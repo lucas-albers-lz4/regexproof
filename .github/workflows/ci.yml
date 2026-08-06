@@ -30,4 +30,7 @@ jobs:
       - name: Check markdown links
         uses: lycheeverse/lychee-action@v2
         with:
-          args: --no-fail --verbose "**/*.md"
+          # Real gate: fail on broken links (NO --no-fail). The two excluded
+          # hosts return 403 to scripted clients (bot protection) but resolve
+          # in a browser — documented in docs/RESEARCH.md.
+          args: --verbose --exclude 'https://dl.acm.org/.*' --exclude 'https://www.microsoft.com/en-us/research/.*' "**/*.md"
