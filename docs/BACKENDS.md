@@ -13,7 +13,7 @@
 ## Stock Z3 (`z3-solver` pip package)
 
 The default `seq` backend is the workhorse. Regex membership is solved by
-**lazy unfolding via symbolic derivatives**; per the official guide, Z3 is a
+**lazy unfolding via symbolic derivatives**. Per the official guide, Z3 is a
 decision procedure for equalities/disequalities between non-symbolic regular
 expressions, but is *not complete* when membership constraints combine with
 string constraints. Consequences (measured):
@@ -33,10 +33,10 @@ equation-stabilization algorithm + the Mata automata library. When to consider:
 - Extra string functions: `str.to_lower`, `str.to_upper`, `str.trim`,
   `str.delete`, `str.to_real/from_real`, `str.update`
 - **`re.from_ecma2020`** — converts ECMA/JS regexes to Z3 regexes. The only
-  way to verify a JS regex *as written* when it uses JS-only features; also
+  way to verify a JS regex *as written* when it uses JS-only features. It also
   verifies the authoritative source rather than a hand-ported mirror.
 
-Caveats: NOT pip-installable as a drop-in; it's a separate binary
+Caveats: NOT pip-installable as a drop-in. It is a separate binary
 (`cmake -DCMAKE_BUILD_TYPE=Release .. && make`, auto-fetches Mata; run
 `./z3 file.smt2`). MIT license (competition use needs separate license). CI
 wiring needs a build step or vendored binary.
@@ -44,22 +44,22 @@ wiring needs a build step or vendored binary.
 ## The rest of the SMT ecosystem (research context)
 
 - **dZ3** (UPenn / Microsoft Research) — regex solver in Z3's sequence theory
-  based on *symbolic Boolean derivatives*; supports "extended" regular
+  based on *symbolic Boolean derivatives*. It supports "extended" regular
   expressions (Boolean combinations) over an arbitrary character theory.
-  MSR-TR-2020-25; the ideas behind Z3's own regex handling.
+  MSR-TR-2020-25. These are the ideas behind Z3's own regex handling.
 - **Z3str3RE** (arXiv:2010.07253) — length-aware solving for the theory of
-  regex membership + linear arithmetic over string length; the decision
+  regex membership + linear arithmetic over string length. It is the decision
   procedure behind Z3str3's regex support.
 - **cvc5** — supports string + regex theories (regular-expression
-  intersection, etc.); useful as a second opinion on cross-solver soundness
-  (also: watch the Z3 issue tracker for cross-solver soundness bugs — e.g.
+  intersection). Use cvc5 as a second opinion on cross-solver soundness
+  (also: watch the Z3 issue tracker for soundness bugs — for example,
   Z3Prover/z3#10379 was an incorrect SAT on a string/regex formula).
 - **AWS Zelkova / Z3 Automata** — AWS extended Z3 with their own automata-based
   regex solver to reason about IAM policy languages. Precedent that SMT regex
   reasoning is production-grade.
-- **String-solver ecosystem:** S3P, Norn, HAMPI, Kaluza, Stranger — mostly
-  symbolic-execution tooling; relevant background for the theory, not needed
-  for the membership/counterexample patterns in this repo.
+- **String-solver ecosystem:** S3P, Norn, HAMPI, Kaluza, Stranger. These are
+  mostly symbolic-execution tooling. They are relevant background for the
+  theory, not needed for the membership/counterexample patterns in this repo.
 
 ## Rule of thumb
 

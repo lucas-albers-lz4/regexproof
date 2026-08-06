@@ -17,7 +17,7 @@ exponential (or super-linear) time?" Use both:
 Z3's regex theory decides membership of a *regular language* — it has no
 notion of backtracking, NFA state explosion, or engine-specific matching
 cost. A regex can be semantically trivial and computationally catastrophic
-(`(a|a)*` over a backtracking engine). Conversely, an engine may be
+(`(a|a)*` over a backtracking engine). Conversely, an engine can be
 nonbacktracking (RE2, Rust `regex`, V8's linear-time optimizations) and immune
 to exponential backtracking — but still vulnerable to *polynomial* blowups in
 some engines (see USENIX Sec'22 "Exposing ReDoS Vulnerability of
@@ -57,5 +57,5 @@ Nonbacktracking Matchers").
 
 - Wikipedia: ReDoS (history, examples, tool list)
 - payloadplayground.com/blog/regular-expression-denial-of-service-redos — practical payloads
-- joshua.hu/comparing-redos-detection-tools — independent benchmark of Semgrep/CodeQL/regexploit etc. on a vulnerable corpus
+- joshua.hu/comparing-redos-detection-tools — independent benchmark of Semgrep/CodeQL/regexploit, and more, on a vulnerable corpus
 - HackTricks ReDoS page — exploitation playbook

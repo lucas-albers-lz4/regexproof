@@ -48,7 +48,7 @@ and the proof silently passes for a name that must be rejected.
 ## 5. `re.replace_re` / `str.replace_all` are NOT supported
 
 The Z3 guide: "currently not supported". Model replacements as string ops or
-unroll (e.g. `IndexOf`/`SubString`/`Concat` composition).
+unroll (for example, `IndexOf`/`SubString`/`Concat` composition).
 
 ## 6. Regex unfolding is incomplete with string constraints
 
@@ -85,7 +85,7 @@ and/or length-slice with incremental push/pop (16, 32, 48, 64).
 
 Treating solver timeout as SAT produced "FAIL ... SAT (counterexample!)" with
 no model. Always check `r == sat` before reading a model. Report `unknown`
-honestly — it's a hard failure in CI, never a pass.
+honestly — it is a hard failure in CI, never a pass.
 
 ## 11. Lookaheads/lookbehinds are not expressible in stock Z3
 
