@@ -1,0 +1,96 @@
+# Traps — solver gotchas that cost real debugging time
+
+Every entry below was hit (or measured) during the usrmanage/fwlive work on
+`z3-solver==5.0.0` (2026-08). Read this before writing constraints.
+
+## 1. `Complement()` is LANGUAGE complement, not char-class negation
+
+`Complement(Re('"'))` = all strings that aren't exactly `"` — so `a"`, `ba`,
+`\"` are all "in the complement", and `Star(Complement(Re('"')))` is **NOT**
+`[^\"]*`. Controlled tests:
+
+| Query | Result |
+|---|---|
+| `s == "b"` ∧ `InRe(s, Complement(Re("a")))` | sat |
+| `s == "a"` ∧ `InRe(s, Complement(Re("a")))` | unsat |
+| `s == 'a"'` ∧ `InRe(s, Complement(Re('"')))` | **sat** ← the trap |
+| `s == ""` ∧ `InRe(s, Complement(Re("a")))` | sat |
+
+To exclude a char class, use `Union(Range(...))` of the allowed chars, or
+string ops (`IndexOf`, `Contains`).
+
+## 2. The `seq` backend solves regex; `z3str3` returns `unknown` instantly
+
+Z3 has two string backends. `z3str3` (`smt.string_solver=z3str3`) solves pure
+string equations but gives `unknown` (1ms) on `InRe` constraints. Do NOT set
+it for regex work. The default `seq` backend solved P2 in 927ms, P3 in 2ms.
+
+| Backend | Regex membership (`InRe`) | String eq |
+|---|---|---|
+| `seq` (DEFAULT) | ✅ solves | ✅ |
+| `z3str3` | ❌ `unknown` instantly | ✅ |
+
+## 3. NUL (0x00) is a real edge — state input-domain assumptions
+
+An escaper with `if (o > 0 && o < 32)` prints NUL raw through its `else`
+branch. "No raw C0 controls" is then FALSE as stated. Fix: state the
+input-domain assumption explicitly — *POSIX shell strings cannot contain NUL*
+(C strings are NUL-terminated) — and encode it as a solver constraint +
+comment, or the property is false as stated.
+
+## 4. "Deny-list unreachable" is ambiguous
+
+`root` IS in the username-regex language; only the accept-language
+(regex ∧ ¬deny-list) excludes it. Encode as `accept(s) ∧ s == "root"` → unsat,
+NOT plain regex membership. Mirror deny-lists verbatim — forget the deny-list
+and the proof silently passes for a name that must be rejected.
+
+## 5. `re.replace_re` / `str.replace_all` are NOT supported
+
+The Z3 guide: "currently not supported". Model replacements as string ops or
+unroll (e.g. `IndexOf`/`SubString`/`Concat` composition).
+
+## 6. Regex unfolding is incomplete with string constraints
+
+The default solver lazily unfolds memberships via symbolic derivatives — it
+works for many membership/non-membership queries but "is not a complete
+procedure when membership constraints are combined with constraints over
+strings." Don't expect a decision procedure for the full combination. This is
+the mechanism behind monolithic-image timeouts — decompose (see
+DECOMPOSITION.md).
+
+## 7. `SubString` with symbolic indices is expensive
+
+Prefer concrete indices. `SubString(s, 0, IndexOf(...))` is fine; symbolic
+offsets into loops are not.
+
+## 8. `FullRe` is NOT exported in z3py 5.0.0
+
+`NameError`. Use `Star(Re("..."))` over an explicit char set instead.
+
+## 9. Length bounds are load-bearing
+
+Same property shape (`InRe` + `Contains` exclusion), different caps:
+
+- Username validator (`^[a-z_][a-z0-9_-]{0,31}$`, 9-name deny-list): all 10
+  injection-char exclusions <1s each.
+- Actor whitelist (`^[A-Za-z0-9._@-]{1,64}$`): 9/9 instant at `Length ≤ 16`;
+  **`Length ≤ 64` timed out at 60s** on the same query.
+
+Mitigation for real bounds > ~16: prove the alphabet-level property
+(single-char `InRe(c, class) ∧ c == bad` → unsat, instant, length-independent),
+and/or length-slice with incremental push/pop (16, 32, 48, 64).
+
+## 10. `unknown` is NOT sat
+
+Treating solver timeout as SAT produced "FAIL ... SAT (counterexample!)" with
+no model. Always check `r == sat` before reading a model. Report `unknown`
+honestly — it's a hard failure in CI, never a pass.
+
+## 11. Lookaheads/lookbehinds are not expressible in stock Z3
+
+The regex theory is the *regular-language* theory — no `(?=...)` constructors.
+Patterns with lookahead must be rewritten to equivalent non-lookahead forms
+(string-ops prefix checks work for most) or routed through Z3-Noodler's
+`re.from_ecma2020` (JS only). See BACKENDS.md and the fwlive classifier note
+in properties/.

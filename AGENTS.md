@@ -1,0 +1,114 @@
+# regexproof — AGENTS.md
+
+Instructions for **coding agents** (Hermes, Claude Code, Codex, opencode) that
+want to use this repo to improve the security of regex-based code. Read
+`docs/` only as needed — this file is the decision tree.
+
+## When to use this repo
+
+Use it when the code you are working on (or reviewing) has **regexes on
+security boundaries**:
+
+- input validators / whitelists / deny-lists (usernames, actors, IP-shaped
+  gates, allowed-charset checks)
+- sanitizers / escapers (JSON escaping, shell quoting, audit-line shaping)
+- parsers with regex fallbacks (sed/awk capture groups, classifier patterns)
+- anything where the question is **"is there ANY string that, after this
+  regex runs, violates the boundary?"**
+
+Do NOT use Z3 for:
+
+- **ReDoS / catastrophic backtracking** — that is complexity analysis of the
+  *matching engine*, not language membership. Use `recheck`,
+  `safe-regex2`, or `vuln-regex-detector` (see `docs/REDOS.md`).
+- **Lookaheads / lookbehinds / backreferences as written** — not expressible
+  in Z3's regular-language theory. Rewrite to string ops, or route JS patterns
+  through Z3-Noodler's `re.from_ecma2020` (`docs/BACKENDS.md`).
+- Cosmetic/internal patterns with no untrusted input — skip them; low value.
+
+## The 5-step workflow (follow in order)
+
+### 1. Inventory the regex surface
+Find every regex on the boundary. Classify by input trust:
+`untrusted-input > config > internal`. Only boundary regexes get properties.
+Record each with: file:line, the pattern, what input feeds it, and the
+*property you actually care about* (e.g. "no `;` can reach the shell",
+"the capture never truncates an escaped quote").
+
+### 2. Classify the property, pick the shape
+From `scripts/z3-property-template.py`, the 4 canonical shapes:
+
+| Shape | Question | Encoding | Expect |
+|---|---|---|---|
+| 1. Alphabet disjointness | "accepted strings contain no char X" | single-char `InRe(c, class) ∧ c == bad` | instant, no length bound — **prefer this** |
+| 2. Whitelist exclusion | "a whitelisted string (len-bounded) contains no X" | `InRe(s, wl) ∧ len(s) ∈ [a,b] → ¬Contains(s, X)` | length bound is load-bearing (≤16 instant, ≤64 times out) |
+| 3. Counterexample finder | "is there a value where capture ≠ true value?" | string ops: `IndexOf`/`SubString` | SAT + witness = the bug repro — cheapest, most valuable |
+| 4. Per-token image | "escape output has no raw control chars" | one token per tiny solver query | monolithic image-regex TIMEOUTs — decompose |
+
+### 3. Encode — read `docs/TRAPS.md` first
+The traps cost real debugging time. Minimum set:
+- `Complement()` is **language** complement, not char-class negation.
+  `Star(Complement(Re('"')))` ≠ `[^\"]*`. Use `Range`/`Union` or string ops.
+- Never set `smt.string_solver=z3str3` for regex work — it returns `unknown`
+  instantly on `InRe`. Default `seq` backend is the one that solves.
+- Mirror the real code **exactly**: deny-lists verbatim, length checks,
+  char classes. "root" matches the username regex; only the deny-list
+  excludes it.
+- State input-domain assumptions as constraints + comments (e.g. *POSIX
+  shell strings cannot contain NUL*).
+- `re.replace_re` / `str.replace_all` are unsupported — model with string ops.
+
+### 4. Ground-truth every witness
+A Z3 model is a *mirror*; SAT means "the mirror says there's a counterexample".
+Before reporting it:
+1. Run the **real implementation** on the witness (real `sed`, real JS, real
+   Python `re`) and confirm behavior matches the model byte-for-byte.
+2. If the target runs BusyBox (OpenWrt), verify under `busybox sed` too —
+   pin `busybox` in CI for device fidelity.
+3. Enumerate refuted reviewer/model claims in your report — a digest that
+   says what was checked and what was disproven is what makes a proof
+   trustworthy.
+
+### 5. Make it a regression gate
+- Ship as a runnable script + CI job (`pip install z3-solver`; **TIMEOUT
+  (`unknown`) = hard failure**, never a silent skip).
+- Add **mutation guards**: a tagged property that weakens the regex and
+  asserts the result flips UNSAT→SAT. A harness that can't fail proves
+  nothing. Run them in `--all`, always.
+- Add **differential fuzz** for transformation properties: random inputs →
+  mirror accept/reject vs real implementation accept/reject must agree.
+  Mutation guards prove the mirror is sensitive; differential fuzz proves
+  mirror ≡ real code.
+- Pin `z3-solver==5.0.0` — the `Re()`/regex API changed across 4.x/5.x.
+
+## Report shape
+
+For each property report: the pattern (file:line), the property, the declared
+domain (what exactly was proven — a length bound means "proven up to this
+length", not "inputs are this length"), result (UNSAT=holds / SAT=witness /
+TIMEOUT=hard fail), and ground-truth evidence.
+
+Prefer **alphabet-level, length-independent proofs** wherever the property
+allows: they cover ALL strings with no bound at all. Use length bounds only
+for genuinely length-sensitive properties, and document the declared domain
+in the harness output so a reader knows exactly what was proven.
+
+## Worked examples in this repo
+
+- `scripts/z3-property-template.py` — runnable shapes 1–4 (all four PASS
+  against a pinned z3-solver)
+- `scripts/z3-verify.py --all` — harness skeleton run: P1 injection chars,
+  P2 actor whitelist, P3 sed-capture counterexample (SAT + witness), P4
+  per-token escape image + the NUL-passthrough bug demo, and the
+  `P1-mutated-star` mutation guard
+- `properties/usrmanage-p1-p6.md` — full property suite (username validator,
+  actor whitelist, sed-fallback truncation, JSON escaper image, audit-line
+  integrity, password policy) with encoded forms and spike timings
+- `properties/fwlive-classifier.md` — classifier regex inventory incl. the
+  `NETFILTER_KV_GLUE` lookahead blocker and the decomposition route per pattern
+
+## Related skills (Hermes)
+
+If running under Hermes, the `z3-regex-verification`, `z3-string-verification`,
+and `z3-verification` skills carry the same knowledge with the full evidence
+base. This repo is the distributable, language-agnostic version.
