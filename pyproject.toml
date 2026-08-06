@@ -1,0 +1,27 @@
+[tool.ruff]
+line-length = 100
+target-version = "py39"
+# Scripts are standalone CLI tools; there is no package layout to lint.
+
+[tool.ruff.lint]
+# Curated set, same spine as the housekeeping toolkit (E,F,W,I,UP,SIM,PTH,PIE,PLC)
+# plus RUF (ruff-specific) and EXE (shebang/executable-bit — CLI tools must run).
+# Deliberately NOT selected (by-design noise for small solver scripts):
+#   ANN*   — no annotation mandates on throwaway solver scripts
+#   D*     — docstring pedantry; the scripts carry module + key-function docstrings
+#   FBT*   — boolean flags (expect_unsat=...) are the intended API
+#   PLR*   — magic-number / complexity refactors; solver constants are the domain
+#   Q*     — quote-style churn; mixed ' and " is deliberate (strings contain quotes)
+#   T201   — print IS the CLI output of these tools
+#   COM*   — trailing-comma style churn
+select = ["E", "F", "W", "I", "UP", "SIM", "PTH", "PIE", "PLC", "RUF", "EXE"]
+
+[tool.ruff.lint.per-file-ignores]
+# z3py idiom: the official Z3 guide's own examples use `from z3 import *`.
+# The template is a copy-and-adapt artifact; keeping the star import matches
+# the upstream documentation the template points at. The harness
+# (z3-verify.py) uses explicit imports and is fully lint-clean.
+"scripts/z3-property-template.py" = [
+    "F403",  # star import used — deliberate (z3py idiom)
+    "F405",  # star-import names — resolved by the z3 library, not undefined
+]

@@ -1,0 +1,12 @@
+# Pre-commit hooks: ruff lint (auto-fix) + ruff format.
+# One-time install:  pip install pre-commit && pre-commit install
+# Verify locally:     pre-commit run --all-files
+# rev must match the local ruff version (ruff --version) or check/format
+# behavior drifts between the hook and interactive runs.
+repos:
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.15.22
+    hooks:
+      - id: ruff
+        args: [--fix]
+      - id: ruff-format
