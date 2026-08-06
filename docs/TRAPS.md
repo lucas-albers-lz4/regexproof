@@ -19,6 +19,14 @@ Every entry below was hit (or measured) during the usrmanage/fwlive work on
 To exclude a char class, use `Union(Range(...))` of the allowed chars, or
 string ops (`IndexOf`, `Contains`).
 
+**✅ Valid use — single-char membership:** `InRe(c, Complement(Re('"')))`
+with `Length(c) == 1` DOES correctly exclude `"` (the complement of the
+one-char language restricted to one-char strings is the char-class
+complement). Verified in the fwlive pilot (word-boundary check:
+`Complement([A-Za-z0-9_])` with `Length==1` excludes alnum/underscore and
+admits `.`). The trap is exclusively the multi-char / `Star(Complement(...))`
+context — restrict to single-char membership and Complement is safe.
+
 ## 2. The `seq` backend solves regex; `z3str3` returns `unknown` instantly
 
 Z3 has two string backends. `z3str3` (`smt.string_solver=z3str3`) solves pure
@@ -94,3 +102,21 @@ Patterns with lookahead must be rewritten to equivalent non-lookahead forms
 (string-ops prefix checks work for most) or routed through Z3-Noodler's
 `re.from_ecma2020` (JS only). See BACKENDS.md and the fwlive classifier note
 in properties/.
+
+## 12. Presence-gates must use whole-word grep — substring matches lie
+
+Gating a property on code presence ("is the fallback still there?", the
+temporal-coupling gate) with a naive `grep -c sed file` matched the word
+"pas**sed**" inside a comment and nearly produced a false "fallback absent"
+verdict (count 1 instead of 0). Use whole-word or anchored patterns and
+derive the verdict from the count explicitly:
+
+```bash
+grep -wc "sed" file           # whole-word count — 0 = truly absent
+grep -cE "(^|[^A-Za-z])sed([^A-Za-z]|$)" file   # or anchored alternative
+```
+
+Print the verdict ("0 hits — path absent, finder flipped" vs "N hits — finder
+stays active"), never just the raw count. This bit the regexproof pilot
+(usrmanage P3 gate); ground-truthing the gate output caught it before the
+false claim shipped.
