@@ -66,9 +66,13 @@ Before reporting it:
    Python `re`) and confirm behavior matches the model byte-for-byte.
 2. If the target runs BusyBox (OpenWrt), verify under `busybox sed` too —
    pin `busybox` in CI for device fidelity.
-3. Enumerate refuted reviewer/model claims in your report — a digest that
+3. **Presence-gates use whole-word grep** (`grep -wc`) — substring matches
+   lie ("sed" matches "passed"). See TRAPS.md #12.
+4. Enumerate refuted reviewer/model claims in your report — a digest that
    says what was checked and what was disproven is what makes a proof
-   trustworthy.
+   trustworthy. This includes your own claims: read the surrounding code
+   before filing a finding (the pilot flagged an interpolated regex as
+   un-escaped when `re.escape` was already two lines above).
 
 ### 5. Make it a regression gate
 - Ship as a runnable script + CI job (`pip install z3-solver`; **TIMEOUT

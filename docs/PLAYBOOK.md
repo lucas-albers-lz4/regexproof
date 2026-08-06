@@ -62,27 +62,36 @@ s != StringVal("x")            # inequality
 1. **Spike first, plan second.** Prove the core properties in a throwaway
    script before writing any plan. Costs minutes, converts speculation into
    evidence.
-2. **Ground-truth digest.** Manually verify every strong claim against the
+2. **Re-inventory before verifying — code drifts past plans.** A plan (or a
+   skill note) written against an older revision can gate on things that no
+   longer exist. The regexproof pilot found usrmanage's planned P3 target
+   (rpcd sed JSON fallback) replaced by `jsonfilter` and the P2 whitelist
+   already landed — both since the plan was written. Grep the actual code
+   before encoding, and treat "known from a previous session" as suspect.
+3. **Ground-truth digest.** Manually verify every strong claim against the
    real code before synthesis/CI. Refute confidently — reviewers and LLMs
    produce plausible-but-wrong claims (a "TOCTOU" that's serialized by a lock;
    a byte-fidelity claim that `od` disproves). Enumerate refuted claims in the
-   digest.
-3. **Differential fuzz.** The Z3 model is a *mirror* of the shell/JS logic.
+   digest. This includes your own pilot findings: the happycow pilot flagged
+   an interpolated regex as "un-escaped" without reading line 105 — the
+   `re.escape` was already there. Read the surrounding code before filing.
+4. **Differential fuzz.** The Z3 model is a *mirror* of the shell/JS logic.
    Mutation guards prove the mirror is sensitive; differential fuzz proves
    mirror ↔ real code agree. Source the real shell under a fake env
    (`USRMANAGE_DRY_RUN=1` pattern) and assert agreement on random inputs.
-4. **Automated mutation guards.** Tagged tests (`P1-mutated`) that weaken the
+5. **Automated mutation guards.** Tagged tests (`P1-mutated`) that weaken the
    regex and assert `expect_sat=True`. The harness MUST be able to fail — a
    proof harness that can't fail proves nothing.
-5. **Device fidelity.** On OpenWrt targets, run ground-truth subprocess tests
+6. **Device fidelity.** On OpenWrt targets, run ground-truth subprocess tests
    through `busybox sed` (behavior was identical on tested repros, but pin for
    device fidelity — CI runs GNU tools).
-6. **Pin the version.** `z3-solver==5.0.0` — the `Re()`/Regex API changed
+7. **Pin the version.** `z3-solver==5.0.0` — the `Re()`/Regex API changed
    across 4.x/5.x. Unpinned installs break non-deterministically.
-7. **Counterexample mode is the cheap win.** A "finder" property (expect SAT +
+8. **Counterexample mode is the cheap win.** A "finder" property (expect SAT +
    witness) is far easier than full verification and still guards regressions.
    Include a **migration hook**: when the underlying bug is fixed, flip the
-   property from finder to "path absent" (trivial proof).
+   property from finder to "path absent" (trivial proof) — and gate the flip
+   on a whole-word presence check (see TRAPS.md #12).
 
 ## Scope guidance
 
