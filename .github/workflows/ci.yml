@@ -1,0 +1,33 @@
+name: verify
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  proof:
+    name: Z3 proof harness
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+      - name: Install pinned solver
+        run: pip install -r requirements.txt
+      - name: Run the 4 canonical property shapes
+        run: python scripts/z3-property-template.py
+      - name: Run the property suite with mutation guards
+        # TIMEOUT (unknown) is a hard failure by design — the harness exits 1.
+        run: python scripts/z3-verify.py --all
+
+  links:
+    name: Link check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Check markdown links
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: --no-fail --verbose "**/*.md"
