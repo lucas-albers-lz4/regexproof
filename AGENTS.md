@@ -32,7 +32,7 @@ Do NOT use Z3 for:
 Find every regex on the boundary. Classify by input trust:
 `untrusted-input > config > internal`. Only boundary regexes get properties.
 Record each with: file:line, the pattern, what input feeds it, and the
-*property you actually care about* (e.g. "no `;` can reach the shell",
+*property you actually care about* (for example, "no `;` can reach the shell",
 "the capture never truncates an escaped quote").
 
 ### 2. Classify the property, pick the shape
@@ -54,7 +54,8 @@ The traps cost real debugging time. Minimum set:
 - Mirror the real code **exactly**: deny-lists verbatim, length checks,
   char classes. "root" matches the username regex; only the deny-list
   excludes it.
-- State input-domain assumptions as constraints + comments (e.g. *POSIX
+- State input-domain assumptions as constraints + comments (for example,
+  *POSIX
   shell strings cannot contain NUL*).
 - `re.replace_re` / `str.replace_all` are unsupported — model with string ops.
 

@@ -2,21 +2,23 @@
 
 Deep-research pass aggregated into this repo. Sources are cited inline.
 "Verified" = reproduced/measured on `z3-solver==5.0.0` during the
-usrmanage/fwlive work; "researched" = from the cited external source.
+usrmanage/fwlive work. "Researched" = from the cited external source.
 
 ## 1. The solver layer: what Z3 actually does with regexes
 
-- **Official guide — Regular Expressions** (microsoft.github.io/z3guide):
-  Z3's regex theory covers regular languages; it "is a decision procedure for
-  equalities and disequalities between non-symbolic regular expressions";
-  membership is handled via **lazy unfolding (symbolic derivatives)** and is
+- **Official guide — Regular Expressions** (microsoft.github.io/z3guide,
+  "Regular Expressions" under Theories):
+  Z3's regex theory covers regular languages. It "is a decision procedure for
+  equalities and disequalities between non-symbolic regular expressions".
+  Membership is handled via **lazy unfolding (symbolic derivatives)** and is
   *not complete* when combined with string constraints. This is the mechanism
   behind every timeout we measured — decomposition is the documented remedy.
 - **dZ3** — "Symbolic Boolean derivatives for efficiently solving extended
-  regular expression constraints" (MSR-TR-2020-25, arXiv; UPenn PL Club talk):
+  regular expression constraints" (PLDI 2021, ACM 10.1145/3453483.3454066;
+  PDF at microsoft.com/research pldi21-SBFA-final):
   extended regex constraints (Boolean combinations) over an arbitrary
-  character theory; the technique underlying Z3's sequence-theory regex
-  solving.
+  character theory. This is the technique underlying Z3's sequence-theory
+  regex solving.
 - **Z3str3RE** — "An SMT Solver for Regular Expressions and Linear Arithmetic
   over String Length" (arXiv:2010.07253): length-aware decision procedure for
   regex membership + length arithmetic.
@@ -25,7 +27,8 @@ usrmanage/fwlive work; "researched" = from the cited external source.
   `to_upper`/`trim`/`delete`, and **`re.from_ecma2020`** — converts ECMA/JS
   regexes to Z3 regexes. Separate binary (cmake build), not pip-installable.
 - **cvc5**: string + regex theories (incl. regex intersection). Useful as a
-  second opinion; cross-solver soundness bugs exist (e.g. Z3Prover/z3#10379 —
+  second opinion. Cross-solver soundness bugs exist (for example,
+  Z3Prover/z3#10379 —
   incorrect SAT on a string/regex formula, found against cvc5).
 - **AWS Zelkova / "Z3 Automata"** (ahelwer.ca/post/2022-01-19-z3-rbac/): AWS
   hit Z3 regex limitations pre-2018 and extended Z3 with their own
@@ -81,8 +84,8 @@ full tool map. Key findings:
 
 - Python `re` is a backtracking engine (PCRE-flavored): ReDoS applies;
   `re.fullmatch`/`match`/`search` are three different questions to encode
-  (SEMANTICS.md). Third-party `regex` module adds features (folding, etc.) —
-  not SMT-expressible as written.
+  (SEMANTICS.md). Third-party `regex` module adds features (case folding and
+  more) — not SMT-expressible as written.
 - JS RegExp is ECMA-262 with backtracking; V8 has linear-time optimizations
   for some patterns but not all. For SMT: rewrite lookaheads to string ops or
   use Z3-Noodler `re.from_ecma2020`; backreferences are out of scope for SMT
@@ -91,7 +94,7 @@ full tool map. Key findings:
   `IndexOf`/`SubString` (byte-verified vs GNU sed AND BusyBox sed on the
   escaped-quote repro — identical truncation behavior).
 
-## 5. What's NOT out there (the gap this repo fills)
+## 5. What is NOT out there (the gap this repo fills)
 
 No established public playbook for *coding agents* applying SMT regex
 verification to improve code. The ecosystem has: solver docs (Z3 guide),
@@ -104,11 +107,11 @@ empirical backbone.
 
 ## Sources
 
-- Z3 guide, Regular Expressions: https://microsoft.github.io/z3guide/docs/theories/Regular+Expressions/
+- Z3 guide, Regular Expressions: https://microsoft.github.io/z3guide/docs/theories/Regular%20Expressions
 - Z3-Noodler: https://github.com/VeriFIT/z3-noodler
 - JS regex formal semantics: https://arxiv.org/abs/2507.13091
 - Z3str3RE: https://arxiv.org/abs/2010.07253
-- dZ3: https://www.microsoft.com/en-us/research/wp-content/uploads/2020/08/MSR-TR-2020-25.pdf
+- dZ3: https://www.microsoft.com/en-us/research/wp-content/uploads/2020/08/pldi21-SBFA-final.pdf
 - Zelkova/Z3-Automata: https://ahelwer.ca/post/2022-01-19-z3-rbac/
 - Z3 cross-solver soundness bug: https://github.com/Z3Prover/z3/issues/10379
 - recheck: https://github.com/makenowjust-labs/recheck
