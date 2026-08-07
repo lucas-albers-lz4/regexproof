@@ -21,7 +21,9 @@ jobs:
         run: python scripts/z3-property-template.py
       - name: Run the property suite with mutation guards
         # TIMEOUT (unknown) is a hard failure by design — the harness exits 1.
-        run: python scripts/z3-verify.py --all
+        # --require-ground-truth: SAT witnesses must replay against the real
+        # implementation (sed/escaper mirrors) or the run fails.
+        run: python scripts/z3-verify.py --all --require-ground-truth
 
   links:
     name: Link check

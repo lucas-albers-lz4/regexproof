@@ -79,12 +79,27 @@ Before reporting it:
   (`unknown`) = hard failure**, never a silent skip).
 - Add **mutation guards**: a tagged property that weakens the regex and
   asserts the result flips UNSAT→SAT. A harness that can't fail proves
-  nothing. Run them in `--all`, always.
+  nothing. Run them in `--all`, always. The harness enforces coverage: every
+  family with a security property must have at least one mutation guard
+  (`check_mutation_coverage()` warns and exits non-zero otherwise).
 - Add **differential fuzz** for transformation properties: random inputs →
   mirror accept/reject vs real implementation accept/reject must agree.
   Mutation guards prove the mirror is sensitive; differential fuzz proves
   mirror ≡ real code.
+- **Ground-truth every SAT witness in code, not just in prose**: give each
+  counterexample-finding property a `ground_truth=` callback that runs the
+  real implementation on the witness, and run the harness with
+  `--require-ground-truth`. An unverified (or non-reproducing) witness is a
+  hard failure — an unverified counterexample is never reported as a
+  vulnerability. (The P3 sed-capture and P4-NUL properties ship real
+  replay callbacks.)
+- **Tag every property with `kind=`**: `property` (invariant must hold),
+  `counterexample_finder` (SAT is the finding), `mutation_guard` (SAT proves
+  sensitivity), `bug_demo` (SAT demonstrates a known bug). The `kind` field
+  is what makes `expect_unsat=False` unambiguous and lets the coverage check
+  reason about the registry.
 - Pin `z3-solver==5.0.0` — the `Re()`/regex API changed across 4.x/5.x.
+  The harness refuses to run (exit 3) on any non-5.0.x solver.
 
 ## Report shape
 

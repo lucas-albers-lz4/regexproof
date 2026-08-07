@@ -107,7 +107,7 @@ empirical backbone.
 
 ## Sources
 
-- Z3 guide, Regular Expressions: https://microsoft.github.io/z3guide/docs/theories/Regular%20Expressions
+- Z3 guide, Regular Expressions: https://microsoft.github.io/z3guide/docs/theories/Regular%20Expressions/
 - Z3-Noodler: https://github.com/VeriFIT/z3-noodler
 - JS regex formal semantics: https://arxiv.org/abs/2507.13091
 - Z3str3RE: https://arxiv.org/abs/2010.07253
