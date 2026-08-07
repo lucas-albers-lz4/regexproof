@@ -18,6 +18,7 @@ Usage:
   python3 z3-verify.py --all
   python3 z3-verify.py P1 P2 P1-mutated
   python3 z3-verify.py --all --require-ground-truth
+  python3 z3-verify.py --all --json          # machine-readable report
 
 Exit code: 0 = all pass; 1 = any FAIL/TIMEOUT/coverage gap;
 2 = unknown property names on the CLI; 3 = wrong z3-solver version.
@@ -27,8 +28,15 @@ its witness against the real implementation via the property's ground_truth
 callback. A SAT result without a callback (or a witness that fails to
 reproduce) is a hard failure — an unverified counterexample is never
 reported as a vulnerability.
+
+--json: emit one JSON object per property (result, witness, ground-truth,
+domain, wall_ms) instead of the human summary. Same facts as the human
+output — the two reports can never disagree.
 """
 
+import contextlib
+import io
+import json
 import re
 import subprocess
 import sys
@@ -126,6 +134,23 @@ def prop(
 
 
 def run_one(name, entry, require_ground_truth=False):
+    """Run one property; print human output; return a result dict.
+
+    The dict is also what --json serializes, so the JSON report and the
+    human report always agree on the facts (result, witness, ground-truth).
+    """
+    result = {
+        "name": name,
+        "kind": entry["kind"],
+        "family": entry["family"],
+        "domain": entry["domain"],
+        "expect_unsat": entry["expect_unsat"],
+        "result": None,  # "unsat" | "sat" | "timeout"
+        "ok": False,
+        "witness": None,
+        "ground_truth": None,  # None | "reproduced" | "failed" | "refused-no-callback"
+        "wall_ms": None,
+    }
     s = Solver()
     s.set("timeout", entry["timeout_ms"])
     constraints, bad = entry["fn"]()
@@ -134,13 +159,15 @@ def run_one(name, entry, require_ground_truth=False):
     s.add(bad)
     t0 = time.perf_counter()
     r = s.check()
-    wall = (time.perf_counter() - t0) * 1000
+    result["wall_ms"] = round((time.perf_counter() - t0) * 1000, 1)
     if r == unknown:
+        result["result"] = "timeout"
         print(f"[TIMEOUT] {name}: unknown ({entry['timeout_ms']}ms) — HARD FAILURE")
-        return False
-    ok = (r == unsat) == entry["expect_unsat"]
+        return result
+    result["result"] = "unsat" if r == unsat else "sat"
+    result["ok"] = (r == unsat) == entry["expect_unsat"]
     tag = "UNSAT (property HOLDS)" if r == unsat else "SAT (counterexample)"
-    print(f"[{'PASS' if ok else 'FAIL'}] {name}: {tag}  [{wall:.1f}ms]")
+    print(f"[{'PASS' if result['ok'] else 'FAIL'}] {name}: {tag}  [{result['wall_ms']:.1f}ms]")
     print(f"    domain: {entry['domain']}")
     if r == sat:
         m = s.model()
@@ -156,11 +183,14 @@ def run_one(name, entry, require_ground_truth=False):
                 pass
             witness[d.name()] = val
             print(f"    witness: {d.name()} = {val!r}")
+        result["witness"] = witness
         gt = entry.get("ground_truth")
         if entry["kind"] == "mutation_guard":
+            result["ground_truth"] = "mutation-guard-sat-expected"
             print("    mutation guard: SAT expected (harness-sensitivity probe, not a finding)")
         elif gt is not None:
             reproduced = bool(gt(witness))
+            result["ground_truth"] = "reproduced" if reproduced else "failed"
             print(f"    ground-truth: {'REPRODUCED' if reproduced else 'FAILED TO REPRODUCE'}")
             if not reproduced:
                 print(
@@ -168,16 +198,17 @@ def run_one(name, entry, require_ground_truth=False):
                     "implementation — do NOT report this as a vulnerability.",
                     file=sys.stderr,
                 )
-                return False
+                result["ok"] = False
         elif require_ground_truth:
+            result["ground_truth"] = "refused-no-callback"
             print(
                 "    ERROR: SAT witness has no ground_truth callback, but "
                 "--require-ground-truth is set — refusing to report an "
                 "unverified counterexample.",
                 file=sys.stderr,
             )
-            return False
-    return ok
+            result["ok"] = False
+    return result
 
 
 # ---------------------------------------------------------------------------
@@ -454,7 +485,8 @@ def check_mutation_coverage():
 def main():
     args = sys.argv[1:]
     require_ground_truth = "--require-ground-truth" in args
-    args = [a for a in args if a != "--require-ground-truth"]
+    as_json = "--json" in args
+    args = [a for a in args if a not in ("--require-ground-truth", "--json")]
     if not args or "--all" in args:
         named = [a for a in args if a != "--all"]
         if named:
@@ -483,10 +515,25 @@ def main():
 
     coverage_fail = check_mutation_coverage()
     failures = 0
-    for n in names:
-        if not run_one(n, REGISTRY[n], require_ground_truth):
-            failures += 1
-    print(f"\n{len(names) - failures}/{len(names)} passed")
+    results = []
+    if as_json:
+        sink = io.StringIO()
+        with contextlib.redirect_stdout(sink):
+            for n in names:
+                res = run_one(n, REGISTRY[n], require_ground_truth)
+                results.append(res)
+                if not res["ok"]:
+                    failures += 1
+    else:
+        for n in names:
+            res = run_one(n, REGISTRY[n], require_ground_truth)
+            results.append(res)
+            if not res["ok"]:
+                failures += 1
+    if as_json:
+        print(json.dumps(results, indent=2))
+    else:
+        print(f"\n{len(names) - failures}/{len(names)} passed")
     return 1 if (failures or coverage_fail) else 0
 
 

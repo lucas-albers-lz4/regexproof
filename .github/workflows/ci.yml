@@ -24,6 +24,14 @@ jobs:
         # --require-ground-truth: SAT witnesses must replay against the real
         # implementation (sed/escaper mirrors) or the run fails.
         run: python scripts/z3-verify.py --all --require-ground-truth
+      - name: Differential-fuzz mirror vs real grep
+        # Proves the Z3 mirror agrees with a real regex implementation on
+        # exhaustive short strings + random + mutation-spliced inputs.
+        run: |
+          python scripts/differential-fuzz.py \
+            --mirror-expr "Concat(Union(Range('a','z'),Range('0','9'),Re('.'),Re('_'),Re('-')),Star(Union(Range('a','z'),Range('0','9'),Re('.'),Re('_'),Re('-'))))" \
+            --real-cmd "grep -qE '^[a-z0-9._-]+$'" \
+            --alphabet "abc123._-" --mutations ' ;="`$|&' --runs 100 --seed 42
 
   links:
     name: Link check

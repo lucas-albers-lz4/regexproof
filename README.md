@@ -54,7 +54,8 @@ the counterexample finder — the sed-truncation bug repro).
 | `docs/REDOS.md` | ReDoS (complexity) tooling — complements, not replaces, the SMT approach |
 | `docs/RESEARCH.md` | Deep-research findings: papers, tools, ecosystem, with sources |
 | `scripts/z3-property-template.py` | The 4 canonical property shapes, copy-and-adapt |
-| `scripts/z3-verify.py` | Harness skeleton: property registry, mutation guards, timeout = hard failure |
+| `scripts/z3-verify.py` | Harness: property registry, mutation guards, `--require-ground-truth`, `--json`, timeout = hard failure |
+| `scripts/differential-fuzz.py` | Fuzz a Z3 mirror against the real implementation (`grep`, `sed`, `busybox`, …) — random inputs, both must agree |
 | `properties/usrmanage-p1-p6.md` | Worked property suite (P1–P6) from the usrmanage case study |
 | `properties/fwlive-classifier.md` | Worked regex inventory of the fwlive LuCI log classifier + lookahead blocker |
 

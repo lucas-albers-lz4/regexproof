@@ -85,7 +85,11 @@ Before reporting it:
 - Add **differential fuzz** for transformation properties: random inputs →
   mirror accept/reject vs real implementation accept/reject must agree.
   Mutation guards prove the mirror is sensitive; differential fuzz proves
-  mirror ≡ real code.
+  mirror ≡ real code. **`scripts/differential-fuzz.py` implements this**:
+  give it a Z3 mirror expression + a real command (`grep -qE`, `sed`,
+  `busybox`, …) and it fuzzes exhaustive short strings, random strings, and
+  dangerous-char mutations, failing on any disagreement. The mirror is a Z3
+  **expression**, not a pattern string — `z3.Re("...")` is a literal match.
 - **Ground-truth every SAT witness in code, not just in prose**: give each
   counterexample-finding property a `ground_truth=` callback that runs the
   real implementation on the witness, and run the harness with
@@ -100,6 +104,9 @@ Before reporting it:
   reason about the registry.
 - Pin `z3-solver==5.0.0` — the `Re()`/regex API changed across 4.x/5.x.
   The harness refuses to run (exit 3) on any non-5.0.x solver.
+- **Machine-readable output**: `z3-verify.py --json` emits one JSON object
+  per property (result, witness, ground-truth, domain, wall_ms) on stdout —
+  the same facts as the human report, for agents/CI to consume.
 
 ## Report shape
 
