@@ -125,3 +125,39 @@ Print the verdict ("0 hits — path absent, finder flipped" vs "N hits — finde
 stays active"), never just the raw count. This bit the regexproof pilot
 (usrmanage P3 gate); ground-truthing the gate output caught it before the
 false claim shipped.
+
+## 13. `Re("...")` is a LITERAL, not a pattern parse
+
+`z3.Re("[a-z]")` builds the regex matching the 5-character string `[a-z]`
+literally — it does NOT compile a regex pattern. Verified:
+
+```
+InRe("a", Re("[a-z]"))  → unsat      (the 1-char string "a" is not "[a-z]")
+InRe("[", Re("[a-z]"))  → sat        (the literal "[a-z]" contains "[")
+```
+
+This silently breaks any "mirror = Re(user_pattern_string)" design: the
+mirror accepts a different language than the real regex and differential
+fuzz reports mismatches on every input — or worse, a containment property
+passes vacuously. The original `differential-fuzz.py --mirror-regex`
+design shipped exactly this bug. It was caught in testing and the script
+now requires a z3py EXPRESSION (Union/Range/Concat/Star), never a pattern
+string. Build mirrors with the API, same as z3-verify.py properties.
+
+## 14. Char-range boundaries are load-bearing — off-by-one silently includes neighbors
+
+Building `[^A-Za-z0-9_]` as `Union(Range("[", "`"), ...)` wrongly includes
+`_` (0x5F), which IS alnum: `Range("[","`")` spans 0x5B–0x60. The correct
+complement is `Range("[","^")` (0x5B–0x5E) + `Re("`")` (0x60). A Z3
+witness (`b = "_"`) exposed the error in the fwlive sweep (property
+"trailing boundary rejects alnum" initially PASSED a wrong encoding).
+Always write complements as explicit disjoint ranges and probe each
+boundary char with a membership query before trusting the class.
+
+## 15. `Opt` is the optimizer class, not regex optional
+
+There is NO regex-optional `Opt`/`ReOpt` in z3py 5.0.0 — `z3.Opt` is the
+optimization-solver class. Regex `?` is `Union(r, Re(""))` (verified:
+accepts both the token and the empty string). This bit the
+differential-fuzz mirror namespace (AttributeError at import). Documented
+here so a mirror namespace never advertises `Opt` as regex-optional.
