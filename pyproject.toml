@@ -25,3 +25,10 @@ select = ["E", "F", "W", "I", "UP", "SIM", "PTH", "PIE", "PLC", "RUF", "EXE"]
     "F403",  # star import used — deliberate (z3py idiom)
     "F405",  # star-import names — resolved by the z3 library, not undefined
 ]
+
+# Long lines are load-bearing in the solver scripts: Z3 regex expressions
+# and example invocations in docstrings routinely exceed 100 columns, and
+# wrapping them hurts copy-paste fidelity more than it helps readability.
+"scripts/differential-fuzz.py" = [
+    "E501",
+]
