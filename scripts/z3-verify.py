@@ -17,13 +17,24 @@ Usage:
   python3 z3-verify.py --list
   python3 z3-verify.py --all
   python3 z3-verify.py P1 P2 P1-mutated
+  python3 z3-verify.py --all --require-ground-truth
 
-Exit code: 0 = all pass; 1 = any FAIL or TIMEOUT.
+Exit code: 0 = all pass; 1 = any FAIL/TIMEOUT/coverage gap;
+2 = unknown property names on the CLI; 3 = wrong z3-solver version.
+
+--require-ground-truth: any SAT (counterexample) result MUST have replayed
+its witness against the real implementation via the property's ground_truth
+callback. A SAT result without a callback (or a witness that fails to
+reproduce) is a hard failure — an unverified counterexample is never
+reported as a vulnerability.
 """
 
+import re
+import subprocess
 import sys
 import time
 
+import z3
 from z3 import (
     Concat,
     Contains,
@@ -44,14 +55,60 @@ from z3 import (
 )
 
 # ---------------------------------------------------------------------------
+# Solver version pin — the Re()/regex API changed across 4.x/5.x. Refuse to
+# run on an unpinned version instead of silently producing unknown/timeouts.
+# ---------------------------------------------------------------------------
+Z3_VERSION = z3.get_version_string()
+if not Z3_VERSION.startswith("5.0"):
+    print(
+        f"FATAL: z3-solver {Z3_VERSION} — this harness is validated against "
+        "5.0.x only. Install the pinned version: pip install -r requirements.txt",
+        file=sys.stderr,
+    )
+    sys.exit(3)
+
+
+def z3_str(val) -> str:
+    """Extract a raw Python string from a z3 model value.
+
+    z3's as_string() escapes control chars (NUL -> literal '\\u{0}'), which
+    would break ground-truth replay of binary witnesses. Decode the escapes
+    back to raw bytes."""
+    s = val.as_string()
+    return re.sub(r"\\u\{([0-9a-fA-F]+)\}", lambda m: chr(int(m.group(1), 16)), s)
+
+
+# ---------------------------------------------------------------------------
 # Property registry
 # ---------------------------------------------------------------------------
 REGISTRY = {}
 
 
-def prop(name, declared_domain, expect_unsat=True, timeout_ms=30000):
+def prop(
+    name,
+    declared_domain,
+    expect_unsat=True,
+    timeout_ms=30000,
+    ground_truth=None,
+    kind="property",
+    family=None,
+):
     """Decorator: register a property. The wrapped function returns the
-    constraint list; the harness adds `bad` and checks satisfiability."""
+    constraint list; the harness adds `bad` and checks satisfiability.
+
+    `kind` distinguishes WHY expect_unsat is False (or why SAT matters):
+      - "property": a security invariant that must hold (expect_unsat=True).
+      - "counterexample_finder": SAT is the finding (a real bug witness).
+      - "mutation_guard": SAT proves the harness is sensitive (weakened
+        regex must flip UNSAT->SAT). Its witness is never replayed/reported.
+      - "bug_demo": SAT demonstrates a known bug by design (P4-nul).
+    `family` groups properties that share a mutation guard (e.g. "P1").
+    `ground_truth`: optional callable `fn(witness: dict) -> bool` that runs
+    the REAL implementation on a SAT witness and reports whether the model's
+    behavior reproduces. Required when --require-ground-truth is set and the
+    property is satisfiable — UNLESS kind is "mutation_guard" (sensitivity
+    probe, not a reportable counterexample)."""
+    assert callable(ground_truth) or ground_truth is None, "ground_truth must be callable"
 
     def deco(fn):
         REGISTRY[name] = {
@@ -59,13 +116,16 @@ def prop(name, declared_domain, expect_unsat=True, timeout_ms=30000):
             "domain": declared_domain,
             "expect_unsat": expect_unsat,
             "timeout_ms": timeout_ms,
+            "ground_truth": ground_truth,
+            "kind": kind,
+            "family": family or name.split("-")[0],
         }
         return fn
 
     return deco
 
 
-def run_one(name, entry):
+def run_one(name, entry, require_ground_truth=False):
     s = Solver()
     s.set("timeout", entry["timeout_ms"])
     constraints, bad = entry["fn"]()
@@ -84,8 +144,39 @@ def run_one(name, entry):
     print(f"    domain: {entry['domain']}")
     if r == sat:
         m = s.model()
+        witness = {}
         for d in m.decls():
-            print(f"    witness: {d.name()} = {m[d]!r}")
+            val = m[d]
+            # Extract raw string values so ground_truth callbacks see the
+            # actual bytes, not z3's repr (e.g. "\u{0}" for NUL).
+            try:
+                if val.sort() == StringVal("").sort():
+                    val = z3_str(val)
+            except Exception:
+                pass
+            witness[d.name()] = val
+            print(f"    witness: {d.name()} = {val!r}")
+        gt = entry.get("ground_truth")
+        if entry["kind"] == "mutation_guard":
+            print("    mutation guard: SAT expected (harness-sensitivity probe, not a finding)")
+        elif gt is not None:
+            reproduced = bool(gt(witness))
+            print(f"    ground-truth: {'REPRODUCED' if reproduced else 'FAILED TO REPRODUCE'}")
+            if not reproduced:
+                print(
+                    "    WARNING: SAT witness did not reproduce against the real "
+                    "implementation — do NOT report this as a vulnerability.",
+                    file=sys.stderr,
+                )
+                return False
+        elif require_ground_truth:
+            print(
+                "    ERROR: SAT witness has no ground_truth callback, but "
+                "--require-ground-truth is set — refusing to report an "
+                "unverified counterexample.",
+                file=sys.stderr,
+            )
+            return False
     return ok
 
 
@@ -108,6 +199,35 @@ INJECTION_CHARS = [
 ]
 
 
+def _sed_capture(stream: str) -> str:
+    """Real sed fallback: capture `[^\"]*` (prefix before first quote).
+
+    Mirrors the rpcd json_get fallback shape. Used as ground truth for P3 —
+    the Z3 witness must reproduce against this real implementation."""
+    proc = subprocess.run(
+        ["sed", "-n", 's/^.*\\("\\([^"]*\\)".*$/\\1/p', stream],
+        capture_output=True,
+        text=True,
+    )
+    return proc.stdout.rstrip("\n")
+
+
+def p3_ground_truth(witness: dict) -> bool:
+    """Replay the P3 SAT witness against real sed.
+
+    The Z3 model says: for v containing an escaped quote, the `[^\"]*`
+    capture (prefix before the first quote) differs from v. Feed v through
+    the real sed fallback and check the capture is a strict prefix (i.e.
+    truncation happened at the escaped quote)."""
+    v = witness["v"]  # raw string (as_string-extracted)
+    # Build a stream shaped like the rpcd JSON the sed fallback sees.
+    stream = f'{{"password":"{v}"}}'
+    capture = _sed_capture(stream)
+    # Truncation means the capture stopped at the first unescaped quote:
+    # capture is a strict prefix of v (v contains an escaped quote).
+    return capture != v and v.startswith(capture)
+
+
 def _p1(ch):
     """P1 builder: username validator + deny-list, 'contains <ch>' as bad."""
     u = String("u")
@@ -125,6 +245,8 @@ for _name, _ch in INJECTION_CHARS:
         "^[a-z_][a-z0-9_-]{0,31}$ minus deny-list "
         "(declared domain: len 1..32) contain no "
         f"{_name}",
+        "kind": "property",
+        "family": "P1",
     }
 
 ACTOR_CLS = Union(
@@ -137,6 +259,7 @@ ACTOR_CLS = Union(
     "actor whitelist [A-Za-z0-9._@-]{1,64} admits no audit-line-breaking "
     "char (proven for len <= 16; slice 17-64 for full coverage)",
     expect_unsat=True,
+    family="P2",
 )
 def p2():
     a = String("a")
@@ -151,6 +274,9 @@ def p2():
     '[^"]* (prefix before first quote) differs from v — the rpcd sed '
     "fallback bug repro",
     expect_unsat=False,
+    ground_truth=p3_ground_truth,
+    kind="counterexample_finder",
+    family="P3",
 )
 def p3():
     v = String("v")
@@ -190,12 +316,27 @@ def p4_del():
     return [InRe(w, ESCAPE_TOKENS), Length(w) == 1], w == StringVal("\x7f")
 
 
+def _escape_mirror(byte: str) -> str:
+    """Mirror of the real escaper: o == 0 falls through the `o > 0 && o < 32`
+    guard and is printed raw (NUL passthrough). Anything else is escaped or
+    safe-printed. Used as ground truth for P4-nul."""
+    o = ord(byte)
+    if o == 0:
+        return byte  # raw NUL — the bug
+    if 0 < o < 32:
+        return f"\\x{o:02x}"
+    return byte
+
+
 @prop(
     "P4-nul-passthrough-demo",
     "BUG DEMO: a faithful token alphabet that includes the escaper's "
     "raw-NUL else-branch DOES contain NUL — this is why the POSIX "
     "input-domain assumption must be stated explicitly in the real property",
     expect_unsat=False,
+    ground_truth=lambda w: _escape_mirror(w["w"][0] if w["w"] else "\x00") == "\x00",
+    kind="bug_demo",
+    family="P4",
 )
 def p4_nul():
     w = String("w")
@@ -216,6 +357,8 @@ WEAKENED_USERNAME_RE = Concat(Union(Range("a", "z"), Re("_")), Star(Union(USERNA
     "'no star' property MUST flip UNSAT->SAT. If this passes as UNSAT, the "
     "mirror is not tracking the real regex.",
     expect_unsat=False,
+    kind="mutation_guard",
+    family="P1",
 )
 def p1_mutated():
     u = String("u")
@@ -223,20 +366,113 @@ def p1_mutated():
     return constraints, Contains(u, StringVal("*"))
 
 
+# P2 guard: weaken the actor whitelist to admit a space. The P2 property
+# ("no space in whitelisted actors") MUST flip UNSAT->SAT.
+WEAKENED_ACTOR_CLS = Union(ACTOR_CLS, Re(" "))
+
+
+@prop(
+    "P2-mutated-space",
+    "MUTATION GUARD: if the actor whitelist is weakened to admit ' ', the "
+    "'no space' property MUST flip UNSAT->SAT. If this passes as UNSAT, the "
+    "mirror is not tracking the real whitelist.",
+    expect_unsat=False,
+    kind="mutation_guard",
+    family="P2",
+)
+def p2_mutated():
+    a = String("a")
+    wl_re = Concat(WEAKENED_ACTOR_CLS, Star(WEAKENED_ACTOR_CLS))
+    constraints = [InRe(a, wl_re), Length(a) >= 1, Length(a) <= 16]
+    return constraints, Contains(a, StringVal(" "))
+
+
+# P3 guard: make the capture CORRECT (whole value, no truncation). The
+# counterexample (capture != v) MUST disappear -> flip SAT->UNSAT. This
+# proves the P3 mirror is sensitive to the truncation it models.
+@prop(
+    "P3-mutated-correct-capture",
+    "MUTATION GUARD: if the sed capture were CORRECT (captures the whole "
+    "value, no truncation at the first quote), no counterexample exists — "
+    "the property MUST flip SAT->UNSAT. If this stays SAT, the mirror is "
+    "not tracking the truncation.",
+    expect_unsat=True,
+    kind="mutation_guard",
+    family="P3",
+)
+def p3_mutated():
+    v = String("v")
+    first_quote = IndexOf(v, StringVal('"'), 0)
+    correct_capture = SubString(v, 0, Length(v))  # whole value, no truncation
+    return [first_quote > 0, correct_capture != v], Contains(v, StringVal('\\"'))
+
+
+# P4 guard: weaken the escape alphabet to admit a raw tab. The P4 property
+# ("no raw tab in escape output") MUST flip UNSAT->SAT.
+WEAKENED_ESCAPE_TOKENS = Union(ESCAPE_TOKENS, Re("\t"))
+
+
+@prop(
+    "P4-mutated-tab",
+    "MUTATION GUARD: if the escape token alphabet is weakened to admit a "
+    "raw tab, the 'no raw tab' property MUST flip UNSAT->SAT. If this "
+    "passes as UNSAT, the mirror is not tracking the real escaper.",
+    expect_unsat=False,
+    kind="mutation_guard",
+    family="P4",
+)
+def p4_mutated():
+    w = String("w")
+    return [InRe(w, WEAKENED_ESCAPE_TOKENS), Length(w) == 1], w == StringVal("\t")
+
+
 # ---------------------------------------------------------------------------
 # CLI
 # ---------------------------------------------------------------------------
+def check_mutation_coverage():
+    """Structural invariant: every family with a security property or
+    counterexample finder must also have at least one mutation guard.
+
+    A property with no mutation guard can go vacuous (e.g. via the
+    Complement() trap) without any test noticing. Warn loudly so the gap
+    is visible; the warning is the guard's guard."""
+    guarded = {e["family"] for e in REGISTRY.values() if e["kind"] == "mutation_guard"}
+    needing = {
+        e["family"] for e in REGISTRY.values() if e["kind"] in ("property", "counterexample_finder")
+    }
+    missing = sorted(needing - guarded)
+    if missing:
+        print(
+            "WARNING: families with properties but NO mutation guard: "
+            f"{', '.join(missing)} — a vacuous encoding would pass silently.",
+            file=sys.stderr,
+        )
+        return 1
+    return 0
+
+
 def main():
     args = sys.argv[1:]
+    require_ground_truth = "--require-ground-truth" in args
+    args = [a for a in args if a != "--require-ground-truth"]
     if not args or "--all" in args:
+        named = [a for a in args if a != "--all"]
+        if named:
+            print(
+                f"WARNING: --all ignores explicitly named properties: {named}",
+                file=sys.stderr,
+            )
         names = sorted(REGISTRY)
     elif "--list" in args:
         for n in sorted(REGISTRY):
+            e = REGISTRY[n]
             print(
-                f"{n}  expect_unsat={REGISTRY[n]['expect_unsat']}  "
-                f"timeout={REGISTRY[n]['timeout_ms']}ms"
+                f"{n}  expect_unsat={e['expect_unsat']}  "
+                f"timeout={e['timeout_ms']}ms  "
+                f"kind={e['kind']}  family={e['family']}  "
+                f"ground_truth={'yes' if e.get('ground_truth') else 'no'}"
             )
-            print(f"    domain: {REGISTRY[n]['domain']}")
+            print(f"    domain: {e['domain']}")
         return 0
     else:
         names = [a for a in args if a in REGISTRY]
@@ -245,12 +481,13 @@ def main():
             print(f"unknown properties: {missing}", file=sys.stderr)
             return 2
 
+    coverage_fail = check_mutation_coverage()
     failures = 0
     for n in names:
-        if not run_one(n, REGISTRY[n]):
+        if not run_one(n, REGISTRY[n], require_ground_truth):
             failures += 1
     print(f"\n{len(names) - failures}/{len(names)} passed")
-    return 1 if failures else 0
+    return 1 if (failures or coverage_fail) else 0
 
 
 if __name__ == "__main__":

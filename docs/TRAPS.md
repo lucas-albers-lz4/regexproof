@@ -85,6 +85,11 @@ Same property shape (`InRe` + `Contains` exclusion), different caps:
 - Actor whitelist (`^[A-Za-z0-9._@-]{1,64}$`): 9/9 instant at `Length ≤ 16`;
   **`Length ≤ 64` timed out at 60s** on the same query.
 
+Timing caveat: these numbers were measured on one machine (z3-solver 5.0.0,
+2026-08, single-threaded). They are **order-of-magnitude guides**, not
+portable benchmarks — a different CPU/container can shift the exact cutoffs
+(16 vs 64) by a factor of 2-3. Use the shapes, not the raw milliseconds.
+
 Mitigation for real bounds > ~16: prove the alphabet-level property
 (single-char `InRe(c, class) ∧ c == bad` → unsat, instant, length-independent),
 and/or length-slice with incremental push/pop (16, 32, 48, 64).
