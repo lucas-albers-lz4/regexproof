@@ -1,9 +1,0 @@
-name: trigger-test
-on:
-  push:
-    branches: [main]
-jobs:
-  t:
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo "trigger-test fired"
