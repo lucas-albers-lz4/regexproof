@@ -1,5 +1,6 @@
 [
   {
+    "schema_version": "1",
     "name": "GL-mutated",
     "kind": "mutation_guard",
     "family": "GL",
@@ -13,13 +14,15 @@
       "s": " "
     },
     "ground_truth": "mutation-guard-sat-expected",
-    "wall_ms": 1.3,
+    "wall_ms": 1.5,
     "engine_versions": {
       "z3": "5.0.0",
-      "python": "3.14.6"
-    }
+      "python": "3.13.5"
+    },
+    "not_proven": false
   },
   {
+    "schema_version": "1",
     "name": "GL-ops-no-space",
     "kind": "property",
     "family": "GL",
@@ -31,13 +34,15 @@
     "ok": true,
     "witness": null,
     "ground_truth": null,
-    "wall_ms": 510.9,
+    "wall_ms": 863.2,
     "engine_versions": {
       "z3": "5.0.0",
-      "python": "3.14.6"
-    }
+      "python": "3.13.5"
+    },
+    "not_proven": false
   },
   {
+    "schema_version": "1",
     "name": "VJS-ascii-no-high",
     "kind": "property",
     "family": "VJS",
@@ -49,13 +54,15 @@
     "ok": true,
     "witness": null,
     "ground_truth": null,
-    "wall_ms": 0.8,
+    "wall_ms": 1.0,
     "engine_versions": {
       "z3": "5.0.0",
-      "python": "3.14.6"
-    }
+      "python": "3.13.5"
+    },
+    "not_proven": false
   },
   {
+    "schema_version": "1",
     "name": "VJS-mutated-star",
     "kind": "mutation_guard",
     "family": "VJS",
@@ -69,13 +76,15 @@
       "c": "\u00a0"
     },
     "ground_truth": "mutation-guard-sat-expected",
-    "wall_ms": 0.1,
+    "wall_ms": 0.2,
     "engine_versions": {
       "z3": "5.0.0",
-      "python": "3.14.6"
-    }
+      "python": "3.13.5"
+    },
+    "not_proven": false
   },
   {
+    "schema_version": "1",
     "name": "VJS-port-mutated",
     "kind": "mutation_guard",
     "family": "VJS-port",
@@ -89,13 +98,15 @@
       "s": "a"
     },
     "ground_truth": "mutation-guard-sat-expected",
-    "wall_ms": 2.7,
+    "wall_ms": 3.3,
     "engine_versions": {
       "z3": "5.0.0",
-      "python": "3.14.6"
-    }
+      "python": "3.13.5"
+    },
+    "not_proven": false
   },
   {
+    "schema_version": "1",
     "name": "VJS-port-no-alpha",
     "kind": "property",
     "family": "VJS-port",
@@ -107,13 +118,15 @@
     "ok": true,
     "witness": null,
     "ground_truth": null,
-    "wall_ms": 73.0,
+    "wall_ms": 121.3,
     "engine_versions": {
       "z3": "5.0.0",
-      "python": "3.14.6"
-    }
+      "python": "3.13.5"
+    },
+    "not_proven": false
   },
   {
+    "schema_version": "1",
     "name": "VJS-proto-counterexample",
     "kind": "counterexample_finder",
     "family": "VJS-proto",
@@ -124,16 +137,18 @@
     "result": "sat",
     "ok": true,
     "witness": {
-      "s": "y://"
+      "s": "l://"
     },
     "ground_truth": "reproduced",
-    "wall_ms": 6.1,
+    "wall_ms": 7.5,
     "engine_versions": {
       "z3": "5.0.0",
-      "python": "3.14.6"
-    }
+      "python": "3.13.5"
+    },
+    "not_proven": false
   },
   {
+    "schema_version": "1",
     "name": "VJS-proto-mutated",
     "kind": "mutation_guard",
     "family": "VJS-proto",
@@ -147,10 +162,11 @@
       "s": "://"
     },
     "ground_truth": "mutation-guard-sat-expected",
-    "wall_ms": 1.0,
+    "wall_ms": 1.8,
     "engine_versions": {
       "z3": "5.0.0",
-      "python": "3.14.6"
-    }
+      "python": "3.13.5"
+    },
+    "not_proven": false
   }
 ]

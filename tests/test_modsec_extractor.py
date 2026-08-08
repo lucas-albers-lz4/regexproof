@@ -1,0 +1,108 @@
+"""ModSecurity extractor accuracy: @rx operators, escaped quotes, selectors."""
+
+from __future__ import annotations
+
+import jsonschema
+import pytest
+
+from regexproof.extractors.modsec import count_operators, extract_modsec
+from regexproof.schemas import extractor_schema
+
+REPO = "coreruleset/coreruleset"
+
+
+def _extract(source: str) -> list[dict]:
+    recs = extract_modsec(source, repo=REPO, file="rules/test.conf")
+    schema = extractor_schema()
+    for r in recs:
+        jsonschema.validate(r, schema)
+    return recs
+
+
+def test_basic_rx_operator():
+    src = 'SecRule REQUEST_URI "@rx /admin" "id:1,phase:2,deny"\n'
+    recs = _extract(src)
+    assert len(recs) == 1
+    assert recs[0]["pattern"] == "/admin"
+    assert recs[0]["dialect"] == "pcre"
+    assert recs[0]["call_kind"] == "search"
+    assert recs[0]["site"] == "rules/test.conf:1:0"
+    assert recs[0]["negated"] is False
+
+
+def test_negated_rx_operator():
+    src = 'SecRule REQUEST_URI "!@rx /admin" "id:2,phase:1,allow"\n'
+    recs = _extract(src)
+    assert len(recs) == 1
+    assert recs[0]["pattern"] == "/admin"
+    assert recs[0]["negated"] is True
+
+
+def test_escaped_quote_inside_pattern_not_truncated():
+    """Regression: CRS patterns embed \\" escapes; naive capture truncates."""
+    src = r'SecRule ARGS "@rx <script[^>]*>[\s\x0b&\)\"\']*" "id:3,phase:2,deny"' + "\n"
+    recs = _extract(src)
+    assert len(recs) == 1
+    assert recs[0]["pattern"] == r"<script[^>]*>[\s\x0b&\)\"\']*"
+
+
+def test_pattern_with_alternation_and_classes():
+    src = r'SecRule ARGS "@rx (?i)union\s+select|[\--9A-Z_a-z]" "id:4"' + "\n"
+    recs = _extract(src)
+    assert len(recs) == 1
+    assert "union" in recs[0]["pattern"]
+
+
+def test_variable_selector_regex_extracted():
+    src = 'SecRule REQUEST_COOKIES "!@within x" "id:5"\n'
+    src += 'SecRule ARGS "!REQUEST_COOKIES:/^_pk_ref/" "id:6,phase:1,pass"\n'
+    src += 'SecRule ARGS "!REQUEST_COOKIES:/^pbjs-\\w+$/" "id:7"\n'
+    recs = _extract(src)
+    selectors = [r for r in recs if r.get("selector")]
+    assert len(selectors) == 2
+    assert selectors[0]["pattern"] == "^_pk_ref"
+    assert selectors[0]["negated"] is True
+    assert selectors[1]["pattern"] == r"^pbjs-\w+$"
+
+
+def test_quoted_variable_selector_is_literal_not_regex():
+    src = 'SecRule ARGS "!REQUEST_COOKIES:FCCDCF" "id:8"\n'
+    recs = _extract(src)
+    assert recs == []
+
+
+def test_non_regex_operator_not_extracted_but_counted():
+    src = 'SecRule REQUEST_BODY "@lt 1024" "id:9"\n'
+    src += 'SecRule REQUEST_BODY "@ge 1024" "id:10"\n'
+    assert _extract(src) == []
+    counts = count_operators(src)
+    assert counts["@lt"] == 1
+    assert counts["@ge"] == 1
+
+
+def test_comments_and_non_secrule_lines_skipped():
+    src = "# a comment\nSecRule ARGS \"@rx x\" \"id:11\"\nSecAction \"id:12,phase:1\"\n"
+    recs = _extract(src)
+    assert len(recs) == 1
+    assert recs[0]["line"] == 2
+
+
+def test_inline_crs_style_corpus():
+    """A realistic multi-rule CRS-style corpus extracts end to end."""
+    src = (
+        '# CRS rule\n'
+        'SecRule REQUEST_URI "@rx ^(?:connect (?:(?:[0-9]{1,3}\\.){3}[0-9]{1,3}|[a-z]+:[0-9]+)|options \\*)" "id:920100,phase:1,deny"\n'
+        'SecRule ARGS "@rx (?i)union\\s+select" "id:942100,phase:2,deny"\n'
+        'SecRule REQUEST_HEADERS "!@rx (?i)charset.*?charset" "id:920120,phase:1,pass"\n'
+        'SecRule REQUEST_BODY "@lt 1024" "id:920180,phase:1,pass"\n'
+        'SecRule ARGS "!REQUEST_COOKIES:/^_pk_ref/" "id:920280,phase:1,pass"\n'
+    )
+    recs = _extract(src)
+    assert len(recs) == 4  # 3 @rx + 1 selector regex; @lt is not regex
+    rx = [r for r in recs if not r.get("selector")]
+    assert len(rx) == 3
+    assert rx[0]["pattern"].startswith("^(?:connect ")
+    assert rx[1]["pattern"] == "(?i)union\\s+select"
+    assert rx[2]["negated"] is True
+    assert rx[2]["pattern"] == "(?i)charset.*?charset"
+    assert [r for r in recs if r.get("selector")][0]["pattern"] == "^_pk_ref"

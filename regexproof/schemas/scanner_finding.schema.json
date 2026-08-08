@@ -37,6 +37,9 @@
       "enum": ["private_first", "public_ok", null]
     },
     "witness": {},
+    "domain": { "type": ["string", "null"] },
+    "wall_ms": { "type": ["integer", "null"] },
+    "engine_versions": { "type": ["object", "null"], "additionalProperties": true },
     "detail": { "type": "object", "additionalProperties": true }
   }
 }

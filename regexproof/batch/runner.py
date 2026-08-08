@@ -27,6 +27,7 @@ from regexproof.batch.triage import triage_records_from_compiled, write_triage_n
 from regexproof.compiler import compile_pattern  # noqa: E402
 from regexproof.compiler.normalize import normalize_inline_flags  # noqa: E402
 from regexproof.extractors.js_babel import extract_js  # noqa: E402
+from regexproof.extractors.modsec import extract_modsec  # noqa: E402
 from regexproof.extractors.python_ast import extract_python  # noqa: E402
 from regexproof.extractors.rule_file import extract_rule_file  # noqa: E402
 from regexproof.redos.join import join_findings  # noqa: E402
@@ -68,6 +69,15 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "security_tool": True,
         "lift_inline": False,
     },
+    "coreruleset": {
+        "corpus_type": "rule_corpus",
+        "path": ROOT / "batch" / "corpora" / "coreruleset" / "rules",
+        "dialect": "pcre",
+        "extractor": "modsec",
+        "repo": "coreruleset/coreruleset",
+        "security_tool": True,
+        "lift_inline": True,
+    },
 }
 
 
@@ -79,6 +89,18 @@ def _extract(corpus: str, meta: dict[str, Any]) -> list[dict[str, Any]]:
         return extract_rule_file(
             source, repo=meta["repo"], file=rel, dialect=meta["dialect"]
         )
+    if meta["extractor"] == "modsec":
+        out: list[dict[str, Any]] = []
+        for fp in sorted(path.glob("*.conf")):
+            rel = str(fp.relative_to(ROOT))
+            out.extend(
+                extract_modsec(
+                    fp.read_text(encoding="utf-8", errors="replace"),
+                    repo=meta["repo"],
+                    file=rel,
+                )
+            )
+        return out
     if meta["extractor"] == "js_dir":
         out: list[dict[str, Any]] = []
         for name in meta.get("files") or sorted(p.name for p in path.glob("*.js")):
@@ -162,7 +184,6 @@ def run_corpus(
                 "site": f"inventory:{q['id']}",
                 "pattern": "",
                 "shape": q["shape"],
-                "ground_truth_status": "N/A",
                 "disclosure": None,
                 "detail": {"question_id": q["id"], "threat": q["threat"]},
             }
@@ -193,8 +214,12 @@ def run_corpus(
                         "site": f.get("site") or "",
                         "pattern": f.get("pattern") or "",
                         "shape": None,
-                        "ground_truth_status": "N/A",
                         "disclosure": "private_first" if meta.get("security_tool") else None,
+                        "engine_versions": (
+                            {str(f.get("tool")): str(f.get("tool_version"))}
+                            if f.get("tool")
+                            else None
+                        ),
                         "detail": {"tool": f.get("tool"), "severity": f.get("severity")},
                     }
                 )
@@ -342,7 +367,7 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument(
         "--corpus",
         default="all",
-        help="gitleaks|validatorjs|detect-secrets|all",
+        help="gitleaks|validatorjs|detect-secrets|coreruleset|all",
     )
     ap.add_argument("--out", type=Path, default=ROOT / "properties" / "generated")
     ap.add_argument("--with-redos", action="store_true")
@@ -356,6 +381,8 @@ def main(argv: list[str] | None = None) -> int:
         print("error: --json-legacy is mutually exclusive with batch NDJSON", file=sys.stderr)
         return 2
     if args.corpus == "all":
+        # coreruleset is opt-in: its corpus is an external pinned clone, not
+        # committed (see batch/corpora/coreruleset/README.md).
         corpora = ["gitleaks", "validatorjs", "detect-secrets"]
     else:
         corpora = [args.corpus]
