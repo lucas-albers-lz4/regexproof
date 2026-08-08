@@ -211,6 +211,28 @@ for dialect in ("py_re", "ecma", "re2", "pcre"):
         _add(dialect, pat, "", "fullmatch", acc, rej)
 
 
+# --- trailing-alternation $ (P2 #87 / A1B) ---
+_TRAILING_ALT = [
+    (r"(?:a|$)", "search", ["", "a", "zz"], []),
+    (r"foo(?:bar|$)", "search", ["foo", "foobar", "xfoo"], ["bar"]),
+    (r"x(?:a|b|$)", "search", ["x", "xa", "xb"], ["a"]),
+    (r"foo(?:x(?:y)|$)", "search", ["foo", "fooxy"], ["foox"]),
+]
+for dialect in ("py_re", "ecma", "re2", "pcre"):
+    for pat, ck, acc, rej in _TRAILING_ALT:
+        _add(dialect, pat, "", ck, acc, rej)
+    _add(
+        dialect,
+        r"^a|b",
+        "",
+        "search",
+        [],
+        [],
+        category="reject",
+        expect_unencodable="per-alternative-anchor",
+    )
+
+
 def coverage_counts() -> dict[str, dict[str, int]]:
     counts: dict[str, dict[str, int]] = {}
     for c in CASES:

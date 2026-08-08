@@ -2,7 +2,7 @@
 
 | Corpus | Decision | Fraction | Encodable | Size | parse-error |
 |---|---|---|---|---|---|
-| gitleaks | no-go | 0.2262 | 50 | 221 | 0 |
+| gitleaks | go | 0.819 | 181 | 221 | 0 |
 | validatorjs | go | 0.7689 | 163 | 212 | 0 |
 | coreruleset | go | 0.6908 | 239 | 346 | 0 |
 | trufflehog | go | 0.9302 | 200 | 215 | 0 |
