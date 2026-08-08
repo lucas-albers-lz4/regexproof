@@ -6,8 +6,8 @@
       "mirror_on_witness": true,
       "py_re_on_witness": true,
       "result": "sat",
-      "wall_ms": 9.82,
-      "witness": "Dfoo"
+      "wall_ms": 7.62,
+      "witness": "Afoo"
     },
     {
       "call_kind": "search",
@@ -15,7 +15,7 @@
       "mirror_on_witness": true,
       "py_re_on_witness": true,
       "result": "sat",
-      "wall_ms": 3.13,
+      "wall_ms": 3.38,
       "witness": "foo"
     },
     {
@@ -24,8 +24,8 @@
       "mirror_on_witness": true,
       "py_re_on_witness": true,
       "result": "sat",
-      "wall_ms": 7.47,
-      "witness": "Dfoo"
+      "wall_ms": 7.07,
+      "witness": "Afoo"
     },
     {
       "call_kind": "exec",
@@ -33,7 +33,7 @@
       "mirror_on_witness": true,
       "py_re_on_witness": true,
       "result": "sat",
-      "wall_ms": 2.9,
+      "wall_ms": 2.78,
       "witness": "foo"
     },
     {
@@ -42,8 +42,8 @@
       "mirror_on_witness": true,
       "py_re_on_witness": true,
       "result": "sat",
-      "wall_ms": 1.65,
-      "witness": "foobar"
+      "wall_ms": 10.16,
+      "witness": "foo"
     },
     {
       "call_kind": "match",
@@ -51,7 +51,7 @@
       "mirror_on_witness": true,
       "py_re_on_witness": true,
       "result": "sat",
-      "wall_ms": 8.7,
+      "wall_ms": 7.16,
       "witness": "foo"
     },
     {
@@ -60,8 +60,8 @@
       "mirror_on_witness": true,
       "py_re_on_witness": true,
       "result": "sat",
-      "wall_ms": 1.34,
-      "witness": "foobar"
+      "wall_ms": 1.12,
+      "witness": "foo"
     },
     {
       "call_kind": "fullmatch",
@@ -69,7 +69,7 @@
       "mirror_on_witness": true,
       "py_re_on_witness": true,
       "result": "sat",
-      "wall_ms": 3.43,
+      "wall_ms": 3.12,
       "witness": "foo"
     }
   ],
@@ -97,13 +97,13 @@
       "encoding": "E1",
       "flags": "",
       "id": "toy-a-dollar",
-      "max_membership_ms": 0.14,
+      "max_membership_ms": 0.2,
       "pattern": "(?:a|$)",
       "result": "sat",
       "sat_find": {
         "note": "case-split-sat-find",
         "result": "sat",
-        "wall_ms": 1.33,
+        "wall_ms": 1.31,
         "witness": "!0!a!1!",
         "xd_sat_find": {
           "note": "empty-x-universal",
@@ -113,19 +113,19 @@
         },
         "xr_sat_find": {
           "result": "sat",
-          "wall_ms": 1.33,
+          "wall_ms": 1.31,
           "witness": "!0!a!1!"
         }
       },
       "soundness": {
         "checked": 5,
-        "max_membership_ms": 0.14,
+        "max_membership_ms": 0.2,
         "membership_walls_ms": [
+          0.13,
           0.12,
-          0.11,
+          0.15,
           0.14,
-          0.14,
-          0.14
+          0.2
         ],
         "mismatches": []
       },
@@ -135,7 +135,7 @@
         "x_dollar": "",
         "xr": "(?:a)"
       },
-      "wall_ms": 1.33,
+      "wall_ms": 1.31,
       "witness": "!0!a!1!",
       "x_dollar_encoding": "compile_x$"
     },
@@ -147,12 +147,24 @@
       "flags": "",
       "id": "toy-a-dollar",
       "len_bound": 256,
+      "max_membership_ms": 0.15,
       "pattern": "(?:a|$)",
       "result": "sat",
       "sat_find": {
         "result": "sat",
-        "wall_ms": 0.82,
-        "witness": "a"
+        "wall_ms": 0.52,
+        "witness": ""
+      },
+      "soundness": {
+        "checked": 4,
+        "max_membership_ms": 0.15,
+        "membership_walls_ms": [
+          0.12,
+          0.14,
+          0.12,
+          0.15
+        ],
+        "mismatches": []
       },
       "split": {
         "empty_x": true,
@@ -160,8 +172,8 @@
         "x_dollar": "",
         "xr": "(?:a)"
       },
-      "wall_ms": 0.82,
-      "witness": "a"
+      "wall_ms": 0.52,
+      "witness": ""
     },
     {
       "bucket": "toy",
@@ -170,35 +182,35 @@
       "encoding": "E1",
       "flags": "",
       "id": "toy-foo-bar",
-      "max_membership_ms": 0.18,
+      "max_membership_ms": 0.23,
       "pattern": "foo(?:bar|$)",
       "result": "sat",
       "sat_find": {
         "note": "case-split-sat-find",
         "result": "sat",
-        "wall_ms": 1.41,
+        "wall_ms": 2.02,
         "witness": "!0!foobar!1!",
         "xd_sat_find": {
           "result": "sat",
-          "wall_ms": 0.68,
+          "wall_ms": 0.78,
           "witness": "foo"
         },
         "xr_sat_find": {
           "result": "sat",
-          "wall_ms": 0.73,
+          "wall_ms": 1.24,
           "witness": "!0!foobar!1!"
         }
       },
       "soundness": {
         "checked": 6,
-        "max_membership_ms": 0.18,
+        "max_membership_ms": 0.23,
         "membership_walls_ms": [
+          0.2,
           0.18,
-          0.15,
-          0.17,
+          0.18,
           0.16,
-          0.18,
-          0.15
+          0.23,
+          0.14
         ],
         "mismatches": []
       },
@@ -208,7 +220,7 @@
         "x_dollar": "foo$",
         "xr": "foo(?:bar)"
       },
-      "wall_ms": 1.41,
+      "wall_ms": 2.02,
       "witness": "!0!foobar!1!",
       "x_dollar_encoding": "compile_x$"
     },
@@ -220,12 +232,34 @@
       "flags": "",
       "id": "toy-foo-bar",
       "len_bound": 256,
+      "max_membership_ms": 0.17,
       "pattern": "foo(?:bar|$)",
       "result": "sat",
       "sat_find": {
         "result": "sat",
-        "wall_ms": 5.48,
+        "wall_ms": 6.06,
         "witness": "foo"
+      },
+      "soundness": {
+        "checked": 5,
+        "max_membership_ms": 0.17,
+        "membership_walls_ms": [
+          0.16,
+          0.17,
+          0.17,
+          0.11,
+          0.12
+        ],
+        "mismatches": [
+          {
+            "engine": "re2",
+            "mirror": false,
+            "py_re": true,
+            "real": true,
+            "s": "foobarz",
+            "wall_ms": 0.11
+          }
+        ]
       },
       "split": {
         "empty_x": false,
@@ -233,7 +267,7 @@
         "x_dollar": "foo$",
         "xr": "foo(?:bar)"
       },
-      "wall_ms": 5.48,
+      "wall_ms": 6.06,
       "witness": "foo"
     },
     {
@@ -243,34 +277,34 @@
       "encoding": "E1",
       "flags": "",
       "id": "toy-x-ab",
-      "max_membership_ms": 0.2,
+      "max_membership_ms": 0.27,
       "pattern": "x(?:a|b|$)",
       "result": "sat",
       "sat_find": {
         "note": "case-split-sat-find",
         "result": "sat",
-        "wall_ms": 2.32,
-        "witness": "xa",
+        "wall_ms": 2.42,
+        "witness": "xb",
         "xd_sat_find": {
           "result": "sat",
-          "wall_ms": 0.54,
+          "wall_ms": 0.62,
           "witness": "x"
         },
         "xr_sat_find": {
           "result": "sat",
-          "wall_ms": 1.78,
-          "witness": "xa"
+          "wall_ms": 1.8,
+          "witness": "xb"
         }
       },
       "soundness": {
         "checked": 5,
-        "max_membership_ms": 0.2,
+        "max_membership_ms": 0.27,
         "membership_walls_ms": [
-          0.14,
+          0.16,
           0.19,
           0.19,
-          0.2,
-          0.15
+          0.27,
+          0.13
         ],
         "mismatches": []
       },
@@ -280,8 +314,8 @@
         "x_dollar": "x$",
         "xr": "x(?:a|b)"
       },
-      "wall_ms": 2.32,
-      "witness": "xa",
+      "wall_ms": 2.42,
+      "witness": "xb",
       "x_dollar_encoding": "compile_x$"
     },
     {
@@ -292,12 +326,25 @@
       "flags": "",
       "id": "toy-x-ab",
       "len_bound": 256,
+      "max_membership_ms": 0.2,
       "pattern": "x(?:a|b|$)",
       "result": "sat",
       "sat_find": {
         "result": "sat",
-        "wall_ms": 1.49,
+        "wall_ms": 1.58,
         "witness": "x"
+      },
+      "soundness": {
+        "checked": 5,
+        "max_membership_ms": 0.2,
+        "membership_walls_ms": [
+          0.16,
+          0.2,
+          0.16,
+          0.17,
+          0.12
+        ],
+        "mismatches": []
       },
       "split": {
         "empty_x": false,
@@ -305,8 +352,91 @@
         "x_dollar": "x$",
         "xr": "x(?:a|b)"
       },
-      "wall_ms": 1.49,
+      "wall_ms": 1.58,
       "witness": "x"
+    },
+    {
+      "bucket": "toy",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encoding": "E1",
+      "flags": "",
+      "id": "toy-nested-noncap",
+      "max_membership_ms": 0.23,
+      "pattern": "foo(?:x(?:y)|$)",
+      "result": "sat",
+      "sat_find": {
+        "note": "case-split-sat-find",
+        "result": "sat",
+        "wall_ms": 1.61,
+        "witness": "!0!fooxy!1!",
+        "xd_sat_find": {
+          "result": "sat",
+          "wall_ms": 0.77,
+          "witness": "foo"
+        },
+        "xr_sat_find": {
+          "result": "sat",
+          "wall_ms": 0.84,
+          "witness": "!0!fooxy!1!"
+        }
+      },
+      "soundness": {
+        "checked": 4,
+        "max_membership_ms": 0.23,
+        "membership_walls_ms": [
+          0.23,
+          0.11,
+          0.14,
+          0.17
+        ],
+        "mismatches": []
+      },
+      "split": {
+        "empty_x": false,
+        "x_bare": "foo",
+        "x_dollar": "foo$",
+        "xr": "foo(?:x(?:y))"
+      },
+      "wall_ms": 1.61,
+      "witness": "!0!fooxy!1!",
+      "x_dollar_encoding": "compile_x$"
+    },
+    {
+      "bucket": "toy",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encoding": "E2",
+      "flags": "",
+      "id": "toy-nested-noncap",
+      "len_bound": 256,
+      "max_membership_ms": 0.15,
+      "pattern": "foo(?:x(?:y)|$)",
+      "result": "sat",
+      "sat_find": {
+        "result": "sat",
+        "wall_ms": 5.64,
+        "witness": "foo"
+      },
+      "soundness": {
+        "checked": 4,
+        "max_membership_ms": 0.15,
+        "membership_walls_ms": [
+          0.13,
+          0.1,
+          0.1,
+          0.15
+        ],
+        "mismatches": []
+      },
+      "split": {
+        "empty_x": false,
+        "x_bare": "foo",
+        "x_dollar": "foo$",
+        "xr": "foo(?:x(?:y))"
+      },
+      "wall_ms": 5.64,
+      "witness": "foo"
     },
     {
       "bucket": "control-reject",
@@ -345,35 +475,35 @@
       "encoding": "E1",
       "flags": "",
       "id": "reduced-adafruit",
-      "max_membership_ms": 2.92,
+      "max_membership_ms": 2.76,
       "pattern": "(?:adafruit)=([a-z0-9_-]{32})(?:[\\x60'\\\"\\s;]|$)",
       "result": "sat",
       "sat_find": {
         "note": "case-split-sat-find",
         "result": "sat",
-        "wall_ms": 306.32,
-        "witness": "adafruit=cist4g22dpaeqgvfib4dhka57doylbkt`",
+        "wall_ms": 317.65,
+        "witness": "adafruit=6heo730vcww2e3kvylc72drezl_osukr\r",
         "xd_sat_find": {
           "result": "sat",
-          "wall_ms": 114.75,
-          "witness": "adafruit=7mzc8nouvi8jlb1hu-myy9i78pt2m0kt"
+          "wall_ms": 116.94,
+          "witness": "adafruit=wwz00j3r9s639ppecl5dj8vr7x2mdn12"
         },
         "xr_sat_find": {
           "result": "sat",
-          "wall_ms": 191.57,
-          "witness": "adafruit=cist4g22dpaeqgvfib4dhka57doylbkt`"
+          "wall_ms": 200.71,
+          "witness": "adafruit=6heo730vcww2e3kvylc72drezl_osukr\r"
         }
       },
       "soundness": {
         "checked": 6,
-        "max_membership_ms": 2.92,
+        "max_membership_ms": 2.76,
         "membership_walls_ms": [
-          2.92,
-          2.16,
-          2.13,
-          2.49,
-          1.31,
-          0.73
+          2.36,
+          2.43,
+          2.71,
+          2.76,
+          2.02,
+          0.91
         ],
         "mismatches": []
       },
@@ -383,8 +513,8 @@
         "x_dollar": "(?:adafruit)=([a-z0-9_-]{32})$",
         "xr": "(?:adafruit)=([a-z0-9_-]{32})(?:[\\x60'\\\"\\s;])"
       },
-      "wall_ms": 306.32,
-      "witness": "adafruit=cist4g22dpaeqgvfib4dhka57doylbkt`",
+      "wall_ms": 317.65,
+      "witness": "adafruit=6heo730vcww2e3kvylc72drezl_osukr\r",
       "x_dollar_encoding": "compile_x$"
     },
     {
@@ -395,12 +525,26 @@
       "flags": "",
       "id": "reduced-adafruit",
       "len_bound": 256,
+      "max_membership_ms": 2.43,
       "pattern": "(?:adafruit)=([a-z0-9_-]{32})(?:[\\x60'\\\"\\s;]|$)",
       "result": "sat",
       "sat_find": {
         "result": "sat",
-        "wall_ms": 114.49,
-        "witness": "adafruit=ssg9oqau2fjcqe3yh078z_s2n6tkgj-0"
+        "wall_ms": 114.9,
+        "witness": "adafruit=z9qwf6cmakgzi1qps8n0hq2k3l4n9-i5"
+      },
+      "soundness": {
+        "checked": 6,
+        "max_membership_ms": 2.43,
+        "membership_walls_ms": [
+          2.43,
+          2.32,
+          2.37,
+          2.05,
+          1.18,
+          0.86
+        ],
+        "mismatches": []
       },
       "split": {
         "empty_x": false,
@@ -408,8 +552,8 @@
         "x_dollar": "(?:adafruit)=([a-z0-9_-]{32})$",
         "xr": "(?:adafruit)=([a-z0-9_-]{32})(?:[\\x60'\\\"\\s;])"
       },
-      "wall_ms": 114.49,
-      "witness": "adafruit=ssg9oqau2fjcqe3yh078z_s2n6tkgj-0"
+      "wall_ms": 114.9,
+      "witness": "adafruit=z9qwf6cmakgzi1qps8n0hq2k3l4n9-i5"
     },
     {
       "bucket": "reduced",
@@ -418,34 +562,34 @@
       "encoding": "E1",
       "flags": "",
       "id": "reduced-delim",
-      "max_membership_ms": 1.57,
+      "max_membership_ms": 1.66,
       "pattern": "secret([a-z0-9]{16})(?:[\\x60'\\\"\\s;]|\\\\[nr]|$)",
       "result": "sat",
       "sat_find": {
         "note": "case-split-sat-find",
         "result": "sat",
-        "wall_ms": 125.2,
-        "witness": "Asecretwnezfivtltu22jyw\"",
+        "wall_ms": 128.51,
+        "witness": "Asecreta0sf2evv20ya9vee\r",
         "xd_sat_find": {
           "result": "sat",
-          "wall_ms": 58.31,
-          "witness": "secretu4la3xbkzawzav34"
+          "wall_ms": 78.46,
+          "witness": "Asecrettey95q1pn8knpaqt"
         },
         "xr_sat_find": {
           "result": "sat",
-          "wall_ms": 66.89,
-          "witness": "Asecretwnezfivtltu22jyw\""
+          "wall_ms": 50.05,
+          "witness": "Asecreta0sf2evv20ya9vee\r"
         }
       },
       "soundness": {
         "checked": 5,
-        "max_membership_ms": 1.57,
+        "max_membership_ms": 1.66,
         "membership_walls_ms": [
-          1.57,
-          1.34,
-          1.22,
-          0.71,
-          0.61
+          1.63,
+          1.66,
+          1.25,
+          0.86,
+          0.74
         ],
         "mismatches": []
       },
@@ -455,8 +599,8 @@
         "x_dollar": "secret([a-z0-9]{16})$",
         "xr": "secret([a-z0-9]{16})(?:[\\x60'\\\"\\s;]|\\\\[nr])"
       },
-      "wall_ms": 125.2,
-      "witness": "Asecretwnezfivtltu22jyw\"",
+      "wall_ms": 128.51,
+      "witness": "Asecreta0sf2evv20ya9vee\r",
       "x_dollar_encoding": "compile_x$"
     },
     {
@@ -467,12 +611,25 @@
       "flags": "",
       "id": "reduced-delim",
       "len_bound": 256,
+      "max_membership_ms": 1.69,
       "pattern": "secret([a-z0-9]{16})(?:[\\x60'\\\"\\s;]|\\\\[nr]|$)",
       "result": "sat",
       "sat_find": {
         "result": "sat",
-        "wall_ms": 44.71,
-        "witness": "secretgv7idr2mpou859zr\f"
+        "wall_ms": 83.19,
+        "witness": "Asecrets8fo8yl81h69pdid"
+      },
+      "soundness": {
+        "checked": 5,
+        "max_membership_ms": 1.69,
+        "membership_walls_ms": [
+          1.69,
+          1.29,
+          1.26,
+          0.74,
+          0.66
+        ],
+        "mismatches": []
       },
       "split": {
         "empty_x": false,
@@ -480,8 +637,8 @@
         "x_dollar": "secret([a-z0-9]{16})$",
         "xr": "secret([a-z0-9]{16})(?:[\\x60'\\\"\\s;]|\\\\[nr])"
       },
-      "wall_ms": 44.71,
-      "witness": "secretgv7idr2mpou859zr\f"
+      "wall_ms": 83.19,
+      "witness": "Asecrets8fo8yl81h69pdid"
     },
     {
       "bucket": "reduced",
@@ -490,35 +647,35 @@
       "encoding": "E1",
       "flags": "",
       "id": "reduced-b-short",
-      "max_membership_ms": 1.56,
+      "max_membership_ms": 1.43,
       "pattern": "\\b(TOK[A-Z0-9]{8})(?:[\\x60'\\\"\\s;]|$)",
       "result": "sat",
       "sat_find": {
         "note": "case-split-sat-find",
         "result": "sat",
-        "wall_ms": 1022.27,
-        "witness": "TOKOTORRO9G\n\\]_ab",
+        "wall_ms": 2025.91,
+        "witness": "TOKK5WK0ZLP`\\]_ab",
         "xd_sat_find": {
           "result": "sat",
-          "wall_ms": 794.66,
-          "witness": "TOKIBO7W0FK"
+          "wall_ms": 1735.24,
+          "witness": "TOKK5MKYHGX"
         },
         "xr_sat_find": {
           "result": "sat",
-          "wall_ms": 227.61,
-          "witness": "TOKOTORRO9G\n\\]_ab"
+          "wall_ms": 290.67,
+          "witness": "TOKK5WK0ZLP`\\]_ab"
         }
       },
       "soundness": {
         "checked": 6,
-        "max_membership_ms": 1.56,
+        "max_membership_ms": 1.43,
         "membership_walls_ms": [
-          1.32,
-          1.56,
+          1.42,
+          1.29,
           1.43,
-          0.81,
-          1.02,
-          0.8
+          0.79,
+          0.99,
+          0.64
         ],
         "mismatches": []
       },
@@ -528,8 +685,8 @@
         "x_dollar": "\\b(TOK[A-Z0-9]{8})$",
         "xr": "\\b(TOK[A-Z0-9]{8})(?:[\\x60'\\\"\\s;])"
       },
-      "wall_ms": 1022.27,
-      "witness": "TOKOTORRO9G\n\\]_ab",
+      "wall_ms": 2025.91,
+      "witness": "TOKK5WK0ZLP`\\]_ab",
       "x_dollar_encoding": "wb_leading_suffix_mirror"
     },
     {
@@ -540,12 +697,35 @@
       "flags": "",
       "id": "reduced-b-short",
       "len_bound": 256,
+      "max_membership_ms": 1.06,
       "pattern": "\\b(TOK[A-Z0-9]{8})(?:[\\x60'\\\"\\s;]|$)",
       "result": "sat",
       "sat_find": {
         "result": "sat",
-        "wall_ms": 18.11,
-        "witness": "[TOKW8V008E3"
+        "wall_ms": 18.91,
+        "witness": "[TOKVNWGWJOZ"
+      },
+      "soundness": {
+        "checked": 6,
+        "max_membership_ms": 1.06,
+        "membership_walls_ms": [
+          1.01,
+          1.01,
+          1.06,
+          1.01,
+          0.97,
+          0.52
+        ],
+        "mismatches": [
+          {
+            "engine": "re2",
+            "mirror": true,
+            "py_re": false,
+            "real": false,
+            "s": "xTOKABCDEF12",
+            "wall_ms": 1.01
+          }
+        ]
       },
       "split": {
         "empty_x": false,
@@ -553,8 +733,8 @@
         "x_dollar": "\\b(TOK[A-Z0-9]{8})$",
         "xr": "\\b(TOK[A-Z0-9]{8})(?:[\\x60'\\\"\\s;])"
       },
-      "wall_ms": 18.11,
-      "witness": "[TOKW8V008E3"
+      "wall_ms": 18.91,
+      "witness": "[TOKVNWGWJOZ"
     },
     {
       "bucket": "gitleaks-kw",
@@ -563,7 +743,7 @@
       "encoding": "E1",
       "flags": "",
       "id": "ac8604fcd5ba993051be817dd6147a21",
-      "max_membership_ms": 2.95,
+      "max_membership_ms": 2.63,
       "pattern": "[\\w.-]{0,50}?(?:adafruit)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}([a-z0-9_-]{32})(?:[\\x60'\"\\s;]|\\\\[nr]|$)",
       "result": "skipped-corpus-sat-find",
       "sat_find": {
@@ -573,13 +753,13 @@
       },
       "soundness": {
         "checked": 5,
-        "max_membership_ms": 2.95,
+        "max_membership_ms": 2.63,
         "membership_walls_ms": [
-          2.95,
-          2.3,
-          2.3,
-          1.52,
-          1.03
+          2.63,
+          2.36,
+          2.34,
+          1.58,
+          1.06
         ],
         "mismatches": []
       },
@@ -600,7 +780,7 @@
       "encoding": "E1",
       "flags": "",
       "id": "41131f3939b610cc8c15586511750818",
-      "max_membership_ms": 0.95,
+      "max_membership_ms": 0.9,
       "pattern": "[\\w.-]{0,50}?(?:adobe)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}([a-f0-9]{32})(?:[\\x60'\"\\s;]|\\\\[nr]|$)",
       "result": "skipped-corpus-sat-find",
       "sat_find": {
@@ -610,12 +790,12 @@
       },
       "soundness": {
         "checked": 4,
-        "max_membership_ms": 0.95,
+        "max_membership_ms": 0.9,
         "membership_walls_ms": [
-          0.73,
-          0.79,
+          0.72,
+          0.84,
           0.9,
-          0.95
+          0.88
         ],
         "mismatches": []
       },
@@ -636,7 +816,7 @@
       "encoding": "E1",
       "flags": "",
       "id": "7e1b515f4a13cba11c0609302fa8dff1",
-      "max_membership_ms": 1.11,
+      "max_membership_ms": 1.04,
       "pattern": "[\\w.-]{0,50}?(?:airtable)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}([a-z0-9]{17})(?:[\\x60'\"\\s;]|\\\\[nr]|$)",
       "result": "skipped-corpus-sat-find",
       "sat_find": {
@@ -646,12 +826,12 @@
       },
       "soundness": {
         "checked": 4,
-        "max_membership_ms": 1.11,
+        "max_membership_ms": 1.04,
         "membership_walls_ms": [
-          0.95,
-          0.88,
-          1.0,
-          1.11
+          0.87,
+          0.89,
+          1.03,
+          1.04
         ],
         "mismatches": []
       },
@@ -672,7 +852,7 @@
       "encoding": "E1",
       "flags": "",
       "id": "3d5d72fe4899f145402ee93743f3552f",
-      "max_membership_ms": 1.15,
+      "max_membership_ms": 1.06,
       "pattern": "[\\w.-]{0,50}?(?:algolia)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}([a-z0-9]{32})(?:[\\x60'\"\\s;]|\\\\[nr]|$)",
       "result": "skipped-corpus-sat-find",
       "sat_find": {
@@ -682,12 +862,12 @@
       },
       "soundness": {
         "checked": 4,
-        "max_membership_ms": 1.15,
+        "max_membership_ms": 1.06,
         "membership_walls_ms": [
-          0.89,
-          0.94,
-          1.02,
-          1.15
+          0.85,
+          0.91,
+          1.01,
+          1.06
         ],
         "mismatches": []
       },
@@ -708,7 +888,7 @@
       "encoding": "E1",
       "flags": "",
       "id": "af05f24163c0f84869a1596def89d1b8",
-      "max_membership_ms": 1.04,
+      "max_membership_ms": 1.08,
       "pattern": "[\\w.-]{0,50}?(?:alibaba)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}([a-z0-9]{30})(?:[\\x60'\"\\s;]|\\\\[nr]|$)",
       "result": "skipped-corpus-sat-find",
       "sat_find": {
@@ -718,12 +898,12 @@
       },
       "soundness": {
         "checked": 4,
-        "max_membership_ms": 1.04,
+        "max_membership_ms": 1.08,
         "membership_walls_ms": [
-          0.83,
-          0.97,
-          0.96,
-          1.04
+          0.85,
+          0.89,
+          1.0,
+          1.08
         ],
         "mismatches": []
       },
@@ -744,7 +924,7 @@
       "encoding": "E1",
       "flags": "",
       "id": "a6e8f5ff3888ba5b9f0d01e84646c268",
-      "max_membership_ms": 1.44,
+      "max_membership_ms": 1.47,
       "pattern": "\\b(sk-ant-admin01-[a-zA-Z0-9_\\-]{93}AA)(?:[\\x60'\"\\s;]|\\\\[nr]|$)",
       "result": "skipped-corpus-sat-find",
       "sat_find": {
@@ -754,11 +934,11 @@
       },
       "soundness": {
         "checked": 3,
-        "max_membership_ms": 1.44,
+        "max_membership_ms": 1.47,
         "membership_walls_ms": [
-          1.35,
-          1.36,
-          1.44
+          1.41,
+          1.41,
+          1.47
         ],
         "mismatches": []
       },
@@ -779,7 +959,7 @@
       "encoding": "E1",
       "flags": "",
       "id": "7659754f2cb2ecf3548ffbae58f2613d",
-      "max_membership_ms": 1.43,
+      "max_membership_ms": 1.49,
       "pattern": "\\b(sk-ant-api03-[a-zA-Z0-9_\\-]{93}AA)(?:[\\x60'\"\\s;]|\\\\[nr]|$)",
       "result": "skipped-corpus-sat-find",
       "sat_find": {
@@ -789,11 +969,11 @@
       },
       "soundness": {
         "checked": 3,
-        "max_membership_ms": 1.43,
+        "max_membership_ms": 1.49,
         "membership_walls_ms": [
-          1.32,
-          1.33,
-          1.43
+          1.47,
+          1.38,
+          1.49
         ],
         "mismatches": []
       },
@@ -814,7 +994,7 @@
       "encoding": "E1",
       "flags": "",
       "id": "07bed9c9f7fe8fb30cf9f5dba9cda323",
-      "max_membership_ms": 1.07,
+      "max_membership_ms": 1.21,
       "pattern": "\\b(ABSK[A-Za-z0-9+/]{109,269}={0,2})(?:[\\x60'\"\\s;]|\\\\[nr]|$)",
       "result": "skipped-corpus-sat-find",
       "sat_find": {
@@ -824,11 +1004,11 @@
       },
       "soundness": {
         "checked": 3,
-        "max_membership_ms": 1.07,
+        "max_membership_ms": 1.21,
         "membership_walls_ms": [
-          1.03,
-          1.01,
-          1.07
+          1.21,
+          1.15,
+          1.16
         ],
         "mismatches": []
       },
@@ -864,33 +1044,33 @@
       "encoding": "E1",
       "flags": "",
       "id": "ids-0-amp",
-      "max_membership_ms": 0.24,
+      "max_membership_ms": 0.27,
       "pattern": "^0+(?:&|$)",
       "result": "sat",
       "sat_find": {
         "note": "case-split-sat-find",
         "result": "sat",
-        "wall_ms": 2.88,
+        "wall_ms": 3.39,
         "witness": "0&",
         "xd_sat_find": {
           "result": "sat",
-          "wall_ms": 1.08,
+          "wall_ms": 1.2,
           "witness": "0"
         },
         "xr_sat_find": {
           "result": "sat",
-          "wall_ms": 1.8,
+          "wall_ms": 2.19,
           "witness": "0&"
         }
       },
       "soundness": {
         "checked": 5,
-        "max_membership_ms": 0.24,
+        "max_membership_ms": 0.27,
         "membership_walls_ms": [
-          0.22,
-          0.21,
-          0.24,
-          0.14,
+          0.27,
+          0.23,
+          0.23,
+          0.17,
           0.18
         ],
         "mismatches": []
@@ -901,7 +1081,7 @@
         "x_dollar": "^0+$",
         "xr": "^0+(?:&)"
       },
-      "wall_ms": 2.88,
+      "wall_ms": 3.39,
       "witness": "0&",
       "x_dollar_encoding": "compile_x$"
     },
@@ -913,12 +1093,34 @@
       "flags": "",
       "id": "ids-0-amp",
       "len_bound": 256,
+      "max_membership_ms": 0.33,
       "pattern": "^0+(?:&|$)",
       "result": "sat",
       "sat_find": {
         "result": "sat",
-        "wall_ms": 2.47,
+        "wall_ms": 1.78,
         "witness": "0"
+      },
+      "soundness": {
+        "checked": 5,
+        "max_membership_ms": 0.33,
+        "membership_walls_ms": [
+          0.33,
+          0.29,
+          0.26,
+          0.25,
+          0.29
+        ],
+        "mismatches": [
+          {
+            "engine": "py_re",
+            "mirror": true,
+            "py_re": false,
+            "real": false,
+            "s": "x0",
+            "wall_ms": 0.25
+          }
+        ]
       },
       "split": {
         "empty_x": false,
@@ -926,7 +1128,7 @@
         "x_dollar": "^0+$",
         "xr": "^0+(?:&)"
       },
-      "wall_ms": 2.47,
+      "wall_ms": 1.78,
       "witness": "0"
     },
     {
@@ -936,34 +1138,34 @@
       "encoding": "E1",
       "flags": "i",
       "id": "ids-hta",
-      "max_membership_ms": 0.36,
+      "max_membership_ms": 0.35,
       "pattern": "\\.hta(?:[?&]|$)",
       "result": "sat",
       "sat_find": {
         "note": "case-split-sat-find",
         "result": "sat",
-        "wall_ms": 7.93,
-        "witness": ".hTA?",
+        "wall_ms": 8.31,
+        "witness": ".hta&",
         "xd_sat_find": {
           "result": "sat",
-          "wall_ms": 3.23,
-          "witness": "B.HTa"
+          "wall_ms": 3.5,
+          "witness": ".HTa\n"
         },
         "xr_sat_find": {
           "result": "sat",
-          "wall_ms": 4.7,
-          "witness": ".hTA?"
+          "wall_ms": 4.81,
+          "witness": ".hta&"
         }
       },
       "soundness": {
         "checked": 5,
-        "max_membership_ms": 0.36,
+        "max_membership_ms": 0.35,
         "membership_walls_ms": [
-          0.36,
-          0.33,
-          0.34,
-          0.21,
-          0.23
+          0.35,
+          0.35,
+          0.35,
+          0.25,
+          0.22
         ],
         "mismatches": []
       },
@@ -973,8 +1175,8 @@
         "x_dollar": "\\.hta$",
         "xr": "\\.hta(?:[?&])"
       },
-      "wall_ms": 7.93,
-      "witness": ".hTA?",
+      "wall_ms": 8.31,
+      "witness": ".hta&",
       "x_dollar_encoding": "compile_x$"
     },
     {
@@ -985,12 +1187,25 @@
       "flags": "i",
       "id": "ids-hta",
       "len_bound": 256,
+      "max_membership_ms": 0.34,
       "pattern": "\\.hta(?:[?&]|$)",
       "result": "sat",
       "sat_find": {
         "result": "sat",
-        "wall_ms": 3.96,
-        "witness": ".hta&"
+        "wall_ms": 4.8,
+        "witness": ".Hta&"
+      },
+      "soundness": {
+        "checked": 5,
+        "max_membership_ms": 0.34,
+        "membership_walls_ms": [
+          0.34,
+          0.3,
+          0.33,
+          0.24,
+          0.21
+        ],
+        "mismatches": []
       },
       "split": {
         "empty_x": false,
@@ -998,8 +1213,8 @@
         "x_dollar": "\\.hta$",
         "xr": "\\.hta(?:[?&])"
       },
-      "wall_ms": 3.96,
-      "witness": ".hta&"
+      "wall_ms": 4.8,
+      "witness": ".Hta&"
     },
     {
       "bucket": "ids_rules",
@@ -1008,33 +1223,33 @@
       "encoding": "E1",
       "flags": "",
       "id": "ids-hex64",
-      "max_membership_ms": 1.11,
+      "max_membership_ms": 1.14,
       "pattern": "^[a-f0-9]{64}(?:&|$)",
       "result": "sat",
       "sat_find": {
         "note": "case-split-sat-find",
         "result": "sat",
-        "wall_ms": 1445.57,
-        "witness": "540ac3274ef3410bf77cf7386374415bd32dcf929844a9d4af2d939288a7fe87&",
+        "wall_ms": 1385.35,
+        "witness": "d8766e9cfbed9edace8262f9b4db8b9d667394563eedc44fb63e8365ce7a5826&",
         "xd_sat_find": {
           "result": "sat",
-          "wall_ms": 755.54,
-          "witness": "e315a16adf4ff7da90454bb21b4909fbc79df9a8876961d0cbd939f5c0d22833\n"
+          "wall_ms": 672.62,
+          "witness": "c16495f1c620f1af307fcb2a72384c83dddce968a746ae292f51ddcc1b288fb4"
         },
         "xr_sat_find": {
           "result": "sat",
-          "wall_ms": 690.03,
-          "witness": "540ac3274ef3410bf77cf7386374415bd32dcf929844a9d4af2d939288a7fe87&"
+          "wall_ms": 712.73,
+          "witness": "d8766e9cfbed9edace8262f9b4db8b9d667394563eedc44fb63e8365ce7a5826&"
         }
       },
       "soundness": {
         "checked": 5,
-        "max_membership_ms": 1.11,
+        "max_membership_ms": 1.14,
         "membership_walls_ms": [
-          1.11,
-          0.77,
-          0.83,
-          0.73,
+          1.14,
+          0.84,
+          0.79,
+          0.79,
           0.57
         ],
         "mismatches": []
@@ -1045,8 +1260,8 @@
         "x_dollar": "^[a-f0-9]{64}$",
         "xr": "^[a-f0-9]{64}(?:&)"
       },
-      "wall_ms": 1445.57,
-      "witness": "540ac3274ef3410bf77cf7386374415bd32dcf929844a9d4af2d939288a7fe87&",
+      "wall_ms": 1385.35,
+      "witness": "d8766e9cfbed9edace8262f9b4db8b9d667394563eedc44fb63e8365ce7a5826&",
       "x_dollar_encoding": "compile_x$"
     },
     {
@@ -1057,12 +1272,25 @@
       "flags": "",
       "id": "ids-hex64",
       "len_bound": 256,
+      "max_membership_ms": 7592.34,
       "pattern": "^[a-f0-9]{64}(?:&|$)",
       "result": "sat",
       "sat_find": {
         "result": "sat",
-        "wall_ms": 1459.65,
-        "witness": "ACBea7451101bf8ba827f734180b6dec29ba82f42dd8bd863fe00cbb52d7edb6195"
+        "wall_ms": 685.96,
+        "witness": "16438a1740870b767a0e18f71225e2d99016365ccef1c808ce030a1c8f10daec"
+      },
+      "soundness": {
+        "checked": 5,
+        "max_membership_ms": 7592.34,
+        "membership_walls_ms": [
+          7592.34,
+          7228.34,
+          7012.68,
+          6733.78,
+          0.83
+        ],
+        "mismatches": []
       },
       "split": {
         "empty_x": false,
@@ -1070,14 +1298,14 @@
         "x_dollar": "^[a-f0-9]{64}$",
         "xr": "^[a-f0-9]{64}(?:&)"
       },
-      "wall_ms": 1459.65,
-      "witness": "ACBea7451101bf8ba827f734180b6dec29ba82f42dd8bd863fe00cbb52d7edb6195"
+      "wall_ms": 685.96,
+      "witness": "16438a1740870b767a0e18f71225e2d99016365ccef1c808ce030a1c8f10daec"
     }
   ],
-  "sample_count": 20,
+  "sample_count": 21,
   "schema_version": "1",
   "timeout_ms": 5000,
-  "wall_s": 6.311,
+  "wall_s": 35.244,
   "wave": "trailing-alt-dollar",
   "z3": "5.0.0"
 }

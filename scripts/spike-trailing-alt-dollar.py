@@ -69,6 +69,8 @@ TOYS = [
     {"id": "toy-a-dollar", "pattern": "(?:a|$)", "bucket": "toy"},
     {"id": "toy-foo-bar", "pattern": "foo(?:bar|$)", "bucket": "toy"},
     {"id": "toy-x-ab", "pattern": "x(?:a|b|$)", "bucket": "toy"},
+    # Nested (?:…) inside the final alt — must not split on the inner group.
+    {"id": "toy-nested-noncap", "pattern": "foo(?:x(?:y)|$)", "bucket": "toy"},
     {
         "id": "toy-mid-control",
         "pattern": "a(?:$|b)c",
@@ -126,12 +128,45 @@ TRACTABILITY_BUCKETS = frozenset({"toy", "ids_rules", "reduced"})
 CORPUS_BUCKETS = frozenset({"gitleaks-kw", "gitleaks-b", "gitleaks-other"})
 
 
-def split_trailing_dollar(pattern: str) -> dict[str, str] | None:
-    """Split pattern-final ``(?:...|$)`` into XR / X$ / X bare strings."""
+def _unescaped_at(s: str, i: int) -> bool:
+    """True if ``s[i]`` is not escaped by an odd number of backslashes."""
+    n = 0
+    j = i - 1
+    while j >= 0 and s[j] == "\\":
+        n += 1
+        j -= 1
+    return n % 2 == 0
+
+
+def _final_noncap_open(pattern: str) -> int | None:
+    """Index of ``(?:`` that opens the group closed by the final ``|$)``.
+
+    Walks backward with paren depth so nested ``(?:…)`` inside the tail does
+    not steal the split point (``rfind('(?:')`` is wrong for that case).
+    """
     if not pattern.endswith("|$)") :
         return None
-    open_idx = pattern.rfind("(?:")
-    if open_idx < 0:
+    depth = 0
+    i = len(pattern) - 1  # final ')'
+    while i >= 0:
+        ch = pattern[i]
+        if ch in "()" and _unescaped_at(pattern, i):
+            if ch == ")":
+                depth += 1
+            else:  # '('
+                depth -= 1
+                if depth == 0:
+                    if pattern.startswith("(?:", i):
+                        return i
+                    return None
+        i -= 1
+    return None
+
+
+def split_trailing_dollar(pattern: str) -> dict[str, str] | None:
+    """Split pattern-final ``(?:...|$)`` into XR / X$ / X bare strings."""
+    open_idx = _final_noncap_open(pattern)
+    if open_idx is None:
         return None
     xr = pattern[:-3] + ")"
     x_bare = pattern[:open_idx]
@@ -211,10 +246,15 @@ def build_e1(xr_mirror, x_dollar_mirror, s, *, empty_x: bool, call_kind: str):
     return Or(InRe(s, xr_mirror), InRe(s, x_dollar_mirror))
 
 
-def build_e2(xr_body, x_body, s, *, len_bound: int, empty_x: bool):
+def build_e2(
+    xr_body, x_body, s, *, len_bound: int, empty_x: bool, call_kind: str = "search"
+):
     star = z3.Star(any_char())
+    if empty_x and call_kind in ("search", "exec", "substitution"):
+        # Same as E1: empty-at-EOS under search matches every string.
+        return And(Length(s) <= len_bound, BoolVal(True))
     if empty_x:
-        right = InRe(s, z3.Re(""))  # under-approx; E2 is secondary
+        right = InRe(s, z3.Re(""))
     else:
         right = InRe(s, Concat(star, x_body))
     return And(Length(s) <= len_bound, Or(InRe(s, Concat(star, xr_body)), right))
@@ -578,16 +618,32 @@ def run_sample(sample: dict, *, encodings: list[str], timeout_ms: int) -> list[d
             )
         else:
             s = String("s")
-            sat_row = solve_constraint(
-                build_e2(
-                    xr_fm.mirror,
-                    x_body,
-                    s,
+
+            def e2_fn(
+                sv,
+                xr_b=xr_fm.mirror,
+                x_b=x_body,
+                empty=split["empty_x"],
+                ck=call_kind,
+            ):
+                return build_e2(
+                    xr_b,
+                    x_b,
+                    sv,
                     len_bound=E2_LEN_BOUND,
-                    empty_x=split["empty_x"],
-                ),
-                s,
-                timeout_ms=timeout_ms,
+                    empty_x=empty,
+                    call_kind=ck,
+                )
+
+            sat_row = solve_constraint(e2_fn(s), s, timeout_ms=timeout_ms)
+            sound = soundness_check(
+                pattern,
+                dialect=dialect,
+                flags=flags,
+                call_kind=call_kind,
+                e1_fn=e2_fn,  # membership callback; same shape as E1 checks
+                split=split,
+                witness=sat_row.get("witness"),
             )
             rows.append(
                 {
@@ -598,6 +654,8 @@ def run_sample(sample: dict, *, encodings: list[str], timeout_ms: int) -> list[d
                     "wall_ms": sat_row["wall_ms"],
                     "witness": sat_row.get("witness"),
                     "len_bound": E2_LEN_BOUND,
+                    "soundness": sound,
+                    "max_membership_ms": sound.get("max_membership_ms"),
                 }
             )
 
@@ -700,16 +758,18 @@ def decide(results: list[dict]) -> tuple[str, str, str | None, str | None]:
         )
         return "GO", note, "E1", domain
 
-    # E2 fallback on tractability cohort
+    # E2 fallback on tractability cohort — requires E2 membership soundness
+    # (not E1 mem_clean alone; empty-X / under-approx must be checked on E2).
     e2_tract = [
         r
         for r in results
         if r.get("encoding") == "E2" and r.get("bucket") in TRACTABILITY_BUCKETS
     ]
-    if e2_tract and all(sat_ok(r) for r in e2_tract) and mem_clean:
+    e2_sound = all(membership_ok(r) for r in e2_tract) and bool(e2_tract)
+    if e2_tract and all(sat_ok(r) for r in e2_tract) and e2_sound:
         note = (
             f"E1 sat-find missed the <{GO_WALL_MS}ms gate on the tractability cohort; "
-            f"E2 with len(s)<={E2_LEN_BOUND} meets it. Soundness membership clean."
+            f"E2 with len(s)<={E2_LEN_BOUND} meets sat-find + E2 membership soundness."
         )
         return "GO-BOUNDED", note, "E2", f"len(s)<={E2_LEN_BOUND}"
 
