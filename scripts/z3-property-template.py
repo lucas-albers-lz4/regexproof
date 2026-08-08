@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Z3 regex-sanitation property starter — the 4 canonical shapes.
+"""Z3 regex-sanitation property starter — the 5 canonical shapes.
 
 Part of regexproof. Validated with z3-solver==5.0.0 (2026-08, usrmanage
 spike). Copy and adapt:
@@ -7,6 +7,7 @@ spike). Copy and adapt:
   Shape 2: whitelist membership exclusion (length-bounded sanity)
   Shape 3: counterexample finder via string ops (NOT regex — Complement gotcha)
   Shape 4: per-token escape-image check (monolithic image-regex times out)
+  Shape 5: rule_diff gap — InRe(s,R2) ∧ Not(InRe(s,R1)) (complement-free)
 
 Run: python3 scripts/z3-property-template.py
 Read docs/TRAPS.md before changing anything.
@@ -97,6 +98,25 @@ check(
     [InRe(w, Union(tokens, Re("\x00"))), Length(w) == 1],
     w == StringVal("\x00"),
     expect_unsat=False,
+)
+
+# ---------- Shape 5: rule_diff gap (complement-free) ----------
+# Does R2 accept anything R1 misses? Encode as InRe(s,R2) ∧ Not(InRe(s,R1)).
+# Never build Complement(R1) as a regex — language complement ≠ char-class gap.
+r1 = Concat(Re("a"), Star(Re("a")))  # a+
+r2 = Union(r1, Concat(Re("b"), Star(Re("b"))))  # a+|b+
+s5 = String("s5")
+check(
+    "shape-5 gap: R2 accepts b+ which R1 misses",
+    [Length(s5) >= 1, Length(s5) <= 8],
+    InRe(s5, r2) & Not(InRe(s5, r1)),
+    expect_unsat=False,
+)
+check(
+    "shape-5 control: R1≡R2 → no gap",
+    [Length(s5) >= 1, Length(s5) <= 8],
+    InRe(s5, r1) & Not(InRe(s5, r1)),
+    expect_unsat=True,
 )
 
 print("done")

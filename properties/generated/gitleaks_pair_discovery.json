@@ -1,0 +1,8 @@
+{
+  "schema_version": "1",
+  "admitted_count": 22,
+  "dropped_count": 1,
+  "min_admitted_pairs": 20,
+  "max_len": 96,
+  "floor_ok": true
+}

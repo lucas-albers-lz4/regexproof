@@ -42,7 +42,7 @@ Record each with: file:line, the pattern, what input feeds it, and the
 "the capture never truncates an escaped quote").
 
 ### 2. Classify the property, pick the shape
-From `scripts/z3-property-template.py`, the 4 canonical shapes:
+From `scripts/z3-property-template.py`, the canonical shapes:
 
 | Shape | Question | Encoding | Expect |
 |---|---|---|---|
@@ -50,6 +50,7 @@ From `scripts/z3-property-template.py`, the 4 canonical shapes:
 | 2. Whitelist exclusion | "a whitelisted string (len-bounded) contains no X" | `InRe(s, wl) ∧ len(s) ∈ [a,b] → ¬Contains(s, X)` | length bound is load-bearing (≤16 instant, ≤64 times out) |
 | 3. Counterexample finder | "is there a value where capture ≠ true value?" | string ops: `IndexOf`/`SubString` | SAT + witness = the bug repro — cheapest, most valuable |
 | 4. Per-token image | "escape output has no raw control chars" | one token per tiny solver query | monolithic image-regex TIMEOUTs — decompose |
+| 5. Rule diff (`rule_diff`) | "does R2 accept anything R1 misses?" | `InRe(s, R2) ∧ Not(InRe(s, R1))` (no regex Complement) | SAT = gap; UNSAT = no gap in bound; TIMEOUT ≠ pass |
 
 ### 3. Encode — read `docs/TRAPS.md` first
 The traps cost real debugging time. Minimum set:
@@ -128,8 +129,10 @@ in the harness output so a reader knows exactly what was proven.
 
 ## Worked examples in this repo
 
-- `scripts/z3-property-template.py` — runnable shapes 1–4 (all four PASS
-  against a pinned z3-solver)
+- `scripts/z3-property-template.py` — runnable shapes 1–5 (incl. complement-free
+  shape-5 `rule_diff`) PASS against a pinned z3-solver
+- `scripts/rule-diff-pilot.py` — Phase 3 gitleaks encodable-subset shape-5 pilot
+  (independent-spec R1, admitted_pairs≥20, timeout gate)
 - `scripts/z3-verify.py --all` — harness skeleton run: P1 injection chars,
   P2 actor whitelist, P3 sed-capture counterexample (SAT + witness), P4
   per-token escape image + the NUL-passthrough bug demo, and the
