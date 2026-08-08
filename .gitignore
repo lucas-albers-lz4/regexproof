@@ -13,3 +13,7 @@ helpers/go-re2/go-re2
 helpers/go-re2/go-re2.exe
 redos-env/
 batch/corpora/coreruleset/rules
+
+# Materialized corpus checkouts (see batch/corpora/*/README.md)
+batch/corpora/*/rules
+batch/corpora/*/detectors

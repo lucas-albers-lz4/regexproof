@@ -67,4 +67,4 @@ def test_hex_escapes_encode_as_literals():
         assert brace.encodable, (dialect, brace.unencodable_reason)
         bad = compile_pattern(r"\xGG", "", dialect, "fullmatch")
         assert not bad.encodable
-        assert bad.unencodable_reason in ("bad-range", "parse-error")
+        assert bad.unencodable_reason in ("bad-range", "unsupported-syntax", "parse-error")

@@ -14,7 +14,8 @@ except ModuleNotFoundError:  # py<3.11
 
 
 _YAML_REGEX = re.compile(
-    r"^\s*(?:regex|pattern)\s*:\s*[\"']?(?P<pat>.+?)[\"']?\s*$",
+    # semgrep uses hyphenated ``pattern-regex:`` under list items (``- ``).
+    r"^\s*-?\s*(?:regex|pattern|pattern-regex)\s*:\s*(?:[\"'](?P<pat>.+?)[\"']|(?P<bare>\S.*?))\s*$",
     re.MULTILINE | re.IGNORECASE,
 )
 
@@ -31,10 +32,35 @@ def extract_rule_file(
         return _extract_toml(source, repo=repo, file=file, dialect=dialect)
     for m in _YAML_REGEX.finditer(source):
         line_no = source.count("\n", 0, m.start()) + 1
+        # Skip YAML block scalars (|) — multi-line pattern-regex needs a
+        # dedicated path; mark composite for now rather than truncate.
+        line = m.group(0)
+        if line.rstrip().endswith("|") or line.rstrip().endswith(">"):
+            out.append(
+                make_record(
+                    repo=repo,
+                    pattern="",
+                    flags="",
+                    dialect=dialect,
+                    call_kind="search",
+                    file=file,
+                    line=line_no,
+                    column=0,
+                    context_snippet=line.strip()[:500],
+                    unencodable_reason="composite-pattern",
+                )
+            )
+            continue
+        pat = m.group("pat") if m.groupdict().get("pat") else None
+        if not pat:
+            pat = m.groupdict().get("bare") or ""
+        pat = pat.strip()
+        if not pat:
+            continue
         out.append(
             make_record(
                 repo=repo,
-                pattern=m.group("pat"),
+                pattern=pat,
                 flags="",
                 dialect=dialect,
                 call_kind="search",

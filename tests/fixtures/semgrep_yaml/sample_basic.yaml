@@ -1,0 +1,11 @@
+rules:
+  - id: sample.pattern-regex
+    patterns:
+      - pattern-regex: (?i)select\b.*from
+  - id: sample.quoted
+    pattern: "legacy"
+  - id: sample.block
+    patterns:
+      - pattern-regex: |
+          multi
+          line

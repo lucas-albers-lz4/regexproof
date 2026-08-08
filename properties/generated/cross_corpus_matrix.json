@@ -1,0 +1,127 @@
+{
+  "corpora": [
+    {
+      "corpus": "gitleaks",
+      "corpus_pin": null,
+      "decision": "no-go",
+      "encodable": 133,
+      "fraction": 0.6018,
+      "reasons": {
+        "inline-flag": 17,
+        "negated-shorthand": 2,
+        "ok": 133,
+        "pattern-too-long": 4,
+        "word-boundary": 65
+      },
+      "sample_size": 221,
+      "scope": null,
+      "unclassified_parse_errors": 0
+    },
+    {
+      "corpus": "validatorjs",
+      "corpus_pin": null,
+      "decision": "go",
+      "encodable": 145,
+      "fraction": 0.684,
+      "reasons": {
+        "bad-range": 3,
+        "composite-pattern": 3,
+        "m-flag": 2,
+        "negated-class": 1,
+        "ok": 145,
+        "parse-error": 48,
+        "pattern-too-long": 9,
+        "u-flag": 1
+      },
+      "sample_size": 212,
+      "scope": null,
+      "unclassified_parse_errors": 0
+    },
+    {
+      "corpus": "coreruleset",
+      "corpus_pin": "v4.28.0",
+      "decision": "go",
+      "encodable": 206,
+      "fraction": 0.6478,
+      "reasons": {
+        "inline-flag": 1,
+        "internal-anchor": 2,
+        "negated-shorthand": 2,
+        "ok": 206,
+        "pattern-too-long": 73,
+        "word-boundary": 34
+      },
+      "sample_size": 318,
+      "scope": "full_corpus",
+      "unclassified_parse_errors": 0
+    },
+    {
+      "corpus": "trufflehog",
+      "corpus_pin": "v3.88.29",
+      "decision": "no-go",
+      "encodable": 50,
+      "fraction": 0.2326,
+      "reasons": {
+        "inline-flag": 2,
+        "m-flag": 1,
+        "negated-shorthand": 1,
+        "ok": 50,
+        "pattern-too-long": 2,
+        "word-boundary": 159
+      },
+      "sample_size": 215,
+      "scope": "full_corpus",
+      "unclassified_parse_errors": 0
+    },
+    {
+      "corpus": "ids_rules",
+      "corpus_pin": "suricata-7.0.3-et-open",
+      "decision": "go",
+      "encodable": 7182,
+      "fraction": 0.879,
+      "reasons": {
+        "backref": 85,
+        "bad-range": 1,
+        "inline-flag": 89,
+        "internal-anchor": 4,
+        "lookaround": 174,
+        "m-flag": 198,
+        "negated-shorthand": 3,
+        "ok": 7182,
+        "pattern-too-long": 186,
+        "unclosed-class": 219,
+        "unclosed-group": 1,
+        "unsupported-syntax": 4,
+        "word-boundary": 25
+      },
+      "sample_size": 8171,
+      "scope": "full_corpus",
+      "unclassified_parse_errors": 0
+    },
+    {
+      "corpus": "semgrep_rules",
+      "corpus_pin": "40b8c63f75dc7c22c8a77482d73bfb864b146f7e",
+      "decision": "no-go",
+      "encodable": 2518,
+      "fraction": 0.2741,
+      "reasons": {
+        "composite-pattern": 3247,
+        "internal-anchor": 3113,
+        "lookaround": 50,
+        "m-flag": 18,
+        "negated-shorthand": 6,
+        "ok": 2518,
+        "parse-error:PatternError": 55,
+        "pattern-too-long": 8,
+        "per-alternative-anchor": 102,
+        "unicode-not-literal": 20,
+        "unsupported:POSSESSIVE_REPEAT": 1,
+        "word-boundary": 48
+      },
+      "sample_size": 9186,
+      "scope": "full_corpus",
+      "unclassified_parse_errors": 0
+    }
+  ],
+  "schema_version": "1"
+}

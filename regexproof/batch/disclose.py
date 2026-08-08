@@ -10,7 +10,16 @@ import json
 from pathlib import Path
 from typing import Any
 
-SECURITY_TOOL_CORPORA = frozenset({"gitleaks", "detect-secrets", "trufflehog", "coreruleset"})
+SECURITY_TOOL_CORPORA = frozenset(
+    {
+        "gitleaks",
+        "detect-secrets",
+        "trufflehog",
+        "coreruleset",
+        "ids_rules",
+        "semgrep_rules",
+    }
+)
 
 
 def tag_disclosure(findings: list[dict[str, Any]], *, corpus: str) -> list[dict[str, Any]]:

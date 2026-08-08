@@ -1,0 +1,36 @@
+{
+  "budget": {
+    "max_patterns": 5000,
+    "max_wall_s": 600
+  },
+  "commit": "90190deac64289cb10bb694894be8db9ead8790b",
+  "compiler_fingerprint": "50acabd829ca",
+  "complete_run": true,
+  "corpus_pin": "v3.88.29",
+  "decision": "no-go",
+  "decision_rule": "go iff encodable/sample_size >= 0.3",
+  "dialect": "re2",
+  "encodable": 50,
+  "engine_versions": {
+    "python": "3.14.6",
+    "z3": "5.0.0"
+  },
+  "fraction": 0.2326,
+  "go_no_go_threshold": 0.3,
+  "inventory_path": "properties/generated/trufflehog-inventory.ndjson",
+  "path": "batch/corpora/trufflehog/detectors",
+  "pilot": "trufflehog",
+  "reasons": {
+    "inline-flag": 2,
+    "m-flag": 1,
+    "negated-shorthand": 1,
+    "ok": 50,
+    "pattern-too-long": 2,
+    "word-boundary": 159
+  },
+  "sample_size": 215,
+  "schema_version": "1",
+  "scope": "full_corpus",
+  "unclassified_parse_errors": 0,
+  "wall_s": 0.643
+}

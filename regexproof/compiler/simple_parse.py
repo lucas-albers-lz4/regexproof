@@ -107,7 +107,7 @@ def _parse_atom(s: str, i: int, *, allow_scoped_i: bool = True):
             if s[i + 2] == ":":
                 inner, j = _parse_alt(s, i + 3, allow_scoped_i=allow_scoped_i)
                 if j >= len(s) or s[j] != ")":
-                    raise Unencodable("parse-error")
+                    raise Unencodable("unsupported-syntax")
                 return inner, j + 1
             # Scoped inline flags: (?i:…), (?ims:…), etc.
             # (?-i:…) and mid-pattern (?i) without ':' stay inline-flag.
@@ -124,27 +124,34 @@ def _parse_atom(s: str, i: int, *, allow_scoped_i: bool = True):
                     raise Unencodable("inline-flag")
                 inner, k = _parse_alt(s, j + 1, allow_scoped_i=allow_scoped_i)
                 if k >= len(s) or s[k] != ")":
-                    raise Unencodable("parse-error")
+                    raise Unencodable("unsupported-syntax")
                 if "i" in scoped:
                     return Folded(inner), k + 1
                 return inner, k + 1
             raise Unencodable("inline-flag")
         inner, j = _parse_alt(s, i + 1, allow_scoped_i=allow_scoped_i)
         if j >= len(s) or s[j] != ")":
-            raise Unencodable("parse-error")
+            raise Unencodable("unclosed-group")
         return inner, j + 1
     if ch == "[":
         return _parse_class(s, i)
     if ch == "\\":
         return _parse_escape(s, i)
-    if ch in ")*+?{|":
-        raise Unencodable("parse-error")
+    if ch == "{":
+        # Lone '{' as atom (e.g. pattern starts with '{?') — literal.
+        brace: object = Lit("{")
+        j = i + 1
+        if j < len(s) and s[j] in "?*+":
+            brace, j = _parse_quant(s, j, brace)
+        return brace, j
+    if ch in ")*+?|":
+        raise Unencodable("unsupported-syntax")
     return Lit(ch), i + 1
 
 
 def _parse_escape(s: str, i: int):
     if i + 1 >= len(s):
-        raise Unencodable("parse-error")
+        raise Unencodable("unsupported-syntax")
     e = s[i + 1]
     if e in "dws":
         return Cls(chars=[f"\\{e}"], negate=False), i + 2
@@ -222,7 +229,7 @@ def _parse_class(s: str, i: int):
         else:
             chars.extend(atom)  # shorthand tokens
     if j >= len(s) or s[j] != "]":
-        raise Unencodable("parse-error")
+        raise Unencodable("unclosed-class")
     return Cls(chars=chars, negate=negate), j + 1
 
 
@@ -233,7 +240,7 @@ def _parse_class_atom(s: str, j: int) -> tuple[str | list[str], int, str]:
     tokens such as ``[\"\\\\d\"]`` or ``[\"\\\\D\"]``.
     """
     if j >= len(s):
-        raise Unencodable("parse-error")
+        raise Unencodable("unsupported-syntax")
     if s[j] == "\\":
         node, nj = _parse_escape(s, j)
         if isinstance(node, Lit):
@@ -272,7 +279,12 @@ def _parse_quant(s: str, i: int, node):
             num += s[j]
             j += 1
         if not num:
-            raise Unencodable("parse-error")
+            # PCRE/RE2: non-quantifier '{' is a literal; following ?/*/+ apply to it.
+            brace: object = Lit("{")
+            j = i + 1
+            if j < len(s) and s[j] in "?*+":
+                brace, j = _parse_quant(s, j, brace)
+            return Seq([node, brace]), j
         lo = int(num)
         if j < len(s) and s[j] == "}":
             return Repeat(node, lo, lo), j + 1
@@ -283,10 +295,18 @@ def _parse_quant(s: str, i: int, node):
                 num2 += s[j]
                 j += 1
             if j >= len(s) or s[j] != "}":
-                raise Unencodable("parse-error")
+                brace = Lit("{")
+                k = i + 1
+                if k < len(s) and s[k] in "?*+":
+                    brace, k = _parse_quant(s, k, brace)
+                return Seq([node, brace]), k
             hi = int(num2) if num2 else None
             return Repeat(node, lo, hi), j + 1
-        raise Unencodable("parse-error")
+        brace = Lit("{")
+        k = i + 1
+        if k < len(s) and s[k] in "?*+":
+            brace, k = _parse_quant(s, k, brace)
+        return Seq([node, brace]), k
     return node, i
 
 
@@ -298,5 +318,5 @@ def parse_pattern(pattern: str, *, allow_scoped_i: bool = True):
     """
     node, i = _parse_alt(pattern, 0, allow_scoped_i=allow_scoped_i)
     if i != len(pattern):
-        raise Unencodable("parse-error")
+        raise Unencodable("unsupported-syntax")
     return node
