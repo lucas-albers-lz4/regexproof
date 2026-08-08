@@ -1,0 +1,43 @@
+{
+  "checked_ok": 4,
+  "engine_versions": {
+    "python": "3.14.6",
+    "z3": "5.0.0"
+  },
+  "gate": "mirror_fidelity",
+  "mismatches": 0,
+  "ok": true,
+  "pcre2_helper": true,
+  "pcre_checked_ok": 2,
+  "results": [
+    {
+      "corpus": "coreruleset",
+      "dialect": "pcre",
+      "probes": 51,
+      "regex_id": "d00fe967efcf75cd1166d48a59883c0c",
+      "status": "ok"
+    },
+    {
+      "corpus": "coreruleset",
+      "dialect": "pcre",
+      "probes": 51,
+      "regex_id": "4cda044c15b26e0b433f0b5df567047d",
+      "status": "ok"
+    },
+    {
+      "corpus": "gitleaks",
+      "dialect": "re2",
+      "probes": 51,
+      "regex_id": "f66e76a3534be1d3727febcfd8db409f",
+      "status": "ok"
+    },
+    {
+      "corpus": "gitleaks",
+      "dialect": "re2",
+      "probes": 51,
+      "regex_id": "ac8604fcd5ba993051be817dd6147a21",
+      "status": "ok"
+    }
+  ],
+  "schema_version": "1"
+}

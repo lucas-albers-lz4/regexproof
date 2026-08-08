@@ -55,6 +55,35 @@ def test_scoped_inline_i_fold():
         assert (solver.check() == sat) is expect_sat, witness
 
 
+def test_hex_escape_soundness_codepoint_not_literal_text():
+    """TRAPS #23: [\\x22] must accept '"' and reject literal 'x22'."""
+    from z3 import InRe, String, sat, unsat
+
+    for dialect, pattern in (
+        ("pcre", r"^[\x22]$"),
+        ("pcre", r"^[\x{22}]$"),
+        ("re2", r"^[\x22]$"),
+        ("ecma", r"^[\x22]$"),
+        ("py_re", r"^[\x22]$"),
+    ):
+        cr = compile_pattern(pattern, "", dialect, "fullmatch")
+        assert cr.encodable, (dialect, pattern, cr.unencodable_reason)
+        s = String("s")
+        z3 = __import__("z3")
+        ok = z3.Solver()
+        ok.add(InRe(s, cr.mirror))
+        ok.add(s == '"')
+        assert ok.check() == sat, (dialect, pattern)
+        bad = z3.Solver()
+        bad.add(InRe(s, cr.mirror))
+        bad.add(s == "x22")
+        assert bad.check() == unsat, (dialect, pattern)
+        bad2 = z3.Solver()
+        bad2.add(InRe(s, cr.mirror))
+        bad2.add(s == "x2")
+        assert bad2.check() == unsat, (dialect, pattern)
+
+
 def test_hex_range_in_class():
     from z3 import InRe, String, sat, unsat
 
