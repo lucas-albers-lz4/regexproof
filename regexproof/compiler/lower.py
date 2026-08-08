@@ -4,9 +4,14 @@ from __future__ import annotations
 
 from typing import Callable
 
-from z3 import Concat, Plus, Range, Re, Star, Union
+from z3 import Concat, Range, Re, Star, Union
 
-from regexproof.compiler.base import Unencodable, any_char, opt, python_trailing_dollar
+from regexproof.compiler.base import (
+    Unencodable,
+    any_char,
+    python_trailing_dollar,
+    repeat_z3,
+)
 from regexproof.compiler import simple_parse as sp
 
 _DIGIT_CODES = frozenset(range(ord("0"), ord("9") + 1))
@@ -437,21 +442,5 @@ def _class(node: sp.Cls, fold, digit, space, word, *, space_codes=_SPACE_CODES):
 
 
 def _repeat(body, lo, hi):
-    from z3 import Loop
-
-    if lo == 0 and hi == 1:
-        return opt(body)
-    if lo == 0 and hi is None:
-        return Star(body)
-    if lo == 1 and hi is None:
-        return Plus(body)
-    if hi is None:
-        return Concat(*([body] * lo), Star(body)) if lo else Star(body)
-    if lo == hi:
-        if lo <= 0:
-            return Re("")
-        if lo == 1:
-            # Z3 Concat requires ≥2 args; `{1}` / `{1,1}` is identity.
-            return body
-        return Concat(*([body] * lo))
-    return Loop(body, lo, hi)
+    """Dialect wrapper — behavior owned by ``repeat_z3`` (fix-wave #73)."""
+    return repeat_z3(body, lo, hi)

@@ -22,8 +22,8 @@ from regexproof.compiler.base import (
     CompileResult,
     Unencodable,
     any_char,
-    opt,
     python_trailing_dollar,
+    repeat_z3,
     wrap_call_kind,
 )
 from regexproof.compiler.fold import python_fold_closure
@@ -304,8 +304,6 @@ def _not_literal(ch: str, ctx: _Ctx):
         c = chr(code)
         if c in excluded:
             continue
-        if c == "\n" and not ctx.dotall and False:
-            continue
         parts.append(Re(c))
     if not parts:
         raise Unencodable("empty-not-literal")
@@ -493,28 +491,9 @@ def _is_maxrepeat(hi) -> bool:
 
 
 def _repeat(body, lo, hi):
-    from z3 import Loop, Plus
-
+    """Dialect wrapper — behavior owned by ``repeat_z3`` (fix-wave #73)."""
     unbounded = hi is None or _is_maxrepeat(hi)
-    if lo == 0 and hi == 1:
-        return opt(body)
-    if lo == 0 and unbounded:
-        return Star(body)
-    if lo == 1 and unbounded:
-        return Plus(body)
-    if unbounded:
-        if lo == 0:
-            return Star(body)
-        return Concat(*([body] * lo), Star(body))
-    # hi is int
-    if lo == hi:
-        if lo <= 0:
-            return Re("")
-        if lo == 1:
-            # Z3 Concat requires ≥2 args; `{1}` / `{1,1}` is identity (TRAPS #20).
-            return body
-        return Concat(*([body] * lo))
-    return Loop(body, lo, hi)
+    return repeat_z3(body, lo, None if unbounded else int(hi))
 
 
 # Silence unused import warning for wrap helpers re-exported conceptually
