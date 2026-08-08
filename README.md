@@ -1,5 +1,7 @@
 # regexproof
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 **Prove security properties of your regexes with Z3 — a playbook + toolkit for
 humans and coding agents.**
 
