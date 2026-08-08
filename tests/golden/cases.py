@@ -193,6 +193,24 @@ for row in TRAPS:
     _add(dialect, pat, flags, ck, acc, rej, category="trap", trap=trap)
 
 
+# --- fix-wave P1 (#69): exact-single quantifier + lazy quantifiers ---
+# {1}/{1,1} crashed lower.py _repeat (Concat(body) at lo==1 → Z3Exception);
+# lazy quantifiers were rejected as parse-error though laziness is a matching
+# strategy, not language (a*? ≡ a* for membership). Both must encode + match.
+_FIX_WAVE_P1 = [
+    (r"x{1}", ["x"], ["xx", ""]),
+    (r"(?:ab){1}", ["ab"], ["a", "abb"]),
+    (r"x{1,1}", ["x"], ["xx"]),
+    (r"a*?", ["", "a", "aaa"], ["b"]),
+    (r"a+?", ["a", "aaa"], ["", "b"]),
+    (r"a??", ["", "a"], ["aa"]),
+    (r"a{2,3}?", ["aa", "aaa"], ["a", "aaaa"]),
+]
+for dialect in ("py_re", "ecma", "re2", "pcre"):
+    for pat, acc, rej in _FIX_WAVE_P1:
+        _add(dialect, pat, "", "fullmatch", acc, rej)
+
+
 def coverage_counts() -> dict[str, dict[str, int]]:
     counts: dict[str, dict[str, int]] = {}
     for c in CASES:

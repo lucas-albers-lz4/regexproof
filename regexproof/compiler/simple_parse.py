@@ -287,11 +287,20 @@ def _parse_class_atom(s: str, j: int) -> tuple[str | list[str], int, str]:
 def _parse_quant(s: str, i: int, node):
     ch = s[i]
     if ch == "?":
-        return Repeat(node, 0, 1), i + 1
+        j = i + 1
+        if j < len(s) and s[j] == "?":
+            j += 1  # lazy optional — same language (fix-wave #69)
+        return Repeat(node, 0, 1), j
     if ch == "*":
-        return Repeat(node, 0, None), i + 1
+        j = i + 1
+        if j < len(s) and s[j] == "?":
+            j += 1  # lazy star — same language (fix-wave #69)
+        return Repeat(node, 0, None), j
     if ch == "+":
-        return Repeat(node, 1, None), i + 1
+        j = i + 1
+        if j < len(s) and s[j] == "?":
+            j += 1  # lazy plus — same language (fix-wave #69)
+        return Repeat(node, 1, None), j
     if ch == "{":
         j = i + 1
         num = ""
@@ -307,7 +316,10 @@ def _parse_quant(s: str, i: int, node):
             return Seq([node, brace]), j
         lo = int(num)
         if j < len(s) and s[j] == "}":
-            return Repeat(node, lo, lo), j + 1
+            j += 1
+            if j < len(s) and s[j] == "?":
+                j += 1  # lazy {n} — same language (fix-wave #69)
+            return Repeat(node, lo, lo), j
         if j < len(s) and s[j] == ",":
             j += 1
             num2 = ""
@@ -321,7 +333,10 @@ def _parse_quant(s: str, i: int, node):
                     brace, k = _parse_quant(s, k, brace)
                 return Seq([node, brace]), k
             hi = int(num2) if num2 else None
-            return Repeat(node, lo, hi), j + 1
+            j += 1
+            if j < len(s) and s[j] == "?":
+                j += 1  # lazy bound — same language (fix-wave #69)
+            return Repeat(node, lo, hi), j
         brace = Lit("{")
         k = i + 1
         if k < len(s) and s[k] in "?*+":
