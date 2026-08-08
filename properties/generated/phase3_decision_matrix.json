@@ -1,0 +1,86 @@
+{
+  "decisions": [
+    {
+      "corpus": "gitleaks",
+      "decision": "go",
+      "fraction": 0.6018,
+      "phase3_redecision": "confirm go",
+      "rule": "go iff encodable/sample_size >= 0.30 (inventory_only exempt)"
+    },
+    {
+      "corpus": "validatorjs",
+      "decision": "go",
+      "fraction": 0.684,
+      "phase3_redecision": "confirm go",
+      "rule": "go iff encodable/sample_size >= 0.30 (inventory_only exempt)"
+    },
+    {
+      "corpus": "coreruleset",
+      "decision": "go",
+      "fraction": 0.6478,
+      "phase3_redecision": "confirm go",
+      "rule": "go iff encodable/sample_size >= 0.30 (inventory_only exempt)"
+    },
+    {
+      "corpus": "trufflehog",
+      "decision": "no-go",
+      "fraction": 0.2326,
+      "next": "Phase-2 backlog or dialect rewrite; do not raise pattern-too-long cap",
+      "phase3_redecision": "remain no-go; primary residual is engine-limit (word-boundary / composite-pattern / internal-anchor) \u2014 not a silent skip",
+      "rule": "go iff encodable/sample_size >= 0.30 (inventory_only exempt)"
+    },
+    {
+      "corpus": "ids_rules",
+      "decision": "go",
+      "fraction": 0.879,
+      "phase3_redecision": "confirm go",
+      "rule": "go iff encodable/sample_size >= 0.30 (inventory_only exempt)"
+    },
+    {
+      "corpus": "semgrep_rules",
+      "decision": "no-go",
+      "fraction": 0.2741,
+      "next": "Phase-2 backlog or dialect rewrite; do not raise pattern-too-long cap",
+      "phase3_redecision": "remain no-go; primary residual is engine-limit (word-boundary / composite-pattern / internal-anchor) \u2014 not a silent skip",
+      "rule": "go iff encodable/sample_size >= 0.30 (inventory_only exempt)"
+    },
+    {
+      "corpus": "pcre2_testdata",
+      "decision": "go",
+      "fraction": 1.0,
+      "phase3_redecision": "confirm go",
+      "rule": "go iff encodable/sample_size >= 0.30 (inventory_only exempt)"
+    },
+    {
+      "corpus": "re2_testdata",
+      "decision": "go",
+      "fraction": 1.0,
+      "phase3_redecision": "confirm go",
+      "rule": "go iff encodable/sample_size >= 0.30 (inventory_only exempt)"
+    },
+    {
+      "corpus": "cpython_re",
+      "decision": "go",
+      "fraction": 0.5556,
+      "phase3_redecision": "confirm go",
+      "rule": "go iff encodable/sample_size >= 0.30 (inventory_only exempt)"
+    },
+    {
+      "corpus": "busybox",
+      "decision": "go",
+      "fraction": 1.0,
+      "phase3_redecision": "confirm go",
+      "rule": "go iff encodable/sample_size >= 0.30 (inventory_only exempt)"
+    },
+    {
+      "corpus": "rust_regex",
+      "decision": "inventory_only",
+      "fraction": null,
+      "phase3_redecision": "no fraction gate",
+      "rule": "go iff encodable/sample_size >= 0.30 (inventory_only exempt)"
+    }
+  ],
+  "gitleaks_target_met": true,
+  "phase": 3,
+  "schema_version": "1"
+}

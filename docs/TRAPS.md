@@ -288,3 +288,14 @@ the corresponding character in the Z3 mirror. A pre-fix bug compiled
 **Regression:** `compile_pattern(r"[\x22]", …)` must SAT-admit `"` and
 UNSAT-reject `x22`. Same for `\x{22}`. Class ranges `\x21-\x7e` must expand
 to the codepoint range (not `x` / `-` / digits as separate atoms).
+
+## 24. ReDoS fan-out uses a wall-clock gate, not a count cap
+
+Batch `--with-redos` walks encodable records through the non-Z3 ReDoS helper.
+Truncation is governed by `--redos-timeout-s` or per-corpus
+`budget.redos_wall_s` (default **120s** when unset). A count-based
+`--redos-cap` was removed: it produced incomplete reports that looked like
+“only N findings exist”. Incomplete runs write `{corpus}.ndjson` with
+`result=incomplete` then fail the evidence gate. The budget is checked
+before and after each `analyze_record` call (a single hung helper call is
+still not preemptible — that is a helper-level limit, not a silent skip).

@@ -7,6 +7,7 @@ import hashlib
 import json
 import platform
 import sys
+import time
 from pathlib import Path
 from typing import Any
 
@@ -47,6 +48,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "repo": "gitleaks/gitleaks",
         "security_tool": True,
         "lift_inline": True,
+        "budget": {"redos_wall_s": 120},
     },
     "validatorjs": {
         "corpus_type": "validator",
@@ -69,6 +71,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "repo": "validatorjs/validator.js",
         "security_tool": False,
         "lift_inline": False,
+        "budget": {"redos_wall_s": 120},
     },
     "detect-secrets": {
         "corpus_type": "rule_corpus",
@@ -78,6 +81,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "repo": "Yelp/detect-secrets",
         "security_tool": True,
         "lift_inline": False,
+        "budget": {"redos_wall_s": 60},
     },
     "coreruleset": {
         "corpus_type": "rule_corpus",
@@ -87,6 +91,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "repo": "coreruleset/coreruleset",
         "security_tool": True,
         "lift_inline": True,
+        "budget": {"redos_wall_s": 180},
     },
     "trufflehog": {
         "corpus_type": "rule_corpus",
@@ -99,7 +104,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": True,
         "corpus_pin": "v3.88.29",
         "commit": "90190deac64289cb10bb694894be8db9ead8790b",
-        "budget": {"max_patterns": 5000, "max_wall_s": 600},
+        "budget": {"max_patterns": 5000, "max_wall_s": 600, "redos_wall_s": 120},
     },
     "ids_rules": {
         "corpus_type": "rule_corpus",
@@ -112,7 +117,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": True,
         "corpus_pin": "suricata-7.0.3-et-open",
         "commit": "emergingthreats-open-suricata-7.0.3",
-        "budget": {"max_patterns": 20000, "max_wall_s": 900},
+        "budget": {"max_patterns": 20000, "max_wall_s": 900, "redos_wall_s": 180},
     },
     "semgrep_rules": {
         "corpus_type": "rule_corpus",
@@ -125,7 +130,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": True,
         "corpus_pin": "40b8c63f75dc7c22c8a77482d73bfb864b146f7e",
         "commit": "40b8c63f75dc7c22c8a77482d73bfb864b146f7e",
-        "budget": {"max_patterns": 5000, "max_wall_s": 600},
+        "budget": {"max_patterns": 5000, "max_wall_s": 600, "redos_wall_s": 120},
     },
     "re2_testdata": {
         "corpus_type": "testdata",
@@ -370,7 +375,7 @@ def run_corpus(
     approval_path: Path | None = None,
     require_ground_truth: bool = False,
     fail_planned: bool = False,
-    redos_cap: int | None = None,
+    redos_timeout_s: float | None = None,
     emit_planned: bool = True,
 ) -> dict[str, Any]:
     meta = CORPUS_MANIFESTS[corpus]
@@ -435,10 +440,14 @@ def run_corpus(
     if with_redos:
         from regexproof.redos.runner import analyze_record
 
+        budget_s = redos_timeout_s
+        if budget_s is None:
+            budget_s = (meta.get("budget") or {}).get("redos_wall_s", 120)
+        t0 = time.monotonic()
         for rec in compiled:
             if not rec.get("encodable"):
                 continue
-            if redos_cap is not None and len(redos_findings) >= redos_cap:
+            if budget_s is not None and (time.monotonic() - t0) >= float(budget_s):
                 redos_incomplete = True
                 break
             for f in analyze_record(rec, triage=False):
@@ -462,6 +471,10 @@ def run_corpus(
                         "detail": {"tool": f.get("tool"), "severity": f.get("severity")},
                     }
                 )
+            # Re-check after each record so a slow analyze_record still trips the gate.
+            if budget_s is not None and (time.monotonic() - t0) >= float(budget_s):
+                redos_incomplete = True
+                break
 
     if redos_incomplete:
         findings.append(
@@ -471,12 +484,14 @@ def run_corpus(
                 "kind": "redos",
                 "corpus": corpus,
                 "result": "incomplete",
-                "site": f"redos-cap:{redos_cap}",
+                "site": f"redos-timeout:{redos_timeout_s or (meta.get('budget') or {}).get('redos_wall_s', 120)}",
                 "pattern": "",
                 "shape": None,
                 "disclosure": "private_first" if meta.get("security_tool") else None,
                 "detail": {
-                    "error": f"ReDoS fan-out truncated at cap={redos_cap}",
+                    "error": "ReDoS fan-out truncated by wall-clock timeout gate",
+                    "redos_timeout_s": redos_timeout_s
+                    or (meta.get("budget") or {}).get("redos_wall_s", 120),
                     "findings_emitted": len(redos_findings),
                 },
             }
@@ -492,14 +507,16 @@ def run_corpus(
         require_ground_truth=require_ground_truth,
         fail_planned=fail_planned,
     )
-    if redos_incomplete:
-        raise SystemExit(
-            f"evidence gate failed: ReDoS report incomplete (cap={redos_cap}); "
-            "omit --redos-cap for an uncapped run"
-        )
     write_ndjson(out_dir / f"{corpus}.ndjson", findings)
     # Keep Phase 3 shape-5 report at {corpus}.md; batch uses a distinct path.
     write_markdown(out_dir / f"{corpus}_batch.md", corpus=corpus, findings=findings)
+    if redos_incomplete:
+        raise SystemExit(
+            f"evidence gate failed: ReDoS report incomplete "
+            f"(timeout_s={redos_timeout_s or (meta.get('budget') or {}).get('redos_wall_s', 120)}); "
+            "raise --redos-timeout-s / corpus budget.redos_wall_s for a complete run "
+            f"(partial findings written to {out_dir / f'{corpus}.ndjson'})"
+        )
 
     dry = write_pr_dry_run(
         out_dir / f"{corpus}-pr-dry-run.json",
@@ -700,7 +717,7 @@ def run_batch(
     with_redos: bool = False,
     require_ground_truth: bool = False,
     fail_planned: bool = False,
-    redos_cap: int | None = None,
+    redos_timeout_s: float | None = None,
     emit_planned: bool = True,
 ) -> dict[str, Any]:
     cov = check_corpus_coverage()
@@ -720,7 +737,7 @@ def run_batch(
             with_redos=with_redos,
             require_ground_truth=require_ground_truth,
             fail_planned=fail_planned,
-            redos_cap=redos_cap,
+            redos_timeout_s=redos_timeout_s,
             emit_planned=emit_planned,
         )
         # Pair-at-scale: reuse Phase-3 discovery when catalog exists
@@ -792,10 +809,18 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--out", type=Path, default=ROOT / "properties" / "generated")
     ap.add_argument("--with-redos", action="store_true")
     ap.add_argument(
+        "--redos-timeout-s",
+        type=float,
+        default=None,
+        help="wall-clock ReDoS fan-out budget in seconds (per corpus); "
+        "truncation emits incomplete and fails the gate. "
+        "Falls back to corpus budget.redos_wall_s when unset.",
+    )
+    ap.add_argument(
         "--redos-cap",
         type=int,
         default=None,
-        help="optional ReDoS fan-out cap; truncation emits incomplete and fails the gate",
+        help=argparse.SUPPRESS,  # removed: use --redos-timeout-s
     )
     ap.add_argument(
         "--require-ground-truth",
@@ -822,6 +847,12 @@ def main(argv: list[str] | None = None) -> int:
     if args.json_legacy:
         print("error: --json-legacy is mutually exclusive with batch NDJSON", file=sys.stderr)
         return 2
+    if args.redos_cap is not None:
+        print(
+            "error: --redos-cap was removed; use --redos-timeout-s (wall-clock gate)",
+            file=sys.stderr,
+        )
+        return 2
     if args.corpus == "all":
         # coreruleset is opt-in: its corpus is an external pinned clone, not
         # committed (see batch/corpora/coreruleset/README.md).
@@ -834,7 +865,7 @@ def main(argv: list[str] | None = None) -> int:
         with_redos=args.with_redos,
         require_ground_truth=args.require_ground_truth,
         fail_planned=args.fail_planned,
-        redos_cap=args.redos_cap,
+        redos_timeout_s=args.redos_timeout_s,
         emit_planned=not args.no_planned,
     )
     print("batch ok:", ", ".join(corpora))

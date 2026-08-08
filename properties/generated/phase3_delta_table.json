@@ -1,0 +1,45 @@
+{
+  "phase": 3,
+  "rows": [
+    {
+      "after_fraction": 0.6018,
+      "before_fraction": 0.185,
+      "corpus": "gitleaks",
+      "delta": 0.4168,
+      "non_lazy_contributor": "CRS/hex+scoped-flag evidence; gitleaks lift dominated by lazy-strip"
+    },
+    {
+      "after_fraction": 0.6478,
+      "before_fraction": 0.384,
+      "corpus": "coreruleset",
+      "delta": 0.2638,
+      "non_lazy_contributor": "hex soundness + negated-class / scoped-flag"
+    },
+    {
+      "after_fraction": 0.684,
+      "before_fraction": null,
+      "corpus": "validatorjs",
+      "delta": null,
+      "non_lazy_contributor": "see validatorjs_encodable_fraction.json"
+    },
+    {
+      "after_fraction": 0.2326,
+      "before_fraction": null,
+      "corpus": "trufflehog",
+      "decision": "no-go"
+    },
+    {
+      "after_fraction": 0.2741,
+      "before_fraction": null,
+      "corpus": "semgrep_rules",
+      "decision": "no-go"
+    },
+    {
+      "after_fraction": 0.879,
+      "before_fraction": null,
+      "corpus": "ids_rules",
+      "decision": "go"
+    }
+  ],
+  "schema_version": "1"
+}
