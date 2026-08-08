@@ -112,6 +112,11 @@ def remeasure(
     ]
     now_encodable = [rid for rid in flips if now_enc[rid]]
     now_rejected = [rid for rid in flips if not now_enc[rid]]
+    # Baseline for the remeasure block = frozen inventory (not a prior artifact,
+    # which may itself be a corrupted earlier remeasure).
+    baseline_encodable = sum(1 for r in frozen if r.get("encodable"))
+    baseline_n = len(frozen) or 1
+    baseline_fraction = round(baseline_encodable / baseline_n, 4)
 
     def _samples(rids: list[str]) -> list[dict]:
         by_id = {c.get("regex_id"): c for c in compiled}
@@ -173,9 +178,11 @@ def remeasure(
         },
         "remeasure": {
             "from": "frozen_inventory",
-            "baseline_fraction": (prior or {}).get("fraction"),
-            "baseline_encodable": (prior or {}).get("encodable"),
-            "baseline_compiler_fingerprint": (prior or {}).get("compiler_fingerprint"),
+            "baseline_fraction": baseline_fraction,
+            "baseline_encodable": baseline_encodable,
+            "prior_artifact_fraction": (prior or {}).get("fraction"),
+            "prior_artifact_encodable": (prior or {}).get("encodable"),
+            "prior_compiler_fingerprint": (prior or {}).get("compiler_fingerprint"),
             "flips": {
                 "now_encodable": len(now_encodable),
                 "now_rejected": len(now_rejected),
@@ -202,7 +209,11 @@ def remeasure(
         if flips
         else "flips: none"
     )
-    prior_frac = f" (was {prior.get('fraction')})" if prior else ""
+    prior_frac = (
+        f" (frozen {baseline_fraction}; prior-artifact {prior.get('fraction')})"
+        if prior
+        else f" (frozen {baseline_fraction})"
+    )
     print(
         f"{corpus}: {enc}/{len(compiled)} = {fraction:.4f}{prior_frac} "
         f"decision={decision} {flips_summary} parse-error={unclassified} "
