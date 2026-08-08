@@ -1,4 +1,4 @@
-# Semantics — mapping Python `re` and JS ECMA-262 regexes to Z3
+# Semantics — dialects, `call_kind`, fold closures, shorthands
 
 Z3's regex theory is the **regular-language theory**: languages of strings
 over an alphabet. Backtracking engines (Python `re`, JS RegExp, PCRE, sed)
@@ -6,58 +6,92 @@ accept a *superset* of syntax but with **operational semantics** (priority
 ordering, greediness, backtracking) that matter when you ask questions about
 what a match *captures* — not just what matches.
 
-## What carries over 1:1 to Z3 (membership questions)
+Taxonomy source of truth: `regexproof/kinds.py` (`CALL_KINDS`, `DIALECTS`,
+`PROPERTY_KINDS`).
+
+## `call_kind` taxonomy
+
+| `call_kind` | Real API (examples) | Z3 mirror wrapping |
+|---|---|---|
+| `fullmatch` | Python `re.fullmatch`, JS `^…$` with full-string intent | Bare body (whole-string `InRe`) |
+| `match` | Python `re.match` (implicit `^`) | Prefix: `Concat(body, Star(any))` — **not** bare `InRe` |
+| `search` | Python `re.search`, JS `RegExp.test` / unanchored RE2 | `Concat(Star(any), body, Star(any))` |
+| `exec` | JS `RegExp.exec` (membership + captures) | Same wrap as `search` for membership; captures are string-ops (deferred) |
+| `substitution` | `re.sub` / replace | Search-style wrap for “what matches”; replacement is string-ops |
+
+**verified-finding: VF-009** — `InRe` is always whole-string membership.
+`re.match(r"AND", "AND foo")` matches while `InRe("AND foo", Re("AND"))` is
+unsat. Use `prefix_match()` / compiler `call_kind` wrappers
+(`regexproof/compiler/base.py`, `lower.py`).
+
+Anchors `^` / `$` in the pattern are stripped into metadata and combined with
+`call_kind` — do **not** equate “has `^`” with full-string membership when the
+call is `search` or `match`.
+
+## What carries over 1:1 (membership questions)
 
 | Feature | Z3 encoding |
 |---|---|
-| literals, `.` (as literal) | `Re(".")`, `Re(s)` |
-| char classes `[a-z]` | `Range('a','z')` / `Union(Range(...))` |
-| alternation `a|b` | `Union` |
-| concatenation | `Concat` |
-| `*` `+` `?` `{n,m}` | `Star`, `Plus`, `Opt`, `Loop(Re("a"), n, m)` |
-| anchors `^` `$` | model as full-string membership (the default in Z3) |
-| case-insensitive flag | expand the alphabet explicitly (union of both cases) — Z3 has no flag |
+| literals | `Re(s)` — **literal**, not a pattern parse (`VF-004`) |
+| char classes `[a-z]` | `Range` / `Union` |
+| alternation / concat | `Union` / `Concat` |
+| `*` `+` `{n,m}` | `Star`, `Plus`, `Loop` |
+| `?` (optional) | `Union(r, Re(""))` — **not** `z3.Opt` (that is the optimizer class) |
+| case-insensitive | **fold closures** per dialect (below) — Z3 has no flag |
 
-**Key semantic point:** Z3 `InRe(s, r)` is *full-string* membership. An
-unanchored Python `re.search(pattern, s)` / JS `regex.test(s)` corresponds to
-`Contains(s, w)` for some word `w ∈ L(pattern)` — or equivalently
-`InRe(s, Concat(Star(any), pattern, Star(any)))`. Decide which question you're
-asking and encode it deliberately.
+## Per-dialect case-fold closures
+
+Implementation: `regexproof/compiler/fold.py`. Closures, not pair lists.
+
+| Dialect | Fold function | Distinguishing probes |
+|---|---|---|
+| `py_re` (default Unicode) | `python_fold_closure` | **İ** (U+0130) and **ı** (U+0131) fold into `[i]` |
+| `py_re` + ASCII/`re.A` | `python_fold_closure(..., ascii_only=True)` | ASCII letter pairs only |
+| `re2` | `re2_fold_closure` | İ/ı do **not** fold into `[i]` |
+| `ecma` (non-`u`) | `js_nonsu_fold_closure` | **ß** does not expand to `SS` (no multi-char folds) |
+| `pcre` (encodable subset) | ASCII-style fold when `i` set | Same discipline as ASCII py-re for the subset |
+
+**verified-finding: VF-008** — Python vs RE2 divergence on İ/ı is load-bearing
+for any cross-dialect “same pattern” claim.
+
+**verified-finding: VF-005** — a containment proof against `Re("bot")` under
+`re.I` is a silently narrower language; use `ci()` / dialect fold tables.
+
+## `\d` / `\s` / `\w` and line terminators
+
+Compilers expand shorthands to dialect alphabets (see `py_re.py`, `ecma.py`,
+`re2.py`, `pcre.py`). Approximate tables for the encodable subset:
+
+| Class | `py_re` (ASCII-bound domain) | `ecma` | `re2` / `pcre` subset |
+|---|---|---|---|
+| `\d` | `[0-9]` when domain is ASCII; Unicode digits otherwise (state domain!) | `[0-9]` in common subset | `[0-9]` |
+| `\w` | ASCII word or Unicode word per flags / domain | JS word class per flags | RE2/PCRE word class in subset |
+| `\s` | whitespace incl. dialect-specific | JS whitespace | dialect whitespace |
+| `.` terminators | `\n` (`_PY_LINE_TERMINATORS`) | `\n`, `\r`, U+2028, U+2029 (`JS_TERMINATORS`) | `\n` (`RE2_TERMINATORS` / `PCRE_TERMINATORS`) |
+
+**verified-finding: VF-006** — Unicode-aware Python classes vs ASCII Z3
+mirrors can yield false safety (`\b`) or false findings (`\d`). Declare
+`input_domain` and use `--require-domain` when proving ASCII-only boundaries.
 
 ## What does NOT carry over
 
 | Feature | Problem | Workaround |
 |---|---|---|
-| Lookahead `(?=...)`, lookbehind `(?<=...)` | no constructors in the regular-language theory | rewrite with string ops (`PrefixOf`/`SuffixOf`/`Contains` on the remainder), or Z3-Noodler `re.from_ecma2020` for JS |
-| Backreferences `\1` | not regular | out of scope for SMT — use ReDoS/behavioral tooling (REDOS.md) |
-| Greedy vs lazy capture semantics | Z3 membership ignores match position | model captures with string ops (`IndexOf`/`SubString`) — the P3 pattern |
-| `re.sub` / `replace_all` | unsupported in stock z3 | model as string ops or unroll |
-| Python-specific: `\A`, `\Z`, inline flags, `re.VERBOSE`, conditional groups | partial | strip/expand to the regular subset before encoding |
-| Unicode classes `\w` `\d` (Python default) | huge alphabets blow up | restrict to the actual input domain (ASCII where the boundary is ASCII); state the domain |
-| JS `u`/`v` flags, property escapes `\p{...}` | same | same — expand to the domain |
+| Lookahead / lookbehind | not in regular-language theory | string ops or Z3-Noodler `re.from_ecma2020` (JS) |
+| Backreferences | not regular | ReDoS / behavioral tooling (`docs/REDOS.md`) |
+| Capture position / greediness | membership ignores match position | `IndexOf` / `SubString` (P3 pattern) |
+| `re.sub` / `replace_all` | unsupported in stock z3 | string ops / unroll |
+| Search-wrapped **shape-5** gap queries | Z3 times out / `unknown` | compile R1/R2 as `fullmatch` + tight length (`VF-007`) |
 
 ## Ground truth beats assumptions
 
-The Z3 model is a mirror of *your* reading of the regex. Wherever a match
-*position* or *capture* matters, run the real engine on witness strings:
-
-- sed capture `s/.*"password"[[:space:]]*:[[:space:]]*"\([^\"]*\)".*/\1/p` —
-  `IndexOf`/`SubString` mirror matches real sed byte-for-byte for the
-  first-quote case (verified with `od` on both GNU and BusyBox sed), but sed's
-  greedy `.*` prefix means **last-key-wins on duplicate keys** — a documented
-  single-field abstraction.
-- JS `RegExp.test` vs `RegExp.exec` — one answers membership, the other
-  position+captures. Mirror the one the code actually calls.
-- Python `re.fullmatch` vs `re.match` vs `re.search` — three different
-  questions. `fullmatch` ↔ Z3 `InRe`; the others need the `Star(any)` wrapper.
+Wherever match *position* or *capture* matters, run the real engine on
+witnesses. Mirror the `call_kind` the code actually uses. See
+`docs/REPORTING.md` and `--require-ground-truth`.
 
 ## Practical rules
 
-1. **Ask the question the code asks.** If the code checks `if re.match(...)`
-   then a Z3 proof about full-match semantics is the wrong property.
-2. **Restrict the alphabet to the input domain** (and say so in the declared
-   domain). ASCII-boundary regexes don't need Unicode alphabets.
-3. **Lookahead?** Prefer the string-ops rewrite; use `re.from_ecma2020` when
-   verifying the JS source pattern as written matters (codegen'd specs).
-4. **Capture correctness** is a string-ops question, never a regex-membership
-   question.
+1. **Ask the question the code asks** (`call_kind` first).
+2. **Restrict the alphabet to the input domain** and declare it.
+3. **Lookahead?** Prefer string-ops rewrite; Noodler when verifying JS as written.
+4. **Capture correctness** is string-ops, never pure membership.

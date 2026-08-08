@@ -52,6 +52,10 @@ From `scripts/z3-property-template.py`, the canonical shapes:
 | 4. Per-token image | "escape output has no raw control chars" | one token per tiny solver query | monolithic image-regex TIMEOUTs — decompose |
 | 5. Rule diff (`rule_diff`) | "does R2 accept anything R1 misses?" | `InRe(s, R2) ∧ Not(InRe(s, R1))` (no regex Complement) | SAT = gap; UNSAT = no gap in bound; TIMEOUT ≠ pass |
 
+Shape-5 registry/`kind`/`family`/mutation-guard contract:
+[`docs/examples/shape5-rule_diff.md`](docs/examples/shape5-rule_diff.md).
+Dialect/`call_kind`/fold tables: [`docs/SEMANTICS.md`](docs/SEMANTICS.md).
+
 ### 3. Encode — read `docs/TRAPS.md` first
 The traps cost real debugging time. Minimum set:
 - `Complement()` is **language** complement, not char-class negation.
@@ -83,7 +87,7 @@ Before reporting it:
 
 ### 5. Make it a regression gate
 - Ship as a runnable script + CI job (`pip install z3-solver`; **TIMEOUT
-  (`unknown`) = hard failure**, never a silent skip).
+  (`unknown`) = hard failure / not proven**, never a silent skip).
 - Add **mutation guards**: a tagged property that weakens the regex and
   asserts the result flips UNSAT→SAT. A harness that can't fail proves
   nothing. Run them in `--all`, always. The harness enforces coverage: every
@@ -106,21 +110,33 @@ Before reporting it:
   replay callbacks.)
 - **Tag every property with `kind=`**: `property` (invariant must hold),
   `counterexample_finder` (SAT is the finding), `mutation_guard` (SAT proves
-  sensitivity), `bug_demo` (SAT demonstrates a known bug). The `kind` field
-  is what makes `expect_unsat=False` unambiguous and lets the coverage check
-  reason about the registry.
+  sensitivity), `bug_demo` (SAT demonstrates a known bug), `rule_diff`
+  (shape-5 gap query). The `kind` field is what makes `expect_unsat=False`
+  unambiguous and lets the coverage check reason about the registry.
+  Scanner NDJSON also uses finding kinds `redos`, `usage_mismatch`,
+  `intent_mismatch`, `triage` — see `docs/REPORTING.md`.
 - Pin `z3-solver==5.0.0` — the `Re()`/regex API changed across 4.x/5.x.
   The harness refuses to run (exit 3) on any non-5.0.x solver.
-- **Machine-readable output**: `z3-verify.py --json` emits one JSON object
-  per property (result, witness, ground-truth, domain, wall_ms) on stdout —
-  the same facts as the human report, for agents/CI to consume.
+- **Machine-readable output (NDJSON contract — must match CLI help):**
+  `z3-verify.py --json` emits one NDJSON object per property
+  (`schema_version`, result, witness, ground-truth, domain, wall_ms,
+  `engine_versions`, `not_proven`). Same facts as the human report — the two
+  reports can never disagree. Partial streams remain valid if a later
+  property fails. Mutually exclusive with `--json-legacy`.
+  `--json-legacy` emits a single JSON array of the same records (one-release
+  compat). Mutually exclusive with `--json`.
+- **Triage / batch reports:** `properties/triage/<repo>.ndjson` and
+  `properties/generated/<repo>.ndjson` (+ `*_batch.md`). Field contracts:
+  [`docs/REPORTING.md`](docs/REPORTING.md). Deterministic sort by `regex_id`.
+- **Disclosure:** security-tool findings are `private_first` — see
+  [`SECURITY.md`](SECURITY.md).
 
 ## Report shape
 
 For each property report: the pattern (file:line), the property, the declared
 domain (what exactly was proven — a length bound means "proven up to this
 length", not "inputs are this length"), result (UNSAT=holds / SAT=witness /
-TIMEOUT=hard fail), and ground-truth evidence.
+TIMEOUT=not proven / hard fail), ground-truth evidence, and engine versions.
 
 Prefer **alphabet-level, length-independent proofs** wherever the property
 allows: they cover ALL strings with no bound at all. Use length bounds only
@@ -131,6 +147,7 @@ in the harness output so a reader knows exactly what was proven.
 
 - `scripts/z3-property-template.py` — runnable shapes 1–5 (incl. complement-free
   shape-5 `rule_diff`) PASS against a pinned z3-solver
+- `docs/examples/shape5-rule_diff.md` — shape-5 `kind`/`family`/mutation guards
 - `scripts/rule-diff-pilot.py` — Phase 3 gitleaks encodable-subset shape-5 pilot
   (independent-spec R1, admitted_pairs≥20, timeout gate)
 - `python -m regexproof.batch` — Phase 5 batch (inventory, triage NDJSON, intent-vs-actual,
@@ -144,6 +161,8 @@ in the harness output so a reader knows exactly what was proven.
   integrity, password policy) with encoded forms and spike timings
 - `properties/fwlive-classifier.md` — classifier regex inventory incl. the
   `NETFILTER_KV_GLUE` lookahead blocker and the decomposition route per pattern
+- `docs/verified-findings.jsonl` — machine-readable implementation findings
+  keyed into TRAPS/BACKENDS/SEMANTICS
 
 ## Related skills (Hermes)
 

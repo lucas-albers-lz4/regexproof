@@ -21,9 +21,9 @@ inputs.
   analysis is a different problem — `docs/REDOS.md` maps the right tool
   (recheck, safe-regex2, …) per case.
 - **Everything is testable:** the harness treats solver `unknown` (timeout) as
-  a hard failure, requires mutation guards (a proof harness that can't fail
-  proves nothing), and demands ground-truthing every counterexample against
-  the real implementation.
+  a hard failure (**not proven**), requires mutation guards (a proof harness
+  that can't fail proves nothing), and demands ground-truthing every
+  counterexample against the real implementation.
 
 ## Quickstart
 
@@ -31,13 +31,14 @@ inputs.
 python3 -m venv .venv
 .venv/bin/pip install -e ".[dev]"             # package + z3-solver==5.0.0 (pinned)
 
-# Run the 4 canonical property shapes (alphabet, whitelist, counterexample, per-token image):
+# Run the 5 canonical property shapes (alphabet, whitelist, counterexample,
+# per-token image, rule_diff):
 .venv/bin/python scripts/z3-property-template.py
 
 # Run the harness skeleton (property registry + mutation guards + timeout=hard-fail):
 .venv/bin/python scripts/z3-verify.py --all --require-ground-truth
 
-# Phase-1 foundations (compiler golden suite, schemas, argv-only fuzz adapters):
+# Phase foundations (compiler golden suite, schemas, argv-only fuzz adapters):
 .venv/bin/pytest -q
 ```
 
@@ -48,19 +49,23 @@ the counterexample finder — the sed-truncation bug repro).
 
 | Path | Role |
 |---|---|
-| `AGENTS.md` | Agent-facing instructions: when/how to verify, property checklist, what to ground-truth |
+| `AGENTS.md` | Agent-facing instructions: when/how to verify, property checklist, NDJSON contract |
+| `SECURITY.md` | Private-disclosure-first policy for security-tool findings |
 | `docs/PLAYBOOK.md` | The core method: strategy, workflow, performance rules, verification workflow |
 | `docs/TRAPS.md` | Every solver trap we hit (Complement, z3str3, NUL, length bounds, …) with evidence |
 | `docs/DECOMPOSITION.md` | How to decompose hard properties + how to read a proof correctly |
 | `docs/BACKENDS.md` | seq vs z3str3 vs Z3-Noodler vs cvc5/Z3str3RE/dZ3 — what to use when |
-| `docs/SEMANTICS.md` | Python `re` / JS ECMA-262 semantics mapping: expressible subset, lookaheads, backrefs, Unicode |
+| `docs/SEMANTICS.md` | `call_kind`, fold closures, `\d`/`\s`/`\w`, terminators per dialect |
+| `docs/REPORTING.md` | Scanner NDJSON / triage / batch MD field contracts |
+| `docs/examples/shape5-rule_diff.md` | Shape-5 `rule_diff` kind/family/mutation guards |
+| `docs/verified-findings.jsonl` | Machine-readable verified implementation findings |
 | `docs/REDOS.md` | ReDoS (complexity) tooling — complements, not replaces, the SMT approach |
 | `docs/RESEARCH.md` | Deep-research findings: papers, tools, ecosystem, with sources |
-| `regexproof/` | Installable package: `regex_id`, dialect compilers, argv-only fuzz adapters, extractor scaffolds, JSON schemas |
+| `regexproof/` | Installable package: compilers, batch, ReDoS, schemas |
 | `helpers/` | Mandated Go RE2 + ECMA (regexpp) + PCRE2 CLI helpers (parse and replay) |
-| `tests/` | Golden suite, schema/extractor fixtures, false-UNSAT + Noodler probes |
-| `scripts/z3-property-template.py` | The 4 canonical property shapes, copy-and-adapt |
-| `scripts/z3-verify.py` | Harness: property registry, mutation guards, `rule_diff`/`call_kind`, `--require-ground-truth`, `--json`, timeout = hard failure |
+| `tests/` | Golden suite, schema/extractor fixtures, CI contract + docs checks |
+| `scripts/z3-property-template.py` | The 5 canonical property shapes, copy-and-adapt |
+| `scripts/z3-verify.py` | Harness: registry, mutation guards, `--json` / `--json-legacy`, GT |
 | `scripts/differential-fuzz.py` | Fuzz a Z3 mirror against a real engine via `--real-argv` (no `shell=True`) |
 | `properties/usrmanage-p1-p6.md` | Worked property suite (P1–P6) from the usrmanage case study |
 | `properties/fwlive-classifier.md` | Worked regex inventory of the fwlive LuCI log classifier + lookahead blocker |

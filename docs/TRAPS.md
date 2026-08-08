@@ -5,6 +5,8 @@ Every entry below was hit (or measured) during the usrmanage/fwlive work on
 
 ## 1. `Complement()` is LANGUAGE complement, not char-class negation
 
+<!-- verified-finding: VF-001 -->
+
 `Complement(Re('"'))` = all strings that aren't exactly `"` — so `a"`, `ba`,
 `\"` are all "in the complement", and `Star(Complement(Re('"')))` is **NOT**
 `[^\"]*`. Controlled tests:
@@ -29,6 +31,8 @@ context — restrict to single-char membership and Complement is safe.
 
 ## 2. The `seq` backend solves regex; `z3str3` returns `unknown` instantly
 
+<!-- verified-finding: VF-002 -->
+
 Z3 has two string backends. `z3str3` (`smt.string_solver=z3str3`) solves pure
 string equations but gives `unknown` (1ms) on `InRe` constraints. Do NOT set
 it for regex work. The default `seq` backend solved P2 in 927ms, P3 in 2ms.
@@ -39,6 +43,8 @@ it for regex work. The default `seq` backend solved P2 in 927ms, P3 in 2ms.
 | `z3str3` | ❌ `unknown` instantly | ✅ |
 
 ## 3. NUL (0x00) is a real edge — state input-domain assumptions
+
+<!-- verified-finding: VF-003 -->
 
 An escaper with `if (o > 0 && o < 32)` prints NUL raw through its `else`
 branch. "No raw C0 controls" is then FALSE as stated. Fix: state the
@@ -96,9 +102,12 @@ and/or length-slice with incremental push/pop (16, 32, 48, 64).
 
 ## 10. `unknown` is NOT sat
 
+<!-- verified-finding: VF-010 -->
+
 Treating solver timeout as SAT produced "FAIL ... SAT (counterexample!)" with
 no model. Always check `r == sat` before reading a model. Report `unknown`
-honestly — it is a hard failure in CI, never a pass.
+honestly — it is a hard failure in CI (**not proven**), never a pass.
+Harness JSON sets `result="timeout"` and `not_proven=true`.
 
 ## 11. Lookaheads/lookbehinds are not expressible in stock Z3
 
@@ -127,6 +136,8 @@ stays active"), never just the raw count. This bit the regexproof pilot
 false claim shipped.
 
 ## 13. `Re("...")` is a LITERAL, not a pattern parse
+
+<!-- verified-finding: VF-004 -->
 
 `z3.Re("[a-z]")` builds the regex matching the 5-character string `[a-z]`
 literally — it does NOT compile a regex pattern. Verified:
@@ -164,6 +175,8 @@ here so a mirror namespace never advertises `Opt` as regex-optional.
 
 ## 16. Case-insensitive flags: the mirror must expand case
 
+<!-- verified-finding: VF-005 -->
+
 `Re("AND")` is case-sensitive. A pattern compiled with `re.I` / `(?i)`
 silently accepts a SUPERSET of the naive mirror's language. Verified
 (hermes-agent sweep, telegram bot-handle boundary,
@@ -187,6 +200,8 @@ matches; see P6 properties).
 
 ## 17. Unicode classes: the input-domain assumption is load-bearing
 
+<!-- verified-finding: VF-006 -->
+
 Python's `\w \d \s \b` are Unicode-aware by default. Z3's `Range`/`Union`
 classes are ASCII. An ASCII mirror of a Unicode class silently diverges —
 and the DIVERGENCE DIRECTION determines the danger:
@@ -206,3 +221,14 @@ boundary is genuinely ASCII-constrained; run `--require-domain` to make
 unstated domains a hard failure; add non-ASCII chars to differential-fuzz
 mutation sets so a Unicode-exposed boundary with an ASCII mirror produces
 a mismatch instead of a silent pass.
+
+## 18. Search-wrapped `rule_diff` blows up Z3
+
+<!-- verified-finding: VF-007 -->
+
+Shape-5 gap queries (`InRe(s,R2) ∧ Not(InRe(s,R1))`) under a **search**
+wrapper (leading/trailing `Star(any)`) routinely return `unknown` within
+budget. The Phase-3 gitleaks pilot compiles R1/R2 as **`fullmatch`** mirrors
+with tight length bounds, then ground-truths witnesses with the real
+detector `call_kind` (usually `search`). See
+`docs/examples/shape5-rule_diff.md` and `scripts/rule-diff-pilot.py`.
