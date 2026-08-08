@@ -3,7 +3,7 @@
     "redos_wall_s": 180
   },
   "commit": null,
-  "compiler_fingerprint": "c04a3e0148b3d58a",
+  "compiler_fingerprint": "4a86d0cffde9046c",
   "complete_run": true,
   "corpus_pin": null,
   "decision": "go",
@@ -11,7 +11,7 @@
   "dialect": "pcre",
   "encodable": 239,
   "engine_versions": {
-    "python": "3.13.5",
+    "python": "3.14.6",
     "z3": "5.0.0"
   },
   "fraction": 0.6908,
@@ -28,7 +28,6 @@
     "word-boundary": 19
   },
   "remeasure": {
-    "baseline_compiler_fingerprint": "c3566c0cb380",
     "baseline_encodable": 248,
     "baseline_fraction": 0.7168,
     "flips": {
@@ -37,6 +36,9 @@
       "unchanged": 337
     },
     "from": "frozen_inventory",
+    "prior_artifact_encodable": 239,
+    "prior_artifact_fraction": 0.6908,
+    "prior_compiler_fingerprint": "c04a3e0148b3d58a",
     "samples": {
       "now_encodable": [],
       "now_rejected": [
@@ -110,5 +112,5 @@
   "schema_version": "1",
   "scope": "full_corpus",
   "unclassified_parse_errors": 0,
-  "wall_s": 21.96
+  "wall_s": 19.503
 }
