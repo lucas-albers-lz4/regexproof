@@ -76,6 +76,13 @@ ROUTING = {
     },
     "lookaround": {"route": "triage", "note": "Not expressible in stock Z3."},
     "backref": {"route": "triage", "note": "Not expressible in stock Z3."},
+    "negated-unsupported": {
+        "route": "triage",
+        "note": (
+            "ModSecurity !@rx / selector negation — reject before compile "
+            "(docs/NEGATION.md); never silent-positive or Z3 Complement()."
+        ),
+    },
 }
 
 

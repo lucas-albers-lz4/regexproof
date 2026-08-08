@@ -23,18 +23,22 @@ def triage_records_from_compiled(compiled: list[dict[str, Any]]) -> list[dict[st
             kind = "unencodable"
         else:
             kind = "ambiguous"
-        out.append(
-            {
-                "schema_version": TRIAGE_SCHEMA_VERSION,
-                "regex_id": rec["regex_id"],
-                "reason_kind": kind,
-                "unencodable_reason": reason,
-                "dialect": rec.get("dialect") or "",
-                "call_kind": rec.get("call_kind") or "",
-                "site": rec.get("site") or "",
-                "pattern": rec.get("pattern") or "",
-            }
-        )
+        row = {
+            "schema_version": TRIAGE_SCHEMA_VERSION,
+            "regex_id": rec["regex_id"],
+            "reason_kind": kind,
+            "unencodable_reason": reason,
+            "dialect": rec.get("dialect") or "",
+            "call_kind": rec.get("call_kind") or "",
+            "site": rec.get("site") or "",
+            "pattern": rec.get("pattern") or "",
+        }
+        # Surface ModSecurity negation so triage never looks like a normal rule.
+        if rec.get("negated") is not None:
+            row["negated"] = bool(rec.get("negated"))
+        if rec.get("selector") is not None:
+            row["selector"] = bool(rec.get("selector"))
+        out.append(row)
     out.sort(key=lambda r: r["regex_id"])
     return out
 
