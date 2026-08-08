@@ -57,3 +57,14 @@ def test_lazy_patterns_become_encodable_pcre_and_ecma():
         assert eager.encodable
         braced = compile_pattern("a{2,3}?", "", dialect, "fullmatch")
         assert braced.encodable, (dialect, braced.unencodable_reason)
+
+
+def test_hex_escapes_encode_as_literals():
+    for dialect in ("pcre", "ecma", "re2"):
+        nn = compile_pattern(r"\x41", "", dialect, "fullmatch")
+        assert nn.encodable, (dialect, nn.unencodable_reason)
+        brace = compile_pattern(r"\x{41}", "", dialect, "fullmatch")
+        assert brace.encodable, (dialect, brace.unencodable_reason)
+        bad = compile_pattern(r"\xGG", "", dialect, "fullmatch")
+        assert not bad.encodable
+        assert bad.unencodable_reason in ("bad-range", "parse-error")
