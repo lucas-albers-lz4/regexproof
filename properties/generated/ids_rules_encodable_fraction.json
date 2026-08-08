@@ -1,35 +1,201 @@
 {
+  "budget": {
+    "max_patterns": 20000,
+    "max_wall_s": 900,
+    "redos_wall_s": 180
+  },
   "commit": "emergingthreats-open-suricata-7.0.3",
+  "compiler_fingerprint": "c04a3e0148b3d58a",
   "complete_run": true,
   "corpus_pin": "suricata-7.0.3-et-open",
   "decision": "go",
   "decision_rule": "go iff encodable/sample_size >= 0.3",
   "dialect": "pcre",
-  "encodable": 7182,
+  "encodable": 6918,
   "engine_versions": {
-    "python": "3.14.6",
+    "python": "3.13.5",
     "z3": "5.0.0"
   },
-  "fraction": 0.879,
+  "fraction": 0.8467,
   "go_no_go_threshold": 0.3,
+  "inventory_path": "properties/generated/ids_rules-inventory.ndjson",
   "pilot": "ids_rules",
   "reasons": {
     "backref": 85,
     "bad-range": 1,
-    "inline-flag": 89,
-    "internal-anchor": 4,
+    "inline-flag": 90,
+    "internal-anchor": 3,
     "lookaround": 174,
     "m-flag": 198,
     "negated-shorthand": 3,
-    "ok": 7182,
+    "ok": 6918,
     "pattern-too-long": 186,
+    "per-alternative-anchor": 278,
     "unclosed-class": 219,
     "unclosed-group": 1,
     "unsupported-syntax": 4,
-    "word-boundary": 25
+    "word-boundary": 11
+  },
+  "remeasure": {
+    "baseline_compiler_fingerprint": null,
+    "baseline_encodable": 7182,
+    "baseline_fraction": 0.879,
+    "flips": {
+      "now_encodable": 13,
+      "now_rejected": 277,
+      "unchanged": 7881
+    },
+    "from": "frozen_inventory",
+    "samples": {
+      "now_encodable": [
+        {
+          "flags": "",
+          "pattern": "\\bsolusvmc-node\\b",
+          "reason": null,
+          "regex_id": "5aa01f481025ed6bbf584a08680a33e3",
+          "site": "/home/lalbers/gitroot/regexproof/batch/corpora/ids_rules/rules/emerging-exploit.rules:371:183"
+        },
+        {
+          "flags": "i",
+          "pattern": "\\bexec\\b",
+          "reason": null,
+          "regex_id": "07130550e70206726f81721649747ecb",
+          "site": "/home/lalbers/gitroot/regexproof/batch/corpora/ids_rules/rules/emerging-exploit.rules:961:298"
+        },
+        {
+          "flags": "i",
+          "pattern": "[^\\r\\n]*(?:\\x60|\\x24|\\x7c|\\bsh\\b)",
+          "reason": null,
+          "regex_id": "843881f725ea5d011607d016ec32993f",
+          "site": "/home/lalbers/gitroot/regexproof/batch/corpora/ids_rules/rules/emerging-exploit.rules:1337:319"
+        },
+        {
+          "flags": "i",
+          "pattern": "^[\\s\\x22\\x27]*upload\\b",
+          "reason": null,
+          "regex_id": "f85abe3e520ff8e669e6ed9d45c1288d",
+          "site": "/home/lalbers/gitroot/regexproof/batch/corpora/ids_rules/rules/emerging-exploit.rules:1373:208"
+        },
+        {
+          "flags": "i",
+          "pattern": "^[\\s\\x22\\x27]*uploadedfile\\b",
+          "reason": null,
+          "regex_id": "074f898846c1557edd2393fe1d8b0a39",
+          "site": "/home/lalbers/gitroot/regexproof/batch/corpora/ids_rules/rules/emerging-exploit.rules:1373:272"
+        },
+        {
+          "flags": "i",
+          "pattern": "^[\\s\\x22\\x27]*check_ping\\b",
+          "reason": null,
+          "regex_id": "7e35b6f4c3380b27aeb2b5d8a62bdc45",
+          "site": "/home/lalbers/gitroot/regexproof/batch/corpora/ids_rules/rules/emerging-exploit.rules:1373:346"
+        },
+        {
+          "flags": "",
+          "pattern": "^\\b",
+          "reason": null,
+          "regex_id": "48e9ef0f7c369f00f5d1a943e66e7911",
+          "site": "/home/lalbers/gitroot/regexproof/batch/corpora/ids_rules/rules/emerging-web_server.rules:221:199"
+        },
+        {
+          "flags": "",
+          "pattern": "\\ballow_url_include\\s*?=",
+          "reason": null,
+          "regex_id": "88c18fa1014dbd71c497db064991e424",
+          "site": "/home/lalbers/gitroot/regexproof/batch/corpora/ids_rules/rules/emerging-web_server.rules:479:196"
+        },
+        {
+          "flags": "",
+          "pattern": "\\bsafe_mode\\s*?=",
+          "reason": null,
+          "regex_id": "368e62e63ea0bce87b4b6e515a89ea8e",
+          "site": "/home/lalbers/gitroot/regexproof/batch/corpora/ids_rules/rules/emerging-web_server.rules:481:180"
+        },
+        {
+          "flags": "",
+          "pattern": "\\bopen_basedir\\s*?=",
+          "reason": null,
+          "regex_id": "574d95852619e07c49d6d5428b0751a6",
+          "site": "/home/lalbers/gitroot/regexproof/batch/corpora/ids_rules/rules/emerging-web_server.rules:483:186"
+        }
+      ],
+      "now_rejected": [
+        {
+          "flags": "i",
+          "pattern": "(?:^|&|Content-Disposition[\\x3a][^\\n]*?name\\s*?=\\s*?[\\x22\\x27])name\\[[^\\x5d]*?\\W",
+          "reason": "per-alternative-anchor",
+          "regex_id": "47c0fdbc5581dbb4c056221ce2bc88d7",
+          "site": "/home/lalbers/gitroot/regexproof/batch/corpora/ids_rules/rules/emerging-exploit.rules:629:200"
+        },
+        {
+          "flags": "i",
+          "pattern": "(?:^|&|Content-Disposition[\\x3a][^\\n]*?name\\s*?=\\s*?[\\x22\\x27])name\\%5b[^\\x5d]*?\\W",
+          "reason": "per-alternative-anchor",
+          "regex_id": "6fe4eeecbe8d1b5512234e11bb0b4e05",
+          "site": "/home/lalbers/gitroot/regexproof/batch/corpora/ids_rules/rules/emerging-exploit.rules:631:202"
+        },
+        {
+          "flags": "i",
+          "pattern": "(?:^|&|Content-Disposition[\\x3a][^\\n]*?name\\s*?=\\s*?[\\x22\\x27])nam\\%65\\[[^\\x5d]*?\\W",
+          "reason": "per-alternative-anchor",
+          "regex_id": "34ab8d6ff4334efaaae99e533a7d2600",
+          "site": "/home/lalbers/gitroot/regexproof/batch/corpora/ids_rules/rules/emerging-exploit.rules:633:202"
+        },
+        {
+          "flags": "i",
+          "pattern": "(?:^|&|Content-Disposition[\\x3a][^\\n]*?name\\s*?=\\s*?[\\x22\\x27])nam\\%65\\%5b[^\\x5d]*?\\W",
+          "reason": "per-alternative-anchor",
+          "regex_id": "90cfd9d5b18487e41c9cbe8111bcb89f",
+          "site": "/home/lalbers/gitroot/regexproof/batch/corpora/ids_rules/rules/emerging-exploit.rules:635:204"
+        },
+        {
+          "flags": "i",
+          "pattern": "(?:^|&|Content-Disposition[\\x3a][^\\n]*?name\\s*?=\\s*?[\\x22\\x27])na\\%6de\\[[^\\x5d]*?\\W",
+          "reason": "per-alternative-anchor",
+          "regex_id": "77ed31e217fd243f12b57903a40cd26c",
+          "site": "/home/lalbers/gitroot/regexproof/batch/corpora/ids_rules/rules/emerging-exploit.rules:637:202"
+        },
+        {
+          "flags": "i",
+          "pattern": "(?:^|&|Content-Disposition[\\x3a][^\\n]*?name\\s*?=\\s*?[\\x22\\x27])na\\%6de\\%5b[^\\x5d]*?\\W",
+          "reason": "per-alternative-anchor",
+          "regex_id": "1a782599b1782765d43edb335cf29881",
+          "site": "/home/lalbers/gitroot/regexproof/batch/corpora/ids_rules/rules/emerging-exploit.rules:639:204"
+        },
+        {
+          "flags": "i",
+          "pattern": "(?:^|&|Content-Disposition[\\x3a][^\\n]*?name\\s*?=\\s*?[\\x22\\x27])na\\%6d\\%65\\[[^\\x5d]*?\\W",
+          "reason": "per-alternative-anchor",
+          "regex_id": "52604bc9e1853b45418916b426102d4d",
+          "site": "/home/lalbers/gitroot/regexproof/batch/corpora/ids_rules/rules/emerging-exploit.rules:641:204"
+        },
+        {
+          "flags": "i",
+          "pattern": "(?:^|&|Content-Disposition[\\x3a][^\\n]*?name\\s*?=\\s*?[\\x22\\x27])na\\%6d\\%65\\%5b[^\\x5d]*?\\W",
+          "reason": "per-alternative-anchor",
+          "regex_id": "1aac569584890011a7e92f309518cee6",
+          "site": "/home/lalbers/gitroot/regexproof/batch/corpora/ids_rules/rules/emerging-exploit.rules:643:206"
+        },
+        {
+          "flags": "i",
+          "pattern": "(?:^|&|Content-Disposition[\\x3a][^\\n]*?name\\s*?=\\s*?[\\x22\\x27])n\\%61me\\[[^\\x5d]*?\\W",
+          "reason": "per-alternative-anchor",
+          "regex_id": "7f5e7628347948bbe7770e7697f58023",
+          "site": "/home/lalbers/gitroot/regexproof/batch/corpora/ids_rules/rules/emerging-exploit.rules:645:202"
+        },
+        {
+          "flags": "i",
+          "pattern": "(?:^|&|Content-Disposition[\\x3a][^\\n]*?name\\s*?=\\s*?[\\x22\\x27])n\\%61me\\%5b[^\\x5d]*?\\W",
+          "reason": "per-alternative-anchor",
+          "regex_id": "33daa57275fd17ae432b8b9f3199e826",
+          "site": "/home/lalbers/gitroot/regexproof/batch/corpora/ids_rules/rules/emerging-exploit.rules:647:205"
+        }
+      ]
+    }
   },
   "sample_size": 8171,
   "schema_version": "1",
   "scope": "full_corpus",
-  "unclassified_parse_errors": 0
+  "unclassified_parse_errors": 0,
+  "wall_s": 608.453
 }

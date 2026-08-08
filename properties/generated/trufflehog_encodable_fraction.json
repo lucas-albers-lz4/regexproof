@@ -5,33 +5,56 @@
     "redos_wall_s": 120
   },
   "commit": "90190deac64289cb10bb694894be8db9ead8790b",
-  "compiler_fingerprint": "c3566c0cb380",
+  "compiler_fingerprint": "c04a3e0148b3d58a",
   "complete_run": true,
   "corpus_pin": "v3.88.29",
   "decision": "go",
   "decision_rule": "go iff encodable/sample_size >= 0.3",
   "dialect": "re2",
-  "encodable": 201,
+  "encodable": 200,
   "engine_versions": {
-    "python": "3.14.6",
+    "python": "3.13.5",
     "z3": "5.0.0"
   },
-  "fraction": 0.9349,
+  "fraction": 0.9302,
   "go_no_go_threshold": 0.3,
   "inventory_path": "properties/generated/trufflehog-inventory.ndjson",
-  "path": "batch/corpora/trufflehog/detectors",
   "pilot": "trufflehog",
   "reasons": {
     "inline-flag": 5,
     "m-flag": 1,
     "negated-shorthand": 4,
-    "ok": 201,
+    "ok": 200,
     "pattern-too-long": 2,
+    "per-alternative-anchor": 1,
     "word-boundary": 2
+  },
+  "remeasure": {
+    "baseline_compiler_fingerprint": "c3566c0cb380",
+    "baseline_encodable": 201,
+    "baseline_fraction": 0.9349,
+    "flips": {
+      "now_encodable": 0,
+      "now_rejected": 1,
+      "unchanged": 214
+    },
+    "from": "frozen_inventory",
+    "samples": {
+      "now_encodable": [],
+      "now_rejected": [
+        {
+          "flags": "",
+          "pattern": "^[xX]+|\\*+$",
+          "reason": "per-alternative-anchor",
+          "regex_id": "34ea8d912295a1980a82a1e8e93e8774",
+          "site": "/home/lalbers/gitroot/regexproof/batch/corpora/trufflehog/detectors/mongodb/mongodb.go:34:0"
+        }
+      ]
+    }
   },
   "sample_size": 215,
   "schema_version": "1",
   "scope": "full_corpus",
   "unclassified_parse_errors": 0,
-  "wall_s": 0.818
+  "wall_s": 0.544
 }

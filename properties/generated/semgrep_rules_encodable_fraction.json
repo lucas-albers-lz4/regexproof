@@ -1,10 +1,11 @@
 {
   "budget": {
     "max_patterns": 5000,
-    "max_wall_s": 600
+    "max_wall_s": 600,
+    "redos_wall_s": 120
   },
   "commit": "40b8c63f75dc7c22c8a77482d73bfb864b146f7e",
-  "compiler_fingerprint": "a9e4f80459ea",
+  "compiler_fingerprint": "c04a3e0148b3d58a",
   "complete_run": true,
   "corpus_pin": "40b8c63f75dc7c22c8a77482d73bfb864b146f7e",
   "decision": "no-go",
@@ -18,7 +19,6 @@
   "fraction": 0.2741,
   "go_no_go_threshold": 0.3,
   "inventory_path": "properties/generated/semgrep_rules-inventory.ndjson",
-  "path": "batch/corpora/semgrep_rules/rules",
   "pilot": "semgrep_rules",
   "reasons": {
     "composite-pattern": 3247,
@@ -34,9 +34,26 @@
     "unsupported:POSSESSIVE_REPEAT": 1,
     "word-boundary": 48
   },
+  "remeasure": {
+    "baseline_encodable": 2518,
+    "baseline_fraction": 0.2741,
+    "flips": {
+      "now_encodable": 0,
+      "now_rejected": 0,
+      "unchanged": 9186
+    },
+    "from": "frozen_inventory",
+    "prior_artifact_encodable": 2518,
+    "prior_artifact_fraction": 0.2741,
+    "prior_compiler_fingerprint": "c04a3e0148b3d58a",
+    "samples": {
+      "now_encodable": [],
+      "now_rejected": []
+    }
+  },
   "sample_size": 9186,
   "schema_version": "1",
   "scope": "full_corpus",
   "unclassified_parse_errors": 0,
-  "wall_s": 2.538
+  "wall_s": 2.223
 }

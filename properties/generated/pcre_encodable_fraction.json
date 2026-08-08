@@ -2,8 +2,8 @@
   "schema_version": "1",
   "dialect": "pcre",
   "sample_size": 20,
-  "encodable": 11,
-  "fraction": 0.55,
+  "encodable": 14,
+  "fraction": 0.7,
   "rows": [
     {
       "pattern": "^[a-z]+$",
@@ -52,13 +52,13 @@
     },
     {
       "pattern": "\\bword\\b",
-      "encodable": false,
-      "reason": "word-boundary"
+      "encodable": true,
+      "reason": null
     },
     {
       "pattern": "^https?://\\S+$",
-      "encodable": false,
-      "reason": "negated-class"
+      "encodable": true,
+      "reason": null
     },
     {
       "pattern": "[A-Z]{3}\\d{2}",
@@ -82,8 +82,8 @@
     },
     {
       "pattern": "password\\s*=\\s*\\S+",
-      "encodable": false,
-      "reason": "negated-class"
+      "encodable": true,
+      "reason": null
     },
     {
       "pattern": "(?i)admin",
