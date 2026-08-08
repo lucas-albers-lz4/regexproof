@@ -25,7 +25,7 @@
       "result": "unsat",
       "schema_version": "1",
       "shape": 5,
-      "wall_ms": 2.403,
+      "wall_ms": 2.127,
       "witness": null
     },
     {
@@ -43,7 +43,7 @@
       "result": "unsat",
       "schema_version": "1",
       "shape": 5,
-      "wall_ms": 4.245,
+      "wall_ms": 3.715,
       "witness": null
     },
     {
@@ -61,7 +61,7 @@
       "result": "unsat",
       "schema_version": "1",
       "shape": 5,
-      "wall_ms": 1.588,
+      "wall_ms": 2.081,
       "witness": null
     },
     {
@@ -79,7 +79,7 @@
       "result": "sat",
       "schema_version": "1",
       "shape": 5,
-      "wall_ms": 1.385,
+      "wall_ms": 1.394,
       "witness": {
         "s": "<redacted len=44>"
       }
@@ -99,7 +99,7 @@
       "result": "unsat",
       "schema_version": "1",
       "shape": 5,
-      "wall_ms": 1.582,
+      "wall_ms": 1.561,
       "witness": null
     },
     {
@@ -117,7 +117,7 @@
       "result": "unsat",
       "schema_version": "1",
       "shape": 5,
-      "wall_ms": 2.54,
+      "wall_ms": 2.538,
       "witness": null
     },
     {
@@ -135,7 +135,7 @@
       "result": "unsat",
       "schema_version": "1",
       "shape": 5,
-      "wall_ms": 2.043,
+      "wall_ms": 1.683,
       "witness": null
     },
     {
@@ -153,7 +153,7 @@
       "result": "sat",
       "schema_version": "1",
       "shape": 5,
-      "wall_ms": 695.013,
+      "wall_ms": 706.812,
       "witness": {
         "s": "<redacted len=40>"
       }
@@ -173,7 +173,7 @@
       "result": "unsat",
       "schema_version": "1",
       "shape": 5,
-      "wall_ms": 1.704,
+      "wall_ms": 2.582,
       "witness": null
     },
     {
@@ -191,7 +191,7 @@
       "result": "unsat",
       "schema_version": "1",
       "shape": 5,
-      "wall_ms": 2.619,
+      "wall_ms": 3.282,
       "witness": null
     },
     {
@@ -209,7 +209,7 @@
       "result": "unsat",
       "schema_version": "1",
       "shape": 5,
-      "wall_ms": 1.669,
+      "wall_ms": 1.698,
       "witness": null
     },
     {
@@ -227,7 +227,7 @@
       "result": "sat",
       "schema_version": "1",
       "shape": 5,
-      "wall_ms": 715.035,
+      "wall_ms": 719.181,
       "witness": {
         "s": "<redacted len=40>"
       }
@@ -247,7 +247,7 @@
       "result": "unsat",
       "schema_version": "1",
       "shape": 5,
-      "wall_ms": 1.8,
+      "wall_ms": 1.727,
       "witness": null
     },
     {
@@ -265,7 +265,7 @@
       "result": "unsat",
       "schema_version": "1",
       "shape": 5,
-      "wall_ms": 2.786,
+      "wall_ms": 2.728,
       "witness": null
     },
     {
@@ -283,7 +283,7 @@
       "result": "unsat",
       "schema_version": "1",
       "shape": 5,
-      "wall_ms": 1.675,
+      "wall_ms": 1.652,
       "witness": null
     },
     {
@@ -301,7 +301,7 @@
       "result": "sat",
       "schema_version": "1",
       "shape": 5,
-      "wall_ms": 702.789,
+      "wall_ms": 729.091,
       "witness": {
         "s": "<redacted len=40>"
       }
@@ -321,7 +321,7 @@
       "result": "unsat",
       "schema_version": "1",
       "shape": 5,
-      "wall_ms": 1.747,
+      "wall_ms": 1.813,
       "witness": null
     },
     {
@@ -339,7 +339,7 @@
       "result": "sat",
       "schema_version": "1",
       "shape": 5,
-      "wall_ms": 836.899,
+      "wall_ms": 842.035,
       "witness": {
         "s": "<redacted len=40>"
       }
@@ -359,7 +359,7 @@
       "result": "unsat",
       "schema_version": "1",
       "shape": 5,
-      "wall_ms": 2.194,
+      "wall_ms": 2.16,
       "witness": null
     },
     {
@@ -377,7 +377,7 @@
       "result": "sat",
       "schema_version": "1",
       "shape": 5,
-      "wall_ms": 687.666,
+      "wall_ms": 692.021,
       "witness": {
         "s": "<redacted len=40>"
       }
@@ -397,7 +397,7 @@
       "result": "unsat",
       "schema_version": "1",
       "shape": 5,
-      "wall_ms": 1.87,
+      "wall_ms": 1.915,
       "witness": null
     },
     {
@@ -415,7 +415,7 @@
       "result": "unsat",
       "schema_version": "1",
       "shape": 5,
-      "wall_ms": 2.734,
+      "wall_ms": 2.792,
       "witness": null
     },
     {
@@ -433,7 +433,7 @@
       "result": "unsat",
       "schema_version": "1",
       "shape": 5,
-      "wall_ms": 1.748,
+      "wall_ms": 1.758,
       "witness": null
     },
     {
@@ -451,7 +451,7 @@
       "result": "sat",
       "schema_version": "1",
       "shape": 5,
-      "wall_ms": 1490.511,
+      "wall_ms": 1479.034,
       "witness": {
         "s": "<redacted len=28>"
       }
@@ -471,7 +471,7 @@
       "result": "unsat",
       "schema_version": "1",
       "shape": 5,
-      "wall_ms": 1.84,
+      "wall_ms": 1.889,
       "witness": null
     },
     {
@@ -489,7 +489,7 @@
       "result": "unsat",
       "schema_version": "1",
       "shape": 5,
-      "wall_ms": 2.74,
+      "wall_ms": 2.767,
       "witness": null
     },
     {
@@ -507,7 +507,7 @@
       "result": "unsat",
       "schema_version": "1",
       "shape": 5,
-      "wall_ms": 1.636,
+      "wall_ms": 1.634,
       "witness": null
     },
     {
@@ -525,7 +525,7 @@
       "result": "sat",
       "schema_version": "1",
       "shape": 5,
-      "wall_ms": 396.468,
+      "wall_ms": 397.235,
       "witness": {
         "s": "<redacted len=25>"
       }
@@ -545,7 +545,7 @@
       "result": "unsat",
       "schema_version": "1",
       "shape": 5,
-      "wall_ms": 1.799,
+      "wall_ms": 1.864,
       "witness": null
     },
     {
@@ -563,7 +563,7 @@
       "result": "unsat",
       "schema_version": "1",
       "shape": 5,
-      "wall_ms": 2.771,
+      "wall_ms": 2.858,
       "witness": null
     },
     {
@@ -581,7 +581,7 @@
       "result": "unsat",
       "schema_version": "1",
       "shape": 5,
-      "wall_ms": 1.705,
+      "wall_ms": 1.747,
       "witness": null
     },
     {
@@ -599,7 +599,7 @@
       "result": "sat",
       "schema_version": "1",
       "shape": 5,
-      "wall_ms": 478.533,
+      "wall_ms": 472.679,
       "witness": {
         "s": "<redacted len=27>"
       }
@@ -619,7 +619,7 @@
       "result": "unsat",
       "schema_version": "1",
       "shape": 5,
-      "wall_ms": 1.787,
+      "wall_ms": 1.749,
       "witness": null
     },
     {
@@ -637,7 +637,7 @@
       "result": "unsat",
       "schema_version": "1",
       "shape": 5,
-      "wall_ms": 2.758,
+      "wall_ms": 2.757,
       "witness": null
     },
     {
@@ -655,7 +655,7 @@
       "result": "unsat",
       "schema_version": "1",
       "shape": 5,
-      "wall_ms": 1.761,
+      "wall_ms": 1.756,
       "witness": null
     },
     {
@@ -673,7 +673,7 @@
       "result": "sat",
       "schema_version": "1",
       "shape": 5,
-      "wall_ms": 433.39,
+      "wall_ms": 429.689,
       "witness": {
         "s": "<redacted len=25>"
       }
@@ -693,7 +693,7 @@
       "result": "unsat",
       "schema_version": "1",
       "shape": 5,
-      "wall_ms": 1.869,
+      "wall_ms": 1.9,
       "witness": null
     },
     {
@@ -711,7 +711,7 @@
       "result": "unsat",
       "schema_version": "1",
       "shape": 5,
-      "wall_ms": 2.788,
+      "wall_ms": 2.808,
       "witness": null
     },
     {
@@ -729,7 +729,7 @@
       "result": "unsat",
       "schema_version": "1",
       "shape": 5,
-      "wall_ms": 1.844,
+      "wall_ms": 1.785,
       "witness": null
     },
     {
@@ -747,7 +747,7 @@
       "result": "sat",
       "schema_version": "1",
       "shape": 5,
-      "wall_ms": 366.215,
+      "wall_ms": 366.701,
       "witness": {
         "s": "<redacted len=31>"
       }
@@ -767,7 +767,7 @@
       "result": "unsat",
       "schema_version": "1",
       "shape": 5,
-      "wall_ms": 0.666,
+      "wall_ms": 0.67,
       "witness": null
     },
     {
@@ -785,7 +785,7 @@
       "result": "sat",
       "schema_version": "1",
       "shape": 5,
-      "wall_ms": 224.44,
+      "wall_ms": 223.82,
       "witness": {
         "s": "<redacted len=26>"
       }
@@ -805,7 +805,7 @@
       "result": "unsat",
       "schema_version": "1",
       "shape": 5,
-      "wall_ms": 2.245,
+      "wall_ms": 2.252,
       "witness": null
     },
     {
@@ -823,7 +823,7 @@
       "result": "sat",
       "schema_version": "1",
       "shape": 5,
-      "wall_ms": 172.805,
+      "wall_ms": 170.262,
       "witness": {
         "s": "<redacted len=26>"
       }
@@ -843,7 +843,7 @@
       "result": "unsat",
       "schema_version": "1",
       "shape": 5,
-      "wall_ms": 0.68,
+      "wall_ms": 0.695,
       "witness": null
     },
     {
@@ -861,7 +861,7 @@
       "result": "unsat",
       "schema_version": "1",
       "shape": 5,
-      "wall_ms": 1701.055,
+      "wall_ms": 1657.248,
       "witness": null
     },
     {
@@ -879,7 +879,7 @@
       "result": "unsat",
       "schema_version": "1",
       "shape": 5,
-      "wall_ms": 2.019,
+      "wall_ms": 1.925,
       "witness": null
     },
     {
@@ -897,7 +897,7 @@
       "result": "sat",
       "schema_version": "1",
       "shape": 5,
-      "wall_ms": 207.217,
+      "wall_ms": 201.736,
       "witness": {
         "s": "<redacted len=29>"
       }
@@ -917,7 +917,7 @@
       "result": "unsat",
       "schema_version": "1",
       "shape": 5,
-      "wall_ms": 1.844,
+      "wall_ms": 1.909,
       "witness": null
     },
     {
@@ -935,7 +935,7 @@
       "result": "unsat",
       "schema_version": "1",
       "shape": 5,
-      "wall_ms": 2.815,
+      "wall_ms": 2.782,
       "witness": null
     },
     {
@@ -953,7 +953,7 @@
       "result": "unsat",
       "schema_version": "1",
       "shape": 5,
-      "wall_ms": 1.808,
+      "wall_ms": 1.811,
       "witness": null
     },
     {
@@ -971,7 +971,7 @@
       "result": "sat",
       "schema_version": "1",
       "shape": 5,
-      "wall_ms": 504.019,
+      "wall_ms": 502.944,
       "witness": {
         "s": "<redacted len=25>"
       }
@@ -991,7 +991,7 @@
       "result": "unsat",
       "schema_version": "1",
       "shape": 5,
-      "wall_ms": 1.872,
+      "wall_ms": 1.806,
       "witness": null
     },
     {
@@ -1009,7 +1009,7 @@
       "result": "unsat",
       "schema_version": "1",
       "shape": 5,
-      "wall_ms": 2.757,
+      "wall_ms": 2.702,
       "witness": null
     },
     {
@@ -1027,7 +1027,7 @@
       "result": "unsat",
       "schema_version": "1",
       "shape": 5,
-      "wall_ms": 1.714,
+      "wall_ms": 1.661,
       "witness": null
     },
     {
@@ -1045,7 +1045,7 @@
       "result": "sat",
       "schema_version": "1",
       "shape": 5,
-      "wall_ms": 487.448,
+      "wall_ms": 488.543,
       "witness": {
         "s": "<redacted len=27>"
       }
@@ -1065,7 +1065,7 @@
       "result": "unsat",
       "schema_version": "1",
       "shape": 5,
-      "wall_ms": 2.103,
+      "wall_ms": 2.01,
       "witness": null
     },
     {
@@ -1083,7 +1083,7 @@
       "result": "sat",
       "schema_version": "1",
       "shape": 5,
-      "wall_ms": 2384.593,
+      "wall_ms": 2367.433,
       "witness": {
         "s": "<redacted len=72>"
       }
@@ -1103,7 +1103,7 @@
       "result": "unsat",
       "schema_version": "1",
       "shape": 5,
-      "wall_ms": 2.3,
+      "wall_ms": 2.23,
       "witness": null
     },
     {
@@ -1121,7 +1121,7 @@
       "result": "sat",
       "schema_version": "1",
       "shape": 5,
-      "wall_ms": 1698.64,
+      "wall_ms": 1690.502,
       "witness": {
         "s": "<redacted len=72>"
       }
@@ -1141,7 +1141,7 @@
       "result": "unsat",
       "schema_version": "1",
       "shape": 5,
-      "wall_ms": 0.906,
+      "wall_ms": 0.889,
       "witness": null
     },
     {
@@ -1159,7 +1159,7 @@
       "result": "unsat",
       "schema_version": "1",
       "shape": 5,
-      "wall_ms": 0.95,
+      "wall_ms": 0.952,
       "witness": null
     },
     {
@@ -1177,7 +1177,7 @@
       "result": "unsat",
       "schema_version": "1",
       "shape": 5,
-      "wall_ms": 0.733,
+      "wall_ms": 0.74,
       "witness": null
     },
     {
@@ -1195,7 +1195,7 @@
       "result": "sat",
       "schema_version": "1",
       "shape": 5,
-      "wall_ms": 260.098,
+      "wall_ms": 255.064,
       "witness": {
         "s": "<redacted len=38>"
       }
@@ -1215,7 +1215,7 @@
       "result": "unsat",
       "schema_version": "1",
       "shape": 5,
-      "wall_ms": 0.912,
+      "wall_ms": 0.889,
       "witness": null
     },
     {
@@ -1233,7 +1233,7 @@
       "result": "unsat",
       "schema_version": "1",
       "shape": 5,
-      "wall_ms": 0.949,
+      "wall_ms": 0.925,
       "witness": null
     },
     {
@@ -1251,7 +1251,7 @@
       "result": "unsat",
       "schema_version": "1",
       "shape": 5,
-      "wall_ms": 0.743,
+      "wall_ms": 0.742,
       "witness": null
     },
     {
@@ -1269,7 +1269,7 @@
       "result": "sat",
       "schema_version": "1",
       "shape": 5,
-      "wall_ms": 262.133,
+      "wall_ms": 257.298,
       "witness": {
         "s": "<redacted len=38>"
       }
@@ -1289,7 +1289,7 @@
       "result": "unsat",
       "schema_version": "1",
       "shape": 5,
-      "wall_ms": 0.857,
+      "wall_ms": 0.923,
       "witness": null
     },
     {
@@ -1307,7 +1307,7 @@
       "result": "unsat",
       "schema_version": "1",
       "shape": 5,
-      "wall_ms": 0.922,
+      "wall_ms": 0.946,
       "witness": null
     },
     {
@@ -1343,7 +1343,7 @@
       "result": "sat",
       "schema_version": "1",
       "shape": 5,
-      "wall_ms": 270.423,
+      "wall_ms": 265.904,
       "witness": {
         "s": "<redacted len=38>"
       }
@@ -1363,7 +1363,7 @@
       "result": "unsat",
       "schema_version": "1",
       "shape": 5,
-      "wall_ms": 0.856,
+      "wall_ms": 0.869,
       "witness": null
     },
     {
@@ -1381,7 +1381,7 @@
       "result": "unsat",
       "schema_version": "1",
       "shape": 5,
-      "wall_ms": 0.928,
+      "wall_ms": 0.922,
       "witness": null
     },
     {
@@ -1399,7 +1399,7 @@
       "result": "unsat",
       "schema_version": "1",
       "shape": 5,
-      "wall_ms": 0.727,
+      "wall_ms": 0.762,
       "witness": null
     },
     {
@@ -1417,7 +1417,7 @@
       "result": "sat",
       "schema_version": "1",
       "shape": 5,
-      "wall_ms": 260.279,
+      "wall_ms": 257.979,
       "witness": {
         "s": "<redacted len=38>"
       }
@@ -1437,7 +1437,7 @@
       "result": "unsat",
       "schema_version": "1",
       "shape": 5,
-      "wall_ms": 1.925,
+      "wall_ms": 1.861,
       "witness": null
     },
     {
@@ -1455,7 +1455,7 @@
       "result": "sat",
       "schema_version": "1",
       "shape": 5,
-      "wall_ms": 158.258,
+      "wall_ms": 157.652,
       "witness": {
         "s": "<redacted len=26>"
       }
@@ -1475,7 +1475,7 @@
       "result": "unsat",
       "schema_version": "1",
       "shape": 5,
-      "wall_ms": 2.396,
+      "wall_ms": 2.302,
       "witness": null
     },
     {
@@ -1493,7 +1493,7 @@
       "result": "sat",
       "schema_version": "1",
       "shape": 5,
-      "wall_ms": 193.327,
+      "wall_ms": 192.178,
       "witness": {
         "s": "<redacted len=26>"
       }
@@ -1513,7 +1513,7 @@
       "result": "unsat",
       "schema_version": "1",
       "shape": 5,
-      "wall_ms": 1.932,
+      "wall_ms": 1.961,
       "witness": null
     },
     {
@@ -1531,7 +1531,7 @@
       "result": "unsat",
       "schema_version": "1",
       "shape": 5,
-      "wall_ms": 2.675,
+      "wall_ms": 2.714,
       "witness": null
     },
     {
@@ -1549,7 +1549,7 @@
       "result": "unsat",
       "schema_version": "1",
       "shape": 5,
-      "wall_ms": 1.667,
+      "wall_ms": 1.683,
       "witness": null
     },
     {
@@ -1567,7 +1567,7 @@
       "result": "sat",
       "schema_version": "1",
       "shape": 5,
-      "wall_ms": 859.509,
+      "wall_ms": 855.481,
       "witness": {
         "s": "<redacted len=33>"
       }
@@ -1587,7 +1587,7 @@
       "result": "unsat",
       "schema_version": "1",
       "shape": 5,
-      "wall_ms": 0.816,
+      "wall_ms": 0.823,
       "witness": null
     },
     {
@@ -1605,7 +1605,7 @@
       "result": "unsat",
       "schema_version": "1",
       "shape": 5,
-      "wall_ms": 0.883,
+      "wall_ms": 0.907,
       "witness": null
     },
     {
@@ -1623,7 +1623,7 @@
       "result": "unsat",
       "schema_version": "1",
       "shape": 5,
-      "wall_ms": 0.712,
+      "wall_ms": 0.733,
       "witness": null
     },
     {
@@ -1641,7 +1641,7 @@
       "result": "sat",
       "schema_version": "1",
       "shape": 5,
-      "wall_ms": 203.998,
+      "wall_ms": 201.859,
       "witness": {
         "s": "<redacted len=34>"
       }

@@ -14,7 +14,7 @@ shape: 5
 - result: `unsat`
 - ground_truth_status: `N/A`
 - domain: len(s) in [32,52]; dialect=re2; solver_call_kind=fullmatch; site_call_kind=search
-- wall_ms: 4.245
+- wall_ms: 3.715
 
 ### Pattern
 
@@ -42,7 +42,7 @@ N/A
 - result: `unsat`
 - ground_truth_status: `N/A`
 - domain: len(s) in [28,48]; dialect=re2; solver_call_kind=fullmatch; site_call_kind=search
-- wall_ms: 2.54
+- wall_ms: 2.538
 
 ### Pattern
 
@@ -70,7 +70,7 @@ N/A
 - result: `unsat`
 - ground_truth_status: `N/A`
 - domain: len(s) in [28,48]; dialect=re2; solver_call_kind=fullmatch; site_call_kind=search
-- wall_ms: 2.619
+- wall_ms: 3.282
 
 ### Pattern
 
@@ -98,7 +98,7 @@ N/A
 - result: `unsat`
 - ground_truth_status: `N/A`
 - domain: len(s) in [28,48]; dialect=re2; solver_call_kind=fullmatch; site_call_kind=search
-- wall_ms: 2.786
+- wall_ms: 2.728
 
 ### Pattern
 
@@ -126,7 +126,7 @@ N/A
 - result: `sat`
 - ground_truth_status: `PASS`
 - domain: len(s) in [31,51]; dialect=re2; solver_call_kind=fullmatch; site_call_kind=search
-- wall_ms: 836.899
+- wall_ms: 842.035
 
 ### Pattern
 
@@ -141,7 +141,7 @@ N/A
 ### Witness
 
 ```json
-{"s": "<redacted len=17>"}
+{"s": "<redacted len=40>"}
 ```
 
 ### Ground-truth
@@ -154,7 +154,7 @@ PASS
 - result: `unsat`
 - ground_truth_status: `N/A`
 - domain: len(s) in [16,36]; dialect=re2; solver_call_kind=fullmatch; site_call_kind=search
-- wall_ms: 2.734
+- wall_ms: 2.792
 
 ### Pattern
 
@@ -182,7 +182,7 @@ N/A
 - result: `unsat`
 - ground_truth_status: `N/A`
 - domain: len(s) in [13,33]; dialect=re2; solver_call_kind=fullmatch; site_call_kind=search
-- wall_ms: 2.74
+- wall_ms: 2.767
 
 ### Pattern
 
@@ -210,7 +210,7 @@ N/A
 - result: `unsat`
 - ground_truth_status: `N/A`
 - domain: len(s) in [15,35]; dialect=re2; solver_call_kind=fullmatch; site_call_kind=search
-- wall_ms: 2.771
+- wall_ms: 2.858
 
 ### Pattern
 
@@ -238,7 +238,7 @@ N/A
 - result: `unsat`
 - ground_truth_status: `N/A`
 - domain: len(s) in [13,33]; dialect=re2; solver_call_kind=fullmatch; site_call_kind=search
-- wall_ms: 2.758
+- wall_ms: 2.757
 
 ### Pattern
 
@@ -266,7 +266,7 @@ N/A
 - result: `unsat`
 - ground_truth_status: `N/A`
 - domain: len(s) in [19,39]; dialect=re2; solver_call_kind=fullmatch; site_call_kind=search
-- wall_ms: 2.788
+- wall_ms: 2.808
 
 ### Pattern
 
@@ -294,7 +294,7 @@ N/A
 - result: `sat`
 - ground_truth_status: `PASS`
 - domain: len(s) in [14,34]; dialect=re2; solver_call_kind=fullmatch; site_call_kind=search
-- wall_ms: 224.44
+- wall_ms: 223.82
 
 ### Pattern
 
@@ -309,7 +309,7 @@ N/A
 ### Witness
 
 ```json
-{"s": "<redacted len=17>"}
+{"s": "<redacted len=26>"}
 ```
 
 ### Ground-truth
@@ -322,7 +322,7 @@ PASS
 - result: `unsat`
 - ground_truth_status: `N/A`
 - domain: len(s) in [17,37]; dialect=re2; solver_call_kind=fullmatch; site_call_kind=search
-- wall_ms: 1701.055
+- wall_ms: 1657.248
 
 ### Pattern
 
@@ -350,7 +350,7 @@ N/A
 - result: `unsat`
 - ground_truth_status: `N/A`
 - domain: len(s) in [13,33]; dialect=re2; solver_call_kind=fullmatch; site_call_kind=search
-- wall_ms: 2.815
+- wall_ms: 2.782
 
 ### Pattern
 
@@ -378,7 +378,7 @@ N/A
 - result: `unsat`
 - ground_truth_status: `N/A`
 - domain: len(s) in [15,35]; dialect=re2; solver_call_kind=fullmatch; site_call_kind=search
-- wall_ms: 2.757
+- wall_ms: 2.702
 
 ### Pattern
 
@@ -406,7 +406,7 @@ N/A
 - result: `sat`
 - ground_truth_status: `PASS`
 - domain: len(s) in [63,83]; dialect=re2; solver_call_kind=fullmatch; site_call_kind=search
-- wall_ms: 2384.593
+- wall_ms: 2367.433
 
 ### Pattern
 
@@ -421,7 +421,7 @@ N/A
 ### Witness
 
 ```json
-{"s": "<redacted len=17>"}
+{"s": "<redacted len=72>"}
 ```
 
 ### Ground-truth
@@ -434,7 +434,7 @@ PASS
 - result: `unsat`
 - ground_truth_status: `N/A`
 - domain: len(s) in [26,46]; dialect=re2; solver_call_kind=fullmatch; site_call_kind=search
-- wall_ms: 0.95
+- wall_ms: 0.952
 
 ### Pattern
 
@@ -462,7 +462,7 @@ N/A
 - result: `unsat`
 - ground_truth_status: `N/A`
 - domain: len(s) in [26,46]; dialect=re2; solver_call_kind=fullmatch; site_call_kind=search
-- wall_ms: 0.949
+- wall_ms: 0.925
 
 ### Pattern
 
@@ -490,7 +490,7 @@ N/A
 - result: `unsat`
 - ground_truth_status: `N/A`
 - domain: len(s) in [26,46]; dialect=re2; solver_call_kind=fullmatch; site_call_kind=search
-- wall_ms: 0.922
+- wall_ms: 0.946
 
 ### Pattern
 
@@ -518,7 +518,7 @@ N/A
 - result: `unsat`
 - ground_truth_status: `N/A`
 - domain: len(s) in [26,46]; dialect=re2; solver_call_kind=fullmatch; site_call_kind=search
-- wall_ms: 0.928
+- wall_ms: 0.922
 
 ### Pattern
 
@@ -546,7 +546,7 @@ N/A
 - result: `sat`
 - ground_truth_status: `PASS`
 - domain: len(s) in [14,34]; dialect=re2; solver_call_kind=fullmatch; site_call_kind=search
-- wall_ms: 158.258
+- wall_ms: 157.652
 
 ### Pattern
 
@@ -561,7 +561,7 @@ N/A
 ### Witness
 
 ```json
-{"s": "<redacted len=17>"}
+{"s": "<redacted len=26>"}
 ```
 
 ### Ground-truth
@@ -574,7 +574,7 @@ PASS
 - result: `unsat`
 - ground_truth_status: `N/A`
 - domain: len(s) in [20,40]; dialect=re2; solver_call_kind=fullmatch; site_call_kind=search
-- wall_ms: 2.675
+- wall_ms: 2.714
 
 ### Pattern
 
@@ -602,7 +602,7 @@ N/A
 - result: `unsat`
 - ground_truth_status: `N/A`
 - domain: len(s) in [22,42]; dialect=re2; solver_call_kind=fullmatch; site_call_kind=search
-- wall_ms: 0.883
+- wall_ms: 0.907
 
 ### Pattern
 

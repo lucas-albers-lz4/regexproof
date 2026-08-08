@@ -5,8 +5,9 @@ Usage:
   python scripts/rule-diff-pilot.py
   python scripts/rule-diff-pilot.py --require-ground-truth
 
-FAILED ground-truth on auto pairs continues (records FAILED); exit 1 only for
-floor/timeout gate failures or harness errors.
+FAILED ground-truth on auto pairs is recorded as FAILED and, without
+--require-ground-truth, continues. With --require-ground-truth (CI), a
+FAILED or missing ground-truth on any SAT gap is a hard failure.
 """
 
 from __future__ import annotations
@@ -221,17 +222,24 @@ def _register_pair(harness, pair: dict, *, require_gt: bool) -> None:
 
 
 def _redact_witness(witness: object) -> object:
-    """Avoid committing solver strings that match secret scanners (token-shaped)."""
+    """Avoid committing solver strings that match secret scanners (token-shaped).
+
+    Idempotent: already-redacted placeholders are left unchanged.
+    """
     if witness is None:
         return None
     if isinstance(witness, dict):
         out = {}
         for k, v in witness.items():
-            if isinstance(v, str) and len(v) >= 8:
+            if isinstance(v, str) and v.startswith("<redacted"):
+                out[k] = v
+            elif isinstance(v, str) and len(v) >= 8:
                 out[k] = f"<redacted len={len(v)}>"
             else:
                 out[k] = v
         return out
+    if isinstance(witness, str) and witness.startswith("<redacted"):
+        return witness
     return "<redacted>"
 
 
@@ -276,7 +284,7 @@ def _write_markdown(report: dict, pairs: list[dict]) -> None:
                 "",
                 "### Witness",
                 "",
-                f"```json\n{json.dumps(_redact_witness(res.get('witness')), sort_keys=True)}\n```",
+                f"```json\n{json.dumps(res.get('witness'), sort_keys=True)}\n```",
                 "",
                 "### Ground-truth",
                 "",
@@ -353,13 +361,15 @@ def main(argv: list[str] | None = None) -> int:
 
     results = []
     timeouts = 0
+    gt_failed = 0
     gap_names = [n for n, e in harness.REGISTRY.items() if e["kind"] == "rule_diff"]
     pair_by_family = {p["family"]: p for p in discovered["admitted_pairs"]}
 
     for name in sorted(harness.REGISTRY):
         entry = harness.REGISTRY[name]
         t0 = time.perf_counter()
-        # Manual run to allow FAILED-continue on GT
+        # GT is enforced below when --require-ground-truth; harness flag stays
+        # False so we can record FAILED status before deciding exit code.
         res = harness.run_one(name, entry, require_ground_truth=False)
         wall = (time.perf_counter() - t0) * 1000
         family = entry["family"]
@@ -383,8 +393,9 @@ def main(argv: list[str] | None = None) -> int:
             elif args.require_ground_truth:
                 print(f"FAIL --require-ground-truth missing witness for SAT: {name}")
                 return 1
+            if gt_status == "FAILED":
+                gt_failed += 1
             # SAT gap is a finding, not a harness failure.
-            # FAILED-continue: non-reproducing auto witnesses do not abort.
             ok = True
         elif res.get("result") == "unsat":
             outcome = "unsat"
@@ -457,6 +468,13 @@ def main(argv: list[str] | None = None) -> int:
                 return 1
             print(f"FAIL mutation guard: {r['name']} result={r['result']}")
             return 1
+
+    if args.require_ground_truth and gt_failed:
+        print(
+            f"FAIL --require-ground-truth: {gt_failed} SAT gap(s) with "
+            "ground_truth_status=FAILED"
+        )
+        return 1
 
     return 0
 

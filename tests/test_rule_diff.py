@@ -82,3 +82,17 @@ def test_rule_diff_report_schema_shape():
         ],
     }
     jsonschema.validate(sample, schema)
+
+
+def test_redact_witness_idempotent():
+    import importlib.util
+
+    path = ROOT / "scripts" / "rule-diff-pilot.py"
+    spec = importlib.util.spec_from_file_location("rule_diff_pilot", path)
+    mod = importlib.util.module_from_spec(spec)
+    assert spec.loader is not None
+    spec.loader.exec_module(mod)
+    once = mod._redact_witness({"s": "ghp_" + "A" * 36})
+    assert once == {"s": "<redacted len=40>"}
+    twice = mod._redact_witness(once)
+    assert twice == once
