@@ -40,7 +40,7 @@ phase. Dates are merge dates.
 
 - Added the installable package with dialect compilers, the golden suite,
   and argv-only fuzz adapters.
-- Addressed Bugbot findings on the PCRE, CI, and extractor gates.
+- Fixed PCRE, CI, and extractor gate issues found by automated review.
 
 ## Phase 2 — Pilots (2026-08-07)
 

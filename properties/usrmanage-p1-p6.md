@@ -27,7 +27,7 @@ verification must be per-token.
 | P2 | C1 actor whitelist `[A-Za-z0-9._@-]{1,64}` admits no audit-line-breaking chars | same shape, `Length ≤ 16` (slice for 17-64) | 9/9 unsat |
 | P3 | sed fallback truncates escaped-quote values | `∃v: Contains(v, '\\"') ∧ SubString(v,0,IndexOf(v,'"',0)) != v` | sat, witness `\"` |
 | P4 | `um_json_escape` output has no raw controls / unescaped quotes | per-token decomposition + differential fuzz | timeout as one regex; per-token planned |
-| P5 | Audit line keeps exactly N key=value fields | composition of P1+P2 alphabets (values contain no space/`=`) | planned — formulation corrected by plan review (below) |
+| P5 | Audit line keeps exactly N key=value fields | composition of P1+P2 alphabets (values contain no space/`=`) | planned — formulation corrected (below) |
 | P6 | Password policy len≥8 ∧ ≠username | `Length(p) ≥ USRMANAGE_PASS_MINLEN ∧ p != u` | trivial |
 
 ## Ground truth (BusyBox vs GNU sed)
@@ -44,7 +44,7 @@ The rpcd `json_get` sed fallback (`[^\"]*` capture) on `{"password":"a\"b"}`:
 Device fidelity: OpenWrt ships BusyBox; even when behavior is identical, pin
 `busybox` in CI and run the repro through `busybox sed`.
 
-## Plan-review corrections (4-model zen MCR of the verification plan)
+## Formulation corrections from verification-plan review
 
 These are the formulation bugs that recur in Z3-verification plans:
 
