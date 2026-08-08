@@ -100,3 +100,10 @@ For a whole repo: count regexes per file, classify by input trust
 per-boundary properties. Skip cosmetic patterns (for example, CSS color
 parsing) — low value. Verify one critical function at a time; expect
 trade-offs.
+
+**CRS / ModSecurity:** extract with `regexproof.extractors.modsec` (handles
+`\"` escapes + multi-line `SecRule`). Shape-5 version-diff pairs use the
+**CRS rule-derived R1 adapter** (`regexproof.rule_diff.crs_pairs`) — do not
+apply `reject_rule_derived_r1` (that gate is for independent-spec corpora
+like gitleaks). Ground-truth witnesses with the PCRE2 helper, not Python
+`re`.

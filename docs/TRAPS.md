@@ -232,3 +232,18 @@ budget. The Phase-3 gitleaks pilot compiles R1/R2 as **`fullmatch`** mirrors
 with tight length bounds, then ground-truths witnesses with the real
 detector `call_kind` (usually `search`). See
 `docs/examples/shape5-rule_diff.md` and `scripts/rule-diff-pilot.py`.
+
+## 19. ModSecurity `@rx` strings escape quotes as `\"`
+
+CRS / ModSecurity operator strings are double-quoted with `\"` escapes
+inside the pattern. A naive `"..."` capture truncates at the first
+embedded quote (102 false parse-errors on CRS v4.28.0 before
+`regexproof.extractors.modsec`). Always join `\` continuations before
+matching so `id:NNNN` on a later line is captured.
+
+## 20. Exact `{1}` / `{1,1}` must not call Z3 `Concat` with one arg
+
+`lower._repeat` previously did `Concat(*([body] * lo))` for `lo == hi`.
+When `lo == 1`, Z3 raises `At least two arguments expected` — a compiler
+**crash**, not an encodable reject (19 validator.js sites). Treat `{1}` as
+identity (`return body`).

@@ -1,0 +1,66 @@
+{
+  "noodler_probe": {
+    "available": false,
+    "changed": false,
+    "error": "from_ecma2020 not present on stock z3-solver 5.0.0",
+    "fixture": "tests/fixtures/noodler_probe.json",
+    "note": "CRS @rx has zero lookarounds; probe is confirmatory",
+    "prior_available": false,
+    "triage_fallback": true
+  },
+  "pattern_too_long_policy": {
+    "note": "Capacity cap (>256 chars), not a language limit. Policy: keep cap for interactive Z3 queries; triage long patterns to ReDoS-only / manual review.",
+    "route": "policy"
+  },
+  "schema_version": "1",
+  "unencodable_triage": [
+    {
+      "count": 125,
+      "note": "encodable \u2014 Z3 property / rule_diff / ReDoS",
+      "reason": "ok",
+      "route": "prove"
+    },
+    {
+      "count": 73,
+      "note": "Capacity cap (>256 chars), not a language limit. Policy: keep cap for interactive Z3 queries; triage long patterns to ReDoS-only / manual review.",
+      "reason": "pattern-too-long",
+      "route": "policy"
+    },
+    {
+      "count": 53,
+      "note": "Often lazy quantifiers / hex escapes \u2014 language-transparent strip candidates.",
+      "reason": "parse-error",
+      "route": "prove"
+    },
+    {
+      "count": 32,
+      "note": "Encodable in principle (TRAPS #1/#10) \u2014 toolkit-fix candidate.",
+      "reason": "negated-class",
+      "route": "prove"
+    },
+    {
+      "count": 22,
+      "note": "Genuine stock-Z3 limit (gate-3 \\b direction); ASCII domain declared for CRS.",
+      "reason": "word-boundary",
+      "route": "triage"
+    },
+    {
+      "count": 6,
+      "note": "\\x{} / hex ranges \u2014 toolkit-fix candidate.",
+      "reason": "bad-range",
+      "route": "prove"
+    },
+    {
+      "count": 6,
+      "note": "Scoped (?i:...) lifting \u2014 toolkit-fix candidate.",
+      "reason": "inline-flag",
+      "route": "prove"
+    },
+    {
+      "count": 1,
+      "note": "unclassified reject \u2014 inspect",
+      "reason": "internal-anchor",
+      "route": "triage"
+    }
+  ]
+}

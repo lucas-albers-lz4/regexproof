@@ -50,16 +50,30 @@ pilot registers, per admitted pair:
 # Encoding smoke (template shapes 1–5):
 python scripts/z3-property-template.py
 
-# Full gitleaks encodable-subset pilot:
+# Gitleaks independent-spec pilot:
 python scripts/rule-diff-pilot.py --require-ground-truth
 
 # One measured-stable family (Phase 6 CI subset):
 python scripts/rule-diff-pilot.py --family RD-github-oauth-token --require-ground-truth
+
+# CRS rule-derived R1 adapter (version-diff + sibling-family):
+python scripts/crs-rule-diff-pilot.py \
+  --older-rules /path/to/coreruleset-v4.27.0/rules \
+  --newer-rules /path/to/coreruleset-v4.28.0/rules \
+  --require-ground-truth
 ```
+
+## CRS adapter (rule-derived R1)
+
+For OWASP CRS, R1 on same-ID adjacent-tag pairs is intentionally the prior
+release's pattern (`crs_rule_derived_r1`). That is the security question
+("did R2 change acceptance vs R1?"). **Do not** route CRS through
+`reject_rule_derived_r1` — that integrity gate is for independent-spec
+corpora. See `regexproof.rule_diff.crs_pairs`.
 
 ## Ground truth
 
 SAT gap witnesses replay against the **real** dialect engine (go-re2 for
-gitleaks) under the site `call_kind` (usually `search`), even though the Z3
-mirror used `fullmatch` + length bounds. See `docs/REPORTING.md` and
-`--require-ground-truth`.
+gitleaks; PCRE2 helper for CRS) under the site `call_kind` (usually
+`search`), even though the Z3 mirror used `fullmatch` + length bounds. See
+`docs/REPORTING.md` and `--require-ground-truth`.

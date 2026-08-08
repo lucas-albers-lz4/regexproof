@@ -1,0 +1,9 @@
+{
+  "admitted_count": 55,
+  "dropped_count": 478,
+  "newer_tag": "v4.28.0",
+  "older_tag": "v4.27.0",
+  "schema_version": "1",
+  "sibling_admitted": 54,
+  "version_diff_admitted": 1
+}

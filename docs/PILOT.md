@@ -19,6 +19,46 @@ mattermost-plugin-community-admin (TS/Go RE2 — lower SMT value).
 | fwlive (ECMA frontier) | 15 | ALL PASS | Anchored finite alternation, word-boundary complement, KV extraction, lookahead classification |
 | happycow (classification) | 2 + inventory | ALL PASS | "When NOT to use Z3" path: skip cosmetic, flag ReDoS-tooling items |
 
+## Dogfooding wave — OWASP CRS + validator.js (2026-08-08)
+
+Tracking: issue [#35](https://github.com/lucas-albers-lz4/regexproof/issues/35) /
+[#36](https://github.com/lucas-albers-lz4/regexproof/issues/36).
+
+| Corpus | Surface | Encodable | Result |
+|---|---|---|---|
+| OWASP CRS v4.28.0 (`55b09f5`) | 318 `@rx` (modsec extractor) | 125/318 ≈ **39.3%** → **GO** (≥30%) | shape-5 gaps + ReDoS + dialect triage |
+| validator.js (7-file verified domain) | pilots/validatorjs/src subset | shapes 1–3 + `ci()` mutation | PASS under `--require-ground-truth` |
+
+**CRS lessons (machine-verified):**
+
+- ModSecurity `\"`-escape + multi-line `SecRule` joining are load-bearing for
+  inventory (TRAPS #19). Naive quote capture produced 102 false parse-errors.
+- Shape-5 version-diff (v4.27.0→v4.28.0) with **rule-derived R1 adapter**:
+  e.g. rule `942220` SAT witness `JSon.1e309` — R2 accepts optional `json.`
+  prefix that R1 misses; PCRE2 ground-truth PASS.
+  Artifacts: `properties/generated/crs_rule_diff_report.json`,
+  `properties/triage/coreruleset_rule_diff.ndjson`.
+- Unencodable routing (compiler reject set): pattern-too-long **73** (policy:
+  keep 256-cap for interactive Z3; ReDoS/manual for long patterns),
+  parse-error **53** (lazy/`\x` toolkit-fix), negated-class **32**,
+  word-boundary **22**, inline-flag **6**, bad-range **6**.
+- Noodler `re.from_ecma2020` still unavailable on stock z3-solver 5.0.0
+  (fixture unchanged; CRS `@rx` has zero lookarounds).
+- Uncapped ReDoS (recheck) on encodable subset:
+  `properties/generated/crs_redos_report.json`.
+
+**validator.js lessons:**
+
+- Declared verified domain: the 7-file pilot subset (not full upstream
+  `src/lib`). Inventory questions hard-fail if left `planned`.
+- `{1}`/`{1,1}` exact-single quantifier crashed `lower.py` (`Concat` arity) —
+  fixed as identity (TRAPS #20).
+- Gap-1 `ci()` + naive-mirror mutation guard flips UNSAT→SAT as required.
+
+Findings are `disclosure: private_first` for CRS (security-tool corpus).
+Toolkit-fix follow-ups are filed separately (lazy-quantifier strip,
+`\xNN`/`\x{}`, negated-class, scoped `(?i:...)`, pattern-too-long policy).
+
 ## Findings filed (fix-later phase)
 
 - **usrmanage** — comment on [#6](https://github.com/lucas-albers-lz4/usrmanage/issues/6)
@@ -101,9 +141,22 @@ mattermost-plugin-community-admin (TS/Go RE2 — lower SMT value).
    before filing; PLAYBOOK.md step 3 / AGENTS.md step 4 now say so.
 6. **Classification is half the value** — happycow's "skip cosmetic, flag
    ReDoS-tooling items" output is the decision tree doing its job.
+7. **CRS at scale** — encodable fraction is compiler-bound (~39%), not
+   pattern-quality-bound; language-transparent strip (lazy quantifiers) is
+   the largest fix lever; shape-5 version diffs find real acceptance deltas
+   with PCRE2-reproduced witnesses.
 
 ## Artifacts
 
 Pilot scripts (scratch, not committed to any target repo):
 `/tmp/regexproof-pilot/{usrmanage,fwlive,happycow}_pilot.py` — each a
 copy-adapt of regexproof's template shapes, run with pinned `z3-solver==5.0.0`.
+
+CRS / validator.js wave artifacts (in-repo):
+
+- `properties/generated/coreruleset_encodable_fraction.json` (full corpus)
+- `properties/generated/crs-inventory.ndjson`
+- `properties/generated/crs_rule_diff_report.json` / `crs_rule_diff.md`
+- `properties/generated/crs_redos_report.json` / `crs_unencodable_triage.json`
+- `properties/generated/validatorjs_complete_report.json`
+- `properties/triage/coreruleset_rule_diff.ndjson` / `validatorjs.ndjson`

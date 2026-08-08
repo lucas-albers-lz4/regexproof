@@ -28,6 +28,20 @@ def test_basic_rx_operator():
     assert recs[0]["call_kind"] == "search"
     assert recs[0]["site"] == "rules/test.conf:1:0"
     assert recs[0]["negated"] is False
+    assert recs[0]["rule_id"] == "1"
+
+
+def test_multiline_secrule_captures_rule_id():
+    src = (
+        'SecRule ARGS "@rx (?i)union\\s+select" \\\n'
+        '    "id:942100,\\\n'
+        '    phase:2,\\\n'
+        '    deny"\n'
+    )
+    recs = _extract(src)
+    assert len(recs) == 1
+    assert recs[0]["rule_id"] == "942100"
+    assert "union" in recs[0]["pattern"]
 
 
 def test_negated_rx_operator():

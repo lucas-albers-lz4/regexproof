@@ -14,13 +14,17 @@ Extraction invariant (verified on CRS v4.28.0): ModSecurity operator strings are
 double-quoted with ``\\"`` escapes inside the pattern. A naive ``"..."`` capture
 truncates the pattern at the first quote (102 false parse-errors before this
 module existed). See the regression tests.
+
+SecRule directives frequently span multiple lines with trailing ``\\``; this
+module joins continuations before matching so ``id:NNNN`` on a later line is
+captured as ``rule_id``.
 """
 
 from __future__ import annotations
 
 import re
 from collections import Counter
-from typing import Any
+from typing import Any, Iterator
 
 from regexproof.extractors.record import make_record
 
@@ -30,14 +34,27 @@ _RX_OP = re.compile(r'"((?:!)?@rx)\s+((?:\\.|[^"\\])*)"')
 _RX_SELECTOR = re.compile(r'!(?:[A-Z_]+):(/(?:\\.|[^/"])*/[a-z]*|"[^"]*")')
 # Any operator name (for counting; @rx is handled separately).
 _RX_OPNAME = re.compile(r'"((?:!)?@[a-z_]+)')
+_RULE_ID = re.compile(r"\bid:(\d+)\b")
 
-_KNOWN_NON_REGEX = frozenset(
-    [
-        "@lt", "@eq", "@ge", "@gt", "@pm", "@streq", "@within", "@contains",
-        "@endsWith", "@beginsWith", "@ipMatch", "@validateByteRange", "@detectXSS",
-        "@detectSQLi", "@validateUrlEncoding", "@unconditionalMatch",
-    ]
-)
+
+def iter_secrule_blocks(source: str) -> Iterator[tuple[int, str]]:
+    """Yield (start_line, joined_text) for each SecRule, joining ``\\`` continuations."""
+    buf: list[str] = []
+    start: int | None = None
+    for i, line in enumerate(source.splitlines(), 1):
+        s = line.rstrip()
+        if not buf and not s.strip().startswith("SecRule"):
+            continue
+        if not buf:
+            start = i
+        buf.append(s)
+        if s.endswith("\\"):
+            continue
+        joined = " ".join(x[:-1].rstrip() if x.endswith("\\") else x for x in buf)
+        assert start is not None
+        yield start, joined
+        buf = []
+        start = None
 
 
 def extract_modsec(
@@ -52,9 +69,9 @@ def extract_modsec(
     Non-regex operators are ignored (see :func:`count_operators`).
     """
     out: list[dict[str, Any]] = []
-    for i, line in enumerate(source.splitlines(), 1):
-        ls = line.strip()
-        if not ls.startswith("SecRule") or ls.startswith("#"):
+    for start_line, joined in iter_secrule_blocks(source):
+        ls = joined.strip()
+        if ls.startswith("#"):
             continue
         m = _RX_OP.search(ls)
         if m:
@@ -69,11 +86,14 @@ def extract_modsec(
                 dialect="pcre",
                 call_kind="search",
                 file=file,
-                line=i,
+                line=start_line,
                 column=0,
                 context_snippet=ls[:500],
             )
             rec["negated"] = negated
+            mid = _RULE_ID.search(ls)
+            if mid:
+                rec["rule_id"] = mid.group(1)
             out.append(rec)
             continue
         for sm in _RX_SELECTOR.finditer(ls):
@@ -93,22 +113,25 @@ def extract_modsec(
                 dialect="pcre",
                 call_kind="search",
                 file=file,
-                line=i,
+                line=start_line,
                 column=0,
                 context_snippet=ls[:500],
             )
             rec["negated"] = True  # variable-selector regexes are exclusion selectors
             rec["selector"] = True
+            mid = _RULE_ID.search(ls)
+            if mid:
+                rec["rule_id"] = mid.group(1)
             out.append(rec)
     return out
 
 
 def count_operators(source: str) -> Counter[str]:
-    """Count operator occurrences (including non-regex ones) per line."""
+    """Count operator occurrences (including non-regex ones) per SecRule block."""
     counts: Counter[str] = Counter()
-    for line in source.splitlines():
-        ls = line.strip()
-        if not ls.startswith("SecRule") or ls.startswith("#"):
+    for _start, joined in iter_secrule_blocks(source):
+        ls = joined.strip()
+        if ls.startswith("#"):
             continue
         m = _RX_OPNAME.search(ls)
         if m:

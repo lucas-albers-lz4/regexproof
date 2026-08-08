@@ -17,6 +17,7 @@ from regexproof.batch.disclose import (  # noqa: E402
     tag_disclosure,
     write_pr_dry_run,
 )
+from regexproof.batch.evidence import enforce_evidence_gates  # noqa: E402
 from regexproof.batch.intent import (  # noqa: E402
     detect_intent_mismatches,
     detect_usage_mismatches,
@@ -27,7 +28,7 @@ from regexproof.batch.triage import triage_records_from_compiled, write_triage_n
 from regexproof.compiler import compile_pattern  # noqa: E402
 from regexproof.compiler.normalize import normalize_inline_flags  # noqa: E402
 from regexproof.extractors.js_babel import extract_js  # noqa: E402
-from regexproof.extractors.modsec import extract_modsec  # noqa: E402
+from regexproof.extractors.modsec import count_operators, extract_modsec  # noqa: E402
 from regexproof.extractors.python_ast import extract_python  # noqa: E402
 from regexproof.extractors.rule_file import extract_rule_file  # noqa: E402
 from regexproof.redos.join import join_findings  # noqa: E402
@@ -45,6 +46,9 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
     "validatorjs": {
         "corpus_type": "validator",
         "path": ROOT / "pilots" / "validatorjs" / "src",
+        # Verified domain (Phase 4): the 7-file pilot subset. Full upstream
+        # src/lib inventory (~103 files) is measured separately; this manifest
+        # is the declared verified domain for property execution.
         "files": [
             "isAscii.js",
             "isAlpha.js",
@@ -54,6 +58,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
             "isURL.js",
             "alpha.js",
         ],
+        "verified_domain": "pilots/validatorjs/src/{isAscii,isAlpha,isAlphanumeric,isEmail,isFQDN,isURL,alpha}.js",
         "dialect": "ecma",
         "extractor": "js_dir",
         "repo": "validatorjs/validator.js",
@@ -91,8 +96,12 @@ def _extract(corpus: str, meta: dict[str, Any]) -> list[dict[str, Any]]:
         )
     if meta["extractor"] == "modsec":
         out: list[dict[str, Any]] = []
+        root_resolved = ROOT.resolve()
         for fp in sorted(path.glob("*.conf")):
-            rel = str(fp.relative_to(ROOT))
+            try:
+                rel = str(fp.resolve().relative_to(root_resolved))
+            except ValueError:
+                rel = str(fp)
             out.extend(
                 extract_modsec(
                     fp.read_text(encoding="utf-8", errors="replace"),
@@ -160,6 +169,10 @@ def run_corpus(
     out_dir: Path,
     with_redos: bool = False,
     approval_path: Path | None = None,
+    require_ground_truth: bool = False,
+    fail_planned: bool = False,
+    redos_cap: int | None = None,
+    emit_planned: bool = True,
 ) -> dict[str, Any]:
     meta = CORPUS_MANIFESTS[corpus]
     inventory = load_inventory(meta["corpus_type"])
@@ -173,34 +186,36 @@ def run_corpus(
 
     findings: list[dict[str, Any]] = []
     # Inventory-driven shape markers (auto property stubs — encode deferred to Z3 job)
-    for q in inventory["questions"]:
-        findings.append(
-            {
-                "schema_version": "1",
-                "regex_id": f"inventory:{q['id']}",
-                "kind": "property",
-                "corpus": corpus,
-                "result": "planned",
-                "site": f"inventory:{q['id']}",
-                "pattern": "",
-                "shape": q["shape"],
-                "disclosure": None,
-                "detail": {"question_id": q["id"], "threat": q["threat"]},
-            }
-        )
+    if emit_planned:
+        for q in inventory["questions"]:
+            findings.append(
+                {
+                    "schema_version": "1",
+                    "regex_id": f"inventory:{q['id']}",
+                    "kind": "property",
+                    "corpus": corpus,
+                    "result": "planned",
+                    "site": f"inventory:{q['id']}",
+                    "pattern": "",
+                    "shape": q["shape"],
+                    "disclosure": None,
+                    "detail": {"question_id": q["id"], "threat": q["threat"]},
+                }
+            )
 
     findings.extend(detect_usage_mismatches(compiled))
     findings.extend(detect_intent_mismatches(compiled))
 
     redos_findings: list[dict[str, Any]] = []
+    redos_incomplete = False
     if with_redos:
         from regexproof.redos.runner import analyze_record
 
         for rec in compiled:
             if not rec.get("encodable"):
                 continue
-            # Cap ReDoS fan-out for CI time
-            if len(redos_findings) >= 5:
+            if redos_cap is not None and len(redos_findings) >= redos_cap:
+                redos_incomplete = True
                 break
             for f in analyze_record(rec, triage=False):
                 redos_findings.append(f)
@@ -224,11 +239,40 @@ def run_corpus(
                     }
                 )
 
+    if redos_incomplete:
+        findings.append(
+            {
+                "schema_version": "1",
+                "regex_id": f"redos-incomplete:{corpus}",
+                "kind": "redos",
+                "corpus": corpus,
+                "result": "incomplete",
+                "site": f"redos-cap:{redos_cap}",
+                "pattern": "",
+                "shape": None,
+                "disclosure": "private_first" if meta.get("security_tool") else None,
+                "detail": {
+                    "error": f"ReDoS fan-out truncated at cap={redos_cap}",
+                    "findings_emitted": len(redos_findings),
+                },
+            }
+        )
+
     # Join Z3-side placeholders with redos (separate sections)
     z3_side = [{"regex_id": f["regex_id"], "result": f["result"]} for f in findings if f["kind"] != "redos"]
     joined = join_findings(z3_side, redos_findings)
 
     findings = tag_disclosure(findings, corpus=corpus)
+    enforce_evidence_gates(
+        findings,
+        require_ground_truth=require_ground_truth,
+        fail_planned=fail_planned,
+    )
+    if redos_incomplete:
+        raise SystemExit(
+            f"evidence gate failed: ReDoS report incomplete (cap={redos_cap}); "
+            "omit --redos-cap for an uncapped run"
+        )
     write_ndjson(out_dir / f"{corpus}.ndjson", findings)
     # Keep Phase 3 shape-5 report at {corpus}.md; batch uses a distinct path.
     write_markdown(out_dir / f"{corpus}_batch.md", corpus=corpus, findings=findings)
@@ -251,6 +295,8 @@ def run_corpus(
         "inventory_questions": len(inventory["questions"]),
         "join_regex_ids": len(joined.get("regex_ids") or []),
         "engine": {"python": platform.python_version()},
+        "redos_findings": len(redos_findings),
+        "redos_incomplete": redos_incomplete,
     }
     (out_dir / f"{corpus}_batch_summary.json").write_text(
         json.dumps(summary, indent=2, sort_keys=True) + "\n", encoding="utf-8"
@@ -258,7 +304,7 @@ def run_corpus(
     return summary
 
 
-def measure_coreruleset(out_dir: Path) -> dict[str, Any]:
+def measure_coreruleset_sample(out_dir: Path) -> dict[str, Any]:
     """PCRE encodable-fraction gate on pinned CRS sample; go iff >= 0.30."""
     sample = ROOT / "batch" / "corpora" / "coreruleset" / "sample.rules"
     lines = [
@@ -284,12 +330,143 @@ def measure_coreruleset(out_dir: Path) -> dict[str, Any]:
         "go_no_go_threshold": 0.3,
         "decision": decision,
         "sample_path": str(sample.relative_to(ROOT)),
+        "scope": "sample",
     }
     out_dir.mkdir(parents=True, exist_ok=True)
+    payload = json.dumps(report, indent=2, sort_keys=True) + "\n"
+    (out_dir / "coreruleset_sample_encodable_fraction.json").write_text(
+        payload, encoding="utf-8"
+    )
+    # When full corpus is absent, the sample report is the primary artifact.
+    (out_dir / "coreruleset_encodable_fraction.json").write_text(
+        payload, encoding="utf-8"
+    )
+    return report
+
+
+def measure_coreruleset_full(out_dir: Path) -> dict[str, Any] | None:
+    """Full-corpus CRS fraction (modsec extractor + normalize → compile_pcre).
+
+    Returns None when ``batch/corpora/coreruleset/rules`` is not materialized.
+    Writes ``coreruleset_encodable_fraction.json`` (primary artifact) and
+    ``crs-inventory.ndjson`` for P2/P3 handoff. @rx-only numerator matches the
+    Phase-1 GO comment (selectors reported separately).
+    """
+    from collections import Counter
+
+    import platform as _platform
+
+    import z3
+
+    rules_dir = ROOT / "batch" / "corpora" / "coreruleset" / "rules"
+    if not rules_dir.is_dir():
+        return None
+
+    records: list[dict[str, Any]] = []
+    op_counts: Counter[str] = Counter()
+    for fp in sorted(rules_dir.glob("*.conf")):
+        src = fp.read_text(encoding="utf-8", errors="replace")
+        op_counts.update(count_operators(src))
+        rel = str(fp.relative_to(ROOT))
+        records.extend(extract_modsec(src, repo="coreruleset/coreruleset", file=rel))
+
+    compiled = _compile_all(records, lift_inline=True, corpus_slug="coreruleset")
+    rx_only = [c for c in compiled if not c.get("selector")]
+    selectors = [c for c in compiled if c.get("selector")]
+    rx_enc = [c for c in rx_only if c.get("encodable")]
+    n = len(rx_only) or 1
+    fraction = len(rx_enc) / n
+    decision = "go" if fraction >= 0.30 else "no-go"
+    reasons = Counter((c.get("compile_reason") or "ok") for c in rx_only)
+
+    out_dir.mkdir(parents=True, exist_ok=True)
+    inv_path = out_dir / "crs-inventory.ndjson"
+    with inv_path.open("w", encoding="utf-8") as fh:
+        for c in compiled:
+            fh.write(
+                json.dumps(
+                    {
+                        "regex_id": c.get("regex_id"),
+                        "rule_id": c.get("rule_id"),
+                        "site": c.get("site"),
+                        "pattern": c.get("pattern"),
+                        "flags": c.get("flags") or "",
+                        "dialect": c.get("dialect"),
+                        "call_kind": c.get("call_kind"),
+                        "encodable": bool(c.get("encodable")),
+                        "compile_reason": c.get("compile_reason"),
+                        "negated": c.get("negated"),
+                        "selector": bool(c.get("selector")),
+                        "corpus": "coreruleset",
+                    },
+                    sort_keys=True,
+                )
+                + "\n"
+            )
+
+    report = {
+        "schema_version": "1",
+        "pilot": "coreruleset",
+        "dialect": "pcre",
+        "scope": "full_corpus",
+        "corpus_pin": "v4.28.0",
+        "sample_size": len(rx_only),
+        "encodable": len(rx_enc),
+        "fraction": round(fraction, 4),
+        "go_no_go_threshold": 0.3,
+        "decision": decision,
+        "decision_rule": (
+            "go iff @rx-only encodable/sample_size >= 0.3 "
+            "(normalize_inline_flags → compile_pcre; selectors excluded from fraction)"
+        ),
+        "reasons": dict(reasons),
+        "selectors": {
+            "count": len(selectors),
+            "encodable": sum(1 for c in selectors if c.get("encodable")),
+        },
+        "operators": dict(op_counts),
+        "extracted_total": len(compiled),
+        "inventory_path": str(inv_path),
+        "engine_versions": {
+            "python": _platform.python_version(),
+            "z3": z3.get_version_string(),
+        },
+        "records": [
+            {
+                "regex_id": c.get("regex_id"),
+                "rule_id": c.get("rule_id"),
+                "site": c.get("site"),
+                "call_kind": c.get("call_kind"),
+                "dialect": c.get("dialect"),
+                "encodable": bool(c.get("encodable")),
+                "reason": c.get("compile_reason"),
+                "pattern": (c.get("pattern") or "")[:120],
+                "flags": c.get("flags") or "",
+                "selector": bool(c.get("selector")),
+            }
+            for c in compiled
+        ],
+    }
     (out_dir / "coreruleset_encodable_fraction.json").write_text(
         json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8"
     )
     return report
+
+
+def measure_coreruleset(out_dir: Path) -> dict[str, Any]:
+    """Prefer full-corpus fraction when rules/ is present and out_dir is in-repo."""
+    try:
+        out_dir.resolve().relative_to((ROOT / "properties").resolve())
+        in_repo_properties = True
+    except ValueError:
+        in_repo_properties = False
+    if in_repo_properties:
+        full = measure_coreruleset_full(out_dir)
+        if full is not None:
+            # Still emit sample artifact for CI smoke without depending on it for GO.
+            measure_coreruleset_sample(out_dir)
+            return full
+    return measure_coreruleset_sample(out_dir)
 
 
 def run_batch(
@@ -297,6 +474,10 @@ def run_batch(
     *,
     out_dir: Path | None = None,
     with_redos: bool = False,
+    require_ground_truth: bool = False,
+    fail_planned: bool = False,
+    redos_cap: int | None = None,
+    emit_planned: bool = True,
 ) -> dict[str, Any]:
     cov = check_corpus_coverage()
     if cov:
@@ -309,7 +490,15 @@ def run_batch(
     summaries = {}
     pair_counts = {}
     for name in corpora:
-        summaries[name] = run_corpus(name, out_dir=out_dir, with_redos=with_redos)
+        summaries[name] = run_corpus(
+            name,
+            out_dir=out_dir,
+            with_redos=with_redos,
+            require_ground_truth=require_ground_truth,
+            fail_planned=fail_planned,
+            redos_cap=redos_cap,
+            emit_planned=emit_planned,
+        )
         # Pair-at-scale: reuse Phase-3 discovery when catalog exists
         if name == "gitleaks":
             from regexproof.rule_diff.pairs import discover_pairs
@@ -329,19 +518,26 @@ def run_batch(
         pair_counts["coreruleset"] = {
             "admitted": 0,
             "dropped": 0,
-            "note": "fraction gate go; no independent-spec R1 catalog in Phase 5",
+            "note": "fraction gate go; CRS rule-derived adapter is Phase-2 rule_diff",
+            "scope": crs.get("scope"),
+            "fraction": crs.get("fraction"),
         }
     else:
         pair_counts["coreruleset"] = {
             "admitted": 0,
             "note": f"excluded decision={crs['decision']} fraction={crs['fraction']}",
+            "scope": crs.get("scope"),
         }
 
     batch = {
         "schema_version": "1",
         "corpora": summaries,
         "pair_counts": pair_counts,
-        "coreruleset": crs,
+        "coreruleset": {
+            k: crs[k]
+            for k in crs
+            if k != "records"  # keep batch_summary compact; full report on disk
+        },
     }
     (out_dir / "batch_pair_counts.json").write_text(
         json.dumps(pair_counts, indent=2, sort_keys=True) + "\n", encoding="utf-8"
@@ -372,6 +568,28 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--out", type=Path, default=ROOT / "properties" / "generated")
     ap.add_argument("--with-redos", action="store_true")
     ap.add_argument(
+        "--redos-cap",
+        type=int,
+        default=None,
+        help="optional ReDoS fan-out cap; truncation emits incomplete and fails the gate",
+    )
+    ap.add_argument(
+        "--require-ground-truth",
+        action="store_true",
+        help="hard-fail SAT Z3 findings without reproduced ground_truth_status; "
+        "TIMEOUT/unknown always hard-fails",
+    )
+    ap.add_argument(
+        "--fail-planned",
+        action="store_true",
+        help="hard-fail inventory planned stubs (lists unexecuted question IDs)",
+    )
+    ap.add_argument(
+        "--no-planned",
+        action="store_true",
+        help="omit inventory planned stubs from findings",
+    )
+    ap.add_argument(
         "--json-legacy",
         action="store_true",
         help="mutually exclusive legacy flag (rejected)",
@@ -386,7 +604,15 @@ def main(argv: list[str] | None = None) -> int:
         corpora = ["gitleaks", "validatorjs", "detect-secrets"]
     else:
         corpora = [args.corpus]
-    run_batch(corpora, out_dir=args.out, with_redos=args.with_redos)
+    run_batch(
+        corpora,
+        out_dir=args.out,
+        with_redos=args.with_redos,
+        require_ground_truth=args.require_ground_truth,
+        fail_planned=args.fail_planned,
+        redos_cap=args.redos_cap,
+        emit_planned=not args.no_planned,
+    )
     print("batch ok:", ", ".join(corpora))
     return 0
 
