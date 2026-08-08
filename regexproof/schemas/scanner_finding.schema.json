@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://regexproof.dev/schemas/scanner_finding/v1",
+  "title": "ScannerFinding",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "regex_id",
+    "kind",
+    "corpus",
+    "result",
+    "site"
+  ],
+  "additionalProperties": true,
+  "properties": {
+    "schema_version": { "type": "string", "const": "1" },
+    "regex_id": { "type": "string" },
+    "kind": {
+      "type": "string",
+      "enum": [
+        "property",
+        "rule_diff",
+        "redos",
+        "usage_mismatch",
+        "intent_mismatch",
+        "triage"
+      ]
+    },
+    "corpus": { "type": "string" },
+    "result": { "type": "string" },
+    "site": { "type": "string" },
+    "pattern": { "type": "string" },
+    "shape": { "type": ["integer", "null"] },
+    "ground_truth_status": { "type": ["string", "null"] },
+    "disclosure": {
+      "type": ["string", "null"],
+      "enum": ["private_first", "public_ok", null]
+    },
+    "witness": {},
+    "detail": { "type": "object", "additionalProperties": true }
+  }
+}

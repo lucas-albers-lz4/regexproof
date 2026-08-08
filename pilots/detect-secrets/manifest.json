@@ -1,0 +1,9 @@
+{
+  "schema_version": "1",
+  "pilot": "detect-secrets",
+  "repo": "Yelp/detect-secrets",
+  "note": "Minimal pinned Python regex corpus for Phase 5 batch (not a full upstream mirror).",
+  "corpus_path": "pilots/detect-secrets/sample_plugins.py",
+  "dialect": "py_re",
+  "corpus_type": "rule_corpus"
+}

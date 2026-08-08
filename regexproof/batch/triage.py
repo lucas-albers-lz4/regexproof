@@ -1,0 +1,44 @@
+"""Triage NDJSON writer — unencodable / timeout / ambiguous → one record each."""
+
+from __future__ import annotations
+
+import json
+from pathlib import Path
+from typing import Any
+
+TRIAGE_SCHEMA_VERSION = "1"
+
+
+def triage_records_from_compiled(compiled: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    out: list[dict[str, Any]] = []
+    for rec in compiled:
+        reason = rec.get("compile_reason") or rec.get("unencodable_reason")
+        if rec.get("encodable") and not reason:
+            continue
+        if not reason and rec.get("result") == "timeout":
+            kind = "timeout"
+        elif reason:
+            kind = "unencodable"
+        else:
+            kind = "ambiguous"
+        out.append(
+            {
+                "schema_version": TRIAGE_SCHEMA_VERSION,
+                "regex_id": rec["regex_id"],
+                "reason_kind": kind,
+                "unencodable_reason": reason,
+                "dialect": rec.get("dialect") or "",
+                "call_kind": rec.get("call_kind") or "",
+                "site": rec.get("site") or "",
+                "pattern": rec.get("pattern") or "",
+            }
+        )
+    out.sort(key=lambda r: r["regex_id"])
+    return out
+
+
+def write_triage_ndjson(path: Path, records: list[dict[str, Any]]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("w", encoding="utf-8") as fh:
+        for rec in records:
+            fh.write(json.dumps(rec, sort_keys=True) + "\n")

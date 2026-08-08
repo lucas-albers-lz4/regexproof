@@ -1,4 +1,4 @@
-"""Versioned JSON Schema loaders for Phase-1/3/4 artifact contracts."""
+"""Versioned JSON Schema loaders for Phase-1/3/4/5 artifact contracts."""
 
 from __future__ import annotations
 
@@ -12,6 +12,9 @@ COMPILED_SCHEMA_VERSION = "1"
 REDOS_FINDING_SCHEMA_VERSION = "1"
 ADMITTED_PAIR_SCHEMA_VERSION = "1"
 RULE_DIFF_REPORT_SCHEMA_VERSION = "1"
+QUESTION_INVENTORY_SCHEMA_VERSION = "1"
+TRIAGE_RECORD_SCHEMA_VERSION = "1"
+SCANNER_FINDING_SCHEMA_VERSION = "1"
 
 
 def load_schema(name: str) -> dict:
@@ -38,3 +41,15 @@ def admitted_pair_schema() -> dict:
 
 def rule_diff_report_schema() -> dict:
     return load_schema("rule_diff_report.schema.json")
+
+
+def question_inventory_schema() -> dict:
+    return load_schema("question_inventory.schema.json")
+
+
+def triage_record_schema() -> dict:
+    return load_schema("triage_record.schema.json")
+
+
+def scanner_finding_schema() -> dict:
+    return load_schema("scanner_finding.schema.json")

@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://regexproof.dev/schemas/triage_record/v1",
+  "title": "TriageRecord",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "regex_id",
+    "reason_kind",
+    "dialect",
+    "call_kind",
+    "site"
+  ],
+  "additionalProperties": true,
+  "properties": {
+    "schema_version": { "type": "string", "const": "1" },
+    "regex_id": { "type": "string", "pattern": "^[0-9a-f]{32}$" },
+    "reason_kind": {
+      "type": "string",
+      "enum": ["unencodable", "timeout", "ambiguous"]
+    },
+    "unencodable_reason": { "type": ["string", "null"] },
+    "dialect": { "type": "string" },
+    "call_kind": { "type": "string" },
+    "site": { "type": "string" },
+    "pattern": { "type": "string" }
+  }
+}

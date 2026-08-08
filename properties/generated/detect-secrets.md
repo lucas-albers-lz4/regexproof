@@ -1,53 +1,26 @@
 ---
 schema_version: "1"
-corpus: gitleaks
-findings: 6
+corpus: detect-secrets
+findings: 5
 ---
 
-# gitleaks batch findings
+# detect-secrets batch findings
 
-## intent_mismatch:05fa87af971ce63a93881230d7461ddb
+## usage_mismatch:e7bddec159659c5738754898341489fe
 
 - result: `finding`
-- site: `pilots/gitleaks/config/gitleaks.toml:361:0`
+- site: `pilots/detect-secrets/sample_plugins.py:15:13`
 - ground_truth_status: `N/A`
 - disclosure: `private_first`
 
 ### Pattern
 
-`\bcurl\b(?:.*?|.*?(?:[\r\n]{1,2}.*?){1,5})[ \t\n\r](?:-H|--header)(?:=|[ \t]{0,5})(?:"(?i)(?:Authorization:[ \t]{0,5}(?:Basic[ \t]([a-z0-9+/]{8,}={0,3})|(?:Bearer|(?:Api-)?Token)[ \t]([\w=~@.+/-]{8,})|([\w=~@.+/-]{8,}))|(?:(?:X-(?:[a-z]+-)?)?(?:Api-?)?(?:Key|Token)):[ \t]{0,5}([\w=~@.+/-]{8,}))"|'(?i)(?:Authorization:[ \t]{0,5}(?:Basic[ \t]([a-z0-9+/]{8,}={0,3})|(?:Bearer|(?:Api-)?Token)[ \t]([\w=~@.+/-]{8,})|([\w=~@.+/-]{8,}))|(?:(?:X-(?:[a-z]+-)?)?(?:Api-?)?(?:Key|Token)):[ \t]{0,5}([\w=~@.+/-]{8,}))')(?:\B|\s|\z)`
+`^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$`
 
 ### Context
 
 ```json
-{"admitted_char": "'\\n'", "keyword": "url", "reason": "name/comment claims validation but pattern admits excluded char"}
-```
-
-### Witness
-
-```json
-null
-```
-
-### Ground-truth
-
-N/A
-
-## intent_mismatch:f4686d2e58118dca2b3382abaee04c9c
-
-- result: `finding`
-- site: `pilots/gitleaks/config/gitleaks.toml:368:0`
-- ground_truth_status: `N/A`
-- disclosure: `private_first`
-
-### Pattern
-
-`\bcurl\b(?:.*|.*(?:[\r\n]{1,2}.*){1,5})[ \t\n\r](?:-u|--user)(?:=|[ \t]{0,5})("(:[^"]{3,}|[^:"]{3,}:|[^:"]{3,}:[^"]{3,})"|'([^:']{3,}:[^']{3,})'|((?:"[^"]{3,}"|'[^']{3,}'|[\w$@.-]+):(?:"[^"]{3,}"|'[^']{3,}'|[\w${}@.-]+)))(?:\s|\z)`
-
-### Context
-
-```json
-{"admitted_char": "'\\n'", "keyword": "url", "reason": "name/comment claims validation but pattern admits excluded char"}
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
 ```
 
 ### Witness
