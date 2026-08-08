@@ -11,13 +11,14 @@ from z3 import Range, Re, Union
 
 from regexproof.compiler.base import CompileResult, Unencodable
 from regexproof.compiler.fold import re2_fold_closure
-from regexproof.compiler.lower import lower
+from regexproof.compiler.lower import lower, space_codes_from_chars
 from regexproof.compiler.pcre_strip import strip_language_transparent
 from regexproof.compiler.simple_parse import parse_pattern
 
 HELPER_DIR = Path(__file__).resolve().parents[2] / "helpers" / "go-re2"
 DEFAULT_MAX_LENGTH = 256
 RE2_TERMINATORS = frozenset(["\n"])
+_RE2_SPACE_CHARS = " \t\n\f\r"
 
 
 def _helper_bin() -> Path:
@@ -86,11 +87,12 @@ def compile_re2(
             case_fold=re2_fold_closure,
             dot_terminators=RE2_TERMINATORS,
             digit=lambda: Range("0", "9"),
-            space=lambda: Union(*[Re(c) for c in " \t\n\f\r"]),
+            space=lambda: Union(*[Re(c) for c in _RE2_SPACE_CHARS]),
             word=lambda: Union(Range("a", "z"), Range("A", "Z"), Range("0", "9"), Re("_")),
             trailing_dollar_nl=False,
             call_kind=call_kind,
             allow_ascii_word_boundary=True,
+            space_codes=space_codes_from_chars(_RE2_SPACE_CHARS),
         )
         return CompileResult(
             mirror=mirror,

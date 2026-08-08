@@ -318,3 +318,24 @@ no `\B`) lowers under **ASCII `\w` = `[A-Za-z0-9_]`** as a search-shaped
 Spike evidence: `properties/generated/word_boundary_spike.json` (GO).
 Differential-fuzz against `re.ASCII`; Unicode probes must diverge from
 Python-default `\b` and must not be used as a silent pass.
+
+## 26. Dialect `\s` on complement / `[^\S]` must use dialect space codes
+
+<!-- verified-finding: VF-SPACE-COMPLEMENT-001 -->
+
+Positive `\s` already uses each dialect's `space()` alphabet (ECMA includes
+NBSP / U+2028 / U+2029; RE2 omits `\v`). The negated-class / `\S` path used
+to hard-code `_SPACE_CODES` (` \t\n\r\f\v`) — so ECMA `[^\S]` rejected NBSP
+while Node accepted it (**false-UNSAT**). Pass `space_codes=` from each
+`compile_*` into `lower` / `_member_codes`. Documentation alone does not
+eliminate the under-approximation.
+
+## 27. Per-alternative anchors and literal `}+` / `}?`
+
+- `^a|b` must not compile as `^(a|b)`. Shared `at_start`/`meta` across `Alt`
+  branches caused search under-approx (`xb` accepted by real engines,
+  rejected by the mirror). Reject `per-alternative-anchor` (parity with
+  `py_re`) until per-alt wraps exist.
+- `strip_atomic_and_possessive("a}+")` must preserve `a}+` — `}` is a
+  possessive closer only after a real `{n,m}` brace, not after a literal
+  `}`. Same guard for lazy `}?`.

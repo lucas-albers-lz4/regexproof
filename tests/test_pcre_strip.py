@@ -22,6 +22,12 @@ def test_possessive_outside_class_stripped():
     assert strip_atomic_and_possessive("a{2,3}+") == "a{2,3}"
 
 
+def test_literal_brace_plus_not_stripped_as_possessive():
+    """fix-wave #70: `a}+` is literal `}` + one-or-more, not `{n,m}+`."""
+    assert strip_atomic_and_possessive("a}+") == "a}+"
+    assert strip_lazy_quantifiers("a}?") == "a}?"
+
+
 def test_atomic_group_rewritten():
     assert strip_atomic_and_possessive("(?>ab)c") == "(?:ab)c"
 

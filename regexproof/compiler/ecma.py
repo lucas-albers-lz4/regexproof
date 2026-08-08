@@ -11,12 +11,13 @@ from z3 import Range, Re, Union
 
 from regexproof.compiler.base import CompileResult, Unencodable
 from regexproof.compiler.fold import js_nonsu_fold_closure
-from regexproof.compiler.lower import lower
+from regexproof.compiler.lower import lower, space_codes_from_chars
 from regexproof.compiler.pcre_strip import strip_language_transparent
 from regexproof.compiler.simple_parse import parse_pattern
 
 HELPER = Path(__file__).resolve().parents[2] / "helpers" / "ecma"
 JS_TERMINATORS = frozenset(["\n", "\r", "\u2028", "\u2029"])
+_ECMA_SPACE_CHARS = " \t\n\r\f\v\u00a0\u2028\u2029"
 DEFAULT_MAX_LENGTH = 256
 
 
@@ -85,13 +86,12 @@ def compile_ecma(
             case_fold=js_nonsu_fold_closure,
             dot_terminators=JS_TERMINATORS,
             digit=lambda: Range("0", "9"),
-            space=lambda: Union(
-                *[Re(c) for c in " \t\n\r\f\v\u00a0\u2028\u2029"]
-            ),
+            space=lambda: Union(*[Re(c) for c in _ECMA_SPACE_CHARS]),
             word=lambda: Union(Range("a", "z"), Range("A", "Z"), Range("0", "9"), Re("_")),
             trailing_dollar_nl=False,
             call_kind=call_kind,
             allow_ascii_word_boundary=True,
+            space_codes=space_codes_from_chars(_ECMA_SPACE_CHARS),
         )
         return CompileResult(
             mirror=mirror,

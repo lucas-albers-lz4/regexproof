@@ -71,10 +71,14 @@ def compile_py_re(
             raise Unencodable("m-flag")
         flag_bits = _flags_from_string(flags)
         # VERBOSE: let sre_parse preprocess whitespace/comments.
-        parsed = sre_parse.parse(pattern, flag_bits)
-        ascii_only = bool(flag_bits & re.ASCII)
-        ignorecase = bool(flag_bits & re.IGNORECASE)
-        dotall = bool(flag_bits & re.DOTALL)
+        # Inline (?i)/(?s)/(?a) update State.flags (fix-wave #70).
+        state = sre_parse.State()
+        state.flags = flag_bits
+        parsed = sre_parse.parse(pattern, flag_bits, state=state)
+        effective = int(getattr(state, "flags", flag_bits) or flag_bits)
+        ascii_only = bool(effective & re.ASCII)
+        ignorecase = bool(effective & re.IGNORECASE)
+        dotall = bool(effective & re.DOTALL)
         ctx = _Ctx(
             ascii_only=ascii_only,
             ignorecase=ignorecase,
@@ -217,8 +221,35 @@ def _translate(pattern: sre_parse.SubPattern, ctx: _Ctx):
             parts.append(Union(*alts) if len(alts) > 1 else alts[0])
         elif op is sc.SUBPATTERN:
             # (group, add_flags, del_flags, subpattern) on 3.11+
-            sub = av[-1]
-            sub_body, sub_meta = _translate(sub, ctx)
+            if len(av) >= 4:
+                _group, add_flags, del_flags, sub = av[0], av[1], av[2], av[3]
+            else:
+                add_flags, del_flags, sub = 0, 0, av[-1]
+            child_ignore = ctx.ignorecase
+            if add_flags & re.IGNORECASE:
+                child_ignore = True
+            if del_flags & re.IGNORECASE:
+                child_ignore = False
+            child_dotall = ctx.dotall
+            if add_flags & re.DOTALL:
+                child_dotall = True
+            if del_flags & re.DOTALL:
+                child_dotall = False
+            child_ascii = ctx.ascii_only
+            if add_flags & re.ASCII:
+                child_ascii = True
+            if del_flags & re.ASCII:
+                child_ascii = False
+            # Reject scoped flags we do not model (m/x).
+            if (add_flags | del_flags) & (re.MULTILINE | re.VERBOSE):
+                raise Unencodable("inline-flag")
+            child_ctx = _Ctx(
+                ascii_only=child_ascii,
+                ignorecase=child_ignore,
+                dotall=child_dotall,
+                call_kind=ctx.call_kind,
+            )
+            sub_body, sub_meta = _translate(sub, child_ctx)
             if sub_meta.get("has_internal_anchor"):
                 meta["has_internal_anchor"] = True
             parts.append(sub_body)

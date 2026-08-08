@@ -11,6 +11,13 @@ from regexproof.compiler import simple_parse as sp
 
 _DIGIT_CODES = frozenset(range(ord("0"), ord("9") + 1))
 _SPACE_CODES = frozenset(ord(c) for c in " \t\n\r\f\v")
+
+
+def space_codes_from_chars(chars: str) -> frozenset[int]:
+    """Dialect space alphabet as codepoints (for complement / negated class)."""
+    return frozenset(ord(c) for c in chars)
+
+
 _WORD_CODES = frozenset(
     list(range(ord("a"), ord("z") + 1))
     + list(range(ord("A"), ord("Z") + 1))
@@ -32,6 +39,7 @@ def lower(
     call_kind: str,
     case_fold: Callable[[str], set[str]] | None = None,
     allow_ascii_word_boundary: bool = False,
+    space_codes: frozenset[int] | None = None,
 ):
     """Lower AST to Z3.
 
@@ -49,6 +57,7 @@ def lower(
         "has_internal_anchor": False,
         "word_boundary_wrap": False,
     }
+    scodes = space_codes if space_codes is not None else _SPACE_CODES
     body = _lower_node(
         node,
         fold=fold,
@@ -61,6 +70,7 @@ def lower(
         at_start=True,
         at_end=True,
         allow_ascii_word_boundary=allow_ascii_word_boundary,
+        space_codes=scodes,
     )
     if meta["has_internal_anchor"]:
         raise Unencodable("internal-anchor")
@@ -102,6 +112,7 @@ def _lower_node(
     at_start,
     at_end,
     allow_ascii_word_boundary: bool = False,
+    space_codes: frozenset[int] = _SPACE_CODES,
 ):
     if isinstance(node, sp.WordBoundary):
         raise Unencodable("word-boundary")
@@ -117,6 +128,7 @@ def _lower_node(
             space=space,
             word=word,
             meta=meta,
+            space_codes=space_codes,
         )
     if isinstance(node, sp.Folded):
         active = case_fold if case_fold is not None else fold
@@ -134,6 +146,7 @@ def _lower_node(
             at_start=at_start,
             at_end=at_end,
             allow_ascii_word_boundary=allow_ascii_word_boundary,
+            space_codes=space_codes,
         )
     if isinstance(node, sp.Lit):
         if node.ch == "":
@@ -158,14 +171,24 @@ def _lower_node(
                     at_start=at_start and idx == 0,
                     at_end=at_end and idx == len(items) - 1,
                     allow_ascii_word_boundary=allow_ascii_word_boundary,
+                    space_codes=space_codes,
                 )
             )
         if not parts:
             return Re("")
         return parts[0] if len(parts) == 1 else Concat(*parts)
     if isinstance(node, sp.Alt):
-        alts = [
-            _lower_node(
+        # Per-alternative anchors must not hoist onto the whole Union
+        # (false-UNSAT under search: ^a|b vs ^(a|b)). Reject like py_re.
+        alts = []
+        for it in node.items:
+            alt_meta = {
+                "leading_caret": False,
+                "trailing_dollar": False,
+                "has_internal_anchor": False,
+                "word_boundary_wrap": False,
+            }
+            lowered = _lower_node(
                 it,
                 fold=fold,
                 case_fold=case_fold,
@@ -173,14 +196,18 @@ def _lower_node(
                 digit=digit,
                 space=space,
                 word=word,
-                meta=meta,
+                meta=alt_meta,
                 at_start=at_start,
                 at_end=at_end,
                 allow_ascii_word_boundary=allow_ascii_word_boundary,
+                space_codes=space_codes,
             )
-            for it in node.items
-        ]
-        return Union(*alts)
+            if alt_meta.get("has_internal_anchor"):
+                meta["has_internal_anchor"] = True
+            if alt_meta.get("leading_caret") or alt_meta.get("trailing_dollar"):
+                raise Unencodable("per-alternative-anchor")
+            alts.append(lowered)
+        return Union(*alts) if len(alts) > 1 else alts[0]
     if isinstance(node, sp.Repeat):
         inner = _lower_node(
             node.item,
@@ -194,10 +221,11 @@ def _lower_node(
             at_start=False,
             at_end=False,
             allow_ascii_word_boundary=allow_ascii_word_boundary,
+            space_codes=space_codes,
         )
         return _repeat(inner, node.lo, node.hi)
     if isinstance(node, sp.Cls):
-        return _class(node, fold, digit, space, word)
+        return _class(node, fold, digit, space, word, space_codes=space_codes)
     if isinstance(node, sp.Anchor):
         if node.kind == "start":
             if at_start:
@@ -229,6 +257,7 @@ def _lower_word_bounded(
     space,
     word,
     meta,
+    space_codes: frozenset[int] = _SPACE_CODES,
 ):
     """Encode edge ``\\b`` as (^|\\W)inner(\\W|$) under ASCII ``\\w``.
 
@@ -254,6 +283,7 @@ def _lower_word_bounded(
         at_start=True,
         at_end=True,
         allow_ascii_word_boundary=False,  # no nested WordBounded
+        space_codes=space_codes,
     )
     if inner_meta["has_internal_anchor"]:
         raise Unencodable("internal-anchor")
@@ -358,15 +388,17 @@ def _dot(terminators: frozenset[str]):
     return ranges_excluding({ord(t) for t in terminators})
 
 
-def _member_codes(item: str, fold) -> set[int]:
+def _member_codes(
+    item: str, fold, *, space_codes: frozenset[int] = _SPACE_CODES
+) -> set[int]:
     if item == "\\d":
         return set(_DIGIT_CODES)
     if item == "\\D":
         return set(range(_BMP_HI + 1)) - set(_DIGIT_CODES)
     if item == "\\s":
-        return set(_SPACE_CODES)
+        return set(space_codes)
     if item == "\\S":
-        return set(range(_BMP_HI + 1)) - set(_SPACE_CODES)
+        return set(range(_BMP_HI + 1)) - set(space_codes)
     if item == "\\w":
         return set(_WORD_CODES)
     if item == "\\W":
@@ -375,11 +407,11 @@ def _member_codes(item: str, fold) -> set[int]:
     return {ord(c) for c in chars if len(c) == 1}
 
 
-def _class(node: sp.Cls, fold, digit, space, word):
+def _class(node: sp.Cls, fold, digit, space, word, *, space_codes=_SPACE_CODES):
     if node.negate:
         forbidden: set[int] = set()
         for item in node.chars:
-            forbidden |= _member_codes(item, fold)
+            forbidden |= _member_codes(item, fold, space_codes=space_codes)
         if not node.chars:
             raise Unencodable("empty-class")
         return ranges_excluding(forbidden)
