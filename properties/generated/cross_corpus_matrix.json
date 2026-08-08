@@ -4,14 +4,14 @@
       "corpus": "gitleaks",
       "corpus_pin": null,
       "decision": "go",
-      "encodable": 133,
-      "fraction": 0.6018,
+      "encodable": 182,
+      "fraction": 0.8235,
       "reasons": {
-        "inline-flag": 17,
+        "inline-flag": 29,
         "negated-shorthand": 2,
-        "ok": 133,
+        "ok": 182,
         "pattern-too-long": 4,
-        "word-boundary": 65
+        "word-boundary": 4
       },
       "sample_size": 221,
       "scope": "full_corpus",
@@ -39,35 +39,35 @@
     },
     {
       "corpus": "coreruleset",
-      "corpus_pin": "v4.28.0",
+      "corpus_pin": null,
       "decision": "go",
-      "encodable": 206,
-      "fraction": 0.6478,
+      "encodable": 248,
+      "fraction": 0.7168,
       "reasons": {
         "inline-flag": 1,
         "internal-anchor": 2,
-        "negated-shorthand": 2,
-        "ok": 206,
+        "negated-shorthand": 3,
+        "ok": 248,
         "pattern-too-long": 73,
-        "word-boundary": 34
+        "word-boundary": 19
       },
-      "sample_size": 318,
+      "sample_size": 346,
       "scope": "full_corpus",
       "unclassified_parse_errors": 0
     },
     {
       "corpus": "trufflehog",
       "corpus_pin": "v3.88.29",
-      "decision": "no-go",
-      "encodable": 50,
-      "fraction": 0.2326,
+      "decision": "go",
+      "encodable": 201,
+      "fraction": 0.9349,
       "reasons": {
-        "inline-flag": 2,
+        "inline-flag": 5,
         "m-flag": 1,
-        "negated-shorthand": 1,
-        "ok": 50,
+        "negated-shorthand": 4,
+        "ok": 201,
         "pattern-too-long": 2,
-        "word-boundary": 159
+        "word-boundary": 2
       },
       "sample_size": 215,
       "scope": "full_corpus",

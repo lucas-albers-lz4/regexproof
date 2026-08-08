@@ -299,3 +299,22 @@ Truncation is governed by `--redos-timeout-s` or per-corpus
 `result=incomplete` then fail the evidence gate. The budget is checked
 before and after each `analyze_record` call (a single hung helper call is
 still not preemptible — that is a helper-level limit, not a silent skip).
+
+## 25. ASCII-domain `\b` encode — never silent Unicode mirrors
+
+<!-- verified-finding: VF-WORD-BOUNDARY-001 -->
+
+Stock Z3 has no zero-width `\b`. Edge-only `\b` / `\b…\b` (no mid-pattern,
+no `\B`) lowers under **ASCII `\w` = `[A-Za-z0-9_]`** as a search-shaped
+`(^|\W)inner(\W|$)` union (see `WordBounded` in `simple_parse` / `lower`).
+
+| Dialect | `\b` |
+|---|---|
+| re2 / pcre / ecma (no `u`) | Encode — engine `\w` is ASCII |
+| py_re default | **Reject** `word-boundary` — Unicode `\b` (TRAPS #17 false-safety) |
+| py_re + `re.ASCII` / `(?a)` | Future: may encode; still reject until wired |
+| Mid-pattern `foo\bbar`, `\B` | Reject `word-boundary` |
+
+Spike evidence: `properties/generated/word_boundary_spike.json` (GO).
+Differential-fuzz against `re.ASCII`; Unicode probes must diverge from
+Python-default `\b` and must not be used as a silent pass.

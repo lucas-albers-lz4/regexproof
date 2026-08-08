@@ -1,32 +1,34 @@
 {
-  "budget": null,
+  "budget": {
+    "redos_wall_s": 120
+  },
   "commit": null,
-  "compiler_fingerprint": "50acabd829ca",
+  "compiler_fingerprint": "c3566c0cb380",
   "complete_run": true,
   "corpus_pin": null,
   "decision": "go",
   "decision_rule": "go iff encodable/sample_size >= 0.3",
   "dialect": "re2",
-  "encodable": 133,
+  "encodable": 182,
   "engine_versions": {
     "python": "3.14.6",
     "z3": "5.0.0"
   },
-  "fraction": 0.6018,
+  "fraction": 0.8235,
   "go_no_go_threshold": 0.3,
   "inventory_path": "properties/generated/gitleaks-inventory.ndjson",
   "path": "pilots/gitleaks/config/gitleaks.toml",
   "pilot": "gitleaks",
   "reasons": {
-    "inline-flag": 17,
+    "inline-flag": 29,
     "negated-shorthand": 2,
-    "ok": 133,
+    "ok": 182,
     "pattern-too-long": 4,
-    "word-boundary": 65
+    "word-boundary": 4
   },
   "sample_size": 221,
   "schema_version": "1",
   "scope": "full_corpus",
   "unclassified_parse_errors": 0,
-  "wall_s": 1.051
+  "wall_s": 1.052
 }

@@ -1,0 +1,107 @@
+{
+  "decision": "GO",
+  "decision_note": "ASCII-domain \\b encode agrees with re.ASCII / RE2-shaped \\w for edge-wrap patterns; Python Unicode-default \\b diverges (keep py_re reject without re.ASCII). \\B and mid-pattern \\b stay reject.",
+  "issues": {
+    "canonical": 62,
+    "land": 65,
+    "remeasure": 66,
+    "spike": 64,
+    "umbrella": 63
+  },
+  "results": [
+    {
+      "ascii_mismatches": [],
+      "dialect": "re2",
+      "encodable": true,
+      "pattern": "\\bword\\b",
+      "runs": 200,
+      "unicode_divergences_vs_python_default": [
+        {
+          "mirror": true,
+          "python_ascii": true,
+          "python_unicode": false,
+          "s": "\u4e2dword"
+        },
+        {
+          "mirror": true,
+          "python_ascii": true,
+          "python_unicode": false,
+          "s": "word\u4e2d"
+        },
+        {
+          "mirror": true,
+          "python_ascii": true,
+          "python_unicode": false,
+          "s": "\u4e2dword\u4e2d"
+        },
+        {
+          "mirror": true,
+          "python_ascii": true,
+          "python_unicode": false,
+          "s": "x\u4e2dword"
+        }
+      ]
+    },
+    {
+      "ascii_mismatches": [],
+      "dialect": "re2",
+      "encodable": true,
+      "pattern": "\\bAKIA[0-9A-Z]{16}\\b",
+      "runs": 200,
+      "unicode_divergences_vs_python_default": []
+    },
+    {
+      "ascii_mismatches": [],
+      "dialect": "re2",
+      "encodable": true,
+      "pattern": "\\b[a-z]{3,8}\\b",
+      "runs": 200,
+      "unicode_divergences_vs_python_default": [
+        {
+          "mirror": true,
+          "python_ascii": true,
+          "python_unicode": false,
+          "s": "\u4e2dword"
+        },
+        {
+          "mirror": true,
+          "python_ascii": true,
+          "python_unicode": false,
+          "s": "word\u4e2d"
+        },
+        {
+          "mirror": true,
+          "python_ascii": true,
+          "python_unicode": false,
+          "s": "\u4e2dword\u4e2d"
+        },
+        {
+          "mirror": true,
+          "python_ascii": true,
+          "python_unicode": false,
+          "s": "x\u4e2dword"
+        }
+      ]
+    },
+    {
+      "ascii_mismatches": [],
+      "dialect": "re2",
+      "encodable": true,
+      "pattern": "\\bfoo",
+      "runs": 200,
+      "unicode_divergences_vs_python_default": []
+    },
+    {
+      "ascii_mismatches": [],
+      "dialect": "re2",
+      "encodable": true,
+      "pattern": "bar\\b",
+      "runs": 200,
+      "unicode_divergences_vs_python_default": []
+    }
+  ],
+  "schema_version": "1",
+  "unicode_kill_without_domain_gate": true,
+  "wall_s": 0.606,
+  "wave": "word-boundary"
+}

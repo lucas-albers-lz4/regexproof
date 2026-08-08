@@ -9,10 +9,10 @@ See [properties/generated/cross_corpus_matrix.md](../properties/generated/cross_
 
 | Corpus | Decision | Fraction |
 |---|---|---|
-| gitleaks | go (0.30 gate; ≥0.60 wave target) | 0.6018 |
+| gitleaks | go | **0.8235** (was 0.6018 pre-`\b`) |
 | validatorjs | go | 0.684 |
-| coreruleset | go | 0.6478 |
-| trufflehog | no-go | 0.2326 |
+| coreruleset | go | **0.7168** (was 0.6478) |
+| trufflehog | **go** | **0.9349** (was 0.2326 no-go) |
 | ids_rules | go | 0.879 |
 | semgrep_rules | no-go | 0.2741 |
 | pcre2/re2/cpython/busybox samples | go | ≥0.53 |
@@ -44,8 +44,17 @@ See [properties/generated/cross_corpus_matrix.md](../properties/generated/cross_
   typed reasons (`unclosed-class`, `unsupported-syntax`, …).
 - Cross-scanner rule_diff requires shared detector intent; unrelated rules are
   not pairs.
-- Next-wave candidates: word-boundary encoding, semgrep composite/`internal-anchor`
-  surface, trufflehog `\b` mass, optional `(?-i:)` if measured surface rises.
+- Next-wave candidates (remaining): semgrep `composite-pattern` / `internal-anchor`
+  surface; optional `(?-i:)` if measured surface rises; py_re `re.ASCII` `\b` wiring.
+
+## Word-boundary wave (#62–#66)
+
+- Spike **GO** (`word_boundary_spike.json`): edge `\b` under ASCII `\w` agrees with
+  `re.ASCII` / RE2; Unicode-default Python diverges (domain gate required).
+- Landed: `WordBounded` rewrite in `simple_parse` / `lower`; re2/pcre/ecma encode;
+  py_re Unicode-default still rejects; mid-pattern / `\B` reject (TRAPS #25).
+- Remeasure: gitleaks **60.2% → 82.4%** (49 IDs flipped); trufflehog **23.3% → 93.5%**
+  (decision flip to go); CRS **64.8% → 71.7%**. See `word_boundary_wave_delta.json`.
 
 ## Artifact index
 
@@ -60,3 +69,5 @@ See [properties/generated/cross_corpus_matrix.md](../properties/generated/cross_
 | `phase3_decision_matrix.*` | 3 |
 | `phase4_rule_diff_families.*` | 4 |
 | `mirror_fidelity_gate.json` | pre-gate |
+| `word_boundary_spike.json` | `\b` spike |
+| `word_boundary_wave_delta.json` | `\b` remeasure |

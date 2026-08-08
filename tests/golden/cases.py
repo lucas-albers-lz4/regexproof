@@ -100,6 +100,18 @@ for pat, flags, ck, acc, rej in [
     p = pat.replace("(?i)", "")
     _add("re2", p, flags, ck, acc, rej)
 
+# ASCII-domain edge \\b (RE2/PCRE/ECMA); py_re Unicode-default stays reject.
+for dialect in ("re2", "ecma", "pcre"):
+    _add(
+        dialect,
+        r"\bword\b",
+        "",
+        "search",
+        ["word", " word ", "word!", "!word"],
+        ["awordb", "xwordy", "wordword"],
+        category="positive",
+    )
+
 # --- pcre positives (≥10) ---
 for pat, flags, ck, acc, rej in [
     (r"^[a-z]+$", "", "fullmatch", ["abc"], ["1"]),
@@ -124,12 +136,12 @@ REJECTS = [
     ("py_re", r"(?=a)b", "", "search", "lookaround"),
     ("py_re", r"(?<=a)b", "", "search", "lookaround"),
     ("py_re", r"(a)\1", "", "search", "backref"),
-    ("py_re", r"\bword\b", "", "search", "word-boundary"),
+    ("py_re", r"\bword\b", "", "search", "word-boundary"),  # Unicode-default; ASCII gate required
     ("py_re", r"^a$", "m", "search", "m-flag"),
     ("py_re", "a" * 300, "", "search", "pattern-too-long"),
     ("ecma", r"(?=a)b", "", "search", "lookaround"),
     ("ecma", r"(a)\1", "", "search", "backref"),
-    ("ecma", r"\bword\b", "", "search", "word-boundary"),
+    ("ecma", r"foo\bbar", "", "search", "word-boundary"),  # mid-pattern \\b unsupported
     ("ecma", r"a", "u", "search", "u-flag"),
     ("ecma", r"a", "v", "search", "v-flag"),
     ("ecma", r"a", "m", "search", "m-flag"),
@@ -138,7 +150,8 @@ REJECTS = [
     ("ecma", r"(?i:a)", "", "search", "inline-flag"),
     ("re2", r"(?=a)b", "", "search", "lookaround"),
     ("re2", r"(a)\1", "", "search", "backref"),
-    ("re2", r"\bword\b", "", "search", "word-boundary"),
+    ("re2", r"foo\bbar", "", "search", "word-boundary"),  # mid-pattern \\b unsupported
+    ("re2", r"\Bword\B", "", "search", "word-boundary"),  # \\B stays reject
     ("re2", r"^a$", "m", "search", "m-flag"),
     ("re2", "b" * 300, "", "search", "pattern-too-long"),
     ("re2", r"(?-i:abc)", "", "search", "inline-flag"),

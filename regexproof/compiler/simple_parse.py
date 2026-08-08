@@ -1,7 +1,8 @@
 """Minimal regex AST for encodable-subset dialects (ECMA / RE2 / PCRE).
 
 Handles: literals, `.`, `|`, `()`, `?` `*` `+` `{n,m}`, char classes `[...]`,
-shorthands `\\d\\w\\s`, anchors `^$`. Rejects lookarounds, backrefs, `\\b`.
+shorthands `\\d\\w\\s`, anchors `^$`, word boundaries `\\b` (lowered only under
+ASCII-domain dialects — see ``lower``). Rejects lookarounds, backrefs, `\\B`.
 """
 
 from __future__ import annotations
@@ -54,6 +55,22 @@ class Folded:
     """Scoped case-insensitive subexpression (from `(?i:…)`)."""
 
     item: object
+
+
+@dataclass
+class WordBoundary:
+    """Zero-width ASCII word boundary (``\\b``). ``\\B`` is not represented."""
+
+    pass
+
+
+@dataclass
+class WordBounded:
+    """Inner pattern with leading/trailing ``\\b`` constraints (post-rewrite)."""
+
+    item: object
+    leading: bool = True
+    trailing: bool = True
 
 
 def _as_seq(node):
@@ -158,8 +175,11 @@ def _parse_escape(s: str, i: int):
     if e in "DWS":
         # Represent as negated positive shorthand (\\D ≡ [^\\d] language).
         return Cls(chars=[f"\\{e.lower()}"], negate=True), i + 2
-    if e in "bB":
+    if e == "B":
+        # Negated boundary: rare in corpora; keep honest reject.
         raise Unencodable("word-boundary")
+    if e == "b":
+        return WordBoundary(), i + 2
     if e.isdigit():
         raise Unencodable("backref")
     if e == "n":
@@ -319,4 +339,91 @@ def parse_pattern(pattern: str, *, allow_scoped_i: bool = True):
     node, i = _parse_alt(pattern, 0, allow_scoped_i=allow_scoped_i)
     if i != len(pattern):
         raise Unencodable("unsupported-syntax")
+    return rewrite_word_boundaries(node)
+
+
+def rewrite_word_boundaries(node):
+    """Collapse edge ``\\b`` into ``WordBounded``; reject mid-pattern / nested WB."""
+    if isinstance(node, WordBoundary):
+        # Lone \\b is not a useful encodable pattern.
+        raise Unencodable("word-boundary")
+    if isinstance(node, WordBounded):
+        return WordBounded(
+            rewrite_word_boundaries(node.item),
+            leading=node.leading,
+            trailing=node.trailing,
+        )
+    if isinstance(node, Folded):
+        return Folded(rewrite_word_boundaries(node.item))
+    if isinstance(node, Repeat):
+        # \\b cannot be quantified meaningfully for our edge rewrite.
+        if _contains_word_boundary(node.item):
+            raise Unencodable("word-boundary")
+        return Repeat(rewrite_word_boundaries(node.item), node.lo, node.hi)
+    if isinstance(node, Alt):
+        return Alt([rewrite_word_boundaries(it) for it in node.items])
+    if isinstance(node, Seq):
+        # Recurse into non-WB children first; leave WordBoundary atoms intact.
+        items = []
+        for it in node.items:
+            if isinstance(it, WordBoundary):
+                items.append(it)
+            else:
+                items.append(rewrite_word_boundaries(it))
+        flat: list = []
+        for it in items:
+            if isinstance(it, Seq):
+                flat.extend(it.items)
+            else:
+                flat.append(it)
+        wb_idx = [i for i, it in enumerate(flat) if isinstance(it, WordBoundary)]
+        if not wb_idx:
+            return Seq(flat) if len(flat) != 1 else flat[0]
+        leading = 0 in wb_idx
+        trailing = (len(flat) - 1) in wb_idx
+        # Only edge WBs supported (leading and/or trailing); no mid-pattern \\b.
+        allowed = set()
+        if leading:
+            allowed.add(0)
+        if trailing:
+            allowed.add(len(flat) - 1)
+        if set(wb_idx) - allowed:
+            raise Unencodable("word-boundary")
+        inner_items = [it for it in flat if not isinstance(it, WordBoundary)]
+        if not inner_items:
+            raise Unencodable("word-boundary")
+        inner = Seq(inner_items) if len(inner_items) != 1 else inner_items[0]
+        if _contains_word_bounded(inner) or _contains_word_boundary(inner):
+            raise Unencodable("word-boundary")
+        return WordBounded(inner, leading=leading, trailing=trailing)
     return node
+
+
+def _contains_word_boundary(node) -> bool:
+    if isinstance(node, WordBoundary):
+        return True
+    if isinstance(node, WordBounded):
+        return True
+    if isinstance(node, Folded):
+        return _contains_word_boundary(node.item)
+    if isinstance(node, Repeat):
+        return _contains_word_boundary(node.item)
+    if isinstance(node, Alt):
+        return any(_contains_word_boundary(it) for it in node.items)
+    if isinstance(node, Seq):
+        return any(_contains_word_boundary(it) for it in node.items)
+    return False
+
+
+def _contains_word_bounded(node) -> bool:
+    if isinstance(node, (WordBounded, WordBoundary)):
+        return True
+    if isinstance(node, Folded):
+        return _contains_word_bounded(node.item)
+    if isinstance(node, Repeat):
+        return _contains_word_bounded(node.item)
+    if isinstance(node, Alt):
+        return any(_contains_word_bounded(it) for it in node.items)
+    if isinstance(node, Seq):
+        return any(_contains_word_bounded(it) for it in node.items)
+    return False

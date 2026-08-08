@@ -122,3 +122,9 @@ ASCII approximations.
 5. Delta / residual → `scripts/build-phase3-delta.py`
 6. Shape-5 families → `scripts/phase4-rule-diff-families.py`
 7. Report → `docs/final-report.md`
+
+## Word-boundary wave (ASCII `\b`)
+
+Edge `\b` encodes for re2/pcre/ecma only (TRAPS #25). Spike artifact:
+`properties/generated/word_boundary_spike.json`. Remeasure gitleaks/trufflehog
+after landing; never enable silent Unicode `py_re` `\b` mirrors.

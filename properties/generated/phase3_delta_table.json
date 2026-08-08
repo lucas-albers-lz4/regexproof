@@ -2,17 +2,17 @@
   "phase": 3,
   "rows": [
     {
-      "after_fraction": 0.6018,
+      "after_fraction": 0.8235,
       "before_fraction": 0.185,
       "corpus": "gitleaks",
-      "delta": 0.4168,
+      "delta": 0.6385,
       "non_lazy_contributor": "CRS/hex+scoped-flag evidence; gitleaks lift dominated by lazy-strip"
     },
     {
-      "after_fraction": 0.6478,
+      "after_fraction": 0.7168,
       "before_fraction": 0.384,
       "corpus": "coreruleset",
-      "delta": 0.2638,
+      "delta": 0.3328,
       "non_lazy_contributor": "hex soundness + negated-class / scoped-flag"
     },
     {
@@ -23,7 +23,7 @@
       "non_lazy_contributor": "see validatorjs_encodable_fraction.json"
     },
     {
-      "after_fraction": 0.2326,
+      "after_fraction": 0.9349,
       "before_fraction": null,
       "corpus": "trufflehog",
       "decision": "no-go"

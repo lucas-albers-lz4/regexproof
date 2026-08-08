@@ -91,6 +91,7 @@ def compile_ecma(
             word=lambda: Union(Range("a", "z"), Range("A", "Z"), Range("0", "9"), Re("_")),
             trailing_dollar_nl=False,
             call_kind=call_kind,
+            allow_ascii_word_boundary=True,
         )
         return CompileResult(
             mirror=mirror,
