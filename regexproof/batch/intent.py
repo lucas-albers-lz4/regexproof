@@ -55,7 +55,6 @@ def detect_usage_mismatches(records: list[dict[str, Any]]) -> list[dict[str, Any
                     "site": rec.get("site") or "",
                     "pattern": pattern,
                     "shape": None,
-                    "ground_truth_status": "N/A",
                     "disclosure": None,
                     "detail": {
                         "call_kind": call_kind,
@@ -74,7 +73,6 @@ def detect_usage_mismatches(records: list[dict[str, Any]]) -> list[dict[str, Any
                     "site": rec.get("site") or "",
                     "pattern": pattern,
                     "shape": None,
-                    "ground_truth_status": "N/A",
                     "disclosure": None,
                     "detail": {
                         "call_kind": call_kind,
@@ -138,7 +136,6 @@ def _intent_finding(rec: dict[str, Any], keyword: str, bad_char: str) -> dict[st
         "site": rec.get("site") or "",
         "pattern": rec.get("pattern") or "",
         "shape": None,
-        "ground_truth_status": "N/A",
         "disclosure": None,
         "detail": {
             "keyword": keyword,

@@ -1,0 +1,14 @@
+{
+  "corpus": "coreruleset",
+  "corpus_type": "rule_corpus",
+  "encodable": 147,
+  "engine": {
+    "python": "3.13.5"
+  },
+  "extracted": 338,
+  "findings": 106,
+  "inventory_questions": 4,
+  "join_regex_ids": 106,
+  "schema_version": "1",
+  "triage": 191
+}

@@ -42,7 +42,7 @@ Schema: `regexproof/schemas/scanner_finding.schema.json`.
 | `site` | `file:line:column` or inventory id |
 | `pattern` | Pattern text when applicable |
 | `shape` | 1–5 or null |
-| `ground_truth_status` | Replay status or `N/A` |
+| `ground_truth_status` | Replay status. Present on Z3-verdict findings (`property`, `rule_diff`); omitted on classification findings (`usage_mismatch`, `intent_mismatch`, `triage`, `redos`) — absence means "not a Z3 verdict", never a silent `N/A` |
 | `disclosure` | `private_first` \| `public_ok` \| null |
 | `witness` | Redacted when committed |
 | `detail` | Kind-specific object |
