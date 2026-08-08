@@ -87,3 +87,12 @@ def test_toml_rule_fixtures():
     # composites must be explicit when present — sample_20 may parse oddly;
     # ensure no silent skip: every file produced ≥1 record
     assert len(all_recs) >= 20
+    assert any(r.get("unencodable_reason") == "composite-pattern" for r in all_recs)
+
+
+def test_toml_concat_not_literal_pattern():
+    src = '[[rules]]\nid = "x"\nregex = "compos" + "ite"\n'
+    recs = extract_rule_file(src, repo="t", file="bad.toml", dialect="re2")
+    assert recs
+    assert recs[0].get("unencodable_reason") == "composite-pattern"
+    assert recs[0]["pattern"] == ""

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
-"""PCRE2 CLI helper — parse + replay via the `pcre2` Python bindings if present,
-falling back to the system `pcre2grep` for match-only.
+"""PCRE2 CLI helper — parse + replay via pcre2 bindings or pcre2grep.
+
+Never falls back to Python `re` (wrong engine = broken ground-truth gate).
 
 Usage:
   match.py parse <pattern>
@@ -10,6 +11,7 @@ Usage:
 from __future__ import annotations
 
 import json
+import shutil
 import subprocess
 import sys
 
@@ -20,8 +22,7 @@ def main() -> int:
         return 2
     cmd = sys.argv[1]
     if cmd == "parse":
-        pattern = sys.argv[2]
-        return parse(pattern)
+        return parse(sys.argv[2])
     if cmd == "match":
         pattern = sys.argv[2]
         flags = sys.argv[3] if len(sys.argv) > 3 else ""
@@ -31,8 +32,7 @@ def main() -> int:
     return 2
 
 
-def parse(pattern: str) -> int:
-    # Reject known unencodable constructs for the Phase-1 subset.
+def _reject_unencodable(pattern: str) -> str | None:
     reject_markers = [
         ("(?=", "lookaround"),
         ("(?!", "lookaround"),
@@ -46,64 +46,110 @@ def parse(pattern: str) -> int:
     ]
     for marker, reason in reject_markers:
         if marker in pattern:
-            print(json.dumps({"ok": False, "unencodable_reason": reason, "helper": "pcre2"}))
-            return 1
-    # Backrefs \1..\9
+            return reason
     import re as _re
 
     if _re.search(r"(?<!\\)\\[1-9]", pattern):
-        print(json.dumps({"ok": False, "unencodable_reason": "backref", "helper": "pcre2"}))
-        return 1
-    try:
-        import pcre2  # type: ignore
+        return "backref"
+    return None
 
-        pcre2.compile(pattern.encode())
-        print(json.dumps({"ok": True, "helper": "pcre2-bindings"}))
-        return 0
+
+def _has_pcre2_bindings() -> bool:
+    try:
+        import pcre2  # noqa: F401
+
+        return True
     except ImportError:
-        # Bindings absent — structural accept for encodable-subset probes.
-        print(json.dumps({"ok": True, "helper": "pcre2-structural"}))
-        return 0
-    except Exception as exc:  # noqa: BLE001
-        print(json.dumps({"ok": False, "unencodable_reason": "parse-error", "error": str(exc)}))
+        return False
+
+
+def _has_pcre2grep() -> bool:
+    return shutil.which("pcre2grep") is not None
+
+
+def parse(pattern: str) -> int:
+    reason = _reject_unencodable(pattern)
+    if reason:
+        print(json.dumps({"ok": False, "unencodable_reason": reason, "helper": "pcre2"}))
         return 1
+    if _has_pcre2_bindings():
+        try:
+            import pcre2  # type: ignore
+
+            pcre2.compile(pattern.encode())
+            print(json.dumps({"ok": True, "helper": "pcre2-bindings"}))
+            return 0
+        except Exception as exc:  # noqa: BLE001
+            print(
+                json.dumps(
+                    {"ok": False, "unencodable_reason": "parse-error", "error": str(exc)}
+                )
+            )
+            return 1
+    if _has_pcre2grep():
+        # pcre2grep validates by attempting a match against empty — compile errors → 2
+        proc = subprocess.run(
+            ["pcre2grep", "-q", "--", pattern],
+            input="",
+            text=True,
+            capture_output=True,
+            shell=False,
+            check=False,
+        )
+        if proc.returncode in (0, 1):
+            print(json.dumps({"ok": True, "helper": "pcre2grep"}))
+            return 0
+        print(
+            json.dumps(
+                {
+                    "ok": False,
+                    "unencodable_reason": "parse-error",
+                    "error": proc.stderr.strip() or "pcre2grep reject",
+                }
+            )
+        )
+        return 1
+    print(
+        json.dumps(
+            {
+                "ok": False,
+                "unencodable_reason": "pcre2-helper-unavailable",
+                "helper": "none",
+            }
+        )
+    )
+    return 1
 
 
 def match(pattern: str, flags: str, data: str) -> int:
-    try:
-        import pcre2  # type: ignore
+    if _has_pcre2_bindings():
+        try:
+            import pcre2  # type: ignore
 
-        opts = 0
+            opts = 0
+            if "i" in flags and hasattr(pcre2, "COMPAT_I"):
+                opts |= pcre2.COMPAT_I
+            compiled = pcre2.compile(pattern.encode(), options=opts)
+            return 0 if compiled.search(data.encode()) else 1
+        except Exception:  # noqa: BLE001
+            return 2
+    if _has_pcre2grep():
+        argv = ["pcre2grep", "-q"]
         if "i" in flags:
-            opts |= pcre2.COMPAT_I
-        re = pcre2.compile(pattern.encode(), options=opts)
-        return 0 if re.search(data.encode()) else 1
-    except ImportError:
-        pass
-    # Fallback: Python re as approximate for ASCII subset smoke only.
-    import re
-
-    f = 0
-    if "i" in flags:
-        f |= re.I
-    try:
-        return 0 if re.search(pattern, data, f) else 1
-    except re.error:
-        return 2
-
-
-if __name__ == "__main__":
-    # Optional pcre2grep path for environments that ship it.
-    if len(sys.argv) >= 2 and sys.argv[1] == "match-pcre2grep":
-        pattern = sys.argv[2]
-        data = sys.stdin.read()
+            argv.append("-i")
+        argv.extend(["--", pattern])
         proc = subprocess.run(
-            ["pcre2grep", "-q", "--", pattern],
+            argv,
             input=data,
             text=True,
             capture_output=True,
             shell=False,
             check=False,
         )
-        sys.exit(proc.returncode)
+        return 0 if proc.returncode == 0 else 1
+    print("FATAL: no pcre2 bindings and no pcre2grep — refusing Python re fallback", file=sys.stderr)
+    return 2
+
+
+if __name__ == "__main__":
     sys.exit(main())

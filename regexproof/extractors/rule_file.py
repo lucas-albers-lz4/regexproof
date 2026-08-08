@@ -52,10 +52,47 @@ def _extract_toml(source: str, *, repo: str, file: str, dialect: str) -> list[di
     try:
         data = tomllib.loads(source)
     except Exception:  # noqa: BLE001
-        # Fallback line scan for regex = "..."
+        # Fallback line scan — never treat concatenation as a literal pattern.
         for i, line in enumerate(source.splitlines(), 1):
+            if not re.search(r"regex\s*=", line):
+                continue
+            rhs = line.split("=", 1)[1]
+            # Dynamic / concatenated RHS (e.g. "compos" + "ite") → composite.
+            if "+" in rhs or not re.search(
+                r'^\s*(?:\'\'\'[\s\S]*\'\'\'|"""[\s\S]*"""|"(?:\\.|[^"\\])*"|\'(?:\\.|[^\'\\])*\')\s*$',
+                rhs.strip(),
+            ):
+                out.append(
+                    make_record(
+                        repo=repo,
+                        pattern="",
+                        flags="",
+                        dialect=dialect,
+                        call_kind="search",
+                        file=file,
+                        line=i,
+                        column=0,
+                        context_snippet=line.strip()[:500],
+                        unencodable_reason="composite-pattern",
+                    )
+                )
+                continue
             m = re.search(r'regex\s*=\s*"(?P<p>(?:\\.|[^"\\])*)"', line)
             if not m:
+                out.append(
+                    make_record(
+                        repo=repo,
+                        pattern="",
+                        flags="",
+                        dialect=dialect,
+                        call_kind="search",
+                        file=file,
+                        line=i,
+                        column=0,
+                        context_snippet=line.strip()[:500],
+                        unencodable_reason="composite-pattern",
+                    )
+                )
                 continue
             out.append(
                 make_record(

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import re
 import subprocess
 import sys
 from pathlib import Path
@@ -12,11 +13,36 @@ from z3 import Range, Re, Union
 from regexproof.compiler.base import CompileResult, Unencodable
 from regexproof.compiler.fold import python_fold_closure
 from regexproof.compiler.lower import lower
+from regexproof.compiler.pcre_strip import strip_atomic_and_possessive
 from regexproof.compiler.simple_parse import parse_pattern
 
 HELPER = Path(__file__).resolve().parents[2] / "helpers" / "pcre2" / "match.py"
 DEFAULT_MAX_LENGTH = 256
 PCRE_TERMINATORS = frozenset(["\n"])
+
+_REJECT_MARKERS = (
+    ("(?=", "lookaround"),
+    ("(?!", "lookaround"),
+    ("(?<=", "lookaround"),
+    ("(?<!", "lookaround"),
+    ("\\k<", "backref"),
+    ("\\g<", "backref"),
+    ("(?(", "conditional"),
+    ("\\K", "reset"),
+    ("\\G", "g-anchor"),
+    ("\\R", "r-escape"),
+    ("\\X", "x-escape"),
+    ("\\C", "c-escape"),
+)
+
+
+def _local_reject(pattern: str) -> str | None:
+    for marker, reason in _REJECT_MARKERS:
+        if marker in pattern:
+            return reason
+    if re.search(r"(?<!\\)\\[1-9]", pattern):
+        return "backref"
+    return None
 
 
 def _helper_parse(pattern: str) -> dict:
@@ -46,23 +72,20 @@ def compile_pcre(
             raise Unencodable("pattern-too-long")
         if "m" in flags:
             raise Unencodable("m-flag")
-        # Strip atomic groups / possessive — language-transparent for membership.
-        stripped = (
-            pattern.replace("(?>", "(?:")
-            .replace("++", "+")
-            .replace("*+", "*")
-            .replace("?+", "?")
-        )
+        reason = _local_reject(pattern)
+        if reason:
+            raise Unencodable(reason)
+        # Strip atomic/possessive outside char classes only (never mutate `[*+]`).
+        stripped = strip_atomic_and_possessive(pattern)
+        # Optional real-engine parse when available; never required for encode.
         gate = _helper_parse(stripped)
-        if gate.get("ok") is False:
-            raise Unencodable(gate.get("unencodable_reason") or "parse-error")
-        for marker, reason in (
-            ("\\R", "r-escape"),
-            ("\\X", "x-escape"),
-            ("\\C", "c-escape"),
+        if gate.get("ok") is False and gate.get("unencodable_reason") not in (
+            None,
+            "pcre2-helper-unavailable",
         ):
-            if marker in pattern:
-                raise Unencodable(reason)
+            # Real engine rejected the pattern.
+            if gate.get("helper") in ("pcre2-bindings", "pcre2grep"):
+                raise Unencodable(gate.get("unencodable_reason") or "parse-error")
         ast = parse_pattern(stripped)
         fold = (lambda ch: python_fold_closure(ch, ascii_only=True)) if "i" in flags else None
         mirror, _meta = lower(
@@ -101,8 +124,11 @@ def replay_argv(pattern: str, flags: str) -> list[str]:
 
 
 def helper_used_for_parse_and_replay() -> bool:
+    """True only when a real PCRE2 engine (bindings or pcre2grep) is used."""
     gate = _helper_parse("a+")
     if not gate.get("ok"):
+        return False
+    if gate.get("helper") not in ("pcre2-bindings", "pcre2grep"):
         return False
     proc = subprocess.run(
         [sys.executable, str(HELPER), "match", "a+", ""],

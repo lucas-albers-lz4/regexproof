@@ -10,6 +10,29 @@ permissions:
   contents: read
 
 jobs:
+  matrix:
+    name: Read Python matrix
+    runs-on: ubuntu-latest
+    outputs:
+      minors: ${{ steps.set.outputs.minors }}
+    steps:
+      - uses: actions/checkout@v5
+      - name: Load ci/python-matrix.toml (non-empty required)
+        id: set
+        run: |
+          python3 - <<'PY'
+          import json
+          import os
+          import tomllib
+          from pathlib import Path
+
+          minors = tomllib.loads(Path("ci/python-matrix.toml").read_text()).get("minors") or []
+          assert len(minors) >= 1, "ci/python-matrix.toml minors must be non-empty"
+          with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as fh:
+              fh.write(f"minors={json.dumps(minors)}\n")
+          print("minors", minors)
+          PY
+
   proof:
     name: Z3 proof harness
     runs-on: ubuntu-latest
@@ -38,24 +61,15 @@ jobs:
 
   golden:
     name: Golden suite (Python ${{ matrix.python-version }})
+    needs: matrix
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        # Must match ci/python-matrix.toml — empty matrix is a misconfig.
-        python-version: ["3.12", "3.13"]
+        # Sourced from ci/python-matrix.toml via the matrix job — do not hardcode.
+        python-version: ${{ fromJson(needs.matrix.outputs.minors) }}
     steps:
       - uses: actions/checkout@v5
-      - name: Assert python-matrix.toml non-empty
-        run: |
-          python3 - <<'PY'
-          import tomllib
-          from pathlib import Path
-          data = tomllib.loads(Path("ci/python-matrix.toml").read_text())
-          minors = data.get("minors") or []
-          assert len(minors) >= 1, "ci/python-matrix.toml minors must be non-empty"
-          print("minors", minors)
-          PY
       - uses: actions/setup-python@v6
         with:
           python-version: ${{ matrix.python-version }}

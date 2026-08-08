@@ -25,9 +25,34 @@ def test_go_re2_parse_and_replay():
 
 
 def test_pcre2_parse_and_replay():
-    assert pcre_mod.helper_used_for_parse_and_replay() is True
     gate = pcre_mod._helper_parse("a+")
+    if gate.get("helper") not in ("pcre2-bindings", "pcre2grep"):
+        pytest.skip("real PCRE2 engine not installed (bindings or pcre2grep)")
+    assert pcre_mod.helper_used_for_parse_and_replay() is True
     assert gate.get("ok") is True
+
+
+def test_pcre2_match_refuses_python_re_fallback():
+    """Without a real engine, match must exit 2 — never Python re."""
+    import subprocess
+    import sys
+    from pathlib import Path
+
+    helper = Path(__file__).resolve().parents[1] / "helpers" / "pcre2" / "match.py"
+    # Force no bindings path by checking the helper's own refusal message when
+    # neither engine exists; if an engine exists, skip this negative test.
+    if pcre_mod.helper_used_for_parse_and_replay():
+        pytest.skip("real PCRE2 present — negative fallback test N/A")
+    proc = subprocess.run(
+        [sys.executable, str(helper), "match", "a+", ""],
+        input="aaa",
+        capture_output=True,
+        text=True,
+        shell=False,
+        check=False,
+    )
+    assert proc.returncode == 2
+    assert "refusing Python re" in proc.stderr
 
 
 def test_ecma_helper_when_node_present():
