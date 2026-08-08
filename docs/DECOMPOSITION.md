@@ -61,7 +61,7 @@ when combined with string constraints**. Decompose in this order:
 | `sat` | counterexample exists | print model; **ground-truth against the real implementation** |
 | `unknown` | timeout | hard failure in CI; never report as pass or as counterexample |
 
-## The plan-review recurring bugs (from zen MCR of verification plans)
+## Recurring formulation bugs in verification plans
 
 When a plan for Z3 verification is reviewed, these formulation bugs recur:
 

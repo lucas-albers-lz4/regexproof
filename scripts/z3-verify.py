@@ -600,7 +600,7 @@ def p5_mutated_lowercase():
 
 
 # ---------------------------------------------------------------------------
-# P6 — prefix-match modeling (dogfooding P0-3, MCR Major finding)
+# P6 — prefix-match modeling (dogfooding finding, issue #11)
 # ---------------------------------------------------------------------------
 # re.match(r"^AND", "AND foo") MATCHES, but InRe("AND foo", Re("AND")) is
 # unsat (whole-string membership). The prefix_match() helper models the
@@ -664,7 +664,7 @@ def check_mutation_coverage():
 
 
 def check_domain_coverage(require=False):
-    """input_domain discipline (dogfooding P0-2, MCR blind-spot fix).
+    """input_domain discipline (dogfooding gap-2 finding, issue #11).
 
     With --require-domain, every security property / counterexample finder
     must declare input_domain ("ascii" | "unicode"). Without it, an ASCII

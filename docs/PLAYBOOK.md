@@ -51,7 +51,7 @@ s != StringVal("x")            # inequality
 | Rule | Evidence |
 |---|---|
 | **Bound lengths.** `Length ≤ 16` solves ~instant; `≤ 64` **times out** (60s+). | P2 whitelist: 9/9 UNSAT ≤16; both 64-char queries TIMEOUT |
-| **Containment is alphabet-trivial.** "No space in whitelisted strings" is decided by `space ∉ alphabet` — no length bound, no solver search. Prove alphabet disjointness + ONE membership query; drop length-slicing loops. | A-reviewer catch, confirmed |
+| **Containment is alphabet-trivial.** "No space in whitelisted strings" is decided by `space ∉ alphabet` — no length bound, no solver search. Prove alphabet disjointness + ONE membership query; drop length-slicing loops. | Caught in review. Confirmed by re-measurement. |
 | **Prefer string ops over monolithic regex** for extraction/contains reasoning. Regexes fine for membership, expensive for transformation. | P3 sed model: string-ops version solves in **2ms** |
 | **Decompose big properties.** One giant regex-image proof times out. ⚠️ Encoding matters: `Contains` against the `Star(...)` image times out even per-token (30s measured); the equivalent instant form is single-char membership over the TOKEN ALPHABET (0.4ms) — star-language containment ≡ alphabet disjointness. | P4: monolithic TIMEOUT; per-token `Contains`-vs-`Star` TIMEOUT (30s); alphabet form 0.4ms |
 | **Set `solver.set("timeout", N)` per property.** TIMEOUT must be a hard CI failure — never silently skip. | — |
