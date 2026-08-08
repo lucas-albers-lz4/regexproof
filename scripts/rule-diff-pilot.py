@@ -340,6 +340,11 @@ def main(argv: list[str] | None = None) -> int:
 
     for pair in discovered["admitted_pairs"]:
         _register_pair(harness, pair, require_gt=args.require_ground_truth)
+        if args.require_ground_truth:
+            gap_name = f"{pair['family']}-gap"
+            if harness.REGISTRY[gap_name].get("ground_truth") is None:
+                print(f"FAIL --require-ground-truth: {gap_name} has no callback")
+                return 1
 
     cov = harness.check_mutation_coverage()
     if cov:
@@ -366,15 +371,21 @@ def main(argv: list[str] | None = None) -> int:
             ok = False
         elif res.get("result") == "sat" and entry["kind"] == "rule_diff":
             outcome = "sat"
+            if args.require_ground_truth and entry.get("ground_truth") is None:
+                print(f"FAIL --require-ground-truth but no callback: {name}")
+                return 1
             if entry.get("ground_truth") and res.get("witness") is not None:
                 try:
                     gt_ok = bool(entry["ground_truth"](res["witness"]))
                     gt_status = "PASS" if gt_ok else "FAILED"
                 except Exception:  # noqa: BLE001
                     gt_status = "FAILED"
+            elif args.require_ground_truth:
+                print(f"FAIL --require-ground-truth missing witness for SAT: {name}")
+                return 1
             # SAT gap is a finding, not a harness failure.
+            # FAILED-continue: non-reproducing auto witnesses do not abort.
             ok = True
-            # FAILED-continue: do not abort on non-reproducing witnesses
         elif res.get("result") == "unsat":
             outcome = "unsat"
             gt_status = "N/A"
