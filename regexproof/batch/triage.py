@@ -13,9 +13,11 @@ def triage_records_from_compiled(compiled: list[dict[str, Any]]) -> list[dict[st
     out: list[dict[str, Any]] = []
     for rec in compiled:
         reason = rec.get("compile_reason") or rec.get("unencodable_reason")
-        if rec.get("encodable") and not reason:
+        if rec.get("encodable") and not reason and rec.get("result") != "timeout":
             continue
-        if not reason and rec.get("result") == "timeout":
+        # Timeout may be signaled via result= and/or compile_reason= (runner
+        # sets both when a compile times out — fix-wave #71).
+        if reason == "timeout" or rec.get("result") == "timeout":
             kind = "timeout"
         elif reason:
             kind = "unencodable"

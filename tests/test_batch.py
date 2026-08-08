@@ -171,6 +171,59 @@ def test_redaction_corpus():
         assert twice == red
 
 
+def test_redact_witness_recurses_lists_and_nested_dicts():
+    """fix-wave #71: nested containers must not leak secrets."""
+    leaked = {
+        "value": ["ghp_ABCDEFGHIJKLMNOPQRSTUVWXYZ012345"],
+        "nested": {"token": "AKIAIOSFODNN7EXAMPLE"},
+    }
+    red = redact_witness(leaked)
+    dump = json.dumps(red)
+    assert "ghp_" not in dump
+    assert "AKIA" not in dump
+    assert red["value"][0].startswith("<redacted len=")
+    assert red["nested"]["token"].startswith("<redacted len=")
+    assert redact_witness(red) == red
+
+
+def test_triage_timeout_kind():
+    """fix-wave #71: timeout via result and/or compile_reason → kind=timeout."""
+    for rec in (
+        {
+            "regex_id": "c" * 32,
+            "encodable": False,
+            "compile_reason": "timeout",
+            "result": "timeout",
+            "dialect": "ecma",
+            "call_kind": "search",
+            "site": "z:1:0",
+            "pattern": "a+",
+        },
+        {
+            "regex_id": "d" * 32,
+            "encodable": False,
+            "compile_reason": "timeout",
+            "dialect": "pcre",
+            "call_kind": "search",
+            "site": "z:2:0",
+            "pattern": "a+",
+        },
+        {
+            "regex_id": "e" * 32,
+            "encodable": False,
+            "result": "timeout",
+            "dialect": "re2",
+            "call_kind": "search",
+            "site": "z:3:0",
+            "pattern": "a+",
+        },
+    ):
+        rows = triage_records_from_compiled([rec])
+        assert len(rows) == 1
+        assert rows[0]["reason_kind"] == "timeout"
+        jsonschema.validate(rows[0], triage_record_schema())
+
+
 def test_pr_dry_run_no_auto_publish(tmp_path: Path):
     art = write_pr_dry_run(
         tmp_path / "pr.json",

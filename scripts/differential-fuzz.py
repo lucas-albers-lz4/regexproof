@@ -39,6 +39,10 @@ import argparse
 import itertools
 import random
 import sys
+from pathlib import Path
+
+# Checkout bootstrap (match scripts/batch-scan.py) — fix-wave #71.
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 import z3
 

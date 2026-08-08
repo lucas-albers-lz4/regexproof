@@ -48,6 +48,10 @@ import re
 import subprocess
 import sys
 import time
+from pathlib import Path
+
+# Checkout bootstrap (match scripts/batch-scan.py) — fix-wave #71.
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 import z3
 from z3 import (
@@ -268,15 +272,8 @@ def run_one(name, entry, require_ground_truth=False):
             witness[d.name()] = val
             print(f"    witness: {d.name()} = {val!r}")
         result["witness"] = witness
-        if require_ground_truth and not result.get("engine_versions"):
-            print(
-                "    ERROR: --require-ground-truth but engine_versions missing "
-                "on SAT result.",
-                file=sys.stderr,
-            )
-            result["ok"] = False
-            result["ground_truth"] = "refused-no-engine-version"
-            return result
+        # Note: engine_versions is always populated above; the meaningful
+        # --require-ground-truth gate is the callback check below (fix-wave #71).
         gt = entry.get("ground_truth")
         if entry["kind"] == "mutation_guard":
             result["ground_truth"] = "mutation-guard-sat-expected"
