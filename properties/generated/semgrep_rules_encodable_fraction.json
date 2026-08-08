@@ -35,15 +35,17 @@
     "word-boundary": 48
   },
   "remeasure": {
-    "baseline_compiler_fingerprint": "c04a3e0148b3d58a",
-    "baseline_encodable": 5765,
-    "baseline_fraction": 0.6276,
+    "baseline_encodable": 2518,
+    "baseline_fraction": 0.2741,
     "flips": {
       "now_encodable": 0,
       "now_rejected": 0,
       "unchanged": 9186
     },
     "from": "frozen_inventory",
+    "prior_artifact_encodable": 2518,
+    "prior_artifact_fraction": 0.2741,
+    "prior_compiler_fingerprint": "c04a3e0148b3d58a",
     "samples": {
       "now_encodable": [],
       "now_rejected": []
@@ -53,5 +55,5 @@
   "schema_version": "1",
   "scope": "full_corpus",
   "unclassified_parse_errors": 0,
-  "wall_s": 2.247
+  "wall_s": 2.223
 }
