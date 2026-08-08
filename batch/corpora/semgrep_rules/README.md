@@ -5,9 +5,12 @@ Pinned: **semgrep/semgrep-rules** commit
 
 ## Materialize
 
+Fetch the **pinned commit** (required — do not use tip-of-default):
+
 ```bash
-git clone --depth 1 https://github.com/semgrep/semgrep-rules.git /tmp/semgrep-rules
-# optionally: git -C /tmp/semgrep-rules checkout 40b8c63f75dc7c22c8a77482d73bfb864b146f7e
+git clone https://github.com/semgrep/semgrep-rules.git /tmp/semgrep-rules
+git -C /tmp/semgrep-rules fetch --depth 1 origin 40b8c63f75dc7c22c8a77482d73bfb864b146f7e
+git -C /tmp/semgrep-rules checkout 40b8c63f75dc7c22c8a77482d73bfb864b146f7e
 ln -sfn /tmp/semgrep-rules batch/corpora/semgrep_rules/rules
 ```
 
