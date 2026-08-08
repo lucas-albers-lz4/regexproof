@@ -18,6 +18,23 @@ INTENT_TABLE: dict[str, frozenset[str]] = {
 }
 
 
+def _corpus_slug(rec: dict[str, Any]) -> str:
+    """Prefer short pilot corpus name; fall back to extractor repo slug."""
+    if rec.get("corpus_slug"):
+        return str(rec["corpus_slug"])
+    if rec.get("corpus") and "/" not in str(rec["corpus"]):
+        return str(rec["corpus"])
+    return str(rec.get("repo") or rec.get("corpus") or "")
+
+
+def _keyword_hit(hay: str, key: str) -> bool:
+    """Whole-token match only — avoids `url` inside `curl-auth-header`."""
+    # Split camelCase then tokenize on non-alnum so isHostname → hostname.
+    spaced = re.sub(r"([a-z0-9])([A-Z])", r"\1 \2", hay)
+    tokens = re.findall(r"[a-z0-9]+", spaced.lower())
+    return key.lower() in tokens
+
+
 def detect_usage_mismatches(records: list[dict[str, Any]]) -> list[dict[str, Any]]:
     """Anchored pattern used via search/test (or match when full-string implied)."""
     findings: list[dict[str, Any]] = []
@@ -33,7 +50,7 @@ def detect_usage_mismatches(records: list[dict[str, Any]]) -> list[dict[str, Any
                     "schema_version": "1",
                     "regex_id": rec["regex_id"],
                     "kind": "usage_mismatch",
-                    "corpus": rec.get("repo") or rec.get("corpus") or "",
+                    "corpus": _corpus_slug(rec),
                     "result": "finding",
                     "site": rec.get("site") or "",
                     "pattern": pattern,
@@ -52,7 +69,7 @@ def detect_usage_mismatches(records: list[dict[str, Any]]) -> list[dict[str, Any
                     "schema_version": "1",
                     "regex_id": rec["regex_id"],
                     "kind": "usage_mismatch",
-                    "corpus": rec.get("repo") or rec.get("corpus") or "",
+                    "corpus": _corpus_slug(rec),
                     "result": "finding",
                     "site": rec.get("site") or "",
                     "pattern": pattern,
@@ -80,13 +97,11 @@ def detect_intent_mismatches(records: list[dict[str, Any]]) -> list[dict[str, An
                 str(rec.get("site") or ""),
                 str(rec.get("name") or ""),
             ]
-        ).lower()
+        )
         pattern = rec.get("pattern") or ""
         for key, excluded in INTENT_TABLE.items():
-            if key not in hay.replace("_", "").replace("-", ""):
-                # also allow isEmail-style camel
-                if not re.search(rf"\b{re.escape(key)}\b", hay, re.I):
-                    continue
+            if not _keyword_hit(hay, key):
+                continue
             # If pattern clearly admits an excluded char via `.` or missing negation
             for ch in excluded:
                 if ch == "\n" and (".*" in pattern or "[\\s\\S]" in pattern or r"[\s\S]" in pattern):
@@ -110,7 +125,7 @@ def detect_intent_mismatches(records: list[dict[str, Any]]) -> list[dict[str, An
     uniq: dict[str, dict[str, Any]] = {}
     for f in findings:
         uniq[f"{f['regex_id']}:{f['detail']['keyword']}"] = f
-    return sorted(uniq.values(), key=lambda f: f["regex_id"])
+    return sorted(uniq.values(), key=lambda f: (f["regex_id"], f["detail"]["keyword"]))
 
 
 def _intent_finding(rec: dict[str, Any], keyword: str, bad_char: str) -> dict[str, Any]:
@@ -118,7 +133,7 @@ def _intent_finding(rec: dict[str, Any], keyword: str, bad_char: str) -> dict[st
         "schema_version": "1",
         "regex_id": rec["regex_id"],
         "kind": "intent_mismatch",
-        "corpus": rec.get("repo") or rec.get("corpus") or "",
+        "corpus": _corpus_slug(rec),
         "result": "finding",
         "site": rec.get("site") or "",
         "pattern": rec.get("pattern") or "",

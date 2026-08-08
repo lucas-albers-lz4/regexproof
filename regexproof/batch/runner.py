@@ -97,7 +97,9 @@ def _extract(corpus: str, meta: dict[str, Any]) -> list[dict[str, Any]]:
     raise ValueError(meta["extractor"])
 
 
-def _compile_all(records: list[dict[str, Any]], *, lift_inline: bool) -> list[dict[str, Any]]:
+def _compile_all(
+    records: list[dict[str, Any]], *, lift_inline: bool, corpus_slug: str
+) -> list[dict[str, Any]]:
     out = []
     for rec in records:
         pattern = rec["pattern"]
@@ -110,7 +112,8 @@ def _compile_all(records: list[dict[str, Any]], *, lift_inline: bool) -> list[di
                     **rec,
                     "encodable": False,
                     "compile_reason": rec["unencodable_reason"],
-                    "corpus": rec.get("repo"),
+                    "corpus": corpus_slug,
+                    "corpus_slug": corpus_slug,
                 }
             )
             continue
@@ -122,7 +125,8 @@ def _compile_all(records: list[dict[str, Any]], *, lift_inline: bool) -> list[di
                 "flags": flags,
                 "encodable": cr.encodable,
                 "compile_reason": cr.unencodable_reason,
-                "corpus": rec.get("repo"),
+                "corpus": corpus_slug,
+                "corpus_slug": corpus_slug,
             }
         )
     return out
@@ -138,7 +142,9 @@ def run_corpus(
     meta = CORPUS_MANIFESTS[corpus]
     inventory = load_inventory(meta["corpus_type"])
     records = _extract(corpus, meta)
-    compiled = _compile_all(records, lift_inline=bool(meta.get("lift_inline")))
+    compiled = _compile_all(
+        records, lift_inline=bool(meta.get("lift_inline")), corpus_slug=corpus
+    )
 
     triage = triage_records_from_compiled(compiled)
     write_triage_ndjson(out_dir.parent / "triage" / f"{corpus}.ndjson", triage)
@@ -199,7 +205,8 @@ def run_corpus(
 
     findings = tag_disclosure(findings, corpus=corpus)
     write_ndjson(out_dir / f"{corpus}.ndjson", findings)
-    write_markdown(out_dir / f"{corpus}.md", corpus=corpus, findings=findings)
+    # Keep Phase 3 shape-5 report at {corpus}.md; batch uses a distinct path.
+    write_markdown(out_dir / f"{corpus}_batch.md", corpus=corpus, findings=findings)
 
     dry = write_pr_dry_run(
         out_dir / f"{corpus}-pr-dry-run.json",

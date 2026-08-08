@@ -65,6 +65,55 @@ def test_intent_fixtures_both_classes():
         assert bool(hits) == case["expect_finding"], case["id"]
 
 
+def test_intent_no_substring_false_positive_on_curl():
+    hits = detect_intent_mismatches(
+        [
+            {
+                "regex_id": "c" * 32,
+                "pattern": ".*",
+                "context_snippet": "curl-auth-header",
+                "file": "gitleaks.toml",
+                "site": "x:1:0",
+                "name": "curl-auth-header",
+                "corpus_slug": "gitleaks",
+            }
+        ]
+    )
+    assert hits == []
+
+
+def test_markdown_section_headers_unique(tmp_path: Path):
+    from regexproof.batch.report import write_markdown
+
+    findings = [
+        {
+            "regex_id": "d" * 32,
+            "kind": "intent_mismatch",
+            "result": "finding",
+            "site": "a:1:0",
+            "pattern": ".*",
+            "ground_truth_status": "N/A",
+            "disclosure": None,
+            "detail": {"keyword": "email"},
+        },
+        {
+            "regex_id": "d" * 32,
+            "kind": "intent_mismatch",
+            "result": "finding",
+            "site": "a:1:0",
+            "pattern": ".*",
+            "ground_truth_status": "N/A",
+            "disclosure": None,
+            "detail": {"keyword": "url"},
+        },
+    ]
+    path = tmp_path / "out.md"
+    write_markdown(path, corpus="t", findings=findings)
+    text = path.read_text()
+    assert "## intent_mismatch:" + "d" * 32 + ":email" in text
+    assert "## intent_mismatch:" + "d" * 32 + ":url" in text
+
+
 def test_redaction_corpus():
     samples = json.loads((ROOT / "batch/fixtures/redaction/corpus.json").read_text())["samples"]
     for s in samples:
@@ -98,8 +147,12 @@ def test_batch_runner_smoke(tmp_path: Path):
             continue
         jsonschema.validate(rec, scanner_finding_schema())
     assert (out / "detect-secrets-pr-dry-run.json").is_file()
+    assert (out / "detect-secrets_batch.md").is_file()
+    assert not (out / "detect-secrets.md").exists()
     triage_path = out.parent / "triage" / "detect-secrets.ndjson"
     assert triage_path.is_file()
+    corpora = {json.loads(line)["corpus"] for line in ndjson}
+    assert corpora == {"detect-secrets"}
 
 
 def test_coreruleset_measurement(tmp_path: Path):

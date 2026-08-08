@@ -6,7 +6,7 @@
     "python": "3.14.6"
   },
   "extracted": 212,
-  "findings": 108,
+  "findings": 106,
   "inventory_questions": 4,
   "join_regex_ids": 104,
   "schema_version": "1",

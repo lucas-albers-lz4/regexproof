@@ -47,10 +47,23 @@ def write_markdown(path: Path, *, corpus: str, findings: list[dict[str, Any]]) -
         f"# {corpus} batch findings",
         "",
     ]
-    for f in sorted(findings, key=lambda r: r.get("regex_id") or ""):
+    for f in sorted(
+        findings,
+        key=lambda r: (
+            r.get("regex_id") or "",
+            r.get("kind") or "",
+            (r.get("detail") or {}).get("keyword") or "",
+            (r.get("detail") or {}).get("question_id") or "",
+        ),
+    ):
+        detail = f.get("detail") or {}
+        suffix = detail.get("keyword") or detail.get("question_id") or detail.get("call_kind") or ""
+        heading = f"## {f.get('kind')}:{f.get('regex_id')}"
+        if suffix:
+            heading = f"{heading}:{suffix}"
         lines.extend(
             [
-                f"## {f.get('kind')}:{f.get('regex_id')}",
+                heading,
                 "",
                 f"- result: `{f.get('result')}`",
                 f"- site: `{f.get('site')}`",
@@ -63,7 +76,7 @@ def write_markdown(path: Path, *, corpus: str, findings: list[dict[str, Any]]) -
                 "",
                 "### Context",
                 "",
-                f"```json\n{json.dumps(f.get('detail') or {}, sort_keys=True)}\n```",
+                f"```json\n{json.dumps(detail, sort_keys=True)}\n```",
                 "",
                 "### Witness",
                 "",
