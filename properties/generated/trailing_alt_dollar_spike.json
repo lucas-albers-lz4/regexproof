@@ -1,0 +1,1083 @@
+{
+  "call_kind_matrix": [
+    {
+      "call_kind": "search",
+      "dialect": "re2",
+      "mirror_on_witness": true,
+      "py_re_on_witness": true,
+      "result": "sat",
+      "wall_ms": 9.82,
+      "witness": "Dfoo"
+    },
+    {
+      "call_kind": "search",
+      "dialect": "py_re",
+      "mirror_on_witness": true,
+      "py_re_on_witness": true,
+      "result": "sat",
+      "wall_ms": 3.13,
+      "witness": "foo"
+    },
+    {
+      "call_kind": "exec",
+      "dialect": "re2",
+      "mirror_on_witness": true,
+      "py_re_on_witness": true,
+      "result": "sat",
+      "wall_ms": 7.47,
+      "witness": "Dfoo"
+    },
+    {
+      "call_kind": "exec",
+      "dialect": "py_re",
+      "mirror_on_witness": true,
+      "py_re_on_witness": true,
+      "result": "sat",
+      "wall_ms": 2.9,
+      "witness": "foo"
+    },
+    {
+      "call_kind": "match",
+      "dialect": "re2",
+      "mirror_on_witness": true,
+      "py_re_on_witness": true,
+      "result": "sat",
+      "wall_ms": 1.65,
+      "witness": "foobar"
+    },
+    {
+      "call_kind": "match",
+      "dialect": "py_re",
+      "mirror_on_witness": true,
+      "py_re_on_witness": true,
+      "result": "sat",
+      "wall_ms": 8.7,
+      "witness": "foo"
+    },
+    {
+      "call_kind": "fullmatch",
+      "dialect": "re2",
+      "mirror_on_witness": true,
+      "py_re_on_witness": true,
+      "result": "sat",
+      "wall_ms": 1.34,
+      "witness": "foobar"
+    },
+    {
+      "call_kind": "fullmatch",
+      "dialect": "py_re",
+      "mirror_on_witness": true,
+      "py_re_on_witness": true,
+      "result": "sat",
+      "wall_ms": 3.43,
+      "witness": "foo"
+    }
+  ],
+  "decision": "GO",
+  "decision_note": "E1 Or(search(X\u00b7R), search(X$)) is sound (membership vs re2/py_re). Case-split sat-find <5000ms on the tractability cohort (toys, ids_rules, shape-reduced); monolithic Or(xr,xd) can TIMEOUT even when each branch is fine \u2014 P2 property queries should case-split. Full gitleaks paa samples (n=8): split-encodable + instant membership; corpus sat-find skipped (large {{n}}/{{0,50}}). \\b\u2026$ suffix uses wb_leading_suffix_mirror (stock WordBounded+$ over-approx). P2 lowers the pattern-final class for encodability recovery. call_kind: search/exec use E1; match/fullmatch wraps differ. Controls without pattern-final |$) stay rejected.",
+  "domain": "case-split sat-find for Or branches; full kw/\\b corpus sat-find deferred",
+  "e2_len_bound": 256,
+  "encoding_chosen": "E1",
+  "go_wall_ms": 5000,
+  "issues": {
+    "canonical": 81,
+    "corpus": 84,
+    "docs": 85,
+    "implement": 87,
+    "spike": 86,
+    "umbrella": 82,
+    "validate": 83
+  },
+  "paa_gitleaks_count": 132,
+  "results": [
+    {
+      "bucket": "toy",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encoding": "E1",
+      "flags": "",
+      "id": "toy-a-dollar",
+      "max_membership_ms": 0.14,
+      "pattern": "(?:a|$)",
+      "result": "sat",
+      "sat_find": {
+        "note": "case-split-sat-find",
+        "result": "sat",
+        "wall_ms": 1.33,
+        "witness": "!0!a!1!",
+        "xd_sat_find": {
+          "note": "empty-x-universal",
+          "result": "sat",
+          "wall_ms": 0,
+          "witness": ""
+        },
+        "xr_sat_find": {
+          "result": "sat",
+          "wall_ms": 1.33,
+          "witness": "!0!a!1!"
+        }
+      },
+      "soundness": {
+        "checked": 5,
+        "max_membership_ms": 0.14,
+        "membership_walls_ms": [
+          0.12,
+          0.11,
+          0.14,
+          0.14,
+          0.14
+        ],
+        "mismatches": []
+      },
+      "split": {
+        "empty_x": true,
+        "x_bare": "",
+        "x_dollar": "",
+        "xr": "(?:a)"
+      },
+      "wall_ms": 1.33,
+      "witness": "!0!a!1!",
+      "x_dollar_encoding": "compile_x$"
+    },
+    {
+      "bucket": "toy",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encoding": "E2",
+      "flags": "",
+      "id": "toy-a-dollar",
+      "len_bound": 256,
+      "pattern": "(?:a|$)",
+      "result": "sat",
+      "sat_find": {
+        "result": "sat",
+        "wall_ms": 0.82,
+        "witness": "a"
+      },
+      "split": {
+        "empty_x": true,
+        "x_bare": "",
+        "x_dollar": "",
+        "xr": "(?:a)"
+      },
+      "wall_ms": 0.82,
+      "witness": "a"
+    },
+    {
+      "bucket": "toy",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encoding": "E1",
+      "flags": "",
+      "id": "toy-foo-bar",
+      "max_membership_ms": 0.18,
+      "pattern": "foo(?:bar|$)",
+      "result": "sat",
+      "sat_find": {
+        "note": "case-split-sat-find",
+        "result": "sat",
+        "wall_ms": 1.41,
+        "witness": "!0!foobar!1!",
+        "xd_sat_find": {
+          "result": "sat",
+          "wall_ms": 0.68,
+          "witness": "foo"
+        },
+        "xr_sat_find": {
+          "result": "sat",
+          "wall_ms": 0.73,
+          "witness": "!0!foobar!1!"
+        }
+      },
+      "soundness": {
+        "checked": 6,
+        "max_membership_ms": 0.18,
+        "membership_walls_ms": [
+          0.18,
+          0.15,
+          0.17,
+          0.16,
+          0.18,
+          0.15
+        ],
+        "mismatches": []
+      },
+      "split": {
+        "empty_x": false,
+        "x_bare": "foo",
+        "x_dollar": "foo$",
+        "xr": "foo(?:bar)"
+      },
+      "wall_ms": 1.41,
+      "witness": "!0!foobar!1!",
+      "x_dollar_encoding": "compile_x$"
+    },
+    {
+      "bucket": "toy",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encoding": "E2",
+      "flags": "",
+      "id": "toy-foo-bar",
+      "len_bound": 256,
+      "pattern": "foo(?:bar|$)",
+      "result": "sat",
+      "sat_find": {
+        "result": "sat",
+        "wall_ms": 5.48,
+        "witness": "foo"
+      },
+      "split": {
+        "empty_x": false,
+        "x_bare": "foo",
+        "x_dollar": "foo$",
+        "xr": "foo(?:bar)"
+      },
+      "wall_ms": 5.48,
+      "witness": "foo"
+    },
+    {
+      "bucket": "toy",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encoding": "E1",
+      "flags": "",
+      "id": "toy-x-ab",
+      "max_membership_ms": 0.2,
+      "pattern": "x(?:a|b|$)",
+      "result": "sat",
+      "sat_find": {
+        "note": "case-split-sat-find",
+        "result": "sat",
+        "wall_ms": 2.32,
+        "witness": "xa",
+        "xd_sat_find": {
+          "result": "sat",
+          "wall_ms": 0.54,
+          "witness": "x"
+        },
+        "xr_sat_find": {
+          "result": "sat",
+          "wall_ms": 1.78,
+          "witness": "xa"
+        }
+      },
+      "soundness": {
+        "checked": 5,
+        "max_membership_ms": 0.2,
+        "membership_walls_ms": [
+          0.14,
+          0.19,
+          0.19,
+          0.2,
+          0.15
+        ],
+        "mismatches": []
+      },
+      "split": {
+        "empty_x": false,
+        "x_bare": "x",
+        "x_dollar": "x$",
+        "xr": "x(?:a|b)"
+      },
+      "wall_ms": 2.32,
+      "witness": "xa",
+      "x_dollar_encoding": "compile_x$"
+    },
+    {
+      "bucket": "toy",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encoding": "E2",
+      "flags": "",
+      "id": "toy-x-ab",
+      "len_bound": 256,
+      "pattern": "x(?:a|b|$)",
+      "result": "sat",
+      "sat_find": {
+        "result": "sat",
+        "wall_ms": 1.49,
+        "witness": "x"
+      },
+      "split": {
+        "empty_x": false,
+        "x_bare": "x",
+        "x_dollar": "x$",
+        "xr": "x(?:a|b)"
+      },
+      "wall_ms": 1.49,
+      "witness": "x"
+    },
+    {
+      "bucket": "control-reject",
+      "call_kind": "search",
+      "compile_reason": "internal-anchor",
+      "dialect": "re2",
+      "encodable_today": false,
+      "encoding": null,
+      "flags": "",
+      "id": "toy-mid-control",
+      "ok_expect_no_split": true,
+      "pattern": "a(?:$|b)c",
+      "result": "no-split",
+      "split": null,
+      "wall_ms": 0
+    },
+    {
+      "bucket": "control-reject",
+      "call_kind": "search",
+      "compile_reason": "per-alternative-anchor",
+      "dialect": "re2",
+      "encodable_today": false,
+      "encoding": null,
+      "flags": "",
+      "id": "toy-caret-branch",
+      "ok_expect_no_split": true,
+      "pattern": "(?:^|a)",
+      "result": "no-split",
+      "split": null,
+      "wall_ms": 0
+    },
+    {
+      "bucket": "reduced",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encoding": "E1",
+      "flags": "",
+      "id": "reduced-adafruit",
+      "max_membership_ms": 2.92,
+      "pattern": "(?:adafruit)=([a-z0-9_-]{32})(?:[\\x60'\\\"\\s;]|$)",
+      "result": "sat",
+      "sat_find": {
+        "note": "case-split-sat-find",
+        "result": "sat",
+        "wall_ms": 306.32,
+        "witness": "adafruit=cist4g22dpaeqgvfib4dhka57doylbkt`",
+        "xd_sat_find": {
+          "result": "sat",
+          "wall_ms": 114.75,
+          "witness": "adafruit=7mzc8nouvi8jlb1hu-myy9i78pt2m0kt"
+        },
+        "xr_sat_find": {
+          "result": "sat",
+          "wall_ms": 191.57,
+          "witness": "adafruit=cist4g22dpaeqgvfib4dhka57doylbkt`"
+        }
+      },
+      "soundness": {
+        "checked": 6,
+        "max_membership_ms": 2.92,
+        "membership_walls_ms": [
+          2.92,
+          2.16,
+          2.13,
+          2.49,
+          1.31,
+          0.73
+        ],
+        "mismatches": []
+      },
+      "split": {
+        "empty_x": false,
+        "x_bare": "(?:adafruit)=([a-z0-9_-]{32})",
+        "x_dollar": "(?:adafruit)=([a-z0-9_-]{32})$",
+        "xr": "(?:adafruit)=([a-z0-9_-]{32})(?:[\\x60'\\\"\\s;])"
+      },
+      "wall_ms": 306.32,
+      "witness": "adafruit=cist4g22dpaeqgvfib4dhka57doylbkt`",
+      "x_dollar_encoding": "compile_x$"
+    },
+    {
+      "bucket": "reduced",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encoding": "E2",
+      "flags": "",
+      "id": "reduced-adafruit",
+      "len_bound": 256,
+      "pattern": "(?:adafruit)=([a-z0-9_-]{32})(?:[\\x60'\\\"\\s;]|$)",
+      "result": "sat",
+      "sat_find": {
+        "result": "sat",
+        "wall_ms": 114.49,
+        "witness": "adafruit=ssg9oqau2fjcqe3yh078z_s2n6tkgj-0"
+      },
+      "split": {
+        "empty_x": false,
+        "x_bare": "(?:adafruit)=([a-z0-9_-]{32})",
+        "x_dollar": "(?:adafruit)=([a-z0-9_-]{32})$",
+        "xr": "(?:adafruit)=([a-z0-9_-]{32})(?:[\\x60'\\\"\\s;])"
+      },
+      "wall_ms": 114.49,
+      "witness": "adafruit=ssg9oqau2fjcqe3yh078z_s2n6tkgj-0"
+    },
+    {
+      "bucket": "reduced",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encoding": "E1",
+      "flags": "",
+      "id": "reduced-delim",
+      "max_membership_ms": 1.57,
+      "pattern": "secret([a-z0-9]{16})(?:[\\x60'\\\"\\s;]|\\\\[nr]|$)",
+      "result": "sat",
+      "sat_find": {
+        "note": "case-split-sat-find",
+        "result": "sat",
+        "wall_ms": 125.2,
+        "witness": "Asecretwnezfivtltu22jyw\"",
+        "xd_sat_find": {
+          "result": "sat",
+          "wall_ms": 58.31,
+          "witness": "secretu4la3xbkzawzav34"
+        },
+        "xr_sat_find": {
+          "result": "sat",
+          "wall_ms": 66.89,
+          "witness": "Asecretwnezfivtltu22jyw\""
+        }
+      },
+      "soundness": {
+        "checked": 5,
+        "max_membership_ms": 1.57,
+        "membership_walls_ms": [
+          1.57,
+          1.34,
+          1.22,
+          0.71,
+          0.61
+        ],
+        "mismatches": []
+      },
+      "split": {
+        "empty_x": false,
+        "x_bare": "secret([a-z0-9]{16})",
+        "x_dollar": "secret([a-z0-9]{16})$",
+        "xr": "secret([a-z0-9]{16})(?:[\\x60'\\\"\\s;]|\\\\[nr])"
+      },
+      "wall_ms": 125.2,
+      "witness": "Asecretwnezfivtltu22jyw\"",
+      "x_dollar_encoding": "compile_x$"
+    },
+    {
+      "bucket": "reduced",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encoding": "E2",
+      "flags": "",
+      "id": "reduced-delim",
+      "len_bound": 256,
+      "pattern": "secret([a-z0-9]{16})(?:[\\x60'\\\"\\s;]|\\\\[nr]|$)",
+      "result": "sat",
+      "sat_find": {
+        "result": "sat",
+        "wall_ms": 44.71,
+        "witness": "secretgv7idr2mpou859zr\f"
+      },
+      "split": {
+        "empty_x": false,
+        "x_bare": "secret([a-z0-9]{16})",
+        "x_dollar": "secret([a-z0-9]{16})$",
+        "xr": "secret([a-z0-9]{16})(?:[\\x60'\\\"\\s;]|\\\\[nr])"
+      },
+      "wall_ms": 44.71,
+      "witness": "secretgv7idr2mpou859zr\f"
+    },
+    {
+      "bucket": "reduced",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encoding": "E1",
+      "flags": "",
+      "id": "reduced-b-short",
+      "max_membership_ms": 1.56,
+      "pattern": "\\b(TOK[A-Z0-9]{8})(?:[\\x60'\\\"\\s;]|$)",
+      "result": "sat",
+      "sat_find": {
+        "note": "case-split-sat-find",
+        "result": "sat",
+        "wall_ms": 1022.27,
+        "witness": "TOKOTORRO9G\n\\]_ab",
+        "xd_sat_find": {
+          "result": "sat",
+          "wall_ms": 794.66,
+          "witness": "TOKIBO7W0FK"
+        },
+        "xr_sat_find": {
+          "result": "sat",
+          "wall_ms": 227.61,
+          "witness": "TOKOTORRO9G\n\\]_ab"
+        }
+      },
+      "soundness": {
+        "checked": 6,
+        "max_membership_ms": 1.56,
+        "membership_walls_ms": [
+          1.32,
+          1.56,
+          1.43,
+          0.81,
+          1.02,
+          0.8
+        ],
+        "mismatches": []
+      },
+      "split": {
+        "empty_x": false,
+        "x_bare": "\\b(TOK[A-Z0-9]{8})",
+        "x_dollar": "\\b(TOK[A-Z0-9]{8})$",
+        "xr": "\\b(TOK[A-Z0-9]{8})(?:[\\x60'\\\"\\s;])"
+      },
+      "wall_ms": 1022.27,
+      "witness": "TOKOTORRO9G\n\\]_ab",
+      "x_dollar_encoding": "wb_leading_suffix_mirror"
+    },
+    {
+      "bucket": "reduced",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encoding": "E2",
+      "flags": "",
+      "id": "reduced-b-short",
+      "len_bound": 256,
+      "pattern": "\\b(TOK[A-Z0-9]{8})(?:[\\x60'\\\"\\s;]|$)",
+      "result": "sat",
+      "sat_find": {
+        "result": "sat",
+        "wall_ms": 18.11,
+        "witness": "[TOKW8V008E3"
+      },
+      "split": {
+        "empty_x": false,
+        "x_bare": "\\b(TOK[A-Z0-9]{8})",
+        "x_dollar": "\\b(TOK[A-Z0-9]{8})$",
+        "xr": "\\b(TOK[A-Z0-9]{8})(?:[\\x60'\\\"\\s;])"
+      },
+      "wall_ms": 18.11,
+      "witness": "[TOKW8V008E3"
+    },
+    {
+      "bucket": "gitleaks-kw",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encoding": "E1",
+      "flags": "",
+      "id": "ac8604fcd5ba993051be817dd6147a21",
+      "max_membership_ms": 2.95,
+      "pattern": "[\\w.-]{0,50}?(?:adafruit)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}([a-z0-9_-]{32})(?:[\\x60'\"\\s;]|\\\\[nr]|$)",
+      "result": "skipped-corpus-sat-find",
+      "sat_find": {
+        "result": "skipped-corpus-sat-find",
+        "wall_ms": 0,
+        "witness": null
+      },
+      "soundness": {
+        "checked": 5,
+        "max_membership_ms": 2.95,
+        "membership_walls_ms": [
+          2.95,
+          2.3,
+          2.3,
+          1.52,
+          1.03
+        ],
+        "mismatches": []
+      },
+      "split": {
+        "empty_x": false,
+        "x_bare": "[\\w.-]{0,50}?(?:adafruit)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}([a-z0-9_-]{32})",
+        "x_dollar": "[\\w.-]{0,50}?(?:adafruit)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}([a-z0-9_-]{32})$",
+        "xr": "[\\w.-]{0,50}?(?:adafruit)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}([a-z0-9_-]{32})(?:[\\x60'\"\\s;]|\\\\[nr])"
+      },
+      "wall_ms": 0,
+      "witness": null,
+      "x_dollar_encoding": "compile_x$"
+    },
+    {
+      "bucket": "gitleaks-kw",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encoding": "E1",
+      "flags": "",
+      "id": "41131f3939b610cc8c15586511750818",
+      "max_membership_ms": 0.95,
+      "pattern": "[\\w.-]{0,50}?(?:adobe)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}([a-f0-9]{32})(?:[\\x60'\"\\s;]|\\\\[nr]|$)",
+      "result": "skipped-corpus-sat-find",
+      "sat_find": {
+        "result": "skipped-corpus-sat-find",
+        "wall_ms": 0,
+        "witness": null
+      },
+      "soundness": {
+        "checked": 4,
+        "max_membership_ms": 0.95,
+        "membership_walls_ms": [
+          0.73,
+          0.79,
+          0.9,
+          0.95
+        ],
+        "mismatches": []
+      },
+      "split": {
+        "empty_x": false,
+        "x_bare": "[\\w.-]{0,50}?(?:adobe)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}([a-f0-9]{32})",
+        "x_dollar": "[\\w.-]{0,50}?(?:adobe)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}([a-f0-9]{32})$",
+        "xr": "[\\w.-]{0,50}?(?:adobe)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}([a-f0-9]{32})(?:[\\x60'\"\\s;]|\\\\[nr])"
+      },
+      "wall_ms": 0,
+      "witness": null,
+      "x_dollar_encoding": "compile_x$"
+    },
+    {
+      "bucket": "gitleaks-kw",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encoding": "E1",
+      "flags": "",
+      "id": "7e1b515f4a13cba11c0609302fa8dff1",
+      "max_membership_ms": 1.11,
+      "pattern": "[\\w.-]{0,50}?(?:airtable)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}([a-z0-9]{17})(?:[\\x60'\"\\s;]|\\\\[nr]|$)",
+      "result": "skipped-corpus-sat-find",
+      "sat_find": {
+        "result": "skipped-corpus-sat-find",
+        "wall_ms": 0,
+        "witness": null
+      },
+      "soundness": {
+        "checked": 4,
+        "max_membership_ms": 1.11,
+        "membership_walls_ms": [
+          0.95,
+          0.88,
+          1.0,
+          1.11
+        ],
+        "mismatches": []
+      },
+      "split": {
+        "empty_x": false,
+        "x_bare": "[\\w.-]{0,50}?(?:airtable)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}([a-z0-9]{17})",
+        "x_dollar": "[\\w.-]{0,50}?(?:airtable)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}([a-z0-9]{17})$",
+        "xr": "[\\w.-]{0,50}?(?:airtable)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}([a-z0-9]{17})(?:[\\x60'\"\\s;]|\\\\[nr])"
+      },
+      "wall_ms": 0,
+      "witness": null,
+      "x_dollar_encoding": "compile_x$"
+    },
+    {
+      "bucket": "gitleaks-kw",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encoding": "E1",
+      "flags": "",
+      "id": "3d5d72fe4899f145402ee93743f3552f",
+      "max_membership_ms": 1.15,
+      "pattern": "[\\w.-]{0,50}?(?:algolia)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}([a-z0-9]{32})(?:[\\x60'\"\\s;]|\\\\[nr]|$)",
+      "result": "skipped-corpus-sat-find",
+      "sat_find": {
+        "result": "skipped-corpus-sat-find",
+        "wall_ms": 0,
+        "witness": null
+      },
+      "soundness": {
+        "checked": 4,
+        "max_membership_ms": 1.15,
+        "membership_walls_ms": [
+          0.89,
+          0.94,
+          1.02,
+          1.15
+        ],
+        "mismatches": []
+      },
+      "split": {
+        "empty_x": false,
+        "x_bare": "[\\w.-]{0,50}?(?:algolia)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}([a-z0-9]{32})",
+        "x_dollar": "[\\w.-]{0,50}?(?:algolia)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}([a-z0-9]{32})$",
+        "xr": "[\\w.-]{0,50}?(?:algolia)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}([a-z0-9]{32})(?:[\\x60'\"\\s;]|\\\\[nr])"
+      },
+      "wall_ms": 0,
+      "witness": null,
+      "x_dollar_encoding": "compile_x$"
+    },
+    {
+      "bucket": "gitleaks-kw",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encoding": "E1",
+      "flags": "",
+      "id": "af05f24163c0f84869a1596def89d1b8",
+      "max_membership_ms": 1.04,
+      "pattern": "[\\w.-]{0,50}?(?:alibaba)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}([a-z0-9]{30})(?:[\\x60'\"\\s;]|\\\\[nr]|$)",
+      "result": "skipped-corpus-sat-find",
+      "sat_find": {
+        "result": "skipped-corpus-sat-find",
+        "wall_ms": 0,
+        "witness": null
+      },
+      "soundness": {
+        "checked": 4,
+        "max_membership_ms": 1.04,
+        "membership_walls_ms": [
+          0.83,
+          0.97,
+          0.96,
+          1.04
+        ],
+        "mismatches": []
+      },
+      "split": {
+        "empty_x": false,
+        "x_bare": "[\\w.-]{0,50}?(?:alibaba)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}([a-z0-9]{30})",
+        "x_dollar": "[\\w.-]{0,50}?(?:alibaba)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}([a-z0-9]{30})$",
+        "xr": "[\\w.-]{0,50}?(?:alibaba)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}([a-z0-9]{30})(?:[\\x60'\"\\s;]|\\\\[nr])"
+      },
+      "wall_ms": 0,
+      "witness": null,
+      "x_dollar_encoding": "compile_x$"
+    },
+    {
+      "bucket": "gitleaks-b",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encoding": "E1",
+      "flags": "",
+      "id": "a6e8f5ff3888ba5b9f0d01e84646c268",
+      "max_membership_ms": 1.44,
+      "pattern": "\\b(sk-ant-admin01-[a-zA-Z0-9_\\-]{93}AA)(?:[\\x60'\"\\s;]|\\\\[nr]|$)",
+      "result": "skipped-corpus-sat-find",
+      "sat_find": {
+        "result": "skipped-corpus-sat-find",
+        "wall_ms": 0,
+        "witness": null
+      },
+      "soundness": {
+        "checked": 3,
+        "max_membership_ms": 1.44,
+        "membership_walls_ms": [
+          1.35,
+          1.36,
+          1.44
+        ],
+        "mismatches": []
+      },
+      "split": {
+        "empty_x": false,
+        "x_bare": "\\b(sk-ant-admin01-[a-zA-Z0-9_\\-]{93}AA)",
+        "x_dollar": "\\b(sk-ant-admin01-[a-zA-Z0-9_\\-]{93}AA)$",
+        "xr": "\\b(sk-ant-admin01-[a-zA-Z0-9_\\-]{93}AA)(?:[\\x60'\"\\s;]|\\\\[nr])"
+      },
+      "wall_ms": 0,
+      "witness": null,
+      "x_dollar_encoding": "wb_leading_suffix_mirror"
+    },
+    {
+      "bucket": "gitleaks-b",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encoding": "E1",
+      "flags": "",
+      "id": "7659754f2cb2ecf3548ffbae58f2613d",
+      "max_membership_ms": 1.43,
+      "pattern": "\\b(sk-ant-api03-[a-zA-Z0-9_\\-]{93}AA)(?:[\\x60'\"\\s;]|\\\\[nr]|$)",
+      "result": "skipped-corpus-sat-find",
+      "sat_find": {
+        "result": "skipped-corpus-sat-find",
+        "wall_ms": 0,
+        "witness": null
+      },
+      "soundness": {
+        "checked": 3,
+        "max_membership_ms": 1.43,
+        "membership_walls_ms": [
+          1.32,
+          1.33,
+          1.43
+        ],
+        "mismatches": []
+      },
+      "split": {
+        "empty_x": false,
+        "x_bare": "\\b(sk-ant-api03-[a-zA-Z0-9_\\-]{93}AA)",
+        "x_dollar": "\\b(sk-ant-api03-[a-zA-Z0-9_\\-]{93}AA)$",
+        "xr": "\\b(sk-ant-api03-[a-zA-Z0-9_\\-]{93}AA)(?:[\\x60'\"\\s;]|\\\\[nr])"
+      },
+      "wall_ms": 0,
+      "witness": null,
+      "x_dollar_encoding": "wb_leading_suffix_mirror"
+    },
+    {
+      "bucket": "gitleaks-b",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encoding": "E1",
+      "flags": "",
+      "id": "07bed9c9f7fe8fb30cf9f5dba9cda323",
+      "max_membership_ms": 1.07,
+      "pattern": "\\b(ABSK[A-Za-z0-9+/]{109,269}={0,2})(?:[\\x60'\"\\s;]|\\\\[nr]|$)",
+      "result": "skipped-corpus-sat-find",
+      "sat_find": {
+        "result": "skipped-corpus-sat-find",
+        "wall_ms": 0,
+        "witness": null
+      },
+      "soundness": {
+        "checked": 3,
+        "max_membership_ms": 1.07,
+        "membership_walls_ms": [
+          1.03,
+          1.01,
+          1.07
+        ],
+        "mismatches": []
+      },
+      "split": {
+        "empty_x": false,
+        "x_bare": "\\b(ABSK[A-Za-z0-9+/]{109,269}={0,2})",
+        "x_dollar": "\\b(ABSK[A-Za-z0-9+/]{109,269}={0,2})$",
+        "xr": "\\b(ABSK[A-Za-z0-9+/]{109,269}={0,2})(?:[\\x60'\"\\s;]|\\\\[nr])"
+      },
+      "wall_ms": 0,
+      "witness": null,
+      "x_dollar_encoding": "wb_leading_suffix_mirror"
+    },
+    {
+      "bucket": "gitleaks-other",
+      "call_kind": "search",
+      "compile_reason": "per-alternative-anchor",
+      "dialect": "re2",
+      "encodable_today": false,
+      "encoding": null,
+      "flags": "",
+      "id": "1c97a66dcdc9e6d11a16e998a7fa8a92",
+      "ok_expect_no_split": false,
+      "pattern": "(?:^|[\\\\'\"\\x60\\s>=:(,)])([a-zA-Z0-9_~.]{3}\\dQ~[a-zA-Z0-9_~.-]{31,34})(?:$|[\\\\'\"\\x60\\s<),])",
+      "result": "no-split",
+      "split": null,
+      "wall_ms": 0
+    },
+    {
+      "bucket": "ids_rules",
+      "call_kind": "search",
+      "dialect": "pcre",
+      "encoding": "E1",
+      "flags": "",
+      "id": "ids-0-amp",
+      "max_membership_ms": 0.24,
+      "pattern": "^0+(?:&|$)",
+      "result": "sat",
+      "sat_find": {
+        "note": "case-split-sat-find",
+        "result": "sat",
+        "wall_ms": 2.88,
+        "witness": "0&",
+        "xd_sat_find": {
+          "result": "sat",
+          "wall_ms": 1.08,
+          "witness": "0"
+        },
+        "xr_sat_find": {
+          "result": "sat",
+          "wall_ms": 1.8,
+          "witness": "0&"
+        }
+      },
+      "soundness": {
+        "checked": 5,
+        "max_membership_ms": 0.24,
+        "membership_walls_ms": [
+          0.22,
+          0.21,
+          0.24,
+          0.14,
+          0.18
+        ],
+        "mismatches": []
+      },
+      "split": {
+        "empty_x": false,
+        "x_bare": "^0+",
+        "x_dollar": "^0+$",
+        "xr": "^0+(?:&)"
+      },
+      "wall_ms": 2.88,
+      "witness": "0&",
+      "x_dollar_encoding": "compile_x$"
+    },
+    {
+      "bucket": "ids_rules",
+      "call_kind": "search",
+      "dialect": "pcre",
+      "encoding": "E2",
+      "flags": "",
+      "id": "ids-0-amp",
+      "len_bound": 256,
+      "pattern": "^0+(?:&|$)",
+      "result": "sat",
+      "sat_find": {
+        "result": "sat",
+        "wall_ms": 2.47,
+        "witness": "0"
+      },
+      "split": {
+        "empty_x": false,
+        "x_bare": "^0+",
+        "x_dollar": "^0+$",
+        "xr": "^0+(?:&)"
+      },
+      "wall_ms": 2.47,
+      "witness": "0"
+    },
+    {
+      "bucket": "ids_rules",
+      "call_kind": "search",
+      "dialect": "pcre",
+      "encoding": "E1",
+      "flags": "i",
+      "id": "ids-hta",
+      "max_membership_ms": 0.36,
+      "pattern": "\\.hta(?:[?&]|$)",
+      "result": "sat",
+      "sat_find": {
+        "note": "case-split-sat-find",
+        "result": "sat",
+        "wall_ms": 7.93,
+        "witness": ".hTA?",
+        "xd_sat_find": {
+          "result": "sat",
+          "wall_ms": 3.23,
+          "witness": "B.HTa"
+        },
+        "xr_sat_find": {
+          "result": "sat",
+          "wall_ms": 4.7,
+          "witness": ".hTA?"
+        }
+      },
+      "soundness": {
+        "checked": 5,
+        "max_membership_ms": 0.36,
+        "membership_walls_ms": [
+          0.36,
+          0.33,
+          0.34,
+          0.21,
+          0.23
+        ],
+        "mismatches": []
+      },
+      "split": {
+        "empty_x": false,
+        "x_bare": "\\.hta",
+        "x_dollar": "\\.hta$",
+        "xr": "\\.hta(?:[?&])"
+      },
+      "wall_ms": 7.93,
+      "witness": ".hTA?",
+      "x_dollar_encoding": "compile_x$"
+    },
+    {
+      "bucket": "ids_rules",
+      "call_kind": "search",
+      "dialect": "pcre",
+      "encoding": "E2",
+      "flags": "i",
+      "id": "ids-hta",
+      "len_bound": 256,
+      "pattern": "\\.hta(?:[?&]|$)",
+      "result": "sat",
+      "sat_find": {
+        "result": "sat",
+        "wall_ms": 3.96,
+        "witness": ".hta&"
+      },
+      "split": {
+        "empty_x": false,
+        "x_bare": "\\.hta",
+        "x_dollar": "\\.hta$",
+        "xr": "\\.hta(?:[?&])"
+      },
+      "wall_ms": 3.96,
+      "witness": ".hta&"
+    },
+    {
+      "bucket": "ids_rules",
+      "call_kind": "search",
+      "dialect": "pcre",
+      "encoding": "E1",
+      "flags": "",
+      "id": "ids-hex64",
+      "max_membership_ms": 1.11,
+      "pattern": "^[a-f0-9]{64}(?:&|$)",
+      "result": "sat",
+      "sat_find": {
+        "note": "case-split-sat-find",
+        "result": "sat",
+        "wall_ms": 1445.57,
+        "witness": "540ac3274ef3410bf77cf7386374415bd32dcf929844a9d4af2d939288a7fe87&",
+        "xd_sat_find": {
+          "result": "sat",
+          "wall_ms": 755.54,
+          "witness": "e315a16adf4ff7da90454bb21b4909fbc79df9a8876961d0cbd939f5c0d22833\n"
+        },
+        "xr_sat_find": {
+          "result": "sat",
+          "wall_ms": 690.03,
+          "witness": "540ac3274ef3410bf77cf7386374415bd32dcf929844a9d4af2d939288a7fe87&"
+        }
+      },
+      "soundness": {
+        "checked": 5,
+        "max_membership_ms": 1.11,
+        "membership_walls_ms": [
+          1.11,
+          0.77,
+          0.83,
+          0.73,
+          0.57
+        ],
+        "mismatches": []
+      },
+      "split": {
+        "empty_x": false,
+        "x_bare": "^[a-f0-9]{64}",
+        "x_dollar": "^[a-f0-9]{64}$",
+        "xr": "^[a-f0-9]{64}(?:&)"
+      },
+      "wall_ms": 1445.57,
+      "witness": "540ac3274ef3410bf77cf7386374415bd32dcf929844a9d4af2d939288a7fe87&",
+      "x_dollar_encoding": "compile_x$"
+    },
+    {
+      "bucket": "ids_rules",
+      "call_kind": "search",
+      "dialect": "pcre",
+      "encoding": "E2",
+      "flags": "",
+      "id": "ids-hex64",
+      "len_bound": 256,
+      "pattern": "^[a-f0-9]{64}(?:&|$)",
+      "result": "sat",
+      "sat_find": {
+        "result": "sat",
+        "wall_ms": 1459.65,
+        "witness": "ACBea7451101bf8ba827f734180b6dec29ba82f42dd8bd863fe00cbb52d7edb6195"
+      },
+      "split": {
+        "empty_x": false,
+        "x_bare": "^[a-f0-9]{64}",
+        "x_dollar": "^[a-f0-9]{64}$",
+        "xr": "^[a-f0-9]{64}(?:&)"
+      },
+      "wall_ms": 1459.65,
+      "witness": "ACBea7451101bf8ba827f734180b6dec29ba82f42dd8bd863fe00cbb52d7edb6195"
+    }
+  ],
+  "sample_count": 20,
+  "schema_version": "1",
+  "timeout_ms": 5000,
+  "wall_s": 6.311,
+  "wave": "trailing-alt-dollar",
+  "z3": "5.0.0"
+}
