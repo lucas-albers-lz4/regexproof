@@ -18,10 +18,12 @@ Usage:
   python3 z3-verify.py --all
   python3 z3-verify.py P1 P2 P1-mutated
   python3 z3-verify.py --all --require-ground-truth
-  python3 z3-verify.py --all --json          # machine-readable report
+  python3 z3-verify.py --all --json          # NDJSON (one object per line)
+  python3 z3-verify.py --all --json-legacy   # one-release JSON array mode
+  python3 z3-verify.py --check-mutation-coverage
 
 Exit code: 0 = all pass; 1 = any FAIL/TIMEOUT/coverage gap;
-2 = unknown property names on the CLI; 3 = wrong z3-solver version.
+2 = unknown property names / flag conflict on the CLI; 3 = wrong z3-solver version.
 
 --require-ground-truth: any SAT (counterexample) result MUST have replayed
 its witness against the real implementation via the property's ground_truth
@@ -29,14 +31,19 @@ callback. A SAT result without a callback (or a witness that fails to
 reproduce) is a hard failure — an unverified counterexample is never
 reported as a vulnerability.
 
---json: emit one JSON object per property (result, witness, ground-truth,
-domain, wall_ms) instead of the human summary. Same facts as the human
-output — the two reports can never disagree.
+--json: emit one NDJSON object per property (schema_version, result, witness,
+ground-truth, domain, wall_ms, engine_versions, not_proven). Same facts as
+the human output — the two reports can never disagree. Partial streams remain
+valid if a later property fails. Mutually exclusive with --json-legacy.
+
+--json-legacy: emit a single JSON array of the same records (one-release
+compat). Mutually exclusive with --json.
 """
 
 import contextlib
 import io
 import json
+import platform
 import re
 import subprocess
 import sys
@@ -98,6 +105,15 @@ def z3_str(val) -> str:
 # Property registry
 # ---------------------------------------------------------------------------
 REGISTRY = {}
+SCHEMA_VERSION = "1"
+
+
+def engine_versions() -> dict:
+    """Recorded engines for machine-readable / ground-truth reports."""
+    return {
+        "python": platform.python_version(),
+        "z3": Z3_VERSION,
+    }
 
 
 # ---------------------------------------------------------------------------
@@ -193,10 +209,12 @@ def prop(
 def run_one(name, entry, require_ground_truth=False):
     """Run one property; print human output; return a result dict.
 
-    The dict is also what --json serializes, so the JSON report and the
-    human report always agree on the facts (result, witness, ground-truth).
+    The dict is also what --json / --json-legacy serializes, so the JSON
+    report and the human report always agree on the facts.
     """
+    engines = engine_versions()
     result = {
+        "schema_version": SCHEMA_VERSION,
         "name": name,
         "kind": entry["kind"],
         "family": entry["family"],
@@ -209,6 +227,8 @@ def run_one(name, entry, require_ground_truth=False):
         "witness": None,
         "ground_truth": None,  # None | "reproduced" | "failed" | "refused-no-callback"
         "wall_ms": None,
+        "engine_versions": engines,
+        "not_proven": False,  # True iff TIMEOUT — surfaced as "not proven"
     }
     s = Solver()
     s.set("timeout", entry["timeout_ms"])
@@ -221,7 +241,12 @@ def run_one(name, entry, require_ground_truth=False):
     result["wall_ms"] = round((time.perf_counter() - t0) * 1000, 1)
     if r == unknown:
         result["result"] = "timeout"
-        print(f"[TIMEOUT] {name}: unknown ({entry['timeout_ms']}ms) — HARD FAILURE")
+        result["not_proven"] = True
+        result["ok"] = False
+        print(
+            f"[TIMEOUT] {name}: unknown ({entry['timeout_ms']}ms) — "
+            "HARD FAILURE (not proven)"
+        )
         return result
     result["result"] = "unsat" if r == unsat else "sat"
     result["ok"] = (r == unsat) == entry["expect_unsat"]
@@ -243,6 +268,15 @@ def run_one(name, entry, require_ground_truth=False):
             witness[d.name()] = val
             print(f"    witness: {d.name()} = {val!r}")
         result["witness"] = witness
+        if require_ground_truth and not result.get("engine_versions"):
+            print(
+                "    ERROR: --require-ground-truth but engine_versions missing "
+                "on SAT result.",
+                file=sys.stderr,
+            )
+            result["ok"] = False
+            result["ground_truth"] = "refused-no-engine-version"
+            return result
         gt = entry.get("ground_truth")
         if entry["kind"] == "mutation_guard":
             result["ground_truth"] = "mutation-guard-sat-expected"
@@ -268,7 +302,6 @@ def run_one(name, entry, require_ground_truth=False):
             )
             result["ok"] = False
     return result
-
 
 # ---------------------------------------------------------------------------
 # Properties (mirrors properties/usrmanage-p1-p6.md)
@@ -660,12 +693,33 @@ def check_domain_coverage(require=False):
     return 0
 
 
-def main():
-    args = sys.argv[1:]
+def main(argv=None):
+    args = list(sys.argv[1:] if argv is None else argv)
     require_ground_truth = "--require-ground-truth" in args
     require_domain = "--require-domain" in args
     as_json = "--json" in args
-    args = [a for a in args if a not in ("--require-ground-truth", "--require-domain", "--json")]
+    as_json_legacy = "--json-legacy" in args
+    check_cov_only = "--check-mutation-coverage" in args
+    if as_json and as_json_legacy:
+        print(
+            "error: --json and --json-legacy are mutually exclusive",
+            file=sys.stderr,
+        )
+        return 2
+    args = [
+        a
+        for a in args
+        if a
+        not in (
+            "--require-ground-truth",
+            "--require-domain",
+            "--json",
+            "--json-legacy",
+            "--check-mutation-coverage",
+        )
+    ]
+    if check_cov_only:
+        return check_mutation_coverage()
     if not args or "--all" in args:
         named = [a for a in args if a != "--all"]
         if named:
@@ -698,7 +752,7 @@ def main():
     domain_fail = check_domain_coverage(require=require_domain)
     failures = 0
     results = []
-    if as_json:
+    if as_json or as_json_legacy:
         sink = io.StringIO()
         with contextlib.redirect_stdout(sink):
             for n in names:
@@ -706,6 +760,9 @@ def main():
                 results.append(res)
                 if not res["ok"]:
                     failures += 1
+                if as_json:
+                    # Flush each record immediately so partial streams stay valid.
+                    print(json.dumps(res, sort_keys=True), file=sys.__stdout__)
     else:
         for n in names:
             res = run_one(n, REGISTRY[n], require_ground_truth)
@@ -713,9 +770,9 @@ def main():
             if not res["ok"]:
                 failures += 1
     failures += domain_fail
-    if as_json:
-        print(json.dumps(results, indent=2))
-    else:
+    if as_json_legacy:
+        print(json.dumps(results, indent=2, sort_keys=True))
+    elif not as_json:
         print(f"\n{len(names) - failures}/{len(names)} passed")
     return 1 if (failures or coverage_fail) else 0
 

@@ -4,10 +4,14 @@
 Usage:
   python scripts/rule-diff-pilot.py
   python scripts/rule-diff-pilot.py --require-ground-truth
+  python scripts/rule-diff-pilot.py --family RD-github-oauth-token --require-ground-truth
 
 FAILED ground-truth on auto pairs is recorded as FAILED and, without
 --require-ground-truth, continues. With --require-ground-truth (CI), a
 FAILED or missing ground-truth on any SAT gap is a hard failure.
+
+--family restricts registration/run to one admitted-pair family (Phase 6
+property-subset gate). Floor checks are skipped in family mode.
 """
 
 from __future__ import annotations
@@ -298,6 +302,11 @@ def _write_markdown(report: dict, pairs: list[dict]) -> None:
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--require-ground-truth", action="store_true")
+    ap.add_argument(
+        "--family",
+        default=None,
+        help="Run only this admitted-pair family (Phase 6 subset)",
+    )
     args = ap.parse_args(argv)
 
     OUT.mkdir(parents=True, exist_ok=True)
@@ -312,32 +321,48 @@ def main(argv: list[str] | None = None) -> int:
         return 1
 
     discovered = discover_pairs(toml_path=TOML, specs_path=SPECS, file=str(TOML.relative_to(ROOT)))
-    write_jsonl(OUT / "gitleaks_admitted_pairs.jsonl", discovered["admitted_pairs"])
-    write_jsonl(OUT / "gitleaks_dropped_pairs.jsonl", discovered["dropped_pairs"])
-    (OUT / "gitleaks_pair_discovery.json").write_text(
-        json.dumps(
-            {
-                k: discovered[k]
-                for k in (
-                    "schema_version",
-                    "admitted_count",
-                    "dropped_count",
-                    "min_admitted_pairs",
-                    "max_len",
-                    "floor_ok",
-                )
-            },
-            indent=2,
+    if args.family:
+        admitted = [p for p in discovered["admitted_pairs"] if p["family"] == args.family]
+        if not admitted:
+            print(f"FAIL unknown or non-admitted rule_diff family: {args.family}")
+            print(
+                "known:",
+                ", ".join(sorted({p['family'] for p in discovered['admitted_pairs']})),
+            )
+            return 1
+        discovered = {
+            **discovered,
+            "admitted_pairs": admitted,
+            "admitted_count": len(admitted),
+            "floor_ok": True,
+        }
+    else:
+        write_jsonl(OUT / "gitleaks_admitted_pairs.jsonl", discovered["admitted_pairs"])
+        write_jsonl(OUT / "gitleaks_dropped_pairs.jsonl", discovered["dropped_pairs"])
+        (OUT / "gitleaks_pair_discovery.json").write_text(
+            json.dumps(
+                {
+                    k: discovered[k]
+                    for k in (
+                        "schema_version",
+                        "admitted_count",
+                        "dropped_count",
+                        "min_admitted_pairs",
+                        "max_len",
+                        "floor_ok",
+                    )
+                },
+                indent=2,
+            )
+            + "\n",
+            encoding="utf-8",
         )
-        + "\n",
-        encoding="utf-8",
-    )
 
-    if not discovered["floor_ok"]:
-        print(
-            f"FAIL admitted_pairs floor: {discovered['admitted_count']} < {MIN_ADMITTED_PAIRS}"
-        )
-        return 1
+        if not discovered["floor_ok"]:
+            print(
+                f"FAIL admitted_pairs floor: {discovered['admitted_count']} < {MIN_ADMITTED_PAIRS}"
+            )
+            return 1
 
     for pair in discovered["admitted_pairs"]:
         jsonschema.validate(pair, admitted_pair_schema())
@@ -445,11 +470,19 @@ def main(argv: list[str] | None = None) -> int:
         "mutation_coverage_ok": True,
         "gap_properties": len(gap_names),
     }
-    jsonschema.validate(report, rule_diff_report_schema())
-    (OUT / "gitleaks_rule_diff_report.json").write_text(
-        json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8"
-    )
-    _write_markdown(report, discovered["admitted_pairs"])
+    if args.family:
+        # Subset mode: do not clobber the full Phase-3 report artifacts.
+        out_subset = OUT / f"gitleaks_rule_diff_subset_{args.family}.json"
+        jsonschema.validate(report, rule_diff_report_schema())
+        out_subset.write_text(
+            json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+        )
+    else:
+        jsonschema.validate(report, rule_diff_report_schema())
+        (OUT / "gitleaks_rule_diff_report.json").write_text(
+            json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+        )
+        _write_markdown(report, discovered["admitted_pairs"])
 
     print(
         f"admitted={admitted} timeouts={timeouts} timeout_rate={timeout_rate:.3f} "

@@ -1,0 +1,32 @@
+# Pinned toolchains for Phase 6 CI drift assertions.
+# Each job runs scripts/ci-assert-toolchain.py --job <name> and fails on mismatch.
+
+[python]
+# Must match ci/python-matrix.toml minors (golden) and proof/redos job versions.
+minors = ["3.12", "3.13"]
+proof = "3.13"
+redos = "3.13"
+
+[z3]
+# pip pin: requirements.txt / pyproject.toml
+version_prefix = "5.0"
+
+[node]
+# setup-node major used in golden + redos jobs
+major = 22
+
+[go]
+# setup-go version used in golden (go-re2 helper)
+version = "1.22"
+
+[pcre2]
+# No CI job installs a system PCRE2 package today; dialect uses optional helper.
+# Assert records n/a rather than silently skipping.
+status = "n/a"
+reason = "optional helper; not installed in CI jobs"
+
+[redos]
+# helpers/redos/package.json + requirements-redos.txt
+recheck = "4.5.0"
+safe_regex2 = "5.1.1"
+regexploit = "1.0.0"
