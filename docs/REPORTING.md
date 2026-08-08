@@ -49,17 +49,23 @@ Schema: `regexproof/schemas/scanner_finding.schema.json`.
 
 ## Batch markdown (`properties/generated/<corpus>_batch.md`)
 
-Front matter (YAML): `schema_version`, `corpus`, `findings`.
+Report-level YAML front matter: `schema_version`, `corpus`, `findings`.
 
-Per finding section headings:
+Each finding section starts with a fenced YAML block of contracted fields
+(when present on the finding record):
+
+`regex_id`, `schema_version`, `kind`, `corpus`, `dialect`, `call_kind`,
+`shape`, `result`, `family`, `domain`, `wall_ms`, `ground_truth_status`,
+`engine_versions`, `disclosure`, `site`.
+
+Then the usual prose sections:
 
 - `## <kind>:<regex_id>[:suffix]`
 - `### Pattern` / `### Context` / `### Witness` / `### Ground-truth`
 
 Phase-3 shape-5 pilot report remains at `properties/generated/gitleaks.md`
-(not overwritten by batch). Field-rich pilot rows include `regex_id`, dialect,
-`call_kind`, shape, result, ground-truth + engine versions, `wall_ms`, domain,
-`family`, `schema_version`.
+(not overwritten by batch). Writer: `regexproof.batch.report.write_markdown`
+(paths must stay `*_batch.md`).
 
 ## Triage NDJSON (`properties/triage/<corpus>.ndjson`)
 
