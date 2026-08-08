@@ -4,20 +4,20 @@
   "dialect": "ecma",
   "extractor_schema_version": "1",
   "sample_size": 212,
-  "encodable": 145,
-  "fraction": 0.684,
+  "encodable": 163,
+  "fraction": 0.7689,
   "go_no_go_threshold": 0.3,
   "decision": "go",
   "decision_rule": "go iff encodable/sample_size >= 0.3 (Phase 3 admits only encodable pairs; no-go blocks scaling that corpus)",
   "reasons": {
-    "ok": 145,
+    "ok": 163,
     "pattern-too-long": 9,
-    "bad-range": 3,
-    "parse-error": 48,
+    "bad-range": 1,
+    "unsupported-syntax": 20,
     "composite-pattern": 3,
     "u-flag": 1,
-    "m-flag": 2,
-    "negated-class": 1
+    "unclosed-group": 13,
+    "m-flag": 2
   },
   "call_kinds": {
     "search": 204,
@@ -1037,7 +1037,7 @@
       "call_kind": "substitution",
       "dialect": "ecma",
       "encodable": false,
-      "reason": "parse-error",
+      "reason": "unsupported-syntax",
       "pattern": "g, '\\\\$&')}]`, 'g'), ''); ",
       "flags": ""
     },
@@ -1077,7 +1077,7 @@
       "call_kind": "substitution",
       "dialect": "ecma",
       "encodable": false,
-      "reason": "parse-error",
+      "reason": "unsupported-syntax",
       "pattern": "g, '\\\\$&')}]`, 'g'), ''); ",
       "flags": ""
     },
@@ -1107,7 +1107,7 @@
       "call_kind": "search",
       "dialect": "ecma",
       "encodable": false,
-      "reason": "parse-error",
+      "reason": "unsupported-syntax",
       "pattern": "* eslint-disable no-control-regex *",
       "flags": ""
     },
@@ -1127,7 +1127,7 @@
       "call_kind": "search",
       "dialect": "ecma",
       "encodable": false,
-      "reason": "parse-error",
+      "reason": "unsupported-syntax",
       "pattern": "* eslint-enable no-control-regex *",
       "flags": ""
     },
@@ -1216,8 +1216,8 @@
       "site": "pilots/validatorjs/src/isEmail.js:24:44",
       "call_kind": "search",
       "dialect": "ecma",
-      "encodable": false,
-      "reason": "parse-error",
+      "encodable": true,
+      "reason": null,
       "pattern": "=\\?\\^_`{\\|}~]+$",
       "flags": "i"
     },
@@ -1236,8 +1236,8 @@
       "site": "pilots/validatorjs/src/isEmail.js:26:24",
       "call_kind": "search",
       "dialect": "ecma",
-      "encodable": false,
-      "reason": "bad-range",
+      "encodable": true,
+      "reason": null,
       "pattern": "^([\\s\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x7f\\x21\\x23-\\x5b\\x5d-\\x7e]|(\\\\[\\x01-\\x09\\x0b\\x0c\\x0d-\\x7f]))*$",
       "flags": "i"
     },
@@ -1256,8 +1256,8 @@
       "site": "pilots/validatorjs/src/isEmail.js:28:28",
       "call_kind": "search",
       "dialect": "ecma",
-      "encodable": false,
-      "reason": "bad-range",
+      "encodable": true,
+      "reason": null,
       "pattern": "^([\\s\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x7f\\x21\\x23-\\x5b\\x5d-\\x7e\\u00A0-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFEF]|(\\\\[\\x01-\\x09\\x0b\\x0c\\",
       "flags": "i"
     },
@@ -1267,7 +1267,7 @@
       "call_kind": "search",
       "dialect": "ecma",
       "encodable": false,
-      "reason": "parse-error",
+      "reason": "unsupported-syntax",
       "pattern": "* eslint-enable max-len *",
       "flags": ""
     },
@@ -1277,7 +1277,7 @@
       "call_kind": "search",
       "dialect": "ecma",
       "encodable": false,
-      "reason": "parse-error",
+      "reason": "unsupported-syntax",
       "pattern": "* eslint-enable no-control-regex *",
       "flags": ""
     },
@@ -1287,7 +1287,7 @@
       "call_kind": "search",
       "dialect": "ecma",
       "encodable": false,
-      "reason": "parse-error",
+      "reason": "unsupported-syntax",
       "pattern": "**\n * Validate display name according to the RFC2822: https:",
       "flags": ""
     },
@@ -1306,8 +1306,8 @@
       "site": "pilots/validatorjs/src/isEmail.js:34:78",
       "call_kind": "search",
       "dialect": "ecma",
-      "encodable": false,
-      "reason": "parse-error",
+      "encodable": true,
+      "reason": null,
       "pattern": "rfc2822#appendix-A.1.2\n * @param {String} display_name\n *",
       "flags": ""
     },
@@ -1326,8 +1326,8 @@
       "site": "pilots/validatorjs/src/isEmail.js:39:3",
       "call_kind": "search",
       "dialect": "ecma",
-      "encodable": false,
-      "reason": "parse-error",
+      "encodable": true,
+      "reason": null,
       "pattern": " display name with only spaces is not valid\n  if (!display_name_without_quotes.trim()) {\n    return false;\n  }\n\n  ",
       "flags": ""
     },
@@ -1346,8 +1346,8 @@
       "site": "pilots/validatorjs/src/isEmail.js:45:36",
       "call_kind": "search",
       "dialect": "ecma",
-      "encodable": false,
-      "reason": "parse-error",
+      "encodable": true,
+      "reason": null,
       "pattern": ".test(display_name_without_quotes);\n  if (contains_illegal) {\n    ",
       "flags": ""
     },
@@ -1366,8 +1366,8 @@
       "site": "pilots/validatorjs/src/isEmail.js:48:5",
       "call_kind": "search",
       "dialect": "ecma",
-      "encodable": false,
-      "reason": "parse-error",
+      "encodable": true,
+      "reason": null,
       "pattern": " must to be enclosed in double-quotes, otherwise it's not a valid display name\n    if (display_name_without_quotes === d",
       "flags": ""
     },
@@ -1387,7 +1387,7 @@
       "call_kind": "substitution",
       "dialect": "ecma",
       "encodable": false,
-      "reason": "parse-error",
+      "reason": "unclosed-group",
       "pattern": " Can be done in the regex but will introduce a ReDOS (See  #1597 for more info)\n      str = str.replace(display_name, ''",
       "flags": ""
     },
@@ -1397,7 +1397,7 @@
       "call_kind": "substitution",
       "dialect": "ecma",
       "encodable": false,
-      "reason": "parse-error",
+      "reason": "unsupported-syntax",
       "pattern": "g, '');\n\n      ",
       "flags": ""
     },
@@ -1467,7 +1467,7 @@
       "call_kind": "substitution",
       "dialect": "ecma",
       "encodable": false,
-      "reason": "parse-error",
+      "reason": "unclosed-group",
       "pattern": " Dots are not included in gmail length restriction\n    if (!isByteLength(username.replace(",
       "flags": ""
     },
@@ -1507,7 +1507,7 @@
       "call_kind": "search",
       "dialect": "ecma",
       "encodable": false,
-      "reason": "parse-error",
+      "reason": "unsupported-syntax",
       "pattern": "* Remove the optional trailing dot before checking validity *",
       "flags": ""
     },
@@ -1517,7 +1517,7 @@
       "call_kind": "search",
       "dialect": "ecma",
       "encodable": false,
-      "reason": "parse-error",
+      "reason": "unsupported-syntax",
       "pattern": "* Remove the optional wildcard before checking validity *",
       "flags": ""
     },
@@ -1527,7 +1527,7 @@
       "call_kind": "search",
       "dialect": "ecma",
       "encodable": false,
-      "reason": "parse-error",
+      "reason": "unclosed-group",
       "pattern": " disallow fqdns without tld\n    if (parts.length < 2) {\n      return false;\n    }\n\n    if (!options.allow_numeric_tld &&",
       "flags": ""
     },
@@ -1537,7 +1537,7 @@
       "call_kind": "search",
       "dialect": "ecma",
       "encodable": false,
-      "reason": "parse-error",
+      "reason": "unsupported-syntax",
       "pattern": "i.test(tld)) {\n      return false;\n    }\n\n    ",
       "flags": ""
     },
@@ -1547,7 +1547,7 @@
       "call_kind": "search",
       "dialect": "ecma",
       "encodable": false,
-      "reason": "parse-error",
+      "reason": "unclosed-group",
       "pattern": " disallow spaces\n    if (",
       "flags": ""
     },
@@ -1557,7 +1557,7 @@
       "call_kind": "search",
       "dialect": "ecma",
       "encodable": false,
-      "reason": "parse-error",
+      "reason": "unsupported-syntax",
       "pattern": ".test(tld)) {\n      return false;\n    }\n  }\n\n  ",
       "flags": ""
     },
@@ -1567,7 +1567,7 @@
       "call_kind": "search",
       "dialect": "ecma",
       "encodable": false,
-      "reason": "parse-error",
+      "reason": "unclosed-group",
       "pattern": " reject numeric TLDs\n  if (!options.allow_numeric_tld && ",
       "flags": ""
     },
@@ -1577,7 +1577,7 @@
       "call_kind": "search",
       "dialect": "ecma",
       "encodable": false,
-      "reason": "parse-error",
+      "reason": "unsupported-syntax",
       "pattern": ".test(tld)) {\n    return false;\n  }\n\n  return parts.every((part) => {\n    if (part.length > 63 && !options.ignore_max_le",
       "flags": ""
     },
@@ -1587,7 +1587,7 @@
       "call_kind": "search",
       "dialect": "ecma",
       "encodable": false,
-      "reason": "parse-error",
+      "reason": "unsupported-syntax",
       "pattern": "i.test(part)) {\n      return false;\n    }\n\n    ",
       "flags": ""
     },
@@ -1597,7 +1597,7 @@
       "call_kind": "search",
       "dialect": "ecma",
       "encodable": false,
-      "reason": "parse-error",
+      "reason": "unclosed-group",
       "pattern": " disallow full-width chars\n    if (",
       "flags": ""
     },
@@ -1607,7 +1607,7 @@
       "call_kind": "search",
       "dialect": "ecma",
       "encodable": false,
-      "reason": "parse-error",
+      "reason": "unsupported-syntax",
       "pattern": ".test(part)) {\n      return false;\n    }\n\n    ",
       "flags": ""
     },
@@ -1617,7 +1617,7 @@
       "call_kind": "search",
       "dialect": "ecma",
       "encodable": false,
-      "reason": "parse-error",
+      "reason": "unclosed-group",
       "pattern": " disallow parts starting or ending with hyphen\n    if (",
       "flags": ""
     },
@@ -1627,7 +1627,7 @@
       "call_kind": "search",
       "dialect": "ecma",
       "encodable": false,
-      "reason": "parse-error",
+      "reason": "unsupported-syntax",
       "pattern": ".test(part)) {\n      return false;\n    }\n\n    if (!options.allow_underscores && ",
       "flags": ""
     },
@@ -1706,8 +1706,8 @@
       "site": "pilots/validatorjs/src/isURL.js:54:21",
       "call_kind": "search",
       "dialect": "ecma",
-      "encodable": false,
-      "reason": "negated-class",
+      "encodable": true,
+      "reason": null,
       "pattern": "^\\[([^\\]]+)\\](?::([0-9]+))?$",
       "flags": ""
     },
@@ -1727,7 +1727,7 @@
       "call_kind": "search",
       "dialect": "ecma",
       "encodable": false,
-      "reason": "parse-error",
+      "reason": "unclosed-group",
       "pattern": " Replaced the 'split(\":",
       "flags": ""
     },
@@ -1737,7 +1737,7 @@
       "call_kind": "search",
       "dialect": "ecma",
       "encodable": false,
-      "reason": "parse-error",
+      "reason": "unsupported-syntax",
       "pattern": "\")' logic with a regex to match the protocol.\n  ",
       "flags": ""
     },
@@ -1777,7 +1777,7 @@
       "call_kind": "search",
       "dialect": "ecma",
       "encodable": false,
-      "reason": "parse-error",
+      "reason": "unclosed-group",
       "pattern": " with protocols. A colon before an @ symbol might be part of auth, not a protocol separator.\n  const protocol_match = ur",
       "flags": ""
     },
@@ -1806,8 +1806,8 @@
       "site": "pilots/validatorjs/src/isURL.js:102:5",
       "call_kind": "search",
       "dialect": "ecma",
-      "encodable": false,
-      "reason": "parse-error",
+      "encodable": true,
+      "reason": null,
       "pattern": " Remove the protocol from the URL string.\n    return url.substring(protocol_match[0].length);\n  };\n\n  if (protocol_match",
       "flags": ""
     },
@@ -1847,7 +1847,7 @@
       "call_kind": "search",
       "dialect": "ecma",
       "encodable": false,
-      "reason": "parse-error",
+      "reason": "unclosed-group",
       "pattern": "` after the colon (protocols like `http:",
       "flags": ""
     },
@@ -1857,7 +1857,7 @@
       "call_kind": "search",
       "dialect": "ecma",
       "encodable": false,
-      "reason": "parse-error",
+      "reason": "unsupported-syntax",
       "pattern": "` have this)\n    ",
       "flags": ""
     },
@@ -1887,7 +1887,7 @@
       "call_kind": "search",
       "dialect": "ecma",
       "encodable": false,
-      "reason": "parse-error",
+      "reason": "unclosed-group",
       "pattern": "';\n\n    if (!starts_with_slashes) {\n      const first_slash_position = after_colon.indexOf('",
       "flags": ""
     },
@@ -1936,8 +1936,8 @@
       "site": "pilots/validatorjs/src/isURL.js:132:52",
       "call_kind": "search",
       "dialect": "ecma",
-      "encodable": false,
-      "reason": "parse-error",
+      "encodable": true,
+      "reason": null,
       "pattern": ".test(before_at);\n\n        if (is_valid_auth && !has_encoded_content) {\n          ",
       "flags": ""
     },
@@ -1946,8 +1946,8 @@
       "site": "pilots/validatorjs/src/isURL.js:135:11",
       "call_kind": "search",
       "dialect": "ecma",
-      "encodable": false,
-      "reason": "parse-error",
+      "encodable": true,
+      "reason": null,
       "pattern": " This looks like authentication (e.g., user:password@host), not a protocol\n          if (options.require_protocol) {\n   ",
       "flags": ""
     },
@@ -1956,8 +1956,8 @@
       "site": "pilots/validatorjs/src/isURL.js:140:11",
       "call_kind": "search",
       "dialect": "ecma",
-      "encodable": false,
-      "reason": "parse-error",
+      "encodable": true,
+      "reason": null,
       "pattern": " Don't consume the colon; let the auth parsing handle it later\n        } else {\n          ",
       "flags": ""
     },
@@ -1976,8 +1976,8 @@
       "site": "pilots/validatorjs/src/isURL.js:143:11",
       "call_kind": "search",
       "dialect": "ecma",
-      "encodable": false,
-      "reason": "parse-error",
+      "encodable": true,
+      "reason": null,
       "pattern": " or URL-encoded protocol handler (e.g., javascript:%61%6c%65%72%74%28%31%29@host)\n          url = cleanUpProtocol(potent",
       "flags": ""
     },
@@ -1997,7 +1997,7 @@
       "call_kind": "search",
       "dialect": "ecma",
       "encodable": false,
-      "reason": "parse-error",
+      "reason": "unclosed-group",
       "pattern": " If what's after the colon is numeric (or starts with a digit and contains only\n        ",
       "flags": ""
     },
@@ -2007,7 +2007,7 @@
       "call_kind": "search",
       "dialect": "ecma",
       "encodable": false,
-      "reason": "parse-error",
+      "reason": "unsupported-syntax",
       "pattern": " valid port characters until a path separator), it's likely hostname:port, not a protocol.\n        const looks_like_port",
       "flags": ""
     },
@@ -2016,8 +2016,8 @@
       "site": "pilots/validatorjs/src/isURL.js:154:39",
       "call_kind": "search",
       "dialect": "ecma",
-      "encodable": false,
-      "reason": "parse-error",
+      "encodable": true,
+      "reason": null,
       "pattern": ".test(after_colon);\n\n        if (looks_like_port) {\n          ",
       "flags": ""
     },
@@ -2026,8 +2026,8 @@
       "site": "pilots/validatorjs/src/isURL.js:157:11",
       "call_kind": "search",
       "dialect": "ecma",
-      "encodable": false,
-      "reason": "parse-error",
+      "encodable": true,
+      "reason": null,
       "pattern": " This looks like hostname:port, not a protocol\n          if (options.require_protocol) {\n            return false;\n     ",
       "flags": ""
     },
@@ -2036,8 +2036,8 @@
       "site": "pilots/validatorjs/src/isURL.js:161:11",
       "call_kind": "search",
       "dialect": "ecma",
-      "encodable": false,
-      "reason": "parse-error",
+      "encodable": true,
+      "reason": null,
       "pattern": " Don't consume anything; let it be parsed as hostname:port\n        } else {\n          ",
       "flags": ""
     },
@@ -2046,8 +2046,8 @@
       "site": "pilots/validatorjs/src/isURL.js:163:11",
       "call_kind": "search",
       "dialect": "ecma",
-      "encodable": false,
-      "reason": "parse-error",
+      "encodable": true,
+      "reason": null,
       "pattern": " This is definitely a protocol\n          url = cleanUpProtocol(potential_protocol);\n\n          if (url === false) {\n    ",
       "flags": ""
     },
@@ -2076,8 +2076,8 @@
       "site": "pilots/validatorjs/src/isURL.js:172:68",
       "call_kind": "search",
       "dialect": "ecma",
-      "encodable": false,
-      "reason": "parse-error",
+      "encodable": true,
+      "reason": null,
       "pattern": "\n      url = cleanUpProtocol(potential_protocol);\n\n      if (url === false) {\n        return false;\n      }\n    }\n  } el",
       "flags": ""
     },
@@ -2127,7 +2127,7 @@
       "call_kind": "search",
       "dialect": "ecma",
       "encodable": false,
-      "reason": "parse-error",
+      "reason": "unclosed-group",
       "pattern": " and should be stripped unconditionally.\n  if (url.slice(0, 2) === '",
       "flags": ""
     },
@@ -2137,7 +2137,7 @@
       "call_kind": "search",
       "dialect": "ecma",
       "encodable": false,
-      "reason": "parse-error",
+      "reason": "unsupported-syntax",
       "pattern": "') {\n    if (!had_explicit_protocol && !options.allow_protocol_relative_urls) {\n      return false;\n    }\n\n    url = url",
       "flags": ""
     },

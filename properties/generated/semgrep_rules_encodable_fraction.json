@@ -1,32 +1,31 @@
 {
   "budget": {
     "max_patterns": 5000,
-    "max_wall_s": 600
+    "max_wall_s": 600,
+    "redos_wall_s": 120
   },
   "commit": "40b8c63f75dc7c22c8a77482d73bfb864b146f7e",
-  "compiler_fingerprint": "a9e4f80459ea",
+  "compiler_fingerprint": "c04a3e0148b3d58a",
   "complete_run": true,
   "corpus_pin": "40b8c63f75dc7c22c8a77482d73bfb864b146f7e",
-  "decision": "no-go",
+  "decision": "go",
   "decision_rule": "go iff encodable/sample_size >= 0.3",
   "dialect": "py_re",
-  "encodable": 2518,
+  "encodable": 5765,
   "engine_versions": {
-    "python": "3.14.6",
+    "python": "3.13.5",
     "z3": "5.0.0"
   },
-  "fraction": 0.2741,
+  "fraction": 0.6276,
   "go_no_go_threshold": 0.3,
   "inventory_path": "properties/generated/semgrep_rules-inventory.ndjson",
-  "path": "batch/corpora/semgrep_rules/rules",
   "pilot": "semgrep_rules",
   "reasons": {
-    "composite-pattern": 3247,
     "internal-anchor": 3113,
     "lookaround": 50,
     "m-flag": 18,
     "negated-shorthand": 6,
-    "ok": 2518,
+    "ok": 5765,
     "parse-error:PatternError": 55,
     "pattern-too-long": 8,
     "per-alternative-anchor": 102,
@@ -34,9 +33,95 @@
     "unsupported:POSSESSIVE_REPEAT": 1,
     "word-boundary": 48
   },
+  "remeasure": {
+    "baseline_compiler_fingerprint": "a9e4f80459ea",
+    "baseline_encodable": 2518,
+    "baseline_fraction": 0.2741,
+    "flips": {
+      "now_encodable": 3247,
+      "now_rejected": 0,
+      "unchanged": 5939
+    },
+    "from": "frozen_inventory",
+    "samples": {
+      "now_encodable": [
+        {
+          "flags": "",
+          "pattern": "",
+          "reason": null,
+          "regex_id": "166a410f670eb046961cf6be83c57e99",
+          "site": "/home/lalbers/gitroot/regexproof/batch/corpora/semgrep_rules/rules/ai/ai-best-practices/anthropic-hardcoded-api-key/anthropic-hardcoded-api-key-javascript.yaml:18:0"
+        },
+        {
+          "flags": "",
+          "pattern": "",
+          "reason": null,
+          "regex_id": "9eacb98d28e13dc0b014d459ba9dd008",
+          "site": "/home/lalbers/gitroot/regexproof/batch/corpora/semgrep_rules/rules/ai/ai-best-practices/anthropic-hardcoded-api-key/anthropic-hardcoded-api-key-ruby.yaml:18:0"
+        },
+        {
+          "flags": "",
+          "pattern": "",
+          "reason": null,
+          "regex_id": "7341173dcca57b98a9307d1004476984",
+          "site": "/home/lalbers/gitroot/regexproof/batch/corpora/semgrep_rules/rules/ai/ai-best-practices/anthropic-user-input-in-system-prompt/anthropic-user-input-in-system-prompt-js.yaml:27:0"
+        },
+        {
+          "flags": "",
+          "pattern": "",
+          "reason": null,
+          "regex_id": "ff8e812404c3395bb42dd90bb0c4acc0",
+          "site": "/home/lalbers/gitroot/regexproof/batch/corpora/semgrep_rules/rules/ai/ai-best-practices/cohere-hardcoded-api-key/cohere-hardcoded-api-key-javascript.yaml:17:0"
+        },
+        {
+          "flags": "",
+          "pattern": "",
+          "reason": null,
+          "regex_id": "66dad3ddec4d8ee7c8cb6453f5d0b44f",
+          "site": "/home/lalbers/gitroot/regexproof/batch/corpora/semgrep_rules/rules/ai/ai-best-practices/cohere-safety-mode-off/cohere-safety-mode-off-javascript.yaml:19:0"
+        },
+        {
+          "flags": "",
+          "pattern": "",
+          "reason": null,
+          "regex_id": "cd43f55632c4e375c7bd3293d3b20904",
+          "site": "/home/lalbers/gitroot/regexproof/batch/corpora/semgrep_rules/rules/ai/ai-best-practices/cohere-user-input-in-system-prompt/cohere-user-input-in-system-prompt-js.yaml:27:0"
+        },
+        {
+          "flags": "",
+          "pattern": "",
+          "reason": null,
+          "regex_id": "6022564287b7d2e2a30393d65666cc3b",
+          "site": "/home/lalbers/gitroot/regexproof/batch/corpora/semgrep_rules/rules/ai/ai-best-practices/gemini-user-input-in-system-prompt/gemini-user-input-in-system-prompt-js.yaml:27:0"
+        },
+        {
+          "flags": "",
+          "pattern": "",
+          "reason": null,
+          "regex_id": "515d12a481c470362b8818c7ccb011b5",
+          "site": "/home/lalbers/gitroot/regexproof/batch/corpora/semgrep_rules/rules/ai/ai-best-practices/hooks-path-traversal/hooks-path-traversal-bash.yaml:24:0"
+        },
+        {
+          "flags": "",
+          "pattern": "",
+          "reason": null,
+          "regex_id": "3208c3ceed63de2dcd311f4b98834e25",
+          "site": "/home/lalbers/gitroot/regexproof/batch/corpora/semgrep_rules/rules/ai/ai-best-practices/mcp-command-injection/mcp-command-injection.yaml:23:0"
+        },
+        {
+          "flags": "",
+          "pattern": "",
+          "reason": null,
+          "regex_id": "94daec850f40b0d0bc4b2008fec08ba3",
+          "site": "/home/lalbers/gitroot/regexproof/batch/corpora/semgrep_rules/rules/ai/ai-best-practices/mcp-ssrf/mcp-ssrf.yaml:23:0"
+        }
+      ],
+      "now_rejected": []
+    }
+  },
   "sample_size": 9186,
   "schema_version": "1",
   "scope": "full_corpus",
   "unclassified_parse_errors": 0,
-  "wall_s": 2.538
+  "wall_s": 2.668
 }

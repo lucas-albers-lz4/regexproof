@@ -2,16 +2,16 @@
   "schema_version": "1",
   "pilots": {
     "validatorjs": {
-      "fraction": 0.684,
+      "fraction": 0.7689,
       "decision": "go",
       "sample_size": 212,
-      "encodable": 145
+      "encodable": 163
     },
     "gitleaks": {
-      "fraction": 0.1855,
+      "fraction": 0.2262,
       "decision": "no-go",
       "sample_size": 221,
-      "encodable": 41
+      "encodable": 50
     }
   },
   "shell_true_violations": [],

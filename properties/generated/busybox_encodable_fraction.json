@@ -4,7 +4,7 @@
     "max_wall_s": 300
   },
   "commit": null,
-  "compiler_fingerprint": "50acabd829ca",
+  "compiler_fingerprint": "c04a3e0148b3d58a",
   "complete_run": true,
   "corpus_pin": "1_36_1",
   "decision": "go",
@@ -12,20 +12,34 @@
   "dialect": "pcre",
   "encodable": 2,
   "engine_versions": {
-    "python": "3.14.6",
+    "python": "3.13.5",
     "z3": "5.0.0"
   },
   "fraction": 1.0,
   "go_no_go_threshold": 0.3,
   "inventory_path": "properties/generated/busybox-inventory.ndjson",
-  "path": "batch/corpora/busybox/sample",
   "pilot": "busybox",
   "reasons": {
     "ok": 2
+  },
+  "remeasure": {
+    "baseline_compiler_fingerprint": "50acabd829ca",
+    "baseline_encodable": 2,
+    "baseline_fraction": 1.0,
+    "flips": {
+      "now_encodable": 0,
+      "now_rejected": 0,
+      "unchanged": 2
+    },
+    "from": "frozen_inventory",
+    "samples": {
+      "now_encodable": [],
+      "now_rejected": []
+    }
   },
   "sample_size": 2,
   "schema_version": "1",
   "scope": "sample",
   "unclassified_parse_errors": 0,
-  "wall_s": 0.077
+  "wall_s": 0.171
 }

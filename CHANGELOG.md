@@ -1,8 +1,8 @@
 # Changelog
 
-All entries below cover the initial development cycle (2026-08-06 to
-2026-08-08). No release tags exist yet. This changelog groups the work by
-phase. Dates are merge dates.
+All entries below cover the initial development cycle plus the 2026-08-08
+dogfooding/corpus/fix waves. No release tags exist yet. This changelog groups
+the work by phase; dates are merge dates.
 
 ## Foundations (2026-08-06)
 
@@ -74,12 +74,95 @@ phase. Dates are merge dates.
 - Added the taxonomy, NDJSON contract, reporting, and disclosure docs.
 - Clarified the secret-scanning wording. Required verified-finding markers.
 
-## Toolkit-fix (#45) (2026-08-08)
+## Dogfooding wave completion — CRS + validator.js (2026-08-08)
 
-- Lazy-quantifier strip + `\xNN`/`\x{}` hex parse (PR #49).
-- Negated-class via BMP/ASCII range complement; scoped `(?i:…)` for PCRE/RE2;
-  ECMA keeps scoped-`i` and `m`/`u`/`v`/`g`/`y`/`d` as explicit rejects
-  (TRAPS #21–#22).
+- Phase 1 CRS inventory (#42): ModSecurity `@rx` extractor (escaped-quote
+  truncation regression-tested), `coreruleset` manifest + `--corpus
+  coreruleset`, batch evidence fields (no hardcoded `N/A`;
+  `engine_versions` on ReDoS findings).
+- Completed the CRS + validator.js dogfooding wave P1–P5 (#46): 310-site CRS
+  inventory and 1,597-site validator.js inventory; verified findings issue
+  (facts-only) + separate toolkit-gap plan issue. CRS encodable 38.4% →
+  44.5% after the lazy strip.
+- Batch markdown findings carry full metadata (#48). Non-trivial PRs require
+  Bugbot before merge (#47).
+
+## Toolkit fixes — language-transparent encodability (#45, 2026-08-08)
+
+- Lazy quantifiers are language-transparent for membership: `a*?` → `a*`
+  (#49). The biggest single reject-bucket fix — CRS parse-errors 53 → 7;
+  validator.js ~118 sites.
+- Hex escapes `\xNN`/`\x{}` lower to codepoint literals instead of literal
+  text — the mirror-fidelity repair (PR #49).
+- Negated classes `[^...]` via BMP/ASCII range complement; scoped `(?i:…)`
+  for PCRE/RE2; ECMA keeps scoped-`i` and `m`/`u`/`v`/`g`/`y`/`d` as
+  explicit rejects (TRAPS #21–#22) (#50).
 - `{1}` identity fix also on `py_re._repeat`; wave-gate regressions expanded.
-- CRS encodable fraction **206/318 (64.8%)** after encode paths (was ~45%
-  post-lazy/hex).
+- CRS encodable measured **206/318 (64.8%)** after the encode paths (was
+  ~45% post-lazy/hex).
+
+## Corpus wave — 10-corpus roster (#51–#61, 2026-08-08)
+
+- Pre-gate (#58): mirror-fidelity differential-fuzz gate on encodable
+  samples; pcre2 helper provisioning.
+- Phase 1a (#59): trufflehog (215 rules), IDS rule sets suricata+snort3
+  (8,171 rules), semgrep-rules (9,186 rules); new extractors (`go_regexp`,
+  `ids_rules`, `semgrep_yaml`), sample corpora, cross-corpus matrix.
+- Phase 1b (#60): testdata harness corpora — CPython `re` tests, busybox,
+  PCRE2 testdata, RE2 testdata, rust-lang/regex (inventory-only by design).
+- Phases 2–5 (#61): gitleaks re-measured to 82.4% on the fixed compiler;
+  frozen-`regex_id` re-measure helper; residual-bucket a/b/c
+  classification; rule_diff family semantics; TRAPS + final-report updates.
+
+## Word-boundary wave (#62–#67, 2026-08-08)
+
+- ASCII-domain `\b`/`\B` encoding for stock Z3 (#67) — the last genuine
+  size limit for ASCII-domain engines; golden + mutation +
+  differential-fuzz coverage.
+
+## Compiler soundness fix wave (#68–#79, 2026-08-08)
+
+Review follow-up wave; every finding mapped one-to-one to a phase,
+test-first:
+
+- P1 (#74): `{1}`/`{1,1}` quantifier crash fixed (no `Concat(body)` at
+  lo==1); lazy-quantifier strip consolidated into the lowering pipeline.
+- P3 (#75): pipeline integrity — `redact_witness` recursion for list-typed
+  values; wall-clock ReDoS gate (count-cap removed); `sys.path` bootstrap.
+- P2 (#76): false-UNSAT soundness — anchors inside alternations now
+  **reject** (`per-alternative-anchor`) instead of hoisting unsoundly;
+  scoped `(?i:)` case handling; `pcre_strip` `}+` corruption; `\s`
+  divergence fix-or-reject per dialect.
+- P4 (#77): ModSecurity `!@rx` negation — per-dialect decision table,
+  reject-unsupported, never silent.
+- P5 (#78): consolidation — shared `reject_markers.py`, duplicate
+  `_repeat`/`_lit`/`_dot` removed, golden-suite hardening.
+- MIT license badge (#79).
+
+## Post-fix-wave re-measurement (2026-08-08)
+
+- New `scripts/remeasure-from-inventory.py`: recompiles committed inventory
+  NDJSONs through the current compiler (frozen extraction, current
+  compiler) with per-record flip deltas; no silent sample fallback.
+- All corpus fractions re-measured on the post-fix-wave compiler (frozen
+  inventories):
+
+| Corpus | Before | After | Flips |
+|---|---|---|---|
+| gitleaks | 0.8235 | 0.2262 | +0 / −132 (`per-alternative-anchor`) |
+| trufflehog | 0.9349 | 0.9302 | +0 / −1 |
+| ids_rules | 0.8790 | 0.8467 | +13 / −277 (mostly `per-alternative-anchor`) |
+| semgrep_rules | 0.2741 (no-go) | 0.6276 (go) | +3,247 / −0 |
+| coreruleset | 0.7168 | 0.6908 | +0 / −9 |
+| cpython_re | 0.5556 | 0.5556 | none |
+| busybox / pcre2 / re2 testdata | 1.0 | 1.0 | none |
+| validator.js (full inventory, dry-run) | 0.714 | 0.7639 | +91 / −31 |
+
+  Headline: **semgrep-rules crosses the go/no-go gate** (corpus-wave
+  decision reversed by the language-transparent fixes); **gitleaks drops
+  below the gate** — the P2 soundness fix (reject-over-hoist for
+  per-alternative anchors) hits secret-detector `(?:...|$)` trailing
+  alternations. The rejection is sound; the class is encodable in principle
+  via string-op suffix equality and is the next toolkit-fix candidate.
+  The corpus-wave phase-3 decision artifacts are superseded by these
+  measurements.
