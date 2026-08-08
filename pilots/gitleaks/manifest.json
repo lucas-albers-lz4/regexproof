@@ -1,0 +1,19 @@
+{
+  "schema_version": "1",
+  "pilot": "gitleaks",
+  "repo": "gitleaks/gitleaks",
+  "repo_url": "https://github.com/gitleaks/gitleaks",
+  "commit": "b58d3f102cf3a2c84cb7f923d05c25c9b1aed84b",
+  "corpus_path": "pilots/gitleaks/config/gitleaks.toml",
+  "dialect": "re2",
+  "shapes": [1, 2, 3],
+  "property_module": "scripts/pilot-properties.py",
+  "report_path": "properties/generated/gitleaks_encodable_fraction.json",
+  "go_no_go_threshold": 0.3,
+  "selection_rationale": "Chose gitleaks (RE2) over detect-secrets because Phase 1 already ships the Go regexp/syntax helper + rule-file extractor; RE2 fold divergence (İ/ı) and rule-corpus scale are the hardest dialect probes before Phase 3 rule_diff. Leading (?i) flags are lifted into flags=i for compile; \\b remains unencodable.",
+  "commands": [
+    "python scripts/pilot-run.py",
+    "python scripts/pilot-properties.py --require-ground-truth"
+  ],
+  "notes": "Phase 3 admits only encodable pairs from this report. Decision=no-go means do not scale the full corpus; the encodable subset may still pilot shape-5."
+}

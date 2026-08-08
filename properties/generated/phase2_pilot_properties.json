@@ -1,0 +1,156 @@
+[
+  {
+    "name": "GL-mutated",
+    "kind": "mutation_guard",
+    "family": "GL",
+    "call_kind": "fullmatch",
+    "domain": "MUTATION GUARD: Star(any) admits spaces",
+    "input_domain": null,
+    "expect_unsat": false,
+    "result": "sat",
+    "ok": true,
+    "witness": {
+      "s": " "
+    },
+    "ground_truth": "mutation-guard-sat-expected",
+    "wall_ms": 1.3,
+    "engine_versions": {
+      "z3": "5.0.0",
+      "python": "3.14.6"
+    }
+  },
+  {
+    "name": "GL-ops-no-space",
+    "kind": "property",
+    "family": "GL",
+    "call_kind": "fullmatch",
+    "domain": "gitleaks encodable token as fullmatch: the token language itself admits no space (shape 2 whitelist exclusion; search wrappers deferred)",
+    "input_domain": "ascii",
+    "expect_unsat": true,
+    "result": "unsat",
+    "ok": true,
+    "witness": null,
+    "ground_truth": null,
+    "wall_ms": 510.9,
+    "engine_versions": {
+      "z3": "5.0.0",
+      "python": "3.14.6"
+    }
+  },
+  {
+    "name": "VJS-ascii-no-high",
+    "kind": "property",
+    "family": "VJS",
+    "call_kind": "fullmatch",
+    "domain": "validator.js isAscii ^[\\x00-\\x7F]+$: no codepoint > 0x7F is a full match (shape 1 alphabet disjointness; Unicode input domain)",
+    "input_domain": "unicode",
+    "expect_unsat": true,
+    "result": "unsat",
+    "ok": true,
+    "witness": null,
+    "ground_truth": null,
+    "wall_ms": 0.8,
+    "engine_versions": {
+      "z3": "5.0.0",
+      "python": "3.14.6"
+    }
+  },
+  {
+    "name": "VJS-mutated-star",
+    "kind": "mutation_guard",
+    "family": "VJS",
+    "call_kind": "fullmatch",
+    "domain": "MUTATION GUARD: Star(AllChar) admits U+00A0",
+    "input_domain": null,
+    "expect_unsat": false,
+    "result": "sat",
+    "ok": true,
+    "witness": {
+      "c": "\u00a0"
+    },
+    "ground_truth": "mutation-guard-sat-expected",
+    "wall_ms": 0.1,
+    "engine_versions": {
+      "z3": "5.0.0",
+      "python": "3.14.6"
+    }
+  },
+  {
+    "name": "VJS-port-mutated",
+    "kind": "mutation_guard",
+    "family": "VJS-port",
+    "call_kind": "fullmatch",
+    "domain": "MUTATION GUARD: widen alphabet to digits|a admits 'a'",
+    "input_domain": null,
+    "expect_unsat": false,
+    "result": "sat",
+    "ok": true,
+    "witness": {
+      "s": "a"
+    },
+    "ground_truth": "mutation-guard-sat-expected",
+    "wall_ms": 2.7,
+    "engine_versions": {
+      "z3": "5.0.0",
+      "python": "3.14.6"
+    }
+  },
+  {
+    "name": "VJS-port-no-alpha",
+    "kind": "property",
+    "family": "VJS-port",
+    "call_kind": "fullmatch",
+    "domain": "isURL port ^[0-9]+$: digit whitelist contains no letter (shape 2)",
+    "input_domain": "ascii",
+    "expect_unsat": true,
+    "result": "unsat",
+    "ok": true,
+    "witness": null,
+    "ground_truth": null,
+    "wall_ms": 73.0,
+    "engine_versions": {
+      "z3": "5.0.0",
+      "python": "3.14.6"
+    }
+  },
+  {
+    "name": "VJS-proto-counterexample",
+    "kind": "counterexample_finder",
+    "family": "VJS-proto",
+    "call_kind": "match",
+    "domain": "COUNTEREXAMPLE FINDER (shape 3): prefix protocol match + '://' in string (call_kind mismatch class \u2014 match vs full URL)",
+    "input_domain": "ascii",
+    "expect_unsat": false,
+    "result": "sat",
+    "ok": true,
+    "witness": {
+      "s": "y://"
+    },
+    "ground_truth": "reproduced",
+    "wall_ms": 6.1,
+    "engine_versions": {
+      "z3": "5.0.0",
+      "python": "3.14.6"
+    }
+  },
+  {
+    "name": "VJS-proto-mutated",
+    "kind": "mutation_guard",
+    "family": "VJS-proto",
+    "call_kind": "match",
+    "domain": "MUTATION GUARD: any short string with :// is SAT",
+    "input_domain": null,
+    "expect_unsat": false,
+    "result": "sat",
+    "ok": true,
+    "witness": {
+      "s": "://"
+    },
+    "ground_truth": "mutation-guard-sat-expected",
+    "wall_ms": 1.0,
+    "engine_versions": {
+      "z3": "5.0.0",
+      "python": "3.14.6"
+    }
+  }
+]
