@@ -378,14 +378,27 @@ def run_corpus(
         from regexproof.extractors.rust_inventory import write_rust_inventory
 
         path: Path = meta["path"]
+        out_dir.mkdir(parents=True, exist_ok=True)
         report = write_rust_inventory(path, out_dir / f"{corpus}_inventory_only.json")
-        return {
+        # Empty findings NDJSON so run_batch repro hashing still finds the file.
+        write_ndjson(out_dir / f"{corpus}.ndjson", [])
+        write_markdown(
+            out_dir / f"{corpus}_batch.md",
+            corpus=corpus,
+            findings=[],
+        )
+        summary = {
             "corpus": corpus,
             "findings": 0,
             "encodable": report.get("extracted"),
             "decision": "inventory_only",
             "detail": report,
         }
+        (out_dir / f"{corpus}_batch_summary.json").write_text(
+            __import__("json").dumps(summary, indent=2, sort_keys=True) + "\n",
+            encoding="utf-8",
+        )
+        return summary
     inventory = load_inventory(meta["corpus_type"])
     records = _extract(corpus, meta)
     compiled = _compile_all(
