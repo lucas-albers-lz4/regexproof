@@ -28,14 +28,14 @@
       "corpus": "gitleaks",
       "dialect": "re2",
       "probes": 51,
-      "regex_id": "45fb01484e6593d0c34922f594e7344b",
+      "regex_id": "f66e76a3534be1d3727febcfd8db409f",
       "status": "ok"
     },
     {
       "corpus": "gitleaks",
       "dialect": "re2",
       "probes": 51,
-      "regex_id": "f66e76a3534be1d3727febcfd8db409f",
+      "regex_id": "ac8604fcd5ba993051be817dd6147a21",
       "status": "ok"
     }
   ],
