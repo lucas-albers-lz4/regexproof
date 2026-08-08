@@ -66,7 +66,26 @@ def _yaml_scalar(value: object) -> str:
         # Compact JSON for nested maps (engine_versions).
         return json.dumps(value, sort_keys=True)
     text = str(value)
-    if any(c in text for c in (":", "#", "\n", '"', "'")) or text == "":
+    # Quote anything ambiguous for YAML 1.1 (N/A, YES, NO, ON, OFF, …).
+    ambiguous = {
+        "",
+        "n/a",
+        "yes",
+        "no",
+        "y",
+        "n",
+        "true",
+        "false",
+        "on",
+        "off",
+        "null",
+        "~",
+    }
+    if (
+        text.lower() in ambiguous
+        or any(c in text for c in (":", "#", "\n", '"', "'", "[", "]", "{", "}"))
+        or text[:1] in "-?&*!|>%@`"
+    ):
         return json.dumps(text)
     return text
 

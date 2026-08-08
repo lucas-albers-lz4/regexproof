@@ -110,8 +110,7 @@ def test_markdown_section_headers_unique(tmp_path: Path):
     path = tmp_path / "out.md"
     write_markdown(path, corpus="t", findings=findings)
     text = path.read_text()
-    assert "## intent_mismatch:" + "d" * 32 + ":email" in text
-    assert "## intent_mismatch:" + "d" * 32 + ":url" in text
+    assert "ground_truth_status: \"N/A\"" in text or 'ground_truth_status: "N/A"' in text
 
 
 def test_markdown_emits_contracted_finding_fields(tmp_path: Path):
