@@ -99,6 +99,7 @@ def compile_pcre(
             word=lambda: Union(Range("a", "z"), Range("A", "Z"), Range("0", "9"), Re("_")),
             trailing_dollar_nl=True,
             call_kind=call_kind,
+            allow_ascii_word_boundary=True,
         )
         return CompileResult(
             mirror=mirror,

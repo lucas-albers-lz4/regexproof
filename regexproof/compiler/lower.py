@@ -31,14 +31,24 @@ def lower(
     trailing_dollar_nl: bool,
     call_kind: str,
     case_fold: Callable[[str], set[str]] | None = None,
+    allow_ascii_word_boundary: bool = False,
 ):
     """Lower AST to Z3.
 
     ``fold`` is the active case-fold (None unless ignorecase). ``case_fold`` is
     the dialect fold closure used for scoped ``(?i:…)`` (Folded nodes) when
     the outer pattern is case-sensitive.
+
+    ``allow_ascii_word_boundary``: encode edge ``\\b`` (WordBounded) using an
+    ASCII ``\\w``/``\\W`` split faithful for RE2/PCRE/ECMA and Python
+    ``re.ASCII``. Leave False for Unicode-default Python ``\\b`` (TRAPS #17).
     """
-    meta = {"leading_caret": False, "trailing_dollar": False, "has_internal_anchor": False}
+    meta = {
+        "leading_caret": False,
+        "trailing_dollar": False,
+        "has_internal_anchor": False,
+        "word_boundary_wrap": False,
+    }
     body = _lower_node(
         node,
         fold=fold,
@@ -50,11 +60,15 @@ def lower(
         meta=meta,
         at_start=True,
         at_end=True,
+        allow_ascii_word_boundary=allow_ascii_word_boundary,
     )
     if meta["has_internal_anchor"]:
         raise Unencodable("internal-anchor")
     if meta["trailing_dollar"] and trailing_dollar_nl:
         body = python_trailing_dollar(body)
+    if meta.get("word_boundary_wrap"):
+        # WordBounded lowering already applied search-shaped edge constraints.
+        return body, meta
     return _wrap(body, call_kind, meta), meta
 
 
@@ -76,8 +90,34 @@ def _wrap(body, call_kind, meta):
 
 
 def _lower_node(
-    node, *, fold, case_fold, dot_terminators, digit, space, word, meta, at_start, at_end
+    node,
+    *,
+    fold,
+    case_fold,
+    dot_terminators,
+    digit,
+    space,
+    word,
+    meta,
+    at_start,
+    at_end,
+    allow_ascii_word_boundary: bool = False,
 ):
+    if isinstance(node, sp.WordBoundary):
+        raise Unencodable("word-boundary")
+    if isinstance(node, sp.WordBounded):
+        if not allow_ascii_word_boundary:
+            raise Unencodable("word-boundary")
+        return _lower_word_bounded(
+            node,
+            fold=fold,
+            case_fold=case_fold,
+            dot_terminators=dot_terminators,
+            digit=digit,
+            space=space,
+            word=word,
+            meta=meta,
+        )
     if isinstance(node, sp.Folded):
         active = case_fold if case_fold is not None else fold
         if active is None:
@@ -93,6 +133,7 @@ def _lower_node(
             meta=meta,
             at_start=at_start,
             at_end=at_end,
+            allow_ascii_word_boundary=allow_ascii_word_boundary,
         )
     if isinstance(node, sp.Lit):
         if node.ch == "":
@@ -116,6 +157,7 @@ def _lower_node(
                     meta=meta,
                     at_start=at_start and idx == 0,
                     at_end=at_end and idx == len(items) - 1,
+                    allow_ascii_word_boundary=allow_ascii_word_boundary,
                 )
             )
         if not parts:
@@ -134,6 +176,7 @@ def _lower_node(
                 meta=meta,
                 at_start=at_start,
                 at_end=at_end,
+                allow_ascii_word_boundary=allow_ascii_word_boundary,
             )
             for it in node.items
         ]
@@ -150,6 +193,7 @@ def _lower_node(
             meta=meta,
             at_start=False,
             at_end=False,
+            allow_ascii_word_boundary=allow_ascii_word_boundary,
         )
         return _repeat(inner, node.lo, node.hi)
     if isinstance(node, sp.Cls):
@@ -168,6 +212,83 @@ def _lower_node(
             meta["has_internal_anchor"] = True
             return Re("")
     raise Unencodable(f"unsupported-node:{type(node).__name__}")
+
+
+def _ascii_nonword():
+    """RE2/PCRE/ECMA ``\\W``: not ``[A-Za-z0-9_]`` over the BMP."""
+    return ranges_excluding(set(_WORD_CODES))
+
+
+def _lower_word_bounded(
+    node: sp.WordBounded,
+    *,
+    fold,
+    case_fold,
+    dot_terminators,
+    digit,
+    space,
+    word,
+    meta,
+):
+    """Encode edge ``\\b`` as (^|\\W)inner(\\W|$) under ASCII ``\\w``.
+
+    Faithful for engines whose ``\\w`` is ASCII (RE2, stock PCRE without UCP,
+    ECMA without unicode flag). Emits a search-shaped language and sets
+    ``meta['word_boundary_wrap']=True`` so the caller skips a second wrap.
+    """
+    inner_meta = {
+        "leading_caret": False,
+        "trailing_dollar": False,
+        "has_internal_anchor": False,
+        "word_boundary_wrap": False,
+    }
+    inner = _lower_node(
+        node.item,
+        fold=fold,
+        case_fold=case_fold,
+        dot_terminators=dot_terminators,
+        digit=digit,
+        space=space,
+        word=word,
+        meta=inner_meta,
+        at_start=True,
+        at_end=True,
+        allow_ascii_word_boundary=False,  # no nested WordBounded
+    )
+    if inner_meta["has_internal_anchor"]:
+        raise Unencodable("internal-anchor")
+    any_c = any_char()
+    nw = _ascii_nonword()
+    # leading \\b: match at start OR after a non-word char.
+    # trailing \\b: match at end OR before a non-word char.
+    prefix_after_nw = Concat(Star(any_c), nw)
+    suffix_at_end = Re("")
+    suffix_before_nw = Concat(nw, Star(any_c))
+
+    if node.leading and node.trailing:
+        body = Union(
+            Concat(inner, suffix_at_end),
+            Concat(inner, suffix_before_nw),
+            Concat(prefix_after_nw, inner, suffix_at_end),
+            Concat(prefix_after_nw, inner, suffix_before_nw),
+        )
+    elif node.leading:
+        body = Union(
+            Concat(inner, Star(any_c)),
+            Concat(prefix_after_nw, inner, Star(any_c)),
+        )
+    elif node.trailing:
+        body = Union(
+            Concat(Star(any_c), inner),
+            Concat(Star(any_c), inner, suffix_before_nw),
+        )
+    else:
+        raise Unencodable("word-boundary")
+    meta["word_boundary_wrap"] = True
+    # Propagate caret/dollar only if inner had them (unusual with \\b wraps).
+    meta["leading_caret"] = inner_meta["leading_caret"]
+    meta["trailing_dollar"] = inner_meta["trailing_dollar"]
+    return body
 
 
 def _lit(ch: str, fold):

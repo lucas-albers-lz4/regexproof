@@ -3,7 +3,7 @@
     {
       "corpus": "gitleaks",
       "decision": "go",
-      "fraction": 0.6018,
+      "fraction": 0.8235,
       "phase3_redecision": "confirm go",
       "rule": "go iff encodable/sample_size >= 0.30 (inventory_only exempt)"
     },
@@ -17,16 +17,15 @@
     {
       "corpus": "coreruleset",
       "decision": "go",
-      "fraction": 0.6478,
+      "fraction": 0.7168,
       "phase3_redecision": "confirm go",
       "rule": "go iff encodable/sample_size >= 0.30 (inventory_only exempt)"
     },
     {
       "corpus": "trufflehog",
-      "decision": "no-go",
-      "fraction": 0.2326,
-      "next": "Phase-2 backlog or dialect rewrite; do not raise pattern-too-long cap",
-      "phase3_redecision": "remain no-go; primary residual is engine-limit (word-boundary / composite-pattern / internal-anchor) \u2014 not a silent skip",
+      "decision": "go",
+      "fraction": 0.9349,
+      "phase3_redecision": "confirm go",
       "rule": "go iff encodable/sample_size >= 0.30 (inventory_only exempt)"
     },
     {

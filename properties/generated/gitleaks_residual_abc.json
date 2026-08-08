@@ -2,52 +2,54 @@
   "baseline_fraction": 0.185,
   "baseline_note": "issue #51: 221 rules, 101 lazy parse-errors",
   "class_counts": {
-    "b": 84,
+    "b": 35,
     "c": 4,
-    "encodable": 133
+    "encodable": 182
   },
   "corpus": "gitleaks",
   "current": {
-    "budget": null,
+    "budget": {
+      "redos_wall_s": 120
+    },
     "commit": null,
-    "compiler_fingerprint": "50acabd829ca",
+    "compiler_fingerprint": "c3566c0cb380",
     "complete_run": true,
     "corpus_pin": null,
     "decision": "go",
     "decision_rule": "go iff encodable/sample_size >= 0.3",
     "dialect": "re2",
-    "encodable": 133,
+    "encodable": 182,
     "engine_versions": {
       "python": "3.14.6",
       "z3": "5.0.0"
     },
-    "fraction": 0.6018,
+    "fraction": 0.8235,
     "go_no_go_threshold": 0.3,
     "inventory_path": "properties/generated/gitleaks-inventory.ndjson",
     "path": "pilots/gitleaks/config/gitleaks.toml",
     "pilot": "gitleaks",
     "reasons": {
-      "inline-flag": 17,
+      "inline-flag": 29,
       "negated-shorthand": 2,
-      "ok": 133,
+      "ok": 182,
       "pattern-too-long": 4,
-      "word-boundary": 65
+      "word-boundary": 4
     },
     "sample_size": 221,
     "schema_version": "1",
     "scope": "full_corpus",
     "unclassified_parse_errors": 0,
-    "wall_s": 1.051
+    "wall_s": 1.052
   },
   "non_lazy_fix_evidence": {
-    "crs_after": 0.6478,
+    "crs_after": 0.7168,
     "crs_before": 0.384,
     "note": "CRS lift 38.4%\u219264.8% includes hex soundness + negated-class/scoped-flag work beyond lazy-strip; gitleaks residual is mostly word-boundary (b) after lazy cleared."
   },
   "records": [
     {
-      "class": "b",
-      "compile_reason": "word-boundary",
+      "class": "encodable",
+      "compile_reason": "ok",
       "regex_id": "45fb01484e6593d0c34922f594e7344b"
     },
     {
@@ -67,7 +69,7 @@
     },
     {
       "class": "b",
-      "compile_reason": "word-boundary",
+      "compile_reason": "inline-flag",
       "regex_id": "2ea489673992a57020424e728e789560"
     },
     {
@@ -81,8 +83,8 @@
       "regex_id": "7e1b515f4a13cba11c0609302fa8dff1"
     },
     {
-      "class": "b",
-      "compile_reason": "word-boundary",
+      "class": "encodable",
+      "compile_reason": "ok",
       "regex_id": "c2df990f2f50948a62a8c134d13ecddb"
     },
     {
@@ -92,7 +94,7 @@
     },
     {
       "class": "b",
-      "compile_reason": "word-boundary",
+      "compile_reason": "inline-flag",
       "regex_id": "2501363a9c4207267106b9ed0a7d7194"
     },
     {
@@ -101,23 +103,23 @@
       "regex_id": "af05f24163c0f84869a1596def89d1b8"
     },
     {
-      "class": "b",
-      "compile_reason": "word-boundary",
+      "class": "encodable",
+      "compile_reason": "ok",
       "regex_id": "a6e8f5ff3888ba5b9f0d01e84646c268"
     },
     {
-      "class": "b",
-      "compile_reason": "word-boundary",
+      "class": "encodable",
+      "compile_reason": "ok",
       "regex_id": "7659754f2cb2ecf3548ffbae58f2613d"
     },
     {
-      "class": "b",
-      "compile_reason": "word-boundary",
+      "class": "encodable",
+      "compile_reason": "ok",
       "regex_id": "fe9f0523bce369f55cfc783b0b6aca70"
     },
     {
-      "class": "b",
-      "compile_reason": "word-boundary",
+      "class": "encodable",
+      "compile_reason": "ok",
       "regex_id": "369501785eb6c62ea97828d5c9abfc76"
     },
     {
@@ -137,17 +139,17 @@
     },
     {
       "class": "b",
-      "compile_reason": "word-boundary",
+      "compile_reason": "inline-flag",
       "regex_id": "cc9b56ff92bd0731ccbc17a0a7e15994"
     },
     {
-      "class": "b",
-      "compile_reason": "word-boundary",
+      "class": "encodable",
+      "compile_reason": "ok",
       "regex_id": "5ae00a581404116cf8dbfc6585b9ea09"
     },
     {
-      "class": "b",
-      "compile_reason": "word-boundary",
+      "class": "encodable",
+      "compile_reason": "ok",
       "regex_id": "07bed9c9f7fe8fb30cf9f5dba9cda323"
     },
     {
@@ -191,8 +193,8 @@
       "regex_id": "e0396ad182bc5501498ed70dc7068d29"
     },
     {
-      "class": "b",
-      "compile_reason": "word-boundary",
+      "class": "encodable",
+      "compile_reason": "ok",
       "regex_id": "9e6244920851537076c48a27b3e3664f"
     },
     {
@@ -211,8 +213,8 @@
       "regex_id": "0d57b78a3a971be1a56c32105a920440"
     },
     {
-      "class": "b",
-      "compile_reason": "word-boundary",
+      "class": "encodable",
+      "compile_reason": "ok",
       "regex_id": "2c3da3d19d89a3605f845516838dafd6"
     },
     {
@@ -256,8 +258,8 @@
       "regex_id": "f4686d2e58118dca2b3382abaee04c9c"
     },
     {
-      "class": "b",
-      "compile_reason": "word-boundary",
+      "class": "encodable",
+      "compile_reason": "ok",
       "regex_id": "71837a14c3da215f5a5c94f0ef799111"
     },
     {
@@ -271,18 +273,18 @@
       "regex_id": "02e3224794efbcfed1577b160002807b"
     },
     {
-      "class": "b",
-      "compile_reason": "word-boundary",
+      "class": "encodable",
+      "compile_reason": "ok",
       "regex_id": "f595dccb562b1259644510238f5d671d"
     },
     {
-      "class": "b",
-      "compile_reason": "word-boundary",
+      "class": "encodable",
+      "compile_reason": "ok",
       "regex_id": "04af05e74767ba1def688618531494b8"
     },
     {
-      "class": "b",
-      "compile_reason": "word-boundary",
+      "class": "encodable",
+      "compile_reason": "ok",
       "regex_id": "ec58d128a4ef5188a8e05f609e0fd44f"
     },
     {
@@ -337,12 +339,12 @@
     },
     {
       "class": "b",
-      "compile_reason": "word-boundary",
+      "compile_reason": "inline-flag",
       "regex_id": "2fdd3a59ba11492e8e9c96660abd83d2"
     },
     {
       "class": "b",
-      "compile_reason": "word-boundary",
+      "compile_reason": "inline-flag",
       "regex_id": "387df87e420e68068b8b013020a8ce42"
     },
     {
@@ -351,13 +353,13 @@
       "regex_id": "721ddac51276b4e7e80a9173b870c70d"
     },
     {
-      "class": "b",
-      "compile_reason": "word-boundary",
+      "class": "encodable",
+      "compile_reason": "ok",
       "regex_id": "1c23eb80fb07b5410eb55b25a1e05efb"
     },
     {
       "class": "b",
-      "compile_reason": "word-boundary",
+      "compile_reason": "inline-flag",
       "regex_id": "d2aeefe39e143467e2830ed86858cab2"
     },
     {
@@ -406,8 +408,8 @@
       "regex_id": "b028c6ddb51b1535aa24b9bb5e1177a4"
     },
     {
-      "class": "b",
-      "compile_reason": "word-boundary",
+      "class": "encodable",
+      "compile_reason": "ok",
       "regex_id": "b9afdedf5cadcd9a1fc6221800d712f6"
     },
     {
@@ -426,8 +428,8 @@
       "regex_id": "312b163356905626d163b59c46262c0f"
     },
     {
-      "class": "b",
-      "compile_reason": "word-boundary",
+      "class": "encodable",
+      "compile_reason": "ok",
       "regex_id": "519d6679edf0e7270c2168542b342eeb"
     },
     {
@@ -501,8 +503,8 @@
       "regex_id": "a2d374ce5ef8ef50a688e12a31540aa5"
     },
     {
-      "class": "b",
-      "compile_reason": "word-boundary",
+      "class": "encodable",
+      "compile_reason": "ok",
       "regex_id": "1aa5f360e1cde7c7782a76901370dcdf"
     },
     {
@@ -521,8 +523,8 @@
       "regex_id": "486592a2dfbca98126a7c5efb932dc5f"
     },
     {
-      "class": "b",
-      "compile_reason": "word-boundary",
+      "class": "encodable",
+      "compile_reason": "ok",
       "regex_id": "a161232e7fe0588057e521ded2d0348b"
     },
     {
@@ -546,18 +548,18 @@
       "regex_id": "8f808966856e642c231aa75a214e5203"
     },
     {
-      "class": "b",
-      "compile_reason": "word-boundary",
+      "class": "encodable",
+      "compile_reason": "ok",
       "regex_id": "dae9f973e3c33ca0cd0c89a44bc15b4f"
     },
     {
-      "class": "b",
-      "compile_reason": "word-boundary",
+      "class": "encodable",
+      "compile_reason": "ok",
       "regex_id": "83e95c27b23a9b491634148f79ff3422"
     },
     {
-      "class": "b",
-      "compile_reason": "word-boundary",
+      "class": "encodable",
+      "compile_reason": "ok",
       "regex_id": "e345ac223b4b12bfed61a07a34f9b6cd"
     },
     {
@@ -581,8 +583,8 @@
       "regex_id": "98f37153602eda8f57d9dc09aa2ffb7f"
     },
     {
-      "class": "b",
-      "compile_reason": "word-boundary",
+      "class": "encodable",
+      "compile_reason": "ok",
       "regex_id": "1f53539c115f9d9731354fcb3941dbb1"
     },
     {
@@ -591,18 +593,18 @@
       "regex_id": "a17cff6f06c645012a92e8fcdd913f36"
     },
     {
-      "class": "b",
-      "compile_reason": "word-boundary",
+      "class": "encodable",
+      "compile_reason": "ok",
       "regex_id": "5bfdc051e5b96c4d775c420f6647ca03"
     },
     {
-      "class": "b",
-      "compile_reason": "word-boundary",
+      "class": "encodable",
+      "compile_reason": "ok",
       "regex_id": "f96ab70de22c878f2fc19acb6d2a99d8"
     },
     {
-      "class": "b",
-      "compile_reason": "word-boundary",
+      "class": "encodable",
+      "compile_reason": "ok",
       "regex_id": "5b04bec44fd8759ae15afdfbc8b6cefa"
     },
     {
@@ -612,7 +614,7 @@
     },
     {
       "class": "b",
-      "compile_reason": "word-boundary",
+      "compile_reason": "inline-flag",
       "regex_id": "381599ee0ffe9dc04e43af02ef55eec4"
     },
     {
@@ -626,8 +628,8 @@
       "regex_id": "667a414757e52ff47cef327dfe84ff7d"
     },
     {
-      "class": "b",
-      "compile_reason": "word-boundary",
+      "class": "encodable",
+      "compile_reason": "ok",
       "regex_id": "6b4db4fc7e495fee3877c58d0ecd8ba7"
     },
     {
@@ -731,8 +733,8 @@
       "regex_id": "2b6c65b081a8e1165a3e9759c9c327ff"
     },
     {
-      "class": "b",
-      "compile_reason": "word-boundary",
+      "class": "encodable",
+      "compile_reason": "ok",
       "regex_id": "91f0bf2312f6448cf25323b457277e74"
     },
     {
@@ -776,13 +778,13 @@
       "regex_id": "a82ad297acece47b5aeefcd40c3354f6"
     },
     {
-      "class": "b",
-      "compile_reason": "word-boundary",
+      "class": "encodable",
+      "compile_reason": "ok",
       "regex_id": "4850f32f6f8a8c6340d07cf89d6dc692"
     },
     {
-      "class": "b",
-      "compile_reason": "word-boundary",
+      "class": "encodable",
+      "compile_reason": "ok",
       "regex_id": "2f0be2e9ef12a380197c45e930e106db"
     },
     {
@@ -796,8 +798,8 @@
       "regex_id": "afe15580e0a8b687b9e2432fe1f5e9c0"
     },
     {
-      "class": "b",
-      "compile_reason": "word-boundary",
+      "class": "encodable",
+      "compile_reason": "ok",
       "regex_id": "e81dabc67b57c3caa18dd1fa7049bfad"
     },
     {
@@ -811,8 +813,8 @@
       "regex_id": "287a1c142d93f45d4f0ce0e9714ef9d7"
     },
     {
-      "class": "b",
-      "compile_reason": "word-boundary",
+      "class": "encodable",
+      "compile_reason": "ok",
       "regex_id": "c2554c562e8c20d6d4c4141645b88a8f"
     },
     {
@@ -837,27 +839,27 @@
     },
     {
       "class": "b",
-      "compile_reason": "word-boundary",
+      "compile_reason": "inline-flag",
       "regex_id": "9bc610a51ca446a253216b28658f88a2"
     },
     {
-      "class": "b",
-      "compile_reason": "word-boundary",
+      "class": "encodable",
+      "compile_reason": "ok",
       "regex_id": "e7ff6e23853704114028754b129ed5c1"
     },
     {
       "class": "b",
-      "compile_reason": "word-boundary",
+      "compile_reason": "inline-flag",
       "regex_id": "100bd740c320abe81b5005d06f823306"
     },
     {
       "class": "b",
-      "compile_reason": "word-boundary",
+      "compile_reason": "inline-flag",
       "regex_id": "a4b185664c1566be3738c58ead020769"
     },
     {
-      "class": "b",
-      "compile_reason": "word-boundary",
+      "class": "encodable",
+      "compile_reason": "ok",
       "regex_id": "acfba3142faefd106daed98923dffdcb"
     },
     {
@@ -871,8 +873,8 @@
       "regex_id": "1258f2bb1706ffcd35dcc2d67e940b67"
     },
     {
-      "class": "b",
-      "compile_reason": "word-boundary",
+      "class": "encodable",
+      "compile_reason": "ok",
       "regex_id": "787f8874315b1c576000c63721cbbf2a"
     },
     {
@@ -886,18 +888,18 @@
       "regex_id": "b803e871a668f99d4e1c7ba6b8d96f2f"
     },
     {
-      "class": "b",
-      "compile_reason": "word-boundary",
+      "class": "encodable",
+      "compile_reason": "ok",
       "regex_id": "4eda66d89ad56912405ba9cfbb7d54cb"
     },
     {
-      "class": "b",
-      "compile_reason": "word-boundary",
+      "class": "encodable",
+      "compile_reason": "ok",
       "regex_id": "bd3d2f7274ca925cb05d8d41e373a35f"
     },
     {
-      "class": "b",
-      "compile_reason": "word-boundary",
+      "class": "encodable",
+      "compile_reason": "ok",
       "regex_id": "ef1eb0b1b25b1fbf82ed6889739d86f5"
     },
     {
@@ -912,12 +914,12 @@
     },
     {
       "class": "b",
-      "compile_reason": "word-boundary",
+      "compile_reason": "inline-flag",
       "regex_id": "00b85bb56fa0dfeab682245bd945e7bd"
     },
     {
       "class": "b",
-      "compile_reason": "word-boundary",
+      "compile_reason": "inline-flag",
       "regex_id": "1747c5122d876f7426b15879e0313c7d"
     },
     {
@@ -926,33 +928,33 @@
       "regex_id": "df135272e5404bfd40f9b7ba70d90fcc"
     },
     {
-      "class": "b",
-      "compile_reason": "word-boundary",
+      "class": "encodable",
+      "compile_reason": "ok",
       "regex_id": "58585f481307865fd58c2a362a90c20e"
     },
     {
-      "class": "b",
-      "compile_reason": "word-boundary",
+      "class": "encodable",
+      "compile_reason": "ok",
       "regex_id": "448bd96b4cc33acf0778a365a2f86855"
     },
     {
-      "class": "b",
-      "compile_reason": "word-boundary",
+      "class": "encodable",
+      "compile_reason": "ok",
       "regex_id": "b252d5fdd62b62ecebb86aaaa1dd491a"
     },
     {
-      "class": "b",
-      "compile_reason": "word-boundary",
+      "class": "encodable",
+      "compile_reason": "ok",
       "regex_id": "953bbbd68f8b8d6031b0c5f471cf9c4d"
     },
     {
-      "class": "b",
-      "compile_reason": "word-boundary",
+      "class": "encodable",
+      "compile_reason": "ok",
       "regex_id": "81b90e72491fee6d13ca3edddc4d3e61"
     },
     {
-      "class": "b",
-      "compile_reason": "word-boundary",
+      "class": "encodable",
+      "compile_reason": "ok",
       "regex_id": "42b215c31d65226a7c1d6314ddaa5c88"
     },
     {
@@ -981,8 +983,8 @@
       "regex_id": "92d1d84faf912cb2e0ea628009742726"
     },
     {
-      "class": "b",
-      "compile_reason": "word-boundary",
+      "class": "encodable",
+      "compile_reason": "ok",
       "regex_id": "92130a8833eff5843c24b2a29b5f5712"
     },
     {
@@ -1046,8 +1048,8 @@
       "regex_id": "da7a31c4123fd732b96bea22052b10f0"
     },
     {
-      "class": "b",
-      "compile_reason": "word-boundary",
+      "class": "encodable",
+      "compile_reason": "ok",
       "regex_id": "2a382f896ebac0d396c5cf4cdbd2efc9"
     },
     {
@@ -1056,8 +1058,8 @@
       "regex_id": "fbfdd3df4523c7c5c52b02ee2d410064"
     },
     {
-      "class": "b",
-      "compile_reason": "word-boundary",
+      "class": "encodable",
+      "compile_reason": "ok",
       "regex_id": "a12f744943183371bbcad7a85e2fb5ab"
     },
     {
@@ -1121,13 +1123,13 @@
       "regex_id": "03861d6b8a72af2857f90322193890da"
     },
     {
-      "class": "b",
-      "compile_reason": "word-boundary",
+      "class": "encodable",
+      "compile_reason": "ok",
       "regex_id": "c30ba88c188f43ebda11ee1acb17ef56"
     },
     {
-      "class": "b",
-      "compile_reason": "word-boundary",
+      "class": "encodable",
+      "compile_reason": "ok",
       "regex_id": "30b2c22070518dfcd1e0faa015e1df50"
     },
     {

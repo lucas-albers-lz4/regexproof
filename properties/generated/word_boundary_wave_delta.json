@@ -1,0 +1,29 @@
+{
+  "schema_version": "1",
+  "wave": "word-boundary",
+  "issues": {
+    "canonical": 62,
+    "umbrella": 63,
+    "spike": 64,
+    "land": 65,
+    "remeasure": 66
+  },
+  "before": {
+    "gitleaks": 0.6018,
+    "trufflehog": 0.2326,
+    "coreruleset": 0.6478
+  },
+  "after": {
+    "gitleaks": 0.8235,
+    "trufflehog": 0.9349,
+    "coreruleset": 0.7168
+  },
+  "flipped_to_encodable_gitleaks": 49,
+  "decisions": {
+    "trufflehog": "no-go → go (≥0.30)",
+    "gitleaks": "go (lift beyond lazy-only ceiling)",
+    "coreruleset": "go (further lift)"
+  },
+  "spike_artifact": "properties/generated/word_boundary_spike.json",
+  "note": "ASCII-domain edge \\\\b encode; py_re Unicode-default remains reject (TRAPS #25)."
+}
