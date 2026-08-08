@@ -138,9 +138,11 @@ def write_markdown(path: Path, *, corpus: str, findings: list[dict[str, Any]]) -
         for key in _FINDING_META_KEYS:
             if key not in f and key != "schema_version":
                 continue
-            val = f.get(key, "1" if key == "schema_version" else None)
-            if key == "schema_version" and val is None:
-                val = "1"
+            val = f.get(key)
+            if key == "schema_version":
+                # Always emit the string constant required by scanner schemas.
+                lines.append(f'schema_version: "1"')
+                continue
             if val is None and key not in ("ground_truth_status", "disclosure", "shape"):
                 continue
             lines.append(f"{key}: {_yaml_scalar(val)}")
