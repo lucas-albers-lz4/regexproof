@@ -1,4 +1,8 @@
-"""Security-tool disclosure gate + human-gated PR dry-run."""
+"""Security-tool disclosure gate + human-gated PR dry-run.
+
+Policy: SECURITY.md (private-disclosure-first for security-tool corpora).
+Field contracts: docs/REPORTING.md.
+"""
 
 from __future__ import annotations
 
