@@ -182,3 +182,16 @@ test-first:
   shapes outside the A1B accept class (documented in
   `properties/generated/trailing_alt_dollar_p3_delta.md`; accept class not
   widened).
+
+## Trailing-alt `$` P4 secret corpora (#84, 2026-08-08)
+
+- gitleaks e2e fraction **0.8190** (stable vs P3); extract `regex_id` set
+  unchanged. `(***)` Anthropic shared-prefix rows classified as
+  corpus-artifact (still encodable under A1B).
+- detect-secrets expanded to full pin **v1.5.0** via new `python_dir`
+  extractor; fraction artifact **0.3725** (19/51).
+- trufflehog re-cloned at **v3.88.29** / `90190de`; `regex_id` set matches
+  frozen baseline. One encodability flip (`^[xX]+|\*+$` →
+  `per-alternative-anchor`) classified as compiler soundness (#76), not
+  extractor drift. Drift writeup:
+  `properties/generated/trailing_alt_dollar_p4_drift.md`.

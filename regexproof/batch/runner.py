@@ -79,12 +79,15 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
     },
     "detect-secrets": {
         "corpus_type": "rule_corpus",
-        "path": ROOT / "pilots" / "detect-secrets" / "sample_plugins.py",
+        "path": ROOT / "batch" / "corpora" / "detect-secrets" / "plugins",
+        "glob": "**/*.py",
         "dialect": "py_re",
-        "extractor": "python",
+        "extractor": "python_dir",
         "repo": "Yelp/detect-secrets",
         "security_tool": True,
         "lift_inline": False,
+        "corpus_pin": "v1.5.0",
+        "commit": "01886c8a910c64595c47f186ca1ffc0b77fa5458",
         "budget": {"redos_wall_s": 60},
     },
     "coreruleset": {
@@ -242,6 +245,15 @@ def _extract(corpus: str, meta: dict[str, Any]) -> list[dict[str, Any]]:
         source = path.read_text(encoding="utf-8")
         rel = str(path.relative_to(ROOT))
         return extract_python(source, repo=meta["repo"], file=rel)
+    if meta["extractor"] == "python_dir":
+        return _extract_glob(
+            path,
+            meta,
+            glob=meta.get("glob") or "**/*.py",
+            extract_fn=lambda src, rel: extract_python(
+                src, repo=meta["repo"], file=rel
+            ),
+        )
     if meta["extractor"] == "go_regexp":
         return _extract_glob(
             path,

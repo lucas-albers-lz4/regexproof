@@ -19,6 +19,7 @@ CORPORA = [
     "validatorjs",
     "coreruleset",
     "trufflehog",
+    "detect-secrets",
     "ids_rules",
     "semgrep_rules",
     "pcre2_testdata",

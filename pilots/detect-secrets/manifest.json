@@ -2,8 +2,12 @@
   "schema_version": "1",
   "pilot": "detect-secrets",
   "repo": "Yelp/detect-secrets",
-  "note": "Minimal pinned Python regex corpus for Phase 5 batch (not a full upstream mirror).",
+  "note": "Mini Phase-5 sample remains at sample_plugins.py. Full corpus pin is batch/corpora/detect-secrets (v1.5.0) via python_dir.",
   "corpus_path": "pilots/detect-secrets/sample_plugins.py",
+  "full_corpus_path": "batch/corpora/detect-secrets/plugins",
+  "corpus_pin": "v1.5.0",
+  "commit": "01886c8a910c64595c47f186ca1ffc0b77fa5458",
   "dialect": "py_re",
-  "corpus_type": "rule_corpus"
+  "corpus_type": "rule_corpus",
+  "extractor": "python_dir"
 }

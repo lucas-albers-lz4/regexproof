@@ -1,0 +1,31 @@
+{
+  "baseline": "properties/generated/gitleaks-inventory.ndjson",
+  "corpus": "gitleaks",
+  "current": {
+    "compiler_fingerprint": "4a86d0cffde9046c",
+    "corpus": "gitleaks",
+    "corpus_pin": null,
+    "encodable": 181,
+    "fraction": 0.819,
+    "python": "3.14.6",
+    "reasons": {
+      "inline-flag": 29,
+      "negated-shorthand": 2,
+      "ok": 181,
+      "pattern-too-long": 4,
+      "per-alternative-anchor": 1,
+      "word-boundary": 4
+    },
+    "sample_size": 221,
+    "wall_s": 1.285,
+    "z3_version": "5.0.0"
+  },
+  "current_ids": 221,
+  "extra_in_current": [],
+  "flipped_encodable_to_unencodable": [],
+  "flipped_unencodable_to_encodable": [],
+  "frozen_ids": 221,
+  "missing_from_current": [],
+  "non_lazy_needle_moved": false,
+  "schema_version": "1"
+}

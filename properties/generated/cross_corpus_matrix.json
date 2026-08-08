@@ -15,7 +15,7 @@
         "word-boundary": 4
       },
       "sample_size": 221,
-      "scope": "frozen_inventory",
+      "scope": "full_corpus",
       "unclassified_parse_errors": 0
     },
     {
@@ -42,19 +42,11 @@
       "corpus": "coreruleset",
       "corpus_pin": null,
       "decision": "go",
-      "encodable": 239,
-      "fraction": 0.6908,
-      "reasons": {
-        "inline-flag": 1,
-        "internal-anchor": 2,
-        "negated-shorthand": 3,
-        "ok": 239,
-        "pattern-too-long": 73,
-        "per-alternative-anchor": 9,
-        "word-boundary": 19
-      },
-      "sample_size": 346,
-      "scope": "full_corpus",
+      "encodable": 9,
+      "fraction": 0.9,
+      "reasons": null,
+      "sample_size": 10,
+      "scope": "sample",
       "unclassified_parse_errors": 0
     },
     {
@@ -73,6 +65,22 @@
         "word-boundary": 2
       },
       "sample_size": 215,
+      "scope": "full_corpus",
+      "unclassified_parse_errors": 0
+    },
+    {
+      "corpus": "detect-secrets",
+      "corpus_pin": "v1.5.0",
+      "decision": "go",
+      "encodable": 19,
+      "fraction": 0.3725,
+      "reasons": {
+        "composite-pattern": 23,
+        "lookaround": 7,
+        "ok": 19,
+        "per-alternative-anchor": 2
+      },
+      "sample_size": 51,
       "scope": "full_corpus",
       "unclassified_parse_errors": 0
     },
