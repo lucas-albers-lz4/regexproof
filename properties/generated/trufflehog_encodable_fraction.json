@@ -5,7 +5,7 @@
     "redos_wall_s": 120
   },
   "commit": "90190deac64289cb10bb694894be8db9ead8790b",
-  "compiler_fingerprint": "c04a3e0148b3d58a",
+  "compiler_fingerprint": "4a86d0cffde9046c",
   "complete_run": true,
   "corpus_pin": "v3.88.29",
   "decision": "go",
@@ -13,7 +13,7 @@
   "dialect": "re2",
   "encodable": 200,
   "engine_versions": {
-    "python": "3.13.5",
+    "python": "3.14.6",
     "z3": "5.0.0"
   },
   "fraction": 0.9302,
@@ -30,7 +30,6 @@
     "word-boundary": 2
   },
   "remeasure": {
-    "baseline_compiler_fingerprint": "c3566c0cb380",
     "baseline_encodable": 201,
     "baseline_fraction": 0.9349,
     "flips": {
@@ -39,6 +38,9 @@
       "unchanged": 214
     },
     "from": "frozen_inventory",
+    "prior_artifact_encodable": 200,
+    "prior_artifact_fraction": 0.9302,
+    "prior_compiler_fingerprint": "c04a3e0148b3d58a",
     "samples": {
       "now_encodable": [],
       "now_rejected": [
@@ -56,5 +58,5 @@
   "schema_version": "1",
   "scope": "full_corpus",
   "unclassified_parse_errors": 0,
-  "wall_s": 0.544
+  "wall_s": 0.552
 }

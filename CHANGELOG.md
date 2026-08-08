@@ -169,3 +169,16 @@ test-first:
 - `remeasure-from-inventory.py` restores extractor-frozen reasons
   (`composite-pattern`, `multi-match`) from inventory `compile_reason` so
   empty-placeholder rows cannot inflate encodable counts.
+
+## Trailing-alt `$` P3 validate (#83, 2026-08-08)
+
+- Remeasured all frozen inventories through the A1B compiler (#89) and
+  regenerated `cross_corpus_matrix.{json,md}`.
+- Headline fractions: gitleaks **0.8190** (stable), ids_rules **0.8519**
+  (was 0.8467; paa 278→235), coreruleset **0.6908** (unchanged; paa=9),
+  semgrep_rules **0.2842** (was 0.2741).
+- AC-P3: gitleaks ≥0.70 **pass**; ids ≥0.87 and CRS ≥0.71 **miss** — residual
+  `per-alternative-anchor` rows are caret-in-X / mid-pattern / non-`(?:…|$)`
+  shapes outside the A1B accept class (documented in
+  `properties/generated/trailing_alt_dollar_p3_delta.md`; accept class not
+  widened).

@@ -4,7 +4,7 @@
     "max_wall_s": 900
   },
   "commit": null,
-  "compiler_fingerprint": "c04a3e0148b3d58a",
+  "compiler_fingerprint": "4a86d0cffde9046c",
   "complete_run": true,
   "corpus_pin": "pcre2-10.44",
   "decision": "go",
@@ -12,7 +12,7 @@
   "dialect": "pcre",
   "encodable": 2,
   "engine_versions": {
-    "python": "3.13.5",
+    "python": "3.14.6",
     "z3": "5.0.0"
   },
   "fraction": 1.0,
@@ -23,7 +23,6 @@
     "ok": 2
   },
   "remeasure": {
-    "baseline_compiler_fingerprint": "50acabd829ca",
     "baseline_encodable": 2,
     "baseline_fraction": 1.0,
     "flips": {
@@ -32,6 +31,9 @@
       "unchanged": 2
     },
     "from": "frozen_inventory",
+    "prior_artifact_encodable": 2,
+    "prior_artifact_fraction": 1.0,
+    "prior_compiler_fingerprint": "c04a3e0148b3d58a",
     "samples": {
       "now_encodable": [],
       "now_rejected": []
@@ -41,5 +43,5 @@
   "schema_version": "1",
   "scope": "sample",
   "unclassified_parse_errors": 0,
-  "wall_s": 0.17
+  "wall_s": 0.204
 }
