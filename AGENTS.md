@@ -161,6 +161,7 @@ in the harness output so a reader knows exactly what was proven.
   integrity, password policy) with encoded forms and spike timings
 - `properties/fwlive-classifier.md` — classifier regex inventory incl. the
   `NETFILTER_KV_GLUE` lookahead blocker and the decomposition route per pattern
+- `docs/final-report.md` — corpus-wave (#51–#57) fraction table + gap closure
 - `docs/verified-findings.jsonl` — machine-readable implementation findings
   keyed into TRAPS/BACKENDS/SEMANTICS
 

@@ -1,0 +1,81 @@
+{
+  "compiler_fingerprint": "e00f8969e63fa2bb",
+  "engine_versions": {
+    "python": "3.14.6",
+    "z3": "5.0.0"
+  },
+  "families": [
+    {
+      "call_kind": "search",
+      "dialect": "re2",
+      "domain": "len(s)\u2208[1,32] ascii",
+      "family": "gitleaks-trufflehog-cross-scanner",
+      "gap": {
+        "result": "sat",
+        "wall_ms": 2004
+      },
+      "ground_truth": {
+        "engine": "python.re",
+        "r1_match": false,
+        "r2_match": true,
+        "status": "reproduced",
+        "witness_redacted": "<redacted len=26>"
+      },
+      "ground_truth_engine": "python.re",
+      "mapping_rationale": "same detector intent: cloud access-key id shape",
+      "mutation_guard": "narrow-R2 / widen-R1 registered in rule-diff-pilot style",
+      "pair_kind": "cross_scanner",
+      "r1_provenance": "gitleaks-like AWS key prefix (fixture)",
+      "r2_provenance": "trufflehog-like widened AWS key prefixes (fixture)"
+    },
+    {
+      "call_kind": "search",
+      "dialect": "pcre",
+      "domain": "len(s)\u2208[1,32]",
+      "family": "ids-sig-evolution",
+      "gap": {
+        "result": "sat",
+        "wall_ms": 10
+      },
+      "ground_truth": {
+        "engine": "python.re",
+        "r1_match": false,
+        "r2_match": true,
+        "status": "reproduced",
+        "witness_redacted": "<redacted len=6>"
+      },
+      "ground_truth_engine": "python.re (pcre2 when helper present)",
+      "mapping_rationale": "same sid family / adjacent signature revision",
+      "mutation_guard": "required in harness registration",
+      "pair_kind": "version_diff",
+      "r1_provenance": "IDS sample older GET-only HTTP method gate",
+      "r2_provenance": "IDS sample newer GET|POST method gate"
+    },
+    {
+      "artifact": "properties/generated/crs_rule_diff_report.json",
+      "call_kind": "search/fullmatch-mirror",
+      "dialect": "pcre",
+      "domain": "len(s)\u2208[1,96]",
+      "existing_report_summary": {
+        "admitted_pairs": 8,
+        "path": "properties/generated/crs_rule_diff_report.json"
+      },
+      "family": "crs-adjacent-tag",
+      "ground_truth_engine": "helpers/pcre2",
+      "issue_44_fold": "retain private_first; do not auto-publish upstream",
+      "mapping_rationale": "fold issue #44 private_first SAT gaps; see SECURITY.md",
+      "mutation_guard": "crs_rule_diff_pilot mutation guards",
+      "pair_kind": "version_diff+sibling_family",
+      "r1_provenance": "coreruleset older tag (rule-derived R1 per crs_pairs)",
+      "r2_provenance": "coreruleset newer tag",
+      "triage": "properties/triage/coreruleset_rule_diff.ndjson"
+    }
+  ],
+  "phase": 4,
+  "phase3_artifacts_required": [
+    "phase3_delta_table.json",
+    "phase3_decision_matrix.json",
+    "gitleaks_residual_abc.json"
+  ],
+  "schema_version": "1"
+}

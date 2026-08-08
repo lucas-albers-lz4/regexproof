@@ -1,0 +1,1156 @@
+{
+  "baseline_fraction": 0.185,
+  "baseline_note": "issue #51: 221 rules, 101 lazy parse-errors",
+  "class_counts": {
+    "b": 84,
+    "c": 4,
+    "encodable": 133
+  },
+  "corpus": "gitleaks",
+  "current": {
+    "budget": null,
+    "commit": null,
+    "compiler_fingerprint": "50acabd829ca",
+    "complete_run": true,
+    "corpus_pin": null,
+    "decision": "go",
+    "decision_rule": "go iff encodable/sample_size >= 0.3",
+    "dialect": "re2",
+    "encodable": 133,
+    "engine_versions": {
+      "python": "3.14.6",
+      "z3": "5.0.0"
+    },
+    "fraction": 0.6018,
+    "go_no_go_threshold": 0.3,
+    "inventory_path": "properties/generated/gitleaks-inventory.ndjson",
+    "path": "pilots/gitleaks/config/gitleaks.toml",
+    "pilot": "gitleaks",
+    "reasons": {
+      "inline-flag": 17,
+      "negated-shorthand": 2,
+      "ok": 133,
+      "pattern-too-long": 4,
+      "word-boundary": 65
+    },
+    "sample_size": 221,
+    "schema_version": "1",
+    "scope": "full_corpus",
+    "unclassified_parse_errors": 0,
+    "wall_s": 1.051
+  },
+  "non_lazy_fix_evidence": {
+    "crs_after": 0.6478,
+    "crs_before": 0.384,
+    "note": "CRS lift 38.4%\u219264.8% includes hex soundness + negated-class/scoped-flag work beyond lazy-strip; gitleaks residual is mostly word-boundary (b) after lazy cleared."
+  },
+  "records": [
+    {
+      "class": "b",
+      "compile_reason": "word-boundary",
+      "regex_id": "45fb01484e6593d0c34922f594e7344b"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "f66e76a3534be1d3727febcfd8db409f"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "ac8604fcd5ba993051be817dd6147a21"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "41131f3939b610cc8c15586511750818"
+    },
+    {
+      "class": "b",
+      "compile_reason": "word-boundary",
+      "regex_id": "2ea489673992a57020424e728e789560"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "c0f37f1028802aaaba673dc005d5fe2c"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "7e1b515f4a13cba11c0609302fa8dff1"
+    },
+    {
+      "class": "b",
+      "compile_reason": "word-boundary",
+      "regex_id": "c2df990f2f50948a62a8c134d13ecddb"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "3d5d72fe4899f145402ee93743f3552f"
+    },
+    {
+      "class": "b",
+      "compile_reason": "word-boundary",
+      "regex_id": "2501363a9c4207267106b9ed0a7d7194"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "af05f24163c0f84869a1596def89d1b8"
+    },
+    {
+      "class": "b",
+      "compile_reason": "word-boundary",
+      "regex_id": "a6e8f5ff3888ba5b9f0d01e84646c268"
+    },
+    {
+      "class": "b",
+      "compile_reason": "word-boundary",
+      "regex_id": "7659754f2cb2ecf3548ffbae58f2613d"
+    },
+    {
+      "class": "b",
+      "compile_reason": "word-boundary",
+      "regex_id": "fe9f0523bce369f55cfc783b0b6aca70"
+    },
+    {
+      "class": "b",
+      "compile_reason": "word-boundary",
+      "regex_id": "369501785eb6c62ea97828d5c9abfc76"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "da53e9828dd436469913703fb8dab716"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "9e31211915bc44e6711c76e185f40185"
+    },
+    {
+      "class": "c",
+      "compile_reason": "pattern-too-long",
+      "regex_id": "940db10c80ccb64e1173cca47dab4947"
+    },
+    {
+      "class": "b",
+      "compile_reason": "word-boundary",
+      "regex_id": "cc9b56ff92bd0731ccbc17a0a7e15994"
+    },
+    {
+      "class": "b",
+      "compile_reason": "word-boundary",
+      "regex_id": "5ae00a581404116cf8dbfc6585b9ea09"
+    },
+    {
+      "class": "b",
+      "compile_reason": "word-boundary",
+      "regex_id": "07bed9c9f7fe8fb30cf9f5dba9cda323"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "8e85516ffe8da0722025a25b39228d52"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "1c97a66dcdc9e6d11a16e998a7fa8a92"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "a12a3f44d97a270c7b9473b723b261f9"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "83b38c6ddf8958938233a80cd29a74c1"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "807762946cd391f3d22ba9d89a2f7354"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "5931e3d00d78b24d7d0e95d1d031bc15"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "79fdb1940dc024417f9851e376a29b85"
+    },
+    {
+      "class": "b",
+      "compile_reason": "inline-flag",
+      "regex_id": "e0396ad182bc5501498ed70dc7068d29"
+    },
+    {
+      "class": "b",
+      "compile_reason": "word-boundary",
+      "regex_id": "9e6244920851537076c48a27b3e3664f"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "174b0eb882ae1305fcbb90bed67a7c76"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "c2af44b139806f35036f15b8ee65b7e0"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "0d57b78a3a971be1a56c32105a920440"
+    },
+    {
+      "class": "b",
+      "compile_reason": "word-boundary",
+      "regex_id": "2c3da3d19d89a3605f845516838dafd6"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "06818279436e56309cf2811b727aec35"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "955c43b9dc836be914c5cde5ee1d0f34"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "58d20e50ed971541040c646272352218"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "976cbea5520109796dd8483b32e561c1"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "e946d312e9668a4ad397443cad6e0dd2"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "b0beca1531f1b99ef56a07295a165107"
+    },
+    {
+      "class": "c",
+      "compile_reason": "pattern-too-long",
+      "regex_id": "05fa87af971ce63a93881230d7461ddb"
+    },
+    {
+      "class": "b",
+      "compile_reason": "word-boundary",
+      "regex_id": "f4686d2e58118dca2b3382abaee04c9c"
+    },
+    {
+      "class": "b",
+      "compile_reason": "word-boundary",
+      "regex_id": "71837a14c3da215f5a5c94f0ef799111"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "7eb09b462929166c5709bb1ff144633d"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "02e3224794efbcfed1577b160002807b"
+    },
+    {
+      "class": "b",
+      "compile_reason": "word-boundary",
+      "regex_id": "f595dccb562b1259644510238f5d671d"
+    },
+    {
+      "class": "b",
+      "compile_reason": "word-boundary",
+      "regex_id": "04af05e74767ba1def688618531494b8"
+    },
+    {
+      "class": "b",
+      "compile_reason": "word-boundary",
+      "regex_id": "ec58d128a4ef5188a8e05f609e0fd44f"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "477180dfc141c9d12ce5ad44a657603c"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "a57fd8a3f4fc8310b6eade6a090bd32b"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "4041f8effdc7cc137f2f3466681f4b65"
+    },
+    {
+      "class": "b",
+      "compile_reason": "inline-flag",
+      "regex_id": "d3a8297df41836a680d8620f94e32313"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "7eb560b54c017b8b3573839134710bae"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "821b8fe4a45644994ba9458ac5376876"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "6c537fa094652891c3edfeb942461ed3"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "3846049addc5bab6fb5796efe09409ba"
+    },
+    {
+      "class": "b",
+      "compile_reason": "inline-flag",
+      "regex_id": "b88e3b67193d1cc27c76fff7ff716c0f"
+    },
+    {
+      "class": "b",
+      "compile_reason": "inline-flag",
+      "regex_id": "c2bcbfdf7a8cb2fa06265f8169f50179"
+    },
+    {
+      "class": "b",
+      "compile_reason": "word-boundary",
+      "regex_id": "2fdd3a59ba11492e8e9c96660abd83d2"
+    },
+    {
+      "class": "b",
+      "compile_reason": "word-boundary",
+      "regex_id": "387df87e420e68068b8b013020a8ce42"
+    },
+    {
+      "class": "b",
+      "compile_reason": "inline-flag",
+      "regex_id": "721ddac51276b4e7e80a9173b870c70d"
+    },
+    {
+      "class": "b",
+      "compile_reason": "word-boundary",
+      "regex_id": "1c23eb80fb07b5410eb55b25a1e05efb"
+    },
+    {
+      "class": "b",
+      "compile_reason": "word-boundary",
+      "regex_id": "d2aeefe39e143467e2830ed86858cab2"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "5fd84a6a519693c9e69889efe8ae8b78"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "f8a0f9cf16d2e27e307f4a15a52db5b2"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "38104956799573182b8c1c0e57236ef8"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "58f8f184f5aab6330e9d51ed089091b5"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "bb43b9b1bb6544c968eb00e20ae6d769"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "a39075f5fa9c151f5989f78948c2d6ad"
+    },
+    {
+      "class": "b",
+      "compile_reason": "inline-flag",
+      "regex_id": "24f68a0ed229e3b11a71ff27ca9caa11"
+    },
+    {
+      "class": "b",
+      "compile_reason": "inline-flag",
+      "regex_id": "1efdbdd76d3402658dad5326c81b8691"
+    },
+    {
+      "class": "b",
+      "compile_reason": "inline-flag",
+      "regex_id": "b028c6ddb51b1535aa24b9bb5e1177a4"
+    },
+    {
+      "class": "b",
+      "compile_reason": "word-boundary",
+      "regex_id": "b9afdedf5cadcd9a1fc6221800d712f6"
+    },
+    {
+      "class": "b",
+      "compile_reason": "inline-flag",
+      "regex_id": "257eb62a9a6ea9258038b0922a0c6102"
+    },
+    {
+      "class": "b",
+      "compile_reason": "negated-shorthand",
+      "regex_id": "67cb80311ece119ef8c94e97ab0360c9"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "312b163356905626d163b59c46262c0f"
+    },
+    {
+      "class": "b",
+      "compile_reason": "word-boundary",
+      "regex_id": "519d6679edf0e7270c2168542b342eeb"
+    },
+    {
+      "class": "b",
+      "compile_reason": "inline-flag",
+      "regex_id": "f3be736e57f2a490d4ae87b545cb3158"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "89f0b3e0fab988bce925ea5a4b3a4fd4"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "04acb44f5ff6814c0fcddb78ff750615"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "dbcaaf86d1043b173b9e5b326b2db352"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "744a90c843ea77c77259cc357d9ebec3"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "2b51dbd04e455535b3e3a7885698af37"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "13d7917dbc832d53b469e54a1f3c266e"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "6f08a9109dc65ce1e408ae5c12ffb103"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "718d002ce737ed78d6351f7890e407a7"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "8c6cfc3514ae624e1f0cd92d6374dc71"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "85af104ed1dbf180cf79d708d37eaa35"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "dff06cb06d5e62a0827a0aba626fae5d"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "0c49a88d44517f83b9068006edd7a25e"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "a2d374ce5ef8ef50a688e12a31540aa5"
+    },
+    {
+      "class": "b",
+      "compile_reason": "word-boundary",
+      "regex_id": "1aa5f360e1cde7c7782a76901370dcdf"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "6b0c20724376ce929118ce2ce1411478"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "694d083f4f32aea337f83a26b08ef19e"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "486592a2dfbca98126a7c5efb932dc5f"
+    },
+    {
+      "class": "b",
+      "compile_reason": "word-boundary",
+      "regex_id": "a161232e7fe0588057e521ded2d0348b"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "2d0e5c83421e5bd5f7a22dc21f695879"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "02311166d82eee2be879feba8bc37308"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "a98e2a8c7e62b547a2d0b90c65765698"
+    },
+    {
+      "class": "b",
+      "compile_reason": "inline-flag",
+      "regex_id": "8f808966856e642c231aa75a214e5203"
+    },
+    {
+      "class": "b",
+      "compile_reason": "word-boundary",
+      "regex_id": "dae9f973e3c33ca0cd0c89a44bc15b4f"
+    },
+    {
+      "class": "b",
+      "compile_reason": "word-boundary",
+      "regex_id": "83e95c27b23a9b491634148f79ff3422"
+    },
+    {
+      "class": "b",
+      "compile_reason": "word-boundary",
+      "regex_id": "e345ac223b4b12bfed61a07a34f9b6cd"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "6b67e673a9f69748b251f191ef308699"
+    },
+    {
+      "class": "b",
+      "compile_reason": "inline-flag",
+      "regex_id": "7df01108e83effbeeb837ea4a2cfa583"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "ed2cc1d26d2d9bae8c30888ce9549fbb"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "98f37153602eda8f57d9dc09aa2ffb7f"
+    },
+    {
+      "class": "b",
+      "compile_reason": "word-boundary",
+      "regex_id": "1f53539c115f9d9731354fcb3941dbb1"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "a17cff6f06c645012a92e8fcdd913f36"
+    },
+    {
+      "class": "b",
+      "compile_reason": "word-boundary",
+      "regex_id": "5bfdc051e5b96c4d775c420f6647ca03"
+    },
+    {
+      "class": "b",
+      "compile_reason": "word-boundary",
+      "regex_id": "f96ab70de22c878f2fc19acb6d2a99d8"
+    },
+    {
+      "class": "b",
+      "compile_reason": "word-boundary",
+      "regex_id": "5b04bec44fd8759ae15afdfbc8b6cefa"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "668b9cda484b01a8f42702fa6ced69e8"
+    },
+    {
+      "class": "b",
+      "compile_reason": "word-boundary",
+      "regex_id": "381599ee0ffe9dc04e43af02ef55eec4"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "7ce1c58fd9c756d70e3fa61e977a5d96"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "667a414757e52ff47cef327dfe84ff7d"
+    },
+    {
+      "class": "b",
+      "compile_reason": "word-boundary",
+      "regex_id": "6b4db4fc7e495fee3877c58d0ecd8ba7"
+    },
+    {
+      "class": "c",
+      "compile_reason": "pattern-too-long",
+      "regex_id": "9196cf09a56961cd479ae3448e317c35"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "4db3c4beeed7c6a32d11c056d65c7b00"
+    },
+    {
+      "class": "c",
+      "compile_reason": "pattern-too-long",
+      "regex_id": "b9835d745b05683bec4aada1275d2a0d"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "b858ad87052ef8de1f258d4eb979c91c"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "4ccb621b18ad66c59d1d88bed0fcf1a2"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "d096a4fb42f673d542e3cb6c9e21a622"
+    },
+    {
+      "class": "b",
+      "compile_reason": "inline-flag",
+      "regex_id": "ddda3abe762e6194ab8b6d1475d2a80b"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "bea9fd4a95d1c6835e9866d2c62ec1ef"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "31f83dfe72260c8a920da71fdcd35836"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "5559ff992be84b421747701c0b1688c4"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "0bfe44907b1ca8599efeddd4c6f902fd"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "be248fb6f7dca4d1aca9e5cb140c0ae3"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "6f26a3c2d8414a295ce237fb21278086"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "766529a17f362846536d247b9259b2af"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "b58de5300d8784b862c833703d0529eb"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "0f020fe2199ccc198a9e190be014d4ce"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "0da705e14e177a860788abbdf93581ba"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "3866c3006627b4a700cec300c322c2e9"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "98b067ecebabb7646a7c7c4e23ff7c01"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "2b6c65b081a8e1165a3e9759c9c327ff"
+    },
+    {
+      "class": "b",
+      "compile_reason": "word-boundary",
+      "regex_id": "91f0bf2312f6448cf25323b457277e74"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "fed46822480730768c5f98104718fe53"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "5ebf61a36e42985050b812d3d5f3c59c"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "5f47c797f846930cc4aa22ce64fc0589"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "bc944686aa79ebe6416a2dd1354edef2"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "9539b5ff606c20327c8eb0c82fcfec69"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "60d0570856c1fdcaf0f8c1b05e888573"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "fb51b401d5ec357f2d0a23304338f028"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "a82ad297acece47b5aeefcd40c3354f6"
+    },
+    {
+      "class": "b",
+      "compile_reason": "word-boundary",
+      "regex_id": "4850f32f6f8a8c6340d07cf89d6dc692"
+    },
+    {
+      "class": "b",
+      "compile_reason": "word-boundary",
+      "regex_id": "2f0be2e9ef12a380197c45e930e106db"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "5a52b61d2395ca18fb3d2afcf3700d1d"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "afe15580e0a8b687b9e2432fe1f5e9c0"
+    },
+    {
+      "class": "b",
+      "compile_reason": "word-boundary",
+      "regex_id": "e81dabc67b57c3caa18dd1fa7049bfad"
+    },
+    {
+      "class": "b",
+      "compile_reason": "inline-flag",
+      "regex_id": "40a9a3bf3d57891a1c7b9fd3909383ee"
+    },
+    {
+      "class": "b",
+      "compile_reason": "word-boundary",
+      "regex_id": "287a1c142d93f45d4f0ce0e9714ef9d7"
+    },
+    {
+      "class": "b",
+      "compile_reason": "word-boundary",
+      "regex_id": "c2554c562e8c20d6d4c4141645b88a8f"
+    },
+    {
+      "class": "b",
+      "compile_reason": "word-boundary",
+      "regex_id": "ca3665a5f2d387f2661ecbbdc8ab32bb"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "8e0ba90172563f7cfaf02d11ab80c8a4"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "7beb94b5d66432f6880a7eebbaeef64e"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "f0b6225b8a02d84f5d3b463b4c309970"
+    },
+    {
+      "class": "b",
+      "compile_reason": "word-boundary",
+      "regex_id": "9bc610a51ca446a253216b28658f88a2"
+    },
+    {
+      "class": "b",
+      "compile_reason": "word-boundary",
+      "regex_id": "e7ff6e23853704114028754b129ed5c1"
+    },
+    {
+      "class": "b",
+      "compile_reason": "word-boundary",
+      "regex_id": "100bd740c320abe81b5005d06f823306"
+    },
+    {
+      "class": "b",
+      "compile_reason": "word-boundary",
+      "regex_id": "a4b185664c1566be3738c58ead020769"
+    },
+    {
+      "class": "b",
+      "compile_reason": "word-boundary",
+      "regex_id": "acfba3142faefd106daed98923dffdcb"
+    },
+    {
+      "class": "b",
+      "compile_reason": "negated-shorthand",
+      "regex_id": "7f12f6a88a453f034f8857f842cb1d36"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "1258f2bb1706ffcd35dcc2d67e940b67"
+    },
+    {
+      "class": "b",
+      "compile_reason": "word-boundary",
+      "regex_id": "787f8874315b1c576000c63721cbbf2a"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "1d566c984c3fdb2df596df60be7a497b"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "b803e871a668f99d4e1c7ba6b8d96f2f"
+    },
+    {
+      "class": "b",
+      "compile_reason": "word-boundary",
+      "regex_id": "4eda66d89ad56912405ba9cfbb7d54cb"
+    },
+    {
+      "class": "b",
+      "compile_reason": "word-boundary",
+      "regex_id": "bd3d2f7274ca925cb05d8d41e373a35f"
+    },
+    {
+      "class": "b",
+      "compile_reason": "word-boundary",
+      "regex_id": "ef1eb0b1b25b1fbf82ed6889739d86f5"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "8e02be73807ebce25dad3532ea543123"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "559f5c7e7cd6cbc87ec569117055bd10"
+    },
+    {
+      "class": "b",
+      "compile_reason": "word-boundary",
+      "regex_id": "00b85bb56fa0dfeab682245bd945e7bd"
+    },
+    {
+      "class": "b",
+      "compile_reason": "word-boundary",
+      "regex_id": "1747c5122d876f7426b15879e0313c7d"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "df135272e5404bfd40f9b7ba70d90fcc"
+    },
+    {
+      "class": "b",
+      "compile_reason": "word-boundary",
+      "regex_id": "58585f481307865fd58c2a362a90c20e"
+    },
+    {
+      "class": "b",
+      "compile_reason": "word-boundary",
+      "regex_id": "448bd96b4cc33acf0778a365a2f86855"
+    },
+    {
+      "class": "b",
+      "compile_reason": "word-boundary",
+      "regex_id": "b252d5fdd62b62ecebb86aaaa1dd491a"
+    },
+    {
+      "class": "b",
+      "compile_reason": "word-boundary",
+      "regex_id": "953bbbd68f8b8d6031b0c5f471cf9c4d"
+    },
+    {
+      "class": "b",
+      "compile_reason": "word-boundary",
+      "regex_id": "81b90e72491fee6d13ca3edddc4d3e61"
+    },
+    {
+      "class": "b",
+      "compile_reason": "word-boundary",
+      "regex_id": "42b215c31d65226a7c1d6314ddaa5c88"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "bf7fb5c4e9415b03f859ac170411e807"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "948761e183cbc98566e248d6e2177e90"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "65aa7c6dcf1442e6476a7f91b5097b16"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "c8f46ba46d0cb2415aee4bdbb8710283"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "92d1d84faf912cb2e0ea628009742726"
+    },
+    {
+      "class": "b",
+      "compile_reason": "word-boundary",
+      "regex_id": "92130a8833eff5843c24b2a29b5f5712"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "764194f07ad860a1cc892ce097e35978"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "926db647f68c3fc0a0a80945ce0366cd"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "3cbfe657a699c1eb1d282517fe9e9c7f"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "7e7c16b7721c23631891e5afc765e234"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "6c7d71cbe123726b4661e6df7fdcb455"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "796ac9327345c7d15ad1a13463028c33"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "b760e71091ac73462a7a2221f0a9d6a0"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "1dbe91243348b6d2a467f254b0a1b9b9"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "ca86a38252cb5fe86338d616bca0aa03"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "106823fb17d6b3ae64f86273e37a50e9"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "1f2937970e03c6f8e66964de24bc19bf"
+    },
+    {
+      "class": "b",
+      "compile_reason": "word-boundary",
+      "regex_id": "da7a31c4123fd732b96bea22052b10f0"
+    },
+    {
+      "class": "b",
+      "compile_reason": "word-boundary",
+      "regex_id": "2a382f896ebac0d396c5cf4cdbd2efc9"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "fbfdd3df4523c7c5c52b02ee2d410064"
+    },
+    {
+      "class": "b",
+      "compile_reason": "word-boundary",
+      "regex_id": "a12f744943183371bbcad7a85e2fb5ab"
+    },
+    {
+      "class": "b",
+      "compile_reason": "inline-flag",
+      "regex_id": "2edd372d0a3b1c4e0aa3867c2d6776cb"
+    },
+    {
+      "class": "b",
+      "compile_reason": "inline-flag",
+      "regex_id": "e1a2d00df872fa9b31cb471916a1db3c"
+    },
+    {
+      "class": "b",
+      "compile_reason": "inline-flag",
+      "regex_id": "78d220617ed7c20816a4dc0a73f39602"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "124f78e32d1c60ec23ff444c991d0168"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "4bdb1d0ea564c5967d6e27fcf63c3733"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "aa45d4cc8a0a005fef3d6d26a2eec7ae"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "04a71cfb63ffa544818abd31a26701b2"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "225892a0d2512a63897cd987768d0ca1"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "b78b425e669d6b94917e1a27ba8105f7"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "072e419b2ebaf38b9a8464fb15b5f210"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "3630c6944a64e7cf5a047e04a8359fa6"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "03861d6b8a72af2857f90322193890da"
+    },
+    {
+      "class": "b",
+      "compile_reason": "word-boundary",
+      "regex_id": "c30ba88c188f43ebda11ee1acb17ef56"
+    },
+    {
+      "class": "b",
+      "compile_reason": "word-boundary",
+      "regex_id": "30b2c22070518dfcd1e0faa015e1df50"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "2f869c3c37347ef3217c8b89933b353c"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "af9937622e99bf718f86e9346e2a683c"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "aac7671c5062687613c87231c731d988"
+    },
+    {
+      "class": "encodable",
+      "compile_reason": "ok",
+      "regex_id": "9af4436a199be26593d920d6eb49548e"
+    }
+  ],
+  "schema_version": "1",
+  "unexplained": 0
+}

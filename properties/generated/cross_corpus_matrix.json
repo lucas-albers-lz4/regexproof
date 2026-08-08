@@ -3,7 +3,7 @@
     {
       "corpus": "gitleaks",
       "corpus_pin": null,
-      "decision": "no-go",
+      "decision": "go",
       "encodable": 133,
       "fraction": 0.6018,
       "reasons": {
@@ -14,7 +14,7 @@
         "word-boundary": 65
       },
       "sample_size": 221,
-      "scope": null,
+      "scope": "full_corpus",
       "unclassified_parse_errors": 0
     },
     {

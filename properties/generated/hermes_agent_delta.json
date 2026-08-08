@@ -1,0 +1,35 @@
+{
+  "after": {
+    "encodable_fraction_approx": 0.55,
+    "fixes_applied": [
+      "lazy-strip",
+      "scoped-(?i:)",
+      "hex-soundness"
+    ],
+    "remaining_gaps": [
+      "unicode-class",
+      "dynamic-compile",
+      "variable-width-lookbehind"
+    ]
+  },
+  "baseline_note": "dogfooding wave: case flags, Unicode classes, dynamic compiles",
+  "before": {
+    "encodable_fraction_approx": 0.42,
+    "known_gaps": [
+      "case-flag",
+      "unicode-class",
+      "dynamic-compile",
+      "lookbehind"
+    ]
+  },
+  "corpus": "hermes_agent",
+  "decision": "go-with-gaps",
+  "decision_rule": "re-measure full tree when hermes pin is materialized; sample IDs frozen here",
+  "frozen_regex_ids_sample": [
+    "hermes:telegram:handle:001",
+    "hermes:shell:hook:002",
+    "hermes:gateway:run:003"
+  ],
+  "schema_version": "1",
+  "sites_approx": 1100
+}

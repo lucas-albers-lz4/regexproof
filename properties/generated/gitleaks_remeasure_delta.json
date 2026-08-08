@@ -1,0 +1,30 @@
+{
+  "baseline": "/home/lalbers/gitroot/regexproof/properties/generated/gitleaks-frozen-ids.ndjson",
+  "corpus": "gitleaks",
+  "current": {
+    "compiler_fingerprint": "e00f8969e63fa2bb",
+    "corpus": "gitleaks",
+    "corpus_pin": null,
+    "encodable": 133,
+    "fraction": 0.6018,
+    "python": "3.14.6",
+    "reasons": {
+      "inline-flag": 17,
+      "negated-shorthand": 2,
+      "ok": 133,
+      "pattern-too-long": 4,
+      "word-boundary": 65
+    },
+    "sample_size": 221,
+    "wall_s": 0.975,
+    "z3_version": "5.0.0"
+  },
+  "current_ids": 221,
+  "extra_in_current": [],
+  "flipped_encodable_to_unencodable": [],
+  "flipped_unencodable_to_encodable": [],
+  "frozen_ids": 221,
+  "missing_from_current": [],
+  "non_lazy_needle_moved": false,
+  "schema_version": "1"
+}

@@ -112,3 +112,13 @@ like gitleaks). Ground-truth witnesses with the PCRE2 helper, not Python
 (`pattern-too-long` — TRAPS #21); long patterns go to ReDoS/manual triage.
 ECMA `m`/`u`/`v`/`g`/`y`/`d` are explicit rejects (TRAPS #22) — never silent
 ASCII approximations.
+
+## Corpus-wave loop (minimal repro)
+
+1. Inventory → `scripts/measure-corpus-fraction.py --corpus NAME --assert-determinism`
+2. Matrix → `scripts/build-cross-corpus-matrix.py`
+3. Toolkit closeout → `properties/generated/phase2_toolkit_fix_closeout.md`
+4. Freeze IDs → `scripts/remeasure-frozen-ids.py --corpus gitleaks --write-baseline`
+5. Delta / residual → `scripts/build-phase3-delta.py`
+6. Shape-5 families → `scripts/phase4-rule-diff-families.py`
+7. Report → `docs/final-report.md`
