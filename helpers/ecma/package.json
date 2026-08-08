@@ -1,0 +1,8 @@
+{
+  "name": "regexproof-ecma-helper",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "regexpp": "3.2.0"
+  }
+}

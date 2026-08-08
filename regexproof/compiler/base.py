@@ -1,0 +1,66 @@
+"""Shared compiler types and Z3 helpers."""
+
+from __future__ import annotations
+
+from dataclasses import dataclass
+from typing import Any
+
+import z3
+from z3 import AllChar, Concat, Re, Star, Union
+
+
+class Unencodable(Exception):
+    """Pattern cannot be faithfully encoded; reason is the triage key."""
+
+    def __init__(self, reason: str):
+        super().__init__(reason)
+        self.reason = reason
+
+
+@dataclass
+class CompileResult:
+    mirror: Any | None
+    unencodable_reason: str | None
+    dialect: str
+    call_kind: str
+    flags: str
+    pattern: str
+    declared_domain: str  # "ascii" | "unicode"
+
+    @property
+    def encodable(self) -> bool:
+        return self.mirror is not None and self.unencodable_reason is None
+
+
+def any_char():
+    return AllChar(Re("").sort())
+
+
+def opt(r):
+    """Regex optional — never z3.Opt (optimizer)."""
+    return Union(r, Re(""))
+
+
+def wrap_call_kind(body, call_kind: str, *, trailing_dollar_nl: bool = False):
+    """Apply call_kind wrapper after anchors have been translated into `body`.
+
+    Anchors themselves are handled in the dialect translators. This only adds
+    the search/match prefix/suffix Star(any) wrappers when needed.
+    """
+    any_c = any_char()
+    if call_kind == "fullmatch":
+        return body
+    if call_kind == "match":
+        # Prefix match: pattern || .*
+        return Concat(body, Star(any_c))
+    if call_kind in ("search", "exec"):
+        return Concat(Star(any_c), body, Star(any_c))
+    if call_kind == "substitution":
+        # Bounded substitution mirrors use search-shaped membership for v1.
+        return Concat(Star(any_c), body, Star(any_c))
+    raise Unencodable(f"unsupported-call_kind:{call_kind}")
+
+
+def python_trailing_dollar(body):
+    """Python/PCRE `$` matches before a trailing newline."""
+    return Concat(body, Union(Re(""), Re("\n")))

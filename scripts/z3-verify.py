@@ -64,6 +64,12 @@ from z3 import (
     unsat,
 )
 
+from regexproof.kinds import (
+    KINDS_NEEDING_MUTATION_GUARD,
+    validate_call_kind,
+    validate_kind,
+)
+
 # ---------------------------------------------------------------------------
 # Solver version pin — the Re()/regex API changed across 4.x/5.x. Refuse to
 # run on an unpinned version instead of silently producing unknown/timeouts.
@@ -132,6 +138,7 @@ def prop(
     kind="property",
     family=None,
     input_domain=None,
+    call_kind=None,
 ):
     """Decorator: register a property. The wrapped function returns the
     constraint list; the harness adds `bad` and checks satisfiability.
@@ -142,7 +149,10 @@ def prop(
       - "mutation_guard": SAT proves the harness is sensitive (weakened
         regex must flip UNSAT->SAT). Its witness is never replayed/reported.
       - "bug_demo": SAT demonstrates a known bug by design (P4-nul).
+      - "rule_diff": shape-5 gap query (R2 accepts something R1 misses).
     `family` groups properties that share a mutation guard (e.g. "P1").
+    `call_kind`: optional engine usage taxonomy (fullmatch/match/search/exec/
+    substitution) — required for auto-generated scanner properties.
     `ground_truth`: optional callable `fn(witness: dict) -> bool` that runs
     the REAL implementation on a SAT witness and reports whether the model's
     behavior reproduces. Required when --require-ground-truth is set and the
@@ -160,6 +170,8 @@ def prop(
         assert input_domain in ("ascii", "unicode"), (
             f"{name}: input_domain must be 'ascii' | 'unicode' | None, got {input_domain!r}"
         )
+    kind = validate_kind(kind)
+    call_kind = validate_call_kind(call_kind)
 
     def deco(fn):
         REGISTRY[name] = {
@@ -171,6 +183,7 @@ def prop(
             "kind": kind,
             "family": family or name.split("-")[0],
             "input_domain": input_domain,
+            "call_kind": call_kind,
         }
         return fn
 
@@ -187,6 +200,7 @@ def run_one(name, entry, require_ground_truth=False):
         "name": name,
         "kind": entry["kind"],
         "family": entry["family"],
+        "call_kind": entry.get("call_kind"),
         "domain": entry["domain"],
         "input_domain": entry["input_domain"],
         "expect_unsat": entry["expect_unsat"],
@@ -592,15 +606,18 @@ def p6_prefix_match_helper():
 # CLI
 # ---------------------------------------------------------------------------
 def check_mutation_coverage():
-    """Structural invariant: every family with a security property or
-    counterexample finder must also have at least one mutation guard.
+    """Structural invariant: every family with a security property,
+    counterexample finder, or rule_diff must also have at least one
+    mutation guard.
 
     A property with no mutation guard can go vacuous (e.g. via the
     Complement() trap) without any test noticing. Warn loudly so the gap
     is visible; the warning is the guard's guard."""
     guarded = {e["family"] for e in REGISTRY.values() if e["kind"] == "mutation_guard"}
     needing = {
-        e["family"] for e in REGISTRY.values() if e["kind"] in ("property", "counterexample_finder")
+        e["family"]
+        for e in REGISTRY.values()
+        if e["kind"] in KINDS_NEEDING_MUTATION_GUARD
     }
     missing = sorted(needing - guarded)
     if missing:
@@ -664,6 +681,7 @@ def main():
                 f"{n}  expect_unsat={e['expect_unsat']}  "
                 f"timeout={e['timeout_ms']}ms  "
                 f"kind={e['kind']}  family={e['family']}  "
+                f"call_kind={e.get('call_kind')}  "
                 f"input_domain={e['input_domain']}  "
                 f"ground_truth={'yes' if e.get('ground_truth') else 'no'}"
             )

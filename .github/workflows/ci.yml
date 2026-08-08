@@ -18,8 +18,8 @@ jobs:
       - uses: actions/setup-python@v6
         with:
           python-version: "3.13"
-      - name: Install pinned solver
-        run: pip install -r requirements.txt
+      - name: Install package + pinned solver
+        run: pip install -e ".[dev]"
       - name: Run the 4 canonical property shapes
         run: python scripts/z3-property-template.py
       - name: Run the property suite with mutation guards
@@ -27,14 +27,53 @@ jobs:
         # --require-ground-truth: SAT witnesses must replay against the real
         # implementation (sed/escaper mirrors) or the run fails.
         run: python scripts/z3-verify.py --all --require-ground-truth
-      - name: Differential-fuzz mirror vs real grep
-        # Proves the Z3 mirror agrees with a real regex implementation on
-        # exhaustive short strings + random + mutation-spliced inputs.
+      - name: Differential-fuzz mirror vs real grep (argv-only)
         run: |
           python scripts/differential-fuzz.py \
             --mirror-expr "Concat(Union(Range('a','z'),Range('0','9'),Re('.'),Re('_'),Re('-')),Star(Union(Range('a','z'),Range('0','9'),Re('.'),Re('_'),Re('-'))))" \
-            --real-cmd "grep -qE '^[a-z0-9._-]+$'" \
-            --alphabet "abc123._-" --mutations ' ;="`$|&' --runs 100 --seed 42
+            --alphabet "abc123._-" --mutations ' ;="`$|&' --runs 100 --seed 42 \
+            --real-argv grep -qE '^[a-z0-9._-]+$'
+      - name: Static reject shell=True in fuzz paths
+        run: python -c "from regexproof.fuzz.adapters import reject_shell_subprocess_usage; v=reject_shell_subprocess_usage(); assert not v, v"
+
+  golden:
+    name: Golden suite (Python ${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # Must match ci/python-matrix.toml — empty matrix is a misconfig.
+        python-version: ["3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v5
+      - name: Assert python-matrix.toml non-empty
+        run: |
+          python3 - <<'PY'
+          import tomllib
+          from pathlib import Path
+          data = tomllib.loads(Path("ci/python-matrix.toml").read_text())
+          minors = data.get("minors") or []
+          assert len(minors) >= 1, "ci/python-matrix.toml minors must be non-empty"
+          print("minors", minors)
+          PY
+      - uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "1.22"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install JS helper deps
+        run: npm install --prefix helpers/ecma
+      - name: Build go-re2 helper
+        working-directory: helpers/go-re2
+        run: go build -o go-re2 .
+      - name: Install package
+        run: pip install -e ".[dev]"
+      - name: Pytest (golden + foundations)
+        run: pytest -q
 
   links:
     name: Link check

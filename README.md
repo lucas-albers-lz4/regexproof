@@ -29,13 +29,16 @@ inputs.
 
 ```bash
 python3 -m venv .venv
-.venv/bin/pip install -r requirements.txt     # z3-solver==5.0.0 (pinned)
+.venv/bin/pip install -e ".[dev]"             # package + z3-solver==5.0.0 (pinned)
 
 # Run the 4 canonical property shapes (alphabet, whitelist, counterexample, per-token image):
 .venv/bin/python scripts/z3-property-template.py
 
 # Run the harness skeleton (property registry + mutation guards + timeout=hard-fail):
-.venv/bin/python scripts/z3-verify.py --all
+.venv/bin/python scripts/z3-verify.py --all --require-ground-truth
+
+# Phase-1 foundations (compiler golden suite, schemas, argv-only fuzz adapters):
+.venv/bin/pytest -q
 ```
 
 Expected: all shapes PASS (UNSAT where property holds, SAT with a witness for
@@ -53,11 +56,15 @@ the counterexample finder — the sed-truncation bug repro).
 | `docs/SEMANTICS.md` | Python `re` / JS ECMA-262 semantics mapping: expressible subset, lookaheads, backrefs, Unicode |
 | `docs/REDOS.md` | ReDoS (complexity) tooling — complements, not replaces, the SMT approach |
 | `docs/RESEARCH.md` | Deep-research findings: papers, tools, ecosystem, with sources |
+| `regexproof/` | Installable package: `regex_id`, dialect compilers, argv-only fuzz adapters, extractor scaffolds, JSON schemas |
+| `helpers/` | Mandated Go RE2 + ECMA (regexpp) + PCRE2 CLI helpers (parse and replay) |
+| `tests/` | Golden suite, schema/extractor fixtures, false-UNSAT + Noodler probes |
 | `scripts/z3-property-template.py` | The 4 canonical property shapes, copy-and-adapt |
-| `scripts/z3-verify.py` | Harness: property registry, mutation guards, `--require-ground-truth`, `--json`, timeout = hard failure |
-| `scripts/differential-fuzz.py` | Fuzz a Z3 mirror against the real implementation (`grep`, `sed`, `busybox`, …) — random inputs, both must agree |
+| `scripts/z3-verify.py` | Harness: property registry, mutation guards, `rule_diff`/`call_kind`, `--require-ground-truth`, `--json`, timeout = hard failure |
+| `scripts/differential-fuzz.py` | Fuzz a Z3 mirror against a real engine via `--real-argv` (no `shell=True`) |
 | `properties/usrmanage-p1-p6.md` | Worked property suite (P1–P6) from the usrmanage case study |
 | `properties/fwlive-classifier.md` | Worked regex inventory of the fwlive LuCI log classifier + lookahead blocker |
+| `ci/python-matrix.toml` | Supported Python minors for golden-suite re-run (non-empty enforced in CI) |
 
 ## Provenance
 
