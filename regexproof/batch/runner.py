@@ -24,6 +24,10 @@ from regexproof.batch.intent import (  # noqa: E402
     detect_usage_mismatches,
 )
 from regexproof.batch.inventory import check_corpus_coverage, load_inventory  # noqa: E402
+from regexproof.batch.negation_policy import (  # noqa: E402
+    NEGATED_UNSUPPORTED_REASON,
+    should_reject_negated,
+)
 from regexproof.batch.report import write_markdown, write_ndjson  # noqa: E402
 from regexproof.batch.triage import triage_records_from_compiled, write_triage_ndjson  # noqa: E402
 from regexproof.compiler import compile_pattern  # noqa: E402
@@ -347,6 +351,19 @@ def _compile_all(
                     **rec,
                     "encodable": False,
                     "compile_reason": rec["unencodable_reason"],
+                    "corpus": corpus_slug,
+                    "corpus_slug": corpus_slug,
+                }
+            )
+            continue
+        # ModSecurity !@rx / selectors: never silent-positive (fix-wave #72).
+        if rec.get("negated") and should_reject_negated(rec.get("dialect") or ""):
+            out.append(
+                {
+                    **rec,
+                    "encodable": False,
+                    "compile_reason": NEGATED_UNSUPPORTED_REASON,
+                    "unencodable_reason": NEGATED_UNSUPPORTED_REASON,
                     "corpus": corpus_slug,
                     "corpus_slug": corpus_slug,
                 }

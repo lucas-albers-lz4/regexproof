@@ -91,6 +91,11 @@ Wherever match *position* or *capture* matters, run the real engine on
 witnesses. Mirror the `call_kind` the code actually uses. See
 `docs/REPORTING.md` and `--require-ground-truth`.
 
+## ModSecurity negation
+
+Negated `@rx` / selectors are **never** silent-positive. Per-dialect policy
+table: [`docs/NEGATION.md`](NEGATION.md) / `regexproof.batch.negation_policy`.
+
 ## Practical rules
 
 1. **Ask the question the code asks** (`call_kind` first).
