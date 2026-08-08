@@ -11,20 +11,20 @@ must accept/reject identically.
           that exposes the z3py names (Concat, Union, Range, Re, Star,
           Plus, Loop, Complement). NOTE: no Opt — z3py's Opt is the
           optimizer class, not regex optional; "?" is Union(r, Re("")).
-  real:   any command that reads a string on stdin and exits 0 (accept) or
-          non-zero (reject) — e.g. `grep -qE '^...$'`, a `sed`-based check,
-          a `python -c` one-liner, a compiled binary, or a `busybox`-
-          prefixed variant for device fidelity.
+  real:   argv program that reads a string on stdin and exits 0 (accept) or
+          non-zero (reject) — e.g. grep -qE '^...$', never a shell string.
 
 IMPORTANT: the mirror is a Z3 EXPRESSION, not a pattern string. z3.Re("...")
 is a literal match, not a regex — see docs/TRAPS.md. Use the same API calls
 your property uses.
 
+Phase-1 gate: real engines are invoked with shell=False argv only.
+
 Usage (whitelist [a-z0-9._-]+ vs grep):
   python3 scripts/differential-fuzz.py --mirror-expr \
       "Concat(Union(Range('a','z'),Range('0','9'),Re('.'),Re('_'),Re('-')),Star(Union(Range('a','z'),Range('0','9'),Re('.'),Re('_'),Re('-'))))" \
-      --real-cmd "grep -qE '^[a-z0-9._-]+$'" \
-      --alphabet "abc123._-" --mutations ' ;="`$|&' --runs 500 --seed 42
+      --alphabet "abc123._-" --mutations ' ;="`$|&' --runs 500 --seed 42 \
+      --real-argv grep -qE '^[a-z0-9._-]+$'
 
   Exit 0 = all inputs agree (mirror == real).
   Exit 1 = mismatch found (mirror and real disagree on some input).
@@ -38,10 +38,11 @@ a mismatch against the real code before reporting anything.
 import argparse
 import itertools
 import random
-import subprocess
 import sys
 
 import z3
+
+from regexproof.fuzz.adapters import real_accepts_argv
 
 if not z3.get_version_string().startswith("5.0"):
     print(
@@ -79,23 +80,6 @@ def mirror_accepts(mirror_expr, s: str) -> bool:
     return r == z3.sat
 
 
-def real_accepts(cmd: str, s: str) -> bool:
-    """Real implementation: does the command accept s (exit 0)?"""
-    try:
-        proc = subprocess.run(
-            cmd,
-            input=s,
-            capture_output=True,
-            text=True,
-            shell=True,
-            timeout=10,
-        )
-    except subprocess.TimeoutExpired:
-        print(f"    TIMEOUT running real impl on {s!r} — treat as mismatch", file=sys.stderr)
-        return False
-    return proc.returncode == 0
-
-
 def exhaustive(alphabet: str, max_len: int):
     """Exhaustive short strings: every input of length 0..max_len over alphabet.
 
@@ -114,7 +98,6 @@ def main():
         required=True,
         help="Z3 regex expression (z3py API names; NOT a pattern string)",
     )
-    ap.add_argument("--real-cmd", required=True, help="shell command: reads stdin, exit 0 = accept")
     ap.add_argument("--alphabet", required=True, help="input chars to fuzz with")
     ap.add_argument(
         "--mutations",
@@ -136,7 +119,37 @@ def main():
         "--exhaust-max-len", type=int, default=3, help="exhaustive coverage up to this length"
     )
     ap.add_argument("--max-len", type=int, default=12, help="max generated string length")
+    ap.add_argument(
+        "--real-cmd",
+        default=None,
+        help=argparse.SUPPRESS,  # rejected: shell strings are forbidden
+    )
+    # REMAINDER so engine flags like -qE are not eaten by argparse. Place last:
+    #   ... --alphabet abc --real-argv grep -qE '^[a-z]+$'
+    ap.add_argument(
+        "--real-argv",
+        nargs=argparse.REMAINDER,
+        help="argv: program + args (must be last); reads stdin, exit 0 = accept",
+    )
     args = ap.parse_args()
+
+    if args.real_cmd is not None:
+        print(
+            "FATAL: --real-cmd (shell string) is forbidden. Use --real-argv PROG [ARGS...]",
+            file=sys.stderr,
+        )
+        return 2
+    real_argv = list(args.real_argv or [])
+    # argparse REMAINDER keeps a leading '--' if the caller used one.
+    if real_argv and real_argv[0] == "--":
+        real_argv = real_argv[1:]
+    if not real_argv:
+        print(
+            "FATAL: --real-argv PROG [ARGS...] is required (place it last)",
+            file=sys.stderr,
+        )
+        return 2
+    args.real_argv = real_argv
 
     # Default mutation set: the non-ASCII divergence classes. Python's
     # \w\d\s\b are Unicode-aware; an ASCII mirror diverges on these (TRAP
@@ -167,7 +180,7 @@ def main():
         nonlocal mismatches, checked
         checked += 1
         m = mirror_accepts(mirror, s)
-        r = real_accepts(args.real_cmd, s)
+        r = real_accepts_argv(args.real_argv, s)
         if m != r:
             mismatches += 1
             print(f"MISMATCH {s!r}: mirror={m} real={r}")

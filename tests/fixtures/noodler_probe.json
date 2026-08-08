@@ -1,0 +1,8 @@
+{
+  "pattern": "(?=a)b",
+  "api": "re.from_ecma2020",
+  "available": false,
+  "tool_version": null,
+  "error": "from_ecma2020 not present on stock z3-solver 5.0.0",
+  "triage_fallback": true
+}

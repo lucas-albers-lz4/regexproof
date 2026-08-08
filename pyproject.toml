@@ -1,7 +1,36 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "regexproof"
+version = "0.1.0"
+description = "Prove security properties of regexes with Z3 — compiler + harness foundations"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "z3-solver==5.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "jsonschema>=4.0",
+]
+
+[tool.setuptools.packages.find]
+include = ["regexproof*"]
+
+[tool.setuptools.package-data]
+regexproof = ["schemas/*.json"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+
 [tool.ruff]
 line-length = 100
 target-version = "py39"
-# Scripts are standalone CLI tools; there is no package layout to lint.
 
 [tool.ruff.lint]
 # Curated set, same spine as the housekeeping toolkit (E,F,W,I,UP,SIM,PTH,PIE,PLC)

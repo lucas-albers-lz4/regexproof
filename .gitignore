@@ -3,3 +3,10 @@ __pycache__/
 *.pyc
 .mypy_cache/
 .pytest_cache/
+*.egg-info/
+.eggs/
+dist/
+build/
+helpers/ecma/node_modules/
+helpers/go-re2/go-re2
+helpers/go-re2/go-re2.exe

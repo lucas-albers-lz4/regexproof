@@ -1,0 +1,4 @@
+[[rules]]
+id = "rule-2"
+description = "demo 2"
+regex = '''AKIA2[0-9A-Z]{16}'''

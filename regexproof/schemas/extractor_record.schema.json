@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://regexproof.dev/schemas/extractor_record/v1",
+  "title": "ExtractorJSONLRecord",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "regex_id",
+    "repo",
+    "pattern",
+    "flags",
+    "dialect",
+    "call_kind",
+    "site",
+    "file",
+    "line",
+    "column"
+  ],
+  "additionalProperties": true,
+  "properties": {
+    "schema_version": { "type": "string", "const": "1" },
+    "regex_id": { "type": "string", "pattern": "^[0-9a-f]{32}$" },
+    "repo": { "type": "string", "minLength": 1 },
+    "pattern": { "type": "string" },
+    "flags": { "type": "string" },
+    "dialect": {
+      "type": "string",
+      "enum": ["py_re", "ecma", "re2", "pcre"]
+    },
+    "call_kind": {
+      "type": "string",
+      "enum": ["fullmatch", "match", "search", "exec", "substitution"]
+    },
+    "site": {
+      "type": "string",
+      "description": "file:line:column"
+    },
+    "file": { "type": "string" },
+    "line": { "type": "integer", "minimum": 1 },
+    "column": { "type": "integer", "minimum": 0 },
+    "context_snippet": { "type": "string", "maxLength": 500 },
+    "unencodable_reason": {
+      "type": "string",
+      "description": "Present when the site cannot be compiled; never folded into regex_id"
+    }
+  }
+}

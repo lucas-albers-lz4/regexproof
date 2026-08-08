@@ -1,0 +1,109 @@
+{
+  "schema_version": "1",
+  "dialect": "pcre",
+  "sample_size": 20,
+  "encodable": 11,
+  "fraction": 0.55,
+  "rows": [
+    {
+      "pattern": "^[a-z]+$",
+      "encodable": true,
+      "reason": null
+    },
+    {
+      "pattern": "\\d+",
+      "encodable": true,
+      "reason": null
+    },
+    {
+      "pattern": "(a|b)+",
+      "encodable": true,
+      "reason": null
+    },
+    {
+      "pattern": "foo(?:bar)?",
+      "encodable": true,
+      "reason": null
+    },
+    {
+      "pattern": "a{2,4}",
+      "encodable": true,
+      "reason": null
+    },
+    {
+      "pattern": "(?=x)y",
+      "encodable": false,
+      "reason": "lookaround"
+    },
+    {
+      "pattern": "(a)\\1",
+      "encodable": false,
+      "reason": "backref"
+    },
+    {
+      "pattern": "(?(1)a|b)",
+      "encodable": false,
+      "reason": "conditional"
+    },
+    {
+      "pattern": "a\\Kb",
+      "encodable": false,
+      "reason": "reset"
+    },
+    {
+      "pattern": "\\bword\\b",
+      "encodable": false,
+      "reason": "word-boundary"
+    },
+    {
+      "pattern": "^https?://\\S+$",
+      "encodable": false,
+      "reason": "negated-class"
+    },
+    {
+      "pattern": "[A-Z]{3}\\d{2}",
+      "encodable": true,
+      "reason": null
+    },
+    {
+      "pattern": "(?>atomic)",
+      "encodable": true,
+      "reason": null
+    },
+    {
+      "pattern": "a++",
+      "encodable": true,
+      "reason": null
+    },
+    {
+      "pattern": "[\\w.-]+@[\\w.-]+",
+      "encodable": true,
+      "reason": null
+    },
+    {
+      "pattern": "password\\s*=\\s*\\S+",
+      "encodable": false,
+      "reason": "negated-class"
+    },
+    {
+      "pattern": "(?i)admin",
+      "encodable": false,
+      "reason": "inline-flag"
+    },
+    {
+      "pattern": "x|y|z",
+      "encodable": true,
+      "reason": null
+    },
+    {
+      "pattern": "^$",
+      "encodable": true,
+      "reason": null
+    },
+    {
+      "pattern": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "encodable": false,
+      "reason": "pattern-too-long"
+    }
+  ]
+}
