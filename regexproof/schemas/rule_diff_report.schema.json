@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://regexproof.dev/schemas/rule_diff_report/v1",
+  "title": "RuleDiffPilotReport",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "pilot",
+    "admitted_pairs",
+    "timeout_rate",
+    "engine_versions",
+    "results"
+  ],
+  "additionalProperties": true,
+  "properties": {
+    "schema_version": { "type": "string", "const": "1" },
+    "pilot": { "type": "string" },
+    "admitted_pairs": { "type": "integer", "minimum": 0 },
+    "timeouts": { "type": "integer", "minimum": 0 },
+    "timeout_rate": { "type": "number", "minimum": 0 },
+    "floor_ok": { "type": "boolean" },
+    "timeout_gate_ok": { "type": "boolean" },
+    "engine_versions": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "results": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "regex_id",
+          "pair_id",
+          "shape",
+          "result",
+          "declared_domain",
+          "ground_truth_status",
+          "wall_ms",
+          "schema_version"
+        ],
+        "additionalProperties": true,
+        "properties": {
+          "regex_id": { "type": "string" },
+          "pair_id": { "type": "string" },
+          "file": { "type": ["string", "null"] },
+          "line": { "type": ["integer", "null"] },
+          "pattern": { "type": "string" },
+          "shape": { "type": "integer", "const": 5 },
+          "result": {
+            "type": "string",
+            "enum": ["sat", "unsat", "timeout", "not_proven_bounded"]
+          },
+          "declared_domain": { "type": "string" },
+          "ground_truth_status": {
+            "type": "string",
+            "enum": ["PASS", "FAILED", "N/A", "SKIPPED"]
+          },
+          "wall_ms": { "type": "number" },
+          "schema_version": { "type": "string" },
+          "family": { "type": "string" },
+          "kind": { "type": "string" }
+        }
+      }
+    }
+  }
+}

@@ -110,21 +110,14 @@ def _extract_toml(source: str, *, repo: str, file: str, dialect: str) -> list[di
         return out
 
     rules = data.get("rules") or data.get("Rules") or []
-    if isinstance(data, dict):
-        # gitleaks: [[rules]]
-        pass
     for idx, rule in enumerate(rules):
         if not isinstance(rule, dict):
             continue
         pattern = rule.get("regex") or rule.get("pattern")
         if not pattern:
             continue
-        # Approximate line via search
-        line_no = 1
-        for i, line in enumerate(source.splitlines(), 1):
-            if pattern[:20] in line or "regex" in line:
-                line_no = i
-                break
+        rule_id = str(rule.get("id", f"rule-{idx}"))
+        line_no = _find_toml_regex_line(source, pattern=pattern, rule_id=rule_id)
         out.append(
             make_record(
                 repo=repo,
@@ -135,7 +128,28 @@ def _extract_toml(source: str, *, repo: str, file: str, dialect: str) -> list[di
                 file=file,
                 line=line_no,
                 column=0,
-                context_snippet=str(rule.get("id", f"rule-{idx}"))[:500],
+                context_snippet=rule_id[:500],
             )
         )
     return out
+
+
+def _find_toml_regex_line(source: str, *, pattern: str, rule_id: str) -> int:
+    """Locate the `regex =` line for a rule (id-scoped), not the first 'regex' comment."""
+    lines = source.splitlines()
+    id_hit = False
+    for i, line in enumerate(lines, 1):
+        if re.search(rf'id\s*=\s*["\']{re.escape(rule_id)}["\']', line):
+            id_hit = True
+            continue
+        if id_hit:
+            if line.lstrip().startswith("[["):
+                break
+            if re.search(r"regex\s*=", line):
+                return i
+    # Fallback: first regex= line that contains a distinctive pattern prefix.
+    needle = pattern[:32]
+    for i, line in enumerate(lines, 1):
+        if re.search(r"regex\s*=", line) and needle and needle in line:
+            return i
+    return 1

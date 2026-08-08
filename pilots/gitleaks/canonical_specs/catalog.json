@@ -1,0 +1,305 @@
+{
+  "schema_version": "1",
+  "description": "Independent-spec R1 baselines for gitleaks shape-5 pairs. Patterns are public format fixtures / docs-derived; never copies of gitleaks rule regexes. Curated for Z3 length-bound solvability (subset pilot).",
+  "specs": [
+    {
+      "id": "github-pat-classic",
+      "pattern": "ghp_[A-Za-z0-9]{36}",
+      "flags": "",
+      "dialect": "re2",
+      "call_kind": "search",
+      "maps_to_rule_id": "github-pat",
+      "provenance": {
+        "source_doc": "GitHub docs: classic personal access token prefix ghp_",
+        "source_url": "https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens",
+        "note": "Independent charset order [A-Za-z0-9] vs rule [0-9a-zA-Z]"
+      }
+    },
+    {
+      "id": "github-oauth-token",
+      "pattern": "gho_[A-Za-z0-9]{36}",
+      "flags": "",
+      "dialect": "re2",
+      "call_kind": "search",
+      "maps_to_rule_id": "github-oauth",
+      "provenance": {
+        "source_doc": "GitHub OAuth access token prefix gho_",
+        "source_url": "https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/authorizing-oauth-apps",
+        "note": "Public token-prefix fixture"
+      }
+    },
+    {
+      "id": "github-refresh-token",
+      "pattern": "ghr_[A-Za-z0-9]{36}",
+      "flags": "",
+      "dialect": "re2",
+      "call_kind": "search",
+      "maps_to_rule_id": "github-refresh-token",
+      "provenance": {
+        "source_doc": "GitHub refresh token prefix ghr_",
+        "source_url": "https://docs.github.com/en/apps/creating-github-apps/authenticating-with-a-github-app/generating-a-user-access-token-for-a-github-app",
+        "note": "Public prefix fixture"
+      }
+    },
+    {
+      "id": "gitlab-deploy-token",
+      "pattern": "gldt-[A-Za-z0-9_\\-]{20}",
+      "flags": "",
+      "dialect": "re2",
+      "call_kind": "search",
+      "maps_to_rule_id": "gitlab-deploy-token",
+      "provenance": {
+        "source_doc": "GitLab deploy token prefix gldt-",
+        "source_url": "https://docs.gitlab.com/ee/user/project/deploy_tokens/",
+        "note": "Public prefix fixture"
+      }
+    },
+    {
+      "id": "gitlab-runner-token",
+      "pattern": "glrt-[A-Za-z0-9_\\-]{20}",
+      "flags": "",
+      "dialect": "re2",
+      "call_kind": "search",
+      "maps_to_rule_id": "gitlab-runner-authentication-token",
+      "provenance": {
+        "source_doc": "GitLab runner authentication token prefix glrt-",
+        "source_url": "https://docs.gitlab.com/runner/security/",
+        "note": "Public prefix fixture"
+      }
+    },
+    {
+      "id": "gitlab-feed-token",
+      "pattern": "glft-[A-Za-z0-9_\\-]{20}",
+      "flags": "",
+      "dialect": "re2",
+      "call_kind": "search",
+      "maps_to_rule_id": "gitlab-feed-token",
+      "provenance": {
+        "source_doc": "GitLab feed token prefix glft-",
+        "source_url": "https://docs.gitlab.com/ee/user/profile/personal_access_tokens.html",
+        "note": "Public prefix fixture"
+      }
+    },
+    {
+      "id": "gitlab-incoming-mail",
+      "pattern": "glimt-[A-Za-z0-9_\\-]{25}",
+      "flags": "",
+      "dialect": "re2",
+      "call_kind": "search",
+      "maps_to_rule_id": "gitlab-incoming-mail-token",
+      "provenance": {
+        "source_doc": "GitLab incoming email token prefix glimt-",
+        "source_url": "https://docs.gitlab.com/ee/administration/incoming_email.html",
+        "note": "Public prefix fixture"
+      }
+    },
+    {
+      "id": "gitlab-scim",
+      "pattern": "glsoat-[A-Za-z0-9_\\-]{20}",
+      "flags": "",
+      "dialect": "re2",
+      "call_kind": "search",
+      "maps_to_rule_id": "gitlab-scim-token",
+      "provenance": {
+        "source_doc": "GitLab SCIM token prefix glsoat-",
+        "source_url": "https://docs.gitlab.com/ee/administration/settings/sign_in_restrictions.html",
+        "note": "Public prefix fixture"
+      }
+    },
+    {
+      "id": "gitlab-feature-flag",
+      "pattern": "glffct-[A-Za-z0-9_\\-]{20}",
+      "flags": "",
+      "dialect": "re2",
+      "call_kind": "search",
+      "maps_to_rule_id": "gitlab-feature-flag-client-token",
+      "provenance": {
+        "source_doc": "GitLab feature flag client token prefix glffct-",
+        "source_url": "https://docs.gitlab.com/ee/operations/feature_flags.html",
+        "note": "Public prefix fixture"
+      }
+    },
+    {
+      "id": "shopify-access-token",
+      "pattern": "shpat_[A-Fa-f0-9]{32}",
+      "flags": "",
+      "dialect": "re2",
+      "call_kind": "search",
+      "maps_to_rule_id": "shopify-access-token",
+      "provenance": {
+        "source_doc": "Shopify Admin API access token prefix shpat_",
+        "source_url": "https://shopify.dev/docs/apps/build/authentication-authorization/access-tokens",
+        "note": "Charset order A-Fa-f vs rule a-fA-F"
+      }
+    },
+    {
+      "id": "shopify-custom-token",
+      "pattern": "shpca_[A-Fa-f0-9]{32}",
+      "flags": "",
+      "dialect": "re2",
+      "call_kind": "search",
+      "maps_to_rule_id": "shopify-custom-access-token",
+      "provenance": {
+        "source_doc": "Shopify custom app access token prefix shpca_",
+        "source_url": "https://shopify.dev/docs/apps/build/authentication-authorization/access-tokens",
+        "note": "Public prefix fixture"
+      }
+    },
+    {
+      "id": "shopify-private-token",
+      "pattern": "shppa_[A-Fa-f0-9]{32}",
+      "flags": "",
+      "dialect": "re2",
+      "call_kind": "search",
+      "maps_to_rule_id": "shopify-private-app-access-token",
+      "provenance": {
+        "source_doc": "Shopify private app token prefix shppa_",
+        "source_url": "https://shopify.dev/docs/apps/build/authentication-authorization/access-tokens",
+        "note": "Public prefix fixture"
+      }
+    },
+    {
+      "id": "shopify-shared-secret",
+      "pattern": "shpss_[A-Fa-f0-9]{32}",
+      "flags": "",
+      "dialect": "re2",
+      "call_kind": "search",
+      "maps_to_rule_id": "shopify-shared-secret",
+      "provenance": {
+        "source_doc": "Shopify shared secret prefix shpss_",
+        "source_url": "https://shopify.dev/docs/apps/build/authentication-authorization",
+        "note": "Public prefix fixture"
+      }
+    },
+    {
+      "id": "twilio-api-key",
+      "pattern": "SK[A-Fa-f0-9]{32}",
+      "flags": "",
+      "dialect": "re2",
+      "call_kind": "search",
+      "maps_to_rule_id": "twilio-api-key",
+      "provenance": {
+        "source_doc": "Twilio API key SID format SK + 32 hex",
+        "source_url": "https://www.twilio.com/docs/iam/keys/api-key",
+        "note": "Public SID format fixture"
+      }
+    },
+    {
+      "id": "slack-bot-token-fixed",
+      "pattern": "xoxb-[0-9]{10,13}-[0-9]{10,13}-[A-Za-z0-9]{24}",
+      "flags": "",
+      "dialect": "re2",
+      "call_kind": "search",
+      "maps_to_rule_id": "slack-bot-token",
+      "provenance": {
+        "source_doc": "Slack bot token xoxb- format (fixed trailing segment; narrower than detector *)",
+        "source_url": "https://api.slack.com/authentication/token-types",
+        "note": "Narrower independent baseline than gitleaks open trailing class"
+      }
+    },
+    {
+      "id": "gitlab-cicd-job",
+      "pattern": "glcbt-[A-Za-z0-9]{1,5}_[A-Za-z0-9_\\-]{20}",
+      "flags": "",
+      "dialect": "re2",
+      "call_kind": "search",
+      "maps_to_rule_id": "gitlab-cicd-job-token",
+      "provenance": {
+        "source_doc": "GitLab CI/CD job token prefix glcbt-",
+        "source_url": "https://docs.gitlab.com/ee/ci/jobs/ci_job_token.html",
+        "note": "Public prefix fixture"
+      }
+    },
+    {
+      "id": "clojars-deploy-token",
+      "pattern": "CLOJARS_[a-z0-9]{50,60}",
+      "flags": "",
+      "dialect": "re2",
+      "call_kind": "search",
+      "maps_to_rule_id": "clojars-api-token",
+      "provenance": {
+        "source_doc": "Clojars deploy token prefix CLOJARS_",
+        "source_url": "https://github.com/clojars/clojars-web/wiki/Deploy-Tokens",
+        "note": "Length range fixture; not an exact TOML copy"
+      }
+    },
+    {
+      "id": "slack-legacy-bot",
+      "pattern": "xoxb-[0-9]{8,14}-[A-Za-z0-9]{18,26}",
+      "flags": "",
+      "dialect": "re2",
+      "call_kind": "search",
+      "maps_to_rule_id": "slack-legacy-bot-token",
+      "provenance": {
+        "source_doc": "Slack legacy bot token xoxb- format",
+        "source_url": "https://api.slack.com/authentication/token-types",
+        "note": "Charset order differs from rule"
+      }
+    },
+    {
+      "id": "github-user-to-server",
+      "pattern": "ghu_[A-Za-z0-9]{36}",
+      "flags": "",
+      "dialect": "re2",
+      "call_kind": "search",
+      "maps_to_rule_id": "github-app-token",
+      "provenance": {
+        "source_doc": "GitHub user-to-server token prefix ghu_ (narrower than ghu|ghs)",
+        "source_url": "https://docs.github.com/en/apps",
+        "note": "Narrower independent baseline than detector alternation"
+      }
+    },
+    {
+      "id": "gitlab-pat-ascii",
+      "pattern": "glpat-[A-Za-z0-9]{20}",
+      "flags": "",
+      "dialect": "re2",
+      "call_kind": "search",
+      "maps_to_rule_id": "gitlab-pat",
+      "provenance": {
+        "source_doc": "GitLab personal access token prefix glpat-",
+        "source_url": "https://docs.gitlab.com/ee/user/profile/personal_access_tokens.html",
+        "note": "ASCII-only body (no hyphen) — narrower than rule [\\\\w-]"
+      }
+    },
+    {
+      "id": "gitlab-rrt",
+      "pattern": "GR1348941[A-Za-z0-9_\\-]{20}",
+      "flags": "",
+      "dialect": "re2",
+      "call_kind": "search",
+      "maps_to_rule_id": "gitlab-rrt",
+      "provenance": {
+        "source_doc": "GitLab runner registration token historical prefix GR1348941",
+        "source_url": "https://docs.gitlab.com/runner/register/",
+        "note": "Public historical prefix fixture"
+      }
+    },
+    {
+      "id": "bedrock-short-lived",
+      "pattern": "bedrock-api-key-[A-Za-z0-9]+",
+      "flags": "",
+      "dialect": "re2",
+      "call_kind": "search",
+      "maps_to_rule_id": "aws-amazon-bedrock-api-key-short-lived",
+      "provenance": {
+        "source_doc": "AWS Bedrock short-lived API key prefix bedrock-api-key-",
+        "source_url": "https://docs.aws.amazon.com/bedrock/latest/userguide/",
+        "note": "Prefix+body fixture; not the fixed base64 literal from the rule file"
+      }
+    },
+    {
+      "id": "harness-pat",
+      "pattern": "pat\\.[A-Za-z0-9_-]{22}\\.[A-Za-z0-9]{24}\\.[A-Za-z0-9]{20}",
+      "flags": "",
+      "dialect": "re2",
+      "call_kind": "search",
+      "maps_to_rule_id": "harness-api-key",
+      "provenance": {
+        "source_doc": "Harness personal access token pat. segment format",
+        "source_url": "https://developer.harness.io/docs/platform/automation/api/api-quickstart/",
+        "note": "pat-only baseline vs detector pat|sat"
+      }
+    }
+  ]
+}

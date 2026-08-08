@@ -103,6 +103,8 @@ jobs:
         run: |
           python scripts/pilot-run.py
           python scripts/pilot-properties.py --require-ground-truth
+      - name: Phase 3 shape-5 rule_diff (gitleaks encodable subset)
+        run: python scripts/rule-diff-pilot.py --require-ground-truth
 
   redos:
     name: ReDoS stage (isolated)

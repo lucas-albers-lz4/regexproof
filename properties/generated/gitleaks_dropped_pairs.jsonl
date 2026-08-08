@@ -1,0 +1,1 @@
+{"maps_to_rule_id": "clojars-api-token", "r2_regex_id": "174b0eb882ae1305fcbb90bed67a7c76", "r2_site": "pilots/gitleaks/config/gitleaks.toml:290:0", "reason": "flags-mismatch", "schema_version": "1", "spec_id": "clojars-deploy-token"}

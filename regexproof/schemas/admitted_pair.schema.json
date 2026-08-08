@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://regexproof.dev/schemas/admitted_pair/v1",
+  "title": "AdmittedPair",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "pair_id",
+    "direction",
+    "regex_id_r1",
+    "regex_id_r2",
+    "r1",
+    "r2",
+    "provenance",
+    "call_kind"
+  ],
+  "additionalProperties": true,
+  "properties": {
+    "schema_version": { "type": "string", "const": "1" },
+    "pair_id": { "type": "string", "minLength": 1 },
+    "direction": { "type": "string", "enum": ["r2_minus_r1", "r1_minus_r2"] },
+    "regex_id_r1": { "type": "string", "pattern": "^[0-9a-f]{32}$" },
+    "regex_id_r2": { "type": "string", "pattern": "^[0-9a-f]{32}$" },
+    "r1": {
+      "type": "object",
+      "required": ["pattern", "flags", "dialect", "call_kind", "site"],
+      "additionalProperties": true
+    },
+    "r2": {
+      "type": "object",
+      "required": ["pattern", "flags", "dialect", "call_kind", "site"],
+      "additionalProperties": true
+    },
+    "provenance": { "type": "object", "additionalProperties": true },
+    "call_kind": {
+      "type": "string",
+      "enum": ["fullmatch", "match", "search", "exec", "substitution"]
+    },
+    "declared_domain": { "type": "string" },
+    "max_len": { "type": "integer" },
+    "family": { "type": "string" }
+  }
+}
