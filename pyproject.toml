@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "regexproof"
 version = "0.1.0"
-description = "Prove security properties of regexes with Z3 — compiler + harness foundations"
+description = "Prove security properties of regexes with Z3 — compiler, harness, batch, and ReDoS tooling"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
