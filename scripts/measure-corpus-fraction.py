@@ -41,7 +41,7 @@ def measure(corpus: str, *, assert_determinism: bool = False) -> dict:
     meta = dict(CORPUS_MANIFESTS[corpus])
     path: Path = meta["path"]
     sample = ROOT / "batch" / "corpora" / corpus / "sample"
-    scope = "full_corpus"
+    scope = meta.get("measure_scope") or "full_corpus"
     if not path.exists() and sample.is_dir():
         meta["path"] = sample
         path = sample
@@ -52,7 +52,7 @@ def measure(corpus: str, *, assert_determinism: bool = False) -> dict:
             f"corpus path missing: {path} — see batch/corpora/{corpus}/README.md"
         )
 
-    if "sample" in path.parts:
+    if "sample" in path.parts and not meta.get("measure_scope"):
         scope = "sample"
 
     if meta.get("corpus_type") == "inventory_only" or meta.get("extractor") == "rust_inventory":

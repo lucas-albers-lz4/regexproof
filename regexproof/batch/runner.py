@@ -136,6 +136,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "security_tool": False,
         "lift_inline": False,
         "corpus_pin": "2024-07-02",
+        "measure_scope": "sample",
         "budget": {"max_patterns": 5000, "max_wall_s": 300},
     },
     "pcre2_testdata": {
@@ -149,6 +150,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "security_tool": False,
         "lift_inline": False,
         "corpus_pin": "pcre2-10.44",
+        "measure_scope": "sample",
         "budget": {"max_patterns": 20000, "max_wall_s": 900},
     },
     "cpython_re": {
@@ -160,6 +162,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "security_tool": False,
         "lift_inline": False,
         "corpus_pin": "v3.12.8",
+        "measure_scope": "sample",
         "budget": {"max_patterns": 5000, "max_wall_s": 300},
     },
     "busybox": {
@@ -173,6 +176,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "security_tool": False,
         "lift_inline": False,
         "corpus_pin": "1_36_1",
+        "measure_scope": "sample",
         "budget": {"max_patterns": 5000, "max_wall_s": 300},
     },
     "rust_regex": {
@@ -184,6 +188,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "security_tool": False,
         "lift_inline": False,
         "corpus_pin": "1.11.1",
+        "measure_scope": "sample",
         "budget": {"max_patterns": 0, "max_wall_s": 60},
     },
 }
@@ -369,6 +374,18 @@ def run_corpus(
     emit_planned: bool = True,
 ) -> dict[str, Any]:
     meta = CORPUS_MANIFESTS[corpus]
+    if meta.get("corpus_type") == "inventory_only":
+        from regexproof.extractors.rust_inventory import write_rust_inventory
+
+        path: Path = meta["path"]
+        report = write_rust_inventory(path, out_dir / f"{corpus}_inventory_only.json")
+        return {
+            "corpus": corpus,
+            "findings": 0,
+            "encodable": report.get("extracted"),
+            "decision": "inventory_only",
+            "detail": report,
+        }
     inventory = load_inventory(meta["corpus_type"])
     records = _extract(corpus, meta)
     compiled = _compile_all(

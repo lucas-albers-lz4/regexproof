@@ -8,9 +8,9 @@ from typing import Any
 
 from regexproof.extractors.record import make_record
 
-# (pattern, match_string, outcome, ...) — take first string in tuple rows.
+# (pattern, match_string, outcome, ...) — first string may be raw (r'...').
 _ROW = re.compile(
-    r"^\s*\(\s*(?P<q>['\"])(?P<pat>(?:\\.|(?!\1).)*)(?P=q)\s*,",
+    r"^\s*\(\s*(?P<prefix>[rRuUbBfF]*)(?P<q>['\"])(?P<pat>(?:\\.|(?!\2).)*)(?P=q)\s*,",
     re.MULTILINE,
 )
 
@@ -25,8 +25,10 @@ def extract_cpython_re_tests(
     out: list[dict[str, Any]] = []
     for m in _ROW.finditer(source):
         raw = m.group("pat")
+        prefix = m.group("prefix") or ""
+        lit = prefix + m.group("q") + raw + m.group("q")
         try:
-            pattern = ast.literal_eval(m.group("q") + raw + m.group("q"))
+            pattern = ast.literal_eval(lit)
         except Exception:  # noqa: BLE001
             pattern = raw
         if not isinstance(pattern, str) or not pattern:

@@ -12,12 +12,21 @@ CORPUS_TYPE_FILES = {
     "validator": "validator.json",
 }
 
+# Corpora without property-question inventories (Phase 1b testdata / inventory-only).
+_EMPTY_INVENTORY_TYPES = frozenset({"testdata", "inventory_only"})
+
 
 def load_inventory(
     corpus_type: str,
     *,
     inventory_dir: Path | None = None,
 ) -> dict[str, Any]:
+    if corpus_type in _EMPTY_INVENTORY_TYPES:
+        return {
+            "schema_version": "1",
+            "corpus_type": corpus_type,
+            "questions": [],
+        }
     inventory_dir = inventory_dir or INVENTORY_DIR
     name = CORPUS_TYPE_FILES.get(corpus_type)
     if not name:

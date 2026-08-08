@@ -10,24 +10,24 @@
   "decision": "go",
   "decision_rule": "go iff encodable/sample_size >= 0.3",
   "dialect": "py_re",
-  "encodable": 14,
+  "encodable": 15,
   "engine_versions": {
     "python": "3.14.6",
     "z3": "5.0.0"
   },
-  "fraction": 0.5385,
+  "fraction": 0.5556,
   "go_no_go_threshold": 0.3,
   "inventory_path": "properties/generated/cpython_re-inventory.ndjson",
   "path": "batch/corpora/cpython_re/re_tests.py",
   "pilot": "cpython_re",
   "reasons": {
     "backref": 3,
-    "ok": 14,
+    "ok": 15,
     "parse-error:PatternError": 9
   },
-  "sample_size": 26,
+  "sample_size": 27,
   "schema_version": "1",
-  "scope": "full_corpus",
+  "scope": "sample",
   "unclassified_parse_errors": 0,
-  "wall_s": 0.016
+  "wall_s": 0.013
 }

@@ -10,6 +10,6 @@
 | semgrep_rules | no-go | 0.2741 | 2518 | 9186 | 0 |
 | pcre2_testdata | go | 1.0 | 2 | 2 | 0 |
 | re2_testdata | go | 1.0 | 2 | 2 | 0 |
-| cpython_re | go | 0.5385 | 14 | 26 | 0 |
+| cpython_re | go | 0.5556 | 15 | 27 | 0 |
 | busybox | go | 1.0 | 2 | 2 | 0 |
 | rust_regex | inventory_only | None | 1 | 1 | 0 |

@@ -152,15 +152,15 @@
       "corpus": "cpython_re",
       "corpus_pin": "v3.12.8",
       "decision": "go",
-      "encodable": 14,
-      "fraction": 0.5385,
+      "encodable": 15,
+      "fraction": 0.5556,
       "reasons": {
         "backref": 3,
-        "ok": 14,
+        "ok": 15,
         "parse-error:PatternError": 9
       },
-      "sample_size": 26,
-      "scope": "full_corpus",
+      "sample_size": 27,
+      "scope": "sample",
       "unclassified_parse_errors": 0
     },
     {
