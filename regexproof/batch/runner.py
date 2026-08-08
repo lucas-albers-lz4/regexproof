@@ -27,10 +27,13 @@ from regexproof.batch.report import write_markdown, write_ndjson  # noqa: E402
 from regexproof.batch.triage import triage_records_from_compiled, write_triage_ndjson  # noqa: E402
 from regexproof.compiler import compile_pattern  # noqa: E402
 from regexproof.compiler.normalize import normalize_inline_flags  # noqa: E402
+from regexproof.extractors.busybox_tests import extract_busybox_tests  # noqa: E402
+from regexproof.extractors.cpython_re_tests import extract_cpython_re_tests  # noqa: E402
 from regexproof.extractors.go_regexp import extract_go_regexp  # noqa: E402
 from regexproof.extractors.ids_rules import extract_ids_rules  # noqa: E402
 from regexproof.extractors.js_babel import extract_js  # noqa: E402
 from regexproof.extractors.modsec import count_operators, extract_modsec  # noqa: E402
+from regexproof.extractors.pcre2_testdata import extract_pcre2_testdata  # noqa: E402
 from regexproof.extractors.python_ast import extract_python  # noqa: E402
 from regexproof.extractors.rule_file import extract_rule_file  # noqa: E402
 from regexproof.redos.join import join_findings  # noqa: E402
@@ -124,6 +127,65 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "commit": "40b8c63f75dc7c22c8a77482d73bfb864b146f7e",
         "budget": {"max_patterns": 5000, "max_wall_s": 600},
     },
+    "re2_testdata": {
+        "corpus_type": "testdata",
+        "path": ROOT / "batch" / "corpora" / "re2_testdata" / "sample" / "patterns.toml",
+        "dialect": "re2",
+        "extractor": "rule_file",
+        "repo": "google/re2",
+        "security_tool": False,
+        "lift_inline": False,
+        "corpus_pin": "2024-07-02",
+        "budget": {"max_patterns": 5000, "max_wall_s": 300},
+    },
+    "pcre2_testdata": {
+        "corpus_type": "testdata",
+        # Full testdata can OOM the process; prefer sample for CI / default path.
+        "path": ROOT / "batch" / "corpora" / "pcre2_testdata" / "sample",
+        "glob": "testinput*",
+        "dialect": "pcre",
+        "extractor": "pcre2_testdata",
+        "repo": "PCRE2Project/pcre2",
+        "security_tool": False,
+        "lift_inline": False,
+        "corpus_pin": "pcre2-10.44",
+        "budget": {"max_patterns": 20000, "max_wall_s": 900},
+    },
+    "cpython_re": {
+        "corpus_type": "testdata",
+        "path": ROOT / "batch" / "corpora" / "cpython_re" / "re_tests.py",
+        "dialect": "py_re",
+        "extractor": "cpython_re_tests",
+        "repo": "python/cpython",
+        "security_tool": False,
+        "lift_inline": False,
+        "corpus_pin": "v3.12.8",
+        "budget": {"max_patterns": 5000, "max_wall_s": 300},
+    },
+    "busybox": {
+        "corpus_type": "testdata",
+        # Default to sample; materialize full testsuite via README symlink.
+        "path": ROOT / "batch" / "corpora" / "busybox" / "sample",
+        "glob": "*.tests",
+        "dialect": "pcre",
+        "extractor": "busybox_tests",
+        "repo": "mirror/busybox",
+        "security_tool": False,
+        "lift_inline": False,
+        "corpus_pin": "1_36_1",
+        "budget": {"max_patterns": 5000, "max_wall_s": 300},
+    },
+    "rust_regex": {
+        "corpus_type": "inventory_only",
+        "path": ROOT / "batch" / "corpora" / "rust_regex" / "sample",
+        "dialect": "rust_regex",
+        "extractor": "rust_inventory",
+        "repo": "rust-lang/regex",
+        "security_tool": False,
+        "lift_inline": False,
+        "corpus_pin": "1.11.1",
+        "budget": {"max_patterns": 0, "max_wall_s": 60},
+    },
 }
 
 
@@ -188,8 +250,35 @@ def _extract(corpus: str, meta: dict[str, Any]) -> list[dict[str, Any]]:
         return _extract_glob(
             path,
             meta,
-            glob=meta.get("glob") or "**/*.{yml,yaml}",
+            glob=meta.get("glob") or "**/*.yml,**/*.yaml",
             extract_fn=lambda src, rel: extract_rule_file(
+                src, repo=meta["repo"], file=rel, dialect=meta["dialect"]
+            ),
+        )
+    if meta["extractor"] == "pcre2_testdata":
+        return _extract_glob(
+            path,
+            meta,
+            glob=meta.get("glob") or "testinput*",
+            extract_fn=lambda src, rel: extract_pcre2_testdata(
+                src, repo=meta["repo"], file=rel, dialect=meta["dialect"]
+            ),
+        )
+    if meta["extractor"] == "cpython_re_tests":
+        source = path.read_text(encoding="utf-8", errors="replace")
+        try:
+            rel = str(path.resolve().relative_to(ROOT.resolve()))
+        except ValueError:
+            rel = str(path)
+        return extract_cpython_re_tests(
+            source, repo=meta["repo"], file=rel, dialect=meta["dialect"]
+        )
+    if meta["extractor"] == "busybox_tests":
+        return _extract_glob(
+            path,
+            meta,
+            glob=meta.get("glob") or "*.tests",
+            extract_fn=lambda src, rel: extract_busybox_tests(
                 src, repo=meta["repo"], file=rel, dialect=meta["dialect"]
             ),
         )

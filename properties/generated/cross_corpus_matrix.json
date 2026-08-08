@@ -121,6 +121,71 @@
       "sample_size": 9186,
       "scope": "full_corpus",
       "unclassified_parse_errors": 0
+    },
+    {
+      "corpus": "pcre2_testdata",
+      "corpus_pin": "pcre2-10.44",
+      "decision": "go",
+      "encodable": 2,
+      "fraction": 1.0,
+      "reasons": {
+        "ok": 2
+      },
+      "sample_size": 2,
+      "scope": "sample",
+      "unclassified_parse_errors": 0
+    },
+    {
+      "corpus": "re2_testdata",
+      "corpus_pin": "2024-07-02",
+      "decision": "go",
+      "encodable": 2,
+      "fraction": 1.0,
+      "reasons": {
+        "ok": 2
+      },
+      "sample_size": 2,
+      "scope": "sample",
+      "unclassified_parse_errors": 0
+    },
+    {
+      "corpus": "cpython_re",
+      "corpus_pin": "v3.12.8",
+      "decision": "go",
+      "encodable": 14,
+      "fraction": 0.5385,
+      "reasons": {
+        "backref": 3,
+        "ok": 14,
+        "parse-error:PatternError": 9
+      },
+      "sample_size": 26,
+      "scope": "full_corpus",
+      "unclassified_parse_errors": 0
+    },
+    {
+      "corpus": "busybox",
+      "corpus_pin": "1_36_1",
+      "decision": "go",
+      "encodable": 2,
+      "fraction": 1.0,
+      "reasons": {
+        "ok": 2
+      },
+      "sample_size": 2,
+      "scope": "sample",
+      "unclassified_parse_errors": 0
+    },
+    {
+      "corpus": "rust_regex",
+      "corpus_pin": "1.11.1",
+      "decision": "inventory_only",
+      "encodable": 1,
+      "fraction": null,
+      "reasons": {},
+      "sample_size": 1,
+      "scope": "inventory_only",
+      "unclassified_parse_errors": 0
     }
   ],
   "schema_version": "1"

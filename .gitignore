@@ -17,3 +17,6 @@ batch/corpora/coreruleset/rules
 # Materialized corpus checkouts (see batch/corpora/*/README.md)
 batch/corpora/*/rules
 batch/corpora/*/detectors
+batch/corpora/*/testdata
+batch/corpora/*/testsuite
+batch/corpora/rust_regex/src

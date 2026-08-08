@@ -1,0 +1,33 @@
+{
+  "budget": {
+    "max_patterns": 5000,
+    "max_wall_s": 300
+  },
+  "commit": null,
+  "compiler_fingerprint": "50acabd829ca",
+  "complete_run": true,
+  "corpus_pin": "v3.12.8",
+  "decision": "go",
+  "decision_rule": "go iff encodable/sample_size >= 0.3",
+  "dialect": "py_re",
+  "encodable": 14,
+  "engine_versions": {
+    "python": "3.14.6",
+    "z3": "5.0.0"
+  },
+  "fraction": 0.5385,
+  "go_no_go_threshold": 0.3,
+  "inventory_path": "properties/generated/cpython_re-inventory.ndjson",
+  "path": "batch/corpora/cpython_re/re_tests.py",
+  "pilot": "cpython_re",
+  "reasons": {
+    "backref": 3,
+    "ok": 14,
+    "parse-error:PatternError": 9
+  },
+  "sample_size": 26,
+  "schema_version": "1",
+  "scope": "full_corpus",
+  "unclassified_parse_errors": 0,
+  "wall_s": 0.016
+}
