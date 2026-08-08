@@ -247,7 +247,14 @@ def build_e1(xr_mirror, x_dollar_mirror, s, *, empty_x: bool, call_kind: str):
 
 
 def build_e2(
-    xr_body, x_body, s, *, len_bound: int, empty_x: bool, call_kind: str = "search"
+    xr_body,
+    x_body,
+    s,
+    *,
+    len_bound: int,
+    empty_x: bool,
+    call_kind: str = "search",
+    x_body_is_suffix: bool = False,
 ):
     star = z3.Star(any_char())
     if empty_x and call_kind in ("search", "exec", "substitution"):
@@ -255,6 +262,9 @@ def build_e2(
         return And(Length(s) <= len_bound, BoolVal(True))
     if empty_x:
         right = InRe(s, z3.Re(""))
+    elif x_body_is_suffix:
+        # wb_leading_suffix_mirror is already (^|\\W)INNER$ shaped.
+        right = InRe(s, x_body)
     else:
         right = InRe(s, Concat(star, x_body))
     return And(Length(s) <= len_bound, Or(InRe(s, Concat(star, xr_body)), right))
@@ -593,10 +603,20 @@ def run_sample(sample: dict, *, encodings: list[str], timeout_ms: int) -> list[d
 
     if "E2" in encodings and run_sat_find:
         xr_fm = _compile(split["xr"], dialect=dialect, call_kind="fullmatch", flags=flags)
+        x_body_is_suffix = False
         if split["empty_x"]:
             x_body = z3.Re("")
             xb_ok = True
             xb_reason = None
+        elif split["x_bare"].startswith("\\b"):
+            # Match E1: stock fullmatch on \\b INNER over-approximates `$`.
+            wb_m, wb_reason = wb_leading_suffix_mirror(
+                split["x_bare"], dialect=dialect, flags=flags
+            )
+            x_body = wb_m
+            xb_ok = wb_m is not None
+            xb_reason = wb_reason
+            x_body_is_suffix = True
         else:
             xb_cr = _compile(
                 split["x_bare"], dialect=dialect, call_kind="fullmatch", flags=flags
@@ -625,6 +645,7 @@ def run_sample(sample: dict, *, encodings: list[str], timeout_ms: int) -> list[d
                 x_b=x_body,
                 empty=split["empty_x"],
                 ck=call_kind,
+                suf=x_body_is_suffix,
             ):
                 return build_e2(
                     xr_b,
@@ -633,6 +654,7 @@ def run_sample(sample: dict, *, encodings: list[str], timeout_ms: int) -> list[d
                     len_bound=E2_LEN_BOUND,
                     empty_x=empty,
                     call_kind=ck,
+                    x_body_is_suffix=suf,
                 )
 
             sat_row = solve_constraint(e2_fn(s), s, timeout_ms=timeout_ms)
@@ -766,10 +788,17 @@ def decide(results: list[dict]) -> tuple[str, str, str | None, str | None]:
         if r.get("encoding") == "E2" and r.get("bucket") in TRACTABILITY_BUCKETS
     ]
     e2_sound = all(membership_ok(r) for r in e2_tract) and bool(e2_tract)
-    if e2_tract and all(sat_ok(r) for r in e2_tract) and e2_sound:
+    if (
+        e2_tract
+        and all(sat_ok(r) for r in e2_tract)
+        and e2_sound
+        and mem_clean
+        and corpus_split_ok
+    ):
         note = (
             f"E1 sat-find missed the <{GO_WALL_MS}ms gate on the tractability cohort; "
-            f"E2 with len(s)<={E2_LEN_BOUND} meets sat-find + E2 membership soundness."
+            f"E2 with len(s)<={E2_LEN_BOUND} meets sat-find + E2 membership soundness; "
+            "corpus E1 membership/split gates also hold."
         )
         return "GO-BOUNDED", note, "E2", f"len(s)<={E2_LEN_BOUND}"
 
