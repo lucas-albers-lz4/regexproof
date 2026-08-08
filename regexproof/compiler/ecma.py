@@ -12,6 +12,7 @@ from z3 import Range, Re, Union
 from regexproof.compiler.base import CompileResult, Unencodable
 from regexproof.compiler.fold import js_nonsu_fold_closure
 from regexproof.compiler.lower import lower
+from regexproof.compiler.pcre_strip import strip_language_transparent
 from regexproof.compiler.simple_parse import parse_pattern
 
 HELPER = Path(__file__).resolve().parents[2] / "helpers" / "ecma"
@@ -66,7 +67,8 @@ def compile_ecma(
             "parse-error",
         ):
             raise Unencodable(reason)
-        ast = parse_pattern(pattern)
+        stripped = strip_language_transparent(pattern)
+        ast = parse_pattern(stripped)
         ignorecase = "i" in flags
         fold = js_nonsu_fold_closure if ignorecase else None
         mirror, _meta = lower(

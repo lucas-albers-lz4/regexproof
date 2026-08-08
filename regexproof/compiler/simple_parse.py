@@ -132,9 +132,33 @@ def _parse_escape(s: str, i: int):
         return Lit("\t"), i + 2
     if e == "r":
         return Lit("\r"), i + 2
+    if e == "x":
+        return _parse_hex_escape(s, i)
     if e in r"\\.^$*+?()[]{}|":
         return Lit(e), i + 2
     return Lit(e), i + 2
+
+
+def _parse_hex_escape(s: str, i: int):
+    """Parse ``\\xNN`` or ``\\x{HHHH}`` starting at the backslash index."""
+    # s[i] == '\\', s[i+1] == 'x'
+    if i + 2 < len(s) and s[i + 2] == "{":
+        j = i + 3
+        digits: list[str] = []
+        while j < len(s) and s[j] != "}":
+            if s[j] not in "0123456789abcdefABCDEF":
+                raise Unencodable("bad-range")
+            digits.append(s[j])
+            j += 1
+        if not digits or j >= len(s):
+            raise Unencodable("bad-range")
+        code = int("".join(digits), 16)
+        if code > 0x10FFFF:
+            raise Unencodable("bad-range")
+        return Lit(chr(code)), j + 1
+    if i + 3 < len(s) and all(c in "0123456789abcdefABCDEF" for c in s[i + 2 : i + 4]):
+        return Lit(chr(int(s[i + 2 : i + 4], 16))), i + 4
+    raise Unencodable("bad-range")
 
 
 def _parse_class(s: str, i: int):

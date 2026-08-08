@@ -12,6 +12,7 @@ from z3 import Range, Re, Union
 from regexproof.compiler.base import CompileResult, Unencodable
 from regexproof.compiler.fold import re2_fold_closure
 from regexproof.compiler.lower import lower
+from regexproof.compiler.pcre_strip import strip_language_transparent
 from regexproof.compiler.simple_parse import parse_pattern
 
 HELPER_DIR = Path(__file__).resolve().parents[2] / "helpers" / "go-re2"
@@ -73,10 +74,11 @@ def compile_re2(
             raise Unencodable("pattern-too-long")
         if "m" in flags:
             raise Unencodable("m-flag")
-        gate = parse_with_helper(pattern)
+        stripped = strip_language_transparent(pattern)
+        gate = parse_with_helper(stripped)
         if gate.get("ok") is False:
             raise Unencodable("parse-error")
-        ast = parse_pattern(pattern)
+        ast = parse_pattern(stripped)
         fold = re2_fold_closure if "i" in flags else None
         mirror, _meta = lower(
             ast,
