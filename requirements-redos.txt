@@ -1,0 +1,4 @@
+# Isolated ReDoS-stage dependencies — NEVER install into the Z3 proof job.
+# #20 designates vuln-regex-detector (not on PyPI / multi-runtime). Phase 4
+# pins regexploit as the pip-installable Python detector used by the CLI wrapper.
+regexploit==1.0.0

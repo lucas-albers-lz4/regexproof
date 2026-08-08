@@ -1,0 +1,137 @@
+{
+  "schema_version": "1",
+  "fixtures": [
+    {
+      "id": "moment-cve-2022-31129",
+      "meta": {
+        "cve": "CVE-2022-31129",
+        "package": "moment",
+        "note": "Representative nested-quantifier ReDoS class from the moment.js advisory era; pattern chosen for deterministic recheck detection."
+      },
+      "extractor": {
+        "schema_version": "1",
+        "regex_id": "REPLACE",
+        "repo": "fixture/moment",
+        "pattern": "([a-z]+)+$",
+        "flags": "",
+        "dialect": "ecma",
+        "call_kind": "search",
+        "site": "fixtures/moment.js:1:0",
+        "file": "fixtures/moment.js",
+        "line": 1,
+        "column": 0
+      },
+      "expect_tools": {
+        "recheck": { "result": "vulnerable", "severity": "exponential" }
+      }
+    },
+    {
+      "id": "ansi-regex-vulnerable",
+      "meta": {
+        "package": "ansi-regex",
+        "note": "Classic ansi-regex ReDoS pattern (pre-fix)."
+      },
+      "extractor": {
+        "schema_version": "1",
+        "regex_id": "REPLACE",
+        "repo": "fixture/ansi-regex",
+        "pattern": "[\\u001B\\u009B][[\\]()#;?]*(?:(?:(?:[a-zA-Z\\d]*(?:;[-a-zA-Z\\d\\/#&.:=?%@~_]*)*)?\\u0007)|(?:(?:\\d{1,4}(?:;\\d{0,4})*)?[\\dA-PR-TZcf-ntqry=><~]))",
+        "flags": "",
+        "dialect": "ecma",
+        "call_kind": "search",
+        "site": "fixtures/ansi-regex.js:1:0",
+        "file": "fixtures/ansi-regex.js",
+        "line": 1,
+        "column": 0
+      },
+      "expect_tools": {
+        "recheck": { "result": "vulnerable" }
+      }
+    },
+    {
+      "id": "trim-newlines-vulnerable",
+      "meta": {
+        "package": "trim-newlines",
+        "note": "Nested-star class used in trim-newlines ReDoS reports."
+      },
+      "extractor": {
+        "schema_version": "1",
+        "regex_id": "REPLACE",
+        "repo": "fixture/trim-newlines",
+        "pattern": "(a*)*$",
+        "flags": "",
+        "dialect": "ecma",
+        "call_kind": "search",
+        "site": "fixtures/trim-newlines.js:1:0",
+        "file": "fixtures/trim-newlines.js",
+        "line": 1,
+        "column": 0
+      },
+      "expect_tools": {
+        "recheck": { "result": "vulnerable", "severity": "exponential" }
+      }
+    },
+    {
+      "id": "python-nested-quantifier",
+      "meta": {
+        "note": "Python dialect nested quantifier for regexploit."
+      },
+      "extractor": {
+        "schema_version": "1",
+        "regex_id": "REPLACE",
+        "repo": "fixture/python",
+        "pattern": "(a+)+$",
+        "flags": "",
+        "dialect": "py_re",
+        "call_kind": "fullmatch",
+        "site": "fixtures/evil.py:1:0",
+        "file": "fixtures/evil.py",
+        "line": 1,
+        "column": 0
+      },
+      "expect_tools": {
+        "regexploit": { "result": "vulnerable" }
+      }
+    },
+    {
+      "id": "control-safe",
+      "meta": { "note": "Trivial safe control." },
+      "extractor": {
+        "schema_version": "1",
+        "regex_id": "REPLACE",
+        "repo": "fixture/control",
+        "pattern": "^a$",
+        "flags": "",
+        "dialect": "ecma",
+        "call_kind": "fullmatch",
+        "site": "fixtures/safe.js:1:0",
+        "file": "fixtures/safe.js",
+        "line": 1,
+        "column": 0
+      },
+      "expect_tools": {
+        "recheck": { "result": "safe" }
+      }
+    },
+    {
+      "id": "re2-unsupported",
+      "meta": { "note": "RE2 must not be claimed safe." },
+      "extractor": {
+        "schema_version": "1",
+        "regex_id": "REPLACE",
+        "repo": "fixture/re2",
+        "pattern": "a+",
+        "flags": "",
+        "dialect": "re2",
+        "call_kind": "search",
+        "site": "fixtures/re2.toml:1:0",
+        "file": "fixtures/re2.toml",
+        "line": 1,
+        "column": 0
+      },
+      "expect_tools": {
+        "redos-stage": { "result": "unsupported" }
+      }
+    }
+  ]
+}

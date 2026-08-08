@@ -53,6 +53,21 @@ Nonbacktracking Matchers").
    (device fidelity: BusyBox/GNU, Node/V8 versions matter).
 4. **Semantics + language properties:** this repo's Z3 workflow.
 
+## Phase 4 runner (this repo)
+
+Isolated complexity stage (never install into the Z3 proof job):
+
+```bash
+npm install --prefix helpers/redos          # recheck@4.5.0, safe-regex2@5.1.1
+python -m venv redos-env && redos-env/bin/pip install -e ".[dev]" -r requirements-redos.txt
+redos-env/bin/python -m regexproof.redos.runner --input extractor.jsonl --out findings.jsonl
+```
+
+- Findings are versioned JSONL keyed by `regex_id` (see `regexproof/schemas/redos_finding.schema.json`).
+- ECMA → `recheck` (required) + `safe-regex2` (triage); Python → `regexploit` (pip stand-in for vuln-regex-detector, which is not on PyPI); RE2 → `unsupported` (linear-time engine; USENIX Sec'22 super-linear caveat — do not claim safe).
+- Join Z3 + ReDoS with `regexproof.redos.join.join_findings` — separate sections, no combined verdict.
+- Error/timeout/unsupported must never be recorded as `safe`.
+
 ## Related reading
 
 - Wikipedia: ReDoS (history, examples, tool list)

@@ -1,0 +1,9 @@
+{
+  "name": "regexproof-redos-helpers",
+  "private": true,
+  "type": "commonjs",
+  "dependencies": {
+    "recheck": "4.5.0",
+    "safe-regex2": "5.1.1"
+  }
+}
