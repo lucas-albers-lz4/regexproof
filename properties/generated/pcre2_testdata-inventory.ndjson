@@ -1,0 +1,2 @@
+{"call_kind": "search", "compile_reason": null, "corpus": "pcre2_testdata", "dialect": "pcre", "encodable": true, "flags": "", "pattern": "abc", "regex_id": "dffe93f2e5fe37e7f143a177273af90b", "site": "batch/corpora/pcre2_testdata/sample/testinput_sample:1:0"}
+{"call_kind": "search", "compile_reason": null, "corpus": "pcre2_testdata", "dialect": "pcre", "encodable": true, "flags": "i", "pattern": "[a-z]+", "regex_id": "c0de71787cef396491cd0ee373c60e24", "site": "batch/corpora/pcre2_testdata/sample/testinput_sample:3:0"}

@@ -17,7 +17,6 @@ OUT = ROOT / "properties" / "generated"
 CORPORA = [
     "gitleaks",
     "validatorjs",
-    "detect-secrets",
     "coreruleset",
     "trufflehog",
     "ids_rules",

@@ -1,0 +1,12 @@
+{
+  "corpus": "rust_regex",
+  "corpus_pin": "1.11.1",
+  "decision": "inventory_only",
+  "encodable": 1,
+  "fraction": null,
+  "reasons": {},
+  "sample_size": 1,
+  "schema_version": "1",
+  "scope": "inventory_only",
+  "unclassified_parse_errors": 0
+}

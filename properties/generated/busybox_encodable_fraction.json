@@ -1,0 +1,31 @@
+{
+  "budget": {
+    "max_patterns": 5000,
+    "max_wall_s": 300
+  },
+  "commit": null,
+  "compiler_fingerprint": "50acabd829ca",
+  "complete_run": true,
+  "corpus_pin": "1_36_1",
+  "decision": "go",
+  "decision_rule": "go iff encodable/sample_size >= 0.3",
+  "dialect": "pcre",
+  "encodable": 2,
+  "engine_versions": {
+    "python": "3.14.6",
+    "z3": "5.0.0"
+  },
+  "fraction": 1.0,
+  "go_no_go_threshold": 0.3,
+  "inventory_path": "properties/generated/busybox-inventory.ndjson",
+  "path": "batch/corpora/busybox/sample",
+  "pilot": "busybox",
+  "reasons": {
+    "ok": 2
+  },
+  "sample_size": 2,
+  "schema_version": "1",
+  "scope": "sample",
+  "unclassified_parse_errors": 0,
+  "wall_s": 0.077
+}

@@ -1,0 +1,10 @@
+{
+  "extracted": 1,
+  "note": "No fraction / go-no-go; fold interesting patterns into golden suite manually.",
+  "pilot": "rust_regex",
+  "sample_files": [
+    "demo.rs"
+  ],
+  "schema_version": "1",
+  "scope": "inventory_only"
+}

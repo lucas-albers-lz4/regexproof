@@ -1,0 +1,2 @@
+{"call_kind": "search", "compile_reason": null, "corpus": "re2_testdata", "dialect": "re2", "encodable": true, "flags": "", "pattern": "^[a-z]+$", "regex_id": "79437a2125b2ac967bd63774f0b8410b", "site": "batch/corpora/re2_testdata/sample/patterns.toml:3:0"}
+{"call_kind": "search", "compile_reason": null, "corpus": "re2_testdata", "dialect": "re2", "encodable": true, "flags": "", "pattern": "foo[0-9]+", "regex_id": "ef31973c9458c86762ec8a4ff2d5c192", "site": "batch/corpora/re2_testdata/sample/patterns.toml:6:0"}

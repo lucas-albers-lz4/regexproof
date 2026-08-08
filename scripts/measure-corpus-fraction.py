@@ -41,7 +41,7 @@ def measure(corpus: str, *, assert_determinism: bool = False) -> dict:
     meta = dict(CORPUS_MANIFESTS[corpus])
     path: Path = meta["path"]
     sample = ROOT / "batch" / "corpora" / corpus / "sample"
-    scope = "full_corpus"
+    scope = meta.get("measure_scope") or "full_corpus"
     if not path.exists() and sample.is_dir():
         meta["path"] = sample
         path = sample
@@ -51,6 +51,41 @@ def measure(corpus: str, *, assert_determinism: bool = False) -> dict:
         raise SystemExit(
             f"corpus path missing: {path} — see batch/corpora/{corpus}/README.md"
         )
+
+    if "sample" in path.parts and not meta.get("measure_scope"):
+        scope = "sample"
+
+    if meta.get("corpus_type") == "inventory_only" or meta.get("extractor") == "rust_inventory":
+        from regexproof.extractors.rust_inventory import write_rust_inventory
+
+        OUT.mkdir(parents=True, exist_ok=True)
+        report = write_rust_inventory(path, OUT / f"{corpus}_inventory_only.json")
+        report["corpus"] = corpus
+        report["corpus_pin"] = meta.get("corpus_pin")
+        report["decision"] = "inventory_only"
+        report["scope"] = "inventory_only"
+        report["unclassified_parse_errors"] = 0
+        # Also write a stub fraction-shaped row for matrix consumers that expect it.
+        frac = {
+            "schema_version": "1",
+            "corpus": corpus,
+            "corpus_pin": meta.get("corpus_pin"),
+            "decision": "inventory_only",
+            "fraction": None,
+            "encodable": report.get("extracted"),
+            "sample_size": report.get("extracted"),
+            "reasons": {},
+            "scope": "inventory_only",
+            "unclassified_parse_errors": 0,
+        }
+        (OUT / f"{corpus}_encodable_fraction.json").write_text(
+            json.dumps(frac, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+        )
+        print(
+            f"{corpus}: inventory_only extracted={report.get('extracted')} "
+            f"→ properties/generated/{corpus}_inventory_only.json"
+        )
+        return frac
 
     t0 = time.perf_counter()
     records = _extract(corpus, meta)
@@ -150,9 +185,17 @@ def main(argv: list[str] | None = None) -> int:
     args = ap.parse_args(argv)
     report = measure(args.corpus, assert_determinism=args.assert_determinism)
     # Soft warn on unclassified; hard-fail when measuring new wave corpora.
-    if args.corpus in ("trufflehog", "ids_rules", "semgrep_rules"):
-        if report["unclassified_parse_errors"]:
-            return 2
+    wave = (
+        "trufflehog",
+        "ids_rules",
+        "semgrep_rules",
+        "pcre2_testdata",
+        "re2_testdata",
+        "cpython_re",
+        "busybox",
+    )
+    if args.corpus in wave and report.get("unclassified_parse_errors"):
+        return 2
     return 0
 
 

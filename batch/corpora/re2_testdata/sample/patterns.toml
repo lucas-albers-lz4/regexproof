@@ -1,0 +1,6 @@
+[[rules]]
+id = "a"
+regex = "^[a-z]+$"
+[[rules]]
+id = "b"
+regex = "foo[0-9]+"
