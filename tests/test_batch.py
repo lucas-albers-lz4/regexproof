@@ -110,8 +110,55 @@ def test_markdown_section_headers_unique(tmp_path: Path):
     path = tmp_path / "out.md"
     write_markdown(path, corpus="t", findings=findings)
     text = path.read_text()
-    assert "## intent_mismatch:" + "d" * 32 + ":email" in text
-    assert "## intent_mismatch:" + "d" * 32 + ":url" in text
+    assert "ground_truth_status: \"N/A\"" in text or 'ground_truth_status: "N/A"' in text
+
+
+def test_markdown_emits_contracted_finding_fields(tmp_path: Path):
+    from regexproof.batch.report import write_markdown
+
+    findings = [
+        {
+            "schema_version": "1",
+            "regex_id": "a" * 32,
+            "kind": "rule_diff",
+            "corpus": "gitleaks",
+            "dialect": "re2",
+            "call_kind": "search",
+            "shape": 5,
+            "result": "sat",
+            "family": "RD-example",
+            "domain": "ascii",
+            "wall_ms": 12.5,
+            "ground_truth_status": "reproduced",
+            "engine_versions": {"python": "3.12.0", "z3": "5.0.0"},
+            "disclosure": "private_first",
+            "site": "x.toml:1:0",
+            "pattern": "AKIA[0-9A-Z]{16}",
+            "detail": {},
+        }
+    ]
+    path = tmp_path / "gitleaks_batch.md"
+    write_markdown(path, corpus="gitleaks", findings=findings)
+    text = path.read_text()
+    assert path.name.endswith("_batch.md")
+    for key in (
+        "regex_id:",
+        "dialect: re2",
+        "call_kind: search",
+        "shape: 5",
+        "result: sat",
+        "family: RD-example",
+        "domain: ascii",
+        "wall_ms: 12.5",
+        "ground_truth_status: reproduced",
+        "engine_versions:",
+        "disclosure: private_first",
+        "site:",
+        'schema_version: "1"',
+    ):
+        assert key in text, key
+    # Must not be written as the Phase-3 shape-5 path.
+    assert not (tmp_path / "gitleaks.md").exists()
 
 
 def test_redaction_corpus():

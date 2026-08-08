@@ -6,6 +6,25 @@ import json
 from pathlib import Path
 from typing import Any
 
+# Per-finding metadata keys aligned with docs/REPORTING.md / Phase-3 pilot rows.
+_FINDING_META_KEYS = (
+    "regex_id",
+    "schema_version",
+    "kind",
+    "corpus",
+    "dialect",
+    "call_kind",
+    "shape",
+    "result",
+    "family",
+    "domain",
+    "wall_ms",
+    "ground_truth_status",
+    "engine_versions",
+    "disclosure",
+    "site",
+)
+
 
 def redact_witness(witness: object) -> object:
     """Idempotent redaction for secret-scanner-safe committed artifacts."""
@@ -36,7 +55,46 @@ def write_ndjson(path: Path, records: list[dict[str, Any]]) -> None:
             fh.write(json.dumps(payload, sort_keys=True) + "\n")
 
 
+def _yaml_scalar(value: object) -> str:
+    if value is None:
+        return "null"
+    if isinstance(value, bool):
+        return "true" if value else "false"
+    if isinstance(value, (int, float)):
+        return str(value)
+    if isinstance(value, dict):
+        # Compact JSON for nested maps (engine_versions).
+        return json.dumps(value, sort_keys=True)
+    text = str(value)
+    # Quote anything ambiguous for YAML 1.1 (N/A, YES, NO, ON, OFF, …).
+    ambiguous = {
+        "",
+        "n/a",
+        "yes",
+        "no",
+        "y",
+        "n",
+        "true",
+        "false",
+        "on",
+        "off",
+        "null",
+        "~",
+    }
+    if (
+        text.lower() in ambiguous
+        or any(c in text for c in (":", "#", "\n", '"', "'", "[", "]", "{", "}"))
+        or text[:1] in "-?&*!|>%@`"
+    ):
+        return json.dumps(text)
+    return text
+
+
 def write_markdown(path: Path, *, corpus: str, findings: list[dict[str, Any]]) -> None:
+    """Write ``*_batch.md`` with report front matter + per-finding contracted fields.
+
+    Does not write Phase-3 shape-5 paths such as ``gitleaks.md``.
+    """
     lines = [
         "---",
         'schema_version: "1"',
@@ -57,18 +115,40 @@ def write_markdown(path: Path, *, corpus: str, findings: list[dict[str, Any]]) -
         ),
     ):
         detail = f.get("detail") or {}
-        suffix = detail.get("keyword") or detail.get("question_id") or detail.get("call_kind") or ""
+        # Prefer finding-level call_kind; fall back to detail.
+        if f.get("call_kind") is None and detail.get("call_kind") is not None:
+            f = {**f, "call_kind": detail.get("call_kind")}
+        if f.get("dialect") is None and detail.get("dialect") is not None:
+            f = {**f, "dialect": detail.get("dialect")}
+        if f.get("family") is None and detail.get("family") is not None:
+            f = {**f, "family": detail.get("family")}
+        if f.get("domain") is None and (
+            f.get("input_domain") is not None or detail.get("domain") is not None
+        ):
+            f = {
+                **f,
+                "domain": f.get("input_domain") or detail.get("domain"),
+            }
+
+        suffix = detail.get("keyword") or detail.get("question_id") or f.get("call_kind") or ""
         heading = f"## {f.get('kind')}:{f.get('regex_id')}"
         if suffix:
             heading = f"{heading}:{suffix}"
+        lines.extend([heading, "", "```yaml"])
+        for key in _FINDING_META_KEYS:
+            if key not in f and key != "schema_version":
+                continue
+            val = f.get(key)
+            if key == "schema_version":
+                # Always emit the string constant required by scanner schemas.
+                lines.append(f'schema_version: "1"')
+                continue
+            if val is None and key not in ("ground_truth_status", "disclosure", "shape"):
+                continue
+            lines.append(f"{key}: {_yaml_scalar(val)}")
         lines.extend(
             [
-                heading,
-                "",
-                f"- result: `{f.get('result')}`",
-                f"- site: `{f.get('site')}`",
-                f"- ground_truth_status: `{f.get('ground_truth_status')}`",
-                f"- disclosure: `{f.get('disclosure')}`",
+                "```",
                 "",
                 "### Pattern",
                 "",
