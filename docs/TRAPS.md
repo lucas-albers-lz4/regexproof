@@ -161,3 +161,48 @@ optimization-solver class. Regex `?` is `Union(r, Re(""))` (verified:
 accepts both the token and the empty string). This bit the
 differential-fuzz mirror namespace (AttributeError at import). Documented
 here so a mirror namespace never advertises `Opt` as regex-optional.
+
+## 16. Case-insensitive flags: the mirror must expand case
+
+`Re("AND")` is case-sensitive. A pattern compiled with `re.I` / `(?i)`
+silently accepts a SUPERSET of the naive mirror's language. Verified
+(hermes-agent sweep, telegram bot-handle boundary,
+`re.fullmatch(r"[a-z0-9_]{2,29}bot", handle, re.IGNORECASE)`):
+
+| handle | real regex | naive mirror `Re("bot")` | ci() mirror |
+|--------|-----------|---------------------------|-------------|
+| `mybot` | accepts | accepts | accepts |
+| `MyBot` | accepts | **rejects** | accepts |
+| `MYBOT` | accepts | **rejects** | accepts |
+
+A containment property proven against the naive mirror covers a strict
+subset of the real accepted language — the classic silently-narrower
+mirror. **Use `ci(word)` / `ci_class(lo, hi)` from `scripts/z3-verify.py`**
+(Union of both cases per char) for any pattern compiled with a
+case-insensitive flag. Related: `re.match`/`re.sub` with `^` is a PREFIX
+match while Z3 `InRe` is whole-string membership — model anchored
+matchers with `prefix_match(regex)`, never the bare regex (verified:
+`InRe("AND foo", Re("AND"))` is unsat, `re.match(r"AND", "AND foo")`
+matches; see P6 properties).
+
+## 17. Unicode classes: the input-domain assumption is load-bearing
+
+Python's `\w \d \s \b` are Unicode-aware by default. Z3's `Range`/`Union`
+classes are ASCII. An ASCII mirror of a Unicode class silently diverges —
+and the DIVERGENCE DIRECTION determines the danger:
+
+- **Narrower mirror (`\d`): false FINDINGS.** Python `\d` matches
+  Arabic-Indic `٣` and fullwidth `１`; an ASCII `[0-9]` mirror misses them.
+  A property "phone-shaped strings are redacted" proven on the mirror
+  under-reports (noise, safe direction).
+- **Wider mirror (`\b`): false SAFETY.** Python `\b` is a Unicode word
+  boundary — `中` is `\w`, so `xx中sk-<token>` has NO boundary and is NOT
+  redacted by the real regex. An ASCII `\b` mirror treats `中` as a
+  boundary and matches — a coverage proof passes while the real layer
+  leaks (verified hermes-agent `gateway/run.py:150`).
+
+**Discipline:** declare `input_domain="ascii"` on `@prop` only when the
+boundary is genuinely ASCII-constrained; run `--require-domain` to make
+unstated domains a hard failure; add non-ASCII chars to differential-fuzz
+mutation sets so a Unicode-exposed boundary with an ASCII mirror produces
+a mismatch instead of a silent pass.
