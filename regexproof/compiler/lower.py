@@ -199,5 +199,10 @@ def _repeat(body, lo, hi):
     if hi is None:
         return Concat(*([body] * lo), Star(body)) if lo else Star(body)
     if lo == hi:
-        return Concat(*([body] * lo)) if lo else Re("")
+        if lo <= 0:
+            return Re("")
+        if lo == 1:
+            # Z3 Concat requires ≥2 args; `{1}` / `{1,1}` is identity.
+            return body
+        return Concat(*([body] * lo))
     return Loop(body, lo, hi)

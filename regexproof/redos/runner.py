@@ -68,20 +68,9 @@ def analyze_record(rec: dict[str, Any], *, triage: bool = True) -> list[dict[str
         return findings
 
     if dialect == "pcre":
-        findings.append(
-            make_finding(
-                regex_id=regex_id,
-                tool="redos-stage",
-                tool_version="1",
-                result="unsupported",
-                dialect=dialect,
-                pattern=pattern,
-                flags=flags,
-                site=site,
-                source=source,
-                error_message="pcre ReDoS not wired in Phase 4; use JS/Python detectors",
-            )
-        )
+        # Recheck accepts PCRE-flavored patterns for complexity analysis.
+        raw = run_recheck(pattern, flags)
+        findings.append(_tool_to_finding(raw, rec, source, default_tool="recheck"))
         return findings
 
     findings.append(

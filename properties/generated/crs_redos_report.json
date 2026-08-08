@@ -1,0 +1,1612 @@
+{
+  "encodable": 125,
+  "engine_versions": {
+    "python": "3.14.6"
+  },
+  "noodler_probe": {
+    "available": false,
+    "changed": false,
+    "error": "from_ecma2020 not present on stock z3-solver 5.0.0",
+    "fixture": "tests/fixtures/noodler_probe.json",
+    "note": "CRS @rx has zero lookarounds; probe is confirmatory",
+    "prior_available": false,
+    "triage_fallback": true
+  },
+  "pattern_too_long_policy": {
+    "note": "Capacity cap (>256 chars), not a language limit. Policy: keep cap for interactive Z3 queries; triage long patterns to ReDoS-only / manual review.",
+    "route": "policy"
+  },
+  "pilot": "coreruleset-redos-dialect",
+  "redos": {
+    "by_result": {
+      "safe": 137,
+      "vulnerable": 16
+    },
+    "count": 153,
+    "rows": [
+      {
+        "pattern": "(?:URLENCODED|MULTIPART|XML|JSON)",
+        "regex_id": "fc213c69c51a78074b9db7a79c0a3cdf",
+        "result": "safe",
+        "rule_id": "901340",
+        "severity": "safe",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-901-INITIALIZATION.conf:375:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "(?:URLENCODED|MULTIPART|XML|JSON)",
+        "regex_id": "2937d3663e1c9621508e03be9d879b61",
+        "result": "safe",
+        "rule_id": null,
+        "severity": "safe",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-901-INITIALIZATION.conf:398:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "^[a-f]*([0-9])[a-f]*([0-9])",
+        "regex_id": "12da5e9c854a440c3271a24da8a58565",
+        "result": "safe",
+        "rule_id": "901410",
+        "severity": "linear",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-901-INITIALIZATION.conf:439:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "^(?:GET /|OPTIONS \\*) HTTP/[12]\\.[01]$",
+        "regex_id": "3c24ea1b0584bffeaa6dfd0731c8be89",
+        "result": "safe",
+        "rule_id": null,
+        "severity": "safe",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-905-COMMON-EXCEPTIONS.conf:54:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "^\\d+$",
+        "regex_id": "3523bd737bc85e25c7236406bc21cbc3",
+        "result": "safe",
+        "rule_id": "920160",
+        "severity": "linear",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-920-PROTOCOL-ENFORCEMENT.conf:138:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "^(?:GET|HEAD)$",
+        "regex_id": "66342d357386a976e5c3067a8f22c622",
+        "result": "safe",
+        "rule_id": "920170",
+        "severity": "safe",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-920-PROTOCOL-ENFORCEMENT.conf:173:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "^0?$",
+        "regex_id": "ab4ae45e6798cf6663e784b539612d63",
+        "result": "safe",
+        "rule_id": null,
+        "severity": "safe",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-920-PROTOCOL-ENFORCEMENT.conf:191:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "^(?:GET|HEAD)$",
+        "regex_id": "a3fa314f1b5c82395f1ce858acb1c548",
+        "result": "safe",
+        "rule_id": "920171",
+        "severity": "safe",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-920-PROTOCOL-ENFORCEMENT.conf:199:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "(\\d+)-(\\d+)",
+        "regex_id": "58fcb7c11cefdc74f1f070590a9c1549",
+        "result": "vulnerable",
+        "rule_id": "920190",
+        "severity": "polynomial",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-920-PROTOCOL-ENFORCEMENT.conf:309:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "%uff[0-9a-f]{2}",
+        "regex_id": "c0e7e28a869ecf0b4de7d1570d713130",
+        "result": "safe",
+        "rule_id": "920260",
+        "severity": "safe",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-920-PROTOCOL-ENFORCEMENT.conf:458:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "^$",
+        "regex_id": "f3816c7f31f2caf098af24054d5f1f54",
+        "result": "safe",
+        "rule_id": "920290",
+        "severity": "safe",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-920-PROTOCOL-ENFORCEMENT.conf:569:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "^$",
+        "regex_id": "c48faa84fa2f603b59c86b2c2633d140",
+        "result": "safe",
+        "rule_id": "920310",
+        "severity": "safe",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-920-PROTOCOL-ENFORCEMENT.conf:610:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "^OPTIONS$",
+        "regex_id": "d0472725596eaaf5cee4c1297e452564",
+        "result": "safe",
+        "rule_id": null,
+        "severity": "safe",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-920-PROTOCOL-ENFORCEMENT.conf:627:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "^$",
+        "regex_id": "191a4bbb1e7848b9f480088785d4137d",
+        "result": "safe",
+        "rule_id": "920311",
+        "severity": "safe",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-920-PROTOCOL-ENFORCEMENT.conf:636:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "^OPTIONS$",
+        "regex_id": "06a7034210bfa65225423a65c3017221",
+        "result": "safe",
+        "rule_id": null,
+        "severity": "safe",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-920-PROTOCOL-ENFORCEMENT.conf:653:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "^$",
+        "regex_id": "75b75e10317d4301ecf3263599ed50f3",
+        "result": "safe",
+        "rule_id": "920330",
+        "severity": "safe",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-920-PROTOCOL-ENFORCEMENT.conf:670:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "^0$",
+        "regex_id": "3faed74b7451d9275e4a150fb64b283f",
+        "result": "safe",
+        "rule_id": "920340",
+        "severity": "safe",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-920-PROTOCOL-ENFORCEMENT.conf:712:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "(?:^([\\d.]+|\\[[\\da-f:]+\\]|[\\da-f:]+)(:[\\d]+)?$)",
+        "regex_id": "9a3e3279ec79778cd1bfe889d9c643bb",
+        "result": "safe",
+        "rule_id": "920350",
+        "severity": "linear",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-920-PROTOCOL-ENFORCEMENT.conf:756:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "^[\\w/.+*-]+(?:\\s?;\\s*(?:action|boundary|charset|component|start(?:-info)?|type|version)\\s?=\\s?['\\\"\\w.()+,/:=?<>@#*-]+)*$",
+        "regex_id": "e344c90e3eab7f81fbf080964232dedf",
+        "result": "safe",
+        "rule_id": "920470",
+        "severity": "linear",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-920-PROTOCOL-ENFORCEMENT.conf:961:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "^.*$",
+        "regex_id": "14359151d51ec5ecb0d0e16f09cd803a",
+        "result": "safe",
+        "rule_id": "920450",
+        "severity": "linear",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-920-PROTOCOL-ENFORCEMENT.conf:1209:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "\\x5cu[0-9a-f]{4}",
+        "regex_id": "b9b7e7444a2c3dadc74d9df7bb537eb0",
+        "result": "safe",
+        "rule_id": "920540",
+        "severity": "safe",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-920-PROTOCOL-ENFORCEMENT.conf:1315:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "^bytes=(?:(?:\\d+)?-(?:\\d+)?\\s*,?\\s*){6}",
+        "regex_id": "9d719ad507dee5cd886bab92df78708e",
+        "result": "vulnerable",
+        "rule_id": "920200",
+        "severity": "polynomial",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-920-PROTOCOL-ENFORCEMENT.conf:1418:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "^bytes=(?:(?:\\d+)?-(?:\\d+)?\\s*,?\\s*){63}",
+        "regex_id": "0b76042e30119fbcea516c3db14508c7",
+        "result": "vulnerable",
+        "rule_id": null,
+        "severity": "polynomial",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-920-PROTOCOL-ENFORCEMENT.conf:1461:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "%[0-9a-fA-F]{2}",
+        "regex_id": "dd66b721572897dff677acfe3f78695b",
+        "result": "safe",
+        "rule_id": "920230",
+        "severity": "safe",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-920-PROTOCOL-ENFORCEMENT.conf:1465:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "['\\\";=\\x5c]",
+        "regex_id": "0bc4ede9391be778873a3988c315430e",
+        "result": "safe",
+        "rule_id": "920121",
+        "severity": "safe",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-920-PROTOCOL-ENFORCEMENT.conf:1538:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "^.*$",
+        "regex_id": "3b92873315a00fd275a285a7a3468df9",
+        "result": "safe",
+        "rule_id": "920451",
+        "severity": "linear",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-920-PROTOCOL-ENFORCEMENT.conf:1560:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "\\x25",
+        "regex_id": "933ee22ddbc2159738a42467fea16d3f",
+        "result": "safe",
+        "rule_id": null,
+        "severity": "safe",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-920-PROTOCOL-ENFORCEMENT.conf:1608:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "^[a-z]{3,10}$",
+        "regex_id": "b39bd54afd2febfea334bd63ea54a658",
+        "result": "safe",
+        "rule_id": null,
+        "severity": "safe",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-920-PROTOCOL-ENFORCEMENT.conf:1660:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "^(?:OPTIONS|CONNECT)$",
+        "regex_id": "20e5b7f4c2cde8a77a976ef12be00bd2",
+        "result": "safe",
+        "rule_id": null,
+        "severity": "safe",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-920-PROTOCOL-ENFORCEMENT.conf:1728:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "br|compress|deflate|(?:pack200-)?gzip|identity|\\*|^$|aes128gcm|exi|zstd|x-(?:compress|gzip)",
+        "regex_id": "39762ab894d372041a94535811e92e5a",
+        "result": "safe",
+        "rule_id": "920521",
+        "severity": "safe",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-920-PROTOCOL-ENFORCEMENT.conf:1829:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "^bytes=(?:(?:\\d+)?-(?:\\d+)?\\s*,?\\s*){6}",
+        "regex_id": "b2ee9eeec3cead4b87d445c0a19625e1",
+        "result": "vulnerable",
+        "rule_id": null,
+        "severity": "polynomial",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-920-PROTOCOL-ENFORCEMENT.conf:1876:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "^(?:\\?[01])?$",
+        "regex_id": "ffb1f46ab8758d34b3c5c67790a2c86c",
+        "result": "safe",
+        "rule_id": "920275",
+        "severity": "safe",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-920-PROTOCOL-ENFORCEMENT.conf:1935:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "[\\n\\r]",
+        "regex_id": "a027ef7ab9641b543238fea8c6a080fe",
+        "result": "safe",
+        "rule_id": "921140",
+        "severity": "safe",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-921-PROTOCOL-ATTACK.conf:134:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "[\\n\\r]",
+        "regex_id": "e3c6806362823ebd941af338deccc3a1",
+        "result": "safe",
+        "rule_id": "921150",
+        "severity": "safe",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-921-PROTOCOL-ATTACK.conf:163:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "[\\n\\r]+(?:[\\s\\x0b]|location|re(?:fresh|mote-(?:ip|addr))|(?:set-)?cookie|forwarded-(?:(?:fo|serve)r|host)|host|via|origi",
+        "regex_id": "e16cd91f0097fc5d7feff17de6ea3a71",
+        "result": "vulnerable",
+        "rule_id": "921160",
+        "severity": "polynomial",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-921-PROTOCOL-ATTACK.conf:190:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "[\\n\\r]",
+        "regex_id": "bfa254997deda142de5d73672d58a740",
+        "result": "safe",
+        "rule_id": "921190",
+        "severity": "safe",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-921-PROTOCOL-ATTACK.conf:218:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "[\\n\\r]",
+        "regex_id": "c6b729adf5250644e09188d9ae3b2105",
+        "result": "safe",
+        "rule_id": "921151",
+        "severity": "safe",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-921-PROTOCOL-ATTACK.conf:379:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": ".",
+        "regex_id": "6d1299a5555a96d250d77a184808d70d",
+        "result": "safe",
+        "rule_id": "921170",
+        "severity": "safe",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-921-PROTOCOL-ATTACK.conf:494:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "\\[",
+        "regex_id": "a98bb570ee86b2af649c4b92aa830f76",
+        "result": "safe",
+        "rule_id": "921220",
+        "severity": "safe",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-921-PROTOCOL-ATTACK.conf:602:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "^content-type\\s*:\\s*(.*)$",
+        "regex_id": "603130f8dc4e794d973d8240c3145776",
+        "result": "vulnerable",
+        "rule_id": "922150",
+        "severity": "polynomial",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-922-MULTIPART-ATTACK.conf:73:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "content-transfer-encoding:(.*)",
+        "regex_id": "6e84df510b504d343418d0d638c924ca",
+        "result": "safe",
+        "rule_id": "922120",
+        "severity": "linear",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-922-MULTIPART-ATTACK.conf:114:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "(?:^|[/;\\x5c])\\.{2,3}[/;\\x5c]",
+        "regex_id": "5610f531e236dd58a09793508805952d",
+        "result": "safe",
+        "rule_id": "930110",
+        "severity": "safe",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-930-APPLICATION-ATTACK-LFI.conf:73:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "^(f(?:ile|tps?)|https?|ssh)://(?:\\[?[0-9a-f]+:[0-:a-f]+\\]?|[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3})",
+        "regex_id": "eb28d663dc95436c697da1df01c0dcd4",
+        "result": "safe",
+        "rule_id": "931100",
+        "severity": "linear",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-931-APPLICATION-ATTACK-RFI.conf:47:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "~[\\+\\-](?:$|[0-9]+)",
+        "regex_id": "8d849010be9687c39d87d29eb97e1a68",
+        "result": "safe",
+        "rule_id": "932270",
+        "severity": "linear",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-932-APPLICATION-ATTACK-RCE.conf:384:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "\\{[0-9A-Z_a-z]*,[,\\-0-9A-Z_a-z]*\\}",
+        "regex_id": "750fe2dc8941db188b27dadb70302df6",
+        "result": "safe",
+        "rule_id": "932280",
+        "severity": "linear",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-932-APPLICATION-ATTACK-RCE.conf:423:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "!-\\d",
+        "regex_id": "88a3ee7765166a6c70c9932d2816c9ba",
+        "result": "safe",
+        "rule_id": "932330",
+        "severity": "safe",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-932-APPLICATION-ATTACK-RCE.conf:665:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "^\\(\\s*\\)\\s+\\{",
+        "regex_id": "a48e33eebad28a74e0589d8d2802f80a",
+        "result": "safe",
+        "rule_id": "932170",
+        "severity": "linear",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-932-APPLICATION-ATTACK-RCE.conf:737:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "^\\(\\s*\\)\\s+\\{",
+        "regex_id": "f3a7d202cbc7085e147133bbf4c06f9f",
+        "result": "safe",
+        "rule_id": "932171",
+        "severity": "linear",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-932-APPLICATION-ATTACK-RCE.conf:758:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "/",
+        "regex_id": "455ac5bc32bb865be3080302ee35b287",
+        "result": "safe",
+        "rule_id": null,
+        "severity": "safe",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-932-APPLICATION-ATTACK-RCE.conf:1178:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "\\s",
+        "regex_id": "d8be5976558bc8007c251f5517d8df8f",
+        "result": "safe",
+        "rule_id": null,
+        "severity": "safe",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-932-APPLICATION-ATTACK-RCE.conf:1181:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "/",
+        "regex_id": "98fc689cd2979f6b5b48b83949331dae",
+        "result": "safe",
+        "rule_id": null,
+        "severity": "safe",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-932-APPLICATION-ATTACK-RCE.conf:1221:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "\\s",
+        "regex_id": "235ff2e8e320dbb258cd16612a1ef1ea",
+        "result": "safe",
+        "rule_id": null,
+        "severity": "safe",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-932-APPLICATION-ATTACK-RCE.conf:1224:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "/",
+        "regex_id": "6b286702c71d46d3c1428e34e86dd650",
+        "result": "safe",
+        "rule_id": null,
+        "severity": "safe",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-932-APPLICATION-ATTACK-RCE.conf:1260:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "\\s",
+        "regex_id": "6e5a118942e09013ff83a06d4f04b28c",
+        "result": "safe",
+        "rule_id": null,
+        "severity": "safe",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-932-APPLICATION-ATTACK-RCE.conf:1263:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "#.*",
+        "regex_id": "9506fe2507b8c167fa549d71ff49e78d",
+        "result": "safe",
+        "rule_id": "932207",
+        "severity": "linear",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-932-APPLICATION-ATTACK-RCE.conf:1282:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "/",
+        "regex_id": "2c0047ef07a531983ce4d731d5d72390",
+        "result": "safe",
+        "rule_id": null,
+        "severity": "safe",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-932-APPLICATION-ATTACK-RCE.conf:1306:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "\\s",
+        "regex_id": "21e98a7a82bfc551a0bc0e2976402f58",
+        "result": "safe",
+        "rule_id": null,
+        "severity": "safe",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-932-APPLICATION-ATTACK-RCE.conf:1309:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "[0-9]\\s*\\'\\s*[0-9]",
+        "regex_id": "3cc3b99f5ea2ebeffa5df91394f93103",
+        "result": "safe",
+        "rule_id": null,
+        "severity": "linear",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-932-APPLICATION-ATTACK-RCE.conf:1407:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "~[0-9]+",
+        "regex_id": "121b10fbfdb5fe49994aa9471a432426",
+        "result": "safe",
+        "rule_id": "932271",
+        "severity": "linear",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-932-APPLICATION-ATTACK-RCE.conf:1505:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "/(?:[\\*\\?]+[/-9A-Z_a-z]|[/-9A-Z_a-z]+[\\*\\?])",
+        "regex_id": "78821b7305a408618e8f419a00c02d1b",
+        "result": "vulnerable",
+        "rule_id": "932190",
+        "severity": "polynomial",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-932-APPLICATION-ATTACK-RCE.conf:2082:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "!(?:\\d|!)",
+        "regex_id": "a2ea0105eeca35bb78f162e2d9a9c33d",
+        "result": "safe",
+        "rule_id": "932331",
+        "severity": "safe",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-932-APPLICATION-ATTACK-RCE.conf:2279:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": ".*\\.ph(?:p\\d*|tml|ar|ps|t|pt)\\.*$",
+        "regex_id": "8e7f1b8cfe079a38e3dccc28fc15c7f3",
+        "result": "vulnerable",
+        "rule_id": "933110",
+        "severity": "polynomial",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-933-APPLICATION-ATTACK-PHP.conf:95:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "php://(?:std(?:in|out|err)|(?:in|out)put|f(?:d|ilter)|memory|temp)",
+        "regex_id": "7b202b6fd7567dfc209def4e594257e6",
+        "result": "safe",
+        "rule_id": "933140",
+        "severity": "safe",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-933-APPLICATION-ATTACK-PHP.conf:224:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "(?:bzip2|expect|glob|ogg|(?:ph|r)ar|ssh2(?:.(?:s(?:hell|(?:ft|c)p)|exec|tunnel))?|z(?:ip|lib))://",
+        "regex_id": "070936f80d388408c7c6549771830718",
+        "result": "safe",
+        "rule_id": "933200",
+        "severity": "safe",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-933-APPLICATION-ATTACK-PHP.conf:262:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "(?:^|[/\\x5c])sess_[,\\-0-9a-z]{20,256}$",
+        "regex_id": "93814b54da34f813048dafe300a88c57",
+        "result": "safe",
+        "rule_id": "933220",
+        "severity": "safe",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-933-APPLICATION-ATTACK-PHP.conf:615:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "AUTH_TYPE|HTTP_(?:ACCEPT(?:_(?:CHARSET|ENCODING|LANGUAGE))?|CONNECTION|(?:HOS|USER_AGEN)T|KEEP_ALIVE|(?:REFERE|X_FORWARD",
+        "regex_id": "f967d1d2ae694d7ce941f7038355fe04",
+        "result": "safe",
+        "rule_id": "933131",
+        "severity": "safe",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-933-APPLICATION-ATTACK-PHP.conf:772:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": ".*\\.ph(?:p\\d*|tml|ar|ps|t|pt)\\..*$",
+        "regex_id": "af268762acaec759f978db6a1e784cba",
+        "result": "vulnerable",
+        "rule_id": "933111",
+        "severity": "polynomial",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-933-APPLICATION-ATTACK-PHP.conf:860:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "__proto__|constructor[\\s\\x0b]*(?:\\.|\\]?\\[)[\\s\\x0b]*prototype",
+        "regex_id": "9de874cea79b0501297975c0c0933c10",
+        "result": "safe",
+        "rule_id": "934130",
+        "severity": "linear",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-934-APPLICATION-ATTACK-GENERIC.conf:158:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "Process[\\s\\x0b]*\\.[\\s\\x0b]*spawn[\\s\\x0b]*\\(",
+        "regex_id": "ab3c7be5958029cb873ad5e13b453430",
+        "result": "safe",
+        "rule_id": "934150",
+        "severity": "linear",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-934-APPLICATION-ATTACK-GENERIC.conf:191:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "(?:close|exists|fork|(?:ope|spaw)n|re(?:ad|quire)|w(?:atch|rite))[\\s\\x0b]*\\(",
+        "regex_id": "5d77d2a364657762f3f535218e4f4130",
+        "result": "safe",
+        "rule_id": "934101",
+        "severity": "linear",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-934-APPLICATION-ATTACK-GENERIC.conf:320:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "@+\\{[\\s\\x0b]*\\[",
+        "regex_id": "c4b388b6b212fd665f46c93d7d511c79",
+        "result": "vulnerable",
+        "rule_id": "934140",
+        "severity": "polynomial",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-934-APPLICATION-ATTACK-GENERIC.conf:406:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "__(?:i?(?:startswith|e(?:ndswith|xact)|contains|regex)|i(?:snull|n)|range|[gl]te?|has_(?:keys?|any_keys)|contained_by)(?",
+        "regex_id": "5a8d7fa7af78dfc2df8ef4fcebce6713",
+        "result": "safe",
+        "rule_id": "934210",
+        "severity": "linear",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-934-APPLICATION-ATTACK-GENERIC.conf:516:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "<APPLET[\\s/+>]",
+        "regex_id": "cc39c50a3da4721181b176fb2bd22fb9",
+        "result": "safe",
+        "rule_id": "941290",
+        "severity": "safe",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-941-APPLICATION-ATTACK-XSS.conf:592:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "\\+ADw-.*(?:\\+AD4-|>)|<.*\\+AD4-",
+        "regex_id": "b5de0c983c445b78cc9e4f77b472a511",
+        "result": "vulnerable",
+        "rule_id": "941350",
+        "severity": "polynomial",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-941-APPLICATION-ATTACK-XSS.conf:717:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "![!+ ]\\[\\]",
+        "regex_id": "b5d040478010cdd7f6efcaf9abc108df",
+        "result": "safe",
+        "rule_id": "941360",
+        "severity": "safe",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-941-APPLICATION-ATTACK-XSS.conf:761:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "^(?:json\\.)?(?:429496729[56]|2(?:14748364[78]|.22507385850720(?:07|11)e-308)|-(?:214748364[89]|0000023456)|00000(?:12345",
+        "regex_id": "9e8617b9d7e33082f7817293cbfb178d",
+        "result": "safe",
+        "rule_id": "942220",
+        "severity": "safe",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf:235:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "1\\.e(?:[\\(\\),]|\\.[\\$0-9A-Z_a-z])",
+        "regex_id": "9331badd91c59f1bcd2658b15f4c8455",
+        "result": "safe",
+        "rule_id": "942560",
+        "severity": "safe",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf:588:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "^[,\\-0-9=A-Z_a-z]+$",
+        "regex_id": "d947731ffcb9b92c6d987f8a75ba5aaa",
+        "result": "safe",
+        "rule_id": null,
+        "severity": "linear",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf:863:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "^(?:ey[\\-0-9A-Z_a-z]+\\.ey[\\-0-9A-Z_a-z]+\\.)?[\\-0-9A-Z_a-z]+$",
+        "regex_id": "bb754e0ee5d410e82e4e1a5be09beb82",
+        "result": "safe",
+        "rule_id": null,
+        "severity": "linear",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf:1395:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "^(?:and|or)$",
+        "regex_id": "c37fa238c8c6f3b463c3c292c6723831",
+        "result": "safe",
+        "rule_id": null,
+        "severity": "safe",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf:1544:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "';",
+        "regex_id": "69699b20f1da649cb9e36b22836e4d2d",
+        "result": "safe",
+        "rule_id": "942530",
+        "severity": "safe",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf:1919:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "^(?:json\\.)?(?:j(?:se(?:ssionid|rvsession)|wsession)|(?:asp(?:\\.net_)?session|session[\\-_]?)id|phpsessi(?:on|d)|(?:weblo",
+        "regex_id": "7e5594e7cf57cfc5f7cab49c85b3237b",
+        "result": "safe",
+        "rule_id": "943120",
+        "severity": "safe",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-943-APPLICATION-ATTACK-SESSION-FIXATION.conf:96:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "java\\.lang\\.(?:runtime|processbuilder)",
+        "regex_id": "2d2ab5bec4bbc4950147d6853d2f2ff3",
+        "result": "safe",
+        "rule_id": "944100",
+        "severity": "safe",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-944-APPLICATION-ATTACK-JAVA.conf:33:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "(?:runtime|processbuilder)",
+        "regex_id": "19888fa7c9c3711395a2a5d336dccfa3",
+        "result": "safe",
+        "rule_id": "944110",
+        "severity": "safe",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-944-APPLICATION-ATTACK-JAVA.conf:66:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "(?:unmarshaller|base64data|java\\.)",
+        "regex_id": "8fdb85e6a392d3c77d92ac78615ad81b",
+        "result": "safe",
+        "rule_id": null,
+        "severity": "safe",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-944-APPLICATION-ATTACK-JAVA.conf:84:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "(?:clonetransform|xmldecod)er|f(?:orclosure|ilewriter)|in(?:stantiate(?:factory|transformer)|vokertransformer)|(?:protot",
+        "regex_id": "38dedcfa90bf1559db68dfae1067ebd8",
+        "result": "safe",
+        "rule_id": "944120",
+        "severity": "safe",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-944-APPLICATION-ATTACK-JAVA.conf:95:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "(?:runtime|processbuilder)",
+        "regex_id": "30505fc0de573fa3c8feb46a5f3ed60c",
+        "result": "safe",
+        "rule_id": null,
+        "severity": "safe",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-944-APPLICATION-ATTACK-JAVA.conf:114:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": ".*\\.(?:jsp|jspx)\\.*$",
+        "regex_id": "b38055209d961fdc3333bc955568c0d4",
+        "result": "vulnerable",
+        "rule_id": "944140",
+        "severity": "polynomial",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-944-APPLICATION-ATTACK-JAVA.conf:166:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "\\xac\\xed\\x00\\x05",
+        "regex_id": "347547521bfb3acee88edad824c7a5a5",
+        "result": "safe",
+        "rule_id": "944200",
+        "severity": "safe",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-944-APPLICATION-ATTACK-JAVA.conf:285:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "(?:rO0ABQ|KztAAU|Cs7QAF)",
+        "regex_id": "366cb4b5b70ac2d24c8e7f484fa9f2cf",
+        "result": "safe",
+        "rule_id": "944210",
+        "severity": "safe",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-944-APPLICATION-ATTACK-JAVA.conf:306:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "(?:clonetransform|xmldecod)er|f(?:orclosure|ilewriter)|in(?:stantiate(?:factory|transformer)|vokertransformer)|(?:protot",
+        "regex_id": "f886d2ae963f0c5382bd8330d38301a5",
+        "result": "safe",
+        "rule_id": "944240",
+        "severity": "safe",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-944-APPLICATION-ATTACK-JAVA.conf:331:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "class\\.module\\.classLoader\\.resources\\.context\\.parent\\.pipeline|springframework\\.context\\.support\\.FileSystemXmlApplica",
+        "regex_id": "7ec5281f61040c916771be01b206b211",
+        "result": "safe",
+        "rule_id": "944260",
+        "severity": "safe",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-944-APPLICATION-ATTACK-JAVA.conf:385:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "(?:\\$|&dollar;?)(?:\\{|&l(?:brace|cub);?)",
+        "regex_id": "4dfbdfe874212801c0d109b54d2f04fd",
+        "result": "safe",
+        "rule_id": "944152",
+        "severity": "safe",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-944-APPLICATION-ATTACK-JAVA.conf:462:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "^_ga(?:_\\w+)?$",
+        "regex_id": "1c6fb31890ef99ac15f7408cae5d87a0",
+        "result": "safe",
+        "rule_id": null,
+        "severity": "linear",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-999-COMMON-EXCEPTIONS-AFTER.conf:26:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "^_ga(?:_\\w+)?$",
+        "regex_id": "40bf00603317d3ce39cb78b9e4a49101",
+        "result": "safe",
+        "rule_id": null,
+        "severity": "linear",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-999-COMMON-EXCEPTIONS-AFTER.conf:27:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "^_ga(?:_\\w+)?$",
+        "regex_id": "3c1b115e3560ac748c2631f2055e1f7e",
+        "result": "safe",
+        "rule_id": null,
+        "severity": "linear",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-999-COMMON-EXCEPTIONS-AFTER.conf:28:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "^_ga(?:_\\w+)?$",
+        "regex_id": "aa26bec7a66a4413bd50143c3b3f5d3f",
+        "result": "safe",
+        "rule_id": null,
+        "severity": "linear",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-999-COMMON-EXCEPTIONS-AFTER.conf:29:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "^_ga(?:_\\w+)?$",
+        "regex_id": "a5d9f1ba6ad108f8ec363223e908ddbd",
+        "result": "safe",
+        "rule_id": null,
+        "severity": "linear",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-999-COMMON-EXCEPTIONS-AFTER.conf:30:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "^pbjs-\\w+$",
+        "regex_id": "c634c3f7401262c12d9fea3a61cd1558",
+        "result": "safe",
+        "rule_id": null,
+        "severity": "linear",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-999-COMMON-EXCEPTIONS-AFTER.conf:77:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "^pbjs-\\w+$",
+        "regex_id": "341bc760d810a31fadc4a2c25e787e21",
+        "result": "safe",
+        "rule_id": null,
+        "severity": "linear",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-999-COMMON-EXCEPTIONS-AFTER.conf:78:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "^pbjs-\\w+$",
+        "regex_id": "5398c5f38e9d9fe0c670c928aeba160a",
+        "result": "safe",
+        "rule_id": null,
+        "severity": "linear",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-999-COMMON-EXCEPTIONS-AFTER.conf:79:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "^pbjs-\\w+$",
+        "regex_id": "a083ea5bcf47014b3273cab81ba58b8e",
+        "result": "safe",
+        "rule_id": null,
+        "severity": "linear",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-999-COMMON-EXCEPTIONS-AFTER.conf:80:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "^pbjs-\\w+$",
+        "regex_id": "ccf2ae652ec33858272cffbdaec33372",
+        "result": "safe",
+        "rule_id": null,
+        "severity": "linear",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-999-COMMON-EXCEPTIONS-AFTER.conf:81:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "^pbjs-\\w+$",
+        "regex_id": "ae7cc23f2885e05a53361bf8ad62c30a",
+        "result": "safe",
+        "rule_id": null,
+        "severity": "linear",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-999-COMMON-EXCEPTIONS-AFTER.conf:82:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "^pbjs-\\w+$",
+        "regex_id": "4db229a332726a9fac15e45a505d6d77",
+        "result": "safe",
+        "rule_id": null,
+        "severity": "linear",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-999-COMMON-EXCEPTIONS-AFTER.conf:83:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "^pbjs-\\w+$",
+        "regex_id": "1a6ef3584529a7c6abc02d3ec6d60018",
+        "result": "safe",
+        "rule_id": null,
+        "severity": "linear",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-999-COMMON-EXCEPTIONS-AFTER.conf:84:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "^pbjs-\\w+$",
+        "regex_id": "ad81fabed628ac757580586bef94ffcd",
+        "result": "safe",
+        "rule_id": null,
+        "severity": "linear",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-999-COMMON-EXCEPTIONS-AFTER.conf:85:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "^_pk_ref",
+        "regex_id": "e862811b793a64cd6b596a7494b8fca4",
+        "result": "safe",
+        "rule_id": null,
+        "severity": "safe",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-999-COMMON-EXCEPTIONS-AFTER.conf:88:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "^_pk_ref",
+        "regex_id": "42a6befd80991614775cdc6ed0723695",
+        "result": "safe",
+        "rule_id": null,
+        "severity": "safe",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-999-COMMON-EXCEPTIONS-AFTER.conf:89:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "^_pk_ref",
+        "regex_id": "d87aa979bb1c07139e654b952540b673",
+        "result": "safe",
+        "rule_id": null,
+        "severity": "safe",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-999-COMMON-EXCEPTIONS-AFTER.conf:90:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "^_pk_ref",
+        "regex_id": "6d10922f6033b103d74b5a0d179ff1f6",
+        "result": "safe",
+        "rule_id": null,
+        "severity": "safe",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-999-COMMON-EXCEPTIONS-AFTER.conf:91:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "^_pk_ref",
+        "regex_id": "ff22c3165efeaf88dc041e39fc9753e1",
+        "result": "safe",
+        "rule_id": null,
+        "severity": "safe",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-999-COMMON-EXCEPTIONS-AFTER.conf:92:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "^_pk_ref",
+        "regex_id": "641a43cf376fe42ca590b34652fc5655",
+        "result": "safe",
+        "rule_id": null,
+        "severity": "safe",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-999-COMMON-EXCEPTIONS-AFTER.conf:93:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "^_pk_ref",
+        "regex_id": "8282fd93b9921a5d577b86b4ce040ee7",
+        "result": "safe",
+        "rule_id": null,
+        "severity": "safe",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-999-COMMON-EXCEPTIONS-AFTER.conf:94:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "^_pk_ref",
+        "regex_id": "c6863aea662e6bfc88fbc5332841f425",
+        "result": "safe",
+        "rule_id": null,
+        "severity": "safe",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-999-COMMON-EXCEPTIONS-AFTER.conf:95:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "^_pk_ref",
+        "regex_id": "90aee9c545cafb0d0ec5db2b5d30d0a4",
+        "result": "safe",
+        "rule_id": null,
+        "severity": "safe",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-999-COMMON-EXCEPTIONS-AFTER.conf:96:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "^_pk_ref",
+        "regex_id": "b68f89955f2541218e9eb0946cbfb557",
+        "result": "safe",
+        "rule_id": null,
+        "severity": "safe",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-999-COMMON-EXCEPTIONS-AFTER.conf:97:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "^_pk_ref",
+        "regex_id": "5c980f9841dc395bbb551c7b6bebeb0a",
+        "result": "safe",
+        "rule_id": null,
+        "severity": "safe",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-999-COMMON-EXCEPTIONS-AFTER.conf:98:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "^_pk_ref",
+        "regex_id": "b007814fa32602f35f260fbe16d8a4a1",
+        "result": "safe",
+        "rule_id": null,
+        "severity": "safe",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-999-COMMON-EXCEPTIONS-AFTER.conf:99:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "^_pk_ref",
+        "regex_id": "3cd2f5b93e46d645eaf95d7bd13d3663",
+        "result": "safe",
+        "rule_id": null,
+        "severity": "safe",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-999-COMMON-EXCEPTIONS-AFTER.conf:100:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "^_pk_ref",
+        "regex_id": "cedd5ed16babf68d25f535e492dc3a06",
+        "result": "safe",
+        "rule_id": null,
+        "severity": "safe",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-999-COMMON-EXCEPTIONS-AFTER.conf:101:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "^#\\!\\s?/",
+        "regex_id": "84d02523ff0b6751f9274a0b15ee89ee",
+        "result": "safe",
+        "rule_id": "950140",
+        "severity": "safe",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/RESPONSE-950-DATA-LEAKAGES.conf:87:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "^5\\d{2}$",
+        "regex_id": "f1025d11e0418d7338ced57677f86a23",
+        "result": "safe",
+        "rule_id": "950100",
+        "severity": "safe",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/RESPONSE-950-DATA-LEAKAGES.conf:140:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "(?:JET|Access) Database Engine|\\[Microsoft\\]\\[ODBC Microsoft Access Driver\\]",
+        "regex_id": "5ef082839b038d62434ccf8aaa24f697",
+        "result": "safe",
+        "rule_id": "951110",
+        "severity": "safe",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/RESPONSE-951-DATA-LEAKAGES-SQL.conf:59:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "DB2 SQL error|\\[IBM\\]\\[CLI Driver\\]\\[DB2/6000\\]|CLI Driver.*DB2|db2_[0-9A-Z_a-z]+\\(\\)",
+        "regex_id": "1f1d94ed24aef407bdbb4d91b4c9e0dd",
+        "result": "vulnerable",
+        "rule_id": "951130",
+        "severity": "polynomial",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/RESPONSE-951-DATA-LEAKAGES-SQL.conf:111:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "\\[DM_QUERY_E_SYNTAX\\]|has occurred in the vicinity of:",
+        "regex_id": "700e704feea8f1a365a6ab7dc860301d",
+        "result": "safe",
+        "rule_id": "951140",
+        "severity": "safe",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/RESPONSE-951-DATA-LEAKAGES-SQL.conf:137:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "Dynamic SQL Error",
+        "regex_id": "f995ca1edae83df672421f03dfe93a70",
+        "result": "safe",
+        "rule_id": "951150",
+        "severity": "safe",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/RESPONSE-951-DATA-LEAKAGES-SQL.conf:158:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "Exception (?:condition )?\\d+\\. Transaction rollback\\.",
+        "regex_id": "ffbfe2929758efbde735db22556427ea",
+        "result": "safe",
+        "rule_id": "951160",
+        "severity": "linear",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/RESPONSE-951-DATA-LEAKAGES-SQL.conf:179:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "org\\.hsqldb\\.jdbc",
+        "regex_id": "a46bc8d91bc5bd7b4bf621981127b824",
+        "result": "safe",
+        "rule_id": "951170",
+        "severity": "safe",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/RESPONSE-951-DATA-LEAKAGES-SQL.conf:200:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "An illegal character has been found in the statement|com\\.informix\\.jdbc|Exception.*Informix",
+        "regex_id": "a7a78aecd5218d708880abaa09f2d1a7",
+        "result": "vulnerable",
+        "rule_id": "951180",
+        "severity": "polynomial",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/RESPONSE-951-DATA-LEAKAGES-SQL.conf:226:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "<b>Warning</b>: ibase_|Unexpected end of command in statement",
+        "regex_id": "292a6b12574bc4a3ed567fa9e74c327c",
+        "result": "safe",
+        "rule_id": "951200",
+        "severity": "safe",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/RESPONSE-951-DATA-LEAKAGES-SQL.conf:278:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "Warning.{1,10}maxdb[\\(\\):_a-z]{1,26}:",
+        "regex_id": "53e8e46d37e271428a6376ab45d9d00e",
+        "result": "safe",
+        "rule_id": "951210",
+        "severity": "safe",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/RESPONSE-951-DATA-LEAKAGES-SQL.conf:304:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "Warning.*(?:sqlite_|SQLite3::)|S(?:QLite(?:/JDBCDriver|\\.Exception)|ystem\\.Data\\.SQLite\\.SQLiteException)",
+        "regex_id": "39a90e25c38327cb47de1cd8a6796fd9",
+        "result": "vulnerable",
+        "rule_id": "951250",
+        "severity": "polynomial",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/RESPONSE-951-DATA-LEAKAGES-SQL.conf:408:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "Sybase(?: message:|.*Server message)|Warning.{2,20}sybase",
+        "regex_id": "7efa45da451e4ee9fd65a64dfe3817e9",
+        "result": "vulnerable",
+        "rule_id": "951260",
+        "severity": "polynomial",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/RESPONSE-951-DATA-LEAKAGES-SQL.conf:434:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "<\\?(?:=|php)?\\s+",
+        "regex_id": "7ed7537e58552e125b9d176bb8138df4",
+        "result": "safe",
+        "rule_id": "953120",
+        "severity": "linear",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/RESPONSE-953-DATA-LEAKAGES-PHP.conf:86:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "^404$",
+        "regex_id": "7a9663488c0f871c2d0cda08908ddb3c",
+        "result": "safe",
+        "rule_id": "954130",
+        "severity": "safe",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/RESPONSE-954-DATA-LEAKAGES-IIS.conf:101:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "<title>r57 Shell Version [0-9.]+</title>|<title>r57 shell</title>",
+        "regex_id": "ffca3bd719dd7b9091c561e628946856",
+        "result": "safe",
+        "rule_id": "955110",
+        "severity": "linear",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/RESPONSE-955-WEB-SHELLS.conf:54:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "<title>Symlink_Sa [0-9.]+</title>",
+        "regex_id": "a54490f60470dc3211bf6b066bde84cd",
+        "result": "safe",
+        "rule_id": "955160",
+        "severity": "linear",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/RESPONSE-955-WEB-SHELLS.conf:154:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "<title>CasuS [0-9.]+ by MafiABoY</title>",
+        "regex_id": "0390269313ab0a625e69401052d335ca",
+        "result": "safe",
+        "rule_id": "955170",
+        "severity": "linear",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/RESPONSE-955-WEB-SHELLS.conf:174:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "^<html>\\r\\n<head>\\r\\n<title>GRP WebShell [0-9.]+",
+        "regex_id": "dca0773d083d324bde9d436862981664",
+        "result": "safe",
+        "rule_id": "955180",
+        "severity": "linear",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/RESPONSE-955-WEB-SHELLS.conf:194:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "<small>NGHshell [0-9.]+ by Cr4sh</body></html>\\n$",
+        "regex_id": "c89c44d70784caad74293c691bfcb96c",
+        "result": "safe",
+        "rule_id": "955190",
+        "severity": "linear",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/RESPONSE-955-WEB-SHELLS.conf:214:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "<title>SimAttacker - (?:Version|Vrsion) : [0-9.]+ -",
+        "regex_id": "2220bcd236b027ec04746c150e504061",
+        "result": "safe",
+        "rule_id": "955200",
+        "severity": "linear",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/RESPONSE-955-WEB-SHELLS.conf:234:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "<title>lama's'hell v. [0-9.]+</title>",
+        "regex_id": "ea4102c0a83e3b29b18c9b62654b3455",
+        "result": "safe",
+        "rule_id": "955220",
+        "severity": "linear",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/RESPONSE-955-WEB-SHELLS.conf:274:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "^ *<html>\\n[ ]+<head>\\n[ ]+<title>lostDC -",
+        "regex_id": "e26edb58c71a030b865c6f30d6e9f10c",
+        "result": "safe",
+        "rule_id": "955230",
+        "severity": "linear",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/RESPONSE-955-WEB-SHELLS.conf:294:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "^<title>PHP Web Shell</title>\\r\\n<html>\\r\\n<body>\\r\\n    <!-- Replaces command with Base64-encoded Data -->",
+        "regex_id": "c1df98444869757f92faa10a4e358a9d",
+        "result": "safe",
+        "rule_id": "955240",
+        "severity": "safe",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/RESPONSE-955-WEB-SHELLS.conf:314:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "^<html>\\n<head>\\n<div align=\\\"left\\\"><font size=\\\"1\\\">Input command :</font></div>\\n<form name=\\\"cmd\\\" method=\\\"POST\\\" e",
+        "regex_id": "267e5a029025d81602aa41a7732b99dc",
+        "result": "safe",
+        "rule_id": "955250",
+        "severity": "safe",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/RESPONSE-955-WEB-SHELLS.conf:334:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "^<html>\\n<head>\\n<title>Ru24PostWebShell",
+        "regex_id": "ba4405d297d6dffee999dc02ec1ef3ab",
+        "result": "safe",
+        "rule_id": "955260",
+        "severity": "safe",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/RESPONSE-955-WEB-SHELLS.conf:356:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "<title>s72 Shell v[0-9.]+ Codinf by Cr@zy_King</title>",
+        "regex_id": "18068f4175f9d1693416d7cd0a507da8",
+        "result": "safe",
+        "rule_id": "955270",
+        "severity": "linear",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/RESPONSE-955-WEB-SHELLS.conf:376:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "^<html>\\r\\n<head>\\r\\n<meta http-equiv=\\\"Content-Type\\\" content=\\\"text/html; charset=gb2312\\\">\\r\\n<title>PhpSpy Ver [0-9]",
+        "regex_id": "1c9b84c00c25a7ecc8ad8667e598d27d",
+        "result": "safe",
+        "rule_id": "955280",
+        "severity": "linear",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/RESPONSE-955-WEB-SHELLS.conf:396:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "^ <html>\\n\\n<head>\\n\\n<title>g00nshell v[0-9.]+",
+        "regex_id": "8fd713c867775db1a0efc112528c4d26",
+        "result": "safe",
+        "rule_id": "955290",
+        "severity": "linear",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/RESPONSE-955-WEB-SHELLS.conf:416:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "^<html>\\n      <head>\\n             <title>azrail [0-9.]+ by C-W-M</title>",
+        "regex_id": "85fae47d2635c010eacc7b2a101861bb",
+        "result": "safe",
+        "rule_id": "955310",
+        "severity": "linear",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/RESPONSE-955-WEB-SHELLS.conf:458:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": ">SmEvK_PaThAn Shell v[0-9]+ coded by <a href=",
+        "regex_id": "664e7ceb42f7fc081b4fc17db056222c",
+        "result": "safe",
+        "rule_id": "955320",
+        "severity": "linear",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/RESPONSE-955-WEB-SHELLS.conf:478:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "^ <html><head><title>:: b374k m1n1 [0-9.]+ ::</title>",
+        "regex_id": "46b71d5b665b4cdec997e90050a13af8",
+        "result": "safe",
+        "rule_id": "955340",
+        "severity": "linear",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/RESPONSE-955-WEB-SHELLS.conf:518:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      }
+    ],
+    "uncapped": true
+  },
+  "rx_count": 318,
+  "schema_version": "1",
+  "unencodable_triage": [
+    {
+      "count": 125,
+      "note": "encodable \u2014 Z3 property / rule_diff / ReDoS",
+      "reason": "ok",
+      "route": "prove"
+    },
+    {
+      "count": 73,
+      "note": "Capacity cap (>256 chars), not a language limit. Policy: keep cap for interactive Z3 queries; triage long patterns to ReDoS-only / manual review.",
+      "reason": "pattern-too-long",
+      "route": "policy"
+    },
+    {
+      "count": 53,
+      "note": "Often lazy quantifiers / hex escapes \u2014 language-transparent strip candidates.",
+      "reason": "parse-error",
+      "route": "prove"
+    },
+    {
+      "count": 32,
+      "note": "Encodable in principle (TRAPS #1/#10) \u2014 toolkit-fix candidate.",
+      "reason": "negated-class",
+      "route": "prove"
+    },
+    {
+      "count": 22,
+      "note": "Genuine stock-Z3 limit (gate-3 \\b direction); ASCII domain declared for CRS.",
+      "reason": "word-boundary",
+      "route": "triage"
+    },
+    {
+      "count": 6,
+      "note": "\\x{} / hex ranges \u2014 toolkit-fix candidate.",
+      "reason": "bad-range",
+      "route": "prove"
+    },
+    {
+      "count": 6,
+      "note": "Scoped (?i:...) lifting \u2014 toolkit-fix candidate.",
+      "reason": "inline-flag",
+      "route": "prove"
+    },
+    {
+      "count": 1,
+      "note": "unclassified reject \u2014 inspect",
+      "reason": "internal-anchor",
+      "route": "triage"
+    }
+  ]
+}

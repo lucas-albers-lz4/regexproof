@@ -1,0 +1,78 @@
+{
+  "deferred_questions": [
+    "v-shape4-escape-image"
+  ],
+  "encodable": 145,
+  "engine_versions": {
+    "node": "v26.5.0",
+    "python": "3.14.6"
+  },
+  "executed_questions": [
+    "v-shape1-injection-chars",
+    "v-shape2-whitelist-space",
+    "v-shape3-prefix-vs-full",
+    "v-shape4-escape-image"
+  ],
+  "extracted": 212,
+  "pilot": "validatorjs-complete",
+  "rows": [
+    {
+      "domain": "verified_domain=pilots/validatorjs/src/{isAscii,isAlpha,isAlphanumeric,isEmail,isFQDN,isURL,alpha}.js; isAscii alphabet excludes U+00A0 (shape 1)",
+      "ground_truth": null,
+      "kind": "property",
+      "name": "VJS-complete-shape1",
+      "ok": true,
+      "result": "unsat",
+      "wall_ms": 2.7,
+      "witness": null
+    },
+    {
+      "domain": "verified_domain=pilots/validatorjs/src/{isAscii,isAlpha,isAlphanumeric,isEmail,isFQDN,isURL,alpha}.js; port whitelist admits no space (shape 2)",
+      "ground_truth": null,
+      "kind": "property",
+      "name": "VJS-complete-shape2",
+      "ok": true,
+      "result": "unsat",
+      "wall_ms": 45.1,
+      "witness": null
+    },
+    {
+      "domain": "verified_domain=pilots/validatorjs/src/{isAscii,isAlpha,isAlphanumeric,isEmail,isFQDN,isURL,alpha}.js; prefix protocol match vs :// intent (shape 3)",
+      "ground_truth": "reproduced",
+      "kind": "counterexample_finder",
+      "name": "VJS-complete-shape3",
+      "ok": true,
+      "result": "sat",
+      "wall_ms": 10.2,
+      "witness": {
+        "s": "e://"
+      }
+    },
+    {
+      "domain": "verified_domain=pilots/validatorjs/src/{isAscii,isAlpha,isAlphanumeric,isEmail,isFQDN,isURL,alpha}.js; ci('AND') accepts 'and' (gap-1)",
+      "ground_truth": "reproduced",
+      "kind": "property",
+      "name": "VJS-complete-ci",
+      "ok": true,
+      "result": "sat",
+      "wall_ms": 0.3,
+      "witness": {
+        "s": "and"
+      }
+    },
+    {
+      "domain": "verified_domain=pilots/validatorjs/src/{isAscii,isAlpha,isAlphanumeric,isEmail,isFQDN,isURL,alpha}.js; naive Re('AND') misses 'and' that ci() accepts (mutation)",
+      "ground_truth": "mutation-guard-sat-expected",
+      "kind": "mutation_guard",
+      "name": "VJS-complete-ci-naive-mutation",
+      "ok": true,
+      "result": "sat",
+      "wall_ms": 2.6,
+      "witness": {
+        "s": "AnD"
+      }
+    }
+  ],
+  "schema_version": "1",
+  "verified_domain": "pilots/validatorjs/src/{isAscii,isAlpha,isAlphanumeric,isEmail,isFQDN,isURL,alpha}.js"
+}
