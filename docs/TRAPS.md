@@ -293,6 +293,9 @@ to the codepoint range (not `x` / `-` / digits as separate atoms).
 
 Batch `--with-redos` walks encodable records through the non-Z3 ReDoS helper.
 Truncation is governed by `--redos-timeout-s` or per-corpus
-`budget.redos_wall_s`. A count-based `--redos-cap` was removed: it produced
-incomplete reports that looked like “only N findings exist”. Incomplete
-runs emit `result=incomplete` and fail the evidence gate.
+`budget.redos_wall_s` (default **120s** when unset). A count-based
+`--redos-cap` was removed: it produced incomplete reports that looked like
+“only N findings exist”. Incomplete runs write `{corpus}.ndjson` with
+`result=incomplete` then fail the evidence gate. The budget is checked
+before and after each `analyze_record` call (a single hung helper call is
+still not preemptible — that is a helper-level limit, not a silent skip).

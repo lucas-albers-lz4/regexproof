@@ -48,6 +48,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "repo": "gitleaks/gitleaks",
         "security_tool": True,
         "lift_inline": True,
+        "budget": {"redos_wall_s": 120},
     },
     "validatorjs": {
         "corpus_type": "validator",
@@ -70,6 +71,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "repo": "validatorjs/validator.js",
         "security_tool": False,
         "lift_inline": False,
+        "budget": {"redos_wall_s": 120},
     },
     "detect-secrets": {
         "corpus_type": "rule_corpus",
@@ -79,6 +81,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "repo": "Yelp/detect-secrets",
         "security_tool": True,
         "lift_inline": False,
+        "budget": {"redos_wall_s": 60},
     },
     "coreruleset": {
         "corpus_type": "rule_corpus",
@@ -88,6 +91,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "repo": "coreruleset/coreruleset",
         "security_tool": True,
         "lift_inline": True,
+        "budget": {"redos_wall_s": 180},
     },
     "trufflehog": {
         "corpus_type": "rule_corpus",
@@ -438,7 +442,7 @@ def run_corpus(
 
         budget_s = redos_timeout_s
         if budget_s is None:
-            budget_s = (meta.get("budget") or {}).get("redos_wall_s")
+            budget_s = (meta.get("budget") or {}).get("redos_wall_s", 120)
         t0 = time.monotonic()
         for rec in compiled:
             if not rec.get("encodable"):
@@ -467,6 +471,10 @@ def run_corpus(
                         "detail": {"tool": f.get("tool"), "severity": f.get("severity")},
                     }
                 )
+            # Re-check after each record so a slow analyze_record still trips the gate.
+            if budget_s is not None and (time.monotonic() - t0) >= float(budget_s):
+                redos_incomplete = True
+                break
 
     if redos_incomplete:
         findings.append(
@@ -476,14 +484,14 @@ def run_corpus(
                 "kind": "redos",
                 "corpus": corpus,
                 "result": "incomplete",
-                "site": f"redos-timeout:{redos_timeout_s or (meta.get('budget') or {}).get('redos_wall_s')}",
+                "site": f"redos-timeout:{redos_timeout_s or (meta.get('budget') or {}).get('redos_wall_s', 120)}",
                 "pattern": "",
                 "shape": None,
                 "disclosure": "private_first" if meta.get("security_tool") else None,
                 "detail": {
                     "error": "ReDoS fan-out truncated by wall-clock timeout gate",
                     "redos_timeout_s": redos_timeout_s
-                    or (meta.get("budget") or {}).get("redos_wall_s"),
+                    or (meta.get("budget") or {}).get("redos_wall_s", 120),
                     "findings_emitted": len(redos_findings),
                 },
             }
@@ -499,15 +507,16 @@ def run_corpus(
         require_ground_truth=require_ground_truth,
         fail_planned=fail_planned,
     )
-    if redos_incomplete:
-        raise SystemExit(
-            f"evidence gate failed: ReDoS report incomplete "
-            f"(timeout_s={redos_timeout_s or (meta.get('budget') or {}).get('redos_wall_s')}); "
-            "raise --redos-timeout-s / corpus budget.redos_wall_s for a complete run"
-        )
     write_ndjson(out_dir / f"{corpus}.ndjson", findings)
     # Keep Phase 3 shape-5 report at {corpus}.md; batch uses a distinct path.
     write_markdown(out_dir / f"{corpus}_batch.md", corpus=corpus, findings=findings)
+    if redos_incomplete:
+        raise SystemExit(
+            f"evidence gate failed: ReDoS report incomplete "
+            f"(timeout_s={redos_timeout_s or (meta.get('budget') or {}).get('redos_wall_s', 120)}); "
+            "raise --redos-timeout-s / corpus budget.redos_wall_s for a complete run "
+            f"(partial findings written to {out_dir / f'{corpus}.ndjson'})"
+        )
 
     dry = write_pr_dry_run(
         out_dir / f"{corpus}-pr-dry-run.json",
