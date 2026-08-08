@@ -49,6 +49,45 @@ def test_lazy_star_mirror_equivalent_to_greedy():
             )
 
 
+def test_lazy_plus_mirror_equivalent_to_greedy():
+    """a+? accepts exactly what a+ accepts (luna review: uncovered branch)."""
+    for dialect in DIALECTS:
+        lazy = compile_pattern("a+?", "", dialect, "fullmatch")
+        greedy = compile_pattern("a+", "", dialect, "fullmatch")
+        assert lazy.encodable and greedy.encodable, dialect
+        for s in ["", "a", "aaa", "b"]:
+            assert membership(lazy.mirror, s) == membership(greedy.mirror, s), (
+                dialect,
+                s,
+            )
+
+
+def test_lazy_optional_mirror_equivalent_to_greedy():
+    """a?? accepts exactly what a? accepts (luna review: uncovered branch)."""
+    for dialect in DIALECTS:
+        lazy = compile_pattern("a??", "", dialect, "fullmatch")
+        greedy = compile_pattern("a?", "", dialect, "fullmatch")
+        assert lazy.encodable and greedy.encodable, dialect
+        for s in ["", "a", "aa", "b"]:
+            assert membership(lazy.mirror, s) == membership(greedy.mirror, s), (
+                dialect,
+                s,
+            )
+
+
+def test_lazy_exact_bound_mirror_equivalent_to_greedy():
+    """a{2}? accepts exactly what a{2} accepts (luna review: uncovered branch)."""
+    for dialect in DIALECTS:
+        lazy = compile_pattern("a{2}?", "", dialect, "fullmatch")
+        greedy = compile_pattern("a{2}", "", dialect, "fullmatch")
+        assert lazy.encodable and greedy.encodable, dialect
+        for s in ["", "a", "aa", "aaa", "b"]:
+            assert membership(lazy.mirror, s) == membership(greedy.mirror, s), (
+                dialect,
+                s,
+            )
+
+
 def test_lazy_bound_mirror_equivalent_to_greedy():
     """a{2,3}? accepts exactly what a{2,3} accepts."""
     for dialect in DIALECTS:
