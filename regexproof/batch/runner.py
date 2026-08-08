@@ -27,6 +27,8 @@ from regexproof.batch.report import write_markdown, write_ndjson  # noqa: E402
 from regexproof.batch.triage import triage_records_from_compiled, write_triage_ndjson  # noqa: E402
 from regexproof.compiler import compile_pattern  # noqa: E402
 from regexproof.compiler.normalize import normalize_inline_flags  # noqa: E402
+from regexproof.extractors.go_regexp import extract_go_regexp  # noqa: E402
+from regexproof.extractors.ids_rules import extract_ids_rules  # noqa: E402
 from regexproof.extractors.js_babel import extract_js  # noqa: E402
 from regexproof.extractors.modsec import count_operators, extract_modsec  # noqa: E402
 from regexproof.extractors.python_ast import extract_python  # noqa: E402
@@ -83,6 +85,45 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "security_tool": True,
         "lift_inline": True,
     },
+    "trufflehog": {
+        "corpus_type": "rule_corpus",
+        "path": ROOT / "batch" / "corpora" / "trufflehog" / "detectors",
+        "glob": "**/*.go",
+        "dialect": "re2",
+        "extractor": "go_regexp",
+        "repo": "trufflesecurity/trufflehog",
+        "security_tool": True,
+        "lift_inline": True,
+        "corpus_pin": "v3.88.29",
+        "commit": "90190deac64289cb10bb694894be8db9ead8790b",
+        "budget": {"max_patterns": 5000, "max_wall_s": 600},
+    },
+    "ids_rules": {
+        "corpus_type": "rule_corpus",
+        "path": ROOT / "batch" / "corpora" / "ids_rules" / "rules",
+        "glob": "*.rules",
+        "dialect": "pcre",
+        "extractor": "ids_rules",
+        "repo": "emergingthreats/open",
+        "security_tool": True,
+        "lift_inline": True,
+        "corpus_pin": "suricata-7.0.3-et-open",
+        "commit": "emergingthreats-open-suricata-7.0.3",
+        "budget": {"max_patterns": 20000, "max_wall_s": 900},
+    },
+    "semgrep_rules": {
+        "corpus_type": "rule_corpus",
+        "path": ROOT / "batch" / "corpora" / "semgrep_rules" / "rules",
+        "glob": "**/*.yml,**/*.yaml",
+        "dialect": "py_re",
+        "extractor": "semgrep_yaml",
+        "repo": "semgrep/semgrep-rules",
+        "security_tool": True,
+        "lift_inline": True,
+        "corpus_pin": "40b8c63f75dc7c22c8a77482d73bfb864b146f7e",
+        "commit": "40b8c63f75dc7c22c8a77482d73bfb864b146f7e",
+        "budget": {"max_patterns": 5000, "max_wall_s": 600},
+    },
 }
 
 
@@ -125,7 +166,71 @@ def _extract(corpus: str, meta: dict[str, Any]) -> list[dict[str, Any]]:
         source = path.read_text(encoding="utf-8")
         rel = str(path.relative_to(ROOT))
         return extract_python(source, repo=meta["repo"], file=rel)
+    if meta["extractor"] == "go_regexp":
+        return _extract_glob(
+            path,
+            meta,
+            glob=meta.get("glob") or "**/*.go",
+            extract_fn=lambda src, rel: extract_go_regexp(
+                src, repo=meta["repo"], file=rel, dialect=meta["dialect"]
+            ),
+        )
+    if meta["extractor"] == "ids_rules":
+        return _extract_glob(
+            path,
+            meta,
+            glob=meta.get("glob") or "*.rules",
+            extract_fn=lambda src, rel: extract_ids_rules(
+                src, repo=meta["repo"], file=rel, dialect=meta["dialect"]
+            ),
+        )
+    if meta["extractor"] == "semgrep_yaml":
+        return _extract_glob(
+            path,
+            meta,
+            glob=meta.get("glob") or "**/*.{yml,yaml}",
+            extract_fn=lambda src, rel: extract_rule_file(
+                src, repo=meta["repo"], file=rel, dialect=meta["dialect"]
+            ),
+        )
     raise ValueError(meta["extractor"])
+
+
+def _extract_glob(
+    path: Path,
+    meta: dict[str, Any],
+    *,
+    glob: str,
+    extract_fn,
+) -> list[dict[str, Any]]:
+    """Deterministic directory walk: sorted paths, fixed order.
+
+    ``glob`` may be a single pattern or a comma-separated list (brace-free),
+    e.g. ``**/*.yml,**/*.yaml``.
+    """
+    out: list[dict[str, Any]] = []
+    root_resolved = ROOT.resolve()
+    if not path.is_dir():
+        return out
+    files: list[Path] = []
+    for pattern in glob.split(","):
+        pattern = pattern.strip()
+        if not pattern:
+            continue
+        files.extend(path.glob(pattern))
+    seen: set[Path] = set()
+    for fp in sorted(files, key=lambda p: str(p)):
+        if fp in seen or not fp.is_file():
+            continue
+        seen.add(fp)
+        try:
+            rel = str(fp.resolve().relative_to(root_resolved))
+        except ValueError:
+            rel = str(fp)
+        out.extend(
+            extract_fn(fp.read_text(encoding="utf-8", errors="replace"), rel)
+        )
+    return out
 
 
 def _compile_all(

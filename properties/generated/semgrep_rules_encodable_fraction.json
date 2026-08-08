@@ -1,0 +1,42 @@
+{
+  "budget": {
+    "max_patterns": 5000,
+    "max_wall_s": 600
+  },
+  "commit": "40b8c63f75dc7c22c8a77482d73bfb864b146f7e",
+  "compiler_fingerprint": "a9e4f80459ea",
+  "complete_run": true,
+  "corpus_pin": "40b8c63f75dc7c22c8a77482d73bfb864b146f7e",
+  "decision": "no-go",
+  "decision_rule": "go iff encodable/sample_size >= 0.3",
+  "dialect": "py_re",
+  "encodable": 2518,
+  "engine_versions": {
+    "python": "3.14.6",
+    "z3": "5.0.0"
+  },
+  "fraction": 0.2741,
+  "go_no_go_threshold": 0.3,
+  "inventory_path": "properties/generated/semgrep_rules-inventory.ndjson",
+  "path": "batch/corpora/semgrep_rules/rules",
+  "pilot": "semgrep_rules",
+  "reasons": {
+    "composite-pattern": 3247,
+    "internal-anchor": 3113,
+    "lookaround": 50,
+    "m-flag": 18,
+    "negated-shorthand": 6,
+    "ok": 2518,
+    "parse-error:PatternError": 55,
+    "pattern-too-long": 8,
+    "per-alternative-anchor": 102,
+    "unicode-not-literal": 20,
+    "unsupported:POSSESSIVE_REPEAT": 1,
+    "word-boundary": 48
+  },
+  "sample_size": 9186,
+  "schema_version": "1",
+  "scope": "full_corpus",
+  "unclassified_parse_errors": 0,
+  "wall_s": 2.538
+}

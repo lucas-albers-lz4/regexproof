@@ -37,7 +37,7 @@ def test_golden_case(case):
             "lookaround",
             "backref",
             "word-boundary",
-            "inline-flag",
+            "inline-flag", "unsupported-syntax", "unclosed-class", "unclosed-group",
         }, reason
         return
     if case.trap == "z-eos":

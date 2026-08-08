@@ -1,0 +1,4 @@
+alert tcp any any -> any any (msg:"TEST"; pcre:"/^GET\s+/i"; sid:1001; rev:1;)
+alert tcp any any -> any any (msg:"TEST2"; pcre:"/[\x22]abc/"; sid:1002; rev:1;)
+#alert tcp any any -> any any (msg:"commented"; pcre:"/should-skip/"; sid:1003; rev:1;)
+alert http any any -> any any (msg:"bare"; pcre:"foo[0-9]+"; sid:1004; rev:1;)

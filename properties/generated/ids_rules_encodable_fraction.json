@@ -1,0 +1,35 @@
+{
+  "commit": "emergingthreats-open-suricata-7.0.3",
+  "complete_run": true,
+  "corpus_pin": "suricata-7.0.3-et-open",
+  "decision": "go",
+  "decision_rule": "go iff encodable/sample_size >= 0.3",
+  "dialect": "pcre",
+  "encodable": 7182,
+  "engine_versions": {
+    "python": "3.14.6",
+    "z3": "5.0.0"
+  },
+  "fraction": 0.879,
+  "go_no_go_threshold": 0.3,
+  "pilot": "ids_rules",
+  "reasons": {
+    "backref": 85,
+    "bad-range": 1,
+    "inline-flag": 89,
+    "internal-anchor": 4,
+    "lookaround": 174,
+    "m-flag": 198,
+    "negated-shorthand": 3,
+    "ok": 7182,
+    "pattern-too-long": 186,
+    "unclosed-class": 219,
+    "unclosed-group": 1,
+    "unsupported-syntax": 4,
+    "word-boundary": 25
+  },
+  "sample_size": 8171,
+  "schema_version": "1",
+  "scope": "full_corpus",
+  "unclassified_parse_errors": 0
+}
