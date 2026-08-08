@@ -1,0 +1,42 @@
+---
+description: Run Bugbot on non-trivial PRs before merge in autonomous PR cycles
+alwaysApply: true
+---
+
+# PR cycle: Bugbot before merge (no human-review dependency)
+
+When creating and merging pull requests in an agent-driven cycle (create → CI → merge) **without waiting for human review**, treat Bugbot as a required gate for any non-trivial PR.
+
+## When this applies
+
+- You opened a PR, or are about to merge an open PR you (or this session) own.
+- The change is **non-trivial** (see below).
+- Do **not** block on human approval / CODEOWNERS review for merge readiness in this cycle; still respect hard CI failures and Bugbot findings.
+
+## Non-trivial vs trivial
+
+**Trivial** (Bugbot optional — may merge after CI green):
+
+- Docs-only typos, badge/link/metadata, single-line comment, pure formatting with no logic change
+- Housekeeping like license badge, topics, changelog date bumps
+
+**Non-trivial** (Bugbot **required** before merge):
+
+- Any new/changed logic, scripts, compilers, extractors, tests, CI workflows, schemas, or generated security/report artifacts
+- Multi-file features, refactors, or anything touching regexproof runtime / harness / batch / rule_diff
+
+If unsure, treat as non-trivial.
+
+## Required sequence (non-trivial)
+
+1. Open or update the PR; wait for **CI** to go green (or fix failures first).
+2. Ensure the PR head branch is checked out locally.
+3. Run Bugbot via the `review-bugbot` skill / `bugbot` subagent on **branch changes** (merge-base vs default base, usually `main`).
+4. If Bugbot reports findings: **fix them** (or explicitly document why a finding is a false positive), push, re-run Bugbot once after substantive fixes.
+5. Only then merge (`gh pr merge` with the repo’s usual strategy). Do not merge non-trivial PRs with unresolved Bugbot findings.
+
+## Do not
+
+- Merge a non-trivial PR solely because CI is green and no human commented
+- Skip Bugbot because “we just ran tests locally”
+- Rely on AGENTS.md alone for this gate — this Cursor rule is the merge-cycle source of truth
