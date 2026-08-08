@@ -29,8 +29,9 @@ def test_verified_findings_covered_in_docs_entry():
         path = ROOT / rel
         assert path.is_file(), rec["id"]
         text = path.read_text(encoding="utf-8")
-        assert rec["id"] in text, f"{rec['id']} missing from {rel}"
-        assert f"verified-finding: {rec['id']}" in text or rec["id"] in text
+        assert f"verified-finding: {rec['id']}" in text, (
+            f"missing marker for {rec['id']} in {rel}"
+        )
 
 
 def test_verified_findings_unique_ids():

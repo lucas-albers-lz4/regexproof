@@ -21,9 +21,11 @@ Reporting field contracts: [`docs/REPORTING.md`](docs/REPORTING.md).
 
 - Not a CVE process for third-party product vulnerabilities found elsewhere.
 - Not permission to commit live credentials. Fixture keywords (e.g. gitleaks
-  detector test strings) are resolved as `used_in_tests` and narrowly ignored
-  via [`.github/secret_scanning.yml`](.github/secret_scanning.yml). Witnesses in
-  committed artifacts must stay redacted (`docs/REPORTING.md`).
+  detector test strings) were resolved in GitHub secret scanning as
+  `used_in_tests` (API), and [`.github/secret_scanning.yml`](.github/secret_scanning.yml)
+  narrowly `paths-ignore`s those fixture/pilot paths so they do not re-open
+  as alerts. Witnesses in committed artifacts must stay redacted
+  (`docs/REPORTING.md`).
 
 ## Reporting a concern about this repo
 
