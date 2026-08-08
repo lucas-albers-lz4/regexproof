@@ -1,0 +1,34 @@
+{
+  "schema_version": "1",
+  "corpus_type": "validator",
+  "questions": [
+    {
+      "id": "v-shape1-injection-chars",
+      "shape": 1,
+      "threat": "Validator alphabet admits shell/HTML injection characters",
+      "encoding_hint": "single-char InRe alphabet disjointness",
+      "applies_when": "ASCII/username/URL charset validators"
+    },
+    {
+      "id": "v-shape2-whitelist-space",
+      "shape": 2,
+      "threat": "Whitelisted string of bounded length contains forbidden separator",
+      "encoding_hint": "InRe whitelist ∧ length bound → ¬Contains",
+      "applies_when": "port/digit/hostname-like whitelists"
+    },
+    {
+      "id": "v-shape3-prefix-vs-full",
+      "shape": 3,
+      "threat": "Prefix match accepts values that fail full-string validation intent",
+      "encoding_hint": "string-ops counterexample between match and fullmatch",
+      "applies_when": "call_kind match/search on anchored validators"
+    },
+    {
+      "id": "v-shape4-escape-image",
+      "shape": 4,
+      "threat": "Escaped output still contains raw control characters",
+      "encoding_hint": "per-token escape image",
+      "applies_when": "sanitizers/escapers (Phase 2 deferred SSRF shape-4)"
+    }
+  ]
+}

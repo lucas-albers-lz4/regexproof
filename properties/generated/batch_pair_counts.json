@@ -1,0 +1,21 @@
+{
+  "coreruleset": {
+    "admitted": 0,
+    "dropped": 0,
+    "note": "fraction gate go; no independent-spec R1 catalog in Phase 5"
+  },
+  "detect-secrets": {
+    "admitted": 0,
+    "dropped": 0,
+    "note": "no independent-spec catalog"
+  },
+  "gitleaks": {
+    "admitted": 22,
+    "dropped": 1
+  },
+  "validatorjs": {
+    "admitted": 0,
+    "dropped": 0,
+    "note": "no independent-spec catalog"
+  }
+}

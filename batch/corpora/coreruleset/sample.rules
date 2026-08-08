@@ -1,0 +1,13 @@
+# Pinned ModSecurity CRS-like sample patterns for PCRE encodable-fraction gate.
+# Not a full coreruleset checkout — enough to measure go/no-go (≥30%).
+# Many real CRS rules use PCRE features that remain unencodable.
+^index\.php$
+^admin$
+<script
+(?i)union\s+select
+\bSELECT\b
+[a-zA-Z0-9_-]{8,32}
+^/api/v1/
+\.git/
+passwd
+etc/shadow

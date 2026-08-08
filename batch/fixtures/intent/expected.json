@@ -1,0 +1,39 @@
+{
+  "schema_version": "1",
+  "description": "Fixed fixtures for intent-vs-actual (both mismatch classes)",
+  "cases": [
+    {
+      "id": "usage-anchored-search",
+      "class": "usage_mismatch",
+      "record": {
+        "regex_id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "pattern": "^[a-z]+$",
+        "flags": "",
+        "dialect": "ecma",
+        "call_kind": "search",
+        "site": "fixtures/usage.js:1:0",
+        "repo": "fixture/usage",
+        "file": "fixtures/usage.js",
+        "context_snippet": "isAscii"
+      },
+      "expect_finding": true
+    },
+    {
+      "id": "intent-hostname-dotstar",
+      "class": "intent_mismatch",
+      "record": {
+        "regex_id": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "pattern": ".*",
+        "flags": "",
+        "dialect": "ecma",
+        "call_kind": "fullmatch",
+        "site": "fixtures/hostname.js:1:0",
+        "repo": "fixture/intent",
+        "file": "fixtures/isHostname.js",
+        "context_snippet": "function isHostname",
+        "name": "isHostname"
+      },
+      "expect_finding": true
+    }
+  ]
+}
