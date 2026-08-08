@@ -1,8 +1,13 @@
-"""Possessive/atomic strip must not mutate char-class contents."""
+"""Possessive/atomic/lazy strip must not mutate char-class contents."""
 
 from __future__ import annotations
 
-from regexproof.compiler.pcre_strip import strip_atomic_and_possessive
+from regexproof.compiler import compile_pattern
+from regexproof.compiler.pcre_strip import (
+    strip_atomic_and_possessive,
+    strip_language_transparent,
+    strip_lazy_quantifiers,
+)
 
 
 def test_class_star_plus_preserved():
@@ -24,3 +29,31 @@ def test_atomic_group_rewritten():
 def test_escaped_bracket_not_class():
     # \[ does not open a class; possessive after still strips.
     assert strip_atomic_and_possessive(r"\[a++") == r"\[a+"
+
+
+def test_lazy_outside_class_stripped():
+    assert strip_lazy_quantifiers("a*?") == "a*"
+    assert strip_lazy_quantifiers("a+?") == "a+"
+    assert strip_lazy_quantifiers("a??") == "a?"
+    assert strip_lazy_quantifiers("a{2,3}?") == "a{2,3}"
+
+
+def test_lazy_inside_class_preserved():
+    assert strip_lazy_quantifiers("[?]") == "[?]"
+    assert strip_lazy_quantifiers("[a*?]") == "[a*?]"
+
+
+def test_language_transparent_combined():
+    assert strip_language_transparent("a*+") == "a*"
+    assert strip_language_transparent("a*?") == "a*"
+    assert strip_language_transparent("(?>a)+?") == "(?:a)+"
+
+
+def test_lazy_patterns_become_encodable_pcre_and_ecma():
+    for dialect in ("pcre", "ecma"):
+        lazy = compile_pattern("a*?", "", dialect, "fullmatch")
+        eager = compile_pattern("a*", "", dialect, "fullmatch")
+        assert lazy.encodable, (dialect, lazy.unencodable_reason)
+        assert eager.encodable
+        braced = compile_pattern("a{2,3}?", "", dialect, "fullmatch")
+        assert braced.encodable, (dialect, braced.unencodable_reason)

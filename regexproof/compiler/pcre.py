@@ -13,7 +13,7 @@ from z3 import Range, Re, Union
 from regexproof.compiler.base import CompileResult, Unencodable
 from regexproof.compiler.fold import python_fold_closure
 from regexproof.compiler.lower import lower
-from regexproof.compiler.pcre_strip import strip_atomic_and_possessive
+from regexproof.compiler.pcre_strip import strip_language_transparent
 from regexproof.compiler.simple_parse import parse_pattern
 
 HELPER = Path(__file__).resolve().parents[2] / "helpers" / "pcre2" / "match.py"
@@ -75,8 +75,8 @@ def compile_pcre(
         reason = _local_reject(pattern)
         if reason:
             raise Unencodable(reason)
-        # Strip atomic/possessive outside char classes only (never mutate `[*+]`).
-        stripped = strip_atomic_and_possessive(pattern)
+        # Strip language-transparent constructs outside char classes only.
+        stripped = strip_language_transparent(pattern)
         # Optional real-engine parse when available; never required for encode.
         gate = _helper_parse(stripped)
         if gate.get("ok") is False and gate.get("unencodable_reason") not in (
