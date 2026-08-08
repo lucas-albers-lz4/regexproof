@@ -3,7 +3,8 @@
 Many real regexes are `re.compile`d from variables (f-strings, `.format`,
 concatenation). A pattern like `re.compile(r"\b" + trigger + r"\b")` cannot
 be proven as written: the harness has no value for `trigger`. This document
-is the procedure for dynamic compiles (hermes-agent dogfooding, issue #11,
+is the procedure for dynamic compiles (hermes-agent dogfooding,
+[issue #11](https://github.com/lucas-albers-lz4/regexproof/issues/11),
 gap 3 — ~518 `re.compile` sites in a 3000-file corpus).
 
 ## Classify the site first

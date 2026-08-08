@@ -7,7 +7,8 @@ adjacent char class of the mirror. The genuinely unprovable case is a
 **variable-width** lookbehind — `(?<=^)` under `re.MULTILINE` (line
 start, zero-or-more width depending on the newline position).
 
-This document is the worked rewrite (hermes-agent dogfooding, issue #11,
+This document is the worked rewrite (hermes-agent dogfooding,
+[issue #11](https://github.com/lucas-albers-lz4/regexproof/issues/11),
 gap 3 — the one variable-width lookbehind found in a 3000-file corpus).
 
 ## The pattern (gateway/platforms/yuanbao.py:4860)

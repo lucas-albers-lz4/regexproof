@@ -1,6 +1,7 @@
 # Hard-dialect probes from Phase 2 → Phase 1 golden suite
 
-Routed probes exercised by the gitleaks / validator.js pilots (issue #18).
+Routed probes exercised by the gitleaks / validator.js pilots
+([issue #18](https://github.com/lucas-albers-lz4/regexproof/issues/18)).
 
 | Probe | Dialect | Source | Golden coverage |
 |---|---|---|---|
