@@ -24,6 +24,12 @@ Do NOT use Z3 for:
 - **Lookaheads / lookbehinds / backreferences as written** — not expressible
   in Z3's regular-language theory. Rewrite to string ops, or route JS patterns
   through Z3-Noodler's `re.from_ecma2020` (`docs/BACKENDS.md`).
+  Variable-width lookbehinds (`(?<=^)` under `re.MULTILINE`) get the
+  IndexOf/SubString/CharAt rewrite in `docs/LOOKBEHIND_REWRITE.md`.
+- **Dynamic compiles** (`re.compile` with interpolated values) — cannot be
+  proven as written. Classify the site (constant / escaped / raw-config)
+  and prove the right thing per `docs/DYNAMIC.md`; an unescaped
+  config-supplied pattern is a finding, not a proof.
 - Cosmetic/internal patterns with no untrusted input — skip them; low value.
 
 ## The 5-step workflow (follow in order)

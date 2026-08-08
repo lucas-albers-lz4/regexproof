@@ -55,6 +55,7 @@ if not z3.get_version_string().startswith("5.0"):
 # NOTE: no Opt — z3py's Opt is the optimizer class, not regex optional.
 # Regex "?" is Union(r, Re("")).
 MIRROR_NS = {
+    "AllChar": z3.AllChar,
     "Concat": z3.Concat,
     "Union": z3.Union,
     "Range": z3.Range,
@@ -115,7 +116,20 @@ def main():
     )
     ap.add_argument("--real-cmd", required=True, help="shell command: reads stdin, exit 0 = accept")
     ap.add_argument("--alphabet", required=True, help="input chars to fuzz with")
-    ap.add_argument("--mutations", default="", help="extra chars to splice in (dangerous chars)")
+    ap.add_argument(
+        "--mutations",
+        default="",
+        help="extra chars to splice in (dangerous chars); defaults to the "
+        "non-ASCII divergence set (CJK, Arabic-Indic digits, fullwidth, "
+        "NBSP/ideographic space) when empty",
+    )
+    ap.add_argument(
+        "--targets",
+        default=[],
+        nargs="*",
+        help="explicit adversarial inputs to check verbatim (deterministic; "
+        "for position-sensitive divergences random splicing rarely hits)",
+    )
     ap.add_argument("--runs", type=int, default=200, help="random inputs (beyond exhaustive short)")
     ap.add_argument("--seed", type=int, default=42, help="RNG seed (deterministic)")
     ap.add_argument(
@@ -123,6 +137,14 @@ def main():
     )
     ap.add_argument("--max-len", type=int, default=12, help="max generated string length")
     args = ap.parse_args()
+
+    # Default mutation set: the non-ASCII divergence classes. Python's
+    # \w\d\s\b are Unicode-aware; an ASCII mirror diverges on these (TRAP
+    # 17). If the caller passes explicit mutations, honor those instead.
+    # CJK, Latin-ext, Arabic-Indic digit, fullwidth digit, ideographic
+    # space (U+3000, which is \s in Python).
+    if not args.mutations:
+        args.mutations = "中é٣１\u3000"
 
     # Compile the mirror once; fail fast on invalid expression.
     try:
@@ -160,14 +182,22 @@ def main():
         n = rng.randint(args.exhaust_max_len + 1, args.max_len)
         check("".join(rng.choice(args.alphabet) for _ in range(n)))
 
-    # 3) Mutation splice: take a random alphabet string and insert each
-    #    dangerous char at a random position. Real code may reject these while
+    # 3) Explicit adversarial targets (deterministic — for position-sensitive
+    #    divergences random splicing rarely hits, e.g. \\b boundaries where the
+    #    dangerous char must sit immediately before the token).
+    for t in args.targets:
+        check(t)
+
+    # 4) Mutation splice: take a random alphabet string and insert each
+    #    dangerous char at EVERY position. Real code may reject these while
     #    the mirror still accepts them — that is a REAL divergence to report.
+    #    (Every position, not one random position: \\b/\\w Unicode divergences
+    #    only trigger at specific offsets.)
     for _ in range(args.runs):
         base = "".join(rng.choice(args.alphabet) for _ in range(rng.randint(1, args.max_len)))
         for ch in args.mutations:
-            pos = rng.randint(0, len(base))
-            check(base[:pos] + ch + base[pos:])
+            for pos in range(len(base) + 1):
+                check(base[:pos] + ch + base[pos:])
 
     print(f"\n{checked} inputs, {mismatches} mismatches (seed={args.seed})")
     if mismatches:

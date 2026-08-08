@@ -44,11 +44,13 @@ import time
 
 import z3
 from z3 import (
+    AllChar,
     Concat,
     Contains,
     IndexOf,
     InRe,
     Length,
+    Loop,
     Range,
     Re,
     Solver,
@@ -92,6 +94,35 @@ def z3_str(val) -> str:
 REGISTRY = {}
 
 
+# ---------------------------------------------------------------------------
+# Mirror-construction helpers (dogfooding P0 — verified 2026-08-07)
+# ---------------------------------------------------------------------------
+def ci(word: str):
+    """Case-expanded mirror of a literal word: Union(Re(c.lower()),
+    Re(c.upper())) per char. REQUIRED when mirroring a pattern compiled
+    with re.I / (?i) — z3's Re("AND") is case-sensitive and silently
+    accepts a strict subset of the real (?i)AND language (verified:
+    naive mirror rejects 'And'/'aND' while the real regex accepts)."""
+    return Concat(*[Union(Re(c.lower()), Re(c.upper())) for c in word])
+
+
+def ci_class(lo: str, hi: str):
+    """Case-expanded char range: every char in [lo..hi] plus its
+    uppercase/lowercase counterpart. For r"[a-z]" under re.I."""
+    return Union(*[Union(Re(chr(c)), Re(chr(c).upper())) for c in range(ord(lo), ord(hi) + 1)])
+
+
+def prefix_match(regex):
+    """Mirror of re.match(regex, s) / re.sub(regex, ...) with an implicit
+    ^ — Z3 InRe is WHOLE-STRING membership, so a prefix matcher must be
+    modeled as Concat(regex, <anything>), not as the bare regex.
+    Verified divergence: InRe("AND foo", Re("AND")) is unsat while
+    re.match(r"AND", "AND foo") matches (hermes-agent gap1 demo 2).
+    The suffix is Star(AllChar) — any tail is accepted."""
+    any_char = AllChar(Re("").sort())
+    return Concat(regex, Star(any_char))
+
+
 def prop(
     name,
     declared_domain,
@@ -100,6 +131,7 @@ def prop(
     ground_truth=None,
     kind="property",
     family=None,
+    input_domain=None,
 ):
     """Decorator: register a property. The wrapped function returns the
     constraint list; the harness adds `bad` and checks satisfiability.
@@ -115,8 +147,19 @@ def prop(
     the REAL implementation on a SAT witness and reports whether the model's
     behavior reproduces. Required when --require-ground-truth is set and the
     property is satisfiable — UNLESS kind is "mutation_guard" (sensitivity
-    probe, not a reportable counterexample)."""
+    probe, not a reportable counterexample).
+    `input_domain`: the boundary's alphabet assumption — "ascii" (mirror
+    classes like [a-z0-9_] are faithful because the real input is
+    ASCII-constrained) or "unicode" (Python \\w\\d\\s\\b are Unicode-aware;
+    an ASCII mirror silently diverges). None = unstated (legacy default,
+    backward compatible: properties written before this field pass as
+    before). --require-domain makes an unstated domain a hard failure.
+    """
     assert callable(ground_truth) or ground_truth is None, "ground_truth must be callable"
+    if input_domain is not None:
+        assert input_domain in ("ascii", "unicode"), (
+            f"{name}: input_domain must be 'ascii' | 'unicode' | None, got {input_domain!r}"
+        )
 
     def deco(fn):
         REGISTRY[name] = {
@@ -127,6 +170,7 @@ def prop(
             "ground_truth": ground_truth,
             "kind": kind,
             "family": family or name.split("-")[0],
+            "input_domain": input_domain,
         }
         return fn
 
@@ -144,6 +188,7 @@ def run_one(name, entry, require_ground_truth=False):
         "kind": entry["kind"],
         "family": entry["family"],
         "domain": entry["domain"],
+        "input_domain": entry["input_domain"],
         "expect_unsat": entry["expect_unsat"],
         "result": None,  # "unsat" | "sat" | "timeout"
         "ok": False,
@@ -278,6 +323,8 @@ for _name, _ch in INJECTION_CHARS:
         f"{_name}",
         "kind": "property",
         "family": "P1",
+        "input_domain": "ascii",
+        "ground_truth": None,
     }
 
 ACTOR_CLS = Union(
@@ -458,6 +505,90 @@ def p4_mutated():
 
 
 # ---------------------------------------------------------------------------
+# P5 — case-insensitive boundary (dogfooding P0-1/P1-1, hermes-agent gap 1)
+# ---------------------------------------------------------------------------
+# Real boundary (hermes-agent telegram adapter): a @handle is validated with
+#   re.fullmatch(r"[a-z0-9_]{2,29}bot", handle, re.IGNORECASE)
+# The whitelist is ASCII + IGNORECASE. Properties:
+#   P5-handle-safe: no control/separator char can be in the accepted handle.
+#   P5-mutated-lowercase: weaken the mirror to lowercase-only -> the
+#     "accepts MyBot" claim flips UNSAT->SAT (case-flag sensitivity).
+# Full handle language: [A-Za-z0-9_]{2,29}bot with both cases.
+HANDLE_CHAR = Union(ci_class("a", "z"), Range("0", "9"), Re("_"))
+HANDLE_LANG = Concat(
+    Loop(HANDLE_CHAR, 2, 29),
+    ci("bot"),  # case-expanded "bot" — the IGNORECASE part
+)
+
+
+@prop(
+    "P5-handle-safe",
+    "telegram bot-handle whitelist [a-z0-9_]{2,29}bot (re.IGNORECASE) admits "
+    "no control/separator char — case-expanded mirror via ci()/ci_class()",
+    expect_unsat=True,
+    input_domain="ascii",
+    family="P5",
+)
+def p5_handle_safe():
+    h = String("h")
+    bad = Union(Range("\x00", "\x1f"), Re("\x7f"), Re(" "), Re(";"), Re("="))
+    # Any single char of the handle language that is ALSO bad:
+    return [InRe(h, HANDLE_CHAR), Length(h) == 1], InRe(h, bad)
+
+
+@prop(
+    "P5-mutated-lowercase",
+    "MUTATION GUARD (case flags): the case-expanded mirror MUST accept "
+    "'MyBot' (SAT) — the real IGNORECASE regex does. A lowercase-only "
+    "mirror gives UNSAT here (verified: Re('bot') rejects 'MyBot'), which "
+    "is exactly the silently-narrower-language trap (hermes-agent gap 1).",
+    expect_unsat=False,
+    kind="mutation_guard",
+    family="P5",
+)
+def p5_mutated_lowercase():
+    # Correct mirror: case-expanded everywhere. Must accept "MyBot".
+    h = String("h")
+    return [InRe(h, HANDLE_LANG)], h == StringVal("MyBot")
+
+
+# ---------------------------------------------------------------------------
+# P6 — prefix-match modeling (dogfooding P0-3, MCR Major finding)
+# ---------------------------------------------------------------------------
+# re.match(r"^AND", "AND foo") MATCHES, but InRe("AND foo", Re("AND")) is
+# unsat (whole-string membership). The prefix_match() helper models the
+# anchor; this property proves the divergence is real and the helper fixes it.
+@prop(
+    "P6-prefix-match-demo",
+    "DEMO: re.match/^ is a prefix match, InRe is whole-string — the bare "
+    "mirror MUST FAIL here (UNSAT proves the trap): 'AND foo' is not in "
+    "the exact-string language Re('AND'), but re.match(r'AND', 'AND foo') "
+    "matches. The helper P6-prefix-match-helper shows the correct form.",
+    expect_unsat=True,
+    kind="bug_demo",
+    family="P6",
+)
+def p6_prefix_match_demo():
+    s = String("s")
+    # bare mirror (wrong): "AND foo" is NOT in the Re("AND") language
+    return [InRe(s, Re("AND"))], s == StringVal("AND foo")
+
+
+@prop(
+    "P6-prefix-match-helper",
+    "prefix_match(Re('AND')) models re.match(r'AND', s) — 'AND foo' IS in "
+    "the prefix language (correct mirror, SAT)",
+    expect_unsat=False,
+    kind="bug_demo",
+    family="P6",
+    ground_truth=lambda w: bool(re.match(r"AND", w["s"])),
+)
+def p6_prefix_match_helper():
+    s = String("s")
+    return [InRe(s, prefix_match(Re("AND")))], s == StringVal("AND foo")
+
+
+# ---------------------------------------------------------------------------
 # CLI
 # ---------------------------------------------------------------------------
 def check_mutation_coverage():
@@ -482,11 +613,42 @@ def check_mutation_coverage():
     return 0
 
 
+def check_domain_coverage(require=False):
+    """input_domain discipline (dogfooding P0-2, MCR blind-spot fix).
+
+    With --require-domain, every security property / counterexample finder
+    must declare input_domain ("ascii" | "unicode"). Without it, an ASCII
+    mirror of a Unicode-exposed boundary passes silently — the exact false-
+    safety class the hermes-agent gap-2 finding demonstrated (an ASCII \\b
+    mirror 'proves' redaction while real Python leaks CJK-adjacent tokens).
+    Backward compatible: legacy properties with no declaration only fail
+    when the flag is passed, matching how --require-ground-truth works.
+    """
+    if not require:
+        return 0
+    missing = sorted(
+        e["family"] + ":" + n
+        for n, e in REGISTRY.items()
+        if e["kind"] in ("property", "counterexample_finder") and e["input_domain"] is None
+    )
+    if missing:
+        print(
+            "FAIL: --require-domain, but these properties declare no "
+            f"input_domain ('ascii' | 'unicode'): {', '.join(missing)}. "
+            "An unstated alphabet assumption can silently diverge from "
+            "Unicode-aware \\w\\d\\s\\b in the real regex.",
+            file=sys.stderr,
+        )
+        return 1
+    return 0
+
+
 def main():
     args = sys.argv[1:]
     require_ground_truth = "--require-ground-truth" in args
+    require_domain = "--require-domain" in args
     as_json = "--json" in args
-    args = [a for a in args if a not in ("--require-ground-truth", "--json")]
+    args = [a for a in args if a not in ("--require-ground-truth", "--require-domain", "--json")]
     if not args or "--all" in args:
         named = [a for a in args if a != "--all"]
         if named:
@@ -502,6 +664,7 @@ def main():
                 f"{n}  expect_unsat={e['expect_unsat']}  "
                 f"timeout={e['timeout_ms']}ms  "
                 f"kind={e['kind']}  family={e['family']}  "
+                f"input_domain={e['input_domain']}  "
                 f"ground_truth={'yes' if e.get('ground_truth') else 'no'}"
             )
             print(f"    domain: {e['domain']}")
@@ -514,6 +677,7 @@ def main():
             return 2
 
     coverage_fail = check_mutation_coverage()
+    domain_fail = check_domain_coverage(require=require_domain)
     failures = 0
     results = []
     if as_json:
@@ -530,6 +694,7 @@ def main():
             results.append(res)
             if not res["ok"]:
                 failures += 1
+    failures += domain_fail
     if as_json:
         print(json.dumps(results, indent=2))
     else:
