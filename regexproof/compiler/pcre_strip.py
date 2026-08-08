@@ -8,6 +8,10 @@ Membership (language) is unchanged by:
 
 from __future__ import annotations
 
+import re
+
+_REPEAT_BRACE_RE = re.compile(r"\{\d+(?:,\d*)?$")
+
 
 def _closes_hex_brace(out: list[str]) -> bool:
     """True if ``out`` ends with an unclosed ``\\x{HEX`` (not a ``{n,m}`` brace)."""
@@ -19,6 +23,11 @@ def _closes_hex_brace(out: list[str]) -> bool:
     if "}" in mid:
         return False
     return bool(mid) and all(c in "0123456789abcdefABCDEF" for c in mid)
+
+
+def _closes_repeat_brace(out: list[str]) -> bool:
+    """True if ``out`` ends with an open ``{n``, ``{n,``, or ``{n,m`` quantifier."""
+    return bool(_REPEAT_BRACE_RE.search("".join(out)))
 
 
 def strip_atomic_and_possessive(pattern: str) -> str:
@@ -57,10 +66,16 @@ def strip_atomic_and_possessive(pattern: str) -> str:
             and i + 1 < len(pattern)
             and pattern[i + 1] == "+"
         ):
-            if ch == "}" and _closes_hex_brace(out):
-                out.append(ch)
-                i += 1
-                continue
+            if ch == "}":
+                if _closes_hex_brace(out):
+                    out.append(ch)
+                    i += 1
+                    continue
+                if not _closes_repeat_brace(out):
+                    # Literal `}` + `+` (e.g. `a}+`) — not a possessive quantifier.
+                    out.append(ch)
+                    i += 1
+                    continue
             # Possessive quantifier: ++, *+, ?+, {n,m}+
             out.append(ch)
             i += 2
@@ -103,10 +118,16 @@ def strip_lazy_quantifiers(pattern: str) -> str:
             and i + 1 < len(pattern)
             and pattern[i + 1] == "?"
         ):
-            if ch == "}" and _closes_hex_brace(out):
-                out.append(ch)
-                i += 1
-                continue
+            if ch == "}":
+                if _closes_hex_brace(out):
+                    out.append(ch)
+                    i += 1
+                    continue
+                if not _closes_repeat_brace(out):
+                    # Literal `}` + `?` — keep both (not a lazy `{n,m}?`).
+                    out.append(ch)
+                    i += 1
+                    continue
             out.append(ch)
             i += 2  # skip lazy marker
             continue
