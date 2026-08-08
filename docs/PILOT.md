@@ -26,7 +26,7 @@ Tracking: issue [#35](https://github.com/lucas-albers-lz4/regexproof/issues/35) 
 
 | Corpus | Surface | Encodable | Result |
 |---|---|---|---|
-| OWASP CRS v4.28.0 (`55b09f5`) | 318 `@rx` (modsec extractor) | 125/318 ≈ **39.3%** → **GO** (≥30%) | shape-5 gaps + ReDoS + dialect triage |
+| OWASP CRS v4.28.0 (`55b09f5`) | 318 `@rx` (modsec extractor) | **206/318 ≈ 64.8%** → **GO** (≥30%; was 39.3% pre toolkit-fix) | shape-5 gaps + ReDoS + dialect triage |
 | validator.js (7-file verified domain) | pilots/validatorjs/src subset | shapes 1–3 + `ci()` mutation | PASS under `--require-ground-truth` |
 
 **CRS lessons (machine-verified):**
@@ -38,10 +38,11 @@ Tracking: issue [#35](https://github.com/lucas-albers-lz4/regexproof/issues/35) 
   prefix that R1 misses; PCRE2 ground-truth PASS.
   Artifacts: `properties/generated/crs_rule_diff_report.json`,
   `properties/triage/coreruleset_rule_diff.ndjson`.
-- Unencodable routing (compiler reject set): pattern-too-long **73** (policy:
-  keep 256-cap for interactive Z3; ReDoS/manual for long patterns),
-  parse-error **53** (lazy/`\x` toolkit-fix), negated-class **32**,
-  word-boundary **22**, inline-flag **6**, bad-range **6**.
+- Unencodable routing after toolkit-fix (#45): pattern-too-long **73**
+  (TRAPS #21 — keep 256 interactive cap; ReDoS/manual for long patterns),
+  word-boundary **34**, internal-anchor **2**, negated-shorthand **2**,
+  inline-flag **1**. Negated-class, hex ranges in classes, and most
+  lazy/`\x`/scoped-`(?i:)` rejects cleared by encode paths.
 - Noodler `re.from_ecma2020` still unavailable on stock z3-solver 5.0.0
   (fixture unchanged; CRS `@rx` has zero lookarounds).
 - Uncapped ReDoS (recheck) on encodable subset:
@@ -51,13 +52,13 @@ Tracking: issue [#35](https://github.com/lucas-albers-lz4/regexproof/issues/35) 
 
 - Declared verified domain: the 7-file pilot subset (not full upstream
   `src/lib`). Inventory questions hard-fail if left `planned`.
-- `{1}`/`{1,1}` exact-single quantifier crashed `lower.py` (`Concat` arity) —
-  fixed as identity (TRAPS #20).
+- `{1}`/`{1,1}` exact-single quantifier crashed `lower.py` / `py_re`
+  (`Concat` arity) — fixed as identity (TRAPS #20).
 - Gap-1 `ci()` + naive-mirror mutation guard flips UNSAT→SAT as required.
 
 Findings are `disclosure: private_first` for CRS (security-tool corpus).
-Toolkit-fix follow-ups are filed separately (lazy-quantifier strip,
-`\xNN`/`\x{}`, negated-class, scoped `(?i:...)`, pattern-too-long policy).
+Toolkit-fix (#45): lazy strip, `\xNN`/`\x{}`, negated-class, scoped
+`(?i:...)`, pattern-too-long policy, ECMA flag reject-list (TRAPS #21–#22).
 
 ## Findings filed (fix-later phase)
 

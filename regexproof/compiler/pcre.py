@@ -87,10 +87,12 @@ def compile_pcre(
             if gate.get("helper") in ("pcre2-bindings", "pcre2grep"):
                 raise Unencodable(gate.get("unencodable_reason") or "parse-error")
         ast = parse_pattern(stripped)
-        fold = (lambda ch: python_fold_closure(ch, ascii_only=True)) if "i" in flags else None
+        fold_fn = lambda ch: python_fold_closure(ch, ascii_only=True)
+        fold = fold_fn if "i" in flags else None
         mirror, _meta = lower(
             ast,
             fold=fold,
+            case_fold=fold_fn,
             dot_terminators=PCRE_TERMINATORS,
             digit=lambda: Range("0", "9"),
             space=lambda: Union(*[Re(c) for c in " \t\n\r\f\v"]),

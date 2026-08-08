@@ -9,6 +9,16 @@ from z3 import Concat, Plus, Range, Re, Star, Union
 from regexproof.compiler.base import Unencodable, any_char, opt, python_trailing_dollar
 from regexproof.compiler import simple_parse as sp
 
+_DIGIT_CODES = frozenset(range(ord("0"), ord("9") + 1))
+_SPACE_CODES = frozenset(ord(c) for c in " \t\n\r\f\v")
+_WORD_CODES = frozenset(
+    list(range(ord("a"), ord("z") + 1))
+    + list(range(ord("A"), ord("Z") + 1))
+    + list(range(ord("0"), ord("9") + 1))
+    + [ord("_")]
+)
+_BMP_HI = 0xFFFF
+
 
 def lower(
     node,
@@ -20,11 +30,19 @@ def lower(
     word: Callable[[], object],
     trailing_dollar_nl: bool,
     call_kind: str,
+    case_fold: Callable[[str], set[str]] | None = None,
 ):
+    """Lower AST to Z3.
+
+    ``fold`` is the active case-fold (None unless ignorecase). ``case_fold`` is
+    the dialect fold closure used for scoped ``(?i:…)`` (Folded nodes) when
+    the outer pattern is case-sensitive.
+    """
     meta = {"leading_caret": False, "trailing_dollar": False, "has_internal_anchor": False}
     body = _lower_node(
         node,
         fold=fold,
+        case_fold=case_fold or fold,
         dot_terminators=dot_terminators,
         digit=digit,
         space=space,
@@ -57,7 +75,25 @@ def _wrap(body, call_kind, meta):
     return parts[0] if len(parts) == 1 else Concat(*parts)
 
 
-def _lower_node(node, *, fold, dot_terminators, digit, space, word, meta, at_start, at_end):
+def _lower_node(
+    node, *, fold, case_fold, dot_terminators, digit, space, word, meta, at_start, at_end
+):
+    if isinstance(node, sp.Folded):
+        active = case_fold if case_fold is not None else fold
+        if active is None:
+            raise Unencodable("inline-flag")
+        return _lower_node(
+            node.item,
+            fold=active,
+            case_fold=case_fold,
+            dot_terminators=dot_terminators,
+            digit=digit,
+            space=space,
+            word=word,
+            meta=meta,
+            at_start=at_start,
+            at_end=at_end,
+        )
     if isinstance(node, sp.Lit):
         if node.ch == "":
             return Re("")
@@ -72,6 +108,7 @@ def _lower_node(node, *, fold, dot_terminators, digit, space, word, meta, at_sta
                 _lower_node(
                     it,
                     fold=fold,
+                    case_fold=case_fold,
                     dot_terminators=dot_terminators,
                     digit=digit,
                     space=space,
@@ -89,6 +126,7 @@ def _lower_node(node, *, fold, dot_terminators, digit, space, word, meta, at_sta
             _lower_node(
                 it,
                 fold=fold,
+                case_fold=case_fold,
                 dot_terminators=dot_terminators,
                 digit=digit,
                 space=space,
@@ -104,6 +142,7 @@ def _lower_node(node, *, fold, dot_terminators, digit, space, word, meta, at_sta
         inner = _lower_node(
             node.item,
             fold=fold,
+            case_fold=case_fold,
             dot_terminators=dot_terminators,
             digit=digit,
             space=space,
@@ -138,34 +177,91 @@ def _lit(ch: str, fold):
     return Re(chars[0]) if len(chars) == 1 else Union(*[Re(c) for c in chars])
 
 
-def _dot(terminators: frozenset[str]):
-    # BMP approximation excluding terminators (same approach as py_re).
-    parts = []
-    # Split around each terminator — for common {\n} or {\n,\r,U+2028,U+2029}
-    ranges = [(0, 0xFFFF)]
-    for t in sorted(terminators):
-        code = ord(t)
-        new_ranges = []
-        for lo, hi in ranges:
-            if code < lo or code > hi:
-                new_ranges.append((lo, hi))
+def ranges_excluding(forbidden: set[int], *, hi: int = _BMP_HI):
+    """Union of BMP (or ASCII) ranges excluding ``forbidden`` codepoints.
+
+    Encodes char-class complement without ``Star(Complement(...))`` (TRAPS #1).
+    When the forbidden set is large (e.g. ``[^\\D]``), build the small
+    allowed set instead of punching tens of thousands of holes.
+    """
+    n = hi + 1
+    forbid = {c for c in forbidden if 0 <= c <= hi}
+    if len(forbid) >= n:
+        raise Unencodable("empty-class")
+    if len(forbid) > n // 2:
+        return _codes_to_union([c for c in range(n) if c not in forbid])
+    ranges: list[tuple[int, int]] = [(0, hi)]
+    for code in sorted(forbid):
+        new_ranges: list[tuple[int, int]] = []
+        for lo, rhi in ranges:
+            if code < lo or code > rhi:
+                new_ranges.append((lo, rhi))
                 continue
             if lo <= code - 1:
                 new_ranges.append((lo, code - 1))
-            if code + 1 <= hi:
-                new_ranges.append((code + 1, hi))
+            if code + 1 <= rhi:
+                new_ranges.append((code + 1, rhi))
         ranges = new_ranges
-    for lo, hi in ranges:
-        if lo == hi:
+    return _range_pairs_to_union(ranges)
+
+
+def _codes_to_union(codes: list[int]):
+    if not codes:
+        raise Unencodable("empty-class")
+    codes = sorted(codes)
+    pairs: list[tuple[int, int]] = []
+    start = prev = codes[0]
+    for c in codes[1:]:
+        if c == prev + 1:
+            prev = c
+            continue
+        pairs.append((start, prev))
+        start = prev = c
+    pairs.append((start, prev))
+    return _range_pairs_to_union(pairs)
+
+
+def _range_pairs_to_union(ranges: list[tuple[int, int]]):
+    parts = []
+    for lo, rhi in ranges:
+        if lo == rhi:
             parts.append(Re(chr(lo)))
         else:
-            parts.append(Range(chr(lo), chr(hi)))
+            parts.append(Range(chr(lo), chr(rhi)))
+    if not parts:
+        raise Unencodable("empty-class")
     return Union(*parts) if len(parts) > 1 else parts[0]
+
+
+def _dot(terminators: frozenset[str]):
+    return ranges_excluding({ord(t) for t in terminators})
+
+
+def _member_codes(item: str, fold) -> set[int]:
+    if item == "\\d":
+        return set(_DIGIT_CODES)
+    if item == "\\D":
+        return set(range(_BMP_HI + 1)) - set(_DIGIT_CODES)
+    if item == "\\s":
+        return set(_SPACE_CODES)
+    if item == "\\S":
+        return set(range(_BMP_HI + 1)) - set(_SPACE_CODES)
+    if item == "\\w":
+        return set(_WORD_CODES)
+    if item == "\\W":
+        return set(range(_BMP_HI + 1)) - set(_WORD_CODES)
+    chars = fold(item) if fold is not None else {item}
+    return {ord(c) for c in chars if len(c) == 1}
 
 
 def _class(node: sp.Cls, fold, digit, space, word):
     if node.negate:
-        raise Unencodable("negated-class")
+        forbidden: set[int] = set()
+        for item in node.chars:
+            forbidden |= _member_codes(item, fold)
+        if not node.chars:
+            raise Unencodable("empty-class")
+        return ranges_excluding(forbidden)
     parts = []
     for item in node.chars:
         if item == "\\d":

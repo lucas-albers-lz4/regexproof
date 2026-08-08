@@ -28,7 +28,8 @@ ROUTING = {
         "route": "policy",
         "note": (
             "Capacity cap (>256 chars), not a language limit. Policy: keep cap for "
-            "interactive Z3 queries; triage long patterns to ReDoS-only / manual review."
+            "interactive Z3 queries; triage long patterns to ReDoS-only / manual review. "
+            "See TRAPS #21."
         ),
     },
     "word-boundary": {
@@ -37,15 +38,37 @@ ROUTING = {
     },
     "negated-class": {
         "route": "prove",
-        "note": "Encodable in principle (TRAPS #1/#10) — toolkit-fix candidate.",
+        "note": (
+            "Encoded via BMP/ASCII range complement (TRAPS #1/#10) when members are "
+            "literals/ranges/ASCII shorthands; residual Unicode-word cases still reject."
+        ),
     },
     "inline-flag": {
         "route": "prove",
-        "note": "Scoped (?i:...) lifting — toolkit-fix candidate.",
+        "note": (
+            "Scoped (?i:...) encoded for PCRE/RE2; mid-pattern (?i), (?-i:...), "
+            "scoped m/s/x, and ECMA remain rejects."
+        ),
+    },
+    "m-flag": {
+        "route": "triage",
+        "note": "Multiline ^/$ — rewrite or LOOKBEHIND_REWRITE; never ASCII-approx (TRAPS #22).",
+    },
+    "u-flag": {
+        "route": "triage",
+        "note": "ECMA Unicode mode — stock Z3 limit; do not silent-approx (TRAPS #22).",
+    },
+    "v-flag": {
+        "route": "triage",
+        "note": "ECMA Unicode-sets mode — stock Z3 limit (TRAPS #22).",
+    },
+    "stateful": {
+        "route": "triage",
+        "note": "ECMA g/y/d — lastIndex / indices metadata, not language membership (TRAPS #22).",
     },
     "bad-range": {
         "route": "prove",
-        "note": "\\x{} / hex ranges — toolkit-fix candidate.",
+        "note": "\\x{} / hex ranges — mostly fixed; residual bad escapes still reject.",
     },
     "parse-error": {
         "route": "prove",

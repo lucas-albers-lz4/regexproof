@@ -9,58 +9,46 @@
     "triage_fallback": true
   },
   "pattern_too_long_policy": {
-    "note": "Capacity cap (>256 chars), not a language limit. Policy: keep cap for interactive Z3 queries; triage long patterns to ReDoS-only / manual review.",
+    "note": "Capacity cap (>256 chars), not a language limit. Policy: keep cap for interactive Z3 queries; triage long patterns to ReDoS-only / manual review. See TRAPS #21.",
     "route": "policy"
   },
   "schema_version": "1",
   "unencodable_triage": [
     {
-      "count": 125,
+      "count": 206,
       "note": "encodable \u2014 Z3 property / rule_diff / ReDoS",
       "reason": "ok",
       "route": "prove"
     },
     {
       "count": 73,
-      "note": "Capacity cap (>256 chars), not a language limit. Policy: keep cap for interactive Z3 queries; triage long patterns to ReDoS-only / manual review.",
+      "note": "Capacity cap (>256 chars), not a language limit. Policy: keep cap for interactive Z3 queries; triage long patterns to ReDoS-only / manual review. See TRAPS #21.",
       "reason": "pattern-too-long",
       "route": "policy"
     },
     {
-      "count": 53,
-      "note": "Often lazy quantifiers / hex escapes \u2014 language-transparent strip candidates.",
-      "reason": "parse-error",
-      "route": "prove"
-    },
-    {
-      "count": 32,
-      "note": "Encodable in principle (TRAPS #1/#10) \u2014 toolkit-fix candidate.",
-      "reason": "negated-class",
-      "route": "prove"
-    },
-    {
-      "count": 22,
+      "count": 34,
       "note": "Genuine stock-Z3 limit (gate-3 \\b direction); ASCII domain declared for CRS.",
       "reason": "word-boundary",
       "route": "triage"
     },
     {
-      "count": 6,
-      "note": "\\x{} / hex ranges \u2014 toolkit-fix candidate.",
-      "reason": "bad-range",
-      "route": "prove"
-    },
-    {
-      "count": 6,
-      "note": "Scoped (?i:...) lifting \u2014 toolkit-fix candidate.",
-      "reason": "inline-flag",
-      "route": "prove"
-    },
-    {
-      "count": 1,
+      "count": 2,
       "note": "unclassified reject \u2014 inspect",
       "reason": "internal-anchor",
       "route": "triage"
+    },
+    {
+      "count": 2,
+      "note": "unclassified reject \u2014 inspect",
+      "reason": "negated-shorthand",
+      "route": "triage"
+    },
+    {
+      "count": 1,
+      "note": "Scoped (?i:...) encoded for PCRE/RE2; mid-pattern (?i), (?-i:...), scoped m/s/x, and ECMA remain rejects.",
+      "reason": "inline-flag",
+      "route": "prove"
     }
   ]
 }

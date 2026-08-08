@@ -73,3 +73,13 @@ phase. Dates are merge dates.
 
 - Added the taxonomy, NDJSON contract, reporting, and disclosure docs.
 - Clarified the secret-scanning wording. Required verified-finding markers.
+
+## Toolkit-fix (#45) (2026-08-08)
+
+- Lazy-quantifier strip + `\xNN`/`\x{}` hex parse (PR #49).
+- Negated-class via BMP/ASCII range complement; scoped `(?i:…)` for PCRE/RE2;
+  ECMA keeps scoped-`i` and `m`/`u`/`v`/`g`/`y`/`d` as explicit rejects
+  (TRAPS #21–#22).
+- `{1}` identity fix also on `py_re._repeat`; wave-gate regressions expanded.
+- CRS encodable fraction **206/318 (64.8%)** after encode paths (was ~45%
+  post-lazy/hex).

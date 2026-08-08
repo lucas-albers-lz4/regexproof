@@ -114,6 +114,8 @@ for pat, flags, ck, acc, rej in [
     (r"end$", "", "search", ["end"], ["endx"]),
     (r"^start", "", "match", ["start"], ["xstart"]),
     (r"(?:ab)+", "", "search", ["abab"], ["a"]),
+    (r"^[^0-9]+$", "", "fullmatch", ["abc"], ["a1"]),
+    (r"pre-(?i:abc)-post", "", "fullmatch", ["pre-ABC-post", "pre-abc-post"], ["pre-abd-post"]),
 ]:
     _add("pcre", pat, flags, ck, acc, rej)
 
@@ -129,17 +131,23 @@ REJECTS = [
     ("ecma", r"(a)\1", "", "search", "backref"),
     ("ecma", r"\bword\b", "", "search", "word-boundary"),
     ("ecma", r"a", "u", "search", "u-flag"),
+    ("ecma", r"a", "v", "search", "v-flag"),
+    ("ecma", r"a", "m", "search", "m-flag"),
     ("ecma", r"a", "g", "search", "stateful"),
+    ("ecma", r"a", "y", "search", "stateful"),
+    ("ecma", r"(?i:a)", "", "search", "inline-flag"),
     ("re2", r"(?=a)b", "", "search", "lookaround"),
     ("re2", r"(a)\1", "", "search", "backref"),
     ("re2", r"\bword\b", "", "search", "word-boundary"),
     ("re2", r"^a$", "m", "search", "m-flag"),
     ("re2", "b" * 300, "", "search", "pattern-too-long"),
+    ("re2", r"(?-i:abc)", "", "search", "inline-flag"),
     ("pcre", r"(?=a)b", "", "search", "lookaround"),
     ("pcre", r"(a)\1", "", "search", "backref"),
     ("pcre", r"(?(1)a|b)", "", "search", "conditional"),
     ("pcre", r"a\K b", "", "search", "reset"),
     ("pcre", "c" * 300, "", "search", "pattern-too-long"),
+    ("pcre", r"(?ms:abc)", "", "search", "inline-flag"),
 ]
 for dialect, pat, flags, ck, reason in REJECTS:
     _add(

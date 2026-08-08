@@ -1,26 +1,24 @@
 # CRS ReDoS + dialect triage
 
 - @rx sites: 318
-- encodable: 125
-- ReDoS findings (uncapped): 153
+- encodable: 206
+- ReDoS findings (uncapped): 234
 - Noodler available: False (changed=False)
 
 ## Unencodable routing
 
 | reason | count | route | note |
 |---|---:|---|---|
-| `ok` | 125 | prove | encodable — Z3 property / rule_diff / ReDoS |
-| `pattern-too-long` | 73 | policy | Capacity cap (>256 chars), not a language limit. Policy: keep cap for interactive Z3 queries; triage long patterns to ReDoS-only / manual review. |
-| `parse-error` | 53 | prove | Often lazy quantifiers / hex escapes — language-transparent strip candidates. |
-| `negated-class` | 32 | prove | Encodable in principle (TRAPS #1/#10) — toolkit-fix candidate. |
-| `word-boundary` | 22 | triage | Genuine stock-Z3 limit (gate-3 \b direction); ASCII domain declared for CRS. |
-| `bad-range` | 6 | prove | \x{} / hex ranges — toolkit-fix candidate. |
-| `inline-flag` | 6 | prove | Scoped (?i:...) lifting — toolkit-fix candidate. |
-| `internal-anchor` | 1 | triage | unclassified reject — inspect |
+| `ok` | 206 | prove | encodable — Z3 property / rule_diff / ReDoS |
+| `pattern-too-long` | 73 | policy | Capacity cap (>256 chars), not a language limit. Policy: keep cap for interactive Z3 queries; triage long patterns to ReDoS-only / manual review. See TRAPS #21. |
+| `word-boundary` | 34 | triage | Genuine stock-Z3 limit (gate-3 \b direction); ASCII domain declared for CRS. |
+| `internal-anchor` | 2 | triage | unclassified reject — inspect |
+| `negated-shorthand` | 2 | triage | unclassified reject — inspect |
+| `inline-flag` | 1 | prove | Scoped (?i:...) encoded for PCRE/RE2; mid-pattern (?i), (?-i:...), scoped m/s/x, and ECMA remain rejects. |
 
 ## Pattern-too-long policy
 
-Capacity cap (>256 chars), not a language limit. Policy: keep cap for interactive Z3 queries; triage long patterns to ReDoS-only / manual review.
+Capacity cap (>256 chars), not a language limit. Policy: keep cap for interactive Z3 queries; triage long patterns to ReDoS-only / manual review. See TRAPS #21.
 
 ## ReDoS PASS/FAIL rows (sample)
 
@@ -30,6 +28,8 @@ Capacity cap (>256 chars), not a language limit. Policy: keep cap for interactiv
 | `2937d3663e1c9621508e03be9d879b61` | safe | recheck |
 | `12da5e9c854a440c3271a24da8a58565` | safe | recheck |
 | `3c24ea1b0584bffeaa6dfd0731c8be89` | safe | recheck |
+| `e10b86ff17417e765c4e4e2d6e246a9c` | vulnerable | recheck |
+| `84f8757d3c0fa8cc2efa1bec274241da` | safe | recheck |
 | `3523bd737bc85e25c7236406bc21cbc3` | safe | recheck |
 | `66342d357386a976e5c3067a8f22c622` | safe | recheck |
 | `ab4ae45e6798cf6663e784b539612d63` | safe | recheck |
@@ -45,6 +45,11 @@ Capacity cap (>256 chars), not a language limit. Policy: keep cap for interactiv
 | `3faed74b7451d9275e4a150fb64b283f` | safe | recheck |
 | `9a3e3279ec79778cd1bfe889d9c643bb` | safe | recheck |
 | `e344c90e3eab7f81fbf080964232dedf` | safe | recheck |
+| `ad788aa56aebde4c7e8e3591c8badd34` | safe | recheck |
+| `c2d5e3c4c7d40074c4c7e3d3d9db9ba6` | safe | recheck |
+| `e387b56e7c498c0a90f657f70273c562` | safe | recheck |
+| `19df3bc67b16333d43829e3c12235539` | safe | recheck |
+| `b1f808b9357a9cbe8281cc14d593c595` | vulnerable | recheck |
 | `14359151d51ec5ecb0d0e16f09cd803a` | safe | recheck |
 | `b9b7e7444a2c3dadc74d9df7bb537eb0` | safe | recheck |
 | `9d719ad507dee5cd886bab92df78708e` | vulnerable | recheck |
@@ -58,22 +63,15 @@ Capacity cap (>256 chars), not a language limit. Policy: keep cap for interactiv
 | `39762ab894d372041a94535811e92e5a` | safe | recheck |
 | `b2ee9eeec3cead4b87d445c0a19625e1` | vulnerable | recheck |
 | `ffb1f46ab8758d34b3c5c67790a2c86c` | safe | recheck |
+| `a5a5071868f6b77eff6bebbc2ec5a19d` | safe | recheck |
+| `dd9d5b9b8486e131a0b389af24ac8396` | safe | recheck |
+| `9622e6e203d147bd2614eb8f8a3af8a5` | vulnerable | recheck |
 | `a027ef7ab9641b543238fea8c6a080fe` | safe | recheck |
 | `e3c6806362823ebd941af338deccc3a1` | safe | recheck |
 | `e16cd91f0097fc5d7feff17de6ea3a71` | vulnerable | recheck |
 | `bfa254997deda142de5d73672d58a740` | safe | recheck |
+| `d6c34928fa032a4e8516705a47c1bd46` | safe | recheck |
+| `cd4f301dbbb2e45d1ee07150bb9332d1` | vulnerable | recheck |
+| `8da9fd11b5a381f092c535318a4e1df6` | vulnerable | recheck |
 | `c6b729adf5250644e09188d9ae3b2105` | safe | recheck |
-| `6d1299a5555a96d250d77a184808d70d` | safe | recheck |
-| `a98bb570ee86b2af649c4b92aa830f76` | safe | recheck |
-| `603130f8dc4e794d973d8240c3145776` | vulnerable | recheck |
-| `6e84df510b504d343418d0d638c924ca` | safe | recheck |
-| `5610f531e236dd58a09793508805952d` | safe | recheck |
-| `eb28d663dc95436c697da1df01c0dcd4` | safe | recheck |
-| `8d849010be9687c39d87d29eb97e1a68` | safe | recheck |
-| `750fe2dc8941db188b27dadb70302df6` | safe | recheck |
-| `88a3ee7765166a6c70c9932d2816c9ba` | safe | recheck |
-| `a48e33eebad28a74e0589d8d2802f80a` | safe | recheck |
-| `f3a7d202cbc7085e147133bbf4c06f9f` | safe | recheck |
-| `455ac5bc32bb865be3080302ee35b287` | safe | recheck |
-| `d8be5976558bc8007c251f5517d8df8f` | safe | recheck |
-| … | (103 more) | |
+| … | (184 more) | |
