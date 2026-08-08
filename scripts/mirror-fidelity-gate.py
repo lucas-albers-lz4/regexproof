@@ -194,9 +194,10 @@ def main(argv: list[str] | None = None) -> int:
             "pcre",
         ),
         (
-            "validatorjs",
-            ROOT / "properties" / "generated" / "validatorjs_inventory.ndjson",
-            "ecma",
+            "gitleaks",
+            # Prefer inventory NDJSON if present; else measure from TOML inline.
+            ROOT / "properties" / "generated" / "gitleaks_inventory.ndjson",
+            "re2",
         ),
     ]
     # Fallback: synthesize a few known-good patterns if inventories missing rows.
@@ -230,6 +231,21 @@ def main(argv: list[str] | None = None) -> int:
     results = []
     for name, inv, dialect in corpora:
         rows = _sample_from_inventory(inv, dialect=dialect, limit=args.max_per_corpus)
+        if name == "gitleaks" and not rows:
+            # Synthesize from pilot TOML when inventory NDJSON is absent.
+            from regexproof.batch.runner import CORPUS_MANIFESTS, _compile_all, _extract
+
+            meta = dict(CORPUS_MANIFESTS["gitleaks"])
+            compiled = _compile_all(
+                _extract("gitleaks", meta),
+                lift_inline=True,
+                corpus_slug="gitleaks",
+            )
+            rows = [
+                c
+                for c in compiled
+                if c.get("encodable") and not c.get("selector")
+            ][: args.max_per_corpus]
         for rec in rows:
             results.append(
                 {
@@ -249,13 +265,27 @@ def main(argv: list[str] | None = None) -> int:
 
     mismatches = [r for r in results if r.get("status") == "mismatch"]
     oks = [r for r in results if r.get("status") == "ok"]
+    pcre_attempted = [
+        r
+        for r in results
+        if r.get("dialect") == "pcre" or r.get("corpus") == "coreruleset"
+    ]
+    pcre_ok = [r for r in pcre_attempted if r.get("status") == "ok"]
+    pcre2 = pcre_mod.helper_used_for_parse_and_replay()
+    # Require at least one successful check; if PCRE was attempted and the
+    # helper is available, require at least one PCRE ok (do not pass on RE2
+    # alone when CRS inventory was present).
+    ok = len(mismatches) == 0 and len(oks) > 0
+    if pcre_attempted and pcre2 and not pcre_ok and not mismatches:
+        ok = False
     report = {
         "schema_version": "1",
         "gate": "mirror_fidelity",
-        "ok": len(mismatches) == 0 and len(oks) > 0,
+        "ok": ok,
         "checked_ok": len(oks),
         "mismatches": len(mismatches),
-        "pcre2_helper": pcre_mod.helper_used_for_parse_and_replay(),
+        "pcre2_helper": pcre2,
+        "pcre_checked_ok": len(pcre_ok),
         "engine_versions": {
             "python": platform.python_version(),
             "z3": z3.get_version_string(),
