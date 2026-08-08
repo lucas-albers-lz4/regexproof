@@ -247,3 +247,31 @@ matching so `id:NNNN` on a later line is captured.
 When `lo == 1`, Z3 raises `At least two arguments expected` — a compiler
 **crash**, not an encodable reject (19 validator.js sites). Treat `{1}` as
 identity (`return body`).
+
+## 21. Pattern-too-long is a capacity policy, not a language limit
+
+`DEFAULT_MAX_LENGTH = 256` on every dialect compiler. Patterns longer than
+the cap raise `pattern-too-long`. This is an **interactive Z3 query budget**,
+not a claim that the regex is inexpressible:
+
+| Route | What to do |
+|---|---|
+| Interactive / property suite | Keep the 256 cap; shorten or decompose the pattern |
+| Batch inventory | Record `unencodable_reason=pattern-too-long`; do not silent-skip |
+| Long security regexes | Prefer **ReDoS-only** analysis (`docs/REDOS.md`) + manual review; optional raise `max_length=` only in controlled batch jobs |
+
+Never treat TIMEOUT/`unknown` as a pass when probing a lengthened cap.
+
+## 22. ECMA flags `m` / `u` / `v` / sticky (`g`/`y`/`d`) — reject, don't approximate
+
+JS RegExp flags beyond `i`/`s` are **explicit rejects** in `compile_ecma`:
+
+| Flag | Reason | Triage |
+|---|---|---|
+| `m` | `^`/`$` become line-anchored | Rewrite (IndexOf/split) or LOOKBEHIND_REWRITE notes |
+| `u` / `v` | Unicode / Unicode-sets mode | Stock Z3 ASCII domain — route to triage, not silent BMP approx |
+| `g` / `y` | Stateful `lastIndex` | `stateful` — not a regular language question |
+| `d` | `hasIndices` match metadata | `stateful` |
+
+Do not encode these as ASCII-ish mirrors. Report the reject reason in triage
+NDJSON (`unencodable_reason`) so batch routing stays honest.

@@ -83,6 +83,7 @@ def compile_re2(
         mirror, _meta = lower(
             ast,
             fold=fold,
+            case_fold=re2_fold_closure,
             dot_terminators=RE2_TERMINATORS,
             digit=lambda: Range("0", "9"),
             space=lambda: Union(*[Re(c) for c in " \t\n\f\r"]),

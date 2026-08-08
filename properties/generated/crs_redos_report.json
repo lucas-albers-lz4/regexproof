@@ -1,5 +1,5 @@
 {
-  "encodable": 125,
+  "encodable": 198,
   "engine_versions": {
     "python": "3.14.6"
   },
@@ -13,16 +13,17 @@
     "triage_fallback": true
   },
   "pattern_too_long_policy": {
-    "note": "Capacity cap (>256 chars), not a language limit. Policy: keep cap for interactive Z3 queries; triage long patterns to ReDoS-only / manual review.",
+    "note": "Capacity cap (>256 chars), not a language limit. Policy: keep cap for interactive Z3 queries; triage long patterns to ReDoS-only / manual review. See TRAPS #21.",
     "route": "policy"
   },
   "pilot": "coreruleset-redos-dialect",
   "redos": {
     "by_result": {
-      "safe": 137,
-      "vulnerable": 16
+      "error": 5,
+      "safe": 167,
+      "vulnerable": 54
     },
-    "count": 153,
+    "count": 226,
     "rows": [
       {
         "pattern": "(?:URLENCODED|MULTIPART|XML|JSON)",
@@ -61,6 +62,26 @@
         "rule_id": null,
         "severity": "safe",
         "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-905-COMMON-EXCEPTIONS.conf:54:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "^(?:connect (?:(?:[0-9]{1,3}\\.){3}[0-9]{1,3}\\.?(?::[0-9]+)?|[\\--9A-Z_a-z]+:[0-9]+)|options \\*|[a-z]{3,10}[\\s\\x0b]+(?:[0-",
+        "regex_id": "e10b86ff17417e765c4e4e2d6e246a9c",
+        "result": "vulnerable",
+        "rule_id": "920100",
+        "severity": "polynomial",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-920-PROTOCOL-ENFORCEMENT.conf:52:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "^(?:&(?:(?:[acegilnorsuz]acut|[aeiou]grav|[aino]tild)e|[c-elnr-tz]caron|(?:[cgklnr-t]cedi|[aeiouy]um)l|[aceg-josuwy]circ",
+        "regex_id": "84f8757d3c0fa8cc2efa1bec274241da",
+        "result": "safe",
+        "rule_id": "920120",
+        "severity": "linear",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-920-PROTOCOL-ENFORCEMENT.conf:108:0",
         "tool": "recheck",
         "tool_version": "4.5.0"
       },
@@ -215,6 +236,56 @@
         "tool_version": "4.5.0"
       },
       {
+        "pattern": "^[^;\\s]+",
+        "regex_id": "ad788aa56aebde4c7e8e3591c8badd34",
+        "result": "safe",
+        "rule_id": "920420",
+        "severity": "linear",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-920-PROTOCOL-ENFORCEMENT.conf:983:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "charset\\s*=\\s*[\\\"']?([^;\\\"'\\s]+)",
+        "regex_id": "c2d5e3c4c7d40074c4c7e3d3d9db9ba6",
+        "result": "safe",
+        "rule_id": "920480",
+        "severity": "linear",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-920-PROTOCOL-ENFORCEMENT.conf:1011:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "charset.*?charset",
+        "regex_id": "e387b56e7c498c0a90f657f70273c562",
+        "result": "safe",
+        "rule_id": "920530",
+        "severity": "linear",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-920-PROTOCOL-ENFORCEMENT.conf:1039:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "\\.([^.]+)$",
+        "regex_id": "19df3bc67b16333d43829e3c12235539",
+        "result": "safe",
+        "rule_id": "920440",
+        "severity": "linear",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-920-PROTOCOL-ENFORCEMENT.conf:1127:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "\\.[^.~]+~(?:/.*|)$",
+        "regex_id": "b1f808b9357a9cbe8281cc14d593c595",
+        "result": "vulnerable",
+        "rule_id": "920500",
+        "severity": "polynomial",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-920-PROTOCOL-ENFORCEMENT.conf:1155:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
         "pattern": "^.*$",
         "regex_id": "14359151d51ec5ecb0d0e16f09cd803a",
         "result": "safe",
@@ -345,6 +416,36 @@
         "tool_version": "4.5.0"
       },
       {
+        "pattern": "(?:^|[^\\x5c])\\x5c[cdeghijklmpqwxyz123456789]",
+        "regex_id": "a5a5071868f6b77eff6bebbc2ec5a19d",
+        "result": "safe",
+        "rule_id": "920460",
+        "severity": "safe",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-920-PROTOCOL-ENFORCEMENT.conf:1979:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "(?:get|p(?:(?:os|u)t|atch|rop(?:find|atch))|head|options|co(?:nnect|py)|delete|trac[ek]|m(?:kcol|ove)|(?:un)?lock)[\\s\\x0",
+        "regex_id": "dd9d5b9b8486e131a0b389af24ac8396",
+        "result": "safe",
+        "rule_id": "921110",
+        "severity": "safe",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-921-PROTOCOL-ATTACK.conf:39:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "[\\n\\r][^0-9A-Z_a-z]*?(?:content-(?:type|length)|set-cookie|location):[\\s\\x0b]*[0-9A-Z_a-z]",
+        "regex_id": "9622e6e203d147bd2614eb8f8a3af8a5",
+        "result": "vulnerable",
+        "rule_id": "921120",
+        "severity": "polynomial",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-921-PROTOCOL-ATTACK.conf:77:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
         "pattern": "[\\n\\r]",
         "regex_id": "a027ef7ab9641b543238fea8c6a080fe",
         "result": "safe",
@@ -385,6 +486,36 @@
         "tool_version": "4.5.0"
       },
       {
+        "pattern": "^[^!&\\(\\):<>\\|~]*\\)[\\s\\x0b]*(?:\\((?:[^!&\\(\\),<->\\|~]+[<>~]?=|[\\s\\x0b]*[!&\\|][\\s\\x0b]*[\\(\\)]?[\\s\\x0b]*)|\\)[\\s\\x0b]*\\([\\s\\",
+        "regex_id": "d6c34928fa032a4e8516705a47c1bd46",
+        "result": "safe",
+        "rule_id": "921200",
+        "severity": "linear",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-921-PROTOCOL-ATTACK.conf:258:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "^[^\\s\\x0b,;]+[\\s\\x0b,;].*?(?:application/(?:.+\\+)?json|(?:application/(?:soap\\+)?|text/)xml)",
+        "regex_id": "cd4f301dbbb2e45d1ee07150bb9332d1",
+        "result": "vulnerable",
+        "rule_id": "921421",
+        "severity": "polynomial",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-921-PROTOCOL-ATTACK.conf:290:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "unix:[^|]*\\|",
+        "regex_id": "8da9fd11b5a381f092c535318a4e1df6",
+        "result": "vulnerable",
+        "rule_id": "921240",
+        "severity": "polynomial",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-921-PROTOCOL-ATTACK.conf:317:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
         "pattern": "[\\n\\r]",
         "regex_id": "c6b729adf5250644e09188d9ae3b2105",
         "result": "safe",
@@ -401,6 +532,16 @@
         "rule_id": "921170",
         "severity": "safe",
         "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-921-PROTOCOL-ATTACK.conf:494:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "(][^\\]]+$|][^\\]]+\\[)",
+        "regex_id": "a2aee51a050e42295efc866987590bed",
+        "result": "safe",
+        "rule_id": "921210",
+        "severity": "linear",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-921-PROTOCOL-ATTACK.conf:551:0",
         "tool": "recheck",
         "tool_version": "4.5.0"
       },
@@ -435,6 +576,16 @@
         "tool_version": "4.5.0"
       },
       {
+        "pattern": "[^\\x21-\\x7E][\\x21-\\x39\\x3B-\\x7E]*:",
+        "regex_id": "969c727f07383343bd925f46db53d832",
+        "result": "safe",
+        "rule_id": "922130",
+        "severity": "linear",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-922-MULTIPART-ATTACK.conf:139:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
         "pattern": "(?:^|[/;\\x5c])\\.{2,3}[/;\\x5c]",
         "regex_id": "5610f531e236dd58a09793508805952d",
         "result": "safe",
@@ -451,6 +602,26 @@
         "rule_id": "931100",
         "severity": "linear",
         "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-931-APPLICATION-ATTACK-RFI.conf:47:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "^(?i:file|ftps?|https?).*?\\?+$",
+        "regex_id": "f86a803247453d0b142e395ff14b0ff7",
+        "result": "error",
+        "rule_id": "931120",
+        "severity": null,
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-931-APPLICATION-ATTACK-RFI.conf:94:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "\\$(?:\\((?:[^\\)]+|\\([^\\)]+\\))\\)|\\{[^\\}]+\\}|\\[[^\\]]*\\])|[<>]\\([^\\)]+\\)|/[0-9A-Z_a-z]*\\[[^\\]]+\\]",
+        "regex_id": "05b80fb4fbf15062e9ecc09ee7e30564",
+        "result": "vulnerable",
+        "rule_id": "932130",
+        "severity": "polynomial",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-932-APPLICATION-ATTACK-RCE.conf:297:0",
         "tool": "recheck",
         "tool_version": "4.5.0"
       },
@@ -505,6 +676,16 @@
         "tool_version": "4.5.0"
       },
       {
+        "pattern": "\\$(?:\\((?:[^\\)]+|\\([^\\)]+\\))\\)|\\{[^\\}]+\\}|\\[[^\\]]*\\])|[<>]\\([^\\)]+\\)|/[0-9A-Z_a-z]*\\[[^\\]]+\\]",
+        "regex_id": "a39d84c427d963abf412fbdb9459955c",
+        "result": "vulnerable",
+        "rule_id": "932131",
+        "severity": "polynomial",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-932-APPLICATION-ATTACK-RCE.conf:1102:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
         "pattern": "/",
         "regex_id": "455ac5bc32bb865be3080302ee35b287",
         "result": "safe",
@@ -521,6 +702,16 @@
         "rule_id": null,
         "severity": "safe",
         "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-932-APPLICATION-ATTACK-RCE.conf:1181:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "^[^#]+",
+        "regex_id": "d1a5adcee40f145d5e01aa5805ac0094",
+        "result": "safe",
+        "rule_id": "932205",
+        "severity": "linear",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-932-APPLICATION-ATTACK-RCE.conf:1197:0",
         "tool": "recheck",
         "tool_version": "4.5.0"
       },
@@ -605,12 +796,32 @@
         "tool_version": "4.5.0"
       },
       {
+        "pattern": "\\{[^\\s\\x0b,:\\}]*,[^\\s\\x0b]*\\}",
+        "regex_id": "b5861d257cad197841d7f5d9998f7f34",
+        "result": "vulnerable",
+        "rule_id": "932281",
+        "severity": "polynomial",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-932-APPLICATION-ATTACK-RCE.conf:1431:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
         "pattern": "~[0-9]+",
         "regex_id": "121b10fbfdb5fe49994aa9471a432426",
         "result": "safe",
         "rule_id": "932271",
         "severity": "linear",
         "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-932-APPLICATION-ATTACK-RCE.conf:1505:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "[\\.0-:A-Z_a-z]+[\\s\\x0b]*\\([\\s\\x0b]*\\)[\\s\\x0b]*\\{[^\\}]+[&\\|][^\\}]+\\}",
+        "regex_id": "3e171acdd6ecb169e78e2f16133e50b1",
+        "result": "vulnerable",
+        "rule_id": "932390",
+        "severity": "polynomial",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-932-APPLICATION-ATTACK-RCE.conf:1821:0",
         "tool": "recheck",
         "tool_version": "4.5.0"
       },
@@ -635,12 +846,32 @@
         "tool_version": "4.5.0"
       },
       {
+        "pattern": "<\\?(?:php[\\s\\x0b]|[\\s\\x0b=]|xml(?:[\\s\\x0b]+[^a-z]|:)|$)|\\[[/\\x5c]?php\\]|\\{/?php\\}",
+        "regex_id": "4626105c7ec07b19194e84a8c5236d12",
+        "result": "safe",
+        "rule_id": "933100",
+        "severity": "linear",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-933-APPLICATION-ATTACK-PHP.conf:53:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
         "pattern": ".*\\.ph(?:p\\d*|tml|ar|ps|t|pt)\\.*$",
         "regex_id": "8e7f1b8cfe079a38e3dccc28fc15c7f3",
         "result": "vulnerable",
         "rule_id": "933110",
         "severity": "polynomial",
         "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-933-APPLICATION-ATTACK-PHP.conf:95:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "\\$\\s*\\{\\s*\\S[^\\{\\}]*\\}",
+        "regex_id": "28f24b90f5b15801a22a1d84442bf26a",
+        "result": "safe",
+        "rule_id": "933135",
+        "severity": "linear",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-933-APPLICATION-ATTACK-PHP.conf:182:0",
         "tool": "recheck",
         "tool_version": "4.5.0"
       },
@@ -661,6 +892,26 @@
         "rule_id": "933200",
         "severity": "safe",
         "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-933-APPLICATION-ATTACK-PHP.conf:262:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "[oOcC]:\\d+:\\\".+?\\\":\\d+:\\{.*}",
+        "regex_id": "d64bd1c88cbdded647e2f2c53740d092",
+        "result": "vulnerable",
+        "rule_id": "933170",
+        "severity": "polynomial",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-933-APPLICATION-ATTACK-PHP.conf:443:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "\\$+(?:[A-Z_a-z\\x7f-\\x{ff}][0-9A-Z_a-z\\x7f-\\x{ff}]*|[\\s\\x0b]*\\{[^\\}]+\\})(?:[\\s\\x0b]|\\[(?:[^\\[\\]]|\\[[^\\]]+\\])+\\]|\\{[^\\}]+\\",
+        "regex_id": "ae41dd64b73f21137d4cecd9dde595bc",
+        "result": "error",
+        "rule_id": "933180",
+        "severity": null,
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-933-APPLICATION-ATTACK-PHP.conf:504:0",
         "tool": "recheck",
         "tool_version": "4.5.0"
       },
@@ -715,6 +966,16 @@
         "tool_version": "4.5.0"
       },
       {
+        "pattern": "(?:\\{\\{[^\\}]*?(?:[\\(\\*]|__)[^\\}]*?\\}|#\\{[^\\}]*?(?:[\\(\\*]|__)[^\\}]*?)\\}|<%=?[\\s\\x0b]*[^%]*?(?:[\\(\\*]|__)[^%]*?%>",
+        "regex_id": "beaada01ed6342adf0d606e311412310",
+        "result": "vulnerable",
+        "rule_id": "934200",
+        "severity": "polynomial",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-934-APPLICATION-ATTACK-GENERIC.conf:287:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
         "pattern": "(?:close|exists|fork|(?:ope|spaw)n|re(?:ad|quire)|w(?:atch|rite))[\\s\\x0b]*\\(",
         "regex_id": "5d77d2a364657762f3f535218e4f4130",
         "result": "safe",
@@ -735,6 +996,26 @@
         "tool_version": "4.5.0"
       },
       {
+        "pattern": "(?:\\{%[^%}]*%}|<%=?[^%>]*%>)",
+        "regex_id": "df0f1eec4ec78e94a9eccf5de36189bf",
+        "result": "safe",
+        "rule_id": "934180",
+        "severity": "linear",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-934-APPLICATION-ATTACK-GENERIC.conf:435:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "__[^\\\"&=]*__(?:i?(?:startswith|e(?:ndswith|xact)|contains|regex)|i(?:snull|n)|range|[gl]te?|has_(?:keys?|any_keys)|conta",
+        "regex_id": "b18bbb61415133c7b4032ba969969293",
+        "result": "vulnerable",
+        "rule_id": "934220",
+        "severity": "polynomial",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-934-APPLICATION-ATTACK-GENERIC.conf:470:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
         "pattern": "__(?:i?(?:startswith|e(?:ndswith|xact)|contains|regex)|i(?:snull|n)|range|[gl]te?|has_(?:keys?|any_keys)|contained_by)(?",
         "regex_id": "5a8d7fa7af78dfc2df8ef4fcebce6713",
         "result": "safe",
@@ -745,12 +1026,132 @@
         "tool_version": "4.5.0"
       },
       {
+        "pattern": "[\\t-\\r \\\"'\\(,/-9;=`]on[a-z]{3,50}[\\t-\\r \\(,;]*?=[^=]",
+        "regex_id": "484a5d81249fe37272b075cd38c8d2ab",
+        "result": "safe",
+        "rule_id": "941120",
+        "severity": "safe",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-941-APPLICATION-ATTACK-XSS.conf:153:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "[a-z]+=(?:[^:=]+:[^;]+;)*?[^:=]+:url\\(javascript",
+        "regex_id": "2d5edfec7459a118fbc35bd88d7b153a",
+        "result": "vulnerable",
+        "rule_id": "941140",
+        "severity": "polynomial",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-941-APPLICATION-ATTACK-XSS.conf:219:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "<style.*?>.*?(?:@[\\x5ci]|(?:[:=]|&#x?0*(?:58|3[AD]|61);?).*?(?:[\\(\\x5c]|&#x?0*(?:40|28|92|5C);?))",
+        "regex_id": "9ca0e5485e753fd8251013220b7e4bf1",
+        "result": "vulnerable",
+        "rule_id": "941190",
+        "severity": "polynomial",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-941-APPLICATION-ATTACK-XSS.conf:345:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "(?i:<.*[:]?vmlframe.*?[\\s/+]*?src[\\s/+]*=)",
+        "regex_id": "1a7ccb67f45838c77e5307b0115ca469",
+        "result": "error",
+        "rule_id": "941200",
+        "severity": null,
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-941-APPLICATION-ATTACK-XSS.conf:368:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "<EMBED[\\s/+].*?(?:src|type).*?=",
+        "regex_id": "eb6acedd68e168083689a4d151c1c8e4",
+        "result": "vulnerable",
+        "rule_id": "941230",
+        "severity": "polynomial",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-941-APPLICATION-ATTACK-XSS.conf:449:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "<META[\\s\\x0b\\+/].*?http-equiv[\\s\\x0b\\+/]*=[\\s\\x0b\\+/]*[\\\"'`]?(?:[crs]|&#x?0*(?:6[37]|43|99|[578][23]|11[45]);?)",
+        "regex_id": "463efbeb4f1e18fe682869cf6b3a32d3",
+        "result": "vulnerable",
+        "rule_id": "941250",
+        "severity": "polynomial",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-941-APPLICATION-ATTACK-XSS.conf:500:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "(?i:<META[\\s/+].*?charset[\\s/+]*=)",
+        "regex_id": "dd2c4857763b97fe9433dba2156abade",
+        "result": "error",
+        "rule_id": "941260",
+        "severity": null,
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-941-APPLICATION-ATTACK-XSS.conf:523:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "<LINK[\\s/+].*?href[\\s/+]*=",
+        "regex_id": "2f7431fdcb76085a11564b204eaf22c9",
+        "result": "vulnerable",
+        "rule_id": "941270",
+        "severity": "polynomial",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-941-APPLICATION-ATTACK-XSS.conf:546:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "<BASE[\\s/+].*?href[\\s/+]*=",
+        "regex_id": "57038044ca12d61faada234825e8ebc1",
+        "result": "vulnerable",
+        "rule_id": "941280",
+        "severity": "polynomial",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-941-APPLICATION-ATTACK-XSS.conf:569:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
         "pattern": "<APPLET[\\s/+>]",
         "regex_id": "cc39c50a3da4721181b176fb2bd22fb9",
         "result": "safe",
         "rule_id": "941290",
         "severity": "safe",
         "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-941-APPLICATION-ATTACK-XSS.conf:592:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "<OBJECT[\\s\\x0b\\+/].*?(?:type|c(?:ode(?:type)?|lassid)|data)[\\s\\x0b\\+/]*=",
+        "regex_id": "4680c2de061c868bbfd052c01c8a10b8",
+        "result": "vulnerable",
+        "rule_id": "941300",
+        "severity": "polynomial",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-941-APPLICATION-ATTACK-XSS.conf:620:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "\\x{bc}[^>\\x{be}]*[>\\x{be}]|<[^\\x{be}]*\\x{be}",
+        "regex_id": "c77d5c246ac6b92da8e1c48c57e1935a",
+        "result": "vulnerable",
+        "rule_id": "941310",
+        "severity": "polynomial",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-941-APPLICATION-ATTACK-XSS.conf:687:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "\\x{bc}[\\s\\x0b]*/[\\s\\x0b]*[^>\\x{be}]*[>\\x{be}]|<[\\s\\x0b]*/[\\s\\x0b]*[^\\x{be}]*\\x{be}",
+        "regex_id": "8168104a4a1d93fcd3cdc799fb32d499",
+        "result": "vulnerable",
+        "rule_id": null,
+        "severity": "polynomial",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-941-APPLICATION-ATTACK-XSS.conf:707:0",
         "tool": "recheck",
         "tool_version": "4.5.0"
       },
@@ -775,12 +1176,142 @@
         "tool_version": "4.5.0"
       },
       {
+        "pattern": "(?:self|document|t(?:his|op)|window)[\\s\\x0b]*(?:/\\*|[\\)\\[]).+?(?:\\]|\\*/)",
+        "regex_id": "0131894db9f3a1681d65beadbc563733",
+        "result": "vulnerable",
+        "rule_id": "941370",
+        "severity": "polynomial",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-941-APPLICATION-ATTACK-XSS.conf:794:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "((?:\\[[^\\]]*\\]|Reflect)[^\\.]*\\.).*(?:map|sort|apply)[^\\.]*\\..*call[^`]*`.*`",
+        "regex_id": "4a79689f153ea277925def4d39bf7017",
+        "result": "vulnerable",
+        "rule_id": "941400",
+        "severity": "polynomial",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-941-APPLICATION-ATTACK-XSS.conf:863:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "[\\\"\\'][ ]*(?:[^a-z0-9~_:\\' ]|in).+?[.].+?=",
+        "regex_id": "e6ee18df25e15151a6a12872e5f48073",
+        "result": "vulnerable",
+        "rule_id": "941340",
+        "severity": "polynomial",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-941-APPLICATION-ATTACK-XSS.conf:1095:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "\\{\\{.*?}}",
+        "regex_id": "26f05efc25df850b63bd0c11c3a66a14",
+        "result": "vulnerable",
+        "rule_id": "941380",
+        "severity": "polynomial",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-941-APPLICATION-ATTACK-XSS.conf:1130:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "(?i:sleep\\s*?\\(.*?\\)|benchmark\\s*?\\(.*?\\,.*?\\))",
+        "regex_id": "280bdc2ea844207a660e733e1c98e342",
+        "result": "error",
+        "rule_id": "942160",
+        "severity": null,
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf:154:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "(?:select|;)[\\s\\x0b]+(?:benchmark|if|sleep)[\\s\\x0b]*?\\([\\s\\x0b]*?\\(?[\\s\\x0b]*?[0-9A-Z_a-z]+",
+        "regex_id": "9201c8eefdb8d437848e74563971334d",
+        "result": "vulnerable",
+        "rule_id": "942170",
+        "severity": "polynomial",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf:180:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
         "pattern": "^(?:json\\.)?(?:429496729[56]|2(?:14748364[78]|.22507385850720(?:07|11)e-308)|-(?:214748364[89]|0000023456)|00000(?:12345",
         "regex_id": "9e8617b9d7e33082f7817293cbfb178d",
         "result": "safe",
         "rule_id": "942220",
         "severity": "safe",
         "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf:235:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "[\\s\\x0b\\(\\)]case[\\s\\x0b]+when.*?then|\\)[\\s\\x0b]*?like[\\s\\x0b]*?\\(|select.*?having[\\s\\x0b]*?[^\\s\\x0b]+[\\s\\x0b]*?[^\\s\\x0b0",
+        "regex_id": "85a3f425bdbc2278f7f8f596d23a04e3",
+        "result": "vulnerable",
+        "rule_id": "942230",
+        "severity": "polynomial",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf:261:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "alter[\\s\\x0b]*?[0-9A-Z_a-z]+.*?char(?:acter)?[\\s\\x0b]+set[\\s\\x0b]+[0-9A-Z_a-z]+|[\\\"'`](?:;*?[\\s\\x0b]*?waitfor[\\s\\x0b]+(?",
+        "regex_id": "620a3e79649e726ceb56f3e611f8edb5",
+        "result": "vulnerable",
+        "rule_id": "942240",
+        "severity": "polynomial",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf:287:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "m(?:erge.*?using|atch[\\s\\x0b]*?[\\(\\)\\+-\\-0-9A-Z_a-z]+[\\s\\x0b]*?against)[\\s\\x0b]*?\\(|execute[\\s\\x0b]*?immediate[\\s\\x0b]*?",
+        "regex_id": "60418d7fac953d55dcb096aed1956145",
+        "result": "vulnerable",
+        "rule_id": "942250",
+        "severity": "polynomial",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf:313:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "union.*?select.*?from",
+        "regex_id": "eda04c46b43a9ae15740d64f91fae3c3",
+        "result": "vulnerable",
+        "rule_id": "942270",
+        "severity": "polynomial",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf:334:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "select[\\s\\x0b]*?pg_sleep|waitfor[\\s\\x0b]*?delay[\\s\\x0b]?[\\\"'`]+[\\s\\x0b]?[0-9]|;[\\s\\x0b]*?shutdown[\\s\\x0b]*?(?:[#;\\{]|/\\*",
+        "regex_id": "74037faccad50b07eacbaec6e54ae364",
+        "result": "safe",
+        "rule_id": "942280",
+        "severity": "linear",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf:360:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "/\\*[\\s\\x0b]*?[!\\+](?:[\\s\\x0b\\(\\)\\-0-9=A-Z_a-z]+)?\\*/",
+        "regex_id": "5b438656c7e7c629a585c650e2e74a89",
+        "result": "safe",
+        "rule_id": "942500",
+        "severity": "linear",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf:521:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "^(?:[^']*'|[^\\\"]*\\\"|[^`]*`)[\\s\\x0b]*;",
+        "regex_id": "568daa9959024815bc785b4b47c963ac",
+        "result": "safe",
+        "rule_id": "942540",
+        "severity": "linear",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf:558:0",
         "tool": "recheck",
         "tool_version": "4.5.0"
       },
@@ -805,6 +1336,26 @@
         "tool_version": "4.5.0"
       },
       {
+        "pattern": "((?:(?:[!-\\+\\-:->@\\[\\]\\^`\\{-~]|\\x{c2}\\x{b4}|\\x{e2}\\x80[\\x98\\x99])[^!-\\+\\-:->@\\[\\]\\^`\\{-~]*?){12})",
+        "regex_id": "8d085cafecf799f71aa4824277686b93",
+        "result": "vulnerable",
+        "rule_id": "942430",
+        "severity": "polynomial",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf:1317:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "/\\*!?|\\*/|[';]--|--(?:[\\s\\x0b]|[^\\-]*?-)|[^&\\-]#.*?[\\s\\x0b]|;?\\x00",
+        "regex_id": "e432b9a2e7928f7d1deadc72749ee440",
+        "result": "vulnerable",
+        "rule_id": "942440",
+        "severity": "polynomial",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf:1376:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
         "pattern": "^(?:ey[\\-0-9A-Z_a-z]+\\.ey[\\-0-9A-Z_a-z]+\\.)?[\\-0-9A-Z_a-z]+$",
         "regex_id": "bb754e0ee5d410e82e4e1a5be09beb82",
         "result": "safe",
@@ -825,12 +1376,82 @@
         "tool_version": "4.5.0"
       },
       {
+        "pattern": "[\\\"'`][\\s\\d]*?[^\\w\\s]\\W*?\\d\\W*?.*?[\\\"'`\\d]",
+        "regex_id": "9b7d8dfe59ebd12bd7856b906abc5815",
+        "result": "vulnerable",
+        "rule_id": "942490",
+        "severity": "polynomial",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf:1716:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "((?:(?:[!-\\+\\-:->@\\[\\]\\^`\\{-~]|\\x{c2}\\x{b4}|\\x{e2}\\x80[\\x98\\x99])[^!-\\+\\-:->@\\[\\]\\^`\\{-~]*?){8})",
+        "regex_id": "3a68a8a891e26a13dcb7f9779c6dcc35",
+        "result": "safe",
+        "rule_id": "942420",
+        "severity": "linear",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf:1761:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "((?:(?:[!-\\+\\-:->@\\[\\]\\^`\\{-~]|\\x{c2}\\x{b4}|\\x{e2}\\x80[\\x98\\x99])[^!-\\+\\-:->@\\[\\]\\^`\\{-~]*?){6})",
+        "regex_id": "9e449ca903091ab0a4eeaac59054402e",
+        "result": "safe",
+        "rule_id": "942431",
+        "severity": "linear",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf:1795:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "\\W{4}",
+        "regex_id": "157aeca43e8097d19946193a49e1087f",
+        "result": "safe",
+        "rule_id": "942460",
+        "severity": "safe",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf:1837:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
         "pattern": "';",
         "regex_id": "69699b20f1da649cb9e36b22836e4d2d",
         "result": "safe",
         "rule_id": "942530",
         "severity": "safe",
         "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf:1919:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "((?:(?:[!-\\+\\-:->@\\[\\]\\^`\\{-~]|\\x{c2}\\x{b4}|\\x{e2}\\x80[\\x98\\x99])[^!-\\+\\-:->@\\[\\]\\^`\\{-~]*?){3})",
+        "regex_id": "d18c3dcb6c7028b6a663eb79f134977e",
+        "result": "safe",
+        "rule_id": "942421",
+        "severity": "linear",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf:1958:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "((?:(?:[!-\\+\\-:->@\\[\\]\\^`\\{-~]|\\x{c2}\\x{b4}|\\x{e2}\\x80[\\x98\\x99])[^!-\\+\\-:->@\\[\\]\\^`\\{-~]*?){2})",
+        "regex_id": "54416591693057c499b533562b498847",
+        "result": "safe",
+        "rule_id": "942432",
+        "severity": "linear",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf:1992:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "^(?:ht|f)tps?://(.*?)/",
+        "regex_id": "31a28f792fc68c04fe57b40abb8f8fb8",
+        "result": "safe",
+        "rule_id": null,
+        "severity": "linear",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-943-APPLICATION-ATTACK-SESSION-FIXATION.conf:83:0",
         "tool": "recheck",
         "tool_version": "4.5.0"
       },
@@ -901,6 +1522,26 @@
         "rule_id": "944140",
         "severity": "polynomial",
         "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-944-APPLICATION-ATTACK-JAVA.conf:166:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "(?:\\$|&dollar;?)(?:\\{|&l(?:brace|cub);?)(?:[^\\}]{0,15}(?:\\$|&dollar;?)(?:\\{|&l(?:brace|cub);?)|jndi|ctx)",
+        "regex_id": "3f3ad1cb02ce64364cd75ad6fe29ba6f",
+        "result": "safe",
+        "rule_id": "944150",
+        "severity": "safe",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-944-APPLICATION-ATTACK-JAVA.conf:215:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "(?:\\$|&dollar;?)(?:\\{|&l(?:brace|cub);?)(?:[^\\}]*(?:\\$|&dollar;?)(?:\\{|&l(?:brace|cub);?)|jndi|ctx)",
+        "regex_id": "9a9080e5f73bbe64392fa4a6e519c399",
+        "result": "safe",
+        "rule_id": "944151",
+        "severity": "linear",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-944-APPLICATION-ATTACK-JAVA.conf:253:0",
         "tool": "recheck",
         "tool_version": "4.5.0"
       },
@@ -1235,6 +1876,16 @@
         "tool_version": "4.5.0"
       },
       {
+        "pattern": "(?:<(?:TITLE>Index of.*?<H|title>Index of.*?<h)1>Index of|>\\[To Parent Directory\\]</[Aa]><br>)",
+        "regex_id": "51cc1fc08689e905f84a996b661888a4",
+        "result": "vulnerable",
+        "rule_id": "950130",
+        "severity": "polynomial",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/RESPONSE-950-DATA-LEAKAGES.conf:55:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
         "pattern": "^#\\!\\s?/",
         "regex_id": "84d02523ff0b6751f9274a0b15ee89ee",
         "result": "safe",
@@ -1325,6 +1976,16 @@
         "tool_version": "4.5.0"
       },
       {
+        "pattern": "Warning.*ingres_|Ingres(?: SQLSTATE|[^0-9A-Z_a-z].*Driver)",
+        "regex_id": "fe15cde5871d027162e8394befc239b9",
+        "result": "vulnerable",
+        "rule_id": "951190",
+        "severity": "polynomial",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/RESPONSE-951-DATA-LEAKAGES-SQL.conf:252:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
         "pattern": "<b>Warning</b>: ibase_|Unexpected end of command in statement",
         "regex_id": "292a6b12574bc4a3ed567fa9e74c327c",
         "result": "safe",
@@ -1395,6 +2056,46 @@
         "tool_version": "4.5.0"
       },
       {
+        "pattern": "^<html><head><meta http-equiv='Content-Type' content='text/html; charset=(?:Windows-1251|UTF-8)?'><title>.*?(?: -)? W[Ss",
+        "regex_id": "effbc115d9866cb51d89cc7c5a41cbd1",
+        "result": "safe",
+        "rule_id": "955120",
+        "severity": "linear",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/RESPONSE-955-WEB-SHELLS.conf:74:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "B4TM4N SH3LL</title>[^<]*<meta name='author' content='k4mpr3t'/>",
+        "regex_id": "c16964f6465f42454f22c3713b3f2f78",
+        "result": "safe",
+        "rule_id": "955130",
+        "severity": "linear",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/RESPONSE-955-WEB-SHELLS.conf:94:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "<title>Mini Shell</title>[^D]*Developed By LameHacker",
+        "regex_id": "813681532a46dd487dc6975e8448a910",
+        "result": "vulnerable",
+        "rule_id": "955140",
+        "severity": "polynomial",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/RESPONSE-955-WEB-SHELLS.conf:114:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "<title>\\.:: [^~]*~ Ashiyane V [0-9.]+ ::\\.</title>",
+        "regex_id": "9bb9a9d8880e649c6f292deb23ed5ebd",
+        "result": "vulnerable",
+        "rule_id": "955150",
+        "severity": "polynomial",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/RESPONSE-955-WEB-SHELLS.conf:134:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
         "pattern": "<title>Symlink_Sa [0-9.]+</title>",
         "regex_id": "a54490f60470dc3211bf6b066bde84cd",
         "result": "safe",
@@ -1441,6 +2142,16 @@
         "rule_id": "955200",
         "severity": "linear",
         "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/RESPONSE-955-WEB-SHELLS.conf:234:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "^<!DOCTYPE html>\\n<html>\\n<!-- By Artyum [^<]*<title>Web Shell</title>",
+        "regex_id": "348c97a92cd79fb1131c6f1047ba81cd",
+        "result": "safe",
+        "rule_id": "955210",
+        "severity": "linear",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/RESPONSE-955-WEB-SHELLS.conf:254:0",
         "tool": "recheck",
         "tool_version": "4.5.0"
       },
@@ -1545,12 +2256,32 @@
         "tool_version": "4.5.0"
       },
       {
+        "pattern": "^<html>\\n<title>[^~]*~ Shell I</title>\\n<head>\\n<style>",
+        "regex_id": "89b627a6d12a06bcd17a8735ebb3be91",
+        "result": "safe",
+        "rule_id": "955330",
+        "severity": "linear",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/RESPONSE-955-WEB-SHELLS.conf:498:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
         "pattern": "^ <html><head><title>:: b374k m1n1 [0-9.]+ ::</title>",
         "regex_id": "46b71d5b665b4cdec997e90050a13af8",
         "result": "safe",
         "rule_id": "955340",
         "severity": "linear",
         "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/RESPONSE-955-WEB-SHELLS.conf:518:0",
+        "tool": "recheck",
+        "tool_version": "4.5.0"
+      },
+      {
+        "pattern": "(?:<%[=#\\s]|#\\{[^}]+\\})",
+        "regex_id": "af1d8da14834a646369f3312ad9fe6cc",
+        "result": "vulnerable",
+        "rule_id": "956110",
+        "severity": "polynomial",
+        "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/RESPONSE-956-DATA-LEAKAGES-RUBY.conf:66:0",
         "tool": "recheck",
         "tool_version": "4.5.0"
       }
@@ -1561,44 +2292,38 @@
   "schema_version": "1",
   "unencodable_triage": [
     {
-      "count": 125,
+      "count": 198,
       "note": "encodable \u2014 Z3 property / rule_diff / ReDoS",
       "reason": "ok",
       "route": "prove"
     },
     {
       "count": 73,
-      "note": "Capacity cap (>256 chars), not a language limit. Policy: keep cap for interactive Z3 queries; triage long patterns to ReDoS-only / manual review.",
+      "note": "Capacity cap (>256 chars), not a language limit. Policy: keep cap for interactive Z3 queries; triage long patterns to ReDoS-only / manual review. See TRAPS #21.",
       "reason": "pattern-too-long",
       "route": "policy"
     },
     {
-      "count": 53,
-      "note": "Often lazy quantifiers / hex escapes \u2014 language-transparent strip candidates.",
-      "reason": "parse-error",
-      "route": "prove"
-    },
-    {
-      "count": 32,
-      "note": "Encodable in principle (TRAPS #1/#10) \u2014 toolkit-fix candidate.",
-      "reason": "negated-class",
-      "route": "prove"
-    },
-    {
-      "count": 22,
+      "count": 34,
       "note": "Genuine stock-Z3 limit (gate-3 \\b direction); ASCII domain declared for CRS.",
       "reason": "word-boundary",
       "route": "triage"
     },
     {
-      "count": 6,
-      "note": "\\x{} / hex ranges \u2014 toolkit-fix candidate.",
+      "count": 9,
+      "note": "\\x{} / hex ranges \u2014 mostly fixed; residual bad escapes still reject.",
       "reason": "bad-range",
       "route": "prove"
     },
     {
-      "count": 6,
-      "note": "Scoped (?i:...) lifting \u2014 toolkit-fix candidate.",
+      "count": 2,
+      "note": "unclassified reject \u2014 inspect",
+      "reason": "negated-shorthand",
+      "route": "triage"
+    },
+    {
+      "count": 1,
+      "note": "Scoped (?i:...) encoded for PCRE/RE2; mid-pattern (?i), (?-i:...), scoped m/s/x, and ECMA remain rejects.",
       "reason": "inline-flag",
       "route": "prove"
     },

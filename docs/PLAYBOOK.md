@@ -107,3 +107,8 @@ trade-offs.
 apply `reject_rule_derived_r1` (that gate is for independent-spec corpora
 like gitleaks). Ground-truth witnesses with the PCRE2 helper, not Python
 `re`.
+
+**Pattern length / ECMA flags:** keep the interactive **256-char** encode cap
+(`pattern-too-long` — TRAPS #21); long patterns go to ReDoS/manual triage.
+ECMA `m`/`u`/`v`/`g`/`y`/`d` are explicit rejects (TRAPS #22) — never silent
+ASCII approximations.

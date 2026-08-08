@@ -53,12 +53,19 @@ def compile_ecma(
         if len(pattern) > max_length:
             raise Unencodable("pattern-too-long")
         for f in flags:
+            # Explicit reject-list — never silently ASCII-approximate these.
+            # Triage: m → rewrite/IndexOf (LOOKBEHIND_REWRITE); u/v → Unicode
+            # stock-Z3 limit; g/y → stateful (lastIndex) — not language membership.
             if f in "uv":
                 raise Unencodable(f"{f}-flag")
             if f == "m":
                 raise Unencodable("m-flag")
             if f in "gy":
                 raise Unencodable("stateful")
+            if f == "d":
+                raise Unencodable("stateful")  # hasIndices — match metadata, not language
+            if f not in "is":
+                raise Unencodable(f"unknown-flag:{f}")
         gate = _run_regexpp(pattern, flags)
         # regexpp is a capability gate for reject reasons; stack/tool failures
         # must not block the simple-AST path (soft dependency).
@@ -68,12 +75,14 @@ def compile_ecma(
         ):
             raise Unencodable(reason)
         stripped = strip_language_transparent(pattern)
-        ast = parse_pattern(stripped)
+        # JS has no scoped inline flags — reject before encoding as Folded.
+        ast = parse_pattern(stripped, allow_scoped_i=False)
         ignorecase = "i" in flags
         fold = js_nonsu_fold_closure if ignorecase else None
         mirror, _meta = lower(
             ast,
             fold=fold,
+            case_fold=js_nonsu_fold_closure,
             dot_terminators=JS_TERMINATORS,
             digit=lambda: Range("0", "9"),
             space=lambda: Union(

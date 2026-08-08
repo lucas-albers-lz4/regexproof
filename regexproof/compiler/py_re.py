@@ -322,11 +322,38 @@ def _char_class_excluding(excluded: frozenset[str], ctx: _Ctx):
 
 
 def _in_class(items, ctx: _Ctx):
+    from regexproof.compiler.lower import ranges_excluding
+
     negate = False
     options = []
+    forbidden: set[int] = set()
+    saw_member = False
     for op, av in items:
         if op is sc.NEGATE:
             negate = True
+            continue
+        saw_member = True
+        if negate:
+            if op is sc.LITERAL:
+                chars = (
+                    python_fold_closure(chr(av), ascii_only=ctx.ascii_only)
+                    if ctx.ignorecase
+                    else {chr(av)}
+                )
+                forbidden.update(ord(c) for c in chars if len(c) == 1)
+            elif op is sc.RANGE:
+                lo, hi = av
+                for code in range(lo, hi + 1):
+                    chars = (
+                        python_fold_closure(chr(code), ascii_only=ctx.ascii_only)
+                        if ctx.ignorecase
+                        else {chr(code)}
+                    )
+                    forbidden.update(ord(c) for c in chars if len(c) == 1)
+            elif op is sc.CATEGORY:
+                forbidden |= _category_codes(av, ctx)
+            else:
+                raise Unencodable(f"class-op:{op}")
             continue
         if op is sc.LITERAL:
             options.append(_lit(chr(av), ctx))
@@ -337,17 +364,42 @@ def _in_class(items, ctx: _Ctx):
             options.append(_category(av, ctx))
         else:
             raise Unencodable(f"class-op:{op}")
+    if negate:
+        if not saw_member:
+            raise Unencodable("empty-class")
+        hi = 127 if ctx.ascii_only else 0xFFFF
+        return ranges_excluding(forbidden, hi=hi)
     if not options:
         raise Unencodable("empty-class")
-    body = Union(*options) if len(options) > 1 else options[0]
-    if negate:
+    return Union(*options) if len(options) > 1 else options[0]
+
+
+def _category_codes(av, ctx: _Ctx) -> set[int]:
+    """Codepoints matched by a positive category (for negated-class complement)."""
+    if av in (sc.CATEGORY_DIGIT,):
         if ctx.ascii_only:
-            # Build ASCII complement
-            allowed = set()
-            # Expand by probing — for small classes use Range complement.
-            raise Unencodable("negated-class")  # force explicit handling later
+            return set(range(ord("0"), ord("9") + 1))
+        return set(range(ord("0"), ord("9") + 1)) | {ord("\u0660")}
+    if av in (sc.CATEGORY_NOT_DIGIT,):
+        raise Unencodable("negated-shorthand")
+    if av in (sc.CATEGORY_SPACE,):
+        chars = " \t\n\r\f\v" if ctx.ascii_only else " \t\n\r\f\v\u00a0\u3000"
+        return {ord(c) for c in chars}
+    if av in (sc.CATEGORY_NOT_SPACE,):
+        raise Unencodable("negated-shorthand")
+    if av in (sc.CATEGORY_WORD,):
+        if ctx.ascii_only:
+            return (
+                set(range(ord("a"), ord("z") + 1))
+                | set(range(ord("A"), ord("Z") + 1))
+                | set(range(ord("0"), ord("9") + 1))
+                | {ord("_")}
+            )
+        # Unicode word — too large for explicit complement; reject.
         raise Unencodable("negated-class")
-    return body
+    if av in (sc.CATEGORY_NOT_WORD,):
+        raise Unencodable("negated-shorthand")
+    raise Unencodable(f"category:{av}")
 
 
 def _range(lo: str, hi: str, ctx: _Ctx):
@@ -425,7 +477,12 @@ def _repeat(body, lo, hi):
         return Concat(*([body] * lo), Star(body))
     # hi is int
     if lo == hi:
-        return Concat(*([body] * lo)) if lo else Re("")
+        if lo <= 0:
+            return Re("")
+        if lo == 1:
+            # Z3 Concat requires ≥2 args; `{1}` / `{1,1}` is identity (TRAPS #20).
+            return body
+        return Concat(*([body] * lo))
     return Loop(body, lo, hi)
 
 

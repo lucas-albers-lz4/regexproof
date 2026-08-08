@@ -84,4 +84,9 @@ file is valid).
 | `site` | `file:line:column` |
 | `pattern` | Pattern text |
 
+Compiler `unencodable_reason` values that are **policy / explicit rejects**
+(not silent approximations): `pattern-too-long` (TRAPS #21), ECMA `m-flag` /
+`u-flag` / `v-flag` / `stateful` (TRAPS #22). Batch triage should route these
+per `scripts/crs-redos-dialect.py` `ROUTING` (and corpus equivalents).
+
 Human-mergable: one JSON object per line, stable key order (`sort_keys`).

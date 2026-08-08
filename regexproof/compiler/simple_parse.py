@@ -49,28 +49,35 @@ class Anchor:
     kind: str  # "start" | "end"
 
 
+@dataclass
+class Folded:
+    """Scoped case-insensitive subexpression (from `(?i:…)`)."""
+
+    item: object
+
+
 def _as_seq(node):
     if isinstance(node, Seq):
         return node
     return Seq([node])
 
 
-def _parse_alt(s: str, i: int):
+def _parse_alt(s: str, i: int, *, allow_scoped_i: bool = True):
     items = []
-    node, i = _parse_concat(s, i)
+    node, i = _parse_concat(s, i, allow_scoped_i=allow_scoped_i)
     items.append(node)
     while i < len(s) and s[i] == "|":
-        node, i = _parse_concat(s, i + 1)
+        node, i = _parse_concat(s, i + 1, allow_scoped_i=allow_scoped_i)
         items.append(node)
     if len(items) == 1:
         return items[0], i
     return Alt(items), i
 
 
-def _parse_concat(s: str, i: int):
+def _parse_concat(s: str, i: int, *, allow_scoped_i: bool = True):
     items = []
     while i < len(s) and s[i] not in "|)":
-        node, i = _parse_atom(s, i)
+        node, i = _parse_atom(s, i, allow_scoped_i=allow_scoped_i)
         # quantifier
         if i < len(s) and s[i] in "?*+{":
             node, i = _parse_quant(s, i, node)
@@ -82,7 +89,7 @@ def _parse_concat(s: str, i: int):
     return Seq(items), i
 
 
-def _parse_atom(s: str, i: int):
+def _parse_atom(s: str, i: int, *, allow_scoped_i: bool = True):
     if i >= len(s):
         return Seq([]), i
     ch = s[i]
@@ -98,12 +105,31 @@ def _parse_atom(s: str, i: int):
             if s[i + 2] in ("=", "!", "<"):
                 raise Unencodable("lookaround")
             if s[i + 2] == ":":
-                inner, j = _parse_alt(s, i + 3)
+                inner, j = _parse_alt(s, i + 3, allow_scoped_i=allow_scoped_i)
                 if j >= len(s) or s[j] != ")":
                     raise Unencodable("parse-error")
                 return inner, j + 1
+            # Scoped inline flags: (?i:…), (?ims:…), etc.
+            # (?-i:…) and mid-pattern (?i) without ':' stay inline-flag.
+            j = i + 2
+            scoped = ""
+            while j < len(s) and s[j] in "imsx":
+                scoped += s[j]
+                j += 1
+            if scoped and j < len(s) and s[j] == ":":
+                if not allow_scoped_i:
+                    raise Unencodable("inline-flag")
+                # Only ``i`` is modeled; m/s/x scoped still reject honestly.
+                if set(scoped) - {"i"}:
+                    raise Unencodable("inline-flag")
+                inner, k = _parse_alt(s, j + 1, allow_scoped_i=allow_scoped_i)
+                if k >= len(s) or s[k] != ")":
+                    raise Unencodable("parse-error")
+                if "i" in scoped:
+                    return Folded(inner), k + 1
+                return inner, k + 1
             raise Unencodable("inline-flag")
-        inner, j = _parse_alt(s, i + 1)
+        inner, j = _parse_alt(s, i + 1, allow_scoped_i=allow_scoped_i)
         if j >= len(s) or s[j] != ")":
             raise Unencodable("parse-error")
         return inner, j + 1
@@ -120,8 +146,11 @@ def _parse_escape(s: str, i: int):
     if i + 1 >= len(s):
         raise Unencodable("parse-error")
     e = s[i + 1]
-    if e in "dDwWsS":
-        return Cls(chars=[f"\\{e}"], negate=e.isupper()), i + 2
+    if e in "dws":
+        return Cls(chars=[f"\\{e}"], negate=False), i + 2
+    if e in "DWS":
+        # Represent as negated positive shorthand (\\D ≡ [^\\d] language).
+        return Cls(chars=[f"\\{e.lower()}"], negate=True), i + 2
     if e in "bB":
         raise Unencodable("word-boundary")
     if e.isdigit():
@@ -137,7 +166,6 @@ def _parse_escape(s: str, i: int):
     if e in r"\\.^$*+?()[]{}|":
         return Lit(e), i + 2
     return Lit(e), i + 2
-
 
 def _parse_hex_escape(s: str, i: int):
     """Parse ``\\xNN`` or ``\\x{HHHH}`` starting at the backslash index."""
@@ -175,7 +203,19 @@ def _parse_class(s: str, i: int):
             if isinstance(node, Lit):
                 chars.append(node.ch)
             elif isinstance(node, Cls):
-                chars.extend(node.chars)
+                if node.negate:
+                    # \\D inside […] is a non-digit member — restore upper token.
+                    for c in node.chars:
+                        if c == "\\d":
+                            chars.append("\\D")
+                        elif c == "\\s":
+                            chars.append("\\S")
+                        elif c == "\\w":
+                            chars.append("\\W")
+                        else:
+                            raise Unencodable("class-escape")
+                else:
+                    chars.extend(node.chars)
             else:
                 raise Unencodable("class-escape")
             continue
@@ -227,8 +267,13 @@ def _parse_quant(s: str, i: int, node):
     return node, i
 
 
-def parse_pattern(pattern: str):
-    node, i = _parse_alt(pattern, 0)
+def parse_pattern(pattern: str, *, allow_scoped_i: bool = True):
+    """Parse encodable-subset pattern.
+
+    ``allow_scoped_i``: PCRE/RE2 may encode ``(?i:…)``; ECMA must keep
+    ``False`` (JS has no scoped inline flags — reject as ``inline-flag``).
+    """
+    node, i = _parse_alt(pattern, 0, allow_scoped_i=allow_scoped_i)
     if i != len(pattern):
         raise Unencodable("parse-error")
     return node
