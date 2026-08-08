@@ -14,6 +14,14 @@ import json
 import shutil
 import subprocess
 import sys
+from pathlib import Path
+
+# Checkout bootstrap so helper shares reject markers with compile_pcre (#73).
+_ROOT = Path(__file__).resolve().parents[2]
+if str(_ROOT) not in sys.path:
+    sys.path.insert(0, str(_ROOT))
+
+from regexproof.compiler.reject_markers import PCRE_REJECT_MARKERS  # noqa: E402
 
 
 def main() -> int:
@@ -33,18 +41,7 @@ def main() -> int:
 
 
 def _reject_unencodable(pattern: str) -> str | None:
-    reject_markers = [
-        ("(?=", "lookaround"),
-        ("(?!", "lookaround"),
-        ("(?<=", "lookaround"),
-        ("(?<!", "lookaround"),
-        ("\\k<", "backref"),
-        ("\\g<", "backref"),
-        ("(?(", "conditional"),
-        ("\\K", "reset"),
-        ("\\G", "g-anchor"),
-    ]
-    for marker, reason in reject_markers:
+    for marker, reason in PCRE_REJECT_MARKERS:
         if marker in pattern:
             return reason
     import re as _re

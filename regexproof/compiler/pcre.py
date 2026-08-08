@@ -14,6 +14,7 @@ from regexproof.compiler.base import CompileResult, Unencodable
 from regexproof.compiler.fold import python_fold_closure
 from regexproof.compiler.lower import lower, space_codes_from_chars
 from regexproof.compiler.pcre_strip import strip_language_transparent
+from regexproof.compiler.reject_markers import PCRE_REJECT_MARKERS
 from regexproof.compiler.simple_parse import parse_pattern
 
 HELPER = Path(__file__).resolve().parents[2] / "helpers" / "pcre2" / "match.py"
@@ -21,24 +22,9 @@ DEFAULT_MAX_LENGTH = 256
 PCRE_TERMINATORS = frozenset(["\n"])
 _PCRE_SPACE_CHARS = " \t\n\r\f\v"
 
-_REJECT_MARKERS = (
-    ("(?=", "lookaround"),
-    ("(?!", "lookaround"),
-    ("(?<=", "lookaround"),
-    ("(?<!", "lookaround"),
-    ("\\k<", "backref"),
-    ("\\g<", "backref"),
-    ("(?(", "conditional"),
-    ("\\K", "reset"),
-    ("\\G", "g-anchor"),
-    ("\\R", "r-escape"),
-    ("\\X", "x-escape"),
-    ("\\C", "c-escape"),
-)
-
 
 def _local_reject(pattern: str) -> str | None:
-    for marker, reason in _REJECT_MARKERS:
+    for marker, reason in PCRE_REJECT_MARKERS:
         if marker in pattern:
             return reason
     if re.search(r"(?<!\\)\\[1-9]", pattern):

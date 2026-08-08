@@ -6,7 +6,7 @@ from dataclasses import dataclass
 from typing import Any
 
 import z3
-from z3 import AllChar, Concat, Re, Star, Union
+from z3 import AllChar, Concat, Loop, Plus, Re, Star, Union
 
 
 class Unencodable(Exception):
@@ -39,6 +39,31 @@ def any_char():
 def opt(r):
     """Regex optional — never z3.Opt (optimizer)."""
     return Union(r, Re(""))
+
+
+def repeat_z3(body, lo: int, hi: int | None):
+    """Shared ``{lo,hi}`` / ``*`` / ``+`` lowering for all dialects.
+
+    Consolidation only (fix-wave #73) — preserves the ``lo == hi == 1``
+    identity from Phase 1 / TRAPS #20 (do not re-derive that fix here).
+    ``hi is None`` means unbounded.
+    """
+    if lo == 0 and hi == 1:
+        return opt(body)
+    if lo == 0 and hi is None:
+        return Star(body)
+    if lo == 1 and hi is None:
+        return Plus(body)
+    if hi is None:
+        return Concat(*([body] * lo), Star(body)) if lo else Star(body)
+    if lo == hi:
+        if lo <= 0:
+            return Re("")
+        if lo == 1:
+            # Z3 Concat requires ≥2 args; `{1}` / `{1,1}` is identity (TRAPS #20).
+            return body
+        return Concat(*([body] * lo))
+    return Loop(body, lo, hi)
 
 
 def wrap_call_kind(body, call_kind: str, *, trailing_dollar_nl: bool = False):
