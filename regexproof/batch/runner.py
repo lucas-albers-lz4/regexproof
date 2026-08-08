@@ -353,17 +353,19 @@ def _compile_all(
             )
             continue
         cr = compile_pattern(pattern, flags, rec["dialect"], rec["call_kind"])
-        out.append(
-            {
-                **rec,
-                "pattern": pattern,
-                "flags": flags,
-                "encodable": cr.encodable,
-                "compile_reason": cr.unencodable_reason,
-                "corpus": corpus_slug,
-                "corpus_slug": corpus_slug,
-            }
-        )
+        row = {
+            **rec,
+            "pattern": pattern,
+            "flags": flags,
+            "encodable": cr.encodable,
+            "compile_reason": cr.unencodable_reason,
+            "corpus": corpus_slug,
+            "corpus_slug": corpus_slug,
+        }
+        # Surface compile timeouts for triage kind=timeout (fix-wave #71).
+        if cr.unencodable_reason == "timeout":
+            row["result"] = "timeout"
+        out.append(row)
     return out
 
 

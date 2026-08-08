@@ -26,20 +26,30 @@ _FINDING_META_KEYS = (
 )
 
 
+def _redact_value(value: object) -> object:
+    """Redact a dict/list value, recursing into nested containers."""
+    if isinstance(value, dict):
+        return {k: _redact_value(v) for k, v in value.items()}
+    if isinstance(value, (list, tuple)):
+        return [_redact_value(v) for v in value]
+    if isinstance(value, str) and value.startswith("<redacted"):
+        return value
+    if isinstance(value, str) and len(value) >= 8:
+        return f"<redacted len={len(value)}>"
+    return value
+
+
 def redact_witness(witness: object) -> object:
-    """Idempotent redaction for secret-scanner-safe committed artifacts."""
+    """Idempotent redaction for secret-scanner-safe committed artifacts.
+
+    Nested lists/dicts are walked so container-typed witness fields cannot
+    leak secrets (fix-wave #71). Top-level non-dict witnesses remain fully
+    opaque (`<redacted>`), matching the prior contract.
+    """
     if witness is None:
         return None
     if isinstance(witness, dict):
-        out = {}
-        for k, v in witness.items():
-            if isinstance(v, str) and v.startswith("<redacted"):
-                out[k] = v
-            elif isinstance(v, str) and len(v) >= 8:
-                out[k] = f"<redacted len={len(v)}>"
-            else:
-                out[k] = v
-        return out
+        return {k: _redact_value(v) for k, v in witness.items()}
     if isinstance(witness, str) and witness.startswith("<redacted"):
         return witness
     return "<redacted>"
