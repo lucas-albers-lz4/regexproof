@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://regexproof.dev/schemas/redos_finding/v1",
+  "title": "ReDoSFinding",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "regex_id",
+    "tool",
+    "tool_version",
+    "result",
+    "dialect",
+    "pattern",
+    "flags",
+    "site"
+  ],
+  "additionalProperties": true,
+  "properties": {
+    "schema_version": { "type": "string", "const": "1" },
+    "regex_id": { "type": "string", "pattern": "^[0-9a-f]{32}$" },
+    "tool": { "type": "string", "minLength": 1 },
+    "tool_version": { "type": "string", "minLength": 1 },
+    "result": {
+      "type": "string",
+      "enum": ["vulnerable", "safe", "error", "timeout", "unsupported"]
+    },
+    "severity": { "type": ["string", "null"] },
+    "confidence": { "type": ["string", "null"] },
+    "dialect": {
+      "type": "string",
+      "enum": ["py_re", "ecma", "re2", "pcre"]
+    },
+    "pattern": { "type": "string" },
+    "flags": { "type": "string" },
+    "site": { "type": "string" },
+    "source": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "error_message": { "type": ["string", "null"] },
+    "detail": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  }
+}
