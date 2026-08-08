@@ -15,24 +15,24 @@
         "word-boundary": 4
       },
       "sample_size": 221,
-      "scope": "full_corpus",
+      "scope": null,
       "unclassified_parse_errors": 0
     },
     {
       "corpus": "validatorjs",
       "corpus_pin": null,
       "decision": "go",
-      "encodable": 145,
-      "fraction": 0.684,
+      "encodable": 163,
+      "fraction": 0.7689,
       "reasons": {
-        "bad-range": 3,
+        "bad-range": 1,
         "composite-pattern": 3,
         "m-flag": 2,
-        "negated-class": 1,
-        "ok": 145,
-        "parse-error": 48,
+        "ok": 163,
         "pattern-too-long": 9,
-        "u-flag": 1
+        "u-flag": 1,
+        "unclosed-group": 13,
+        "unsupported-syntax": 20
       },
       "sample_size": 212,
       "scope": null,
@@ -105,15 +105,16 @@
     {
       "corpus": "semgrep_rules",
       "corpus_pin": "40b8c63f75dc7c22c8a77482d73bfb864b146f7e",
-      "decision": "go",
-      "encodable": 5765,
-      "fraction": 0.6276,
+      "decision": "no-go",
+      "encodable": 2518,
+      "fraction": 0.2741,
       "reasons": {
+        "composite-pattern": 3247,
         "internal-anchor": 3113,
         "lookaround": 50,
         "m-flag": 18,
         "negated-shorthand": 6,
-        "ok": 5765,
+        "ok": 2518,
         "parse-error:PatternError": 55,
         "pattern-too-long": 8,
         "per-alternative-anchor": 102,

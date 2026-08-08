@@ -41,6 +41,16 @@ OUT = ROOT / "properties" / "generated"
 
 FLIP_SAMPLE_CAP = 10
 
+# Extractor-level rejects persisted as ``compile_reason`` in frozen inventories
+# (``unencodable_reason`` is dropped at write time). Restoring them prevents
+# recompiling empty-placeholder patterns as encodable (Bugbot / PR #80).
+EXTRACTOR_FROZEN_REASONS = frozenset(
+    {
+        "composite-pattern",
+        "multi-match",
+    }
+)
+
 
 def _compiler_fingerprint() -> str:
     h = hashlib.sha256()
@@ -57,6 +67,18 @@ def load_records(path: Path) -> list[dict]:
     return records
 
 
+def prepare_frozen_records(frozen: list[dict]) -> list[dict]:
+    """Restore extractor ``unencodable_reason`` so ``_compile_all`` skips them."""
+    out: list[dict] = []
+    for row in frozen:
+        rec = dict(row)
+        reason = rec.get("unencodable_reason") or rec.get("compile_reason")
+        if reason in EXTRACTOR_FROZEN_REASONS and not rec.get("unencodable_reason"):
+            rec["unencodable_reason"] = reason
+        out.append(rec)
+    return out
+
+
 def remeasure(
     corpus: str,
     *,
@@ -70,10 +92,11 @@ def remeasure(
     if not inv_path.exists():
         raise SystemExit(f"inventory missing: {inv_path}")
     frozen = load_records(inv_path)
+    records = prepare_frozen_records(frozen)
 
     t0 = time.perf_counter()
     compiled = _compile_all(
-        frozen,
+        records,
         lift_inline=bool(meta.get("lift_inline")),
         corpus_slug=corpus,
     )

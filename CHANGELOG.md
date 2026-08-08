@@ -152,17 +152,20 @@ test-first:
 | gitleaks | 0.8235 | 0.2262 | +0 / −132 (`per-alternative-anchor`) |
 | trufflehog | 0.9349 | 0.9302 | +0 / −1 |
 | ids_rules | 0.8790 | 0.8467 | +13 / −277 (mostly `per-alternative-anchor`) |
-| semgrep_rules | 0.2741 (no-go) | 0.6276 (go) | +3,247 / −0 |
+| semgrep_rules | 0.2741 (no-go) | 0.2741 (no-go) | none (composite-pattern extractor rejects preserved) |
 | coreruleset | 0.7168 | 0.6908 | +0 / −9 |
 | cpython_re | 0.5556 | 0.5556 | none |
 | busybox / pcre2 / re2 testdata | 1.0 | 1.0 | none |
 | validator.js (full inventory, dry-run) | 0.714 | 0.7639 | +91 / −31 |
 
-  Headline: **semgrep-rules crosses the go/no-go gate** (corpus-wave
-  decision reversed by the language-transparent fixes); **gitleaks drops
-  below the gate** — the P2 soundness fix (reject-over-hoist for
-  per-alternative anchors) hits secret-detector `(?:...|$)` trailing
-  alternations. The rejection is sound; the class is encodable in principle
-  via string-op suffix equality and is the next toolkit-fix candidate.
-  The corpus-wave phase-3 decision artifacts are superseded by these
-  measurements.
+  Headline: **gitleaks drops below the gate** — the false-UNSAT soundness
+  fix (reject-over-hoist for per-alternative anchors) hits secret-detector
+  `(?:...|$)` trailing alternations. The rejection is sound; the class is
+  encodable in principle via string-op suffix equality and is the next
+  toolkit-fix candidate. Semgrep stays no-go: frozen `composite-pattern`
+  extractor rejects (empty placeholders) are restored on remeasure and must
+  not be recompiled as encodable. The corpus-wave phase-3 decision artifacts
+  are superseded by these measurements.
+- `remeasure-from-inventory.py` restores extractor-frozen reasons
+  (`composite-pattern`, `multi-match`) from inventory `compile_reason` so
+  empty-placeholder rows cannot inflate encodable counts.

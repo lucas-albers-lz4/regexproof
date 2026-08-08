@@ -74,3 +74,38 @@ def test_remeasure_dry_run_writes_nothing(tmp_path):
     report = mod.remeasure("gitleaks", inventory=inv, dry_run=True)
     assert not (tmp_path / "gitleaks_encodable_fraction.json").exists()
     assert report["fraction"] == 0.0
+
+
+def test_remeasure_preserves_composite_pattern_extractor_rejects(tmp_path):
+    """Frozen inventories store compile_reason only — empty pattern must not flip encodable."""
+    mod = _load_script()
+    records = [
+        {
+            "regex_id": "comp-1",
+            "site": "rule.yaml:1",
+            "pattern": "",
+            "flags": "",
+            "dialect": "py_re",
+            "call_kind": "search",
+            "encodable": False,
+            "compile_reason": "composite-pattern",
+        },
+        {
+            "regex_id": "ok-1",
+            "site": "x.py:1",
+            "pattern": "a+",
+            "flags": "",
+            "dialect": "py_re",
+            "call_kind": "search",
+            "encodable": True,
+            "compile_reason": None,
+        },
+    ]
+    inv = _write_inventory(tmp_path, records)
+    mod.OUT = tmp_path
+    report = mod.remeasure("semgrep_rules", inventory=inv, dry_run=True)
+    assert report["sample_size"] == 2
+    assert report["encodable"] == 1
+    assert report["fraction"] == 0.5
+    assert report["reasons"].get("composite-pattern") == 1
+    assert report["remeasure"]["flips"]["now_encodable"] == 0
