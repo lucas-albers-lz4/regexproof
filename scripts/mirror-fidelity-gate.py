@@ -47,10 +47,27 @@ def _mirror_accepts(mirror, s: str) -> bool | None:
 
 
 def _alphabet_for(pattern: str) -> str:
-    # Prefer printable ASCII seen in the pattern; fall back to a fixed set.
-    chars = sorted({c for c in pattern if 32 <= ord(c) <= 126 and c not in "\\[](){}|*+?^$"})
-    base = "".join(chars[:24]) if chars else "abc012"
-    return base + "xX._-"
+    """Build a probe alphabet including hex-decoded codepoints (TRAPS #23)."""
+    import re as _re
+
+    chars: set[str] = set()
+    for m in _re.finditer(r"\\x\{([0-9a-fA-F]+)\}|\\x([0-9a-fA-F]{2})", pattern):
+        hexdigits = m.group(1) or m.group(2)
+        try:
+            code = int(hexdigits, 16)
+        except ValueError:
+            continue
+        if 0 <= code <= 0x10FFFF:
+            ch = chr(code)
+            if ch.isprintable() or ch in '"\'\\':
+                chars.add(ch)
+    for c in pattern:
+        if 32 <= ord(c) <= 126 and c not in "\\[](){}|*+?^$":
+            chars.add(c)
+    # Always include hex-regression witnesses + common tokens.
+    chars.update('"' + "xX._-abc012")
+    base = "".join(sorted(chars))
+    return base[:48] if len(base) > 48 else base
 
 
 def _replay_argv(dialect: str, pattern: str, flags: str) -> list[str] | None:
@@ -130,6 +147,9 @@ def _fuzz_one(rec: dict, *, runs: int, seed: int) -> dict:
 
     rng = random.Random(seed)
     probes = [""]
+    # Explicit hex-soundness witnesses when the pattern contains \\x escapes.
+    if "\\x" in pattern:
+        probes.extend(['"', "x22", "x2", "A", "\x22"])
     for n in range(1, 3):
         # limited product
         pool = alphabet[:8]
