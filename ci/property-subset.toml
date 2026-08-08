@@ -1,0 +1,11 @@
+# Named property subset for every-change CI (Phase 6 / #22).
+# Full P1–P4 suite + mutation guards + one measured-stable rule_diff family.
+
+schema_version = "1"
+
+# Families resolved against scripts/z3-verify.py REGISTRY (name prefix).
+families = ["P1", "P2", "P3", "P4"]
+
+# One shape-5 family from Phase 3 gitleaks admitted set (timeout_rate 0.0).
+# Run via scripts/rule-diff-pilot.py --family <id> --require-ground-truth
+rule_diff_family = "RD-github-oauth-token"
