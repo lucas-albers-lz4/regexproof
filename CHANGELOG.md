@@ -81,5 +81,5 @@ phase. Dates are merge dates.
   ECMA keeps scoped-`i` and `m`/`u`/`v`/`g`/`y`/`d` as explicit rejects
   (TRAPS #21–#22).
 - `{1}` identity fix also on `py_re._repeat`; wave-gate regressions expanded.
-- CRS encodable fraction **198/318 (62.3%)** after encode paths (was ~45%
+- CRS encodable fraction **206/318 (64.8%)** after encode paths (was ~45%
   post-lazy/hex).

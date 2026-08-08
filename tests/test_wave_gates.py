@@ -55,6 +55,29 @@ def test_scoped_inline_i_fold():
         assert (solver.check() == sat) is expect_sat, witness
 
 
+def test_hex_range_in_class():
+    from z3 import InRe, String, sat, unsat
+
+    cr = compile_pattern(r"^[\x21-\x7e]$", "", "pcre", "fullmatch")
+    assert cr.encodable, cr.unencodable_reason
+    s = String("s")
+    z3 = __import__("z3")
+    for ch, expect in [("!", True), ("~", True), (" ", False), ("\x7f", False)]:
+        solver = z3.Solver()
+        solver.add(InRe(s, cr.mirror))
+        solver.add(s == ch)
+        assert (solver.check() == sat) is expect, repr(ch)
+
+
+def test_lazy_strip_preserves_optional_hex_brace():
+    from regexproof.compiler.pcre_strip import strip_language_transparent
+
+    assert strip_language_transparent(r"\x{2f}?") == r"\x{2f}?"
+    assert strip_language_transparent(r"a{2,3}?") == r"a{2,3}"
+    cr = compile_pattern(r"^\x{41}?$", "", "pcre", "fullmatch")
+    assert cr.encodable, cr.unencodable_reason
+
+
 def test_ecma_rejects_scoped_i():
     cr = compile_pattern(r"(?i:a)", "", "ecma", "search")
     assert not cr.encodable

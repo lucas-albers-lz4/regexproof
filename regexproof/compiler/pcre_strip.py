@@ -9,10 +9,23 @@ Membership (language) is unchanged by:
 from __future__ import annotations
 
 
+def _closes_hex_brace(out: list[str]) -> bool:
+    """True if ``out`` ends with an unclosed ``\\x{HEX`` (not a ``{n,m}`` brace)."""
+    s = "".join(out)
+    idx = s.rfind("\\x{")
+    if idx < 0:
+        return False
+    mid = s[idx + 3 :]
+    if "}" in mid:
+        return False
+    return bool(mid) and all(c in "0123456789abcdefABCDEF" for c in mid)
+
+
 def strip_atomic_and_possessive(pattern: str) -> str:
     """Replace `(?>` with `(?:` and drop possessive `+` after quantifiers.
 
     Only operates outside character classes so e.g. `[*+]` is unchanged.
+    Does not treat ``\\x{…}+`` as possessive (the ``}`` closes a hex escape).
     """
     out: list[str] = []
     i = 0
@@ -44,6 +57,10 @@ def strip_atomic_and_possessive(pattern: str) -> str:
             and i + 1 < len(pattern)
             and pattern[i + 1] == "+"
         ):
+            if ch == "}" and _closes_hex_brace(out):
+                out.append(ch)
+                i += 1
+                continue
             # Possessive quantifier: ++, *+, ?+, {n,m}+
             out.append(ch)
             i += 2
@@ -58,6 +75,7 @@ def strip_lazy_quantifiers(pattern: str) -> str:
 
     `a*?` → `a*`, `a+?` → `a+`, `a??` → `a?`, `a{2,3}?` → `a{2,3}`.
     Char-class contents such as `[?]` are unchanged.
+    Does not treat ``\\x{…}?`` as lazy (optional hex atom keeps its ``?``).
     """
     out: list[str] = []
     i = 0
@@ -85,6 +103,10 @@ def strip_lazy_quantifiers(pattern: str) -> str:
             and i + 1 < len(pattern)
             and pattern[i + 1] == "?"
         ):
+            if ch == "}" and _closes_hex_brace(out):
+                out.append(ch)
+                i += 1
+                continue
             out.append(ch)
             i += 2  # skip lazy marker
             continue

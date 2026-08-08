@@ -26,7 +26,7 @@ Tracking: issue [#35](https://github.com/lucas-albers-lz4/regexproof/issues/35) 
 
 | Corpus | Surface | Encodable | Result |
 |---|---|---|---|
-| OWASP CRS v4.28.0 (`55b09f5`) | 318 `@rx` (modsec extractor) | **198/318 ≈ 62.3%** → **GO** (≥30%; was 39.3% pre toolkit-fix) | shape-5 gaps + ReDoS + dialect triage |
+| OWASP CRS v4.28.0 (`55b09f5`) | 318 `@rx` (modsec extractor) | **206/318 ≈ 64.8%** → **GO** (≥30%; was 39.3% pre toolkit-fix) | shape-5 gaps + ReDoS + dialect triage |
 | validator.js (7-file verified domain) | pilots/validatorjs/src subset | shapes 1–3 + `ci()` mutation | PASS under `--require-ground-truth` |
 
 **CRS lessons (machine-verified):**
@@ -40,8 +40,8 @@ Tracking: issue [#35](https://github.com/lucas-albers-lz4/regexproof/issues/35) 
   `properties/triage/coreruleset_rule_diff.ndjson`.
 - Unencodable routing after toolkit-fix (#45): pattern-too-long **73**
   (TRAPS #21 — keep 256 interactive cap; ReDoS/manual for long patterns),
-  word-boundary **34**, bad-range **9**, negated-shorthand **2**,
-  inline-flag **1**, internal-anchor **1**. Negated-class and most
+  word-boundary **34**, internal-anchor **2**, negated-shorthand **2**,
+  inline-flag **1**. Negated-class, hex ranges in classes, and most
   lazy/`\x`/scoped-`(?i:)` rejects cleared by encode paths.
 - Noodler `re.from_ecma2020` still unavailable on stock z3-solver 5.0.0
   (fixture unchanged; CRS `@rx` has zero lookarounds).

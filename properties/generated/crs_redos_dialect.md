@@ -1,21 +1,20 @@
 # CRS ReDoS + dialect triage
 
 - @rx sites: 318
-- encodable: 198
-- ReDoS findings (uncapped): 226
+- encodable: 206
+- ReDoS findings (uncapped): 234
 - Noodler available: False (changed=False)
 
 ## Unencodable routing
 
 | reason | count | route | note |
 |---|---:|---|---|
-| `ok` | 198 | prove | encodable — Z3 property / rule_diff / ReDoS |
+| `ok` | 206 | prove | encodable — Z3 property / rule_diff / ReDoS |
 | `pattern-too-long` | 73 | policy | Capacity cap (>256 chars), not a language limit. Policy: keep cap for interactive Z3 queries; triage long patterns to ReDoS-only / manual review. See TRAPS #21. |
 | `word-boundary` | 34 | triage | Genuine stock-Z3 limit (gate-3 \b direction); ASCII domain declared for CRS. |
-| `bad-range` | 9 | prove | \x{} / hex ranges — mostly fixed; residual bad escapes still reject. |
+| `internal-anchor` | 2 | triage | unclassified reject — inspect |
 | `negated-shorthand` | 2 | triage | unclassified reject — inspect |
 | `inline-flag` | 1 | prove | Scoped (?i:...) encoded for PCRE/RE2; mid-pattern (?i), (?-i:...), scoped m/s/x, and ECMA remain rejects. |
-| `internal-anchor` | 1 | triage | unclassified reject — inspect |
 
 ## Pattern-too-long policy
 
@@ -75,4 +74,4 @@ Capacity cap (>256 chars), not a language limit. Policy: keep cap for interactiv
 | `cd4f301dbbb2e45d1ee07150bb9332d1` | vulnerable | recheck |
 | `8da9fd11b5a381f092c535318a4e1df6` | vulnerable | recheck |
 | `c6b729adf5250644e09188d9ae3b2105` | safe | recheck |
-| … | (176 more) | |
+| … | (184 more) | |

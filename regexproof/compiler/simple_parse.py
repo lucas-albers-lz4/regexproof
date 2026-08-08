@@ -198,40 +198,63 @@ def _parse_class(s: str, i: int):
         j += 1
     chars: list[str] = []
     while j < len(s) and s[j] != "]":
-        if s[j] == "\\":
-            node, j = _parse_escape(s, j)
-            if isinstance(node, Lit):
-                chars.append(node.ch)
-            elif isinstance(node, Cls):
-                if node.negate:
-                    # \\D inside […] is a non-digit member — restore upper token.
-                    for c in node.chars:
-                        if c == "\\d":
-                            chars.append("\\D")
-                        elif c == "\\s":
-                            chars.append("\\S")
-                        elif c == "\\w":
-                            chars.append("\\W")
-                        else:
-                            raise Unencodable("class-escape")
-                else:
-                    chars.extend(node.chars)
-            else:
-                raise Unencodable("class-escape")
-            continue
-        if j + 2 < len(s) and s[j + 1] == "-" and s[j + 2] != "]":
-            lo, hi = s[j], s[j + 2]
+        atom, j, kind = _parse_class_atom(s, j)
+        # Range: lo-hi where both ends are single characters (incl. \\xNN).
+        if (
+            kind == "char"
+            and j < len(s)
+            and s[j] == "-"
+            and j + 1 < len(s)
+            and s[j + 1] != "]"
+        ):
+            j += 1  # skip '-'
+            hi_atom, j, hi_kind = _parse_class_atom(s, j)
+            if hi_kind != "char":
+                raise Unencodable("bad-range")
+            lo, hi = atom, hi_atom
             if ord(lo) > ord(hi):
                 raise Unencodable("bad-range")
             for code in range(ord(lo), ord(hi) + 1):
                 chars.append(chr(code))
-            j += 3
             continue
-        chars.append(s[j])
-        j += 1
+        if kind == "char":
+            chars.append(atom)
+        else:
+            chars.extend(atom)  # shorthand tokens
     if j >= len(s) or s[j] != "]":
         raise Unencodable("parse-error")
     return Cls(chars=chars, negate=negate), j + 1
+
+
+def _parse_class_atom(s: str, j: int) -> tuple[str | list[str], int, str]:
+    """Parse one class member. Returns (payload, next_index, kind).
+
+    kind ``char`` → payload is a one-char string; ``shorthand`` → list of
+    tokens such as ``[\"\\\\d\"]`` or ``[\"\\\\D\"]``.
+    """
+    if j >= len(s):
+        raise Unencodable("parse-error")
+    if s[j] == "\\":
+        node, nj = _parse_escape(s, j)
+        if isinstance(node, Lit):
+            return node.ch, nj, "char"
+        if isinstance(node, Cls):
+            tokens: list[str] = []
+            if node.negate:
+                for c in node.chars:
+                    if c == "\\d":
+                        tokens.append("\\D")
+                    elif c == "\\s":
+                        tokens.append("\\S")
+                    elif c == "\\w":
+                        tokens.append("\\W")
+                    else:
+                        raise Unencodable("class-escape")
+            else:
+                tokens.extend(node.chars)
+            return tokens, nj, "shorthand"
+        raise Unencodable("class-escape")
+    return s[j], j + 1, "char"
 
 
 def _parse_quant(s: str, i: int, node):
