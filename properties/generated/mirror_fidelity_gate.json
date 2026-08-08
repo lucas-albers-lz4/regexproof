@@ -1,0 +1,49 @@
+{
+  "checked_ok": 5,
+  "engine_versions": {
+    "python": "3.14.6",
+    "z3": "5.0.0"
+  },
+  "gate": "mirror_fidelity",
+  "mismatches": 0,
+  "ok": true,
+  "pcre2_helper": true,
+  "results": [
+    {
+      "corpus": "coreruleset",
+      "dialect": "pcre",
+      "probes": 61,
+      "regex_id": "d00fe967efcf75cd1166d48a59883c0c",
+      "status": "ok"
+    },
+    {
+      "corpus": "coreruleset",
+      "dialect": "pcre",
+      "probes": 61,
+      "regex_id": "4cda044c15b26e0b433f0b5df567047d",
+      "status": "ok"
+    },
+    {
+      "corpus": "coreruleset",
+      "dialect": "pcre",
+      "probes": 61,
+      "regex_id": "ca3e0bcb968304db4ddd317cd1b264ba",
+      "status": "ok"
+    },
+    {
+      "corpus": "coreruleset",
+      "dialect": "pcre",
+      "probes": 61,
+      "regex_id": "5ff6ec1d690eda40066530ff5f8a3f18",
+      "status": "ok"
+    },
+    {
+      "corpus": "coreruleset",
+      "dialect": "pcre",
+      "probes": 61,
+      "regex_id": "c632a1bc72497ad7b1145388b3ef3646",
+      "status": "ok"
+    }
+  ],
+  "schema_version": "1"
+}

@@ -275,3 +275,16 @@ JS RegExp flags beyond `i`/`s` are **explicit rejects** in `compile_ecma`:
 
 Do not encode these as ASCII-ish mirrors. Report the reject reason in triage
 NDJSON (`unencodable_reason`) so batch routing stays honest.
+
+## 23. Hex escapes must lower to the codepoint, not literal text
+
+<!-- verified-finding: VF-HEX-001 -->
+
+`\xNN` / `\x{…}` inside a pattern (including character classes) must become
+the corresponding character in the Z3 mirror. A pre-fix bug compiled
+`[\x22]` as encodable while the mirror accepted the literal strings `x2` /
+`x22` and rejected `"` — the opposite of Python `re`, PCRE2, and ECMA.
+
+**Regression:** `compile_pattern(r"[\x22]", …)` must SAT-admit `"` and
+UNSAT-reject `x22`. Same for `\x{22}`. Class ranges `\x21-\x7e` must expand
+to the codepoint range (not `x` / `-` / digits as separate atoms).
