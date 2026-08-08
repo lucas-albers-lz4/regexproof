@@ -88,6 +88,10 @@ jobs:
         run: pip install -e ".[dev]"
       - name: Pytest (golden + foundations)
         run: pytest -q
+      - name: Phase 2 pilots (extract → fraction → properties)
+        run: |
+          python scripts/pilot-run.py
+          python scripts/pilot-properties.py --require-ground-truth
 
   links:
     name: Link check

@@ -1,0 +1,27 @@
+{
+  "schema_version": "1",
+  "pilot": "validatorjs",
+  "repo": "validatorjs/validator.js",
+  "repo_url": "https://github.com/validatorjs/validator.js",
+  "commit": "cdb7dafc281d14125b924969bf3ee5bc482ec169",
+  "corpus_path": "pilots/validatorjs/src",
+  "files": [
+    "isAscii.js",
+    "isAlpha.js",
+    "isAlphanumeric.js",
+    "isEmail.js",
+    "isFQDN.js",
+    "isURL.js",
+    "alpha.js"
+  ],
+  "dialect": "ecma",
+  "shapes": [1, 2, 3],
+  "property_module": "scripts/pilot-properties.py",
+  "report_path": "properties/generated/validatorjs_encodable_fraction.json",
+  "go_no_go_threshold": 0.3,
+  "commands": [
+    "python scripts/pilot-run.py",
+    "python scripts/pilot-properties.py --require-ground-truth"
+  ],
+  "notes": "Shape 4 deferred to Phase 5 (#21). Unicode alphabet derivation in scope for email/FQDN."
+}

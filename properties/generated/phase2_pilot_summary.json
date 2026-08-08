@@ -1,0 +1,25 @@
+{
+  "schema_version": "1",
+  "pilots": {
+    "validatorjs": {
+      "fraction": 0.684,
+      "decision": "go",
+      "sample_size": 212,
+      "encodable": 145
+    },
+    "gitleaks": {
+      "fraction": 0.1855,
+      "decision": "no-go",
+      "sample_size": 221,
+      "encodable": 41
+    }
+  },
+  "shell_true_violations": [],
+  "engine_versions": {
+    "python": "3.14.6",
+    "z3": "5.0.0",
+    "node": "v26.5.0",
+    "go": "go version go1.26.5 linux/amd64"
+  },
+  "timeout_policy": "TIMEOUT/unknown = not proven (never a pass)"
+}
