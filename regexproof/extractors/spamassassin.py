@@ -57,10 +57,13 @@ def _extract_delimited(rest: str) -> tuple[str, str] | None:
     if not s:
         return None
     if s.startswith("m") and len(s) >= 2 and s[1] not in ("/",) and not s[1].isalnum():
-        # m{…} / m#…# / m!…! etc.
+        # m{…} / m#…# / m!…! etc. Paired braces track nesting so quantifiers
+        # like ``.{0,5}`` inside ``m{…}`` do not truncate the pattern.
         delim = s[1]
         close = {"{": "}", "(": ")", "[": "]"}.get(delim, delim)
+        paired = delim != close
         i = 2
+        depth = 1
         body: list[str] = []
         while i < len(s):
             ch = s[i]
@@ -69,13 +72,23 @@ def _extract_delimited(rest: str) -> tuple[str, str] | None:
                 body.append(s[i + 1])
                 i += 2
                 continue
+            if paired and ch == delim:
+                depth += 1
+                body.append(ch)
+                i += 1
+                continue
             if ch == close:
-                flags = s[i + 1 :].strip()
-                # Drop trailing junk (if-unset:, comments).
-                flags = flags.split()[0] if flags.split() else ""
-                if not _FLAGS_RE.fullmatch(flags):
-                    flags = "".join(c for c in flags if c in "imsx")
-                return "".join(body), flags
+                depth -= 1
+                if depth == 0:
+                    flags = s[i + 1 :].strip()
+                    # Drop trailing junk (if-unset:, comments).
+                    flags = flags.split()[0] if flags.split() else ""
+                    if not _FLAGS_RE.fullmatch(flags):
+                        flags = "".join(c for c in flags if c in "imsx")
+                    return "".join(body), flags
+                body.append(ch)
+                i += 1
+                continue
             body.append(ch)
             i += 1
         return None

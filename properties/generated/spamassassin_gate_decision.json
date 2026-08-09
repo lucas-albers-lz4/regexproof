@@ -4,12 +4,12 @@
   "corpus_pin": "17e7842caa629d032589458f86d2f5ce8e7306a4",
   "decision": "go",
   "decision_rule": "go iff encodable/sample_size >= 0.3",
-  "encodable": 441,
-  "fraction": 0.7462,
+  "encodable": 442,
+  "fraction": 0.7479,
   "fraction_artifact": "properties/generated/spamassassin_encodable_fraction.json",
   "note": "NO-GO fallback not triggered.",
-  "reason": "Encodable fraction 0.7462 >= 0.30 threshold on full pinned clone; perl dialect + SpamAssassin extractor landed (Wave 3 P2 / #113). Bugbot fix-up: reject \\z/\\Z/\\A; honor s-flag; continuation join without spaces.",
+  "reason": "Encodable fraction 0.7479 >= 0.30 on full pin (Wave 3 P2 / #113).",
   "sample_size": 591,
   "threshold": 0.3,
-  "unclassified_parse_errors": 1
+  "unclassified_parse_errors": 0
 }

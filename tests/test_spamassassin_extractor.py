@@ -81,3 +81,10 @@ def test_backslash_continuation_no_space():
     recs = extract_spamassassin(src, repo="apache/spamassassin", file="cont.cf")
     assert len(recs) == 1
     assert recs[0]["pattern"] == "alphabeta"
+
+
+def test_mbrace_nested_quantifier_not_truncated():
+    src = "body NEST m{foo.{0,5}bar}\n"
+    recs = extract_spamassassin(src, repo="apache/spamassassin", file="nest.cf")
+    assert len(recs) == 1
+    assert recs[0]["pattern"] == "foo.{0,5}bar"

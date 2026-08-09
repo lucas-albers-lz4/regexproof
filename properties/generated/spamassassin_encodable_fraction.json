@@ -12,16 +12,15 @@
   "complete_run": true,
   "corpus_pin": "17e7842caa629d032589458f86d2f5ce8e7306a4",
   "decision": "go",
-  "decision_note": "1 unclassified parse-error rows \u2014 Phase 1 requires zero",
   "decision_rule": "go iff encodable/sample_size >= 0.3",
   "dialect": "perl",
-  "encodable": 441,
+  "encodable": 442,
   "engine_versions": {
     "python": "3.14.6",
     "z3": "5.0.0"
   },
   "extractor_schema_version": "2",
-  "fraction": 0.7462,
+  "fraction": 0.7479,
   "go_no_go_threshold": 0.3,
   "id_formula": "v2-domain-optional-ascii-default",
   "inventory_path": "properties/generated/spamassassin-inventory.ndjson",
@@ -31,11 +30,10 @@
     "backref": 9,
     "empty-class": 1,
     "inline-flag": 3,
-    "lookaround": 56,
-    "m-flag": 22,
+    "lookaround": 59,
+    "m-flag": 19,
     "negated-shorthand": 18,
-    "ok": 441,
-    "parse-error": 1,
+    "ok": 442,
     "pattern-too-long": 4,
     "per-alternative-anchor": 5,
     "word-boundary": 29,
@@ -44,6 +42,6 @@
   "sample_size": 591,
   "schema_version": "1",
   "scope": "full_corpus",
-  "unclassified_parse_errors": 1,
-  "wall_s": 82.065
+  "unclassified_parse_errors": 0,
+  "wall_s": 82.653
 }
