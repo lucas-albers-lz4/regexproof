@@ -16,12 +16,23 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from regexproof.admission.clone import CloneError, cleanup_clone, partial_clone
+from regexproof.admission.clone import (
+    CloneError,
+    cleanup_clone,
+    enforce_disk_budget,
+    partial_clone,
+)
 from regexproof.admission.draft import build_draft, emit_draft_text
 
 
 def _is_url(s: str) -> bool:
-    return s.startswith("http://") or s.startswith("https://") or s.startswith("git@")
+    return (
+        s.startswith("http://")
+        or s.startswith("https://")
+        or s.startswith("git@")
+        or s.startswith("ssh://")
+        or s.startswith("git://")
+    )
 
 
 def _repo_name_from_target(target: str) -> str:
@@ -57,6 +68,12 @@ def main(argv: list[str] | None = None) -> int:
     )
     ap.add_argument("--repo-name", default=None, help="Override corpus/repo name")
     ap.add_argument("--url", default="", help="candidate_url to record in the draft")
+    ap.add_argument(
+        "--max-disk-mb",
+        type=int,
+        default=500,
+        help="Abort if clone exceeds this size after walk materializes blobs",
+    )
     args = ap.parse_args(argv)
 
     target = args.target
@@ -67,7 +84,9 @@ def main(argv: list[str] | None = None) -> int:
                 ap.error("--pin is required when target is a URL")
             base = args.clone_root or Path(tempfile.mkdtemp(prefix="regexproof-probe-"))
             clone_dir = base / "repo"
-            pin = partial_clone(target, dest=clone_dir, pin=args.pin)
+            pin = partial_clone(
+                target, dest=clone_dir, pin=args.pin, max_disk_mb=args.max_disk_mb
+            )
             root = clone_dir
             cand_url = args.url or target
         else:
@@ -84,6 +103,9 @@ def main(argv: list[str] | None = None) -> int:
             repo_name=args.repo_name or _repo_name_from_target(target),
             candidate_url=cand_url,
         )
+        if clone_dir is not None:
+            # Re-check after walk materializes blob:none content.
+            enforce_disk_budget(clone_dir, args.max_disk_mb)
         text = emit_draft_text(draft)
         if args.output:
             out = args.output.expanduser().resolve()

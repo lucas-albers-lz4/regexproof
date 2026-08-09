@@ -26,6 +26,29 @@ def _default_run(argv: Sequence[str], **kwargs: object) -> subprocess.CompletedP
     )
 
 
+def dir_size_bytes(path: Path | str) -> int:
+    """Sum on-disk file sizes under *path* (follows materialized blobs)."""
+    total = 0
+    root = Path(path)
+    for dirpath, _dirnames, filenames in os.walk(root):
+        for fn in filenames:
+            fp = Path(dirpath) / fn
+            try:
+                total += fp.stat().st_size
+            except OSError:
+                continue
+    return total
+
+
+def enforce_disk_budget(path: Path | str, max_disk_mb: int) -> None:
+    """Raise CloneError if *path* exceeds *max_disk_mb* (call after blob materialization)."""
+    total = dir_size_bytes(path)
+    if total > max_disk_mb * 1024 * 1024:
+        raise CloneError(
+            f"clone exceeds max_disk_mb={max_disk_mb} ({total} bytes)"
+        )
+
+
 def partial_clone(
     url: str,
     *,
@@ -38,6 +61,10 @@ def partial_clone(
 
     *dest* must not live under ``batch/corpora/``. Cleanup is the caller's
     responsibility (see :func:`cleanup_clone`).
+
+    Note: with ``blob:none``, the on-disk check here only sees tree metadata.
+    Callers that walk/read files should re-check via :func:`enforce_disk_budget`
+    after materialization.
     """
     run_fn = run or _default_run
     dest = Path(dest)
@@ -85,19 +112,12 @@ def partial_clone(
         resolved = (rev.stdout or "").strip()
 
     if max_disk_mb is not None:
-        total = 0
-        for dirpath, _dirnames, filenames in os.walk(dest):
-            for fn in filenames:
-                fp = Path(dirpath) / fn
-                try:
-                    total += fp.stat().st_size
-                except OSError:
-                    continue
-        if total > max_disk_mb * 1024 * 1024:
+        # Pre-walk soft check (often undercounts with blob:none).
+        try:
+            enforce_disk_budget(dest, max_disk_mb)
+        except CloneError:
             shutil.rmtree(dest, ignore_errors=True)
-            raise CloneError(
-                f"clone exceeds max_disk_mb={max_disk_mb} ({total} bytes)"
-            )
+            raise
 
     return resolved
 
