@@ -73,7 +73,11 @@ def save_ledger(path: Path | str, ledger: dict[str, Any]) -> None:
 
 
 def find_candidate(ledger: dict[str, Any], url: str) -> dict[str, Any] | None:
+    from regexproof.mine.exclusions import normalize_repo_url
+
+    target = normalize_repo_url(url)
     for c in ledger["candidates"]:
-        if c.get("url") == url:
+        cand_url = c.get("url")
+        if cand_url and normalize_repo_url(str(cand_url)) == target:
             return c
     return None
