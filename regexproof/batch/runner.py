@@ -233,12 +233,28 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         # Full clone ~17.5k string sites; 5k was pre-enforcement decorative.
         "budget": {"max_patterns": 25000, "max_wall_s": 600, "redos_wall_s": 120, "max_mem_mb": 1024, "max_disk_mb": 100},
     },
+    "test262": {
+        "corpus_type": "testdata",
+        "path": ROOT / "batch" / "corpora" / "test262" / "RegExp",
+        "full_path": ROOT / "batch" / "corpora" / "test262" / "RegExp",
+        "sample_path": ROOT / "batch" / "corpora" / "test262" / "sample",
+        "glob": "**/*.js",
+        "dialect": "ecma",
+        "extractor": "test262",
+        "repo": "tc39/test262",
+        "security_tool": False,
+        "lift_inline": False,
+        "corpus_pin": "be13516fb6441b950ba8a3df97eb34062c186972",
+        "expected_files": 1879,
+        "measure_scope": "sample",
+        "budget": {"max_patterns": 20000, "max_wall_s": 900, "max_mem_mb": 1024, "max_disk_mb": 200},
+    },
 }
 
 WAVE_CORPORA = frozenset({
     "trufflehog", "ids_rules", "semgrep_rules",
     "pcre2_testdata", "re2_testdata", "cpython_re", "busybox",
-    "yara_rules",
+    "yara_rules", "test262",
 })
 
 
@@ -446,6 +462,31 @@ def _extract(corpus: str, meta: dict[str, Any]) -> list[dict[str, Any]]:
             meta,
             glob=meta.get("glob") or "**/*.yar,**/*.yara",
             extract_fn=lambda src, rel: extract_yara(
+                src, repo=meta["repo"], file=rel
+            ),
+        )
+    if meta["extractor"] == "test262":
+        from regexproof.extractors.test262 import extract_test262, extract_test262_tree
+
+        if path.is_dir() and meta.get("measure_scope") != "sample":
+            # Full tree: use dedicated walker + expected-file gate.
+            expected = meta.get("expected_files")
+            recs, stats = extract_test262_tree(
+                path,
+                repo=meta["repo"],
+                expected_files=expected,
+            )
+            if expected is not None and not stats["files_ok"]:
+                raise SystemExit(
+                    f"HARD ERROR: test262 expected {expected} files, "
+                    f"saw {stats['files_seen']}"
+                )
+            return recs
+        return _extract_glob(
+            path,
+            meta,
+            glob=meta.get("glob") or "**/*.js",
+            extract_fn=lambda src, rel: extract_test262(
                 src, repo=meta["repo"], file=rel
             ),
         )

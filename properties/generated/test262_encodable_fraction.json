@@ -1,0 +1,46 @@
+{
+  "budget": {
+    "max_disk_mb": 200,
+    "max_mem_mb": 1024,
+    "max_patterns": 20000,
+    "max_wall_s": 900
+  },
+  "budget_breaches": null,
+  "commit": null,
+  "compiler_fingerprint": "71d2ce23b4cd",
+  "complete_run": false,
+  "corpus_pin": "be13516fb6441b950ba8a3df97eb34062c186972",
+  "decision": "go",
+  "decision_rule": "go iff encodable/sample_size >= 0.3",
+  "dialect": "ecma",
+  "encodable": 34,
+  "engine_versions": {
+    "python": "3.14.6",
+    "z3": "5.0.0"
+  },
+  "expected_files": 1879,
+  "fraction": 0.8095,
+  "full_tree_encodable": 5191,
+  "full_tree_files_seen": 1879,
+  "full_tree_fraction": 0.4461,
+  "full_tree_records": 11636,
+  "full_tree_scope_note": "sample artifact; full_tree_* measured separately for AC file-count gate",
+  "go_no_go_threshold": 0.3,
+  "inventory_path": "properties/generated/test262-inventory.ndjson",
+  "path": "batch/corpora/test262/sample",
+  "pilot": "test262",
+  "reasons": {
+    "bad-range": 2,
+    "composite-pattern": 2,
+    "m-flag": 1,
+    "ok": 34,
+    "unclosed-group": 1,
+    "unsupported-syntax": 1,
+    "word-boundary": 1
+  },
+  "sample_size": 42,
+  "schema_version": "1",
+  "scope": "sample",
+  "unclassified_parse_errors": 0,
+  "wall_s": 1.149
+}

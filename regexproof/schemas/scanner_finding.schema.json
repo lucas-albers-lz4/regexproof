@@ -32,6 +32,11 @@
     "pattern": { "type": "string" },
     "shape": { "type": ["integer", "null"] },
     "ground_truth_status": { "type": ["string", "null"] },
+    "ground_truth": {
+      "description": "Optional per-engine ground-truth evidence (cross-engine rule_diff).",
+      "type": ["object", "null"],
+      "additionalProperties": true
+    },
     "disclosure": {
       "type": ["string", "null"],
       "enum": ["private_first", "public_ok", null]
