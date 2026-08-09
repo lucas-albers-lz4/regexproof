@@ -15,12 +15,14 @@ _FLAG_CHARS = frozenset("imsx")
 def strip_verbose_x(pattern: str) -> tuple[str, str]:
     """Return ``(stripped_pattern, lifted_flags)``.
 
-    ``lifted_flags`` is the sorted unique set of ``imsx`` letters encountered
-    in consumed ``(?…)`` / ``(?-…)`` groups. ``x`` mode toggles stripping of
-    unescaped whitespace and ``#`` comments outside character classes.
+    ``lifted_flags`` is the sorted set of ``imsx`` letters that remain
+    **enabled** after scanning (``(?-i)`` clears ``i``). ``x`` mode toggles
+    stripping of unescaped whitespace and ``#`` comments outside classes.
     """
     out: list[str] = []
-    lifted: set[str] = set()
+    # Net-on flags after scanning (enable/disable toggles); never report a
+    # letter that ends disabled (e.g. ``(?i)…(?-i)`` → no ``i``).
+    active: set[str] = set()
     x_mode = False
     in_class = False
     i = 0
@@ -51,8 +53,8 @@ def strip_verbose_x(pattern: str) -> tuple[str, str]:
             consumed = _try_consume_flag_group(pattern, i)
             if consumed is not None:
                 end, enable, disable = consumed
-                lifted.update(enable)
-                lifted.update(disable)
+                active |= enable
+                active -= disable
                 if "x" in enable:
                     x_mode = True
                 if "x" in disable:
@@ -70,7 +72,7 @@ def strip_verbose_x(pattern: str) -> tuple[str, str]:
                 continue
         out.append(ch)
         i += 1
-    return "".join(out), "".join(sorted(lifted))
+    return "".join(out), "".join(sorted(active))
 
 
 def _skip_paren_comment(pattern: str, i: int) -> int:

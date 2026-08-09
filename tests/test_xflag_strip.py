@@ -18,7 +18,14 @@ def test_mid_pattern_disable_x():
     stripped, lifted = strip_verbose_x(r"(?x)a b(?-x) c d")
     # With x on: "a b" → "ab"; after (?-x) spaces are literal.
     assert stripped == "ab c d"
-    assert "x" in lifted
+    # Net-on flags: x was disabled → not reported.
+    assert "x" not in lifted
+
+
+def test_disable_i_not_reported_as_compile_flag():
+    stripped, lifted = strip_verbose_x(r"(?i)foo(?-i)bar")
+    assert stripped == "foobar"
+    assert "i" not in lifted
 
 
 def test_combined_xi_consumed():

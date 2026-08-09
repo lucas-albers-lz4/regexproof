@@ -95,16 +95,94 @@ def extract_shhgit(
 
 
 def _unquote(s: str) -> str | None:
+    """Decode a YAML single- or double-quoted scalar (yaml.Unmarshal rules)."""
     s = s.strip()
-    if len(s) < 2:
-        return s if s else None
+    # Allow trailing YAML comment after the closing quote.
+    if not s:
+        return None
     q = s[0]
     if q not in "\"'":
-        return s
-    if not s.endswith(q):
-        # Allow trailing YAML comment: 'pat' # note
-        end = s.rfind(q, 1)
-        if end <= 0:
-            return None
-        return s[1:end]
-    return s[1:-1]
+        # Bare / already-unquoted.
+        return s.split(" #", 1)[0].rstrip() if " #" in s else s
+    end = _closing_quote_index(s, q)
+    if end < 0:
+        return None
+    inner = s[1:end]
+    if q == "'":
+        # Single-quoted: only '' → '
+        return inner.replace("''", "'")
+    # Double-quoted: YAML escape decode.
+    return _yaml_double_unescape(inner)
+
+
+def _closing_quote_index(s: str, q: str) -> int:
+    """Index of closing quote matching *q*, respecting escapes / '' pairs."""
+    i = 1
+    n = len(s)
+    while i < n:
+        ch = s[i]
+        if q == "'" and ch == "'":
+            if i + 1 < n and s[i + 1] == "'":
+                i += 2
+                continue
+            return i
+        if q == '"':
+            if ch == "\\" and i + 1 < n:
+                i += 2
+                continue
+            if ch == '"':
+                return i
+        i += 1
+    return -1
+
+
+def _yaml_double_unescape(inner: str) -> str:
+    out: list[str] = []
+    i = 0
+    n = len(inner)
+    escapes = {
+        "n": "\n",
+        "t": "\t",
+        "r": "\r",
+        "\\": "\\",
+        '"': '"',
+        "/": "/",
+        "0": "\0",
+        "a": "\a",
+        "b": "\b",
+        "e": "\x1b",
+        "f": "\f",
+        "v": "\v",
+        "N": "\u0085",
+        "_": "\u00a0",
+        "L": "\u2028",
+        "P": "\u2029",
+    }
+    while i < n:
+        if inner[i] != "\\" or i + 1 >= n:
+            out.append(inner[i])
+            i += 1
+            continue
+        nxt = inner[i + 1]
+        if nxt in escapes:
+            out.append(escapes[nxt])
+            i += 2
+            continue
+        if nxt == "x" and i + 3 < n:
+            try:
+                out.append(chr(int(inner[i + 2 : i + 4], 16)))
+                i += 4
+                continue
+            except ValueError:
+                pass
+        if nxt == "u" and i + 5 < n:
+            try:
+                out.append(chr(int(inner[i + 2 : i + 6], 16)))
+                i += 6
+                continue
+            except ValueError:
+                pass
+        # Unknown escape: keep the escaped char (YAML drops the backslash).
+        out.append(nxt)
+        i += 2
+    return "".join(out)

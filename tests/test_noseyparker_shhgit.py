@@ -83,6 +83,26 @@ def test_shhgit_deterministic():
     assert [r["regex_id"] for r in a] == [r["regex_id"] for r in b]
 
 
+def test_shhgit_yaml_double_quote_unescape():
+    """Double-quoted YAML escapes must match yaml.Unmarshal (\\\" → \")."""
+    src = '''
+signatures:
+  - part: 'contents'
+    regex: "(?i)artifactory.{0,50}(\\\\\\"|'|`)?[a-zA-Z0-9=]{112}(\\\\\\"|'|`)?"
+    name: 'Artifactory'
+'''
+    # The sample above is awkward in a Python string; use the real config line.
+    real = (ROOT / "batch" / "corpora" / "shhgit" / "repo" / "config.yaml")
+    if not real.is_file():
+        real = Path("/tmp/shhgit/config.yaml")
+    text = real.read_text(encoding="utf-8")
+    recs = extract_shhgit(text, repo="eth0izzle/shhgit", file="config.yaml")
+    art = next(r for r in recs if "artifactory" in r["pattern"])
+    # YAML \\\" → \" in the pattern (one backslash + quote), not \\"
+    assert '(\\"|\'|`)?' in art["pattern"]
+    assert r'(\\\"' not in art["pattern"]
+
+
 def test_shhgit_all_parts_are_search():
     """Go MatchString/Match are substring membership for every part."""
     src = """
