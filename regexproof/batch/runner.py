@@ -739,11 +739,11 @@ def check_admission_gates(
     """Return violation messages for missing/invalid corpus admission decisions.
 
     The corpus admission gate (sweep/corpus-admission-gate.md): every
-    rule_corpus / validator corpus in CORPUS_MANIFESTS must have a committed
-    ``<corpus>_gate_decision.json`` in the default generated-artifacts dir,
-    valid against ``gate_decision.schema.json``, with decision in
-    ``go`` / ``triage-trial``. Testdata and inventory-only corpora are
-    pipeline inputs, not scanned repos, so they are exempt.
+    rule_corpus / validator corpus in CORPUS_MANIFESTS must have a
+    ``<corpus>_gate_decision.json`` at ``out_dir`` (default
+    ``properties/generated``), valid against ``gate_decision.schema.json``,
+    with decision in ``go`` / ``triage-trial``. Testdata and inventory-only
+    corpora are pipeline inputs, not scanned repos, so they are exempt.
 
     Missing or invalid artifacts hard-fail (never silent): a corpus with no
     admission record is not a corpus we are allowed to run.
