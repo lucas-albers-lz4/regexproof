@@ -69,15 +69,31 @@ def compile_re2(
     *,
     max_length: int = DEFAULT_MAX_LENGTH,
 ) -> CompileResult:
+    """Compile a Go-RE2 pattern to a Z3 mirror.
+
+    Fail-closed on residual ``x`` (``x-flag-unstripped``) and ``s``
+    (``s-flag``). Verbose ``(?x)`` must be stripped at extraction via
+    ``strip_verbose_x``; Nosey Parker ``(?s)`` / lifted ``s`` records are
+    unencodable until a rust_regex or helper-``s`` path lands — never silent.
+    """
     flags = "".join(sorted(set(flags)))
     try:
         if len(pattern) > max_length:
             raise Unencodable("pattern-too-long")
+        if "x" in flags:
+            raise Unencodable("x-flag-unstripped")
+        if "s" in flags:
+            raise Unencodable("s-flag")
         if "m" in flags:
             raise Unencodable("m-flag")
         stripped = strip_language_transparent(pattern)
         gate = parse_with_helper(stripped)
         if gate.get("ok") is False:
+            err = str(gate.get("error") or "")
+            # Go RE2 caps repeats at 1000 — classify so wave gates don't treat
+            # this as an unclassified parse-error (e.g. Nosey Parker `{20,1024}`).
+            if "invalid repeat count" in err:
+                raise Unencodable("repeat-count")
             raise Unencodable("parse-error")
         ast = parse_pattern(stripped)
         fold = re2_fold_closure if "i" in flags else None

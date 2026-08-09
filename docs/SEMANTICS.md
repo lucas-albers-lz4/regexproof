@@ -47,7 +47,7 @@ Implementation: `regexproof/compiler/fold.py`. Closures, not pair lists.
 |---|---|---|
 | `py_re` (default Unicode) | `python_fold_closure` | **İ** (U+0130) and **ı** (U+0131) fold into `[i]` |
 | `py_re` + ASCII/`re.A` | `python_fold_closure(..., ascii_only=True)` | ASCII letter pairs only |
-| `re2` | `re2_fold_closure` | İ/ı do **not** fold into `[i]` |
+| `re2` | `re2_fold_closure` | İ/ı do **not** fold into `[i]`; residual `x` → `x-flag-unstripped`, `s` → `s-flag` (fail-closed; strip `(?x)` at extract via `strip_verbose_x`) |
 | `ecma` (non-`u`) | `js_nonsu_fold_closure` | **ß** does not expand to `SS` (no multi-char folds) |
 | `pcre` (encodable subset) | ASCII-style fold when `i` set | Same discipline as ASCII py-re for the subset |
 | `perl` (encodable subset) | ASCII-style fold when `i` set | POSIX `[[:alpha:]]` etc. rewritten; `\K` stripped; lookarounds / `(?{` / `\g{` / `\p{` / `\Q` rejected — see `PERL_REJECT_MARKERS` |

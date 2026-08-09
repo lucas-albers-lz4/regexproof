@@ -1,8 +1,8 @@
 {
  "schema_version": "1",
  "corpus": "shhgit",
- "candidate_url": "https://github.com/l4rm4nd/Shhgit",
- "corpus_pin": null,
+ "candidate_url": "https://github.com/eth0izzle/shhgit",
+ "corpus_pin": "bac0c7d39519203d230b6c9a2c6e3eba18346aba",
  "decision": "go",
  "decision_basis": "admission_conditions",
  "decision_date": "2026-08-09",
@@ -36,9 +36,16 @@
   }
  ],
  "escape_hatch_applied": false,
- "rationale": "Trial-run probe (2026-08-09, live clone): 95 regex entries in config.yaml of 150 signatures. syntax.FoldCase->i lift is a first-seen extractor surface (new-surface met); secret-scanner filename selection is boundary-adjacent (security-boundary met). re2 dialect.",
+ "rationale": "Trial-run probe (2026-08-09, live clone): 95 regex entries in config.yaml of 150 signatures. syntax.FoldCase->i lift is a first-seen extractor surface (new-surface met); secret-scanner filename selection is boundary-adjacent (security-boundary met). re2 dialect. Wave-3 P3 measure: 88/95 = 0.9263 GO (pin bac0c7d39519).",
  "related": {
   "probe": "live clone l4rm4nd/Shhgit (2026-08-09)",
-  "trial_run": true
- }
+  "trial_run": true,
+  "fraction": 0.9263,
+  "encodable": 88,
+  "sample_size": 95,
+  "complete_run": true,
+  "fraction_artifact": "properties/generated/shhgit_encodable_fraction.json",
+  "wave3_p3": true
+ },
+ "fraction_decision": "go"
 }

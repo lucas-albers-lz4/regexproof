@@ -1,8 +1,8 @@
 {
  "schema_version": "1",
  "corpus": "noseyparker",
- "candidate_url": "https://github.com/trailofbits/noseyparker",
- "corpus_pin": null,
+ "candidate_url": "https://github.com/praetorian-inc/noseyparker",
+ "corpus_pin": "2e6e7f36ce36619852532bbe698d8cb7a26d2da7",
  "decision": "go",
  "decision_basis": "admission_conditions",
  "decision_date": "2026-08-09",
@@ -40,9 +40,16 @@
   }
  ],
  "escape_hatch_applied": false,
- "rationale": "Trial-run probe (2026-08-09, live clone): 189 pattern: entries in 90 YAML rule files. (?x) verbose-flag surface at scale is a first-seen compiler surface (new-surface met); secret detector on trust boundaries (security-boundary met). Dialect: rust regex crate, re2-compatible route documented in wave-3 plan.",
+ "rationale": "Trial-run probe (2026-08-09, live clone): 189 pattern: entries in 90 YAML rule files. (?x) verbose-flag surface at scale is a first-seen compiler surface (new-surface met); secret detector on trust boundaries (security-boundary met). Dialect: rust regex crate, re2-compatible route documented in wave-3 plan. Wave-3 P3 measure: 139/189 = 0.7354 GO (pin 2e6e7f36ce36).",
  "related": {
   "probe": "live clone trailofbits/noseyparker (2026-08-09)",
-  "trial_run": true
- }
+  "trial_run": true,
+  "fraction": 0.7354,
+  "encodable": 139,
+  "sample_size": 189,
+  "complete_run": true,
+  "fraction_artifact": "properties/generated/noseyparker_encodable_fraction.json",
+  "wave3_p3": true
+ },
+ "fraction_decision": "go"
 }
