@@ -62,10 +62,12 @@ def mark_auto_filed(
         raise ValueError("candidate audit must be an object")
     if not audit.get("auto_filed_at"):
         audit["auto_filed_at"] = ts
-    # Do not clear needs_human_review / re_evaluate — sampler failures must stick
-    # until a human decision explicitly resolves them.
+    # Successful auto-file clears eligibility-routing flags, but never clears
+    # re_evaluate (sampler failure must stick until human resolve).
     audit["auto_filed"] = True
     audit["template_fired"] = template_fired
+    audit["needs_human_review"] = False
+    audit.pop("human_review_reason", None)
     audit["updated_at"] = ts
     save_ledger(path, ledger)
     return cand

@@ -71,5 +71,9 @@ def default_unmet_evidence(probe: dict[str, Any]) -> dict[str, str]:
             if boundary != "deterministic-true"
             else "Security-boundary condition not asserted met."
         ),
-        "large-under-saturated": f"{sites} sites < 1000 scale bar.",
+        "large-under-saturated": (
+            f"{sites} sites < 1000 scale bar."
+            if sites < 1000
+            else f"{sites} sites meet scale bar but under-saturation / findings path not asserted."
+        ),
     }
