@@ -15,7 +15,7 @@
         "word-boundary": 4
       },
       "sample_size": 221,
-      "scope": null,
+      "scope": "full_corpus",
       "unclassified_parse_errors": 0
     },
     {

@@ -126,6 +126,13 @@ jobs:
           python scripts/pilot-properties.py --require-ground-truth
       - name: Phase 3 shape-5 rule_diff (gitleaks encodable subset)
         run: python scripts/rule-diff-pilot.py --require-ground-truth
+      - name: Materialize detect-secrets corpus pin (v1.5.0)
+        run: |
+          git clone --depth 1 --branch v1.5.0 \
+            https://github.com/Yelp/detect-secrets.git /tmp/detect-secrets
+          test "$(git -C /tmp/detect-secrets rev-parse HEAD)" = "01886c8a910c64595c47f186ca1ffc0b77fa5458"
+          ln -sfn /tmp/detect-secrets/detect_secrets/plugins \
+            batch/corpora/detect-secrets/plugins
       - name: Phase 5 batch mode
         run: |
           python -m regexproof.batch --corpus all
