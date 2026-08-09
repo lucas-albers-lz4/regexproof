@@ -68,11 +68,18 @@ patterns, no novel surface, no findings pipeline. The wave-3 "rejected with evid
 pack would need 10+ repos to matter") is the first instance of this rule applied by hand;
 the gate makes it a lookup.
 
-**Mine-and-approve auto-NO-GO bar (pipeline, not a fourth admission condition):** when the
-probe's immutable `security_boundary` is `deterministic-false` and `regex_sites < 200`,
-the author script may auto-file a schema-valid `no-go` (umbrella C4). `unknown` and
-`deterministic-true` never auto-file. The ≥1000 bar remains only for condition 3
-(large-under-saturated).
+**Mine-and-approve auto-NO-GO bar (pipeline, not a fourth admission condition):** the
+author script may auto-file a schema-valid `no-go` (umbrella C4) when either
+(a) `security_boundary` is `deterministic-false` and `regex_sites < 200`, or
+(b) `regex_sites == 0` (zero-sites override — no regex surface to reason about;
+boundary may still be `unknown`). Non-zero `unknown` and `deterministic-true` never
+auto-file. Auto-path rationale is always `below-scale`. The ≥1000 bar remains only
+for condition 3 (large-under-saturated).
+
+**Probe boundary decision rule (pipeline):** ordered — positive signal →
+`deterministic-true`; else explicit negative-category match →
+`deterministic-false`; else → `unknown`. Absence of positive signals alone is not
+sufficient for `false`.
 
 ## Escape hatch (mandatory, not optional)
 
