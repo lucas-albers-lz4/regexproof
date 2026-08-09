@@ -105,7 +105,10 @@ probe path (no `validate_dialect`). They are **not** a `DIALECTS` compiler
 entry in this wave. Graduation compiles the **encodable subset** as `pcre`
 via `helpers/pcre2`, with an explicit `java→pcre` approximation note (see
 [`sweep/corpus-wave4/java-features.md`](../sweep/corpus-wave4/java-features.md)).
-Unicode `\p{…}` and other non-A1B constructs reject — never silent widen
+Extracted sites use `call_kind=fullmatch` to mirror
+`Pattern.matcher(value).matches()` (HtmlPolicyBuilder attribute policies).
+Unicode `\p{…}`, `\Q…\E` quote escapes, truncated/unbalanced literals, and
+`"…" + "…"` concatenations (not folded) reject — never silent widen
 ([#103](https://github.com/lucas-albers-lz4/regexproof/issues/103)).
 
 ## Practical rules

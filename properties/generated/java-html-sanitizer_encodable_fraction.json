@@ -1,0 +1,24 @@
+{
+  "approximation": "java→pcre",
+  "candidate_url": "https://github.com/OWASP/java-html-sanitizer",
+  "corpus": "java-html-sanitizer",
+  "corpus_pin": "a979a97e65f3cda1921fe3bb27ff4f9457be5c8d",
+  "differential_fail": 0,
+  "differential_ok": 14,
+  "differential_zero_disagreement_pass": true,
+  "encodable": 14,
+  "encodable_fraction": 0.7,
+  "pass_criteria": {
+    "bounded_samples": true,
+    "zero_disagreements_on_encodable_subset": true
+  },
+  "reject_reasons": {
+    "ok": 14,
+    "parse-error": 1,
+    "quote": 1,
+    "unicode-property": 4
+  },
+  "rejected": 6,
+  "schema_version": "1",
+  "total_sites": 20
+}

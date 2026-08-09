@@ -11,7 +11,7 @@ against `regexproof/schemas/gate_decision.schema.json`.
 | noseyparker | 189 | **go** | admission_conditions | 90 YAML rule files, `pattern:` key; 136 `(?x)` + 69 `(?i)` + 8 `(?s)` + 3 `(?m)` + 41 `\b` |
 | shhgit | 95 | **go** | admission_conditions | config.yaml: 95 regex entries of 150 signatures; `syntax.FoldCase` → `i` lift |
 | dompurify | 146 | **go** | admission_conditions | src/purify.ts + src/regexp.ts (33 literals by narrow grep; plan count authoritative) |
-| java-html-sanitizer | 22 | **triage-trial** | escape_hatch | 2 files with `Pattern.compile`; Java = first-seen dialect surface |
+| java-html-sanitizer | 22 | **triage-trial** → later **go** (P4 B2) | escape_hatch | 2 files with `Pattern.compile`; Java = first-seen dialect surface; graduated via java→pcre approx (see `sweep/corpus-wave4/java-features.md`) |
 | wtforms | 2 | **no-go** | — | below batch scale; py dialect covered |
 | django-validators | 12 | **no-go** | — | wave-3 rejected-with-evidence, re-confirmed |
 | secretlint | 5 | **no-go** | — | wave-3 rejected-with-evidence |
@@ -39,9 +39,9 @@ against `regexproof/schemas/gate_decision.schema.json`.
 
 ## Trial-run findings for the toolkit
 
-- **Java dialect is the next frontier.** java-html-sanitizer shows a
-  first-seen dialect with a sanitizer boundary. A java dialect compiler
-  pass + helper would be the wave-4 prize candidate.
+- **Java dialect frontier (trial-era note).** Wave 4 graduated
+  java-html-sanitizer via a declared **java→pcre** approximation (no new
+  `DIALECTS` entry / `helpers/java` in that wave).
 - **git-secrets is a probe lesson:** "security tool" does not imply "regex
   corpus." Filename/grep-based matching has no regex surface — the probe
   must count regex literals, not trust the tool category.
