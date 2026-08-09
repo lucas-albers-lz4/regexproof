@@ -29,6 +29,12 @@ helper = "pcre2grep"
 status = "required"
 version_prefix = "4."
 
+[perl]
+# Wave 3 ground-truth helper (SpamAssassin / perl t/re). System perl on runners.
+status = "required"
+version_prefix = "5."
+helper = "helpers/perl/match.py"
+
 [redos]
 # helpers/redos/package.json + requirements-redos.txt
 recheck = "4.5.0"

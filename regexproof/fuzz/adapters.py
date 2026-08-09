@@ -67,6 +67,29 @@ def real_accepts_argv_bytes(
     return proc.returncode == 0
 
 
+def real_accepts_perl(
+    pattern: str, flags: str, s: str, *, timeout: float = 10.0
+) -> bool:
+    """Replay via ``helpers/perl/match.py`` (system perl; no Python re)."""
+    root = Path(__file__).resolve().parents[2]
+    helper = root / "helpers" / "perl" / "match.py"
+    try:
+        proc = subprocess.run(
+            [sys.executable, str(helper), "match", pattern, flags or ""],
+            input=s,
+            capture_output=True,
+            text=True,
+            shell=False,
+            timeout=timeout,
+            check=False,
+        )
+    except subprocess.TimeoutExpired:
+        return False
+    if proc.returncode == 2:
+        raise RuntimeError("perl-helper-unavailable")
+    return proc.returncode == 0
+
+
 def real_accepts_yara(
     rule_src: str, data: bytes, *, timeout: float = 10.0
 ) -> bool:

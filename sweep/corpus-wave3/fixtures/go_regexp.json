@@ -1,0 +1,8 @@
+{
+  "surface": "go_regexp",
+  "domain": "ascii",
+  "dialect": "re2",
+  "pattern": "^[a-z]+$",
+  "flags": "",
+  "probes": ["", "abc", "ABC", "a1", "z"]
+}

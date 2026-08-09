@@ -44,8 +44,16 @@ def check_corpus_coverage(
     required_types: tuple[str, ...] = ("rule_corpus", "validator"),
 ) -> list[str]:
     """Return violation messages (empty = ok)."""
+    from regexproof.regex_id import REGEX_ID_FORMULA_VERSION
+
     inventory_dir = inventory_dir or INVENTORY_DIR
     violations: list[str] = []
+    expected_formula = "v2-domain-optional-ascii-default"
+    if REGEX_ID_FORMULA_VERSION != expected_formula:
+        violations.append(
+            f"regex_id_formula_version: got {REGEX_ID_FORMULA_VERSION!r}, "
+            f"want {expected_formula!r}"
+        )
     for ctype in required_types:
         try:
             inv = load_inventory(ctype, inventory_dir=inventory_dir)

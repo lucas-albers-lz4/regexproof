@@ -1,0 +1,8 @@
+{
+  "surface": "perl_re",
+  "domain": "ascii",
+  "helper": "perl",
+  "pattern": "^[0-9]+$",
+  "flags": "",
+  "probes": ["", "0", "12", "a", "01a"]
+}

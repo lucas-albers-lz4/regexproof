@@ -1,15 +1,18 @@
 {
   "checked_ok": 4,
   "engine_versions": {
+    "perl": "v5.38.2",
     "python": "3.14.6",
     "yara": "4.5.8",
     "z3": "5.0.0"
   },
+  "fallback_disabled": false,
   "gate": "mirror_fidelity",
   "mismatches": 0,
   "ok": true,
   "pcre2_helper": true,
   "pcre_checked_ok": 2,
+  "perl_helper": true,
   "results": [
     {
       "corpus": "coreruleset",
@@ -40,7 +43,7 @@
       "status": "ok"
     }
   ],
-  "schema_version": "2",
+  "schema_version": "3",
   "surfaces": {
     "busybox": {
       "dialect": "pcre",
@@ -58,6 +61,24 @@
       "status": "ok",
       "surface": "cpython"
     },
+    "go_regexp": {
+      "dialect": "re2",
+      "domain": "ascii",
+      "mismatches": [],
+      "probes": 5,
+      "status": "ok",
+      "surface": "go_regexp"
+    },
+    "noseyparker": {
+      "dialect": "re2",
+      "domain": "ascii",
+      "mismatches": [],
+      "probes": 5,
+      "status": "ok",
+      "surface": "noseyparker",
+      "wrong_xflag_caught": true,
+      "xflag_stripped": "ab"
+    },
     "pcre2": {
       "dialect": "pcre",
       "domain": "ascii",
@@ -65,6 +86,14 @@
       "probes": 5,
       "status": "ok",
       "surface": "pcre2"
+    },
+    "perl_re": {
+      "domain": "ascii",
+      "helper": "perl",
+      "mismatches": [],
+      "probes": 5,
+      "status": "ok",
+      "surface": "perl_re"
     },
     "re2": {
       "dialect": "re2",
@@ -90,6 +119,22 @@
       "status": "ok",
       "surface": "semgrep"
     },
+    "shhgit": {
+      "dialect": "re2",
+      "domain": "ascii",
+      "mismatches": [],
+      "probes": 5,
+      "status": "ok",
+      "surface": "shhgit"
+    },
+    "spamassassin": {
+      "domain": "ascii",
+      "helper": "perl",
+      "mismatches": [],
+      "probes": 5,
+      "status": "ok",
+      "surface": "spamassassin"
+    },
     "test262": {
       "dialect": "ecma",
       "domain": "ascii",
@@ -112,5 +157,6 @@
   },
   "surfaces_ok": true,
   "wrong_wide_caught": true,
+  "wrong_xflag_caught": true,
   "yara_helper": true
 }

@@ -123,6 +123,35 @@ def assert_job(job: str, cfg: dict) -> list[str]:
                     if not out.lstrip("v").startswith(prefix.rstrip(".")):
                         errors.append(f"yara {out!r} missing prefix {prefix!r}")
                 print(f"yara: ok ({out})")
+        perl_cfg = cfg.get("perl") or {}
+        if perl_cfg.get("status") == "required":
+            try:
+                out = subprocess.check_output(
+                    ["perl", "-e", "print $^V"], text=True, shell=False
+                ).strip()
+            except (OSError, subprocess.CalledProcessError):
+                errors.append("perl required but not available")
+            else:
+                prefix = perl_cfg.get("version_prefix") or ""
+                ver = out.lstrip("v")
+                if prefix and not ver.startswith(prefix.rstrip(".")):
+                    errors.append(f"perl {out!r} missing prefix {prefix!r}")
+                helper = ROOT / "helpers" / "perl" / "match.py"
+                if not helper.is_file():
+                    errors.append("helpers/perl/match.py missing")
+                else:
+                    proc = subprocess.run(
+                        [sys.executable, str(helper), "version"],
+                        capture_output=True,
+                        text=True,
+                        check=False,
+                    )
+                    if proc.returncode != 0:
+                        errors.append(
+                            f"perl helper version failed: {proc.stderr or proc.stdout}"
+                        )
+                    else:
+                        print(f"perl: ok ({out})")
     elif job == "redos":
         if mm != py["redos"]:
             errors.append(f"python {mm} != redos pin {py['redos']}")

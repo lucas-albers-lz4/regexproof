@@ -1,0 +1,13 @@
+{
+  "surface": "noseyparker",
+  "domain": "ascii",
+  "dialect": "re2",
+  "pattern": "ab",
+  "flags": "",
+  "probes": ["", "ab", "a", "a b", "AB"],
+  "xflag": {
+    "raw": "(?x) a b",
+    "stripped": "ab",
+    "wrong_literal": "a b"
+  }
+}

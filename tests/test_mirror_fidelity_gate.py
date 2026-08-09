@@ -1,4 +1,4 @@
-"""Pregate mirror-fidelity gate smoke + Wave-2 surface checks."""
+"""Pregate mirror-fidelity gate smoke + Wave-2/Wave-3 surface checks."""
 
 from __future__ import annotations
 
@@ -11,6 +11,25 @@ import pytest
 
 ROOT = Path(__file__).resolve().parents[1]
 FIXTURES = ROOT / "sweep" / "corpus-wave2" / "fixtures"
+FIXTURES_W3 = ROOT / "sweep" / "corpus-wave3" / "fixtures"
+
+WAVE2 = {
+    "yara",
+    "semgrep",
+    "pcre2",
+    "re2",
+    "cpython",
+    "busybox",
+    "test262",
+    "rule_diff",
+}
+WAVE3_P1 = {
+    "spamassassin",
+    "noseyparker",
+    "shhgit",
+    "perl_re",
+    "go_regexp",
+}
 
 
 def test_mirror_fidelity_gate_script_ok():
@@ -37,16 +56,9 @@ def test_mirror_fidelity_gate_script_ok():
     assert report["ok"] is True
     assert report["surfaces_ok"] is True
     assert report["wrong_wide_caught"] is True
-    assert set(report["surfaces"]) == {
-        "yara",
-        "semgrep",
-        "pcre2",
-        "re2",
-        "cpython",
-        "busybox",
-        "test262",
-        "rule_diff",
-    }
+    assert report["wrong_xflag_caught"] is True
+    assert report["perl_helper"] is True
+    assert set(report["surfaces"]) == WAVE2 | WAVE3_P1
     assert report["checked_ok"] >= 1
     if report.get("pcre2_helper"):
         assert report.get("pcre_checked_ok", 0) >= 1
@@ -71,6 +83,29 @@ def test_mirror_fidelity_fail_closed_missing_fixture():
         reports, ok = mod._run_surfaces()
         assert ok is False
         assert reports["yara"]["status"] == "absent"
+    finally:
+        missing.write_text(backup, encoding="utf-8")
+
+
+def test_mirror_fidelity_wave3_required_input():
+    """Wave-3 surface fixture must be present and non-empty."""
+    import importlib.util
+
+    spec = importlib.util.spec_from_file_location(
+        "mirror_fidelity_gate",
+        ROOT / "scripts" / "mirror-fidelity-gate.py",
+    )
+    mod = importlib.util.module_from_spec(spec)
+    assert spec.loader is not None
+    spec.loader.exec_module(mod)
+
+    missing = FIXTURES_W3 / "noseyparker.json"
+    backup = missing.read_text(encoding="utf-8")
+    missing.unlink()
+    try:
+        reports, ok = mod._run_surfaces(wave3_only=True)
+        assert ok is False
+        assert reports["noseyparker"]["status"] == "absent"
     finally:
         missing.write_text(backup, encoding="utf-8")
 

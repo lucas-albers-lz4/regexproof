@@ -20,6 +20,11 @@ from regexproof.kinds import validate_call_kind, validate_dialect, validate_doma
 
 DEFAULT_DOMAIN = "ascii"
 
+# Wave-2 P2 (#97/#105) formula marker. Wave-3 hard-fails in
+# check_corpus_coverage when this does not match the expected post-migration
+# id_formula string used in fraction artifacts.
+REGEX_ID_FORMULA_VERSION = "v2-domain-optional-ascii-default"
+
 
 def _lp(s: str) -> bytes:
     encoded = s.encode("utf-8")
