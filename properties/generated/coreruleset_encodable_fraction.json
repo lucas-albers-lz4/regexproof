@@ -3,7 +3,7 @@
     "redos_wall_s": 180
   },
   "commit": null,
-  "compiler_fingerprint": "4a86d0cffde9046c",
+  "compiler_fingerprint": "6cb6c870dcce1b00",
   "complete_run": true,
   "corpus_pin": null,
   "decision": "go",
@@ -38,7 +38,7 @@
     "from": "frozen_inventory",
     "prior_artifact_encodable": 239,
     "prior_artifact_fraction": 0.6908,
-    "prior_compiler_fingerprint": "c04a3e0148b3d58a",
+    "prior_compiler_fingerprint": "4a86d0cffde9046c",
     "samples": {
       "now_encodable": [],
       "now_rejected": [
@@ -47,63 +47,63 @@
           "pattern": "br|compress|deflate|(?:pack200-)?gzip|identity|\\*|^$|aes128gcm|exi|zstd|x-(?:compress|gzip)",
           "reason": "per-alternative-anchor",
           "regex_id": "39762ab894d372041a94535811e92e5a",
-          "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-920-PROTOCOL-ENFORCEMENT.conf:1829:0"
+          "site": "batch/corpora/coreruleset/rules/REQUEST-920-PROTOCOL-ENFORCEMENT.conf:1829:0"
         },
         {
           "flags": "",
           "pattern": "(?:^|[^\\x5c])\\x5c[cdeghijklmpqwxyz123456789]",
           "reason": "per-alternative-anchor",
           "regex_id": "a5a5071868f6b77eff6bebbc2ec5a19d",
-          "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-920-PROTOCOL-ENFORCEMENT.conf:1979:0"
+          "site": "batch/corpora/coreruleset/rules/REQUEST-920-PROTOCOL-ENFORCEMENT.conf:1979:0"
         },
         {
           "flags": "",
           "pattern": "(][^\\]]+$|][^\\]]+\\[)",
           "reason": "per-alternative-anchor",
           "regex_id": "a2aee51a050e42295efc866987590bed",
-          "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-921-PROTOCOL-ATTACK.conf:551:0"
+          "site": "batch/corpora/coreruleset/rules/REQUEST-921-PROTOCOL-ATTACK.conf:551:0"
         },
         {
           "flags": "",
           "pattern": "(?:^|[/;\\x5c])\\.{2,3}[/;\\x5c]",
           "reason": "per-alternative-anchor",
           "regex_id": "5610f531e236dd58a09793508805952d",
-          "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-930-APPLICATION-ATTACK-LFI.conf:73:0"
+          "site": "batch/corpora/coreruleset/rules/REQUEST-930-APPLICATION-ATTACK-LFI.conf:73:0"
         },
         {
           "flags": "",
           "pattern": "~[\\+\\-](?:$|[0-9]+)",
           "reason": "per-alternative-anchor",
           "regex_id": "8d849010be9687c39d87d29eb97e1a68",
-          "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-932-APPLICATION-ATTACK-RCE.conf:384:0"
+          "site": "batch/corpora/coreruleset/rules/REQUEST-932-APPLICATION-ATTACK-RCE.conf:384:0"
         },
         {
           "flags": "i",
           "pattern": "<\\?(?:php[\\s\\x0b]|[\\s\\x0b=]|xml(?:[\\s\\x0b]+[^a-z]|:)|$)|\\[[/\\x5c]?php\\]|\\{/?php\\}",
           "reason": "per-alternative-anchor",
           "regex_id": "4626105c7ec07b19194e84a8c5236d12",
-          "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-933-APPLICATION-ATTACK-PHP.conf:53:0"
+          "site": "batch/corpora/coreruleset/rules/REQUEST-933-APPLICATION-ATTACK-PHP.conf:53:0"
         },
         {
           "flags": "",
           "pattern": "(?:^|[/\\x5c])sess_[,\\-0-9a-z]{20,256}$",
           "reason": "per-alternative-anchor",
           "regex_id": "93814b54da34f813048dafe300a88c57",
-          "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-933-APPLICATION-ATTACK-PHP.conf:615:0"
+          "site": "batch/corpora/coreruleset/rules/REQUEST-933-APPLICATION-ATTACK-PHP.conf:615:0"
         },
         {
           "flags": "",
           "pattern": "__[^\\\"&=]*__(?:i?(?:startswith|e(?:ndswith|xact)|contains|regex)|i(?:snull|n)|range|[gl]te?|has_(?:keys?|any_keys)|contained_by)(?:$|\\\"[\\s\\x0b]*:)",
           "reason": "per-alternative-anchor",
           "regex_id": "b18bbb61415133c7b4032ba969969293",
-          "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-934-APPLICATION-ATTACK-GENERIC.conf:470:0"
+          "site": "batch/corpora/coreruleset/rules/REQUEST-934-APPLICATION-ATTACK-GENERIC.conf:470:0"
         },
         {
           "flags": "",
           "pattern": "__(?:i?(?:startswith|e(?:ndswith|xact)|contains|regex)|i(?:snull|n)|range|[gl]te?|has_(?:keys?|any_keys)|contained_by)(?:$|\\\"[\\s\\x0b]*:)",
           "reason": "per-alternative-anchor",
           "regex_id": "5a8d7fa7af78dfc2df8ef4fcebce6713",
-          "site": "/home/lalbers/gitroot/regexproof/batch/corpora/coreruleset/rules/REQUEST-934-APPLICATION-ATTACK-GENERIC.conf:516:0"
+          "site": "batch/corpora/coreruleset/rules/REQUEST-934-APPLICATION-ATTACK-GENERIC.conf:516:0"
         }
       ]
     }
@@ -112,5 +112,5 @@
   "schema_version": "1",
   "scope": "full_corpus",
   "unclassified_parse_errors": 0,
-  "wall_s": 19.503
+  "wall_s": 21.527
 }

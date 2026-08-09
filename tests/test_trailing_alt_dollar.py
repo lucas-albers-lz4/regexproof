@@ -32,9 +32,25 @@ REJECT_CONTROLS = [
     # Mid-pattern $: py_re BRANCH → per-alternative-anchor; others → internal-anchor.
     ("a(?:$|b)c", "search", ("internal-anchor", "per-alternative-anchor")),
     ("(?:^|a)", "search", ("per-alternative-anchor",)),
-    # Leading ^ in X is outside the accept class → stock reject path.
-    ("^0+(?:&|$)", "search", ("per-alternative-anchor",)),
+    # Leading ^ in X is outside A1B (caret-in-X is a separate shape — #103).
 ]
+
+
+def test_a1b_does_not_claim_caret_in_x():
+    """A1B refuse caret-in-X; dispatcher may encode via caret_in_x instead."""
+    from regexproof.compiler.trailing_alt_dollar import try_compile_trailing_alt_dollar
+    from regexproof.compiler import _compile_dialect
+
+    def bare(p, f, d, c):
+        return _compile_dialect(p, f, d, c, max_length=256, domain="ascii")
+
+    a1b = try_compile_trailing_alt_dollar(
+        "^0+(?:&|$)", "", "pcre", "search", compile_bare=bare
+    )
+    assert a1b is None
+    cr = compile_pattern("^0+(?:&|$)", dialect="pcre", call_kind="search")
+    assert cr.encodable
+    assert "caret_in_x" in cr.declared_domain
 
 
 def _membership(mirror, s: str, *, timeout_ms: int = 10000) -> bool:

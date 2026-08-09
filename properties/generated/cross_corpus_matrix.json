@@ -102,19 +102,19 @@
       "corpus": "ids_rules",
       "corpus_pin": "suricata-7.0.3-et-open",
       "decision": "go",
-      "encodable": 6961,
-      "fraction": 0.8519,
+      "encodable": 7123,
+      "fraction": 0.8717,
       "reasons": {
         "backref": 85,
         "bad-range": 1,
         "inline-flag": 90,
-        "internal-anchor": 3,
+        "internal-anchor": 4,
         "lookaround": 174,
         "m-flag": 198,
         "negated-shorthand": 3,
-        "ok": 6961,
+        "ok": 7123,
         "pattern-too-long": 186,
-        "per-alternative-anchor": 235,
+        "per-alternative-anchor": 72,
         "unclosed-class": 219,
         "unclosed-group": 1,
         "unsupported-syntax": 4,
@@ -257,7 +257,7 @@
       "unclassified_parse_errors": 0
     }
   ],
-  "note": "Authoritative per-corpus numbers live in *_encodable_fraction.json; this matrix is a rollup.",
+  "note": "Rollup after caret-in-X (#103).",
   "schema_version": "1",
-  "wave": "corpus-wave-2"
+  "wave": "caret-in-x-103"
 }

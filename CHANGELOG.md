@@ -227,3 +227,12 @@ Authoritative fractions: `properties/generated/cross_corpus_matrix.*` and
 Authoritative rollup: `properties/generated/cross_corpus_matrix.*`.
 A1B residual AC close for ids_rules/CRS is tracked outside the wave (#103).
 Non-goals: no re-litigation of wave #81 TRAPS §28 / superseded stubs.
+
+## Caret-in-X lowering — A1B residual / AC-P3 (#103, 2026-08-09)
+
+- New shape `^X(?:R|$)` in `regexproof/compiler/caret_in_x.py` (domain
+  `ascii;caret_in_x`); A1B accept class **unchanged**.
+- Spike GO: `properties/generated/caret_in_x_spike.*`.
+- Remeasure: ids_rules **0.8717** (AC ≥0.87 **pass**; paa 235→72);
+  coreruleset **0.6908** (CRS mid-pattern paa residual documented).
+- TRAPS §33; delta `caret_in_x_remeasure_delta.*`.

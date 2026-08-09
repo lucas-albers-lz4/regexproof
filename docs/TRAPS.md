@@ -368,7 +368,7 @@ are unsound — #86).
 | In class | Out of class (still `per-alternative-anchor`) |
 |---|---|
 | Pattern ends with `(?:…|$)` | Mid-pattern `$`: `a(?:$|b)c` |
-| Prefix X top-level anchor-free | Leading `^` in X: `^0+(?:&|$)` |
+| Prefix X top-level anchor-free | Leading `^` in X → **caret-in-X** (§33), not A1B |
 | `\b` in X allowed | Capturing / bare `(|$)`: `(&|$)` |
 | | Caret-boundary wrap: `(?:^|…)(…)(?:$|…)` |
 
@@ -478,3 +478,28 @@ lookaround pattern → class=non-comparable-re2 (not a gap)
 ```
 
 Pilot: `scripts/cross-engine-rule-diff-pilot.py` / Wave-2 P5 (#100/#108).
+
+## 33. Caret-in-X vs A1B (do not widen A1B)
+
+<!-- verified-finding: VF-CARET-IN-X-001 -->
+
+Pattern-final `^X(?:R|$)` is **not** A1B. A1B rejects leading `^` in X
+because mid-string `Star·X` suffix semantics are wrong under a BOS caret.
+
+Caret-in-X (`regexproof/compiler/caret_in_x.py`, domain `ascii;caret_in_x`):
+
+- `$` branch ≈ strings equal to X' (X without the leading `^`)
+- `R` branch ≈ strings with prefix X'R (no leading `Star(any)`)
+- Dispatcher tries caret-in-X **before** A1B
+
+**Minimal repro:**
+
+```text
+pattern:  ^0+(?:&|$)
+wrong:    A1B Union(Star·0+&·Star, Star·0+)   # mid-string "0+" over-accepts
+right:    Union(Concat(0+&, Star), fullmatch(0+))
+reject:   ^a|b , a(?:$|b)c , (?:^|a)  # still per-alternative-anchor
+```
+
+Never silently remove A1B’s caret check — that is a false-UNSAT hazard
+(TRAPS §27). Mid-pattern / `$`-first alts remain out of both shapes (#103).
