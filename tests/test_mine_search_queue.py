@@ -435,3 +435,44 @@ def test_search_cap_threshold_flagged():
     session = FakeSession([FakeResp(200, body)])
     _data, hit = search_code(session, "q", sleep_fn=lambda _s: None)
     assert hit is True
+
+
+def test_mine_cli_prints_run_summary(tmp_path: Path, monkeypatch, capsys):
+    import importlib.util
+
+    spec = importlib.util.spec_from_file_location(
+        "mine_cli_summary", ROOT / "scripts" / "mine-corpus-candidates.py"
+    )
+    mod = importlib.util.module_from_spec(spec)
+    assert spec.loader is not None
+    spec.loader.exec_module(mod)
+
+    ledger = tmp_path / "candidate-ledger.json"
+    queue = tmp_path / "mine-queue.json"
+    ledger.write_text('{"schema_version":"1","candidates":[]}\n', encoding="utf-8")
+    queue.write_text('{"schema_version":"1","items":[]}\n', encoding="utf-8")
+
+    monkeypatch.setattr(
+        mod,
+        "run_search",
+        lambda _session: SearchRunResult(candidates=[], capped=True, errors=[]),
+    )
+    monkeypatch.setattr(mod, "_http_session", lambda: object())
+    rc = mod.main(
+        [
+            "--dry-run",
+            "--ledger",
+            str(ledger),
+            "--queue",
+            str(queue),
+            "--generated",
+            str(tmp_path),
+        ]
+    )
+    assert rc == 0
+    lines = [ln for ln in capsys.readouterr().out.splitlines() if ln.strip()]
+    summary = json.loads(lines[-1])
+    assert summary["kind"] == "mine_run_summary"
+    assert summary["capped"] is True
+    assert summary["dry_run"] is True
+    assert summary["accepted"] == 0
