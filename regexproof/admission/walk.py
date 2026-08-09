@@ -30,6 +30,14 @@ _JAVA_PATTERN_COMPILE = re.compile(
     re.MULTILINE,
 )
 
+# Extractor flag letters → inline-flag construct keys for predict_buckets.
+_FLAG_LETTER_TO_CONSTRUCT = {
+    "i": "(?i)",
+    "x": "(?x)",
+    "s": "(?s)",
+    "m": "(?m)",
+}
+
 ExtractFn = Callable[[str, str], list[dict[str, Any]]]
 
 
@@ -150,12 +158,18 @@ def walk_repo(root: Path | str, *, repo_name: str = "probe") -> dict[str, Any]:
             per_file[rel] = file_sites
 
     constructs = accumulate_constructs(patterns)
+    # Fold extractor flag letters into construct keys so /pat/i → (?i) bucket.
+    merged = Counter(constructs)
+    for ch, n in flag_counts.items():
+        key = _FLAG_LETTER_TO_CONSTRUCT.get(ch)
+        if key:
+            merged[key] += n
     return {
         "regex_sites": int(sum(dialect_counts.values())),
         "regex_sites_per_file": dict(sorted(per_file.items())),
         "dialect": normalize_dialect_counts(dict(dialect_counts)),
         "flags": dict(sorted(flag_counts.items())),
         "construct_counts": constructs,
-        "predicted_buckets": predict_buckets(constructs),
+        "predicted_buckets": predict_buckets(dict(merged)),
         "repo_name": repo_name,
     }

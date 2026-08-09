@@ -53,7 +53,6 @@ def partial_clone(
         "git",
         "clone",
         "--filter=blob:none",
-        "--single-branch",
         url,
         str(dest),
     ]
@@ -64,6 +63,14 @@ def partial_clone(
         )
 
     if pin:
+        # Fetch the pin explicitly — default-branch-only clones miss other SHAs.
+        fetch = run_fn(
+            ["git", "-C", str(dest), "fetch", "--filter=blob:none", "origin", pin]
+        )
+        if fetch.returncode != 0:
+            raise CloneError(
+                f"git fetch {pin} failed: {fetch.stderr or fetch.stdout}"
+            )
         co = run_fn(["git", "-C", str(dest), "checkout", "--detach", pin])
         if co.returncode != 0:
             raise CloneError(f"git checkout {pin} failed: {co.stderr or co.stdout}")

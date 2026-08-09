@@ -99,6 +99,8 @@ def test_partial_clone_passes_filter_blob_none(tmp_path: Path):
     )
     assert pin == "abc"
     assert any("--filter=blob:none" in c for c in calls)
+    assert not any("--single-branch" in c for c in calls)
+    assert any("fetch" in c and "abc" in c for c in calls)
     cleanup_clone(tmp_path / "repo")
     assert not (tmp_path / "repo").exists()
 
