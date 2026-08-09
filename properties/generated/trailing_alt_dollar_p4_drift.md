@@ -8,8 +8,14 @@ sets; `(***)` shared-prefix gitleaks rows bucketed as corpus artifacts.
 | Check | Result |
 |---|---|
 | `measure-corpus-fraction.py` | **0.8190** (181/221) — stable vs P3 |
-| `remeasure-frozen-ids.py` vs inventory | missing=0, extra=0, enc flips=0 |
+| `remeasure-frozen-ids.py` vs `gitleaks-frozen-ids.ndjson` | missing=0, extra=0; one enc→unenc flip (below) |
 | `python -m regexproof.batch --corpus gitleaks` | ok |
+
+### Encodability flip vs frozen IDs (not extraction drift)
+
+| regex_id | Now | Classification |
+|---|---|---|
+| `1c97a66dcdc9e6d11a16e998a7fa8a92` | `per-alternative-anchor` | Same residual caret-boundary shape locked in #89 / P3 (`(?:^|…)(…)(?:$|…)`); compiler soundness, not id churn |
 
 ### `(***)` shared-prefix bucket (corpus-artifact)
 

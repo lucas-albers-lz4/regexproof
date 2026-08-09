@@ -1,5 +1,5 @@
 {
-  "baseline": "properties/generated/gitleaks-inventory.ndjson",
+  "baseline": "properties/generated/gitleaks-frozen-ids.ndjson",
   "corpus": "gitleaks",
   "current": {
     "compiler_fingerprint": "4a86d0cffde9046c",
@@ -17,12 +17,14 @@
       "word-boundary": 4
     },
     "sample_size": 221,
-    "wall_s": 1.285,
+    "wall_s": 1.31,
     "z3_version": "5.0.0"
   },
   "current_ids": 221,
   "extra_in_current": [],
-  "flipped_encodable_to_unencodable": [],
+  "flipped_encodable_to_unencodable": [
+    "1c97a66dcdc9e6d11a16e998a7fa8a92"
+  ],
   "flipped_unencodable_to_encodable": [],
   "frozen_ids": 221,
   "missing_from_current": [],
