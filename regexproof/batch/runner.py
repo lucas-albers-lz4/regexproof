@@ -443,8 +443,15 @@ def run_corpus(
     meta = dict(meta)
     path: Path = meta["path"]
     sample = ROOT / "batch" / "corpora" / corpus / "sample"
-    if not path.exists() and sample.is_dir():
+    path_usable = path.exists() and (path.is_file() or any(path.iterdir()))
+    if not path_usable and sample.is_dir():
+        print(
+            f"NOTE: {corpus} corpus path missing/empty ({path}); "
+            f"falling back to sample at {sample}",
+            file=sys.stderr,
+        )
         meta["path"] = sample
+        meta["measure_scope"] = "sample"
     inventory = load_inventory(meta["corpus_type"])
     records = _extract(corpus, meta)
     compiled = _compile_all(

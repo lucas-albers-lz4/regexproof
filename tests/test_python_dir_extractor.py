@@ -76,12 +76,10 @@ def test_run_corpus_falls_back_to_sample_when_plugins_missing(tmp_path, monkeypa
     meta = dict(runner_mod.CORPUS_MANIFESTS["detect-secrets"])
     missing = tmp_path / "no-plugins"
     meta["path"] = missing
-    # Point sample at the committed mini pilot directory.
     sample = runner_mod.ROOT / "batch" / "corpora" / "detect-secrets" / "sample"
     assert sample.is_dir()
 
     calls: list[Path] = []
-
     real_extract = runner_mod._extract
 
     def wrap(corpus, m):
@@ -92,7 +90,29 @@ def test_run_corpus_falls_back_to_sample_when_plugins_missing(tmp_path, monkeypa
     monkeypatch.setattr(runner_mod, "_extract", wrap)
     out = tmp_path / "out"
     out.mkdir()
-    # Avoid writing into properties/; monkeypatch OUT via out_dir arg.
     summary = runner_mod.run_corpus("detect-secrets", out_dir=out, emit_planned=False)
     assert calls and calls[0] == sample
     assert summary["findings"] >= 0
+
+
+def test_run_corpus_falls_back_when_plugins_dir_empty(tmp_path, monkeypatch):
+    from regexproof.batch import runner as runner_mod
+
+    empty = tmp_path / "plugins"
+    empty.mkdir()
+    meta = dict(runner_mod.CORPUS_MANIFESTS["detect-secrets"])
+    meta["path"] = empty
+    sample = runner_mod.ROOT / "batch" / "corpora" / "detect-secrets" / "sample"
+    calls: list[Path] = []
+    real_extract = runner_mod._extract
+
+    def wrap(corpus, m):
+        calls.append(m["path"])
+        return real_extract(corpus, m)
+
+    monkeypatch.setitem(runner_mod.CORPUS_MANIFESTS, "detect-secrets", meta)
+    monkeypatch.setattr(runner_mod, "_extract", wrap)
+    out = tmp_path / "out"
+    out.mkdir()
+    runner_mod.run_corpus("detect-secrets", out_dir=out, emit_planned=False)
+    assert calls and calls[0] == sample
