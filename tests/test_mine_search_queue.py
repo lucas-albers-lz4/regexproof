@@ -255,6 +255,102 @@ def test_assimilate_overflow_before_new_and_dry_run_determinism(tmp_path: Path):
         os.environ.pop("DAILY_MINE_CAP", None)
 
 
+def test_assimilate_calendar_day_cap_and_no_capped_on_overflow():
+    import importlib.util
+    import os
+
+    spec = importlib.util.spec_from_file_location(
+        "mine_cli2", ROOT / "scripts" / "mine-corpus-candidates.py"
+    )
+    mod = importlib.util.module_from_spec(spec)
+    assert spec.loader is not None
+    spec.loader.exec_module(mod)
+
+    ledger = empty_ledger()
+    ledger["candidates"].append(
+        {
+            "url": "https://github.com/earlier/one",
+            "default_branch": "main",
+            "pin": "x",
+            "pushed_date": "2026-08-01",
+            "stars": 1,
+            "source_query": "q",
+            "first_seen": "2026-08-09T01:00:00Z",
+            "status": "mined",
+        }
+    )
+    queue = {
+        "schema_version": "1",
+        "items": [
+            {
+                "url": "https://github.com/queued/first",
+                "default_branch": "main",
+                "pin": "aaa",
+                "pushed_date": "2026-08-01",
+                "stars": 3,
+                "source_query": "q0",
+            }
+        ],
+    }
+    search = SearchRunResult(
+        candidates=[
+            {
+                "url": "https://github.com/fresh/second",
+                "default_branch": "main",
+                "pin": "bbb",
+                "pushed_date": "2026-08-02",
+                "stars": 4,
+                "source_query": "q1",
+            }
+        ],
+        capped=True,
+    )
+    os.environ["DAILY_MINE_CAP"] = "1"
+    try:
+        accepted = mod.assimilate(
+            search_result=search,
+            ledger=ledger,
+            queue=queue,
+            admitted=set(),
+            dry_run=True,
+            now_iso="2026-08-09T12:00:00Z",
+        )
+        assert accepted == []
+        assert any(i["url"].endswith("/fresh/second") for i in queue["items"])
+        assert any(i["url"].endswith("/queued/first") for i in queue["items"])
+    finally:
+        os.environ.pop("DAILY_MINE_CAP", None)
+
+    os.environ["DAILY_MINE_CAP"] = "1"
+    try:
+        ledger2 = empty_ledger()
+        queue2 = {
+            "schema_version": "1",
+            "items": [
+                {
+                    "url": "https://github.com/queued/first",
+                    "default_branch": "main",
+                    "pin": "aaa",
+                    "pushed_date": "2026-08-01",
+                    "stars": 3,
+                    "source_query": "q0",
+                }
+            ],
+        }
+        accepted2 = mod.assimilate(
+            search_result=SearchRunResult(candidates=[], capped=True),
+            ledger=ledger2,
+            queue=queue2,
+            admitted=set(),
+            dry_run=True,
+            now_iso="2026-08-09T12:00:00Z",
+        )
+        assert len(accepted2) == 1
+        assert "capped" not in accepted2[0]
+    finally:
+        os.environ.pop("DAILY_MINE_CAP", None)
+
+
 def test_normalize_url_scheme_and_git_suffix():
     a = normalize_repo_url("http://github.com/Acme/Tool.git")
     b = normalize_repo_url("https://github.com/acme/tool")

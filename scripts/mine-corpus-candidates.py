@@ -49,15 +49,22 @@ def assimilate(
     dry_run: bool,
     now_iso: str | None = None,
 ) -> list[dict[str, Any]]:
-    """Merge search hits into ledger/queue respecting daily cap (overflow first)."""
+    """Merge search hits into ledger/queue respecting calendar-day cap (overflow first)."""
     now_iso = now_iso or datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    day = now_iso[:10]
     cap = daily_mine_cap()
+    already = sum(
+        1
+        for c in ledger.get("candidates", [])
+        if str(c.get("first_seen") or "")[:10] == day
+    )
+    room = max(0, cap - already)
     accepted: list[dict[str, Any]] = []
 
     evict_stale(queue)
-    # Overflow first
-    room = cap
-    for item in drain(queue, room):
+    # Overflow first — pull one-at-a-time so exclusions do not waste the day budget
+    while room > 0 and queue.get("items"):
+        item = drain(queue, 1)[0]
         url = item.get("url")
         if not url or is_excluded(url, ledger=ledger, admitted=admitted):
             continue
@@ -78,8 +85,6 @@ def assimilate(
         ledger["candidates"].append(entry)
         accepted.append(entry)
         room -= 1
-        if room <= 0:
-            break
 
     queue_dropped = 0
     for cand in search_result.candidates:
@@ -99,6 +104,7 @@ def assimilate(
                 "first_seen": now_iso,
                 "status": "mined",
             }
+            # Cap flag is search-run provenance only — never stamp overflow drains.
             if cand.get("capped") or search_result.capped:
                 entry["capped"] = True
             ledger["candidates"].append(entry)
@@ -107,11 +113,6 @@ def assimilate(
         else:
             if not enqueue(queue, cand):
                 queue_dropped += 1
-
-    if search_result.capped:
-        for c in ledger["candidates"]:
-            if c in accepted:
-                c["capped"] = True
 
     if queue_dropped:
         print(

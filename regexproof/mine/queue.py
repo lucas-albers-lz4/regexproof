@@ -18,6 +18,11 @@ DEFAULT_QUEUE_PATH = REPO_ROOT / "properties" / "generated" / "mine-queue.json"
 
 
 def daily_mine_cap() -> int:
+    """Max new ledger admissions per UTC calendar day (env ``DAILY_MINE_CAP``).
+
+    Enforced by counting candidates whose ``first_seen`` date is today, not
+    merely per process invocation.
+    """
     env = os.environ.get("DAILY_MINE_CAP")
     if env is not None and env.strip().isdigit():
         return int(env)
