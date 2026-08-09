@@ -201,13 +201,17 @@
       }
     },
     {
-      "description": "A fresh (non-grandfathered) probe must carry real evidence: at least one regex site.",
+      "description": "A fresh (non-grandfathered) GO or TRIAGE-TRIAL decision must carry real evidence: at least one regex site. NO-GO decisions are exempt — zero regex sites is itself a valid rejection reason (no regex surface to scan).",
       "if": {
         "properties": {
           "decision_basis": {
             "not": { "const": "grandfathered" }
+          },
+          "decision": {
+            "enum": ["go", "triage-trial"]
           }
-        }
+        },
+        "required": ["decision_basis", "decision"]
       },
       "then": {
         "properties": {

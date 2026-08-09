@@ -252,6 +252,21 @@ def test_triage_trial_requires_security_boundary():
     __import__("jsonschema").validate(instance=good, schema=schema)
 
 
+def test_no_go_exempt_from_probe_evidence_minimum():
+    """NO-GO with zero regex sites is valid: no regex surface is itself the rejection."""
+    schema = gate_decision_schema()
+    good = _decision(
+        "no-go",
+        probe={
+            "regex_sites": 0,
+            "dialect": {"shell": 0},
+            "flags": {},
+            "predicted_buckets": {},
+        },
+    )
+    __import__("jsonschema").validate(instance=good, schema=schema)
+
+
 def test_conditions_ids_are_unique():
     """Three copies of the same condition id must not validate."""
     from jsonschema import ValidationError
