@@ -70,7 +70,9 @@ def extract_java_pattern(
             pattern=body if not reason else pattern,
             flags=flags if not reason else "",
             dialect=dialect,
-            call_kind="search",
+            # HtmlPolicyBuilder.matching → Pattern.matcher(value).matches()
+            # (whole-string membership), not find()/search.
+            call_kind="fullmatch",
             file=file,
             line=line,
             column=col,

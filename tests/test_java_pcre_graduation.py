@@ -39,6 +39,7 @@ def test_extract_java_pattern_marks_approximation():
     assert rec["dialect"] == "pcre"
     assert rec["source_dialect"] == "java"
     assert rec["approximation"] == APPROXIMATION
+    assert rec["call_kind"] == "fullmatch"
     assert rec["flags"] == "i"
     assert rec["pattern"] == "center|left|right"
     assert not rec.get("unencodable_reason")

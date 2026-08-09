@@ -112,9 +112,16 @@ def classify_encodable(rec: dict) -> dict:
     return rec
 
 
-def _pcre2_match(pattern: str, flags: str, data: str) -> bool | None:
+def _pcre2_match(
+    pattern: str, flags: str, data: str, *, call_kind: str = "fullmatch"
+) -> bool | None:
+    """Replay via helpers/pcre2. ``fullmatch`` anchors like Java Matcher.matches()."""
+    replay = pattern
+    if call_kind in {"fullmatch", "match"}:
+        # Helper uses search/pcre2grep; wrap to whole-string membership.
+        replay = f"^(?:{pattern})$"
     proc = subprocess.run(
-        [sys.executable, str(HELPER), "match", pattern, flags],
+        [sys.executable, str(HELPER), "match", replay, flags],
         input=data,
         capture_output=True,
         text=True,
@@ -133,10 +140,11 @@ def differential_check(rec: dict, *, samples: list[str] | None = None) -> dict:
 
     pattern = rec["pattern"]
     flags = rec.get("flags") or ""
+    call_kind = rec.get("call_kind") or "fullmatch"
     # Avoid empty-string samples: pcre2 helper line/match semantics disagree with
     # Z3 on optional patterns (e.g. `.?`) for the empty input.
     samples = samples or ["a", "A", "0", " ", "center", "LEFT", "#fff", "noresize", "xy"]
-    result = compile_pcre(pattern, flags, call_kind=rec.get("call_kind") or "search")
+    result = compile_pcre(pattern, flags, call_kind=call_kind)
     if not result.encodable or result.mirror is None:
         return {
             "regex_id": rec["regex_id"],
@@ -147,11 +155,10 @@ def differential_check(rec: dict, *, samples: list[str] | None = None) -> dict:
     disagree = 0
     checked = 0
     for s in samples:
-        real = _pcre2_match(pattern, flags, s)
+        real = _pcre2_match(pattern, flags, s, call_kind=call_kind)
         if real is None:
             continue
         solver = z3.Solver()
-        # search-style: InRe on whole string with call_kind already wrapping mirror
         solver.add(z3.InRe(z3.StringVal(s), result.mirror))
         mirror_hit = solver.check() == z3.sat
         checked += 1
