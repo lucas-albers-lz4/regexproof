@@ -1,11 +1,15 @@
 #!/usr/bin/env python3
-"""Corpus-wave mirror-fidelity gate (Wave 2: 8 surfaces + YARA domains).
+"""Corpus-wave mirror-fidelity gate (Wave 2 + Wave 3 P1 surfaces).
 
 1. Fail-closed surface probes for ALL 8 Wave-2 surfaces (fixtures under
    ``sweep/corpus-wave2/fixtures/``). Absent fixture → gate fail.
 2. YARA byte-level replay (temp-file + ``yara``) with UTF-16LE / NUL probes;
    a deliberately-wrong ``wide`` mirror must be caught.
-3. Legacy inventory differential fuzz (CRS / gitleaks) when helpers exist.
+3. Wave-3 P1: 5 of 9 surfaces under ``sweep/corpus-wave3/fixtures/`` with
+   per-corpus REQUIRED-INPUT assertions (no synthetic fallback for W3).
+   Deliberately-wrong ``(?x)`` mirror must be caught (``wrong_xflag_caught``).
+4. Legacy inventory differential fuzz (CRS / gitleaks) when helpers exist
+   (Wave-2 path only; disabled under ``--wave3-only``).
 
 Hard-fails on any mirror↔real mismatch or missing surface. Writes
 ``properties/generated/mirror_fidelity_gate.json``.
@@ -13,6 +17,7 @@ Hard-fails on any mirror↔real mismatch or missing surface. Writes
 Usage:
   python scripts/mirror-fidelity-gate.py
   python scripts/mirror-fidelity-gate.py --max-per-corpus 8 --runs 40
+  python scripts/mirror-fidelity-gate.py --skip-inventory
 """
 
 from __future__ import annotations
@@ -35,14 +40,16 @@ from regexproof.compiler import pcre as pcre_mod  # noqa: E402
 from regexproof.compiler import re2 as re2_mod  # noqa: E402
 from regexproof.fuzz.adapters import (  # noqa: E402
     real_accepts_argv,
+    real_accepts_perl,
     real_accepts_yara,
 )
 
 OUT = ROOT / "properties" / "generated" / "mirror_fidelity_gate.json"
 FIXTURES = ROOT / "sweep" / "corpus-wave2" / "fixtures"
+FIXTURES_W3 = ROOT / "sweep" / "corpus-wave3" / "fixtures"
 
 # Explicit Wave-2 surfaces — fail closed when fixture absent.
-SURFACES = (
+WAVE2_SURFACES = (
     "yara",
     "semgrep",
     "pcre2",
@@ -52,6 +59,17 @@ SURFACES = (
     "test262",
     "rule_diff",
 )
+
+# Wave-3 P1: 5 of 9 (dompurify/isemail/email_addresses/mjsunit deferred to P4/P5).
+WAVE3_SURFACES_P1 = (
+    "spamassassin",
+    "noseyparker",
+    "shhgit",
+    "perl_re",
+    "go_regexp",
+)
+
+SURFACES = WAVE2_SURFACES + WAVE3_SURFACES_P1
 
 
 def _mirror_accepts(mirror, s: str) -> bool | None:
@@ -105,6 +123,20 @@ def _replay_argv(dialect: str, pattern: str, flags: str) -> list[str] | None:
         if not re2_mod.helper_used_for_parse_and_replay():
             return None
         return re2_mod.replay_argv(pattern, flags)
+    if dialect == "perl":
+        helper = ROOT / "helpers" / "perl" / "match.py"
+        if not helper.is_file():
+            return None
+        # Presence gate via version (fail closed).
+        ver = subprocess.run(
+            [sys.executable, str(helper), "version"],
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        if ver.returncode != 0:
+            return None
+        return [sys.executable, str(helper), "match", pattern, flags or ""]
     if dialect == "py_re":
         code = (
             "import re,sys\n"
@@ -359,16 +391,122 @@ def _check_rule_diff_surface(fixture: Path) -> dict:
     }
 
 
-def _run_surfaces() -> tuple[dict[str, dict], bool]:
+def _check_perl_surface(name: str, fixture: Path) -> dict:
+    """Spike mirror (re2-encodable) vs real perl helper — dialect not in DIALECTS yet."""
+    meta = json.loads(fixture.read_text(encoding="utf-8"))
+    pattern = meta["pattern"]
+    flags = meta.get("flags") or ""
+    probes = meta.get("probes") or ["", "a"]
+    try:
+        # Presence gate
+        helper = ROOT / "helpers" / "perl" / "match.py"
+        ver = subprocess.run(
+            [sys.executable, str(helper), "version"],
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        if ver.returncode != 0:
+            return {
+                "surface": name,
+                "status": "absent",
+                "error": "perl-helper-unavailable",
+            }
+    except OSError as exc:
+        return {"surface": name, "status": "absent", "error": str(exc)}
+
+    # Mirror via re2 compile of the same pattern (spike patterns are re2-safe).
+    cr = compile_pattern(pattern, flags, "re2", "fullmatch")
+    if not cr.encodable or cr.mirror is None:
+        return {
+            "surface": name,
+            "status": "absent",
+            "error": f"unencodable:{cr.unencodable_reason}",
+        }
+    mismatches = []
+    for s in probes:
+        m = _mirror_accepts(cr.mirror, s)
+        if m is None:
+            mismatches.append({"input": s, "reason": "mirror_timeout"})
+            break
+        try:
+            real = real_accepts_perl(pattern, flags, s)
+        except RuntimeError as exc:
+            msg = str(exc)
+            if "perl-helper-unavailable" in msg:
+                return {"surface": name, "status": "absent", "error": msg}
+            mismatches.append({"input": s, "error": msg})
+            break
+        if bool(m) != bool(real):
+            mismatches.append({"input": s, "mirror": bool(m), "real": bool(real)})
+            break
+    return {
+        "surface": name,
+        "status": "mismatch" if mismatches else "ok",
+        "helper": "perl",
+        "domain": meta.get("domain") or "ascii",
+        "mismatches": mismatches,
+        "probes": len(probes),
+    }
+
+
+def _check_noseyparker_xflag_surface(fixture: Path) -> dict:
+    """re2 dialect probes + deliberately-wrong (?x) mirror must be caught."""
+    meta = json.loads(fixture.read_text(encoding="utf-8"))
+    base = _check_dialect_surface(
+        "noseyparker", fixture, dialect="re2", call_kind="search"
+    )
+    xflag = meta.get("xflag") or {}
+    stripped = xflag.get("stripped") or meta["pattern"]
+    wrong_literal = xflag.get("wrong_literal") or "a b"
+    correct = z3.Re(stripped)
+    wrong = z3.Re(wrong_literal)
+    argv = _replay_argv("re2", stripped, "")
+    if argv is None:
+        base["status"] = "absent"
+        base["error"] = "helper-unavailable:re2"
+        base["wrong_xflag_caught"] = False
+        return base
+
+    # Correct stripped form agrees with real on "ab"
+    m_ok = _mirror_accepts(correct, stripped)
+    real_ok = real_accepts_argv(argv, stripped)
+    # Wrong mirror accepts whitespace form; real stripped engine does not
+    catch_probe = wrong_literal
+    wrong_m = _mirror_accepts(wrong, catch_probe)
+    real_catch = real_accepts_argv(argv, catch_probe)
+    wrong_xflag_caught = bool(wrong_m) is True and bool(real_catch) is False
+
+    status = base.get("status") or "ok"
+    if base.get("mismatches"):
+        status = "mismatch"
+    elif m_ok is not True or real_ok is not True:
+        status = "mismatch"
+        base.setdefault("mismatches", []).append(
+            {"input": stripped, "mirror": m_ok, "real": real_ok, "kind": "xflag_correct"}
+        )
+    elif not wrong_xflag_caught:
+        status = "wrong_xflag_not_caught"
+    base["status"] = status
+    base["wrong_xflag_caught"] = wrong_xflag_caught
+    base["xflag_stripped"] = stripped
+    return base
+
+
+def _run_surfaces(*, wave3_only: bool = False) -> tuple[dict[str, dict], bool]:
     reports: dict[str, dict] = {}
     all_ok = True
-    for name in SURFACES:
-        fixture = FIXTURES / f"{name}.json"
-        if not fixture.is_file():
+    names = WAVE3_SURFACES_P1 if wave3_only else SURFACES
+    for name in names:
+        if name in WAVE3_SURFACES_P1:
+            fixture = FIXTURES_W3 / f"{name}.json"
+        else:
+            fixture = FIXTURES / f"{name}.json"
+        if not fixture.is_file() or fixture.stat().st_size == 0:
             reports[name] = {
                 "surface": name,
                 "status": "absent",
-                "error": f"missing-fixture:{fixture.relative_to(ROOT)}",
+                "error": f"missing-fixture:{fixture.relative_to(ROOT) if fixture.exists() else name}",
             }
             all_ok = False
             continue
@@ -376,6 +514,10 @@ def _run_surfaces() -> tuple[dict[str, dict], bool]:
             rec = _check_yara_surface(fixture)
         elif name == "rule_diff":
             rec = _check_rule_diff_surface(fixture)
+        elif name in ("spamassassin", "perl_re"):
+            rec = _check_perl_surface(name, fixture)
+        elif name == "noseyparker":
+            rec = _check_noseyparker_xflag_surface(fixture)
         else:
             dialect_map = {
                 "semgrep": ("py_re", "search"),
@@ -384,6 +526,8 @@ def _run_surfaces() -> tuple[dict[str, dict], bool]:
                 "cpython": ("py_re", "search"),
                 "busybox": ("pcre", "search"),
                 "test262": ("ecma", "search"),
+                "shhgit": ("re2", "fullmatch"),
+                "go_regexp": ("re2", "fullmatch"),
             }
             dialect, ck = dialect_map[name]
             rec = _check_dialect_surface(name, fixture, dialect=dialect, call_kind=ck)
@@ -401,7 +545,17 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument(
         "--skip-inventory",
         action="store_true",
-        help="Only run the 8 Wave-2 surface fixtures (used by unit tests).",
+        help="Only run surface fixtures (used by unit tests).",
+    )
+    ap.add_argument(
+        "--wave3-only",
+        action="store_true",
+        help="Run Wave-3 P1 surfaces only (no Wave-2 inventory fallback).",
+    )
+    ap.add_argument(
+        "--disable-fallback",
+        action="store_true",
+        help="Never use synthetic inventory fallback probes (required for Wave-3).",
     )
     args = ap.parse_args(argv)
 
@@ -409,10 +563,13 @@ def main(argv: list[str] | None = None) -> int:
         print("FATAL: need z3-solver 5.0.x", file=sys.stderr)
         return 3
 
-    surface_reports, surfaces_ok = _run_surfaces()
+    # Wave-3 runs never pass via synthetic fallback.
+    disable_fallback = bool(args.disable_fallback or args.wave3_only)
+
+    surface_reports, surfaces_ok = _run_surfaces(wave3_only=args.wave3_only)
 
     results = []
-    if not args.skip_inventory:
+    if not args.skip_inventory and not args.wave3_only:
         corpora = [
             (
                 "coreruleset",
@@ -474,7 +631,7 @@ def main(argv: list[str] | None = None) -> int:
                         **_fuzz_one(rec, runs=args.runs, seed=args.seed),
                     }
                 )
-        if not any(r.get("status") == "ok" for r in results):
+        if not disable_fallback and not any(r.get("status") == "ok" for r in results):
             for rec in fallback:
                 # Skip pcre fallbacks when helper absent (CI).
                 if rec["dialect"] == "pcre" and not pcre_mod.helper_used_for_parse_and_replay():
@@ -496,31 +653,62 @@ def main(argv: list[str] | None = None) -> int:
     pcre_ok = [r for r in pcre_attempted if r.get("status") == "ok"]
     pcre2 = pcre_mod.helper_used_for_parse_and_replay()
     inv_ok = True
-    if not args.skip_inventory:
+    if not args.skip_inventory and not args.wave3_only:
         inv_ok = len(mismatches) == 0 and len(oks) > 0
         if pcre_attempted and pcre2 and not pcre_ok and not mismatches:
             inv_ok = False
 
     wrong_wide = bool(surface_reports.get("yara", {}).get("wrong_wide_caught"))
-    ok = surfaces_ok and inv_ok and wrong_wide
+    wrong_xflag = bool(surface_reports.get("noseyparker", {}).get("wrong_xflag_caught"))
+    # When wave2 yara is in the run, require wrong_wide; always require wrong_xflag
+    # when noseyparker surface is present.
+    catch_ok = True
+    if "yara" in surface_reports:
+        catch_ok = catch_ok and wrong_wide
+    if "noseyparker" in surface_reports:
+        catch_ok = catch_ok and wrong_xflag
+    ok = surfaces_ok and inv_ok and catch_ok
+
+    perl_helper_ok = False
+    helper = ROOT / "helpers" / "perl" / "match.py"
+    if helper.is_file():
+        perl_helper_ok = (
+            subprocess.run(
+                [sys.executable, str(helper), "version"],
+                capture_output=True,
+                check=False,
+            ).returncode
+            == 0
+        )
+
     report = {
-        "schema_version": "2",
+        "schema_version": "3",
         "gate": "mirror_fidelity",
         "ok": ok,
         "surfaces_ok": surfaces_ok,
         "wrong_wide_caught": wrong_wide,
+        "wrong_xflag_caught": wrong_xflag,
         "surfaces": surface_reports,
         "checked_ok": len(oks),
         "mismatches": len(mismatches),
         "pcre2_helper": pcre2,
         "pcre_checked_ok": len(pcre_ok),
         "yara_helper": shutil.which("yara") is not None,
+        "perl_helper": perl_helper_ok,
+        "fallback_disabled": disable_fallback,
         "engine_versions": {
             "python": platform.python_version(),
             "z3": z3.get_version_string(),
             "yara": (
                 subprocess.run(["yara", "-v"], capture_output=True, text=True).stdout.strip()
                 if shutil.which("yara")
+                else None
+            ),
+            "perl": (
+                subprocess.run(
+                    ["perl", "-e", "print $^V"], capture_output=True, text=True
+                ).stdout.strip()
+                if shutil.which("perl")
                 else None
             ),
         },
@@ -530,8 +718,8 @@ def main(argv: list[str] | None = None) -> int:
     OUT.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     print(
         f"mirror-fidelity: ok={report['ok']} surfaces_ok={surfaces_ok} "
-        f"wrong_wide_caught={wrong_wide} checked={len(oks)} "
-        f"mismatches={len(mismatches)} → {OUT.relative_to(ROOT)}"
+        f"wrong_wide_caught={wrong_wide} wrong_xflag_caught={wrong_xflag} "
+        f"checked={len(oks)} mismatches={len(mismatches)} → {OUT.relative_to(ROOT)}"
     )
     return 0 if report["ok"] else 1
 

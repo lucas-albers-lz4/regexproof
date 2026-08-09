@@ -1,0 +1,8 @@
+{
+  "surface": "spamassassin",
+  "domain": "ascii",
+  "helper": "perl",
+  "pattern": "^[A-Za-z0-9._-]+$",
+  "flags": "",
+  "probes": ["", "abc", "A_1", "a b", "x!y"]
+}

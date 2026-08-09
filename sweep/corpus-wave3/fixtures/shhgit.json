@@ -1,0 +1,8 @@
+{
+  "surface": "shhgit",
+  "domain": "ascii",
+  "dialect": "re2",
+  "pattern": "^.*_rsa$",
+  "flags": "i",
+  "probes": ["", "id_rsa", "FOO_RSA", "foo_rsa", "id_rsa.bak"]
+}
