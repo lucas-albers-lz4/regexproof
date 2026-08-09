@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from regexproof.mine.audit import mark_auto_filed, run_audit_sampler, sample_size
 from regexproof.mine.exclusions import is_excluded, load_admitted_urls
 from regexproof.mine.ledger import (
     LEDGER_SCHEMA_VERSION,
@@ -23,7 +24,10 @@ __all__ = [
     "load_admitted_urls",
     "load_ledger",
     "load_queue",
+    "mark_auto_filed",
+    "run_audit_sampler",
     "run_search",
+    "sample_size",
     "save_ledger",
     "save_queue",
     "transition_candidate",
