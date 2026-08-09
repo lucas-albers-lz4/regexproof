@@ -47,6 +47,9 @@ from regexproof.extractors.modsec import count_operators, extract_modsec  # noqa
 from regexproof.extractors.pcre2_testdata import extract_pcre2_testdata  # noqa: E402
 from regexproof.extractors.python_ast import extract_python  # noqa: E402
 from regexproof.extractors.rule_file import extract_rule_file  # noqa: E402
+from regexproof.extractors.dompurify import extract_dompurify  # noqa: E402
+from regexproof.extractors.email_addresses import extract_email_addresses  # noqa: E402
+from regexproof.extractors.isemail import extract_isemail  # noqa: E402
 from regexproof.extractors.noseyparker import extract_noseyparker  # noqa: E402
 from regexproof.extractors.shhgit import extract_shhgit  # noqa: E402
 from regexproof.extractors.spamassassin import extract_spamassassin  # noqa: E402
@@ -316,6 +319,79 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
             "max_disk_mb": 50,
         },
     },
+    "dompurify": {
+        "corpus_type": "rule_corpus",
+        # Materialize: ln -sfn /tmp/DOMPurify batch/corpora/dompurify/rules
+        # (gitignored). TS sources are listed explicitly — js_dir globs *.js only.
+        "path": ROOT / "batch" / "corpora" / "dompurify" / "rules",
+        "files": [
+            "src/purify.ts",
+            "src/regexp.ts",
+            "src/attrs.ts",
+            "src/tags.ts",
+            "src/utils.ts",
+        ],
+        "dialect": "ecma",
+        "extractor": "dompurify",
+        "repo": "cure53/DOMPurify",
+        "security_tool": True,
+        "lift_inline": False,
+        "corpus_pin": "7392211bda80f9c1038db32fc090119685bfe425",
+        "commit": "7392211bda80f9c1038db32fc090119685bfe425",
+        "budget": {
+            "max_patterns": 5000,
+            "max_wall_s": 300,
+            "redos_wall_s": 60,
+            "max_mem_mb": 512,
+            "max_disk_mb": 50,
+        },
+    },
+    "isemail": {
+        "corpus_type": "validator",
+        "path": ROOT / "batch" / "corpora" / "isemail" / "rules",
+        "files": [
+            "constants.js",
+            "diagnoses.js",
+            "index.js",
+            "parser.js",
+            "reader.js",
+            "utils.js",
+            "validation.js",
+        ],
+        "dialect": "ecma",
+        "extractor": "isemail",
+        "repo": "hapijs/isemail",
+        "security_tool": False,
+        "lift_inline": False,
+        "corpus_pin": "8789d509d69f098350783fb2d8d2bf05f036b448",
+        "commit": "8789d509d69f098350783fb2d8d2bf05f036b448",
+        "budget": {
+            "max_patterns": 5000,
+            "max_wall_s": 300,
+            "redos_wall_s": 60,
+            "max_mem_mb": 512,
+            "max_disk_mb": 50,
+        },
+    },
+    "email_addresses": {
+        "corpus_type": "validator",
+        "path": ROOT / "batch" / "corpora" / "email_addresses" / "rules",
+        "files": ["email-addresses.js"],
+        "dialect": "ecma",
+        "extractor": "email_addresses",
+        "repo": "jackbearheart/email-addresses",
+        "security_tool": False,
+        "lift_inline": False,
+        "corpus_pin": "8e6be27770b7be223c2de035d7e52849f938c959",
+        "commit": "8e6be27770b7be223c2de035d7e52849f938c959",
+        "budget": {
+            "max_patterns": 5000,
+            "max_wall_s": 300,
+            "redos_wall_s": 60,
+            "max_mem_mb": 512,
+            "max_disk_mb": 50,
+        },
+    },
 }
 
 WAVE_CORPORA = frozenset({
@@ -323,6 +399,7 @@ WAVE_CORPORA = frozenset({
     "pcre2_testdata", "re2_testdata", "cpython_re", "busybox",
     "yara_rules", "test262", "spamassassin",
     "noseyparker", "shhgit",
+    "dompurify", "isemail", "email_addresses",
 })
 
 
@@ -558,6 +635,33 @@ def _extract(corpus: str, meta: dict[str, Any]) -> list[dict[str, Any]]:
             glob=meta.get("glob") or "config.yaml",
             extract_fn=lambda src, rel: extract_shhgit(
                 src, repo=meta["repo"], file=rel, dialect=meta["dialect"]
+            ),
+        )
+    if meta["extractor"] == "dompurify":
+        return _extract_glob(
+            path,
+            meta,
+            glob=meta.get("glob") or "src/*.ts",
+            extract_fn=lambda src, rel: extract_dompurify(
+                src, repo=meta["repo"], file=rel
+            ),
+        )
+    if meta["extractor"] == "isemail":
+        return _extract_glob(
+            path,
+            meta,
+            glob=meta.get("glob") or "*.js",
+            extract_fn=lambda src, rel: extract_isemail(
+                src, repo=meta["repo"], file=rel
+            ),
+        )
+    if meta["extractor"] == "email_addresses":
+        return _extract_glob(
+            path,
+            meta,
+            glob=meta.get("glob") or "*.js",
+            extract_fn=lambda src, rel: extract_email_addresses(
+                src, repo=meta["repo"], file=rel
             ),
         )
     if meta["extractor"] == "test262":
