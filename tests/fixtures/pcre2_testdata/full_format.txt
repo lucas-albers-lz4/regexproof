@@ -1,0 +1,53 @@
+# pcre2test full-format fixture
+# Tests multi-delimiter, continuations, modifier lists, # commands
+
+# Simple /…/ pattern
+/abc/
+    abc
+
+# Pattern with flags
+/[a-z]+/i
+    XYZ
+
+# Non-slash delimiter (!)
+!foo|bar!
+    foobar
+
+# Non-slash delimiter (#) — different from comment
+#hello#
+    hello
+
+# Modifier list (comma-separated)
+/case_test/caseless,multiline
+    CASE_TEST
+
+# Multi-line continuation (delimiter not closed on first line)
+/multi
+line
+pattern/i
+    multilinepattern
+
+# Command line (skip, don't crash)
+#pattern
+#perltest
+#subject anything here
+
+# Empty pattern (should be skipped)
+//
+    empty
+
+# Escaped delimiter
+/foo\/bar/
+    foo/bar
+
+# Pattern with many flags
+/\d+/imsx
+    123
+
+# Backslash at end of pattern (not a continuation — delimiter follows)
+/end\\/
+    end\
+
+# Pattern with non-standard delimiter and flags
+<anchored><
+    anchored

@@ -1,16 +1,19 @@
 {
   "budget": {
+    "max_disk_mb": 50,
+    "max_mem_mb": 512,
     "max_patterns": 5000,
     "max_wall_s": 300
   },
+  "budget_breaches": null,
   "commit": null,
-  "compiler_fingerprint": "4a86d0cffde9046c",
-  "complete_run": true,
+  "compiler_fingerprint": "71d2ce23b4cd",
+  "complete_run": false,
   "corpus_pin": "2024-07-02",
   "decision": "go",
   "decision_rule": "go iff encodable/sample_size >= 0.3",
   "dialect": "re2",
-  "encodable": 2,
+  "encodable": 4,
   "engine_versions": {
     "python": "3.14.6",
     "z3": "5.0.0"
@@ -18,30 +21,14 @@
   "fraction": 1.0,
   "go_no_go_threshold": 0.3,
   "inventory_path": "properties/generated/re2_testdata-inventory.ndjson",
+  "path": "batch/corpora/re2_testdata/sample",
   "pilot": "re2_testdata",
   "reasons": {
-    "ok": 2
+    "ok": 4
   },
-  "remeasure": {
-    "baseline_encodable": 2,
-    "baseline_fraction": 1.0,
-    "flips": {
-      "now_encodable": 0,
-      "now_rejected": 0,
-      "unchanged": 2
-    },
-    "from": "frozen_inventory",
-    "prior_artifact_encodable": 2,
-    "prior_artifact_fraction": 1.0,
-    "prior_compiler_fingerprint": "c04a3e0148b3d58a",
-    "samples": {
-      "now_encodable": [],
-      "now_rejected": []
-    }
-  },
-  "sample_size": 2,
+  "sample_size": 4,
   "schema_version": "1",
   "scope": "sample",
   "unclassified_parse_errors": 0,
-  "wall_s": 0.015
+  "wall_s": 0.026
 }

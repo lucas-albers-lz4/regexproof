@@ -1,2 +1,2 @@
 {"call_kind": "search", "compile_reason": null, "corpus": "busybox", "dialect": "pcre", "encodable": true, "flags": "", "pattern": "[0-9]+", "regex_id": "37870870dad5d3fe37415584622c2dd8", "site": "batch/corpora/busybox/sample/sample.tests:1:0"}
-{"call_kind": "search", "compile_reason": null, "corpus": "busybox", "dialect": "pcre", "encodable": true, "flags": "", "pattern": "s/a/b/", "regex_id": "5c9ef153528ade5dce4d433af02c5b0a", "site": "batch/corpora/busybox/sample/sample.tests:2:0"}
+{"call_kind": "search", "compile_reason": null, "corpus": "busybox", "dialect": "pcre", "encodable": true, "flags": "", "pattern": "a/b/", "regex_id": "f28e13935539e8493129bbf6b04c823b", "site": "batch/corpora/busybox/sample/sample.tests:2:0"}

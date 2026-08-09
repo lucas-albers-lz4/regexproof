@@ -33,7 +33,11 @@ from regexproof.batch.triage import triage_records_from_compiled, write_triage_n
 from regexproof.compiler import compile_pattern  # noqa: E402
 from regexproof.compiler.normalize import normalize_inline_flags  # noqa: E402
 from regexproof.extractors.busybox_tests import extract_busybox_tests  # noqa: E402
-from regexproof.extractors.cpython_re_tests import extract_cpython_re_tests  # noqa: E402
+from regexproof.extractors.cpython_re_tests import (  # noqa: E402
+    extract_cpython_combined,
+    extract_cpython_re_tests,
+)
+from regexproof.extractors.re2_testdata import extract_re2_testdata  # noqa: E402
 from regexproof.extractors.go_regexp import extract_go_regexp  # noqa: E402
 from regexproof.extractors.ids_rules import extract_ids_rules  # noqa: E402
 from regexproof.extractors.js_babel import extract_js  # noqa: E402
@@ -112,7 +116,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": True,
         "corpus_pin": "v3.88.29",
         "commit": "90190deac64289cb10bb694894be8db9ead8790b",
-        "budget": {"max_patterns": 5000, "max_wall_s": 600, "redos_wall_s": 120},
+        "budget": {"max_patterns": 5000, "max_wall_s": 600, "redos_wall_s": 120, "max_mem_mb": 1024, "max_disk_mb": 100},
     },
     "ids_rules": {
         "corpus_type": "rule_corpus",
@@ -125,7 +129,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": True,
         "corpus_pin": "suricata-7.0.3-et-open",
         "commit": "emergingthreats-open-suricata-7.0.3",
-        "budget": {"max_patterns": 20000, "max_wall_s": 900, "redos_wall_s": 180},
+        "budget": {"max_patterns": 20000, "max_wall_s": 900, "redos_wall_s": 180, "max_mem_mb": 2048, "max_disk_mb": 200},
     },
     "semgrep_rules": {
         "corpus_type": "rule_corpus",
@@ -141,24 +145,28 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": True,
         "corpus_pin": "40b8c63f75dc7c22c8a77482d73bfb864b146f7e",
         "commit": "40b8c63f75dc7c22c8a77482d73bfb864b146f7e",
-        "budget": {"max_patterns": 5000, "max_wall_s": 600, "redos_wall_s": 120},
+        "budget": {"max_patterns": 5000, "max_wall_s": 600, "redos_wall_s": 120, "max_mem_mb": 1024, "max_disk_mb": 100},
     },
     "re2_testdata": {
         "corpus_type": "testdata",
-        "path": ROOT / "batch" / "corpora" / "re2_testdata" / "sample" / "patterns.toml",
+        "path": ROOT / "batch" / "corpora" / "re2_testdata" / "testdata",
+        "full_path": ROOT / "batch" / "corpora" / "re2_testdata" / "testdata",
+        "sample_path": ROOT / "batch" / "corpora" / "re2_testdata" / "sample",
+        "glob": "*.txt",
         "dialect": "re2",
-        "extractor": "rule_file",
+        "extractor": "re2_testdata",
         "repo": "google/re2",
         "security_tool": False,
         "lift_inline": False,
         "corpus_pin": "2024-07-02",
         "measure_scope": "sample",
-        "budget": {"max_patterns": 5000, "max_wall_s": 300},
+        "budget": {"max_patterns": 5000, "max_wall_s": 300, "max_mem_mb": 512, "max_disk_mb": 50},
     },
     "pcre2_testdata": {
         "corpus_type": "testdata",
-        # Full testdata can OOM the process; prefer sample for CI / default path.
-        "path": ROOT / "batch" / "corpora" / "pcre2_testdata" / "sample",
+        "path": ROOT / "batch" / "corpora" / "pcre2_testdata" / "testdata",
+        "full_path": ROOT / "batch" / "corpora" / "pcre2_testdata" / "testdata",
+        "sample_path": ROOT / "batch" / "corpora" / "pcre2_testdata" / "sample",
         "glob": "testinput*",
         "dialect": "pcre",
         "extractor": "pcre2_testdata",
@@ -167,11 +175,14 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": False,
         "corpus_pin": "pcre2-10.44",
         "measure_scope": "sample",
-        "budget": {"max_patterns": 20000, "max_wall_s": 900},
+        "budget": {"max_patterns": 20000, "max_wall_s": 900, "max_mem_mb": 1024, "max_disk_mb": 100},
     },
     "cpython_re": {
         "corpus_type": "testdata",
-        "path": ROOT / "batch" / "corpora" / "cpython_re" / "re_tests.py",
+        "path": ROOT / "batch" / "corpora" / "cpython_re",
+        "full_path": ROOT / "batch" / "corpora" / "cpython_re",
+        "sample_path": ROOT / "batch" / "corpora" / "cpython_re" / "re_tests.py",
+        "glob": "*.py",
         "dialect": "py_re",
         "extractor": "cpython_re_tests",
         "repo": "python/cpython",
@@ -179,13 +190,14 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": False,
         "corpus_pin": "v3.12.8",
         "measure_scope": "sample",
-        "budget": {"max_patterns": 5000, "max_wall_s": 300},
+        "budget": {"max_patterns": 5000, "max_wall_s": 300, "max_mem_mb": 512, "max_disk_mb": 50},
     },
     "busybox": {
         "corpus_type": "testdata",
-        # Default to sample; materialize full testsuite via README symlink.
-        "path": ROOT / "batch" / "corpora" / "busybox" / "sample",
-        "glob": "*.tests",
+        "path": ROOT / "batch" / "corpora" / "busybox" / "testsuite",
+        "full_path": ROOT / "batch" / "corpora" / "busybox" / "testsuite",
+        "sample_path": ROOT / "batch" / "corpora" / "busybox" / "sample",
+        "glob": "*.tests,**/*.tests",
         "dialect": "pcre",
         "extractor": "busybox_tests",
         "repo": "mirror/busybox",
@@ -193,7 +205,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": False,
         "corpus_pin": "1_36_1",
         "measure_scope": "sample",
-        "budget": {"max_patterns": 5000, "max_wall_s": 300},
+        "budget": {"max_patterns": 5000, "max_wall_s": 300, "max_mem_mb": 512, "max_disk_mb": 50},
     },
     "rust_regex": {
         "corpus_type": "inventory_only",
@@ -218,9 +230,73 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": False,
         "corpus_pin": "0f93570194a80d2f2032869055808b0ddcdfb360",
         "commit": "0f93570194a80d2f2032869055808b0ddcdfb360",
-        "budget": {"max_patterns": 5000, "max_wall_s": 600, "redos_wall_s": 120},
+        # Full clone ~17.5k string sites; 5k was pre-enforcement decorative.
+        "budget": {"max_patterns": 25000, "max_wall_s": 600, "redos_wall_s": 120, "max_mem_mb": 1024, "max_disk_mb": 100},
     },
 }
+
+WAVE_CORPORA = frozenset({
+    "trufflehog", "ids_rules", "semgrep_rules",
+    "pcre2_testdata", "re2_testdata", "cpython_re", "busybox",
+    "yara_rules",
+})
+
+
+class BudgetBreached(Exception):
+    """Raised when a corpus budget limit is exceeded."""
+
+    def __init__(self, corpus: str, field: str, limit: Any, actual: Any) -> None:
+        self.corpus = corpus
+        self.field = field
+        self.limit = limit
+        self.actual = actual
+        super().__init__(
+            f"budget breach: {corpus}.{field} limit={limit} actual={actual}"
+        )
+
+
+def _check_budget_patterns(
+    records: list[dict[str, Any]],
+    budget: dict[str, Any],
+    corpus_slug: str,
+) -> None:
+    max_pat = budget.get("max_patterns")
+    if max_pat is not None and max_pat > 0 and len(records) > max_pat:
+        raise BudgetBreached(corpus_slug, "max_patterns", max_pat, len(records))
+
+
+def _check_budget_mem() -> int:
+    """Return current process RSS in MB (best-effort)."""
+    try:
+        import resource
+        usage = resource.getrusage(resource.RUSAGE_SELF)
+        return int(usage.ru_maxrss / 1024)
+    except Exception:  # noqa: BLE001
+        return 0
+
+
+def _validate_expected_roots(corpus: str, meta: dict[str, Any]) -> None:
+    """Fail closed when expected corpus path/glob would produce zero files."""
+    path: Path = meta["path"]
+    if not path.exists():
+        if corpus in WAVE_CORPORA:
+            raise SystemExit(
+                f"HARD ERROR: expected root missing for {corpus}: {path}"
+            )
+        return
+    if path.is_dir():
+        glob_pat = meta.get("glob") or ""
+        if glob_pat:
+            files = []
+            for pat in glob_pat.split(","):
+                pat = pat.strip()
+                if pat:
+                    files.extend(path.glob(pat))
+            if not files and corpus in WAVE_CORPORA:
+                raise SystemExit(
+                    f"HARD ERROR: {corpus} glob '{glob_pat}' at {path} "
+                    f"matched 0 files — fail closed on empty root"
+                )
 
 
 def _extract(corpus: str, meta: dict[str, Any]) -> list[dict[str, Any]]:
@@ -300,6 +376,24 @@ def _extract(corpus: str, meta: dict[str, Any]) -> list[dict[str, Any]]:
                 src, repo=meta["repo"], file=rel, dialect=meta["dialect"]
             ),
         )
+    if meta["extractor"] == "re2_testdata":
+        if path.is_file():
+            source = path.read_text(encoding="utf-8", errors="replace")
+            try:
+                rel = str(path.resolve().relative_to(ROOT.resolve()))
+            except ValueError:
+                rel = str(path)
+            return extract_re2_testdata(
+                source, repo=meta["repo"], file=rel, dialect=meta["dialect"]
+            )
+        return _extract_glob(
+            path,
+            meta,
+            glob=meta.get("glob") or "*.txt",
+            extract_fn=lambda src, rel: extract_re2_testdata(
+                src, repo=meta["repo"], file=rel, dialect=meta["dialect"]
+            ),
+        )
     if meta["extractor"] == "pcre2_testdata":
         return _extract_glob(
             path,
@@ -310,14 +404,33 @@ def _extract(corpus: str, meta: dict[str, Any]) -> list[dict[str, Any]]:
             ),
         )
     if meta["extractor"] == "cpython_re_tests":
-        source = path.read_text(encoding="utf-8", errors="replace")
-        try:
-            rel = str(path.resolve().relative_to(ROOT.resolve()))
-        except ValueError:
-            rel = str(path)
-        return extract_cpython_re_tests(
-            source, repo=meta["repo"], file=rel, dialect=meta["dialect"]
-        )
+        if path.is_dir():
+            sources: dict[str, str] = {}
+            for fp in sorted(path.glob(meta.get("glob") or "*.py")):
+                if fp.is_file():
+                    try:
+                        rel = str(fp.resolve().relative_to(ROOT.resolve()))
+                    except ValueError:
+                        rel = str(fp)
+                    sources[fp.name] = fp.read_text(encoding="utf-8", errors="replace")
+            if sources:
+                try:
+                    base = str(path.resolve().relative_to(ROOT.resolve()))
+                except ValueError:
+                    base = str(path)
+                return extract_cpython_combined(
+                    sources, repo=meta["repo"], base_path=base,
+                )
+        if path.is_file():
+            source = path.read_text(encoding="utf-8", errors="replace")
+            try:
+                rel = str(path.resolve().relative_to(ROOT.resolve()))
+            except ValueError:
+                rel = str(path)
+            return extract_cpython_re_tests(
+                source, repo=meta["repo"], file=rel, dialect=meta["dialect"]
+            )
+        return []
     if meta["extractor"] == "busybox_tests":
         return _extract_glob(
             path,
@@ -382,8 +495,19 @@ def _extract_glob(
 
 
 def _compile_all(
-    records: list[dict[str, Any]], *, lift_inline: bool, corpus_slug: str
+    records: list[dict[str, Any]],
+    *,
+    lift_inline: bool,
+    corpus_slug: str,
+    budget: dict[str, Any] | None = None,
+    wall_t0: float | None = None,
 ) -> list[dict[str, Any]]:
+    budget = budget or {}
+    _check_budget_patterns(records, budget, corpus_slug)
+    max_wall = budget.get("max_wall_s")
+    max_mem = budget.get("max_mem_mb")
+    # wall_t0 may be set before extraction so max_wall_s covers extract+compile.
+    t0 = wall_t0 if wall_t0 is not None else time.monotonic()
     out = []
     for rec in records:
         pattern = rec["pattern"]
@@ -434,6 +558,14 @@ def _compile_all(
         if cr.unencodable_reason == "timeout":
             row["result"] = "timeout"
         out.append(row)
+
+        if max_wall and (time.monotonic() - t0) > max_wall:
+            raise BudgetBreached(corpus_slug, "max_wall_s", max_wall, time.monotonic() - t0)
+        if max_mem:
+            rss = _check_budget_mem()
+            if rss > max_mem:
+                raise BudgetBreached(corpus_slug, "max_mem_mb", max_mem, rss)
+
     return out
 
 
@@ -476,21 +608,83 @@ def run_corpus(
         return summary
     meta = dict(meta)
     path: Path = meta["path"]
-    sample = ROOT / "batch" / "corpora" / corpus / "sample"
+    sample_path = meta.get("sample_path") or ROOT / "batch" / "corpora" / corpus / "sample"
+    if isinstance(sample_path, str):
+        sample_path = Path(sample_path)
     path_usable = path.exists() and (path.is_file() or any(path.iterdir()))
-    if not path_usable and sample.is_dir():
-        print(
-            f"NOTE: {corpus} corpus path missing/empty ({path}); "
-            f"falling back to sample at {sample}",
-            file=sys.stderr,
-        )
-        meta["path"] = sample
-        meta["measure_scope"] = "sample"
+    if not path_usable:
+        if corpus in WAVE_CORPORA:
+            # Match measure-corpus-fraction.py: sample fallback only when
+            # measure_scope is explicitly "sample"; otherwise fail closed.
+            if meta.get("measure_scope") == "sample" and isinstance(
+                sample_path, Path
+            ) and sample_path.exists():
+                meta["path"] = sample_path
+                print(
+                    f"NOTE: {corpus} full corpus path missing ({path}); "
+                    f"using sample at {sample_path}",
+                    file=sys.stderr,
+                )
+            else:
+                raise SystemExit(
+                    f"HARD ERROR: {corpus} corpus path missing/empty ({path}) "
+                    f"and measure_scope={meta.get('measure_scope')!r} "
+                    f"(sample fallback only when measure_scope='sample')"
+                )
+        else:
+            sample = ROOT / "batch" / "corpora" / corpus / "sample"
+            if sample.is_dir():
+                print(
+                    f"NOTE: {corpus} corpus path missing/empty ({path}); "
+                    f"falling back to sample at {sample}",
+                    file=sys.stderr,
+                )
+                meta["path"] = sample
+                meta["measure_scope"] = "sample"
+    # Honor declared sample scope even when the full tree is present so batch
+    # extraction stays aligned with measure-corpus-fraction.py.
+    if meta.get("measure_scope") == "sample":
+        sp = meta.get("sample_path")
+        if isinstance(sp, str):
+            sp = Path(sp)
+        if not isinstance(sp, Path):
+            sp = sample_path if isinstance(sample_path, Path) else None
+        if isinstance(sp, Path) and sp.exists():
+            cur = meta["path"]
+            if "sample" not in Path(cur).parts:
+                meta["path"] = sp
+                print(
+                    f"NOTE: {corpus} measure_scope=sample; using {sp}",
+                    file=sys.stderr,
+                )
+        elif not isinstance(sp, Path) or not sp.exists():
+            raise SystemExit(
+                f"HARD ERROR: {corpus} measure_scope=sample but sample path "
+                f"missing ({sp})"
+            )
+    _validate_expected_roots(corpus, meta)
     inventory = load_inventory(meta["corpus_type"])
+    budget = meta.get("budget") or {}
+    wall_t0 = time.monotonic()
     records = _extract(corpus, meta)
-    compiled = _compile_all(
-        records, lift_inline=bool(meta.get("lift_inline")), corpus_slug=corpus
-    )
+    if not records and corpus in WAVE_CORPORA:
+        raise SystemExit(
+            f"HARD ERROR: {corpus} extraction produced 0 records — "
+            f"empty glob must not fake zero-pattern success"
+        )
+    try:
+        compiled = _compile_all(
+            records,
+            lift_inline=bool(meta.get("lift_inline")),
+            corpus_slug=corpus,
+            budget=budget,
+            wall_t0=wall_t0,
+        )
+    except BudgetBreached as exc:
+        raise SystemExit(
+            f"BUDGET BREACH ({corpus}): {exc.field} "
+            f"limit={exc.limit} actual={exc.actual}"
+        ) from exc
 
     triage = triage_records_from_compiled(compiled)
     write_triage_ndjson(out_dir.parent / "triage" / f"{corpus}.ndjson", triage)
@@ -710,7 +904,10 @@ def measure_coreruleset_full(out_dir: Path) -> dict[str, Any] | None:
         rel = str(fp.relative_to(ROOT))
         records.extend(extract_modsec(src, repo="coreruleset/coreruleset", file=rel))
 
-    compiled = _compile_all(records, lift_inline=True, corpus_slug="coreruleset")
+    compiled = _compile_all(
+        records, lift_inline=True, corpus_slug="coreruleset",
+        budget=CORPUS_MANIFESTS.get("coreruleset", {}).get("budget"),
+    )
     rx_only = [c for c in compiled if not c.get("selector")]
     selectors = [c for c in compiled if c.get("selector")]
     rx_enc = [c for c in rx_only if c.get("encodable")]

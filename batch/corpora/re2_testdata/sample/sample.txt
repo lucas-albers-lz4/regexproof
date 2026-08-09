@@ -1,0 +1,3 @@
+# re2 AT&T testregex sample for CI
+E	^[a-z]+$	hello	(0,5)
+E	foo[0-9]+	foo42	(0,5)
