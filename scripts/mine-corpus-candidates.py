@@ -179,6 +179,18 @@ def main(argv: list[str] | None = None) -> int:
             )
         )
 
+    summary = {
+        "kind": "mine_run_summary",
+        "accepted": len(accepted),
+        "ledger": len(ledger.get("candidates", [])),
+        "queue": len(queue.get("items", [])),
+        "capped": bool(result.capped),
+        "dry_run": bool(args.dry_run),
+        "daily_mine_cap": daily_mine_cap(),
+        "search_errors": len(result.errors),
+    }
+    print(json.dumps(summary, sort_keys=True))
+
     if args.dry_run:
         if result.errors and not result.candidates and not accepted:
             return 1

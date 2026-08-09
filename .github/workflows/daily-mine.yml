@@ -1,0 +1,137 @@
+name: Daily mine
+
+# Discover corpus candidates via GitHub Code Search and commit-back the
+# durable ledger/queue (issue #147). Mirrors sre-ai-llm-work daily-scan.yml,
+# trimmed to one scanner — no issue filing, no score-and-sort.
+
+on:
+  schedule:
+    # 12:12 UTC — offset avoids top-of-hour Actions contention.
+    - cron: "12 12 * * *"
+  workflow_dispatch:
+    inputs:
+      daily_mine_cap:
+        description: "Override DAILY_MINE_CAP for this run only (default 10; use 80 to flush mine-queue)"
+        required: false
+        default: "10"
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  # Serialize so two runs never race candidate-ledger.json / mine-queue.json.
+  group: daily-mine
+  cancel-in-progress: false
+
+jobs:
+  mine:
+    runs-on: ubuntu-latest
+    env:
+      DAILY_MINE_CAP: ${{ github.event.inputs.daily_mine_cap || '10' }}
+    steps:
+      - name: Require PROJECT_PAT
+        env:
+          PROJECT_PAT: ${{ secrets.PROJECT_PAT }}
+        run: |
+          if [ -z "${PROJECT_PAT}" ]; then
+            echo "::error::PROJECT_PAT secret is required (fail closed). See docs/MINE-SETUP.md"
+            exit 1
+          fi
+
+      - uses: actions/checkout@v5
+        with:
+          # PAT so ledger/queue commits can push to main under branch protection.
+          token: ${{ secrets.PROJECT_PAT }}
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+
+      - name: Install package
+        run: pip install -e .
+
+      - name: Show daily-mine cap
+        run: echo "DAILY_MINE_CAP=${DAILY_MINE_CAP} (dispatch override or scheduled default)"
+
+      - name: Run corpus mine
+        id: mine
+        env:
+          GITHUB_TOKEN: ${{ secrets.PROJECT_PAT }}
+        run: |
+          set +e
+          python scripts/mine-corpus-candidates.py | tee mine-run.log
+          code=${PIPESTATUS[0]}
+          SUMMARY_LINE=$(grep -E '"kind": "mine_run_summary"' mine-run.log | tail -n1 || true)
+          if [ -z "${SUMMARY_LINE}" ]; then
+            echo "::warning::no mine_run_summary line in stdout"
+            SUMMARY_LINE='{}'
+          fi
+          {
+            echo "exit_code=${code}"
+            echo "summary<<EOF"
+            echo "${SUMMARY_LINE}"
+            echo "EOF"
+          } >> "${GITHUB_OUTPUT}"
+          # Auth (2) fail closed here; exit 1 still allows commit-back of partial writes.
+          if [ "${code}" = "2" ]; then
+            echo "::error::mine auth failure (exit 2) — PROJECT_PAT rejected or missing scope"
+            exit 2
+          fi
+
+      - name: Job summary
+        if: always() && steps.mine.outcome != 'skipped'
+        env:
+          SUMMARY_JSON: ${{ steps.mine.outputs.summary }}
+          MINE_EXIT: ${{ steps.mine.outputs.exit_code }}
+        run: |
+          {
+            echo "## Daily mine"
+            echo ""
+            echo "- \`DAILY_MINE_CAP=${DAILY_MINE_CAP}\`"
+            echo "- mine exit: \`${MINE_EXIT:-unknown}\`"
+            if command -v jq >/dev/null 2>&1 && [ -n "${SUMMARY_JSON}" ] && [ "${SUMMARY_JSON}" != '{}' ]; then
+              echo "- accepted: \`$(echo "${SUMMARY_JSON}" | jq -r '.accepted // 0')\`"
+              echo "- ledger candidates: \`$(echo "${SUMMARY_JSON}" | jq -r '.ledger // 0')\`"
+              echo "- queue depth: \`$(echo "${SUMMARY_JSON}" | jq -r '.queue // 0')\`"
+              echo "- search capped: \`$(echo "${SUMMARY_JSON}" | jq -r '.capped // false')\`"
+            else
+              echo "- summary JSON unavailable; inspect mine step logs"
+              if [ -f properties/generated/candidate-ledger.json ]; then
+                echo "- ledger candidates: \`$(jq '.candidates | length' properties/generated/candidate-ledger.json)\`"
+                echo "- run.capped: \`$(jq -r '.run.capped // false' properties/generated/candidate-ledger.json)\`"
+              fi
+              if [ -f properties/generated/mine-queue.json ]; then
+                echo "- queue depth: \`$(jq '.items | length' properties/generated/mine-queue.json)\`"
+              fi
+            fi
+            echo ""
+            echo "### Re-run / flush queue"
+            echo '```'
+            echo "gh workflow run daily-mine.yml -f daily_mine_cap=80"
+            echo '```'
+            echo ""
+            echo "Ops: \`docs/MINE-SETUP.md\`"
+          } >> "${GITHUB_STEP_SUMMARY}"
+
+      - name: Commit ledger + queue
+        # Skip on auth failure; still commit after soft/hard search failure if files changed.
+        if: steps.mine.outcome == 'success'
+        run: |
+          git config user.name "regexproof-bot"
+          git config user.email "regexproof-bot@users.noreply.github.com"
+          git add properties/generated/candidate-ledger.json \
+                  properties/generated/mine-queue.json || true
+          if git diff --staged --quiet; then
+            echo "No ledger/queue changes to commit."
+          else
+            git commit -m "chore(mine): daily candidate ledger + queue"
+            git pull --rebase --autostash origin "${GITHUB_REF_NAME}"
+            git push
+          fi
+
+      - name: Fail job on mine soft failure
+        if: steps.mine.outputs.exit_code == '1'
+        run: |
+          echo "::error::mine exited 1 (search failure with no candidates). Ledger/queue commit-back already attempted."
+          exit 1

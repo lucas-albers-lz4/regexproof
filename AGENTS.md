@@ -165,6 +165,10 @@ in the harness output so a reader knows exactly what was proven.
 - `docs/verified-findings.jsonl` — machine-readable implementation findings
   keyed into TRAPS/BACKENDS/SEMANTICS
 
+## Related tooling
+
+- Daily corpus mine (GHA + ledger): [`docs/MINE-SETUP.md`](docs/MINE-SETUP.md)
+
 ## Related skills (Hermes)
 
 If running under Hermes, the `z3-regex-verification`, `z3-string-verification`,
