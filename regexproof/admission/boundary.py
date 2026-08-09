@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import re
 from dataclasses import dataclass
 from functools import lru_cache
 from pathlib import Path
@@ -31,27 +32,36 @@ def load_signal_lists(path: str | None = None) -> dict[str, Any]:
     return json.loads(p.read_text(encoding="utf-8"))
 
 
-def _contains(hay: str, needle: str) -> bool:
-    return needle.lower() in hay.lower()
+def _token_match(hay: str, needle: str) -> bool:
+    """Match *needle* as a whole token or hyphenated segment, not a raw substring.
+
+    Avoids false positives like ``waf`` in ``waffle`` or ``secret`` in
+    ``secretariat`` (Bugbot finding on C2 classifier).
+    """
+    n = needle.lower().strip()
+    if not n:
+        return False
+    h = hay.lower()
+    # Hyphen/underscore-aware token boundary around the needle.
+    return re.search(rf"(?<![a-z0-9]){re.escape(n)}(?![a-z0-9])", h) is not None
 
 
 def _has_positive(signals: BoundarySignals, lists: dict[str, Any]) -> bool:
     if signals.extra_positive:
         return True
     pos = lists.get("positive", {})
-    name_hay = f"{signals.repo_name} {signals.description}".lower()
+    name_hay = f"{signals.repo_name} {signals.description}"
     for sub in pos.get("name_substrings", []):
-        if _contains(name_hay, sub):
+        if _token_match(name_hay, sub):
             return True
-    topic_hay = " ".join(t.lower() for t in signals.topics)
-    desc = signals.description.lower()
+    topic_hay = " ".join(signals.topics)
+    desc = signals.description
     for kw in pos.get("topic_keywords", []):
-        k = kw.lower()
-        if k in topic_hay or k in desc:
+        if _token_match(topic_hay, kw) or _token_match(desc, kw):
             return True
-    path_hay = " ".join(p.lower() for p in signals.paths)
+    path_hay = " ".join(signals.paths)
     for sub in pos.get("path_substrings", []):
-        if _contains(path_hay, sub):
+        if _token_match(path_hay, sub):
             return True
     return False
 
@@ -60,10 +70,10 @@ def _negative_category(signals: BoundarySignals, lists: dict[str, Any]) -> str |
     if signals.extra_negative_category:
         return signals.extra_negative_category
     cats: dict[str, Any] = lists.get("negative_categories", {})
-    name_hay = f"{signals.repo_name} {signals.description}".lower()
+    name_hay = f"{signals.repo_name} {signals.description}"
     for cat, spec in cats.items():
         for sub in spec.get("name_substrings", []):
-            if _contains(name_hay, sub):
+            if _token_match(name_hay, sub):
                 return cat
     return None
 

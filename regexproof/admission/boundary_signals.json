@@ -26,16 +26,17 @@
       "secrets-detection",
       "xss",
       "sanitizer",
-      "waf",
-      "ids",
+      "web-application-firewall",
+      "intrusion-detection",
       "static-analysis"
     ],
     "path_substrings": [
       "sanitizer",
       "xss",
-      "secret",
       "gitleaks",
-      "purify"
+      "purify",
+      "secret-scan",
+      "secrets/"
     ]
   },
   "negative_categories": {

@@ -102,6 +102,30 @@ def test_boundary_golden_fixtures(name: str, expected: set[str]):
         assert verdict == "deterministic-false"
 
 
+def test_boundary_avoids_short_keyword_false_positives():
+    lists = load_signal_lists()
+    assert (
+        classify_boundary(
+            BoundarySignals(description="Belgian waffle recipes"),
+            signal_lists=lists,
+        )
+        == "unknown"
+    )
+    assert (
+        classify_boundary(
+            BoundarySignals(repo_name="secretariat-helpers"),
+            signal_lists=lists,
+        )
+        == "unknown"
+    )
+
+
+def test_vocabulary_maps_k_reset_to_reset_bucket():
+    vocab = load_vocabulary()
+    assert vocab["construct_to_bucket"]["\\K"] == "reset"
+    assert predict_buckets({"\\K": 3}, vocabulary=vocab) == {"reset": 3}
+
+
 def test_signal_lists_not_security_tool_corpora():
     lists = load_signal_lists()
     # Must not reuse the closed admitted-name frozenset from disclose.py
@@ -111,8 +135,9 @@ def test_signal_lists_not_security_tool_corpora():
     assert "negative_categories" in lists
     assert "form-library" in lists["negative_categories"]
     # Classifier module must not import SECURITY_TOOL_CORPORA
-    import regexproof.admission.boundary as boundary_mod
     import inspect
+
+    import regexproof.admission.boundary as boundary_mod
 
     src = inspect.getsource(boundary_mod)
     assert "SECURITY_TOOL_CORPORA" not in src
