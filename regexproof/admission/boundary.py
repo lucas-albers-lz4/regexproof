@@ -33,16 +33,18 @@ def load_signal_lists(path: str | None = None) -> dict[str, Any]:
 
 
 def _token_match(hay: str, needle: str) -> bool:
-    """Match *needle* as a whole token or hyphenated segment, not a raw substring.
+    """Match *needle* as a token, or as an intentional prefix if it ends with ``-``/``/``.
 
-    Avoids false positives like ``waf`` in ``waffle`` or ``secret`` in
-    ``secretariat`` (Bugbot finding on C2 classifier).
+    Whole-token matching avoids ``waf``⊂``waffle``. Prefix needles like
+    ``awesome-`` / ``secrets/`` only require a leading boundary so directory
+    and name-prefix signals still fire (Bugbot follow-up).
     """
     n = needle.lower().strip()
     if not n:
         return False
     h = hay.lower()
-    # Hyphen/underscore-aware token boundary around the needle.
+    if n[-1] in "-_/":
+        return re.search(rf"(?<![a-z0-9]){re.escape(n)}", h) is not None
     return re.search(rf"(?<![a-z0-9]){re.escape(n)}(?![a-z0-9])", h) is not None
 
 

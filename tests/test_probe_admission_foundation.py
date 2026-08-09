@@ -120,6 +120,24 @@ def test_boundary_avoids_short_keyword_false_positives():
     )
 
 
+def test_boundary_prefix_needles_still_match():
+    lists = load_signal_lists()
+    assert (
+        classify_boundary(
+            BoundarySignals(repo_name="awesome-regex-list"),
+            signal_lists=lists,
+        )
+        == "deterministic-false"
+    )
+    assert (
+        classify_boundary(
+            BoundarySignals(paths=("src/secrets/scanner.go",)),
+            signal_lists=lists,
+        )
+        == "deterministic-true"
+    )
+
+
 def test_vocabulary_maps_k_reset_to_reset_bucket():
     vocab = load_vocabulary()
     assert vocab["construct_to_bucket"]["\\K"] == "reset"
