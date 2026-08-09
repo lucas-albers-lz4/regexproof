@@ -67,14 +67,19 @@ def test_queue_fifo_cap_and_ttl(tmp_path: Path):
     stale = {
         "schema_version": "1",
         "items": [
-            {"url": "https://github.com/old/old", "pushed_date": "2020-01-01"},
-            {"url": "https://github.com/new/new", "pushed_date": "2026-08-01"},
+            {"url": "https://github.com/old/old", "pushed_date": "2020-01-01", "queued_at": "2020-01-02"},
+            {
+                "url": "https://github.com/new/new",
+                "pushed_date": "2020-01-01",  # old push, but freshly queued
+                "queued_at": "2026-08-01",
+            },
             {"url": "https://github.com/nodate/x"},  # no dates → stale
         ],
     }
     n = evict_stale(stale, ttl_days=90, today=date(2026, 8, 9))
     assert n == 2
     assert len(stale["items"]) == 1
+    assert stale["items"][0]["url"].endswith("/new/new")
 
     full = {"schema_version": "1", "items": [{"url": f"https://github.com/x/{i}"} for i in range(100)]}
     assert enqueue(full, {"url": "https://github.com/x/overflow"}) == "full"

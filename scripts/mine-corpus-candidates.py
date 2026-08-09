@@ -153,6 +153,10 @@ def main(argv: list[str] | None = None) -> int:
         print(f"error: {e}", file=sys.stderr)
         return 2
 
+    if result.errors:
+        for err in result.errors:
+            print(f"warning: search error: {err}", file=sys.stderr)
+
     accepted = assimilate(
         search_result=result,
         ledger=ledger,
@@ -176,12 +180,18 @@ def main(argv: list[str] | None = None) -> int:
         )
 
     if args.dry_run:
+        if result.errors and not result.candidates and not accepted:
+            return 1
         return 0
 
     if result.capped:
         ledger.setdefault("run", {})["capped"] = True
+    if result.errors:
+        ledger.setdefault("run", {})["search_errors"] = list(result.errors)
     save_ledger(ledger_path, ledger)
     save_queue(queue_path, queue)
+    if result.errors and not result.candidates and not accepted:
+        return 1
     return 0
 
 

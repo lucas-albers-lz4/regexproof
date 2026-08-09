@@ -77,19 +77,22 @@ def evict_stale(
     ttl_days: int = DEFAULT_TTL_DAYS,
     today: date | None = None,
 ) -> int:
-    """Drop items older than TTL. Prefer ``pushed_date``; else ``queued_at``.
+    """Drop items older than TTL. Prefer ``queued_at``; else ``pushed_date``.
 
     Rows with neither date are treated as stale so the FIFO cap cannot fill
-    with immortal empty-date entries.
+    with immortal empty-date entries. Preferring ``queued_at`` keeps overflow
+    candidates that were only just discovered even when GitHub ``pushed_date``
+    is older than the TTL.
     """
     today = today or datetime.now(timezone.utc).date()
     cutoff = today - timedelta(days=ttl_days)
     kept: list[dict[str, Any]] = []
     evicted = 0
     for item in queue["items"]:
-        d = _parse_pushed(str(item.get("pushed_date") or ""))
+        # Prefer time-in-queue so overflow waiting is not culled by stale GitHub push dates.
+        d = _parse_pushed(str(item.get("queued_at") or ""))
         if d is None:
-            d = _parse_pushed(str(item.get("queued_at") or ""))
+            d = _parse_pushed(str(item.get("pushed_date") or ""))
         if d is None or d < cutoff:
             evicted += 1
             continue
