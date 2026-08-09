@@ -131,7 +131,10 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "corpus_type": "rule_corpus",
         "path": ROOT / "batch" / "corpora" / "semgrep_rules" / "rules",
         "glob": "**/*.yml,**/*.yaml",
+        # Semgrep evaluates pattern-regex via rust `regex` crate; stock path
+        # is an ASCII approximation (declared + fidelity-fuzzed).
         "dialect": "py_re",
+        "declared_semantics": "ascii_approx_rust_regex",
         "extractor": "semgrep_yaml",
         "repo": "semgrep/semgrep-rules",
         "security_tool": True,
@@ -287,11 +290,13 @@ def _extract(corpus: str, meta: dict[str, Any]) -> list[dict[str, Any]]:
             ),
         )
     if meta["extractor"] == "semgrep_yaml":
+        from regexproof.extractors.semgrep_yaml import extract_semgrep_yaml
+
         return _extract_glob(
             path,
             meta,
             glob=meta.get("glob") or "**/*.yml,**/*.yaml",
-            extract_fn=lambda src, rel: extract_rule_file(
+            extract_fn=lambda src, rel: extract_semgrep_yaml(
                 src, repo=meta["repo"], file=rel, dialect=meta["dialect"]
             ),
         )

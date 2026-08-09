@@ -1,0 +1,21 @@
+{
+  "baseline_fraction": 0.2842,
+  "baseline_hashes": {
+    "fraction_sha256": "454cf0556cb08ea3a5ddd75ee7b4344edb08a3e3b366670392d0c8564edd6592",
+    "inventory_sha256": "0673ecca6b425b4b19282a2623d47d91fbb27747afaa33d2fe12ac56fdf24645"
+  },
+  "baseline_n": 9186,
+  "corpus": "semgrep_rules",
+  "declared_semantics": "ascii_approx_rust_regex",
+  "drift": {
+    "added_regex_ids": 1431,
+    "expected_removals": "code-pattern pattern: pseudo-sites excluded by extract_semgrep_yaml",
+    "removed_regex_ids": 9186,
+    "thresholds": {
+      "owner": "wave2-p3",
+      "unexpected_additions_max": 500
+    }
+  },
+  "new_fraction": 0.4941,
+  "new_n": 1431
+}

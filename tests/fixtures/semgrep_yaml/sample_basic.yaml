@@ -9,3 +9,9 @@ rules:
       - pattern-regex: |
           multi
           line
+  - id: sample.metavar
+    metavariable-regex:
+      $KEY: "[A-Za-z0-9_]{8,}"
+  - id: sample.code-pattern
+    patterns:
+      - pattern: $CLIENT.chat.completions.create(...)
