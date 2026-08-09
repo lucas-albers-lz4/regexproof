@@ -338,10 +338,15 @@ def _extract_glob(
         if fp in seen or not fp.is_file():
             continue
         seen.add(fp)
+        # Prefer the unresolved path under ROOT so symlink materializations
+        # (plugins/ → /tmp/…) keep stable repo-relative sites / regex_ids.
         try:
-            rel = str(fp.resolve().relative_to(root_resolved))
+            rel = str(fp.relative_to(ROOT))
         except ValueError:
-            rel = str(fp)
+            try:
+                rel = str(fp.resolve().relative_to(root_resolved))
+            except ValueError:
+                rel = str(fp)
         out.extend(
             extract_fn(fp.read_text(encoding="utf-8", errors="replace"), rel)
         )
@@ -435,6 +440,11 @@ def run_corpus(
             encoding="utf-8",
         )
         return summary
+    meta = dict(meta)
+    path: Path = meta["path"]
+    sample = ROOT / "batch" / "corpora" / corpus / "sample"
+    if not path.exists() and sample.is_dir():
+        meta["path"] = sample
     inventory = load_inventory(meta["corpus_type"])
     records = _extract(corpus, meta)
     compiled = _compile_all(
@@ -576,8 +586,16 @@ def run_corpus(
     return summary
 
 
-def measure_coreruleset_sample(out_dir: Path) -> dict[str, Any]:
-    """PCRE encodable-fraction gate on pinned CRS sample; go iff >= 0.30."""
+def measure_coreruleset_sample(
+    out_dir: Path, *, as_primary: bool = False
+) -> dict[str, Any]:
+    """PCRE encodable-fraction gate on pinned CRS sample; go iff >= 0.30.
+
+    Always writes ``coreruleset_sample_encodable_fraction.json``. Only when
+    ``as_primary`` (full ``rules/`` absent) may it also write the primary
+    ``coreruleset_encodable_fraction.json`` — never overwrite a full-corpus
+    primary with the sample report.
+    """
     sample = ROOT / "batch" / "corpora" / "coreruleset" / "sample.rules"
     lines = [
         ln.strip()
@@ -609,10 +627,10 @@ def measure_coreruleset_sample(out_dir: Path) -> dict[str, Any]:
     (out_dir / "coreruleset_sample_encodable_fraction.json").write_text(
         payload, encoding="utf-8"
     )
-    # When full corpus is absent, the sample report is the primary artifact.
-    (out_dir / "coreruleset_encodable_fraction.json").write_text(
-        payload, encoding="utf-8"
-    )
+    if as_primary:
+        (out_dir / "coreruleset_encodable_fraction.json").write_text(
+            payload, encoding="utf-8"
+        )
     return report
 
 
@@ -736,9 +754,9 @@ def measure_coreruleset(out_dir: Path) -> dict[str, Any]:
         full = measure_coreruleset_full(out_dir)
         if full is not None:
             # Still emit sample artifact for CI smoke without depending on it for GO.
-            measure_coreruleset_sample(out_dir)
+            measure_coreruleset_sample(out_dir, as_primary=False)
             return full
-    return measure_coreruleset_sample(out_dir)
+    return measure_coreruleset_sample(out_dir, as_primary=True)
 
 
 def run_batch(

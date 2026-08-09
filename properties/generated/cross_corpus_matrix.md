@@ -4,7 +4,7 @@
 |---|---|---|---|---|---|
 | gitleaks | go | 0.819 | 181 | 221 | 0 |
 | validatorjs | go | 0.7689 | 163 | 212 | 0 |
-| coreruleset | go | 0.9 | 9 | 10 | 0 |
+| coreruleset | go | 0.6908 | 239 | 346 | 0 |
 | trufflehog | go | 0.9302 | 200 | 215 | 0 |
 | detect-secrets | go | 0.3725 | 19 | 51 | 0 |
 | ids_rules | go | 0.8519 | 6961 | 8171 | 0 |
