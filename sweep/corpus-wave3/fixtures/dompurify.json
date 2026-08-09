@@ -1,0 +1,8 @@
+{
+  "surface": "dompurify",
+  "domain": "ascii",
+  "dialect": "ecma",
+  "pattern": "^(?:\\w+script|data):",
+  "flags": "i",
+  "probes": ["", "javascript:", "data:", "JAVASCRIPT:", "https:", "vbscript:"]
+}

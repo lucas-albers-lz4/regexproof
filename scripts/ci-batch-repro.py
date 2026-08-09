@@ -1,8 +1,16 @@
 #!/usr/bin/env python3
-"""Two-run byte-identical batch reproducibility gate (Phase 6)."""
+"""Two-run byte-identical batch reproducibility gate (Phase 6).
+
+Also: single-corpus extraction determinism for Wave-3 corpora::
+
+  python scripts/ci-batch-repro.py --corpus dompurify
+  python scripts/ci-batch-repro.py --corpus isemail
+  python scripts/ci-batch-repro.py --corpus email_addresses
+"""
 
 from __future__ import annotations
 
+import argparse
 import hashlib
 import subprocess
 import sys
@@ -10,6 +18,7 @@ import tempfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
 
 # Artifacts compared across two runs (sorted regex_id NDJSON + summaries).
 COMPARE_SUFFIXES = (
@@ -63,7 +72,37 @@ def _run_batch(out_dir: Path) -> None:
         raise SystemExit(proc.returncode)
 
 
-def main() -> int:
+def _extract_determinism(corpus: str) -> int:
+    """Two-run extraction must yield identical regex_id sequences."""
+    from regexproof.batch.runner import CORPUS_MANIFESTS, _extract
+
+    if corpus not in CORPUS_MANIFESTS:
+        print(f"unknown corpus: {corpus}", file=sys.stderr)
+        return 2
+    meta = dict(CORPUS_MANIFESTS[corpus])
+    a = [r["regex_id"] for r in _extract(corpus, meta)]
+    b = [r["regex_id"] for r in _extract(corpus, meta)]
+    if a != b:
+        print(f"FAIL: non-deterministic extraction for {corpus}", file=sys.stderr)
+        return 1
+    if not a:
+        print(f"FAIL: {corpus} extracted 0 records", file=sys.stderr)
+        return 1
+    print(f"{corpus} extraction determinism ok (n={len(a)})")
+    return 0
+
+
+def main(argv: list[str] | None = None) -> int:
+    ap = argparse.ArgumentParser(description=__doc__)
+    ap.add_argument(
+        "--corpus",
+        default="all",
+        help="all (default two-run batch) or a single CORPUS_MANIFESTS name",
+    )
+    args = ap.parse_args(argv)
+    if args.corpus != "all":
+        return _extract_determinism(args.corpus)
+
     with tempfile.TemporaryDirectory(prefix="regexproof-repro-") as tmp:
         base = Path(tmp)
         a = base / "run1" / "generated"

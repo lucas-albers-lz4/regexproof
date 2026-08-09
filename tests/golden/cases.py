@@ -78,6 +78,10 @@ for pat, flags, ck, acc, rej in [
     (r"foo", "i", "search", ["FOO", "Foo"], ["bar"]),
     (r"^https?://", "", "match", ["http://x", "https://x"], ["ftp://x"]),
     (r"end$", "", "search", ["end", "the end"], ["endx"]),
+    # Wave-3 P4 (#115) sanitizer / email boundary goldens
+    (r"^(?:\w+script|data):", "i", "search", ["javascript:", "data:", "vbscript:"], ["https:", "ftp:"]),
+    (r"^[a-fA-F\d]{0,4}$", "", "fullmatch", ["", "a", "FFFF", "0"], ["gggg", "12345"]),
+    (r"^\s*", "", "search", ["", "  abc", "\tabc"], []),
 ]:
     _add("ecma", pat, flags, ck, acc, rej)
 

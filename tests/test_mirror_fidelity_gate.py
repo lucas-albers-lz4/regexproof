@@ -23,12 +23,15 @@ WAVE2 = {
     "test262",
     "rule_diff",
 }
-WAVE3_P1 = {
+WAVE3 = {
     "spamassassin",
     "noseyparker",
     "shhgit",
     "perl_re",
     "go_regexp",
+    "dompurify",
+    "isemail",
+    "email_addresses",
 }
 
 
@@ -58,7 +61,7 @@ def test_mirror_fidelity_gate_script_ok():
     assert report["wrong_wide_caught"] is True
     assert report["wrong_xflag_caught"] is True
     assert report["perl_helper"] is True
-    assert set(report["surfaces"]) == WAVE2 | WAVE3_P1
+    assert set(report["surfaces"]) == WAVE2 | WAVE3
     assert report["checked_ok"] >= 1
     if report.get("pcre2_helper"):
         assert report.get("pcre_checked_ok", 0) >= 1

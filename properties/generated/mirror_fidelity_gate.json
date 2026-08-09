@@ -1,65 +1,36 @@
 {
-  "checked_ok": 4,
+  "checked_ok": 0,
   "engine_versions": {
     "perl": "v5.38.2",
     "python": "3.14.6",
     "yara": "4.5.8",
     "z3": "5.0.0"
   },
-  "fallback_disabled": false,
+  "fallback_disabled": true,
   "gate": "mirror_fidelity",
   "mismatches": 0,
   "ok": true,
   "pcre2_helper": true,
-  "pcre_checked_ok": 2,
+  "pcre_checked_ok": 0,
   "perl_helper": true,
-  "results": [
-    {
-      "corpus": "coreruleset",
-      "dialect": "pcre",
-      "probes": 51,
-      "regex_id": "d00fe967efcf75cd1166d48a59883c0c",
-      "status": "ok"
-    },
-    {
-      "corpus": "coreruleset",
-      "dialect": "pcre",
-      "probes": 51,
-      "regex_id": "4cda044c15b26e0b433f0b5df567047d",
-      "status": "ok"
-    },
-    {
-      "corpus": "gitleaks",
-      "dialect": "re2",
-      "probes": 51,
-      "regex_id": "45fb01484e6593d0c34922f594e7344b",
-      "status": "ok"
-    },
-    {
-      "corpus": "gitleaks",
-      "dialect": "re2",
-      "probes": 51,
-      "regex_id": "f66e76a3534be1d3727febcfd8db409f",
-      "status": "ok"
-    }
-  ],
+  "results": [],
   "schema_version": "3",
   "surfaces": {
-    "busybox": {
-      "dialect": "pcre",
+    "dompurify": {
+      "dialect": "ecma",
       "domain": "ascii",
       "mismatches": [],
-      "probes": 4,
+      "probes": 6,
       "status": "ok",
-      "surface": "busybox"
+      "surface": "dompurify"
     },
-    "cpython": {
-      "dialect": "py_re",
+    "email_addresses": {
+      "dialect": "ecma",
       "domain": "ascii",
       "mismatches": [],
       "probes": 5,
       "status": "ok",
-      "surface": "cpython"
+      "surface": "email_addresses"
     },
     "go_regexp": {
       "dialect": "re2",
@@ -68,6 +39,14 @@
       "probes": 5,
       "status": "ok",
       "surface": "go_regexp"
+    },
+    "isemail": {
+      "dialect": "ecma",
+      "domain": "ascii",
+      "mismatches": [],
+      "probes": 6,
+      "status": "ok",
+      "surface": "isemail"
     },
     "noseyparker": {
       "dialect": "re2",
@@ -79,14 +58,6 @@
       "wrong_xflag_caught": true,
       "xflag_stripped": "ab"
     },
-    "pcre2": {
-      "dialect": "pcre",
-      "domain": "ascii",
-      "mismatches": [],
-      "probes": 5,
-      "status": "ok",
-      "surface": "pcre2"
-    },
     "perl_re": {
       "domain": "ascii",
       "helper": "perl",
@@ -94,30 +65,6 @@
       "probes": 5,
       "status": "ok",
       "surface": "perl_re"
-    },
-    "re2": {
-      "dialect": "re2",
-      "domain": "ascii",
-      "mismatches": [],
-      "probes": 5,
-      "status": "ok",
-      "surface": "re2"
-    },
-    "rule_diff": {
-      "domain": "ascii",
-      "in_r1": false,
-      "in_r2": true,
-      "status": "ok",
-      "surface": "rule_diff",
-      "witness": "a1"
-    },
-    "semgrep": {
-      "dialect": "py_re",
-      "domain": "ascii",
-      "mismatches": [],
-      "probes": 4,
-      "status": "ok",
-      "surface": "semgrep"
     },
     "shhgit": {
       "dialect": "re2",
@@ -134,29 +81,10 @@
       "probes": 5,
       "status": "ok",
       "surface": "spamassassin"
-    },
-    "test262": {
-      "dialect": "ecma",
-      "domain": "ascii",
-      "mismatches": [],
-      "probes": 5,
-      "status": "ok",
-      "surface": "test262"
-    },
-    "yara": {
-      "domains": [
-        "ascii",
-        "wide"
-      ],
-      "mismatches": [],
-      "probes": 7,
-      "status": "ok",
-      "surface": "yara",
-      "wrong_wide_caught": true
     }
   },
   "surfaces_ok": true,
-  "wrong_wide_caught": true,
+  "wrong_wide_caught": false,
   "wrong_xflag_caught": true,
   "yara_helper": true
 }

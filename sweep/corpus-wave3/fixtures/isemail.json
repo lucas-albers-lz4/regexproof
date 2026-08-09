@@ -1,0 +1,8 @@
+{
+  "surface": "isemail",
+  "domain": "ascii",
+  "dialect": "ecma",
+  "pattern": "^[a-fA-F\\d]{0,4}$",
+  "flags": "",
+  "probes": ["", "a", "FFFF", "gggg", "12345", "0"]
+}
