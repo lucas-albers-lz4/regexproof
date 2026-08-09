@@ -1,4 +1,121 @@
 {
-  "schema_version": "1",
-  "candidates": []
+  "candidates": [
+    {
+      "capped": true,
+      "default_branch": "main",
+      "first_seen": "2026-08-09T22:36:24Z",
+      "pin": "c84d52528a489821f355fc63976fbc7783ae0ad5",
+      "pushed_date": "2026-08-09",
+      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
+      "stars": 3761,
+      "status": "mined",
+      "url": "https://github.com/TracecatHQ/tracecat"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "first_seen": "2026-08-09T22:36:24Z",
+      "pin": "d3daa912a04d17f78df2d0c059a111cafff75534",
+      "pushed_date": "2026-08-09",
+      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
+      "stars": 594,
+      "status": "mined",
+      "url": "https://github.com/Mininglamp-OSS/octo-server"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "first_seen": "2026-08-09T22:36:24Z",
+      "pin": "e9fb233763160316989863b4739c4656133d45b0",
+      "pushed_date": "2026-07-30",
+      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
+      "stars": 477,
+      "status": "mined",
+      "url": "https://github.com/magiclabs/magic-js"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "first_seen": "2026-08-09T22:36:24Z",
+      "pin": "0dc632bdfb0e67aead52f8776ece347dd689dfff",
+      "pushed_date": "2026-08-07",
+      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
+      "stars": 31,
+      "status": "mined",
+      "url": "https://github.com/openshift/splunk-forwarder-operator"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "first_seen": "2026-08-09T22:36:24Z",
+      "pin": "7ea3b445ee7d2ef8004d5ee77dab7544e1b8ef88",
+      "pushed_date": "2026-06-20",
+      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
+      "stars": 111,
+      "status": "mined",
+      "url": "https://github.com/profbernardoj/everclaw-community-branches"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "first_seen": "2026-08-09T22:36:24Z",
+      "pin": "cee4d30c226658fce0598d12f87f304104767162",
+      "pushed_date": "2026-08-09",
+      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
+      "stars": 103,
+      "status": "mined",
+      "url": "https://github.com/avivsinai/langfuse-mcp"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "first_seen": "2026-08-09T22:36:24Z",
+      "pin": "f660999a9cff293e893d335ba3751ba3cd06664d",
+      "pushed_date": "2026-08-09",
+      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
+      "stars": 166,
+      "status": "mined",
+      "url": "https://github.com/gebruder/wirken"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "first_seen": "2026-08-09T22:36:24Z",
+      "pin": "4879bd48c50c712236f99413cb1f68091cea599c",
+      "pushed_date": "2026-08-08",
+      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
+      "stars": 16,
+      "status": "mined",
+      "url": "https://github.com/NHS-digital-website/hippo"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "first_seen": "2026-08-09T22:36:24Z",
+      "pin": "1d1aaa2e35f51ee2eac75eddb1ffad22b4616cab",
+      "pushed_date": "2025-11-06",
+      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
+      "stars": 23,
+      "status": "mined",
+      "url": "https://github.com/oracle/ocifs"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "first_seen": "2026-08-09T22:36:24Z",
+      "pin": "f2b17a7ca08a97b6562db3ad4e19db5dfdd4364a",
+      "pushed_date": "2026-07-24",
+      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
+      "stars": 26,
+      "status": "mined",
+      "url": "https://github.com/ackinacki/ackinacki"
+    }
+  ],
+  "run": {
+    "capped": true,
+    "search_errors": [
+      "enrich failed: sambawy01/Fire-Line"
+    ]
+  },
+  "schema_version": "1"
 }
