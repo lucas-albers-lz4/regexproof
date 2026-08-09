@@ -333,16 +333,18 @@ def main(argv: list[str] | None = None) -> int:
                 mut_ok = False
 
     findings = tag_disclosure(findings, corpus="coreruleset")
+    n_timeout = sum(1 for r in results if r["result"] == "timeout")
+    timeout_rate = n_timeout / max(1, len(results))
+    # TIMEOUT = not proven — never a silent pass (AGENTS.md / harness contract).
+    timeout_gate_ok = n_timeout == 0
     report = {
         "schema_version": "1",
         "pilot": "crs_cross_engine_coraza_modsec",
         "admitted_pairs": len(pairs),
-        "timeouts": sum(1 for r in results if r["result"] == "timeout"),
-        "timeout_rate": (
-            sum(1 for r in results if r["result"] == "timeout") / max(1, len(results))
-        ),
+        "timeouts": n_timeout,
+        "timeout_rate": timeout_rate,
         "floor_ok": len(pairs) >= 1,
-        "timeout_gate_ok": True,
+        "timeout_gate_ok": timeout_gate_ok,
         "engine_versions": _engine_versions(),
         "preflight": pre,
         "class_counts": class_counts,
@@ -408,6 +410,12 @@ def main(argv: list[str] | None = None) -> int:
                     return 1
     if not mut_ok:
         print("FAIL: mutation guard", file=sys.stderr)
+        return 1
+    if not timeout_gate_ok:
+        print(
+            f"FAIL: {n_timeout} timeout(s) — TIMEOUT is not proven",
+            file=sys.stderr,
+        )
         return 1
     return 0
 
