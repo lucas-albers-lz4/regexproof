@@ -76,7 +76,7 @@ def _extractors_for(path: Path) -> list[ExtractFn]:
                 src, repo="probe", file=rel, dialect="re2"
             )
         ]
-    if suffix in {".yml", ".yaml"}:
+    if suffix in {".yml", ".yaml", ".toml"}:
         return [
             lambda src, rel: extract_rule_file(
                 src, repo="probe", file=rel, dialect="rust-regex"

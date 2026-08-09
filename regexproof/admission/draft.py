@@ -7,7 +7,7 @@ from typing import Any
 
 from regexproof.admission.boundary import BoundarySignals, classify_boundary
 from regexproof.admission.serialize import dumps_pinned
-from regexproof.admission.walk import walk_repo
+from regexproof.admission.walk import _SKIP_DIR_NAMES, walk_repo
 
 # Exact list from umbrella C2 — fields the author script must fill.
 FIELDS_REMAINING: list[str] = [
@@ -43,9 +43,14 @@ def build_boundary_signals(
     paths: list[str] = []
     if root is not None:
         description = _readme_text(root)
-        # Sample a few path strings for path_substring positive signals.
+        # Sample path strings for path_substring signals (skip .git / vendor / …).
         try:
-            paths = [str(p.relative_to(root)) for p in sorted(root.rglob("*"))[:200] if p.is_file()]
+            paths = [
+                str(p.relative_to(root))
+                for p in sorted(root.rglob("*"))
+                if p.is_file()
+                and not any(part in _SKIP_DIR_NAMES for part in p.parts)
+            ][:200]
         except OSError:
             paths = []
     return BoundarySignals(

@@ -20,12 +20,13 @@ FIXTURES = ROOT / "tests" / "fixtures" / "admission"
 
 
 def test_count_constructs_flags_and_lookarounds():
-    c = count_constructs(r"(?x)(?i)foo(?=bar)\K\1[[:digit:]]")
+    c = count_constructs(r"(?x)(?i)foo(?=bar)\K\g{1}\1[[:digit:]]")
     assert c.get("(?x)", 0) >= 1
     assert c.get("(?i)", 0) >= 1
     assert c.get("lookaround", 0) >= 1
     assert c.get("\\K", 0) >= 1
-    assert c.get("backref", 0) >= 1
+    assert c.get("\\g{", 0) == 1
+    assert c.get("backref", 0) == 1  # only \\1 — \\g{ counted separately
     assert c.get("posix-class", 0) >= 1
 
 
@@ -122,6 +123,8 @@ def test_cli_local_path(tmp_path: Path):
     mod = importlib.util.module_from_spec(spec)
     assert spec.loader is not None
     spec.loader.exec_module(mod)
+    assert mod._repo_name_from_target("https://github.com/pallets/wtforms.git") == "wtforms"
+    assert mod._repo_name_from_target(str(root)) == "ecma_noise"
     rc = mod.main(
         [str(root), "--pin", "localpin", "-o", str(out), "--repo-name", "ecma_noise"]
     )
@@ -129,3 +132,15 @@ def test_cli_local_path(tmp_path: Path):
     data = json.loads(out.read_text(encoding="utf-8"))
     assert data["draft"] is True
     assert data["probe"]["regex_sites"] == 2
+
+
+def test_boundary_path_sample_skips_git(tmp_path: Path):
+    from regexproof.admission.draft import build_boundary_signals
+
+    (tmp_path / ".git" / "objects").mkdir(parents=True)
+    (tmp_path / ".git" / "objects" / "pack").write_text("x", encoding="utf-8")
+    (tmp_path / "src").mkdir()
+    (tmp_path / "src" / "sanitizer.py").write_text("x", encoding="utf-8")
+    sigs = build_boundary_signals(repo_name="x", root=tmp_path)
+    assert any("sanitizer" in p for p in sigs.paths)
+    assert not any(".git" in p for p in sigs.paths)

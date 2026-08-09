@@ -15,7 +15,8 @@ _CONSTRUCT_PATTERNS: list[tuple[str, re.Pattern[str]]] = [
     ("\\K", re.compile(r"\\K")),
     ("\\g{", re.compile(r"\\g\{")),
     ("posix-class", re.compile(r"\[\[:[a-z]+:\]\]")),
-    ("backref", re.compile(r"\\[1-9]|\\g\{|(?:\?P=)")),
+    # Numeric / named backrefs only — \\g{ is counted separately above.
+    ("backref", re.compile(r"\\[1-9]|(?:\?P=)")),
 ]
 
 

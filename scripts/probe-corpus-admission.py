@@ -24,6 +24,26 @@ def _is_url(s: str) -> bool:
     return s.startswith("http://") or s.startswith("https://") or s.startswith("git@")
 
 
+def _repo_name_from_target(target: str) -> str:
+    """Derive corpus name from a git URL or local path (never the clone dirname ``repo``)."""
+    s = target.strip().rstrip("/")
+    if s.startswith("git@"):
+        path = s.split(":", 1)[-1]
+    elif "://" in s:
+        from urllib.parse import urlparse
+
+        path = urlparse(s).path
+    else:
+        return Path(s).expanduser().resolve().name
+    parts = [p for p in path.split("/") if p]
+    if not parts:
+        return "unknown"
+    name = parts[-1]
+    if name.endswith(".git"):
+        name = name[:-4]
+    return name or "unknown"
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("target", help="Local path or git URL")
@@ -61,7 +81,7 @@ def main(argv: list[str] | None = None) -> int:
         draft = build_draft(
             root,
             pin=pin,
-            repo_name=args.repo_name or root.name,
+            repo_name=args.repo_name or _repo_name_from_target(target),
             candidate_url=cand_url,
         )
         text = emit_draft_text(draft)
