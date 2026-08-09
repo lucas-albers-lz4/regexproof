@@ -18,6 +18,7 @@ SECURITY_TOOL_CORPORA = frozenset(
         "coreruleset",
         "ids_rules",
         "semgrep_rules",
+        "yara_rules",
     }
 )
 

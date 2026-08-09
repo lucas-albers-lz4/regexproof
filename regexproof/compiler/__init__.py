@@ -39,6 +39,12 @@ def _compile_dialect(
         return compile_pcre(
             pattern, flags=flags, call_kind=call_kind, max_length=max_length
         )
+    if dialect == "yara":
+        from regexproof.compiler.yara import compile_yara
+
+        return compile_yara(
+            pattern, flags=flags, call_kind=call_kind, max_length=max_length
+        )
     raise ValueError(f"unknown dialect {dialect!r}")
 
 

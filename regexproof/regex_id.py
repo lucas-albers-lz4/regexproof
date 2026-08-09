@@ -1,18 +1,24 @@
-"""Stable regex_id: length-prefixed SHA-256 prefix (Phase 1 invariant).
+"""Stable regex_id: length-prefixed SHA-256 prefix (Phase 1→2 invariant).
 
-Formula (issue #14 / #17):
-  sha256(lp(repo) || lp(pattern) || lp(flags) || lp(dialect) || lp(call_kind) || lp(site))[:32]
+Formula (issue #14 / #17 / #97):
+  sha256(lp(repo) || lp(pattern) || lp(flags) || lp(dialect) || lp(call_kind) || lp(site) [|| lp(domain)])[:32]
 
-where lp(s) = uint32_be(len(utf8(s))) || utf8(s). All six fields are
+where lp(s) = uint32_be(len(utf8(s))) || utf8(s). All fields are
 length-prefixed so delimiter collisions cannot conflate components.
 Unencodability reasons are never folded into the hash.
+
+Schema v2 adds domain as the 7th component. When domain is the default
+("ascii"), it is omitted from the hash to preserve backward-compat with
+v1 IDs. Non-default domains (e.g. "wide") produce distinct IDs.
 """
 
 from __future__ import annotations
 
 import hashlib
 
-from regexproof.kinds import validate_call_kind, validate_dialect
+from regexproof.kinds import validate_call_kind, validate_dialect, validate_domain
+
+DEFAULT_DOMAIN = "ascii"
 
 
 def _lp(s: str) -> bytes:
@@ -27,13 +33,17 @@ def make_regex_id(
     dialect: str,
     call_kind: str,
     site: str,
+    domain: str = DEFAULT_DOMAIN,
 ) -> str:
-    """Return 32 hex chars identifying (repo, pattern, flags, dialect, call_kind, site).
+    """Return 32 hex chars identifying (repo, pattern, flags, dialect, call_kind, site[, domain]).
 
     `site` must be `file:line:column`.
+    When ``domain`` equals the default ("ascii"), it is not folded into the
+    hash — this preserves backward-compat with schema-v1 IDs.
     """
     validate_dialect(dialect)
     validate_call_kind(call_kind)
+    validate_domain(domain)
     payload = (
         _lp(repo)
         + _lp(pattern)
@@ -42,4 +52,6 @@ def make_regex_id(
         + _lp(call_kind)
         + _lp(site)
     )
+    if domain != DEFAULT_DOMAIN:
+        payload += _lp(domain)
     return hashlib.sha256(payload).hexdigest()[:32]

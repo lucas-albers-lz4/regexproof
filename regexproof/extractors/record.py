@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from regexproof.regex_id import make_regex_id
+from regexproof.regex_id import DEFAULT_DOMAIN, make_regex_id
 from regexproof.schemas import EXTRACTOR_SCHEMA_VERSION
 
 
@@ -18,13 +18,14 @@ def make_record(
     file: str,
     line: int,
     column: int,
+    domain: str = DEFAULT_DOMAIN,
     context_snippet: str = "",
     unencodable_reason: str | None = None,
 ) -> dict[str, Any]:
     site = f"{file}:{line}:{column}"
     rec: dict[str, Any] = {
         "schema_version": EXTRACTOR_SCHEMA_VERSION,
-        "regex_id": make_regex_id(repo, pattern, flags, dialect, call_kind, site),
+        "regex_id": make_regex_id(repo, pattern, flags, dialect, call_kind, site, domain=domain),
         "repo": repo,
         "pattern": pattern,
         "flags": flags,
@@ -34,6 +35,7 @@ def make_record(
         "file": file,
         "line": line,
         "column": column,
+        "domain": domain,
         "context_snippet": context_snippet[:500],
     }
     if unencodable_reason:

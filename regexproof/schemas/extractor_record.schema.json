@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://regexproof.dev/schemas/extractor_record/v1",
+  "$id": "https://regexproof.dev/schemas/extractor_record/v2",
   "title": "ExtractorJSONLRecord",
   "type": "object",
   "required": [
@@ -18,14 +18,14 @@
   ],
   "additionalProperties": true,
   "properties": {
-    "schema_version": { "type": "string", "const": "1" },
+    "schema_version": { "type": "string", "enum": ["1", "2"] },
     "regex_id": { "type": "string", "pattern": "^[0-9a-f]{32}$" },
     "repo": { "type": "string", "minLength": 1 },
     "pattern": { "type": "string" },
     "flags": { "type": "string" },
     "dialect": {
       "type": "string",
-      "enum": ["py_re", "ecma", "re2", "pcre"]
+      "enum": ["py_re", "ecma", "re2", "pcre", "yara", "rust_regex"]
     },
     "call_kind": {
       "type": "string",
@@ -38,6 +38,11 @@
     "file": { "type": "string" },
     "line": { "type": "integer", "minimum": 1 },
     "column": { "type": "integer", "minimum": 0 },
+    "domain": {
+      "type": "string",
+      "enum": ["ascii", "wide"],
+      "description": "Encoding domain; defaults to ascii when absent (schema v1 compat)"
+    },
     "context_snippet": { "type": "string", "maxLength": 500 },
     "unencodable_reason": {
       "type": "string",

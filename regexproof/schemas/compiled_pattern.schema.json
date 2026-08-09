@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://regexproof.dev/schemas/compiled_pattern/v1",
+  "$id": "https://regexproof.dev/schemas/compiled_pattern/v2",
   "title": "CompiledPatternRecord",
   "type": "object",
   "required": [
@@ -14,13 +14,13 @@
   ],
   "additionalProperties": true,
   "properties": {
-    "schema_version": { "type": "string", "const": "1" },
+    "schema_version": { "type": "string", "enum": ["1", "2"] },
     "regex_id": { "type": "string", "pattern": "^[0-9a-f]{32}$" },
     "pattern": { "type": "string" },
     "flags": { "type": "string" },
     "dialect": {
       "type": "string",
-      "enum": ["py_re", "ecma", "re2", "pcre"]
+      "enum": ["py_re", "ecma", "re2", "pcre", "yara", "rust_regex"]
     },
     "call_kind": {
       "type": "string",
@@ -32,7 +32,7 @@
       "properties": {
         "alphabet": {
           "type": "string",
-          "enum": ["ascii", "unicode", "custom"]
+          "enum": ["ascii", "unicode", "custom", "wide"]
         },
         "description": { "type": "string" }
       }
