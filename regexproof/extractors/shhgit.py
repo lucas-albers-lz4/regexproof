@@ -1,7 +1,11 @@
 """shhgit ``config.yaml`` signature extractor (Wave 3 / #114).
 
-Extracts ``regex:`` entries from the signatures list. Filename-selection
-patterns are anchored; ``call_kind`` is ``fullmatch``.
+Extracts ``regex:`` entries from the signatures list.
+
+``call_kind`` mirrors upstream ``PatternSignature.Match``:
+- ``contents`` → ``search`` (``Regexp.Match`` on file bytes)
+- ``filename`` / ``path`` / ``extension`` → ``fullmatch`` (whole
+  haystack string; patterns are typically ``^…$``-anchored)
 
 Flags are always ``i``: upstream ``core/signatures.go`` gates pattern
 signatures with ``syntax.Parse(..., syntax.FoldCase)`` (Wave-3 P1 fold).
@@ -71,12 +75,15 @@ def extract_shhgit(
         ):
             pat = _unquote(pat) or pat
         snippet = f"part={cur_part}; name={cur_name}" if cur_part or cur_name else line.strip()
+        # contents uses substring Match; path/filename/extension use MatchString
+        # on the whole component (treat as fullmatch for the haystack).
+        call_kind = "search" if (cur_part or "").lower() == "contents" else "fullmatch"
         rec = make_record(
             repo=repo,
             pattern=pat,
             flags="i",
             dialect=dialect,
-            call_kind="fullmatch",
+            call_kind=call_kind,
             file=file,
             line=line_no,
             column=0,

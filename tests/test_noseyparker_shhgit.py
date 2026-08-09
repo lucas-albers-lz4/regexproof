@@ -83,6 +83,43 @@ def test_shhgit_deterministic():
     assert [r["regex_id"] for r in a] == [r["regex_id"] for r in b]
 
 
+def test_shhgit_contents_is_search_not_fullmatch():
+    src = """
+signatures:
+  - part: 'contents'
+    regex: 'EAACEdEose0cBA[0-9A-Za-z]+'
+    name: 'Facebook Access Token'
+  - part: 'filename'
+    regex: '^.*_rsa$'
+    name: 'Private key'
+"""
+    recs = extract_shhgit(src, repo="eth0izzle/shhgit", file="config.yaml")
+    by_part = {r["rule_part"]: r for r in recs}
+    assert by_part["contents"]["call_kind"] == "search"
+    assert by_part["filename"]["call_kind"] == "fullmatch"
+
+
+def test_noseyparker_sibling_guard_skips_top_level_pattern():
+    """A top-level pattern: must not attach to the previous rule."""
+    src = """
+rules:
+- name: First
+  id: np.first.1
+  pattern: 'first_token'
+
+pattern: 'orphan_top_level'
+
+- name: Second
+  id: np.second.1
+  pattern: 'second_token'
+"""
+    recs = extract_noseyparker(src, repo="praetorian-inc/noseyparker", file="sib.yml")
+    pats = [r["pattern"] for r in recs]
+    assert "orphan_top_level" not in pats
+    assert "first_token" in pats
+    assert "second_token" in pats
+
+
 def test_mutation_unstripped_x_rejected():
     raw = "(?x) a b"
     stripped, _ = strip_verbose_x(raw)

@@ -54,8 +54,10 @@ def extract_noseyparker(
             continue
         indent = len(m.group(1))
         if indent <= rule_indent and not line.lstrip().startswith("-"):
-            # Sibling of rule list — ignore.
-            pass
+            # Sibling of the rule list (or top-level key) — do not attribute
+            # to the previous rule's metadata.
+            i += 1
+            continue
         key = m.group(2)
         rest = m.group(3).rstrip()
         line_no = i + 1
