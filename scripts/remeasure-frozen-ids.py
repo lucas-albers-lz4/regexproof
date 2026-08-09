@@ -160,6 +160,16 @@ def main() -> int:
         "current": summary,
     }
     out = args.out or (OUT / f"{args.corpus}_remeasure_delta.json")
+    if args.out is None and out.is_file():
+        try:
+            prev = json.loads(out.read_text(encoding="utf-8"))
+        except json.JSONDecodeError:
+            prev = {}
+        if prev.get("superseded"):
+            raise SystemExit(
+                f"{out} is a SUPERSEDED stub — pass --out <path> "
+                f"(e.g. properties/generated/{args.corpus}_p4_extract_delta.json)"
+            )
     out.write_text(json.dumps(delta, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     print(
         f"{args.corpus}: fraction={summary['fraction']} "

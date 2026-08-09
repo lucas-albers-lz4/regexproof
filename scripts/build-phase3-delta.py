@@ -268,31 +268,45 @@ def _is_superseded(path: Path) -> bool:
 
 def main() -> int:
     OUT.mkdir(parents=True, exist_ok=True)
-    # Wave #81 / P5: phase-3 decision artifacts are historical. Do not clobber
-    # SUPERSEDED stubs or the hand-maintained phase3_decision_matrix.md.
-    guarded = [
-        OUT / "gitleaks_residual_abc.json",
-        OUT / "phase3_decision_matrix.json",
-        OUT / "phase3_decision_matrix.md",
-    ]
-    if any(_is_superseded(p) if p.suffix == ".json" else p.is_file() for p in guarded):
+    # Wave #81 / P5: residual + decision matrix are historical stubs. Still
+    # refresh hermes_delta / phase3_delta_table from current fractions.
+    skip_decision = _is_superseded(OUT / "phase3_decision_matrix.json") or (
+        OUT / "phase3_decision_matrix.md"
+    ).is_file() and "SUPERSEDED" in (
+        OUT / "phase3_decision_matrix.md"
+    ).read_text(encoding="utf-8")
+    skip_residual = _is_superseded(OUT / "gitleaks_residual_abc.json")
+
+    unexplained = 0
+    if skip_residual:
         print(
-            "NOTE: phase3 decision artifacts are superseded "
-            "(see cross_corpus_matrix.md / *_encodable_fraction.json). "
-            "Refusing to overwrite — clear superseded=true to force regen.",
+            "NOTE: skipping gitleaks_residual_abc.json (superseded stub)",
             file=sys.stderr,
         )
-        return 0
-    g = gitleaks_residual()
+    else:
+        g = gitleaks_residual()
+        unexplained = g["unexplained"]
+
     h = hermes_delta()
     d = delta_table()
-    m = decision_matrix()
+
+    if skip_decision:
+        print(
+            "NOTE: skipping phase3_decision_matrix.* (superseded; "
+            "see cross_corpus_matrix.md)",
+            file=sys.stderr,
+        )
+        target_met = (_load_fraction("gitleaks").get("fraction") or 0) >= 0.60
+    else:
+        m = decision_matrix()
+        target_met = m["gitleaks_target_met"]
+
     print(
-        f"gitleaks residual unexplained={g['unexplained']} "
-        f"target_met={m['gitleaks_target_met']} hermes_ids={len(h['frozen_regex_ids_sample'])} "
+        f"gitleaks residual unexplained={unexplained} "
+        f"target_met={target_met} hermes_ids={len(h['frozen_regex_ids_sample'])} "
         f"delta_rows={len(d['rows'])}"
     )
-    return 0 if g["unexplained"] == 0 else 2
+    return 0 if unexplained == 0 else 2
 
 
 if __name__ == "__main__":
