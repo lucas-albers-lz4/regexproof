@@ -15,6 +15,7 @@ RULE_DIFF_REPORT_SCHEMA_VERSION = "1"
 QUESTION_INVENTORY_SCHEMA_VERSION = "1"
 TRIAGE_RECORD_SCHEMA_VERSION = "1"
 SCANNER_FINDING_SCHEMA_VERSION = "1"
+GATE_DECISION_SCHEMA_VERSION = "1"
 
 
 def load_schema(name: str) -> dict:
@@ -53,3 +54,7 @@ def triage_record_schema() -> dict:
 
 def scanner_finding_schema() -> dict:
     return load_schema("scanner_finding.schema.json")
+
+
+def gate_decision_schema() -> dict:
+    return load_schema("gate_decision.schema.json")

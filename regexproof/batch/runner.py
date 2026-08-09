@@ -11,6 +11,8 @@ import time
 from pathlib import Path
 from typing import Any
 
+import jsonschema
+
 ROOT = Path(__file__).resolve().parents[2]
 
 from regexproof.batch.disclose import (  # noqa: E402
@@ -1086,6 +1088,61 @@ def measure_coreruleset(out_dir: Path) -> dict[str, Any]:
     return measure_coreruleset_sample(out_dir, as_primary=True)
 
 
+def check_admission_gates(
+    corpora: list[str],
+    *,
+    out_dir: Path,
+) -> list[str]:
+    """Return violation messages for missing/invalid corpus admission decisions.
+
+    The corpus admission gate (sweep/corpus-admission-gate.md): every
+    rule_corpus / validator corpus in CORPUS_MANIFESTS must have a
+    ``<corpus>_gate_decision.json`` at ``out_dir`` (default
+    ``properties/generated``), valid against ``gate_decision.schema.json``,
+    with decision in ``go`` / ``triage-trial``. Testdata and inventory-only
+    corpora are pipeline inputs, not scanned repos, so they are exempt.
+
+    Missing or invalid artifacts hard-fail (never silent): a corpus with no
+    admission record is not a corpus we are allowed to run.
+    """
+    from regexproof.schemas import load_schema
+
+    schema = load_schema("gate_decision.schema.json")
+    violations: list[str] = []
+    for name in corpora:
+        meta = CORPUS_MANIFESTS.get(name)
+        if meta is None:
+            violations.append(f"{name}: not in CORPUS_MANIFESTS")
+            continue
+        if meta.get("corpus_type") in ("testdata", "inventory_only"):
+            continue
+        path = out_dir / f"{name}_gate_decision.json"
+        if not path.exists():
+            violations.append(
+                f"{name}: admission decision missing ({path.name}); "
+                "run the admission probe and commit the decision artifact "
+                "(sweep/corpus-admission-gate.md)"
+            )
+            continue
+        try:
+            data = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError) as exc:
+            violations.append(f"{name}: admission decision unreadable: {exc}")
+            continue
+        try:
+            jsonschema.validate(instance=data, schema=schema)
+        except jsonschema.ValidationError as exc:
+            violations.append(f"{name}: admission decision fails schema: {exc.message}")
+            continue
+        decision = data.get("decision")
+        if decision not in ("go", "triage-trial"):
+            violations.append(
+                f"{name}: admission decision={decision!r}; "
+                "go or triage-trial required (no-go corpora are not run)"
+            )
+    return violations
+
+
 def run_batch(
     corpora: list[str],
     *,
@@ -1101,6 +1158,10 @@ def run_batch(
         raise SystemExit("inventory coverage failed: " + "; ".join(cov))
 
     out_dir = out_dir or (ROOT / "properties" / "generated")
+    admission = check_admission_gates(corpora, out_dir=out_dir)
+    if admission:
+        raise SystemExit("admission gate failed: " + "; ".join(admission))
+
     out_dir.mkdir(parents=True, exist_ok=True)
     (ROOT / "properties" / "triage").mkdir(parents=True, exist_ok=True)
 

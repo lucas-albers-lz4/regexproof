@@ -1,0 +1,46 @@
+{
+ "schema_version": "1",
+ "corpus": "gitleaks",
+ "candidate_url": "https://github.com/gitleaks/gitleaks",
+ "decision": "triage-trial",
+ "probe": {
+  "regex_sites": 221,
+  "dialect": {
+   "go": 221
+  },
+  "flags": {
+   "inline-flag": 29,
+   "word-boundary": 4
+  },
+  "predicted_buckets": {
+   "inline-flag": 29
+  },
+  "predicted_rejects_pct": 0.13
+ },
+ "conditions": [
+  {
+   "id": "new-surface",
+   "met": false,
+   "evidence": "go dialect already covered by go_regexp extractor; no first-seen construct."
+  },
+  {
+   "id": "security-boundary",
+   "met": true,
+   "evidence": "Secret detector on trust boundaries; rule_diff shape-3 candidate per phase-3 pilot; A1B trailing-|$ class present."
+  },
+  {
+   "id": "large-under-saturated",
+   "met": false,
+   "evidence": "221 sites < 1000."
+  }
+ ],
+ "escape_hatch_applied": true,
+ "rationale": "Security-boundary hatch: small + same-dialect but the findings pipeline paid off \u2014 A1B trailing-|$ lowering moved encodable 22.6% -> 81.9% (CHANGELOG).",
+ "related": {
+  "nearest_admitted": {
+   "corpus": "validatorjs",
+   "fraction": 0.7689
+  }
+ },
+ "decision_basis": "escape_hatch"
+}

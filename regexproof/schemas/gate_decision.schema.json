@@ -1,0 +1,227 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://regexproof.dev/schemas/gate_decision/v1",
+  "title": "CorpusAdmissionDecision",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "corpus",
+    "candidate_url",
+    "decision",
+    "probe",
+    "conditions",
+    "rationale"
+  ],
+  "additionalProperties": true,
+  "properties": {
+    "schema_version": { "type": "string", "const": "1" },
+    "corpus": { "type": "string", "minLength": 1 },
+    "candidate_url": { "type": "string", "minLength": 1 },
+    "corpus_pin": { "type": ["string", "null"], "description": "Pinned commit/tag, when chosen." },
+    "decision": {
+      "type": "string",
+      "enum": ["go", "no-go", "triage-trial"],
+      "description": "go: full pipeline. no-go: rejected with evidence. triage-trial: security-boundary escape hatch — property pipeline on encodable subset, findings decide."
+    },
+    "decision_basis": {
+      "type": "string",
+      "enum": ["admission_conditions", "grandfathered", "escape_hatch"],
+      "description": "Why the decision holds. admission_conditions: at least one of the three conditions is met. grandfathered: pre-gate corpus already admitted and running. escape_hatch: security-boundary triage trial. Required when decision=go with zero conditions met."
+    },
+    "fraction_decision": {
+      "type": ["string", "null"],
+      "enum": [null, "go", "no-go"],
+      "description": "Post-extraction encodable-fraction outcome (>= 0.30 gate), when it differs from the admission decision. The fraction gate is sequential and separate: admission decides whether to extract, fraction decides whether the result is usable. Recorded here for convenience; the authoritative fraction artifact is <corpus>_encodable_fraction.json / phase3_decision_matrix.json."
+    },
+    "decision_date": { "type": "string", "format": "date" },
+    "probe": {
+      "type": "object",
+      "required": ["regex_sites", "dialect", "flags", "predicted_buckets"],
+      "additionalProperties": true,
+      "properties": {
+        "regex_sites": { "type": "integer", "minimum": 0 },
+        "regex_sites_per_file": {
+          "type": "object",
+          "additionalProperties": { "type": "integer" }
+        },
+        "dialect": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "integer",
+            "description": "Count of sites per dialect (py/pcre/re2/ecma/perl/rust-regex/...)."
+          }
+        },
+        "flags": {
+          "type": "object",
+          "description": "Counts per flag/construct surface: (?x), (?i), (?s), (?m), \\K, \\g{, POSIX classes, lookarounds, backrefs, wide/ascii, ...",
+          "additionalProperties": { "type": "integer" }
+        },
+        "predicted_buckets": {
+          "type": "object",
+          "description": "Predicted reject-bucket overlap against the 17-bucket taxonomy.",
+          "additionalProperties": { "type": "integer" }
+        },
+        "predicted_rejects_pct": {
+          "type": ["number", "null"],
+          "minimum": 0,
+          "maximum": 1
+        }
+      }
+    },
+    "conditions": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "required": ["id", "met", "evidence"],
+        "additionalProperties": true,
+        "properties": {
+          "id": {
+            "type": "string",
+            "enum": ["new-surface", "security-boundary", "large-under-saturated"]
+          },
+          "met": { "type": "boolean" },
+          "evidence": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "escape_hatch_applied": {
+      "type": "boolean",
+      "description": "True when the security-boundary findings-triage trial was invoked despite failing scale/surface conditions."
+    },
+    "rationale": { "type": "string", "minLength": 1 },
+    "related": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Cross-refs: prior no-go candidates, nearest admitted corpus in the same dialect (name + fraction), sweep/ docs."
+    }
+  },
+  "allOf": [
+    {
+      "description": "decision=go requires a defensible basis: at least one condition met, or an explicit grandfathered/escape-hatch basis.",
+      "if": {
+        "properties": {
+          "decision": { "const": "go" },
+          "conditions": {
+            "not": {
+              "contains": { "properties": { "met": { "const": true } } }
+            }
+          }
+        },
+        "required": ["decision", "conditions"]
+      },
+      "then": {
+        "properties": {
+          "decision_basis": {
+            "enum": ["grandfathered", "escape_hatch"]
+          }
+        },
+        "required": ["decision_basis"]
+      }
+    },
+    {
+      "description": "grandfathered requires provenance: the artifact must declare related.backfilled=true (pre-gate corpus, decision predates the gate). A fresh probe cannot claim grandfathered.",
+      "if": {
+        "properties": {
+          "decision_basis": { "const": "grandfathered" }
+        },
+        "required": ["decision_basis"]
+      },
+      "then": {
+        "properties": {
+          "related": {
+            "properties": {
+              "backfilled": { "const": true }
+            },
+            "required": ["backfilled"]
+          }
+        },
+        "required": ["related"]
+      }
+    },
+    {
+      "description": "escape_hatch requires a security-boundary triage path: security-boundary condition met AND escape_hatch_applied=true. A non-security corpus cannot declare the hatch.",
+      "if": {
+        "properties": {
+          "decision_basis": { "const": "escape_hatch" }
+        },
+        "required": ["decision_basis"]
+      },
+      "then": {
+        "properties": {
+          "escape_hatch_applied": { "const": true },
+          "conditions": {
+            "contains": {
+              "properties": {
+                "id": { "const": "security-boundary" },
+                "met": { "const": true }
+              }
+            }
+          }
+        },
+        "required": ["escape_hatch_applied", "conditions"]
+      }
+    },
+    {
+      "description": "triage-trial is the security-boundary findings trial: it requires the security-boundary condition met and escape_hatch_applied=true, matching the documented lifecycle.",
+      "if": {
+        "properties": {
+          "decision": { "const": "triage-trial" }
+        },
+        "required": ["decision"]
+      },
+      "then": {
+        "properties": {
+          "escape_hatch_applied": { "const": true },
+          "decision_basis": { "const": "escape_hatch" },
+          "conditions": {
+            "contains": {
+              "properties": {
+                "id": { "const": "security-boundary" },
+                "met": { "const": true }
+              }
+            }
+          }
+        },
+        "required": ["escape_hatch_applied", "decision_basis", "conditions"]
+      }
+    },
+    {
+      "description": "decision=no-go with any admission condition met is a contradiction: per the plan, any-one-passes => GO. The fraction gate outcome belongs in fraction_decision, never in decision.",
+      "not": {
+        "properties": {
+          "decision": { "const": "no-go" },
+          "conditions": {
+            "contains": { "properties": { "met": { "const": true } } }
+          }
+        },
+        "required": ["decision", "conditions"]
+      }
+    },
+    {
+      "description": "A fresh (non-grandfathered) GO or TRIAGE-TRIAL decision must carry real evidence: at least one regex site. NO-GO decisions are exempt — zero regex sites is itself a valid rejection reason (no regex surface to scan).",
+      "if": {
+        "properties": {
+          "decision_basis": {
+            "not": { "const": "grandfathered" }
+          },
+          "decision": {
+            "enum": ["go", "triage-trial"]
+          }
+        },
+        "required": ["decision_basis", "decision"]
+      },
+      "then": {
+        "properties": {
+          "probe": {
+            "properties": {
+              "regex_sites": { "minimum": 1 }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

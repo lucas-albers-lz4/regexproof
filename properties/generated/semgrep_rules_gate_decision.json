@@ -1,0 +1,55 @@
+{
+ "schema_version": "1",
+ "corpus": "semgrep_rules",
+ "candidate_url": "https://github.com/semgrep/semgrep-rules",
+ "corpus_pin": null,
+ "decision": "go",
+ "decision_date": "2026-08-09",
+ "probe": {
+  "regex_sites": 9186,
+  "dialect": {
+   "rust-regex": 9186
+  },
+  "flags": {},
+  "predicted_buckets": {
+   "composite-pattern": 3247,
+   "internal-anchor": 3113,
+   "lookaround": 50,
+   "m-flag": 18,
+   "negated-shorthand": 6,
+   "parse-error:PatternError": 55,
+   "pattern-too-long": 8,
+   "per-alternative-anchor": 9,
+   "unicode-not-literal": 20,
+   "unsupported:POSSESSIVE_REPEAT": 1,
+   "word-boundary": 48
+  },
+  "predicted_rejects_pct": null
+ },
+ "conditions": [
+  {
+   "id": "new-surface",
+   "met": false,
+   "evidence": "Backfilled for a pre-gate corpus; admission predates the gate."
+  },
+  {
+   "id": "security-boundary",
+   "met": true,
+   "evidence": "Secret/SAST rule corpus; SECURITY_TOOL_CORPORA member."
+  },
+  {
+   "id": "large-under-saturated",
+   "met": true,
+   "evidence": "9186 regex sites; nearest security corpus fraction ids_rules 0.8519."
+  }
+ ],
+ "escape_hatch_applied": false,
+ "rationale": "Admission GO: security-boundary (secret/SAST rules) + large-under-saturated (9,186 sites) both met. Fraction no-go (0.2741 < 0.30) recorded in phase3_decision_matrix.json; the fraction gate is sequential and separate.",
+ "related": {
+  "backfilled": true,
+  "source": "cross_corpus_matrix.json + phase3_decision_matrix.json",
+  "repo": "semgrep/semgrep-rules"
+ },
+ "decision_basis": "admission_conditions",
+ "fraction_decision": "no-go"
+}

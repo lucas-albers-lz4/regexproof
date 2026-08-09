@@ -1,0 +1,44 @@
+{
+ "schema_version": "1",
+ "corpus": "shhgit",
+ "candidate_url": "https://github.com/l4rm4nd/Shhgit",
+ "corpus_pin": null,
+ "decision": "go",
+ "decision_basis": "admission_conditions",
+ "decision_date": "2026-08-09",
+ "probe": {
+  "regex_sites": 95,
+  "dialect": {
+   "re2": 95
+  },
+  "flags": {
+   "FoldCase": 95
+  },
+  "predicted_buckets": {
+   "inline-flag": 5
+  }
+ },
+ "conditions": [
+  {
+   "id": "new-surface",
+   "met": true,
+   "evidence": "First-seen construct class in roster; see probe flags/dialect."
+  },
+  {
+   "id": "security-boundary",
+   "met": true,
+   "evidence": "Security tool / sanitizer on trust boundaries (SECURITY_TOOL_CORPORA class)."
+  },
+  {
+   "id": "large-under-saturated",
+   "met": false,
+   "evidence": "95 sites < 1000 scale bar."
+  }
+ ],
+ "escape_hatch_applied": false,
+ "rationale": "Trial-run probe (2026-08-09, live clone): 95 regex entries in config.yaml of 150 signatures. syntax.FoldCase->i lift is a first-seen extractor surface (new-surface met); secret-scanner filename selection is boundary-adjacent (security-boundary met). re2 dialect.",
+ "related": {
+  "probe": "live clone l4rm4nd/Shhgit (2026-08-09)",
+  "trial_run": true
+ }
+}
