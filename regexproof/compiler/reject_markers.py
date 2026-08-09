@@ -23,6 +23,8 @@ PCRE_REJECT_MARKERS: tuple[tuple[str, str], ...] = (
 )
 
 # Perl: \\K is stripped (membership-transparent), not rejected.
+# \\z/\\Z/\\A are absolute anchors — shared parse_pattern treats \\z as literal
+# ``z``, so reject fail-closed rather than silently wrong mirrors.
 PERL_REJECT_MARKERS: tuple[tuple[str, str], ...] = (
     ("(?=", "lookaround"),
     ("(?!", "lookaround"),
@@ -38,6 +40,9 @@ PERL_REJECT_MARKERS: tuple[tuple[str, str], ...] = (
     ("\\h", "h-escape"),
     ("\\v", "v-escape"),
     ("\\Q", "quote-meta"),
+    ("\\z", "z-anchor"),
+    ("\\Z", "Z-anchor"),
+    ("\\A", "A-anchor"),
     ("(?R)", "recursion"),
     ("(?&", "recursion"),
 )

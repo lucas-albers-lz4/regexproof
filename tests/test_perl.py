@@ -43,6 +43,24 @@ def test_reject_g_brace():
     assert r.unencodable_reason == "backref"
 
 
+def test_reject_z_anchor():
+    """\\z must not lower to literal z (shared parse_pattern pitfall)."""
+    r = compile_perl(r"foo\z", call_kind="search")
+    assert not r.encodable
+    assert r.unencodable_reason == "z-anchor"
+
+
+def test_dotall_s_flag_allows_newline():
+    import z3
+
+    r = compile_perl(r"a.b", flags="s", call_kind="search")
+    assert r.encodable, r.unencodable_reason
+    solver = z3.Solver()
+    solver.set("timeout", 5000)
+    solver.add(z3.InRe(z3.StringVal("a\nb"), r.mirror))
+    assert solver.check() == z3.sat
+
+
 def test_dispatch_via_compile_pattern():
     r = compile_pattern(r"abc", "", "perl", "search")
     assert r.encodable, r.unencodable_reason

@@ -74,3 +74,10 @@ def test_mbrace_delimiter():
     recs = _extract_all()
     mbrace = next(r for r in recs if r["rule_name"] == "MBRACE")
     assert mbrace["pattern"] == r"[[:digit:]]+"
+
+
+def test_backslash_continuation_no_space():
+    src = "body CONT /alpha\\\nbeta/\n"
+    recs = extract_spamassassin(src, repo="apache/spamassassin", file="cont.cf")
+    assert len(recs) == 1
+    assert recs[0]["pattern"] == "alphabeta"

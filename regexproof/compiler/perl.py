@@ -121,11 +121,13 @@ def compile_perl(
         ast = parse_pattern(rewritten)
         fold_fn = lambda ch: python_fold_closure(ch, ascii_only=True)
         fold = fold_fn if "i" in flags else None
+        # ``s`` (dotall): ``.`` matches newline — empty terminator set.
+        terminators = frozenset() if "s" in flags else PERL_TERMINATORS
         mirror, _meta = lower(
             ast,
             fold=fold,
             case_fold=fold_fn,
-            dot_terminators=PERL_TERMINATORS,
+            dot_terminators=terminators,
             digit=lambda: Range("0", "9"),
             space=lambda: Union(*[Re(c) for c in _PERL_SPACE_CHARS]),
             word=lambda: Union(Range("a", "z"), Range("A", "Z"), Range("0", "9"), Re("_")),

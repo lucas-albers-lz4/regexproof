@@ -38,15 +38,16 @@ def _join_continuations(source: str) -> list[tuple[int, str]]:
                 continue
             start = i
         if raw.endswith("\\"):
+            # Concatenate without inserting spaces (SA continues the token).
             buf.append(raw[:-1].rstrip())
             continue
         buf.append(raw)
         assert start is not None
-        out.append((start, " ".join(buf)))
+        out.append((start, "".join(buf)))
         buf = []
         start = None
     if buf and start is not None:
-        out.append((start, " ".join(buf)))
+        out.append((start, "".join(buf)))
     return out
 
 

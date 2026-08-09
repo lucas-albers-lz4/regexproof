@@ -15,13 +15,13 @@
   "decision_note": "1 unclassified parse-error rows \u2014 Phase 1 requires zero",
   "decision_rule": "go iff encodable/sample_size >= 0.3",
   "dialect": "perl",
-  "encodable": 443,
+  "encodable": 441,
   "engine_versions": {
     "python": "3.14.6",
     "z3": "5.0.0"
   },
   "extractor_schema_version": "2",
-  "fraction": 0.7496,
+  "fraction": 0.7462,
   "go_no_go_threshold": 0.3,
   "id_formula": "v2-domain-optional-ascii-default",
   "inventory_path": "properties/generated/spamassassin-inventory.ndjson",
@@ -34,15 +34,16 @@
     "lookaround": 56,
     "m-flag": 22,
     "negated-shorthand": 18,
-    "ok": 443,
+    "ok": 441,
     "parse-error": 1,
     "pattern-too-long": 4,
     "per-alternative-anchor": 5,
-    "word-boundary": 29
+    "word-boundary": 29,
+    "z-anchor": 2
   },
   "sample_size": 591,
   "schema_version": "1",
   "scope": "full_corpus",
   "unclassified_parse_errors": 1,
-  "wall_s": 82.865
+  "wall_s": 82.065
 }
