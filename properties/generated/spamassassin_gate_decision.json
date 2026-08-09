@@ -1,0 +1,15 @@
+{
+  "corpus": "spamassassin",
+  "decision": "go",
+  "fraction": 0.7496,
+  "threshold": 0.3,
+  "encodable": 443,
+  "sample_size": 591,
+  "complete_run": true,
+  "corpus_pin": "17e7842caa629d032589458f86d2f5ce8e7306a4",
+  "reason": "Encodable fraction 0.7496 >= 0.30 threshold on full pinned clone; perl dialect + SpamAssassin extractor landed (Wave 3 P2 / #113).",
+  "decision_rule": "go iff encodable/sample_size >= 0.3",
+  "fraction_artifact": "properties/generated/spamassassin_encodable_fraction.json",
+  "unclassified_parse_errors": 1,
+  "note": "1 unclassified parse-error remains (bucket pending); does not flip GO under the ≥0.30 rule. NO-GO fallback not triggered."
+}

@@ -51,6 +51,12 @@ def _compile_dialect(
             max_length=max_length,
             domain=domain,
         )
+    if dialect == "perl":
+        from regexproof.compiler.perl import compile_perl
+
+        return compile_perl(
+            pattern, flags=flags, call_kind=call_kind, max_length=max_length
+        )
     raise ValueError(f"unknown dialect {dialect!r}")
 
 

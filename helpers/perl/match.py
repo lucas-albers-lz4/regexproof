@@ -21,10 +21,26 @@ import sys
 import tempfile
 from pathlib import Path
 
+# Checkout bootstrap so helper shares reject markers with compile_perl (#113).
+_ROOT = Path(__file__).resolve().parents[2]
+if str(_ROOT) not in sys.path:
+    sys.path.insert(0, str(_ROOT))
+
+from regexproof.compiler.reject_markers import PERL_REJECT_MARKERS  # noqa: E402
+
 # Pin: major.minor must match installed perl (Wave-3 hard pre-gate).
 # Local/CI currently ship 5.38.x; prefix gate accepts 5.38+.
 PERL_VERSION = "5.38.2"
 PERL_VERSION_PREFIX = "5."
+
+
+def _reject_unencodable(pattern: str) -> str | None:
+    for marker, reason in PERL_REJECT_MARKERS:
+        if marker in pattern:
+            return reason
+    if re.search(r"(?<!\\)\\[1-9]", pattern):
+        return "backref"
+    return None
 
 # Shared Perl fragment: load pattern from a file (NUL-safe) and compile with
 # double-interpolation guards so `$`/`@` in the pattern are not re-scanned as
@@ -129,6 +145,14 @@ def _write_pat_file(pattern: str) -> Path:
 
 
 def parse(pattern: str) -> int:
+    reason = _reject_unencodable(pattern)
+    if reason:
+        print(
+            json.dumps(
+                {"ok": False, "unencodable_reason": reason, "helper": "perl"}
+            )
+        )
+        return 1
     bin_ = _perl_bin()
     if not bin_:
         print(
