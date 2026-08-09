@@ -13,7 +13,7 @@
   "decision": "go",
   "decision_rule": "go iff encodable/sample_size >= 0.3",
   "dialect": "re2",
-  "encodable": 2,
+  "encodable": 4,
   "engine_versions": {
     "python": "3.14.6",
     "z3": "5.0.0"
@@ -24,11 +24,11 @@
   "path": "batch/corpora/re2_testdata/sample",
   "pilot": "re2_testdata",
   "reasons": {
-    "ok": 2
+    "ok": 4
   },
-  "sample_size": 2,
+  "sample_size": 4,
   "schema_version": "1",
   "scope": "sample",
   "unclassified_parse_errors": 0,
-  "wall_s": 0.018
+  "wall_s": 0.026
 }
