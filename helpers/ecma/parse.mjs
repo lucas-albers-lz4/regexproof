@@ -24,7 +24,7 @@ for (const f of flags) {
 }
 
 try {
-  const literal = `/${pattern.replace(/\//g, "\\/")}/${flags}`;
+  const literal = `/${escapeForLiteral(pattern)}/${flags}`;
   const ast = parseRegExpLiteral(literal);
   const reason = findReject(ast.pattern);
   if (reason) {
@@ -50,22 +50,45 @@ try {
   process.exit(1);
 }
 
-function findReject(node) {
+// Escape only *unescaped* slashes; existing escape sequences (including `\/`)
+// pass through verbatim. Escaping `\` first would corrupt source-text
+// semantics (`\d` would become `\\d` — literal backslash + "d").
+function escapeForLiteral(p) {
+  let out = "";
+  for (let i = 0; i < p.length; i++) {
+    if (p[i] === "\\" && i + 1 < p.length) {
+      out += p[i] + p[i + 1];
+      i++;
+    } else if (p[i] === "/") {
+      out += "\\/";
+    } else {
+      out += p[i];
+    }
+  }
+  return out;
+}
+
+function findReject(node, seen = new Set()) {
   if (!node || typeof node !== "object") return null;
+  // regexpp ASTs are cyclic (parent / Backreference.resolved back-edges) —
+  // without a visited set this walk overflows the stack on every pattern.
+  if (seen.has(node)) return null;
+  seen.add(node);
   if (node.type === "Assertion") {
     if (node.kind === "lookahead" || node.kind === "lookbehind") return "lookaround";
-    if (node.kind === "word") return "word-boundary";
-    if (node.kind === "start" || node.kind === "end") return null; // handled in compiler
+    // word/start/end: handled in compiler (ASCII edge \b encode; mid-pattern
+    // \b and \B are honest rejects there — TRAPS #25).
+    if (node.kind === "word" || node.kind === "start" || node.kind === "end") return null;
   }
   if (node.type === "Backreference") return "backref";
   for (const v of Object.values(node)) {
     if (Array.isArray(v)) {
       for (const item of v) {
-        const r = findReject(item);
+        const r = findReject(item, seen);
         if (r) return r;
       }
     } else if (v && typeof v === "object") {
-      const r = findReject(v);
+      const r = findReject(v, seen);
       if (r) return r;
     }
   }
