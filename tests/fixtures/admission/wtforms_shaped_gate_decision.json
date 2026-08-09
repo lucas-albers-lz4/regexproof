@@ -1,0 +1,42 @@
+{
+  "candidate_url": "https://github.com/wtforms/wtforms",
+  "conditions": [
+    {
+      "evidence": "No novel dialect/flag/encoding surface.",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Not a security boundary (probe.security_boundary=deterministic-false).",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "2 sites < 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "wtforms",
+  "corpus_pin": "fixture-pin",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-09",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "py_re": 2
+    },
+    "flags": {},
+    "pin": "fixture-pin",
+    "predicted_buckets": {},
+    "regex_sites": 2,
+    "regex_sites_per_file": {
+      "fields.py": 2
+    },
+    "security_boundary": "deterministic-false"
+  },
+  "rationale": "Below admission scale: 2 regex sites (auto-NO-GO bar 200); dialects [py_re:2]; boundary=deterministic-false.",
+  "schema_version": "1"
+}
