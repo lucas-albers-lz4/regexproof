@@ -50,7 +50,7 @@ def normalize_repo_url(url: str) -> str:
     parts = [p for p in parsed.path.split("/") if p]
     if len(parts) >= 2:
         owner, repo = parts[0], parts[1].removesuffix(".git")
-        if host.endswith("github.com") or not host:
+        if host in {"github.com", "www.github.com"} or not host:
             return f"https://github.com/{owner}/{repo}".lower()
         return f"https://{host}/{owner}/{repo}".lower()
     fallback = u.rstrip("/")
