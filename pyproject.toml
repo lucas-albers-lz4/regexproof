@@ -22,7 +22,7 @@ dev = [
 include = ["regexproof*"]
 
 [tool.setuptools.package-data]
-regexproof = ["schemas/*.json"]
+regexproof = ["schemas/*.json", "admission/*.json"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

@@ -1,0 +1,40 @@
+{
+  "_meta": {
+    "schema_version": "1",
+    "purpose": "Probe prediction vocabulary (umbrella C5 / P1 task 0): construct token → predicted reject-bucket for probe.predicted_buckets.",
+    "note": "Cardinality is intentionally smaller than live inventory compile_reason count (57+ distinct reasons at design-review). This map is for admission overlap prediction only — not an inventory taxonomy authority."
+  },
+  "construct_to_bucket": {
+    "lookaround": "lookaround",
+    "(?=": "lookaround",
+    "(?!": "lookaround",
+    "(?<=": "lookaround",
+    "(?<!": "lookaround",
+    "backref": "backref",
+    "\\1": "backref",
+    "\\g{": "backref",
+    "(?P=": "backref",
+    "composite-pattern": "composite-pattern",
+    "pattern-too-long": "pattern-too-long",
+    "m-flag": "m-flag",
+    "(?m)": "m-flag",
+    "u-flag": "u-flag",
+    "v-flag": "v-flag",
+    "stateful": "stateful",
+    "(?x)": "inline-flag",
+    "(?i)": "inline-flag",
+    "(?s)": "inline-flag",
+    "inline-flag": "inline-flag",
+    "\\K": "unsupported-syntax",
+    "posix-class": "posix-class",
+    "[[:": "posix-class",
+    "word-boundary": "word-boundary",
+    "\\b": "word-boundary",
+    "\\B": "word-boundary",
+    "fullword-boundary": "fullword-boundary",
+    "internal-anchor": "internal-anchor",
+    "empty-class": "empty-class",
+    "unclosed-class": "unclosed-class",
+    "parse-error": "parse-error"
+  }
+}
