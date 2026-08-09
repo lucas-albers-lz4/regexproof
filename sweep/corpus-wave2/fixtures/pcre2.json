@@ -1,0 +1,1 @@
+{"surface":"pcre2","domain":"ascii","dialect":"pcre","pattern":"[0-9]{3}","flags":"","probes":["","123","12","abc","0123"]}

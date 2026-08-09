@@ -1,0 +1,6 @@
+{
+  "surface": "yara",
+  "domain": ["ascii", "wide"],
+  "rule_ascii": "rule ascii_abc { strings: $a = \"abc\" ascii condition: $a }",
+  "rule_wide": "rule wide_abc { strings: $a = \"abc\" wide condition: $a }"
+}

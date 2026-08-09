@@ -1,0 +1,1 @@
+{"surface":"semgrep","domain":"ascii","dialect":"py_re","pattern":"api[_-]?key\\s*=\\s*['\"][A-Za-z0-9]{8,}['\"]","flags":"","probes":["","api_key=\"ABCD1234\"","api-key = 'xxxxxxxx'","password=foo"]}

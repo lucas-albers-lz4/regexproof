@@ -40,6 +40,63 @@ def real_accepts_argv(argv: Sequence[str], s: str, timeout: float = 10.0) -> boo
     return proc.returncode == 0
 
 
+def real_accepts_argv_bytes(
+    argv: Sequence[str], data: bytes, timeout: float = 10.0
+) -> bool:
+    """Run argv with raw ``data`` on stdin (binary-safe). Always shell=False."""
+    if not argv:
+        raise ValueError("argv must be non-empty")
+    if isinstance(argv, str):
+        raise TypeError("argv must be a sequence of strings, not a shell string")
+    try:
+        proc = subprocess.run(
+            list(argv),
+            input=data,
+            capture_output=True,
+            text=False,
+            shell=False,
+            timeout=timeout,
+            check=False,
+        )
+    except subprocess.TimeoutExpired:
+        print(
+            "    TIMEOUT running real impl on binary probe — treat as mismatch",
+            file=sys.stderr,
+        )
+        return False
+    return proc.returncode == 0
+
+
+def real_accepts_yara(
+    rule_src: str, data: bytes, *, timeout: float = 10.0
+) -> bool:
+    """Write rule + sample to temp files; invoke ``yara`` (NUL-safe)."""
+    import tempfile
+    from pathlib import Path
+
+    root = Path(__file__).resolve().parents[2]
+    helper = root / "helpers" / "yara" / "match.py"
+    with tempfile.TemporaryDirectory(prefix="yara-replay-") as tmp:
+        tdir = Path(tmp)
+        rule_path = tdir / "rule.yar"
+        sample_path = tdir / "sample.bin"
+        rule_path.write_text(rule_src, encoding="utf-8")
+        sample_path.write_bytes(data)
+        try:
+            proc = subprocess.run(
+                [sys.executable, str(helper), "match", str(rule_path), str(sample_path)],
+                capture_output=True,
+                shell=False,
+                timeout=timeout,
+                check=False,
+            )
+        except subprocess.TimeoutExpired:
+            return False
+        if proc.returncode == 2:
+            raise RuntimeError("yara-helper-unavailable")
+        return proc.returncode == 0
+
+
 def reject_shell_subprocess_usage(paths: Sequence[Path] | None = None) -> list[str]:
     """Static check: fail if any scanned file passes shell=True to subprocess.
 

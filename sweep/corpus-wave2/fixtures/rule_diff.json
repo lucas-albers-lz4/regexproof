@@ -1,0 +1,1 @@
+{"surface":"rule_diff","domain":"ascii","r1":"^[a-z]+$","r2":"^[a-z0-9]+$","witness":"a1"}

@@ -2,6 +2,7 @@
   "checked_ok": 4,
   "engine_versions": {
     "python": "3.14.6",
+    "yara": "4.5.8",
     "z3": "5.0.0"
   },
   "gate": "mirror_fidelity",
@@ -28,16 +29,88 @@
       "corpus": "gitleaks",
       "dialect": "re2",
       "probes": 51,
-      "regex_id": "f66e76a3534be1d3727febcfd8db409f",
+      "regex_id": "45fb01484e6593d0c34922f594e7344b",
       "status": "ok"
     },
     {
       "corpus": "gitleaks",
       "dialect": "re2",
       "probes": 51,
-      "regex_id": "ac8604fcd5ba993051be817dd6147a21",
+      "regex_id": "f66e76a3534be1d3727febcfd8db409f",
       "status": "ok"
     }
   ],
-  "schema_version": "1"
+  "schema_version": "2",
+  "surfaces": {
+    "busybox": {
+      "dialect": "pcre",
+      "domain": "ascii",
+      "mismatches": [],
+      "probes": 4,
+      "status": "ok",
+      "surface": "busybox"
+    },
+    "cpython": {
+      "dialect": "py_re",
+      "domain": "ascii",
+      "mismatches": [],
+      "probes": 5,
+      "status": "ok",
+      "surface": "cpython"
+    },
+    "pcre2": {
+      "dialect": "pcre",
+      "domain": "ascii",
+      "mismatches": [],
+      "probes": 5,
+      "status": "ok",
+      "surface": "pcre2"
+    },
+    "re2": {
+      "dialect": "re2",
+      "domain": "ascii",
+      "mismatches": [],
+      "probes": 5,
+      "status": "ok",
+      "surface": "re2"
+    },
+    "rule_diff": {
+      "domain": "ascii",
+      "in_r1": false,
+      "in_r2": true,
+      "status": "ok",
+      "surface": "rule_diff",
+      "witness": "a1"
+    },
+    "semgrep": {
+      "dialect": "py_re",
+      "domain": "ascii",
+      "mismatches": [],
+      "probes": 4,
+      "status": "ok",
+      "surface": "semgrep"
+    },
+    "test262": {
+      "dialect": "ecma",
+      "domain": "ascii",
+      "mismatches": [],
+      "probes": 5,
+      "status": "ok",
+      "surface": "test262"
+    },
+    "yara": {
+      "domains": [
+        "ascii",
+        "wide"
+      ],
+      "mismatches": [],
+      "probes": 7,
+      "status": "ok",
+      "surface": "yara",
+      "wrong_wide_caught": true
+    }
+  },
+  "surfaces_ok": true,
+  "wrong_wide_caught": true,
+  "yara_helper": true
 }
