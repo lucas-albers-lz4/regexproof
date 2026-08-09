@@ -41,6 +41,7 @@ from regexproof.extractors.modsec import count_operators, extract_modsec  # noqa
 from regexproof.extractors.pcre2_testdata import extract_pcre2_testdata  # noqa: E402
 from regexproof.extractors.python_ast import extract_python  # noqa: E402
 from regexproof.extractors.rule_file import extract_rule_file  # noqa: E402
+from regexproof.extractors.yara import extract_yara  # noqa: E402
 from regexproof.redos.join import join_findings  # noqa: E402
 
 CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
@@ -203,6 +204,19 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "measure_scope": "sample",
         "budget": {"max_patterns": 0, "max_wall_s": 60},
     },
+    "yara_rules": {
+        "corpus_type": "rule_corpus",
+        "path": ROOT / "batch" / "corpora" / "yara_rules" / "rules",
+        "glob": "**/*.yar,**/*.yara",
+        "dialect": "yara",
+        "extractor": "yara",
+        "repo": "YARA-Rules/rules",
+        "security_tool": True,
+        "lift_inline": False,
+        "corpus_pin": "0f93570194a80d2f2032869055808b0ddcdfb360",
+        "commit": "0f93570194a80d2f2032869055808b0ddcdfb360",
+        "budget": {"max_patterns": 5000, "max_wall_s": 600, "redos_wall_s": 120},
+    },
 }
 
 
@@ -308,6 +322,15 @@ def _extract(corpus: str, meta: dict[str, Any]) -> list[dict[str, Any]]:
                 src, repo=meta["repo"], file=rel, dialect=meta["dialect"]
             ),
         )
+    if meta["extractor"] == "yara":
+        return _extract_glob(
+            path,
+            meta,
+            glob=meta.get("glob") or "**/*.yar,**/*.yara",
+            extract_fn=lambda src, rel: extract_yara(
+                src, repo=meta["repo"], file=rel
+            ),
+        )
     raise ValueError(meta["extractor"])
 
 
@@ -386,7 +409,13 @@ def _compile_all(
                 }
             )
             continue
-        cr = compile_pattern(pattern, flags, rec["dialect"], rec["call_kind"])
+        cr = compile_pattern(
+            pattern,
+            flags,
+            rec["dialect"],
+            rec["call_kind"],
+            domain=rec.get("domain") or "ascii",
+        )
         row = {
             **rec,
             "pattern": pattern,

@@ -16,6 +16,7 @@ def _compile_dialect(
     call_kind: str,
     *,
     max_length: int,
+    domain: str = "ascii",
 ) -> CompileResult:
     if dialect == "py_re":
         return compile_py_re(
@@ -39,6 +40,16 @@ def _compile_dialect(
         return compile_pcre(
             pattern, flags=flags, call_kind=call_kind, max_length=max_length
         )
+    if dialect == "yara":
+        from regexproof.compiler.yara import compile_yara
+
+        return compile_yara(
+            pattern,
+            flags=flags,
+            call_kind=call_kind,
+            max_length=max_length,
+            domain=domain,
+        )
     raise ValueError(f"unknown dialect {dialect!r}")
 
 
@@ -49,11 +60,14 @@ def compile_pattern(
     call_kind: str = "search",
     *,
     max_length: int = 256,
+    domain: str = "ascii",
 ):
     """Dispatch to a dialect compiler. Never use z3.Re(pattern_string)."""
 
     def compile_bare(pat: str, fl: str, dia: str, ck: str) -> CompileResult:
-        return _compile_dialect(pat, fl, dia, ck, max_length=max_length)
+        return _compile_dialect(
+            pat, fl, dia, ck, max_length=max_length, domain=domain
+        )
 
     special = try_compile_trailing_alt_dollar(
         pattern,
@@ -66,5 +80,10 @@ def compile_pattern(
     if special is not None:
         return special
     return _compile_dialect(
-        pattern, flags, dialect, call_kind, max_length=max_length
+        pattern,
+        flags,
+        dialect,
+        call_kind,
+        max_length=max_length,
+        domain=domain,
     )

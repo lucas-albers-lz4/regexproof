@@ -37,6 +37,14 @@ DIALECTS = frozenset(
         "ecma",
         "re2",
         "pcre",
+        "yara",
+    }
+)
+
+DOMAINS = frozenset(
+    {
+        "ascii",
+        "wide",
     }
 )
 
@@ -65,3 +73,11 @@ def validate_dialect(dialect: str) -> str:
             f"invalid dialect {dialect!r}; expected one of {sorted(DIALECTS)}"
         )
     return dialect
+
+
+def validate_domain(domain: str) -> str:
+    if domain not in DOMAINS:
+        raise ValueError(
+            f"invalid domain {domain!r}; expected one of {sorted(DOMAINS)}"
+        )
+    return domain
