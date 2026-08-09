@@ -227,7 +227,8 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": False,
         "corpus_pin": "0f93570194a80d2f2032869055808b0ddcdfb360",
         "commit": "0f93570194a80d2f2032869055808b0ddcdfb360",
-        "budget": {"max_patterns": 5000, "max_wall_s": 600, "redos_wall_s": 120, "max_mem_mb": 1024, "max_disk_mb": 100},
+        # Full clone ~17.5k string sites; 5k was pre-enforcement decorative.
+        "budget": {"max_patterns": 25000, "max_wall_s": 600, "redos_wall_s": 120, "max_mem_mb": 1024, "max_disk_mb": 100},
     },
 }
 

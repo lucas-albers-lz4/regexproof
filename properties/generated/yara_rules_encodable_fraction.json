@@ -1,6 +1,8 @@
 {
   "budget": {
-    "max_patterns": 5000,
+    "max_disk_mb": 100,
+    "max_mem_mb": 1024,
+    "max_patterns": 25000,
     "max_wall_s": 600,
     "redos_wall_s": 120
   },

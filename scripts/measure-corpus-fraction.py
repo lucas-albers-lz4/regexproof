@@ -333,6 +333,9 @@ def _write_breach_report(
 ) -> dict[str, Any]:
     """Write a fraction report with complete_run=False for a budget breach."""
     OUT.mkdir(parents=True, exist_ok=True)
+    inv_path = OUT / f"{corpus}-inventory.ndjson"
+    # Clear stale inventory so fraction+inventory cannot disagree after a breach.
+    inv_path.write_text("", encoding="utf-8")
     report: dict[str, Any] = {
         "schema_version": "1",
         "pilot": corpus,
@@ -351,6 +354,7 @@ def _write_breach_report(
         "wall_s": round(wall, 3),
         "budget": meta.get("budget"),
         "budget_breaches": [breach],
+        "inventory_path": str(inv_path.relative_to(ROOT)),
         "engine_versions": {
             "python": platform.python_version(),
             "z3": z3.get_version_string(),
