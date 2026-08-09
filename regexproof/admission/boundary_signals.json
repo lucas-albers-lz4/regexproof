@@ -1,0 +1,53 @@
+{
+  "_meta": {
+    "schema_version": "1",
+    "purpose": "Probe security-boundary classifier signals (umbrella C2). Distinct from disclose.SECURITY_TOOL_CORPORA (admitted-name set).",
+    "rule": "positive match → deterministic-true; else negative-category match → deterministic-false; else → unknown. Absence of positive alone is not false."
+  },
+  "positive": {
+    "name_substrings": [
+      "gitleaks",
+      "trufflehog",
+      "noseyparker",
+      "shhgit",
+      "detect-secrets",
+      "secretlint",
+      "dompurify",
+      "java-html-sanitizer",
+      "html-sanitizer",
+      "sanitizer",
+      "coreruleset",
+      "modsecurity",
+      "semgrep",
+      "yara"
+    ],
+    "topic_keywords": [
+      "secret-scanning",
+      "secrets-detection",
+      "xss",
+      "sanitizer",
+      "web-application-firewall",
+      "intrusion-detection",
+      "static-analysis"
+    ],
+    "path_substrings": [
+      "sanitizer",
+      "xss",
+      "gitleaks",
+      "purify",
+      "secret-scan",
+      "secrets/"
+    ]
+  },
+  "negative_categories": {
+    "form-library": {
+      "name_substrings": ["wtforms", "django-forms", "flask-wtf"]
+    },
+    "url-helper": {
+      "name_substrings": ["url-regex", "is-url", "valid-url"]
+    },
+    "tutorial": {
+      "name_substrings": ["awesome-", "tutorial", "example-regex"]
+    }
+  }
+}
