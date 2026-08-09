@@ -28,6 +28,11 @@ def test_count_constructs_flags_and_lookarounds():
     assert c.get("\\g{", 0) == 1
     assert c.get("backref", 0) == 1  # only \\1 — \\g{ counted separately
     assert c.get("posix-class", 0) >= 1
+    # Lookaround with 'x'/'i' chars must not count as inline flags
+    look = count_constructs(r"(?<=x)(?<!i)(?=i)(?!x)")
+    assert look.get("(?x)", 0) == 0
+    assert look.get("(?i)", 0) == 0
+    assert look.get("lookaround", 0) >= 4
 
 
 def test_accumulate_constructs_additive():

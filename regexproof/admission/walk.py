@@ -30,12 +30,15 @@ _JAVA_PATTERN_COMPILE = re.compile(
     re.MULTILINE,
 )
 
-# Extractor flag letters → inline-flag construct keys for predict_buckets.
+# Extractor flag letters → construct keys for predict_buckets.
 _FLAG_LETTER_TO_CONSTRUCT = {
     "i": "(?i)",
     "x": "(?x)",
     "s": "(?s)",
     "m": "(?m)",
+    "u": "u-flag",
+    "v": "v-flag",
+    "g": "stateful",
 }
 
 ExtractFn = Callable[[str, str], list[dict[str, Any]]]

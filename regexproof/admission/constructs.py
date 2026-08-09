@@ -6,11 +6,13 @@ import re
 from collections import Counter
 
 # (vocab construct key, compiled pattern). Order matters only for readability.
+# Inline-flag patterns exclude lookarounds / named groups: (?= (?! (?<= (?<! (?P
+_INLINE = r"\(\?(?![:=!<P])[a-zA-Z0-9_+\-]*{letter}[a-zA-Z0-9_+\-]*(?:\)|:)"
 _CONSTRUCT_PATTERNS: list[tuple[str, re.Pattern[str]]] = [
-    ("(?x)", re.compile(r"\(\?x\)|\(\?[^)]*x[^):]*[:)]")),
-    ("(?i)", re.compile(r"\(\?i\)|\(\?[^)]*i[^):]*[:)]")),
-    ("(?s)", re.compile(r"\(\?s\)|\(\?[^)]*s[^):]*[:)]")),
-    ("(?m)", re.compile(r"\(\?m\)|\(\?[^)]*m[^):]*[:)]")),
+    ("(?x)", re.compile(_INLINE.format(letter="x"))),
+    ("(?i)", re.compile(_INLINE.format(letter="i"))),
+    ("(?s)", re.compile(_INLINE.format(letter="s"))),
+    ("(?m)", re.compile(_INLINE.format(letter="m"))),
     ("lookaround", re.compile(r"\(\?(?:[=!]|<=|<!)")),
     ("\\K", re.compile(r"\\K")),
     ("\\g{", re.compile(r"\\g\{")),

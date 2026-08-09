@@ -41,8 +41,11 @@ def partial_clone(
     """
     run_fn = run or _default_run
     dest = Path(dest)
-    dest_s = str(dest.resolve())
-    if "batch/corpora" in dest_s.replace("\\", "/"):
+    parts = dest.resolve().parts
+    if any(
+        parts[i] == "batch" and parts[i + 1] == "corpora"
+        for i in range(len(parts) - 1)
+    ):
         raise CloneError("probe clones must not land under batch/corpora/")
 
     dest.parent.mkdir(parents=True, exist_ok=True)
