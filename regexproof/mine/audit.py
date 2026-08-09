@@ -62,15 +62,11 @@ def mark_auto_filed(
         raise ValueError("candidate audit must be an object")
     if not audit.get("auto_filed_at"):
         audit["auto_filed_at"] = ts
-    audit.update(
-        {
-            "auto_filed": True,
-            "template_fired": template_fired,
-            "needs_human_review": False,
-            "re_evaluate": False,
-            "updated_at": ts,
-        }
-    )
+    # Do not clear needs_human_review / re_evaluate — sampler failures must stick
+    # until a human decision explicitly resolves them.
+    audit["auto_filed"] = True
+    audit["template_fired"] = template_fired
+    audit["updated_at"] = ts
     save_ledger(path, ledger)
     return cand
 
@@ -86,6 +82,25 @@ def mark_needs_human_review(
     if reason:
         updates["human_review_reason"] = reason
     return ensure_candidate_audit(ledger_path, url, updates=updates, clock=clock)
+
+
+def mark_human_resolved(
+    ledger_path: Path | str,
+    url: str,
+    *,
+    clock: Clock | None = None,
+) -> dict[str, Any]:
+    """Clear sampler/human-routing flags after a successful human decision."""
+    return ensure_candidate_audit(
+        ledger_path,
+        url,
+        updates={
+            "needs_human_review": False,
+            "re_evaluate": False,
+            "human_resolved": True,
+        },
+        clock=clock,
+    )
 
 
 def sample_size(population: int) -> int:

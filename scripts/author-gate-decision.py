@@ -31,6 +31,7 @@ from regexproof.admission.auto_nogo import AutoNoGoError
 from regexproof.admission.templates import TemplateError
 from regexproof.mine.audit import (
     mark_auto_filed,
+    mark_human_resolved,
     mark_needs_human_review,
     run_audit_sampler,
 )
@@ -215,9 +216,12 @@ def main(argv: list[str] | None = None) -> int:
 
     if ledger_path is not None:
         url = str(decision.get("candidate_url") or "")
-        if url and args.auto:
+        if url:
             try:
-                mark_auto_filed(ledger_path, url, template_fired="below-scale")
+                if args.auto:
+                    mark_auto_filed(ledger_path, url, template_fired="below-scale")
+                else:
+                    mark_human_resolved(ledger_path, url)
             except ValueError as e:
                 print(f"warning: ledger update skipped: {e}", file=sys.stderr)
 
