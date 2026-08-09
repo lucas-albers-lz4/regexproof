@@ -84,6 +84,11 @@ def gitleaks_residual() -> dict:
     unexplained = [c for c in classified if c["class"] not in ("a", "b", "c", "encodable")]
     report = {
         "schema_version": "1",
+        "superseded": True,
+        "superseded_by": (
+            "gitleaks_encodable_fraction.json + trailing_alt_dollar_p3_delta.md "
+            "+ trailing_alt_dollar_p4_drift.md (wave #81)"
+        ),
         "corpus": "gitleaks",
         "baseline_fraction": 0.185,
         "baseline_note": "issue #51: 221 rules, 101 lazy parse-errors",
@@ -165,6 +170,11 @@ def decision_matrix() -> dict:
         decisions.append(redecision)
     report = {
         "schema_version": "1",
+        "superseded": True,
+        "superseded_by": (
+            "cross_corpus_matrix.json + *_encodable_fraction.json "
+            "(PR #80/#89/#90); see phase3_decision_matrix.md"
+        ),
         "phase": 3,
         "decisions": decisions,
         "gitleaks_target_met": (_load_fraction("gitleaks").get("fraction") or 0) >= 0.60,
@@ -172,9 +182,16 @@ def decision_matrix() -> dict:
     (OUT / "phase3_decision_matrix.json").write_text(
         json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8"
     )
-    md = ["# Phase 3 decision matrix", ""]
-    md.append("| Corpus | Decision | Fraction | Phase-3 note |")
-    md.append("|---|---|---|---|")
+    md = [
+        "# Phase 3 decision matrix — SUPERSEDED",
+        "",
+        "> **Superseded** by `cross_corpus_matrix.md` and each "
+        "`*_encodable_fraction.json` (PR #80/#89/#90). Rows below are "
+        "historical regenerations only.",
+        "",
+        "| Corpus | Decision | Fraction | Phase-3 note |",
+        "|---|---|---|---|",
+    ]
     for d in decisions:
         md.append(
             f"| {d['corpus']} | {d['decision']} | {d.get('fraction')} | "
@@ -240,18 +257,56 @@ def delta_table() -> dict:
     return report
 
 
+def _is_superseded(path: Path) -> bool:
+    if not path.is_file():
+        return False
+    try:
+        return bool(json.loads(path.read_text(encoding="utf-8")).get("superseded"))
+    except json.JSONDecodeError:
+        return False
+
+
 def main() -> int:
     OUT.mkdir(parents=True, exist_ok=True)
-    g = gitleaks_residual()
+    # Wave #81 / P5: residual + decision matrix are historical stubs. Still
+    # refresh hermes_delta / phase3_delta_table from current fractions.
+    skip_decision = _is_superseded(OUT / "phase3_decision_matrix.json") or (
+        OUT / "phase3_decision_matrix.md"
+    ).is_file() and "SUPERSEDED" in (
+        OUT / "phase3_decision_matrix.md"
+    ).read_text(encoding="utf-8")
+    skip_residual = _is_superseded(OUT / "gitleaks_residual_abc.json")
+
+    unexplained = 0
+    if skip_residual:
+        print(
+            "NOTE: skipping gitleaks_residual_abc.json (superseded stub)",
+            file=sys.stderr,
+        )
+    else:
+        g = gitleaks_residual()
+        unexplained = g["unexplained"]
+
     h = hermes_delta()
     d = delta_table()
-    m = decision_matrix()
+
+    if skip_decision:
+        print(
+            "NOTE: skipping phase3_decision_matrix.* (superseded; "
+            "see cross_corpus_matrix.md)",
+            file=sys.stderr,
+        )
+        target_met = (_load_fraction("gitleaks").get("fraction") or 0) >= 0.60
+    else:
+        m = decision_matrix()
+        target_met = m["gitleaks_target_met"]
+
     print(
-        f"gitleaks residual unexplained={g['unexplained']} "
-        f"target_met={m['gitleaks_target_met']} hermes_ids={len(h['frozen_regex_ids_sample'])} "
+        f"gitleaks residual unexplained={unexplained} "
+        f"target_met={target_met} hermes_ids={len(h['frozen_regex_ids_sample'])} "
         f"delta_rows={len(d['rows'])}"
     )
-    return 0 if g["unexplained"] == 0 else 2
+    return 0 if unexplained == 0 else 2
 
 
 if __name__ == "__main__":

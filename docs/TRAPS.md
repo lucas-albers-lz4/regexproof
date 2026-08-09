@@ -339,3 +339,43 @@ eliminate the under-approximation.
 - `strip_atomic_and_possessive("a}+")` must preserve `a}+` — `}` is a
   possessive closer only after a real `{n,m}` brace, not after a literal
   `}`. Same guard for lazy `}?`.
+
+## 28. Pattern-final `(?:…|$)` — A1B lowering (accept-class boundary)
+
+<!-- verified-finding: VF-TRAILING-ALT-DOLLAR-A1B-001 -->
+
+Stock lowering rejects `$` inside an alternation as `per-alternative-anchor`
+(trap 27). That is sound for mid-pattern and caret-branch shapes, but many
+secret-detector rules end with a **pattern-final** non-capturing
+`(?:R|$)` / `(?:…|$)`. Those are encodable via A1B
+(`regexproof/compiler/trailing_alt_dollar.py`, wave #81 / P2 #87).
+
+**Minimal repro (encode):**
+
+```text
+pattern:  foo(?:bar|$)
+call:     search
+mirror ≈  Union( Star(any)·foo·bar·Star(any) , Star(any)·foo )
+domain:   ascii;a1b_suffix_bound=128
+```
+
+Membership: `"foo"` and `"foobar"` accept; `"bar"` / `"fooba"` reject.
+Bare X/R sub-mirrors must use `fullmatch` (search wrappers in sub-position
+are unsound — #86).
+
+**Accept condition (do not widen casually):**
+
+| In class | Out of class (still `per-alternative-anchor`) |
+|---|---|
+| Pattern ends with `(?:…|$)` | Mid-pattern `$`: `a(?:$|b)c` |
+| Prefix X top-level anchor-free | Leading `^` in X: `^0+(?:&|$)` |
+| `\b` in X allowed | Capturing / bare `(|$)`: `(&|$)` |
+| | Caret-boundary wrap: `(?:^|…)(…)(?:$|…)` |
+
+**Word-boundary suffix:** stock `WordBounded` + `$` false-SATs mid-string
+junk after a non-suffix X. Use `wb_leading_suffix_mirror` (`(^|\W) INNER $`,
+no trailing `Star(any)`).
+
+**Sat-find note:** prefer case-split `Or` branches; declare
+`Length(q) ≤ a1b_suffix_bound` (default 128) on the suffix witness. Fuzz
+membership timeouts should be ≥15s for these mirrors.
