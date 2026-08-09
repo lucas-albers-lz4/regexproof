@@ -192,6 +192,11 @@ def measure(corpus: str, *, assert_determinism: bool = False) -> dict:
     budget = meta.get("budget") or {}
     t0 = time.perf_counter()
     records = _extract(corpus, meta)
+    if not records and corpus in WAVE_CORPORA:
+        raise SystemExit(
+            f"HARD ERROR: {corpus} extraction produced 0 records — "
+            f"empty glob must not fake zero-pattern success"
+        )
 
     try:
         compiled = _compile_all(

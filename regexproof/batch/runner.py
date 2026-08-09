@@ -629,6 +629,27 @@ def run_corpus(
                 )
                 meta["path"] = sample
                 meta["measure_scope"] = "sample"
+    # Honor declared sample scope even when the full tree is present so batch
+    # extraction stays aligned with measure-corpus-fraction.py.
+    if meta.get("measure_scope") == "sample":
+        sp = meta.get("sample_path")
+        if isinstance(sp, str):
+            sp = Path(sp)
+        if not isinstance(sp, Path):
+            sp = sample_path if isinstance(sample_path, Path) else None
+        if isinstance(sp, Path) and sp.exists():
+            cur = meta["path"]
+            if "sample" not in Path(cur).parts:
+                meta["path"] = sp
+                print(
+                    f"NOTE: {corpus} measure_scope=sample; using {sp}",
+                    file=sys.stderr,
+                )
+        elif not isinstance(sp, Path) or not sp.exists():
+            raise SystemExit(
+                f"HARD ERROR: {corpus} measure_scope=sample but sample path "
+                f"missing ({sp})"
+            )
     _validate_expected_roots(corpus, meta)
     inventory = load_inventory(meta["corpus_type"])
     budget = meta.get("budget") or {}
@@ -647,7 +668,7 @@ def run_corpus(
         )
     except BudgetBreached as exc:
         raise SystemExit(
-            f"BUDGET BREACH ({corpus}): {exc.limit_name} "
+            f"BUDGET BREACH ({corpus}): {exc.field} "
             f"limit={exc.limit} actual={exc.actual}"
         ) from exc
 
