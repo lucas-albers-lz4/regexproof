@@ -1,0 +1,29 @@
+# re2 AT&T testregex-style format
+# type\tpattern\tstring\texpected
+
+# Extended patterns
+E	[a-z]+	hello	(0,5)
+E	^foo$	foo	(0,3)
+E	(a|b)c	ac	(0,2)(0,1)
+
+# Basic patterns
+B	[0-9]\+	123	(0,3)
+B	^line$	line	(0,4)
+
+# Literal
+L	foo.bar	foo.bar	(0,7)
+
+# Error patterns (should be extracted but may be unencodable)
+E	*invalid	NOMATCH
+
+# Comment lines (skip)
+# This is a comment
+
+# Directive lines (skip)
+: sym
+
+# Empty line (skip)
+
+# Pattern with special chars
+E	\(parens\)	(parens)	(0,8)
+E	a{2,4}	aaaa	(0,4)

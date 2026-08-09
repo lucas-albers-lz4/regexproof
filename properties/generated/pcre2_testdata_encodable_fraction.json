@@ -1,11 +1,14 @@
 {
   "budget": {
+    "max_disk_mb": 100,
+    "max_mem_mb": 1024,
     "max_patterns": 20000,
     "max_wall_s": 900
   },
+  "budget_breaches": null,
   "commit": null,
-  "compiler_fingerprint": "4a86d0cffde9046c",
-  "complete_run": true,
+  "compiler_fingerprint": "71d2ce23b4cd",
+  "complete_run": false,
   "corpus_pin": "pcre2-10.44",
   "decision": "go",
   "decision_rule": "go iff encodable/sample_size >= 0.3",
@@ -18,30 +21,14 @@
   "fraction": 1.0,
   "go_no_go_threshold": 0.3,
   "inventory_path": "properties/generated/pcre2_testdata-inventory.ndjson",
+  "path": "batch/corpora/pcre2_testdata/sample",
   "pilot": "pcre2_testdata",
   "reasons": {
     "ok": 2
-  },
-  "remeasure": {
-    "baseline_encodable": 2,
-    "baseline_fraction": 1.0,
-    "flips": {
-      "now_encodable": 0,
-      "now_rejected": 0,
-      "unchanged": 2
-    },
-    "from": "frozen_inventory",
-    "prior_artifact_encodable": 2,
-    "prior_artifact_fraction": 1.0,
-    "prior_compiler_fingerprint": "c04a3e0148b3d58a",
-    "samples": {
-      "now_encodable": [],
-      "now_rejected": []
-    }
   },
   "sample_size": 2,
   "schema_version": "1",
   "scope": "sample",
   "unclassified_parse_errors": 0,
-  "wall_s": 0.204
+  "wall_s": 0.291
 }

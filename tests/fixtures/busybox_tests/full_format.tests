@@ -1,0 +1,26 @@
+# busybox testsuite fixture — full format
+
+# testing "description" "command" "expected_stdout" "input" "args"
+testing "grep finds pattern" "grep 'hello' input" "hello world\n" "hello world\nfoo bar\n" ""
+testing "grep -E extended" "grep -E '[0-9]+' input" "abc 123\n" "abc 123\nno digits\n" ""
+testing "grep -i ignorecase" "grep -i 'HELLO' input" "hello\n" "hello\nworld\n" ""
+testing "grep -w word" "grep -w 'foo' input" "foo bar\n" "foo bar\nfoobar\n" ""
+
+testing "sed substitution" "sed 's/old/new/' input" "new text\n" "old text\n" ""
+testing "sed extended" "sed -E 's/[0-9]+/NUM/' input" "NUM\n" "42\n" ""
+testing "sed -r extended" "sed -r 's/(a)(b)/\\2\\1/' input" "ba\n" "ab\n" ""
+testing "sed delete" "sed '/^#/d' input" "code\n" "# comment\ncode\n" ""
+
+testing "awk pattern" "awk '/^[0-9]+$/{print}' input" "42\n" "foo\n42\nbar\n" ""
+testing "awk field" "awk -F: '{print $1}' input" "root\n" "root:x:0\n" ""
+
+testing "expr match" "expr 'foobar' : 'foo\(.*\)'" "bar\n" "" ""
+
+# Edge cases — no pattern content (should not crash)
+testing "cat" "cat input" "hi\n" "hi\n" ""
+testing "echo" "echo hello" "hello\n" "" ""
+
+# grep -E with single quotes
+grep -E 'direct-pattern' /dev/null
+# sed -ne with quoted pattern
+sed -ne 's/abc/def/p' /dev/null
