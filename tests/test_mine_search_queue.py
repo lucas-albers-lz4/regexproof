@@ -255,6 +255,51 @@ def test_assimilate_overflow_before_new_and_dry_run_determinism(tmp_path: Path):
         os.environ.pop("DAILY_MINE_CAP", None)
 
 
+def test_normalize_url_scheme_and_git_suffix():
+    a = normalize_repo_url("http://github.com/Acme/Tool.git")
+    b = normalize_repo_url("https://github.com/acme/tool")
+    assert a == b == "https://github.com/acme/tool"
+
+
+def test_run_search_dedupes_across_queries():
+    items = {
+        "total_count": 1,
+        "items": [
+            {
+                "repository": {
+                    "full_name": "acme/tool",
+                    "stargazers_count": 5,
+                    "html_url": "https://github.com/acme/tool",
+                }
+            }
+        ],
+    }
+    meta = {
+        "default_branch": "main",
+        "stargazers_count": 5,
+        "pushed_at": "2026-08-01T00:00:00Z",
+        "html_url": "https://github.com/acme/tool",
+    }
+    session = FakeSession(
+        [
+            FakeResp(200, items),
+            FakeResp(200, meta),
+            FakeResp(200, {"sha": "aaa"}),
+            FakeResp(200, items),  # same repo, second query — should skip enrich
+        ]
+    )
+    result = run_search(
+        session,
+        queries=["filename:a", "filename:b"],
+        query_budget=2,
+        sleep_fn=lambda _s: None,
+    )
+    assert result.queries_run == 2
+    assert len(result.candidates) == 1
+    # Only one enrich + one pin for the first hit
+    assert sum(1 for u in session.calls if "/repos/acme/tool" in u and "/commits/" not in u) == 1
+
+
 def test_search_cap_threshold_flagged():
     body = {"total_count": 960, "items": []}
     session = FakeSession([FakeResp(200, body)])

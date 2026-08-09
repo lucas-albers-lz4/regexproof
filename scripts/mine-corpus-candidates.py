@@ -81,6 +81,7 @@ def assimilate(
         if room <= 0:
             break
 
+    queue_dropped = 0
     for cand in search_result.candidates:
         url = cand["url"]
         if is_excluded(url, ledger=ledger, admitted=admitted):
@@ -104,12 +105,19 @@ def assimilate(
             accepted.append(entry)
             room -= 1
         else:
-            enqueue(queue, cand)
+            if not enqueue(queue, cand):
+                queue_dropped += 1
 
     if search_result.capped:
         for c in ledger["candidates"]:
             if c in accepted:
                 c["capped"] = True
+
+    if queue_dropped:
+        print(
+            f"warning: mine-queue full; dropped {queue_dropped} overflow candidate(s)",
+            file=sys.stderr,
+        )
 
     return accepted
 

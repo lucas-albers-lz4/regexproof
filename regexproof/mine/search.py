@@ -167,6 +167,7 @@ def run_search(
     """Execute curated queries until budget exhaustion; return candidates + capped flag."""
     result = SearchRunResult()
     hdrs = headers or github_headers()
+    seen_repos: set[str] = set()
     for query in queries or SEARCH_QUERIES:
         if result.queries_run >= query_budget:
             result.capped = True
@@ -190,7 +191,6 @@ def run_search(
         if hit_cap:
             result.capped = True
 
-        seen_repos: set[str] = set()
         for item in body.get("items") or []:
             repo = item.get("repository") or {}
             full_name = repo.get("full_name") or ""

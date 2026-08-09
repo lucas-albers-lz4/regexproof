@@ -33,10 +33,30 @@ def _owner_from_url(url: str) -> str | None:
 
 
 def normalize_repo_url(url: str) -> str:
-    u = url.strip().rstrip("/")
-    if u.endswith(".git"):
-        u = u[:-4]
-    return u.lower()
+    """Canonical https://github.com/owner/repo form (scheme/host/.git tolerant)."""
+    u = url.strip()
+    if u.startswith("git@"):
+        try:
+            path = u.split(":", 1)[1]
+        except IndexError:
+            return u.lower()
+        parts = [p for p in path.split("/") if p]
+        if len(parts) >= 2:
+            owner, repo = parts[0], parts[1].removesuffix(".git")
+            return f"https://github.com/{owner}/{repo}".lower()
+        return path.removesuffix(".git").lower()
+    parsed = urlparse(u)
+    host = (parsed.hostname or "").lower()
+    parts = [p for p in parsed.path.split("/") if p]
+    if len(parts) >= 2:
+        owner, repo = parts[0], parts[1].removesuffix(".git")
+        if host.endswith("github.com") or not host:
+            return f"https://github.com/{owner}/{repo}".lower()
+        return f"https://{host}/{owner}/{repo}".lower()
+    fallback = u.rstrip("/")
+    if fallback.endswith(".git"):
+        fallback = fallback[:-4]
+    return fallback.lower()
 
 
 def load_admitted_urls(generated_dir: Path | None = None) -> set[str]:
