@@ -1,0 +1,55 @@
+{
+  "schema_version": "1",
+  "corpus": "isemail",
+  "candidate_url": "https://github.com/hapijs/isemail",
+  "corpus_pin": "8789d509d69f098350783fb2d8d2bf05f036b448",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-09",
+  "probe": {
+    "regex_sites": 5,
+    "regex_sites_per_file": {
+      "index.js": 2,
+      "parser.js": 3
+    },
+    "dialect": {
+      "ecma": 5
+    },
+    "flags": {},
+    "predicted_buckets": {
+      "backref": 1
+    }
+  },
+  "conditions": [
+    {
+      "id": "new-surface",
+      "met": false,
+      "evidence": "ecma dialect already covered by validatorjs; no novel flag/encoding surface."
+    },
+    {
+      "id": "security-boundary",
+      "met": false,
+      "evidence": "RFC email validator, not a security tool (correctly NOT in SECURITY_TOOL_CORPORA)."
+    },
+    {
+      "id": "large-under-saturated",
+      "met": false,
+      "evidence": "5 sites < 1000 scale bar (plan 121 corrected: most '/…/' hits were ABNF alternatives in comments)."
+    }
+  ],
+  "escape_hatch_applied": false,
+  "rationale": "Wave-3 P4 measure (pin 8789d509d69f): precise scan finds 5 real JS regex literals in lib/ (IP helpers + ASCII/NUL normalize). Plan claim of 121 was false-positive comment grep. Admission NO-GO (0/3 conditions). Fraction 4/5 = 0.8000 still passes the sequential fraction gate — see sweep/corpus-wave3/ecma-frontier-nogo.md + umbrella #111.",
+  "related": {
+    "probe": "pinned clone hapijs/isemail @ 8789d509d69f (2026-08-09)",
+    "fraction": 0.8,
+    "encodable": 4,
+    "sample_size": 5,
+    "complete_run": true,
+    "fraction_artifact": "properties/generated/isemail_encodable_fraction.json",
+    "wave3_p4": true,
+    "count_correction": "plan 121 → measured 5",
+    "umbrella": 111,
+    "sweep": "sweep/corpus-wave3/ecma-frontier-nogo.md"
+  },
+  "fraction_decision": "go"
+}

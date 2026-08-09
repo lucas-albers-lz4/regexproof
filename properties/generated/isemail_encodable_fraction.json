@@ -1,0 +1,38 @@
+{
+  "budget": {
+    "max_disk_mb": 50,
+    "max_mem_mb": 512,
+    "max_patterns": 5000,
+    "max_wall_s": 300,
+    "redos_wall_s": 60
+  },
+  "budget_breaches": null,
+  "commit": "8789d509d69f098350783fb2d8d2bf05f036b448",
+  "compiler_fingerprint": "71d2ce23b4cd",
+  "complete_run": true,
+  "corpus_pin": "8789d509d69f098350783fb2d8d2bf05f036b448",
+  "decision": "go",
+  "decision_rule": "go iff encodable/sample_size >= 0.3",
+  "dialect": "ecma",
+  "encodable": 4,
+  "engine_versions": {
+    "python": "3.14.6",
+    "z3": "5.0.0"
+  },
+  "extractor_schema_version": "2",
+  "fraction": 0.8,
+  "go_no_go_threshold": 0.3,
+  "id_formula": "v2-domain-optional-ascii-default",
+  "inventory_path": "properties/generated/isemail-inventory.ndjson",
+  "path": "batch/corpora/isemail/rules",
+  "pilot": "isemail",
+  "reasons": {
+    "backref": 1,
+    "ok": 4
+  },
+  "sample_size": 5,
+  "schema_version": "1",
+  "scope": "full_corpus",
+  "unclassified_parse_errors": 0,
+  "wall_s": 0.612
+}
