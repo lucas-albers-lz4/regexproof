@@ -11,6 +11,14 @@ Three full-suite testdata corpora (not samples):
 All are `corpus_type: testdata` — **exempt** from admission `gate_decision`
 (same as `cpython_re` / `busybox` / `test262` / `pcre2_testdata` / `re2_testdata`).
 
+## Measured fractions (full suite, `complete_run=true`)
+
+| Corpus | Encodable | Size | Fraction | Decision |
+|---|---|---|---|---|
+| perl_tre | 1645 | 4646 | **0.3541** | go |
+| go_regexp_tests | 556 | 739 | **0.7524** | go |
+| v8_mjsunit | 2494 | 4633 | **0.5383** | go |
+
 ## Fail-closed
 
 - Missing `rules/` symlink root → `FileNotFoundError` / `SystemExit`
