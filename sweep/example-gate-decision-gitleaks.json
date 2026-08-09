@@ -41,5 +41,6 @@
    "corpus": "validatorjs",
    "fraction": 0.7689
   }
- }
+ },
+ "decision_basis": "escape_hatch"
 }

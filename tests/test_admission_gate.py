@@ -14,7 +14,7 @@ ROOT = Path(__file__).resolve().parents[1]
 GENERATED = ROOT / "properties" / "generated"
 
 
-def _decision(decision: str, **overrides) -> dict:
+def _decision(decision: str, *, security_boundary: bool = False, **overrides) -> dict:
     base = {
         "schema_version": "1",
         "corpus": "probe-corpus",
@@ -28,7 +28,7 @@ def _decision(decision: str, **overrides) -> dict:
         },
         "conditions": [
             {"id": "new-surface", "met": False, "evidence": "x"},
-            {"id": "security-boundary", "met": False, "evidence": "x"},
+            {"id": "security-boundary", "met": security_boundary, "evidence": "x"},
             {"id": "large-under-saturated", "met": False, "evidence": "x"},
         ],
         "rationale": "test",
@@ -114,7 +114,16 @@ def test_schema_invalid_decision_is_a_violation(tmp_path):
 
 
 def test_triage_trial_passes(tmp_path):
-    _write(tmp_path, "gitleaks", _decision("triage-trial", decision_basis="escape_hatch"))
+    _write(
+        tmp_path,
+        "gitleaks",
+        _decision(
+            "triage-trial",
+            security_boundary=True,
+            decision_basis="escape_hatch",
+            escape_hatch_applied=True,
+        ),
+    )
     assert check_admission_gates(["gitleaks"], out_dir=tmp_path) == []
 
 
@@ -126,8 +135,12 @@ def test_go_requires_basis_when_no_conditions_met(tmp_path):
     bad = _decision("go")  # all conditions met=False, no decision_basis
     with pytest.raises(ValidationError):
         __import__("jsonschema").validate(instance=bad, schema=schema)
-    # grandfathered basis makes it valid
-    good = _decision("go", decision_basis="grandfathered")
+    # grandfathered basis makes it valid (with provenance)
+    good = _decision(
+        "go",
+        decision_basis="grandfathered",
+        related={"backfilled": True, "repo": "example/probe-corpus"},
+    )
     __import__("jsonschema").validate(instance=good, schema=schema)
 
 
@@ -171,9 +184,10 @@ def test_probe_requires_regex_sites_for_fresh_decision():
     )
     with pytest.raises(ValidationError):
         __import__("jsonschema").validate(instance=bad, schema=schema)
-    # grandfathered exempts the probe evidence minimum
+    # grandfathered exempts the probe evidence minimum (with provenance)
     good = _decision(
         "go", decision_basis="grandfathered",
+        related={"backfilled": True, "repo": "example/probe-corpus"},
         probe={
             "regex_sites": 0,
             "dialect": {"py": 10},
@@ -182,6 +196,76 @@ def test_probe_requires_regex_sites_for_fresh_decision():
         },
     )
     __import__("jsonschema").validate(instance=good, schema=schema)
+
+
+def test_grandfathered_requires_backfill_provenance():
+    """A fresh probe cannot claim grandfathered: related.backfilled=true required."""
+    from jsonschema import ValidationError
+
+    schema = gate_decision_schema()
+    # no provenance -> invalid
+    bad = _decision("go", decision_basis="grandfathered")
+    with pytest.raises(ValidationError):
+        __import__("jsonschema").validate(instance=bad, schema=schema)
+    # with provenance -> valid
+    good = _decision(
+        "go",
+        decision_basis="grandfathered",
+        related={"backfilled": True, "repo": "example/probe-corpus"},
+    )
+    __import__("jsonschema").validate(instance=good, schema=schema)
+
+
+def test_escape_hatch_requires_security_boundary():
+    """escape_hatch basis requires security-boundary met + escape_hatch_applied."""
+    from jsonschema import ValidationError
+
+    schema = gate_decision_schema()
+    # non-security corpus claiming the hatch -> invalid
+    bad = _decision("go", decision_basis="escape_hatch", escape_hatch_applied=True)
+    with pytest.raises(ValidationError):
+        __import__("jsonschema").validate(instance=bad, schema=schema)
+    # security-boundary met + applied -> valid
+    good = _decision(
+        "go",
+        security_boundary=True,
+        decision_basis="escape_hatch",
+        escape_hatch_applied=True,
+    )
+    __import__("jsonschema").validate(instance=good, schema=schema)
+
+
+def test_triage_trial_requires_security_boundary():
+    """triage-trial is the security-boundary findings trial; non-security triage is invalid."""
+    from jsonschema import ValidationError
+
+    schema = gate_decision_schema()
+    bad = _decision("triage-trial", decision_basis="escape_hatch", escape_hatch_applied=True)
+    with pytest.raises(ValidationError):
+        __import__("jsonschema").validate(instance=bad, schema=schema)
+    good = _decision(
+        "triage-trial",
+        security_boundary=True,
+        decision_basis="escape_hatch",
+        escape_hatch_applied=True,
+    )
+    __import__("jsonschema").validate(instance=good, schema=schema)
+
+
+def test_conditions_ids_are_unique():
+    """Three copies of the same condition id must not validate."""
+    from jsonschema import ValidationError
+
+    schema = gate_decision_schema()
+    dup = _decision("go")
+    dup["conditions"] = [
+        {"id": "security-boundary", "met": True, "evidence": "x"},
+        {"id": "security-boundary", "met": True, "evidence": "x"},
+        {"id": "security-boundary", "met": True, "evidence": "x"},
+    ]
+    dup["decision_basis"] = "admission_conditions"
+    with pytest.raises(ValidationError):
+        __import__("jsonschema").validate(instance=dup, schema=schema)
 
 
 def test_unreadable_decision_is_a_violation(tmp_path):

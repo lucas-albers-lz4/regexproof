@@ -72,6 +72,7 @@
       "type": "array",
       "minItems": 3,
       "maxItems": 3,
+      "uniqueItems": true,
       "items": {
         "type": "object",
         "required": ["id", "met", "evidence"],
@@ -118,6 +119,73 @@
           }
         },
         "required": ["decision_basis"]
+      }
+    },
+    {
+      "description": "grandfathered requires provenance: the artifact must declare related.backfilled=true (pre-gate corpus, decision predates the gate). A fresh probe cannot claim grandfathered.",
+      "if": {
+        "properties": {
+          "decision_basis": { "const": "grandfathered" }
+        },
+        "required": ["decision_basis"]
+      },
+      "then": {
+        "properties": {
+          "related": {
+            "properties": {
+              "backfilled": { "const": true }
+            },
+            "required": ["backfilled"]
+          }
+        },
+        "required": ["related"]
+      }
+    },
+    {
+      "description": "escape_hatch requires a security-boundary triage path: security-boundary condition met AND escape_hatch_applied=true. A non-security corpus cannot declare the hatch.",
+      "if": {
+        "properties": {
+          "decision_basis": { "const": "escape_hatch" }
+        },
+        "required": ["decision_basis"]
+      },
+      "then": {
+        "properties": {
+          "escape_hatch_applied": { "const": true },
+          "conditions": {
+            "contains": {
+              "properties": {
+                "id": { "const": "security-boundary" },
+                "met": { "const": true }
+              }
+            }
+          }
+        },
+        "required": ["escape_hatch_applied", "conditions"]
+      }
+    },
+    {
+      "description": "triage-trial is the security-boundary findings trial: it requires the security-boundary condition met and escape_hatch_applied=true, matching the documented lifecycle.",
+      "if": {
+        "properties": {
+          "decision": { "const": "triage-trial" }
+        },
+        "required": ["decision"]
+      },
+      "then": {
+        "properties": {
+          "escape_hatch_applied": { "const": true },
+          "decision_basis": { "const": "escape_hatch" },
+          "conditions": {
+            "contains": {
+              "properties": {
+                "id": { "const": "security-boundary" },
+                "met": { "const": true }
+              }
+            }
+          }
+        },
+        "required": ["escape_hatch_applied", "decision_basis", "conditions"]
       }
     },
     {
