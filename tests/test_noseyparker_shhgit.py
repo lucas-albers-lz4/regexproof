@@ -54,7 +54,7 @@ def test_shhgit_flags_i_and_rsa_sample():
     rsa = next(r for r in recs if r["pattern"] == "^.*_rsa$")
     assert rsa["flags"] == "i"
     assert rsa["dialect"] == "re2"
-    assert rsa["call_kind"] == "fullmatch"
+    assert rsa["call_kind"] == "search"
     # match: entries are not regex sites
     assert all(r["pattern"] != ".pem" for r in recs)
     _validate(recs)
@@ -83,7 +83,8 @@ def test_shhgit_deterministic():
     assert [r["regex_id"] for r in a] == [r["regex_id"] for r in b]
 
 
-def test_shhgit_contents_is_search_not_fullmatch():
+def test_shhgit_all_parts_are_search():
+    """Go MatchString/Match are substring membership for every part."""
     src = """
 signatures:
   - part: 'contents'
@@ -92,11 +93,12 @@ signatures:
   - part: 'filename'
     regex: '^.*_rsa$'
     name: 'Private key'
+  - part: 'path'
+    regex: '\\.?ssh/config$'
+    name: 'SSH config'
 """
     recs = extract_shhgit(src, repo="eth0izzle/shhgit", file="config.yaml")
-    by_part = {r["rule_part"]: r for r in recs}
-    assert by_part["contents"]["call_kind"] == "search"
-    assert by_part["filename"]["call_kind"] == "fullmatch"
+    assert {r["call_kind"] for r in recs} == {"search"}
 
 
 def test_noseyparker_sibling_guard_skips_top_level_pattern():
