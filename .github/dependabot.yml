@@ -31,3 +31,39 @@ updates:
           - "version-update:semver-patch"
           - "version-update:semver-minor"
           - "version-update:semver-major"
+
+  - package-ecosystem: "gomod"
+    directory: "/helpers/go-re2"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 0
+    ignore:
+      - dependency-name: "*"
+        update-types:
+          - "version-update:semver-patch"
+          - "version-update:semver-minor"
+          - "version-update:semver-major"
+
+  - package-ecosystem: "npm"
+    directory: "/helpers/ecma"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 0
+    ignore:
+      - dependency-name: "*"
+        update-types:
+          - "version-update:semver-patch"
+          - "version-update:semver-minor"
+          - "version-update:semver-major"
+
+  - package-ecosystem: "npm"
+    directory: "/helpers/redos"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 0
+    ignore:
+      - dependency-name: "*"
+        update-types:
+          - "version-update:semver-patch"
+          - "version-update:semver-minor"
+          - "version-update:semver-major"
