@@ -232,5 +232,14 @@ def emit_decision_text(decision: dict[str, Any]) -> str:
 
 
 def default_output_path(corpus: str, *, repo_root: Path | None = None) -> Path:
-    root = repo_root or Path(__file__).resolve().parents[2]
-    return (root / "properties" / "generated" / f"{corpus}_gate_decision.json").resolve()
+    import re
+
+    root = (repo_root or Path(__file__).resolve().parents[2]).resolve()
+    safe = re.sub(r"[^A-Za-z0-9._-]+", "_", corpus.strip()) or "corpus"
+    if safe in {".", ".."} or "/" in safe or "\\" in safe:
+        raise AuthorError(f"unsafe corpus name for default output path: {corpus!r}")
+    out = (root / "properties" / "generated" / f"{safe}_gate_decision.json").resolve()
+    generated = (root / "properties" / "generated").resolve()
+    if not out.is_relative_to(generated):
+        raise AuthorError(f"refusing to write outside properties/generated: {out}")
+    return out

@@ -221,7 +221,9 @@ def main(argv: list[str] | None = None) -> int:
                 if args.auto:
                     mark_auto_filed(ledger_path, url, template_fired="below-scale")
                 else:
-                    mark_human_resolved(ledger_path, url)
+                    mark_human_resolved(
+                        ledger_path, url, decision=str(decision.get("decision"))
+                    )
             except ValueError as e:
                 print(f"warning: ledger update skipped: {e}", file=sys.stderr)
 

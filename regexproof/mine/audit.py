@@ -62,8 +62,11 @@ def mark_auto_filed(
         raise ValueError("candidate audit must be an object")
     if not audit.get("auto_filed_at"):
         audit["auto_filed_at"] = ts
-    # Successful auto-file clears eligibility-routing flags, but never clears
-    # re_evaluate (sampler failure must stick until human resolve).
+    if audit.get("re_evaluate"):
+        raise ValueError(
+            f"candidate {url} has re_evaluate=true; human decision required before auto-file"
+        )
+    # Successful auto-file clears eligibility-routing flags only.
     audit["auto_filed"] = True
     audit["template_fired"] = template_fired
     audit["needs_human_review"] = False
@@ -90,17 +93,25 @@ def mark_human_resolved(
     ledger_path: Path | str,
     url: str,
     *,
+    decision: str | None = None,
     clock: Clock | None = None,
 ) -> dict[str, Any]:
-    """Clear sampler/human-routing flags after a successful human decision."""
+    """Clear sampler/human-routing flags after a successful human decision.
+
+    GO / triage-trial also clear ``auto_filed`` so the weekly sampler does not
+    keep sampling a superseded auto-NO-GO.
+    """
+    updates: dict[str, Any] = {
+        "needs_human_review": False,
+        "re_evaluate": False,
+        "human_resolved": True,
+    }
+    if decision in {"go", "triage-trial"}:
+        updates["auto_filed"] = False
     return ensure_candidate_audit(
         ledger_path,
         url,
-        updates={
-            "needs_human_review": False,
-            "re_evaluate": False,
-            "human_resolved": True,
-        },
+        updates=updates,
         clock=clock,
     )
 
