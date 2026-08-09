@@ -199,6 +199,7 @@ def run_search(
             seen_repos.add(full_name)
             meta = enrich_repo(session, full_name, headers=hdrs)
             if not meta:
+                result.errors.append(f"enrich failed: {full_name}")
                 continue
             stars = int(meta.get("stargazers_count") or repo.get("stargazers_count") or 0)
             if stars < min_stars:
@@ -208,6 +209,7 @@ def run_search(
                 session, full_name, default_branch, headers=hdrs
             )
             if not pin:
+                result.errors.append(f"pin resolve failed: {full_name}")
                 continue
             pushed = str(meta.get("pushed_at") or "")[:10]
             html = str(meta.get("html_url") or f"https://github.com/{full_name}")
