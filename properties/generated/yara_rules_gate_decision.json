@@ -1,0 +1,54 @@
+{
+ "schema_version": "1",
+ "corpus": "yara_rules",
+ "candidate_url": "https://github.com/YARA-Rules/rules",
+ "corpus_pin": "0f93570194a80d2f2032869055808b0ddcdfb360",
+ "decision": "go",
+ "decision_basis": "admission_conditions",
+ "decision_date": "2026-08-09",
+ "fraction_decision": "go",
+ "probe": {
+  "regex_sites": 17574,
+  "dialect": {
+   "yara": 17574
+  },
+  "flags": {
+   "wide": 1,
+   "nocase": 1
+  },
+  "predicted_buckets": {
+   "fullword-boundary": 5902,
+   "parse-error": 1,
+   "pattern-too-long": 6,
+   "per-alternative-anchor": 1,
+   "wide-non-literal": 130
+  },
+  "predicted_rejects_pct": null
+ },
+ "conditions": [
+  {
+   "id": "new-surface",
+   "met": true,
+   "evidence": "First-seen construct class / dialect surface."
+  },
+  {
+   "id": "security-boundary",
+   "met": true,
+   "evidence": "Security-tool corpus on trust boundaries."
+  },
+  {
+   "id": "large-under-saturated",
+   "met": true,
+   "evidence": "17574 sites."
+  }
+ ],
+ "escape_hatch_applied": false,
+ "rationale": "Wave-2 YARA corpus; fraction 0.6563 meets the 0.30 gate; 11534/17574 encodable. Backfilled admission record (missing from #121 backfill set).",
+ "related": {
+  "backfilled": true,
+  "fraction": 0.6563,
+  "encodable": 11534,
+  "sample_size": 17574,
+  "fraction_artifact": "properties/generated/yara_rules_encodable_fraction.json"
+ }
+}
