@@ -135,8 +135,11 @@ def extract_js_precise(source: str, *, repo: str, file: str) -> list[dict[str, A
                 unencodable_reason=reason,
             )
         )
-    # new RegExp("...") — reuse legacy scanner (composite → unencodable).
+    # new RegExp("...") — same scanner, but only at live (non-comment/string) offsets.
+    live = _live_code_offsets(source)
     for m in _NEW_REGEXP.finditer(source):
+        if m.start() not in live:
+            continue
         arg = m.group("arg").strip()
         line_no = source.count("\n", 0, m.start()) + 1
         col = m.start() - (source.rfind("\n", 0, m.start()) + 1)
@@ -164,6 +167,28 @@ def extract_js_precise(source: str, *, repo: str, file: str) -> list[dict[str, A
         )
     out.sort(key=lambda r: (r["line"], r["column"], r["regex_id"]))
     return out
+
+
+def _live_code_offsets(source: str) -> set[int]:
+    """Offsets that are outside // /* */ comments and string/template literals."""
+    live: set[int] = set()
+    i = 0
+    n = len(source)
+    while i < n:
+        if source.startswith("//", i):
+            while i < n and source[i] != "\n":
+                i += 1
+            continue
+        if source.startswith("/*", i):
+            j = source.find("*/", i + 2)
+            i = n if j < 0 else j + 2
+            continue
+        if source[i] in "\"'`":
+            i = _skip_string(source, i)
+            continue
+        live.add(i)
+        i += 1
+    return live
 
 
 def _scan_regex_literals(source: str) -> list[tuple[int, str, str]]:

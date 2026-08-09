@@ -14,6 +14,7 @@ from regexproof.compiler import compile_pattern
 from regexproof.extractors.dompurify import extract_dompurify
 from regexproof.extractors.email_addresses import extract_email_addresses
 from regexproof.extractors.isemail import extract_isemail
+from regexproof.extractors.js_babel import extract_js_precise
 from regexproof.schemas import extractor_schema
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -41,6 +42,31 @@ def test_dompurify_sample_seal_names():
     assert "i" in script["flags"]
     assert script.get("sanitizer_check") == "IS_SCRIPT_OR_DATA"
     _validate(recs)
+
+
+def test_precise_skips_new_regexp_in_comments():
+    src = (
+        "// new RegExp('phantom')\n"
+        "/* new RegExp(\"also\") */\n"
+        "const r = new RegExp('live');\n"
+    )
+    recs = extract_js_precise(src, repo="t", file="x.js")
+    assert len(recs) == 1
+    assert recs[0]["pattern"] == "live"
+
+
+def test_seal_name_not_attached_to_distant_regex():
+    """A non-seal regex after a seal binding must not inherit the seal name."""
+    src = (
+        "export const IS_SCRIPT_OR_DATA = seal(/^(?:\\w+script|data):/i);\n"
+        "const later = /https:/i;\n"
+    )
+    recs = extract_dompurify(src, repo="cure53/DOMPurify", file="x.ts")
+    assert len(recs) == 2
+    by_pat = {r["pattern"]: r for r in recs}
+    assert by_pat[r"^(?:\w+script|data):"].get("rule_name") == "IS_SCRIPT_OR_DATA"
+    assert by_pat["https:"].get("rule_name") is None
+    assert by_pat["https:"].get("sanitizer_check") is None
 
 
 def test_dompurify_deterministic():
