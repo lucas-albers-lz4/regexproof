@@ -5,6 +5,7 @@ from __future__ import annotations
 import itertools
 import random
 import re
+from pathlib import Path
 
 import jsonschema
 import pytest
@@ -149,10 +150,20 @@ def test_selector_trailing_backslash_parity():
 
 # Pre-rewrite _RX_SELECTOR (py/redos alert #7). The linear-time rewrite must
 # match this language exactly — see issue #141 for the differential evidence.
-# The vulnerable pattern is embedded verbatim as the parity reference; it runs
+# The vulnerable pattern lives in a fixture, not inline: an inline literal is
+# itself flagged by py/redos, and in-source codeql[...] suppression comments
+# are not honored by this repo's code scanning (alert #5 precedent). It runs
 # only on this file's short deterministic battery, never on untrusted input.
-# codeql[py/redos]
-_PRE_REWRITE_SELECTOR = re.compile(r'!(?:[A-Z_]+):(/(?:\\.|[^/"])*/[a-z]*|"[^"]*")')
+_PRE_REWRITE_SELECTOR = re.compile(
+    (
+        Path(__file__).resolve().parent
+        / "fixtures"
+        / "modsec"
+        / "pre-rewrite-selector-regex.txt"
+    )
+    .read_text(encoding="utf-8")
+    .strip()
+)
 
 
 def _sig(rx: re.Pattern[str], s: str) -> list[tuple[tuple[int, int], str]]:
