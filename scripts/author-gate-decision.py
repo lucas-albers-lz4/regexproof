@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
-"""Author a schema-valid corpus gate decision from a probe draft (P3 / #132).
+"""Author a schema-valid corpus gate decision from a probe draft (P3 / P3b).
 
 Usage:
   python scripts/author-gate-decision.py DRAFT --human --decision go --rationale '...'
   python scripts/author-gate-decision.py DRAFT --auto -o out.json
+  python scripts/author-gate-decision.py DRAFT --llm-draft -o out.json
   python scripts/author-gate-decision.py --audit-sample --ledger PATH --week YYYY-Www
 """
 
@@ -12,7 +13,8 @@ from __future__ import annotations
 import argparse
 import json
 import sys
-from datetime import date
+import time
+from datetime import date, datetime, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -28,10 +30,18 @@ from regexproof.admission.author import (
     load_probe_draft,
 )
 from regexproof.admission.auto_nogo import AutoNoGoError
+from regexproof.admission.llm_client import (
+    OpencodeDeepseekClassifier,
+    RetryingClassifier,
+    StaticClassifier,
+)
+from regexproof.admission.llm_draft import author_llm_draft
 from regexproof.admission.templates import TemplateError
 from regexproof.mine.audit import (
+    append_model_call,
     mark_auto_filed,
     mark_human_resolved,
+    mark_llm_template_fired,
     mark_needs_human_review,
     run_audit_sampler,
 )
@@ -59,6 +69,16 @@ def _parse_related(raw: str | None) -> dict | None:
     return data
 
 
+def _audit_clock(now: date | None):
+    if now is None:
+        return None
+
+    def _clock() -> datetime:
+        return datetime(now.year, now.month, now.day, tzinfo=timezone.utc)
+
+    return _clock
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument(
@@ -70,14 +90,14 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--human", action="store_true", help="Human authoring mode")
     ap.add_argument("--auto", action="store_true", help="Restricted auto-NO-GO mode")
     ap.add_argument(
+        "--llm-draft",
+        action="store_true",
+        help="LLM classify-then-template draft (never auto-files / never approves)",
+    )
+    ap.add_argument(
         "--audit-sample",
         action="store_true",
         help="Weekly audit sampler over auto-filed ledger entries",
-    )
-    ap.add_argument(
-        "--llm-draft",
-        action="store_true",
-        help=argparse.SUPPRESS,
     )
     ap.add_argument(
         "--decision",
@@ -132,14 +152,18 @@ def main(argv: list[str] | None = None) -> int:
         metavar="URL",
         help="Simulate sampler failure for URL (repeatable)",
     )
+    ap.add_argument(
+        "--classify-label",
+        default=None,
+        help="Test seam: fixed classifier label (skips live model)",
+    )
+    ap.add_argument(
+        "--classify-fail-times",
+        type=int,
+        default=0,
+        help="Test seam: fail the first N classify calls before succeeding",
+    )
     args = ap.parse_args(argv)
-
-    if args.llm_draft:
-        print(
-            "error: --llm-draft is deferred to #134 (P3b); not available in P3 v1",
-            file=sys.stderr,
-        )
-        return 2
 
     if args.audit_sample:
         if not args.ledger:
@@ -156,9 +180,12 @@ def main(argv: list[str] | None = None) -> int:
         sys.stdout.write(json.dumps(result, indent=2, sort_keys=True) + "\n")
         return 0
 
-    modes = sum(bool(x) for x in (args.human, args.auto))
+    modes = sum(bool(x) for x in (args.human, args.auto, args.llm_draft))
     if modes != 1:
-        ap.error("exactly one of --human or --auto is required (or --audit-sample)")
+        ap.error(
+            "exactly one of --human, --auto, or --llm-draft is required "
+            "(or --audit-sample)"
+        )
     if not args.probe_draft:
         ap.error("probe draft path is required")
 
@@ -172,6 +199,71 @@ def main(argv: list[str] | None = None) -> int:
     decision_date = date.fromisoformat(args.now) if args.now else None
     related = _parse_related(args.related)
     ledger_path = args.ledger.expanduser().resolve() if args.ledger else None
+    clock = _audit_clock(decision_date)
+
+    if args.llm_draft:
+        test_seam = args.classify_label is not None or args.classify_fail_times > 0
+        if test_seam:
+            inner = StaticClassifier(
+                args.classify_label,
+                fail_times=args.classify_fail_times,
+            )
+            sleep_fn = lambda _s: None  # noqa: E731 — tests must not sleep 60s
+        else:
+            inner = OpencodeDeepseekClassifier()
+            sleep_fn = time.sleep
+        classifier = RetryingClassifier(inner, sleep_fn=sleep_fn)
+
+        outcome = author_llm_draft(
+            draft,
+            classifier,
+            related=related,
+            decision_date=decision_date,
+        )
+        url = str(draft.get("candidate_url") or "")
+        if ledger_path is not None and url and outcome.classification is not None:
+            try:
+                append_model_call(
+                    ledger_path,
+                    url,
+                    outcome.classification.as_audit_call(),
+                    clock=clock,
+                )
+            except ValueError as e:
+                print(f"warning: model_call log skipped: {e}", file=sys.stderr)
+
+        if outcome.needs_human_review or outcome.decision is None:
+            print(f"error: {outcome.reason}", file=sys.stderr)
+            if ledger_path is not None and url:
+                try:
+                    mark_needs_human_review(
+                        ledger_path, url, reason=outcome.reason, clock=clock
+                    )
+                except ValueError:
+                    pass
+            return 1
+
+        decision = outcome.decision
+        out = (
+            args.output.expanduser().resolve()
+            if args.output
+            else default_output_path(str(decision["corpus"]), repo_root=ROOT)
+        )
+        if ledger_path is not None and url:
+            try:
+                mark_llm_template_fired(
+                    ledger_path,
+                    url,
+                    template_fired=str(outcome.template_fired),
+                    clock=clock,
+                )
+            except ValueError as e:
+                print(f"error: ledger update failed: {e}", file=sys.stderr)
+                return 1
+        out.parent.mkdir(parents=True, exist_ok=True)
+        out.write_text(emit_decision_text(decision), encoding="utf-8")
+        print(str(out))
+        return 0
 
     try:
         if args.auto:
@@ -211,8 +303,6 @@ def main(argv: list[str] | None = None) -> int:
         else default_output_path(str(decision["corpus"]), repo_root=ROOT)
     )
 
-    # Ledger first when requested so we never exit 0 with a written decision
-    # but a failed auto_filed / human_resolved sync.
     if ledger_path is not None:
         url = str(decision.get("candidate_url") or "")
         if not url:
@@ -231,8 +321,6 @@ def main(argv: list[str] | None = None) -> int:
 
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(emit_decision_text(decision), encoding="utf-8")
-
-    # Print absolute output path for runners / review dispatch.
     print(str(out))
     return 0
 

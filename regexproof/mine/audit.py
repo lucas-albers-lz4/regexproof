@@ -89,6 +89,69 @@ def mark_needs_human_review(
     return ensure_candidate_audit(ledger_path, url, updates=updates, clock=clock)
 
 
+def append_model_call(
+    ledger_path: Path | str,
+    url: str,
+    call: dict[str, Any],
+    *,
+    clock: Clock | None = None,
+) -> dict[str, Any]:
+    """Append one model-call record to ``audit.model_calls`` (P3b)."""
+    path = Path(ledger_path)
+    ledger = load_ledger(path)
+    cand = find_candidate(ledger, url)
+    if cand is None:
+        raise ValueError(f"candidate not in ledger: {url}")
+    audit = cand.setdefault("audit", {})
+    if not isinstance(audit, dict):
+        raise ValueError("candidate audit must be an object")
+    calls = audit.setdefault("model_calls", [])
+    if not isinstance(calls, list):
+        raise ValueError("audit.model_calls must be a list")
+    now = (clock or default_clock)()
+    row = dict(call)
+    row.setdefault("at", now.strftime("%Y-%m-%dT%H:%M:%SZ"))
+    calls.append(row)
+    audit["updated_at"] = now.strftime("%Y-%m-%dT%H:%M:%SZ")
+    save_ledger(path, ledger)
+    return cand
+
+
+def mark_llm_template_fired(
+    ledger_path: Path | str,
+    url: str,
+    *,
+    template_fired: str,
+    model_call: dict[str, Any] | None = None,
+    clock: Clock | None = None,
+) -> dict[str, Any]:
+    """Record LLM draft template use — never sets ``auto_filed`` (C4)."""
+    path = Path(ledger_path)
+    ledger = load_ledger(path)
+    cand = find_candidate(ledger, url)
+    if cand is None:
+        raise ValueError(f"candidate not in ledger: {url}")
+    audit = cand.setdefault("audit", {})
+    if not isinstance(audit, dict):
+        raise ValueError("candidate audit must be an object")
+    now = (clock or default_clock)()
+    ts = now.strftime("%Y-%m-%dT%H:%M:%SZ")
+    audit["template_fired"] = template_fired
+    audit["template_fired_at"] = ts
+    audit["updated_at"] = ts
+    # Explicit: LLM draft is not an auto-file.
+    audit.setdefault("auto_filed", False)
+    if model_call is not None:
+        calls = audit.setdefault("model_calls", [])
+        if not isinstance(calls, list):
+            raise ValueError("audit.model_calls must be a list")
+        row = dict(model_call)
+        row.setdefault("at", ts)
+        calls.append(row)
+    save_ledger(path, ledger)
+    return cand
+
+
 def mark_human_resolved(
     ledger_path: Path | str,
     url: str,
