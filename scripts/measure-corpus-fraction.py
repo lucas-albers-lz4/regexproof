@@ -38,6 +38,8 @@ from regexproof.batch.runner import (  # noqa: E402
     _compile_all,
     _extract,
 )
+from regexproof.regex_id import REGEX_ID_FORMULA_VERSION  # noqa: E402
+from regexproof.schemas import EXTRACTOR_SCHEMA_VERSION  # noqa: E402
 
 OUT = ROOT / "properties" / "generated"
 
@@ -297,6 +299,8 @@ def measure(corpus: str, *, assert_determinism: bool = False) -> dict:
         "budget": budget if budget else None,
         "budget_breaches": breaches if breaches else None,
         "inventory_path": str(inv_path.relative_to(ROOT)),
+        "id_formula": REGEX_ID_FORMULA_VERSION,
+        "extractor_schema_version": EXTRACTOR_SCHEMA_VERSION,
         "engine_versions": {
             "python": platform.python_version(),
             "z3": z3.get_version_string(),

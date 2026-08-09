@@ -47,6 +47,8 @@ from regexproof.extractors.modsec import count_operators, extract_modsec  # noqa
 from regexproof.extractors.pcre2_testdata import extract_pcre2_testdata  # noqa: E402
 from regexproof.extractors.python_ast import extract_python  # noqa: E402
 from regexproof.extractors.rule_file import extract_rule_file  # noqa: E402
+from regexproof.extractors.noseyparker import extract_noseyparker  # noqa: E402
+from regexproof.extractors.shhgit import extract_shhgit  # noqa: E402
 from regexproof.extractors.spamassassin import extract_spamassassin  # noqa: E402
 from regexproof.extractors.yara import extract_yara  # noqa: E402
 from regexproof.redos.join import join_findings  # noqa: E402
@@ -271,12 +273,56 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
             "max_disk_mb": 100,
         },
     },
+    "noseyparker": {
+        "corpus_type": "rule_corpus",
+        "path": ROOT / "batch" / "corpora" / "noseyparker" / "rules",
+        "glob": "**/*.yml",
+        # re2 is a declared approximation of rust regex (see
+        # sweep/corpus-wave3/noseyparker-dialect.md); differential-fuzz vs go-re2.
+        "dialect": "re2",
+        "declared_semantics": "ascii_approx_rust_regex",
+        "extractor": "noseyparker",
+        "repo": "praetorian-inc/noseyparker",
+        "security_tool": True,
+        "lift_inline": True,
+        "corpus_pin": "2e6e7f36ce36619852532bbe698d8cb7a26d2da7",
+        "commit": "2e6e7f36ce36619852532bbe698d8cb7a26d2da7",
+        "budget": {
+            "max_patterns": 5000,
+            "max_wall_s": 600,
+            "redos_wall_s": 120,
+            "max_mem_mb": 1024,
+            "max_disk_mb": 100,
+        },
+    },
+    "shhgit": {
+        "corpus_type": "rule_corpus",
+        "path": ROOT / "batch" / "corpora" / "shhgit" / "repo",
+        "glob": "config.yaml",
+        "files": ["config.yaml"],
+        "dialect": "re2",
+        "extractor": "shhgit",
+        "repo": "eth0izzle/shhgit",
+        "security_tool": True,
+        # Leading (?i) in content signatures; mid (?-i) remains inline-flag.
+        "lift_inline": True,
+        "corpus_pin": "bac0c7d39519203d230b6c9a2c6e3eba18346aba",
+        "commit": "bac0c7d39519203d230b6c9a2c6e3eba18346aba",
+        "budget": {
+            "max_patterns": 5000,
+            "max_wall_s": 300,
+            "redos_wall_s": 60,
+            "max_mem_mb": 512,
+            "max_disk_mb": 50,
+        },
+    },
 }
 
 WAVE_CORPORA = frozenset({
     "trufflehog", "ids_rules", "semgrep_rules",
     "pcre2_testdata", "re2_testdata", "cpython_re", "busybox",
     "yara_rules", "test262", "spamassassin",
+    "noseyparker", "shhgit",
 })
 
 
@@ -496,6 +542,24 @@ def _extract(corpus: str, meta: dict[str, Any]) -> list[dict[str, Any]]:
                 src, repo=meta["repo"], file=rel
             ),
         )
+    if meta["extractor"] == "noseyparker":
+        return _extract_glob(
+            path,
+            meta,
+            glob=meta.get("glob") or "**/*.yml",
+            extract_fn=lambda src, rel: extract_noseyparker(
+                src, repo=meta["repo"], file=rel, dialect=meta["dialect"]
+            ),
+        )
+    if meta["extractor"] == "shhgit":
+        return _extract_glob(
+            path,
+            meta,
+            glob=meta.get("glob") or "config.yaml",
+            extract_fn=lambda src, rel: extract_shhgit(
+                src, repo=meta["repo"], file=rel, dialect=meta["dialect"]
+            ),
+        )
     if meta["extractor"] == "test262":
         from regexproof.extractors.test262 import extract_test262, extract_test262_tree
 
@@ -541,11 +605,19 @@ def _extract_glob(
     if not path.is_dir():
         return out
     files: list[Path] = []
-    for pattern in glob.split(","):
-        pattern = pattern.strip()
-        if not pattern:
-            continue
-        files.extend(path.glob(pattern))
+    named = meta.get("files")
+    if named:
+        # Explicit file list (single-file corpora e.g. shhgit config.yaml).
+        for name in named:
+            fp = path / name
+            if fp.is_file():
+                files.append(fp)
+    else:
+        for pattern in glob.split(","):
+            pattern = pattern.strip()
+            if not pattern:
+                continue
+            files.extend(path.glob(pattern))
     seen: set[Path] = set()
     for fp in sorted(files, key=lambda p: str(p)):
         if fp in seen or not fp.is_file():

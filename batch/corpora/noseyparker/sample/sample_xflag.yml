@@ -1,0 +1,26 @@
+rules:
+
+# Minimal (?x) pattern for extraction / strip smoke tests.
+- name: Sample Verbose Token
+  id: np.sample.1
+
+  pattern: |
+    (?x)
+    (?: SAMPLE_TOKEN )
+    \s* [:=] \s*
+    ([a-f0-9]{16})\b
+
+  categories:
+  - api
+  - secret
+
+  examples:
+  - 'SAMPLE_TOKEN=0123456789abcdef'
+
+
+- name: Sample Inline Case
+  id: np.sample.2
+
+  pattern: '(?i)\b(sample_[a-z0-9]{8})\b'
+
+  categories: [api]

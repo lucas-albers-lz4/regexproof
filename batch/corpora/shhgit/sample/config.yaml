@@ -1,0 +1,14 @@
+# Minimal shhgit signatures sample (Wave 3 / #114).
+github_access_tokens:
+  - ''
+webhook: ''
+signatures:
+  - part: 'filename'
+    regex: '^.*_rsa$'
+    name: 'Private SSH key'
+  - part: 'filename'
+    regex: '^.*_dsa$'
+    name: 'Private SSH key'
+  - part: 'extension'
+    match: '.pem'
+    name: 'Potential cryptographic private key'

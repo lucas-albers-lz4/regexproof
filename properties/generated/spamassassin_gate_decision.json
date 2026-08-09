@@ -1,15 +1,59 @@
 {
-  "complete_run": true,
-  "corpus": "spamassassin",
-  "corpus_pin": "17e7842caa629d032589458f86d2f5ce8e7306a4",
-  "decision": "go",
-  "decision_rule": "go iff encodable/sample_size >= 0.3",
-  "encodable": 442,
+ "schema_version": "1",
+ "corpus": "spamassassin",
+ "candidate_url": "https://github.com/apache/spamassassin",
+ "corpus_pin": "17e7842caa629d032589458f86d2f5ce8e7306a4",
+ "decision": "go",
+ "decision_basis": "admission_conditions",
+ "decision_date": "2026-08-09",
+ "fraction_decision": "go",
+ "probe": {
+  "regex_sites": 591,
+  "dialect": {
+   "perl": 591
+  },
+  "flags": {
+   "posix": 1,
+   "\\\\K": 1
+  },
+  "predicted_buckets": {
+   "backref": 9,
+   "empty-class": 1,
+   "inline-flag": 3,
+   "lookaround": 59,
+   "m-flag": 19,
+   "negated-shorthand": 18,
+   "pattern-too-long": 4,
+   "per-alternative-anchor": 5,
+   "word-boundary": 29,
+   "z-anchor": 2
+  },
+  "predicted_rejects_pct": null
+ },
+ "conditions": [
+  {
+   "id": "new-surface",
+   "met": true,
+   "evidence": "First-seen construct class / dialect surface."
+  },
+  {
+   "id": "security-boundary",
+   "met": true,
+   "evidence": "Security-tool corpus on trust boundaries."
+  },
+  {
+   "id": "large-under-saturated",
+   "met": false,
+   "evidence": "591 sites."
+  }
+ ],
+ "escape_hatch_applied": false,
+ "rationale": "Wave-3 P2 perl dialect frontier; fraction 0.7479 meets the 0.30 gate; 442/591 encodable. Replaced pre-admission fraction-only artifact with schema-valid admission decision.",
+ "related": {
+  "backfilled": true,
   "fraction": 0.7479,
-  "fraction_artifact": "properties/generated/spamassassin_encodable_fraction.json",
-  "note": "NO-GO fallback not triggered.",
-  "reason": "Encodable fraction 0.7479 >= 0.30 on full pin (Wave 3 P2 / #113).",
+  "encodable": 442,
   "sample_size": 591,
-  "threshold": 0.3,
-  "unclassified_parse_errors": 0
+  "fraction_artifact": "properties/generated/spamassassin_encodable_fraction.json"
+ }
 }
