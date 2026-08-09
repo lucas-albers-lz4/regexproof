@@ -111,7 +111,8 @@ def assimilate(
             accepted.append(entry)
             room -= 1
         else:
-            if not enqueue(queue, cand):
+            status = enqueue(queue, cand)
+            if status == "full":
                 queue_dropped += 1
 
     if queue_dropped:

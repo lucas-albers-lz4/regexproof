@@ -56,8 +56,8 @@ class FakeSession:
 def test_queue_fifo_cap_and_ttl(tmp_path: Path):
     qpath = tmp_path / "mine-queue.json"
     q = {"schema_version": "1", "items": []}
-    assert enqueue(q, {"url": "https://github.com/a/a", "pushed_date": "2026-08-01"})
-    assert enqueue(q, {"url": "https://github.com/b/b", "pushed_date": "2026-08-02"})
+    assert enqueue(q, {"url": "https://github.com/a/a", "pushed_date": "2026-08-01"}) == "enqueued"
+    assert enqueue(q, {"url": "https://github.com/b/b", "pushed_date": "2026-08-02"}) == "enqueued"
     save_queue(qpath, q)
     loaded = load_queue(qpath)
     drained = drain(loaded, 1)
@@ -69,18 +69,19 @@ def test_queue_fifo_cap_and_ttl(tmp_path: Path):
         "items": [
             {"url": "https://github.com/old/old", "pushed_date": "2020-01-01"},
             {"url": "https://github.com/new/new", "pushed_date": "2026-08-01"},
+            {"url": "https://github.com/nodate/x"},  # no dates → stale
         ],
     }
     n = evict_stale(stale, ttl_days=90, today=date(2026, 8, 9))
-    assert n == 1
+    assert n == 2
     assert len(stale["items"]) == 1
 
     full = {"schema_version": "1", "items": [{"url": f"https://github.com/x/{i}"} for i in range(100)]}
-    assert enqueue(full, {"url": "https://github.com/x/overflow"}) is False
+    assert enqueue(full, {"url": "https://github.com/x/overflow"}) == "full"
 
     # Duplicate URL (scheme variant) rejected
     q2 = {"schema_version": "1", "items": [{"url": "https://github.com/a/a"}]}
-    assert enqueue(q2, {"url": "http://github.com/a/a.git"}) is False
+    assert enqueue(q2, {"url": "http://github.com/a/a.git"}) == "duplicate"
     assert len(q2["items"]) == 1
 
 

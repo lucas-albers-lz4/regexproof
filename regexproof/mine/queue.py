@@ -77,14 +77,20 @@ def evict_stale(
     ttl_days: int = DEFAULT_TTL_DAYS,
     today: date | None = None,
 ) -> int:
-    """Drop items whose pushed_date is older than TTL. Returns evicted count."""
+    """Drop items older than TTL. Prefer ``pushed_date``; else ``queued_at``.
+
+    Rows with neither date are treated as stale so the FIFO cap cannot fill
+    with immortal empty-date entries.
+    """
     today = today or datetime.now(timezone.utc).date()
     cutoff = today - timedelta(days=ttl_days)
     kept: list[dict[str, Any]] = []
     evicted = 0
     for item in queue["items"]:
         d = _parse_pushed(str(item.get("pushed_date") or ""))
-        if d is not None and d < cutoff:
+        if d is None:
+            d = _parse_pushed(str(item.get("queued_at") or ""))
+        if d is None or d < cutoff:
             evicted += 1
             continue
         kept.append(item)
@@ -97,8 +103,9 @@ def enqueue(
     item: dict[str, Any],
     *,
     cap: int = DEFAULT_QUEUE_CAP,
-) -> bool:
-    """Append *item* FIFO if under cap and URL not already queued. Returns False if dropped."""
+    now: date | None = None,
+) -> str:
+    """Append *item* FIFO. Returns ``enqueued``, ``duplicate``, or ``full``."""
     from regexproof.mine.exclusions import normalize_repo_url
 
     url = item.get("url")
@@ -107,11 +114,14 @@ def enqueue(
         for existing in queue["items"]:
             eu = existing.get("url")
             if eu and normalize_repo_url(str(eu)) == target:
-                return False
+                return "duplicate"
     if len(queue["items"]) >= cap:
-        return False
-    queue["items"].append(item)
-    return True
+        return "full"
+    row = dict(item)
+    if not row.get("queued_at"):
+        row["queued_at"] = (now or datetime.now(timezone.utc).date()).isoformat()
+    queue["items"].append(row)
+    return "enqueued"
 
 
 def drain(queue: dict[str, Any], max_n: int) -> list[dict[str, Any]]:
