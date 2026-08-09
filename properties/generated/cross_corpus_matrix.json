@@ -1,6 +1,7 @@
 {
   "corpora": [
     {
+      "complete_run": true,
       "corpus": "gitleaks",
       "corpus_pin": null,
       "decision": "go",
@@ -19,6 +20,7 @@
       "unclassified_parse_errors": 0
     },
     {
+      "complete_run": null,
       "corpus": "validatorjs",
       "corpus_pin": null,
       "decision": "go",
@@ -39,6 +41,7 @@
       "unclassified_parse_errors": 0
     },
     {
+      "complete_run": true,
       "corpus": "coreruleset",
       "corpus_pin": null,
       "decision": "go",
@@ -58,6 +61,7 @@
       "unclassified_parse_errors": 0
     },
     {
+      "complete_run": true,
       "corpus": "trufflehog",
       "corpus_pin": "v3.88.29",
       "decision": "go",
@@ -77,6 +81,7 @@
       "unclassified_parse_errors": 0
     },
     {
+      "complete_run": true,
       "corpus": "detect-secrets",
       "corpus_pin": "v1.5.0",
       "decision": "go",
@@ -93,6 +98,7 @@
       "unclassified_parse_errors": 0
     },
     {
+      "complete_run": true,
       "corpus": "ids_rules",
       "corpus_pin": "suricata-7.0.3-et-open",
       "decision": "go",
@@ -119,30 +125,49 @@
       "unclassified_parse_errors": 0
     },
     {
+      "complete_run": true,
       "corpus": "semgrep_rules",
       "corpus_pin": "40b8c63f75dc7c22c8a77482d73bfb864b146f7e",
-      "decision": "no-go",
-      "encodable": 2611,
-      "fraction": 0.2842,
+      "decision": "go",
+      "encodable": 707,
+      "fraction": 0.4941,
       "reasons": {
-        "composite-pattern": 3247,
-        "internal-anchor": 3113,
-        "lookaround": 50,
+        "internal-anchor": 518,
+        "lookaround": 53,
         "m-flag": 18,
         "negated-shorthand": 6,
-        "ok": 2611,
-        "parse-error:PatternError": 55,
-        "pattern-too-long": 8,
+        "ok": 707,
+        "parse-error:PatternError": 39,
+        "pattern-too-long": 6,
         "per-alternative-anchor": 9,
-        "unicode-not-literal": 20,
-        "unsupported:POSSESSIVE_REPEAT": 1,
-        "word-boundary": 48
+        "unicode-not-literal": 24,
+        "word-boundary": 51
       },
-      "sample_size": 9186,
+      "sample_size": 1431,
       "scope": "full_corpus",
       "unclassified_parse_errors": 0
     },
     {
+      "complete_run": true,
+      "corpus": "yara_rules",
+      "corpus_pin": "0f93570194a80d2f2032869055808b0ddcdfb360",
+      "decision": "go",
+      "encodable": 11534,
+      "fraction": 0.6563,
+      "reasons": {
+        "fullword-boundary": 5902,
+        "ok": 11534,
+        "parse-error": 1,
+        "pattern-too-long": 6,
+        "per-alternative-anchor": 1,
+        "wide-non-literal": 130
+      },
+      "sample_size": 17574,
+      "scope": "full_corpus",
+      "unclassified_parse_errors": 1
+    },
+    {
+      "complete_run": false,
       "corpus": "pcre2_testdata",
       "corpus_pin": "pcre2-10.44",
       "decision": "go",
@@ -156,19 +181,21 @@
       "unclassified_parse_errors": 0
     },
     {
+      "complete_run": false,
       "corpus": "re2_testdata",
       "corpus_pin": "2024-07-02",
       "decision": "go",
-      "encodable": 2,
+      "encodable": 4,
       "fraction": 1.0,
       "reasons": {
-        "ok": 2
+        "ok": 4
       },
-      "sample_size": 2,
+      "sample_size": 4,
       "scope": "sample",
       "unclassified_parse_errors": 0
     },
     {
+      "complete_run": false,
       "corpus": "cpython_re",
       "corpus_pin": "v3.12.8",
       "decision": "go",
@@ -184,6 +211,7 @@
       "unclassified_parse_errors": 0
     },
     {
+      "complete_run": false,
       "corpus": "busybox",
       "corpus_pin": "1_36_1",
       "decision": "go",
@@ -197,6 +225,27 @@
       "unclassified_parse_errors": 0
     },
     {
+      "complete_run": false,
+      "corpus": "test262",
+      "corpus_pin": "be13516fb6441b950ba8a3df97eb34062c186972",
+      "decision": "go",
+      "encodable": 34,
+      "fraction": 0.8095,
+      "reasons": {
+        "bad-range": 2,
+        "composite-pattern": 2,
+        "m-flag": 1,
+        "ok": 34,
+        "unclosed-group": 1,
+        "unsupported-syntax": 1,
+        "word-boundary": 1
+      },
+      "sample_size": 42,
+      "scope": "sample",
+      "unclassified_parse_errors": 0
+    },
+    {
+      "complete_run": null,
       "corpus": "rust_regex",
       "corpus_pin": "1.11.1",
       "decision": "inventory_only",
@@ -208,5 +257,7 @@
       "unclassified_parse_errors": 0
     }
   ],
-  "schema_version": "1"
+  "note": "Authoritative per-corpus numbers live in *_encodable_fraction.json; this matrix is a rollup.",
+  "schema_version": "1",
+  "wave": "corpus-wave-2"
 }

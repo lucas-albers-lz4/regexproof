@@ -379,3 +379,102 @@ no trailing `Star(any)`).
 **Sat-find note:** prefer case-split `Or` branches; declare
 `Length(q) ≤ a1b_suffix_bound` (default 128) on the suffix witness. Fuzz
 membership timeouts should be ≥15s for these mirrors.
+
+## 29. YARA encoding-domain declaration (ascii vs wide)
+
+<!-- verified-finding: VF-YARA-DOMAIN-001 -->
+
+YARA `$s` modifiers are **not** regex flags. `ascii` and `wide` are distinct
+encoding domains: the same pattern text yields different matches (and must
+not share a `regex_id`). Schema v2 puts `domain` on the record and as the
+optional 7th `regex_id` component (`ascii` default omitted for v1 compat).
+
+**Trap:** compiling once and claiming “encodable” while `wide` is undeclared
+(or colliding ascii/wide IDs) silently under-proves the rule.
+
+**Minimal repro:**
+
+```text
+rule:   $a = /abc/ ascii wide
+wrong:  one regex_id, one mirror
+right:  two records — domain=ascii and domain=wide (UTF-16LE code-unit mirror)
+        wide non-literals → wide-non-literal reject (not silent accept)
+```
+
+`fullword` ≠ `\b`. See `regexproof/compiler/yara.py` / Wave-2 P2 (#97/#105).
+
+## 30. Semgrep denominator precision (`pattern:` vs `pattern-regex:`)
+
+<!-- verified-finding: VF-SEMGREP-DENOM-001 -->
+
+Semgrep YAML `pattern:` is a **code-pattern** DSL, not a regex site.
+Counting every `pattern:` line as a regex inflates the denominator
+(~9k “sites”, fraction ~0.28 no-go). Real regex surfaces are
+`pattern-regex:` / `metavariable-regex:` (incl. block scalars).
+
+**Minimal repro:**
+
+```yaml
+# NOT a regex site — exclude from denom
+- pattern: foo($X)
+# IS a regex site
+- pattern-regex: |
+    (?i)password\s*=
+```
+
+After the dedicated extractor (`regexproof/extractors/semgrep_yaml.py`),
+Wave-2 P3 measured **707/1431 = 0.4941 go**. Semantics are
+`ascii_approx_rust_regex` (rust `regex` crate), not stock `py_re` parity.
+
+## 31. Testdata sample vs full (`complete_run` / silent fallback)
+
+<!-- verified-finding: VF-SAMPLE-SCOPE-001 -->
+
+A `scope=sample` fraction with `complete_run=true` is a lie. Wave corpora
+must either:
+
+1. declare `measure_scope: sample` → `complete_run=false`, or
+2. materialize the full root → measure with `complete_run=true`.
+
+Missing full roots without `measure_scope=sample` **hard-error** (no silent
+fallback). Budget breaches also force `complete_run=false` and clear stale
+inventory.
+
+**Minimal repro:**
+
+```text
+manifest: path=…/testdata (missing), measure_scope unset, WAVE_CORPORA
+wrong:    fall back to sample/, write complete_run=true
+right:    SystemExit HARD ERROR  OR  measure_scope=sample → complete_run=false
+```
+
+See `scripts/measure-corpus-fraction.py` / Wave-2 P4 (#99/#107).
+
+## 32. Cross-engine parity discipline (re2 vs pcre)
+
+<!-- verified-finding: VF-CROSS-ENGINE-001 -->
+
+Same rule text under Coraza (go-re2) and ModSecurity (pcre) is **not** a
+single-engine property. Result classes:
+
+| Class | Meaning |
+|---|---|
+| `gap` / `no-gap` | Both encodable; shape-5 SAT/UNSAT |
+| `non-comparable-re2` | re2 rejects at parse; pcre ok |
+| `non-comparable-both` | Both reject — counted, not a finding |
+
+Engine-semantic divergences (e.g. `\s` / `$`-before-newline) are **findings**,
+not measurement artifacts. Gap witnesses need **per-engine** ground truth
+(`ground_truth.pcre2` + `ground_truth.go_re2`), not one generic status.
+
+**Minimal repro:**
+
+```text
+pattern:  ^(?:GET|HEAD)$
+R1:       re2 fullmatch mirror (Coraza)
+R2:       pcre fullmatch mirror (ModSecurity)
+witness:  "GET\n"  → pcre may match, re2 may not  → class=gap + dual GT
+lookaround pattern → class=non-comparable-re2 (not a gap)
+```
+
+Pilot: `scripts/cross-engine-rule-diff-pilot.py` / Wave-2 P5 (#100/#108).
