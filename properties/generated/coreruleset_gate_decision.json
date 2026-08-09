@@ -1,0 +1,48 @@
+{
+ "schema_version": "1",
+ "corpus": "coreruleset",
+ "candidate_url": "https://github.com/coreruleset/coreruleset",
+ "corpus_pin": null,
+ "decision": "go",
+ "decision_date": "2026-08-09",
+ "probe": {
+  "regex_sites": 346,
+  "dialect": {
+   "pcre": 346
+  },
+  "flags": {},
+  "predicted_buckets": {
+   "inline-flag": 1,
+   "internal-anchor": 2,
+   "negated-shorthand": 3,
+   "pattern-too-long": 73,
+   "per-alternative-anchor": 9,
+   "word-boundary": 19
+  },
+  "predicted_rejects_pct": null
+ },
+ "conditions": [
+  {
+   "id": "new-surface",
+   "met": false,
+   "evidence": "Backfilled for a pre-gate corpus; admission predates the gate."
+  },
+  {
+   "id": "security-boundary",
+   "met": true,
+   "evidence": "Security-tool corpus on trust boundaries."
+  },
+  {
+   "id": "large-under-saturated",
+   "met": false,
+   "evidence": "346 sites."
+  }
+ ],
+ "escape_hatch_applied": false,
+ "rationale": "Fraction 0.6908 meets the 0.30 gate; 239/346 encodable, unclassified_parse_errors=0.",
+ "related": {
+  "backfilled": true,
+  "source": "cross_corpus_matrix.json + phase3_decision_matrix.json",
+  "repo": "coreruleset/coreruleset"
+ }
+}

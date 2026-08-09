@@ -1,0 +1,90 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://regexproof.dev/schemas/gate_decision/v1",
+  "title": "CorpusAdmissionDecision",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "corpus",
+    "candidate_url",
+    "decision",
+    "probe",
+    "conditions",
+    "rationale"
+  ],
+  "additionalProperties": true,
+  "properties": {
+    "schema_version": { "type": "string", "const": "1" },
+    "corpus": { "type": "string", "minLength": 1 },
+    "candidate_url": { "type": "string", "minLength": 1 },
+    "corpus_pin": { "type": ["string", "null"], "description": "Pinned commit/tag, when chosen." },
+    "decision": {
+      "type": "string",
+      "enum": ["go", "no-go", "triage-trial"],
+      "description": "go: full pipeline. no-go: rejected with evidence. triage-trial: security-boundary escape hatch — property pipeline on encodable subset, findings decide."
+    },
+    "decision_date": { "type": "string", "format": "date" },
+    "probe": {
+      "type": "object",
+      "required": ["regex_sites", "dialect", "flags", "predicted_buckets"],
+      "additionalProperties": true,
+      "properties": {
+        "regex_sites": { "type": "integer", "minimum": 0 },
+        "regex_sites_per_file": {
+          "type": "object",
+          "additionalProperties": { "type": "integer" }
+        },
+        "dialect": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "integer",
+            "description": "Count of sites per dialect (py/pcre/re2/ecma/perl/rust-regex/...)."
+          }
+        },
+        "flags": {
+          "type": "object",
+          "description": "Counts per flag/construct surface: (?x), (?i), (?s), (?m), \\K, \\g{, POSIX classes, lookarounds, backrefs, wide/ascii, ...",
+          "additionalProperties": { "type": "integer" }
+        },
+        "predicted_buckets": {
+          "type": "object",
+          "description": "Predicted reject-bucket overlap against the 17-bucket taxonomy.",
+          "additionalProperties": { "type": "integer" }
+        },
+        "predicted_rejects_pct": {
+          "type": ["number", "null"],
+          "minimum": 0,
+          "maximum": 1
+        }
+      }
+    },
+    "conditions": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "items": {
+        "type": "object",
+        "required": ["id", "met", "evidence"],
+        "additionalProperties": true,
+        "properties": {
+          "id": {
+            "type": "string",
+            "enum": ["new-surface", "security-boundary", "large-under-saturated"]
+          },
+          "met": { "type": "boolean" },
+          "evidence": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "escape_hatch_applied": {
+      "type": "boolean",
+      "description": "True when the security-boundary findings-triage trial was invoked despite failing scale/surface conditions."
+    },
+    "rationale": { "type": "string", "minLength": 1 },
+    "related": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Cross-refs: prior no-go candidates, nearest admitted corpus in the same dialect (name + fraction), sweep/ docs."
+    }
+  }
+}

@@ -237,6 +237,13 @@ def test_pr_dry_run_no_auto_publish(tmp_path: Path):
 
 def test_batch_runner_smoke(tmp_path: Path):
     out = tmp_path / "generated"
+    # Admission gate: run_batch requires a committed decision artifact for
+    # rule corpora (see tests/test_admission_gate.py). Copy the committed one.
+    from regexproof.batch.runner import ROOT as _ROOT
+
+    committed = _ROOT / "properties" / "generated" / "detect-secrets_gate_decision.json"
+    out.mkdir(parents=True, exist_ok=True)
+    (out / committed.name).write_bytes(committed.read_bytes())
     batch = run_batch(["detect-secrets"], out_dir=out, with_redos=False)
     assert "detect-secrets" in batch["corpora"]
     ndjson = (out / "detect-secrets.ndjson").read_text().strip().splitlines()

@@ -1,0 +1,52 @@
+{
+ "schema_version": "1",
+ "corpus": "django-validators",
+ "candidate_url": "https://github.com/django/django",
+ "corpus_pin": null,
+ "decision": "no-go",
+ "decision_date": "2026-08-09",
+ "probe": {
+  "regex_sites": 12,
+  "regex_sites_per_file": {
+   "django/core/validators.py": 12
+  },
+  "dialect": {
+   "py": 12
+  },
+  "flags": {
+   "(?i)": 4,
+   "lookaround": 2
+  },
+  "predicted_buckets": {
+   "lookaround": 2,
+   "inline-flag": 4
+  },
+  "predicted_rejects_pct": 0.5
+ },
+ "conditions": [
+  {
+   "id": "new-surface",
+   "met": false,
+   "evidence": "py dialect fully covered by cpython_re + validator.js; no first-seen construct."
+  },
+  {
+   "id": "security-boundary",
+   "met": false,
+   "evidence": "Django validators are framework-side checks, not trust-boundary scanners; no candidate property shape beyond what validator.js already exercises."
+  },
+  {
+   "id": "large-under-saturated",
+   "met": false,
+   "evidence": "12 sites << 1000; nearest py corpus (validator.js) at 0.7689."
+  }
+ ],
+ "escape_hatch_applied": false,
+ "rationale": "Below batch scale; a python validators pack would need 10+ repos to matter (wave-3 plan #110 rejected-with-evidence list, verbatim).",
+ "related": {
+  "nearest_admitted": {
+   "corpus": "validatorjs",
+   "fraction": 0.7689
+  },
+  "revisit_as": "python-validators-pack (10+ repos)"
+ }
+}
