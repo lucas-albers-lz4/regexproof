@@ -59,9 +59,8 @@ def test_sweep_docs_match_fraction_artifacts():
             (GENERATED / f"{name}_encodable_fraction.json").read_text(encoding="utf-8")
         )
         assert art["fraction"] == frac, name
-        # Accept either 0.7479 or 0.74790-style in docs via exact 4dp string.
         token = f"{frac:.4f}"
-        assert token in blob or f"{frac}" in blob, (
+        assert token in blob, (
             f"{name}: fraction {token} not cited in sweep/corpus-wave3/*.md"
         )
 
