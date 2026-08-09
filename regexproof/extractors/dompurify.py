@@ -10,6 +10,7 @@ import re
 from typing import Any
 
 from regexproof.extractors.js_babel import (
+    _live_code_offsets,
     _skip_string,
     _try_parse_regex,
     extract_js_precise,
@@ -51,10 +52,15 @@ def extract_dompurify(
 
 
 def _seal_name_spans(source: str) -> list[tuple[int, int, str]]:
-    """``(open_paren, close_paren, NAME)`` for each ``const NAME = seal(``."""
+    """``(open_paren, close_paren, NAME)`` for each live ``const NAME = seal(``."""
+    live = _live_code_offsets(source)
     spans: list[tuple[int, int, str]] = []
     for m in _SEAL_NAME.finditer(source):
+        if m.start() not in live:
+            continue
         open_paren = m.end() - 1  # points at '('
+        if open_paren not in live:
+            continue
         close = _match_paren(source, open_paren)
         if close is None:
             continue
@@ -66,8 +72,11 @@ def _anon_seal_spans(
     source: str, *, named_starts: set[int]
 ) -> list[tuple[int, int]]:
     """``seal(`` calls that are not ``const NAME = seal(`` bindings."""
+    live = _live_code_offsets(source)
     spans: list[tuple[int, int]] = []
     for m in _SEAL_CALL.finditer(source):
+        if m.start() not in live:
+            continue
         open_paren = m.end() - 1
         if open_paren in named_starts:
             continue

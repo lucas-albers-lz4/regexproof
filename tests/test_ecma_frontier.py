@@ -69,6 +69,18 @@ def test_seal_name_not_attached_to_distant_regex():
     assert by_pat["https:"].get("sanitizer_check") is None
 
 
+def test_seal_name_ignores_bindings_inside_strings():
+    """A seal( mention inside a string must not steal the real export name."""
+    src = (
+        'const note = "export const FAKE = seal(/xx/)";\n'
+        "export const IS_SCRIPT_OR_DATA = seal(/^(?:\\w+script|data):/i);\n"
+    )
+    recs = extract_dompurify(src, repo="cure53/DOMPurify", file="x.ts")
+    assert len(recs) == 1
+    assert recs[0].get("rule_name") == "IS_SCRIPT_OR_DATA"
+    assert recs[0].get("sanitizer_check") == "IS_SCRIPT_OR_DATA"
+
+
 def test_dompurify_deterministic():
     src = (DP_SAMPLE / "regexp.ts").read_text(encoding="utf-8")
     a = extract_dompurify(src, repo="cure53/DOMPurify", file="sample/regexp.ts")
