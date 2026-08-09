@@ -3,7 +3,7 @@
     "redos_wall_s": 120
   },
   "commit": null,
-  "compiler_fingerprint": "4a86d0cffde9046c",
+  "compiler_fingerprint": "71d2ce23b4cd",
   "complete_run": true,
   "corpus_pin": null,
   "decision": "go",
@@ -17,6 +17,7 @@
   "fraction": 0.819,
   "go_no_go_threshold": 0.3,
   "inventory_path": "properties/generated/gitleaks-inventory.ndjson",
+  "path": "pilots/gitleaks/config/gitleaks.toml",
   "pilot": "gitleaks",
   "reasons": {
     "inline-flag": 29,
@@ -26,34 +27,9 @@
     "per-alternative-anchor": 1,
     "word-boundary": 4
   },
-  "remeasure": {
-    "baseline_encodable": 182,
-    "baseline_fraction": 0.8235,
-    "flips": {
-      "now_encodable": 0,
-      "now_rejected": 1,
-      "unchanged": 220
-    },
-    "from": "frozen_inventory",
-    "prior_artifact_encodable": 181,
-    "prior_artifact_fraction": 0.819,
-    "prior_compiler_fingerprint": null,
-    "samples": {
-      "now_encodable": [],
-      "now_rejected": [
-        {
-          "flags": "",
-          "pattern": "(?:^|[\\\\'\"\\x60\\s>=:(,)])([a-zA-Z0-9_~.]{3}\\dQ~[a-zA-Z0-9_~.-]{31,34})(?:$|[\\\\'\"\\x60\\s<),])",
-          "reason": "per-alternative-anchor",
-          "regex_id": "1c97a66dcdc9e6d11a16e998a7fa8a92",
-          "site": "pilots/gitleaks/config/gitleaks.toml:239:0"
-        }
-      ]
-    }
-  },
   "sample_size": 221,
   "schema_version": "1",
-  "scope": "frozen_inventory",
+  "scope": "full_corpus",
   "unclassified_parse_errors": 0,
-  "wall_s": 0.925
+  "wall_s": 2.564
 }

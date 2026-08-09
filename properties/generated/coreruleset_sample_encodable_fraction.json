@@ -1,0 +1,12 @@
+{
+  "decision": "go",
+  "dialect": "pcre",
+  "encodable": 9,
+  "fraction": 0.9,
+  "go_no_go_threshold": 0.3,
+  "pilot": "coreruleset",
+  "sample_path": "batch/corpora/coreruleset/sample.rules",
+  "sample_size": 10,
+  "schema_version": "1",
+  "scope": "sample"
+}

@@ -42,11 +42,15 @@ def measure(corpus: str, *, assert_determinism: bool = False) -> dict:
     path: Path = meta["path"]
     sample = ROOT / "batch" / "corpora" / corpus / "sample"
     scope = meta.get("measure_scope") or "full_corpus"
-    if not path.exists() and sample.is_dir():
+    path_usable = path.exists() and (path.is_file() or any(path.iterdir()))
+    if not path_usable and sample.is_dir():
         meta["path"] = sample
         path = sample
         scope = "sample"
-        print(f"NOTE: using sample corpus at {sample}", file=sys.stderr)
+        print(
+            f"NOTE: {corpus} corpus path missing/empty; using sample at {sample}",
+            file=sys.stderr,
+        )
     if not path.exists():
         raise SystemExit(
             f"corpus path missing: {path} — see batch/corpora/{corpus}/README.md"

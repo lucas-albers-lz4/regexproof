@@ -8,10 +8,16 @@ findings: 4
 
 ## property:inventory:rc-shape1-injection-alphabet:rc-shape1-injection-alphabet
 
-- result: `planned`
-- site: `inventory:rc-shape1-injection-alphabet`
-- ground_truth_status: `None`
-- disclosure: `private_first`
+```yaml
+regex_id: "inventory:rc-shape1-injection-alphabet"
+schema_version: "1"
+kind: property
+corpus: gitleaks
+shape: 1
+result: planned
+disclosure: private_first
+site: "inventory:rc-shape1-injection-alphabet"
+```
 
 ### Pattern
 
@@ -35,10 +41,16 @@ None
 
 ## property:inventory:rc-shape2-missing-keyword:rc-shape2-missing-keyword
 
-- result: `planned`
-- site: `inventory:rc-shape2-missing-keyword`
-- ground_truth_status: `None`
-- disclosure: `private_first`
+```yaml
+regex_id: "inventory:rc-shape2-missing-keyword"
+schema_version: "1"
+kind: property
+corpus: gitleaks
+shape: 2
+result: planned
+disclosure: private_first
+site: "inventory:rc-shape2-missing-keyword"
+```
 
 ### Pattern
 
@@ -62,10 +74,16 @@ None
 
 ## property:inventory:rc-shape3-capture-truncation:rc-shape3-capture-truncation
 
-- result: `planned`
-- site: `inventory:rc-shape3-capture-truncation`
-- ground_truth_status: `None`
-- disclosure: `private_first`
+```yaml
+regex_id: "inventory:rc-shape3-capture-truncation"
+schema_version: "1"
+kind: property
+corpus: gitleaks
+shape: 3
+result: planned
+disclosure: private_first
+site: "inventory:rc-shape3-capture-truncation"
+```
 
 ### Pattern
 
@@ -89,10 +107,16 @@ None
 
 ## property:inventory:rc-shape4-escape-image:rc-shape4-escape-image
 
-- result: `planned`
-- site: `inventory:rc-shape4-escape-image`
-- ground_truth_status: `None`
-- disclosure: `private_first`
+```yaml
+regex_id: "inventory:rc-shape4-escape-image"
+schema_version: "1"
+kind: property
+corpus: gitleaks
+shape: 4
+result: planned
+disclosure: private_first
+site: "inventory:rc-shape4-escape-image"
+```
 
 ### Pattern
 

@@ -79,12 +79,15 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
     },
     "detect-secrets": {
         "corpus_type": "rule_corpus",
-        "path": ROOT / "pilots" / "detect-secrets" / "sample_plugins.py",
+        "path": ROOT / "batch" / "corpora" / "detect-secrets" / "plugins",
+        "glob": "**/*.py",
         "dialect": "py_re",
-        "extractor": "python",
+        "extractor": "python_dir",
         "repo": "Yelp/detect-secrets",
         "security_tool": True,
         "lift_inline": False,
+        "corpus_pin": "v1.5.0",
+        "commit": "01886c8a910c64595c47f186ca1ffc0b77fa5458",
         "budget": {"redos_wall_s": 60},
     },
     "coreruleset": {
@@ -242,6 +245,15 @@ def _extract(corpus: str, meta: dict[str, Any]) -> list[dict[str, Any]]:
         source = path.read_text(encoding="utf-8")
         rel = str(path.relative_to(ROOT))
         return extract_python(source, repo=meta["repo"], file=rel)
+    if meta["extractor"] == "python_dir":
+        return _extract_glob(
+            path,
+            meta,
+            glob=meta.get("glob") or "**/*.py",
+            extract_fn=lambda src, rel: extract_python(
+                src, repo=meta["repo"], file=rel
+            ),
+        )
     if meta["extractor"] == "go_regexp":
         return _extract_glob(
             path,
@@ -326,10 +338,15 @@ def _extract_glob(
         if fp in seen or not fp.is_file():
             continue
         seen.add(fp)
+        # Prefer the unresolved path under ROOT so symlink materializations
+        # (plugins/ → /tmp/…) keep stable repo-relative sites / regex_ids.
         try:
-            rel = str(fp.resolve().relative_to(root_resolved))
+            rel = str(fp.relative_to(ROOT))
         except ValueError:
-            rel = str(fp)
+            try:
+                rel = str(fp.resolve().relative_to(root_resolved))
+            except ValueError:
+                rel = str(fp)
         out.extend(
             extract_fn(fp.read_text(encoding="utf-8", errors="replace"), rel)
         )
@@ -423,6 +440,18 @@ def run_corpus(
             encoding="utf-8",
         )
         return summary
+    meta = dict(meta)
+    path: Path = meta["path"]
+    sample = ROOT / "batch" / "corpora" / corpus / "sample"
+    path_usable = path.exists() and (path.is_file() or any(path.iterdir()))
+    if not path_usable and sample.is_dir():
+        print(
+            f"NOTE: {corpus} corpus path missing/empty ({path}); "
+            f"falling back to sample at {sample}",
+            file=sys.stderr,
+        )
+        meta["path"] = sample
+        meta["measure_scope"] = "sample"
     inventory = load_inventory(meta["corpus_type"])
     records = _extract(corpus, meta)
     compiled = _compile_all(
@@ -564,8 +593,16 @@ def run_corpus(
     return summary
 
 
-def measure_coreruleset_sample(out_dir: Path) -> dict[str, Any]:
-    """PCRE encodable-fraction gate on pinned CRS sample; go iff >= 0.30."""
+def measure_coreruleset_sample(
+    out_dir: Path, *, as_primary: bool = False
+) -> dict[str, Any]:
+    """PCRE encodable-fraction gate on pinned CRS sample; go iff >= 0.30.
+
+    Always writes ``coreruleset_sample_encodable_fraction.json``. Only when
+    ``as_primary`` (full ``rules/`` absent) may it also write the primary
+    ``coreruleset_encodable_fraction.json`` — never overwrite a full-corpus
+    primary with the sample report.
+    """
     sample = ROOT / "batch" / "corpora" / "coreruleset" / "sample.rules"
     lines = [
         ln.strip()
@@ -597,10 +634,19 @@ def measure_coreruleset_sample(out_dir: Path) -> dict[str, Any]:
     (out_dir / "coreruleset_sample_encodable_fraction.json").write_text(
         payload, encoding="utf-8"
     )
-    # When full corpus is absent, the sample report is the primary artifact.
-    (out_dir / "coreruleset_encodable_fraction.json").write_text(
-        payload, encoding="utf-8"
-    )
+    if as_primary:
+        primary = out_dir / "coreruleset_encodable_fraction.json"
+        # Never clobber a committed/full-corpus primary when rules/ is absent
+        # (CI smoke without materializing CRS).
+        keep_full = False
+        if primary.is_file():
+            try:
+                prev = json.loads(primary.read_text(encoding="utf-8"))
+                keep_full = prev.get("scope") == "full_corpus"
+            except json.JSONDecodeError:
+                keep_full = False
+        if not keep_full:
+            primary.write_text(payload, encoding="utf-8")
     return report
 
 
@@ -724,9 +770,19 @@ def measure_coreruleset(out_dir: Path) -> dict[str, Any]:
         full = measure_coreruleset_full(out_dir)
         if full is not None:
             # Still emit sample artifact for CI smoke without depending on it for GO.
-            measure_coreruleset_sample(out_dir)
+            measure_coreruleset_sample(out_dir, as_primary=False)
             return full
-    return measure_coreruleset_sample(out_dir)
+        # rules/ missing: keep returning a committed full-corpus primary if present.
+        primary = out_dir / "coreruleset_encodable_fraction.json"
+        if primary.is_file():
+            try:
+                prev = json.loads(primary.read_text(encoding="utf-8"))
+            except json.JSONDecodeError:
+                prev = {}
+            if prev.get("scope") == "full_corpus":
+                measure_coreruleset_sample(out_dir, as_primary=False)
+                return prev
+    return measure_coreruleset_sample(out_dir, as_primary=True)
 
 
 def run_batch(

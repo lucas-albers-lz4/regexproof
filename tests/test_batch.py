@@ -262,6 +262,42 @@ def test_coreruleset_measurement(tmp_path: Path):
     assert (tmp_path / "coreruleset_encodable_fraction.json").is_file()
 
 
+def test_coreruleset_sample_does_not_overwrite_full_primary(tmp_path: Path):
+    from regexproof.batch.runner import measure_coreruleset_sample
+
+    primary = tmp_path / "coreruleset_encodable_fraction.json"
+    primary.write_text(
+        json.dumps({"scope": "full_corpus", "fraction": 0.6908, "sample_size": 346})
+        + "\n",
+        encoding="utf-8",
+    )
+    measure_coreruleset_sample(tmp_path, as_primary=False)
+    kept = json.loads(primary.read_text(encoding="utf-8"))
+    assert kept["scope"] == "full_corpus"
+    assert kept["fraction"] == 0.6908
+    sample = json.loads(
+        (tmp_path / "coreruleset_sample_encodable_fraction.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    assert sample["scope"] == "sample"
+
+
+def test_coreruleset_sample_as_primary_preserves_existing_full(tmp_path: Path):
+    from regexproof.batch.runner import measure_coreruleset_sample
+
+    primary = tmp_path / "coreruleset_encodable_fraction.json"
+    primary.write_text(
+        json.dumps({"scope": "full_corpus", "fraction": 0.6908, "sample_size": 346})
+        + "\n",
+        encoding="utf-8",
+    )
+    measure_coreruleset_sample(tmp_path, as_primary=True)
+    kept = json.loads(primary.read_text(encoding="utf-8"))
+    assert kept["scope"] == "full_corpus"
+    assert kept["fraction"] == 0.6908
+
+
 def test_json_legacy_rejected():
     from regexproof.batch.runner import main
 
