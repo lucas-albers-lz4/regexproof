@@ -74,14 +74,70 @@ def _residual_posix_in_class(pattern: str) -> bool:
     return False
 
 
+def _classify_perl_helper_error(error: str) -> str:
+    """Map perl stderr to a named reject bucket (never leave bare parse-error)."""
+    e = (error or "").lower()
+    if not e.strip():
+        return "malformed-pattern"
+    if "invalid [] range" in e or "false [] range" in e:
+        return "bad-range"
+    if "unescaped left brace" in e:
+        return "unescaped-brace"
+    if "unmatched (" in e or "unmatched )" in e or "unexpected ')'" in e:
+        return "unmatched-paren"
+    if "unmatched [" in e:
+        return "unmatched-bracket"
+    if "reference to nonexistent group" in e or "invalid reference to group" in e:
+        return "backref"
+    if "group name must start" in e or "sequence (?<" in e:
+        return "named-group"
+    if "eval-group" in e or "(*{" in e:
+        return "code-embed"
+    if "posix syntax" in e:
+        return "posix-class"
+    if "mutually exclusive" in e or "may not appear" in e or "maximum of twice" in e:
+        return "flag-conflict"
+    if "useless (?" in e:
+        return "useless-flag"
+    if "incomplete expression within '(?[ ])'" in e:
+        return "extended-charclass"
+    if "unknown verb" in e or "unknown '(*" in e or "'{#' is an unknown bound" in e:
+        return "verb-construct"
+    if "nested quantifiers" in e or "quantifier follows nothing" in e:
+        return "bad-quantifier"
+    if "\\o{}" in e or "octal" in e or "non-octal" in e:
+        return "bad-octal"
+    if "\\x{}" in e or "non-hex" in e or "\\x{...}" in e:
+        return "bad-hex"
+    if "empty \\b{}" in e or "empty \\B{}" in e:
+        return "bad-boundary"
+    if "sequence (?" in e or "in '(?...)" in e:
+        return "inline-flag"
+    if (
+        "unexpected character" in e
+        or "unexpected binary operator" in e
+        or "unexpected '('" in e
+        or "operand with no preceding" in e
+    ):
+        return "malformed-pattern"
+    return "malformed-pattern"
+
+
 def _helper_parse(pattern: str) -> dict:
-    proc = subprocess.run(
-        [sys.executable, str(HELPER), "parse", pattern],
-        capture_output=True,
-        text=True,
-        shell=False,
-        check=False,
-    )
+    # argv cannot carry NUL; reject before spawn (Wave-3 P5 perl t/re).
+    if "\x00" in pattern:
+        return {"ok": False, "unencodable_reason": "embedded-nul"}
+    try:
+        proc = subprocess.run(
+            [sys.executable, str(HELPER), "parse", pattern],
+            capture_output=True,
+            text=True,
+            shell=False,
+            check=False,
+        )
+    except ValueError:
+        # Defense in depth: e.g. unexpected argv encoding failures.
+        return {"ok": False, "unencodable_reason": "embedded-nul"}
     try:
         return json.loads(proc.stdout.strip() or "{}")
     except json.JSONDecodeError:
@@ -97,6 +153,8 @@ def compile_perl(
 ) -> CompileResult:
     flags = "".join(sorted(set(flags)))
     try:
+        if "\x00" in pattern:
+            raise Unencodable("embedded-nul")
         if len(pattern) > max_length:
             raise Unencodable("pattern-too-long")
         if "m" in flags:
@@ -117,7 +175,9 @@ def compile_perl(
                 "perl-helper-unavailable",
                 "perl-version-mismatch",
             ):
-                raise Unencodable(ureason or "parse-error")
+                if ureason == "parse-error":
+                    ureason = _classify_perl_helper_error(str(gate.get("error") or ""))
+                raise Unencodable(ureason or "malformed-pattern")
         ast = parse_pattern(rewritten)
         fold_fn = lambda ch: python_fold_closure(ch, ascii_only=True)
         fold = fold_fn if "i" in flags else None
