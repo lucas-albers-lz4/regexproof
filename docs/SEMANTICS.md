@@ -50,7 +50,7 @@ Implementation: `regexproof/compiler/fold.py`. Closures, not pair lists.
 | `re2` | `re2_fold_closure` | İ/ı do **not** fold into `[i]` |
 | `ecma` (non-`u`) | `js_nonsu_fold_closure` | **ß** does not expand to `SS` (no multi-char folds) |
 | `pcre` (encodable subset) | ASCII-style fold when `i` set | Same discipline as ASCII py-re for the subset |
-| `yara` | ASCII-style fold when `nocase` set | YARA `nocase` → case-insensitive flag; single-byte domain only |
+| `yara` | `re2_fold_closure` when `nocase`→`i` | Ascii-domain compile delegates to `compile_re2`; wide domain is NUL-interleaved literals (non-literals reject) |
 
 **verified-finding: VF-008** — Python vs RE2 divergence on İ/ı is load-bearing
 for any cross-dialect “same pattern” claim.
