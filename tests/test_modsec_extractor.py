@@ -149,6 +149,9 @@ def test_selector_trailing_backslash_parity():
 
 # Pre-rewrite _RX_SELECTOR (py/redos alert #7). The linear-time rewrite must
 # match this language exactly — see issue #141 for the differential evidence.
+# The vulnerable pattern is embedded verbatim as the parity reference; it runs
+# only on this file's short deterministic battery, never on untrusted input.
+# codeql[py/redos]
 _PRE_REWRITE_SELECTOR = re.compile(r'!(?:[A-Z_]+):(/(?:\\.|[^/"])*/[a-z]*|"[^"]*")')
 
 
