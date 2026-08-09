@@ -134,6 +134,10 @@ def mark_llm_template_fired(
     audit = cand.setdefault("audit", {})
     if not isinstance(audit, dict):
         raise ValueError("candidate audit must be an object")
+    if audit.get("re_evaluate"):
+        raise ValueError(
+            f"candidate {url} has re_evaluate=true; human decision required before llm-draft"
+        )
     now = (clock or default_clock)()
     ts = now.strftime("%Y-%m-%dT%H:%M:%SZ")
     audit["template_fired"] = template_fired
