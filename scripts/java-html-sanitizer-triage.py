@@ -31,9 +31,58 @@ from regexproof.extractors.java_pattern import extract_java_pattern
 HELPER = ROOT / "helpers" / "pcre2" / "match.py"
 CORPUS = "java-html-sanitizer"
 
+# Align with admission.walk skips so a full-clone --root does not pull test trees.
+_SKIP_DIR_NAMES = frozenset(
+    {
+        ".git",
+        ".hg",
+        ".svn",
+        "node_modules",
+        "vendor",
+        "third_party",
+        "third-party",
+        "__pycache__",
+        ".venv",
+        "venv",
+        "target",
+        "build",
+        "dist",
+        "out",
+        "testdata",
+        "test-data",
+        "fixtures",
+    }
+)
+# Graduation surface is production sources; exclude common Java test layouts.
+_SKIP_PATH_PARTS = frozenset(
+    {
+        "src/test",
+        "src/tests",
+        "src/it",
+        "src/integration-test",
+    }
+)
+
 
 def _iter_java(root: Path) -> list[Path]:
-    return sorted(p for p in root.rglob("*.java") if p.is_file())
+    out: list[Path] = []
+    root = root.resolve()
+    for p in sorted(root.rglob("*.java")):
+        if not p.is_file():
+            continue
+        rel_path = p.relative_to(root)
+        # Only skip dirs *under* root (ancestors like …/tests/fixtures must not apply).
+        if any(part in _SKIP_DIR_NAMES for part in rel_path.parts):
+            continue
+        rel = rel_path.as_posix()
+        if any(seg in rel for seg in _SKIP_PATH_PARTS):
+            continue
+        # Top-level test/ trees (non-Maven layouts).
+        top = rel_path.parts[0] if rel_path.parts else ""
+        if top in {"test", "tests"}:
+            continue
+        out.append(p)
+    return out
 
 
 def extract_tree(root: Path, *, repo: str = CORPUS) -> list[dict]:
@@ -46,6 +95,21 @@ def extract_tree(root: Path, *, repo: str = CORPUS) -> list[dict]:
             continue
         recs.extend(extract_java_pattern(text, repo=repo, file=rel))
     return recs
+
+
+def classify_encodable(rec: dict) -> dict:
+    """Mark unencodable when reject markers fire *or* compile_pcre fails."""
+    if rec.get("unencodable_reason"):
+        return rec
+    result = compile_pcre(
+        rec["pattern"],
+        rec.get("flags") or "",
+        call_kind=rec.get("call_kind") or "search",
+    )
+    if not result.encodable:
+        rec = dict(rec)
+        rec["unencodable_reason"] = result.unencodable_reason or "compile-failed"
+    return rec
 
 
 def _pcre2_match(pattern: str, flags: str, data: str) -> bool | None:
@@ -105,7 +169,7 @@ def differential_check(rec: dict, *, samples: list[str] | None = None) -> dict:
 def run_triage(root: Path, out_dir: Path) -> dict:
     out_dir = out_dir.expanduser().resolve()
     out_dir.mkdir(parents=True, exist_ok=True)
-    recs = extract_tree(root)
+    recs = [classify_encodable(r) for r in extract_tree(root)]
     encodable = [r for r in recs if not r.get("unencodable_reason")]
     rejected = [r for r in recs if r.get("unencodable_reason")]
 

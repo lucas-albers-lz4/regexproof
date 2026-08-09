@@ -96,3 +96,40 @@ def test_fixture_still_reports_java_22():
     walked = walk_repo(FIXTURE, repo_name="java-html-sanitizer")
     assert walked["dialect"] == {"java": 22}
     assert walked["regex_sites"] == 22
+
+
+def _load_triage_mod():
+    import importlib.util
+
+    spec = importlib.util.spec_from_file_location("jhs_triage", TRIAGE)
+    mod = importlib.util.module_from_spec(spec)
+    assert spec.loader is not None
+    spec.loader.exec_module(mod)
+    return mod
+
+
+def test_triage_skips_src_test_trees(tmp_path: Path):
+    main = tmp_path / "src" / "main" / "java" / "A.java"
+    test = tmp_path / "src" / "test" / "java" / "B.java"
+    main.parent.mkdir(parents=True)
+    test.parent.mkdir(parents=True)
+    main.write_text('Pattern.compile("abc");\n', encoding="utf-8")
+    test.write_text('Pattern.compile("xyz");\n', encoding="utf-8")
+    mod = _load_triage_mod()
+    paths = [p.relative_to(tmp_path).as_posix() for p in mod._iter_java(tmp_path)]
+    assert paths == ["src/main/java/A.java"]
+
+
+def test_classify_encodable_requires_compile():
+    mod = _load_triage_mod()
+    # Passes java_reject_reason but fails compile_pcre (backref).
+    assert java_reject_reason(r"(a)\1") is None
+    out = mod.classify_encodable(
+        {
+            "pattern": r"(a)\1",
+            "flags": "",
+            "call_kind": "search",
+            "unencodable_reason": None,
+        }
+    )
+    assert out["unencodable_reason"] == "backref"
