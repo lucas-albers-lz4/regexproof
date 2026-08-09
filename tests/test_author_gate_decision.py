@@ -262,8 +262,11 @@ def test_cli_absolute_paths_and_llm_draft(tmp_path: Path):
     data = json.loads(out.read_text(encoding="utf-8"))
     assert data["decision"] == "no-go"
 
-    rc2 = mod.main(["--llm-draft", str(WTFORMS_DRAFT)])
-    assert rc2 == 2
+    # P3b: --llm-draft is live; garbage classify → human review (exit 1), not stub exit 2
+    rc2 = mod.main(
+        [str(WTFORMS_DRAFT), "--llm-draft", "--classify-label", "not-a-class"]
+    )
+    assert rc2 == 1
 
 
 def test_cli_human_requires_decision(tmp_path: Path):

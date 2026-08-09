@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from regexproof.admission.author import author_auto, author_human, emit_decision_text
 from regexproof.admission.auto_nogo import auto_nogo_eligible
+from regexproof.admission.llm_draft import author_llm_draft
 from regexproof.admission.boundary import classify_boundary
 from regexproof.admission.constructs import accumulate_constructs, count_constructs
 from regexproof.admission.dialect_aliases import normalize_dialect_counts
@@ -17,6 +18,7 @@ __all__ = [
     "accumulate_constructs",
     "author_auto",
     "author_human",
+    "author_llm_draft",
     "auto_nogo_eligible",
     "build_draft",
     "classify_boundary",
