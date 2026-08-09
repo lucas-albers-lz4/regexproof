@@ -118,6 +118,30 @@ def test_email_addresses_deterministic():
     assert [r["regex_id"] for r in a] == [r["regex_id"] for r in b]
 
 
+def test_manifest_files_fail_closed_when_missing(tmp_path: Path):
+    """Explicit files: lists must not silently under-count a partial tree."""
+    from regexproof.batch.runner import _extract_glob
+
+    root = tmp_path / "rules"
+    root.mkdir()
+    (root / "src").mkdir()
+    (root / "src" / "purify.ts").write_text("const x = /a/;\n", encoding="utf-8")
+    # regexp.ts intentionally absent
+    meta = {
+        "repo": "cure53/DOMPurify",
+        "files": ["src/purify.ts", "src/regexp.ts"],
+    }
+    with pytest.raises(FileNotFoundError, match="regexp.ts"):
+        _extract_glob(
+            root,
+            meta,
+            glob="**/*.{ts,js}",
+            extract_fn=lambda src, rel: extract_dompurify(
+                src, repo="cure53/DOMPurify", file=rel
+            ),
+        )
+
+
 def test_wave_corpora_and_security_tool():
     assert "dompurify" in WAVE_CORPORA
     assert "isemail" in WAVE_CORPORA

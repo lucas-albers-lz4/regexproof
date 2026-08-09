@@ -712,10 +712,15 @@ def _extract_glob(
     named = meta.get("files")
     if named:
         # Explicit file list (single-file corpora e.g. shhgit config.yaml).
+        # Fail closed: a partial rules/ tree must not silently under-count.
+        missing = [name for name in named if not (path / name).is_file()]
+        if missing:
+            raise FileNotFoundError(
+                f"{meta.get('repo', path)}: manifest files missing under {path}: "
+                + ", ".join(missing)
+            )
         for name in named:
-            fp = path / name
-            if fp.is_file():
-                files.append(fp)
+            files.append(path / name)
     else:
         for pattern in glob.split(","):
             pattern = pattern.strip()
