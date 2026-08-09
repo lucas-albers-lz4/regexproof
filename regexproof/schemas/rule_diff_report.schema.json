@@ -53,7 +53,25 @@
           "declared_domain": { "type": "string" },
           "ground_truth_status": {
             "type": "string",
-            "enum": ["PASS", "FAILED", "N/A", "SKIPPED"]
+            "enum": ["PASS", "FAILED", "N/A", "SKIPPED", "reproduced", "failed"]
+          },
+          "ground_truth": {
+            "description": "Per-engine evidence for cross-engine rule_diff (pcre2/go_re2).",
+            "type": ["object", "null"],
+            "additionalProperties": true
+          },
+          "result_class": {
+            "type": "string",
+            "enum": [
+              "gap",
+              "no-gap",
+              "non-comparable-re2",
+              "non-comparable-both",
+              "sat",
+              "unsat",
+              "timeout",
+              "not_proven_bounded"
+            ]
           },
           "wall_ms": { "type": "number" },
           "schema_version": { "type": "string" },
@@ -61,6 +79,14 @@
           "kind": { "type": "string" }
         }
       }
+    },
+    "class_counts": {
+      "type": "object",
+      "additionalProperties": { "type": "integer" }
+    },
+    "family_contract": {
+      "type": "object",
+      "additionalProperties": true
     }
   }
 }

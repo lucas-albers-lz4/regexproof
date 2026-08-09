@@ -63,27 +63,50 @@ def compile_pattern(
     domain: str = "ascii",
 ):
     """Dispatch to a dialect compiler. Never use z3.Re(pattern_string)."""
+    import z3
 
     def compile_bare(pat: str, fl: str, dia: str, ck: str) -> CompileResult:
         return _compile_dialect(
             pat, fl, dia, ck, max_length=max_length, domain=domain
         )
 
-    special = try_compile_trailing_alt_dollar(
-        pattern,
-        flags,
-        dialect,
-        call_kind,
-        max_length=max_length,
-        compile_bare=compile_bare,
-    )
-    if special is not None:
-        return special
-    return _compile_dialect(
-        pattern,
-        flags,
-        dialect,
-        call_kind,
-        max_length=max_length,
-        domain=domain,
-    )
+    try:
+        special = try_compile_trailing_alt_dollar(
+            pattern,
+            flags,
+            dialect,
+            call_kind,
+            max_length=max_length,
+            compile_bare=compile_bare,
+        )
+        if special is not None:
+            return special
+        return _compile_dialect(
+            pattern,
+            flags,
+            dialect,
+            call_kind,
+            max_length=max_length,
+            domain=domain,
+        )
+    except Unencodable as exc:
+        return CompileResult(
+            mirror=None,
+            unencodable_reason=exc.reason,
+            dialect=dialect,
+            call_kind=call_kind,
+            flags=flags,
+            pattern=pattern,
+            declared_domain=domain,
+        )
+    except z3.Z3Exception:
+        # REJECT-never-crash: Z3 Loop/bounds bugs must triage, not abort batch.
+        return CompileResult(
+            mirror=None,
+            unencodable_reason="z3-exception",
+            dialect=dialect,
+            call_kind=call_kind,
+            flags=flags,
+            pattern=pattern,
+            declared_domain=domain,
+        )

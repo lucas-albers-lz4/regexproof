@@ -1,0 +1,427 @@
+{
+  "admitted_pairs": 8,
+  "class_counts": {
+    "comparable": 58,
+    "gap": 5,
+    "no-gap": 3,
+    "non-comparable-both": 22,
+    "non-comparable-re2": 0
+  },
+  "classified_patterns": 80,
+  "disclosure": "private_first",
+  "engine_versions": {
+    "go": "go version go1.26.5 linux/amd64",
+    "go_re2_helper": "helpers/go-re2/go-re2",
+    "pcre2_helper": "helpers/pcre2/match.py",
+    "python": "3.14.6",
+    "z3": "5.0.0"
+  },
+  "family_contract": {
+    "R1": "go-re2 (Coraza engine semantics)",
+    "R2": "pcre2 (ModSecurity / CRS native)",
+    "dialect_parity": "fullmatch mirrors; site call_kind=search",
+    "ground_truth": "per-engine pcre2 + go_re2 replay",
+    "mutation_guards": [
+      "control",
+      "widen-R1"
+    ],
+    "provenance": "same CRS rule text @ 55b09f5"
+  },
+  "findings": 5,
+  "floor_ok": true,
+  "mutation_guard_ok": true,
+  "pilot": "crs_cross_engine_coraza_modsec",
+  "preflight": {
+    "git_root": "/tmp/coreruleset-v4.28.0",
+    "head": "55b09f5acfd16413e7b31041100711ceb7adc89c",
+    "n_conf": 27,
+    "n_request": 18,
+    "n_response": 9,
+    "pin_prefix": "55b09f5",
+    "rules_dir": "batch/corpora/coreruleset/rules"
+  },
+  "results": [
+    {
+      "declared_domain": "len(s) in [1,33]; R1=re2(Coraza) R2=pcre(ModSec); solver_call_kind=fullmatch; adapter=crs_cross_engine_coraza_modsec",
+      "family": "crs-cross-engine:8c4e616fa6f55eedea5691b65af29547",
+      "ground_truth": {
+        "go_re2": {
+          "cmd": [
+            "helpers/go-re2/go-re2",
+            "match",
+            "^(?:GET /|OPTIONS \\*) HTTP/[12]\\.[01]$",
+            ""
+          ],
+          "matched": false,
+          "replay": {
+            "cmd": [
+              "helpers/go-re2/go-re2",
+              "match",
+              "^(?:GET /|OPTIONS \\*) HTTP/[12]\\.[01]$",
+              ""
+            ],
+            "returncode": 1,
+            "stderr": "",
+            "stdout": ""
+          },
+          "status": "PASS",
+          "version": "go-re2-helper"
+        },
+        "pcre2": {
+          "cmd": [
+            ".venv/bin/python",
+            "helpers/pcre2/match.py",
+            "match",
+            "^(?:GET /|OPTIONS \\*) HTTP/[12]\\.[01]$",
+            ""
+          ],
+          "matched": true,
+          "replay": {
+            "cmd": [
+              ".venv/bin/python",
+              "helpers/pcre2/match.py",
+              "match",
+              "^(?:GET /|OPTIONS \\*) HTTP/[12]\\.[01]$",
+              ""
+            ],
+            "returncode": 0,
+            "stderr": "",
+            "stdout": ""
+          },
+          "status": "PASS",
+          "version": "pcre2-helper"
+        },
+        "status": "PASS"
+      },
+      "ground_truth_status": "PASS",
+      "kind": "rule_diff",
+      "ok": true,
+      "pair_id": "crs-cross-engine:8c4e616fa6f55eedea5691b65af29547",
+      "regex_id": "crs-cross-engine:8c4e616fa6f55eedea5691b65af29547-gap",
+      "result": "sat",
+      "result_class": "gap",
+      "schema_version": "1",
+      "shape": 5,
+      "wall_ms": 25.2,
+      "witness": {
+        "s": "<redacted len=15>"
+      }
+    },
+    {
+      "declared_domain": "len(s) in [1,24]; R1=re2(Coraza) R2=pcre(ModSec); solver_call_kind=fullmatch; adapter=crs_cross_engine_coraza_modsec",
+      "family": "crs-cross-engine:901410",
+      "ground_truth": null,
+      "ground_truth_status": "N/A",
+      "kind": "rule_diff",
+      "ok": true,
+      "pair_id": "crs-cross-engine:901410",
+      "regex_id": "crs-cross-engine:901410-gap",
+      "result": "unsat",
+      "result_class": "no-gap",
+      "schema_version": "1",
+      "shape": 5,
+      "wall_ms": 0.1,
+      "witness": null
+    },
+    {
+      "declared_domain": "len(s) in [1,24]; R1=re2(Coraza) R2=pcre(ModSec); solver_call_kind=fullmatch; adapter=crs_cross_engine_coraza_modsec",
+      "family": "crs-cross-engine:920170",
+      "ground_truth": {
+        "go_re2": {
+          "cmd": [
+            "helpers/go-re2/go-re2",
+            "match",
+            "^(?:GET|HEAD)$",
+            ""
+          ],
+          "matched": false,
+          "replay": {
+            "cmd": [
+              "helpers/go-re2/go-re2",
+              "match",
+              "^(?:GET|HEAD)$",
+              ""
+            ],
+            "returncode": 1,
+            "stderr": "",
+            "stdout": ""
+          },
+          "status": "PASS",
+          "version": "go-re2-helper"
+        },
+        "pcre2": {
+          "cmd": [
+            ".venv/bin/python",
+            "helpers/pcre2/match.py",
+            "match",
+            "^(?:GET|HEAD)$",
+            ""
+          ],
+          "matched": true,
+          "replay": {
+            "cmd": [
+              ".venv/bin/python",
+              "helpers/pcre2/match.py",
+              "match",
+              "^(?:GET|HEAD)$",
+              ""
+            ],
+            "returncode": 0,
+            "stderr": "",
+            "stdout": ""
+          },
+          "status": "PASS",
+          "version": "pcre2-helper"
+        },
+        "status": "PASS"
+      },
+      "ground_truth_status": "PASS",
+      "kind": "rule_diff",
+      "ok": true,
+      "pair_id": "crs-cross-engine:920170",
+      "regex_id": "crs-cross-engine:920170-gap",
+      "result": "sat",
+      "result_class": "gap",
+      "schema_version": "1",
+      "shape": 5,
+      "wall_ms": 4.0,
+      "witness": {
+        "s": "<redacted len=4>"
+      }
+    },
+    {
+      "declared_domain": "len(s) in [1,24]; R1=re2(Coraza) R2=pcre(ModSec); solver_call_kind=fullmatch; adapter=crs_cross_engine_coraza_modsec",
+      "family": "crs-cross-engine:920190",
+      "ground_truth": null,
+      "ground_truth_status": "N/A",
+      "kind": "rule_diff",
+      "ok": true,
+      "pair_id": "crs-cross-engine:920190",
+      "regex_id": "crs-cross-engine:920190-gap",
+      "result": "unsat",
+      "result_class": "no-gap",
+      "schema_version": "1",
+      "shape": 5,
+      "wall_ms": 0.1,
+      "witness": null
+    },
+    {
+      "declared_domain": "len(s) in [1,42]; R1=re2(Coraza) R2=pcre(ModSec); solver_call_kind=fullmatch; adapter=crs_cross_engine_coraza_modsec",
+      "family": "crs-cross-engine:920210",
+      "ground_truth": {
+        "go_re2": {
+          "cmd": [
+            "helpers/go-re2/go-re2",
+            "match",
+            "\\b(?:keep-alive|close),\\s?(?:keep-alive|close)\\b",
+            ""
+          ],
+          "matched": false,
+          "replay": {
+            "cmd": [
+              "helpers/go-re2/go-re2",
+              "match",
+              "\\b(?:keep-alive|close),\\s?(?:keep-alive|close)\\b",
+              ""
+            ],
+            "returncode": 1,
+            "stderr": "",
+            "stdout": ""
+          },
+          "status": "PASS",
+          "version": "go-re2-helper"
+        },
+        "pcre2": {
+          "cmd": [
+            ".venv/bin/python",
+            "helpers/pcre2/match.py",
+            "match",
+            "\\b(?:keep-alive|close),\\s?(?:keep-alive|close)\\b",
+            ""
+          ],
+          "matched": true,
+          "replay": {
+            "cmd": [
+              ".venv/bin/python",
+              "helpers/pcre2/match.py",
+              "match",
+              "\\b(?:keep-alive|close),\\s?(?:keep-alive|close)\\b",
+              ""
+            ],
+            "returncode": 0,
+            "stderr": "",
+            "stdout": ""
+          },
+          "status": "PASS",
+          "version": "pcre2-helper"
+        },
+        "status": "PASS"
+      },
+      "ground_truth_status": "PASS",
+      "kind": "rule_diff",
+      "ok": true,
+      "pair_id": "crs-cross-engine:920210",
+      "regex_id": "crs-cross-engine:920210-gap",
+      "result": "sat",
+      "result_class": "gap",
+      "schema_version": "1",
+      "shape": 5,
+      "wall_ms": 3188.7,
+      "witness": {
+        "s": "<redacted len=17>"
+      }
+    },
+    {
+      "declared_domain": "len(s) in [1,24]; R1=re2(Coraza) R2=pcre(ModSec); solver_call_kind=fullmatch; adapter=crs_cross_engine_coraza_modsec",
+      "family": "crs-cross-engine:920290",
+      "ground_truth": {
+        "go_re2": {
+          "cmd": [
+            "helpers/go-re2/go-re2",
+            "match",
+            "^$",
+            ""
+          ],
+          "matched": false,
+          "replay": {
+            "cmd": [
+              "helpers/go-re2/go-re2",
+              "match",
+              "^$",
+              ""
+            ],
+            "returncode": 1,
+            "stderr": "",
+            "stdout": ""
+          },
+          "status": "PASS",
+          "version": "go-re2-helper"
+        },
+        "pcre2": {
+          "cmd": [
+            ".venv/bin/python",
+            "helpers/pcre2/match.py",
+            "match",
+            "^$",
+            ""
+          ],
+          "matched": true,
+          "replay": {
+            "cmd": [
+              ".venv/bin/python",
+              "helpers/pcre2/match.py",
+              "match",
+              "^$",
+              ""
+            ],
+            "returncode": 0,
+            "stderr": "",
+            "stdout": ""
+          },
+          "status": "PASS",
+          "version": "pcre2-helper"
+        },
+        "status": "PASS"
+      },
+      "ground_truth_status": "PASS",
+      "kind": "rule_diff",
+      "ok": true,
+      "pair_id": "crs-cross-engine:920290",
+      "regex_id": "crs-cross-engine:920290-gap",
+      "result": "sat",
+      "result_class": "gap",
+      "schema_version": "1",
+      "shape": 5,
+      "wall_ms": 1.6,
+      "witness": {
+        "s": "<redacted len=1>"
+      }
+    },
+    {
+      "declared_domain": "len(s) in [1,24]; R1=re2(Coraza) R2=pcre(ModSec); solver_call_kind=fullmatch; adapter=crs_cross_engine_coraza_modsec",
+      "family": "crs-cross-engine:920350",
+      "ground_truth": {
+        "go_re2": {
+          "cmd": [
+            "helpers/go-re2/go-re2",
+            "match",
+            "(?:^([\\d.]+|\\[[\\da-f:]+\\]|[\\da-f:]+)(:[\\d]+)?$)",
+            ""
+          ],
+          "matched": false,
+          "replay": {
+            "cmd": [
+              "helpers/go-re2/go-re2",
+              "match",
+              "(?:^([\\d.]+|\\[[\\da-f:]+\\]|[\\da-f:]+)(:[\\d]+)?$)",
+              ""
+            ],
+            "returncode": 1,
+            "stderr": "",
+            "stdout": ""
+          },
+          "status": "PASS",
+          "version": "go-re2-helper"
+        },
+        "pcre2": {
+          "cmd": [
+            ".venv/bin/python",
+            "helpers/pcre2/match.py",
+            "match",
+            "(?:^([\\d.]+|\\[[\\da-f:]+\\]|[\\da-f:]+)(:[\\d]+)?$)",
+            ""
+          ],
+          "matched": true,
+          "replay": {
+            "cmd": [
+              ".venv/bin/python",
+              "helpers/pcre2/match.py",
+              "match",
+              "(?:^([\\d.]+|\\[[\\da-f:]+\\]|[\\da-f:]+)(:[\\d]+)?$)",
+              ""
+            ],
+            "returncode": 0,
+            "stderr": "",
+            "stdout": ""
+          },
+          "status": "PASS",
+          "version": "pcre2-helper"
+        },
+        "status": "PASS"
+      },
+      "ground_truth_status": "PASS",
+      "kind": "rule_diff",
+      "ok": true,
+      "pair_id": "crs-cross-engine:920350",
+      "regex_id": "crs-cross-engine:920350-gap",
+      "result": "sat",
+      "result_class": "gap",
+      "schema_version": "1",
+      "shape": 5,
+      "wall_ms": 8.9,
+      "witness": {
+        "s": "<redacted len=2>"
+      }
+    },
+    {
+      "declared_domain": "len(s) in [1,24]; R1=re2(Coraza) R2=pcre(ModSec); solver_call_kind=fullmatch; adapter=crs_cross_engine_coraza_modsec",
+      "family": "crs-cross-engine:920420",
+      "ground_truth": null,
+      "ground_truth_status": "N/A",
+      "kind": "rule_diff",
+      "ok": true,
+      "pair_id": "crs-cross-engine:920420",
+      "regex_id": "crs-cross-engine:920420-gap",
+      "result": "unsat",
+      "result_class": "no-gap",
+      "schema_version": "1",
+      "shape": 5,
+      "wall_ms": 281.1,
+      "witness": null
+    }
+  ],
+  "schema_version": "1",
+  "timeout_gate_ok": true,
+  "timeout_rate": 0.0,
+  "timeouts": 0
+}

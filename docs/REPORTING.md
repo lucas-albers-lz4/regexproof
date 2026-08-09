@@ -43,6 +43,7 @@ Schema: `regexproof/schemas/scanner_finding.schema.json`.
 | `pattern` | Pattern text when applicable |
 | `shape` | 1–5 or null |
 | `ground_truth_status` | Replay status. Present on Z3-verdict findings (`property`, `rule_diff`); omitted on classification findings (`usage_mismatch`, `intent_mismatch`, `triage`, `redos`) — absence means "not a Z3 verdict", never a silent `N/A` |
+| `ground_truth` | Optional **per-engine** evidence object for cross-engine `rule_diff` (e.g. `{pcre2: {status, version, cmd, matched, replay}, go_re2: {...}, status}`). A single `ground_truth_status` alone is not sufficient to claim dual-engine ground truth. |
 | `disclosure` | `private_first` \| `public_ok` \| null |
 | `witness` | Redacted when committed |
 | `detail` | Kind-specific object |

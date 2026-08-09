@@ -597,6 +597,48 @@ def p5_mutated_lowercase():
 
 
 # ---------------------------------------------------------------------------
+# CRS cross-engine rule_diff mutation guard (Wave-2 P5 / issue #100)
+# ---------------------------------------------------------------------------
+# Shape-5 sensitivity probe for the Coraza(go-re2)↔ModSecurity(pcre) family.
+# Uses a tiny shared alphabet pattern so --all stays hermetic (no CRS clone).
+@prop(
+    "crs-cross-engine-widen-R1",
+    "MUTATION GUARD (cross-engine family): narrowing R1 to a singleton "
+    "impossible prefix must flip the gap query to SAT (harness sensitivity).",
+    expect_unsat=False,
+    kind="mutation_guard",
+    family="crs-cross-engine",
+    input_domain="ascii",
+    call_kind="search",
+)
+def crs_cross_engine_widen_r1():
+    from regexproof.rule_diff.encode import shape5_constraints
+
+    r2 = Concat(Re("a"), Star(Union(Range("a", "z"), Range("0", "9"))))
+    narrow_r1 = Concat(Re("\x01"), Star(Re("\x01")))
+    constraints, bad, _s = shape5_constraints(narrow_r1, r2, min_len=1, max_len=16)
+    return constraints, bad
+
+
+@prop(
+    "crs-cross-engine-control",
+    "MUTATION GUARD (cross-engine family): identical R1/R2 mirrors must be "
+    "UNSAT (no self-gap).",
+    expect_unsat=True,
+    kind="mutation_guard",
+    family="crs-cross-engine",
+    input_domain="ascii",
+    call_kind="search",
+)
+def crs_cross_engine_control():
+    from regexproof.rule_diff.encode import shape5_constraints
+
+    r = Concat(Re("a"), Star(Union(Range("a", "z"), Range("0", "9"))))
+    constraints, bad, _s = shape5_constraints(r, r, min_len=1, max_len=16)
+    return constraints, bad
+
+
+# ---------------------------------------------------------------------------
 # P6 — prefix-match modeling (dogfooding finding, issue #11)
 # ---------------------------------------------------------------------------
 # re.match(r"^AND", "AND foo") MATCHES, but InRe("AND foo", Re("AND")) is
