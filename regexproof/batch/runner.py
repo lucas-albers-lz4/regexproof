@@ -494,12 +494,14 @@ def _compile_all(
     lift_inline: bool,
     corpus_slug: str,
     budget: dict[str, Any] | None = None,
+    wall_t0: float | None = None,
 ) -> list[dict[str, Any]]:
     budget = budget or {}
     _check_budget_patterns(records, budget, corpus_slug)
     max_wall = budget.get("max_wall_s")
     max_mem = budget.get("max_mem_mb")
-    t0 = time.monotonic()
+    # wall_t0 may be set before extraction so max_wall_s covers extract+compile.
+    t0 = wall_t0 if wall_t0 is not None else time.monotonic()
     out = []
     for rec in records:
         pattern = rec["pattern"]
@@ -657,6 +659,7 @@ def run_corpus(
     _validate_expected_roots(corpus, meta)
     inventory = load_inventory(meta["corpus_type"])
     budget = meta.get("budget") or {}
+    wall_t0 = time.monotonic()
     records = _extract(corpus, meta)
     if not records and corpus in WAVE_CORPORA:
         raise SystemExit(
@@ -669,6 +672,7 @@ def run_corpus(
             lift_inline=bool(meta.get("lift_inline")),
             corpus_slug=corpus,
             budget=budget,
+            wall_t0=wall_t0,
         )
     except BudgetBreached as exc:
         raise SystemExit(

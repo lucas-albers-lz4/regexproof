@@ -194,6 +194,7 @@ def measure(corpus: str, *, assert_determinism: bool = False) -> dict:
 
     budget = meta.get("budget") or {}
     t0 = time.perf_counter()
+    wall_t0 = time.monotonic()
     records = _extract(corpus, meta)
     if not records and corpus in WAVE_CORPORA:
         raise SystemExit(
@@ -207,6 +208,7 @@ def measure(corpus: str, *, assert_determinism: bool = False) -> dict:
             lift_inline=bool(meta.get("lift_inline")),
             corpus_slug=corpus,
             budget=budget,
+            wall_t0=wall_t0,
         )
     except BudgetBreached as exc:
         wall = time.perf_counter() - t0

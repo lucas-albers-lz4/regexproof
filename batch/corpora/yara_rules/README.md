@@ -19,12 +19,12 @@ test "$(git -C batch/corpora/yara_rules/rules rev-parse HEAD)" = "$PIN"
 Manifest pin (`regexproof/batch/runner.py` corpus `yara_rules`):
 `0f93570194a80d2f2032869055808b0ddcdfb360`. Provenance: YARA-Rules/rules.
 
-## Sample fallback
+## Sample vs full
 
-When `rules/` is absent, `measure-corpus-fraction.py` / batch currently fall
-back to `batch/corpora/yara_rules/sample/` and rewrite `scope` to `sample`
-(stderr NOTE). The sample is for CI smoke only — **do not treat a sample
-run as the Wave-2 fraction**. Committed artifact
+`yara_rules` is a wave corpus without `measure_scope: sample`. If `rules/` is
+missing/empty, measure/batch **hard-error** (no silent sample fallback).
+Use `batch/corpora/yara_rules/sample/` only for local smoke by pointing the
+manifest path at it explicitly. Committed artifact
 `properties/generated/yara_rules_encodable_fraction.json` was measured on
 the pinned full clone (`scope=full_corpus`, `complete_run=true`).
 
