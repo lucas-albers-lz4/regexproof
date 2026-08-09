@@ -70,7 +70,12 @@ def real_accepts_argv_bytes(
 def real_accepts_perl(
     pattern: str, flags: str, s: str, *, timeout: float = 10.0
 ) -> bool:
-    """Replay via ``helpers/perl/match.py`` (system perl; no Python re)."""
+    """Replay via ``helpers/perl/match.py`` (system perl; no Python re).
+
+    Exit codes from the helper: 0 match, 1 no-match, 2 unavailable/version,
+    3 pattern compile failure. Compile failures raise (not treated as
+    helper-unavailable).
+    """
     root = Path(__file__).resolve().parents[2]
     helper = root / "helpers" / "perl" / "match.py"
     try:
@@ -87,6 +92,10 @@ def real_accepts_perl(
         return False
     if proc.returncode == 2:
         raise RuntimeError("perl-helper-unavailable")
+    if proc.returncode == 3:
+        raise RuntimeError(
+            f"perl-pattern-compile-failed: {(proc.stderr or '').strip()}"
+        )
     return proc.returncode == 0
 
 

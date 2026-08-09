@@ -432,7 +432,11 @@ def _check_perl_surface(name: str, fixture: Path) -> dict:
         try:
             real = real_accepts_perl(pattern, flags, s)
         except RuntimeError as exc:
-            return {"surface": name, "status": "absent", "error": str(exc)}
+            msg = str(exc)
+            if "perl-helper-unavailable" in msg:
+                return {"surface": name, "status": "absent", "error": msg}
+            mismatches.append({"input": s, "error": msg})
+            break
         if bool(m) != bool(real):
             mismatches.append({"input": s, "mirror": bool(m), "real": bool(real)})
             break

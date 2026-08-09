@@ -57,6 +57,60 @@ def test_perl_helper_parse_and_match():
     assert n.returncode == 1
 
 
+def test_perl_helper_preserves_dollar_and_at():
+    """Patterns with $ / @ must not be double-interpolated by qr/$p/."""
+    # End-anchor $
+    m = subprocess.run(
+        [sys.executable, str(HELPER), "match", r"^foo$", ""],
+        input="foo",
+        cwd=str(ROOT),
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    assert m.returncode == 0, m.stderr
+    n = subprocess.run(
+        [sys.executable, str(HELPER), "match", r"^foo$", ""],
+        input="foobar",
+        cwd=str(ROOT),
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    assert n.returncode == 1
+    # Literal @ in character class / pattern
+    p = subprocess.run(
+        [sys.executable, str(HELPER), "parse", r"a@b"],
+        cwd=str(ROOT),
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    assert p.returncode == 0, p.stderr
+    a = subprocess.run(
+        [sys.executable, str(HELPER), "match", r"a@b", ""],
+        input="a@b",
+        cwd=str(ROOT),
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    assert a.returncode == 0, a.stderr
+
+
+def test_perl_match_compile_fail_exit_3():
+    """Compile failures must be exit 3 (not 2 / helper-unavailable)."""
+    proc = subprocess.run(
+        [sys.executable, str(HELPER), "match", "(", ""],
+        input="x",
+        cwd=str(ROOT),
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    assert proc.returncode == 3, proc.stderr
+
+
 def test_regex_id_formula_version_gate():
     from regexproof.batch.inventory import check_corpus_coverage
     from regexproof.regex_id import REGEX_ID_FORMULA_VERSION

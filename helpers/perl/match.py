@@ -6,21 +6,53 @@ Usage:
   match.py parse <pattern>
   match.py match <pattern> <flags>   # stdin → exit 0 on match
 
-Exit 0 = ok/match; 1 = parse fail / no-match; 2 = perl unavailable / version mismatch.
+Exit 0 = ok/match; 1 = parse fail / no-match; 2 = perl unavailable / version
+mismatch; 3 = pattern compile failure at match time.
 """
 
 from __future__ import annotations
 
 import json
+import os
 import re
 import shutil
 import subprocess
 import sys
+import tempfile
+from pathlib import Path
 
 # Pin: major.minor must match installed perl (Wave-3 hard pre-gate).
-# Local/CI currently ship 5.38.x; prefix gate accepts 5.38+ / 5.40+.
+# Local/CI currently ship 5.38.x; prefix gate accepts 5.38+.
 PERL_VERSION = "5.38.2"
 PERL_VERSION_PREFIX = "5."
+
+# Shared Perl fragment: load pattern from a file (NUL-safe) and compile with
+# double-interpolation guards so `$`/`@` in the pattern are not re-scanned as
+# Perl variables (Bugbot finding on qr/$p/).
+_PERL_LOAD_AND_COMPILE = r"""
+use strict;
+use warnings;
+sub load_pat {
+  my ($path) = @_;
+  open my $fh, '<:raw', $path or die "open: $!";
+  local $/; my $p = <$fh>;
+  close $fh;
+  return $p // '';
+}
+sub protect {
+  # Escape $/@ that would interpolate as variables; leave end-anchor $ alone.
+  my ($s) = @_;
+  $s =~ s/(?<!\\)\$(?=[\w\{])/\\\$/g;
+  $s =~ s/(?<!\\)\@/\\@/g;
+  return $s;
+}
+sub compile_re {
+  my ($pat, $flag_prefix) = @_;
+  my $safe = protect($flag_prefix . $pat);
+  my $re = eval { qr/(?^:$safe)/ };
+  return ($re, $@);
+}
+"""
 
 
 def _perl_bin() -> str | None:
@@ -36,7 +68,6 @@ def _perl_version_string(bin_: str) -> str | None:
     )
     if proc.returncode != 0:
         return None
-    # $^V prints v5.38.2
     raw = (proc.stdout or "").strip().lstrip("v")
     return raw or None
 
@@ -44,7 +75,6 @@ def _perl_version_string(bin_: str) -> str | None:
 def _version_ok(ver: str) -> bool:
     if not ver.startswith(PERL_VERSION_PREFIX):
         return False
-    # Require 5.38+ (plan assumed 5.40.1; box/CI may be 5.38.x).
     m = re.match(r"^(\d+)\.(\d+)", ver)
     if not m:
         return False
@@ -86,9 +116,16 @@ def version() -> int:
 
 
 def _flag_prefix(flags: str) -> str:
-    """Map helper flags string to a leading (?…) group perl understands."""
     wanted = "".join(c for c in "imsx" if c in (flags or ""))
     return f"(?{wanted})" if wanted else ""
+
+
+def _write_pat_file(pattern: str) -> Path:
+    fd, name = tempfile.mkstemp(prefix="rp-perl-pat-", suffix=".pat")
+    os.close(fd)
+    path = Path(name)
+    path.write_bytes(pattern.encode("utf-8"))
+    return path
 
 
 def parse(pattern: str) -> int:
@@ -117,19 +154,28 @@ def parse(pattern: str) -> int:
             )
         )
         return 2
-    # Compile via qr//; escape nothing — pattern is operator-supplied.
-    script = (
-        "use strict; use warnings;\n"
-        "my $p = $ARGV[0];\n"
-        "eval { qr/$p/; 1 } or do { print STDERR $@; exit 1 };\n"
-        "exit 0;\n"
-    )
-    proc = subprocess.run(
-        [bin_, "-e", script, "--", pattern],
-        capture_output=True,
-        text=True,
-        check=False,
-    )
+    pat_path = _write_pat_file(pattern)
+    try:
+        script = (
+            _PERL_LOAD_AND_COMPILE
+            + r"""
+my $pat = load_pat($ARGV[0]);
+my ($re, $err) = compile_re($pat, '');
+if ($err || !defined $re) {
+  print STDERR $err // 'compile failed';
+  exit 1;
+}
+exit 0;
+"""
+        )
+        proc = subprocess.run(
+            [bin_, "-e", script, "--", str(pat_path)],
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+    finally:
+        pat_path.unlink(missing_ok=True)
     if proc.returncode == 0:
         print(json.dumps({"ok": True, "helper": "perl", "version": ver}))
         return 0
@@ -159,23 +205,34 @@ def match(pattern: str, flags: str, data: str) -> int:
             file=sys.stderr,
         )
         return 2
-    prefixed = _flag_prefix(flags) + pattern
-    script = (
-        "use strict; use warnings;\n"
-        "my $p = $ARGV[0];\n"
-        "local $/; my $s = <STDIN>;\n"
-        "my $re = eval { qr/$p/ };\n"
-        "exit 2 if $@ || !defined $re;\n"
-        "exit($s =~ /$re/ ? 0 : 1);\n"
-    )
-    proc = subprocess.run(
-        [bin_, "-e", script, "--", prefixed],
-        input=data,
-        capture_output=True,
-        text=True,
-        check=False,
-    )
-    if proc.returncode in (0, 1):
+    pat_path = _write_pat_file(pattern)
+    try:
+        prefix = _flag_prefix(flags)
+        script = (
+            _PERL_LOAD_AND_COMPILE
+            + r"""
+my $pat = load_pat($ARGV[0]);
+my $flag_prefix = $ARGV[1] // '';
+my ($re, $err) = compile_re($pat, $flag_prefix);
+if ($err || !defined $re) {
+  print STDERR $err // 'compile failed';
+  exit 3;
+}
+local $/; my $s = <STDIN>;
+$s = '' unless defined $s;
+exit($s =~ /$re/ ? 0 : 1);
+"""
+        )
+        proc = subprocess.run(
+            [bin_, "-e", script, "--", str(pat_path), prefix],
+            input=data,
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+    finally:
+        pat_path.unlink(missing_ok=True)
+    if proc.returncode in (0, 1, 3):
         return proc.returncode
     return 2
 
