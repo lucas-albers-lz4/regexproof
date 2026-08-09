@@ -164,33 +164,57 @@ def extract_go_regexp_tests(
         reason = "empty-pattern" if pattern == "" else None
         if len(pattern) > 10_000:
             reason = "pattern-too-long"
-        # badRe / stringError rows: second field is an error message string.
-        line_end = source.find("\n", m.end())
-        if line_end < 0:
-            line_end = len(source)
-        rest = source[m.end() : line_end]
-        if re.match(r'\s*"(?:\\.|[^"\\])+"', rest) or re.match(
-            r"\s*`[^`]*`", rest
-        ):
-            # Heuristic: {`pat`, "error text"} — expected compile failure.
-            if "error" in rest.lower() or "missing" in rest.lower() or "invalid" in rest.lower() or "unexpected" in rest.lower() or "trailing" in rest.lower():
-                reason = "expected-compile-error"
+        # Do NOT infer expected-compile-error from second-field text: FindTest
+        # match inputs can contain "error"/"invalid"/… (Bugbot). Compile-failure
+        # tables are covered via []stringError / named invalid []string blocks.
         _add(pattern, line_no, m.group(0), reason)
 
-    # 3) Entries inside ``[]string{ … }`` tables (goodRe / invalidRegexps…).
-    for block in re.finditer(r"\[\]string\{", source):
+    # 3) Entries inside ``[]string{ … }`` / ``[]stringError{ … }`` tables.
+    for block in re.finditer(r"\[\](?:stringError|string)\{", source):
         start = block.end()
         table_name = _preceding_ident(source, block.start())
-        expected_bad = table_name in _INVALID_STRING_TABLES
+        is_string_error = "stringError" in block.group(0)
+        expected_bad = is_string_error or table_name in _INVALID_STRING_TABLES
         depth = 1
         i = start
         while i < len(source) and depth:
-            if source[i] == "{":
+            ch = source[i]
+            # Skip string/raw-string contents so `}` inside patterns does not
+            # truncate the table (Bugbot).
+            if ch in "\"`":
+                q = ch
+                i += 1
+                while i < len(source):
+                    if source[i] == "\\" and q == '"' and i + 1 < len(source):
+                        i += 2
+                        continue
+                    if source[i] == q:
+                        i += 1
+                        break
+                    i += 1
+                continue
+            if ch == "{":
                 depth += 1
-            elif source[i] == "}":
+            elif ch == "}":
                 depth -= 1
             i += 1
         body = source[start : i - 1] if depth == 0 else ""
+        if is_string_error:
+            # stringError{ re: "…", err: "…" } / {`pat`, "err"} — first string only.
+            for m in _STRUCT_FIRST.finditer(body):
+                abs_pos = start + m.start()
+                line_start = source.rfind("\n", 0, abs_pos) + 1
+                if "//" in source[line_start:abs_pos]:
+                    stats.skipped += 1
+                    continue
+                q = m.group("q")
+                if not q:
+                    stats.skipped += 1
+                    continue
+                pattern = _decode_go_string(m.group("body"), q)
+                line_no = source.count("\n", 0, abs_pos) + 1
+                _add(pattern, line_no, m.group(0), "expected-compile-error")
+            continue
         for m in _STRING_ENTRY.finditer(body):
             # Offset line numbers relative to block start.
             abs_pos = start + m.start()

@@ -143,6 +143,37 @@ class TestGoRegexpTests:
         assert "a*" in pats
         assert all(r["dialect"] == "re2" for r in recs)
 
+    def test_findtest_match_text_not_compile_error(self):
+        """Second-field text like 'error' must not tag expected-compile-error."""
+        src = (
+            "package regexp\n"
+            "var findTests = []struct{ pat, text string }{\n"
+            '	{`ok`, "contains error word"},\n'
+            "}\n"
+        )
+        recs = extract_go_regexp_tests(src, repo="r", file="f.go")
+        by_pat = {r["pattern"]: r for r in recs}
+        assert "ok" in by_pat
+        assert by_pat["ok"].get("unencodable_reason") is None
+
+    def test_string_error_table_and_brace_in_pattern(self):
+        src = (
+            "package regexp\n"
+            "var badRe = []stringError{\n"
+            '	{`[`, "error parsing regexp"},\n'
+            "}\n"
+            "var goodRe = []string{\n"
+            '	`a{1}`,\n'
+            '	`x}y`,\n'
+            "}\n"
+        )
+        recs = extract_go_regexp_tests(src, repo="r", file="f.go")
+        by_pat = {r["pattern"]: r for r in recs}
+        assert by_pat["["].get("unencodable_reason") == "expected-compile-error"
+        assert "a{1}" in by_pat
+        assert "x}y" in by_pat
+        assert by_pat["x}y"].get("unencodable_reason") is None
+
     def test_does_not_break_go_regexp_fixture(self):
         src = GO_FIXTURE.read_text(encoding="utf-8")
         legacy = extract_go_regexp(src, repo="fixture", file="sample_basic.go")

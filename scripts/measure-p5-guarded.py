@@ -82,18 +82,24 @@ _orig = runner_mod._compile_all
 
 def _compile_all_guarded(records, *, lift_inline, corpus_slug, budget=None, wall_t0=None):
     budget = budget or {}
+    # Fail-fast on full extract size before chunking (Bugbot: chunked path
+    # otherwise never sees len(records) > max_patterns).
+    runner_mod._check_budget_patterns(records, budget, corpus_slug)
     n = len(records)
     out: list = []
     chunk = 100
     t0 = time.time()
     for i in range(0, n, chunk):
         part = records[i : i + chunk]
+        # Per-chunk: skip max_patterns re-check (already enforced above).
+        chunk_budget = dict(budget)
+        chunk_budget.pop("max_patterns", None)
         out.extend(
             _orig(
                 part,
                 lift_inline=lift_inline,
                 corpus_slug=corpus_slug,
-                budget=budget,
+                budget=chunk_budget,
                 wall_t0=wall_t0,
             )
         )

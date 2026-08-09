@@ -20,15 +20,17 @@ All are `corpus_type: testdata` — **exempt** from admission `gate_decision`
   failures in `re_tests` are tagged `expected-compile-error`; helper
   stderr is mapped to named buckets via `_classify_perl_helper_error`)
 
-## OOM hardening (measure)
+## OOM hardening (measure) — fixed
 
 Long suites (esp. `v8_mjsunit`) previously OOM-killed the host (~29 GiB)
-when stacked agent measure processes ran without a hard cap. Mitigations:
+when stacked agent measure processes ran without a hard cap. Mitigations
+(verified: full v8 measure stays ~70 MiB RSS under the guarded path):
 
 - `RLIMIT_AS` at 2× `max_mem_mb` inside `_compile_all`
 - current VmRSS budget checks (`/proc/self/status`)
 - `MemoryError` → `BudgetBreached`
 - single-flight flock via `scripts/measure-p5-guarded.py`
+- guarded path checks `max_patterns` on the full extract before chunking
 
 Prefer the guarded wrapper for Wave-3 full-suite measures:
 
