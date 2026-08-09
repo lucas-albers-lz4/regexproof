@@ -195,3 +195,20 @@ test-first:
   `per-alternative-anchor`) classified as compiler soundness (#76), not
   extractor drift. Drift writeup:
   `properties/generated/trailing_alt_dollar_p4_drift.md`.
+
+## Trailing-alt `$` wave closeout (#81 / #85, 2026-08-08)
+
+Wave plan #81 closed via P1–P5 (#86–#85):
+
+| Phase | PR | Headline |
+|---|---|---|
+| P1 spike | #88 | Encoding evidence; A1B preferred over E1-only |
+| P2 A1B | #89 | Compiler lowering; gitleaks **0.819** |
+| P3 validate | #90 | Cross-corpus remeasure; ids/CRS AC misses documented |
+| P4 corpora | #91 | detect-secrets **0.3725**; trufflehog id-stable |
+| P5 docs | (this) | TRAPS §28; superseded pre-#80 decision matrices |
+
+Authoritative fractions: `properties/generated/cross_corpus_matrix.*` and
+`*_encodable_fraction.json`. Pre-wave
+`phase3_decision_matrix.*` / `gitleaks_residual_abc.json` /
+`gitleaks_remeasure_delta.json` are marked **superseded**.

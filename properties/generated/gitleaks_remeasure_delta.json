@@ -1,4 +1,6 @@
 {
+  "superseded": true,
+  "superseded_by": "gitleaks_p4_extract_delta.json (vs gitleaks-frozen-ids) + gitleaks_encodable_fraction.json",
   "baseline": "properties/generated/gitleaks-frozen-ids-pre-wordboundary.ndjson",
   "corpus": "gitleaks",
   "current": {

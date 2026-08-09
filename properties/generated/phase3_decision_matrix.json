@@ -1,4 +1,6 @@
 {
+  "superseded": true,
+  "superseded_by": "cross_corpus_matrix.json + *_encodable_fraction.json (PR #80/#89/#90); see phase3_decision_matrix.md",
   "decisions": [
     {
       "corpus": "gitleaks",
