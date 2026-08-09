@@ -84,10 +84,33 @@ def test_queue_fifo_cap_and_ttl(tmp_path: Path):
     full = {"schema_version": "1", "items": [{"url": f"https://github.com/x/{i}"} for i in range(100)]}
     assert enqueue(full, {"url": "https://github.com/x/overflow"}) == "full"
 
-    # Duplicate URL (scheme variant) rejected
-    q2 = {"schema_version": "1", "items": [{"url": "https://github.com/a/a"}]}
-    assert enqueue(q2, {"url": "http://github.com/a/a.git"}) == "duplicate"
+    # Duplicate URL (scheme variant) refreshes metadata in place
+    q2 = {
+        "schema_version": "1",
+        "items": [
+            {
+                "url": "https://github.com/a/a",
+                "pin": "old",
+                "stars": 1,
+                "queued_at": "2026-08-01",
+            }
+        ],
+    }
+    assert (
+        enqueue(
+            q2,
+            {
+                "url": "http://github.com/a/a.git",
+                "pin": "newsha",
+                "stars": 9,
+            },
+        )
+        == "duplicate"
+    )
     assert len(q2["items"]) == 1
+    assert q2["items"][0]["pin"] == "newsha"
+    assert q2["items"][0]["stars"] == 9
+    assert q2["items"][0]["queued_at"] == "2026-08-01"
 
 
 def test_daily_mine_cap_env(monkeypatch: pytest.MonkeyPatch):

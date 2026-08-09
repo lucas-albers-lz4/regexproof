@@ -184,10 +184,11 @@ def main(argv: list[str] | None = None) -> int:
             return 1
         return 0
 
-    if result.capped:
-        ledger.setdefault("run", {})["capped"] = True
-    if result.errors:
-        ledger.setdefault("run", {})["search_errors"] = list(result.errors)
+    run_meta: dict[str, Any] = {
+        "capped": bool(result.capped),
+        "search_errors": list(result.errors),
+    }
+    ledger["run"] = run_meta
     save_ledger(ledger_path, ledger)
     save_queue(queue_path, queue)
     if result.errors and not result.candidates and not accepted:

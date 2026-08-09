@@ -108,7 +108,11 @@ def enqueue(
     cap: int = DEFAULT_QUEUE_CAP,
     now: date | None = None,
 ) -> str:
-    """Append *item* FIFO. Returns ``enqueued``, ``duplicate``, or ``full``."""
+    """Append *item* FIFO. Returns ``enqueued``, ``duplicate``, or ``full``.
+
+    On duplicate URL, refresh pin/stars/pushed_date/source_query from *item*
+    while keeping the original queue position and ``queued_at``.
+    """
     from regexproof.mine.exclusions import normalize_repo_url
 
     url = item.get("url")
@@ -117,6 +121,9 @@ def enqueue(
         for existing in queue["items"]:
             eu = existing.get("url")
             if eu and normalize_repo_url(str(eu)) == target:
+                for key in ("pin", "stars", "pushed_date", "source_query", "default_branch", "capped"):
+                    if key in item:
+                        existing[key] = item[key]
                 return "duplicate"
     if len(queue["items"]) >= cap:
         return "full"
