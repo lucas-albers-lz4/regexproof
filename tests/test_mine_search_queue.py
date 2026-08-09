@@ -78,6 +78,11 @@ def test_queue_fifo_cap_and_ttl(tmp_path: Path):
     full = {"schema_version": "1", "items": [{"url": f"https://github.com/x/{i}"} for i in range(100)]}
     assert enqueue(full, {"url": "https://github.com/x/overflow"}) is False
 
+    # Duplicate URL (scheme variant) rejected
+    q2 = {"schema_version": "1", "items": [{"url": "https://github.com/a/a"}]}
+    assert enqueue(q2, {"url": "http://github.com/a/a.git"}) is False
+    assert len(q2["items"]) == 1
+
 
 def test_daily_mine_cap_env(monkeypatch: pytest.MonkeyPatch):
     monkeypatch.setenv("DAILY_MINE_CAP", "3")

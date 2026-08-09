@@ -98,7 +98,16 @@ def enqueue(
     *,
     cap: int = DEFAULT_QUEUE_CAP,
 ) -> bool:
-    """Append *item* FIFO if under cap. Returns False if dropped."""
+    """Append *item* FIFO if under cap and URL not already queued. Returns False if dropped."""
+    from regexproof.mine.exclusions import normalize_repo_url
+
+    url = item.get("url")
+    if url:
+        target = normalize_repo_url(str(url))
+        for existing in queue["items"]:
+            eu = existing.get("url")
+            if eu and normalize_repo_url(str(eu)) == target:
+                return False
     if len(queue["items"]) >= cap:
         return False
     queue["items"].append(item)
