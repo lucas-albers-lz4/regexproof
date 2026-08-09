@@ -98,6 +98,16 @@ witnesses. Mirror the `call_kind` the code actually uses. See
 Negated `@rx` / selectors are **never** silent-positive. Per-dialect policy
 table: [`docs/NEGATION.md`](NEGATION.md) / `regexproof.batch.negation_policy`.
 
+## Java inventory → PCRE approximation (Wave 4 / #133)
+
+Java `Pattern.compile` sites are counted as dialect label `java` on the P1
+probe path (no `validate_dialect`). They are **not** a `DIALECTS` compiler
+entry in this wave. Graduation compiles the **encodable subset** as `pcre`
+via `helpers/pcre2`, with an explicit `java→pcre` approximation note (see
+[`sweep/corpus-wave4/java-features.md`](../sweep/corpus-wave4/java-features.md)).
+Unicode `\p{…}` and other non-A1B constructs reject — never silent widen
+([#103](https://github.com/lucas-albers-lz4/regexproof/issues/103)).
+
 ## Practical rules
 
 1. **Ask the question the code asks** (`call_kind` first).

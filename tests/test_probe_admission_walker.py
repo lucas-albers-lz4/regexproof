@@ -48,6 +48,21 @@ def test_ecma_noise_fixture_counts_two_real_literals():
     assert walked["dialect"].get("ecma") == 2
 
 
+def test_java_html_sanitizer_pin_recorded_in_spike():
+    from regexproof.admission.java_pin import (
+        JAVA_HTML_SANITIZER_PIN,
+        JAVA_HTML_SANITIZER_URL,
+    )
+
+    assert len(JAVA_HTML_SANITIZER_PIN) == 40
+    assert JAVA_HTML_SANITIZER_URL.endswith("java-html-sanitizer")
+    spike = (ROOT / "sweep" / "corpus-wave4" / "java-features.md").read_text(
+        encoding="utf-8"
+    )
+    assert JAVA_HTML_SANITIZER_PIN in spike
+    assert "pcre" in spike.lower()
+
+
 def test_java_fixture_twenty_two_sites_dialect_agnostic():
     root = FIXTURES / "java_sites"
     text_a = (root / "src/main/java/com/example/A.java").read_text()
