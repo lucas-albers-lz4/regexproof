@@ -212,3 +212,18 @@ Authoritative fractions: `properties/generated/cross_corpus_matrix.*` and
 `*_encodable_fraction.json`. Pre-wave
 `phase3_decision_matrix.*` / `gitleaks_residual_abc.json` /
 `gitleaks_remeasure_delta.json` are marked **superseded**.
+
+## Corpus Wave 2 (#94–#101, 2026-08-09)
+
+| Phase | PR | Headline |
+|---|---|---|
+| P1 pre-gate | #104 | yara/pcre2 helpers; 8-surface mirror-fidelity gate |
+| P2 YARA | #105 | schema v2 `domain` + YARA extractor; **0.6563 go** |
+| P3 semgrep | #106 | `pattern-regex` denom; **0.4941 go** (was 0.2842 / 9186) |
+| P4 testdata | #107 | budgets + `complete_run`; sample-scoped pcre2/re2/cpython/busybox |
+| P5 ecma/rule_diff | #108 | test262 sample **0.8095**; Coraza↔CRS cross-engine pilot |
+| P6 docs | (this) | TRAPS §29–§32; matrix rollup aligned to Wave-2 fractions |
+
+Authoritative rollup: `properties/generated/cross_corpus_matrix.*`.
+A1B residual AC close for ids_rules/CRS is tracked outside the wave (#103).
+Non-goals: no re-litigation of wave #81 TRAPS §28 / superseded stubs.

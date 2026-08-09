@@ -5,9 +5,11 @@ Pinned corpus: `semgrep/semgrep-rules` @ `40b8c63f` (existing
 
 ## Problem
 
-Current fraction **0.2842** (no-go) is a **denominator-precision artifact**:
+Pre-P3 fraction **0.2842** (no-go) was a **denominator-precision artifact**:
 generic `_YAML_REGEX` in `rule_file.py` matches YAML `pattern:` keys whose
 values are semgrep **code-pattern language** (`$X`, `...`), not regex.
+**Resolved in Wave-2 P3 (#106):** dedicated `extract_semgrep_yaml` →
+**0.4941 go** (707/1431); see `semgrep_rules_p3_drift.json` and TRAPS §30.
 
 Sampled reject levers (pre-fix inventory): `composite-pattern` ≈ 3247,
 `internal-anchor` ≈ 3113 — many are code-pattern sites miscounted as regex.

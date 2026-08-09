@@ -18,6 +18,10 @@ See [properties/generated/cross_corpus_matrix.md](../properties/generated/cross_
 | pcre2/re2/cpython/busybox samples | go | ≥0.53 |
 | rust_regex | inventory_only | — |
 
+> **Corpus Wave 2 (2026-08-09):** authoritative current fractions are in
+> `cross_corpus_matrix.*` (semgrep **0.4941 go**, yara **0.6563 go**,
+> test262 sample **0.8095**). The table above is the original wave-#51 snapshot.
+
 ## Gap closure (Phase 2–3)
 
 - Toolkit-fix vehicle #45 accepted: lazy strip, hex soundness (TRAPS #23),
