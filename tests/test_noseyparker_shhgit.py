@@ -85,22 +85,23 @@ def test_shhgit_deterministic():
 
 def test_shhgit_yaml_double_quote_unescape():
     """Double-quoted YAML escapes must match yaml.Unmarshal (\\\" → \")."""
-    src = '''
-signatures:
-  - part: 'contents'
-    regex: "(?i)artifactory.{0,50}(\\\\\\"|'|`)?[a-zA-Z0-9=]{112}(\\\\\\"|'|`)?"
-    name: 'Artifactory'
-'''
-    # The sample above is awkward in a Python string; use the real config line.
-    real = (ROOT / "batch" / "corpora" / "shhgit" / "repo" / "config.yaml")
-    if not real.is_file():
-        real = Path("/tmp/shhgit/config.yaml")
-    text = real.read_text(encoding="utf-8")
-    recs = extract_shhgit(text, repo="eth0izzle/shhgit", file="config.yaml")
-    art = next(r for r in recs if "artifactory" in r["pattern"])
-    # YAML \\\" → \" in the pattern (one backslash + quote), not \\"
+    # File bytes as in upstream config.yaml (double-quoted scalar with \\\").
+    src = (
+        "signatures:\n"
+        "  - part: 'contents'\n"
+        '    regex: "(?i)artifactory.{0,50}(\\\\\\"|\'|`)?[a-zA-Z0-9=]{112}'
+        '(\\\\\\"|\'|`)?"\n'
+        "    name: 'Artifactory'\n"
+    )
+    recs = extract_shhgit(src, repo="eth0izzle/shhgit", file="config.yaml")
+    assert len(recs) == 1
+    art = recs[0]
+    # YAML \\\" → \" in the pattern (one backslash + quote).
     assert '(\\"|\'|`)?' in art["pattern"]
     assert r'(\\\"' not in art["pattern"]
+    # Leading (?i) lifted into flags.
+    assert not art["pattern"].startswith("(?i")
+    assert "i" in art["flags"]
 
 
 def test_shhgit_all_parts_are_search():
