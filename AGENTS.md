@@ -167,7 +167,8 @@ in the harness output so a reader knows exactly what was proven.
 
 ## Related tooling
 
-- Daily corpus mine (GHA + ledger): [`docs/MINE-SETUP.md`](docs/MINE-SETUP.md)
+- Daily corpus mine (GHA + ledger, live): [`docs/MINE-SETUP.md`](docs/MINE-SETUP.md)
+  — `PROJECT_PAT` classic PAT with `repo`; ledger/queue commit-back to `main`
 
 ## Related skills (Hermes)
 
