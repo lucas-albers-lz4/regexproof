@@ -195,6 +195,7 @@ def test_audit_sampler_fail_requeues(tmp_path: Path):
                 "audit": {
                     "auto_filed": True,
                     "template_fired": "below-scale",
+                    "auto_filed_at": "2026-08-09T12:00:00Z",
                     "updated_at": "2026-08-09T12:00:00Z",
                 },
             }

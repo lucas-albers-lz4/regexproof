@@ -49,17 +49,30 @@ def mark_auto_filed(
     template_fired: str = "below-scale",
     clock: Clock | None = None,
 ) -> dict[str, Any]:
-    return ensure_candidate_audit(
-        ledger_path,
-        url,
-        updates={
+    now = (clock or default_clock)()
+    ts = now.strftime("%Y-%m-%dT%H:%M:%SZ")
+    # auto_filed_at is set once for week membership; updated_at may move later.
+    path = Path(ledger_path)
+    ledger = load_ledger(path)
+    cand = find_candidate(ledger, url)
+    if cand is None:
+        raise ValueError(f"candidate not in ledger: {url}")
+    audit = cand.setdefault("audit", {})
+    if not isinstance(audit, dict):
+        raise ValueError("candidate audit must be an object")
+    if not audit.get("auto_filed_at"):
+        audit["auto_filed_at"] = ts
+    audit.update(
+        {
             "auto_filed": True,
             "template_fired": template_fired,
             "needs_human_review": False,
             "re_evaluate": False,
-        },
-        clock=clock,
+            "updated_at": ts,
+        }
     )
+    save_ledger(path, ledger)
+    return cand
 
 
 def mark_needs_human_review(
@@ -109,7 +122,8 @@ def auto_filed_in_week(ledger: dict[str, Any], week: str) -> list[dict[str, Any]
         audit = c.get("audit") or {}
         if not audit.get("auto_filed"):
             continue
-        ts = str(audit.get("updated_at") or audit.get("auto_filed_at") or "")
+        # Prefer auto_filed_at so later audit updates do not move week membership.
+        ts = str(audit.get("auto_filed_at") or audit.get("updated_at") or "")
         if _in_iso_week(ts, year, w):
             out.append(c)
     return out
