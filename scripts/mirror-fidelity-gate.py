@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
-"""Corpus-wave mirror-fidelity gate (Wave 2 + Wave 3 P1 surfaces).
+"""Corpus-wave mirror-fidelity gate (Wave 2 + Wave 3 surfaces).
 
 1. Fail-closed surface probes for ALL 8 Wave-2 surfaces (fixtures under
    ``sweep/corpus-wave2/fixtures/``). Absent fixture → gate fail.
 2. YARA byte-level replay (temp-file + ``yara``) with UTF-16LE / NUL probes;
    a deliberately-wrong ``wide`` mirror must be caught.
-3. Wave-3 P1: 5 of 9 surfaces under ``sweep/corpus-wave3/fixtures/`` with
+3. Wave-3: 8 of 9 surfaces under ``sweep/corpus-wave3/fixtures/`` with
    per-corpus REQUIRED-INPUT assertions (no synthetic fallback for W3).
+   P1: spamassassin/noseyparker/shhgit/perl_re/go_regexp;
+   P4: dompurify/isemail/email_addresses (mjsunit deferred to P5).
    Deliberately-wrong ``(?x)`` mirror must be caught (``wrong_xflag_caught``).
 4. Legacy inventory differential fuzz (CRS / gitleaks) when helpers exist
    (Wave-2 path only; disabled under ``--wave3-only``).
@@ -19,6 +21,7 @@ Usage:
   python scripts/mirror-fidelity-gate.py --max-per-corpus 8 --runs 40
   python scripts/mirror-fidelity-gate.py --skip-inventory
 """
+
 
 from __future__ import annotations
 
@@ -60,7 +63,7 @@ WAVE2_SURFACES = (
     "rule_diff",
 )
 
-# Wave-3 P1: 5 of 9 (dompurify/isemail/email_addresses/mjsunit deferred to P4/P5).
+# Wave-3 P1: 5 of 9.
 WAVE3_SURFACES_P1 = (
     "spamassassin",
     "noseyparker",
@@ -69,7 +72,16 @@ WAVE3_SURFACES_P1 = (
     "go_regexp",
 )
 
-SURFACES = WAVE2_SURFACES + WAVE3_SURFACES_P1
+# Wave-3 P4: 3 ecma frontier surfaces (mjsunit deferred to P5).
+WAVE3_SURFACES_P4 = (
+    "dompurify",
+    "isemail",
+    "email_addresses",
+)
+
+WAVE3_SURFACES = WAVE3_SURFACES_P1 + WAVE3_SURFACES_P4
+
+SURFACES = WAVE2_SURFACES + WAVE3_SURFACES
 
 
 def _mirror_accepts(mirror, s: str) -> bool | None:
@@ -496,9 +508,9 @@ def _check_noseyparker_xflag_surface(fixture: Path) -> dict:
 def _run_surfaces(*, wave3_only: bool = False) -> tuple[dict[str, dict], bool]:
     reports: dict[str, dict] = {}
     all_ok = True
-    names = WAVE3_SURFACES_P1 if wave3_only else SURFACES
+    names = WAVE3_SURFACES if wave3_only else SURFACES
     for name in names:
-        if name in WAVE3_SURFACES_P1:
+        if name in WAVE3_SURFACES:
             fixture = FIXTURES_W3 / f"{name}.json"
         else:
             fixture = FIXTURES / f"{name}.json"
@@ -528,6 +540,9 @@ def _run_surfaces(*, wave3_only: bool = False) -> tuple[dict[str, dict], bool]:
                 "test262": ("ecma", "search"),
                 "shhgit": ("re2", "fullmatch"),
                 "go_regexp": ("re2", "fullmatch"),
+                "dompurify": ("ecma", "search"),
+                "isemail": ("ecma", "fullmatch"),
+                "email_addresses": ("ecma", "search"),
             }
             dialect, ck = dialect_map[name]
             rec = _check_dialect_surface(name, fixture, dialect=dialect, call_kind=ck)
@@ -550,7 +565,7 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument(
         "--wave3-only",
         action="store_true",
-        help="Run Wave-3 P1 surfaces only (no Wave-2 inventory fallback).",
+        help="Run Wave-3 surfaces only (no Wave-2 inventory fallback).",
     )
     ap.add_argument(
         "--disable-fallback",

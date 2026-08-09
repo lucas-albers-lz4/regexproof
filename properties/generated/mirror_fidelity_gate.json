@@ -61,6 +61,22 @@
       "status": "ok",
       "surface": "cpython"
     },
+    "dompurify": {
+      "dialect": "ecma",
+      "domain": "ascii",
+      "mismatches": [],
+      "probes": 6,
+      "status": "ok",
+      "surface": "dompurify"
+    },
+    "email_addresses": {
+      "dialect": "ecma",
+      "domain": "ascii",
+      "mismatches": [],
+      "probes": 5,
+      "status": "ok",
+      "surface": "email_addresses"
+    },
     "go_regexp": {
       "dialect": "re2",
       "domain": "ascii",
@@ -68,6 +84,14 @@
       "probes": 5,
       "status": "ok",
       "surface": "go_regexp"
+    },
+    "isemail": {
+      "dialect": "ecma",
+      "domain": "ascii",
+      "mismatches": [],
+      "probes": 6,
+      "status": "ok",
+      "surface": "isemail"
     },
     "noseyparker": {
       "dialect": "re2",

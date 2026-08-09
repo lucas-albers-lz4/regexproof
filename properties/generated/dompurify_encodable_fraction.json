@@ -1,0 +1,39 @@
+{
+  "budget": {
+    "max_disk_mb": 50,
+    "max_mem_mb": 512,
+    "max_patterns": 5000,
+    "max_wall_s": 300,
+    "redos_wall_s": 60
+  },
+  "budget_breaches": null,
+  "commit": "7392211bda80f9c1038db32fc090119685bfe425",
+  "compiler_fingerprint": "71d2ce23b4cd",
+  "complete_run": true,
+  "corpus_pin": "7392211bda80f9c1038db32fc090119685bfe425",
+  "decision": "go",
+  "decision_rule": "go iff encodable/sample_size >= 0.3",
+  "dialect": "ecma",
+  "encodable": 9,
+  "engine_versions": {
+    "python": "3.14.6",
+    "z3": "5.0.0"
+  },
+  "extractor_schema_version": "2",
+  "fraction": 0.5625,
+  "go_no_go_threshold": 0.3,
+  "id_formula": "v2-domain-optional-ascii-default",
+  "inventory_path": "properties/generated/dompurify-inventory.ndjson",
+  "path": "batch/corpora/dompurify/rules",
+  "pilot": "dompurify",
+  "reasons": {
+    "ok": 9,
+    "per-alternative-anchor": 1,
+    "stateful": 6
+  },
+  "sample_size": 16,
+  "schema_version": "1",
+  "scope": "full_corpus",
+  "unclassified_parse_errors": 0,
+  "wall_s": 1.067
+}

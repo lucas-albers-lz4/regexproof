@@ -22,6 +22,7 @@ SECURITY_TOOL_CORPORA = frozenset(
         "spamassassin",
         "noseyparker",
         "shhgit",
+        "dompurify",
     }
 )
 

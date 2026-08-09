@@ -1,0 +1,56 @@
+{
+  "schema_version": "1",
+  "corpus": "email_addresses",
+  "candidate_url": "https://github.com/jackbearheart/email-addresses",
+  "corpus_pin": "8e6be27770b7be223c2de035d7e52849f938c959",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-09",
+  "probe": {
+    "regex_sites": 4,
+    "regex_sites_per_file": {
+      "email-addresses.js": 4
+    },
+    "dialect": {
+      "ecma": 4
+    },
+    "flags": {
+      "g": 2
+    },
+    "predicted_buckets": {
+      "stateful": 2
+    }
+  },
+  "conditions": [
+    {
+      "id": "new-surface",
+      "met": false,
+      "evidence": "ecma dialect already covered by validatorjs; no novel flag/encoding surface."
+    },
+    {
+      "id": "security-boundary",
+      "met": false,
+      "evidence": "RFC5322 address parser, not a security tool (correctly NOT in SECURITY_TOOL_CORPORA)."
+    },
+    {
+      "id": "large-under-saturated",
+      "met": false,
+      "evidence": "4 sites < 1000 scale bar (plan 71 corrected: ABNF '/' in comments inflated the probe)."
+    }
+  ],
+  "escape_hatch_applied": false,
+  "rationale": "Wave-3 P4 measure (pin 8e6be27770b7): precise scan finds 4 whitespace-normalize regex literals in lib/email-addresses.js (minified twin skipped). Plan claim of 71 was false-positive comment grep. Admission NO-GO (0/3 conditions). Fraction 2/4 = 0.5000 still passes the sequential fraction gate — see sweep/corpus-wave3/ecma-frontier-nogo.md + umbrella #111.",
+  "related": {
+    "probe": "pinned clone jackbearheart/email-addresses @ 8e6be27770b7 (2026-08-09)",
+    "fraction": 0.5,
+    "encodable": 2,
+    "sample_size": 4,
+    "complete_run": true,
+    "fraction_artifact": "properties/generated/email_addresses_encodable_fraction.json",
+    "wave3_p4": true,
+    "count_correction": "plan 71 → measured 4",
+    "umbrella": 111,
+    "sweep": "sweep/corpus-wave3/ecma-frontier-nogo.md"
+  },
+  "fraction_decision": "go"
+}

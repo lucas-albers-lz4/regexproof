@@ -1,42 +1,61 @@
 {
- "schema_version": "1",
- "corpus": "dompurify",
- "candidate_url": "https://github.com/cure53/DOMPurify",
- "corpus_pin": null,
- "decision": "go",
- "decision_basis": "admission_conditions",
- "decision_date": "2026-08-09",
- "probe": {
-  "regex_sites": 146,
-  "dialect": {
-   "ecma": 146
+  "schema_version": "1",
+  "corpus": "dompurify",
+  "candidate_url": "https://github.com/cure53/DOMPurify",
+  "corpus_pin": "7392211bda80f9c1038db32fc090119685bfe425",
+  "decision": "go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-09",
+  "probe": {
+    "regex_sites": 16,
+    "regex_sites_per_file": {
+      "src/regexp.ts": 14,
+      "src/purify.ts": 2,
+      "src/attrs.ts": 0,
+      "src/tags.ts": 0,
+      "src/utils.ts": 0
+    },
+    "dialect": {
+      "ecma": 16
+    },
+    "flags": {
+      "g": 6,
+      "i": 7
+    },
+    "predicted_buckets": {
+      "stateful": 6,
+      "per-alternative-anchor": 1
+    }
   },
-  "flags": {},
-  "predicted_buckets": {
-   "lookaround": 6
-  }
- },
- "conditions": [
-  {
-   "id": "new-surface",
-   "met": false,
-   "evidence": "No novel dialect/flag/encoding surface."
+  "conditions": [
+    {
+      "id": "new-surface",
+      "met": false,
+      "evidence": "ecma dialect already covered by validatorjs/test262; seal() is extractor sugar, not a novel compiler surface."
+    },
+    {
+      "id": "security-boundary",
+      "met": true,
+      "evidence": "Security tool / sanitizer on trust boundaries (SECURITY_TOOL_CORPORA class)."
+    },
+    {
+      "id": "large-under-saturated",
+      "met": false,
+      "evidence": "16 sites < 1000 scale bar (plan ~146 corrected: attrs/tags/utils contribute 0 literals)."
+    }
+  ],
+  "escape_hatch_applied": false,
+  "rationale": "Wave-3 P4 measure (pin 7392211bda80): precise comment/string-aware scan finds 16 JS regex literals (14 in src/regexp.ts + 2 in src/purify.ts; attrs/tags/utils = 0). Plan ~146 was a false-positive grep over comments/URLs. XSS sanitizer boundary (IS_ALLOWED_URI / IS_SCRIPT_OR_DATA) — security-boundary met. Fraction 9/16 = 0.5625 GO.",
+  "related": {
+    "probe": "pinned clone cure53/DOMPurify @ 7392211bda80 (2026-08-09)",
+    "trial_run": true,
+    "fraction": 0.5625,
+    "encodable": 9,
+    "sample_size": 16,
+    "complete_run": true,
+    "fraction_artifact": "properties/generated/dompurify_encodable_fraction.json",
+    "wave3_p4": true,
+    "count_correction": "plan ~146 → measured 16"
   },
-  {
-   "id": "security-boundary",
-   "met": true,
-   "evidence": "Security tool / sanitizer on trust boundaries (SECURITY_TOOL_CORPORA class)."
-  },
-  {
-   "id": "large-under-saturated",
-   "met": false,
-   "evidence": "146 sites < 1000 scale bar."
-  }
- ],
- "escape_hatch_applied": false,
- "rationale": "Trial-run probe (2026-08-09, live clone): ~146 regex sites in src/purify.ts + src/regexp.ts (33 literals matched by narrow grep; plan count authoritative). XSS sanitizer boundary (IS_ALLOWED_URI / IS_SCRIPT_OR_DATA) is exactly the toolkit profile \u2014 security-boundary met. ecma dialect.",
- "related": {
-  "probe": "live clone cure53/DOMPurify (2026-08-09)",
-  "trial_run": true
- }
+  "fraction_decision": "go"
 }

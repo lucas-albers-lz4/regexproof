@@ -1,0 +1,8 @@
+{
+  "surface": "email_addresses",
+  "domain": "ascii",
+  "dialect": "ecma",
+  "pattern": "^\\s*",
+  "flags": "",
+  "probes": ["", "  abc", "abc", "\tabc", "a b"]
+}
