@@ -503,3 +503,118 @@ reject:   ^a|b , a(?:$|b)c , (?:^|a)  # still per-alternative-anchor
 
 Never silently remove A1B’s caret check — that is a false-UNSAT hazard
 (TRAPS §27). Mid-pattern / `$`-first alts remain out of both shapes (#103).
+
+## 34. Perl dialect frontier (`\K`, code assertions, POSIX, `\x{…}`)
+
+<!-- verified-finding: VF-PERL-FRONTIER-001 -->
+
+Perl is not “PCRE with a different helper.” Membership mirrors must route
+through the `perl` dialect + `helpers/perl/match.py`, never Python `re`.
+Construct classes diverge:
+
+| Construct | Correct handling |
+|---|---|
+| `\K` | strip candidate (membership-preserving) or named reject — never silent Lit |
+| `(?{…})` / `(?(?{…}))` / recursion | reject (`code-assertion` / related) |
+| POSIX `[[:alpha:]]` | map with helper GT **or** reject `[:` — never silent `{` |
+| `\x{…}` | lower to codepoint (same soundness as TRAPS #23) |
+| perl-vs-pcre edges | findings under declared perl domain, not measurement noise |
+
+**Minimal repro:**
+
+```text
+pattern:  a\Kb
+wrong:    compile as py_re / pcre without strip → wrong membership or Lit("\K")
+right:    perl dialect → strip \K (or reject) + replay via helpers/perl/match.py
+```
+
+See `sweep/corpus-wave3/perl-features.md` / Wave-3 P1–P2 (#112/#113).
+
+## 35. `(?x)` whitespace/comment strip (class-aware)
+
+<!-- verified-finding: VF-XFLAG-STRIP-001 -->
+
+`(?x)` is insignificant whitespace + `#`-to-EOL comments. Strip **before**
+flag lifting / lowering. `#` and spaces inside `[…]` stay literal. Residual
+`x` after strip must **reject** (`x-flag-unstripped`) — never silent
+literal-whitespace mirrors. Combined `(?xi)` / `(?sx)`: consume the group;
+body strips only while `x` is on. Interaction with `i`/`s`/`m` is flag
+folding after strip, not a reason to skip strip.
+
+**Minimal repro:**
+
+```text
+pattern:  (?x) a b   # comment
+          [ #]       # '#' inside class is literal
+wrong:    Re("a b") / leave x in flags → go-re2 parse-error or space Lit
+right:    strip → "ab" (+ class unchanged); residual x → reject
+probe:    "a b" must NOT match stripped mirror (wrong_xflag_caught)
+```
+
+See `sweep/corpus-wave3/xflag-semantics.md` / Wave-3 P3 (#114).
+
+## 36. Secret-detector pack (`pattern:` vs `regex:`)
+
+<!-- verified-finding: VF-SECRET-PACK-001 -->
+
+Nosey Parker YAML uses `pattern:`; shhgit uses `regex:`. Extractors must
+key off the right field — sharing a generic YAML regex scrape conflates
+detectors and under/over-counts. Filename-selection regexes are
+**boundary-adjacent** (path filters), not the secret-on-untrusted-input
+boundary; still inventory them, but do not treat them as the sole
+security-boundary justification.
+
+**Minimal repro:**
+
+```yaml
+# noseyparker rules/*.yml
+pattern: (?x) AKIA[0-9A-Z]{16}
+# shhgit config.yaml
+regex: AKIA[0-9A-Z]{16}
+wrong:  one extractor regex for both keys / skip filename rules silently
+right:  extract_noseyparker vs extract_shhgit; declare filename rules adjacent
+```
+
+See `sweep/corpus-wave3/noseyparker-dialect.md` / Wave-3 P3 (#114).
+
+## 37. ECMA sanitizer / validator boundary (DOMPurify + email)
+
+<!-- verified-finding: VF-ECMA-SANITIZER-001 -->
+
+DOMPurify URI/script gates (`IS_ALLOWED_URI`, `IS_SCRIPT_OR_DATA`) are the
+security-boundary regex shapes — not every `/…/` in comments or docs.
+Email validators (isemail / email-addresses) often carry lookarounds;
+those rows go on the **reject-list** (typed reason), never silent
+approx. Plan site-count greps that ignore comments inflate denominators
+(wave-3 P4 corrected 146→16 / 121→5 / 71→4).
+
+**Minimal repro:**
+
+```text
+wrong:  comment/URL grep → ~146 “sites”; lookaround encoded as Re(…)
+right:  string-aware scan → 16 DOMPurify literals; lookaround → reject reason
+        fraction gate ≠ admission gate (isemail/email_addresses NO-GO admit)
+```
+
+See `sweep/corpus-wave3/ecma-frontier-nogo.md` / Wave-3 P4 (#115).
+
+## 38. Testdata full-suite vs sample (expected-file manifests)
+
+<!-- verified-finding: VF-TESTDATA-FULL-001 -->
+
+Wave-3 perl `t/re`, Go `regexp` tests, and V8 mjsunit are **full-suite**
+testdata (`complete_run=true`), not sample stand-ins. Expected-vs-actual
+file counts fail closed (wave-1 under-extraction lesson). Sample trees
+under `batch/corpora/*/sample/` are unit fixtures only — never write
+`complete_run=true` from them. Measure large suites under mem/wall budgets
+(+ guarded single-flight) so OOM/`parse-error` zeros stay honest.
+
+**Minimal repro:**
+
+```text
+manifest: expected_files=91, path=…/v8_mjsunit/rules (mjsunit pin)
+wrong:    measure sample/regexp.js → complete_run=true, fraction “green”
+right:    full tree file count == expected; budget breach → complete_run=false
+```
+
+See `sweep/corpus-wave3/testdata-p5.md` / Wave-3 P5 (#116); TRAPS §31.

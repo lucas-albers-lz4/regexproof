@@ -44,12 +44,14 @@
   }
  ],
  "escape_hatch_applied": false,
- "rationale": "Admission GO: security-boundary (secret/SAST rules) + large-under-saturated (9,186 sites) both met. Fraction no-go (0.2741 < 0.30) recorded in phase3_decision_matrix.json; the fraction gate is sequential and separate.",
+ "rationale": "Admission GO: security-boundary (secret/SAST rules) + large-under-saturated (historically counted 9,186 pattern: sites). Fraction gate: Wave-2 P3 pattern-regex denominator flipped live fraction to 0.4941 go (was 0.2741/0.2842 no-go — historical only; see TRAPS §30 + sweep/corpus-wave3/supersession.md).",
  "related": {
   "backfilled": true,
-  "source": "cross_corpus_matrix.json + phase3_decision_matrix.json",
-  "repo": "semgrep/semgrep-rules"
+  "source": "cross_corpus_matrix.json + wave2-p3 / #106",
+  "repo": "semgrep/semgrep-rules",
+  "fraction_owner": "wave2-p3",
+  "supersedes_fraction_claim": "0.2741 no-go"
  },
  "decision_basis": "admission_conditions",
- "fraction_decision": "no-go"
+ "fraction_decision": "go"
 }

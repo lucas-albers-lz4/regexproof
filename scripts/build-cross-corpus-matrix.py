@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build cross-corpus encodable-fraction matrix for Phase 1.
+"""Build cross-corpus encodable-fraction matrix for Phase 1 / wave rollups.
 
 Reads ``properties/generated/*_encodable_fraction.json`` and writes
 ``properties/generated/cross_corpus_matrix.json`` (+ markdown).
@@ -14,6 +14,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "properties" / "generated"
 
+# Stable rollup order: phase-1 pilots → wave-2 → wave-3 → sample testdata.
 CORPORA = [
     "gitleaks",
     "validatorjs",
@@ -22,12 +23,29 @@ CORPORA = [
     "detect-secrets",
     "ids_rules",
     "semgrep_rules",
+    "yara_rules",
+    # Wave-3 rule / library corpora
+    "spamassassin",
+    "noseyparker",
+    "shhgit",
+    "dompurify",
+    "isemail",
+    "email_addresses",
+    # Wave-3 full-suite testdata
+    "perl_tre",
+    "go_regexp_tests",
+    "v8_mjsunit",
+    # Sample / inventory
     "pcre2_testdata",
     "re2_testdata",
     "cpython_re",
     "busybox",
+    "test262",
     "rust_regex",
 ]
+
+WAVE = "corpus-wave3"
+NOTE = "Rollup after Corpus Wave 3 (#117)."
 
 
 def main() -> int:
@@ -47,6 +65,9 @@ def main() -> int:
                         "encodable": d.get("extracted"),
                         "sample_size": d.get("extracted"),
                         "unclassified_parse_errors": 0,
+                        "complete_run": d.get("complete_run"),
+                        "corpus_pin": d.get("corpus_pin"),
+                        "reasons": d.get("reasons") or {},
                     }
                 )
             continue
@@ -62,9 +83,15 @@ def main() -> int:
                 "unclassified_parse_errors": d.get("unclassified_parse_errors", 0),
                 "reasons": d.get("reasons"),
                 "corpus_pin": d.get("corpus_pin"),
+                "complete_run": d.get("complete_run"),
             }
         )
-    report = {"schema_version": "1", "corpora": rows}
+    report = {
+        "schema_version": "1",
+        "wave": WAVE,
+        "note": NOTE,
+        "corpora": rows,
+    }
     OUT.mkdir(parents=True, exist_ok=True)
     (OUT / "cross_corpus_matrix.json").write_text(
         json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8"
@@ -72,16 +99,20 @@ def main() -> int:
     lines = [
         "# Cross-corpus encodable matrix",
         "",
-        "| Corpus | Decision | Fraction | Encodable | Size | parse-error |",
-        "|---|---|---|---|---|---|",
+        NOTE,
+        "",
+        "| Corpus | Decision | Fraction | Encodable | Size | scope | parse-error |",
+        "|---|---|---|---|---|---|---|",
     ]
     for r in rows:
         lines.append(
             f"| {r['corpus']} | {r.get('decision')} | {r.get('fraction')} | "
             f"{r.get('encodable')} | {r.get('sample_size')} | "
-            f"{r.get('unclassified_parse_errors')} |"
+            f"{r.get('scope')} | {r.get('unclassified_parse_errors')} |"
         )
-    (OUT / "cross_corpus_matrix.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
+    (OUT / "cross_corpus_matrix.md").write_text(
+        "\n".join(lines) + "\n", encoding="utf-8"
+    )
     print(f"wrote {len(rows)} rows → properties/generated/cross_corpus_matrix.json")
     return 0
 

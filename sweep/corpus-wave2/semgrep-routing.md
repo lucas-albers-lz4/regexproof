@@ -10,6 +10,8 @@ generic `_YAML_REGEX` in `rule_file.py` matches YAML `pattern:` keys whose
 values are semgrep **code-pattern language** (`$X`, `...`), not regex.
 **Resolved in Wave-2 P3 (#106):** dedicated `extract_semgrep_yaml` →
 **0.4941 go** (707/1431); see `semgrep_rules_p3_drift.json` and TRAPS §30.
+Wave-3 P6 (`sweep/corpus-wave3/supersession.md`) records this as the live
+fraction owner so phase-3 **0.2741** is never cited as current.
 
 Sampled reject levers (pre-fix inventory): `composite-pattern` ≈ 3247,
 `internal-anchor` ≈ 3113 — many are code-pattern sites miscounted as regex.

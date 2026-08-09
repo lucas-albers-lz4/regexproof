@@ -84,8 +84,10 @@ The `decision` field holds the **admission** outcome only: `go`, `no-go`, or
 `triage-trial`. It never holds the fraction-gate outcome. The fraction gate
 (>= 0.30 encodable) is sequential and separate — admission decides whether to
 extract, fraction decides whether the result is usable. When they disagree
-(for example semgrep: admission GO on conditions, fraction no-go at 0.2741),
-record `fraction_decision: no-go` in the artifact and keep `decision: go`.
+(for example historically semgrep: admission GO on conditions, fraction no-go
+at 0.2741 — **superseded**: Wave-2 P3 live fraction is **0.4941 go**; keep the
+split-field pattern, not the stale number),
+record `fraction_decision` separately and keep `decision` for admission only.
 
 Every `go` decision needs a defensible basis, enforced by schema
 cross-constraints:

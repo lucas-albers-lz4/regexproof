@@ -236,3 +236,20 @@ Non-goals: no re-litigation of wave #81 TRAPS §28 / superseded stubs.
 - Remeasure: ids_rules **0.8717** (AC ≥0.87 **pass**; paa 235→72);
   coreruleset **0.6908** (CRS mid-pattern paa residual documented).
 - TRAPS §33; delta `caret_in_x_remeasure_delta.*`.
+
+## Corpus Wave 3 (#111–#117, 2026-08-09)
+
+| Phase | PR | Headline |
+|---|---|---|
+| P1 perl helper | #119 | `helpers/perl` + SpamAssassin/perl_re spikes |
+| P2 SpamAssassin | #122 | perl dialect; **0.7479 go** (442/591) |
+| P3 secret pack | #123 | Nosey Parker **0.7354** + shhgit **0.9263**; `(?x)` strip |
+| P4 ECMA frontier | #125 | DOMPurify **0.5625** admit-GO; isemail/email_addresses fraction-GO / admit-NO-GO |
+| P5 testdata | #127 | perl_tre **0.3541** / go_regexp_tests **0.7524** / v8_mjsunit **0.5383**; OOM-hardened measure |
+| P6 docs | (this) | TRAPS §34–§38; matrix + supersession aligned to Wave-3 fractions |
+
+Authoritative rollup: `properties/generated/cross_corpus_matrix.*`.
+Wave-3 measure fingerprints: `properties/generated/wave3_artifact_repro.sha256`
+(CI `batch_repro.sha256` remains the three-corpus gate).
+Ownership / supersession: `sweep/corpus-wave3/supersession.md`.
+Non-goals: no re-litigation of Wave-2 #85 / TRAPS §29–§32 ownership.

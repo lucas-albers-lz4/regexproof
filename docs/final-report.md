@@ -21,6 +21,12 @@ See [properties/generated/cross_corpus_matrix.md](../properties/generated/cross_
 > **Corpus Wave 2 (2026-08-09):** authoritative current fractions are in
 > `cross_corpus_matrix.*` (semgrep **0.4941 go**, yara **0.6563 go**,
 > test262 sample **0.8095**). The table above is the original wave-#51 snapshot.
+>
+> **Corpus Wave 3 (2026-08-09):** matrix rollup adds spamassassin **0.7479**,
+> noseyparker **0.7354**, shhgit **0.9263**, dompurify **0.5625**, isemail
+> **0.8000**, email_addresses **0.5000**, perl_tre **0.3541**,
+> go_regexp_tests **0.7524**, v8_mjsunit **0.5383**. See TRAPS §34–§38 and
+> `sweep/corpus-wave3/supersession.md`.
 
 ## Gap closure (Phase 2–3)
 
