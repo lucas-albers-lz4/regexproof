@@ -628,9 +628,18 @@ def measure_coreruleset_sample(
         payload, encoding="utf-8"
     )
     if as_primary:
-        (out_dir / "coreruleset_encodable_fraction.json").write_text(
-            payload, encoding="utf-8"
-        )
+        primary = out_dir / "coreruleset_encodable_fraction.json"
+        # Never clobber a committed/full-corpus primary when rules/ is absent
+        # (CI smoke without materializing CRS).
+        keep_full = False
+        if primary.is_file():
+            try:
+                prev = json.loads(primary.read_text(encoding="utf-8"))
+                keep_full = prev.get("scope") == "full_corpus"
+            except json.JSONDecodeError:
+                keep_full = False
+        if not keep_full:
+            primary.write_text(payload, encoding="utf-8")
     return report
 
 
@@ -756,6 +765,16 @@ def measure_coreruleset(out_dir: Path) -> dict[str, Any]:
             # Still emit sample artifact for CI smoke without depending on it for GO.
             measure_coreruleset_sample(out_dir, as_primary=False)
             return full
+        # rules/ missing: keep returning a committed full-corpus primary if present.
+        primary = out_dir / "coreruleset_encodable_fraction.json"
+        if primary.is_file():
+            try:
+                prev = json.loads(primary.read_text(encoding="utf-8"))
+            except json.JSONDecodeError:
+                prev = {}
+            if prev.get("scope") == "full_corpus":
+                measure_coreruleset_sample(out_dir, as_primary=False)
+                return prev
     return measure_coreruleset_sample(out_dir, as_primary=True)
 
 
