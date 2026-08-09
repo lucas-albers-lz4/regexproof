@@ -16,6 +16,7 @@ from __future__ import annotations
 import re
 from typing import Any
 
+from regexproof.compiler.normalize import normalize_inline_flags
 from regexproof.extractors.record import make_record
 
 _SIG_NAME = re.compile(r"^(\s*)-\s+part:\s*(.+?)\s*$")
@@ -73,11 +74,14 @@ def extract_shhgit(
             pat.startswith('"') and pat.endswith('"')
         ):
             pat = _unquote(pat) or pat
+        # FoldCase → always i; also lift leading (?i)/(?is)/… so regex_id
+        # matches the post-lift_inline pattern written to inventory.
+        pat, flags = normalize_inline_flags(pat, "i")
         snippet = f"part={cur_part}; name={cur_name}" if cur_part or cur_name else line.strip()
         rec = make_record(
             repo=repo,
             pattern=pat,
-            flags="i",
+            flags=flags,
             dialect=dialect,
             call_kind="search",
             file=file,
