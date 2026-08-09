@@ -156,3 +156,16 @@ class TestRegexIdDomain:
             site="r.yar:1:0",
         )
         assert len(rid) == 32
+
+    def test_compile_pattern_honors_wide_domain(self):
+        """_compile_all / compile_pattern must pass domain through to compile_yara."""
+        from regexproof.compiler import compile_pattern
+
+        ascii_cr = compile_pattern("abc", "", "yara", "search", domain="ascii")
+        wide_cr = compile_pattern("abc", "", "yara", "search", domain="wide")
+        assert ascii_cr.encodable and ascii_cr.declared_domain == "ascii"
+        assert wide_cr.encodable and wide_cr.declared_domain == "wide"
+        # Non-literal wide must reject, not silently ascii-compile.
+        wide_re = compile_pattern("a+", "", "yara", "search", domain="wide")
+        assert not wide_re.encodable
+        assert wide_re.unencodable_reason == "wide-non-literal"

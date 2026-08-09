@@ -12,14 +12,13 @@
   "decision_note": "1 unclassified parse-error rows \u2014 Phase 1 requires zero",
   "decision_rule": "go iff encodable/sample_size >= 0.3",
   "dialect": "yara",
-  "domains_note": "per-variant ascii/wide records; fraction aggregates both",
-  "encodable": 11662,
+  "encodable": 11534,
   "engine_versions": {
     "python": "3.14.6",
     "z3": "5.0.0"
   },
   "extractor_schema_version": "2",
-  "fraction": 0.6636,
+  "fraction": 0.6563,
   "go_no_go_threshold": 0.3,
   "id_formula": "v2-domain-optional-ascii-default",
   "inventory_path": "properties/generated/yara_rules-inventory.ndjson",
@@ -27,14 +26,15 @@
   "pilot": "yara_rules",
   "reasons": {
     "fullword-boundary": 5902,
-    "ok": 11662,
+    "ok": 11534,
     "parse-error": 1,
-    "pattern-too-long": 8,
-    "per-alternative-anchor": 1
+    "pattern-too-long": 6,
+    "per-alternative-anchor": 1,
+    "wide-non-literal": 130
   },
   "sample_size": 17574,
   "schema_version": "1",
   "scope": "full_corpus",
   "unclassified_parse_errors": 1,
-  "wall_s": 23.565
+  "wall_s": 17.964
 }

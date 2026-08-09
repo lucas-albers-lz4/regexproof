@@ -409,7 +409,13 @@ def _compile_all(
                 }
             )
             continue
-        cr = compile_pattern(pattern, flags, rec["dialect"], rec["call_kind"])
+        cr = compile_pattern(
+            pattern,
+            flags,
+            rec["dialect"],
+            rec["call_kind"],
+            domain=rec.get("domain") or "ascii",
+        )
         row = {
             **rec,
             "pattern": pattern,
