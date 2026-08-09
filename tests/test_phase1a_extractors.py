@@ -28,7 +28,14 @@ def test_go_regexp_fixture():
 
 
 def test_semgrep_pattern_regex_key():
+    from regexproof.extractors.semgrep_yaml import extract_semgrep_yaml
+
     src = (ROOT / "semgrep_yaml" / "sample_basic.yaml").read_text(encoding="utf-8")
-    recs = extract_rule_file(src, repo="fixture/sg", file="sample_basic.yaml", dialect="py_re")
-    assert any("select" in (r["pattern"] or "") for r in recs if r.get("pattern"))
-    assert any(r.get("unencodable_reason") == "composite-pattern" for r in recs)
+    recs = extract_semgrep_yaml(src, repo="fixture/sg", file="sample_basic.yaml", dialect="py_re")
+    patterns = [r["pattern"] for r in recs if r.get("pattern")]
+    assert any("select" in p for p in patterns)
+    assert any("multi" in p and "line" in p for p in patterns)
+    assert any("[A-Za-z0-9_]" in p for p in patterns)
+    assert not any("chat.completions" in (p or "") for p in patterns)
+    assert not any(p == "legacy" for p in patterns)
+    assert not any(r.get("unencodable_reason") == "composite-pattern" for r in recs)
