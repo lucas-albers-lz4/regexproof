@@ -1,0 +1,24 @@
+{
+  "coreruleset": {
+    "ac": "miss_residual",
+    "ac_target": 0.71,
+    "encodable": 239,
+    "fraction": 0.6908,
+    "paa": 9,
+    "prior_artifact_fraction": 0.6908,
+    "sample_size": 346
+  },
+  "crs_residual_note": "CRS paa=9 remain mid-pattern / leading (?:^|\u2026) / $-first alts \u2014 outside caret-in-X and A1B. Documented permanent (b) residual for #103; no mid-pattern lowering in this issue.",
+  "ids_rules": {
+    "ac": "pass",
+    "ac_target": 0.87,
+    "encodable": 7123,
+    "fraction": 0.8717,
+    "paa": 72,
+    "prior_artifact_fraction": 0.8519,
+    "sample_size": 8171
+  },
+  "issue": 103,
+  "schema_version": "1",
+  "shape": "caret_in_x"
+}

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from regexproof.compiler.base import CompileResult, Unencodable
+from regexproof.compiler.caret_in_x import try_compile_caret_in_x
 from regexproof.compiler.py_re import compile_py_re
 from regexproof.compiler.trailing_alt_dollar import try_compile_trailing_alt_dollar
 
@@ -71,6 +72,17 @@ def compile_pattern(
         )
 
     try:
+        # Caret-in-X is more specific than A1B; try it first (#103).
+        caret = try_compile_caret_in_x(
+            pattern,
+            flags,
+            dialect,
+            call_kind,
+            max_length=max_length,
+            compile_bare=compile_bare,
+        )
+        if caret is not None:
+            return caret
         special = try_compile_trailing_alt_dollar(
             pattern,
             flags,

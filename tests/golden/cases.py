@@ -232,6 +232,15 @@ for dialect in ("py_re", "ecma", "re2", "pcre"):
         expect_unencodable="per-alternative-anchor",
     )
 
+# --- caret-in-X ^X(?:R|$) (#103) ---
+_CARET_IN_X = [
+    (r"^0+(?:&|$)", "search", ["0", "00", "0&"], ["1", "x0"]),
+    (r"^[a-f0-9]{4}(?:&|$)", "search", ["abcd", "abcd&"], ["abc"]),
+]
+for dialect in ("py_re", "re2", "pcre"):
+    for pat, ck, acc, rej in _CARET_IN_X:
+        _add(dialect, pat, "", ck, acc, rej)
+
 
 def coverage_counts() -> dict[str, dict[str, int]]:
     counts: dict[str, dict[str, int]] = {}

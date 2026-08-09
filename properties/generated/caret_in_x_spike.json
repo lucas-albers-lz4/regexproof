@@ -1,0 +1,15 @@
+{
+  "a1b_refuses_caret": true,
+  "decision": "GO",
+  "diff_failures": [],
+  "estimated_lift": 162,
+  "ids_caret_candidates": 162,
+  "ids_caret_encodable": 162,
+  "ids_paa_total": 235,
+  "issue": 103,
+  "pilot": "caret_in_x",
+  "reject_ok": true,
+  "samples_checked": 20,
+  "schema_version": "1",
+  "toy_ok": true
+}
