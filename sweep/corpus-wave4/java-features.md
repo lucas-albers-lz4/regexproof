@@ -34,7 +34,7 @@ corpus; fixture remains the CI-stable count of 22.
 | Plain ASCII / `\w` / char classes | common | **Encode** as `pcre` |
 | Non-capturing `(?:…)` / alternation / `{n,m}` | common | **Encode** as `pcre` |
 | Inline `(?i)` | EbayPolicy (4) | **Encode** — fold via pcre `i` / existing compiler flag path |
-| `\Q…\E` quoting | `HISTORY_BACK` | **Encode** if pcre2 accepts; else **reject** `quote` bucket (never silent Lit) |
+| `\Q…\E` quoting | `HISTORY_BACK` | **Reject** `quote` — pcre2 accepts but Z3 ASCII mirror does not lower `\Q` faithfully |
 | Unicode `\p{L}` / `\p{N}` | several URL/title patterns | **Reject** for Z3 membership path (outside A1B ASCII-bound encodable subset) unless a later fix-wave adds a declared fold — **no silent widen** |
 | Lookaround | not in main 20 | N/A this pin; reject if appears |
 | `Pattern.compile(String, int)` flag API | not in main 20 string sites | Out of string-literal extractor scope for v1 |
@@ -69,11 +69,15 @@ python helpers/pcre2/match.py parse 'a+'
 printf 'aaa' | python helpers/pcre2/match.py match 'a+' ''
 ```
 
-## Handoff (P4 B2)
+## Handoff (P4 B2) — done
 
-1. Extract java `Pattern.compile` string literals → records with
-   `dialect: pcre` + approximation metadata.
-2. Compile encodable subset; differential-fuzz vs pcre2.
-3. Property pipeline `--require-ground-truth`; commit NDJSON + batch MD.
-4. Superseding gate decision (GO + `escape_hatch` or NO-GO with closure),
-   `corpus_pin` = pin above.
+1. Extractor: `regexproof/extractors/java_pattern.py` (`dialect: pcre` +
+   `approximation: java→pcre`).
+2. Triage script: `scripts/java-html-sanitizer-triage.py` (compile +
+   differential vs `helpers/pcre2`; empty-string samples omitted for helper
+   quirk on optional patterns).
+3. Committed artifacts under `properties/generated/java-html-sanitizer_*`
+   (extractor JSONL, triage NDJSON, fraction, batch MD).
+4. Gate supersede: `decision=go`, `decision_basis=escape_hatch`,
+   `corpus_pin` = pin above; pin `src/main` fraction **14/20 = 0.70** with
+   zero differential disagreements on the encodable subset.

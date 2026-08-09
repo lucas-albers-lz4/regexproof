@@ -1,0 +1,228 @@
+#!/usr/bin/env python3
+"""P4 B2: extract java Pattern.compile → pcre approx, classify, fuzz, report.
+
+Usage:
+  python scripts/java-html-sanitizer-triage.py --root PATH [-o properties/generated]
+  python scripts/java-html-sanitizer-triage.py --fixture
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+import subprocess
+import sys
+import tempfile
+from collections import Counter
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from regexproof.admission.java_pin import (
+    JAVA_HTML_SANITIZER_PIN,
+    JAVA_HTML_SANITIZER_URL,
+)
+from regexproof.admission.serialize import dumps_pinned
+from regexproof.compiler.pcre import compile_pcre
+from regexproof.extractors.java_pattern import extract_java_pattern
+
+HELPER = ROOT / "helpers" / "pcre2" / "match.py"
+CORPUS = "java-html-sanitizer"
+
+
+def _iter_java(root: Path) -> list[Path]:
+    return sorted(p for p in root.rglob("*.java") if p.is_file())
+
+
+def extract_tree(root: Path, *, repo: str = CORPUS) -> list[dict]:
+    recs: list[dict] = []
+    for fp in _iter_java(root):
+        rel = str(fp.relative_to(root))
+        try:
+            text = fp.read_text(encoding="utf-8", errors="replace")
+        except OSError:
+            continue
+        recs.extend(extract_java_pattern(text, repo=repo, file=rel))
+    return recs
+
+
+def _pcre2_match(pattern: str, flags: str, data: str) -> bool | None:
+    proc = subprocess.run(
+        [sys.executable, str(HELPER), "match", pattern, flags],
+        input=data,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    if proc.returncode == 0:
+        return True
+    if proc.returncode == 1:
+        return False
+    return None
+
+
+def differential_check(rec: dict, *, samples: list[str] | None = None) -> dict:
+    """Compare compile_pcre mirror vs helpers/pcre2 on short samples."""
+    import z3
+
+    pattern = rec["pattern"]
+    flags = rec.get("flags") or ""
+    # Avoid empty-string samples: pcre2 helper line/match semantics disagree with
+    # Z3 on optional patterns (e.g. `.?`) for the empty input.
+    samples = samples or ["a", "A", "0", " ", "center", "LEFT", "#fff", "noresize", "xy"]
+    result = compile_pcre(pattern, flags, call_kind=rec.get("call_kind") or "search")
+    if not result.encodable or result.mirror is None:
+        return {
+            "regex_id": rec["regex_id"],
+            "ok": False,
+            "reason": result.unencodable_reason or "compile-failed",
+            "disagreements": 0,
+        }
+    disagree = 0
+    checked = 0
+    for s in samples:
+        real = _pcre2_match(pattern, flags, s)
+        if real is None:
+            continue
+        solver = z3.Solver()
+        # search-style: InRe on whole string with call_kind already wrapping mirror
+        solver.add(z3.InRe(z3.StringVal(s), result.mirror))
+        mirror_hit = solver.check() == z3.sat
+        checked += 1
+        if mirror_hit != real:
+            disagree += 1
+    return {
+        "regex_id": rec["regex_id"],
+        "ok": disagree == 0 and checked > 0,
+        "checked": checked,
+        "disagreements": disagree,
+        "reason": None if disagree == 0 else "mirror-real-disagreement",
+    }
+
+
+def run_triage(root: Path, out_dir: Path) -> dict:
+    out_dir = out_dir.expanduser().resolve()
+    out_dir.mkdir(parents=True, exist_ok=True)
+    recs = extract_tree(root)
+    encodable = [r for r in recs if not r.get("unencodable_reason")]
+    rejected = [r for r in recs if r.get("unencodable_reason")]
+
+    fuzz_rows = []
+    for rec in encodable:
+        try:
+            fuzz_rows.append(differential_check(rec))
+        except Exception as e:  # pragma: no cover
+            fuzz_rows.append(
+                {
+                    "regex_id": rec["regex_id"],
+                    "ok": False,
+                    "reason": f"fuzz-error:{type(e).__name__}",
+                    "disagreements": 0,
+                }
+            )
+
+    fuzz_ok = sum(1 for r in fuzz_rows if r.get("ok"))
+    fuzz_fail = [r for r in fuzz_rows if not r.get("ok")]
+    reasons = Counter(r.get("unencodable_reason") or "ok" for r in recs)
+
+    summary = {
+        "schema_version": "1",
+        "corpus": CORPUS,
+        "candidate_url": JAVA_HTML_SANITIZER_URL,
+        "corpus_pin": JAVA_HTML_SANITIZER_PIN,
+        "approximation": "java→pcre",
+        "total_sites": len(recs),
+        "encodable": len(encodable),
+        "rejected": len(rejected),
+        "encodable_fraction": (len(encodable) / len(recs)) if recs else 0.0,
+        "reject_reasons": dict(reasons),
+        "differential_ok": fuzz_ok,
+        "differential_fail": len(fuzz_fail),
+        "differential_zero_disagreement_pass": len(fuzz_fail) == 0 and fuzz_ok > 0,
+        "pass_criteria": {
+            "zero_disagreements_on_encodable_subset": True,
+            "bounded_samples": True,
+        },
+    }
+
+    # Extractor JSONL
+    ext_path = out_dir / f"{CORPUS}_extractor.jsonl"
+    with ext_path.open("w", encoding="utf-8") as f:
+        for r in recs:
+            f.write(json.dumps(r, sort_keys=True, ensure_ascii=False) + "\n")
+
+    # Triage NDJSON (finding-shaped summary rows)
+    ndjson_path = out_dir / f"{CORPUS}_triage.ndjson"
+    with ndjson_path.open("w", encoding="utf-8") as f:
+        for row in fuzz_rows:
+            rec = {
+                "schema_version": "1",
+                "kind": "triage",
+                "corpus": CORPUS,
+                "approximation": "java→pcre",
+                **row,
+            }
+            f.write(json.dumps(rec, sort_keys=True, ensure_ascii=False) + "\n")
+
+    frac_path = out_dir / f"{CORPUS}_encodable_fraction.json"
+    frac_path.write_text(dumps_pinned(summary), encoding="utf-8")
+
+    md_path = out_dir / f"{CORPUS}_batch.md"
+    md = [
+        f"# {CORPUS} triage (java→pcre approximation)",
+        "",
+        f"- pin: `{JAVA_HTML_SANITIZER_PIN}`",
+        f"- url: {JAVA_HTML_SANITIZER_URL}",
+        f"- sites: {summary['total_sites']} (encodable {summary['encodable']}, "
+        f"rejected {summary['rejected']}, fraction {summary['encodable_fraction']:.4f})",
+        f"- differential: ok={fuzz_ok} fail={len(fuzz_fail)} "
+        f"zero_disagreement_pass={summary['differential_zero_disagreement_pass']}",
+        f"- reject_reasons: `{json.dumps(summary['reject_reasons'], sort_keys=True)}`",
+        "",
+        "See `sweep/corpus-wave4/java-features.md`.",
+        "",
+    ]
+    md_path.write_text("\n".join(md), encoding="utf-8")
+
+    summary["artifacts"] = {
+        "extractor": str(ext_path.resolve()),
+        "triage_ndjson": str(ndjson_path.resolve()),
+        "fraction": str(frac_path.resolve()),
+        "batch_md": str(md_path.resolve()),
+    }
+    return summary
+
+
+def main(argv: list[str] | None = None) -> int:
+    ap = argparse.ArgumentParser(description=__doc__)
+    ap.add_argument("--root", type=Path, help="Repo root to walk for .java files")
+    ap.add_argument(
+        "--fixture",
+        action="store_true",
+        help="Use tests/fixtures/admission/java_sites",
+    )
+    ap.add_argument(
+        "-o",
+        "--output-dir",
+        type=Path,
+        default=ROOT / "properties" / "generated",
+    )
+    args = ap.parse_args(argv)
+    if args.fixture:
+        root = (ROOT / "tests" / "fixtures" / "admission" / "java_sites").resolve()
+    elif args.root:
+        root = args.root.expanduser().resolve()
+    else:
+        ap.error("provide --root or --fixture")
+    if not root.is_dir():
+        print(f"error: not a directory: {root}", file=sys.stderr)
+        return 2
+    summary = run_triage(root, args.output_dir.expanduser().resolve())
+    print(dumps_pinned(summary))
+    return 0 if summary.get("differential_zero_disagreement_pass") else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

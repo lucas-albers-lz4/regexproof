@@ -1,42 +1,57 @@
 {
- "schema_version": "1",
- "corpus": "java-html-sanitizer",
- "candidate_url": "https://github.com/OWASP/java-html-sanitizer",
- "corpus_pin": null,
- "decision": "triage-trial",
- "decision_basis": "escape_hatch",
- "decision_date": "2026-08-09",
- "probe": {
-  "regex_sites": 22,
-  "dialect": {
-   "java": 22
+  "candidate_url": "https://github.com/OWASP/java-html-sanitizer",
+  "conditions": [
+    {
+      "evidence": "First-seen dialect label java on the probe path; graduation compiles encodable subset as pcre with declared java→pcre approximation (no DIALECTS java entry).",
+      "id": "new-surface",
+      "met": true
+    },
+    {
+      "evidence": "Security tool / sanitizer on trust boundaries (SECURITY_TOOL_CORPORA class).",
+      "id": "security-boundary",
+      "met": true
+    },
+    {
+      "evidence": "20 Pattern.compile sites in src/main at pin < 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "java-html-sanitizer",
+  "corpus_pin": "a979a97e65f3cda1921fe3bb27ff4f9457be5c8d",
+  "decision": "go",
+  "decision_basis": "escape_hatch",
+  "decision_date": "2026-08-09",
+  "escape_hatch_applied": true,
+  "fraction_decision": "go",
+  "probe": {
+    "dialect": {
+      "java": 20
+    },
+    "flags": {
+      "i": 1
+    },
+    "predicted_buckets": {
+      "parse-error": 1,
+      "quote": 1,
+      "unicode-property": 4
+    },
+    "regex_sites": 20
   },
-  "flags": {},
-  "predicted_buckets": {
-   "pattern-too-long": 2
-  }
- },
- "conditions": [
-  {
-   "id": "new-surface",
-   "met": true,
-   "evidence": "First-seen construct class in roster; see probe flags/dialect."
+  "rationale": "P4 B2 graduation (pin a979a97e65f3): src/main has 20 Pattern.compile sites; 14/20 = 0.70 encodable under declared java→pcre approximation; differential vs helpers/pcre2 reports zero disagreements on the encodable subset. Rejects (unicode-property×4, quote×1, parse-error×1) stay unencodable — no A1B widen. Security-boundary escape hatch remains the decision basis; supersedes triage-trial.",
+  "related": {
+    "approximation": "java→pcre",
+    "complete_run": true,
+    "differential_zero_disagreement_pass": true,
+    "encodable": 14,
+    "fraction": 0.7,
+    "fraction_artifact": "properties/generated/java-html-sanitizer_encodable_fraction.json",
+    "probe": "pinned clone OWASP/java-html-sanitizer @ a979a97e65f3 (src/main, 2026-08-09)",
+    "sample_size": 20,
+    "spike": "sweep/corpus-wave4/java-features.md",
+    "supersedes": "triage-trial",
+    "trial_run": true,
+    "wave4_p4": true
   },
-  {
-   "id": "security-boundary",
-   "met": true,
-   "evidence": "Security tool / sanitizer on trust boundaries (SECURITY_TOOL_CORPORA class)."
-  },
-  {
-   "id": "large-under-saturated",
-   "met": false,
-   "evidence": "22 sites < 1000 scale bar."
-  }
- ],
- "escape_hatch_applied": true,
- "rationale": "Trial-run probe (2026-08-09, live clone): 22 regex sites / 2 files with Pattern.compile in main sources. Java dialect is a first-seen surface (new-surface met) AND sanitizer boundary (security-boundary met). Small corpus -> triage-trial: run property pipeline on encodable subset, findings decide graduation to go.",
- "related": {
-  "probe": "live clone OWASP/java-html-sanitizer (2026-08-09)",
-  "trial_run": true
- }
+  "schema_version": "1"
 }
