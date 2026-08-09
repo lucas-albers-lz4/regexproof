@@ -210,22 +210,27 @@ def main(argv: list[str] | None = None) -> int:
         if args.output
         else default_output_path(str(decision["corpus"]), repo_root=ROOT)
     )
-    out.parent.mkdir(parents=True, exist_ok=True)
-    text = emit_decision_text(decision)
-    out.write_text(text, encoding="utf-8")
 
+    # Ledger first when requested so we never exit 0 with a written decision
+    # but a failed auto_filed / human_resolved sync.
     if ledger_path is not None:
         url = str(decision.get("candidate_url") or "")
-        if url:
-            try:
-                if args.auto:
-                    mark_auto_filed(ledger_path, url, template_fired="below-scale")
-                else:
-                    mark_human_resolved(
-                        ledger_path, url, decision=str(decision.get("decision"))
-                    )
-            except ValueError as e:
-                print(f"warning: ledger update skipped: {e}", file=sys.stderr)
+        if not url:
+            print("error: decision missing candidate_url for ledger update", file=sys.stderr)
+            return 1
+        try:
+            if args.auto:
+                mark_auto_filed(ledger_path, url, template_fired="below-scale")
+            else:
+                mark_human_resolved(
+                    ledger_path, url, decision=str(decision.get("decision"))
+                )
+        except ValueError as e:
+            print(f"error: ledger update failed: {e}", file=sys.stderr)
+            return 1
+
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(emit_decision_text(decision), encoding="utf-8")
 
     # Print absolute output path for runners / review dispatch.
     print(str(out))
