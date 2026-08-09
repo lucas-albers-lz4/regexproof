@@ -139,8 +139,10 @@ def mark_llm_template_fired(
     audit["template_fired"] = template_fired
     audit["template_fired_at"] = ts
     audit["updated_at"] = ts
-    # Explicit: LLM draft is not an auto-file.
-    audit.setdefault("auto_filed", False)
+    # Explicit: LLM draft is never an auto-file (C4), and clears prior review flags.
+    audit["auto_filed"] = False
+    audit["needs_human_review"] = False
+    audit.pop("human_review_reason", None)
     if model_call is not None:
         calls = audit.setdefault("model_calls", [])
         if not isinstance(calls, list):

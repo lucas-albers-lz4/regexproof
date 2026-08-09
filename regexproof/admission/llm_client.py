@@ -45,13 +45,21 @@ class GateClassifier(Protocol):
 
 
 def normalize_label(raw: str | None) -> str | None:
+    """Accept an exact template token (or a single trailing token after ':')."""
     if not raw:
         return None
-    label = str(raw).strip().lower().replace("_", "-")
-    # Accept "class: below-scale" style answers
-    for name in TEMPLATE_NAMES:
-        if name in label or label == name:
-            return name
+    text = str(raw).strip().lower().replace("_", "-")
+    if text in TEMPLATE_NAMES:
+        return text
+    # Allow "class: below-scale" / "label:below-scale" — exact token after colon.
+    if ":" in text:
+        token = text.rsplit(":", 1)[-1].strip().strip("`'\"")
+        if token in TEMPLATE_NAMES:
+            return token
+    # First whitespace-delimited token only (rejects "not-below-scale").
+    token = text.split()[0].strip("`'\",.") if text.split() else ""
+    if token in TEMPLATE_NAMES:
+        return token
     return None
 
 
