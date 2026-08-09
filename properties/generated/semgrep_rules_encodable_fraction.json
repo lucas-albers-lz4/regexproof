@@ -10,14 +10,12 @@
   "corpus_pin": "40b8c63f75dc7c22c8a77482d73bfb864b146f7e",
   "decision": "go",
   "decision_rule": "go iff encodable/sample_size >= 0.3",
-  "declared_semantics": "ascii_approx_rust_regex",
   "dialect": "py_re",
   "encodable": 707,
   "engine_versions": {
     "python": "3.14.6",
     "z3": "5.0.0"
   },
-  "extractor": "extract_semgrep_yaml",
   "fraction": 0.4941,
   "go_no_go_threshold": 0.3,
   "inventory_path": "properties/generated/semgrep_rules-inventory.ndjson",
@@ -38,7 +36,6 @@
   "sample_size": 1431,
   "schema_version": "1",
   "scope": "full_corpus",
-  "supersedes": "pre-P3 semgrep_rules_encodable_fraction.json (0.2842 / 9186; code-pattern denom)",
   "unclassified_parse_errors": 0,
-  "wall_s": 1.513
+  "wall_s": 0.787
 }
