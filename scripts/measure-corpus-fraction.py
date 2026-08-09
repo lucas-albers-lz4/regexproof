@@ -145,6 +145,18 @@ def measure(corpus: str, *, assert_determinism: bool = False) -> dict:
     if meta.get("measure_scope") == "sample":
         scope = "sample"
         complete_run = False
+        # Prefer explicit sample_path when declared sample scope.
+        sp = meta.get("sample_path")
+        if isinstance(sp, str):
+            sp = Path(sp)
+        if isinstance(sp, Path) and sp.exists():
+            meta["path"] = sp
+            path = sp
+        elif sample_path.exists() and path != sample_path:
+            # Keep configured path if it already points under sample/.
+            if "sample" not in path.parts:
+                meta["path"] = sample_path
+                path = sample_path
 
     if meta.get("corpus_type") == "inventory_only" or meta.get("extractor") == "rust_inventory":
         from regexproof.extractors.rust_inventory import write_rust_inventory
@@ -351,7 +363,13 @@ def main(argv: list[str] | None = None) -> int:
         return 2
     if report.get("budget_breaches"):
         return 1
-    if not report.get("complete_run", True):
+    # Declared sample scope may set complete_run=false without being a failure.
+    # Only fail incomplete runs that were unexpected fallbacks / breaches.
+    if (
+        not report.get("complete_run", True)
+        and report.get("scope") != "sample"
+        and not report.get("budget_breaches")
+    ):
         return 1
     return 0
 

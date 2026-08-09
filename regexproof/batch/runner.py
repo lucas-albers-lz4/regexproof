@@ -638,12 +638,18 @@ def run_corpus(
             f"HARD ERROR: {corpus} extraction produced 0 records — "
             f"empty glob must not fake zero-pattern success"
         )
-    compiled = _compile_all(
-        records,
-        lift_inline=bool(meta.get("lift_inline")),
-        corpus_slug=corpus,
-        budget=budget,
-    )
+    try:
+        compiled = _compile_all(
+            records,
+            lift_inline=bool(meta.get("lift_inline")),
+            corpus_slug=corpus,
+            budget=budget,
+        )
+    except BudgetBreached as exc:
+        raise SystemExit(
+            f"BUDGET BREACH ({corpus}): {exc.limit_name} "
+            f"limit={exc.limit} actual={exc.actual}"
+        ) from exc
 
     triage = triage_records_from_compiled(compiled)
     write_triage_ndjson(out_dir.parent / "triage" / f"{corpus}.ndjson", triage)
