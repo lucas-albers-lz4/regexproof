@@ -1,0 +1,33 @@
+{
+  "candidate_url": "file://fixtures/ecma_noise",
+  "corpus": "ecma_noise",
+  "corpus_pin": "fixture-pin",
+  "draft": true,
+  "fields_remaining": [
+    "decision",
+    "rationale",
+    "conditions[].met",
+    "conditions[].evidence",
+    "decision_basis",
+    "escape_hatch_applied",
+    "related",
+    "decision_date"
+  ],
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 2
+    },
+    "flags": {
+      "i": 1
+    },
+    "pin": "fixture-pin",
+    "predicted_buckets": {},
+    "regex_sites": 2,
+    "regex_sites_per_file": {
+      "sample.js": 2
+    },
+    "security_boundary": "unknown"
+  },
+  "schema_version": "1"
+}
