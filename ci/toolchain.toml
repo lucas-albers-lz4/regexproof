@@ -20,10 +20,14 @@ major = 22
 version = "1.22"
 
 [pcre2]
-# No CI job installs a system PCRE2 package today; dialect uses optional helper.
-# Assert records n/a rather than silently skipping.
-status = "n/a"
-reason = "optional helper; not installed in CI jobs"
+# Golden job installs pcre2-utils (Wave 2 mirror-fidelity surfaces).
+status = "required"
+helper = "pcre2grep"
+
+[yara]
+# Golden job installs yara (Wave 2 encoding-domain gate).
+status = "required"
+version_prefix = "4."
 
 [redos]
 # helpers/redos/package.json + requirements-redos.txt

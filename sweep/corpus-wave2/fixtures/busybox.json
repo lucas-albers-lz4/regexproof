@@ -1,0 +1,1 @@
+{"surface":"busybox","domain":"ascii","dialect":"pcre","pattern":"^[a-z]+$","flags":"","probes":["","abc","ABC","a1"]}

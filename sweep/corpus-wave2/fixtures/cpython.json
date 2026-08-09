@@ -1,0 +1,1 @@
+{"surface":"cpython","domain":"ascii","dialect":"py_re","pattern":"foo+","flags":"","probes":["","foo","fooo","fo","bar"]}

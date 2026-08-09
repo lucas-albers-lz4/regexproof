@@ -95,10 +95,34 @@ def assert_job(job: str, cfg: dict) -> list[str]:
         if not z3v.startswith(cfg["z3"]["version_prefix"]):
             errors.append(f"z3 {z3v} does not start with {cfg['z3']['version_prefix']}")
         pcre = cfg["pcre2"]
-        if pcre.get("status") != "n/a":
-            errors.append("pcre2 status must be n/a until CI installs it")
-        else:
+        if pcre.get("status") == "required":
+            try:
+                out = subprocess.check_output(
+                    ["pcre2grep", "--version"], text=True, shell=False
+                ).strip()
+            except (OSError, subprocess.CalledProcessError):
+                errors.append("pcre2grep required but not available")
+            else:
+                print(f"pcre2: ok ({out.splitlines()[0]})")
+        elif pcre.get("status") == "n/a":
             print(f"pcre2: n/a ({pcre.get('reason')})")
+        else:
+            errors.append(f"unknown pcre2.status {pcre.get('status')!r}")
+        yara_cfg = cfg.get("yara") or {}
+        if yara_cfg.get("status") == "required":
+            try:
+                out = subprocess.check_output(
+                    ["yara", "-v"], text=True, shell=False
+                ).strip()
+            except (OSError, subprocess.CalledProcessError):
+                errors.append("yara required but not available")
+            else:
+                prefix = yara_cfg.get("version_prefix") or ""
+                if prefix and not out.startswith(prefix) and prefix not in out:
+                    # yara -v prints "4.5.x" alone on some builds
+                    if not out.lstrip("v").startswith(prefix.rstrip(".")):
+                        errors.append(f"yara {out!r} missing prefix {prefix!r}")
+                print(f"yara: ok ({out})")
     elif job == "redos":
         if mm != py["redos"]:
             errors.append(f"python {mm} != redos pin {py['redos']}")
