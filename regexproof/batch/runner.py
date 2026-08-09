@@ -606,9 +606,12 @@ def run_corpus(
     path_usable = path.exists() and (path.is_file() or any(path.iterdir()))
     if not path_usable:
         if corpus in WAVE_CORPORA:
-            if isinstance(sample_path, Path) and sample_path.exists():
+            # Match measure-corpus-fraction.py: sample fallback only when
+            # measure_scope is explicitly "sample"; otherwise fail closed.
+            if meta.get("measure_scope") == "sample" and isinstance(
+                sample_path, Path
+            ) and sample_path.exists():
                 meta["path"] = sample_path
-                meta["measure_scope"] = "sample"
                 print(
                     f"NOTE: {corpus} full corpus path missing ({path}); "
                     f"using sample at {sample_path}",
@@ -616,8 +619,9 @@ def run_corpus(
                 )
             else:
                 raise SystemExit(
-                    f"HARD ERROR: {corpus} corpus path missing ({path}) "
-                    f"and no sample — cannot produce valid artifact"
+                    f"HARD ERROR: {corpus} corpus path missing/empty ({path}) "
+                    f"and measure_scope={meta.get('measure_scope')!r} "
+                    f"(sample fallback only when measure_scope='sample')"
                 )
         else:
             sample = ROOT / "batch" / "corpora" / corpus / "sample"
