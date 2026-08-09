@@ -29,7 +29,9 @@ from typing import Any, Iterator
 from regexproof.extractors.record import make_record
 
 # Operator string: "((?:!)?@rx) <pattern>" with \" escapes allowed inside.
-_RX_OP = re.compile(r'"((?:!)?@rx)\s+((?:\\.|[^"\\])*)"')
+# Safe escaped-string idiom ([^"\\]*(?:\\.[^"\\]*)*) — linear-time; the
+# naive (?:\\.|[^"\\])* alternation trips CodeQL py/redos.
+_RX_OP = re.compile(r'"((?:!)?@rx)\s+([^"\\]*(?:\\.[^"\\]*)*)"')
 # Variable-selector regexes: !REQUEST_COOKIES:/^_pk_ref/  (optional trailing flags)
 _RX_SELECTOR = re.compile(r'!(?:[A-Z_]+):(/(?:\\.|[^/"])*/[a-z]*|"[^"]*")')
 # Any operator name (for counting; @rx is handled separately).
