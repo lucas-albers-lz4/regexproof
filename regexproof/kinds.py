@@ -38,6 +38,7 @@ DIALECTS = frozenset(
         "re2",
         "pcre",
         "yara",
+        "perl",
     }
 )
 

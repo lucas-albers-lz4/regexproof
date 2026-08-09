@@ -1,0 +1,5 @@
+# POSIX class + \\K strip candidate + m{} delimiter
+body POSIX_ALPHA /[[:alpha:]]+/
+body K_RESET /foo\Kbar/
+body MBRACE m{[[:digit:]]+}
+uri URI_EXAMPLE /example\.com/

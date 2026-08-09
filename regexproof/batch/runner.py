@@ -45,6 +45,7 @@ from regexproof.extractors.modsec import count_operators, extract_modsec  # noqa
 from regexproof.extractors.pcre2_testdata import extract_pcre2_testdata  # noqa: E402
 from regexproof.extractors.python_ast import extract_python  # noqa: E402
 from regexproof.extractors.rule_file import extract_rule_file  # noqa: E402
+from regexproof.extractors.spamassassin import extract_spamassassin  # noqa: E402
 from regexproof.extractors.yara import extract_yara  # noqa: E402
 from regexproof.redos.join import join_findings  # noqa: E402
 
@@ -249,12 +250,31 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "measure_scope": "sample",
         "budget": {"max_patterns": 20000, "max_wall_s": 900, "max_mem_mb": 1024, "max_disk_mb": 200},
     },
+    "spamassassin": {
+        "corpus_type": "rule_corpus",
+        "path": ROOT / "batch" / "corpora" / "spamassassin" / "rules",
+        "glob": "**/*.cf",
+        "dialect": "perl",
+        "extractor": "spamassassin",
+        "repo": "apache/spamassassin",
+        "security_tool": True,
+        "lift_inline": True,
+        "corpus_pin": "17e7842caa629d032589458f86d2f5ce8e7306a4",
+        "commit": "17e7842caa629d032589458f86d2f5ce8e7306a4",
+        "budget": {
+            "max_patterns": 5000,
+            "max_wall_s": 600,
+            "redos_wall_s": 120,
+            "max_mem_mb": 1024,
+            "max_disk_mb": 100,
+        },
+    },
 }
 
 WAVE_CORPORA = frozenset({
     "trufflehog", "ids_rules", "semgrep_rules",
     "pcre2_testdata", "re2_testdata", "cpython_re", "busybox",
-    "yara_rules", "test262",
+    "yara_rules", "test262", "spamassassin",
 })
 
 
@@ -462,6 +482,15 @@ def _extract(corpus: str, meta: dict[str, Any]) -> list[dict[str, Any]]:
             meta,
             glob=meta.get("glob") or "**/*.yar,**/*.yara",
             extract_fn=lambda src, rel: extract_yara(
+                src, repo=meta["repo"], file=rel
+            ),
+        )
+    if meta["extractor"] == "spamassassin":
+        return _extract_glob(
+            path,
+            meta,
+            glob=meta.get("glob") or "**/*.cf",
+            extract_fn=lambda src, rel: extract_spamassassin(
                 src, repo=meta["repo"], file=rel
             ),
         )

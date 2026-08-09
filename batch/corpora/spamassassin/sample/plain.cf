@@ -1,0 +1,5 @@
+# Plain + case-insensitive + trailing |$
+body PLAIN_TOKEN /viagra/
+body CASE_INSENS /offer/i
+body TRAILING_ALT /(?:spam|ham|$)/
+header SUBJECT_SPAM Subject =~ /free\s+money/i

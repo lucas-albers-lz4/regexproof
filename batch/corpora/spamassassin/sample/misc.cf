@@ -1,0 +1,7 @@
+# Continuations, rawbody, skipped eval
+rawbody RAW_HTML /<script/i
+body MULTI_LINE /alpha\
+beta/
+body EVAL_SKIP eval:check_for_foo()
+score PLAIN_TOKEN 1.0
+describe PLAIN_TOKEN plain body token
