@@ -112,13 +112,19 @@ def _load_triage_mod():
 def test_triage_skips_src_test_trees(tmp_path: Path):
     main = tmp_path / "src" / "main" / "java" / "A.java"
     test = tmp_path / "src" / "test" / "java" / "B.java"
+    testing = tmp_path / "src" / "testing" / "java" / "C.java"
     main.parent.mkdir(parents=True)
     test.parent.mkdir(parents=True)
+    testing.parent.mkdir(parents=True)
     main.write_text('Pattern.compile("abc");\n', encoding="utf-8")
     test.write_text('Pattern.compile("xyz");\n', encoding="utf-8")
+    testing.write_text('Pattern.compile("keep");\n', encoding="utf-8")
     mod = _load_triage_mod()
     paths = [p.relative_to(tmp_path).as_posix() for p in mod._iter_java(tmp_path)]
-    assert paths == ["src/main/java/A.java"]
+    assert paths == [
+        "src/main/java/A.java",
+        "src/testing/java/C.java",
+    ]
 
 
 def test_classify_encodable_requires_compile():

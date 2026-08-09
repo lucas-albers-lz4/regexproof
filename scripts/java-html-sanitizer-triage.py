@@ -53,17 +53,6 @@ _SKIP_DIR_NAMES = frozenset(
         "fixtures",
     }
 )
-# Graduation surface is production sources; exclude common Java test layouts.
-_SKIP_PATH_PARTS = frozenset(
-    {
-        "src/test",
-        "src/tests",
-        "src/it",
-        "src/integration-test",
-    }
-)
-
-
 def _iter_java(root: Path) -> list[Path]:
     out: list[Path] = []
     root = root.resolve()
@@ -74,12 +63,17 @@ def _iter_java(root: Path) -> list[Path]:
         # Only skip dirs *under* root (ancestors like …/tests/fixtures must not apply).
         if any(part in _SKIP_DIR_NAMES for part in rel_path.parts):
             continue
-        rel = rel_path.as_posix()
-        if any(seg in rel for seg in _SKIP_PATH_PARTS):
+        # Segment-aware Maven/layout skips (avoid substring false positives like
+        # ``src/testing`` matching ``src/test`` or ``src/items`` matching ``src/it``).
+        parts = rel_path.parts
+        if (
+            len(parts) >= 2
+            and parts[0] == "src"
+            and parts[1] in {"test", "tests", "it", "integration-test"}
+        ):
             continue
         # Top-level test/ trees (non-Maven layouts).
-        top = rel_path.parts[0] if rel_path.parts else ""
-        if top in {"test", "tests"}:
+        if parts and parts[0] in {"test", "tests"}:
             continue
         out.append(p)
     return out
