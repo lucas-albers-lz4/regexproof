@@ -128,3 +128,27 @@ def compile_pattern(
             pattern=pattern,
             declared_domain=domain,
         )
+    except (OverflowError, MemoryError, RecursionError):
+        # Huge quantifiers / nested reps in testdata must not abort measure.
+        return CompileResult(
+            mirror=None,
+            unencodable_reason="pattern-too-large",
+            dialect=dialect,
+            call_kind=call_kind,
+            flags=flags,
+            pattern=pattern,
+            declared_domain=domain,
+        )
+    except ValueError as exc:
+        # subprocess argv cannot embed NUL (perl helper / similar).
+        msg = str(exc).lower()
+        reason = "embedded-nul" if "null" in msg else "value-error"
+        return CompileResult(
+            mirror=None,
+            unencodable_reason=reason,
+            dialect=dialect,
+            call_kind=call_kind,
+            flags=flags,
+            pattern=pattern,
+            declared_domain=domain,
+        )

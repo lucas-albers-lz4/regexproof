@@ -307,6 +307,16 @@ def measure(corpus: str, *, assert_determinism: bool = False) -> dict:
         },
         "path": str(path.relative_to(ROOT)) if path.is_relative_to(ROOT) else str(path),
     }
+    # Expected-vs-actual file gate stats (Wave-3 P5 testdata / test262-style).
+    extract_stats = meta.get("_extract_stats") or {}
+    if extract_stats:
+        report["expected_files"] = extract_stats.get("expected_files")
+        report["files_seen"] = extract_stats.get("files_seen")
+        report["files_ok"] = extract_stats.get("files_ok")
+        if extract_stats.get("per_file_records") is not None:
+            report["per_file_records"] = extract_stats["per_file_records"]
+    elif meta.get("expected_files") is not None:
+        report["expected_files"] = meta["expected_files"]
     if unclassified:
         report["decision_note"] = (
             f"{unclassified} unclassified parse-error rows — Phase 1 requires zero"

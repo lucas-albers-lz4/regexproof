@@ -41,10 +41,18 @@ from regexproof.extractors.cpython_re_tests import (  # noqa: E402
 )
 from regexproof.extractors.re2_testdata import extract_re2_testdata  # noqa: E402
 from regexproof.extractors.go_regexp import extract_go_regexp  # noqa: E402
+from regexproof.extractors.go_regexp_tests import (  # noqa: E402
+    extract_go_regexp_tests,
+    extract_go_regexp_tests_tree,
+)
 from regexproof.extractors.ids_rules import extract_ids_rules  # noqa: E402
 from regexproof.extractors.js_babel import extract_js  # noqa: E402
 from regexproof.extractors.modsec import count_operators, extract_modsec  # noqa: E402
 from regexproof.extractors.pcre2_testdata import extract_pcre2_testdata  # noqa: E402
+from regexproof.extractors.perl_re_tests import (  # noqa: E402
+    extract_perl_re_file,
+    extract_perl_re_tree,
+)
 from regexproof.extractors.python_ast import extract_python  # noqa: E402
 from regexproof.extractors.rule_file import extract_rule_file  # noqa: E402
 from regexproof.extractors.dompurify import extract_dompurify  # noqa: E402
@@ -53,6 +61,10 @@ from regexproof.extractors.isemail import extract_isemail  # noqa: E402
 from regexproof.extractors.noseyparker import extract_noseyparker  # noqa: E402
 from regexproof.extractors.shhgit import extract_shhgit  # noqa: E402
 from regexproof.extractors.spamassassin import extract_spamassassin  # noqa: E402
+from regexproof.extractors.v8_mjsunit import (  # noqa: E402
+    extract_v8_mjsunit,
+    extract_v8_mjsunit_tree,
+)
 from regexproof.extractors.yara import extract_yara  # noqa: E402
 from regexproof.redos.join import join_findings  # noqa: E402
 
@@ -392,6 +404,73 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
             "max_disk_mb": 50,
         },
     },
+    # Wave-3 P5 testdata corpora (#116) — exempt from admission gate_decision.
+    "perl_tre": {
+        "corpus_type": "testdata",
+        # Materialize: ln -sfn /tmp/perl5/t/re batch/corpora/perl_tre/rules
+        "path": ROOT / "batch" / "corpora" / "perl_tre" / "rules",
+        "full_path": ROOT / "batch" / "corpora" / "perl_tre" / "rules",
+        "sample_path": ROOT / "batch" / "corpora" / "perl_tre" / "sample",
+        "glob": "*.t,re_tests",
+        "dialect": "perl",
+        "extractor": "perl_re_tests",
+        "repo": "Perl/perl5",
+        "security_tool": False,
+        "lift_inline": False,
+        "corpus_pin": "6aef1e87c1ea274e225828cbc1a6044b54feec44",
+        "commit": "6aef1e87c1ea274e225828cbc1a6044b54feec44",
+        "expected_files": 81,
+        "budget": {
+            "max_patterns": 20000,
+            "max_wall_s": 1200,
+            "max_mem_mb": 1024,
+            "max_disk_mb": 100,
+        },
+    },
+    "go_regexp_tests": {
+        "corpus_type": "testdata",
+        # Materialize: ln -sfn /tmp/golang-go/src/regexp batch/corpora/go_regexp_tests/rules
+        "path": ROOT / "batch" / "corpora" / "go_regexp_tests" / "rules",
+        "full_path": ROOT / "batch" / "corpora" / "go_regexp_tests" / "rules",
+        "sample_path": ROOT / "batch" / "corpora" / "go_regexp_tests" / "sample",
+        "glob": "**/*_test.go",
+        "dialect": "re2",
+        "extractor": "go_regexp_tests",
+        "repo": "golang/go",
+        "security_tool": False,
+        "lift_inline": False,
+        "corpus_pin": "e5ec1263ca5e1428d233206b99dc21c38ea2a124",
+        "commit": "e5ec1263ca5e1428d233206b99dc21c38ea2a124",
+        "expected_files": 9,
+        "budget": {
+            "max_patterns": 10000,
+            "max_wall_s": 600,
+            "max_mem_mb": 1024,
+            "max_disk_mb": 100,
+        },
+    },
+    "v8_mjsunit": {
+        "corpus_type": "testdata",
+        # Materialize: ln -sfn /tmp/v8/test/mjsunit batch/corpora/v8_mjsunit/rules
+        "path": ROOT / "batch" / "corpora" / "v8_mjsunit" / "rules",
+        "full_path": ROOT / "batch" / "corpora" / "v8_mjsunit" / "rules",
+        "sample_path": ROOT / "batch" / "corpora" / "v8_mjsunit" / "sample",
+        "glob": "**/regexp*.js",
+        "dialect": "ecma",
+        "extractor": "v8_mjsunit",
+        "repo": "v8/v8",
+        "security_tool": False,
+        "lift_inline": False,
+        "corpus_pin": "15ce9d47586c47d1e44c9ddc49366cf4edc509a2",
+        "commit": "15ce9d47586c47d1e44c9ddc49366cf4edc509a2",
+        "expected_files": 91,
+        "budget": {
+            "max_patterns": 20000,
+            "max_wall_s": 900,
+            "max_mem_mb": 1024,
+            "max_disk_mb": 200,
+        },
+    },
 }
 
 WAVE_CORPORA = frozenset({
@@ -400,6 +479,7 @@ WAVE_CORPORA = frozenset({
     "yara_rules", "test262", "spamassassin",
     "noseyparker", "shhgit",
     "dompurify", "isemail", "email_addresses",
+    "perl_tre", "go_regexp_tests", "v8_mjsunit",
 })
 
 
@@ -427,13 +507,54 @@ def _check_budget_patterns(
 
 
 def _check_budget_mem() -> int:
-    """Return current process RSS in MB (best-effort)."""
+    """Return *current* process RSS in MB (best-effort).
+
+    Prefer ``/proc/self/status`` VmRSS on Linux so growth is visible during a
+    long compile. ``ru_maxrss`` is peak-only and still used as fallback.
+    """
+    try:
+        with open("/proc/self/status", encoding="utf-8") as fh:
+            for line in fh:
+                if line.startswith("VmRSS:"):
+                    # VmRSS is kB.
+                    return int(line.split()[1]) // 1024
+    except Exception:  # noqa: BLE001
+        pass
     try:
         import resource
+
         usage = resource.getrusage(resource.RUSAGE_SELF)
-        return int(usage.ru_maxrss / 1024)
+        # Linux: ru_maxrss is kB; macOS: bytes. Detect via /proc existence.
+        raw = int(usage.ru_maxrss)
+        if Path("/proc/self/status").exists():
+            return raw // 1024
+        return raw // (1024 * 1024)
     except Exception:  # noqa: BLE001
         return 0
+
+
+def _apply_address_space_cap(budget: dict[str, Any]) -> None:
+    """Hard OS cap so a runaway Z3 compile cannot OOM-kill the desktop.
+
+    Uses ``RLIMIT_AS`` at 2× ``max_mem_mb`` (bytes). Soft MemoryError /
+    allocation failure then surfaces before the kernel OOM killer.
+    """
+    max_mb = budget.get("max_mem_mb")
+    if not max_mb:
+        return
+    try:
+        import resource
+
+        # 2× budget: leave headroom for allocator arenas; still far below
+        # the ~30GiB OOM kills observed on v8_mjsunit measure runs.
+        cap = int(max_mb) * 2 * 1024 * 1024
+        soft, hard = resource.getrlimit(resource.RLIMIT_AS)
+        # Only tighten; never raise an existing stricter cap.
+        new_soft = cap if soft == resource.RLIM_INFINITY else min(soft, cap)
+        new_hard = cap if hard == resource.RLIM_INFINITY else min(hard, cap)
+        resource.setrlimit(resource.RLIMIT_AS, (new_soft, new_hard))
+    except Exception:  # noqa: BLE001
+        return
 
 
 def _validate_expected_roots(corpus: str, meta: dict[str, Any]) -> None:
@@ -689,6 +810,83 @@ def _extract(corpus: str, meta: dict[str, Any]) -> list[dict[str, Any]]:
                 src, repo=meta["repo"], file=rel
             ),
         )
+    if meta["extractor"] == "perl_re_tests":
+        if not path.exists():
+            raise FileNotFoundError(f"perl_tre root missing: {path}")
+        if path.is_dir() and meta.get("measure_scope") != "sample":
+            expected = meta.get("expected_files")
+            recs, stats = extract_perl_re_tree(
+                path,
+                repo=meta["repo"],
+                expected_files=expected,
+                dialect=meta["dialect"],
+            )
+            meta["_extract_stats"] = stats
+            if expected is not None and not stats["files_ok"]:
+                raise SystemExit(
+                    f"HARD ERROR: perl_tre expected {expected} files, "
+                    f"saw {stats['files_seen']}"
+                )
+            return recs
+        return _extract_glob(
+            path,
+            meta,
+            glob=meta.get("glob") or "*.t,re_tests",
+            extract_fn=lambda src, rel: extract_perl_re_file(
+                src, repo=meta["repo"], file=rel, dialect=meta["dialect"]
+            ),
+        )
+    if meta["extractor"] == "go_regexp_tests":
+        if not path.exists():
+            raise FileNotFoundError(f"go_regexp_tests root missing: {path}")
+        if path.is_dir() and meta.get("measure_scope") != "sample":
+            expected = meta.get("expected_files")
+            recs, stats = extract_go_regexp_tests_tree(
+                path,
+                repo=meta["repo"],
+                expected_files=expected,
+                dialect=meta["dialect"],
+            )
+            meta["_extract_stats"] = stats
+            if expected is not None and not stats["files_ok"]:
+                raise SystemExit(
+                    f"HARD ERROR: go_regexp_tests expected {expected} files, "
+                    f"saw {stats['files_seen']}"
+                )
+            return recs
+        return _extract_glob(
+            path,
+            meta,
+            glob=meta.get("glob") or "**/*_test.go",
+            extract_fn=lambda src, rel: extract_go_regexp_tests(
+                src, repo=meta["repo"], file=rel, dialect=meta["dialect"]
+            ),
+        )
+    if meta["extractor"] == "v8_mjsunit":
+        if not path.exists():
+            raise FileNotFoundError(f"v8_mjsunit root missing: {path}")
+        if path.is_dir() and meta.get("measure_scope") != "sample":
+            expected = meta.get("expected_files")
+            recs, stats = extract_v8_mjsunit_tree(
+                path,
+                repo=meta["repo"],
+                expected_files=expected,
+            )
+            meta["_extract_stats"] = stats
+            if expected is not None and not stats["files_ok"]:
+                raise SystemExit(
+                    f"HARD ERROR: v8_mjsunit expected {expected} files, "
+                    f"saw {stats['files_seen']}"
+                )
+            return recs
+        return _extract_glob(
+            path,
+            meta,
+            glob=meta.get("glob") or "**/regexp*.js",
+            extract_fn=lambda src, rel: extract_v8_mjsunit(
+                src, repo=meta["repo"], file=rel
+            ),
+        )
     raise ValueError(meta["extractor"])
 
 
@@ -761,6 +959,8 @@ def _compile_all(
     max_mem = budget.get("max_mem_mb")
     # wall_t0 may be set before extraction so max_wall_s covers extract+compile.
     t0 = wall_t0 if wall_t0 is not None else time.monotonic()
+    if max_mem:
+        _apply_address_space_cap(budget)
     out = []
     for rec in records:
         pattern = rec["pattern"]
@@ -791,13 +991,21 @@ def _compile_all(
                 }
             )
             continue
-        cr = compile_pattern(
-            pattern,
-            flags,
-            rec["dialect"],
-            rec["call_kind"],
-            domain=rec.get("domain") or "ascii",
-        )
+        try:
+            cr = compile_pattern(
+                pattern,
+                flags,
+                rec["dialect"],
+                rec["call_kind"],
+                domain=rec.get("domain") or "ascii",
+            )
+        except MemoryError as exc:
+            raise BudgetBreached(
+                corpus_slug,
+                "max_mem_mb",
+                max_mem or 0,
+                _check_budget_mem(),
+            ) from exc
         row = {
             **rec,
             "pattern": pattern,

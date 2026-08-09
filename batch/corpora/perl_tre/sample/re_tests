@@ -1,0 +1,6 @@
+# Sample re_tests slice for local smoke (Wave-3 P5).
+__END__
+abc	abc	y	$&	abc
+ab*c	abc	y	$&	abc
+a[b-a]	-	c	-	-
+\d+	123	y	$&	123
