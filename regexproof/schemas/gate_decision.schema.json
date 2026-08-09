@@ -58,7 +58,7 @@
         },
         "predicted_buckets": {
           "type": "object",
-          "description": "Predicted reject-bucket overlap against the 17-bucket taxonomy.",
+          "description": "Predicted reject-bucket overlap using the probe prediction-vocabulary artifact (construct → bucket map; P1 task 0 / umbrella C5). Not equal to live inventory compile_reason cardinality (57+ distinct reasons at design-review). Historical 17/22/21 figures are stale snapshots.",
           "additionalProperties": { "type": "integer" }
         },
         "predicted_rejects_pct": {

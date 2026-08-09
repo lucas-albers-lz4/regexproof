@@ -1,7 +1,7 @@
 # Corpus Admission Gate — decide what NOT to scan, before it costs a phase
 
 **Status:** process spec (sweep/) · **Scope:** candidate-repo admission for all future corpus waves
-**Related:** wave-3 plan (#110) "Rejected with evidence" list · detect-secrets NO-GO (wave-2 precedent) · `phase3_decision_matrix.json` · 17-bucket reject taxonomy
+**Related:** wave-3 plan (#110) "Rejected with evidence" list · detect-secrets NO-GO (wave-2 precedent) · `phase3_decision_matrix.json` · probe prediction vocabulary (umbrella C5; not live inventory `compile_reason` cardinality)
 
 ## Objective
 
@@ -20,7 +20,7 @@ so plan reviews start with evidence instead of finding its absence in round-1 fo
 
 | Signal | Number | Implication |
 |---|---|---|
-| Reject-bucket taxonomy across all corpora | **17 distinct reasons**; top-5 = **90.2%** of 7,932 rejects | New corpora overwhelmingly re-hit known buckets |
+| Reject-bucket taxonomy across all corpora | Historical gate note cited **17** reasons (top-5 ≈ **90.2%** of then-7,932 rejects). Live inventories now have **57** distinct `compile_reason` values — probe predictions use a separate **prediction vocabulary** (C5), not inventory cardinality | New corpora overwhelmingly re-hit known buckets; do not treat 17/22/21 as live truth |
 | Last corpus to introduce a *novel* bucket | `ids_rules` (wave 1: unclosed-class, bad-range, m-flag) | Bucket-discovery yield ≈ zero after ~2 big corpora per dialect family |
 | Biggest corpus ever admitted | semgrep 9,186 patterns → **27.4% no-go** (composite-pattern structural) | Size alone is not value; fraction risk is predictable pre-extraction |
 | Best fix wave ever | gitleaks 221 patterns → A1B lowered **22.6% → 81.9%** | Small + security-boundary CAN pay off massively — the gate needs an escape hatch |
@@ -41,10 +41,12 @@ corpus artifacts. A probe is: clone/pin the repo → count and classify. Output 
    perl / rust-regex) and flag/construct surface: `(?x)` verbose, `(?i)`, `(?s)`, `(?m)`,
    `\K`, `\g{`, POSIX classes, lookarounds, backrefs, wide/ascii encoding domains.
    A surface with zero prior corpus coverage is the strongest admission signal there is.
-3. **Bucket-overlap prediction** — map the observed constructs onto the existing 17-bucket
-   reject taxonomy. If ≥80% of predicted rejects land in buckets already owned by other
-   corpora (composite-pattern, internal-anchor, pattern-too-long, lookaround, m-flag,
-   unclosed-class), the corpus adds regression coverage, not discovery.
+3. **Bucket-overlap prediction** — map the observed constructs onto the probe
+   **prediction vocabulary** (machine-readable construct → bucket map; see mine-and-approve
+   umbrella C5 / P1 task 0). Do not assume vocabulary size equals live inventory
+   `compile_reason` cardinality. If ≥80% of predicted rejects land in buckets already owned
+   by other corpora (composite-pattern, internal-anchor, pattern-too-long, lookaround,
+   m-flag, unclosed-class), the corpus adds regression coverage, not discovery.
 4. **Security-boundary classification** — is this a security tool / sanitizer / validator
    whose patterns sit on trust boundaries (secret detectors, XSS sanitizers, IP/username/
    email gates)? If yes, it gets the findings-triage trial regardless of scale (escape hatch).
@@ -65,6 +67,12 @@ patterns, no novel surface, no findings pipeline. The wave-3 "rejected with evid
 (django 12, wtforms 2, secretlint 5, url-regex 2 — "below batch scale; a python validators
 pack would need 10+ repos to matter") is the first instance of this rule applied by hand;
 the gate makes it a lookup.
+
+**Mine-and-approve auto-NO-GO bar (pipeline, not a fourth admission condition):** when the
+probe's immutable `security_boundary` is `deterministic-false` and `regex_sites < 200`,
+the author script may auto-file a schema-valid `no-go` (umbrella C4). `unknown` and
+`deterministic-true` never auto-file. The ≥1000 bar remains only for condition 3
+(large-under-saturated).
 
 ## Escape hatch (mandatory, not optional)
 
