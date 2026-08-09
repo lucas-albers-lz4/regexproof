@@ -4,9 +4,9 @@ const pattern = process.argv[2] ?? "";
 const flags = process.argv[3] ?? "";
 let re;
 try {
-  // codeql[js/regex-injection] — pattern/flags are operator-supplied CLI args
-  // to this ground-truth replay harness (differential fuzzing); not an
-  // untrusted-input boundary.
+  // pattern/flags are operator-supplied CLI args to this ground-truth replay
+  // harness (differential fuzzing); not an untrusted-input boundary.
+  // codeql[js/regex-injection]
   re = new RegExp(pattern, flags);
 } catch (e) {
   console.error(e);
