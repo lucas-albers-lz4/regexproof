@@ -149,14 +149,17 @@ def measure(corpus: str, *, assert_determinism: bool = False) -> dict:
         sp = meta.get("sample_path")
         if isinstance(sp, str):
             sp = Path(sp)
+        if not isinstance(sp, Path):
+            sp = sample_path if isinstance(sample_path, Path) else None
         if isinstance(sp, Path) and sp.exists():
-            meta["path"] = sp
-            path = sp
-        elif sample_path.exists() and path != sample_path:
-            # Keep configured path if it already points under sample/.
-            if "sample" not in path.parts:
-                meta["path"] = sample_path
-                path = sample_path
+            if "sample" not in path.parts and path != sp:
+                meta["path"] = sp
+                path = sp
+        else:
+            raise SystemExit(
+                f"HARD ERROR: {corpus} measure_scope=sample but sample path "
+                f"missing ({sp})"
+            )
 
     if meta.get("corpus_type") == "inventory_only" or meta.get("extractor") == "rust_inventory":
         from regexproof.extractors.rust_inventory import write_rust_inventory
