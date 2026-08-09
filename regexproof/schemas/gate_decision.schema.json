@@ -23,6 +23,16 @@
       "enum": ["go", "no-go", "triage-trial"],
       "description": "go: full pipeline. no-go: rejected with evidence. triage-trial: security-boundary escape hatch — property pipeline on encodable subset, findings decide."
     },
+    "decision_basis": {
+      "type": "string",
+      "enum": ["admission_conditions", "grandfathered", "escape_hatch"],
+      "description": "Why the decision holds. admission_conditions: at least one of the three conditions is met. grandfathered: pre-gate corpus already admitted and running. escape_hatch: security-boundary triage trial. Required when decision=go with zero conditions met."
+    },
+    "fraction_decision": {
+      "type": ["string", "null"],
+      "enum": [null, "go", "no-go"],
+      "description": "Post-extraction encodable-fraction outcome (>= 0.30 gate), when it differs from the admission decision. The fraction gate is sequential and separate: admission decides whether to extract, fraction decides whether the result is usable. Recorded here for convenience; the authoritative fraction artifact is <corpus>_encodable_fraction.json / phase3_decision_matrix.json."
+    },
     "decision_date": { "type": "string", "format": "date" },
     "probe": {
       "type": "object",
@@ -86,5 +96,60 @@
       "additionalProperties": true,
       "description": "Cross-refs: prior no-go candidates, nearest admitted corpus in the same dialect (name + fraction), sweep/ docs."
     }
-  }
+  },
+  "allOf": [
+    {
+      "description": "decision=go requires a defensible basis: at least one condition met, or an explicit grandfathered/escape-hatch basis.",
+      "if": {
+        "properties": {
+          "decision": { "const": "go" },
+          "conditions": {
+            "not": {
+              "contains": { "properties": { "met": { "const": true } } }
+            }
+          }
+        },
+        "required": ["decision", "conditions"]
+      },
+      "then": {
+        "properties": {
+          "decision_basis": {
+            "enum": ["grandfathered", "escape_hatch"]
+          }
+        },
+        "required": ["decision_basis"]
+      }
+    },
+    {
+      "description": "decision=no-go with any admission condition met is a contradiction: per the plan, any-one-passes => GO. The fraction gate outcome belongs in fraction_decision, never in decision.",
+      "not": {
+        "properties": {
+          "decision": { "const": "no-go" },
+          "conditions": {
+            "contains": { "properties": { "met": { "const": true } } }
+          }
+        },
+        "required": ["decision", "conditions"]
+      }
+    },
+    {
+      "description": "A fresh (non-grandfathered) probe must carry real evidence: at least one regex site.",
+      "if": {
+        "properties": {
+          "decision_basis": {
+            "not": { "const": "grandfathered" }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "probe": {
+            "properties": {
+              "regex_sites": { "minimum": 1 }
+            }
+          }
+        }
+      }
+    }
+  ]
 }

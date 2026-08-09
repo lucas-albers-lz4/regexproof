@@ -40,10 +40,11 @@
   }
  ],
  "escape_hatch_applied": false,
- "rationale": "Fraction 0.7689 meets the 0.30 gate; 163/212 encodable, unclassified_parse_errors=0.",
+ "rationale": "Grandfathered: pre-gate corpus already admitted and running in CI; fraction 0.7689 (163/212) passes the >=0.30 fraction gate. 0/3 admission conditions met because the corpus predates the gate.",
  "related": {
   "backfilled": true,
   "source": "cross_corpus_matrix.json + phase3_decision_matrix.json",
   "repo": "validatorjs/validator.js"
- }
+ },
+ "decision_basis": "grandfathered"
 }

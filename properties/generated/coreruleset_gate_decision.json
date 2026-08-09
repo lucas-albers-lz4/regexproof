@@ -44,5 +44,6 @@
   "backfilled": true,
   "source": "cross_corpus_matrix.json + phase3_decision_matrix.json",
   "repo": "coreruleset/coreruleset"
- }
+ },
+ "decision_basis": "admission_conditions"
 }

@@ -34,6 +34,13 @@ def _fingerprint(out_dir: Path) -> dict[str, str]:
 
 def _run_batch(out_dir: Path) -> None:
     out_dir.mkdir(parents=True, exist_ok=True)
+    # Admission gate: batch runs require committed decision artifacts for rule
+    # corpora. The reproducibility check exercises extraction determinism, not
+    # admission, so copy the committed decisions into the sandbox out_dir
+    # (same pattern as tests/test_batch.py::test_batch_runner_smoke).
+    committed = ROOT / "properties" / "generated"
+    for path in committed.glob("*_gate_decision.json"):
+        (out_dir / path.name).write_bytes(path.read_bytes())
     proc = subprocess.run(
         [
             sys.executable,

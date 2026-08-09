@@ -114,8 +114,82 @@ def test_schema_invalid_decision_is_a_violation(tmp_path):
 
 
 def test_triage_trial_passes(tmp_path):
-    _write(tmp_path, "gitleaks", _decision("triage-trial"))
+    _write(tmp_path, "gitleaks", _decision("triage-trial", decision_basis="escape_hatch"))
     assert check_admission_gates(["gitleaks"], out_dir=tmp_path) == []
+
+
+def test_go_requires_basis_when_no_conditions_met(tmp_path):
+    """Schema cross-constraint: decision=go with 0/3 conditions met needs a basis."""
+    from jsonschema import ValidationError
+
+    schema = gate_decision_schema()
+    bad = _decision("go")  # all conditions met=False, no decision_basis
+    with pytest.raises(ValidationError):
+        __import__("jsonschema").validate(instance=bad, schema=schema)
+    # grandfathered basis makes it valid
+    good = _decision("go", decision_basis="grandfathered")
+    __import__("jsonschema").validate(instance=good, schema=schema)
+
+
+def test_no_go_with_conditions_met_is_invalid():
+    """decision=no-go while an admission condition is met is a contradiction."""
+    from jsonschema import ValidationError
+
+    schema = gate_decision_schema()
+    bad = _decision(
+        "no-go",
+        conditions=[
+            {"id": "new-surface", "met": False, "evidence": "x"},
+            {"id": "security-boundary", "met": True, "evidence": "x"},
+            {"id": "large-under-saturated", "met": False, "evidence": "x"},
+        ],
+    )
+    with pytest.raises(ValidationError):
+        __import__("jsonschema").validate(instance=bad, schema=schema)
+
+
+def test_probe_requires_regex_sites_for_fresh_decision():
+    """A non-grandfathered decision must carry at least one regex site."""
+    from jsonschema import ValidationError
+
+    schema = gate_decision_schema()
+    # decision=go via conditions, but probe.regex_sites=0 -> invalid
+    bad = _decision(
+        "go",
+        decision_basis="admission_conditions",
+        conditions=[
+            {"id": "new-surface", "met": False, "evidence": "x"},
+            {"id": "security-boundary", "met": True, "evidence": "x"},
+            {"id": "large-under-saturated", "met": False, "evidence": "x"},
+        ],
+        probe={
+            "regex_sites": 0,
+            "dialect": {"py": 10},
+            "flags": {},
+            "predicted_buckets": {},
+        },
+    )
+    with pytest.raises(ValidationError):
+        __import__("jsonschema").validate(instance=bad, schema=schema)
+    # grandfathered exempts the probe evidence minimum
+    good = _decision(
+        "go", decision_basis="grandfathered",
+        probe={
+            "regex_sites": 0,
+            "dialect": {"py": 10},
+            "flags": {},
+            "predicted_buckets": {},
+        },
+    )
+    __import__("jsonschema").validate(instance=good, schema=schema)
+
+
+def test_unreadable_decision_is_a_violation(tmp_path):
+    """The unreadable/JSONDecodeError branch is exercised (MCR finding m2)."""
+    (tmp_path / "gitleaks_gate_decision.json").write_text("{not json!!", encoding="utf-8")
+    violations = check_admission_gates(["gitleaks"], out_dir=tmp_path)
+    assert len(violations) == 1
+    assert "unreadable" in violations[0]
 
 
 def test_testdata_corpora_are_exempt(tmp_path):

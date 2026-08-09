@@ -76,16 +76,47 @@ explicit: *small + security-boundary beat large + same-dialect for bug discovery
 
 ## Decision artifact
 
-Per candidate, commit `properties/generated/<corpus>_gate_decision.json` (schema:
+Each candidate commits `properties/generated/<corpus>_gate_decision.json` (schema:
 `regexproof/schemas/gate_decision.schema.json`) BEFORE the plan-issue reaches review.
 One sweep/ line per candidate in the plan ("admission: GO — condition 1, perl `\K` first-seen").
+
+The `decision` field holds the **admission** outcome only: `go`, `no-go`, or
+`triage-trial`. It never holds the fraction-gate outcome. The fraction gate
+(>= 0.30 encodable) is sequential and separate — admission decides whether to
+extract, fraction decides whether the result is usable. When they disagree
+(for example semgrep: admission GO on conditions, fraction no-go at 0.2741),
+record `fraction_decision: no-go` in the artifact and keep `decision: go`.
+
+Every `go` decision needs a defensible basis, enforced by schema
+cross-constraints:
+
+- `decision: go` with zero conditions met requires `decision_basis:
+  grandfathered` (pre-gate corpus already admitted and running) or
+  `escape_hatch` (security-boundary triage trial).
+- `decision: no-go` while any admission condition is met is a schema
+  contradiction — per the plan, any-one-passes => GO. The fraction outcome
+  belongs in `fraction_decision`, never in `decision`.
+- A fresh (non-grandfathered) decision must carry real probe evidence:
+  `probe.regex_sites >= 1`. Grandfathered corpora are exempt (they predate
+  the probe).
+
+**Triage-trial lifecycle:** `triage-trial` is a security-boundary findings
+trial, not a terminal state. The corpus runs the property pipeline on its
+encodable subset; the findings decide the outcome. Graduation: when the trial
+produces verified findings, re-admit as `go` (new artifact, `decision_basis:
+escape_hatch`, supersedes the trial). Rejection: if the encodable subset is
+too small to prove anything, record `no-go` (new artifact) and close the
+trial. Record the outcome in the artifact's `related` field and one sweep/
+line — a triage-trial must never persist un-resolved into the next wave.
 
 **Grep-clean rule (concrete, per house style):** every candidate named in a wave plan's
 scope must have a `*_gate_decision.json` whose `decision` field is `go` / `no-go` /
 `triage-trial`; any candidate in a plan WITHOUT a committed decision artifact is a
 plan-writing error, caught by the same grep discipline as the fraction-artifact check
 (wave-3 P6 AC: "fraction values in `properties/generated/*_fraction.json` vs sweep decision
-docs; mismatch = fail").
+docs; mismatch = fail"). Note: the runtime gate enforces committed artifacts for
+`CORPUS_MANIFESTS` rule corpora (backfill-invariant test); wave-PLAN candidates are caught
+by this grep rule at review time, not by CI.
 
 ## NO-GO procedure (folded from wave-3 cross-cutting gate)
 

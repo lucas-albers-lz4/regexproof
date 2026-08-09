@@ -3,7 +3,7 @@
  "corpus": "semgrep_rules",
  "candidate_url": "https://github.com/semgrep/semgrep-rules",
  "corpus_pin": null,
- "decision": "no-go",
+ "decision": "go",
  "decision_date": "2026-08-09",
  "probe": {
   "regex_sites": 9186,
@@ -35,19 +35,21 @@
   {
    "id": "security-boundary",
    "met": true,
-   "evidence": "Security-tool corpus on trust boundaries."
+   "evidence": "Secret/SAST rule corpus; SECURITY_TOOL_CORPORA member."
   },
   {
    "id": "large-under-saturated",
    "met": true,
-   "evidence": "9186 sites."
+   "evidence": "9186 regex sites; nearest security corpus fraction ids_rules 0.8519."
   }
  ],
  "escape_hatch_applied": false,
- "rationale": "Fraction 0.2842 below the 0.30 gate (phase3_decision_matrix.json); primary residual is engine-limit (composite-pattern / internal-anchor). Re-admit only via a widened accept class, not a threshold change.",
+ "rationale": "Admission GO: security-boundary (secret/SAST rules) + large-under-saturated (9,186 sites) both met. Fraction no-go (0.2741 < 0.30) recorded in phase3_decision_matrix.json; the fraction gate is sequential and separate.",
  "related": {
   "backfilled": true,
   "source": "cross_corpus_matrix.json + phase3_decision_matrix.json",
   "repo": "semgrep/semgrep-rules"
- }
+ },
+ "decision_basis": "admission_conditions",
+ "fraction_decision": "no-go"
 }
