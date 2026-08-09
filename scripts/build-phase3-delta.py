@@ -257,8 +257,32 @@ def delta_table() -> dict:
     return report
 
 
+def _is_superseded(path: Path) -> bool:
+    if not path.is_file():
+        return False
+    try:
+        return bool(json.loads(path.read_text(encoding="utf-8")).get("superseded"))
+    except json.JSONDecodeError:
+        return False
+
+
 def main() -> int:
     OUT.mkdir(parents=True, exist_ok=True)
+    # Wave #81 / P5: phase-3 decision artifacts are historical. Do not clobber
+    # SUPERSEDED stubs or the hand-maintained phase3_decision_matrix.md.
+    guarded = [
+        OUT / "gitleaks_residual_abc.json",
+        OUT / "phase3_decision_matrix.json",
+        OUT / "phase3_decision_matrix.md",
+    ]
+    if any(_is_superseded(p) if p.suffix == ".json" else p.is_file() for p in guarded):
+        print(
+            "NOTE: phase3 decision artifacts are superseded "
+            "(see cross_corpus_matrix.md / *_encodable_fraction.json). "
+            "Refusing to overwrite — clear superseded=true to force regen.",
+            file=sys.stderr,
+        )
+        return 0
     g = gitleaks_residual()
     h = hermes_delta()
     d = delta_table()
