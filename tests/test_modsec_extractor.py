@@ -2,9 +2,15 @@
 
 from __future__ import annotations
 
+import itertools
+import random
+import re
+from pathlib import Path
+
 import jsonschema
 import pytest
 
+import regexproof.extractors.modsec as modsec
 from regexproof.extractors.modsec import count_operators, extract_modsec
 from regexproof.schemas import extractor_schema
 
@@ -120,3 +126,66 @@ def test_inline_crs_style_corpus():
     assert rx[2]["negated"] is True
     assert rx[2]["pattern"] == "(?i)charset.*?charset"
     assert [r for r in recs if r.get("selector")][0]["pattern"] == "^_pk_ref"
+
+
+def test_selector_escaped_slash_body_extracted():
+    """Selectors whose body escapes the delimiter keep extracting post-rewrite."""
+    src = 'SecRule ARGS "!REQUEST_COOKIES:/a\\/b/" "id:20"\n'
+    recs = _extract(src)
+    selectors = [r for r in recs if r.get("selector")]
+    assert len(selectors) == 1
+    assert selectors[0]["pattern"] == r"a\/b"
+
+
+def test_selector_trailing_backslash_parity():
+    """Parity: the pre-rewrite pattern admitted a lone backslash before the
+    closing delimiter (body "a\\" from /a\\/); the rewrite preserves that
+    language exactly via the trailing \\? — no silent extraction change."""
+    src = 'SecRule ARGS "!X:/a\\/" "id:21"\n'
+    recs = _extract(src)
+    selectors = [r for r in recs if r.get("selector")]
+    assert len(selectors) == 1
+    assert selectors[0]["pattern"] == "a\\"
+
+
+# Pre-rewrite _RX_SELECTOR (py/redos alert #7). The linear-time rewrite must
+# match this language exactly — see issue #141 for the differential evidence.
+# The vulnerable pattern lives in a fixture, not inline: an inline literal is
+# itself flagged by py/redos, and in-source codeql[...] suppression comments
+# are not honored by this repo's code scanning (alert #5 precedent). It runs
+# only on this file's short deterministic battery, never on untrusted input.
+_PRE_REWRITE_SELECTOR = re.compile(
+    (
+        Path(__file__).resolve().parent
+        / "fixtures"
+        / "modsec"
+        / "pre-rewrite-selector-regex.txt"
+    )
+    .read_text(encoding="utf-8")
+    .strip()
+)
+
+
+def _sig(rx: re.Pattern[str], s: str) -> list[tuple[tuple[int, int], str]]:
+    return [(m.span(), m.group(1)) for m in rx.finditer(s)]
+
+
+def test_selector_regex_language_parity_with_pre_rewrite():
+    """Equivalence gate: new _RX_SELECTOR ≡ pre-rewrite pattern (corpus + fuzz)."""
+    corpus = [
+        'SecRule ARGS "!REQUEST_COOKIES:/^_pk_ref/" "id:6,phase:1,pass"\n',
+        'SecRule ARGS "!REQUEST_COOKIES:/^pbjs-\\w+$/" "id:7"\n',
+        'SecRule ARGS "!REQUEST_COOKIES:FCCDCF" "id:8"\n',
+        'SecRule ARGS "!X:/a\\/b/i" "id:22"\n',
+        'SecRule ARGS "!X:"quoted"" "id:23"\n',
+    ]
+    rng = random.Random(42)
+    alpha = ["a", "b", "\\", "/", '"', "!", "X", ":", "i", "_", "^", "$", " ", "0"]
+    fuzz = ["".join(rng.choice(alpha) for _ in range(rng.randint(0, 14))) for _ in range(3000)]
+    for k in range(5):  # exhaustive short selector bodies over the dangerous chars
+        for tup in itertools.product(["a", "\\", "/"], repeat=k):
+            body = "".join(tup)
+            fuzz.append("!X:/" + body + "/")
+            fuzz.append("!X:/" + body)
+    for s in corpus + fuzz:
+        assert _sig(modsec._RX_SELECTOR, s) == _sig(_PRE_REWRITE_SELECTOR, s), s

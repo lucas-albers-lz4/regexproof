@@ -24,7 +24,8 @@ from __future__ import annotations
 
 import re
 from collections import Counter
-from typing import Any, Iterator
+from collections.abc import Iterator
+from typing import Any
 
 from regexproof.extractors.record import make_record
 
@@ -33,7 +34,12 @@ from regexproof.extractors.record import make_record
 # naive (?:\\.|[^"\\])* alternation trips CodeQL py/redos.
 _RX_OP = re.compile(r'"((?:!)?@rx)\s+([^"\\]*(?:\\.[^"\\]*)*)"')
 # Variable-selector regexes: !REQUEST_COOKIES:/^_pk_ref/  (optional trailing flags)
-_RX_SELECTOR = re.compile(r'!(?:[A-Z_]+):(/(?:\\.|[^/"])*/[a-z]*|"[^"]*")')
+# Linear-time idiom (CodeQL py/redos): [^/"\\]*(?:\\.[^/"\\]*)* unrolls the naive
+# (?:\\.|[^/"])* alternation. The trailing \\? preserves exact language parity with
+# the old pattern: its class [^/"] admitted a lone backslash before the closing
+# delimiter (e.g. /a\/ extracts body "a\\"), which the bare idiom would drop.
+# Differential-verified 0 diffs vs the old pattern (CRS v4.28.0 corpus + fuzz).
+_RX_SELECTOR = re.compile(r'!(?:[A-Z_]+):(/[^/"\\]*(?:\\.[^/"\\]*)*\\?/[a-z]*|"[^"]*")')
 # Any operator name (for counting; @rx is handled separately).
 _RX_OPNAME = re.compile(r'"((?:!)?@[a-z_]+)')
 _RULE_ID = re.compile(r"\bid:(\d+)\b")
