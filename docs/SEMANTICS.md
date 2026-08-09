@@ -107,8 +107,8 @@ via `helpers/pcre2`, with an explicit `java→pcre` approximation note (see
 [`sweep/corpus-wave4/java-features.md`](../sweep/corpus-wave4/java-features.md)).
 Extracted sites use `call_kind=fullmatch` to mirror
 `Pattern.matcher(value).matches()` (HtmlPolicyBuilder attribute policies).
-Unicode `\p{…}`, `\Q…\E` quote escapes, and truncated/unbalanced literals
-reject — never silent widen
+Unicode `\p{…}`, `\Q…\E` quote escapes, truncated/unbalanced literals, and
+`"…" + "…"` concatenations (not folded) reject — never silent widen
 ([#103](https://github.com/lucas-albers-lz4/regexproof/issues/103)).
 
 ## Practical rules

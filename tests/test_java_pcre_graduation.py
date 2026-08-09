@@ -31,6 +31,17 @@ def test_java_reject_unicode_quote_and_parse_error():
     assert java_reject_reason("abc+") is None
 
 
+def test_extract_rejects_string_concat_fragments():
+    src = (
+        'Pattern.compile(\n'
+        '      "(?:aqua|black)"\n'
+        '      + "|(?:red|yellow)");\n'
+    )
+    recs = extract_java_pattern(src, repo="fixture", file="X.java")
+    assert len(recs) == 1
+    assert recs[0]["unencodable_reason"] == "concat"
+
+
 def test_extract_java_pattern_marks_approximation():
     src = 'Pattern.compile("(?i)center|left|right");\n'
     recs = extract_java_pattern(src, repo="fixture", file="X.java")

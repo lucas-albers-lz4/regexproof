@@ -44,6 +44,11 @@ def _unescape_java_string(raw: str) -> str:
         return raw
 
 
+def _followed_by_string_concat(source: str, end: int) -> bool:
+    """True when the matched literal is continued with ``+ "…"`` (not folded)."""
+    return re.match(r"\s*\+\s*\"", source[end : end + 64]) is not None
+
+
 def extract_java_pattern(
     source: str,
     *,
@@ -65,6 +70,9 @@ def extract_java_pattern(
         else:
             body = pattern
         reason = java_reject_reason(pattern)
+        # Never encode a truncated first fragment of ``"a" + "b"`` as if whole.
+        if reason is None and _followed_by_string_concat(source, m.end()):
+            reason = "concat"
         rec = make_record(
             repo=repo,
             pattern=body if not reason else pattern,
