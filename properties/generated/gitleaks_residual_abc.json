@@ -1,6 +1,6 @@
 {
   "superseded": true,
-  "superseded_by": "gitleaks_encodable_fraction.json (0.819) + trailing_alt_dollar_p3_delta.md / p4_drift.md",
+  "superseded_by": "gitleaks_encodable_fraction.json (0.819) + trailing_alt_dollar_p3_delta.md + trailing_alt_dollar_p4_drift.md",
   "baseline_fraction": 0.185,
   "baseline_note": "issue #51: 221 rules, 101 lazy parse-errors",
   "class_counts": {

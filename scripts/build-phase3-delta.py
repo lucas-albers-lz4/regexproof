@@ -84,6 +84,11 @@ def gitleaks_residual() -> dict:
     unexplained = [c for c in classified if c["class"] not in ("a", "b", "c", "encodable")]
     report = {
         "schema_version": "1",
+        "superseded": True,
+        "superseded_by": (
+            "gitleaks_encodable_fraction.json + trailing_alt_dollar_p3_delta.md "
+            "+ trailing_alt_dollar_p4_drift.md (wave #81)"
+        ),
         "corpus": "gitleaks",
         "baseline_fraction": 0.185,
         "baseline_note": "issue #51: 221 rules, 101 lazy parse-errors",
@@ -165,6 +170,11 @@ def decision_matrix() -> dict:
         decisions.append(redecision)
     report = {
         "schema_version": "1",
+        "superseded": True,
+        "superseded_by": (
+            "cross_corpus_matrix.json + *_encodable_fraction.json "
+            "(PR #80/#89/#90); see phase3_decision_matrix.md"
+        ),
         "phase": 3,
         "decisions": decisions,
         "gitleaks_target_met": (_load_fraction("gitleaks").get("fraction") or 0) >= 0.60,
@@ -172,9 +182,16 @@ def decision_matrix() -> dict:
     (OUT / "phase3_decision_matrix.json").write_text(
         json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8"
     )
-    md = ["# Phase 3 decision matrix", ""]
-    md.append("| Corpus | Decision | Fraction | Phase-3 note |")
-    md.append("|---|---|---|---|")
+    md = [
+        "# Phase 3 decision matrix — SUPERSEDED",
+        "",
+        "> **Superseded** by `cross_corpus_matrix.md` and each "
+        "`*_encodable_fraction.json` (PR #80/#89/#90). Rows below are "
+        "historical regenerations only.",
+        "",
+        "| Corpus | Decision | Fraction | Phase-3 note |",
+        "|---|---|---|---|",
+    ]
     for d in decisions:
         md.append(
             f"| {d['corpus']} | {d['decision']} | {d.get('fraction')} | "
