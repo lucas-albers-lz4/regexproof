@@ -47,6 +47,11 @@ from regexproof.schemas import (  # noqa: E402
     admitted_pair_schema,
     rule_diff_report_schema,
 )
+from regexproof.rule_diff.pilot_runner import (  # noqa: E402
+    Shape5PairConfig,
+    load_harness,
+    register_shape5_pair,
+)
 from regexproof.rule_diff.timeout_gate import (  # noqa: E402
     fail_message,
     timeout_gate,
