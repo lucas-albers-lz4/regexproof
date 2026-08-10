@@ -23,13 +23,20 @@ FIELDS_REMAINING: list[str] = [
 
 
 def _readme_text(root: Path) -> str:
+    root_resolved = root.resolve()
     for name in ("README.md", "README.rst", "README", "readme.md"):
         p = root / name
-        if p.is_file():
-            try:
-                return p.read_text(encoding="utf-8", errors="replace")[:4000]
-            except OSError:
-                return ""
+        if p.is_symlink():
+            continue
+        if not p.is_file():
+            continue
+        try:
+            resolved = p.resolve()
+            if not resolved.is_relative_to(root_resolved):
+                continue
+            return resolved.read_text(encoding="utf-8", errors="replace")[:4000]
+        except OSError:
+            return ""
     return ""
 
 
@@ -48,7 +55,8 @@ def build_boundary_signals(
             paths = [
                 str(p.relative_to(root))
                 for p in sorted(root.rglob("*"))
-                if p.is_file()
+                if not p.is_symlink()
+                and p.is_file()
                 and not any(part in _SKIP_DIR_NAMES for part in p.parts)
             ][:200]
         except OSError:

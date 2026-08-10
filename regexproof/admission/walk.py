@@ -47,6 +47,9 @@ ExtractFn = Callable[[str, str], list[dict[str, Any]]]
 def _iter_files(root: Path) -> list[Path]:
     files: list[Path] = []
     for p in sorted(root.rglob("*")):
+        # Skip symlinks before is_file() — is_file() follows links.
+        if p.is_symlink():
+            continue
         if not p.is_file():
             continue
         if any(part in _SKIP_DIR_NAMES for part in p.parts):
