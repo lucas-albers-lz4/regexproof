@@ -47,7 +47,8 @@ first; it is faster than reading the call site.
 | `reject_shell_subprocess_usage()` | `regexproof/fuzz/adapters.py` | static AST ban on `shell=True` in fuzz/ReDoS paths; wired into CI |
 | `reject_untimed_subprocess_usage()` | `regexproof/fuzz/adapters.py` | static AST ban on missing `timeout=` in `regexproof/compiler` + `helpers/`; wired into CI (#171) |
 | `ci-assert-toolchain.py --job {proof,golden,redos}` | `scripts/ci-assert-toolchain.py` | z3 5.0.x, Python/Node/Go majors, pcre2/yara/perl presence, npm + regexploit pins — **per CI job env** |
-| z3 pin guard (exit 3) | `scripts/z3-verify.py`, `differential-fuzz.py`, `mirror-fidelity-gate.py` | refuses non-5.0.x solver at runtime |
+| z3 pin guard (exit 3) | `regexproof/harness/core.py` (via `scripts/z3-verify.py`), `differential-fuzz.py`, `mirror-fidelity-gate.py` | refuses non-5.0.x solver at runtime |
+| Public batch extract/compile | `regexproof/batch/extract.py`, `compile_records.py`, `manifests.py` | scripts use public API; runner keeps one-release `_` aliases (#193) |
 | `default_output_path()` containment | `regexproof/admission/author.py` | `is_relative_to(properties/generated)` on the *default* path |
 | `--output` containment (`author-gate-decision.py`) | `scripts/author-gate-decision.py` | explicit `-o` must stay under `properties/generated` unless `--allow-outside-generated` (#176) |
 | Clone destination guard | `regexproof/admission/clone.py` | probe clones cannot land under `batch/corpora/` |
@@ -63,7 +64,11 @@ first; it is faster than reading the call site.
 **Known asymmetries** (each is a real gap, each already has an issue — do not
 re-file): ledger writes are atomic but batch NDJSON writes are not;
 `search_code` retries but `enrich_repo` does not. (Batch extraction size cap
-landed with #175 — no longer asymmetric vs admission walk.)
+landed with #175 — no longer asymmetric vs admission walk.) Measure scripts
+share `compiler_fingerprint` via `batch/measure.py` (#197 partial); 
+`measure-corpus-fraction.py` still uses a historical `simple_parse.py` sha1
+for its `compiler_fingerprint` field so committed fraction artifacts stay
+stable — do not "fix" that divergence without regenerating artifacts.
 
 ---
 

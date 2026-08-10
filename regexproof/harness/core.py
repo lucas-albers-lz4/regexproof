@@ -26,6 +26,8 @@ from z3 import (
 
 from regexproof.kinds import (
     KINDS_NEEDING_MUTATION_GUARD,
+    PropertyKind,
+    SolveResult,
     validate_call_kind,
     validate_kind,
 )
@@ -188,7 +190,7 @@ def run_one(name, entry, require_ground_truth=False):
     r = s.check()
     result["wall_ms"] = round((time.perf_counter() - t0) * 1000, 1)
     if r == unknown:
-        result["result"] = "timeout"
+        result["result"] = SolveResult.TIMEOUT.value
         result["not_proven"] = True
         result["ok"] = False
         print(
@@ -196,7 +198,7 @@ def run_one(name, entry, require_ground_truth=False):
             "HARD FAILURE (not proven)"
         )
         return result
-    result["result"] = "unsat" if r == unsat else "sat"
+    result["result"] = SolveResult.UNSAT.value if r == unsat else SolveResult.SAT.value
     result["ok"] = (r == unsat) == entry["expect_unsat"]
     tag = "UNSAT (property HOLDS)" if r == unsat else "SAT (counterexample)"
     print(f"[{'PASS' if result['ok'] else 'FAIL'}] {name}: {tag}  [{result['wall_ms']:.1f}ms]")
@@ -219,7 +221,7 @@ def run_one(name, entry, require_ground_truth=False):
         # Note: engine_versions is always populated above; the meaningful
         # --require-ground-truth gate is the callback check below (fix-wave #71).
         gt = entry.get("ground_truth")
-        if entry["kind"] == "mutation_guard":
+        if entry["kind"] == PropertyKind.MUTATION_GUARD.value:
             result["ground_truth"] = "mutation-guard-sat-expected"
             print("    mutation guard: SAT expected (harness-sensitivity probe, not a finding)")
         elif gt is not None:
@@ -255,7 +257,9 @@ def check_mutation_coverage():
     A property with no mutation guard can go vacuous (e.g. via the
     Complement() trap) without any test noticing. Warn loudly so the gap
     is visible; the warning is the guard's guard."""
-    guarded = {e["family"] for e in REGISTRY.values() if e["kind"] == "mutation_guard"}
+    guarded = {
+        e["family"] for e in REGISTRY.values() if e["kind"] == PropertyKind.MUTATION_GUARD.value
+    }
     needing = {
         e["family"]
         for e in REGISTRY.values()

@@ -8,14 +8,16 @@ import subprocess
 import sys
 from pathlib import Path
 
-from z3 import Range, Re, Union
 
-from regexproof.compiler.base import CompileResult, Unencodable
+from regexproof.compiler.base import (
+    CompileResult,
+    DialectSpec,
+    Unencodable,
+    compile_dialect_template,
+)
 from regexproof.compiler.fold import python_fold_closure
-from regexproof.compiler.lower import lower, space_codes_from_chars
 from regexproof.compiler.pcre_strip import strip_language_transparent
 from regexproof.compiler.reject_markers import PCRE_REJECT_MARKERS
-from regexproof.compiler.simple_parse import parse_pattern
 
 HELPER = Path(__file__).resolve().parents[2] / "helpers" / "pcre2" / "match.py"
 DEFAULT_MAX_LENGTH = 256
@@ -58,19 +60,14 @@ def compile_pcre(
     *,
     max_length: int = DEFAULT_MAX_LENGTH,
 ) -> CompileResult:
-    flags = "".join(sorted(set(flags)))
-    try:
-        if len(pattern) > max_length:
-            raise Unencodable("pattern-too-long")
-        if "m" in flags:
+    def flag_reject(fl: str) -> None:
+        if "m" in fl:
             raise Unencodable("m-flag")
-        reason = _local_reject(pattern)
-        if reason:
-            raise Unencodable(reason)
-        # Strip language-transparent constructs outside char classes only.
-        stripped = strip_language_transparent(pattern)
-        # Optional real-engine parse when available; never required for encode.
-        gate = _helper_parse(stripped)
+
+    def helper_gate(stripped: str, _flags: str) -> dict:
+        return _helper_parse(stripped)
+
+    def raise_gate(gate: dict) -> None:
         if gate.get("ok") is False:
             ureason = gate.get("unencodable_reason")
             if ureason == "timeout":
@@ -79,44 +76,30 @@ def compile_pcre(
                 None,
                 "pcre2-helper-unavailable",
             ):
-                # Real engine rejected the pattern.
                 if gate.get("helper") in ("pcre2-bindings", "pcre2grep"):
                     raise Unencodable(ureason or "parse-error")
-        ast = parse_pattern(stripped)
-        fold_fn = lambda ch: python_fold_closure(ch, ascii_only=True)
-        fold = fold_fn if "i" in flags else None
-        mirror, _meta = lower(
-            ast,
-            fold=fold,
-            case_fold=fold_fn,
-            dot_terminators=PCRE_TERMINATORS,
-            digit=lambda: Range("0", "9"),
-            space=lambda: Union(*[Re(c) for c in _PCRE_SPACE_CHARS]),
-            word=lambda: Union(Range("a", "z"), Range("A", "Z"), Range("0", "9"), Re("_")),
-            trailing_dollar_nl=True,
-            call_kind=call_kind,
-            allow_ascii_word_boundary=True,
-            space_codes=space_codes_from_chars(_PCRE_SPACE_CHARS),
-        )
-        return CompileResult(
-            mirror=mirror,
-            unencodable_reason=None,
-            dialect="pcre",
-            call_kind=call_kind,
-            flags=flags,
-            pattern=pattern,
-            declared_domain="ascii",
-        )
-    except Unencodable as exc:
-        return CompileResult(
-            mirror=None,
-            unencodable_reason=exc.reason,
-            dialect="pcre",
-            call_kind=call_kind,
-            flags=flags,
-            pattern=pattern,
-            declared_domain="ascii",
-        )
+
+    fold_fn = lambda ch: python_fold_closure(ch, ascii_only=True)
+    spec = DialectSpec(
+        dialect="pcre",
+        declared_domain="ascii",
+        default_max_length=DEFAULT_MAX_LENGTH,
+        terminators=PCRE_TERMINATORS,
+        space_chars=_PCRE_SPACE_CHARS,
+        trailing_dollar_nl=True,
+        allow_ascii_word_boundary=True,
+        strip_fn=strip_language_transparent,
+        local_reject_fn=_local_reject,
+        flag_reject_fn=flag_reject,
+        helper_gate_fn=helper_gate,
+        raise_from_gate_fn=raise_gate,
+        fold_fn=fold_fn,
+        case_fold_fn=fold_fn,
+    )
+    return compile_dialect_template(
+        pattern, flags, call_kind, spec=spec, max_length=max_length
+    )
+
 
 
 def replay_argv(pattern: str, flags: str) -> list[str]:

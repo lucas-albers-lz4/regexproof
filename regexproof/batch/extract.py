@@ -6,6 +6,10 @@ import sys
 from pathlib import Path
 from typing import Any
 
+from regexproof.batch.extractor_registry import (
+    EXTRACTORS,
+    registry_glob,
+)
 from regexproof.batch.manifests import MAX_FILE_BYTES, ROOT, WAVE_CORPORA
 from regexproof.extractors.busybox_tests import extract_busybox_tests
 from regexproof.extractors.cpython_re_tests import (
@@ -66,6 +70,29 @@ def validate_expected_roots(corpus: str, meta: dict[str, Any]) -> None:
 
 def extract_corpus(corpus: str, meta: dict[str, Any]) -> list[dict[str, Any]]:
     path: Path = meta["path"]
+    extractor = meta["extractor"]
+    # Registry path for pure glob extractors (#195) — preserves regex_ids.
+    if extractor in EXTRACTORS and extractor in {
+        "python_dir",
+        "go_regexp",
+        "ids_rules",
+        "pcre2_testdata",
+        "busybox_tests",
+        "yara",
+        "spamassassin",
+        "noseyparker",
+        "shhgit",
+        "dompurify",
+        "isemail",
+        "email_addresses",
+    }:
+        fn = EXTRACTORS[extractor]
+        return extract_glob(
+            path,
+            meta,
+            glob=registry_glob(extractor, meta),
+            extract_fn=lambda src, rel: fn(src, rel, meta),
+        )
     if meta["extractor"] == "rule_file":
         source = path.read_text(encoding="utf-8")
         rel = str(path.relative_to(ROOT))

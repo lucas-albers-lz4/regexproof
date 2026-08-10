@@ -62,6 +62,95 @@ _check_budget_mem = check_budget_mem
 _apply_address_space_cap = apply_address_space_cap
 _LAST_ADDRESS_SPACE_CAP_APPLIED = None  # compat; prefer _budgets.LAST_ADDRESS_SPACE_CAP_APPLIED
 
+
+def resolve_corpus_path(corpus: str, meta: dict[str, Any]) -> dict[str, Any]:
+    """Apply sample fallback / measure_scope path policy before extract (#196)."""
+    meta = dict(meta)
+    path: Path = meta["path"]
+    sample_path = meta.get("sample_path") or ROOT / "batch" / "corpora" / corpus / "sample"
+    if isinstance(sample_path, str):
+        sample_path = Path(sample_path)
+    path_usable = path.exists() and (path.is_file() or any(path.iterdir()))
+    if not path_usable:
+        if corpus in WAVE_CORPORA:
+            if meta.get("measure_scope") == "sample" and isinstance(
+                sample_path, Path
+            ) and sample_path.exists():
+                meta["path"] = sample_path
+                print(
+                    f"NOTE: {corpus} full corpus path missing ({path}); "
+                    f"using sample at {sample_path}",
+                    file=sys.stderr,
+                )
+            else:
+                raise SystemExit(
+                    f"HARD ERROR: {corpus} corpus path missing/empty ({path}) "
+                    f"and measure_scope={meta.get('measure_scope')!r} "
+                    f"(sample fallback only when measure_scope='sample')"
+                )
+        else:
+            sample = ROOT / "batch" / "corpora" / corpus / "sample"
+            if sample.is_dir():
+                print(
+                    f"NOTE: {corpus} corpus path missing/empty ({path}); "
+                    f"falling back to sample at {sample}",
+                    file=sys.stderr,
+                )
+                meta["path"] = sample
+                meta["measure_scope"] = "sample"
+    if meta.get("measure_scope") == "sample":
+        sp = meta.get("sample_path")
+        if isinstance(sp, str):
+            sp = Path(sp)
+        if not isinstance(sp, Path):
+            sp = sample_path if isinstance(sample_path, Path) else None
+        if isinstance(sp, Path) and sp.exists():
+            cur = meta["path"]
+            if "sample" not in Path(cur).parts:
+                meta["path"] = sp
+                print(
+                    f"NOTE: {corpus} measure_scope=sample; using {sp}",
+                    file=sys.stderr,
+                )
+        elif not isinstance(sp, Path) or not sp.exists():
+            raise SystemExit(
+                f"HARD ERROR: {corpus} measure_scope=sample but sample path "
+                f"missing ({sp})"
+            )
+    return meta
+
+
+def extract_and_compile_corpus(
+    corpus: str,
+    meta: dict[str, Any],
+) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+    """Extract + compile with budget gate (#196). Gates before writes."""
+    _validate_expected_roots(corpus, meta)
+    budget = meta.get("budget") or {}
+    wall_t0 = time.monotonic()
+    records = _extract(corpus, meta)
+    if not records and corpus in WAVE_CORPORA:
+        raise SystemExit(
+            f"HARD ERROR: {corpus} extraction produced 0 records — "
+            f"empty glob must not fake zero-pattern success"
+        )
+    try:
+        compiled = _compile_all(
+            records,
+            lift_inline=bool(meta.get("lift_inline")),
+            corpus_slug=corpus,
+            budget=budget,
+            wall_t0=wall_t0,
+        )
+    except BudgetBreached as exc:
+        raise SystemExit(
+            f"BUDGET BREACH ({corpus}): {exc.field} "
+            f"limit={exc.limit} actual={exc.actual}"
+        ) from exc
+    return records, compiled
+
+
+
 def run_corpus(
     corpus: str,
     *,
@@ -99,85 +188,9 @@ def run_corpus(
             json.dumps(summary, indent=2, sort_keys=True) + "\n",
         )
         return summary
-    meta = dict(meta)
-    path: Path = meta["path"]
-    sample_path = meta.get("sample_path") or ROOT / "batch" / "corpora" / corpus / "sample"
-    if isinstance(sample_path, str):
-        sample_path = Path(sample_path)
-    path_usable = path.exists() and (path.is_file() or any(path.iterdir()))
-    if not path_usable:
-        if corpus in WAVE_CORPORA:
-            # Match measure-corpus-fraction.py: sample fallback only when
-            # measure_scope is explicitly "sample"; otherwise fail closed.
-            if meta.get("measure_scope") == "sample" and isinstance(
-                sample_path, Path
-            ) and sample_path.exists():
-                meta["path"] = sample_path
-                print(
-                    f"NOTE: {corpus} full corpus path missing ({path}); "
-                    f"using sample at {sample_path}",
-                    file=sys.stderr,
-                )
-            else:
-                raise SystemExit(
-                    f"HARD ERROR: {corpus} corpus path missing/empty ({path}) "
-                    f"and measure_scope={meta.get('measure_scope')!r} "
-                    f"(sample fallback only when measure_scope='sample')"
-                )
-        else:
-            sample = ROOT / "batch" / "corpora" / corpus / "sample"
-            if sample.is_dir():
-                print(
-                    f"NOTE: {corpus} corpus path missing/empty ({path}); "
-                    f"falling back to sample at {sample}",
-                    file=sys.stderr,
-                )
-                meta["path"] = sample
-                meta["measure_scope"] = "sample"
-    # Honor declared sample scope even when the full tree is present so batch
-    # extraction stays aligned with measure-corpus-fraction.py.
-    if meta.get("measure_scope") == "sample":
-        sp = meta.get("sample_path")
-        if isinstance(sp, str):
-            sp = Path(sp)
-        if not isinstance(sp, Path):
-            sp = sample_path if isinstance(sample_path, Path) else None
-        if isinstance(sp, Path) and sp.exists():
-            cur = meta["path"]
-            if "sample" not in Path(cur).parts:
-                meta["path"] = sp
-                print(
-                    f"NOTE: {corpus} measure_scope=sample; using {sp}",
-                    file=sys.stderr,
-                )
-        elif not isinstance(sp, Path) or not sp.exists():
-            raise SystemExit(
-                f"HARD ERROR: {corpus} measure_scope=sample but sample path "
-                f"missing ({sp})"
-            )
-    _validate_expected_roots(corpus, meta)
+    meta = resolve_corpus_path(corpus, meta)
     inventory = load_inventory(meta["corpus_type"])
-    budget = meta.get("budget") or {}
-    wall_t0 = time.monotonic()
-    records = _extract(corpus, meta)
-    if not records and corpus in WAVE_CORPORA:
-        raise SystemExit(
-            f"HARD ERROR: {corpus} extraction produced 0 records — "
-            f"empty glob must not fake zero-pattern success"
-        )
-    try:
-        compiled = _compile_all(
-            records,
-            lift_inline=bool(meta.get("lift_inline")),
-            corpus_slug=corpus,
-            budget=budget,
-            wall_t0=wall_t0,
-        )
-    except BudgetBreached as exc:
-        raise SystemExit(
-            f"BUDGET BREACH ({corpus}): {exc.field} "
-            f"limit={exc.limit} actual={exc.actual}"
-        ) from exc
+    records, compiled = extract_and_compile_corpus(corpus, meta)
 
     triage = triage_records_from_compiled(compiled)
     write_triage_ndjson(out_dir.parent / "triage" / f"{corpus}.ndjson", triage)
