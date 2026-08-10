@@ -46,11 +46,12 @@ writes. Process **highest score first**.
 
 ## 3. Probe + author gate (admission)
 
-For each ranked URL:
+For each ranked URL (stdout row carries `pin`):
 
 ```bash
 # Draft (flagged; not schema-valid)
-python scripts/probe-corpus-admission.py "$URL" -o /tmp/${name}_draft.json
+python scripts/probe-corpus-admission.py "$URL" --pin "$PIN" \
+  -o /tmp/${name}_draft.json
 
 # Auto NO-GO only when the author script allows it (restricted bar —
 # typically zero sites / below-scale with deterministic-false boundary).
@@ -169,7 +170,7 @@ python scripts/java-html-sanitizer-triage.py \
   --root batch/corpora/<name>/rules \
   --corpus <name> \
   --pin "$PIN" --url <url> \
-  --files path/to/Main.java   # relative; required with non-default corpus
+  --files path/to/Main.java   # relative; recommended to skip the full walk
 ```
 
 Default artifact stem for non-`java-html-sanitizer` corpora is
