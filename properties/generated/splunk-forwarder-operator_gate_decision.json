@@ -7,9 +7,9 @@
       "met": false
     },
     {
-      "evidence": "Probe security_boundary=deterministic-true (paths/topics/name signals); gitleaks.toml discovery query.",
+      "evidence": "Probe marked deterministic-true via gitleaks.toml discovery, but Smith file map shows no product boundary regexes — only Claude skill helpers + one test.",
       "id": "security-boundary",
-      "met": true
+      "met": false
     },
     {
       "evidence": "14 sites < 1000 scale bar.",
@@ -19,10 +19,10 @@
   ],
   "corpus": "splunk-forwarder-operator",
   "corpus_pin": "0dc632bdfb0e67aead52f8776ece347dd689dfff",
-  "decision": "triage-trial",
-  "decision_basis": "escape_hatch",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
   "decision_date": "2026-08-10",
-  "escape_hatch_applied": true,
+  "escape_hatch_applied": false,
   "probe": {
     "construct_counts": {},
     "dialect": {
@@ -44,6 +44,6 @@
     },
     "security_boundary": "deterministic-true"
   },
-  "rationale": "Security-boundary corpus (boundary=deterministic-true) with findings-triage potential; 14 sites across [py_re:13, re2:1].",
+  "rationale": "Smith triage: 13/14 sites are under .claude/skills/prow-ci (agent helper scripts), not product security boundary; remaining 1 site is a Go unit test. Below batch value; supersede triage-trial.",
   "schema_version": "1"
 }

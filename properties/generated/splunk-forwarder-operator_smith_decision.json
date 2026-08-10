@@ -1,0 +1,15 @@
+{
+  "schema_version": "1",
+  "corpus": "splunk-forwarder-operator",
+  "corpus_pin": "0dc632bdfb0e67aead52f8776ece347dd689dfff",
+  "candidate_url": "https://github.com/openshift/splunk-forwarder-operator",
+  "smith_decision": "no-go",
+  "supersedes": "triage-trial",
+  "reason": "13/14 probe sites are .claude/skills/prow-ci helpers; 1 remaining is a Go unit test. No product boundary surface for measure/batch.",
+  "regex_sites": 14,
+  "sites_by_bucket": {
+    "claude_skills": 13,
+    "unit_test": 1,
+    "product": 0
+  }
+}
