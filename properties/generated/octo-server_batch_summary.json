@@ -1,0 +1,16 @@
+{
+  "corpus": "octo-server",
+  "corpus_type": "rule_corpus",
+  "encodable": 28,
+  "engine": {
+    "python": "3.14.6"
+  },
+  "extracted": 40,
+  "findings": 34,
+  "inventory_questions": 4,
+  "join_regex_ids": 34,
+  "redos_findings": 0,
+  "redos_incomplete": false,
+  "schema_version": "1",
+  "triage": 12
+}
