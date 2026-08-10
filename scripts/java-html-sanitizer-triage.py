@@ -193,7 +193,9 @@ def run_triage(
 ) -> dict:
     out_dir = out_dir.expanduser().resolve()
     out_dir.mkdir(parents=True, exist_ok=True)
-    stem = artifact_stem or corpus
+    stem = artifact_stem or (
+        corpus if corpus == DEFAULT_CORPUS else f"{corpus}_java"
+    )
     recs = [
         classify_encodable(r)
         for r in extract_tree(root, repo=corpus, files=files)
@@ -306,7 +308,10 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument(
         "--artifact-stem",
         default=None,
-        help="Filename stem for outputs (default: --corpus; use hippo_java for hippo)",
+        help=(
+            "Filename stem for outputs (default: corpus for "
+            f"{DEFAULT_CORPUS}; otherwise <corpus>_java)"
+        ),
     )
     ap.add_argument("--pin", default=None, help="corpus_pin recorded in summary")
     ap.add_argument("--url", default=None, help="candidate_url recorded in summary")
@@ -333,12 +338,17 @@ def main(argv: list[str] | None = None) -> int:
     elif args.root:
         root = args.root.expanduser().resolve()
         corpus = args.corpus
-        pin = args.pin or (
-            JAVA_HTML_SANITIZER_PIN if corpus == DEFAULT_CORPUS else "unknown"
-        )
-        url = args.url or (
-            JAVA_HTML_SANITIZER_URL if corpus == DEFAULT_CORPUS else "unknown"
-        )
+        if corpus == DEFAULT_CORPUS:
+            pin = args.pin or JAVA_HTML_SANITIZER_PIN
+            url = args.url or JAVA_HTML_SANITIZER_URL
+        else:
+            if not args.pin or not args.url:
+                ap.error(
+                    f"--pin and --url are required when --corpus is not "
+                    f"{DEFAULT_CORPUS}"
+                )
+            pin = args.pin
+            url = args.url
         files = args.files
         stem = args.artifact_stem
     else:
