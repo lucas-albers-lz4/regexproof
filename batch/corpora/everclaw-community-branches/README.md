@@ -34,3 +34,8 @@ At pin: **145/343 = 0.4227** fraction go.
 
 Python `prompt-guard` / bagman examples (py_re) are noted in the gate probe
 but not in this ecma allowlist; revisit if a follow-on py slice is needed.
+
+## Admission
+
+Gate already on `main`: `properties/generated/everclaw-community-branches_gate_decision.json`
+(`triage-trial`). Required by `check_admission_gates` before batch.

@@ -16,7 +16,7 @@ corpus: everclaw-community-branches
 call_kind: search
 shape: null
 result: finding
-disclosure: null
+disclosure: private_first
 site: "batch/corpora/everclaw-community-branches/rules/skills/skillguard/src/gate.js:91:40"
 ```
 
@@ -50,7 +50,7 @@ corpus: everclaw-community-branches
 call_kind: search
 shape: null
 result: finding
-disclosure: null
+disclosure: private_first
 site: "batch/corpora/everclaw-community-branches/rules/skills/skillguard/src/scanner.js:676:28"
 ```
 
@@ -84,7 +84,7 @@ corpus: everclaw-community-branches
 call_kind: search
 shape: null
 result: finding
-disclosure: null
+disclosure: private_first
 site: "batch/corpora/everclaw-community-branches/rules/scripts/everclaw-export.mjs:180:26"
 ```
 
@@ -118,7 +118,7 @@ corpus: everclaw-community-branches
 call_kind: search
 shape: null
 result: finding
-disclosure: null
+disclosure: private_first
 site: "batch/corpora/everclaw-community-branches/rules/scripts/lib/morpheus.mjs:55:2"
 ```
 
@@ -152,7 +152,7 @@ corpus: everclaw-community-branches
 call_kind: search
 shape: null
 result: finding
-disclosure: null
+disclosure: private_first
 site: "batch/corpora/everclaw-community-branches/rules/skills/skillguard/src/scanner.js:887:34"
 ```
 
@@ -186,7 +186,7 @@ corpus: everclaw-community-branches
 call_kind: search
 shape: null
 result: finding
-disclosure: null
+disclosure: private_first
 site: "batch/corpora/everclaw-community-branches/rules/skills/skillguard/src/clawhub.js:72:29"
 ```
 
@@ -220,7 +220,7 @@ corpus: everclaw-community-branches
 call_kind: search
 shape: null
 result: finding
-disclosure: null
+disclosure: private_first
 site: "batch/corpora/everclaw-community-branches/rules/scripts/everclaw-deps.mjs:97:31"
 ```
 
@@ -254,7 +254,7 @@ corpus: everclaw-community-branches
 call_kind: search
 shape: null
 result: finding
-disclosure: null
+disclosure: private_first
 site: "batch/corpora/everclaw-community-branches/rules/mission-control/generate-data.mjs:130:39"
 ```
 
@@ -288,7 +288,7 @@ corpus: everclaw-community-branches
 call_kind: search
 shape: null
 result: finding
-disclosure: null
+disclosure: private_first
 site: "batch/corpora/everclaw-community-branches/rules/skills/skillguard/src/scanner.js:892:28"
 ```
 
@@ -322,7 +322,7 @@ corpus: everclaw-community-branches
 call_kind: search
 shape: null
 result: finding
-disclosure: null
+disclosure: private_first
 site: "batch/corpora/everclaw-community-branches/rules/mission-control/generate-data.mjs:127:37"
 ```
 
@@ -356,7 +356,7 @@ corpus: everclaw-community-branches
 call_kind: search
 shape: null
 result: finding
-disclosure: null
+disclosure: private_first
 site: "batch/corpora/everclaw-community-branches/rules/scripts/lib/morpheus.mjs:58:2"
 ```
 
@@ -390,7 +390,7 @@ corpus: everclaw-community-branches
 call_kind: search
 shape: null
 result: finding
-disclosure: null
+disclosure: private_first
 site: "batch/corpora/everclaw-community-branches/rules/scripts/lib/file-backend.mjs:84:21"
 ```
 
@@ -424,7 +424,7 @@ corpus: everclaw-community-branches
 call_kind: search
 shape: null
 result: finding
-disclosure: null
+disclosure: private_first
 site: "batch/corpora/everclaw-community-branches/rules/scripts/agent-registry.mjs:79:30"
 ```
 
@@ -458,7 +458,7 @@ corpus: everclaw-community-branches
 call_kind: search
 shape: null
 result: finding
-disclosure: null
+disclosure: private_first
 site: "batch/corpora/everclaw-community-branches/rules/scripts/bootstrap-everclaw.mjs:154:34"
 ```
 
@@ -492,7 +492,7 @@ corpus: everclaw-community-branches
 call_kind: search
 shape: null
 result: finding
-disclosure: null
+disclosure: private_first
 site: "batch/corpora/everclaw-community-branches/rules/skills/skillguard/src/scanner.js:499:69"
 ```
 
@@ -526,7 +526,7 @@ corpus: everclaw-community-branches
 call_kind: search
 shape: null
 result: finding
-disclosure: null
+disclosure: private_first
 site: "batch/corpora/everclaw-community-branches/rules/skills/skillguard/src/scanner.js:110:4"
 ```
 
@@ -559,7 +559,7 @@ kind: intent_mismatch
 corpus: everclaw-community-branches
 shape: null
 result: finding
-disclosure: null
+disclosure: private_first
 site: "batch/corpora/everclaw-community-branches/rules/skills/relationships/scripts/relationship.mjs:196:24"
 ```
 
@@ -593,7 +593,7 @@ corpus: everclaw-community-branches
 call_kind: search
 shape: null
 result: finding
-disclosure: null
+disclosure: private_first
 site: "batch/corpora/everclaw-community-branches/rules/mission-control/generate-data.mjs:159:23"
 ```
 
@@ -627,7 +627,7 @@ corpus: everclaw-community-branches
 call_kind: search
 shape: null
 result: finding
-disclosure: null
+disclosure: private_first
 site: "batch/corpora/everclaw-community-branches/rules/skills/skillguard/src/scanner.js:108:4"
 ```
 
@@ -661,7 +661,7 @@ corpus: everclaw-community-branches
 call_kind: search
 shape: null
 result: finding
-disclosure: null
+disclosure: private_first
 site: "batch/corpora/everclaw-community-branches/rules/mission-control/generate-data.mjs:50:34"
 ```
 
@@ -695,7 +695,7 @@ corpus: everclaw-community-branches
 call_kind: search
 shape: null
 result: finding
-disclosure: null
+disclosure: private_first
 site: "batch/corpora/everclaw-community-branches/rules/scripts/agent-registry.mjs:84:35"
 ```
 
@@ -728,7 +728,7 @@ kind: intent_mismatch
 corpus: everclaw-community-branches
 shape: null
 result: finding
-disclosure: null
+disclosure: private_first
 site: "batch/corpora/everclaw-community-branches/rules/skills/skillguard/src/prompt-analyzer.js:446:22"
 ```
 
@@ -762,7 +762,7 @@ corpus: everclaw-community-branches
 call_kind: search
 shape: null
 result: finding
-disclosure: null
+disclosure: private_first
 site: "batch/corpora/everclaw-community-branches/rules/scripts/lib/morpheus.mjs:53:2"
 ```
 
@@ -796,7 +796,7 @@ corpus: everclaw-community-branches
 call_kind: search
 shape: null
 result: finding
-disclosure: null
+disclosure: private_first
 site: "batch/corpora/everclaw-community-branches/rules/skills/skillguard/src/scanner.js:578:24"
 ```
 
@@ -830,7 +830,7 @@ corpus: everclaw-community-branches
 call_kind: search
 shape: null
 result: finding
-disclosure: null
+disclosure: private_first
 site: "batch/corpora/everclaw-community-branches/rules/scripts/agent-download.mjs:318:9"
 ```
 
@@ -864,7 +864,7 @@ corpus: everclaw-community-branches
 call_kind: search
 shape: null
 result: finding
-disclosure: null
+disclosure: private_first
 site: "batch/corpora/everclaw-community-branches/rules/scripts/lib/docker.mjs:28:9"
 ```
 
@@ -898,7 +898,7 @@ corpus: everclaw-community-branches
 call_kind: search
 shape: null
 result: finding
-disclosure: null
+disclosure: private_first
 site: "batch/corpora/everclaw-community-branches/rules/mission-control/generate-data.mjs:59:33"
 ```
 
@@ -932,7 +932,7 @@ corpus: everclaw-community-branches
 call_kind: search
 shape: null
 result: finding
-disclosure: null
+disclosure: private_first
 site: "batch/corpora/everclaw-community-branches/rules/scripts/lib/morpheus.mjs:56:2"
 ```
 
@@ -966,7 +966,7 @@ corpus: everclaw-community-branches
 call_kind: search
 shape: null
 result: finding
-disclosure: null
+disclosure: private_first
 site: "batch/corpora/everclaw-community-branches/rules/scripts/lib/encryption.mjs:87:8"
 ```
 
@@ -1000,7 +1000,7 @@ corpus: everclaw-community-branches
 call_kind: search
 shape: null
 result: finding
-disclosure: null
+disclosure: private_first
 site: "batch/corpora/everclaw-community-branches/rules/mission-control/generate-data.mjs:120:29"
 ```
 
@@ -1034,7 +1034,7 @@ corpus: everclaw-community-branches
 call_kind: search
 shape: null
 result: finding
-disclosure: null
+disclosure: private_first
 site: "batch/corpora/everclaw-community-branches/rules/scripts/lib/morpheus.mjs:54:2"
 ```
 
@@ -1068,7 +1068,7 @@ corpus: everclaw-community-branches
 call_kind: search
 shape: null
 result: finding
-disclosure: null
+disclosure: private_first
 site: "batch/corpora/everclaw-community-branches/rules/skills/skillguard/src/scanner.js:689:13"
 ```
 
@@ -1102,7 +1102,7 @@ corpus: everclaw-community-branches
 call_kind: search
 shape: null
 result: finding
-disclosure: null
+disclosure: private_first
 site: "batch/corpora/everclaw-community-branches/rules/scripts/everclaw-deps.mjs:90:30"
 ```
 
@@ -1136,7 +1136,7 @@ corpus: everclaw-community-branches
 call_kind: search
 shape: null
 result: finding
-disclosure: null
+disclosure: private_first
 site: "batch/corpora/everclaw-community-branches/rules/scripts/everclaw-deps.mjs:124:30"
 ```
 
@@ -1170,7 +1170,7 @@ corpus: everclaw-community-branches
 call_kind: search
 shape: null
 result: finding
-disclosure: null
+disclosure: private_first
 site: "batch/corpora/everclaw-community-branches/rules/skills/skillguard/src/scanner.js:114:4"
 ```
 
@@ -1204,7 +1204,7 @@ corpus: everclaw-community-branches
 call_kind: search
 shape: null
 result: finding
-disclosure: null
+disclosure: private_first
 site: "batch/corpora/everclaw-community-branches/rules/scripts/everclaw-wallet.mjs:55:7"
 ```
 
@@ -1238,7 +1238,7 @@ corpus: everclaw-community-branches
 call_kind: search
 shape: null
 result: finding
-disclosure: null
+disclosure: private_first
 site: "batch/corpora/everclaw-community-branches/rules/skills/skillguard/src/scanner.js:688:13"
 ```
 
@@ -1272,7 +1272,7 @@ corpus: everclaw-community-branches
 call_kind: search
 shape: null
 result: finding
-disclosure: null
+disclosure: private_first
 site: "batch/corpora/everclaw-community-branches/rules/mission-control/generate-data.mjs:54:32"
 ```
 
@@ -1306,7 +1306,7 @@ corpus: everclaw-community-branches
 call_kind: search
 shape: null
 result: finding
-disclosure: null
+disclosure: private_first
 site: "batch/corpora/everclaw-community-branches/rules/scripts/everclaw-restore.mjs:133:26"
 ```
 
@@ -1339,7 +1339,7 @@ kind: property
 corpus: everclaw-community-branches
 shape: 1
 result: planned
-disclosure: null
+disclosure: private_first
 site: "inventory:rc-shape1-injection-alphabet"
 ```
 
@@ -1372,7 +1372,7 @@ kind: property
 corpus: everclaw-community-branches
 shape: 2
 result: planned
-disclosure: null
+disclosure: private_first
 site: "inventory:rc-shape2-missing-keyword"
 ```
 
@@ -1405,7 +1405,7 @@ kind: property
 corpus: everclaw-community-branches
 shape: 3
 result: planned
-disclosure: null
+disclosure: private_first
 site: "inventory:rc-shape3-capture-truncation"
 ```
 
@@ -1438,7 +1438,7 @@ kind: property
 corpus: everclaw-community-branches
 shape: 4
 result: planned
-disclosure: null
+disclosure: private_first
 site: "inventory:rc-shape4-escape-image"
 ```
 
