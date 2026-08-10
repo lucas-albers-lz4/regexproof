@@ -14,13 +14,13 @@
   "decision": "go",
   "decision_rule": "go iff encodable/sample_size >= 0.3",
   "dialect": "ecma",
-  "encodable": 62,
+  "encodable": 43,
   "engine_versions": {
     "python": "3.14.6",
     "z3": "5.0.0"
   },
   "extractor_schema_version": "2",
-  "fraction": 0.3388,
+  "fraction": 0.7818,
   "go_no_go_threshold": 0.3,
   "id_formula": "v2-domain-optional-ascii-default",
   "inventory_path": "properties/generated/hippo-inventory.ndjson",
@@ -28,21 +28,13 @@
   "pilot": "hippo",
   "reasons": {
     "composite-pattern": 2,
-    "empty-class": 1,
-    "internal-anchor": 13,
     "m-flag": 1,
-    "ok": 62,
-    "pattern-too-long": 50,
-    "stateful": 3,
-    "u-flag": 2,
-    "unclosed-class": 3,
-    "unclosed-group": 9,
-    "unsupported-syntax": 36,
-    "v-flag": 1
+    "ok": 43,
+    "stateful": 9
   },
-  "sample_size": 183,
+  "sample_size": 55,
   "schema_version": "1",
   "scope": "full_corpus",
   "unclassified_parse_errors": 0,
-  "wall_s": 7.728
+  "wall_s": 2.806
 }

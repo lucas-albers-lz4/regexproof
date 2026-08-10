@@ -46,7 +46,7 @@ from regexproof.extractors.go_regexp_tests import (  # noqa: E402
     extract_go_regexp_tests_tree,
 )
 from regexproof.extractors.ids_rules import extract_ids_rules  # noqa: E402
-from regexproof.extractors.js_babel import extract_js  # noqa: E402
+from regexproof.extractors.js_babel import extract_js, extract_js_precise  # noqa: E402
 from regexproof.extractors.modsec import count_operators, extract_modsec  # noqa: E402
 from regexproof.extractors.pcre2_testdata import extract_pcre2_testdata  # noqa: E402
 from regexproof.extractors.perl_re_tests import (  # noqa: E402
@@ -418,7 +418,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
             "repository-data/webfiles/src/main/resources/site/src/js/utils/vanilla-js-utils.js",
         ],
         "dialect": "ecma",
-        "extractor": "js_dir",
+        "extractor": "js_precise_dir",
         "repo": "NHS-digital-website/hippo",
         "security_tool": False,
         "lift_inline": False,
@@ -639,6 +639,22 @@ def _extract(corpus: str, meta: dict[str, Any]) -> list[dict[str, Any]]:
             fp = path / name
             rel = str(fp.relative_to(ROOT))
             out.extend(extract_js(fp.read_text(encoding="utf-8"), repo=meta["repo"], file=rel))
+        return out
+    if meta["extractor"] == "js_precise_dir":
+        # Wave ecma path: Babel/comment-aware extract_js_precise (not legacy extract_js).
+        out: list[dict[str, Any]] = []
+        for name in meta.get("files") or sorted(p.name for p in path.glob("*.js")):
+            fp = path / name
+            if not fp.is_file():
+                raise SystemExit(f"HARD ERROR: missing js_precise_dir file: {fp}")
+            rel = str(fp.relative_to(ROOT))
+            out.extend(
+                extract_js_precise(
+                    fp.read_text(encoding="utf-8", errors="replace"),
+                    repo=meta["repo"],
+                    file=rel,
+                )
+            )
         return out
     if meta["extractor"] == "js":
         source = path.read_text(encoding="utf-8")

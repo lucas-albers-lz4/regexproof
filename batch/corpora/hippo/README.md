@@ -35,8 +35,9 @@ Manifest pin: `4879bd48c50c712236f99413cb1f68091cea599c`.
 formcheck `documentation/` + `lang/`; jquery-validate-1.1.2.js (upstream);
 eforms `localization/`; acceptance-tests; webpack/gulp.
 
-Precise `extract_js` counts at this pin (allowlist): **183** sites.
-Ecma measure: **62/183 = 0.3388** → fraction go.
+Extractor: `js_precise_dir` (`extract_js_precise`). At this pin: **55**
+sites, **43** encodable (fraction **0.7818** → go). Legacy `js_dir`/`extract_js`
+false-positives on import paths are excluded.
 
 ## Java slice (not in CORPUS_MANIFESTS)
 

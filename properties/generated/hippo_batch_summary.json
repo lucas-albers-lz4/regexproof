@@ -1,16 +1,16 @@
 {
   "corpus": "hippo",
   "corpus_type": "rule_corpus",
-  "encodable": 62,
+  "encodable": 43,
   "engine": {
     "python": "3.14.6"
   },
-  "extracted": 183,
-  "findings": 11,
+  "extracted": 55,
+  "findings": 30,
   "inventory_questions": 4,
-  "join_regex_ids": 11,
+  "join_regex_ids": 30,
   "redos_findings": 0,
   "redos_incomplete": false,
   "schema_version": "1",
-  "triage": 121
+  "triage": 12
 }

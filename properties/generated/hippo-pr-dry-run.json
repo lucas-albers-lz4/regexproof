@@ -1,7 +1,7 @@
 {
   "action": "dry_run",
   "approved": false,
-  "finding_count": 11,
+  "finding_count": 30,
   "private_first_count": 0,
   "publish": false,
   "schema_version": "1",
