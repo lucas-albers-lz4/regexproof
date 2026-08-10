@@ -23,6 +23,7 @@ SECURITY_TOOL_CORPORA = frozenset(
         "noseyparker",
         "shhgit",
         "dompurify",
+        "everclaw-community-branches",
     }
 )
 
