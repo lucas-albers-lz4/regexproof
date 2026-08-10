@@ -1,0 +1,16 @@
+{
+  "corpus": "tracecat",
+  "corpus_type": "rule_corpus",
+  "encodable": 35,
+  "engine": {
+    "python": "3.14.6"
+  },
+  "extracted": 71,
+  "findings": 24,
+  "inventory_questions": 4,
+  "join_regex_ids": 24,
+  "redos_findings": 0,
+  "redos_incomplete": false,
+  "schema_version": "1",
+  "triage": 36
+}
