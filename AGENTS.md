@@ -165,11 +165,35 @@ in the harness output so a reader knows exactly what was proven.
 - `docs/verified-findings.jsonl` — machine-readable implementation findings
   keyed into TRAPS/BACKENDS/SEMANTICS
 
+## Auditing regexproof itself
+
+The workflow above is for proving properties of *someone else's* regexes. When
+the task is instead **"audit this repo's own security"**, read
+[`docs/SECURITY-AUDIT.md`](docs/SECURITY-AUDIT.md) first — it exists so each
+audit does not re-derive the same context. It carries:
+
+- the **trust-boundary map** (which inputs are attacker-supplied vs
+  operator-supplied — this is the input to almost every severity call here)
+- an inventory of **controls that already exist**, so a covered finding is
+  recognized as a false positive without reading the call site
+- a **settled-decisions registry** of items already examined and declined
+  (floating action tags, the `match.mjs` RegExp construction, `--mirror-expr`
+  `eval`) — re-filing these wastes a review cycle
+- copy-paste **machine-checkable sweeps** (untimed `subprocess` calls, CI gates
+  with no `sys.exit`, fail-open `except` handlers, symlink-following reads)
+- **severity calibration for this repo**: a CI gate that cannot fail outranks a
+  conventional injection finding, because the product is trust in a proof
+
+Two rules from step 4 of the workflow apply unchanged to self-audits: ground-truth
+every finding against the surrounding code before filing, and report what you
+*disproved* alongside what you found.
+
 ## Related tooling
 
 - Daily corpus mine (GHA + ledger, live): [`docs/MINE-SETUP.md`](docs/MINE-SETUP.md)
   — `PROJECT_PAT` classic PAT with `repo`; ledger/queue commit-back to `main`;
   score-v1 allocator + `scripts/rank-mine-candidates.py` for next-to-probe
+- Auditing this repo's own security: [`docs/SECURITY-AUDIT.md`](docs/SECURITY-AUDIT.md)
 
 ## Related skills (Hermes)
 

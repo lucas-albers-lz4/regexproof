@@ -32,3 +32,10 @@ Reporting field contracts: [`docs/REPORTING.md`](docs/REPORTING.md).
 If you believe regexproof itself has shipped an unverified SAT witness or a
 leak of a real secret, open a private report with the project maintainers
 before filing a public issue.
+
+## Auditing this repo's own security
+
+This file covers **disclosure of findings against third-party scanners**. For
+auditing regexproof itself — trust-boundary map, the controls that already
+exist, settled decisions that should not be re-filed, and copy-paste sweeps —
+see [`docs/SECURITY-AUDIT.md`](docs/SECURITY-AUDIT.md).
