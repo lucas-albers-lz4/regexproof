@@ -36,6 +36,7 @@ from regexproof.rule_diff.crs_pairs import discover_crs_pairs  # noqa: E402
 from regexproof.rule_diff.encode import shape5_constraints  # noqa: E402
 from regexproof.rule_diff.pairs import _min_literal_span, write_jsonl  # noqa: E402
 from regexproof.schemas import admitted_pair_schema, rule_diff_report_schema  # noqa: E402
+from regexproof.rule_diff.timeout_gate import fail_message, timeout_gate  # noqa: E402
 
 OUT = ROOT / "properties" / "generated"
 TRIAGE = ROOT / "properties" / "triage"
@@ -398,6 +399,12 @@ def main(argv: list[str] | None = None) -> int:
         f"crs rule_diff: admitted={len(admitted)} sat_gaps={sat_gaps} "
         f"gt_failed={gt_failed}"
     )
+    gate_ok, n_timeout, _rate, bad = timeout_gate(
+        [r for r in rows if r.get("kind") == "rule_diff"]
+    )
+    if not gate_ok:
+        print(fail_message(bad, n_timeout))
+        return 1
     if args.require_ground_truth and gt_failed:
         return 1
     if sat_gaps < 1:

@@ -51,12 +51,17 @@ from regexproof.schemas import (  # noqa: E402
     admitted_pair_schema,
     rule_diff_report_schema,
 )
+from regexproof.rule_diff.timeout_gate import (  # noqa: E402
+    fail_message,
+    timeout_gate,
+)
 
 TOML = ROOT / "pilots" / "gitleaks" / "config" / "gitleaks.toml"
 SPECS = ROOT / "pilots" / "gitleaks" / "canonical_specs" / "catalog.json"
 OUT = ROOT / "properties" / "generated"
-MAX_TIMEOUT_RATE = 0.20
 TIMEOUT_MS = 15000
+# Named exceptions only — empty means zero timeouts required (#186).
+TIMEOUT_ALLOWLIST: frozenset[str] = frozenset()
 
 
 def _length_bounds(pattern: str) -> tuple[int, int]:
@@ -385,7 +390,6 @@ def main(argv: list[str] | None = None) -> int:
         return 1
 
     results = []
-    timeouts = 0
     gt_failed = 0
     gap_names = [n for n, e in harness.REGISTRY.items() if e["kind"] == "rule_diff"]
     pair_by_family = {p["family"]: p for p in discovered["admitted_pairs"]}
@@ -401,7 +405,6 @@ def main(argv: list[str] | None = None) -> int:
         pair = pair_by_family.get(family, {})
         gt_status = "N/A"
         if res.get("result") == "timeout":
-            timeouts += 1 if entry["kind"] == "rule_diff" else 0
             outcome = "timeout"
             ok = False
         elif res.get("result") == "sat" and entry["kind"] == "rule_diff":
@@ -453,9 +456,12 @@ def main(argv: list[str] | None = None) -> int:
         )
 
     admitted = discovered["admitted_count"]
-    # timeouts counted only on rule_diff base props
-    timeout_rate = timeouts / admitted if admitted else 0.0
-    timeout_gate_ok = timeout_rate <= MAX_TIMEOUT_RATE
+    # timeouts counted only on rule_diff base props (results list includes guards)
+    rule_diff_rows = [r for r in results if r.get("kind") == "rule_diff"]
+    timeout_gate_ok, timeouts, timeout_rate, bad_timeouts = timeout_gate(
+        rule_diff_rows,
+        allowlist=TIMEOUT_ALLOWLIST,
+    )
 
     report = {
         "schema_version": "1",
@@ -489,7 +495,7 @@ def main(argv: list[str] | None = None) -> int:
         f"gate_ok={timeout_gate_ok}"
     )
     if not timeout_gate_ok:
-        print(f"FAIL timeout gate: {timeout_rate} > {MAX_TIMEOUT_RATE}")
+        print(fail_message(bad_timeouts, timeouts))
         return 1
 
     # Mutation guards must pass (ok)

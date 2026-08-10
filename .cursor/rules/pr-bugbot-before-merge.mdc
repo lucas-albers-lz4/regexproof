@@ -30,6 +30,10 @@ If unsure, treat as non-trivial.
 ## Required sequence (non-trivial)
 
 1. Open or update the PR; wait for **CI** to go green (or fix failures first).
+   **Presence, not just green:** required `verify` jobs must appear in
+   `gh pr checks` (Z3 proof harness, Golden suite, Link check, …). A rollup
+   that only shows CodeQL is *not* green — the gate never ran (issue #205).
+   Assert expected check names are present *and* successful before merge.
 2. Ensure the PR head branch is checked out locally.
 3. Run Bugbot via the `review-bugbot` skill / `bugbot` subagent on **branch changes** (merge-base vs default base, usually `main`).
 4. If Bugbot reports findings: **fix them** (or explicitly document why a finding is a false positive), push, re-run Bugbot once after substantive fixes.
@@ -38,5 +42,6 @@ If unsure, treat as non-trivial.
 ## Do not
 
 - Merge a non-trivial PR solely because CI is green and no human commented
+- Treat “listed checks passed” as sufficient when expected `verify` jobs are **absent**
 - Skip Bugbot because “we just ran tests locally”
 - Rely on AGENTS.md alone for this gate — this Cursor rule is the merge-cycle source of truth

@@ -234,3 +234,8 @@ Doc-review (#185) signed off 2026-08-10: citations corrected (`eval` line,
 secret-scanning wording); severity ordering and settled-decisions registry
 kept; mine ledger stays classified untrusted; maintenance = same-PR updates +
 wave date-stamps (§6a).
+
+**CI presence (#205):** “checks green” means expected `verify` jobs are
+*present and successful* — not merely that every listed check passed. A PR
+rollup with only CodeQL is not merge-ready. Make `verify` jobs required status
+checks on `main` (branch protection) so absence blocks merge.

@@ -35,6 +35,7 @@ from regexproof.rule_diff.cross_engine import (  # noqa: E402
 from regexproof.rule_diff.encode import shape5_constraints  # noqa: E402
 from regexproof.rule_diff.pairs import _min_literal_span  # noqa: E402
 from regexproof.schemas import rule_diff_report_schema  # noqa: E402
+from regexproof.rule_diff.timeout_gate import fail_message, timeout_gate  # noqa: E402
 
 OUT = ROOT / "properties" / "generated"
 TRIAGE = ROOT / "properties" / "triage"
@@ -333,10 +334,7 @@ def main(argv: list[str] | None = None) -> int:
                 mut_ok = False
 
     findings = tag_disclosure(findings, corpus="coreruleset")
-    n_timeout = sum(1 for r in results if r["result"] == "timeout")
-    timeout_rate = n_timeout / max(1, len(results))
-    # TIMEOUT = not proven — never a silent pass (AGENTS.md / harness contract).
-    timeout_gate_ok = n_timeout == 0
+    timeout_gate_ok, n_timeout, timeout_rate, bad_timeouts = timeout_gate(results)
     report = {
         "schema_version": "1",
         "pilot": "crs_cross_engine_coraza_modsec",
@@ -412,10 +410,7 @@ def main(argv: list[str] | None = None) -> int:
         print("FAIL: mutation guard", file=sys.stderr)
         return 1
     if not timeout_gate_ok:
-        print(
-            f"FAIL: {n_timeout} timeout(s) — TIMEOUT is not proven",
-            file=sys.stderr,
-        )
+        print(fail_message(bad_timeouts, n_timeout), file=sys.stderr)
         return 1
     return 0
 

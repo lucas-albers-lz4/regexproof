@@ -213,3 +213,59 @@ def test_property_subset_resolves_names():
     assert any(n.startswith("P2-") for n in names)
     assert "P1-mutated-star" in names
     assert "P5-handle-safe" not in names
+
+
+def test_z3_property_template_exits_zero_on_pass():
+    """#169: the canonical-shapes CI gate must be able to fail — and must pass clean."""
+    proc = subprocess.run(
+        [sys.executable, str(ROOT / "scripts" / "z3-property-template.py")],
+        cwd=ROOT,
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    assert proc.returncode == 0, proc.stderr + proc.stdout
+    assert "[TIMEOUT]" not in proc.stdout
+    assert "[FAIL]" not in proc.stdout
+
+
+def test_z3_property_template_exits_nonzero_on_forced_fail(tmp_path: Path):
+    """Mutation guard for the gate itself: a flipped expect must exit 1."""
+    src = (ROOT / "scripts" / "z3-property-template.py").read_text(encoding="utf-8")
+    # Flip the shape-5 control (expect_unsat=True) to expect SAT → FAIL.
+    mutated = src.replace(
+        'InRe(s5, r1) & Not(InRe(s5, r1)),\n        expect_unsat=True,',
+        'InRe(s5, r1) & Not(InRe(s5, r1)),\n        expect_unsat=False,',
+        1,
+    )
+    assert mutated != src
+    path = tmp_path / "z3-property-template-mutated.py"
+    path.write_text(mutated, encoding="utf-8")
+    proc = subprocess.run(
+        [sys.executable, str(path)],
+        cwd=ROOT,
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    assert proc.returncode == 1, proc.stdout + proc.stderr
+    assert "[FAIL]" in proc.stdout or "FAIL:" in proc.stderr
+
+
+def test_timeout_gate_zero_and_allowlist():
+    from regexproof.rule_diff.timeout_gate import fail_message, timeout_gate
+
+    ok, n, rate, bad = timeout_gate([{"name": "a", "result": "unsat"}])
+    assert ok and n == 0 and rate == 0.0 and bad == []
+
+    ok, n, rate, bad = timeout_gate(
+        [{"name": "a", "result": "timeout"}, {"name": "b", "result": "sat"}]
+    )
+    assert not ok and n == 1 and bad == ["a"]
+    assert "TIMEOUT is not proven" in fail_message(bad, n)
+
+    ok, n, rate, bad = timeout_gate(
+        [{"name": "a", "result": "timeout"}],
+        allowlist=frozenset({"a"}),
+    )
+    assert ok and n == 1 and bad == []
