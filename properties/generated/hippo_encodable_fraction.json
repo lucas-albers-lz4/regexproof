@@ -1,0 +1,40 @@
+{
+  "budget": {
+    "max_disk_mb": 200,
+    "max_mem_mb": 1024,
+    "max_patterns": 5000,
+    "max_wall_s": 600,
+    "redos_wall_s": 120
+  },
+  "budget_breaches": null,
+  "commit": "4879bd48c50c712236f99413cb1f68091cea599c",
+  "compiler_fingerprint": "71d2ce23b4cd",
+  "complete_run": true,
+  "corpus_pin": "4879bd48c50c712236f99413cb1f68091cea599c",
+  "decision": "go",
+  "decision_rule": "go iff encodable/sample_size >= 0.3",
+  "dialect": "ecma",
+  "encodable": 43,
+  "engine_versions": {
+    "python": "3.14.6",
+    "z3": "5.0.0"
+  },
+  "extractor_schema_version": "2",
+  "fraction": 0.7818,
+  "go_no_go_threshold": 0.3,
+  "id_formula": "v2-domain-optional-ascii-default",
+  "inventory_path": "properties/generated/hippo-inventory.ndjson",
+  "path": "batch/corpora/hippo/rules",
+  "pilot": "hippo",
+  "reasons": {
+    "composite-pattern": 2,
+    "m-flag": 1,
+    "ok": 43,
+    "stateful": 9
+  },
+  "sample_size": 55,
+  "schema_version": "1",
+  "scope": "full_corpus",
+  "unclassified_parse_errors": 0,
+  "wall_s": 2.806
+}

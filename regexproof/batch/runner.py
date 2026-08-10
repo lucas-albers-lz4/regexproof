@@ -46,7 +46,7 @@ from regexproof.extractors.go_regexp_tests import (  # noqa: E402
     extract_go_regexp_tests_tree,
 )
 from regexproof.extractors.ids_rules import extract_ids_rules  # noqa: E402
-from regexproof.extractors.js_babel import extract_js  # noqa: E402
+from regexproof.extractors.js_babel import extract_js, extract_js_precise  # noqa: E402
 from regexproof.extractors.modsec import count_operators, extract_modsec  # noqa: E402
 from regexproof.extractors.pcre2_testdata import extract_pcre2_testdata  # noqa: E402
 from regexproof.extractors.perl_re_tests import (  # noqa: E402
@@ -404,6 +404,34 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
             "max_disk_mb": 50,
         },
     },
+    "hippo": {
+        "corpus_type": "rule_corpus",
+        # Materialize: ln -sfn /tmp/hippo batch/corpora/hippo/rules
+        # Explicit allowlist — probe 2899 sites are dominated by vendored bundles.
+        "path": ROOT / "batch" / "corpora" / "hippo" / "rules",
+        "files": [
+            "repository-data/webfiles/src/main/resources/site/src/js/eforms/eforms.js",
+            "repository-data/webfiles/src/main/resources/site/src/js/eforms/formcheck/formcheck.js",
+            "repository-data/webfiles/src/main/resources/site/src/js/eforms/jquery-hippo-validate.js",
+            "repository-data/webfiles/src/main/resources/site/src/js/table-sort/table-sort-date.js",
+            "repository-data/webfiles/src/main/resources/site/src/js/statistics/statistics-countup.js",
+            "repository-data/webfiles/src/main/resources/site/src/js/utils/vanilla-js-utils.js",
+        ],
+        "dialect": "ecma",
+        "extractor": "js_precise_dir",
+        "repo": "NHS-digital-website/hippo",
+        "security_tool": False,
+        "lift_inline": False,
+        "corpus_pin": "4879bd48c50c712236f99413cb1f68091cea599c",
+        "commit": "4879bd48c50c712236f99413cb1f68091cea599c",
+        "budget": {
+            "max_patterns": 5000,
+            "max_wall_s": 600,
+            "redos_wall_s": 120,
+            "max_mem_mb": 1024,
+            "max_disk_mb": 200,
+        },
+    },
     # Wave-3 P5 testdata corpora (#116) — exempt from admission gate_decision.
     "perl_tre": {
         "corpus_type": "testdata",
@@ -478,7 +506,7 @@ WAVE_CORPORA = frozenset({
     "pcre2_testdata", "re2_testdata", "cpython_re", "busybox",
     "yara_rules", "test262", "spamassassin",
     "noseyparker", "shhgit",
-    "dompurify", "isemail", "email_addresses",
+    "dompurify", "isemail", "email_addresses", "hippo",
     "perl_tre", "go_regexp_tests", "v8_mjsunit",
 })
 
@@ -611,6 +639,22 @@ def _extract(corpus: str, meta: dict[str, Any]) -> list[dict[str, Any]]:
             fp = path / name
             rel = str(fp.relative_to(ROOT))
             out.extend(extract_js(fp.read_text(encoding="utf-8"), repo=meta["repo"], file=rel))
+        return out
+    if meta["extractor"] == "js_precise_dir":
+        # Wave ecma path: Babel/comment-aware extract_js_precise (not legacy extract_js).
+        out: list[dict[str, Any]] = []
+        for name in meta.get("files") or sorted(p.name for p in path.glob("*.js")):
+            fp = path / name
+            if not fp.is_file():
+                raise SystemExit(f"HARD ERROR: missing js_precise_dir file: {fp}")
+            rel = str(fp.relative_to(ROOT))
+            out.extend(
+                extract_js_precise(
+                    fp.read_text(encoding="utf-8", errors="replace"),
+                    repo=meta["repo"],
+                    file=rel,
+                )
+            )
         return out
     if meta["extractor"] == "js":
         source = path.read_text(encoding="utf-8")

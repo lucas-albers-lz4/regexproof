@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
-"""P4 B2: extract java Pattern.compile → pcre approx, classify, fuzz, report.
+"""Extract java Pattern.compile → pcre approx, classify, fuzz, report.
 
 Usage:
   python scripts/java-html-sanitizer-triage.py --root PATH [-o properties/generated]
   python scripts/java-html-sanitizer-triage.py --fixture
+  python scripts/java-html-sanitizer-triage.py --root PATH --corpus hippo \\
+      --artifact-stem hippo_java --pin SHA --url URL --files a.java --files b.java
 """
 
 from __future__ import annotations
@@ -12,7 +14,6 @@ import argparse
 import json
 import subprocess
 import sys
-import tempfile
 from collections import Counter
 from pathlib import Path
 
@@ -29,7 +30,7 @@ from regexproof.compiler.pcre import compile_pcre
 from regexproof.extractors.java_pattern import extract_java_pattern
 
 HELPER = ROOT / "helpers" / "pcre2" / "match.py"
-CORPUS = "java-html-sanitizer"
+DEFAULT_CORPUS = "java-html-sanitizer"
 
 # Align with admission.walk skips so a full-clone --root does not pull test trees.
 _SKIP_DIR_NAMES = frozenset(
@@ -79,13 +80,39 @@ def _iter_java(root: Path) -> list[Path]:
     return out
 
 
-def extract_tree(root: Path, *, repo: str = CORPUS) -> list[dict]:
+def extract_tree(
+    root: Path,
+    *,
+    repo: str = DEFAULT_CORPUS,
+    files: list[str] | None = None,
+) -> list[dict]:
     recs: list[dict] = []
-    for fp in _iter_java(root):
-        rel = str(fp.relative_to(root))
+    root = root.resolve()
+    if files:
+        paths = []
+        for rel in files:
+            if Path(rel).is_absolute():
+                raise SystemExit(f"HARD ERROR: --files must be relative, got: {rel}")
+            fp = (root / rel).resolve()
+            try:
+                fp.relative_to(root)
+            except ValueError as exc:
+                raise SystemExit(
+                    f"HARD ERROR: --files escapes --root: {rel}"
+                ) from exc
+            if not fp.is_file():
+                raise SystemExit(f"HARD ERROR: missing --files entry: {rel}")
+            paths.append((fp, rel))
+    else:
+        paths = [(fp, str(fp.relative_to(root))) for fp in _iter_java(root)]
+    for fp, rel in paths:
         try:
             text = fp.read_text(encoding="utf-8", errors="replace")
-        except OSError:
+        except OSError as exc:
+            if files is not None:
+                raise SystemExit(
+                    f"HARD ERROR: cannot read --files entry {rel}: {exc}"
+                ) from exc
             continue
         recs.extend(extract_java_pattern(text, repo=repo, file=rel))
     return recs
@@ -167,10 +194,25 @@ def differential_check(rec: dict, *, samples: list[str] | None = None) -> dict:
     }
 
 
-def run_triage(root: Path, out_dir: Path) -> dict:
+def run_triage(
+    root: Path,
+    out_dir: Path,
+    *,
+    corpus: str = DEFAULT_CORPUS,
+    candidate_url: str = JAVA_HTML_SANITIZER_URL,
+    corpus_pin: str = JAVA_HTML_SANITIZER_PIN,
+    artifact_stem: str | None = None,
+    files: list[str] | None = None,
+) -> dict:
     out_dir = out_dir.expanduser().resolve()
     out_dir.mkdir(parents=True, exist_ok=True)
-    recs = [classify_encodable(r) for r in extract_tree(root)]
+    stem = artifact_stem or (
+        corpus if corpus == DEFAULT_CORPUS else f"{corpus}_java"
+    )
+    recs = [
+        classify_encodable(r)
+        for r in extract_tree(root, repo=corpus, files=files)
+    ]
     encodable = [r for r in recs if not r.get("unencodable_reason")]
     rejected = [r for r in recs if r.get("unencodable_reason")]
 
@@ -194,9 +236,9 @@ def run_triage(root: Path, out_dir: Path) -> dict:
 
     summary = {
         "schema_version": "1",
-        "corpus": CORPUS,
-        "candidate_url": JAVA_HTML_SANITIZER_URL,
-        "corpus_pin": JAVA_HTML_SANITIZER_PIN,
+        "corpus": corpus,
+        "candidate_url": candidate_url,
+        "corpus_pin": corpus_pin,
         "approximation": "java→pcre",
         "total_sites": len(recs),
         "encodable": len(encodable),
@@ -211,35 +253,38 @@ def run_triage(root: Path, out_dir: Path) -> dict:
             "bounded_samples": True,
         },
     }
+    if files:
+        summary["files"] = list(files)
 
     # Extractor JSONL
-    ext_path = out_dir / f"{CORPUS}_extractor.jsonl"
+    ext_path = out_dir / f"{stem}_extractor.jsonl"
     with ext_path.open("w", encoding="utf-8") as f:
         for r in recs:
             f.write(json.dumps(r, sort_keys=True, ensure_ascii=False) + "\n")
 
     # Triage NDJSON (finding-shaped summary rows)
-    ndjson_path = out_dir / f"{CORPUS}_triage.ndjson"
+    ndjson_path = out_dir / f"{stem}_triage.ndjson"
     with ndjson_path.open("w", encoding="utf-8") as f:
         for row in fuzz_rows:
             rec = {
                 "schema_version": "1",
                 "kind": "triage",
-                "corpus": CORPUS,
+                "corpus": corpus,
                 "approximation": "java→pcre",
                 **row,
             }
             f.write(json.dumps(rec, sort_keys=True, ensure_ascii=False) + "\n")
 
-    frac_path = out_dir / f"{CORPUS}_encodable_fraction.json"
+    frac_path = out_dir / f"{stem}_encodable_fraction.json"
     frac_path.write_text(dumps_pinned(summary), encoding="utf-8")
 
-    md_path = out_dir / f"{CORPUS}_batch.md"
+    md_path = out_dir / f"{stem}_batch.md"
     md = [
-        f"# {CORPUS} triage (java→pcre approximation)",
+        f"# {stem} triage (java→pcre approximation)",
         "",
-        f"- pin: `{JAVA_HTML_SANITIZER_PIN}`",
-        f"- url: {JAVA_HTML_SANITIZER_URL}",
+        f"- corpus: `{corpus}`",
+        f"- pin: `{corpus_pin}`",
+        f"- url: {candidate_url}",
         f"- sites: {summary['total_sites']} (encodable {summary['encodable']}, "
         f"rejected {summary['rejected']}, fraction {summary['encodable_fraction']:.4f})",
         f"- differential: ok={fuzz_ok} fail={len(fuzz_fail)} "
@@ -269,6 +314,27 @@ def main(argv: list[str] | None = None) -> int:
         help="Use tests/fixtures/admission/java_sites",
     )
     ap.add_argument(
+        "--corpus",
+        default=DEFAULT_CORPUS,
+        help=f"Corpus name in artifacts (default {DEFAULT_CORPUS})",
+    )
+    ap.add_argument(
+        "--artifact-stem",
+        default=None,
+        help=(
+            "Filename stem for outputs (default: corpus for "
+            f"{DEFAULT_CORPUS}; otherwise <corpus>_java)"
+        ),
+    )
+    ap.add_argument("--pin", default=None, help="corpus_pin recorded in summary")
+    ap.add_argument("--url", default=None, help="candidate_url recorded in summary")
+    ap.add_argument(
+        "--files",
+        action="append",
+        default=None,
+        help="Relative .java path under --root (repeatable; skips full walk)",
+    )
+    ap.add_argument(
         "-o",
         "--output-dir",
         type=Path,
@@ -277,14 +343,41 @@ def main(argv: list[str] | None = None) -> int:
     args = ap.parse_args(argv)
     if args.fixture:
         root = (ROOT / "tests" / "fixtures" / "admission" / "java_sites").resolve()
+        corpus = DEFAULT_CORPUS
+        pin = JAVA_HTML_SANITIZER_PIN
+        url = JAVA_HTML_SANITIZER_URL
+        files = None
+        stem = None
     elif args.root:
         root = args.root.expanduser().resolve()
+        corpus = args.corpus
+        if corpus == DEFAULT_CORPUS:
+            pin = args.pin or JAVA_HTML_SANITIZER_PIN
+            url = args.url or JAVA_HTML_SANITIZER_URL
+        else:
+            if not args.pin or not args.url:
+                ap.error(
+                    f"--pin and --url are required when --corpus is not "
+                    f"{DEFAULT_CORPUS}"
+                )
+            pin = args.pin
+            url = args.url
+        files = args.files
+        stem = args.artifact_stem
     else:
         ap.error("provide --root or --fixture")
     if not root.is_dir():
         print(f"error: not a directory: {root}", file=sys.stderr)
         return 2
-    summary = run_triage(root, args.output_dir.expanduser().resolve())
+    summary = run_triage(
+        root,
+        args.output_dir.expanduser().resolve(),
+        corpus=corpus,
+        candidate_url=url,
+        corpus_pin=pin,
+        artifact_stem=stem,
+        files=files,
+    )
     print(dumps_pinned(summary))
     return 0 if summary.get("differential_zero_disagreement_pass") else 1
 
