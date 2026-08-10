@@ -188,3 +188,51 @@ def reject_shell_subprocess_usage(paths: Sequence[Path] | None = None) -> list[s
                             f"{file}:{node.lineno}: subprocess.{name}(..., shell=True) forbidden"
                         )
     return violations
+
+
+def reject_untimed_subprocess_usage(paths: Sequence[Path] | None = None) -> list[str]:
+    """Static check: fail if subprocess calls omit an explicit timeout=.
+
+    Scans compilers + helpers by default (#171 hang / self-ReDoS surface).
+    Returns a list of violation messages (empty = clean).
+    """
+    if paths is None:
+        root = Path(__file__).resolve().parents[2]
+        paths = [
+            root / "regexproof" / "compiler",
+            root / "helpers",
+        ]
+    violations: list[str] = []
+    for path in paths:
+        if path.is_dir():
+            files = sorted(path.rglob("*.py"))
+        else:
+            files = [path]
+        for file in files:
+            if not file.is_file():
+                continue
+            source = file.read_text(encoding="utf-8")
+            try:
+                tree = ast.parse(source, filename=str(file))
+            except SyntaxError as exc:
+                violations.append(f"{file}: syntax error: {exc}")
+                continue
+            for node in ast.walk(tree):
+                if not isinstance(node, ast.Call):
+                    continue
+                func = node.func
+                if not (
+                    isinstance(func, ast.Attribute)
+                    and isinstance(func.value, ast.Name)
+                    and func.value.id == "subprocess"
+                    and func.attr
+                    in {"run", "Popen", "call", "check_call", "check_output"}
+                ):
+                    continue
+                name = func.attr
+                kw_names = {k.arg for k in node.keywords}
+                if "timeout" not in kw_names:
+                    violations.append(
+                        f"{file}:{node.lineno}: subprocess.{name}(...) missing timeout="
+                    )
+    return violations

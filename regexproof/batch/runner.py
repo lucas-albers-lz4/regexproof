@@ -15,6 +15,10 @@ import jsonschema
 
 ROOT = Path(__file__).resolve().parents[2]
 
+# Per-file read cap — same bound as admission walk (#175). Symlinks allowed
+# (detect-secrets plugins/ materialization); size is the only gate here.
+_MAX_FILE_BYTES = 2_000_000
+
 from regexproof.batch.disclose import (  # noqa: E402
     assert_no_auto_publication,
     tag_disclosure,
@@ -873,8 +877,12 @@ def _apply_address_space_cap(budget: dict[str, Any]) -> None:
         new_soft = cap if soft == resource.RLIM_INFINITY else min(soft, cap)
         new_hard = cap if hard == resource.RLIM_INFINITY else min(hard, cap)
         resource.setrlimit(resource.RLIMIT_AS, (new_soft, new_hard))
-    except Exception:  # noqa: BLE001
-        return
+    except Exception as exc:  # noqa: BLE001
+        print(
+            f"warning: could not install RLIMIT_AS address-space cap "
+            f"(max_mem_mb={max_mb}): {exc}",
+            file=sys.stderr,
+        )
 
 
 def _validate_expected_roots(corpus: str, meta: dict[str, Any]) -> None:
@@ -1237,10 +1245,16 @@ def _extract_glob(
 
     ``glob`` may be a single pattern or a comma-separated list (brace-free),
     e.g. ``**/*.yml,**/*.yaml``.
+
+    Files larger than ``_MAX_FILE_BYTES`` are skipped (counted on
+    ``meta["skipped_oversized"]``). Symlinks are followed — detect-secrets
+    and similar corpora materialize plugins via symlink (#175).
     """
     out: list[dict[str, Any]] = []
     root_resolved = ROOT.resolve()
+    skipped_oversized = 0
     if not path.is_dir():
+        meta["skipped_oversized"] = 0
         return out
     files: list[Path] = []
     named = meta.get("files")
@@ -1266,6 +1280,12 @@ def _extract_glob(
         if fp in seen or not fp.is_file():
             continue
         seen.add(fp)
+        try:
+            if fp.stat().st_size > _MAX_FILE_BYTES:
+                skipped_oversized += 1
+                continue
+        except OSError:
+            continue
         # Prefer the unresolved path under ROOT so symlink materializations
         # (plugins/ → /tmp/…) keep stable repo-relative sites / regex_ids.
         try:
@@ -1277,6 +1297,13 @@ def _extract_glob(
                 rel = str(fp)
         out.extend(
             extract_fn(fp.read_text(encoding="utf-8", errors="replace"), rel)
+        )
+    meta["skipped_oversized"] = skipped_oversized
+    if skipped_oversized:
+        print(
+            f"warning: skipped {skipped_oversized} oversized file(s) "
+            f"(>{_MAX_FILE_BYTES} bytes) under {path}",
+            file=sys.stderr,
         )
     return out
 

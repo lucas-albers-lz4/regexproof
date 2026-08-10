@@ -17,6 +17,19 @@ class Unencodable(Exception):
         self.reason = reason
 
 
+def helper_gate_missing(helper_name: str) -> dict:
+    """Fail-closed gate when a dialect helper is unavailable (#172).
+
+    Returns ``ok: False`` so existing ``if gate.get("ok") is False`` paths
+    refuse to encode — never soft-open with ``ok: True``.
+    """
+    return {
+        "ok": False,
+        "helper": f"{helper_name}-missing",
+        "error": f"{helper_name} helper unavailable",
+    }
+
+
 @dataclass
 class CompileResult:
     mirror: Any | None

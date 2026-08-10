@@ -19,6 +19,7 @@ from regexproof.compiler.simple_parse import parse_pattern
 
 HELPER = Path(__file__).resolve().parents[2] / "helpers" / "perl" / "match.py"
 DEFAULT_MAX_LENGTH = 256
+HELPER_TIMEOUT_S = 30
 PERL_TERMINATORS = frozenset(["\n"])
 _PERL_SPACE_CHARS = " \t\n\r\f\v"
 
@@ -134,7 +135,10 @@ def _helper_parse(pattern: str) -> dict:
             text=True,
             shell=False,
             check=False,
+            timeout=HELPER_TIMEOUT_S,
         )
+    except subprocess.TimeoutExpired:
+        return {"ok": False, "unencodable_reason": "timeout"}
     except ValueError:
         # Defense in depth: e.g. unexpected argv encoding failures.
         return {"ok": False, "unencodable_reason": "embedded-nul"}
@@ -169,6 +173,8 @@ def compile_perl(
         gate = _helper_parse(rewritten)
         if gate.get("ok") is False:
             ureason = gate.get("unencodable_reason")
+            if ureason == "timeout":
+                raise Unencodable("timeout")
             # Only hard-reject on real parse failures; helper absence is optional.
             if ureason not in (
                 None,
@@ -228,12 +234,16 @@ def helper_used_for_parse_and_replay() -> bool:
         return False
     if gate.get("helper") != "perl":
         return False
-    proc = subprocess.run(
-        [sys.executable, str(HELPER), "match", "a+", ""],
-        input="aaa",
-        capture_output=True,
-        text=True,
-        shell=False,
-        check=False,
-    )
+    try:
+        proc = subprocess.run(
+            [sys.executable, str(HELPER), "match", "a+", ""],
+            input="aaa",
+            capture_output=True,
+            text=True,
+            shell=False,
+            check=False,
+            timeout=HELPER_TIMEOUT_S,
+        )
+    except subprocess.TimeoutExpired:
+        return False
     return proc.returncode == 0

@@ -61,7 +61,7 @@ def test_go_re2_parse_stripped_form():
     stripped, _ = strip_verbose_x(raw)
     assert stripped == "ab"
     gate = parse_with_helper(stripped)
-    if gate.get("helper") == "go-missing":
+    if str(gate.get("helper") or "").endswith("-missing"):
         pytest.skip("go-re2 helper missing")
     assert gate.get("ok") is True
 
@@ -70,7 +70,7 @@ def test_mutation_unstripped_fails_go_re2_or_compile():
     """Deliberately-unstripped ``(?x) a b`` must not silently encode."""
     raw = "(?x) a b"
     gate = parse_with_helper(raw)
-    if gate.get("helper") != "go-missing":
+    if not str(gate.get("helper") or "").endswith("-missing"):
         assert gate.get("ok") is False
     # Residual x in flags is fail-closed at compile_re2.
     result = compile_re2("a b", flags="x")

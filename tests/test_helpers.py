@@ -59,5 +59,10 @@ def test_ecma_helper_when_node_present():
     from regexproof.compiler import ecma as ecma_mod
 
     gate = ecma_mod._run_regexpp("a+", "")
-    # ok True either via regexpp or soft fallback when node missing
-    assert "ok" in gate or gate.get("ok") is True
+    # Fail-closed (#172): missing node → ok False + *-missing helper.
+    assert "ok" in gate
+    if str(gate.get("helper") or "").endswith("-missing"):
+        assert gate.get("ok") is False
+    else:
+        assert gate.get("ok") is True
+

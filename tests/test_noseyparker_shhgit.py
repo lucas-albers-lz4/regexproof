@@ -60,7 +60,7 @@ def test_shhgit_flags_i_and_rsa_sample():
     _validate(recs)
 
     gate = parse_with_helper(rsa["pattern"])
-    if gate.get("helper") == "go-missing":
+    if str(gate.get("helper") or "").endswith("-missing"):
         pytest.skip("go-re2 helper missing")
     from regexproof.compiler.re2 import ensure_built
     import subprocess
@@ -148,7 +148,7 @@ def test_mutation_unstripped_x_rejected():
     stripped, _ = strip_verbose_x(raw)
     assert stripped == "ab"
     gate = parse_with_helper(raw)
-    if gate.get("helper") != "go-missing":
+    if not str(gate.get("helper") or "").endswith("-missing"):
         assert gate.get("ok") is False
     bad = compile_re2(raw, flags="")
     # Pattern still contains (?x — go-re2 parse-error path

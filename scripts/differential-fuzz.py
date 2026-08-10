@@ -59,6 +59,10 @@ if not z3.get_version_string().startswith("5.0"):
 # Namespace for --mirror-expr: the z3py API (same names z3-verify.py uses).
 # NOTE: no Opt — z3py's Opt is the optimizer class, not regex optional.
 # Regex "?" is Union(r, Re("")).
+#
+# Trust boundary: --mirror-expr is operator-supplied CLI input (see
+# docs/SECURITY-AUDIT.md). The restricted eval below is intentional for the
+# harness; it is not an untrusted-input boundary.
 MIRROR_NS = {
     "AllChar": z3.AllChar,
     "Concat": z3.Concat,

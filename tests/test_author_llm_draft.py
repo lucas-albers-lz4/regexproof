@@ -143,6 +143,7 @@ def test_llm_never_sets_auto_filed(tmp_path: Path):
             "below-scale",
             "-o",
             str(out),
+            "--allow-outside-generated",
             "--ledger",
             str(ledger),
             "--now",
@@ -198,6 +199,7 @@ def test_boundary_true_cannot_auto_file_via_llm(tmp_path: Path):
             "below-scale",
             "-o",
             str(out),
+            "--allow-outside-generated",
             "--ledger",
             str(ledger),
             "--now",
@@ -223,6 +225,21 @@ def test_byte_identical_clock():
 def test_absolute_output_path(tmp_path: Path):
     mod = _cli()
     out = tmp_path / "nested" / "dec.json"
+    # Outside properties/generated requires an explicit opt-out (#176).
+    rc_denied = mod.main(
+        [
+            str(WTFORMS_DRAFT.resolve()),
+            "--llm-draft",
+            "--classify-label",
+            "below-scale",
+            "-o",
+            str(out),
+            "--now",
+            "2026-08-09",
+        ]
+    )
+    assert rc_denied == 1
+    assert not out.exists()
     rc = mod.main(
         [
             str(WTFORMS_DRAFT.resolve()),
@@ -231,6 +248,7 @@ def test_absolute_output_path(tmp_path: Path):
             "below-scale",
             "-o",
             str(out),
+            "--allow-outside-generated",
             "--now",
             "2026-08-09",
         ]

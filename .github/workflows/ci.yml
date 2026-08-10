@@ -82,6 +82,8 @@ jobs:
             --real-argv grep -qE '^[a-z0-9._-]+$'
       - name: Static reject shell=True in fuzz paths
         run: python -c "from regexproof.fuzz.adapters import reject_shell_subprocess_usage; v=reject_shell_subprocess_usage(); assert not v, v"
+      - name: Static reject untimed subprocess in compiler/helpers
+        run: python -c "from regexproof.fuzz.adapters import reject_untimed_subprocess_usage; v=reject_untimed_subprocess_usage(); assert not v, v"
       - name: CI contract tests (NDJSON / json-legacy)
         run: pytest -q tests/test_ci_contracts.py
 

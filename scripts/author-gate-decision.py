@@ -79,6 +79,25 @@ def _audit_clock(now: date | None):
     return _clock
 
 
+def _resolve_output(
+    output: Path | None,
+    corpus: str,
+    *,
+    allow_outside: bool,
+) -> Path:
+    """Default under properties/generated; explicit --output must stay there unless opted out."""
+    generated = (ROOT / "properties" / "generated").resolve()
+    if output is None:
+        return default_output_path(corpus, repo_root=ROOT)
+    out = output.expanduser().resolve()
+    if not allow_outside and not out.is_relative_to(generated):
+        raise ValueError(
+            f"error: --output must be under properties/generated (got {out}); "
+            "pass --allow-outside-generated to override"
+        )
+    return out
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument(
@@ -137,6 +156,11 @@ def main(argv: list[str] | None = None) -> int:
     )
     ap.add_argument("--related", default=None, help="JSON object for related metadata")
     ap.add_argument("-o", "--output", type=Path, help="Write decision JSON here")
+    ap.add_argument(
+        "--allow-outside-generated",
+        action="store_true",
+        help="Permit --output outside properties/generated (default: refuse)",
+    )
     ap.add_argument("--ledger", type=Path, help="Candidate ledger path")
     ap.add_argument(
         "--now",
@@ -244,11 +268,15 @@ def main(argv: list[str] | None = None) -> int:
             return 1
 
         decision = outcome.decision
-        out = (
-            args.output.expanduser().resolve()
-            if args.output
-            else default_output_path(str(decision["corpus"]), repo_root=ROOT)
-        )
+        try:
+            out = _resolve_output(
+                args.output,
+                str(decision["corpus"]),
+                allow_outside=args.allow_outside_generated,
+            )
+        except ValueError as e:
+            print(str(e), file=sys.stderr)
+            return 1
         if ledger_path is not None and url:
             try:
                 mark_llm_template_fired(
@@ -297,11 +325,15 @@ def main(argv: list[str] | None = None) -> int:
         print(f"error: {e}", file=sys.stderr)
         return 1
 
-    out = (
-        args.output.expanduser().resolve()
-        if args.output
-        else default_output_path(str(decision["corpus"]), repo_root=ROOT)
-    )
+    try:
+        out = _resolve_output(
+            args.output,
+            str(decision["corpus"]),
+            allow_outside=args.allow_outside_generated,
+        )
+    except ValueError as e:
+        print(str(e), file=sys.stderr)
+        return 1
 
     if ledger_path is not None:
         url = str(decision.get("candidate_url") or "")

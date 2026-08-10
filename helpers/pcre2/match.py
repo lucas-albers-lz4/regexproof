@@ -23,6 +23,8 @@ if str(_ROOT) not in sys.path:
 
 from regexproof.compiler.reject_markers import PCRE_REJECT_MARKERS  # noqa: E402
 
+HELPER_TIMEOUT_S = 30
+
 
 def main() -> int:
     if len(sys.argv) < 2:
@@ -92,6 +94,7 @@ def parse(pattern: str) -> int:
             capture_output=True,
             shell=False,
             check=False,
+            timeout=HELPER_TIMEOUT_S,
         )
         if proc.returncode in (0, 1):
             print(json.dumps({"ok": True, "helper": "pcre2grep"}))
@@ -142,6 +145,7 @@ def match(pattern: str, flags: str, data: str) -> int:
             capture_output=True,
             shell=False,
             check=False,
+            timeout=HELPER_TIMEOUT_S,
         )
         return 0 if proc.returncode == 0 else 1
     print("FATAL: no pcre2 bindings and no pcre2grep — refusing Python re fallback", file=sys.stderr)

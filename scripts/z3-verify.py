@@ -323,12 +323,22 @@ def _sed_capture(stream: str) -> str:
     """Real sed fallback: capture `[^\"]*` (prefix before first quote).
 
     Mirrors the rpcd json_get fallback shape. Used as ground truth for P3 —
-    the Z3 witness must reproduce against this real implementation."""
-    proc = subprocess.run(
-        ["sed", "-n", 's/^.*\\("\\([^"]*\\)".*$/\\1/p', stream],
-        capture_output=True,
-        text=True,
-    )
+    the Z3 witness must reproduce against this real implementation.
+
+    Stream is fed on stdin (not as a path). Timeout only — non-zero exit is
+    tolerated the same way the historical filename form was (empty capture).
+    """
+    try:
+        proc = subprocess.run(
+            ["sed", "-n", r's/^.*"\([^"]*\)".*$/\1/p'],
+            input=stream,
+            capture_output=True,
+            text=True,
+            timeout=30,
+            check=False,
+        )
+    except subprocess.TimeoutExpired as exc:
+        raise RuntimeError("sed replay timed out") from exc
     return proc.stdout.rstrip("\n")
 
 
@@ -342,7 +352,10 @@ def p3_ground_truth(witness: dict) -> bool:
     v = witness["v"]  # raw string (as_string-extracted)
     # Build a stream shaped like the rpcd JSON the sed fallback sees.
     stream = f'{{"password":"{v}"}}'
-    capture = _sed_capture(stream)
+    try:
+        capture = _sed_capture(stream)
+    except (RuntimeError, subprocess.TimeoutExpired):
+        return False
     # Truncation means the capture stopped at the first unescaped quote:
     # capture is a strict prefix of v (v contains an escaped quote).
     return capture != v and v.startswith(capture)
