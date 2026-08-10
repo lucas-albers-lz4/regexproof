@@ -62,6 +62,7 @@ stage, read `docs/REDOS.md` first.
 | `CHANGELOG.md` | Phase-by-phase history of the initial development cycle |
 | `AGENTS.md` | Agent-facing instructions: when/how to verify, property checklist, NDJSON contract |
 | `SECURITY.md` | Private-disclosure-first policy for security-tool findings |
+| `docs/SECURITY-AUDIT.md` | Auditing regexproof itself: trust boundaries, existing controls, settled decisions, sweeps |
 | `docs/PLAYBOOK.md` | The core method: strategy, workflow, performance rules, verification workflow |
 | `docs/TRAPS.md` | Every solver trap we hit (Complement, z3str3, NUL, length bounds, …) with evidence |
 | `docs/DECOMPOSITION.md` | How to decompose hard properties + how to read a proof correctly |
