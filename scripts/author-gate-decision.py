@@ -91,7 +91,7 @@ def _resolve_output(
         return default_output_path(corpus, repo_root=ROOT)
     out = output.expanduser().resolve()
     if not allow_outside and not out.is_relative_to(generated):
-        raise SystemExit(
+        raise ValueError(
             f"error: --output must be under properties/generated (got {out}); "
             "pass --allow-outside-generated to override"
         )
@@ -268,11 +268,15 @@ def main(argv: list[str] | None = None) -> int:
             return 1
 
         decision = outcome.decision
-        out = _resolve_output(
-            args.output,
-            str(decision["corpus"]),
-            allow_outside=args.allow_outside_generated,
-        )
+        try:
+            out = _resolve_output(
+                args.output,
+                str(decision["corpus"]),
+                allow_outside=args.allow_outside_generated,
+            )
+        except ValueError as e:
+            print(str(e), file=sys.stderr)
+            return 1
         if ledger_path is not None and url:
             try:
                 mark_llm_template_fired(
@@ -321,11 +325,15 @@ def main(argv: list[str] | None = None) -> int:
         print(f"error: {e}", file=sys.stderr)
         return 1
 
-    out = _resolve_output(
-        args.output,
-        str(decision["corpus"]),
-        allow_outside=args.allow_outside_generated,
-    )
+    try:
+        out = _resolve_output(
+            args.output,
+            str(decision["corpus"]),
+            allow_outside=args.allow_outside_generated,
+        )
+    except ValueError as e:
+        print(str(e), file=sys.stderr)
+        return 1
 
     if ledger_path is not None:
         url = str(decision.get("candidate_url") or "")

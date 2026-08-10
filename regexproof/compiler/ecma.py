@@ -85,13 +85,14 @@ def compile_ecma(
                 raise Unencodable("stateful")  # hasIndices — match metadata, not language
             if f not in "is":
                 raise Unencodable(f"unknown-flag:{f}")
+        # Local AST reject first so scoped `(?i:…)` stays `inline-flag`
+        # (regexpp alone reports a generic parse-error).
+        stripped = strip_language_transparent(pattern)
+        ast = parse_pattern(stripped, allow_scoped_i=False)
         gate = _run_regexpp(pattern, flags)
         # regexpp is a required capability gate (#172 fail-closed) — never
         # soft-open on missing node / timeout.
         _raise_from_gate(gate)
-        stripped = strip_language_transparent(pattern)
-        # JS has no scoped inline flags — reject before encoding as Folded.
-        ast = parse_pattern(stripped, allow_scoped_i=False)
         ignorecase = "i" in flags
         fold = js_nonsu_fold_closure if ignorecase else None
         mirror, _meta = lower(

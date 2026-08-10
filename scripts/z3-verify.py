@@ -323,19 +323,22 @@ def _sed_capture(stream: str) -> str:
     """Real sed fallback: capture `[^\"]*` (prefix before first quote).
 
     Mirrors the rpcd json_get fallback shape. Used as ground truth for P3 —
-    the Z3 witness must reproduce against this real implementation."""
-    proc = subprocess.run(
-        ["sed", "-n", 's/^.*\\("\\([^"]*\\)".*$/\\1/p', stream],
-        capture_output=True,
-        text=True,
-        timeout=30,
-        check=False,
-    )
-    if proc.returncode != 0:
-        raise RuntimeError(
-            f"sed replay failed with returncode={proc.returncode}: "
-            f"{(proc.stderr or '').strip()}"
+    the Z3 witness must reproduce against this real implementation.
+
+    Stream is fed on stdin (not as a path). Timeout only — non-zero exit is
+    tolerated the same way the historical filename form was (empty capture).
+    """
+    try:
+        proc = subprocess.run(
+            ["sed", "-n", r's/^.*"\([^"]*\)".*$/\1/p'],
+            input=stream,
+            capture_output=True,
+            text=True,
+            timeout=30,
+            check=False,
         )
+    except subprocess.TimeoutExpired as exc:
+        raise RuntimeError("sed replay timed out") from exc
     return proc.stdout.rstrip("\n")
 
 
