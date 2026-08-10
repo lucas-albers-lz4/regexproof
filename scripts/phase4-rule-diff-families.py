@@ -26,6 +26,7 @@ import z3  # noqa: E402
 
 from regexproof.compiler import compile_pattern  # noqa: E402
 from regexproof.rule_diff.encode import shape5_constraints  # noqa: E402
+from regexproof.rule_diff.timeout_gate import fail_message, timeout_gate  # noqa: E402
 
 OUT = ROOT / "properties" / "generated"
 TIMEOUT_MS = 10000
@@ -195,6 +196,11 @@ def main() -> int:
         "\n".join(lines) + "\n", encoding="utf-8"
     )
     print(f"wrote {len(families)} families → properties/generated/phase4_rule_diff_families.json")
+    gap_rows = [{"name": f["family"], "result": (f.get("gap") or {}).get("result")} for f in families]
+    gate_ok, n_timeout, _rate, bad = timeout_gate(gap_rows)
+    if not gate_ok:
+        print(fail_message(bad, n_timeout), file=sys.stderr)
+        return 1
     return 0
 
 
