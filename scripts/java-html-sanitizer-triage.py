@@ -87,10 +87,19 @@ def extract_tree(
     files: list[str] | None = None,
 ) -> list[dict]:
     recs: list[dict] = []
+    root = root.resolve()
     if files:
         paths = []
         for rel in files:
+            if Path(rel).is_absolute():
+                raise SystemExit(f"HARD ERROR: --files must be relative, got: {rel}")
             fp = (root / rel).resolve()
+            try:
+                fp.relative_to(root)
+            except ValueError as exc:
+                raise SystemExit(
+                    f"HARD ERROR: --files escapes --root: {rel}"
+                ) from exc
             if not fp.is_file():
                 raise SystemExit(f"HARD ERROR: missing --files entry: {rel}")
             paths.append((fp, rel))
@@ -99,7 +108,11 @@ def extract_tree(
     for fp, rel in paths:
         try:
             text = fp.read_text(encoding="utf-8", errors="replace")
-        except OSError:
+        except OSError as exc:
+            if files is not None:
+                raise SystemExit(
+                    f"HARD ERROR: cannot read --files entry {rel}: {exc}"
+                ) from exc
             continue
         recs.extend(extract_java_pattern(text, repo=repo, file=rel))
     return recs
