@@ -599,6 +599,43 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
             "max_disk_mb": 200,
         },
     },
+    "magic-js": {
+        "corpus_type": "rule_corpus",
+        # Materialize: ln -sfn /tmp/magic-js batch/corpora/magic-js/rules
+        # Prefer packages/@magic-*; exclude .yarn plugins and rollup configs.
+        "path": ROOT / "batch" / "corpora" / "magic-js" / "rules",
+        "files": [
+            "packages/@magic-ext/farcaster/src/utils.ts",
+            "packages/@magic-ext/oauth2/src/crypto.ts",
+            "packages/@magic-ext/oauth2/src/utils/base64.ts",
+            "packages/@magic-ext/passkey/src/utils/base64.ts",
+            "packages/@magic-ext/react-native-bare-oauth/src/crypto.ts",
+            "packages/@magic-ext/react-native-expo-oauth/src/crypto.ts",
+            "packages/@magic-ext/wallet-kit/src/lib/validators.ts",
+            "packages/@magic-ext/wallet-kit/src/utils/base64.ts",
+            "packages/@magic-ext/wallet-kit/src/utils/copy.ts",
+            "packages/@magic-ext/wallet-kit/src/utils/device.ts",
+            "packages/@magic-ext/webauthn/src/utils/base64.ts",
+            "packages/@magic-sdk/provider/src/util/base64-json.ts",
+            "packages/@magic-sdk/provider/src/util/semver.js",
+            "packages/@magic-sdk/provider/src/util/web-crypto.ts",
+            "packages/@magic-sdk/react-native-bare/src/native-crypto/utils/uint8.ts",
+        ],
+        "dialect": "ecma",
+        "extractor": "js_precise_dir",
+        "repo": "magiclabs/magic-js",
+        "security_tool": True,
+        "lift_inline": False,
+        "corpus_pin": "e9fb233763160316989863b4739c4656133d45b0",
+        "commit": "e9fb233763160316989863b4739c4656133d45b0",
+        "budget": {
+            "max_patterns": 5000,
+            "max_wall_s": 600,
+            "redos_wall_s": 120,
+            "max_mem_mb": 1024,
+            "max_disk_mb": 200,
+        },
+    },
     # Wave-3 P5 testdata corpora (#116) — exempt from admission gate_decision.
     "perl_tre": {
         "corpus_type": "testdata",
@@ -677,6 +714,7 @@ WAVE_CORPORA = frozenset({
     "everclaw-community-branches",
     "tracecat",
     "octo-server",
+    "magic-js",
     "perl_tre", "go_regexp_tests", "v8_mjsunit",
 })
 
