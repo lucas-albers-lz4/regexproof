@@ -34,14 +34,9 @@ from regexproof.kinds import (
 # Solver version pin — the Re()/regex API changed across 4.x/5.x. Refuse to
 # run on an unpinned version instead of silently producing unknown/timeouts.
 # ---------------------------------------------------------------------------
-Z3_VERSION = z3.get_version_string()
-if not Z3_VERSION.startswith("5.0"):
-    print(
-        f"FATAL: z3-solver {Z3_VERSION} — this harness is validated against "
-        "5.0.x only. Install the pinned version: pip install -r requirements.txt",
-        file=sys.stderr,
-    )
-    sys.exit(3)
+from regexproof.z3_pin import assert_z3_pinned
+
+Z3_VERSION = assert_z3_pinned()
 
 
 def z3_str(val) -> str:

@@ -32,10 +32,8 @@ sys.path.insert(0, str(ROOT))
 
 import z3  # noqa: E402
 
-from regexproof.batch.runner import (  # noqa: E402
-    CORPUS_MANIFESTS,
-    _compile_all,
-)
+from regexproof.batch.compile_records import compile_records  # noqa: E402
+from regexproof.batch.manifests import CORPUS_MANIFESTS  # noqa: E402
 
 OUT = ROOT / "properties" / "generated"
 
@@ -68,7 +66,7 @@ def load_records(path: Path) -> list[dict]:
 
 
 def prepare_frozen_records(frozen: list[dict]) -> list[dict]:
-    """Restore extractor ``unencodable_reason`` so ``_compile_all`` skips them."""
+    """Restore extractor ``unencodable_reason`` so ``compile_records`` skips them."""
     out: list[dict] = []
     for row in frozen:
         rec = dict(row)
@@ -95,7 +93,7 @@ def remeasure(
     records = prepare_frozen_records(frozen)
 
     t0 = time.perf_counter()
-    compiled = _compile_all(
+    compiled = compile_records(
         records,
         lift_inline=bool(meta.get("lift_inline")),
         corpus_slug=corpus,

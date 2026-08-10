@@ -74,14 +74,15 @@ def _run_batch(out_dir: Path) -> None:
 
 def _extract_determinism(corpus: str) -> int:
     """Two-run extraction must yield identical regex_id sequences."""
-    from regexproof.batch.runner import CORPUS_MANIFESTS, _extract
+    from regexproof.batch.extract import extract_corpus
+from regexproof.batch.manifests import CORPUS_MANIFESTS
 
     if corpus not in CORPUS_MANIFESTS:
         print(f"unknown corpus: {corpus}", file=sys.stderr)
         return 2
     meta = dict(CORPUS_MANIFESTS[corpus])
-    a = [r["regex_id"] for r in _extract(corpus, meta)]
-    b = [r["regex_id"] for r in _extract(corpus, meta)]
+    a = [r["regex_id"] for r in extract_corpus(corpus, meta)]
+    b = [r["regex_id"] for r in extract_corpus(corpus, meta)]
     if a != b:
         print(f"FAIL: non-deterministic extraction for {corpus}", file=sys.stderr)
         return 1

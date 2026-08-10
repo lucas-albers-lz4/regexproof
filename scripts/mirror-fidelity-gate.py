@@ -625,11 +625,13 @@ def main(argv: list[str] | None = None) -> int:
         for name, inv, dialect in corpora:
             rows = _sample_from_inventory(inv, dialect=dialect, limit=args.max_per_corpus)
             if name == "gitleaks" and not rows:
-                from regexproof.batch.runner import CORPUS_MANIFESTS, _compile_all, _extract
+                from regexproof.batch.compile_records import compile_records
+                from regexproof.batch.extract import extract_corpus
+                from regexproof.batch.manifests import CORPUS_MANIFESTS
 
                 meta = dict(CORPUS_MANIFESTS["gitleaks"])
-                compiled = _compile_all(
-                    _extract("gitleaks", meta),
+                compiled = compile_records(
+                    extract_corpus("gitleaks", meta),
                     lift_inline=True,
                     corpus_slug="gitleaks",
                 )
