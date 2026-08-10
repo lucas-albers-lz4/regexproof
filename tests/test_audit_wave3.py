@@ -107,7 +107,7 @@ def test_author_gate_output_containment(tmp_path):
     spec.loader.exec_module(mod)
 
     outside = tmp_path / "out.json"
-    with pytest.raises(SystemExit, match="properties/generated"):
+    with pytest.raises(ValueError, match="properties/generated"):
         mod._resolve_output(outside, "demo", allow_outside=False)
 
     allowed = mod._resolve_output(outside, "demo", allow_outside=True)
