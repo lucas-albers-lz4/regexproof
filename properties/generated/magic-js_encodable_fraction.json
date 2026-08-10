@@ -1,0 +1,39 @@
+{
+  "budget": {
+    "max_disk_mb": 200,
+    "max_mem_mb": 1024,
+    "max_patterns": 5000,
+    "max_wall_s": 600,
+    "redos_wall_s": 120
+  },
+  "budget_breaches": null,
+  "commit": "e9fb233763160316989863b4739c4656133d45b0",
+  "compiler_fingerprint": "71d2ce23b4cd",
+  "complete_run": true,
+  "corpus_pin": "e9fb233763160316989863b4739c4656133d45b0",
+  "decision": "go",
+  "decision_rule": "go iff encodable/sample_size >= 0.3",
+  "dialect": "ecma",
+  "encodable": 18,
+  "engine_versions": {
+    "python": "3.14.6",
+    "z3": "5.0.0"
+  },
+  "extractor_schema_version": "2",
+  "fraction": 0.3,
+  "go_no_go_threshold": 0.3,
+  "id_formula": "v2-domain-optional-ascii-default",
+  "inventory_path": "properties/generated/magic-js-inventory.ndjson",
+  "path": "batch/corpora/magic-js/rules",
+  "pilot": "magic-js",
+  "reasons": {
+    "composite-pattern": 1,
+    "ok": 18,
+    "stateful": 41
+  },
+  "sample_size": 60,
+  "schema_version": "1",
+  "scope": "full_corpus",
+  "unclassified_parse_errors": 0,
+  "wall_s": 1.142
+}

@@ -25,6 +25,7 @@ SECURITY_TOOL_CORPORA = frozenset(
         "dompurify",
         "everclaw-community-branches",
         "tracecat",
+        "magic-js",
     }
 )
 
