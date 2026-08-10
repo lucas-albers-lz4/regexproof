@@ -1,0 +1,65 @@
+{
+  "candidate_url": "https://github.com/bountyyfi/lonkero",
+  "conditions": [
+    {
+      "evidence": "Predicted buckets present (4) but not treated as novel surface.",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary recorded; gitleaks.toml discovery query; sites=912 (ecma).",
+      "id": "security-boundary",
+      "met": true
+    },
+    {
+      "evidence": "912 sites < 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "lonkero",
+  "corpus_pin": "bc1e4859b321e0a6fb125f804b9d7e35975790cc",
+  "decision": "triage-trial",
+  "decision_basis": "escape_hatch",
+  "decision_date": "2026-08-10",
+  "escape_hatch_applied": true,
+  "probe": {
+    "construct_counts": {
+      "lookaround": 6
+    },
+    "dialect": {
+      "ecma": 912
+    },
+    "flags": {
+      "g": 283,
+      "i": 578,
+      "m": 5
+    },
+    "pin": "bc1e4859b321e0a6fb125f804b9d7e35975790cc",
+    "predicted_buckets": {
+      "inline-flag": 578,
+      "lookaround": 6,
+      "m-flag": 5,
+      "stateful": 283
+    },
+    "regex_sites": 912,
+    "regex_sites_per_file": {
+      "browser-assist-extension/background.js": 3,
+      "browser-assist-extension/bypass-scanner.js": 16,
+      "browser-assist-extension/cms-scanner.js": 54,
+      "browser-assist-extension/content.js": 402,
+      "browser-assist-extension/dom-hooks.js": 11,
+      "browser-assist-extension/formfuzzer.js": 48,
+      "browser-assist-extension/framework-scanner.js": 4,
+      "browser-assist-extension/graphql-fuzzer.js": 106,
+      "browser-assist-extension/merlin.js": 43,
+      "browser-assist-extension/popup.js": 2,
+      "browser-assist-extension/sql-scanner.js": 52,
+      "browser-assist-extension/waf-bypass.js": 56,
+      "browser-assist-extension/xss-scanner.js": 115
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Triage-trial: 912 sites (ecma); escape hatch for findings-pipeline evaluation.",
+  "schema_version": "1"
+}

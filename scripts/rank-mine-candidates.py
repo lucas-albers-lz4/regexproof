@@ -4,6 +4,7 @@
 Usage:
   python scripts/rank-mine-candidates.py
   python scripts/rank-mine-candidates.py --ledger PATH --status mined --limit 10
+  python scripts/rank-mine-candidates.py --skip-gated --limit 10
 """
 
 from __future__ import annotations
@@ -17,6 +18,7 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
+from regexproof.mine.exclusions import load_admitted_urls, normalize_repo_url
 from regexproof.mine.ledger import load_ledger
 from regexproof.mine.score import SCORE_VERSION, candidate_score, rank_candidates
 
@@ -39,6 +41,21 @@ def main(argv: list[str] | None = None) -> int:
         default=10,
         help="Max rows to print (default: 10; 0 = all)",
     )
+    ap.add_argument(
+        "--skip-gated",
+        action="store_true",
+        help=(
+            "Omit URLs that already have a *_gate_decision.json "
+            "(any decision). Use after a wave so rank returns the next drain."
+        ),
+    )
+    ap.add_argument(
+        "--generated",
+        type=Path,
+        default=ROOT / "properties" / "generated",
+        help="Directory of gate decisions for --skip-gated "
+        "(default: properties/generated)",
+    )
     args = ap.parse_args(argv)
 
     ledger_path = args.ledger.expanduser().resolve()
@@ -51,12 +68,21 @@ def main(argv: list[str] | None = None) -> int:
         print(f"error: cannot load ledger: {e}", file=sys.stderr)
         return 2
 
+    gated: set[str] = set()
+    if args.skip_gated:
+        gated = load_admitted_urls(args.generated.expanduser().resolve())
+
     status = (args.status or "").strip()
-    pool = [
-        c
-        for c in ledger.get("candidates", [])
-        if isinstance(c, dict) and (not status or c.get("status") == status)
-    ]
+    pool = []
+    for c in ledger.get("candidates", []):
+        if not isinstance(c, dict):
+            continue
+        if status and c.get("status") != status:
+            continue
+        url = c.get("url")
+        if gated and url and normalize_repo_url(str(url)) in gated:
+            continue
+        pool.append(c)
     ranked = rank_candidates(pool)
     if args.limit and args.limit > 0:
         ranked = ranked[: args.limit]

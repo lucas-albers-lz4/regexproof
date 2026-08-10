@@ -1,0 +1,61 @@
+{
+  "candidate_url": "https://github.com/callowayproject/bump-my-version",
+  "conditions": [
+    {
+      "evidence": "Predicted buckets present (2) but not treated as novel surface.",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Not a security boundary (probe.security_boundary=deterministic-false).",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "15 sites < 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "bump-my-version",
+  "corpus_pin": "3842e1f4911f242ffde0e08488925ed7933debe7",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-10",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "py_re": 15
+    },
+    "flags": {
+      "m": 3,
+      "s": 2,
+      "x": 3
+    },
+    "pin": "3842e1f4911f242ffde0e08488925ed7933debe7",
+    "predicted_buckets": {
+      "inline-flag": 5,
+      "m-flag": 3
+    },
+    "regex_sites": 15,
+    "regex_sites_per_file": {
+      "bumpversion/config/files_legacy.py": 1,
+      "bumpversion/config/models.py": 2,
+      "bumpversion/config/utils.py": 1,
+      "bumpversion/files.py": 1,
+      "bumpversion/hooks.py": 1,
+      "bumpversion/scm/git.py": 1,
+      "bumpversion/scm/hg.py": 1,
+      "bumpversion/scm/models.py": 1,
+      "bumpversion/utils.py": 1,
+      "bumpversion/versioning/functions.py": 1,
+      "bumpversion/versioning/serialization.py": 2,
+      "bumpversion/versioning/version_config.py": 1,
+      "tests/test_versioning/test_conventions.py": 1
+    },
+    "security_boundary": "deterministic-false"
+  },
+  "rationale": "Below admission scale: 15 regex sites (auto-NO-GO bar 200); dialects [py_re:15]; boundary=deterministic-false.",
+  "schema_version": "1"
+}

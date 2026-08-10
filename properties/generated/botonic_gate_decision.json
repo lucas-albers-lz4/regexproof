@@ -1,0 +1,95 @@
+{
+  "candidate_url": "https://github.com/hubtype/botonic",
+  "conditions": [
+    {
+      "evidence": "Predicted buckets present (5) but not treated as novel surface.",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Not a security boundary (probe.security_boundary=deterministic-false).",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "118 sites < 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "botonic",
+  "corpus_pin": "1790c5c194684911ce0885c54173eaf90e3beb60",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-10",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "backref": 2,
+      "lookaround": 3
+    },
+    "dialect": {
+      "ecma": 118
+    },
+    "flags": {
+      "g": 16,
+      "i": 11,
+      "m": 1,
+      "s": 1
+    },
+    "pin": "1790c5c194684911ce0885c54173eaf90e3beb60",
+    "predicted_buckets": {
+      "backref": 2,
+      "inline-flag": 12,
+      "lookaround": 3,
+      "m-flag": 1,
+      "stateful": 16
+    },
+    "regex_sites": 118,
+    "regex_sites_per_file": {
+      "docs/custom-webpack-config-plugin/index.js": 6,
+      "docs/scripts/update-plugins-docs/update-releases.ts": 3,
+      "docs/src/components/homeHero.js": 1,
+      "docs/src/pages/examples/botonic-example.js": 1,
+      "examples/blank-typescript/rspack.config.ts": 10,
+      "examples/blank/rspack.config.ts": 10,
+      "examples/flow-builder-typescript/rspack.config.ts": 10,
+      "examples/flow-builder-typescript/src/server/routes.ts": 3,
+      "packages/botonic-cli/bin/dev.js": 1,
+      "packages/botonic-cli/bin/run.js": 1,
+      "packages/botonic-cli/src/util/bot-config.ts": 2,
+      "packages/botonic-cli/src/util/download-gzip.ts": 1,
+      "packages/botonic-cli/tests/util/file-system.test.ts": 1,
+      "packages/botonic-core/src/constants.ts": 1,
+      "packages/botonic-core/tests/core-bot/core-bot.test.ts": 2,
+      "packages/botonic-core/tests/handoff.test.ts": 1,
+      "packages/botonic-core/tests/routing/router.match-route.test.ts": 9,
+      "packages/botonic-core/tests/routing/router.misc.test.ts": 2,
+      "packages/botonic-core/tests/routing/router.test.ts": 4,
+      "packages/botonic-dx-bundler-rspack/baseline/rspack.config.ts": 10,
+      "packages/botonic-plugin-ai-agents/tests/agent-builder.test.ts": 2,
+      "packages/botonic-plugin-ai-agents/tests/debug-logger.test.ts": 2,
+      "packages/botonic-plugin-flow-builder/src/constants.ts": 3,
+      "packages/botonic-plugin-flow-builder/src/content-fields/flow-ai-agent-router.tsx": 1,
+      "packages/botonic-plugin-flow-builder/src/user-input/keyword.ts": 1,
+      "packages/botonic-react/src/botonic-tester.jsx": 1,
+      "packages/botonic-react/src/components/markdown.js": 2,
+      "packages/botonic-react/src/components/multichannel/whatsapp/markdown-meta.ts": 5,
+      "packages/botonic-react/src/util/dom.js": 1,
+      "packages/botonic-react/src/util/environment.js": 4,
+      "packages/botonic-react/src/util/functional.ts": 3,
+      "packages/botonic-react/src/util/i18n.ts": 3,
+      "packages/botonic-react/src/util/objects.js": 1,
+      "packages/botonic-react/src/util/regexs.js": 2,
+      "packages/botonic-react/tests/msg-to-botonic.test.jsx": 1,
+      "packages/botonic-react/tests/utils.test.js": 2,
+      "packages/botonic-react/tests/webchat.theme.test.js": 2,
+      "packages/botonic-react/tests/webchat/buttons-disabler.test.jsx": 1,
+      "packages/botonic-react/tests/webchat/dev-app.test.jsx": 1,
+      "scripts/ci/bump-version.ts": 1
+    },
+    "security_boundary": "deterministic-false"
+  },
+  "rationale": "Below admission scale: 118 regex sites (auto-NO-GO bar 200); dialects [ecma:118]; boundary=deterministic-false.",
+  "schema_version": "1"
+}

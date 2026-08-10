@@ -1,0 +1,68 @@
+{
+  "candidate_url": "https://github.com/watson-developer-cloud/node-sdk",
+  "conditions": [
+    {
+      "evidence": "Predicted buckets present (5) but not treated as novel surface.",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Human override: probe security_boundary=unknown, but watson-developer-cloud/node-sdk is an auth/API client SDK with 609 ecma sites — admit for triage-trial only.",
+      "id": "security-boundary",
+      "met": true
+    },
+    {
+      "evidence": "609 sites < 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "node-sdk",
+  "corpus_pin": "594ee0e0c0b042ee9eed21f262be3c4bc5a1919b",
+  "decision": "triage-trial",
+  "decision_basis": "escape_hatch",
+  "decision_date": "2026-08-10",
+  "escape_hatch_applied": true,
+  "probe": {
+    "construct_counts": {
+      "backref": 1,
+      "lookaround": 11
+    },
+    "dialect": {
+      "ecma": 609
+    },
+    "flags": {
+      "g": 37,
+      "i": 38,
+      "m": 2
+    },
+    "pin": "594ee0e0c0b042ee9eed21f262be3c4bc5a1919b",
+    "predicted_buckets": {
+      "backref": 1,
+      "inline-flag": 38,
+      "lookaround": 11,
+      "m-flag": 2,
+      "stateful": 37
+    },
+    "regex_sites": 609,
+    "regex_sites_per_file": {
+      "lib/recognize-stream.ts": 1,
+      "lib/synthesize-stream.ts": 1,
+      "scripts/jsdoc/template/publish.js": 7,
+      "scripts/jsdoc/template/static/scripts/prettify/lang-css.js": 14,
+      "scripts/jsdoc/template/static/scripts/prettify/prettify.js": 64,
+      "scripts/report_integration_test.js": 2,
+      "scripts/typedoc/theme/assets/js/main.js": 114,
+      "test/unit/assistant.v1.test.js": 92,
+      "test/unit/assistant.v2.test.js": 60,
+      "test/unit/discovery.v2.test.js": 104,
+      "test/unit/natural-language-understanding.v1.test.js": 20,
+      "test/unit/speech-helpers.test.js": 14,
+      "test/unit/speech-to-text.v1.test.js": 76,
+      "test/unit/text-to-speech.v1.test.js": 40
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Triage-trial: 609 ecma sites in Watson node-sdk; probe boundary=unknown but auth/SDK surface warrants findings trial via escape hatch.",
+  "schema_version": "1"
+}

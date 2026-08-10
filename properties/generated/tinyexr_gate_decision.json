@@ -1,0 +1,53 @@
+{
+  "candidate_url": "https://github.com/syoyo/tinyexr",
+  "conditions": [
+    {
+      "evidence": "Predicted buckets present (2) but not treated as novel surface.",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary=deterministic-true; still below useful Smith scale.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "18 sites < 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "tinyexr",
+  "corpus_pin": "661d88a63c9334392cd82e90e0a3dfd2f58ab74b",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-10",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 18
+    },
+    "flags": {
+      "g": 7,
+      "i": 5
+    },
+    "pin": "661d88a63c9334392cd82e90e0a3dfd2f58ab74b",
+    "predicted_buckets": {
+      "inline-flag": 5,
+      "stateful": 7
+    },
+    "regex_sites": 18,
+    "regex_sites_per_file": {
+      "examples/wasm-benchmark/js/benchmark.mjs": 1,
+      "experimental/js/tinyexr.js": 8,
+      "web/texcomp/app.js": 4,
+      "web/tocio/tocio_demo.mjs": 1,
+      "web/viewer/fflate.module.js": 1,
+      "web/viewer/viewer.js": 3
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 18 regex sites (auto-NO-GO bar 200); dialects [ecma:18]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

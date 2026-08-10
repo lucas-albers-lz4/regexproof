@@ -253,6 +253,12 @@
       "url": "https://github.com/ackinacki/ackinacki"
     },
     {
+      "audit": {
+        "human_resolved": true,
+        "needs_human_review": false,
+        "re_evaluate": false,
+        "updated_at": "2026-08-10T12:29:02Z"
+      },
       "capped": true,
       "default_branch": "main",
       "first_seen": "2026-08-10T12:25:26Z",
@@ -264,6 +270,12 @@
       "url": "https://github.com/Giskard-AI/giskard-oss"
     },
     {
+      "audit": {
+        "human_resolved": true,
+        "needs_human_review": false,
+        "re_evaluate": false,
+        "updated_at": "2026-08-10T12:29:02Z"
+      },
       "capped": true,
       "default_branch": "main",
       "first_seen": "2026-08-10T12:25:26Z",
@@ -275,6 +287,13 @@
       "url": "https://github.com/datajuicer/data-juicer"
     },
     {
+      "audit": {
+        "auto_filed": false,
+        "human_resolved": true,
+        "needs_human_review": false,
+        "re_evaluate": false,
+        "updated_at": "2026-08-10T12:29:03Z"
+      },
       "capped": true,
       "default_branch": "main",
       "first_seen": "2026-08-10T12:25:26Z",
@@ -286,6 +305,13 @@
       "url": "https://github.com/evmos/evmos"
     },
     {
+      "audit": {
+        "auto_filed": false,
+        "human_resolved": true,
+        "needs_human_review": false,
+        "re_evaluate": false,
+        "updated_at": "2026-08-10T12:29:21Z"
+      },
       "capped": true,
       "default_branch": "master",
       "first_seen": "2026-08-10T12:25:26Z",
@@ -297,6 +323,13 @@
       "url": "https://github.com/watson-developer-cloud/node-sdk"
     },
     {
+      "audit": {
+        "auto_filed": false,
+        "human_resolved": true,
+        "needs_human_review": false,
+        "re_evaluate": false,
+        "updated_at": "2026-08-10T12:29:03Z"
+      },
       "capped": true,
       "default_branch": "main",
       "first_seen": "2026-08-10T12:25:26Z",
@@ -308,6 +341,13 @@
       "url": "https://github.com/bountyyfi/lonkero"
     },
     {
+      "audit": {
+        "auto_filed": false,
+        "human_resolved": true,
+        "needs_human_review": false,
+        "re_evaluate": false,
+        "updated_at": "2026-08-10T12:29:03Z"
+      },
       "capped": true,
       "default_branch": "staging",
       "first_seen": "2026-08-10T12:25:26Z",
@@ -319,6 +359,12 @@
       "url": "https://github.com/carverauto/serviceradar"
     },
     {
+      "audit": {
+        "human_resolved": true,
+        "needs_human_review": false,
+        "re_evaluate": false,
+        "updated_at": "2026-08-10T12:29:02Z"
+      },
       "capped": true,
       "default_branch": "main",
       "first_seen": "2026-08-10T12:25:26Z",
@@ -330,6 +376,12 @@
       "url": "https://github.com/snowdreamtech/frp"
     },
     {
+      "audit": {
+        "human_resolved": true,
+        "needs_human_review": false,
+        "re_evaluate": false,
+        "updated_at": "2026-08-10T12:29:03Z"
+      },
       "capped": true,
       "default_branch": "release",
       "first_seen": "2026-08-10T12:25:26Z",
@@ -341,6 +393,13 @@
       "url": "https://github.com/syoyo/tinyexr"
     },
     {
+      "audit": {
+        "auto_filed": true,
+        "auto_filed_at": "2026-08-10T12:29:02Z",
+        "needs_human_review": false,
+        "template_fired": "below-scale",
+        "updated_at": "2026-08-10T12:29:02Z"
+      },
       "capped": true,
       "default_branch": "master",
       "first_seen": "2026-08-10T12:25:26Z",
@@ -352,6 +411,13 @@
       "url": "https://github.com/callowayproject/bump-my-version"
     },
     {
+      "audit": {
+        "auto_filed": true,
+        "auto_filed_at": "2026-08-10T12:29:02Z",
+        "needs_human_review": false,
+        "template_fired": "below-scale",
+        "updated_at": "2026-08-10T12:29:02Z"
+      },
       "capped": true,
       "default_branch": "master",
       "first_seen": "2026-08-10T12:25:26Z",
