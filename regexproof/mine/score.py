@@ -1,0 +1,171 @@
+"""Deterministic mine candidate score-v1 (#148).
+
+Metadata-only ranking for queue drain / day-cap admit and the rank CLI.
+Recompute every time — do not persist scores on disk.
+"""
+
+from __future__ import annotations
+
+import math
+import re
+from datetime import date, datetime, timezone
+from typing import Any
+from urllib.parse import urlparse
+
+from regexproof.admission.boundary import BoundarySignals, classify_boundary
+from regexproof.mine.search import SEARCH_QUERIES
+
+SCORE_VERSION = "v1"
+
+# Family weights locked in #148 plan.
+_FAMILY_WEIGHTS: dict[str, float] = {
+    "security": 30.0,
+    "rules": 25.0,
+    "validators": 20.0,
+    "testdata": 5.0,
+    "other": 10.0,
+}
+
+# Map exact SEARCH_QUERIES strings → family (order matches search.py comments).
+_QUERY_FAMILY: dict[str, str] = {
+    SEARCH_QUERIES[0]: "security",
+    SEARCH_QUERIES[1]: "security",
+    SEARCH_QUERIES[2]: "security",
+    SEARCH_QUERIES[3]: "validators",
+    SEARCH_QUERIES[4]: "validators",
+    SEARCH_QUERIES[5]: "rules",
+    SEARCH_QUERIES[6]: "rules",
+    SEARCH_QUERIES[7]: "rules",
+    SEARCH_QUERIES[8]: "testdata",
+    SEARCH_QUERIES[9]: "testdata",
+}
+
+_BOUNDARY_WEIGHTS: dict[str, float] = {
+    "deterministic-true": 50.0,
+    "unknown": 0.0,
+    "deterministic-false": -40.0,
+}
+
+
+def _repo_slug(url: str) -> str:
+    """Return ``owner/repo`` (or last path segment) from a GitHub-ish URL."""
+    u = (url or "").strip()
+    if u.startswith("git@"):
+        try:
+            path = u.split(":", 1)[1]
+        except IndexError:
+            return u
+        parts = [p for p in path.split("/") if p]
+        if len(parts) >= 2:
+            return f"{parts[0]}/{parts[1].removesuffix('.git')}"
+        return path.removesuffix(".git")
+    parsed = urlparse(u)
+    parts = [p for p in parsed.path.split("/") if p]
+    if len(parts) >= 2:
+        return f"{parts[0]}/{parts[1].removesuffix('.git')}"
+    if parts:
+        return parts[0].removesuffix(".git")
+    return u
+
+
+def _query_family(source_query: str) -> str:
+    q = (source_query or "").strip()
+    if q in _QUERY_FAMILY:
+        return _QUERY_FAMILY[q]
+    # Fuzzy fallback if query text drifted slightly
+    ql = q.lower()
+    if "gitleaks" in ql or "detect-secrets" in ql or "trufflehog" in ql:
+        return "security"
+    if "semgrep" in ql or "yara" in ql or "secrule" in ql:
+        return "rules"
+    if "validator" in ql:
+        return "validators"
+    if "testdata" in ql or "re_tests" in ql or "test_re" in ql:
+        return "testdata"
+    return "other"
+
+
+def _parse_pushed(pushed: str) -> date | None:
+    s = (pushed or "").strip()
+    if not s:
+        return None
+    # Accept YYYY-MM-DD or full ISO timestamps.
+    m = re.match(r"^(\d{4}-\d{2}-\d{2})", s)
+    if not m:
+        return None
+    try:
+        return date.fromisoformat(m.group(1))
+    except ValueError:
+        return None
+
+
+def _recency_points(pushed: str, *, today: date | None = None) -> float:
+    d = _parse_pushed(pushed)
+    if d is None:
+        return 0.0
+    today = today or datetime.now(timezone.utc).date()
+    age = (today - d).days
+    if age < 0:
+        age = 0
+    if age <= 365:
+        return 15.0
+    if age <= 365 * 3:
+        return 5.0
+    return 0.0
+
+
+def _stars_points(stars: int) -> float:
+    return float(min(25, math.floor(8 * math.log10(max(0, stars) + 1))))
+
+
+def candidate_score(
+    cand: dict[str, Any],
+    *,
+    today: date | None = None,
+) -> tuple[float, dict[str, Any]]:
+    """Return ``(total, breakdown)`` for a ledger/queue candidate row."""
+    url = str(cand.get("url") or "")
+    slug = _repo_slug(url)
+    repo_name = slug.split("/")[-1] if slug else ""
+    boundary = classify_boundary(BoundarySignals(repo_name=repo_name))
+    boundary_pts = _BOUNDARY_WEIGHTS.get(boundary, 0.0)
+
+    family = _query_family(str(cand.get("source_query") or ""))
+    family_pts = _FAMILY_WEIGHTS.get(family, _FAMILY_WEIGHTS["other"])
+
+    stars = int(cand.get("stars") or 0)
+    stars_pts = _stars_points(stars)
+
+    recency_pts = _recency_points(str(cand.get("pushed_date") or ""), today=today)
+
+    capped = bool(cand.get("capped"))
+    capped_pts = -10.0 if capped else 0.0
+
+    total = boundary_pts + family_pts + stars_pts + recency_pts + capped_pts
+    breakdown: dict[str, Any] = {
+        "boundary": boundary,
+        "boundary_pts": boundary_pts,
+        "family": family,
+        "family_pts": family_pts,
+        "stars": stars,
+        "stars_pts": stars_pts,
+        "recency_pts": recency_pts,
+        "capped": capped,
+        "capped_pts": capped_pts,
+        "total": total,
+    }
+    return total, breakdown
+
+
+def rank_candidates(
+    cands: list[dict[str, Any]],
+    *,
+    today: date | None = None,
+) -> list[dict[str, Any]]:
+    """Return a new list sorted highest score first; ties by ``url`` ascending."""
+
+    def sort_key(c: dict[str, Any]) -> tuple[float, str]:
+        total, _ = candidate_score(c, today=today)
+        return (-total, str(c.get("url") or ""))
+
+    return sorted(cands, key=sort_key)

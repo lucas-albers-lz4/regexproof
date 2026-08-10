@@ -29,6 +29,7 @@ from regexproof.mine.queue import (
     load_queue,
     save_queue,
 )
+from regexproof.mine.score import SCORE_VERSION, rank_candidates
 from regexproof.mine.search import AuthError, SearchRunResult, run_search
 
 
@@ -62,7 +63,8 @@ def assimilate(
     accepted: list[dict[str, Any]] = []
 
     evict_stale(queue)
-    # Overflow first — pull one-at-a-time so exclusions do not waste the day budget
+    # Score-v1: highest-value overflow first (still drain one-at-a-time for exclusions).
+    queue["items"] = rank_candidates(list(queue.get("items") or []))
     while room > 0 and queue.get("items"):
         item = drain(queue, 1)[0]
         url = item.get("url")
@@ -87,7 +89,8 @@ def assimilate(
         room -= 1
 
     queue_dropped = 0
-    for cand in search_result.candidates:
+    ranked_hits = rank_candidates(list(search_result.candidates))
+    for cand in ranked_hits:
         url = cand["url"]
         if is_excluded(url, ledger=ledger, admitted=admitted):
             continue
@@ -188,6 +191,7 @@ def main(argv: list[str] | None = None) -> int:
         "dry_run": bool(args.dry_run),
         "daily_mine_cap": daily_mine_cap(),
         "search_errors": len(result.errors),
+        "allocator": f"score-{SCORE_VERSION}",
     }
     print(json.dumps(summary, sort_keys=True))
 
