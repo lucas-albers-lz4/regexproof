@@ -1,0 +1,39 @@
+{
+  "budget": {
+    "max_disk_mb": 200,
+    "max_mem_mb": 1024,
+    "max_patterns": 5000,
+    "max_wall_s": 600,
+    "redos_wall_s": 120
+  },
+  "budget_breaches": null,
+  "commit": "d3daa912a04d17f78df2d0c059a111cafff75534",
+  "compiler_fingerprint": "71d2ce23b4cd",
+  "complete_run": true,
+  "corpus_pin": "d3daa912a04d17f78df2d0c059a111cafff75534",
+  "decision": "go",
+  "decision_rule": "go iff encodable/sample_size >= 0.3",
+  "dialect": "re2",
+  "encodable": 28,
+  "engine_versions": {
+    "python": "3.14.6",
+    "z3": "5.0.0"
+  },
+  "extractor_schema_version": "2",
+  "fraction": 0.7,
+  "go_no_go_threshold": 0.3,
+  "id_formula": "v2-domain-optional-ascii-default",
+  "inventory_path": "properties/generated/octo-server-inventory.ndjson",
+  "path": "batch/corpora/octo-server/rules",
+  "pilot": "octo-server",
+  "reasons": {
+    "inline-flag": 10,
+    "ok": 28,
+    "per-alternative-anchor": 2
+  },
+  "sample_size": 40,
+  "schema_version": "1",
+  "scope": "full_corpus",
+  "unclassified_parse_errors": 0,
+  "wall_s": 0.183
+}

@@ -556,6 +556,49 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
             "max_disk_mb": 200,
         },
     },
+    "octo-server": {
+        "corpus_type": "rule_corpus",
+        # Materialize: ln -sfn /tmp/octo-server batch/corpora/octo-server/rules
+        # Exclude assets/web/js/jquery*.min.js and *_test.go.
+        "path": ROOT / "batch" / "corpora" / "octo-server" / "rules",
+        "files": [
+            "internal/cardactiondispatch/registry.go",
+            "internal/carddispatch/registry.go",
+            "modules/app_bot/app_bot.go",
+            "modules/bot_api/commands.go",
+            "modules/card_template_catalog/api_state.go",
+            "modules/common/api.go",
+            "modules/common/system_settings.go",
+            "modules/oidc/api.go",
+            "modules/oidc/config.go",
+            "modules/openapi/api.go",
+            "modules/robot/api.go",
+            "modules/sticker/model.go",
+            "pkg/accesslog/accesslog.go",
+            "pkg/cardmsg/inputs.go",
+            "pkg/cardtmpl/approval_request.go",
+            "pkg/cardtmpl/json_artifact.go",
+            "pkg/i18n/codes/registry.go",
+            "pkg/i18n/params.go",
+            "pkg/space/channel.go",
+            "tools/migrate-rename/main.go",
+            "tools/migrate-rename/rewrite_initdb.go",
+        ],
+        "dialect": "re2",
+        "extractor": "go_regexp",
+        "repo": "Mininglamp-OSS/octo-server",
+        "security_tool": False,
+        "lift_inline": False,
+        "corpus_pin": "d3daa912a04d17f78df2d0c059a111cafff75534",
+        "commit": "d3daa912a04d17f78df2d0c059a111cafff75534",
+        "budget": {
+            "max_patterns": 5000,
+            "max_wall_s": 600,
+            "redos_wall_s": 120,
+            "max_mem_mb": 1024,
+            "max_disk_mb": 200,
+        },
+    },
     # Wave-3 P5 testdata corpora (#116) — exempt from admission gate_decision.
     "perl_tre": {
         "corpus_type": "testdata",
@@ -633,6 +676,7 @@ WAVE_CORPORA = frozenset({
     "dompurify", "isemail", "email_addresses", "hippo",
     "everclaw-community-branches",
     "tracecat",
+    "octo-server",
     "perl_tre", "go_regexp_tests", "v8_mjsunit",
 })
 
