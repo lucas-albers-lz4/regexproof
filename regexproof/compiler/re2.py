@@ -55,8 +55,12 @@ def ensure_built() -> Path:
 def parse_with_helper(pattern: str) -> dict:
     try:
         binary = ensure_built()
-    except (FileNotFoundError, subprocess.CalledProcessError, subprocess.TimeoutExpired):
+    except FileNotFoundError:
         return helper_gate_missing("go-re2")
+    except subprocess.CalledProcessError:
+        return helper_gate_missing("go-re2")
+    except subprocess.TimeoutExpired:
+        return {"ok": False, "unencodable_reason": "timeout", "error": "timeout"}
     except ValueError:
         # REGEXPROOF_GO_RE2 outside helpers/go-re2/ — treat as unavailable.
         return helper_gate_missing("go-re2")
@@ -159,7 +163,16 @@ def compile_re2(
 
 
 def replay_argv(pattern: str, flags: str) -> list[str]:
-    binary = ensure_built()
+    try:
+        binary = ensure_built()
+    except FileNotFoundError as exc:
+        raise RuntimeError("go-re2 helper unavailable") from exc
+    except subprocess.CalledProcessError as exc:
+        raise RuntimeError("go-re2 helper build failed") from exc
+    except subprocess.TimeoutExpired as exc:
+        raise RuntimeError("go-re2 helper build timed out") from exc
+    except ValueError as exc:
+        raise RuntimeError(str(exc)) from exc
     return [str(binary), "match", pattern, flags]
 
 
