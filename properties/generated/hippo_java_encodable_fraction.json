@@ -1,0 +1,31 @@
+{
+  "approximation": "java→pcre",
+  "candidate_url": "https://github.com/NHS-digital-website/hippo",
+  "corpus": "hippo",
+  "corpus_pin": "4879bd48c50c712236f99413cb1f68091cea599c",
+  "differential_fail": 0,
+  "differential_ok": 5,
+  "differential_zero_disagreement_pass": true,
+  "encodable": 5,
+  "encodable_fraction": 0.5555555555555556,
+  "files": [
+    "site/components/src/main/java/uk/nhs/digital/common/components/apispecification/handlebars/HeadingsHyperlinksFromMarkdownHelper.java",
+    "site/components/src/main/java/uk/nhs/digital/website/utils/VideoPlayer.java",
+    "cms/src/main/java/uk/nhs/digital/apispecs/model/SpecificationSyncData.java",
+    "site/components/src/main/java/uk/nhs/digital/common/components/ComponentUtils.java",
+    "site/components/src/main/java/uk/nhs/digital/crisp/SvgSimpleJacksonRestTemplateResourceResolver.java",
+    "site/components/src/main/java/uk/nhs/digital/svg/colour/SvgColourMagic.java"
+  ],
+  "pass_criteria": {
+    "bounded_samples": true,
+    "zero_disagreements_on_encodable_subset": true
+  },
+  "reject_reasons": {
+    "concat": 2,
+    "lookaround": 2,
+    "ok": 5
+  },
+  "rejected": 4,
+  "schema_version": "1",
+  "total_sites": 9
+}

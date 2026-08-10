@@ -404,6 +404,34 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
             "max_disk_mb": 50,
         },
     },
+    "hippo": {
+        "corpus_type": "rule_corpus",
+        # Materialize: ln -sfn /tmp/hippo batch/corpora/hippo/rules
+        # Explicit allowlist — probe 2899 sites are dominated by vendored bundles.
+        "path": ROOT / "batch" / "corpora" / "hippo" / "rules",
+        "files": [
+            "repository-data/webfiles/src/main/resources/site/src/js/eforms/eforms.js",
+            "repository-data/webfiles/src/main/resources/site/src/js/eforms/formcheck/formcheck.js",
+            "repository-data/webfiles/src/main/resources/site/src/js/eforms/jquery-hippo-validate.js",
+            "repository-data/webfiles/src/main/resources/site/src/js/table-sort/table-sort-date.js",
+            "repository-data/webfiles/src/main/resources/site/src/js/statistics/statistics-countup.js",
+            "repository-data/webfiles/src/main/resources/site/src/js/utils/vanilla-js-utils.js",
+        ],
+        "dialect": "ecma",
+        "extractor": "js_dir",
+        "repo": "NHS-digital-website/hippo",
+        "security_tool": False,
+        "lift_inline": False,
+        "corpus_pin": "4879bd48c50c712236f99413cb1f68091cea599c",
+        "commit": "4879bd48c50c712236f99413cb1f68091cea599c",
+        "budget": {
+            "max_patterns": 5000,
+            "max_wall_s": 600,
+            "redos_wall_s": 120,
+            "max_mem_mb": 1024,
+            "max_disk_mb": 200,
+        },
+    },
     # Wave-3 P5 testdata corpora (#116) — exempt from admission gate_decision.
     "perl_tre": {
         "corpus_type": "testdata",
@@ -478,7 +506,7 @@ WAVE_CORPORA = frozenset({
     "pcre2_testdata", "re2_testdata", "cpython_re", "busybox",
     "yara_rules", "test262", "spamassassin",
     "noseyparker", "shhgit",
-    "dompurify", "isemail", "email_addresses",
+    "dompurify", "isemail", "email_addresses", "hippo",
     "perl_tre", "go_regexp_tests", "v8_mjsunit",
 })
 
