@@ -35,9 +35,25 @@ def _sample_candidate(**overrides):
 
 
 def test_committed_scaffold_shape():
+    """Committed ledger is schema v1; may be empty or hold live mine admits."""
     data = json.loads(SCAFFOLD.read_text(encoding="utf-8"))
     assert data["schema_version"] == "1"
-    assert data["candidates"] == []
+    assert isinstance(data["candidates"], list)
+    required = {
+        "url",
+        "default_branch",
+        "pin",
+        "pushed_date",
+        "stars",
+        "source_query",
+        "first_seen",
+        "status",
+    }
+    for cand in data["candidates"]:
+        assert required.issubset(cand.keys())
+        assert cand["status"] in {"mined", "queued"}
+        assert isinstance(cand["url"], str) and cand["url"]
+        assert isinstance(cand["stars"], int)
 
 
 def test_save_load_round_trip(tmp_path: Path):
