@@ -120,18 +120,29 @@ def enrich_repo(
     full_name: str,
     *,
     headers: dict[str, str] | None = None,
+    retry_cap: int = DEFAULT_RETRY_CAP,
+    sleep_fn: Callable[[float], None] = time.sleep,
 ) -> dict[str, Any]:
     hdrs = headers or github_headers()
-    resp = session.get(
-        f"https://api.github.com/repos/{full_name}",
-        headers=hdrs,
-        timeout=30,
-    )
-    if resp.status_code == 401:
-        raise AuthError("GitHub repos API returned 401")
-    if resp.status_code != 200:
-        return {}
-    return resp.json()
+    last_err = ""
+    for attempt in range(retry_cap):
+        resp = session.get(
+            f"https://api.github.com/repos/{full_name}",
+            headers=hdrs,
+            timeout=30,
+        )
+        if resp.status_code == 401:
+            raise AuthError("GitHub repos API returned 401")
+        if resp.status_code == 429:
+            last_err = resp.text[:200]
+            if attempt + 1 >= retry_cap:
+                raise RateLimitError(last_err or f"enrich rate-limited: {full_name}")
+            _sleep_backoff(attempt, sleep_fn=sleep_fn)
+            continue
+        if resp.status_code != 200:
+            return {}
+        return resp.json()
+    raise RateLimitError(last_err or f"enrich rate-limited: {full_name}")
 
 
 def resolve_default_pin(
@@ -140,19 +151,30 @@ def resolve_default_pin(
     default_branch: str,
     *,
     headers: dict[str, str] | None = None,
+    retry_cap: int = DEFAULT_RETRY_CAP,
+    sleep_fn: Callable[[float], None] = time.sleep,
 ) -> str:
     hdrs = headers or github_headers()
-    resp = session.get(
-        f"https://api.github.com/repos/{full_name}/commits/{default_branch}",
-        headers=hdrs,
-        timeout=30,
-    )
-    if resp.status_code == 401:
-        raise AuthError("GitHub commits API returned 401")
-    if resp.status_code != 200:
-        return ""
-    data = resp.json()
-    return str(data.get("sha") or "")
+    last_err = ""
+    for attempt in range(retry_cap):
+        resp = session.get(
+            f"https://api.github.com/repos/{full_name}/commits/{default_branch}",
+            headers=hdrs,
+            timeout=30,
+        )
+        if resp.status_code == 401:
+            raise AuthError("GitHub commits API returned 401")
+        if resp.status_code == 429:
+            last_err = resp.text[:200]
+            if attempt + 1 >= retry_cap:
+                raise RateLimitError(last_err or f"pin rate-limited: {full_name}")
+            _sleep_backoff(attempt, sleep_fn=sleep_fn)
+            continue
+        if resp.status_code != 200:
+            return ""
+        data = resp.json()
+        return str(data.get("sha") or "")
+    raise RateLimitError(last_err or f"pin rate-limited: {full_name}")
 
 
 def run_search(
@@ -197,7 +219,14 @@ def run_search(
             if not full_name or full_name in seen_repos:
                 continue
             seen_repos.add(full_name)
-            meta = enrich_repo(session, full_name, headers=hdrs)
+            try:
+                meta = enrich_repo(
+                    session, full_name, headers=hdrs, sleep_fn=sleep_fn
+                )
+            except RateLimitError as e:
+                result.errors.append(f"enrich rate-limited: {full_name}: {e}")
+                result.capped = True
+                break
             if not meta:
                 result.errors.append(f"enrich failed: {full_name}")
                 continue
@@ -205,9 +234,18 @@ def run_search(
             if stars < min_stars:
                 continue
             default_branch = str(meta.get("default_branch") or "main")
-            pin = resolve_default_pin(
-                session, full_name, default_branch, headers=hdrs
-            )
+            try:
+                pin = resolve_default_pin(
+                    session,
+                    full_name,
+                    default_branch,
+                    headers=hdrs,
+                    sleep_fn=sleep_fn,
+                )
+            except RateLimitError as e:
+                result.errors.append(f"pin rate-limited: {full_name}: {e}")
+                result.capped = True
+                break
             if not pin:
                 result.errors.append(f"pin resolve failed: {full_name}")
                 continue

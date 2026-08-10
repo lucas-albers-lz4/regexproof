@@ -24,6 +24,7 @@ import jsonschema  # noqa: E402
 from z3 import Concat, Re, Star  # noqa: E402
 
 from regexproof.batch.disclose import tag_disclosure  # noqa: E402
+from regexproof.batch.report import write_ndjson  # noqa: E402
 from regexproof.compiler import compile_pattern  # noqa: E402
 from regexproof.compiler.pcre import replay_argv as pcre_replay  # noqa: E402
 from regexproof.compiler.re2 import ensure_built, replay_argv as re2_replay  # noqa: E402
@@ -368,9 +369,7 @@ def main(argv: list[str] | None = None) -> int:
     )
     jsonschema.validate(report, rule_diff_report_schema())
     findings_path = OUT / "crs_cross_engine_findings.ndjson"
-    with findings_path.open("w", encoding="utf-8") as fh:
-        for f in findings:
-            fh.write(json.dumps(f, sort_keys=True) + "\n")
+    write_ndjson(findings_path, findings)
     md = [
         "# CRS cross-engine rule_diff (Coraza↔ModSecurity)",
         "",

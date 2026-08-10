@@ -166,6 +166,34 @@ def test_search_429_retries_then_raises():
         search_code(session, "filename:x", retry_cap=3, sleep_fn=lambda _s: None)
 
 
+def test_enrich_repo_429_retries_then_raises():
+    from regexproof.mine.search import enrich_repo
+
+    session = FakeSession([FakeResp(429, text="slow")] * 5)
+    with pytest.raises(RateLimitError):
+        enrich_repo(session, "acme/tool", retry_cap=3, sleep_fn=lambda _s: None)
+
+
+def test_enrich_repo_429_then_success():
+    from regexproof.mine.search import enrich_repo
+
+    session = FakeSession(
+        [
+            FakeResp(429, text="slow"),
+            FakeResp(
+                200,
+                {
+                    "default_branch": "main",
+                    "stargazers_count": 9,
+                    "html_url": "https://github.com/acme/tool",
+                },
+            ),
+        ]
+    )
+    meta = enrich_repo(session, "acme/tool", retry_cap=3, sleep_fn=lambda _s: None)
+    assert meta["stargazers_count"] == 9
+
+
 def test_run_search_budget_exhaustion_sets_capped():
     # One successful search then stop via budget=1
     items = {

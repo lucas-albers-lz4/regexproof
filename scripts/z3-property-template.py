@@ -23,15 +23,13 @@ import sys
 from z3 import *
 import z3
 
-# Solver version pin — refuse non-5.0.x (same contract as z3-verify.py).
-_Z3_VERSION = z3.get_version_string()
-if not _Z3_VERSION.startswith("5.0"):
-    print(
-        f"FATAL: z3-solver {_Z3_VERSION} — this template is validated against "
-        "5.0.x only. Install the pinned version: pip install -r requirements.txt",
-        file=sys.stderr,
-    )
-    sys.exit(3)
+# Checkout bootstrap so regexproof.z3_pin resolves when run as a script.
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from regexproof.z3_pin import assert_z3_pinned
+
+_Z3_VERSION = assert_z3_pinned()
 
 _failures = 0
 

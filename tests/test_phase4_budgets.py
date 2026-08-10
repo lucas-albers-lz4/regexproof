@@ -80,11 +80,11 @@ class TestBudgetBreach:
             capture_output=True, text=True, timeout=60,
         )
         if result.returncode != 0:
-            pytest.skip(f"script failed: {result.stderr}")
+            pytest.fail(f"script failed: {result.stderr}\nstdout: {result.stdout}")
         report_path = tmp_path / "out" / "test_sample_encodable_fraction.json"
         if not report_path.exists():
-            pytest.skip("fraction report not written")
-        report = json.loads(report_path.read_text())
+            pytest.fail("fraction report not written")
+        report = json.loads(report_path.read_text(encoding="utf-8"))
         assert report["complete_run"] is False
         assert report["scope"] == "sample"
 

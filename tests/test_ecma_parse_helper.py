@@ -39,7 +39,19 @@ def _parse(pattern: str, flags: str = "") -> dict:
         timeout=30,
         check=False,
     )
-    return json.loads(proc.stdout.strip() or "{}")
+    raw = (proc.stdout or "").strip()
+    assert raw, (
+        f"ecma parse helper produced empty stdout (rc={proc.returncode}): "
+        f"stderr={proc.stderr!r}"
+    )
+    data = json.loads(raw)
+    assert "ok" in data, data
+    # Success path must exit 0; reject paths intentionally exit 1 with JSON.
+    if data.get("ok") is True:
+        assert proc.returncode == 0, (
+            f"ok:true but rc={proc.returncode}: stderr={proc.stderr!r}"
+        )
+    return data
 
 
 def _matches(pattern: str, s: str, flags: str = "") -> bool:
