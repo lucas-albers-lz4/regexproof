@@ -1,0 +1,53 @@
+{
+  "candidate_url": "https://github.com/Giskard-AI/giskard-oss",
+  "conditions": [
+    {
+      "evidence": "Predicted buckets present (2) but not treated as novel surface.",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary=unknown; no topics/path signals for boundary.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "6 sites < 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "giskard-oss",
+  "corpus_pin": "b6b8403ffa88d4a2e135aed5f850bc73ed7ac814",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-10",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "py_re": 6
+    },
+    "flags": {
+      "i": 1,
+      "m": 1
+    },
+    "pin": "b6b8403ffa88d4a2e135aed5f850bc73ed7ac814",
+    "predicted_buckets": {
+      "inline-flag": 1,
+      "m-flag": 1
+    },
+    "regex_sites": 6,
+    "regex_sites_per_file": {
+      "libs/giskard-agents/src/giskard/agents/tools/_docstring_parser.py": 1,
+      "libs/giskard-agents/tests/test_litellm_generator.py": 1,
+      "libs/giskard-checks/src/giskard/checks/utils/normalization.py": 1,
+      "libs/giskard-checks/tests/core/test_jsonpath_enforcement.py": 1,
+      "libs/giskard-llm/src/giskard/llm/utils/schema.py": 1,
+      "libs/giskard-scan/src/giskard/scan/generators/knowledge_base/base.py": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 6 regex sites (auto-NO-GO bar 200); dialects [py_re:6]; boundary=unknown.",
+  "schema_version": "1"
+}

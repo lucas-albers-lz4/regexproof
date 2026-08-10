@@ -1,0 +1,58 @@
+{
+  "candidate_url": "https://github.com/snowdreamtech/frp",
+  "conditions": [
+    {
+      "evidence": "Predicted buckets present (2) but not treated as novel surface.",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary=unknown.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "11 sites < 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "frp",
+  "corpus_pin": "5f0490fb1b93fcdbb763cadb540a2daefe007562",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-10",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "lookaround": 1
+    },
+    "dialect": {
+      "ecma": 1,
+      "py_re": 10
+    },
+    "flags": {
+      "s": 1
+    },
+    "pin": "5f0490fb1b93fcdbb763cadb540a2daefe007562",
+    "predicted_buckets": {
+      "inline-flag": 1,
+      "lookaround": 1
+    },
+    "regex_sites": 11,
+    "regex_sites_per_file": {
+      "commitlint.config.cjs": 1,
+      "scripts/pre-commit/check-env-safety.py": 1,
+      "scripts/pre-commit/check-jsonc.py": 3,
+      "scripts/pre-commit/check-lockfile-conflicts.py": 1,
+      "scripts/pre-commit/check-merge-conflict.py": 1,
+      "scripts/pre-commit/check-svg-safety.py": 1,
+      "scripts/pre-commit/detect-private-key.py": 1,
+      "scripts/pre-commit/forbidden-files.py": 1,
+      "scripts/pre-commit/trailing-whitespace.py": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 11 regex sites (auto-NO-GO bar 200); dialects [ecma:1, py_re:10]; boundary=unknown.",
+  "schema_version": "1"
+}

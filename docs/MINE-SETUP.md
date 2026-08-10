@@ -88,6 +88,10 @@ fraction, compile likelihood.
 ```bash
 # Top N mined ledger rows for hand probe → author-gate
 python scripts/rank-mine-candidates.py --limit 10
+
+# After a wave has gate decisions on disk, skip those URLs so rank
+# returns the next drain (not the previous batch still status=mined):
+python scripts/rank-mine-candidates.py --skip-gated --limit 10
 ```
 
 Each stdout line is NDJSON: `url`, `score`, `score_version`, `breakdown`, plus
