@@ -75,7 +75,7 @@ def _run_batch(out_dir: Path) -> None:
 def _extract_determinism(corpus: str) -> int:
     """Two-run extraction must yield identical regex_id sequences."""
     from regexproof.batch.extract import extract_corpus
-from regexproof.batch.manifests import CORPUS_MANIFESTS
+    from regexproof.batch.manifests import CORPUS_MANIFESTS
 
     if corpus not in CORPUS_MANIFESTS:
         print(f"unknown corpus: {corpus}", file=sys.stderr)
