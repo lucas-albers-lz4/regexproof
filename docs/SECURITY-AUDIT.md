@@ -46,15 +46,15 @@ first; it is faster than reading the call site.
 |---|---|---|
 | `reject_shell_subprocess_usage()` | `regexproof/fuzz/adapters.py:132` | static AST ban on `shell=True` in fuzz/ReDoS paths; wired into CI (`ci.yml:83-84`, `ci.yml:205-207`) |
 | `ci-assert-toolchain.py --job {proof,golden,redos}` | `scripts/ci-assert-toolchain.py` | z3 5.0.x, Python/Node/Go majors, pcre2/yara/perl presence, npm + regexploit pins — **per CI job env** |
-| z3 pin guard (exit 3) | `z3-verify.py:88`, `differential-fuzz.py:51`, `mirror-fidelity-gate.py:577` | refuses non-5.0.x solver at runtime |
-| `default_output_path()` containment | `regexproof/admission/author.py:236-245` | `is_relative_to(properties/generated)` on the *default* path |
+| z3 pin guard (exit 3) | `scripts/z3-verify.py:88-95`, `differential-fuzz.py:51`, `mirror-fidelity-gate.py:577` | refuses non-5.0.x solver at runtime |
+| `default_output_path()` containment | `regexproof/admission/author.py:234-245` | `is_relative_to(properties/generated)` on the *default* path |
 | Clone destination guard | `regexproof/admission/clone.py:70-76` | probe clones cannot land under `batch/corpora/` |
 | `_MAX_FILE_BYTES` (2 MB) | `regexproof/admission/walk.py:26,54-58` | per-file read cap — **admission walk only**, not batch |
-| Atomic write (temp + fsync + `os.replace`) | `regexproof/mine/ledger.py:53-66`, `mine/queue.py:46-62` | ledger/queue only — batch NDJSON writers do *not* use this |
+| Atomic write (temp + fsync + `os.replace`) | `regexproof/mine/ledger.py:53-66`, `regexproof/mine/queue.py:46-62` | ledger/queue only — batch NDJSON writers do *not* use this |
 | Evidence gates | `regexproof/batch/evidence.py:12-35` | Z3 `timeout`/`unknown` is a hard fail for property kinds |
 | Disclosure gate | `regexproof/batch/disclose.py:30-75` | `private_first` on security-tool corpora; no network publish |
 | Witness redaction | `scripts/rule-diff-pilot.py:228-247` | long solver strings redacted in committed artifacts |
-| Secret-scanning path ignores | `.github/secret_scanning.yml` | fixture/pilot paths resolved `used_in_tests` |
+| Secret-scanning path ignores | `.github/secret_scanning.yml` | `paths-ignore` for fixture/pilot paths (gitleaks pilot artifacts) |
 | GitHub search backoff | `regexproof/mine/search.py:73-109` | 429 retry — `search_code()` only, *not* `enrich_repo()` |
 
 **Known asymmetries** (each is a real gap, each already has an issue — do not
@@ -74,7 +74,7 @@ reopened, argue against the recorded rationale explicitly.
 |---|---|---|
 | Floating action tags (`@v5`, `@v6`, `@v2`) not SHA-pinned | **won't fix** | Deliberate major-tag pinning, fleet standard. Code-scanning alert 6, dismissed 2026-08-09 |
 | `new RegExp(pattern, flags)` from argv in `helpers/ecma/match.mjs` | **not a boundary** | Operator-supplied CLI args to a ground-truth replay harness. Comment at `match.mjs:7-9` |
-| `eval()` on `--mirror-expr` | **not a boundary** | Same reasoning; `__builtins__` emptied, 9-symbol namespace (`differential-fuzz.py:62-72`) |
+| `eval()` on `--mirror-expr` | **not a boundary** | Same reasoning; 9-symbol namespace (`differential-fuzz.py:62-72`); `eval(..., {"__builtins__": {}}, MIRROR_NS)` at `differential-fuzz.py:168` |
 | daily-mine commits after mine exit 1 | **deliberate** | Preserves partial progress; comment at `daily-mine.yml:76`. Hardening tracked in #173, but the behavior is intentional |
 | Dependabot version updates disabled repo-wide | **deliberate** | `open-pull-requests-limit: 0` + ignore-all; security updates come from the repo-level setting instead |
 | ReDoS analysis via Z3 | **out of scope** | Complexity analysis of the engine, not language membership — see `AGENTS.md` and `docs/REDOS.md` |
@@ -200,6 +200,21 @@ it at medium and letting the reader discover the caveat.
   `.cursor/rules/pr-bugbot-before-merge.mdc`: CI green, then Bugbot on branch
   changes, then merge.
 
+## 6a. Keeping this current
+
+This playbook is only useful if citations stay true. Maintenance rule:
+
+1. **Date-stamp the wave** in §7 when a new audit runs; do not silently rewrite
+   history.
+2. **Update controls / settled-decisions / asymmetries in the same PR** that
+   lands a fix changing them (e.g. adding a size cap to batch extraction must
+   edit the known-asymmetry row, not leave it stale).
+3. **Re-run §4 sweeps** before filing a new wave; if a sweep no longer reproduces
+   a listed finding, move that item from "open gap" to the audit-log outcome
+   rather than leaving a false positive in the text.
+4. Accept that line numbers drift — when a citation is wrong, fix the citation
+   in the next touch; do not invent a separate CI job for line pins.
+
 ---
 
 ## 7. Audit log
@@ -214,3 +229,8 @@ repo · #171 untimed subprocess (45 sites) · #172 compiler fail-open on missing
 helper · #173 daily-mine write PAT · #174 unvalidated clone URL · #175 unbounded
 batch reads · #176 low-severity hardening batch · #177 CodeQL suppression not in
 effect.
+
+Doc-review (#185) signed off 2026-08-10: citations corrected (`eval` line,
+secret-scanning wording); severity ordering and settled-decisions registry
+kept; mine ledger stays classified untrusted; maintenance = same-PR updates +
+wave date-stamps (§6a).
