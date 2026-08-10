@@ -1,0 +1,15 @@
+{
+  "schema_version": "1",
+  "corpus": "evmos",
+  "corpus_pin": "0402a01c9036b40a7f47dc2fc5fb4cfae019f5f1",
+  "candidate_url": "https://github.com/evmos/evmos",
+  "smith_decision": "no-go",
+  "supersedes": "triage-trial",
+  "reason": "361/409 probe sites are vendored swagger-ui; remainder are changelog/license scripts and tests. No product boundary surface for measure/batch.",
+  "regex_sites": 409,
+  "sites_by_bucket": {
+    "swagger_ui_vendor": 361,
+    "tooling_scripts": 38,
+    "tests": 10
+  }
+}
