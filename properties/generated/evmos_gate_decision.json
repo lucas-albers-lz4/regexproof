@@ -7,9 +7,9 @@
       "met": false
     },
     {
-      "evidence": "Probe security_boundary recorded; gitleaks.toml discovery query; sites=409 (ecma/py_re/re2).",
+      "evidence": "Smith: 361/409 sites are vendored swagger-ui JS; remainder are changelog/license scripts and tests — not product security-boundary regexes.",
       "id": "security-boundary",
-      "met": true
+      "met": false
     },
     {
       "evidence": "409 sites < 1000 scale bar.",
@@ -19,10 +19,10 @@
   ],
   "corpus": "evmos",
   "corpus_pin": "0402a01c9036b40a7f47dc2fc5fb4cfae019f5f1",
-  "decision": "triage-trial",
-  "decision_basis": "escape_hatch",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
   "decision_date": "2026-08-10",
-  "escape_hatch_applied": true,
+  "escape_hatch_applied": false,
   "probe": {
     "construct_counts": {
       "backref": 8,
@@ -65,6 +65,6 @@
     },
     "security_boundary": "deterministic-true"
   },
-  "rationale": "Triage-trial: 409 sites (ecma/py_re/re2); escape hatch for findings-pipeline evaluation.",
+  "rationale": "Smith triage: swagger-ui vendor noise dominates; leftover py_re/go sites are tooling/tests. Supersede triage-trial.",
   "schema_version": "1"
 }

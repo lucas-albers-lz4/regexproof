@@ -1,0 +1,16 @@
+{
+  "schema_version": "1",
+  "corpus": "node-sdk",
+  "corpus_pin": "594ee0e0c0b042ee9eed21f262be3c4bc5a1919b",
+  "candidate_url": "https://github.com/watson-developer-cloud/node-sdk",
+  "smith_decision": "no-go",
+  "supersedes": "triage-trial",
+  "reason": "605/609 probe sites are unit tests / jsdoc prettify / typedoc theme; only 4 first-party sites (2 lib streams + report_integration_test). No product boundary surface for measure/batch.",
+  "regex_sites": 609,
+  "sites_by_bucket": {
+    "unit_test": 406,
+    "typedoc_theme": 114,
+    "jsdoc_prettify": 85,
+    "product_or_script": 4
+  }
+}

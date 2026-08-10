@@ -7,9 +7,9 @@
       "met": false
     },
     {
-      "evidence": "Human override: probe security_boundary=unknown, but watson-developer-cloud/node-sdk is an auth/API client SDK with 609 ecma sites — admit for triage-trial only.",
+      "evidence": "Smith: 605/609 probe sites are unit tests, jsdoc/prettify, or typedoc theme assets; only 4 first-party sites (2 lib streams + 2 report_integration_test).",
       "id": "security-boundary",
-      "met": true
+      "met": false
     },
     {
       "evidence": "609 sites < 1000 scale bar.",
@@ -19,10 +19,10 @@
   ],
   "corpus": "node-sdk",
   "corpus_pin": "594ee0e0c0b042ee9eed21f262be3c4bc5a1919b",
-  "decision": "triage-trial",
-  "decision_basis": "escape_hatch",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
   "decision_date": "2026-08-10",
-  "escape_hatch_applied": true,
+  "escape_hatch_applied": false,
   "probe": {
     "construct_counts": {
       "backref": 1,
@@ -63,6 +63,6 @@
     },
     "security_boundary": "unknown"
   },
-  "rationale": "Triage-trial: 609 ecma sites in Watson node-sdk; probe boundary=unknown but auth/SDK surface warrants findings trial via escape hatch.",
+  "rationale": "Smith triage: probe mass is test/docs tooling (typedoc/prettify/unit fixtures), not product auth/API boundary regexes. Supersede triage-trial.",
   "schema_version": "1"
 }
