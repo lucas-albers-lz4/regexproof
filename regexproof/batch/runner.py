@@ -888,14 +888,6 @@ def _apply_address_space_cap(budget: dict[str, Any]) -> bool:
         new_soft = cap if soft == resource.RLIM_INFINITY else min(soft, cap)
         new_hard = cap if hard == resource.RLIM_INFINITY else min(hard, cap)
         resource.setrlimit(resource.RLIMIT_AS, (new_soft, new_hard))
-<<<<<<< HEAD
-    except Exception as exc:  # noqa: BLE001
-        print(
-            f"warning: could not install RLIMIT_AS address-space cap "
-            f"(max_mem_mb={max_mb}): {exc}",
-            file=sys.stderr,
-        )
-=======
         return True
     except Exception as exc:  # noqa: BLE001
         if not _ADDRESS_SPACE_CAP_WARNED:
@@ -906,7 +898,6 @@ def _apply_address_space_cap(budget: dict[str, Any]) -> bool:
             )
             _ADDRESS_SPACE_CAP_WARNED = True
         return False
->>>>>>> 21f6223 (fix(audit): Wave 4 reliability — atomic writes, pin, CI timeouts (#187–#191))
 
 
 def _validate_expected_roots(corpus: str, meta: dict[str, Any]) -> None:
