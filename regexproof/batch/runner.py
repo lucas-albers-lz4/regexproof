@@ -671,6 +671,53 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
             "max_disk_mb": 200,
         },
     },
+    "serviceradar": {
+        "corpus_type": "rule_corpus",
+        # Materialize: ln -sfn /tmp/serviceradar batch/corpora/serviceradar/rules
+        # First-party js/cli + elixir web-ng assets; exclude third_party, tests, monaco.
+        "path": ROOT / "batch" / "corpora" / "serviceradar" / "rules",
+        "files": [
+            "js/cli/src/args.ts",
+            "js/cli/src/auth/credentials.ts",
+            "js/cli/src/auth/login.ts",
+            "js/cli/src/cli.ts",
+            "js/cli/src/dashboard/dev.ts",
+            "js/cli/src/dashboard/init.ts",
+            "js/cli/src/dashboard/publish.ts",
+            "js/cli/src/utils.ts",
+            "elixir/web-ng/assets/component/src/DashboardBuilderCanvas.jsx",
+            "elixir/web-ng/assets/component/src/DashboardPanelChart.jsx",
+            "elixir/web-ng/assets/component/src/RemoteAccessSSHConsole.jsx",
+            "elixir/web-ng/assets/component/src/sshEphemeralKeypair.js",
+            "elixir/web-ng/assets/js/hooks/CommandPalette.js",
+            "elixir/web-ng/assets/js/hooks/DashboardWasmHost.js",
+            "elixir/web-ng/assets/js/hooks/MapboxFlowMap.js",
+            "elixir/web-ng/assets/js/hooks/OperationsTrafficMap.js",
+            "elixir/web-ng/assets/js/hooks/SRQLTimeCookie.js",
+            "elixir/web-ng/assets/js/hooks/SpatialSurveyMap.js",
+            "elixir/web-ng/assets/js/hooks/charts/FlowDonut.js",
+            "elixir/web-ng/assets/js/lib/god_view/rendering_style_edge_telemetry_methods.js",
+            "elixir/web-ng/assets/js/lib/remote_desktop/renderer_state.js",
+            "elixir/web-ng/assets/js/lib/remote_desktop/webrtc_client.js",
+            "elixir/web-ng/assets/js/lib/srql/tokenizer.js",
+            "elixir/web-ng/assets/js/utils/chart_hover_geometry.js",
+        ],
+        "dialect": "ecma",
+        "extractor": "js_precise_dir",
+        "repo": "carverauto/serviceradar",
+        "security_tool": False,
+        "lift_inline": False,
+        "corpus_pin": "37859392af3e58b2e1825bbe75091090914277c4",
+        "commit": "37859392af3e58b2e1825bbe75091090914277c4",
+        "budget": {
+            "max_patterns": 5000,
+            "max_wall_s": 600,
+            "redos_wall_s": 120,
+            "max_mem_mb": 1024,
+            # Full clone via symlink is ~1GB; budget is tree size not extract volume.
+            "max_disk_mb": 1500,
+        },
+    },
     # Wave-3 P5 testdata corpora (#116) — exempt from admission gate_decision.
     "perl_tre": {
         "corpus_type": "testdata",
@@ -751,6 +798,7 @@ WAVE_CORPORA = frozenset({
     "octo-server",
     "magic-js",
     "lonkero",
+    "serviceradar",
     "perl_tre", "go_regexp_tests", "v8_mjsunit",
 })
 
