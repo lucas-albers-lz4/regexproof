@@ -73,10 +73,15 @@ jobs:
             echo "${SUMMARY_LINE}"
             echo "EOF"
           } >> "${GITHUB_OUTPUT}"
-          # Auth (2) fail closed here; exit 1 still allows commit-back of partial writes.
-          if [ "${code}" = "2" ]; then
-            echo "::error::mine auth failure (exit 2) — PROJECT_PAT rejected or missing scope"
-            exit 2
+          # Fail closed on any non-zero (auth=2, search soft-fail=1, …).
+          # Commit step is gated on success, so partial/corrupt writes are not pushed.
+          if [ "${code}" != "0" ]; then
+            if [ "${code}" = "2" ]; then
+              echo "::error::mine auth failure (exit 2) — PROJECT_PAT rejected or missing scope"
+            else
+              echo "::error::mine exited ${code}"
+            fi
+            exit "${code}"
           fi
 
       - name: Job summary
@@ -115,9 +120,32 @@ jobs:
           } >> "${GITHUB_STEP_SUMMARY}"
 
       - name: Commit ledger + queue
-        # Skip on auth failure; still commit after soft/hard search failure if files changed.
+        # Only after a clean mine exit (non-zero skips this step).
         if: steps.mine.outcome == 'success'
         run: |
+          python - <<'PY'
+          import json
+          import sys
+          from pathlib import Path
+
+          checks = (
+              (Path("properties/generated/candidate-ledger.json"), "candidates"),
+              (Path("properties/generated/mine-queue.json"), "items"),
+          )
+          for path, key in checks:
+              if not path.is_file():
+                  print(f"::error::{path} missing after successful mine")
+                  sys.exit(1)
+              try:
+                  data = json.loads(path.read_text(encoding="utf-8"))
+              except json.JSONDecodeError as exc:
+                  print(f"::error::{path} is not valid JSON: {exc}")
+                  sys.exit(1)
+              if not isinstance(data, dict) or not isinstance(data.get(key), list):
+                  print(f"::error::{path}: top-level {key!r} must be a list")
+                  sys.exit(1)
+          print("ledger/queue JSON schema ok")
+          PY
           git config user.name "regexproof-bot"
           git config user.email "regexproof-bot@users.noreply.github.com"
           git add properties/generated/candidate-ledger.json \
@@ -129,9 +157,3 @@ jobs:
             git pull --rebase --autostash origin "${GITHUB_REF_NAME}"
             git push
           fi
-
-      - name: Fail job on mine soft failure
-        if: steps.mine.outputs.exit_code == '1'
-        run: |
-          echo "::error::mine exited 1 (search failure with no candidates). Ledger/queue commit-back already attempted."
-          exit 1

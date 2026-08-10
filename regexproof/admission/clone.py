@@ -7,16 +7,39 @@ import shutil
 import subprocess
 from collections.abc import Callable, Sequence
 from pathlib import Path
+from urllib.parse import urlparse
 
 # Injectable runner for tests: (argv, kwargs) -> CompletedProcess-like
 RunFn = Callable[..., subprocess.CompletedProcess[str]]
+
+_ALLOWED_CLONE_HOSTS = frozenset({"github.com", "www.github.com"})
+_DEFAULT_CLONE_TIMEOUT_SEC = 300
 
 
 class CloneError(RuntimeError):
     """Probe clone failed."""
 
 
+def validate_clone_url(url: str) -> None:
+    """Reject non-https / non-GitHub / credential-bearing clone URLs."""
+    parsed = urlparse(url)
+    scheme = (parsed.scheme or "").lower()
+    if scheme != "https":
+        raise CloneError(
+            f"clone URL must use https scheme, got {scheme!r} (url={url!r})"
+        )
+    if parsed.username is not None or parsed.password is not None:
+        raise CloneError(f"clone URL must not contain userinfo (url={url!r})")
+    host = (parsed.hostname or "").lower()
+    if host not in _ALLOWED_CLONE_HOSTS:
+        raise CloneError(
+            f"clone URL host not allowlisted: {host!r} "
+            f"(allowed: {sorted(_ALLOWED_CLONE_HOSTS)}; url={url!r})"
+        )
+
+
 def _default_run(argv: Sequence[str], **kwargs: object) -> subprocess.CompletedProcess[str]:
+    kwargs.setdefault("timeout", _DEFAULT_CLONE_TIMEOUT_SEC)
     return subprocess.run(
         list(argv),
         check=False,
@@ -66,6 +89,7 @@ def partial_clone(
     Callers that walk/read files should re-check via :func:`enforce_disk_budget`
     after materialization.
     """
+    validate_clone_url(url)
     run_fn = run or _default_run
     dest = Path(dest)
     parts = dest.resolve().parts

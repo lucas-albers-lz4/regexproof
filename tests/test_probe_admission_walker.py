@@ -9,10 +9,15 @@ from types import SimpleNamespace
 
 import pytest
 
-from regexproof.admission.clone import CloneError, cleanup_clone, partial_clone
+from regexproof.admission.clone import (
+    CloneError,
+    cleanup_clone,
+    partial_clone,
+    validate_clone_url,
+)
 from regexproof.admission.constructs import accumulate_constructs, count_constructs
-from regexproof.admission.draft import FIELDS_REMAINING, build_draft, emit_draft_text
-from regexproof.admission.walk import count_java_pattern_compile, walk_repo
+from regexproof.admission.draft import FIELDS_REMAINING, build_boundary_signals, build_draft, emit_draft_text
+from regexproof.admission.walk import _MAX_FILE_BYTES, count_java_pattern_compile, walk_repo
 from regexproof.schemas import gate_decision_schema
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -112,7 +117,7 @@ def test_partial_clone_passes_filter_blob_none(tmp_path: Path):
         return SimpleNamespace(returncode=0, stdout="", stderr="")
 
     pin = partial_clone(
-        "https://example.com/repo.git",
+        "https://github.com/owner/repo.git",
         dest=tmp_path / "repo",
         pin="abc",
         run=fake_run,
@@ -131,7 +136,12 @@ def test_partial_clone_rejects_batch_corpora(tmp_path: Path):
     # Simpler: pass a dest whose resolve string includes the forbidden segment.
     dest = ROOT / "batch" / "corpora" / "probe-tmp-should-fail"
     with pytest.raises(CloneError, match="batch/corpora"):
-        partial_clone("https://example.com/r.git", dest=dest, pin="x", run=lambda *a, **k: None)
+        partial_clone(
+            "https://github.com/owner/repo.git",
+            dest=dest,
+            pin="x",
+            run=lambda *a, **k: None,
+        )
 
 
 def test_cli_local_path(tmp_path: Path):
@@ -157,8 +167,6 @@ def test_cli_local_path(tmp_path: Path):
 
 
 def test_boundary_path_sample_skips_git(tmp_path: Path):
-    from regexproof.admission.draft import build_boundary_signals
-
     (tmp_path / ".git" / "objects").mkdir(parents=True)
     (tmp_path / ".git" / "objects" / "pack").write_text("x", encoding="utf-8")
     (tmp_path / "src").mkdir()
@@ -166,3 +174,71 @@ def test_boundary_path_sample_skips_git(tmp_path: Path):
     sigs = build_boundary_signals(repo_name="x", root=tmp_path)
     assert any("sanitizer" in p for p in sigs.paths)
     assert not any(".git" in p for p in sigs.paths)
+
+
+def test_readme_symlink_to_passwd_yields_empty_description(tmp_path: Path):
+    """Planted README → /etc/passwd must not leak host file contents (#170)."""
+    passwd = Path("/etc/passwd")
+    if not passwd.is_file():
+        pytest.skip("/etc/passwd not available")
+    (tmp_path / "README.md").symlink_to(passwd)
+    sigs = build_boundary_signals(repo_name="x", root=tmp_path)
+    assert sigs.description == ""
+    host = passwd.read_text(encoding="utf-8", errors="replace")[:80]
+    assert host not in sigs.description
+
+
+def test_walk_skips_symlink_files(tmp_path: Path):
+    """Symlinked sources are ignored before is_file() (#170)."""
+    outside = tmp_path / "outside"
+    outside.mkdir()
+    (outside / "evil.py").write_text(
+        "import re\nre.compile(r'symlink-only-pattern')\n", encoding="utf-8"
+    )
+    repo = tmp_path / "repo"
+    repo.mkdir()
+    (repo / "ok.py").write_text("# no regex\n", encoding="utf-8")
+    (repo / "evil.py").symlink_to(outside / "evil.py")
+    walked = walk_repo(repo, repo_name="symlink-probe")
+    assert walked["regex_sites"] == 0
+    assert _MAX_FILE_BYTES == 2_000_000
+
+
+def test_boundary_path_sample_skips_symlinks(tmp_path: Path):
+    (tmp_path / "real.py").write_text("x", encoding="utf-8")
+    (tmp_path / "link.py").symlink_to(tmp_path / "real.py")
+    sigs = build_boundary_signals(repo_name="x", root=tmp_path)
+    assert "real.py" in sigs.paths
+    assert "link.py" not in sigs.paths
+
+
+@pytest.mark.parametrize(
+    "url",
+    [
+        "file:///tmp/repo.git",
+        "ssh://git@github.com/owner/repo.git",
+        "https://user:pass@github.com/owner/repo",
+        "https://evil.com/owner/repo",
+    ],
+)
+def test_validate_clone_url_rejects_disallowed(url: str):
+    with pytest.raises(CloneError):
+        validate_clone_url(url)
+
+
+def test_validate_clone_url_accepts_github_https():
+    validate_clone_url("https://github.com/owner/repo")
+    validate_clone_url("https://www.github.com/owner/repo.git")
+    validate_clone_url("https://GitHub.com/Owner/Repo")
+
+
+def test_partial_clone_rejects_bad_url_before_run(tmp_path: Path):
+    def boom(*_a, **_k):
+        raise AssertionError("run must not be called for disallowed URL")
+
+    with pytest.raises(CloneError, match="https"):
+        partial_clone(
+            "file:///tmp/x.git",
+            dest=tmp_path / "repo",
+            run=boom,
+        )
