@@ -1,0 +1,98 @@
+{
+  "candidate_url": "https://github.com/NHS-digital-website/hippo",
+  "conditions": [
+    {
+      "evidence": "Predicted buckets present (6) but not treated as novel surface.",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary=deterministic-true (paths/topics/name signals); gitleaks.toml discovery query.",
+      "id": "security-boundary",
+      "met": true
+    },
+    {
+      "evidence": "2899 regex sites >= 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": true
+    }
+  ],
+  "corpus": "hippo",
+  "corpus_pin": "4879bd48c50c712236f99413cb1f68091cea599c",
+  "decision": "go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-10",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "backref": 46,
+      "lookaround": 262
+    },
+    "dialect": {
+      "ecma": 2888,
+      "java": 11
+    },
+    "flags": {
+      "g": 674,
+      "i": 238,
+      "m": 54,
+      "u": 1
+    },
+    "pin": "4879bd48c50c712236f99413cb1f68091cea599c",
+    "predicted_buckets": {
+      "backref": 46,
+      "inline-flag": 238,
+      "lookaround": 262,
+      "m-flag": 54,
+      "stateful": 674,
+      "u-flag": 1
+    },
+    "regex_sites": 2899,
+    "regex_sites_per_file": {
+      "acceptance-tests/src/test/node/src/step-definitions/site-steps.ts": 3,
+      "acceptance-tests/src/test/node/src/step-definitions/snapshots.ts": 2,
+      "cms/src/main/java/uk/nhs/digital/apispecs/model/SpecificationSyncData.java": 1,
+      "cms/src/main/resources/ckeditor/extraConfiguration.js": 1,
+      "cms/src/main/resources/ckeditor/plugins/a11ychecker/libs/quail/quail.jquery.js": 101,
+      "cms/src/main/resources/ckeditor/plugins/a11ychecker/libs/quail/quail.jquery.min.js": 103,
+      "cms/src/main/resources/ckeditor/plugins/a11ychecker/plugin.js": 107,
+      "cms/src/main/resources/ckeditor/plugins/a11ychecker/quickfix/en/AddTableCaption.js": 1,
+      "cms/src/main/resources/ckeditor/plugins/a11ychecker/quickfix/en/AnchorsMerge.js": 1,
+      "cms/src/main/resources/ckeditor/plugins/a11ychecker/quickfix/en/DateUnfold.js": 2,
+      "cms/src/main/resources/ckeditor/plugins/a11ychecker/quickfix/en/ImgAlt.js": 1,
+      "cms/src/main/resources/ckeditor/plugins/a11ychecker/quickfix/en/ParagraphToHeader.js": 2,
+      "cms/src/main/resources/ckeditor/plugins/definedterms/dialogs/dialog.js": 9,
+      "cms/src/main/resources/ckeditor/plugins/table/dialogs/table.js": 1,
+      "cms/src/main/resources/ckeditor/plugins/wordcount_modified/plugin.js": 16,
+      "cms/src/test/java/org/apache/sling/testing/mock/jcr/MockNode.java": 1,
+      "repository-data/webfiles/gulpfile.js": 1,
+      "repository-data/webfiles/src/main/resources/site/apispecification/rapidoc-min.js": 630,
+      "repository-data/webfiles/src/main/resources/site/apispecification/swagger-ui-bundle.js": 531,
+      "repository-data/webfiles/src/main/resources/site/apispecification/swagger-ui-standalone-preset.js": 62,
+      "repository-data/webfiles/src/main/resources/site/apispecification/swagger-ui.js": 284,
+      "repository-data/webfiles/src/main/resources/site/js/highcharts/modules/accessibility.js": 9,
+      "repository-data/webfiles/src/main/resources/site/src/js/eforms/eforms.js": 14,
+      "repository-data/webfiles/src/main/resources/site/src/js/eforms/formcheck/documentation/styles/javascript/main.js": 40,
+      "repository-data/webfiles/src/main/resources/site/src/js/eforms/formcheck/formcheck.js": 34,
+      "repository-data/webfiles/src/main/resources/site/src/js/eforms/jquery-ui-1.12.1.custom.min.js": 28,
+      "repository-data/webfiles/src/main/resources/site/src/js/eforms/jquery-validate-1.1.2.js": 5,
+      "repository-data/webfiles/src/main/resources/site/src/js/eforms/localization/methods_de.js": 2,
+      "repository-data/webfiles/src/main/resources/site/src/js/eforms/localization/methods_nl.js": 1,
+      "repository-data/webfiles/src/main/resources/site/src/js/eforms/localization/methods_pt.js": 1,
+      "repository-data/webfiles/src/main/resources/site/src/js/statistics/statistics-countup.js": 1,
+      "repository-data/webfiles/src/main/resources/site/src/js/table-sort/table-sort-date.js": 5,
+      "repository-data/webfiles/src/main/resources/site/src/js/utils/vanilla-js-utils.js": 1,
+      "repository-data/webfiles/webpack.config.js": 2,
+      "site/components/src/main/java/uk/nhs/digital/common/components/ComponentUtils.java": 1,
+      "site/components/src/main/java/uk/nhs/digital/common/components/apispecification/handlebars/HeadingsHyperlinksFromMarkdownHelper.java": 3,
+      "site/components/src/main/java/uk/nhs/digital/crisp/SvgSimpleJacksonRestTemplateResourceResolver.java": 1,
+      "site/components/src/main/java/uk/nhs/digital/freemarker/highcharts/ChartData.java": 1,
+      "site/components/src/main/java/uk/nhs/digital/svg/colour/SvgColourMagic.java": 1,
+      "site/components/src/main/java/uk/nhs/digital/website/utils/VideoPlayer.java": 2,
+      "site/components/src/main/resources/highlighter/highlight-js/highlight.pack.js": 887
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Security-boundary corpus (boundary=deterministic-true) with findings-triage potential; 2899 sites across [ecma:2888, java:11].",
+  "schema_version": "1"
+}

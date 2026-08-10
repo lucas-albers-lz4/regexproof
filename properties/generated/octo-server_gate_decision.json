@@ -1,0 +1,109 @@
+{
+  "candidate_url": "https://github.com/Mininglamp-OSS/octo-server",
+  "conditions": [
+    {
+      "evidence": "Predicted buckets present (5) but not treated as novel surface.",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary=deterministic-true (paths/topics/name signals); gitleaks.toml discovery query.",
+      "id": "security-boundary",
+      "met": true
+    },
+    {
+      "evidence": "228 sites < 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "octo-server",
+  "corpus_pin": "d3daa912a04d17f78df2d0c059a111cafff75534",
+  "decision": "triage-trial",
+  "decision_basis": "escape_hatch",
+  "decision_date": "2026-08-10",
+  "escape_hatch_applied": true,
+  "probe": {
+    "construct_counts": {
+      "(?i)": 7,
+      "(?m)": 6,
+      "(?s)": 19,
+      "backref": 1,
+      "lookaround": 3
+    },
+    "dialect": {
+      "ecma": 81,
+      "re2": 147
+    },
+    "flags": {
+      "g": 13,
+      "i": 14,
+      "m": 1
+    },
+    "pin": "d3daa912a04d17f78df2d0c059a111cafff75534",
+    "predicted_buckets": {
+      "backref": 1,
+      "inline-flag": 40,
+      "lookaround": 3,
+      "m-flag": 7,
+      "stateful": 13
+    },
+    "regex_sites": 228,
+    "regex_sites_per_file": {
+      "assets/web/js/index.js": 1,
+      "assets/web/js/jquery-3.4.1.min.js": 80,
+      "internal/cardactiondispatch/registry.go": 4,
+      "internal/carddispatch/mutation_column_test.go": 2,
+      "internal/carddispatch/registry.go": 1,
+      "main_test.go": 1,
+      "modules/app_bot/app_bot.go": 1,
+      "modules/base/common/service_email_envelope_test.go": 4,
+      "modules/bot_api/commands.go": 1,
+      "modules/bot_api/ratelimit_guard_test.go": 2,
+      "modules/bot_mention/api_i18n_test.go": 2,
+      "modules/botfather/api_apply_space_membership_test.go": 3,
+      "modules/card_template_catalog/api_state.go": 1,
+      "modules/common/api.go": 1,
+      "modules/common/emoji_test.go": 1,
+      "modules/common/system_settings.go": 1,
+      "modules/group/api_realname_test.go": 3,
+      "modules/group/api_scanjoin_space_info_test.go": 27,
+      "modules/group/api_source_space_header_test.go": 13,
+      "modules/group/api_xspaceid_membership_test.go": 7,
+      "modules/incomingwebhook/api_member_test.go": 1,
+      "modules/internal_resolve/api_i18n_test.go": 2,
+      "modules/messages_search/api_i18n_test.go": 2,
+      "modules/oidc/api.go": 1,
+      "modules/oidc/api_realname_ordering_test.go": 4,
+      "modules/oidc/config.go": 1,
+      "modules/oidc/logging_test.go": 2,
+      "modules/openapi/api.go": 1,
+      "modules/robot/api.go": 1,
+      "modules/robot/api_test.go": 1,
+      "modules/space/invite_code_test.go": 1,
+      "modules/sticker/model.go": 4,
+      "modules/thread/source_message_trust_test.go": 2,
+      "modules/user/api_authcode_realname_test.go": 5,
+      "modules/user/api_friend_space_membership_test.go": 6,
+      "pkg/accesslog/accesslog.go": 3,
+      "pkg/accesslog/accesslog_test.go": 1,
+      "pkg/avatarrender/palette_hex_test.go": 1,
+      "pkg/botevent/bell_test.go": 1,
+      "pkg/botevent/chokepoint_guard_test.go": 6,
+      "pkg/botevent/genseq_guard_test.go": 3,
+      "pkg/cardmsg/inputs.go": 1,
+      "pkg/cardtmpl/ai_reasoning_process/v4_test.go": 3,
+      "pkg/cardtmpl/approval_request.go": 4,
+      "pkg/cardtmpl/json_artifact.go": 3,
+      "pkg/i18n/codes/registry.go": 1,
+      "pkg/i18n/params.go": 1,
+      "pkg/redis/chokepoint_guard_test.go": 1,
+      "pkg/space/channel.go": 1,
+      "tools/migrate-rename/main.go": 7,
+      "tools/migrate-rename/rewrite_initdb.go": 1
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Security-boundary corpus (boundary=deterministic-true) with findings-triage potential; 228 sites across [ecma:81, re2:147].",
+  "schema_version": "1"
+}

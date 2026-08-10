@@ -1,0 +1,81 @@
+{
+  "candidate_url": "https://github.com/magiclabs/magic-js",
+  "conditions": [
+    {
+      "evidence": "Predicted buckets present (4) but not treated as novel surface.",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary=deterministic-true (paths/topics/name signals); gitleaks.toml discovery query.",
+      "id": "security-boundary",
+      "met": true
+    },
+    {
+      "evidence": "99 sites < 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "magic-js",
+  "corpus_pin": "e9fb233763160316989863b4739c4656133d45b0",
+  "decision": "triage-trial",
+  "decision_basis": "escape_hatch",
+  "decision_date": "2026-08-10",
+  "escape_hatch_applied": true,
+  "probe": {
+    "construct_counts": {
+      "backref": 1,
+      "lookaround": 2
+    },
+    "dialect": {
+      "ecma": 99
+    },
+    "flags": {
+      "g": 48,
+      "i": 4
+    },
+    "pin": "e9fb233763160316989863b4739c4656133d45b0",
+    "predicted_buckets": {
+      "backref": 1,
+      "inline-flag": 4,
+      "lookaround": 2,
+      "stateful": 48
+    },
+    "regex_sites": 99,
+    "regex_sites_per_file": {
+      ".yarn/plugins/@yarnpkg/plugin-workspace-tools.cjs": 21,
+      "packages/@magic-ext/farcaster/src/utils.ts": 3,
+      "packages/@magic-ext/oauth2/src/crypto.ts": 3,
+      "packages/@magic-ext/oauth2/src/utils/base64.ts": 5,
+      "packages/@magic-ext/passkey/src/utils/base64.ts": 5,
+      "packages/@magic-ext/react-native-bare-oauth/src/crypto.ts": 3,
+      "packages/@magic-ext/react-native-expo-oauth/src/crypto.ts": 3,
+      "packages/@magic-ext/wallet-kit/rollup.config.mjs": 3,
+      "packages/@magic-ext/wallet-kit/src/lib/validators.ts": 1,
+      "packages/@magic-ext/wallet-kit/src/utils/base64.ts": 5,
+      "packages/@magic-ext/wallet-kit/src/utils/copy.ts": 1,
+      "packages/@magic-ext/wallet-kit/src/utils/device.ts": 3,
+      "packages/@magic-ext/webauthn/src/utils/base64.ts": 5,
+      "packages/@magic-sdk/provider/src/util/base64-json.ts": 6,
+      "packages/@magic-sdk/provider/src/util/semver.js": 10,
+      "packages/@magic-sdk/provider/src/util/web-crypto.ts": 4,
+      "packages/@magic-sdk/react-native-bare/src/native-crypto/utils/uint8.ts": 3,
+      "scripts/bin/build.ts": 1,
+      "scripts/bin/clean.ts": 1,
+      "scripts/bin/dev.ts": 1,
+      "scripts/bin/lint.ts": 1,
+      "scripts/bin/scaffold/run.tsx": 1,
+      "scripts/bin/test.ts": 1,
+      "scripts/bin/wsrun-wrapper.ts": 1,
+      "scripts/bin/wsrun/bin.ts": 1,
+      "scripts/bin/wsrun/build-package.ts": 1,
+      "scripts/bin/wsrun/resolve-paths.ts": 1,
+      "scripts/bin/wsrun/test:unit.ts": 1,
+      "scripts/utils/esbuild.ts": 4
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Security-boundary corpus (boundary=deterministic-true) with findings-triage potential; 99 sites across [ecma:99].",
+  "schema_version": "1"
+}

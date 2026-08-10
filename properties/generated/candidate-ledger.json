@@ -1,6 +1,25 @@
 {
   "candidates": [
     {
+      "audit": {
+        "auto_filed": false,
+        "human_resolved": true,
+        "human_review_reason": "requests missing: No module named 'requests'",
+        "model_calls": [
+          {
+            "at": "2026-08-10T01:32:53Z",
+            "error": "requests missing: No module named 'requests'",
+            "label": null,
+            "latency_ms": 0,
+            "ok": false,
+            "slug": "opencode/deepseek-v4-flash",
+            "tokens": null
+          }
+        ],
+        "needs_human_review": false,
+        "re_evaluate": false,
+        "updated_at": "2026-08-10T01:39:14Z"
+      },
       "capped": true,
       "default_branch": "main",
       "first_seen": "2026-08-09T22:36:24Z",
@@ -12,6 +31,25 @@
       "url": "https://github.com/TracecatHQ/tracecat"
     },
     {
+      "audit": {
+        "auto_filed": false,
+        "human_resolved": true,
+        "human_review_reason": "requests missing: No module named 'requests'",
+        "model_calls": [
+          {
+            "at": "2026-08-10T01:33:59Z",
+            "error": "requests missing: No module named 'requests'",
+            "label": null,
+            "latency_ms": 0,
+            "ok": false,
+            "slug": "opencode/deepseek-v4-flash",
+            "tokens": null
+          }
+        ],
+        "needs_human_review": false,
+        "re_evaluate": false,
+        "updated_at": "2026-08-10T01:39:14Z"
+      },
       "capped": true,
       "default_branch": "main",
       "first_seen": "2026-08-09T22:36:24Z",
@@ -23,6 +61,25 @@
       "url": "https://github.com/Mininglamp-OSS/octo-server"
     },
     {
+      "audit": {
+        "auto_filed": false,
+        "human_resolved": true,
+        "human_review_reason": "requests missing: No module named 'requests'",
+        "model_calls": [
+          {
+            "at": "2026-08-10T01:35:03Z",
+            "error": "requests missing: No module named 'requests'",
+            "label": null,
+            "latency_ms": 0,
+            "ok": false,
+            "slug": "opencode/deepseek-v4-flash",
+            "tokens": null
+          }
+        ],
+        "needs_human_review": false,
+        "re_evaluate": false,
+        "updated_at": "2026-08-10T01:39:14Z"
+      },
       "capped": true,
       "default_branch": "master",
       "first_seen": "2026-08-09T22:36:24Z",
@@ -34,6 +91,25 @@
       "url": "https://github.com/magiclabs/magic-js"
     },
     {
+      "audit": {
+        "auto_filed": false,
+        "human_resolved": true,
+        "human_review_reason": "requests missing: No module named 'requests'",
+        "model_calls": [
+          {
+            "at": "2026-08-10T01:37:13Z",
+            "error": "requests missing: No module named 'requests'",
+            "label": null,
+            "latency_ms": 0,
+            "ok": false,
+            "slug": "opencode/deepseek-v4-flash",
+            "tokens": null
+          }
+        ],
+        "needs_human_review": false,
+        "re_evaluate": false,
+        "updated_at": "2026-08-10T01:39:14Z"
+      },
       "capped": true,
       "default_branch": "master",
       "first_seen": "2026-08-09T22:36:24Z",
@@ -45,6 +121,25 @@
       "url": "https://github.com/openshift/splunk-forwarder-operator"
     },
     {
+      "audit": {
+        "auto_filed": false,
+        "human_resolved": true,
+        "human_review_reason": "requests missing: No module named 'requests'",
+        "model_calls": [
+          {
+            "at": "2026-08-10T01:36:11Z",
+            "error": "requests missing: No module named 'requests'",
+            "label": null,
+            "latency_ms": 0,
+            "ok": false,
+            "slug": "opencode/deepseek-v4-flash",
+            "tokens": null
+          }
+        ],
+        "needs_human_review": false,
+        "re_evaluate": false,
+        "updated_at": "2026-08-10T01:39:14Z"
+      },
       "capped": true,
       "default_branch": "main",
       "first_seen": "2026-08-09T22:36:24Z",
@@ -56,6 +151,13 @@
       "url": "https://github.com/profbernardoj/everclaw-community-branches"
     },
     {
+      "audit": {
+        "auto_filed": true,
+        "auto_filed_at": "2026-08-10T01:35:08Z",
+        "needs_human_review": false,
+        "template_fired": "below-scale",
+        "updated_at": "2026-08-10T01:35:08Z"
+      },
       "capped": true,
       "default_branch": "main",
       "first_seen": "2026-08-09T22:36:24Z",
@@ -67,6 +169,13 @@
       "url": "https://github.com/avivsinai/langfuse-mcp"
     },
     {
+      "audit": {
+        "auto_filed": true,
+        "auto_filed_at": "2026-08-10T01:35:06Z",
+        "needs_human_review": false,
+        "template_fired": "below-scale",
+        "updated_at": "2026-08-10T01:35:06Z"
+      },
       "capped": true,
       "default_branch": "main",
       "first_seen": "2026-08-09T22:36:24Z",
@@ -78,6 +187,25 @@
       "url": "https://github.com/gebruder/wirken"
     },
     {
+      "audit": {
+        "auto_filed": false,
+        "human_resolved": true,
+        "human_review_reason": "requests missing: No module named 'requests'",
+        "model_calls": [
+          {
+            "at": "2026-08-10T01:38:29Z",
+            "error": "requests missing: No module named 'requests'",
+            "label": null,
+            "latency_ms": 0,
+            "ok": false,
+            "slug": "opencode/deepseek-v4-flash",
+            "tokens": null
+          }
+        ],
+        "needs_human_review": false,
+        "re_evaluate": false,
+        "updated_at": "2026-08-10T01:39:14Z"
+      },
       "capped": true,
       "default_branch": "master",
       "first_seen": "2026-08-09T22:36:24Z",
@@ -89,6 +217,13 @@
       "url": "https://github.com/NHS-digital-website/hippo"
     },
     {
+      "audit": {
+        "auto_filed": true,
+        "auto_filed_at": "2026-08-10T01:37:22Z",
+        "needs_human_review": false,
+        "template_fired": "below-scale",
+        "updated_at": "2026-08-10T01:37:22Z"
+      },
       "capped": true,
       "default_branch": "main",
       "first_seen": "2026-08-09T22:36:24Z",
@@ -100,6 +235,13 @@
       "url": "https://github.com/oracle/ocifs"
     },
     {
+      "audit": {
+        "auto_filed": true,
+        "auto_filed_at": "2026-08-10T01:37:20Z",
+        "needs_human_review": false,
+        "template_fired": "below-scale",
+        "updated_at": "2026-08-10T01:37:20Z"
+      },
       "capped": true,
       "default_branch": "main",
       "first_seen": "2026-08-09T22:36:24Z",

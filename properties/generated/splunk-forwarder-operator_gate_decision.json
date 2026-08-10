@@ -1,0 +1,49 @@
+{
+  "candidate_url": "https://github.com/openshift/splunk-forwarder-operator",
+  "conditions": [
+    {
+      "evidence": "Predicted buckets present (1) but not treated as novel surface.",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary=deterministic-true (paths/topics/name signals); gitleaks.toml discovery query.",
+      "id": "security-boundary",
+      "met": true
+    },
+    {
+      "evidence": "14 sites < 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "splunk-forwarder-operator",
+  "corpus_pin": "0dc632bdfb0e67aead52f8776ece347dd689dfff",
+  "decision": "triage-trial",
+  "decision_basis": "escape_hatch",
+  "decision_date": "2026-08-10",
+  "escape_hatch_applied": true,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "py_re": 13,
+      "re2": 1
+    },
+    "flags": {
+      "i": 10
+    },
+    "pin": "0dc632bdfb0e67aead52f8776ece347dd689dfff",
+    "predicted_buckets": {
+      "inline-flag": 10
+    },
+    "regex_sites": 14,
+    "regex_sites_per_file": {
+      ".claude/skills/prow-ci/analyze_failure.py": 10,
+      ".claude/skills/prow-ci/fetch_prow_artifacts.py": 3,
+      "pkg/kube/audit_exporter_template_test.go": 1
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Security-boundary corpus (boundary=deterministic-true) with findings-triage potential; 14 sites across [py_re:13, re2:1].",
+  "schema_version": "1"
+}
