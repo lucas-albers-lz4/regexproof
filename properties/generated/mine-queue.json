@@ -1,6 +1,86 @@
 {
   "items": [
     {
+      "capped": false,
+      "default_branch": "main",
+      "pin": "a664dd18b4b0468215126c6f524e91b2a0deec26",
+      "pushed_date": "2026-07-22",
+      "queued_at": "2026-08-10",
+      "source_query": "SecRule filename:REQUEST path:rules",
+      "stars": 56,
+      "url": "https://github.com/corazawaf/coraza-coreruleset"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "5cc871d82361de8a80d387ec8bbd01fe4258b4a9",
+      "pushed_date": "2026-01-28",
+      "queued_at": "2026-08-10",
+      "source_query": "path:rules extension:yar OR extension:yara",
+      "stars": 389,
+      "url": "https://github.com/bartblaze/Yara-rules"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "8e978d5e70084df6d2fae0727677ec4f60e3e639",
+      "pushed_date": "2025-01-31",
+      "queued_at": "2026-08-10",
+      "source_query": "path:rules extension:yar OR extension:yara",
+      "stars": 44,
+      "url": "https://github.com/ail-project/ail-yara-rules"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "1d7c4faed70fae431b8189c904881cc0e12436e6",
+      "pushed_date": "2024-11-18",
+      "queued_at": "2026-08-10",
+      "source_query": "path:rules extension:yar OR extension:yara",
+      "stars": 9,
+      "url": "https://github.com/VaccinatorSec/yara-rules"
+    },
+    {
+      "capped": false,
+      "default_branch": "main",
+      "pin": "63d10cff904d9398e0b099ef2a1118b9ad2cf079",
+      "pushed_date": "2026-08-09",
+      "queued_at": "2026-08-10",
+      "source_query": "filename:rules.yml path:.semgrep OR path:semgrep",
+      "stars": 5031,
+      "url": "https://github.com/PurpleAILAB/Decepticon"
+    },
+    {
+      "capped": false,
+      "default_branch": "develop",
+      "pin": "978def55c8e68cab3a50a7ee4725039da753f0a1",
+      "pushed_date": "2026-08-10",
+      "queued_at": "2026-08-10",
+      "source_query": "filename:rules.yml path:.semgrep OR path:semgrep",
+      "stars": 504,
+      "url": "https://github.com/xibosignage/xibo-cms"
+    },
+    {
+      "capped": false,
+      "default_branch": "main",
+      "pin": "c712baeaaa2a45d954ebc266195f8d1fb6947a2a",
+      "pushed_date": "2026-08-08",
+      "queued_at": "2026-08-10",
+      "source_query": "filename:rules.yml path:.semgrep OR path:semgrep",
+      "stars": 179,
+      "url": "https://github.com/freedomofpress/securedrop-workstation"
+    },
+    {
+      "capped": false,
+      "default_branch": "main",
+      "pin": "d4a39726cad8d8e27e4c0502d1843c3b4180ffbc",
+      "pushed_date": "2026-08-10",
+      "queued_at": "2026-08-10",
+      "source_query": "filename:rules.yml path:.semgrep OR path:semgrep",
+      "stars": 154,
+      "url": "https://github.com/grcengineering/gigachad-grc"
+    },
+    {
       "capped": true,
       "default_branch": "main",
       "pin": "f4a47e2cf2822196275075ab9a2e258b6fa9be8b",
@@ -19,6 +99,16 @@
       "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
       "stars": 455,
       "url": "https://github.com/Grid2op/grid2op"
+    },
+    {
+      "capped": false,
+      "default_branch": "master",
+      "pin": "bb22020cf5c20bfe1e2279fbf453f2d634d08c7b",
+      "pushed_date": "2026-08-09",
+      "queued_at": "2026-08-10",
+      "source_query": "filename:rules.yml path:.semgrep OR path:semgrep",
+      "stars": 129,
+      "url": "https://github.com/cosanlab/nltools"
     },
     {
       "capped": true,
@@ -99,6 +189,16 @@
       "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
       "stars": 133,
       "url": "https://github.com/alphagov/gds-way"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "f0c13e94aff23c651c2e2517eb6eab5cd55c11e2",
+      "pushed_date": "2026-08-10",
+      "queued_at": "2026-08-10",
+      "source_query": "path:rules extension:yar OR extension:yara",
+      "stars": 671,
+      "url": "https://github.com/chainguard-dev/malcontent"
     },
     {
       "capped": true,
@@ -427,8 +527,18 @@
       "pushed_date": "2026-08-07",
       "queued_at": "2026-08-09",
       "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
-      "stars": 19,
+      "stars": 20,
       "url": "https://github.com/mondweep/vibe-cast"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "acf6d956fe807533851157251e030f95af2e0fdf",
+      "pushed_date": "2026-08-09",
+      "queued_at": "2026-08-09",
+      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
+      "stars": 21,
+      "url": "https://github.com/mycelium0/mycelium"
     },
     {
       "capped": true,
@@ -573,7 +683,7 @@
     {
       "capped": true,
       "default_branch": "main",
-      "pin": "9c784ca9bfe8ad0dab74dfd168fe09e49c0c85df",
+      "pin": "73a0b60bd00525640e72e68c0133ab01f9cb47f1",
       "pushed_date": "2026-08-10",
       "queued_at": "2026-08-09",
       "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
@@ -623,22 +733,12 @@
     {
       "capped": true,
       "default_branch": "main",
-      "pin": "fd075c27ecfb3ecd15f10ebb51a83320eb2e835b",
+      "pin": "283acff5202fb3a8960b99d8b84851b712c9e1f0",
       "pushed_date": "2026-08-10",
       "queued_at": "2026-08-09",
       "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
       "stars": 5,
       "url": "https://github.com/melodic-software/claude-code-plugins"
-    },
-    {
-      "capped": true,
-      "default_branch": "main",
-      "pin": "acf6d956fe807533851157251e030f95af2e0fdf",
-      "pushed_date": "2026-08-09",
-      "queued_at": "2026-08-09",
-      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
-      "stars": 21,
-      "url": "https://github.com/mycelium0/mycelium"
     },
     {
       "capped": true,
@@ -899,106 +999,6 @@
       "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
       "stars": 12,
       "url": "https://github.com/thecybermafia/orgleaks"
-    },
-    {
-      "capped": false,
-      "default_branch": "main",
-      "pin": "a664dd18b4b0468215126c6f524e91b2a0deec26",
-      "pushed_date": "2026-07-22",
-      "queued_at": "2026-08-10",
-      "source_query": "SecRule filename:REQUEST path:rules",
-      "stars": 56,
-      "url": "https://github.com/corazawaf/coraza-coreruleset"
-    },
-    {
-      "capped": true,
-      "default_branch": "master",
-      "pin": "5cc871d82361de8a80d387ec8bbd01fe4258b4a9",
-      "pushed_date": "2026-01-28",
-      "queued_at": "2026-08-10",
-      "source_query": "path:rules extension:yar OR extension:yara",
-      "stars": 389,
-      "url": "https://github.com/bartblaze/Yara-rules"
-    },
-    {
-      "capped": true,
-      "default_branch": "master",
-      "pin": "8e978d5e70084df6d2fae0727677ec4f60e3e639",
-      "pushed_date": "2025-01-31",
-      "queued_at": "2026-08-10",
-      "source_query": "path:rules extension:yar OR extension:yara",
-      "stars": 44,
-      "url": "https://github.com/ail-project/ail-yara-rules"
-    },
-    {
-      "capped": true,
-      "default_branch": "master",
-      "pin": "1d7c4faed70fae431b8189c904881cc0e12436e6",
-      "pushed_date": "2024-11-18",
-      "queued_at": "2026-08-10",
-      "source_query": "path:rules extension:yar OR extension:yara",
-      "stars": 9,
-      "url": "https://github.com/VaccinatorSec/yara-rules"
-    },
-    {
-      "capped": false,
-      "default_branch": "main",
-      "pin": "63d10cff904d9398e0b099ef2a1118b9ad2cf079",
-      "pushed_date": "2026-08-09",
-      "queued_at": "2026-08-10",
-      "source_query": "filename:rules.yml path:.semgrep OR path:semgrep",
-      "stars": 5029,
-      "url": "https://github.com/PurpleAILAB/Decepticon"
-    },
-    {
-      "capped": false,
-      "default_branch": "develop",
-      "pin": "d19b485104904b1c63e6cbb0b200522b249e80c0",
-      "pushed_date": "2026-08-10",
-      "queued_at": "2026-08-10",
-      "source_query": "filename:rules.yml path:.semgrep OR path:semgrep",
-      "stars": 504,
-      "url": "https://github.com/xibosignage/xibo-cms"
-    },
-    {
-      "capped": false,
-      "default_branch": "main",
-      "pin": "c712baeaaa2a45d954ebc266195f8d1fb6947a2a",
-      "pushed_date": "2026-08-08",
-      "queued_at": "2026-08-10",
-      "source_query": "filename:rules.yml path:.semgrep OR path:semgrep",
-      "stars": 179,
-      "url": "https://github.com/freedomofpress/securedrop-workstation"
-    },
-    {
-      "capped": false,
-      "default_branch": "main",
-      "pin": "d4a39726cad8d8e27e4c0502d1843c3b4180ffbc",
-      "pushed_date": "2026-08-09",
-      "queued_at": "2026-08-10",
-      "source_query": "filename:rules.yml path:.semgrep OR path:semgrep",
-      "stars": 154,
-      "url": "https://github.com/grcengineering/gigachad-grc"
-    },
-    {
-      "capped": false,
-      "default_branch": "master",
-      "pin": "bb22020cf5c20bfe1e2279fbf453f2d634d08c7b",
-      "pushed_date": "2026-08-09",
-      "queued_at": "2026-08-10",
-      "source_query": "filename:rules.yml path:.semgrep OR path:semgrep",
-      "stars": 129,
-      "url": "https://github.com/cosanlab/nltools"
-    },
-    {
-      "capped": true,
-      "default_branch": "main",
-      "pin": "0c32332490103a44dcd5158dbc14870b95e42d0f",
-      "pushed_date": "2026-08-10",
-      "queued_at": "2026-08-10",
-      "source_query": "path:rules extension:yar OR extension:yara",
-      "stars": 671,
-      "url": "https://github.com/chainguard-dev/malcontent"
     }
   ],
   "schema_version": "1"
