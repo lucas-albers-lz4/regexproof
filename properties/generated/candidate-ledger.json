@@ -251,13 +251,121 @@
       "stars": 26,
       "status": "mined",
       "url": "https://github.com/ackinacki/ackinacki"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "first_seen": "2026-08-10T12:25:26Z",
+      "pin": "b6b8403ffa88d4a2e135aed5f850bc73ed7ac814",
+      "pushed_date": "2026-08-07",
+      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
+      "stars": 5741,
+      "status": "mined",
+      "url": "https://github.com/Giskard-AI/giskard-oss"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "first_seen": "2026-08-10T12:25:26Z",
+      "pin": "0e40a8659a759286d9bb3899cb3ef7f6fdbc624c",
+      "pushed_date": "2026-08-07",
+      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
+      "stars": 6847,
+      "status": "mined",
+      "url": "https://github.com/datajuicer/data-juicer"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "first_seen": "2026-08-10T12:25:26Z",
+      "pin": "0402a01c9036b40a7f47dc2fc5fb4cfae019f5f1",
+      "pushed_date": "2026-01-13",
+      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
+      "stars": 1693,
+      "status": "mined",
+      "url": "https://github.com/evmos/evmos"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "first_seen": "2026-08-10T12:25:26Z",
+      "pin": "594ee0e0c0b042ee9eed21f262be3c4bc5a1919b",
+      "pushed_date": "2026-08-08",
+      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
+      "stars": 1473,
+      "status": "mined",
+      "url": "https://github.com/watson-developer-cloud/node-sdk"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "first_seen": "2026-08-10T12:25:26Z",
+      "pin": "bc1e4859b321e0a6fb125f804b9d7e35975790cc",
+      "pushed_date": "2026-08-09",
+      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
+      "stars": 999,
+      "status": "mined",
+      "url": "https://github.com/bountyyfi/lonkero"
+    },
+    {
+      "capped": true,
+      "default_branch": "staging",
+      "first_seen": "2026-08-10T12:25:26Z",
+      "pin": "37859392af3e58b2e1825bbe75091090914277c4",
+      "pushed_date": "2026-08-09",
+      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
+      "stars": 897,
+      "status": "mined",
+      "url": "https://github.com/carverauto/serviceradar"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "first_seen": "2026-08-10T12:25:26Z",
+      "pin": "5f0490fb1b93fcdbb763cadb540a2daefe007562",
+      "pushed_date": "2026-08-03",
+      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
+      "stars": 905,
+      "status": "mined",
+      "url": "https://github.com/snowdreamtech/frp"
+    },
+    {
+      "capped": true,
+      "default_branch": "release",
+      "first_seen": "2026-08-10T12:25:26Z",
+      "pin": "661d88a63c9334392cd82e90e0a3dfd2f58ab74b",
+      "pushed_date": "2026-08-09",
+      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
+      "stars": 827,
+      "status": "mined",
+      "url": "https://github.com/syoyo/tinyexr"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "first_seen": "2026-08-10T12:25:26Z",
+      "pin": "3842e1f4911f242ffde0e08488925ed7933debe7",
+      "pushed_date": "2026-08-06",
+      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
+      "stars": 623,
+      "status": "mined",
+      "url": "https://github.com/callowayproject/bump-my-version"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "first_seen": "2026-08-10T12:25:26Z",
+      "pin": "1790c5c194684911ce0885c54173eaf90e3beb60",
+      "pushed_date": "2026-08-06",
+      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
+      "stars": 616,
+      "status": "mined",
+      "url": "https://github.com/hubtype/botonic"
     }
   ],
   "run": {
     "capped": true,
-    "search_errors": [
-      "enrich failed: sambawy01/Fire-Line"
-    ]
+    "search_errors": []
   },
   "schema_version": "1"
 }
