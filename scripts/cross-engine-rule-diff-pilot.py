@@ -18,7 +18,6 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-import importlib.util  # noqa: E402
 
 import jsonschema  # noqa: E402
 from z3 import Concat, Re, Star  # noqa: E402
@@ -52,12 +51,8 @@ def _length_bounds(pattern: str) -> tuple[int, int]:
 
 
 def _load_harness():
-    path = ROOT / "scripts" / "z3-verify.py"
-    spec = importlib.util.spec_from_file_location("z3_verify", path)
-    mod = importlib.util.module_from_spec(spec)
-    assert spec.loader is not None
-    spec.loader.exec_module(mod)
-    return mod
+    import regexproof.harness as harness
+    return harness
 
 
 def _rel_cmd(argv: list[str]) -> list[str]:

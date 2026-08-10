@@ -21,7 +21,6 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-import importlib.util  # noqa: E402
 
 from z3 import Contains, InRe, Length, Not, Re, String  # noqa: E402
 
@@ -37,12 +36,8 @@ TIMEOUT_MS = 10000
 
 
 def _load_harness():
-    path = ROOT / "scripts" / "z3-verify.py"
-    spec = importlib.util.spec_from_file_location("z3_verify", path)
-    mod = importlib.util.module_from_spec(spec)
-    assert spec.loader is not None
-    spec.loader.exec_module(mod)
-    return mod
+    import regexproof.harness as harness
+    return harness
 
 
 def _node_test(pattern: str, flags: str, s: str) -> bool:

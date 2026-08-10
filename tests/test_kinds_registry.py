@@ -2,9 +2,6 @@
 
 from __future__ import annotations
 
-import importlib.util
-from pathlib import Path
-
 import pytest
 
 from regexproof.kinds import (
@@ -42,12 +39,8 @@ def test_rule_diff_in_needing_set():
 
 
 def _load_harness():
-    path = Path(__file__).resolve().parents[1] / "scripts" / "z3-verify.py"
-    spec = importlib.util.spec_from_file_location("z3_verify", path)
-    mod = importlib.util.module_from_spec(spec)
-    assert spec.loader is not None
-    spec.loader.exec_module(mod)
-    return mod
+    import regexproof.harness as harness
+    return harness
 
 
 def test_mutation_coverage_requires_guard_for_rule_diff():

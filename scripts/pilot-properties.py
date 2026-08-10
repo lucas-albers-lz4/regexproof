@@ -21,7 +21,6 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-import importlib.util  # noqa: E402
 
 from z3 import (  # noqa: E402
     AllChar,
@@ -42,12 +41,8 @@ from regexproof.compiler.re2 import replay_argv  # noqa: E402
 
 
 def _load_harness():
-    path = ROOT / "scripts" / "z3-verify.py"
-    spec = importlib.util.spec_from_file_location("z3_verify", path)
-    mod = importlib.util.module_from_spec(spec)
-    assert spec.loader is not None
-    spec.loader.exec_module(mod)
-    return mod
+    import regexproof.harness as harness
+    return harness
 
 
 harness = _load_harness()
