@@ -636,6 +636,41 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
             "max_disk_mb": 200,
         },
     },
+    "lonkero": {
+        "corpus_type": "rule_corpus",
+        # Materialize: ln -sfn /tmp/lonkero batch/corpora/lonkero/rules
+        # Browser-assist extension scanners only (probe surface).
+        "path": ROOT / "batch" / "corpora" / "lonkero" / "rules",
+        "files": [
+            "browser-assist-extension/background.js",
+            "browser-assist-extension/bypass-scanner.js",
+            "browser-assist-extension/cms-scanner.js",
+            "browser-assist-extension/content.js",
+            "browser-assist-extension/dom-hooks.js",
+            "browser-assist-extension/formfuzzer.js",
+            "browser-assist-extension/framework-scanner.js",
+            "browser-assist-extension/graphql-fuzzer.js",
+            "browser-assist-extension/merlin.js",
+            "browser-assist-extension/popup.js",
+            "browser-assist-extension/sql-scanner.js",
+            "browser-assist-extension/waf-bypass.js",
+            "browser-assist-extension/xss-scanner.js",
+        ],
+        "dialect": "ecma",
+        "extractor": "js_precise_dir",
+        "repo": "bountyyfi/lonkero",
+        "security_tool": True,
+        "lift_inline": False,
+        "corpus_pin": "bc1e4859b321e0a6fb125f804b9d7e35975790cc",
+        "commit": "bc1e4859b321e0a6fb125f804b9d7e35975790cc",
+        "budget": {
+            "max_patterns": 5000,
+            "max_wall_s": 900,
+            "redos_wall_s": 180,
+            "max_mem_mb": 2048,
+            "max_disk_mb": 200,
+        },
+    },
     # Wave-3 P5 testdata corpora (#116) — exempt from admission gate_decision.
     "perl_tre": {
         "corpus_type": "testdata",
@@ -715,6 +750,7 @@ WAVE_CORPORA = frozenset({
     "tracecat",
     "octo-server",
     "magic-js",
+    "lonkero",
     "perl_tre", "go_regexp_tests", "v8_mjsunit",
 })
 

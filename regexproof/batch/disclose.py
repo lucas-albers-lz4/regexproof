@@ -26,6 +26,7 @@ SECURITY_TOOL_CORPORA = frozenset(
         "everclaw-community-branches",
         "tracecat",
         "magic-js",
+        "lonkero",
     }
 )
 
