@@ -328,7 +328,14 @@ def _sed_capture(stream: str) -> str:
         ["sed", "-n", 's/^.*\\("\\([^"]*\\)".*$/\\1/p', stream],
         capture_output=True,
         text=True,
+        timeout=30,
+        check=False,
     )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"sed replay failed with returncode={proc.returncode}: "
+            f"{(proc.stderr or '').strip()}"
+        )
     return proc.stdout.rstrip("\n")
 
 
@@ -342,7 +349,10 @@ def p3_ground_truth(witness: dict) -> bool:
     v = witness["v"]  # raw string (as_string-extracted)
     # Build a stream shaped like the rpcd JSON the sed fallback sees.
     stream = f'{{"password":"{v}"}}'
-    capture = _sed_capture(stream)
+    try:
+        capture = _sed_capture(stream)
+    except (RuntimeError, subprocess.TimeoutExpired):
+        return False
     # Truncation means the capture stopped at the first unescaped quote:
     # capture is a strict prefix of v (v contains an escaped quote).
     return capture != v and v.startswith(capture)

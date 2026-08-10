@@ -6,7 +6,6 @@ let re;
 try {
   // pattern/flags are operator-supplied CLI args to this ground-truth replay
   // harness (differential fuzzing); not an untrusted-input boundary.
-  // codeql[js/regex-injection]
   re = new RegExp(pattern, flags);
 } catch (e) {
   console.error(e);

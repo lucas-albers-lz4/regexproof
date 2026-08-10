@@ -18,6 +18,8 @@ import sys
 import tempfile
 from pathlib import Path
 
+HELPER_TIMEOUT_S = 30
+
 
 def _yara_bin() -> str | None:
     return shutil.which("yara")
@@ -28,7 +30,13 @@ def version() -> int:
     if not bin_:
         print(json.dumps({"ok": False, "error": "yara-helper-unavailable"}))
         return 2
-    proc = subprocess.run([bin_, "-v"], capture_output=True, text=True, check=False)
+    proc = subprocess.run(
+        [bin_, "-v"],
+        capture_output=True,
+        text=True,
+        check=False,
+        timeout=HELPER_TIMEOUT_S,
+    )
     ver = (proc.stdout or proc.stderr or "").strip().splitlines()[0] if proc.returncode == 0 else ""
     print(json.dumps({"ok": proc.returncode == 0, "helper": bin_, "version": ver}))
     return 0 if proc.returncode == 0 else 2
@@ -47,6 +55,7 @@ def compile_rule(rule_path: Path) -> int:
             capture_output=True,
             text=True,
             check=False,
+            timeout=HELPER_TIMEOUT_S,
         )
     print(
         json.dumps(
@@ -68,6 +77,7 @@ def match_rule(rule_path: Path, sample_path: Path) -> int:
         [bin_, str(rule_path), str(sample_path)],
         capture_output=True,
         check=False,
+        timeout=HELPER_TIMEOUT_S,
     )
     # yara prints rule names on match; exit 0 always if scan succeeds.
     # Treat any stdout line as a match.

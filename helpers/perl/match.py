@@ -32,6 +32,7 @@ from regexproof.compiler.reject_markers import PERL_REJECT_MARKERS  # noqa: E402
 # Local/CI currently ship 5.38.x; prefix gate accepts 5.38+.
 PERL_VERSION = "5.38.2"
 PERL_VERSION_PREFIX = "5."
+HELPER_TIMEOUT_S = 30
 
 
 def _reject_unencodable(pattern: str) -> str | None:
@@ -81,6 +82,7 @@ def _perl_version_string(bin_: str) -> str | None:
         capture_output=True,
         text=True,
         check=False,
+        timeout=HELPER_TIMEOUT_S,
     )
     if proc.returncode != 0:
         return None
@@ -197,6 +199,7 @@ exit 0;
             capture_output=True,
             text=True,
             check=False,
+            timeout=HELPER_TIMEOUT_S,
         )
     finally:
         pat_path.unlink(missing_ok=True)
@@ -253,6 +256,7 @@ exit($s =~ /$re/ ? 0 : 1);
             capture_output=True,
             text=True,
             check=False,
+            timeout=HELPER_TIMEOUT_S,
         )
     finally:
         pat_path.unlink(missing_ok=True)

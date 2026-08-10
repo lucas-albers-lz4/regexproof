@@ -44,23 +44,26 @@ first; it is faster than reading the call site.
 
 | Control | Where | Covers |
 |---|---|---|
-| `reject_shell_subprocess_usage()` | `regexproof/fuzz/adapters.py:132` | static AST ban on `shell=True` in fuzz/ReDoS paths; wired into CI (`ci.yml:83-84`, `ci.yml:205-207`) |
+| `reject_shell_subprocess_usage()` | `regexproof/fuzz/adapters.py` | static AST ban on `shell=True` in fuzz/ReDoS paths; wired into CI |
+| `reject_untimed_subprocess_usage()` | `regexproof/fuzz/adapters.py` | static AST ban on missing `timeout=` in `regexproof/compiler` + `helpers/`; wired into CI (#171) |
 | `ci-assert-toolchain.py --job {proof,golden,redos}` | `scripts/ci-assert-toolchain.py` | z3 5.0.x, Python/Node/Go majors, pcre2/yara/perl presence, npm + regexploit pins — **per CI job env** |
-| z3 pin guard (exit 3) | `scripts/z3-verify.py:88-95`, `differential-fuzz.py:51`, `mirror-fidelity-gate.py:577` | refuses non-5.0.x solver at runtime |
-| `default_output_path()` containment | `regexproof/admission/author.py:234-245` | `is_relative_to(properties/generated)` on the *default* path |
-| Clone destination guard | `regexproof/admission/clone.py:70-76` | probe clones cannot land under `batch/corpora/` |
-| `_MAX_FILE_BYTES` (2 MB) | `regexproof/admission/walk.py:26,54-58` | per-file read cap — **admission walk only**, not batch |
-| Atomic write (temp + fsync + `os.replace`) | `regexproof/mine/ledger.py:53-66`, `regexproof/mine/queue.py:46-62` | ledger/queue only — batch NDJSON writers do *not* use this |
-| Evidence gates | `regexproof/batch/evidence.py:12-35` | Z3 `timeout`/`unknown` is a hard fail for property kinds |
-| Disclosure gate | `regexproof/batch/disclose.py:30-75` | `private_first` on security-tool corpora; no network publish |
-| Witness redaction | `scripts/rule-diff-pilot.py:228-247` | long solver strings redacted in committed artifacts |
+| z3 pin guard (exit 3) | `scripts/z3-verify.py`, `differential-fuzz.py`, `mirror-fidelity-gate.py` | refuses non-5.0.x solver at runtime |
+| `default_output_path()` containment | `regexproof/admission/author.py` | `is_relative_to(properties/generated)` on the *default* path |
+| `--output` containment (`author-gate-decision.py`) | `scripts/author-gate-decision.py` | explicit `-o` must stay under `properties/generated` unless `--allow-outside-generated` (#176) |
+| Clone destination guard | `regexproof/admission/clone.py` | probe clones cannot land under `batch/corpora/` |
+| `_MAX_FILE_BYTES` (2 MB) | `regexproof/admission/walk.py`, `regexproof/batch/runner.py` (`_extract_glob`) | per-file read cap — admission walk **and** batch extraction (#175) |
+| `REGEXPROOF_GO_RE2` path containment | `regexproof/compiler/re2.py` | env override must resolve under `helpers/go-re2/` (#176) |
+| Atomic write (temp + fsync + `os.replace`) | `regexproof/mine/ledger.py`, `regexproof/mine/queue.py` | ledger/queue only — batch NDJSON writers do *not* use this |
+| Evidence gates | `regexproof/batch/evidence.py` | Z3 `timeout`/`unknown` is a hard fail for property kinds |
+| Disclosure gate | `regexproof/batch/disclose.py` | `private_first` on security-tool corpora; no network publish |
+| Witness redaction | `scripts/rule-diff-pilot.py` | long solver strings redacted in committed artifacts |
 | Secret-scanning path ignores | `.github/secret_scanning.yml` | `paths-ignore` for fixture/pilot paths (gitleaks pilot artifacts) |
-| GitHub search backoff | `regexproof/mine/search.py:73-109` | 429 retry — `search_code()` only, *not* `enrich_repo()` |
+| GitHub search backoff | `regexproof/mine/search.py` | 429 retry — `search_code()` only, *not* `enrich_repo()` |
 
 **Known asymmetries** (each is a real gap, each already has an issue — do not
-re-file): admission walk has a size cap but batch extraction does not (#175);
-ledger writes are atomic but batch NDJSON writes are not; `search_code` retries
-but `enrich_repo` does not.
+re-file): ledger writes are atomic but batch NDJSON writes are not;
+`search_code` retries but `enrich_repo` does not. (Batch extraction size cap
+landed with #175 — no longer asymmetric vs admission walk.)
 
 ---
 
@@ -73,8 +76,8 @@ reopened, argue against the recorded rationale explicitly.
 | Item | Decision | Rationale / where recorded |
 |---|---|---|
 | Floating action tags (`@v5`, `@v6`, `@v2`) not SHA-pinned | **won't fix** | Deliberate major-tag pinning, fleet standard. Code-scanning alert 6, dismissed 2026-08-09 |
-| `new RegExp(pattern, flags)` from argv in `helpers/ecma/match.mjs` | **not a boundary** | Operator-supplied CLI args to a ground-truth replay harness. Comment at `match.mjs:7-9` |
-| `eval()` on `--mirror-expr` | **not a boundary** | Same reasoning; 9-symbol namespace (`differential-fuzz.py:62-72`); `eval(..., {"__builtins__": {}}, MIRROR_NS)` at `differential-fuzz.py:168` |
+| `new RegExp(pattern, flags)` from argv in `helpers/ecma/match.mjs` | **not a boundary** | Operator-supplied CLI args to a ground-truth replay harness. Comment at `match.mjs` (CodeQL alert 5 dismissed won't-fix) |
+| `eval()` on `--mirror-expr` | **not a boundary** | Same reasoning; 9-symbol namespace (`differential-fuzz.py`); `eval(..., {"__builtins__": {}}, MIRROR_NS)` — operator trust boundary, documented in-file |
 | daily-mine commits after mine exit 1 | **deliberate** | Preserves partial progress; comment at `daily-mine.yml:76`. Hardening tracked in #173, but the behavior is intentional |
 | Dependabot version updates disabled repo-wide | **deliberate** | `open-pull-requests-limit: 0` + ignore-all; security updates come from the repo-level setting instead |
 | ReDoS analysis via Z3 | **out of scope** | Complexity analysis of the engine, not language membership — see `AGENTS.md` and `docs/REDOS.md` |
@@ -147,9 +150,10 @@ rg -n 'except Exception:\s*$' -A 1 regexproof/ | rg -B1 'continue|pass'
 
 These are not hypothetical. Every sweep above was run against `main` at the
 close of the 2026-08 wave and reproduced a filed finding — and the fail-open
-sweep found **one more** than manual review had: `compiler/ecma.py:38` carries
-the same `{"ok": True, "helper": "…-missing"}` shape as `compiler/re2.py:51`
-(both now on #172). Run the sweeps before reading code, not after.
+sweep found **one more** than manual review had: `compiler/ecma.py` and
+`compiler/re2.py` previously returned `{"ok": True, "helper": "…-missing"}`
+on helper absence (both on #172; fixed fail-closed via `helper_gate_missing`).
+Run the sweeps before reading code, not after.
 
 ---
 

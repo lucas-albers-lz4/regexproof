@@ -4,12 +4,11 @@ from __future__ import annotations
 
 import json
 import subprocess
-import sys
 from pathlib import Path
 
 from z3 import Range, Re, Union
 
-from regexproof.compiler.base import CompileResult, Unencodable
+from regexproof.compiler.base import CompileResult, Unencodable, helper_gate_missing
 from regexproof.compiler.fold import js_nonsu_fold_closure
 from regexproof.compiler.lower import lower, space_codes_from_chars
 from regexproof.compiler.pcre_strip import strip_language_transparent
@@ -19,27 +18,46 @@ HELPER = Path(__file__).resolve().parents[2] / "helpers" / "ecma"
 JS_TERMINATORS = frozenset(["\n", "\r", "\u2028", "\u2029"])
 _ECMA_SPACE_CHARS = " \t\n\r\f\v\u00a0\u2028\u2029"
 DEFAULT_MAX_LENGTH = 256
+HELPER_TIMEOUT_S = 30
 
 
 def _run_regexpp(pattern: str, flags: str) -> dict:
     parse_js = HELPER / "parse.mjs"
     if not parse_js.is_file():
-        return {"ok": True, "helper": "missing"}
+        return helper_gate_missing("node")
     try:
         proc = subprocess.run(
             ["node", str(parse_js), pattern, flags],
             capture_output=True,
             text=True,
             shell=False,
-            timeout=30,
+            timeout=HELPER_TIMEOUT_S,
             check=False,
         )
     except FileNotFoundError:
-        return {"ok": True, "helper": "node-missing"}
+        return helper_gate_missing("node")
+    except subprocess.TimeoutExpired:
+        return {"ok": False, "unencodable_reason": "timeout", "error": "timeout"}
     try:
         return json.loads(proc.stdout.strip() or "{}")
     except json.JSONDecodeError:
         return {"ok": False, "unencodable_reason": "parse-error"}
+
+
+def _raise_from_gate(gate: dict) -> None:
+    """Fail-closed: missing helper / timeout / reject reasons all Unencodable."""
+    if gate.get("ok") is not False:
+        return
+    err = str(gate.get("error") or "")
+    helper = str(gate.get("helper") or "")
+    reason = gate.get("unencodable_reason")
+    if reason == "timeout" or err == "timeout":
+        raise Unencodable("timeout")
+    if helper.endswith("-missing") or "helper unavailable" in err:
+        raise Unencodable("helper-unavailable")
+    if reason:
+        raise Unencodable(reason)
+    raise Unencodable("parse-error")
 
 
 def compile_ecma(
@@ -68,13 +86,9 @@ def compile_ecma(
             if f not in "is":
                 raise Unencodable(f"unknown-flag:{f}")
         gate = _run_regexpp(pattern, flags)
-        # regexpp is a capability gate for reject reasons; stack/tool failures
-        # must not block the simple-AST path (soft dependency).
-        reason = gate.get("unencodable_reason")
-        if gate.get("ok") is False and reason and reason not in (
-            "parse-error",
-        ):
-            raise Unencodable(reason)
+        # regexpp is a required capability gate (#172 fail-closed) — never
+        # soft-open on missing node / timeout.
+        _raise_from_gate(gate)
         stripped = strip_language_transparent(pattern)
         # JS has no scoped inline flags — reject before encoding as Folded.
         ast = parse_pattern(stripped, allow_scoped_i=False)
@@ -121,4 +135,4 @@ def replay_argv(pattern: str, flags: str) -> list[str]:
 def helper_used_for_parse(pattern: str = "a+", flags: str = "") -> bool:
     """Acceptance: regexpp helper participates in parse (when node+deps present)."""
     gate = _run_regexpp(pattern, flags)
-    return gate.get("helper") == "ecma-regexpp" or gate.get("ok") is True
+    return gate.get("helper") == "ecma-regexpp" and gate.get("ok") is True

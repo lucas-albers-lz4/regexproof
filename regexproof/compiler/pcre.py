@@ -19,6 +19,7 @@ from regexproof.compiler.simple_parse import parse_pattern
 
 HELPER = Path(__file__).resolve().parents[2] / "helpers" / "pcre2" / "match.py"
 DEFAULT_MAX_LENGTH = 256
+HELPER_TIMEOUT_S = 30
 PCRE_TERMINATORS = frozenset(["\n"])
 _PCRE_SPACE_CHARS = " \t\n\r\f\v"
 
@@ -33,13 +34,17 @@ def _local_reject(pattern: str) -> str | None:
 
 
 def _helper_parse(pattern: str) -> dict:
-    proc = subprocess.run(
-        [sys.executable, str(HELPER), "parse", pattern],
-        capture_output=True,
-        text=True,
-        shell=False,
-        check=False,
-    )
+    try:
+        proc = subprocess.run(
+            [sys.executable, str(HELPER), "parse", pattern],
+            capture_output=True,
+            text=True,
+            shell=False,
+            check=False,
+            timeout=HELPER_TIMEOUT_S,
+        )
+    except subprocess.TimeoutExpired:
+        return {"ok": False, "unencodable_reason": "timeout"}
     try:
         return json.loads(proc.stdout.strip() or "{}")
     except json.JSONDecodeError:
@@ -66,13 +71,17 @@ def compile_pcre(
         stripped = strip_language_transparent(pattern)
         # Optional real-engine parse when available; never required for encode.
         gate = _helper_parse(stripped)
-        if gate.get("ok") is False and gate.get("unencodable_reason") not in (
-            None,
-            "pcre2-helper-unavailable",
-        ):
-            # Real engine rejected the pattern.
-            if gate.get("helper") in ("pcre2-bindings", "pcre2grep"):
-                raise Unencodable(gate.get("unencodable_reason") or "parse-error")
+        if gate.get("ok") is False:
+            ureason = gate.get("unencodable_reason")
+            if ureason == "timeout":
+                raise Unencodable("timeout")
+            if ureason not in (
+                None,
+                "pcre2-helper-unavailable",
+            ):
+                # Real engine rejected the pattern.
+                if gate.get("helper") in ("pcre2-bindings", "pcre2grep"):
+                    raise Unencodable(ureason or "parse-error")
         ast = parse_pattern(stripped)
         fold_fn = lambda ch: python_fold_closure(ch, ascii_only=True)
         fold = fold_fn if "i" in flags else None
@@ -121,12 +130,16 @@ def helper_used_for_parse_and_replay() -> bool:
         return False
     if gate.get("helper") not in ("pcre2-bindings", "pcre2grep"):
         return False
-    proc = subprocess.run(
-        [sys.executable, str(HELPER), "match", "a+", ""],
-        input="aaa",
-        capture_output=True,
-        text=True,
-        shell=False,
-        check=False,
-    )
+    try:
+        proc = subprocess.run(
+            [sys.executable, str(HELPER), "match", "a+", ""],
+            input="aaa",
+            capture_output=True,
+            text=True,
+            shell=False,
+            check=False,
+            timeout=HELPER_TIMEOUT_S,
+        )
+    except subprocess.TimeoutExpired:
+        return False
     return proc.returncode == 0

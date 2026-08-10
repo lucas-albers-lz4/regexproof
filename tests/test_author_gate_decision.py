@@ -252,6 +252,7 @@ def test_cli_absolute_paths_and_llm_draft(tmp_path: Path):
             "--auto",
             "-o",
             str(out),
+            "--allow-outside-generated",
             "--now",
             "2026-08-09",
         ]

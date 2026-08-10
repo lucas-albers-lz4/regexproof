@@ -10,7 +10,7 @@ readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
     "z3-solver==5.0.0",
-    "requests>=2.31",
+    "requests==2.32.3",
 ]
 
 [project.optional-dependencies]
