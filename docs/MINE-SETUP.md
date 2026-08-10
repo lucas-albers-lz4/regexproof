@@ -83,7 +83,7 @@ fraction, compile likelihood.
 
 `mine_run_summary` includes `"allocator": "score-v1"`.
 
-### Rank then probe (operator loop)
+## Rank then probe (operator loop)
 
 ```bash
 # Top N mined ledger rows for hand probe → author-gate
@@ -92,6 +92,10 @@ python scripts/rank-mine-candidates.py --limit 10
 
 Each stdout line is NDJSON: `url`, `score`, `score_version`, `breakdown`, plus
 stars / query / pushed_date. No network, no writes.
+
+**Full loop after ranking** (probe → author-gate → Smith tickets → local
+extract/fraction/batch, including `js_precise_dir` and java→pcre notes):
+[`CORPUS-PIPELINE.md`](CORPUS-PIPELINE.md).
 
 ## Local dry-run
 
@@ -118,4 +122,6 @@ Stdout ends with a `{"kind": "mine_run_summary", ...}` line (includes
 ## Non-goals (this job)
 
 Smith extract/compile automation (#149) and native Java dialect (#150) remain
-follow-ons. Score-v1 does not auto-GO or file issues.
+follow-ons. Score-v1 does not auto-GO or file issues — after gating, file
+Smith process tickets and run Smith locally per
+[`CORPUS-PIPELINE.md`](CORPUS-PIPELINE.md).

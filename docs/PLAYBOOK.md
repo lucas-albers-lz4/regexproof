@@ -115,6 +115,10 @@ ASCII approximations.
 
 ## Corpus-wave loop (minimal repro)
 
+For **discovering** which corpus to measure next (mine → rank → gate →
+Smith tickets), use [`CORPUS-PIPELINE.md`](CORPUS-PIPELINE.md). Once a corpus
+is registered in `CORPUS_MANIFESTS`:
+
 1. Inventory → `scripts/measure-corpus-fraction.py --corpus NAME --assert-determinism`
 2. Matrix → `scripts/build-cross-corpus-matrix.py`
 3. Toolkit closeout → `properties/generated/phase2_toolkit_fix_closeout.md`

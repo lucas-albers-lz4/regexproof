@@ -1,0 +1,27 @@
+---
+description: Corpus mine→rank→gate→Smith operator loop (scan order)
+alwaysApply: true
+---
+
+# Corpus pipeline (scan order)
+
+When ranking mined candidates, authoring gate decisions, filing Smith
+tickets, or running extract/fraction/batch on a new corpus, follow
+[`docs/CORPUS-PIPELINE.md`](docs/CORPUS-PIPELINE.md). Setup/PAT/score-v1:
+[`docs/MINE-SETUP.md`](docs/MINE-SETUP.md).
+
+## Order
+
+1. `rank-mine-candidates.py --limit N` (highest score first)
+2. `probe-corpus-admission.py` → `author-gate-decision.py` (`--auto` only for
+   restricted NO-GO; `--human` for go / triage-trial)
+3. Commit `*_gate_decision.json` + ledger; **file Smith issues** (mine does
+   not auto-file) — GO before triage-trial
+4. Smith locally: materialize pin → **explicit `files:` allowlist** →
+   `CORPUS_MANIFESTS` + `WAVE_CORPORA` → measure (≥0.30) → batch → PR
+5. Ecma wave corpora: extractor `js_precise_dir` (not legacy `js_dir`)
+6. Java: `java-html-sanitizer-triage.py --corpus NAME --pin --url [--files …]`
+   (default stem `NAME_java`)
+
+Mostly Python; `--llm-draft` never writes GO. Bugbot before merge on
+non-trivial Smith PRs (see `pr-bugbot-before-merge`).

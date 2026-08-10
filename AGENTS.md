@@ -167,6 +167,11 @@ in the harness output so a reader knows exactly what was proven.
 
 ## Related tooling
 
+- **Corpus discovery → Smith (operator loop):**
+  [`docs/CORPUS-PIPELINE.md`](docs/CORPUS-PIPELINE.md) — rank mined ledger →
+  probe/author-gate → file Smith tickets → local measure/batch (Python-first;
+  LLM draft optional and never GO). Follow this when processing top candidates
+  or closing Smith issues (e.g. #154 umbrella).
 - Daily corpus mine (GHA + ledger, live): [`docs/MINE-SETUP.md`](docs/MINE-SETUP.md)
   — `PROJECT_PAT` classic PAT with `repo`; ledger/queue commit-back to `main`;
   score-v1 allocator + `scripts/rank-mine-candidates.py` for next-to-probe
