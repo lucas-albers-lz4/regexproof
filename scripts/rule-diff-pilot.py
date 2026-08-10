@@ -29,12 +29,9 @@ sys.path.insert(0, str(ROOT))
 
 
 import jsonschema  # noqa: E402
-from z3 import Concat, Re, Star  # noqa: E402
 
-from regexproof.compiler import compile_pattern  # noqa: E402
 from regexproof.compiler.re2 import replay_argv  # noqa: E402
 from regexproof.extractors.rule_file import extract_rule_file  # noqa: E402
-from regexproof.rule_diff.encode import shape5_constraints  # noqa: E402
 from regexproof.rule_diff.pairs import (  # noqa: E402
     MIN_ADMITTED_PAIRS,
     _min_literal_span,
@@ -79,8 +76,7 @@ def _length_bounds(pattern: str) -> tuple[int, int]:
 
 
 def _load_harness():
-    import regexproof.harness as harness
-    return harness
+    return load_harness()
 
 
 def _go_re2(pattern: str, flags: str, s: str) -> bool:
@@ -124,105 +120,33 @@ def _emit_extractor_jsonl() -> Path:
 
 
 def _register_pair(harness, pair: dict, *, require_gt: bool) -> None:
-    prop = harness.prop
-    family = pair["family"]
-    r1 = pair["r1"]
-    r2 = pair["r2"]
-    # Fullmatch mirrors keep gap queries length-tight (search wrappers blow up Z3).
-    lo, hi = _length_bounds(r2["pattern"])
-    r1_c = compile_pattern(
-        r1["pattern"], r1["flags"], r1["dialect"], "fullmatch", max_length=256
-    )
-    r2_c = compile_pattern(
-        r2["pattern"], r2["flags"], r2["dialect"], "fullmatch", max_length=256
-    )
-    assert r1_c.encodable and r2_c.encodable, (r1_c.unencodable_reason, r2_c.unencodable_reason)
-
-    def gt(w: dict) -> bool:
+    def gt(p: dict, w: dict) -> bool:
         s = w.get("s")
         if not isinstance(s, str):
             return False
-        # Replay as search (detector call_kind) on the witness string.
-        return _go_re2(r2["pattern"], r2["flags"], s) and not _go_re2(
-            r1["pattern"], r1["flags"], s
+        return _go_re2(p["r2"]["pattern"], p["r2"]["flags"], s) and not _go_re2(
+            p["r1"]["pattern"], p["r1"]["flags"], s
         )
 
-    domain = (
-        f"len(s) in [{lo},{hi}]; dialect=re2; solver_call_kind=fullmatch; "
-        f"site_call_kind={pair['call_kind']}"
-    )
-
-    @prop(
-        f"{family}-gap",
-        domain,
-        # Both SAT (gap) and UNSAT (no gap in bound) are valid outcomes; ok is
-        # reinterpreted after run_one for kind=rule_diff.
-        expect_unsat=True,
-        timeout_ms=TIMEOUT_MS,
-        ground_truth=gt,
-        kind="rule_diff",
-        family=family,
-        input_domain=pair.get("declared_domain") or "ascii",
-        call_kind=pair["call_kind"],
-    )
-    def _gap():
-        constraints, bad, _s = shape5_constraints(
-            r1_c.mirror, r2_c.mirror, min_len=lo, max_len=hi
+    def domain_fn(p: dict, lo: int, hi: int) -> str:
+        return (
+            f"len(s) in [{lo},{hi}]; dialect=re2; solver_call_kind=fullmatch; "
+            f"site_call_kind={p['call_kind']}"
         )
-        return constraints, bad
 
-    @prop(
-        f"{family}-control",
-        domain,
-        expect_unsat=True,
-        timeout_ms=TIMEOUT_MS,
-        kind="mutation_guard",
-        family=family,
-        input_domain=pair.get("declared_domain") or "ascii",
-        call_kind=pair["call_kind"],
+    register_shape5_pair(
+        harness,
+        pair,
+        cfg=Shape5PairConfig(
+            dialect_r1=pair["r1"]["dialect"],
+            dialect_r2=pair["r2"]["dialect"],
+            timeout_ms=TIMEOUT_MS,
+            length_bounds=_length_bounds,
+            ground_truth=gt,
+            domain_fn=domain_fn,
+        ),
     )
-    def _control():
-        constraints, bad, _s = shape5_constraints(
-            r2_c.mirror, r2_c.mirror, min_len=lo, max_len=hi
-        )
-        return constraints, bad
-
-    # R1 accepts almost nothing → any R2 fullmatch is a gap → expect SAT.
-    narrow_r1 = Concat(Re("\x01"), Star(Re("\x01")))
-
-    @prop(
-        f"{family}-widen-R1",
-        domain,
-        expect_unsat=False,
-        timeout_ms=TIMEOUT_MS,
-        kind="mutation_guard",
-        family=family,
-        input_domain=pair.get("declared_domain") or "ascii",
-        call_kind=pair["call_kind"],
-    )
-    def _widen_r1():
-        constraints, bad, _s = shape5_constraints(
-            narrow_r1, r2_c.mirror, min_len=lo, max_len=hi
-        )
-        return constraints, bad
-
-    @prop(
-        f"{family}-narrow-R2",
-        domain,
-        expect_unsat=True,
-        timeout_ms=TIMEOUT_MS,
-        kind="mutation_guard",
-        family=family,
-        input_domain=pair.get("declared_domain") or "ascii",
-        call_kind=pair["call_kind"],
-    )
-    def _narrow_r2():
-        constraints, bad, _s = shape5_constraints(
-            r1_c.mirror, r1_c.mirror, min_len=lo, max_len=hi
-        )
-        return constraints, bad
-
-    _ = (_gap, _control, _widen_r1, _narrow_r2, require_gt)
+    _ = require_gt
 
 
 def _redact_witness(witness: object) -> object:
