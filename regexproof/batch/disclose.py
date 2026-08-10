@@ -24,6 +24,7 @@ SECURITY_TOOL_CORPORA = frozenset(
         "shhgit",
         "dompurify",
         "everclaw-community-branches",
+        "tracecat",
     }
 )
 
