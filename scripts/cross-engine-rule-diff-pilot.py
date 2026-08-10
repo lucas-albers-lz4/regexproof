@@ -18,14 +18,10 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-import importlib.util  # noqa: E402
 
 import jsonschema  # noqa: E402
-from z3 import Concat, Re, Star  # noqa: E402
 
 from regexproof.batch.disclose import tag_disclosure  # noqa: E402
-from regexproof.batch.report import write_ndjson  # noqa: E402
-from regexproof.compiler import compile_pattern  # noqa: E402
 from regexproof.compiler.pcre import replay_argv as pcre_replay  # noqa: E402
 from regexproof.compiler.re2 import ensure_built, replay_argv as re2_replay  # noqa: E402
 from regexproof.rule_diff.cross_engine import (  # noqa: E402
@@ -33,9 +29,13 @@ from regexproof.rule_diff.cross_engine import (  # noqa: E402
     load_crs_rx_records,
     preflight_crs,
 )
-from regexproof.rule_diff.encode import shape5_constraints  # noqa: E402
 from regexproof.rule_diff.pairs import _min_literal_span  # noqa: E402
 from regexproof.schemas import rule_diff_report_schema  # noqa: E402
+from regexproof.rule_diff.pilot_runner import (  # noqa: E402
+    Shape5PairConfig,
+    load_harness,
+    register_shape5_pair,
+)
 from regexproof.rule_diff.timeout_gate import fail_message, timeout_gate  # noqa: E402
 
 OUT = ROOT / "properties" / "generated"
@@ -52,12 +52,7 @@ def _length_bounds(pattern: str) -> tuple[int, int]:
 
 
 def _load_harness():
-    path = ROOT / "scripts" / "z3-verify.py"
-    spec = importlib.util.spec_from_file_location("z3_verify", path)
-    mod = importlib.util.module_from_spec(spec)
-    assert spec.loader is not None
-    spec.loader.exec_module(mod)
-    return mod
+    return load_harness()
 
 
 def _rel_cmd(argv: list[str]) -> list[str]:
@@ -141,86 +136,36 @@ def _per_engine_gt(pattern: str, flags: str, witness: str) -> dict[str, Any]:
 
 
 def _register_pair(harness, pair: dict) -> None:
-    prop = harness.prop
-    family = pair["family"]
-    r1 = pair["r1"]
-    r2 = pair["r2"]
-    lo, hi = _length_bounds(r2["pattern"])
-    r1_c = compile_pattern(
-        r1["pattern"], r1["flags"], "re2", "fullmatch", max_length=256
-    )
-    r2_c = compile_pattern(
-        r2["pattern"], r2["flags"], "pcre", "fullmatch", max_length=256
-    )
-    assert r1_c.encodable and r2_c.encodable
-
-    def gt(w: dict) -> bool:
+    def gt(p: dict, w: dict) -> bool:
         s = w.get("s")
         if not isinstance(s, str):
             return False
         s = s.replace("\x00", "")
-        evidence = _per_engine_gt(r2["pattern"], r2["flags"], s)
+        evidence = _per_engine_gt(p["r2"]["pattern"], p["r2"]["flags"], s)
         return evidence["status"] == "PASS"
 
-    domain = (
-        f"len(s) in [{lo},{hi}]; R1=re2(Coraza) R2=pcre(ModSec); "
-        f"solver_call_kind=fullmatch; adapter={pair.get('adapter')}"
-    )
-
-    @prop(
-        f"{family}-gap",
-        domain,
-        expect_unsat=True,
-        timeout_ms=TIMEOUT_MS,
-        ground_truth=gt,
-        kind="rule_diff",
-        family=family,
-        input_domain="ascii",
-        call_kind=pair["call_kind"],
-    )
-    def _gap():
-        constraints, bad, _s = shape5_constraints(
-            r1_c.mirror, r2_c.mirror, min_len=lo, max_len=hi
+    def domain_fn(p: dict, lo: int, hi: int) -> str:
+        return (
+            f"len(s) in [{lo},{hi}]; R1=re2(Coraza) R2=pcre(ModSec); "
+            f"solver_call_kind=fullmatch; adapter={p.get('adapter')}"
         )
-        return constraints, bad
 
-    @prop(
-        f"{family}-control",
-        domain,
-        expect_unsat=True,
-        timeout_ms=TIMEOUT_MS,
-        kind="mutation_guard",
-        family=family,
-        input_domain="ascii",
-        call_kind=pair["call_kind"],
+    register_shape5_pair(
+        harness,
+        pair,
+        cfg=Shape5PairConfig(
+            dialect_r1="re2",
+            dialect_r2="pcre",
+            timeout_ms=TIMEOUT_MS,
+            length_bounds=_length_bounds,
+            ground_truth=gt,
+            domain_fn=domain_fn,
+            include_narrow_r2=False,
+        ),
     )
-    def _control():
-        constraints, bad, _s = shape5_constraints(
-            r2_c.mirror, r2_c.mirror, min_len=lo, max_len=hi
-        )
-        return constraints, bad
-
-    narrow_r1 = Concat(Re("\x01"), Star(Re("\x01")))
-
-    @prop(
-        f"{family}-widen-R1",
-        domain,
-        expect_unsat=False,
-        timeout_ms=TIMEOUT_MS,
-        kind="mutation_guard",
-        family=family,
-        input_domain="ascii",
-        call_kind=pair["call_kind"],
-    )
-    def _widen_r1():
-        constraints, bad, _s = shape5_constraints(
-            narrow_r1, r2_c.mirror, min_len=lo, max_len=hi
-        )
-        return constraints, bad
-
     # Stash patterns for post-run per-engine evidence attachment.
-    pair["_compiled"] = {"pattern": r2["pattern"], "flags": r2["flags"]}
-    _ = (_gap, _control, _widen_r1)
+    pair["_compiled"] = {"pattern": pair["r2"]["pattern"], "flags": pair["r2"]["flags"]}
+
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -369,7 +314,9 @@ def main(argv: list[str] | None = None) -> int:
     )
     jsonschema.validate(report, rule_diff_report_schema())
     findings_path = OUT / "crs_cross_engine_findings.ndjson"
-    write_ndjson(findings_path, findings)
+    with findings_path.open("w", encoding="utf-8") as fh:
+        for f in findings:
+            fh.write(json.dumps(f, sort_keys=True) + "\n")
     md = [
         "# CRS cross-engine rule_diff (Coraza↔ModSecurity)",
         "",

@@ -76,8 +76,9 @@ assert spec.loader is not None
 spec.loader.exec_module(mcf)
 
 from regexproof.batch import runner as runner_mod  # noqa: E402
+from regexproof.batch import compile_records as compile_mod  # noqa: E402
 
-_orig = runner_mod._compile_all
+_orig = compile_mod.compile_records
 
 
 def _compile_all_guarded(records, *, lift_inline, corpus_slug, budget=None, wall_t0=None):
@@ -124,7 +125,9 @@ def _compile_all_guarded(records, *, lift_inline, corpus_slug, budget=None, wall
 
 
 runner_mod._compile_all = _compile_all_guarded
-mcf._compile_all = _compile_all_guarded
+runner_mod.compile_records = _compile_all_guarded
+compile_mod.compile_records = _compile_all_guarded
+mcf.compile_records = _compile_all_guarded
 
 
 def main(argv: list[str]) -> int:
@@ -147,10 +150,11 @@ def main(argv: list[str]) -> int:
             _status({"phase": "start", "corpus": name, "done": 0, "total": 0, "wall_s": 0})
             t0 = time.time()
             if limit is not None:
-                from regexproof.batch.runner import CORPUS_MANIFESTS, _extract
+                from regexproof.batch.extract import extract_corpus
+                from regexproof.batch.manifests import CORPUS_MANIFESTS
 
                 meta = CORPUS_MANIFESTS[name]
-                recs = _extract(name, meta)[:limit]
+                recs = extract_corpus(name, meta)[:limit]
                 compiled = _compile_all_guarded(
                     recs,
                     lift_inline=bool(meta.get("lift_inline")),

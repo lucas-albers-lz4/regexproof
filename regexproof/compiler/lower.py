@@ -104,6 +104,91 @@ def _wrap(body, call_kind, meta):
     return parts[0] if len(parts) == 1 else Concat(*parts)
 
 
+def _lower_seq(
+    node,
+    *,
+    fold,
+    case_fold,
+    dot_terminators,
+    digit,
+    space,
+    word,
+    meta,
+    at_start,
+    at_end,
+    allow_ascii_word_boundary: bool,
+    space_codes: frozenset[int],
+):
+    items = node.items
+    parts = []
+    for idx, it in enumerate(items):
+        parts.append(
+            _lower_node(
+                it,
+                fold=fold,
+                case_fold=case_fold,
+                dot_terminators=dot_terminators,
+                digit=digit,
+                space=space,
+                word=word,
+                meta=meta,
+                at_start=at_start and idx == 0,
+                at_end=at_end and idx == len(items) - 1,
+                allow_ascii_word_boundary=allow_ascii_word_boundary,
+                space_codes=space_codes,
+            )
+        )
+    if not parts:
+        return Re("")
+    return parts[0] if len(parts) == 1 else Concat(*parts)
+
+
+def _lower_alt(
+    node,
+    *,
+    fold,
+    case_fold,
+    dot_terminators,
+    digit,
+    space,
+    word,
+    meta,
+    at_start,
+    at_end,
+    allow_ascii_word_boundary: bool,
+    space_codes: frozenset[int],
+):
+    # Per-alternative anchors must not hoist onto the whole Union
+    # (false-UNSAT under search: ^a|b vs ^(a|b)). Reject like py_re.
+    alts = []
+    for it in node.items:
+        alt_meta = {
+            "leading_caret": False,
+            "trailing_dollar": False,
+            "has_internal_anchor": False,
+            "word_boundary_wrap": False,
+        }
+        lowered = _lower_node(
+            it,
+            fold=fold,
+            case_fold=case_fold,
+            dot_terminators=dot_terminators,
+            digit=digit,
+            space=space,
+            word=word,
+            meta=alt_meta,
+            at_start=at_start,
+            at_end=at_end,
+            allow_ascii_word_boundary=allow_ascii_word_boundary,
+            space_codes=space_codes,
+        )
+        if alt_meta.get("has_internal_anchor"):
+            meta["has_internal_anchor"] = True
+        if alt_meta.get("leading_caret") or alt_meta.get("trailing_dollar"):
+            raise Unencodable("per-alternative-anchor")
+        alts.append(lowered)
+    return Union(*alts) if len(alts) > 1 else alts[0]
+
 def _lower_node(
     node,
     *,
@@ -160,59 +245,35 @@ def _lower_node(
     if isinstance(node, sp.Any):
         return _dot(dot_terminators)
     if isinstance(node, sp.Seq):
-        items = node.items
-        parts = []
-        for idx, it in enumerate(items):
-            parts.append(
-                _lower_node(
-                    it,
-                    fold=fold,
-                    case_fold=case_fold,
-                    dot_terminators=dot_terminators,
-                    digit=digit,
-                    space=space,
-                    word=word,
-                    meta=meta,
-                    at_start=at_start and idx == 0,
-                    at_end=at_end and idx == len(items) - 1,
-                    allow_ascii_word_boundary=allow_ascii_word_boundary,
-                    space_codes=space_codes,
-                )
-            )
-        if not parts:
-            return Re("")
-        return parts[0] if len(parts) == 1 else Concat(*parts)
+        return _lower_seq(
+            node,
+            fold=fold,
+            case_fold=case_fold,
+            dot_terminators=dot_terminators,
+            digit=digit,
+            space=space,
+            word=word,
+            meta=meta,
+            at_start=at_start,
+            at_end=at_end,
+            allow_ascii_word_boundary=allow_ascii_word_boundary,
+            space_codes=space_codes,
+        )
     if isinstance(node, sp.Alt):
-        # Per-alternative anchors must not hoist onto the whole Union
-        # (false-UNSAT under search: ^a|b vs ^(a|b)). Reject like py_re.
-        alts = []
-        for it in node.items:
-            alt_meta = {
-                "leading_caret": False,
-                "trailing_dollar": False,
-                "has_internal_anchor": False,
-                "word_boundary_wrap": False,
-            }
-            lowered = _lower_node(
-                it,
-                fold=fold,
-                case_fold=case_fold,
-                dot_terminators=dot_terminators,
-                digit=digit,
-                space=space,
-                word=word,
-                meta=alt_meta,
-                at_start=at_start,
-                at_end=at_end,
-                allow_ascii_word_boundary=allow_ascii_word_boundary,
-                space_codes=space_codes,
-            )
-            if alt_meta.get("has_internal_anchor"):
-                meta["has_internal_anchor"] = True
-            if alt_meta.get("leading_caret") or alt_meta.get("trailing_dollar"):
-                raise Unencodable("per-alternative-anchor")
-            alts.append(lowered)
-        return Union(*alts) if len(alts) > 1 else alts[0]
+        return _lower_alt(
+            node,
+            fold=fold,
+            case_fold=case_fold,
+            dot_terminators=dot_terminators,
+            digit=digit,
+            space=space,
+            word=word,
+            meta=meta,
+            at_start=at_start,
+            at_end=at_end,
+            allow_ascii_word_boundary=allow_ascii_word_boundary,
+            space_codes=space_codes,
+        )
     if isinstance(node, sp.Repeat):
         inner = _lower_node(
             node.item,

@@ -7,13 +7,16 @@ import os
 import subprocess
 from pathlib import Path
 
-from z3 import Range, Re, Union
 
-from regexproof.compiler.base import CompileResult, Unencodable, helper_gate_missing
+from regexproof.compiler.base import (
+    CompileResult,
+    DialectSpec,
+    Unencodable,
+    compile_dialect_template,
+    helper_gate_missing,
+)
 from regexproof.compiler.fold import re2_fold_closure
-from regexproof.compiler.lower import lower, space_codes_from_chars
 from regexproof.compiler.pcre_strip import strip_language_transparent
-from regexproof.compiler.simple_parse import parse_pattern
 
 HELPER_DIR = Path(__file__).resolve().parents[2] / "helpers" / "go-re2"
 DEFAULT_MAX_LENGTH = 256
@@ -113,53 +116,37 @@ def compile_re2(
     ``strip_verbose_x``; Nosey Parker ``(?s)`` / lifted ``s`` records are
     unencodable until a rust_regex or helper-``s`` path lands — never silent.
     """
-    flags = "".join(sorted(set(flags)))
-    try:
-        if len(pattern) > max_length:
-            raise Unencodable("pattern-too-long")
-        if "x" in flags:
+
+    def flag_reject(fl: str) -> None:
+        if "x" in fl:
             raise Unencodable("x-flag-unstripped")
-        if "s" in flags:
+        if "s" in fl:
             raise Unencodable("s-flag")
-        if "m" in flags:
+        if "m" in fl:
             raise Unencodable("m-flag")
-        stripped = strip_language_transparent(pattern)
-        gate = parse_with_helper(stripped)
-        _raise_from_gate(gate)
-        ast = parse_pattern(stripped)
-        fold = re2_fold_closure if "i" in flags else None
-        mirror, _meta = lower(
-            ast,
-            fold=fold,
-            case_fold=re2_fold_closure,
-            dot_terminators=RE2_TERMINATORS,
-            digit=lambda: Range("0", "9"),
-            space=lambda: Union(*[Re(c) for c in _RE2_SPACE_CHARS]),
-            word=lambda: Union(Range("a", "z"), Range("A", "Z"), Range("0", "9"), Re("_")),
-            trailing_dollar_nl=False,
-            call_kind=call_kind,
-            allow_ascii_word_boundary=True,
-            space_codes=space_codes_from_chars(_RE2_SPACE_CHARS),
-        )
-        return CompileResult(
-            mirror=mirror,
-            unencodable_reason=None,
-            dialect="re2",
-            call_kind=call_kind,
-            flags=flags,
-            pattern=pattern,
-            declared_domain="ascii",
-        )
-    except Unencodable as exc:
-        return CompileResult(
-            mirror=None,
-            unencodable_reason=exc.reason,
-            dialect="re2",
-            call_kind=call_kind,
-            flags=flags,
-            pattern=pattern,
-            declared_domain="ascii",
-        )
+
+    def helper_gate(stripped: str, _flags: str) -> dict:
+        return parse_with_helper(stripped)
+
+    spec = DialectSpec(
+        dialect="re2",
+        declared_domain="ascii",
+        default_max_length=DEFAULT_MAX_LENGTH,
+        terminators=RE2_TERMINATORS,
+        space_chars=_RE2_SPACE_CHARS,
+        trailing_dollar_nl=False,
+        allow_ascii_word_boundary=True,
+        strip_fn=strip_language_transparent,
+        flag_reject_fn=flag_reject,
+        helper_gate_fn=helper_gate,
+        raise_from_gate_fn=_raise_from_gate,
+        fold_fn=re2_fold_closure,
+        case_fold_fn=re2_fold_closure,
+    )
+    return compile_dialect_template(
+        pattern, flags, call_kind, spec=spec, max_length=max_length
+    )
+
 
 
 def replay_argv(pattern: str, flags: str) -> list[str]:

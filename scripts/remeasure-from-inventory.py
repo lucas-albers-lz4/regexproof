@@ -19,7 +19,6 @@ Usage:
 from __future__ import annotations
 
 import argparse
-import hashlib
 import json
 import platform
 import sys
@@ -32,10 +31,9 @@ sys.path.insert(0, str(ROOT))
 
 import z3  # noqa: E402
 
-from regexproof.batch.runner import (  # noqa: E402
-    CORPUS_MANIFESTS,
-    _compile_all,
-)
+from regexproof.batch.compile_records import compile_records  # noqa: E402
+from regexproof.batch.measure import compiler_fingerprint  # noqa: E402
+from regexproof.batch.manifests import CORPUS_MANIFESTS  # noqa: E402
 
 OUT = ROOT / "properties" / "generated"
 
@@ -53,10 +51,8 @@ EXTRACTOR_FROZEN_REASONS = frozenset(
 
 
 def _compiler_fingerprint() -> str:
-    h = hashlib.sha256()
-    for p in sorted((ROOT / "regexproof" / "compiler").rglob("*.py")):
-        h.update(p.read_bytes())
-    return h.hexdigest()[:16]
+    return compiler_fingerprint()
+
 
 
 def load_records(path: Path) -> list[dict]:
@@ -68,7 +64,7 @@ def load_records(path: Path) -> list[dict]:
 
 
 def prepare_frozen_records(frozen: list[dict]) -> list[dict]:
-    """Restore extractor ``unencodable_reason`` so ``_compile_all`` skips them."""
+    """Restore extractor ``unencodable_reason`` so ``compile_records`` skips them."""
     out: list[dict] = []
     for row in frozen:
         rec = dict(row)
@@ -95,7 +91,7 @@ def remeasure(
     records = prepare_frozen_records(frozen)
 
     t0 = time.perf_counter()
-    compiled = _compile_all(
+    compiled = compile_records(
         records,
         lift_inline=bool(meta.get("lift_inline")),
         corpus_slug=corpus,

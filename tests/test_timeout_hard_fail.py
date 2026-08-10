@@ -2,17 +2,14 @@
 
 from __future__ import annotations
 
-import importlib.util
 from pathlib import Path
+
+from regexproof.harness import run_one
 
 
 def test_harness_marks_unknown_as_not_ok():
-    path = Path(__file__).resolve().parents[1] / "scripts" / "z3-verify.py"
-    spec = importlib.util.spec_from_file_location("z3_verify", path)
-    mod = importlib.util.module_from_spec(spec)
-    assert spec.loader is not None
-    spec.loader.exec_module(mod)
     # Ensure run_one treats unknown as failure — inspect source contract.
+    path = Path(run_one.__code__.co_filename)
     src = path.read_text(encoding="utf-8")
     assert "unknown" in src
     assert "TIMEOUT" in src

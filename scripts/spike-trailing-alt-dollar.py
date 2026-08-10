@@ -42,15 +42,12 @@ from z3 import And, BoolVal, Concat, InRe, Length, Or, Solver, String  # noqa: E
 from regexproof.compiler import compile_pattern  # noqa: E402
 from regexproof.compiler.base import CompileResult, any_char  # noqa: E402
 from regexproof.compiler.lower import ranges_excluding  # noqa: E402
+from regexproof.compiler.trailing_alt_dollar import (  # noqa: E402
+    split_trailing_dollar,
+)
+from regexproof.compiler.trailing_alt_dollar import _WORD_CODES  # noqa: E402
 from regexproof.compiler.re2 import replay_argv  # noqa: E402
 from regexproof.fuzz.adapters import real_accepts_argv  # noqa: E402
-
-_WORD_CODES = frozenset(
-    list(range(ord("a"), ord("z") + 1))
-    + list(range(ord("A"), ord("Z") + 1))
-    + list(range(ord("0"), ord("9") + 1))
-    + [ord("_")]
-)
 
 if not z3.get_version_string().startswith("5.0"):
     print(
@@ -161,17 +158,6 @@ def _final_noncap_open(pattern: str) -> int | None:
                     return None
         i -= 1
     return None
-
-
-def split_trailing_dollar(pattern: str) -> dict[str, str] | None:
-    """Split pattern-final ``(?:...|$)`` into XR / X$ / X bare strings."""
-    open_idx = _final_noncap_open(pattern)
-    if open_idx is None:
-        return None
-    xr = pattern[:-3] + ")"
-    x_bare = pattern[:open_idx]
-    x_dollar = x_bare + "$" if x_bare else ""  # empty X → special-cased in E1
-    return {"xr": xr, "x_dollar": x_dollar, "x_bare": x_bare, "empty_x": not x_bare}
 
 
 def _load_gitleaks_paa() -> list[dict]:
