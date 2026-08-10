@@ -476,3 +476,4 @@ def test_mine_cli_prints_run_summary(tmp_path: Path, monkeypatch, capsys):
     assert summary["capped"] is True
     assert summary["dry_run"] is True
     assert summary["accepted"] == 0
+    assert summary["allocator"] == "score-v1"

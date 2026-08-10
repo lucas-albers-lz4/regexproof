@@ -60,8 +60,38 @@ runs (`cancel-in-progress: false`).
   `chore(mine): daily candidate ledger + queue` on `main`.
 - Day cap filled + overflow queued is **normal**, not a failure. With default
   `DAILY_MINE_CAP=10`, a rich search day will fill the ledger slice and park
-  the rest in `mine-queue.json` (cap 100). Cron drains FIFO on later UTC days;
-  use `daily_mine_cap=80` to flush faster.
+  the rest in `mine-queue.json` (cap 100). Cron drains by **score-v1** (highest
+  first) on later UTC days; use `daily_mine_cap=80` to flush faster. When the
+  queue is already full, new overflow is still **dropped** (no mid-queue
+  replace in v1).
+
+## Score-v1 allocator (#148)
+
+Mine admit/drain uses a deterministic metadata score (recomputed each run; not
+persisted). Higher is better; ties break by `url`.
+
+| Signal | Points |
+|---|---|
+| Boundary name heuristic (`classify_boundary` on repo slug) | +50 true / 0 unknown / −40 false |
+| Query family (`source_query`) | security +30, rules +25, validators +20, testdata +5, else +10 |
+| Stars | `min(25, floor(8 * log10(stars+1)))` |
+| Recency (`pushed_date`) | +15 within 365d, +5 within 3y, else 0 |
+| `capped: true` | −10 |
+
+Not scored yet (needs Smith / live probe): site counts, dialects, encodable
+fraction, compile likelihood.
+
+`mine_run_summary` includes `"allocator": "score-v1"`.
+
+### Rank then probe (operator loop)
+
+```bash
+# Top N mined ledger rows for hand probe → author-gate
+python scripts/rank-mine-candidates.py --limit 10
+```
+
+Each stdout line is NDJSON: `url`, `score`, `score_version`, `breakdown`, plus
+stars / query / pushed_date. No network, no writes.
 
 ## Local dry-run
 
@@ -70,8 +100,8 @@ export GITHUB_TOKEN=ghp_...   # same PAT as PROJECT_PAT
 python scripts/mine-corpus-candidates.py --dry-run
 ```
 
-Stdout ends with a `{"kind": "mine_run_summary", ...}` line. Dry-run does not
-write the ledger/queue.
+Stdout ends with a `{"kind": "mine_run_summary", ...}` line (includes
+`allocator`). Dry-run does not write the ledger/queue.
 
 ## Troubleshooting
 
@@ -82,10 +112,10 @@ write the ledger/queue.
 | Mine exit 1, empty accept | Search errors, no hits after exclusions | Read step logs; try `--dry-run` locally |
 | `run.capped: true` / summary `capped: true` | Query budget or ~1000-result search cap | Expected; next day or raise `daily_mine_cap` on dispatch |
 | Accepted 0 but queue growing | Day cap already filled (`DAILY_MINE_CAP`) | Wait for UTC day roll or dispatch with higher cap |
-| Queue at 100 / “mine-queue full” warnings | Overflow cap hit | Raise `daily_mine_cap` temporarily or wait for daily drain |
+| Queue at 100 / “mine-queue full” warnings | Overflow cap hit | Raise `daily_mine_cap` temporarily or wait for scored daily drain |
 | Rebase/push conflict on commit-back | Concurrent human push to ledger files | Re-run workflow; concurrency prevents two mine jobs overlapping |
 
 ## Non-goals (this job)
 
-Score-and-sort (#148), Smith extract/compile (#149), and native Java dialect
-(#150) are follow-ons. This job only discovers and persists candidates.
+Smith extract/compile automation (#149) and native Java dialect (#150) remain
+follow-ons. Score-v1 does not auto-GO or file issues.

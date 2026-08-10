@@ -168,7 +168,8 @@ in the harness output so a reader knows exactly what was proven.
 ## Related tooling
 
 - Daily corpus mine (GHA + ledger, live): [`docs/MINE-SETUP.md`](docs/MINE-SETUP.md)
-  — `PROJECT_PAT` classic PAT with `repo`; ledger/queue commit-back to `main`
+  — `PROJECT_PAT` classic PAT with `repo`; ledger/queue commit-back to `main`;
+  score-v1 allocator + `scripts/rank-mine-candidates.py` for next-to-probe
 
 ## Related skills (Hermes)
 
