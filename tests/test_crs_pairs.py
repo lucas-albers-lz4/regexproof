@@ -14,22 +14,20 @@ from regexproof.rule_diff.crs_pairs import (
 from regexproof.schemas import admitted_pair_schema
 
 ROOT = Path(__file__).resolve().parents[1]
-V28 = Path("/tmp/coreruleset-v4.28.0/rules")
-V27 = Path("/tmp/coreruleset-v4.27.0/rules")
+FIXTURE = ROOT / "tests" / "fixtures" / "crs_pairs"
+V_OLDER = FIXTURE / "older" / "rules"
+V_NEWER = FIXTURE / "newer" / "rules"
 
 
-def _have_corpus() -> bool:
-    return V28.is_dir() and V27.is_dir()
-
-
-import pytest
-
-
-@pytest.mark.skipif(not _have_corpus(), reason="CRS corpus not materialized under /tmp")
 def test_version_diff_admits_changed_encodable_pairs():
-    report = discover_crs_version_pairs(older_rules=V27, newer_rules=V28)
+    report = discover_crs_version_pairs(
+        older_rules=V_OLDER,
+        newer_rules=V_NEWER,
+        older_tag="fixture-older",
+        newer_tag="fixture-newer",
+    )
     assert report["admitted_count"] >= 1
-    # 942220 is a known encodable widening (optional json. prefix) within DEFAULT_MAX_LEN
+    # 942220 is a known encodable widening (optional json. prefix)
     families = {p["family"] for p in report["admitted"]}
     assert "RD-crs-942220-version" in families
     for p in report["admitted"]:
@@ -38,9 +36,10 @@ def test_version_diff_admits_changed_encodable_pairs():
         assert p["provenance"]["adapter"] == "crs_rule_derived_r1"
 
 
-@pytest.mark.skipif(not _have_corpus(), reason="CRS corpus not materialized under /tmp")
 def test_sibling_family_dedupes_and_directions():
-    report = discover_crs_sibling_pairs(rules_dir=V28, max_pairs_per_family=3)
+    report = discover_crs_sibling_pairs(
+        rules_dir=V_NEWER, tag="fixture-newer", max_pairs_per_family=3
+    )
     assert report["admitted_count"] >= 1
     seen = set()
     for p in report["admitted"]:
@@ -50,9 +49,13 @@ def test_sibling_family_dedupes_and_directions():
         assert p["r1"]["rule_id"] != p["r2"]["rule_id"]
 
 
-@pytest.mark.skipif(not _have_corpus(), reason="CRS corpus not materialized under /tmp")
 def test_combined_discovery_counts():
-    report = discover_crs_pairs(older_rules=V27, newer_rules=V28)
+    report = discover_crs_pairs(
+        older_rules=V_OLDER,
+        newer_rules=V_NEWER,
+        older_tag="fixture-older",
+        newer_tag="fixture-newer",
+    )
     assert report["version_diff_admitted"] >= 1
     assert report["admitted_count"] == len({p["family"] for p in report["admitted"]})
 

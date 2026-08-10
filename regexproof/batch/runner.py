@@ -38,6 +38,8 @@ from regexproof.batch.report import write_markdown, write_ndjson  # noqa: E402
 from regexproof.batch.triage import triage_records_from_compiled, write_triage_ndjson  # noqa: E402
 from regexproof.compiler import compile_pattern  # noqa: E402
 from regexproof.compiler.normalize import normalize_inline_flags  # noqa: E402
+from regexproof.io_atomic import atomic_write_lines, atomic_write_text  # noqa: E402
+from regexproof.z3_pin import assert_z3_pinned  # noqa: E402
 from regexproof.extractors.busybox_tests import extract_busybox_tests  # noqa: E402
 from regexproof.extractors.cpython_re_tests import (  # noqa: E402
     extract_cpython_combined,
@@ -857,15 +859,24 @@ def _check_budget_mem() -> int:
         return 0
 
 
-def _apply_address_space_cap(budget: dict[str, Any]) -> None:
+_ADDRESS_SPACE_CAP_WARNED = False
+_LAST_ADDRESS_SPACE_CAP_APPLIED: bool | None = None
+
+
+def _apply_address_space_cap(budget: dict[str, Any]) -> bool:
     """Hard OS cap so a runaway Z3 compile cannot OOM-kill the desktop.
 
     Uses ``RLIMIT_AS`` at 2× ``max_mem_mb`` (bytes). Soft MemoryError /
     allocation failure then surfaces before the kernel OOM killer.
+
+    Returns True when the cap was installed; False when unavailable
+    (platform/permission). Warns once on failure so macOS/dev runs are not
+    silent about advisory-only memory budgets.
     """
+    global _ADDRESS_SPACE_CAP_WARNED
     max_mb = budget.get("max_mem_mb")
     if not max_mb:
-        return
+        return False
     try:
         import resource
 
@@ -877,12 +888,25 @@ def _apply_address_space_cap(budget: dict[str, Any]) -> None:
         new_soft = cap if soft == resource.RLIM_INFINITY else min(soft, cap)
         new_hard = cap if hard == resource.RLIM_INFINITY else min(hard, cap)
         resource.setrlimit(resource.RLIMIT_AS, (new_soft, new_hard))
+<<<<<<< HEAD
     except Exception as exc:  # noqa: BLE001
         print(
             f"warning: could not install RLIMIT_AS address-space cap "
             f"(max_mem_mb={max_mb}): {exc}",
             file=sys.stderr,
         )
+=======
+        return True
+    except Exception as exc:  # noqa: BLE001
+        if not _ADDRESS_SPACE_CAP_WARNED:
+            print(
+                f"WARNING: address-space memory cap unavailable "
+                f"(max_mem_mb={max_mb} is advisory only): {exc}",
+                file=sys.stderr,
+            )
+            _ADDRESS_SPACE_CAP_WARNED = True
+        return False
+>>>>>>> 21f6223 (fix(audit): Wave 4 reliability — atomic writes, pin, CI timeouts (#187–#191))
 
 
 def _validate_expected_roots(corpus: str, meta: dict[str, Any]) -> None:
@@ -1322,8 +1346,11 @@ def _compile_all(
     max_mem = budget.get("max_mem_mb")
     # wall_t0 may be set before extraction so max_wall_s covers extract+compile.
     t0 = wall_t0 if wall_t0 is not None else time.monotonic()
+    global _LAST_ADDRESS_SPACE_CAP_APPLIED
+    address_space_cap = False
     if max_mem:
-        _apply_address_space_cap(budget)
+        address_space_cap = _apply_address_space_cap(budget)
+    _LAST_ADDRESS_SPACE_CAP_APPLIED = address_space_cap if max_mem else None
     out = []
     for rec in records:
         pattern = rec["pattern"]
@@ -1425,9 +1452,9 @@ def run_corpus(
             "decision": "inventory_only",
             "detail": report,
         }
-        (out_dir / f"{corpus}_batch_summary.json").write_text(
-            __import__("json").dumps(summary, indent=2, sort_keys=True) + "\n",
-            encoding="utf-8",
+        atomic_write_text(
+            out_dir / f"{corpus}_batch_summary.json",
+            json.dumps(summary, indent=2, sort_keys=True) + "\n",
         )
         return summary
     meta = dict(meta)
@@ -1584,6 +1611,7 @@ def run_corpus(
                 "kind": "redos",
                 "corpus": corpus,
                 "result": "incomplete",
+                "complete_run": False,
                 "site": f"redos-timeout:{redos_timeout_s or (meta.get('budget') or {}).get('redos_wall_s', 120)}",
                 "pattern": "",
                 "shape": None,
@@ -1593,6 +1621,7 @@ def run_corpus(
                     "redos_timeout_s": redos_timeout_s
                     or (meta.get("budget") or {}).get("redos_wall_s", 120),
                     "findings_emitted": len(redos_findings),
+                    "complete_run": False,
                 },
             }
         )
@@ -1610,20 +1639,6 @@ def run_corpus(
     write_ndjson(out_dir / f"{corpus}.ndjson", findings)
     # Keep Phase 3 shape-5 report at {corpus}.md; batch uses a distinct path.
     write_markdown(out_dir / f"{corpus}_batch.md", corpus=corpus, findings=findings)
-    if redos_incomplete:
-        raise SystemExit(
-            f"evidence gate failed: ReDoS report incomplete "
-            f"(timeout_s={redos_timeout_s or (meta.get('budget') or {}).get('redos_wall_s', 120)}); "
-            "raise --redos-timeout-s / corpus budget.redos_wall_s for a complete run "
-            f"(partial findings written to {out_dir / f'{corpus}.ndjson'})"
-        )
-
-    dry = write_pr_dry_run(
-        out_dir / f"{corpus}-pr-dry-run.json",
-        findings=findings,
-        approval_path=approval_path,
-    )
-    assert_no_auto_publication(dry)
 
     summary = {
         "schema_version": "1",
@@ -1638,10 +1653,27 @@ def run_corpus(
         "engine": {"python": platform.python_version()},
         "redos_findings": len(redos_findings),
         "redos_incomplete": redos_incomplete,
+        "complete_run": not redos_incomplete,
+        "address_space_cap": _LAST_ADDRESS_SPACE_CAP_APPLIED,
     }
-    (out_dir / f"{corpus}_batch_summary.json").write_text(
-        json.dumps(summary, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    atomic_write_text(
+        out_dir / f"{corpus}_batch_summary.json",
+        json.dumps(summary, indent=2, sort_keys=True) + "\n",
     )
+    if redos_incomplete:
+        raise SystemExit(
+            f"evidence gate failed: ReDoS report incomplete "
+            f"(timeout_s={redos_timeout_s or (meta.get('budget') or {}).get('redos_wall_s', 120)}); "
+            "raise --redos-timeout-s / corpus budget.redos_wall_s for a complete run "
+            f"(partial findings written to {out_dir / f'{corpus}.ndjson'})"
+        )
+
+    dry = write_pr_dry_run(
+        out_dir / f"{corpus}-pr-dry-run.json",
+        findings=findings,
+        approval_path=approval_path,
+    )
+    assert_no_auto_publication(dry)
     return summary
 
 
@@ -1683,9 +1715,7 @@ def measure_coreruleset_sample(
     }
     out_dir.mkdir(parents=True, exist_ok=True)
     payload = json.dumps(report, indent=2, sort_keys=True) + "\n"
-    (out_dir / "coreruleset_sample_encodable_fraction.json").write_text(
-        payload, encoding="utf-8"
-    )
+    atomic_write_text(out_dir / "coreruleset_sample_encodable_fraction.json", payload)
     if as_primary:
         primary = out_dir / "coreruleset_encodable_fraction.json"
         # Never clobber a committed/full-corpus primary when rules/ is absent
@@ -1698,7 +1728,7 @@ def measure_coreruleset_sample(
             except json.JSONDecodeError:
                 keep_full = False
         if not keep_full:
-            primary.write_text(payload, encoding="utf-8")
+            atomic_write_text(primary, payload)
     return report
 
 
@@ -1742,28 +1772,29 @@ def measure_coreruleset_full(out_dir: Path) -> dict[str, Any] | None:
 
     out_dir.mkdir(parents=True, exist_ok=True)
     inv_path = out_dir / "crs-inventory.ndjson"
-    with inv_path.open("w", encoding="utf-8") as fh:
-        for c in compiled:
-            fh.write(
-                json.dumps(
-                    {
-                        "regex_id": c.get("regex_id"),
-                        "rule_id": c.get("rule_id"),
-                        "site": c.get("site"),
-                        "pattern": c.get("pattern"),
-                        "flags": c.get("flags") or "",
-                        "dialect": c.get("dialect"),
-                        "call_kind": c.get("call_kind"),
-                        "encodable": bool(c.get("encodable")),
-                        "compile_reason": c.get("compile_reason"),
-                        "negated": c.get("negated"),
-                        "selector": bool(c.get("selector")),
-                        "corpus": "coreruleset",
-                    },
-                    sort_keys=True,
-                )
-                + "\n"
+    atomic_write_lines(
+        inv_path,
+        (
+            json.dumps(
+                {
+                    "regex_id": c.get("regex_id"),
+                    "rule_id": c.get("rule_id"),
+                    "site": c.get("site"),
+                    "pattern": c.get("pattern"),
+                    "flags": c.get("flags") or "",
+                    "dialect": c.get("dialect"),
+                    "call_kind": c.get("call_kind"),
+                    "encodable": bool(c.get("encodable")),
+                    "compile_reason": c.get("compile_reason"),
+                    "negated": c.get("negated"),
+                    "selector": bool(c.get("selector")),
+                    "corpus": "coreruleset",
+                },
+                sort_keys=True,
             )
+            for c in compiled
+        ),
+    )
 
     report = {
         "schema_version": "1",
@@ -1808,8 +1839,9 @@ def measure_coreruleset_full(out_dir: Path) -> dict[str, Any] | None:
             for c in compiled
         ],
     }
-    (out_dir / "coreruleset_encodable_fraction.json").write_text(
-        json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    atomic_write_text(
+        out_dir / "coreruleset_encodable_fraction.json",
+        json.dumps(report, indent=2, sort_keys=True) + "\n",
     )
     return report
 
@@ -1969,11 +2001,13 @@ def run_batch(
             if k != "records"  # keep batch_summary compact; full report on disk
         },
     }
-    (out_dir / "batch_pair_counts.json").write_text(
-        json.dumps(pair_counts, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    atomic_write_text(
+        out_dir / "batch_pair_counts.json",
+        json.dumps(pair_counts, indent=2, sort_keys=True) + "\n",
     )
-    (out_dir / "batch_summary.json").write_text(
-        json.dumps(batch, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    atomic_write_text(
+        out_dir / "batch_summary.json",
+        json.dumps(batch, indent=2, sort_keys=True) + "\n",
     )
 
     # Byte-identical fingerprint of triage+ndjson names for reproducibility smoke
@@ -1982,7 +2016,7 @@ def run_batch(
         for suffix in (f"{name}.ndjson",):
             p = out_dir / suffix
             blob += hashlib.sha256(p.read_bytes()).hexdigest() + "\n"
-    (out_dir / "batch_repro.sha256").write_text(blob, encoding="utf-8")
+    atomic_write_text(out_dir / "batch_repro.sha256", blob)
     return batch
 
 
@@ -2033,6 +2067,7 @@ def main(argv: list[str] | None = None) -> int:
         help="mutually exclusive legacy flag (rejected)",
     )
     args = ap.parse_args(argv)
+    assert_z3_pinned()
     if args.json_legacy:
         print("error: --json-legacy is mutually exclusive with batch NDJSON", file=sys.stderr)
         return 2

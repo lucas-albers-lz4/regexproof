@@ -27,6 +27,7 @@ import z3  # noqa: E402
 from regexproof.compiler import compile_pattern  # noqa: E402
 from regexproof.rule_diff.encode import shape5_constraints  # noqa: E402
 from regexproof.rule_diff.timeout_gate import fail_message, timeout_gate  # noqa: E402
+from regexproof.z3_pin import assert_z3_pinned  # noqa: E402
 
 OUT = ROOT / "properties" / "generated"
 TIMEOUT_MS = 10000
@@ -155,6 +156,7 @@ def family_crs_fold_44() -> dict:
 
 
 def main() -> int:
+    assert_z3_pinned()
     families = [
         family_gitleaks_trufflehog(),
         family_ids_evolution(),

@@ -40,6 +40,7 @@ from regexproof.batch.runner import (  # noqa: E402
 )
 from regexproof.regex_id import REGEX_ID_FORMULA_VERSION  # noqa: E402
 from regexproof.schemas import EXTRACTOR_SCHEMA_VERSION  # noqa: E402
+from regexproof.z3_pin import assert_z3_pinned  # noqa: E402
 
 OUT = ROOT / "properties" / "generated"
 
@@ -386,6 +387,7 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--corpus", required=True, choices=sorted(CORPUS_MANIFESTS))
     ap.add_argument("--assert-determinism", action="store_true")
     args = ap.parse_args(argv)
+    assert_z3_pinned()
     report = measure(args.corpus, assert_determinism=args.assert_determinism)
     if args.corpus in WAVE_CORPORA and report.get("unclassified_parse_errors"):
         return 2

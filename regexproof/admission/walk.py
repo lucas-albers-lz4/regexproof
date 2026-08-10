@@ -124,6 +124,7 @@ def walk_repo(root: Path | str, *, repo_name: str = "probe") -> dict[str, Any]:
     flag_counts: Counter[str] = Counter()
     patterns: list[str] = []
     per_file: dict[str, int] = {}
+    extractor_errors = 0
 
     for fp in _iter_files(root_p):
         rel = _rel(root_p, fp)
@@ -145,6 +146,7 @@ def walk_repo(root: Path | str, *, repo_name: str = "probe") -> dict[str, Any]:
                 try:
                     recs = extract_fn(text, rel)
                 except Exception:
+                    extractor_errors += 1
                     continue
                 if not recs:
                     continue
@@ -178,4 +180,5 @@ def walk_repo(root: Path | str, *, repo_name: str = "probe") -> dict[str, Any]:
         "construct_counts": constructs,
         "predicted_buckets": predict_buckets(dict(merged)),
         "repo_name": repo_name,
+        "extractor_errors": extractor_errors,
     }

@@ -99,6 +99,7 @@ def build_draft(
             "predicted_buckets": walked["predicted_buckets"],
             "security_boundary": boundary,
             "pin": pin,
+            "extractor_errors": int(walked.get("extractor_errors") or 0),
         },
         "fields_remaining": list(FIELDS_REMAINING),
     }

@@ -47,14 +47,9 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import z3
 
 from regexproof.fuzz.adapters import real_accepts_argv
+from regexproof.z3_pin import assert_z3_pinned
 
-if not z3.get_version_string().startswith("5.0"):
-    print(
-        f"FATAL: z3-solver {z3.get_version_string()} — this harness is "
-        "validated against 5.0.x only. pip install -r requirements.txt",
-        file=sys.stderr,
-    )
-    sys.exit(3)
+assert_z3_pinned()
 
 # Namespace for --mirror-expr: the z3py API (same names z3-verify.py uses).
 # NOTE: no Opt — z3py's Opt is the optimizer class, not regex optional.

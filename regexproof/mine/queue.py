@@ -4,10 +4,11 @@ from __future__ import annotations
 
 import json
 import os
-import tempfile
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
+
+from regexproof.io_atomic import atomic_write_text
 
 DEFAULT_QUEUE_CAP = 100
 DEFAULT_TTL_DAYS = 90
@@ -44,22 +45,8 @@ def load_queue(path: Path | str | None = None) -> dict[str, Any]:
 
 
 def save_queue(path: Path | str, queue: dict[str, Any]) -> None:
-    p = Path(path)
-    p.parent.mkdir(parents=True, exist_ok=True)
     text = json.dumps(queue, indent=2, sort_keys=True, ensure_ascii=False) + "\n"
-    fd, tmp = tempfile.mkstemp(prefix=f".{p.name}.", suffix=".tmp", dir=p.parent)
-    try:
-        with os.fdopen(fd, "w", encoding="utf-8") as f:
-            f.write(text)
-            f.flush()
-            os.fsync(f.fileno())
-        os.replace(tmp, p)
-    except Exception:
-        try:
-            os.unlink(tmp)
-        except OSError:
-            pass
-        raise
+    atomic_write_text(path, text)
 
 
 def _parse_pushed(pushed_date: str) -> date | None:

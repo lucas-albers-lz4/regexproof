@@ -201,7 +201,24 @@ def test_walk_skips_symlink_files(tmp_path: Path):
     (repo / "evil.py").symlink_to(outside / "evil.py")
     walked = walk_repo(repo, repo_name="symlink-probe")
     assert walked["regex_sites"] == 0
+    assert walked["extractor_errors"] == 0
     assert _MAX_FILE_BYTES == 2_000_000
+
+
+def test_walk_counts_extractor_errors(tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
+    """Extractor exceptions are counted, not silently dropped (#188)."""
+    from regexproof.admission import walk as walk_mod
+
+    def boom(_src: str, _rel: str):
+        raise RuntimeError("extractor blew up")
+
+    monkeypatch.setattr(walk_mod, "_extractors_for", lambda _fp: [boom])
+    repo = tmp_path / "repo"
+    repo.mkdir()
+    (repo / "x.py").write_text("import re\n", encoding="utf-8")
+    walked = walk_repo(repo, repo_name="err-probe")
+    assert walked["regex_sites"] == 0
+    assert walked["extractor_errors"] == 1
 
 
 def test_boundary_path_sample_skips_symlinks(tmp_path: Path):

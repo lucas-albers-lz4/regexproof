@@ -6,6 +6,8 @@ import json
 from pathlib import Path
 from typing import Any
 
+from regexproof.io_atomic import atomic_write_lines, atomic_write_text
+
 # Per-finding metadata keys aligned with docs/REPORTING.md / Phase-3 pilot rows.
 _FINDING_META_KEYS = (
     "regex_id",
@@ -56,13 +58,13 @@ def redact_witness(witness: object) -> object:
 
 
 def write_ndjson(path: Path, records: list[dict[str, Any]]) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    with path.open("w", encoding="utf-8") as fh:
-        for rec in sorted(records, key=lambda r: (r.get("regex_id") or "", r.get("kind") or "")):
-            payload = dict(rec)
-            if "witness" in payload:
-                payload["witness"] = redact_witness(payload.get("witness"))
-            fh.write(json.dumps(payload, sort_keys=True) + "\n")
+    lines: list[str] = []
+    for rec in sorted(records, key=lambda r: (r.get("regex_id") or "", r.get("kind") or "")):
+        payload = dict(rec)
+        if "witness" in payload:
+            payload["witness"] = redact_witness(payload.get("witness"))
+        lines.append(json.dumps(payload, sort_keys=True))
+    atomic_write_lines(path, lines)
 
 
 def _yaml_scalar(value: object) -> str:
@@ -178,5 +180,4 @@ def write_markdown(path: Path, *, corpus: str, findings: list[dict[str, Any]]) -
                 "",
             ]
         )
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text("\n".join(lines), encoding="utf-8")
+    atomic_write_text(path, "\n".join(lines))

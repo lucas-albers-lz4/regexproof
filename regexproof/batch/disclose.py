@@ -10,6 +10,8 @@ import json
 from pathlib import Path
 from typing import Any
 
+from regexproof.io_atomic import atomic_write_text
+
 SECURITY_TOOL_CORPORA = frozenset(
     {
         "gitleaks",
@@ -67,8 +69,9 @@ def write_pr_dry_run(
     if approved:
         # Even with approval, this helper only records intent — no network publish.
         artifact["publish_intent"] = "human_approved_recorded"
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(artifact, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    atomic_write_text(
+        path, json.dumps(artifact, indent=2, sort_keys=True) + "\n"
+    )
     return artifact
 
 

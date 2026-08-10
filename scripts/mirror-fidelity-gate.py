@@ -46,6 +46,7 @@ from regexproof.fuzz.adapters import (  # noqa: E402
     real_accepts_perl,
     real_accepts_yara,
 )
+from regexproof.z3_pin import assert_z3_pinned  # noqa: E402
 
 OUT = ROOT / "properties" / "generated" / "mirror_fidelity_gate.json"
 FIXTURES = ROOT / "sweep" / "corpus-wave2" / "fixtures"
@@ -574,9 +575,7 @@ def main(argv: list[str] | None = None) -> int:
     )
     args = ap.parse_args(argv)
 
-    if not z3.get_version_string().startswith("5.0"):
-        print("FATAL: need z3-solver 5.0.x", file=sys.stderr)
-        return 3
+    assert_z3_pinned()
 
     # Wave-3 runs never pass via synthetic fallback.
     disable_fallback = bool(args.disable_fallback or args.wave3_only)
