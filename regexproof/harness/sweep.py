@@ -159,8 +159,10 @@ def sha256_file(path: Path) -> str:
 
 def build_manifest(commit: str, paths: list[Path], root: Path) -> dict:
     """Versioned corpus manifest (schema from Phase 1: commit + paths +
-    hashes). Paths are REPO-RELATIVE (verification works from any checkout —
-    luna r1 on #234)."""
+    hashes). Paths are REPO-RELATIVE. `commit` is the CORPUS commit (the last
+    commit touching the corpus files — stable across sweep runs; pinning HEAD
+    is self-invalidating since committing the refreshed manifest changes
+    HEAD, luna r2 on #234)."""
     return {
         "schema_version": 1,
         "commit": commit,
@@ -169,6 +171,18 @@ def build_manifest(commit: str, paths: list[Path], root: Path) -> dict:
             for p in paths
         ],
     }
+
+
+def corpus_commit(root: Path, paths: list[Path]) -> str:
+    """The last commit touching the corpus files (stable — the sweep does not
+    modify the corpus, so this does not change when the manifest is
+    committed)."""
+    out = subprocess.run(
+        ["git", "log", "-1", "--format=%H", "--"] +
+        [str(p.relative_to(root)) for p in paths],
+        cwd=root, capture_output=True, text=True,
+    )
+    return out.stdout.strip()
 
 
 def verify_manifest(manifest: dict, root: Path) -> list[str]:
@@ -249,7 +263,13 @@ def triage_audit(records: list[dict], manifest: dict, root: Path) -> dict:
     for rec in records:
         if rec.get("disagreement"):
             tr = rec.get("triage") or {}
-            sha_ok = bool(re.fullmatch(r"[0-9a-f]{64}", str(tr.get("sha256") or "")))
+            # 'explained' is FILE-BACKED: the sha256 must hash an existing
+            # repository file (the committed triage record) — a fabricated or
+            # shape-only hash fails (luna r2 on #234)
+            sha = str(tr.get("sha256") or "")
+            record_path = (root / str(tr.get("record_path") or "")).resolve()
+            sha_ok = bool(re.fullmatch(r"[0-9a-f]{64}", sha)) and \
+                record_path.is_file() and sha256_file(record_path) == sha
             reason_ok = bool(tr.get("reason")) and len(str(tr["reason"])) > 10
             if sha_ok and reason_ok:
                 explained += 1

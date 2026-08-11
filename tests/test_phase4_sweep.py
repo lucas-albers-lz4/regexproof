@@ -178,6 +178,19 @@ def test_manifest_missing_file_detected(tmp_path):
     assert verify_manifest(m, tmp_path) == ["a.txt: missing"]
 
 
+def test_corpus_commit_is_stable_sha():
+    # the corpus commit is the last commit touching the corpus files — a
+    # 40-hex sha that does NOT track the sweep's own HEAD (luna r2 on #234)
+    from regexproof.harness.sweep import corpus_commit
+
+    ROOT = Path(__file__).resolve().parents[1]
+    commit = corpus_commit(ROOT, [ROOT / "README.md"])
+    assert len(commit) == 40
+    import re
+
+    assert re.fullmatch(r"[0-9a-f]{40}", commit)
+
+
 # --- metric 8 + D10 + triage audit + U9 -------------------------------------
 def test_metric8_disjoint_classes():
     # re.loop-cap and absent are cvc5-side abstentions — NEVER noodler-only
@@ -216,18 +229,26 @@ def test_d10_decision_records():
     assert "NO-DECIDED-PAIRS" in d3["decision"]
 
 
-def test_triage_audit_explained_is_enforced():
+def test_triage_audit_explained_is_enforced(tmp_path):
+    # 'explained' is FILE-BACKED (luna r2 on #234): the sha256 must hash an
+    # existing repository file (the committed triage record).
+    rec_file = tmp_path / "triage-record.json"
+    rec_file.write_text("{}")
+    good_sha = hashlib.sha256(rec_file.read_bytes()).hexdigest()
     records = [
         {"name": "a", "disagreement": True,
-         "triage": {"sha256": "ab" * 32, "reason": "cvc5 re-loop parse gap (17)"}},
+         "triage": {"sha256": good_sha, "record_path": rec_file.name,
+                    "reason": "cvc5 re-loop parse gap (17) — verified"}},
         {"name": "b", "disagreement": True,
-         "triage": {"sha256": "not-a-hash", "reason": "long enough reason text"}},
+         "triage": {"sha256": "ab" * 32, "record_path": rec_file.name,
+                    "reason": "long enough reason text"}},  # hash mismatch
         {"name": "c", "disagreement": True,
-         "triage": {"sha256": "ab" * 32, "reason": "short"}},
+         "triage": {"sha256": good_sha, "record_path": rec_file.name,
+                    "reason": "short"}},  # reason too short
         {"name": "d", "disagreement": True},
         {"name": "e", "disagreement": False},
     ]
-    audit = triage_audit(records, {"files": []}, Path("."))
+    audit = triage_audit(records, {"files": []}, tmp_path)
     assert audit["disagreements"] == 4
     assert audit["explained"] == 1
     assert audit["unexplained"] == ["b", "c", "d"]

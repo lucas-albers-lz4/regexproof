@@ -35,7 +35,8 @@ from z3 import (Concat, Contains, InRe, Length, Range, Re, Star, String,  # noqa
 
 from regexproof.harness import core  # noqa: E402
 from regexproof.harness.sweep import (build_manifest, classify,  # noqa: E402
-                                      d10_decision, divergence_rate, metric8,
+                                      corpus_commit, d10_decision,
+                                      divergence_rate, metric8,
                                       render_report, triage_audit,
                                       u9_publication, verify_manifest)
 
@@ -95,14 +96,12 @@ def main() -> int:
     cvc5_sp = Path("/tmp/cvc5venv/lib/python3.13/site-packages")
     if cvc5_sp.is_dir():
         os.environ["PYTHONPATH"] = str(cvc5_sp)
-    commit = subprocess.run(
-        ["git", "rev-parse", "HEAD"], cwd=HERE, capture_output=True, text=True
-    ).stdout.strip()
+    commit = corpus_commit(HERE, corpus_files())
+    print(f"corpus commit: {commit}")
 
-    # 1) CONSUME the committed manifest: verify against disk + commit match.
-    #    Consumption is STRICT (stale commit fails); `--refresh` downgrades
-    #    the commit check to a warning so the author can re-pin HEAD.
-    refresh = "--refresh" in sys.argv
+    # 1) CONSUME the committed manifest: verify against disk + corpus-commit
+    #    match (the corpus commit is stable — the sweep does not modify the
+    #    corpus, so committing the refreshed manifest does NOT invalidate it).
     committed = OUT / "corpus-manifest.json"
     if committed.is_file():
         cm = json.loads(committed.read_text())
@@ -112,14 +111,9 @@ def main() -> int:
                   file=sys.stderr)
             return 1
         if cm.get("commit") != commit:
-            msg = (f"committed manifest pins {cm.get('commit')} but HEAD is "
-                   f"{commit}")
-            if refresh:
-                print(f"NOTE: {msg} — refreshing (--refresh)", file=sys.stderr)
-            else:
-                print(f"{msg} — re-run with --refresh to re-pin",
-                      file=sys.stderr)
-                return 1
+            print(f"committed manifest pins {cm.get('commit')} but the corpus "
+                  f"commit is {commit} — re-run to refresh", file=sys.stderr)
+            return 1
     manifest = build_manifest(commit, corpus_files(), HERE)
 
     # 2) DERIVE the inventory from the committed matrix + assert coverage
@@ -161,13 +155,29 @@ def main() -> int:
     d10 = divergence_rate([r["result"] for r in records])
     d10dec = d10_decision(d10)
     audit = triage_audit(records, manifest, HERE)
+    # U9 evidence derived from the COMMITTED Phase-1 pilot artifact (the six
+    # fwlive patterns + their mirror comparisons — never hardcoded)
+    pilot = json.loads(
+        (HERE / "sweep" / "harness-backends" / "p1-baseline" /
+         "ecma-pilot.json").read_text()
+    )
+    mirror_divergences = sum(
+        len(p.get("real_vs_mirror") or []) for p in pilot
+    )
     evidence = {
         "divergence": d10,
         "d10_decision": d10dec["decision"],
-        "fwlive_patterns_mirror_expressible": 6,  # the Phase-1 pilot inventory
+        "fwlive_patterns": [p.get("pattern") for p in pilot],
+        "fwlive_pattern_count": len(pilot),
+        "pilot_mirror_divergences": mirror_divergences,
         "measured_matrix_rows": len(json.loads(MATRIX_JSON.read_text())),
     }
-    u9 = u9_publication(U9_DECISION, reopen_trigger_hit=False, evidence=evidence)
+    # The reopen trigger is an EXPLICIT input (`--reopen-trigger`): the sweep
+    # is not a pattern-discovery tool (D14/Phase 5 is); a NEW fwlive pattern
+    # lacking a standard-encoding mirror is detected there and passed here.
+    u9 = u9_publication(U9_DECISION,
+                        reopen_trigger_hit="--reopen-trigger" in sys.argv,
+                        evidence=evidence)
     report = render_report(manifest, records, m8, d10, d10dec, audit, u9)
 
     # 4) S14 enforcement: any unexplained disagreement FAILS the sweep
