@@ -124,12 +124,18 @@ def run_noodler(smt, timeout_ms):
         return "DISPATCH-ERROR", 0.0, None, str(e)[:80]
     dt = (time.perf_counter() - t0) * 1000
     lines = [ln for ln in out.splitlines() if ln.strip() in ("sat", "unsat", "unknown")]
-    verdict = lines[0] if lines else "NO-VERDICT"
-    # S13 classification: explicit abstention states, not bare exit codes
-    if verdict == "NO-VERDICT":
-        if rc == 139:
-            verdict = "ABSTAIN-SIGSEGV"
-        elif rc != 0:
+    verdict = lines[0] if lines else None
+    # S13 classification, applied literally: a SIGSEGV'd solver's output is not
+    # trustworthy even with a stray verdict line; exit-1-with-verdict is valid
+    # (get-model-after-unsat class); exit-0-without-verdict is an abstain state.
+    if rc == 139:
+        verdict = "ABSTAIN-SIGSEGV"
+    elif verdict is None:
+        if rc == 0:
+            verdict = "ABSTAIN-NO-VERDICT"
+        elif rc == 1:
+            verdict = "DISPATCH-ERROR(rc=1)"
+        else:
             verdict = f"DISPATCH-ERROR(rc={rc})"
     wit = parse_noodler_model(out) if verdict == "sat" else None
     return verdict, dt, wit, rc
@@ -160,7 +166,7 @@ def run_cvc5(smt, timeout_ms):
             return verdict, float(ms), None
         if line.startswith("E "):
             return "PARSE-ERROR", 0.0, line[2:][:80]
-        return "NO-VERDICT", 0.0, line[:80]
+        return "ABSTAIN-NO-VERDICT", 0.0, line[:80]
     except Exception as e:
         return "DISPATCH-ERROR", 0.0, str(e)[:80]
 
