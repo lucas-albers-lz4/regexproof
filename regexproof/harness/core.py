@@ -228,6 +228,7 @@ def run_one(name, entry, require_ground_truth=False):
         result["result"] = SolveResult.TIMEOUT.value
         result["not_proven"] = True
         result["ok"] = False
+        result.setdefault("state", "not-proven")  # §10 state; fallback markers survive
         print(
             f"[TIMEOUT] {name}: unknown ({entry['timeout_ms']}ms) — "
             "HARD FAILURE (not proven)"
@@ -235,6 +236,7 @@ def run_one(name, entry, require_ground_truth=False):
         return result
     result["result"] = SolveResult.UNSAT.value if r == unsat else SolveResult.SAT.value
     result["ok"] = (r == unsat) == entry["expect_unsat"]
+    result.setdefault("state", "stock")  # §10 state; fallback markers survive
     tag = "UNSAT (property HOLDS)" if r == unsat else "SAT (counterexample)"
     print(f"[{'PASS' if result['ok'] else 'FAIL'}] {name}: {tag}  [{result['wall_ms']:.1f}ms]")
     print(f"    domain: {entry['domain']}")
