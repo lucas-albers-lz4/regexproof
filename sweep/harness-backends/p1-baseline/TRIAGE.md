@@ -19,3 +19,10 @@ escaping artifact, not a model difference).
 No wrong-verdict signal in any row: all three DIFFs re-assert `sat` in stock z3
 against the property formula (D16 — the re-validation gate that Phase 2 ships as a
 runner feature; the baseline comparison is the pre-runner calibration).
+
+**S11 cvc5 note (run 8, 2026-08-11):** the cvc5 worker on the re.loop text is
+NONDETERMINISTIC between runs — PARSE-ERROR ("Symbol 're.loop' not declared") in
+runs 6-7, ABSTAIN-SIGSEGV (worker rc -11) in run 8. This is the documented
+batch-segfault class (design D2): the cvc5 C++ library crashes on some inputs it
+cannot parse. Both outcomes are abstentions; the worker containment is the design
+behavior — a crash is recorded, never propagated, never a verdict.
