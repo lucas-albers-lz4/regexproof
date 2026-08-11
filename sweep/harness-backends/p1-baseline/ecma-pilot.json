@@ -1,0 +1,139 @@
+[
+ {
+  "pattern": "NON_FIREWALL_PREFIX",
+  "source": "^(dnsmasq|procd|ubusd|netifd|odhcpd|logd|dropbear|uhttpd|hostapd|wpad)([^A-Za-z0-9_]|$)",
+  "flags": "i",
+  "corpus": 937,
+  "real_vs_ecma": [],
+  "real_vs_mirror": [],
+  "ecma_vs_mirror": [],
+  "ecma_abstains": [
+   "logd\t",
+   "logd ",
+   "logd:",
+   "logd=",
+   "wpad\t",
+   "wpad ",
+   "wpad.",
+   "wpad:",
+   "wpad=",
+   "procd\t"
+  ],
+  "ecma_abstain_count": 41,
+  "ecma_abstain_reasons": {
+   "unknown/rc=0": 41
+  }
+ },
+ {
+  "pattern": "FIREWALL_HINT",
+  "source": "(^|[^A-Za-z0-9_])(fw4|nft|iptables|kernel|firewall)([^A-Za-z0-9_]|$)",
+  "flags": "i",
+  "corpus": 937,
+  "real_vs_ecma": [],
+  "real_vs_mirror": [],
+  "ecma_vs_mirror": [],
+  "ecma_abstains": [
+   "\tfw4",
+   "\tnft",
+   " fw4",
+   " nft",
+   "fw4\t",
+   "fw4 ",
+   "fw4:",
+   "fw4=",
+   "nft\t",
+   "nft "
+  ],
+  "ecma_abstain_count": 30,
+  "ecma_abstain_reasons": {
+   "unknown/rc=0": 30
+  }
+ },
+ {
+  "pattern": "ACTION_RE",
+  "source": "(^|[^A-Za-z0-9_])(ACCEPT|ALLOW|PASS|DROP|REJECT|DENY|BLOCK)([^A-Za-z0-9_]|$)",
+  "flags": "i",
+  "corpus": 937,
+  "real_vs_ecma": [],
+  "real_vs_mirror": [],
+  "ecma_vs_mirror": [],
+  "ecma_abstains": [
+   "\tDENY",
+   "\tDROP",
+   "\tPASS",
+   " DENY",
+   " DROP",
+   " PASS",
+   "DENY\t",
+   "DENY ",
+   "DENY:",
+   "DENY="
+  ],
+  "ecma_abstain_count": 42,
+  "ecma_abstain_reasons": {
+   "unknown/rc=0": 42
+  }
+ },
+ {
+  "pattern": "DENY_ACTION",
+  "source": "(^|[^A-Za-z0-9_])(DROP|REJECT|DENY|BLOCK)([^A-Za-z0-9_]|$)",
+  "flags": "i",
+  "corpus": 937,
+  "real_vs_ecma": [],
+  "real_vs_mirror": [],
+  "ecma_vs_mirror": [],
+  "ecma_abstains": [
+   "\tDENY",
+   "\tDROP",
+   " DENY",
+   " DROP",
+   "DENY\t",
+   "DENY ",
+   "DENY:",
+   "DENY=",
+   "DROP\t",
+   "DROP "
+  ],
+  "ecma_abstain_count": 24,
+  "ecma_abstain_reasons": {
+   "unknown/rc=0": 24
+  }
+ },
+ {
+  "pattern": "TCP_FLAG_TAIL",
+  "source": "\\b(SYN|ACK|FIN|RST|PSH|URG)(?:\\s+(?:SYN|ACK|FIN|RST|PSH|URG))*\\s*$",
+  "flags": "i",
+  "corpus": 937,
+  "real_vs_ecma": [],
+  "real_vs_mirror": [],
+  "ecma_vs_mirror": [],
+  "ecma_abstains": [
+   "ACK",
+   "FIN",
+   "PSH",
+   "RST",
+   "SYN",
+   "URG",
+   "ack",
+   "fin",
+   "psh",
+   "rst"
+  ],
+  "ecma_abstain_count": 26,
+  "ecma_abstain_reasons": {
+   "unknown/rc=0": 26
+  }
+ },
+ {
+  "pattern": "NETFILTER_KV_GLUE",
+  "source": "([^\\s])(?=(IN|OUT|SRC|DST|PROTO|SPT|DPT|LEN|MAC|TYPE|CODE|TTL|TOS|PREC|DF)=)",
+  "flags": "g",
+  "corpus": 937,
+  "real_vs_ecma": [],
+  "real_vs_mirror": [],
+  "ecma_vs_mirror": [],
+  "ecma_abstains": [],
+  "ecma_abstain_count": 0,
+  "ecma_abstain_reasons": {}
+ }
+]
