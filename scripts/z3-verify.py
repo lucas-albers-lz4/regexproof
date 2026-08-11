@@ -13,8 +13,11 @@ Usage:
   python3 z3-verify.py --all --json-legacy   # one-release JSON array mode
   python3 z3-verify.py --check-mutation-coverage
 
-Exit code: 0 = all pass; 1 = any FAIL/TIMEOUT/coverage gap;
-2 = unknown property names / flag conflict on the CLI; 3 = wrong z3-solver version.
+Exit code (design #213 §10 operator contract): 0 = all results recorded
+(proven, findings, or recorded fallback); 1 = any not-proven (unknown/abstain,
+per #186) or a coverage/domain gate failure; 2 = CLI errors (unknown property
+names / flag conflict); 3 = wrong z3-solver version. Disagreement exit 2 (per
+the design's §10) lands in Phase 3 (#219) and is distinct from CLI-error 2.
 
 --require-ground-truth: any SAT (counterexample) result MUST have replayed
 its witness against the real implementation via the property's ground_truth

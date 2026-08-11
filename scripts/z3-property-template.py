@@ -12,8 +12,10 @@ spike). Copy and adapt:
 Run: python3 scripts/z3-property-template.py
 Read docs/TRAPS.md before changing anything.
 
-TIMEOUT / FAIL are hard failures (exit 1). A harness that cannot fail proves
-nothing — see docs/SECURITY-AUDIT.md and issue #169.
+TIMEOUT (not-proven) is the only hard-failure exit (1, per #186 and the design's
+§10 operator contract). A FAILED check RECORDS its verdict — the finding is the
+deliverable and is visible in the output; the exit stays 0. A harness that cannot
+fail proves nothing — see docs/SECURITY-AUDIT.md and issue #169.
 """
 
 from __future__ import annotations
@@ -32,11 +34,13 @@ from regexproof.z3_pin import assert_z3_pinned
 _Z3_VERSION = assert_z3_pinned()
 
 _failures = 0
+_timeouts = 0
 
 
 def check(name, constraints, bad, expect_unsat=True, timeout_ms=30000):
-    """UNSAT = property holds; SAT = counterexample (with model); unknown = timeout (hard fail)."""
-    global _failures
+    """UNSAT = property holds; SAT = counterexample (with model); unknown =
+    timeout = NOT-PROVEN (the only exit-1 condition, §10 operator contract)."""
+    global _failures, _timeouts
     s = Solver()
     s.set("timeout", timeout_ms)
     for c in constraints:
@@ -45,12 +49,14 @@ def check(name, constraints, bad, expect_unsat=True, timeout_ms=30000):
     r = s.check()
     if r == unknown:
         print(f"[TIMEOUT] {name}: unknown (solver timeout {timeout_ms}ms)")
-        _failures += 1
+        _timeouts += 1
         return None
     ok = (r == unsat) == expect_unsat
     tag = "UNSAT (property HOLDS)" if r == unsat else "SAT (counterexample)"
     print(f"[{'PASS' if ok else 'FAIL'}] {name}: {tag}")
     if not ok:
+        # FAILED = RECORDED verdict (a finding) — visible in the output,
+        # exit-0 per §10 (0 = result recorded; 1 = not-proven only)
         _failures += 1
     if r == sat:
         m = s.model()
@@ -156,9 +162,15 @@ def main() -> int:
     )
 
     print("done")
-    if _failures:
-        print(f"FAIL: {_failures} property failure(s)", file=sys.stderr)
+    if _timeouts:
+        print(f"NOT-PROVEN: {_timeouts} timeout(s) — exit 1 per #186/§10",
+              file=sys.stderr)
         return 1
+    if _failures:
+        # recorded findings — the FAIL output above IS the deliverable (§10:
+        # 0 = result recorded; the failure is in the records, not the exit)
+        print(f"RECORDED: {_failures} property failure(s) (findings, exit 0)",
+              file=sys.stderr)
     return 0
 
 

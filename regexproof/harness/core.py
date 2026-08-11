@@ -210,10 +210,9 @@ def run_one(name, entry, require_ground_truth=False):
         r = _run_one_noodler(name, entry, constraints, bad, engines, result)
         if r is not None:
             return r
-        # None = binary absent: the absence is recorded and the property falls
-        # through to the STOCK path — exit unchanged from stock (AC: absence
-        # recorded, stock environments stay green).
-        result["state"] = "noodler-absent"
+        # None = binary absent: the absence is recorded (triage_fallback) and
+        # the property falls through to the STOCK path — the §10 state is the
+        # stock outcome (stock / not-proven), exit unchanged from stock.
         print(f"[ABSENT] {name}: Noodler binary not available — triage_fallback "
               "recorded, running the stock path (exit unchanged from stock)")
     s = Solver()
@@ -342,8 +341,11 @@ def _run_one_noodler(name, entry, constraints, bad, engines, result):
                          binary=binary)
     except NoodlerAbsent as e:
         # absence is recorded state, never a failure: the caller falls through
-        # to the stock path (exit unchanged from stock)
+        # to the stock path (exit unchanged from stock); §10 marks the record
+        # triage_fallback and the STOCK result's state stands (stock or
+        # not-proven if the stock run times out)
         result["noodler_verdict"] = "ABSENT"
+        result["triage_fallback"] = True
         result["triage_override"] = str(e)
         return None
     result["noodler_verdict"] = nd["verdict"]

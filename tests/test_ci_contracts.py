@@ -225,8 +225,11 @@ def test_z3_property_template_exits_zero_on_pass():
     assert "[FAIL]" not in proc.stdout
 
 
-def test_z3_property_template_exits_nonzero_on_forced_fail(tmp_path: Path):
-    """Mutation guard for the gate itself: a flipped expect must exit 1."""
+def test_z3_property_template_forced_fail_records_exit_zero(tmp_path: Path):
+    """Mutation guard for the gate itself, per the §10 operator contract
+    (design rev 7): a flipped expect RECORDS its verdict (a finding) and exits
+    0 — only not-proven exits 1. The failure is visible in the record
+    (ok=False), not the exit code."""
     src = (ROOT / "scripts" / "z3-property-template.py").read_text(encoding="utf-8")
     # Flip the shape-5 control (expect_unsat=True) to expect SAT → FAIL.
     mutated = src.replace(
@@ -244,7 +247,10 @@ def test_z3_property_template_exits_nonzero_on_forced_fail(tmp_path: Path):
         capture_output=True,
         text=True,
     )
-    assert proc.returncode == 1, proc.stdout + proc.stderr
+    # §10: the FAILED property RECORDED its verdict → exit 0 (a finding is the
+    # deliverable; the old FAIL=1 convention is superseded by the design's
+    # exact exit-code table — see #213 rev 7 §10 and #218 PR C).
+    assert proc.returncode == 0, proc.stdout + proc.stderr
     assert "[FAIL]" in proc.stdout or "FAIL:" in proc.stderr
 
 

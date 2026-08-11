@@ -176,8 +176,9 @@ def test_d16_revalidates_matrix_fixtures(name):
 
 # --- absence path ------------------------------------------------------------
 def test_absent_binary_falls_back_to_stock(monkeypatch, capsys):
-    # Absence contract (AC): triage_fallback recorded, exit unchanged from
-    # stock — the property STILL RUNS through the stock path.
+    # Absence contract (AC + §10): triage_fallback recorded, the STATE is the
+    # stock outcome, exit unchanged from stock — the property STILL RUNS
+    # through the stock path.
     import regexproof.harness.properties  # noqa: F401
 
     def _absent():
@@ -189,9 +190,10 @@ def test_absent_binary_falls_back_to_stock(monkeypatch, capsys):
     entry = _noodler_entry("P1-mutated-star")
     result = core.run_one("P1-mutated-star", entry)
     # stock fallback: P1-mutated-star is a mutation guard — sat expected, ok True
-    assert result["state"] == "noodler-absent"
+    assert result["triage_fallback"] is True
     assert result["triage_override"].startswith("NOODLER not found")
     assert result["noodler_verdict"] == "ABSENT"
+    assert result["state"] == "stock"  # the STOCK outcome state (§10)
     assert result["result"] == "sat"  # the STOCK verdict, not an abstain
     assert result["ok"] is True  # exit unchanged from stock
     assert "running the stock path" in capsys.readouterr().out
