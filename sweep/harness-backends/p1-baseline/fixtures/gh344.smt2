@@ -1,0 +1,4 @@
+(declare-const x Int)
+(declare-fun a () String)
+(assert (= (str.++ a (str.from_int x)) (str.replace_re (str.++ a (str.from_int 1)) (re.union (str.to_re "") (str.to_re (str.from_int 1))) (str.from_code 0))))
+(check-sat)
