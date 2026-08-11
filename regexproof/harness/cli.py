@@ -132,7 +132,11 @@ def main(argv=None):
     # §10 operator contract (design rev 7, luna-final): 0 = result recorded
     # (proven, finding, or recorded fallback — a FAILED property still RECORDED
     # its verdict); 1 = any not-proven (unknown/abstain, per #186) or a
-    # coverage/domain gate failure. Disagreement = 2 is Phase 3 (#219).
+    # coverage/domain gate failure; 2 = DISAGREEMENT HARD FAIL (D15 — distinct
+    # from not-proven so triage tooling can filter; the per-record
+    # `disagreement` field is the machine filter).
+    if any(r.get("disagreement") for r in results):
+        return 2
     return 1 if (not_proven_count or coverage_fail or domain_fail) else 0
 
 
