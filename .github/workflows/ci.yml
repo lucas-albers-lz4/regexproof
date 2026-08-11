@@ -168,6 +168,8 @@ jobs:
           python-version: "3.13"
       - name: Install package
         run: pip install -e ".[dev]"
+      - name: Install the cvc5 wheel (P6 scope — the cross-check leg runs)
+        run: pip install cvc5
       - name: Download pinned Noodler asset (sha256-verified, R5 policy)
         run: |
           curl -fsSL -o /tmp/z3-noodler \
@@ -185,7 +187,11 @@ jobs:
           r = json.loads(sys.stdin.read().splitlines()[-1])
           assert r.get('noodler_verdict') not in (None, 'ABSENT'), r
           assert r.get('state') == 'decided', r
-          print('noodler leg ran:', r.get('noodler_verdict'), 'ok=', r.get('ok'))
+          assert r.get('ok') is True, r            # the property HOLDS
+          assert r.get('result') == 'unsat', r
+          assert r.get('cross_check_absent') is not True, r  # cvc5 leg installed
+          print('noodler leg ran:', r.get('noodler_verdict'), 'ok=', r.get('ok'),
+                'cc=', r.get('cross_check_verdict') or r.get('cross_check_reason'))
           "
       - name: Stock-only suite stays green (noodler property treated as absent)
         run: |

@@ -638,6 +638,7 @@ tokenizer; escaped `\\p` literals pass.
 
 Popen reports signal deaths as NEGATIVE returncodes (-11 for SIGSEGV), so
 `rc == 139` (the bash 128+11 convention) NEVER fires for direct Popen. The
-runner's S13 rule: `rc < 0 or rc == 139` → signal death → output untrusted
-EVEN with a printed verdict. Only `rc 0/1` WITH a verdict is valid; anything
-else with a printed verdict is a DISPATCH-ERROR abstention.
+runner's S13 rule: `rc < 0 or rc == 139` → signal death → **ABSTAIN-SIGSEGV**
+(output untrusted EVEN with a printed verdict). Only `rc 0/1` WITH a verdict
+is valid; a NON-signal invalid rc (e.g. 2, 127) with a printed verdict is a
+**DISPATCH-ERROR** abstention — the two classes are distinct in the records.

@@ -6,8 +6,9 @@ the work by phase; dates are merge dates.
 
 ## Harness backends wave (2026-08-11)
 
-Design #213 closed at the APPROVE boundary (rev 7.2, U9 DROP). Phases 1-4
-merged as #222-#234:
+Design #213 closed at the APPROVE boundary (rev 7, U9 DROP; supersession notes
+rev 7.1/7.2 on the issue). Phases 1-4 merged as #222-#234 (this PR is #235, the
+CI bring-on):
 
 - **Phase 1 (#217)**: 28-row parity matrix (25/25 verdict parity; both
   timeout classes rescued to 17/19 ms), ECMA pilot (0 divergences on 5,622

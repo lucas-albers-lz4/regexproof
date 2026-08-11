@@ -31,15 +31,16 @@ def derive_tier(result: dict) -> str:
     route (optional, defaults 'mirror')."""
     backend = result.get("backend", "seq")
 
-    # abstain-aware: any abstention caps the tier (D5)
+    # abstain-aware: any abstention caps the tier (D5) — BUT the §10 absent
+    # fallback row comes FIRST: an absent backend's result is a STOCK result
+    # (seq-only evidence), even when the stock run is not-proven (luna r1 on
+    # #235 — the ordering must not derive escalated for the fallback)
+    if result.get("triage_fallback") or result.get("noodler_verdict") == "ABSENT":
+        return TIER_SEQ_ONLY
     if result.get("not_proven"):
         return TIER_SEQ_ONLY if backend == "seq" else TIER_ESCALATED
     if result.get("cross_check_abstained"):
         return TIER_ESCALATED
-    if result.get("triage_fallback") or result.get("noodler_verdict") == "ABSENT":
-        # §10 row: backend absent → the stock run's result IS the evidence →
-        # seq-only (never escalated — nothing escalated)
-        return TIER_SEQ_ONLY
     if result.get("noodler_verdict") == "unknown" or str(
         result.get("noodler_verdict", "")
     ).startswith("ABSTAIN"):

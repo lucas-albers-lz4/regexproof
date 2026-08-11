@@ -45,6 +45,15 @@ def test_derive_escalated_leg_absent():
     assert derive_tier(r) == TIER_ESCALATED  # cross-check leg absent
 
 
+def test_derive_fallback_not_proven_is_seq_only():
+    # §10 ordering (luna r1 on #235): an ABSENT backend whose stock fallback is
+    # not-proven still derives seq-only — the fallback's evidence is the stock
+    # result (never escalated by the D5 check).
+    r = {"backend": "noodler", "route": "mirror", "not_proven": True,
+         "noodler_verdict": "ABSENT", "triage_fallback": True}
+    assert derive_tier(r) == TIER_SEQ_ONLY
+
+
 def test_derive_cross_checked_agree():
     r = {"backend": "noodler", "route": "mirror", "not_proven": False,
          "noodler_verdict": "unsat", "cross_check_verdict": "unsat"}

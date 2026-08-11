@@ -48,7 +48,7 @@ approval.
 | cold download | ≤ 2 min | 0.83 s | ~144× |
 | per-property overhead | ≤ 2 s | ~16 ms | ~125× |
 | per-property total | ≤ 2 s | 11.8–69.4 ms | ~29×–125× |
-| CI wall-clock (escalated set) | ≤ 15% of stock | projected; **re-verified by the P4 noodler CI job on every run** (#220 PR B) | — |
+| CI wall-clock (escalated set) | ≤ 15% of stock | projected; the noodler CI job (#220 PR B) now exercises the escalated path on every run — the full escalated-set wall-clock comparison against the 15% threshold lands when the escalated set runs in CI (Phase 4's real measurement), not claimed from the single-fixture job | — |
 
 **CI logistics policy (normative):**
 - **Cache key**: the asset's sha256 (`22b19f12…464` for v1.6.1) — a version bump
