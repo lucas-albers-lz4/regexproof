@@ -12,6 +12,7 @@ from regexproof.harness.core import (
     check_domain_coverage,
     check_mutation_coverage,
     run_one,
+    validate_registry,
 )
 # Side-effect: register built-in properties
 import regexproof.harness.properties  # noqa: F401
@@ -25,6 +26,7 @@ def main(argv=None):
     as_json = "--json" in args
     as_json_legacy = "--json-legacy" in args
     check_cov_only = "--check-mutation-coverage" in args
+    skip_gates = "--skip-registration-gate" in args
     if as_json and as_json_legacy:
         print(
             "error: --json and --json-legacy are mutually exclusive",
@@ -41,10 +43,23 @@ def main(argv=None):
             "--json",
             "--json-legacy",
             "--check-mutation-coverage",
+            "--skip-registration-gate",
         )
     ]
     if check_cov_only:
         return check_mutation_coverage()
+    if not skip_gates:
+        failures, checked = validate_registry()
+        if failures:
+            for f in failures:
+                print(f"REGISTRATION GATE FAILURE: {f}", file=sys.stderr)
+            print(
+                f"registration gate: {len(failures)} failure(s) across "
+                f"{checked} pattern-declaring properties (pass "
+                "--skip-registration-gate to bypass)",
+                file=sys.stderr,
+            )
+            return 2
     if not args or "--all" in args:
         named = [a for a in args if a != "--all"]
         if named:

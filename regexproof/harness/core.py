@@ -105,6 +105,11 @@ def prop(
     family=None,
     input_domain=None,
     call_kind=None,
+    backend="seq",
+    decomposition_trace=None,
+    search_wrapped=False,
+    pattern=None,
+    pattern_flags="",
 ):
     """Decorator: register a property. The wrapped function returns the
     constraint list; the harness adds `bad` and checks satisfiability.
@@ -130,6 +135,20 @@ def prop(
     an ASCII mirror silently diverges). None = unstated (legacy default,
     backward compatible: properties written before this field pass as
     before). --require-domain makes an unstated domain a hard failure.
+    `backend`: "seq" (default, stock z3) or "noodler" (opt-in escalation via
+    the Noodler CLI runner — Phase 2 PR B). The runner is invoked only for
+    backend="noodler" properties; the binary must be present and pinned.
+    `decomposition_trace`: falsifiable tried-forms record (design U2) —
+    list of decomposition forms already attempted (e.g. ["alphabet",
+    "fullmatch-bounds", "per-alternative"]). Escalation to noodler is only
+    valid when the trace is non-empty and `decomposition_exhausted` semantics
+    hold. None = never decomposed.
+    `search_wrapped`: True when the property's pattern is used with search
+    semantics (the mirror is the `.*pat.*` wrapped form, design D7). The
+    registration gate (gates.validate_pattern) verifies the wrap shape.
+    `pattern` / `pattern_flags`: the SOURCE pattern text + flags, declared
+    when the property participates in the registration gates (\p gate +
+    D7 structural checks). None = no source pattern declared (gate skipped).
     """
     assert callable(ground_truth) or ground_truth is None, "ground_truth must be callable"
     if input_domain is not None:
@@ -150,6 +169,11 @@ def prop(
             "family": family or name.split("-")[0],
             "input_domain": input_domain,
             "call_kind": call_kind,
+            "backend": backend,
+            "decomposition_trace": decomposition_trace,
+            "search_wrapped": search_wrapped,
+            "pattern": pattern,
+            "pattern_flags": pattern_flags,
         }
         return fn
 
@@ -179,6 +203,7 @@ def run_one(name, entry, require_ground_truth=False):
         "wall_ms": None,
         "engine_versions": engines,
         "not_proven": False,  # True iff TIMEOUT — surfaced as "not proven"
+        "backend": entry.get("backend", "seq"),  # "seq" | "noodler" (additive, Phase 2)
     }
     s = Solver()
     s.set("timeout", entry["timeout_ms"])
@@ -245,6 +270,36 @@ def run_one(name, entry, require_ground_truth=False):
             )
             result["ok"] = False
     return result
+
+# ---------------------------------------------------------------------------
+# Registration validation (Phase 2 PR A — the \p gate + D7 structural gate)
+# ---------------------------------------------------------------------------
+def validate_registry(registry=None):
+    """Run the registration gates over every property that declares a source
+    pattern (gates.validate_pattern: \p gate + D7 anchored/wrap checks via the
+    Node/regexpp parser). Returns (failures: list[str], checked: int). Call
+    BEFORE running properties; the CLI does this by default."""
+    from regexproof.harness.gates import RegistrationError, validate_pattern
+
+    registry = REGISTRY if registry is None else registry
+    failures, checked = [], 0
+    for name, entry in sorted(registry.items()):
+        pat = entry.get("pattern")
+        if not pat:
+            continue
+        checked += 1
+        try:
+            validate_pattern(
+                pat,
+                entry.get("pattern_flags") or "",
+                anchored=(not entry.get("search_wrapped"))
+                and entry.get("kind") in ("property", "counterexample_finder"),
+                search_wrapped=bool(entry.get("search_wrapped")),
+            )
+        except RegistrationError as e:
+            failures.append(f"{name}: {e}")
+    return failures, checked
+
 
 # ---------------------------------------------------------------------------
 # Coverage checks
