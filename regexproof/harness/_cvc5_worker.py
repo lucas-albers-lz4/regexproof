@@ -26,7 +26,8 @@ def main():
     try:
         solver = cvc5.Solver()
         solver.setOption("tlimit-per", str(timeout_ms))
-        solver.setOption("produce-models", "true")
+        # no produce-models: the cross-check leg needs only the verdict
+        # (cumulative zen-MCR finding — memory saving on large formulas)
         sm = cvc5.SymbolManager(solver)
         parser = cvc5.InputParser(solver, sm)
         parser.setStringInput(cvc5.InputLanguage.SMT_LIB_2_6, smt, "q.smt2")

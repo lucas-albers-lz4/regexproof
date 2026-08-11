@@ -174,6 +174,80 @@ def test_d16_revalidates_matrix_fixtures(name):
     assert result["ok"] is True, result
 
 
+# --- ground-truth gate in the noodler sat path (cumulative zen-MCR finding) --
+def _sat_stub(monkeypatch, tmp_path):
+    """Stub the noodler binary: prints sat + the valid '_*' witness for
+    P1-mutated-star's constraints AND its bad (measured valid, D16 passes)."""
+    import regexproof.harness.noodler_runner as nr
+
+    stub = tmp_path / "sat.sh"
+    stub.write_text("#!/bin/bash\necho 'sat'\n"
+                    "echo '(define-fun u () String \"_*\")'\n")
+    stub.chmod(stub.stat().st_mode | 0o111)
+    monkeypatch.setattr(nr, "binary_path", lambda: str(stub))
+    monkeypatch.setattr(nr, "_VERIFIED_PATH", str(stub))
+    monkeypatch.setattr(nr, "noodler_version", lambda b=None: "stub")
+
+
+def test_noodler_sat_ground_truth_failed(monkeypatch, tmp_path):
+    # the noodler sat path honors the same --require-ground-truth contract as
+    # the stock path: a callback that FAILS to reproduce → ok=False
+    import regexproof.harness.properties  # noqa: F401
+    from regexproof.harness import cvc5_runner as cr
+
+    _sat_stub(monkeypatch, tmp_path)  # sat + witness '_*'
+    monkeypatch.setattr(cr, "run_cvc5",
+                        lambda smt, timeout_ms, **kw:
+                        {"verdict": "unsat", "wall_ms": 1.0,
+                         "state": "decided", "reason": None})
+    entry = dict(core.REGISTRY["P1-mutated-star"])
+    entry["backend"] = "noodler"
+    entry["kind"] = "property"  # NOT a mutation guard — the callback path runs
+    entry["ground_truth"] = lambda w: False  # real impl does NOT reproduce
+    r = core.run_one("P1-mutated-star", entry)
+    assert r["ground_truth"] == "failed"
+    assert r["ok"] is False  # a non-reproducing witness is never reported
+
+
+def test_noodler_sat_require_ground_truth_refused(monkeypatch, tmp_path):
+    # --require-ground-truth + no callback → refused-no-callback + ok=False
+    import regexproof.harness.properties  # noqa: F401
+    from regexproof.harness import cvc5_runner as cr
+
+    _sat_stub(monkeypatch, tmp_path)
+    monkeypatch.setattr(cr, "run_cvc5",
+                        lambda smt, timeout_ms, **kw:
+                        {"verdict": "unsat", "wall_ms": 1.0,
+                         "state": "decided", "reason": None})
+    entry = dict(core.REGISTRY["P1-mutated-star"])
+    entry["backend"] = "noodler"
+    entry["kind"] = "property"
+    entry["ground_truth"] = None
+    r = core.run_one("P1-mutated-star", entry, require_ground_truth=True)
+    assert r["ground_truth"] == "refused-no-callback"
+    assert r["ok"] is False
+
+
+def test_noodler_sat_ground_truth_reproduced(monkeypatch, tmp_path):
+    # a REPRODUCING callback keeps ok per the expectation (sat finding)
+    import regexproof.harness.properties  # noqa: F401
+    from regexproof.harness import cvc5_runner as cr
+
+    _sat_stub(monkeypatch, tmp_path)
+    monkeypatch.setattr(cr, "run_cvc5",
+                        lambda smt, timeout_ms, **kw:
+                        {"verdict": "unsat", "wall_ms": 1.0,
+                         "state": "decided", "reason": None})
+    entry = dict(core.REGISTRY["P1-mutated-star"])
+    entry["backend"] = "noodler"
+    entry["kind"] = "property"
+    entry["expect_unsat"] = False  # a counterexample finder
+    entry["ground_truth"] = lambda w: True
+    r = core.run_one("P1-mutated-star", entry)
+    assert r["ground_truth"] == "reproduced"
+    assert r["ok"] is True
+
+
 # --- absence path ------------------------------------------------------------
 def test_absent_binary_falls_back_to_stock(monkeypatch, capsys):
     # Absence contract (AC + §10): triage_fallback recorded, the STATE is the
