@@ -1,0 +1,46 @@
+{
+ "schema_version": 1,
+ "commit": "0e71c788ddfcd1c0c453648d4bc13077ba0491f4",
+ "files": [
+  {
+   "path": "sweep/harness-backends/p1-baseline/matrix.json",
+   "sha256": "41ca4f587ee4dc2aad51e1cd600bf3e62707a8fa82351a46d0594594caebda73"
+  },
+  {
+   "path": "sweep/harness-backends/p1-baseline/MATRIX.md",
+   "sha256": "71c251146eeb0f59dba24b642c4b885207f705d28274301f65fbd78217cf9c90"
+  },
+  {
+   "path": "sweep/harness-backends/p1-baseline/PIN.md",
+   "sha256": "ddc14f2cead01f649b2bf830baef919f1458ee9733ffaeb563cd105b6abdbe0d"
+  },
+  {
+   "path": "sweep/harness-backends/p1-baseline/TRIAGE.md",
+   "sha256": "6bda2caa3637b8b58fdd61017e833b99f0e083b1015722184cd107191acd2b6c"
+  },
+  {
+   "path": "sweep/harness-backends/p1-baseline/p-gate-table.md",
+   "sha256": "4135635320b7ea448ccce8b3768427b4f497f06ec1543189aae1cab8327ef995"
+  },
+  {
+   "path": "sweep/harness-backends/p1-baseline/blocker-probe.md",
+   "sha256": "cd38ec42784e0906a25c0c75373213d287e80539fb207eb6460adc54ac8e3631"
+  },
+  {
+   "path": "sweep/harness-backends/p1-baseline/r5-cost.md",
+   "sha256": "39189a2c4217fb70c118fae470748c4b70e2493e84dcc49f96180c64051a5a40"
+  },
+  {
+   "path": "sweep/harness-backends/p1-baseline/u9-decision.md",
+   "sha256": "a480cf05d7d2cc2b024912260a16d831ef558e9a6818d04ae570443cacb0fd89"
+  },
+  {
+   "path": "sweep/harness-backends/p1-baseline/ecma-pilot.json",
+   "sha256": "3c8b8a40ab3f440f6dce12ae11205920c0617ebee698daa3ec157bceb3e9b201"
+  },
+  {
+   "path": "sweep/harness-backends/p1-baseline/ecma-pilot.md",
+   "sha256": "87eda2dc29365a9d72aee119a1fe43c428602eb74b6fbb562050da788f56b1a1"
+  }
+ ]
+}

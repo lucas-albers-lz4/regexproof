@@ -1,0 +1,96 @@
+[
+ {
+  "name": "P2-len64",
+  "result": {
+   "schema_version": "1",
+   "name": "P2-len64",
+   "kind": "property",
+   "family": "P2",
+   "call_kind": null,
+   "domain": "ascii",
+   "input_domain": "ascii",
+   "expect_unsat": true,
+   "result": "unsat",
+   "ok": true,
+   "witness": {},
+   "ground_truth": null,
+   "wall_ms": 17.6,
+   "engine_versions": {
+    "python": "3.13.5",
+    "z3": "5.0.0",
+    "noodler": "Z3 version 4.16.0 - 64 bit - build hashcode dcce9d2d129e1ecc101946ef257aa7ed246d"
+   },
+   "not_proven": false,
+   "backend": "noodler",
+   "noodler_verdict": "unsat",
+   "noodler_rc": 1,
+   "noodler_wall_ms": 17.6,
+   "route": "mirror",
+   "cross_check_backend": "cvc5",
+   "cross_check_abstained": false,
+   "cross_check_verdict": "unsat",
+   "cross_check_wall_ms": 11.4,
+   "state": "decided"
+  },
+  "classification": {
+   "bucket": "proven",
+   "noodler_verdict": "unsat",
+   "cross_check_verdict": "unsat",
+   "cross_check_abstained": false,
+   "cross_check_absent": false,
+   "disagreement": false,
+   "witness_d16_valid": false
+  },
+  "cross_check_reason": null,
+  "disagreement": false,
+  "wrong_verdict_event": false,
+  "triage": null
+ },
+ {
+  "name": "P4-monolithic",
+  "result": {
+   "schema_version": "1",
+   "name": "P4-monolithic",
+   "kind": "property",
+   "family": "P4",
+   "call_kind": null,
+   "domain": "ascii",
+   "input_domain": "ascii",
+   "expect_unsat": true,
+   "result": "unsat",
+   "ok": true,
+   "witness": {},
+   "ground_truth": null,
+   "wall_ms": 21.1,
+   "engine_versions": {
+    "python": "3.13.5",
+    "z3": "5.0.0",
+    "noodler": "Z3 version 4.16.0 - 64 bit - build hashcode dcce9d2d129e1ecc101946ef257aa7ed246d"
+   },
+   "not_proven": false,
+   "backend": "noodler",
+   "noodler_verdict": "unsat",
+   "noodler_rc": 1,
+   "noodler_wall_ms": 21.1,
+   "route": "mirror",
+   "cross_check_backend": "cvc5",
+   "cross_check_abstained": true,
+   "cross_check_reason": "no-verdict",
+   "cross_check_wall_ms": 30266.9,
+   "state": "decided"
+  },
+  "classification": {
+   "bucket": "escalated-unconfirmed",
+   "noodler_verdict": "unsat",
+   "cross_check_verdict": null,
+   "cross_check_abstained": true,
+   "cross_check_absent": false,
+   "disagreement": false,
+   "witness_d16_valid": false
+  },
+  "cross_check_reason": "no-verdict",
+  "disagreement": false,
+  "wrong_verdict_event": false,
+  "triage": null
+ }
+]
