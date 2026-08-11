@@ -33,5 +33,8 @@ in the P4 job).
 
 ## Anti-backfit statement
 Thresholds were fixed in the design (rev 7) before any of these measurements
-existed. All three pass with ≥125× headroom; none required a bump. The bump
-procedure (design R5) remains: exceed → mapped action + maintainer approval.
+existed. The download leg passes with ~144× headroom and the per-property leg with
+~29×–125× (total/overhead); the CI leg is projected within budget and is
+re-verified with real wall-clock numbers in the P4 CI job. No threshold required a
+bump. The bump procedure (design R5) remains: exceed → mapped action + maintainer
+approval.
