@@ -1,0 +1,454 @@
+[
+ {
+  "property": "P1-ampersand",
+  "note": "usernames matching ^[a-z_][a-z0-9_-]{0,31}$ minus ",
+  "stock": "unsat",
+  "stock_ms": 5752.8,
+  "noodler": "unsat",
+  "noodler_ms": 31.4,
+  "noodler_rc": 1,
+  "cvc5": "unsat",
+  "cvc5_ms": 15.0,
+  "cvc5_note": null,
+  "witness_match": "n/a",
+  "stock_witness": null,
+  "noodler_witness": null
+ },
+ {
+  "property": "P1-backtick",
+  "note": "usernames matching ^[a-z_][a-z0-9_-]{0,31}$ minus ",
+  "stock": "unsat",
+  "stock_ms": 5524.4,
+  "noodler": "unsat",
+  "noodler_ms": 31.5,
+  "noodler_rc": 1,
+  "cvc5": "unsat",
+  "cvc5_ms": 15.1,
+  "cvc5_note": null,
+  "witness_match": "n/a",
+  "stock_witness": null,
+  "noodler_witness": null
+ },
+ {
+  "property": "P1-dollar",
+  "note": "usernames matching ^[a-z_][a-z0-9_-]{0,31}$ minus ",
+  "stock": "unsat",
+  "stock_ms": 5035.4,
+  "noodler": "unsat",
+  "noodler_ms": 31.9,
+  "noodler_rc": 1,
+  "cvc5": "unsat",
+  "cvc5_ms": 16.3,
+  "cvc5_note": null,
+  "witness_match": "n/a",
+  "stock_witness": null,
+  "noodler_witness": null
+ },
+ {
+  "property": "P1-equals",
+  "note": "usernames matching ^[a-z_][a-z0-9_-]{0,31}$ minus ",
+  "stock": "unsat",
+  "stock_ms": 5288.3,
+  "noodler": "unsat",
+  "noodler_ms": 31.5,
+  "noodler_rc": 1,
+  "cvc5": "unsat",
+  "cvc5_ms": 15.3,
+  "cvc5_note": null,
+  "witness_match": "n/a",
+  "stock_witness": null,
+  "noodler_witness": null
+ },
+ {
+  "property": "P1-mutated-star",
+  "note": "MUTATION GUARD: if the username regex is weakened ",
+  "stock": "sat",
+  "stock_ms": 32.5,
+  "noodler": "sat",
+  "noodler_ms": 68.7,
+  "noodler_rc": 0,
+  "cvc5": "sat",
+  "cvc5_ms": 9.3,
+  "cvc5_note": null,
+  "witness_match": "DIFF",
+  "stock_witness": {
+   "u": "l*"
+  },
+  "noodler_witness": {
+   "u": "a*******************************"
+  }
+ },
+ {
+  "property": "P1-newline",
+  "note": "usernames matching ^[a-z_][a-z0-9_-]{0,31}$ minus ",
+  "stock": "unsat",
+  "stock_ms": 4114.0,
+  "noodler": "unsat",
+  "noodler_ms": 31.1,
+  "noodler_rc": 1,
+  "cvc5": "unsat",
+  "cvc5_ms": 15.3,
+  "cvc5_note": null,
+  "witness_match": "n/a",
+  "stock_witness": null,
+  "noodler_witness": null
+ },
+ {
+  "property": "P1-pipe",
+  "note": "usernames matching ^[a-z_][a-z0-9_-]{0,31}$ minus ",
+  "stock": "unsat",
+  "stock_ms": 5032.4,
+  "noodler": "unsat",
+  "noodler_ms": 31.4,
+  "noodler_rc": 1,
+  "cvc5": "unsat",
+  "cvc5_ms": 15.1,
+  "cvc5_note": null,
+  "witness_match": "n/a",
+  "stock_witness": null,
+  "noodler_witness": null
+ },
+ {
+  "property": "P1-semicolon",
+  "note": "usernames matching ^[a-z_][a-z0-9_-]{0,31}$ minus ",
+  "stock": "unsat",
+  "stock_ms": 5125.3,
+  "noodler": "unsat",
+  "noodler_ms": 31.4,
+  "noodler_rc": 1,
+  "cvc5": "unsat",
+  "cvc5_ms": 15.0,
+  "cvc5_note": null,
+  "witness_match": "n/a",
+  "stock_witness": null,
+  "noodler_witness": null
+ },
+ {
+  "property": "P1-space",
+  "note": "usernames matching ^[a-z_][a-z0-9_-]{0,31}$ minus ",
+  "stock": "unsat",
+  "stock_ms": 4760.9,
+  "noodler": "unsat",
+  "noodler_ms": 31.4,
+  "noodler_rc": 1,
+  "cvc5": "unsat",
+  "cvc5_ms": 15.2,
+  "cvc5_note": null,
+  "witness_match": "n/a",
+  "stock_witness": null,
+  "noodler_witness": null
+ },
+ {
+  "property": "P1-tab",
+  "note": "usernames matching ^[a-z_][a-z0-9_-]{0,31}$ minus ",
+  "stock": "unsat",
+  "stock_ms": 4230.5,
+  "noodler": "unsat",
+  "noodler_ms": 31.2,
+  "noodler_rc": 1,
+  "cvc5": "unsat",
+  "cvc5_ms": 18.1,
+  "cvc5_note": null,
+  "witness_match": "n/a",
+  "stock_witness": null,
+  "noodler_witness": null
+ },
+ {
+  "property": "P2-actor-whitelist",
+  "note": "actor whitelist [A-Za-z0-9._@-]{1,64} admits no au",
+  "stock": "unsat",
+  "stock_ms": 1225.1,
+  "noodler": "unsat",
+  "noodler_ms": 22.6,
+  "noodler_rc": 1,
+  "cvc5": "unsat",
+  "cvc5_ms": 12.3,
+  "cvc5_note": null,
+  "witness_match": "n/a",
+  "stock_witness": null,
+  "noodler_witness": null
+ },
+ {
+  "property": "P2-mutated-space",
+  "note": "MUTATION GUARD: if the actor whitelist is weakened",
+  "stock": "sat",
+  "stock_ms": 11.7,
+  "noodler": "sat",
+  "noodler_ms": 34.0,
+  "noodler_rc": 0,
+  "cvc5": "sat",
+  "cvc5_ms": 5.4,
+  "cvc5_note": null,
+  "witness_match": "DIFF",
+  "stock_witness": {
+   "a": " "
+  },
+  "noodler_witness": {
+   "a": "a               "
+  }
+ },
+ {
+  "property": "P3-mutated-correct-capture",
+  "note": "MUTATION GUARD: if the sed capture were CORRECT (c",
+  "stock": "unsat",
+  "stock_ms": 0.1,
+  "noodler": "unsat",
+  "noodler_ms": 12.7,
+  "noodler_rc": 1,
+  "cvc5": "unsat",
+  "cvc5_ms": 2.2,
+  "cvc5_note": null,
+  "witness_match": "n/a",
+  "stock_witness": null,
+  "noodler_witness": null
+ },
+ {
+  "property": "P3-sed-capture-truncation",
+  "note": "exists v: v contains an escaped quote AND the sed-",
+  "stock": "sat",
+  "stock_ms": 7.0,
+  "noodler": "sat",
+  "noodler_ms": 27.0,
+  "noodler_rc": 0,
+  "cvc5": "sat",
+  "cvc5_ms": 7.0,
+  "cvc5_note": null,
+  "witness_match": "DIFF",
+  "stock_witness": {
+   "v": "\\\""
+  },
+  "noodler_witness": {
+   "v": "\\\"\"\""
+  }
+ },
+ {
+  "property": "P4-escape-image-del",
+  "note": "same token alphabet contains no raw DEL (0x7f)",
+  "stock": "unsat",
+  "stock_ms": 0.3,
+  "noodler": "unsat",
+  "noodler_ms": 12.2,
+  "noodler_rc": 1,
+  "cvc5": "unsat",
+  "cvc5_ms": 2.4,
+  "cvc5_note": null,
+  "witness_match": "n/a",
+  "stock_witness": null,
+  "noodler_witness": null
+ },
+ {
+  "property": "P4-escape-image-newline",
+  "note": "same token alphabet contains no raw newline",
+  "stock": "unsat",
+  "stock_ms": 0.3,
+  "noodler": "unsat",
+  "noodler_ms": 12.3,
+  "noodler_rc": 1,
+  "cvc5": "unsat",
+  "cvc5_ms": 2.4,
+  "cvc5_note": null,
+  "witness_match": "n/a",
+  "stock_witness": null,
+  "noodler_witness": null
+ },
+ {
+  "property": "P4-escape-image-tab",
+  "note": "um_json_escape output token alphabet (safe chars +",
+  "stock": "unsat",
+  "stock_ms": 0.4,
+  "noodler": "unsat",
+  "noodler_ms": 12.2,
+  "noodler_rc": 1,
+  "cvc5": "unsat",
+  "cvc5_ms": 2.4,
+  "cvc5_note": null,
+  "witness_match": "n/a",
+  "stock_witness": null,
+  "noodler_witness": null
+ },
+ {
+  "property": "P4-mutated-tab",
+  "note": "MUTATION GUARD: if the escape token alphabet is we",
+  "stock": "sat",
+  "stock_ms": 0.4,
+  "noodler": "sat",
+  "noodler_ms": 12.7,
+  "noodler_rc": 0,
+  "cvc5": "sat",
+  "cvc5_ms": 2.5,
+  "cvc5_note": null,
+  "witness_match": "MATCH",
+  "stock_witness": {
+   "w": "\t"
+  },
+  "noodler_witness": {
+   "w": "\t"
+  }
+ },
+ {
+  "property": "P4-nul-passthrough-demo",
+  "note": "BUG DEMO: a faithful token alphabet that includes ",
+  "stock": "sat",
+  "stock_ms": 0.5,
+  "noodler": "sat",
+  "noodler_ms": 12.5,
+  "noodler_rc": 0,
+  "cvc5": "sat",
+  "cvc5_ms": 2.5,
+  "cvc5_note": null,
+  "witness_match": "MATCH",
+  "stock_witness": {
+   "w": "\u0000"
+  },
+  "noodler_witness": {
+   "w": "\u0000"
+  }
+ },
+ {
+  "property": "P5-handle-safe",
+  "note": "telegram bot-handle whitelist [a-z0-9_]{2,29}bot (",
+  "stock": "unsat",
+  "stock_ms": 25.2,
+  "noodler": "unsat",
+  "noodler_ms": 24.5,
+  "noodler_rc": 1,
+  "cvc5": "unsat",
+  "cvc5_ms": 21.6,
+  "cvc5_note": null,
+  "witness_match": "n/a",
+  "stock_witness": null,
+  "noodler_witness": null
+ },
+ {
+  "property": "P5-mutated-lowercase",
+  "note": "MUTATION GUARD (case flags): the case-expanded mir",
+  "stock": "sat",
+  "stock_ms": 1.7,
+  "noodler": "sat",
+  "noodler_ms": 13.3,
+  "noodler_rc": 0,
+  "cvc5": "sat",
+  "cvc5_ms": 14.6,
+  "cvc5_note": null,
+  "witness_match": "MATCH",
+  "stock_witness": {
+   "h": "MyBot"
+  },
+  "noodler_witness": {
+   "h": "MyBot"
+  }
+ },
+ {
+  "property": "P6-prefix-match-demo",
+  "note": "DEMO: re.match/^ is a prefix match, InRe is whole-",
+  "stock": "unsat",
+  "stock_ms": 0.2,
+  "noodler": "unsat",
+  "noodler_ms": 12.1,
+  "noodler_rc": 1,
+  "cvc5": "unsat",
+  "cvc5_ms": 2.0,
+  "cvc5_note": null,
+  "witness_match": "n/a",
+  "stock_witness": null,
+  "noodler_witness": null
+ },
+ {
+  "property": "P6-prefix-match-helper",
+  "note": "prefix_match(Re('AND')) models re.match(r'AND', s)",
+  "stock": "sat",
+  "stock_ms": 0.4,
+  "noodler": "sat",
+  "noodler_ms": 12.2,
+  "noodler_rc": 0,
+  "cvc5": "sat",
+  "cvc5_ms": 2.1,
+  "cvc5_note": null,
+  "witness_match": "MATCH",
+  "stock_witness": {
+   "s": "AND foo"
+  },
+  "noodler_witness": {
+   "s": "AND foo"
+  }
+ },
+ {
+  "property": "crs-cross-engine-control",
+  "note": "MUTATION GUARD (cross-engine family): identical R1",
+  "stock": "unsat",
+  "stock_ms": 0.1,
+  "noodler": "unsat",
+  "noodler_ms": 12.0,
+  "noodler_rc": 1,
+  "cvc5": "unsat",
+  "cvc5_ms": 2.2,
+  "cvc5_note": null,
+  "witness_match": "n/a",
+  "stock_witness": null,
+  "noodler_witness": null
+ },
+ {
+  "property": "crs-cross-engine-widen-R1",
+  "note": "MUTATION GUARD (cross-engine family): narrowing R1",
+  "stock": "sat",
+  "stock_ms": 4.6,
+  "noodler": "sat",
+  "noodler_ms": 18.3,
+  "noodler_rc": 0,
+  "cvc5": "sat",
+  "cvc5_ms": 4.3,
+  "cvc5_note": null,
+  "witness_match": "MATCH",
+  "stock_witness": {
+   "s": "a"
+  },
+  "noodler_witness": {
+   "s": "a"
+  }
+ },
+ {
+  "property": "P2-len64",
+  "note": "P2 whitelist len<=64 (seq timeout class)",
+  "stock": "unknown",
+  "stock_ms": 30074.1,
+  "noodler": "unsat",
+  "noodler_ms": 17.4,
+  "noodler_rc": 1,
+  "cvc5": "unsat",
+  "cvc5_ms": 12.2,
+  "cvc5_note": null,
+  "witness_match": "n/a",
+  "stock_witness": null,
+  "noodler_witness": null
+ },
+ {
+  "property": "P4-monolithic",
+  "note": "P4 monolithic image (seq timeout class)",
+  "stock": "unknown",
+  "stock_ms": 30035.9,
+  "noodler": "unsat",
+  "noodler_ms": 19.3,
+  "noodler_rc": 1,
+  "cvc5": "unknown",
+  "cvc5_ms": 30016.4,
+  "cvc5_note": null,
+  "witness_match": "n/a",
+  "stock_witness": null,
+  "noodler_witness": null
+ },
+ {
+  "property": "P2-len64-reloop-17-64 (S11)",
+  "note": "re.loop escalation form",
+  "stock": "n/a (z3py no ReLoop)",
+  "stock_ms": 0,
+  "noodler": "unsat",
+  "noodler_ms": 60.3,
+  "noodler_rc": 1,
+  "cvc5": "ABSTAIN-SIGSEGV",
+  "cvc5_ms": 0.0,
+  "cvc5_note": "worker rc=-11",
+  "witness_match": "n/a",
+  "stock_witness": null,
+  "noodler_witness": null
+ }
+]
