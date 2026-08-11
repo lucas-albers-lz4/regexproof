@@ -30,6 +30,8 @@ import time
 
 NOODLER_ENV = "NOODLER"
 DEFAULT_NOODLER = "/tmp/noodler/z3-noodler-ubuntu-24.04-x86_64-shared"
+PIN_SHA256 = "22b19f123d3e7f54e10fdc46af3f91de23d89148c9a259eb072bc9e12f083464"
+_VERIFIED_PATH = None  # cache: the sha256-verified binary for this process
 MODEL_SCAN = re.compile(r'\(define-fun\s+(\S+)\s*\(\)\s*String\s*"')
 HEX_ESC = re.compile(r"\\x([0-9a-fA-F]{2})")
 UNI_ESC = re.compile(r"\\u\{([0-9a-fA-F]+)\}")
@@ -42,10 +44,27 @@ class NoodlerAbsent(Exception):
 
 
 def binary_path() -> str:
+    """Resolve + sha256-verify the invoked binary (the pin is checked ONCE per
+    process and cached — hashing 40 MB per query would dominate the wall clock).
+    A binary whose hash does not match the pin is refused: an unverified binary
+    is the exact risk the R8 pre-flight + R5 bump policy exist to prevent."""
+    global _VERIFIED_PATH
+    if _VERIFIED_PATH:
+        return _VERIFIED_PATH
+    import hashlib
+
     path = os.environ.get(NOODLER_ENV) or DEFAULT_NOODLER
     if not os.path.isfile(path):
         raise NoodlerAbsent(f"NOODLER binary not found at {path!r} "
                             "(set $NOODLER or run the Phase-1 pre-flight)")
+    h = hashlib.sha256(open(path, "rb").read()).hexdigest()
+    if h != PIN_SHA256:
+        raise NoodlerAbsent(
+            f"NOODLER binary {path!r} sha256 {h[:16]}… does NOT match the pin "
+            f"{PIN_SHA256[:16]}… — an unpinned binary is refused (R5 bump "
+            "policy: run the pre-flight on the new binary and update the pin)"
+        )
+    _VERIFIED_PATH = path
     return path
 
 
@@ -174,7 +193,17 @@ def run_noodler(smt: str, timeout_ms: int = 30000, want_model: bool = False,
     first = next((ln.strip() for ln in (out or "").splitlines()
                   if ln.strip() in ("sat", "unsat", "unknown")), None)
     if first is None:
+        # S13: exit-1-no-verdict = dispatch error (the get-model-after-unsat
+        # class is exit 1 WITH a verdict); exit-0-no-verdict = abstention.
+        if rc == 1:
+            return {"verdict": f"DISPATCH-ERROR(rc=1)", "rc": rc,
+                    "wall_ms": dt, "witness": None, "state": "abstain"}
         return {"verdict": f"ABSTAIN-NO-VERDICT(rc={rc})", "rc": rc,
+                "wall_ms": dt, "witness": None, "state": "abstain"}
+    if rc not in (0, 1):
+        # S13 literal: only rc 0 or 1 with a verdict is a VALID result — a
+        # crash/dispatch failure that printed a verdict line is still untrusted.
+        return {"verdict": f"DISPATCH-ERROR(rc={rc})", "rc": rc,
                 "wall_ms": dt, "witness": None, "state": "abstain"}
     witness = None
     if first == "sat" and want_model:
@@ -184,7 +213,9 @@ def run_noodler(smt: str, timeout_ms: int = 30000, want_model: bool = False,
 
 
 def noodler_version(binary: str | None = None) -> str | None:
-    """Record the invoked binary's version string (engine_versions)."""
+    """Record the INVOKED binary's version string (engine_versions). The
+    caller passes the resolved binary (binary_path()); the default is only a
+    fallback — never record a version for a binary that was not invoked."""
     binary = binary or DEFAULT_NOODLER
     try:
         p = subprocess.run([binary, "-version"], capture_output=True, text=True,

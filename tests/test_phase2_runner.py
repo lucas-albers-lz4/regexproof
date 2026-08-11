@@ -83,6 +83,26 @@ def test_stub_exit1_with_sat_is_valid(tmp_path):
     assert r["witness"] == {"u": "x"}
 
 
+def test_stub_rc127_with_sat_rejected(tmp_path):
+    # S13: only rc 0 or 1 with a verdict is valid — a dispatch failure that
+    # printed sat is still untrusted (luna High).
+    b = _stub(tmp_path, 'echo "sat"; exit 127')
+    r = run_noodler("(check-sat)", binary=b)
+    assert r["state"] == "abstain" and "DISPATCH-ERROR" in r["verdict"]
+
+
+def test_stub_rc2_with_unsat_rejected(tmp_path):
+    b = _stub(tmp_path, 'echo "unsat"; exit 2')
+    r = run_noodler("(check-sat)", binary=b)
+    assert r["state"] == "abstain" and "DISPATCH-ERROR" in r["verdict"]
+
+
+def test_stub_exit1_no_verdict_dispatch_error(tmp_path):
+    b = _stub(tmp_path, "exit 1")
+    r = run_noodler("(check-sat)", binary=b)
+    assert r["state"] == "abstain" and "DISPATCH-ERROR(rc=1)" in r["verdict"]
+
+
 def test_stub_exit0_no_verdict_abstains(tmp_path):
     b = _stub(tmp_path, "exit 0")
     r = run_noodler("(check-sat)", binary=b)
@@ -155,7 +175,9 @@ def test_d16_revalidates_matrix_fixtures(name):
 
 
 # --- absence path ------------------------------------------------------------
-def test_absent_binary_records_triage_override(monkeypatch, capsys):
+def test_absent_binary_falls_back_to_stock(monkeypatch, capsys):
+    # Absence contract (AC): triage_fallback recorded, exit unchanged from
+    # stock — the property STILL RUNS through the stock path.
     import regexproof.harness.properties  # noqa: F401
 
     def _absent():
@@ -166,7 +188,22 @@ def test_absent_binary_records_triage_override(monkeypatch, capsys):
     )
     entry = _noodler_entry("P1-mutated-star")
     result = core.run_one("P1-mutated-star", entry)
+    # stock fallback: P1-mutated-star is a mutation guard — sat expected, ok True
     assert result["state"] == "noodler-absent"
     assert result["triage_override"].startswith("NOODLER not found")
-    assert result["not_proven"] is True
-    assert "triage_fallback" in capsys.readouterr().out
+    assert result["noodler_verdict"] == "ABSENT"
+    assert result["result"] == "sat"  # the STOCK verdict, not an abstain
+    assert result["ok"] is True  # exit unchanged from stock
+    assert "running the stock path" in capsys.readouterr().out
+
+
+def test_binary_pin_mismatch_refused(tmp_path, monkeypatch):
+    # An unpinned binary must be refused (luna Medium — sha256 pin in the
+    # runner). Reset the process-level cache and point at a stub.
+    import regexproof.harness.noodler_runner as nr
+
+    monkeypatch.setattr(nr, "_VERIFIED_PATH", None)
+    stub = _stub(tmp_path, 'echo "sat"')
+    monkeypatch.setenv("NOODLER", stub)
+    with pytest.raises(NoodlerAbsent, match="does NOT match the pin"):
+        nr.binary_path()

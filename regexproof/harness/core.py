@@ -207,7 +207,15 @@ def run_one(name, entry, require_ground_truth=False):
     }
     constraints, bad = entry["fn"]()
     if entry.get("backend") == "noodler":
-        return _run_one_noodler(name, entry, constraints, bad, engines, result)
+        r = _run_one_noodler(name, entry, constraints, bad, engines, result)
+        if r is not None:
+            return r
+        # None = binary absent: the absence is recorded and the property falls
+        # through to the STOCK path — exit unchanged from stock (AC: absence
+        # recorded, stock environments stay green).
+        result["state"] = "noodler-absent"
+        print(f"[ABSENT] {name}: Noodler binary not available — triage_fallback "
+              "recorded, running the stock path (exit unchanged from stock)")
     s = Solver()
     s.set("timeout", entry["timeout_ms"])
     for c in constraints:
@@ -316,6 +324,7 @@ def _run_one_noodler(name, entry, constraints, bad, engines, result):
     from regexproof.harness.d16 import revalidate_witness
     from regexproof.harness.noodler_runner import (
         NoodlerAbsent,
+        binary_path,
         noodler_version,
         run_noodler,
     )
@@ -326,20 +335,19 @@ def _run_one_noodler(name, entry, constraints, bad, engines, result):
         s.add(c)
     s.add(bad)
     try:
-        nd = run_noodler(s.sexpr(), entry["timeout_ms"], want_model=True)
+        binary = binary_path()  # sha256-verified, cached per process
+        nd = run_noodler(s.sexpr(), entry["timeout_ms"], want_model=True,
+                         binary=binary)
     except NoodlerAbsent as e:
-        result["result"] = "abstain"
-        result["state"] = "noodler-absent"
-        result["not_proven"] = True
+        # absence is recorded state, never a failure: the caller falls through
+        # to the stock path (exit unchanged from stock)
         result["noodler_verdict"] = "ABSENT"
         result["triage_override"] = str(e)
-        print(f"[ABSENT] {name}: Noodler binary not available — "
-              "triage_fallback recorded (stock-only environments stay green)")
-        return result
+        return None
     result["noodler_verdict"] = nd["verdict"]
     result["noodler_rc"] = nd["rc"]
     result["noodler_wall_ms"] = nd["wall_ms"]
-    engines["noodler"] = noodler_version()
+    engines["noodler"] = noodler_version(binary)  # the INVOKED binary's version
     result["engine_versions"] = engines
     result["wall_ms"] = nd["wall_ms"]
     v = nd["verdict"]
