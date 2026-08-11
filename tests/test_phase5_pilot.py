@@ -36,14 +36,21 @@ def test_d14_zero_in_domain_divergences():
 
 def test_pilot_contract_fields():
     # the committed pilot must carry the #120 handoff contract per result:
-    # property id, route, raw evidence, derived tier, destination mapping
+    # property id, route, raw evidence, derived tier, destination mapping —
+    # ALL 12 records, ground-truthed by the real engine
     text = PILOT.read_text()
     assert "| property | pattern | probe | expect | route | result | tier | destination |" in text
-    for pid in ("fwlive-NON_FIREWALL_PREFIX-accept",
-                "fwlive-NETFILTER_KV_GLUE-reject"):
-        assert pid in text
+    ids = ["fwlive-NON_FIREWALL_PREFIX-accept", "fwlive-NON_FIREWALL_PREFIX-reject",
+           "fwlive-FIREWALL_HINT-accept", "fwlive-FIREWALL_HINT-reject",
+           "fwlive-ACTION_RE-accept", "fwlive-ACTION_RE-reject",
+           "fwlive-DENY_ACTION-accept", "fwlive-DENY_ACTION-reject",
+           "fwlive-TCP_FLAG_TAIL-accept", "fwlive-TCP_FLAG_TAIL-reject",
+           "fwlive-NETFILTER_KV_GLUE-accept", "fwlive-NETFILTER_KV_GLUE-reject"]
+    for pid in ids:
+        assert pid in text, pid
     assert "→ #120" in text
     assert "seq-only" in text  # every route is mirror; tier present
+    assert "ground-truthed by the real JS engine" in text
     assert "reopen trigger: NOT hit" in text
 
 

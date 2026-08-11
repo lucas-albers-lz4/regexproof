@@ -117,9 +117,19 @@ FW = [
 
 
 def run_handoff():
-    """Run the 12 mirror properties through the harness path."""
+    """Run the 12 mirror properties through the harness path. EVERY probe is
+    ground-truthed by the real engine first (luna r1 on #236: ok=True must
+    not just confirm Z3 agrees with a hardcoded expectation)."""
     records = []
     for pid, pat_name, probe, expect_accept, dest in FW:
+        pat = next(p[1] for p in PATTERNS if p[0] == pat_name)
+        flags = next(p[2] for p in PATTERNS if p[0] == pat_name)
+        real = node_verdicts(pat, flags, [probe])[probe]
+        if real != expect_accept:
+            raise AssertionError(
+                f"{pid}: real engine disagrees with the expectation — "
+                f"probe {probe!r} real={real} expect_accept={expect_accept}")
+
         def _fn(pat_name=pat_name, probe=probe):
             u = String("u")
             return [InRe(u, mirror_re(pat_name, None, None))], \
@@ -136,18 +146,38 @@ def run_handoff():
             "pattern": pat_name,
             "probe": json.dumps(probe),
             "expect_accept": expect_accept,
+            "real_engine_verdict": real,  # ground truth (node_verdicts)
             "route": "mirror",
             "raw_evidence": {
                 "result": result["result"],
                 "wall_ms": result["wall_ms"],
-                "ok": result["ok"],
                 "state": result.get("state"),
+                "ok": result["ok"],
             },
             "derived_tier": derive_tier(result),
             "destination": dest,
             "destination_issue": "#120",
         })
     return records
+
+
+def evaluate_reopen() -> bool:
+    """The U9 reopen trigger (luna r1 on #236 — no hardcoding): a pattern in
+    the current set that is NOT in the committed Phase-1 inventory (a NEW
+    pattern) AND lacks a standard-encoding mirror reopens U9. The inventory is
+    the committed ecma-pilot.json."""
+    inventory = json.loads(
+        (HERE / "sweep" / "harness-backends" / "p1-baseline" /
+         "ecma-pilot.json").read_text()
+    )
+    known = {p["pattern"] for p in inventory}
+    for name, _, _ in PATTERNS:
+        if name not in known:
+            try:
+                mirror_re(name, None, None)
+            except KeyError:
+                return True  # new pattern WITHOUT a mirror → reopen
+    return False
 
 
 def render(rows, in_domain, boundary, handoff, reopen):
@@ -184,10 +214,14 @@ def render(rows, in_domain, boundary, handoff, reopen):
         )
     lines += [
         "",
+        "Every probe above is ground-truthed by the real JS engine "
+        "(real_engine_verdict == expect — the run FAILS on disagreement).",
+        "",
         "## U9 reopen trigger evaluation",
         "",
-        f"- fwlive pattern inventory: {len(PATTERNS)} patterns, unchanged "
-        "(no new pattern lacking a standard-encoding mirror)",
+        f"- fwlive pattern inventory: {len(PATTERNS)} patterns compared against "
+        "the committed Phase-1 inventory (ecma-pilot.json); no new pattern "
+        "lacking a standard-encoding mirror",
         f"- reopen trigger: {'HIT — U9 reopened on #213' if reopen else 'NOT hit — the DROP decision stands'}",
         "",
     ]
@@ -197,7 +231,7 @@ def render(rows, in_domain, boundary, handoff, reopen):
 def main() -> int:
     rows, in_domain, boundary = d14_fuzz()
     handoff = run_handoff()
-    reopen = False  # the six-pattern inventory is unchanged (checked above)
+    reopen = evaluate_reopen()  # inventory comparison — never hardcoded
     report = render(rows, in_domain, boundary, handoff, reopen)
     PILOT_PATH.write_text(report)
     print(report)

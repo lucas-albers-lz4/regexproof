@@ -31,7 +31,9 @@
 | fwlive-NETFILTER_KV_GLUE-accept | NETFILTER_KV_GLUE | "eth0IN=" | accept | mirror | sat (ok=True) | seq-only | classify step 6: kv glue (accept) → #120 |
 | fwlive-NETFILTER_KV_GLUE-reject | NETFILTER_KV_GLUE | "eth0 IN=" | reject | mirror | unsat (ok=True) | seq-only | classify step 6: kv glue (reject) → #120 |
 
+Every probe above is ground-truthed by the real JS engine (real_engine_verdict == expect — the run FAILS on disagreement).
+
 ## U9 reopen trigger evaluation
 
-- fwlive pattern inventory: 6 patterns, unchanged (no new pattern lacking a standard-encoding mirror)
+- fwlive pattern inventory: 6 patterns compared against the committed Phase-1 inventory (ecma-pilot.json); no new pattern lacking a standard-encoding mirror
 - reopen trigger: NOT hit — the DROP decision stands
