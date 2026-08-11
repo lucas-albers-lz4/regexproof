@@ -285,7 +285,7 @@ def validate_registry(registry=None):
     failures, checked = [], 0
     for name, entry in sorted(registry.items()):
         pat = entry.get("pattern")
-        if not pat:
+        if pat is None:
             continue
         checked += 1
         try:

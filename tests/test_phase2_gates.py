@@ -142,6 +142,33 @@ def test_validate_registry_real_registry_no_failures():
     assert failures == []
 
 
+def test_validate_registry_empty_pattern_validated():
+    # An explicitly declared EMPTY pattern must still run the gates (a "" source
+    # pattern is a valid regex — the empty string language — and must not
+    # bypass registration). With search_wrapped it fails wrap-validity.
+    reg = {
+        "empty-wrapped": {
+            "pattern": "",
+            "pattern_flags": "",
+            "search_wrapped": True,
+            "kind": "property",
+        },
+        "empty-plain": {
+            "pattern": "",
+            "pattern_flags": "",
+            "search_wrapped": False,
+            "kind": "property",
+        },
+    }
+    failures, checked = core.validate_registry(reg)
+    assert checked == 2
+    # empty-wrapped fails wrap-validity (no .* prefix/suffix); empty-plain fails
+    # anchored-definition (no ^/$) — neither bypasses the gates.
+    assert len(failures) == 2
+    assert any("empty-wrapped" in f for f in failures)
+    assert any("empty-plain" in f for f in failures)
+
+
 def test_cli_gate_failure_exits_2(monkeypatch, capsys):
     from regexproof.harness import cli
 
