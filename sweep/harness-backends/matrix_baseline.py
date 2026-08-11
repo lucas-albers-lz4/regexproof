@@ -125,10 +125,12 @@ def run_noodler(smt, timeout_ms):
     dt = (time.perf_counter() - t0) * 1000
     lines = [ln for ln in out.splitlines() if ln.strip() in ("sat", "unsat", "unknown")]
     verdict = lines[0] if lines else None
-    # S13 classification, applied literally: a SIGSEGV'd solver's output is not
+    # S13 classification, applied literally: a signal-killed solver's output is not
     # trustworthy even with a stray verdict line; exit-1-with-verdict is valid
     # (get-model-after-unsat class); exit-0-without-verdict is an abstain state.
-    if rc == 139:
+    # returncode is NEGATIVE for signal deaths (-11 = SIGSEGV); 139 is the bash
+    # convention, kept as a belt-and-braces for wrappers that report it.
+    if rc < 0 or rc == 139:
         verdict = "ABSTAIN-SIGSEGV"
     elif verdict is None:
         if rc == 0:
@@ -160,12 +162,18 @@ def run_cvc5(smt, timeout_ms):
             out, _ = p.communicate()
             return "ABSTAIN-TIMEOUT", timeout_ms, None
         dt = (time.perf_counter() - t0) * 1000
+        # Signal-killed worker output is not trustworthy; a non-zero exit without
+        # a valid V/E line is a dispatch error, not a verdict.
+        if p.returncode < 0:
+            return "ABSTAIN-SIGSEGV", 0.0, f"worker rc={p.returncode}"
         line = out.strip().splitlines()[-1] if out.strip() else "?"
         if line.startswith("V "):
             verdict, ms = line[2:].split()
             return verdict, float(ms), None
         if line.startswith("E "):
             return "PARSE-ERROR", 0.0, line[2:][:80]
+        if p.returncode != 0:
+            return f"DISPATCH-ERROR(rc={p.returncode})", 0.0, line[:80]
         return "ABSTAIN-NO-VERDICT", 0.0, line[:80]
     except Exception as e:
         return "DISPATCH-ERROR", 0.0, str(e)[:80]
