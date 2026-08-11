@@ -1,7 +1,0 @@
-(set-logic QF_SLIA)
-(declare-const a String)
-(define-fun wl () RegLan (re.union (re.range "a" "z") (re.range "A" "Z") (re.range "0" "9") (str.to_re ".") (str.to_re "_") (str.to_re "@") (str.to_re "-")))
-(assert (str.in_re a (re.loop wl 17 64)))
-(assert (str.contains a " "))
-(check-sat)
-(get-model)
