@@ -1,7 +1,7 @@
 # Phase 4 sweep report (P4, #220)
 
-- corpus commit: `7a0ec5a05c4c1655959e1914b4dde09b9de423df`
-- manifest files: 8 (schema v1: commit + paths + sha256)
+- corpus commit: `a2a0d54bddddaa99a48567d6e1912a196eef7d45`
+- manifest files: 8 (schema v1: commit + repo-relative paths + sha256)
 - manifest verified: True
 
 ## Four-bucket classification (S4)
@@ -22,8 +22,9 @@ Bucket counts: proven=1, finding=0, escalated-unconfirmed=1, still-unknown=0 (ex
 ## Divergence rate (D10)
 
 - decided cross-check pairs: 1
-- disagreements: 0
+- divergent pairs: 0 (disagreements=0, wrong-verdict events=0)
 - divergence rate: 0.0
+- **D10 decision: KEEP — zero divergence on the measured set; the cross-check agrees and the disagreement gate is dormant** (threshold: any divergent pair keeps the gate)
 
 ## Triage audit (S14)
 
@@ -33,4 +34,5 @@ Bucket counts: proven=1, finding=0, escalated-unconfirmed=1, still-unknown=0 (ex
 
 - decision: **DROP (from_ecma2020 out of scope)**
 - reopen trigger hit: False
-- evidence: {"divergence_rate": {"decided_pairs": 1, "disagreements": 0, "divergence_rate": 0.0}, "matrix_measured": {"P2-len64": "noodler unsat 17.4ms, cvc5 unsat 12.2ms (agree)", "P4-monolithic": "noodler unsat 19.3ms, cvc5 unknown 30s (cvc5 abstain)"}, "all_six_fwlive_patterns_mirror_expressible": true}
+- consumed artifact: `/root/workspace/regexproof/sweep/harness-backends/p1-baseline/u9-decision.md`
+- evidence: {"divergence": {"decided_pairs": 1, "divergent_pairs": 0, "disagreements": 0, "wrong_verdict_events": 0, "divergence_rate": 0.0}, "d10_decision": "KEEP \u2014 zero divergence on the measured set; the cross-check agrees and the disagreement gate is dormant", "fwlive_patterns_mirror_expressible": 6, "measured_matrix_rows": 28}

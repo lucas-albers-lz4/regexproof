@@ -14,7 +14,7 @@
    "ok": true,
    "witness": {},
    "ground_truth": null,
-   "wall_ms": 16.8,
+   "wall_ms": 16.9,
    "engine_versions": {
     "python": "3.13.5",
     "z3": "5.0.0",
@@ -24,12 +24,12 @@
    "backend": "noodler",
    "noodler_verdict": "unsat",
    "noodler_rc": 1,
-   "noodler_wall_ms": 16.8,
+   "noodler_wall_ms": 16.9,
    "route": "mirror",
    "cross_check_backend": "cvc5",
    "cross_check_abstained": false,
    "cross_check_verdict": "unsat",
-   "cross_check_wall_ms": 10.5,
+   "cross_check_wall_ms": 13.3,
    "state": "decided"
   },
   "classification": {
@@ -41,7 +41,8 @@
    "disagreement": false,
    "witness_d16_valid": false
   },
-  "cross_check_reason": null
+  "cross_check_reason": null,
+  "triage": null
  },
  {
   "name": "P4-monolithic",
@@ -58,7 +59,7 @@
    "ok": true,
    "witness": {},
    "ground_truth": null,
-   "wall_ms": 18.4,
+   "wall_ms": 18.5,
    "engine_versions": {
     "python": "3.13.5",
     "z3": "5.0.0",
@@ -68,12 +69,12 @@
    "backend": "noodler",
    "noodler_verdict": "unsat",
    "noodler_rc": 1,
-   "noodler_wall_ms": 18.4,
+   "noodler_wall_ms": 18.5,
    "route": "mirror",
    "cross_check_backend": "cvc5",
    "cross_check_abstained": true,
    "cross_check_reason": "no-verdict",
-   "cross_check_wall_ms": 30233.8,
+   "cross_check_wall_ms": 30235.7,
    "state": "decided"
   },
   "classification": {
@@ -85,6 +86,7 @@
    "disagreement": false,
    "witness_d16_valid": false
   },
-  "cross_check_reason": "no-verdict"
+  "cross_check_reason": "no-verdict",
+  "triage": null
  }
 ]

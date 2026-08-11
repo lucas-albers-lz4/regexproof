@@ -99,7 +99,10 @@ def main() -> int:
         ["git", "rev-parse", "HEAD"], cwd=HERE, capture_output=True, text=True
     ).stdout.strip()
 
-    # 1) CONSUME the committed manifest: verify against disk + commit match
+    # 1) CONSUME the committed manifest: verify against disk + commit match.
+    #    Consumption is STRICT (stale commit fails); `--refresh` downgrades
+    #    the commit check to a warning so the author can re-pin HEAD.
+    refresh = "--refresh" in sys.argv
     committed = OUT / "corpus-manifest.json"
     if committed.is_file():
         cm = json.loads(committed.read_text())
@@ -109,9 +112,14 @@ def main() -> int:
                   file=sys.stderr)
             return 1
         if cm.get("commit") != commit:
-            print(f"committed manifest pins {cm.get('commit')} but HEAD is "
-                  f"{commit} — re-run the sweep to refresh", file=sys.stderr)
-            return 1
+            msg = (f"committed manifest pins {cm.get('commit')} but HEAD is "
+                   f"{commit}")
+            if refresh:
+                print(f"NOTE: {msg} — refreshing (--refresh)", file=sys.stderr)
+            else:
+                print(f"{msg} — re-run with --refresh to re-pin",
+                      file=sys.stderr)
+                return 1
     manifest = build_manifest(commit, corpus_files(), HERE)
 
     # 2) DERIVE the inventory from the committed matrix + assert coverage
