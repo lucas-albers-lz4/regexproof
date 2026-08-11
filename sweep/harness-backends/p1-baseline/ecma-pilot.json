@@ -19,7 +19,10 @@
    "wpad=",
    "procd\t"
   ],
-  "ecma_abstain_count": 41
+  "ecma_abstain_count": 41,
+  "ecma_abstain_reasons": {
+   "unknown/rc=0": 41
+  }
  },
  {
   "pattern": "FIREWALL_HINT",
@@ -41,7 +44,10 @@
    "nft\t",
    "nft "
   ],
-  "ecma_abstain_count": 30
+  "ecma_abstain_count": 30,
+  "ecma_abstain_reasons": {
+   "unknown/rc=0": 30
+  }
  },
  {
   "pattern": "ACTION_RE",
@@ -63,7 +69,10 @@
    "DENY:",
    "DENY="
   ],
-  "ecma_abstain_count": 42
+  "ecma_abstain_count": 42,
+  "ecma_abstain_reasons": {
+   "unknown/rc=0": 42
+  }
  },
  {
   "pattern": "DENY_ACTION",
@@ -85,7 +94,10 @@
    "DROP\t",
    "DROP "
   ],
-  "ecma_abstain_count": 24
+  "ecma_abstain_count": 24,
+  "ecma_abstain_reasons": {
+   "unknown/rc=0": 24
+  }
  },
  {
   "pattern": "TCP_FLAG_TAIL",
@@ -107,7 +119,10 @@
    "psh",
    "rst"
   ],
-  "ecma_abstain_count": 26
+  "ecma_abstain_count": 26,
+  "ecma_abstain_reasons": {
+   "unknown/rc=0": 26
+  }
  },
  {
   "pattern": "NETFILTER_KV_GLUE",
@@ -118,6 +133,7 @@
   "real_vs_mirror": [],
   "ecma_vs_mirror": [],
   "ecma_abstains": [],
-  "ecma_abstain_count": 0
+  "ecma_abstain_count": 0,
+  "ecma_abstain_reasons": {}
  }
 ]

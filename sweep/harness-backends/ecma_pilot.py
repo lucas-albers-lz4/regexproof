@@ -212,12 +212,15 @@ def main():
         d13 = [(s, r1[s], r3[s]) for s in corpus if r1[s] != r3[s] and isinstance(r3[s], bool)]
         d23 = [(s, r2[s], r3[s]) for s in corpus if r2[s] != r3[s] and isinstance(r2[s], bool) and isinstance(r3[s], bool)]
         abstains = [s for s in corpus if not isinstance(r2[s], bool)]
+        from collections import Counter
+        reason_dist = Counter(str(r2[s]) for s in abstains)
         rows.append({"pattern": name, "source": pat, "flags": flags,
                      "corpus": len(corpus),
                      "real_vs_ecma": [list(d) for d in d12],
                      "real_vs_mirror": [list(d) for d in d13],
                      "ecma_vs_mirror": [list(d) for d in d23],
-                     "ecma_abstains": abstains[:10], "ecma_abstain_count": len(abstains)})
+                     "ecma_abstains": abstains[:10], "ecma_abstain_count": len(abstains),
+                     "ecma_abstain_reasons": dict(reason_dist)})
         print(f"  real-vs-ecma: {len(d12)} | real-vs-mirror: {len(d13)} | ecma-vs-mirror: {len(d23)} | ecma abstains: {len(abstains)}")
         for s, a, b in d12[:3]:
             print(f"    R1/R2: {s!r} real={a} ecma={b}")
