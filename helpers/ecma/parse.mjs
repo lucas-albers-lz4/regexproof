@@ -37,6 +37,7 @@ try {
       helper: "ecma-regexpp",
       ast_type: ast.type,
       flags: ast.flags.raw,
+      structure: structureReport(ast.pattern),
     }),
   );
 } catch (err) {
@@ -93,4 +94,40 @@ function findReject(node, seen = new Set()) {
     }
   }
   return null;
+}
+
+// Per-alternative structural facts for the D7 registration gate (design #213
+// S1 + S1-parser). Facts are AST-derived (never string-regex on the pattern):
+// each alternative reports whether it is fully anchored (^ first, $ last), has
+// a leading/trailing `.*` wrap element, and how many top-level alternatives
+// exist (top-level alternation is a registration-check input).
+function dotStar(el) {
+  return (
+    el &&
+    el.type === "Quantifier" &&
+    el.min === 0 &&
+    el.max === Infinity &&
+    el.element &&
+    el.element.raw === "."
+  );
+}
+
+function structureReport(pattern) {
+  return {
+    alternatives: pattern.alternatives.map((alt) => {
+      const els = alt.elements;
+      const first = els[0];
+      const last = els[els.length - 1];
+      return {
+        leading_anchor:
+          first && first.type === "Assertion" && first.kind === "start",
+        trailing_anchor:
+          last && last.type === "Assertion" && last.kind === "end",
+        leading_dotstar: dotStar(first),
+        trailing_dotstar: dotStar(last),
+        element_count: els.length,
+      };
+    }),
+    top_level_alternation: pattern.alternatives.length > 1,
+  };
 }
