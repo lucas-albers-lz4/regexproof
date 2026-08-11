@@ -85,7 +85,7 @@ def corpus_files() -> list[Path]:
     base = HERE / "sweep" / "harness-backends" / "p1-baseline"
     names = ["matrix.json", "MATRIX.md", "PIN.md", "TRIAGE.md",
              "p-gate-table.md", "blocker-probe.md", "r5-cost.md",
-             "u9-decision.md"]
+             "u9-decision.md", "ecma-pilot.json", "ecma-pilot.md"]
     return [base / n for n in names]
 
 
@@ -144,6 +144,11 @@ def main() -> int:
             "result": result,
             "classification": c.to_record(),
             "cross_check_reason": result.get("cross_check_reason"),
+            # top-level raw fields so the S14 triage audit sees them (luna r3
+            # on #234: the audit checks the WRAPPER record, not the nested
+            # result/classification)
+            "disagreement": bool(result.get("disagreement")),
+            "wrong_verdict_event": bool(result.get("wrong_verdict_event")),
             "triage": None,  # no disagreements on the measured set
         }
         records.append(rec)

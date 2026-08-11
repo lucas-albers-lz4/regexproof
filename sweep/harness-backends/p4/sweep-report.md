@@ -1,7 +1,7 @@
 # Phase 4 sweep report (P4, #220)
 
 - corpus commit: `0e71c788ddfcd1c0c453648d4bc13077ba0491f4`
-- manifest files: 8 (schema v1: commit + repo-relative paths + sha256)
+- manifest files: 10 (schema v1: commit + repo-relative paths + sha256)
 - manifest verified: True
 
 ## Four-bucket classification (S4)

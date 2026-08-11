@@ -254,14 +254,37 @@ def test_triage_audit_explained_is_enforced(tmp_path):
     assert audit["unexplained"] == ["b", "c", "d"]
 
 
+def test_triage_audit_rejects_out_of_tree_record(tmp_path):
+    # the triage record must live INSIDE the repo root (luna r3 on #234)
+    outside = tmp_path.parent / "outside-record.json"
+    outside.write_text("{}")
+    good_sha = hashlib.sha256(outside.read_bytes()).hexdigest()
+    records = [{"name": "x", "disagreement": True,
+                "triage": {"sha256": good_sha,
+                           "record_path": str(outside),
+                           "reason": "long enough structured reason text"}}]
+    audit = triage_audit(records, {"files": []}, tmp_path)
+    assert audit["unexplained"] == ["x"]
+
+
 def test_u9_publication_consumes_decision_file(tmp_path):
     d = tmp_path / "u9-decision.md"
-    d.write_text("# U9 decision\n\n**DROP** the from_ecma2020 branch.\n")
+    d.write_text("# U9 decision\n\n## Decision: **DROP** the from_ecma2020 branch.\n")
     p = u9_publication(d, reopen_trigger_hit=False, evidence={"x": 1})
     assert "DROP" in p["decision"]
     assert p["consumed_artifact"] == str(d)
     p2 = u9_publication(d, reopen_trigger_hit=True, evidence={"x": 1})
     assert "REOPEN" in p2["decision"]
+
+
+def test_u9_publication_keep_mentioning_drop_fails(tmp_path):
+    # a KEEP decision that merely MENTIONS the DROP flip criterion must NOT
+    # publish as DROP (luna r3 on #234)
+    d = tmp_path / "u9-decision.md"
+    d.write_text("# U9 decision\n\n## Decision: **KEEP** the branch. The DROP\n"
+                 "flip criterion was evaluated and not met.\n")
+    with pytest.raises(ValueError):
+        u9_publication(d, False, {})
 
 
 def test_u9_publication_missing_file_fails(tmp_path):

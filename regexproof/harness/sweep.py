@@ -33,6 +33,7 @@ from __future__ import annotations
 import hashlib
 import json
 import os
+import re
 import subprocess
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -263,13 +264,16 @@ def triage_audit(records: list[dict], manifest: dict, root: Path) -> dict:
     for rec in records:
         if rec.get("disagreement"):
             tr = rec.get("triage") or {}
-            # 'explained' is FILE-BACKED: the sha256 must hash an existing
-            # repository file (the committed triage record) — a fabricated or
-            # shape-only hash fails (luna r2 on #234)
+            # 'explained' is FILE-BACKED + REPO-BOUND (luna r2/r3 on #234):
+            # the sha256 must hash an existing repository file (the committed
+            # triage record) INSIDE the repo root — shape-only hashes and
+            # out-of-tree paths fail
             sha = str(tr.get("sha256") or "")
             record_path = (root / str(tr.get("record_path") or "")).resolve()
+            in_repo = str(record_path).startswith(str(root.resolve()))
             sha_ok = bool(re.fullmatch(r"[0-9a-f]{64}", sha)) and \
-                record_path.is_file() and sha256_file(record_path) == sha
+                in_repo and record_path.is_file() and \
+                sha256_file(record_path) == sha
             reason_ok = bool(tr.get("reason")) and len(str(tr["reason"])) > 10
             if sha_ok and reason_ok:
                 explained += 1
@@ -296,9 +300,11 @@ def u9_publication(decision_file: Path, reopen_trigger_hit: bool,
             f"U9 decision artifact missing: {decision_file} — the sweep "
             "consumes the committed decision, never re-decides silently")
     text = decision_file.read_text()
-    if "DROP" not in text and "drop" not in text:
-        raise ValueError("U9 decision artifact does not carry the DROP "
-                         "decision — refusing to publish")
+    # the DECISION STATEMENT must say DROP (luna r3 on #234: a KEEP decision
+    # that merely MENTIONS the DROP flip criterion must not pass)
+    if not re.search(r"##\s*Decision:\s*\*{0,2}DROP", text, re.IGNORECASE):
+        raise ValueError("U9 decision artifact does not carry a DROP decision "
+                         "statement (## Decision: DROP …) — refusing to publish")
     return {
         "decision": "DROP (from_ecma2020 out of scope)" if not reopen_trigger_hit
         else "REOPEN — new decision required",

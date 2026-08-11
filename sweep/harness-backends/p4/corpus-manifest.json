@@ -33,6 +33,14 @@
   {
    "path": "sweep/harness-backends/p1-baseline/u9-decision.md",
    "sha256": "a480cf05d7d2cc2b024912260a16d831ef558e9a6818d04ae570443cacb0fd89"
+  },
+  {
+   "path": "sweep/harness-backends/p1-baseline/ecma-pilot.json",
+   "sha256": "3c8b8a40ab3f440f6dce12ae11205920c0617ebee698daa3ec157bceb3e9b201"
+  },
+  {
+   "path": "sweep/harness-backends/p1-baseline/ecma-pilot.md",
+   "sha256": "87eda2dc29365a9d72aee119a1fe43c428602eb74b6fbb562050da788f56b1a1"
   }
  ]
 }

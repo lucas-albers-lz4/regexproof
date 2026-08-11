@@ -14,7 +14,7 @@
    "ok": true,
    "witness": {},
    "ground_truth": null,
-   "wall_ms": 16.8,
+   "wall_ms": 17.6,
    "engine_versions": {
     "python": "3.13.5",
     "z3": "5.0.0",
@@ -24,12 +24,12 @@
    "backend": "noodler",
    "noodler_verdict": "unsat",
    "noodler_rc": 1,
-   "noodler_wall_ms": 16.8,
+   "noodler_wall_ms": 17.6,
    "route": "mirror",
    "cross_check_backend": "cvc5",
    "cross_check_abstained": false,
    "cross_check_verdict": "unsat",
-   "cross_check_wall_ms": 10.5,
+   "cross_check_wall_ms": 11.4,
    "state": "decided"
   },
   "classification": {
@@ -42,6 +42,8 @@
    "witness_d16_valid": false
   },
   "cross_check_reason": null,
+  "disagreement": false,
+  "wrong_verdict_event": false,
   "triage": null
  },
  {
@@ -59,7 +61,7 @@
    "ok": true,
    "witness": {},
    "ground_truth": null,
-   "wall_ms": 18.6,
+   "wall_ms": 21.1,
    "engine_versions": {
     "python": "3.13.5",
     "z3": "5.0.0",
@@ -69,12 +71,12 @@
    "backend": "noodler",
    "noodler_verdict": "unsat",
    "noodler_rc": 1,
-   "noodler_wall_ms": 18.6,
+   "noodler_wall_ms": 21.1,
    "route": "mirror",
    "cross_check_backend": "cvc5",
    "cross_check_abstained": true,
    "cross_check_reason": "no-verdict",
-   "cross_check_wall_ms": 30245.6,
+   "cross_check_wall_ms": 30266.9,
    "state": "decided"
   },
   "classification": {
@@ -87,6 +89,8 @@
    "witness_d16_valid": false
   },
   "cross_check_reason": "no-verdict",
+  "disagreement": false,
+  "wrong_verdict_event": false,
   "triage": null
  }
 ]
