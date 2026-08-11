@@ -205,9 +205,11 @@ def run_one(name, entry, require_ground_truth=False):
         "not_proven": False,  # True iff TIMEOUT — surfaced as "not proven"
         "backend": entry.get("backend", "seq"),  # "seq" | "noodler" (additive, Phase 2)
     }
+    constraints, bad = entry["fn"]()
+    if entry.get("backend") == "noodler":
+        return _run_one_noodler(name, entry, constraints, bad, engines, result)
     s = Solver()
     s.set("timeout", entry["timeout_ms"])
-    constraints, bad = entry["fn"]()
     for c in constraints:
         s.add(c)
     s.add(bad)
@@ -299,6 +301,92 @@ def validate_registry(registry=None):
         except RegistrationError as e:
             failures.append(f"{name}: {e}")
     return failures, checked
+
+
+# ---------------------------------------------------------------------------
+# Noodler backend path (Phase 2 PR B — D6 runner + D16 re-validation)
+# ---------------------------------------------------------------------------
+def _run_one_noodler(name, entry, constraints, bad, engines, result):
+    """backend="noodler" properties run the pinned Noodler CLI through the
+    normal result path. Raw evidence only: the per-solver verdict, rc, wall
+    ms, and the D16 re-validation outcome. The verification tier is DERIVED
+    at report time (S15) — never stored here. Absence (binary not found) is
+    recorded as the triage_fallback state, never a failure (PR C wires the
+    operator contract)."""
+    from regexproof.harness.d16 import revalidate_witness
+    from regexproof.harness.noodler_runner import (
+        NoodlerAbsent,
+        noodler_version,
+        run_noodler,
+    )
+
+    s = Solver()
+    s.set("timeout", entry["timeout_ms"])
+    for c in constraints:
+        s.add(c)
+    s.add(bad)
+    try:
+        nd = run_noodler(s.sexpr(), entry["timeout_ms"], want_model=True)
+    except NoodlerAbsent as e:
+        result["result"] = "abstain"
+        result["state"] = "noodler-absent"
+        result["not_proven"] = True
+        result["noodler_verdict"] = "ABSENT"
+        result["triage_override"] = str(e)
+        print(f"[ABSENT] {name}: Noodler binary not available — "
+              "triage_fallback recorded (stock-only environments stay green)")
+        return result
+    result["noodler_verdict"] = nd["verdict"]
+    result["noodler_rc"] = nd["rc"]
+    result["noodler_wall_ms"] = nd["wall_ms"]
+    engines["noodler"] = noodler_version()
+    result["engine_versions"] = engines
+    result["wall_ms"] = nd["wall_ms"]
+    v = nd["verdict"]
+    if nd["state"] == "abstain" or v in ("unknown",):
+        result["result"] = "unknown"
+        result["state"] = v if v.startswith("ABSTAIN") else "solver-abstain"
+        result["not_proven"] = True
+        result["ok"] = False
+        print(f"[ABSTAIN] {name}: Noodler {v} — not proven "
+              f"[{nd['wall_ms']}ms] (abstention is an error state, D15)")
+        return result
+    result["state"] = "decided"
+    if v == "unsat":
+        result["result"] = SolveResult.UNSAT.value
+        result["ok"] = result["expect_unsat"]
+        print(f"[{'PASS' if result['ok'] else 'FAIL'}] {name}: UNSAT via "
+              f"Noodler (property HOLDS)  [{nd['wall_ms']}ms]")
+        return result
+    # sat — D16 re-validation BEFORE the result is usable (uniform, no ECMA
+    # clause per the U9 DROP)
+    result["result"] = SolveResult.SAT.value
+    witness = nd.get("witness") or {}
+    result["witness"] = witness
+    revalidated = bool(witness) and revalidate_witness(
+        constraints, bad, witness, entry["timeout_ms"]
+    )
+    result["d16_revalidated"] = revalidated
+    result["ground_truth"] = None
+    if not witness:
+        result["ok"] = False
+        result["state"] = "witness-unvalidated"
+        print(f"[FAIL] {name}: Noodler sat but no model was parsed — "
+              "witness_unvalidated, result unusable", file=sys.stderr)
+        return result
+    if not revalidated:
+        result["ok"] = False
+        result["state"] = "witness-unvalidated"
+        print(f"[FAIL] {name}: Noodler sat but the witness did NOT re-assert "
+              "sat in stock z3 (D16) — do NOT report this counterexample",
+              file=sys.stderr)
+        return result
+    result["ok"] = not entry["expect_unsat"]
+    result["state"] = "decided"
+    print(f"[{'PASS' if result['ok'] else 'FAIL'}] {name}: SAT via Noodler "
+          f"(D16 re-validated)  [{nd['wall_ms']}ms]")
+    print(f"    witness: {witness!r}")
+    return result
 
 
 # ---------------------------------------------------------------------------
