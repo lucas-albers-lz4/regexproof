@@ -364,6 +364,9 @@ def _run_one_noodler(name, entry, constraints, bad, engines, result):
         print(f"[ABSTAIN] {name}: Noodler {v} — not proven "
               f"[{nd['wall_ms']}ms] (abstention is an error state, D15)")
         return result
+    # parse the witness up-front (the D15 reproduction + D16 both consume it)
+    witness = nd.get("witness") or {}
+    result["witness"] = witness
     # cross-check leg (Phase 3 PR A): the SAME decomposed form, via the cvc5
     # worker with D12 bounded-loop expansion; raw evidence only. Disagreement
     # handling (D15 + exit 2) is the Phase-3 PR B machinery.
@@ -388,6 +391,30 @@ def _run_one_noodler(name, entry, constraints, bad, engines, result):
             else:
                 result["cross_check_verdict"] = cc["verdict"]
         result["cross_check_wall_ms"] = cc["wall_ms"]
+        # D15 verdict resolution (Phase 3 PR B): concrete-vs-concrete
+        # disagreement → the mechanical reproduction rule (the unsat solver
+        # must fail to reproduce the sat witness for a genuine disagreement)
+        if cc["state"] == "decided" and cc["verdict"] != v:
+            from regexproof.harness.d15 import resolve
+            from regexproof.harness.noodler_runner import smt_string
+
+            if v == "sat" and result.get("witness"):
+                def _reproduce():
+                    rep = x_smt
+                    for k, wv in (result.get("witness") or {}).items():
+                        rep += f"(assert (= {k} {smt_string(str(wv))}))\n"
+                    r = run_cvc5(rep, entry["timeout_ms"])
+                    return r["state"] == "decided" and r["verdict"] == "sat"
+
+                res = resolve("sat", cc["verdict"], reproduce=_reproduce)
+            else:
+                # cvc5-sat witness is not captured by the worker — reproduction
+                # unavailable → conservative genuine disagreement (D15)
+                res = resolve(v, cc["verdict"])
+            result["d15"] = res["kind"]
+            result["disagreement"] = res["disagreement"]
+            result["wrong_verdict_event"] = res["wrong_verdict_event"]
+            result["disagreement_detail"] = res["detail"]
     result["state"] = "decided"
     if v == "unsat":
         result["result"] = SolveResult.UNSAT.value
@@ -398,8 +425,6 @@ def _run_one_noodler(name, entry, constraints, bad, engines, result):
     # sat — D16 re-validation BEFORE the result is usable (uniform, no ECMA
     # clause per the U9 DROP)
     result["result"] = SolveResult.SAT.value
-    witness = nd.get("witness") or {}
-    result["witness"] = witness
     revalidated = bool(witness) and revalidate_witness(
         constraints, bad, witness, entry["timeout_ms"]
     )
