@@ -51,8 +51,9 @@ def run(binary, smt, timeout=35):
     except Exception as e:
         return f"DISPATCH-ERROR: {e}", 0.0, None
     dt = (time.perf_counter() - t0) * 1000
-    if rc < 0:
-        # signal death: output untrusted even with a printed verdict (S13 literal)
+    if rc < 0 or rc == 139:
+        # signal death (negative returncode, or the shell's 128+11 convention):
+        # output untrusted even with a printed verdict (S13 literal)
         return f"CRASH(rc={rc})", round(dt, 1), out
     first = out.splitlines()[0] if out else "EMPTY"
     return f"{first}/rc={rc}", round(dt, 1), out
