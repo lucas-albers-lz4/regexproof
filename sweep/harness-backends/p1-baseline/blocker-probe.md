@@ -2,9 +2,13 @@
 
 Run 2026-08-11, pinned Noodler v1.6.1 (sha256 22b19f12…464), stock z3 5.0.0, cvc5
 1.3.4 (isolated worker). Property under test: the mirror language ≡ the as-written
-ECMA language (if exact, any property provable on the mirror holds for the pattern
-as written). **Scope: solver-route feasibility.** The actual fwlive property
+ECMA language (if equivalent, any property provable on the mirror holds for the
+pattern as written). **Scope: solver-route feasibility.** The actual fwlive property
 formulas (F2/F3, #120) are the handoff scope of Phase 5 (#221), not this probe.
+**Equivalence basis: exactness BY CONSTRUCTION (S12 — the lookahead is a
+constant-width positive assertion, so `X(?=K=)` ≡ `XK=` as a search language) plus
+the E2M theorem below plus the 937-string regression corpus. This probe does NOT
+prove the M2E direction (Noodler cannot decide it) — see the theorem section.**
 
 ## Branch outcomes
 
@@ -58,9 +62,11 @@ decides (10/10).
 ## Conclusion
 
 **Solver-route feasibility established for Branch A at `cross-checked`-tier
-availability**: the mirror route is exact within the declared domain (E2M theorem
-unsat), cross-checkable (cvc5 agrees on every string it parses), and
-boundary-correct (13/13 stock, matching real JS). Branch B passes where it decides
-with the honest ceiling; Branch C not hit. The actual fwlive property verdicts —
-the reason this ticket exists — are Phase 5 (#221) work: the route is now
-verified feasible to carry them.
+availability**: the mirror route matches the as-written language on the
+soundness-critical direction (E2M unsat — the mirror cannot miss a glue point),
+is exact by construction (S12) with 937-string regression evidence, cross-checks
+cleanly (cvc5 agrees on every string it parses), and is boundary-correct (13/13
+stock, matching real JS). The M2E direction is regression-evidenced only (Noodler
+cannot decide it). Branch B passes where it decides with the honest ceiling;
+Branch C not hit. The actual fwlive property verdicts — the reason this ticket
+exists — are Phase 5 (#221) work: the route is now verified feasible to carry them.
