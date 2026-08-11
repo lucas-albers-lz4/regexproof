@@ -14,7 +14,7 @@
    "ok": true,
    "witness": {},
    "ground_truth": null,
-   "wall_ms": 17.6,
+   "wall_ms": 17.0,
    "engine_versions": {
     "python": "3.13.5",
     "z3": "5.0.0",
@@ -24,12 +24,12 @@
    "backend": "noodler",
    "noodler_verdict": "unsat",
    "noodler_rc": 1,
-   "noodler_wall_ms": 17.6,
+   "noodler_wall_ms": 17.0,
    "route": "mirror",
    "cross_check_backend": "cvc5",
    "cross_check_abstained": false,
    "cross_check_verdict": "unsat",
-   "cross_check_wall_ms": 11.4,
+   "cross_check_wall_ms": 11.8,
    "state": "decided"
   },
   "classification": {
@@ -61,7 +61,7 @@
    "ok": true,
    "witness": {},
    "ground_truth": null,
-   "wall_ms": 21.1,
+   "wall_ms": 18.8,
    "engine_versions": {
     "python": "3.13.5",
     "z3": "5.0.0",
@@ -71,12 +71,12 @@
    "backend": "noodler",
    "noodler_verdict": "unsat",
    "noodler_rc": 1,
-   "noodler_wall_ms": 21.1,
+   "noodler_wall_ms": 18.8,
    "route": "mirror",
    "cross_check_backend": "cvc5",
    "cross_check_abstained": true,
    "cross_check_reason": "no-verdict",
-   "cross_check_wall_ms": 30266.9,
+   "cross_check_wall_ms": 30243.6,
    "state": "decided"
   },
   "classification": {
