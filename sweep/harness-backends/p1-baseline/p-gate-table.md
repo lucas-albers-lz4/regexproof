@@ -11,37 +11,47 @@ mirror has no encoding without full Unicode tables. No silent folding;
 the gate is conservative (node accepts, the harness rejects with a
 rewrite suggestion: expand to explicit classes).
 
-Corpus: `a A 1 _ é π <empty> ab` — node bitstring per form.
+Corpus (node): `a A 1 _ é π <empty> ab` — bitstring per form.
+Probe (from_ecma2020): 4 discriminating strings `a p{L} p é` — bits per
+string (1=sat 0=unsat ?=unknown T=timeout C=crash). The literal
+interpretation of `\p{L}` matches `p{L}` (bit 2 = 1) and misses `a`/`é`;
+real property semantics would match `a` and `é`. NOTE: from_ecma2020 has
+NO flag representation — the flag-i/flag-u rows probe the BASE form at
+solver level (intentional; the flags exist only in the node column).
 
-| position | form | flags | node | from_ecma2020 | gate |
+| position | form | flags | node | from_ecma2020 probe | gate |
 |---|---|---|---|---|---|
-| plain | `\p{L}` | — | 00000000 | unsat/rc=0 | REJECT |
-| plain | `\p{Lu}` | — | 00000000 | unsat/rc=0 | REJECT |
-| plain | `\p{ASCII}` | — | 00000000 | unsat/rc=0 | REJECT |
-| plain | `\p{Any}` | — | 00000000 | unsat/rc=0 | REJECT |
-| plain | `\P{L}` | — | 00000000 | unsat/rc=0 | REJECT |
-| in-class | `[\p{L}]` | — | 00000000 | unsat/rc=0 | REJECT |
-| in-class | `[\p{L}\d]` | — | 00100000 | unsat/rc=0 | REJECT |
-| quantified | `\p{L}+` | — | 00000000 | unsat/rc=0 | REJECT |
-| quantified | `\p{L}{2}` | — | 00000000 | unsat/rc=0 | REJECT |
-| flag-i | `\p{L}` | i | 00000000 | unsat/rc=0 | REJECT |
-| flag-i | `\p{Lu}` | i | 00000000 | unsat/rc=0 | REJECT |
-| script | `\p{Script=Greek}` | — | 00000000 | unsat/rc=0 | REJECT |
-| script | `\p{Greek}` | — | 00000000 | unsat/rc=0 | REJECT |
-| escaped | `\\p{L}` | — | 00000000 | unsat/rc=0 | ACCEPT |
-| escaped | `[\\p{L}]` | — | 00000000 | unsat/rc=0 | ACCEPT |
-| malformed | `\p{` | — | 00000000 | unsat/rc=0 | REJECT |
-| malformed | `\p{}` | — | 00000000 | unsat/rc=0 | REJECT |
-| malformed | `\p{L` | — | 00000000 | unsat/rc=0 | REJECT |
-| malformed | `\p{L}}` | — | 00000000 | unsat/rc=0 | REJECT |
-| malformed | `\p{L}{` | — | 00000000 | unsat/rc=0 | REJECT |
-| malformed | `\p{Xyz}` | — | 00000000 | unsat/rc=0 | REJECT |
-| malformed | `\p{L}` | u | 11001101 | unsat/rc=0 | REJECT |
+| plain | `\p{L}` | — | 00000000 | 0100 | REJECT |
+| plain | `\p{Lu}` | — | 00000000 | 0000 | REJECT |
+| plain | `\p{ASCII}` | — | 00000000 | 0000 | REJECT |
+| plain | `\p{Any}` | — | 00000000 | 0000 | REJECT |
+| plain | `\P{L}` | — | 00000000 | 0000 | REJECT |
+| in-class | `[\p{L}]` | — | 00000000 | 0110 | REJECT |
+| in-class | `[\p{L}\d]` | — | 00100000 | 0110 | REJECT |
+| quantified | `\p{L}+` | — | 00000000 | 0100 | REJECT |
+| quantified | `\p{L}{2}` | — | 00000000 | 0000 | REJECT |
+| flag-i | `\p{L}` | i | 00000000 | 0100 | REJECT |
+| flag-i | `\p{Lu}` | i | 00000000 | 0000 | REJECT |
+| script | `\p{Script=Greek}` | — | 00000000 | 0000 | REJECT |
+| script | `\p{Greek}` | — | 00000000 | 0000 | REJECT |
+| escaped | `\\p{L}` | — | 00000000 | 0000 | ACCEPT |
+| escaped | `[\\p{L}]` | — | 00000000 | 0110 | ACCEPT |
+| malformed | `\p{` | — | 00000000 | 0100 | REJECT |
+| malformed | `\p{}` | — | 00000000 | 0000 | REJECT |
+| malformed | `\p{L` | — | 00000000 | 0100 | REJECT |
+| malformed | `\p{L}}` | — | 00000000 | 0000 | REJECT |
+| malformed | `\p{L}{` | — | 00000000 | 0000 | REJECT |
+| malformed | `\p{Xyz}` | — | 00000000 | 0000 | REJECT |
+| malformed | `\p{L}` | u | 11001101 | 0100 | REJECT |
 
 ## Reading
-- **from_ecma2020 column**: `unsat/rc=0` on every probe = the pattern
-  was ACCEPTED and silently re-interpreted as literal text (identity
-  escape). Never a parse error, never an abstention — the trap.
+- **from_ecma2020 probe column**: RAW pattern text in the SMT-LIB
+  literal (backslash is a literal char — no escaping; the measured
+  escape-input class from the pilot). The 4-bit pattern discriminates:
+  `p{L}` bit = 1 proves the pattern matches the literal string (identity
+  escape), `a`/`é` bits = 0 prove no property semantics. `unsat/rc=0` on
+  every probe = accepted and silently re-interpreted — never a parse
+  error, never an abstention — the trap.
 - **node without /u**: identical identity-escape semantics (bits match
   the literal interpretation, e.g. `[\p{L}\d]` = literal-p OR digit →
   only '1' matches). Node and the solver agree — but both are WRONG

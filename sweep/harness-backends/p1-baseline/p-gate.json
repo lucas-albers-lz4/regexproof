@@ -4,7 +4,7 @@
   "form": "\\p{L}",
   "flags": "",
   "node_bits": "00000000",
-  "from_ecma2020": "unsat/rc=0",
+  "from_ecma2020": "0100",
   "gate": "REJECT"
  },
  {
@@ -12,7 +12,7 @@
   "form": "\\p{Lu}",
   "flags": "",
   "node_bits": "00000000",
-  "from_ecma2020": "unsat/rc=0",
+  "from_ecma2020": "0000",
   "gate": "REJECT"
  },
  {
@@ -20,7 +20,7 @@
   "form": "\\p{ASCII}",
   "flags": "",
   "node_bits": "00000000",
-  "from_ecma2020": "unsat/rc=0",
+  "from_ecma2020": "0000",
   "gate": "REJECT"
  },
  {
@@ -28,7 +28,7 @@
   "form": "\\p{Any}",
   "flags": "",
   "node_bits": "00000000",
-  "from_ecma2020": "unsat/rc=0",
+  "from_ecma2020": "0000",
   "gate": "REJECT"
  },
  {
@@ -36,7 +36,7 @@
   "form": "\\P{L}",
   "flags": "",
   "node_bits": "00000000",
-  "from_ecma2020": "unsat/rc=0",
+  "from_ecma2020": "0000",
   "gate": "REJECT"
  },
  {
@@ -44,7 +44,7 @@
   "form": "[\\p{L}]",
   "flags": "",
   "node_bits": "00000000",
-  "from_ecma2020": "unsat/rc=0",
+  "from_ecma2020": "0110",
   "gate": "REJECT"
  },
  {
@@ -52,7 +52,7 @@
   "form": "[\\p{L}\\d]",
   "flags": "",
   "node_bits": "00100000",
-  "from_ecma2020": "unsat/rc=0",
+  "from_ecma2020": "0110",
   "gate": "REJECT"
  },
  {
@@ -60,7 +60,7 @@
   "form": "\\p{L}+",
   "flags": "",
   "node_bits": "00000000",
-  "from_ecma2020": "unsat/rc=0",
+  "from_ecma2020": "0100",
   "gate": "REJECT"
  },
  {
@@ -68,7 +68,7 @@
   "form": "\\p{L}{2}",
   "flags": "",
   "node_bits": "00000000",
-  "from_ecma2020": "unsat/rc=0",
+  "from_ecma2020": "0000",
   "gate": "REJECT"
  },
  {
@@ -76,7 +76,7 @@
   "form": "\\p{L}",
   "flags": "i",
   "node_bits": "00000000",
-  "from_ecma2020": "unsat/rc=0",
+  "from_ecma2020": "0100",
   "gate": "REJECT"
  },
  {
@@ -84,7 +84,7 @@
   "form": "\\p{Lu}",
   "flags": "i",
   "node_bits": "00000000",
-  "from_ecma2020": "unsat/rc=0",
+  "from_ecma2020": "0000",
   "gate": "REJECT"
  },
  {
@@ -92,7 +92,7 @@
   "form": "\\p{Script=Greek}",
   "flags": "",
   "node_bits": "00000000",
-  "from_ecma2020": "unsat/rc=0",
+  "from_ecma2020": "0000",
   "gate": "REJECT"
  },
  {
@@ -100,7 +100,7 @@
   "form": "\\p{Greek}",
   "flags": "",
   "node_bits": "00000000",
-  "from_ecma2020": "unsat/rc=0",
+  "from_ecma2020": "0000",
   "gate": "REJECT"
  },
  {
@@ -108,7 +108,7 @@
   "form": "\\\\p{L}",
   "flags": "",
   "node_bits": "00000000",
-  "from_ecma2020": "unsat/rc=0",
+  "from_ecma2020": "0000",
   "gate": "ACCEPT"
  },
  {
@@ -116,7 +116,7 @@
   "form": "[\\\\p{L}]",
   "flags": "",
   "node_bits": "00000000",
-  "from_ecma2020": "unsat/rc=0",
+  "from_ecma2020": "0110",
   "gate": "ACCEPT"
  },
  {
@@ -124,7 +124,7 @@
   "form": "\\p{",
   "flags": "",
   "node_bits": "00000000",
-  "from_ecma2020": "unsat/rc=0",
+  "from_ecma2020": "0100",
   "gate": "REJECT"
  },
  {
@@ -132,7 +132,7 @@
   "form": "\\p{}",
   "flags": "",
   "node_bits": "00000000",
-  "from_ecma2020": "unsat/rc=0",
+  "from_ecma2020": "0000",
   "gate": "REJECT"
  },
  {
@@ -140,7 +140,7 @@
   "form": "\\p{L",
   "flags": "",
   "node_bits": "00000000",
-  "from_ecma2020": "unsat/rc=0",
+  "from_ecma2020": "0100",
   "gate": "REJECT"
  },
  {
@@ -148,7 +148,7 @@
   "form": "\\p{L}}",
   "flags": "",
   "node_bits": "00000000",
-  "from_ecma2020": "unsat/rc=0",
+  "from_ecma2020": "0000",
   "gate": "REJECT"
  },
  {
@@ -156,7 +156,7 @@
   "form": "\\p{L}{",
   "flags": "",
   "node_bits": "00000000",
-  "from_ecma2020": "unsat/rc=0",
+  "from_ecma2020": "0000",
   "gate": "REJECT"
  },
  {
@@ -164,7 +164,7 @@
   "form": "\\p{Xyz}",
   "flags": "",
   "node_bits": "00000000",
-  "from_ecma2020": "unsat/rc=0",
+  "from_ecma2020": "0000",
   "gate": "REJECT"
  },
  {
@@ -172,7 +172,7 @@
   "form": "\\p{L}",
   "flags": "u",
   "node_bits": "11001101",
-  "from_ecma2020": "unsat/rc=0",
+  "from_ecma2020": "0100",
   "gate": "REJECT"
  }
 ]

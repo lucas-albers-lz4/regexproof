@@ -41,10 +41,54 @@ FORMS = [
     ("malformed", r"\p{L}}", ""),
     ("malformed", r"\p{L}{", ""),
     ("malformed", r"\p{Xyz}", ""),
-    ("malformed", r"\p{L}", "u"),        # /u flag: strict semantics
+    ("malformed", r"\p{L}", "u"),        # VALID with /u — real property semantics
 ]
 
+# discriminating probe strings: the literal interpretation of \p{L} matches
+# "p{L}" and misses "a"/"é"; real property semantics would match "a" and "é"
+PROBE_STRS = ["a", "p{L}", "p", "é"]
 TEST_STRS = ["a", "A", "1", "_", "é", "π", "", "ab"]
+
+def noodler_probe(pat_ecma, strs):
+    """from_ecma2020 membership per string — RAW pattern text in the SMT-LIB
+    literal (backslash is a literal char in SMT-LIB; doubling would test a
+    different regex — the measured escape-input class). One assertion per string."""
+    out_bits = ""
+    for s in strs:
+        body = ("(set-logic QF_SLIA)\n(declare-const s String)\n"
+                f"(assert (str.in_re s (re.from_ecma2020 '{pat_ecma}')))\n"
+                f'(assert (= s "{s}"))\n(check-sat)\n')
+        with tempfile.NamedTemporaryFile("w", suffix=".smt2", delete=False) as f:
+            f.write(body)
+            path = f.name
+        try:
+            t0 = time.perf_counter()
+            try:
+                p = subprocess.Popen([NOODLER, path], stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                                     text=True, start_new_session=True)
+                try:
+                    out, _ = p.communicate(timeout=35)
+                except subprocess.TimeoutExpired:
+                    os.killpg(os.getpgid(p.pid), 9)
+                    p.communicate()
+                    out_bits += "T"
+                    continue
+            except FileNotFoundError:
+                return "NO-BINARY"
+            dt = (time.perf_counter() - t0) * 1000
+            first = out.strip().splitlines()[0] if out.strip() else "EMPTY"
+            if p.returncode < 0 or p.returncode == 139:
+                out_bits += "C"
+                continue
+            if first == "sat":
+                out_bits += "1"
+            elif first == "unsat":
+                out_bits += "0"
+            else:
+                out_bits += "?"
+        finally:
+            os.unlink(path)
+    return out_bits
 
 def node_test(pat, flags, strs):
     js = ",".join(json.dumps(s) for s in strs)
@@ -63,36 +107,6 @@ def node_test(pat, flags, strs):
     finally:
         os.unlink(path)
 
-def noodler_probe(pat_ecma):
-    """from_ecma2020 membership on one string — records the solver's response to
-    the \p form (the rejection evidence at solver level)."""
-    body = ("(set-logic QF_SLIA)\n(declare-const s String)\n"
-            f"(assert (str.in_re s (re.from_ecma2020 '{pat_ecma}')))\n"
-            '(assert (= s "a"))\n(check-sat)\n')
-    with tempfile.NamedTemporaryFile("w", suffix=".smt2", delete=False) as f:
-        f.write(body)
-        path = f.name
-    try:
-        t0 = time.perf_counter()
-        try:
-            p = subprocess.Popen([NOODLER, path], stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-                                 text=True, start_new_session=True)
-            try:
-                out, _ = p.communicate(timeout=35)
-            except subprocess.TimeoutExpired:
-                os.killpg(os.getpgid(p.pid), 9)
-                p.communicate()
-                return "TIMEOUT"
-        except FileNotFoundError:
-            return "NO-BINARY"
-        dt = (time.perf_counter() - t0) * 1000
-        first = out.strip().splitlines()[0] if out.strip() else "EMPTY"
-        if p.returncode < 0 or p.returncode == 139:
-            return f"CRASH(rc={p.returncode})"
-        return f"{first}/rc={p.returncode}"
-    finally:
-        os.unlink(path)
-
 def gate_decision(pat):
     """The harness registration gate: REJECT any real property-escape token
     \\p{ or \\P{ (odd backslash chain), ACCEPT only escaped-literal forms
@@ -105,9 +119,10 @@ def main():
     rows = []
     for pos, form, flags in FORMS:
         node_bits = node_test(form, flags, TEST_STRS)
-        # search-wrapped form for the from_ecma2020 probe
-        probe_pat = ".*" + form.replace("\\", "\\\\") + ".*"
-        ndl = noodler_probe(probe_pat)
+        # search-wrapped RAW pattern (no backslash doubling — SMT-LIB has no
+        # backslash escapes; the raw text is the measured input)
+        probe_pat = ".*" + form + ".*"
+        ndl = noodler_probe(probe_pat, PROBE_STRS)
         gate = gate_decision(form)
         rows.append({"position": pos, "form": form, "flags": flags,
                      "node_bits": node_bits, "from_ecma2020": ndl, "gate": gate})
@@ -129,18 +144,28 @@ def main():
              "the gate is conservative (node accepts, the harness rejects with a",
              "rewrite suggestion: expand to explicit classes).",
              "",
-             "Corpus: `a A 1 _ é π <empty> ab` — node bitstring per form.",
+             "Corpus (node): `a A 1 _ é π <empty> ab` — bitstring per form.",
+             "Probe (from_ecma2020): 4 discriminating strings `a p{L} p é` — bits per",
+             "string (1=sat 0=unsat ?=unknown T=timeout C=crash). The literal",
+             "interpretation of `\\p{L}` matches `p{L}` (bit 2 = 1) and misses `a`/`é`;",
+             "real property semantics would match `a` and `é`. NOTE: from_ecma2020 has",
+             "NO flag representation — the flag-i/flag-u rows probe the BASE form at",
+             "solver level (intentional; the flags exist only in the node column).",
              "",
-             "| position | form | flags | node | from_ecma2020 | gate |",
+             "| position | form | flags | node | from_ecma2020 probe | gate |",
              "|---|---|---|---|---|---|"]
     for r in rows:
         lines.append(f"| {r['position']} | `{r['form']}` | {r['flags'] or '—'} | "
                      f"{r['node_bits']} | {r['from_ecma2020']} | {r['gate']} |")
     lines += ["",
               "## Reading",
-              "- **from_ecma2020 column**: `unsat/rc=0` on every probe = the pattern",
-              "  was ACCEPTED and silently re-interpreted as literal text (identity",
-              "  escape). Never a parse error, never an abstention — the trap.",
+              "- **from_ecma2020 probe column**: RAW pattern text in the SMT-LIB",
+              "  literal (backslash is a literal char — no escaping; the measured",
+              "  escape-input class from the pilot). The 4-bit pattern discriminates:",
+              "  `p{L}` bit = 1 proves the pattern matches the literal string (identity",
+              "  escape), `a`/`é` bits = 0 prove no property semantics. `unsat/rc=0` on",
+              "  every probe = accepted and silently re-interpreted — never a parse",
+              "  error, never an abstention — the trap.",
               "- **node without /u**: identical identity-escape semantics (bits match",
               "  the literal interpretation, e.g. `[\\p{L}\\d]` = literal-p OR digit →",
               "  only '1' matches). Node and the solver agree — but both are WRONG",
