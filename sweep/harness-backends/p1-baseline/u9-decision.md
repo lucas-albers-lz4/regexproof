@@ -9,21 +9,26 @@ new fwlive pattern lacking a standard-encoding mirror AUTO-REOPENS this decision
 ## Evidence per condition (all measured 2026-08-11, pinned v1.6.1)
 
 ### Condition (a): all six patterns have proof-capable mirror routes — **MET**
-- ECMA-route pilot (#223, merged): **0 divergences on 5,622 decided comparisons**
-  across all six patterns (real JS vs from_ecma2020 vs stock-z3 mirror; 937-string
-  corpus each). The mirror ≡ real implementation on every decided string.
-- Blocker probe (#224, merged): E2M theorem (ECMA ⊆ mirror) **UNSAT within the
-  declared ASCII domain** — the mirror cannot miss a glue point; boundary set
-  13/13 matching real JS; cvc5 agrees on every mirror formula it parses.
-- Exactness basis: S12 by-construction argument (constant-width positive
-  lookahead elimination) + E2M + 937-string regression. The M2E direction is
-  regression-evidenced only (Noodler SIGABRTs on negated `from_ecma2020`).
+Per-pattern evidence (all measured 2026-08-11, pinned v1.6.1):
+
+| Pattern | Exactness basis | Level |
+|---|---|---|
+| NETFILTER_KV_GLUE | S12 by-construction (constant-width positive lookahead elimination) + **E2M theorem UNSAT** within the declared ASCII domain (blocker probe #224) + 937-string corpus | theorem + regression |
+| NON_FIREWALL_PREFIX, FIREWALL_HINT, ACTION_RE, DENY_ACTION, TCP_FLAG_TAIL | boundary-exact encodings (pilot #223) + **0 divergences on the 937-string corpus each** (real JS vs mirror) | regression parity (no solver-level theorem — the corpus is the evidence) |
+
+The 5,622-comparison pilot corpus establishes regression parity on every decided
+string; the E2M theorem covers the lookahead pattern specifically. M2E is
+regression-only for all six (Noodler SIGABRTs on negated `from_ecma2020`).
+Boundary set 13/13 matching real JS; cvc5 agrees on every mirror formula it
+parses (blocker probe #224).
 
 ### Condition (b): no consumer needs ECMA-as-written output — **MET (with the
 trigger as the safety net)**
-- The only consumer, the fwlive #120 scan, classifies with the six patterns — all
-  six are mirror-expressible; nothing in the scan requires the solver to parse
-  the pattern AS WRITTEN (the mirrors are exact by construction + E2M + corpus).
+- The fwlive #120 scan classifies with the six patterns — all six are
+  mirror-expressible (per-pattern evidence above); no CURRENT consumer requires
+  the solver to parse the pattern AS WRITTEN. This includes the design's P7
+  fwlive handoff (its intended consumer): all six handoff patterns are
+  mirror-expressible, so the handoff proceeds on mirrors.
 - The as-written route's residual values (diagnostic fidelity for unmirrorable
   future patterns) are exactly what the reopen trigger guards: any new pattern
   without a mirror reopens U9 before the route is needed.
@@ -60,7 +65,20 @@ consumer case, before any harness work proceeds. Also re-evaluated if the fwlive
 scan explicitly requests as-written audit output (a consumer-need change).
 
 ## Consequence summary for the wave
-- #218 Phase 2 scope shrinks (no ECMA leg); #219 cross-check simplifies (mirror
-  formulas only); #221 fwlive handoff uses mirrors for all six patterns.
-- The equivalence evidence package (pilot + blocker probe + \p gate) is the
-  permanent justification, committed under p1-baseline/.
+- **#218 Phase 2 scope shrinks**: no `dialect="ecma"` registry field, no
+  `from_ecma2020` invocation in the runner, no ECMA-leg tier ceiling logic; the
+  S3 authority assertion simplifies to "every harness result is mirror-route".
+  The #213 canonical body's ECMA registry fields and S3 ECMA-authority wording
+  are marked **superseded for the current scope** by this decision (a #213
+  amendment note accompanies this PR's merge); #218's body drops its ECMA items.
+- **#219 cross-check simplifies**: mirror formulas only (no ECMA-leg ceiling
+  class).
+- **D14 / P5 differential fuzz is UNAFFECTED**: the fuzz compares real JS vs the
+  translated mirror — a mirror-only world keeps that comparison intact (it is
+  the mirror's regression evidence, now the sole exactness evidence for five of
+  six patterns).
+- **P7 fwlive handoff (#221)**: proceeds on mirrors for all six patterns — the
+  handoff artifact is the mirror encoding table + the per-pattern equivalence
+  evidence package (pilot + blocker probe + \p gate), not an as-written runner.
+- The equivalence evidence package is the permanent justification, committed
+  under p1-baseline/.
