@@ -4,6 +4,31 @@ All entries below cover the initial development cycle plus the 2026-08-08
 dogfooding/corpus/fix waves. No release tags exist yet. This changelog groups
 the work by phase; dates are merge dates.
 
+## Harness backends wave (2026-08-11)
+
+Design #213 closed at the APPROVE boundary (rev 7.2, U9 DROP). Phases 1-4
+merged as #222-#234:
+
+- **Phase 1 (#217)**: 28-row parity matrix (25/25 verdict parity; both
+  timeout classes rescued to 17/19 ms), ECMA pilot (0 divergences on 5,622
+  decided comparisons), blocker probe (E2M unsat in the ASCII domain; Noodler
+  SIGABRTs on negated from_ecma2020), R8 pre-flight 7/7, \p gate table
+  (silent literalization measured), R5 cost table (download 0.83 s, ~144x).
+- **Phase 2 (#218)**: registration gates (\p tokenizer + D7 structural
+  checks via the Node/regexpp parser), D6 Noodler runner (raw-bytes SMT-LIB,
+  process-group kills, S13 rc<0/139 classification, sha256 pin in the
+  runner), D16 witness re-validation, the S10 operator contract (0 = recorded,
+  1 = not-proven, 2 = disagreement).
+- **Phase 3 (#219)**: cvc5 cross-check leg (per-query worker isolation, D12
+  bounded-loop expansion cap 16), report-time verification tiers (S15),
+  D15 verdict resolution (27-triple table) + the mechanical disagreement rule
+  + exit 2.
+- **Phase 4 (#220)**: four-bucket sweep (proven / finding /
+  escalated-unconfirmed / still-unknown) with the versioned manifest, metric 8,
+  D10 decision, S14-enforced triage audit, U9 publication; CI for the pinned
+  Noodler asset (sha256-verified download + R8 pre-flight + S16 absent
+  fixture), mutation-coverage gate, R5 finalization + CI logistics policy.
+
 ## Foundations (2026-08-06)
 
 - Initial release of the playbook and toolkit for Z3 regex verification.

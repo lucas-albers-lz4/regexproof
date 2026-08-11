@@ -38,3 +38,24 @@ existed. The download leg passes with ~144× headroom and the per-property leg w
 re-verified with real wall-clock numbers in the P4 CI job. No threshold required a
 bump. The bump procedure (design R5) remains: exceed → mapped action + maintainer
 approval.
+
+## Finalization (Phase 4, #220)
+
+**Measured vs pre-committed ranges — all within, no bump required:**
+
+| Leg | Pre-committed (rev 7) | Measured | Headroom |
+|---|---|---|---|
+| cold download | ≤ 2 min | 0.83 s | ~144× |
+| per-property overhead | ≤ 2 s | ~16 ms | ~125× |
+| per-property total | ≤ 2 s | 11.8–69.4 ms | ~29×–125× |
+| CI wall-clock (escalated set) | ≤ 15% of stock | projected; **re-verified by the P4 noodler CI job on every run** (#220 PR B) | — |
+
+**CI logistics policy (normative):**
+- **Cache key**: the asset's sha256 (`22b19f12…464` for v1.6.1) — a version bump
+  changes the key, invalidating stale caches; never a tag or date.
+- **Owner**: the regexproof maintainers (lucas-albers-lz4); the pin lives in
+  `preflight.py` (R8) + the CI download step + `PIN.md`.
+- **Bump procedure**: new VeriFIT release → verify sha256 on a cold download →
+  update the pin in `preflight.py` + the CI step + `PIN.md` → the P4 sweep's
+  manifest re-pin (`--refresh`) → luna gate on the bump PR. Any measured
+  threshold breach triggers the mapped action (design R5) + maintainer approval.

@@ -36,6 +36,10 @@ def derive_tier(result: dict) -> str:
         return TIER_SEQ_ONLY if backend == "seq" else TIER_ESCALATED
     if result.get("cross_check_abstained"):
         return TIER_ESCALATED
+    if result.get("triage_fallback") or result.get("noodler_verdict") == "ABSENT":
+        # §10 row: backend absent → the stock run's result IS the evidence →
+        # seq-only (never escalated — nothing escalated)
+        return TIER_SEQ_ONLY
     if result.get("noodler_verdict") == "unknown" or str(
         result.get("noodler_verdict", "")
     ).startswith("ABSTAIN"):
