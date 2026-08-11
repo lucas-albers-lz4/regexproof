@@ -270,11 +270,16 @@ def triage_audit(records: list[dict], manifest: dict, root: Path) -> dict:
             # out-of-tree paths fail
             sha = str(tr.get("sha256") or "")
             record_path = (root / str(tr.get("record_path") or "")).resolve()
-            in_repo = str(record_path).startswith(str(root.resolve()))
+            # containment via is_relative_to (a startswith prefix check is
+            # vulnerable to sibling-prefix paths, luna r4 on #234)
+            in_repo = record_path.is_relative_to(root.resolve())
             sha_ok = bool(re.fullmatch(r"[0-9a-f]{64}", sha)) and \
                 in_repo and record_path.is_file() and \
                 sha256_file(record_path) == sha
-            reason_ok = bool(tr.get("reason")) and len(str(tr["reason"])) > 10
+            # a structured reason: non-trivial length AND at least three
+            # distinct tokens (filler/repetition fails, luna r4 on #234)
+            rsn = str(tr.get("reason") or "")
+            reason_ok = len(rsn) >= 20 and len(set(rsn.split())) >= 3
             if sha_ok and reason_ok:
                 explained += 1
             else:

@@ -267,6 +267,18 @@ def test_triage_audit_rejects_out_of_tree_record(tmp_path):
     assert audit["unexplained"] == ["x"]
 
 
+def test_triage_audit_rejects_filler_reason(tmp_path):
+    # a filler reason (repetition) must fail the structure check (luna r4)
+    rec_file = tmp_path / "triage-record.json"
+    rec_file.write_text("{}")
+    good_sha = hashlib.sha256(rec_file.read_bytes()).hexdigest()
+    records = [{"name": "x", "disagreement": True,
+                "triage": {"sha256": good_sha, "record_path": rec_file.name,
+                           "reason": "same same same same same same same"}}]
+    audit = triage_audit(records, {"files": []}, tmp_path)
+    assert audit["unexplained"] == ["x"]
+
+
 def test_u9_publication_consumes_decision_file(tmp_path):
     d = tmp_path / "u9-decision.md"
     d.write_text("# U9 decision\n\n## Decision: **DROP** the from_ecma2020 branch.\n")
