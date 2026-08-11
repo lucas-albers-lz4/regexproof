@@ -63,7 +63,7 @@ class Classification:
     evidence: dict = field(default_factory=dict)
 
     def to_record(self) -> dict:
-        return {
+        rec = {
             "bucket": self.bucket,
             "noodler_verdict": self.noodler_verdict,
             "cross_check_verdict": self.cross_check_verdict,
@@ -72,6 +72,9 @@ class Classification:
             "disagreement": self.disagreement,
             "witness_d16_valid": self.witness_d16_valid,
         }
+        if self.evidence:
+            rec["reason"] = self.evidence.get("reason")
+        return rec
 
 
 def classify(result: dict) -> Classification:
@@ -122,13 +125,22 @@ def classify(result: dict) -> Classification:
                               witness_d16_valid=True)
 
     # noodler == "unsat" (decided)
-    holds = bool(ok)  # expect_unsat match
+    holds = bool(ok)  # the property's expectation is satisfied
+    if not holds:
+        # an unsat that CONTRADICTS the declared expectation is never proven —
+        # escalated at best (the cross-check cannot rescue a failed property)
+        return Classification(BUCKET_ESCALATED, noodler, cc_verdict,
+                              cross_check_abstained=cc_abstained,
+                              cross_check_absent=cc_absent,
+                              evidence={"reason": "expectation not satisfied"})
     if cc_abstained or cc_absent:
         # decided but the cross-check leg did not confirm → escalated-unconfirmed
         return Classification(BUCKET_ESCALATED, noodler, cc_verdict,
                               cross_check_abstained=cc_abstained,
                               cross_check_absent=cc_absent)
-    if cc_verdict == "unsat":
+    if cc_verdict == "unsat" and result.get("route") == "mirror":
+        # S4 proven REQUIRES: expectation holds + cross-check agrees + the S3
+        # authority guard (explicitly recorded route:"mirror")
         return Classification(BUCKET_PROVEN, noodler, cc_verdict)
     # cross-check absent/abstained already handled; disagreeing concrete
     # verdicts were handled above; reaching here = cc decided something else
@@ -145,24 +157,26 @@ def sha256_file(path: Path) -> str:
     return h.hexdigest()
 
 
-def build_manifest(commit: str, paths: list[Path]) -> dict:
+def build_manifest(commit: str, paths: list[Path], root: Path) -> dict:
     """Versioned corpus manifest (schema from Phase 1: commit + paths +
-    hashes)."""
+    hashes). Paths are REPO-RELATIVE (verification works from any checkout —
+    luna r1 on #234)."""
     return {
         "schema_version": 1,
         "commit": commit,
         "files": [
-            {"path": str(p), "sha256": sha256_file(p)} for p in paths
+            {"path": str(p.relative_to(root)), "sha256": sha256_file(p)}
+            for p in paths
         ],
     }
 
 
-def verify_manifest(manifest: dict) -> list[str]:
-    """Verify the manifest against disk; returns a list of mismatches (empty
-    = verified)."""
+def verify_manifest(manifest: dict, root: Path) -> list[str]:
+    """Verify the manifest against disk (repo-relative paths resolved against
+    `root`); returns a list of mismatches (empty = verified)."""
     problems = []
     for f in manifest.get("files", []):
-        p = Path(f["path"])
+        p = (root / f["path"]).resolve()
         if not p.is_file():
             problems.append(f"{f['path']}: missing")
             continue
@@ -172,39 +186,72 @@ def verify_manifest(manifest: dict) -> list[str]:
 
 
 def metric8(results: list[dict]) -> dict:
-    """Residual-undetectable counts (metric 8)."""
+    """Residual-undetectable counts (metric 8). The classes are DISJOINT:
+    cvc5-abstained = the cross-check leg abstained OR was absent OR hit the
+    D12 re.loop cap (all cvc5-side); noodler-only = properties with NO cvc5
+    representation at all (none measured — both sweep classes are
+    cvc5-expressible); ecma-route = 0 post-U9-DROP."""
     m = {M8_NOODLER_ONLY: 0, M8_ECMA_ROUTE: 0, M8_CVC5_ABSTAINED: 0}
     for r in results:
-        if r.get("cross_check_abstained") or r.get("cross_check_absent"):
+        if (r.get("cross_check_abstained") or r.get("cross_check_absent")
+                or str(r.get("cross_check_reason", "")).startswith("re.loop-cap")):
             m[M8_CVC5_ABSTAINED] += 1
-        if r.get("cross_check_reason", "").startswith("re.loop-cap"):
-            m[M8_NOODLER_ONLY] += 1
-    # ECMA-route: 0 post-U9-DROP (no ECMA leg exists)
     return m
 
 
 def divergence_rate(results: list[dict]) -> dict:
-    """D10 divergence-rate record: decided cross-check pairs vs disagreements."""
+    """D10 divergence-rate record: decided cross-check pairs vs DIVERGENT
+    pairs. A divergent pair is a hard disagreement OR a wrong-verdict event
+    (both are concrete mismatches — the reproduction outcome only decides
+    whether the mismatch is fatal)."""
     decided = [r for r in results
                if r.get("cross_check_verdict") is not None]
-    disagreed = [r for r in decided if r.get("disagreement")]
+    divergent = [r for r in decided
+                 if r.get("disagreement") or r.get("wrong_verdict_event")]
     return {
         "decided_pairs": len(decided),
-        "disagreements": len(disagreed),
-        "divergence_rate": round(len(disagreed) / len(decided), 4)
+        "divergent_pairs": len(divergent),
+        "disagreements": len([r for r in decided if r.get("disagreement")]),
+        "wrong_verdict_events": len(
+            [r for r in decided if r.get("wrong_verdict_event")]),
+        "divergence_rate": round(len(divergent) / len(decided), 4)
         if decided else None,
     }
 
 
-def triage_audit(records: list[dict], manifest: dict) -> dict:
-    """S14 triage audit: every disagreement must carry an 'explained' record
-    (sha256 + structured reason). Returns the audit summary."""
+def d10_decision(d10: dict) -> dict:
+    """The D10 DECISION record (pre-committed threshold: any divergent pair
+    keeps the disagreement machinery as the hard gate; a zero rate confirms
+    the cross-check leg agrees on the measured set)."""
+    rate = d10["divergence_rate"]
+    if rate is None:
+        decision = "NO-DECIDED-PAIRS — cross-check leg abstained everywhere; " \
+                   "the machinery stays the gate by default"
+    elif d10["divergent_pairs"] == 0:
+        decision = "KEEP — zero divergence on the measured set; the " \
+                   "cross-check agrees and the disagreement gate is dormant"
+    else:
+        decision = "KEEP-WITH-GATE — divergence present; the mechanical " \
+                   "reproduction rule + exit 2 stay the hard gate (no silent " \
+                   "convergence)"
+    return {"decision": decision, "rate": rate,
+            "threshold": "any divergent pair keeps the gate"}
+
+
+def triage_audit(records: list[dict], manifest: dict, root: Path) -> dict:
+    """S14 triage audit: every disagreement must carry an 'explained' record.
+    'explained' is ENFORCED: the sha256 must be a 64-hex hash and the reason a
+    non-empty structured string (format-validated, not just present)."""
+    import re
+
     explained = 0
     unexplained = []
     for rec in records:
         if rec.get("disagreement"):
             tr = rec.get("triage") or {}
-            if tr.get("sha256") and tr.get("reason"):
+            sha_ok = bool(re.fullmatch(r"[0-9a-f]{64}", str(tr.get("sha256") or "")))
+            reason_ok = bool(tr.get("reason")) and len(str(tr["reason"])) > 10
+            if sha_ok and reason_ok:
                 explained += 1
             else:
                 unexplained.append(rec.get("name", "?"))
@@ -212,24 +259,37 @@ def triage_audit(records: list[dict], manifest: dict) -> dict:
         "disagreements": explained + len(unexplained),
         "explained": explained,
         "unexplained": unexplained,
-        "manifest_verified": len(verify_manifest(manifest)) == 0,
+        "manifest_verified": len(verify_manifest(manifest, root)) == 0,
     }
 
 
-def u9_publication(reopen_trigger_hit: bool, evidence: dict) -> dict:
-    """The U9 publication against the sweep evidence. A NEW keep/drop decision
-    is reserved ONLY for the documented reopen trigger (a newly discovered
-    fwlive pattern lacking a standard-encoding mirror)."""
+def u9_publication(decision_file: Path, reopen_trigger_hit: bool,
+                   evidence: dict) -> dict:
+    """The U9 publication against the sweep evidence. CONSUMES the committed
+    Phase-1 decision artifact (u9-decision.md must exist and carry the DROP
+    decision — a missing/divergent file is a failure, not a silent re-decide).
+    A NEW keep/drop decision is reserved ONLY for the documented reopen
+    trigger (a newly discovered fwlive pattern lacking a standard-encoding
+    mirror)."""
+    if not decision_file.is_file():
+        raise FileNotFoundError(
+            f"U9 decision artifact missing: {decision_file} — the sweep "
+            "consumes the committed decision, never re-decides silently")
+    text = decision_file.read_text()
+    if "DROP" not in text and "drop" not in text:
+        raise ValueError("U9 decision artifact does not carry the DROP "
+                         "decision — refusing to publish")
     return {
         "decision": "DROP (from_ecma2020 out of scope)" if not reopen_trigger_hit
         else "REOPEN — new decision required",
         "reopen_trigger_hit": reopen_trigger_hit,
+        "consumed_artifact": str(decision_file),
         "evidence": evidence,
     }
 
 
 def render_report(manifest: dict, records: list[dict], m8: dict,
-                  d10: dict, audit: dict, u9: dict) -> str:
+                  d10: dict, d10dec: dict, audit: dict, u9: dict) -> str:
     """Render the sweep report (the published artifact)."""
     from collections import Counter
 
@@ -238,7 +298,7 @@ def render_report(manifest: dict, records: list[dict], m8: dict,
         "# Phase 4 sweep report (P4, #220)",
         "",
         f"- corpus commit: `{manifest['commit']}`",
-        f"- manifest files: {len(manifest['files'])} (schema v1: commit + paths + sha256)",
+        f"- manifest files: {len(manifest['files'])} (schema v1: commit + repo-relative paths + sha256)",
         f"- manifest verified: {audit['manifest_verified']}",
         "",
         "## Four-bucket classification (S4)",
@@ -269,8 +329,12 @@ def render_report(manifest: dict, records: list[dict], m8: dict,
         "## Divergence rate (D10)",
         "",
         f"- decided cross-check pairs: {d10['decided_pairs']}",
-        f"- disagreements: {d10['disagreements']}",
+        f"- divergent pairs: {d10['divergent_pairs']} "
+        f"(disagreements={d10['disagreements']}, "
+        f"wrong-verdict events={d10['wrong_verdict_events']})",
         f"- divergence rate: {d10['divergence_rate']}",
+        f"- **D10 decision: {d10dec['decision']}** "
+        f"(threshold: {d10dec['threshold']})",
         "",
         "## Triage audit (S14)",
         "",
@@ -281,6 +345,7 @@ def render_report(manifest: dict, records: list[dict], m8: dict,
         "",
         f"- decision: **{u9['decision']}**",
         f"- reopen trigger hit: {u9['reopen_trigger_hit']}",
+        f"- consumed artifact: `{u9['consumed_artifact']}`",
         f"- evidence: {json.dumps(u9['evidence'])}",
         "",
     ]

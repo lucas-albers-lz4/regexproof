@@ -8,8 +8,17 @@ Run: python scripts/p4-sweep.py            (NOODLER must point at the pinned
 The absent-binary environment is recorded honestly (still-unknown), never
 silently skipped.
 
+REPRODUCIBILITY (luna r1 on #234):
+- the COMMITTED manifest is consumed and verified (repo-relative paths +
+  commit == HEAD) before anything runs;
+- the stock-unknown inventory is DERIVED from the committed Phase-1 matrix
+  (rows with stock=unknown), and the sweep asserts coverage of exactly that
+  set — a newly added stock-unknown class fails the assertion;
+- the U9 decision artifact (u9-decision.md) is consumed, not re-decided;
+- a non-empty unexplained-triage list FAILS the run (exit 1).
+
 Outputs (committed):
-  sweep/harness-backends/p4/corpus-manifest.json  (commit + paths + sha256)
+  sweep/harness-backends/p4/corpus-manifest.json  (commit + repo-relative paths + sha256)
   sweep/harness-backends/p4/sweep.json            (per-property evidence)
   sweep/harness-backends/p4/sweep-report.md       (the published report)
 """
@@ -21,17 +30,19 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from z3 import (Concat, Contains, InRe, Length, Range, Re, Solver, Star,
-                String, StringVal, Union)  # noqa: E402
+from z3 import (Concat, Contains, InRe, Length, Range, Re, Star, String,  # noqa: E402
+                StringVal, Union)
 
 from regexproof.harness import core  # noqa: E402
-from regexproof.harness.sweep import (BUCKETS, build_manifest, classify,
-                                      divergence_rate, metric8, render_report,
-                                      triage_audit, u9_publication,
-                                      verify_manifest)  # noqa: E402
+from regexproof.harness.sweep import (build_manifest, classify,  # noqa: E402
+                                      d10_decision, divergence_rate, metric8,
+                                      render_report, triage_audit,
+                                      u9_publication, verify_manifest)
 
 HERE = Path(__file__).resolve().parents[1]
 OUT = HERE / "sweep" / "harness-backends" / "p4"
+MATRIX_JSON = HERE / "sweep" / "harness-backends" / "p1-baseline" / "matrix.json"
+U9_DECISION = HERE / "sweep" / "harness-backends" / "p1-baseline" / "u9-decision.md"
 
 
 def stock_unknown_fns():
@@ -61,6 +72,14 @@ def stock_unknown_fns():
     }
 
 
+def derive_stock_unknown_inventory() -> list[str]:
+    """Derive the stock-unknown inventory from the COMMITTED Phase-1 matrix
+    (rows with stock == 'unknown') — the sweep covers exactly this set."""
+    rows = json.loads(MATRIX_JSON.read_text())
+    names = [r["property"] for r in rows if r.get("stock") == "unknown"]
+    return sorted(names)
+
+
 def corpus_files() -> list[Path]:
     base = HERE / "sweep" / "harness-backends" / "p1-baseline"
     names = ["matrix.json", "MATRIX.md", "PIN.md", "TRIAGE.md",
@@ -79,19 +98,42 @@ def main() -> int:
     commit = subprocess.run(
         ["git", "rev-parse", "HEAD"], cwd=HERE, capture_output=True, text=True
     ).stdout.strip()
-    manifest = build_manifest(commit, corpus_files())
-    problems = verify_manifest(manifest)
-    if problems:
-        print("manifest problems:\n - " + "\n - ".join(problems), file=sys.stderr)
+
+    # 1) CONSUME the committed manifest: verify against disk + commit match
+    committed = OUT / "corpus-manifest.json"
+    if committed.is_file():
+        cm = json.loads(committed.read_text())
+        problems = verify_manifest(cm, HERE)
+        if problems:
+            print("committed manifest problems:\n - " + "\n - ".join(problems),
+                  file=sys.stderr)
+            return 1
+        if cm.get("commit") != commit:
+            print(f"committed manifest pins {cm.get('commit')} but HEAD is "
+                  f"{commit} — re-run the sweep to refresh", file=sys.stderr)
+            return 1
+    manifest = build_manifest(commit, corpus_files(), HERE)
+
+    # 2) DERIVE the inventory from the committed matrix + assert coverage
+    inventory = derive_stock_unknown_inventory()
+    fns = stock_unknown_fns()
+    missing = [n for n in inventory if n not in fns]
+    extra = [n for n in fns if n not in inventory]
+    if missing or extra:
+        print(f"inventory mismatch — matrix: {inventory}, sweep: "
+              f"{sorted(fns)} (missing={missing} extra={extra})",
+              file=sys.stderr)
         return 1
 
+    # 3) run + classify
     records = []
-    for name, (fn, expect_unsat) in sorted(stock_unknown_fns().items()):
+    for name in inventory:
+        fn, expect_unsat = fns[name]
         entry = {
             "fn": fn, "domain": "ascii", "expect_unsat": expect_unsat,
             "timeout_ms": 30000, "ground_truth": None, "kind": "property",
             "family": name.split("-")[0], "input_domain": "ascii",
-            "call_kind": None, "backend": "noodler",
+            "call_kind": None, "backend": "noodler", "route": "mirror",
         }
         result = core.run_one(name, entry)
         c = classify(result)
@@ -100,6 +142,7 @@ def main() -> int:
             "result": result,
             "classification": c.to_record(),
             "cross_check_reason": result.get("cross_check_reason"),
+            "triage": None,  # no disagreements on the measured set
         }
         records.append(rec)
         print(f"{name:18s} -> {c.bucket:22s} "
@@ -108,23 +151,29 @@ def main() -> int:
 
     m8 = metric8([r["result"] for r in records])
     d10 = divergence_rate([r["result"] for r in records])
-    audit = triage_audit(records, manifest)
+    d10dec = d10_decision(d10)
+    audit = triage_audit(records, manifest, HERE)
     evidence = {
-        "divergence_rate": d10,
-        "matrix_measured": {
-            "P2-len64": "noodler unsat 17.4ms, cvc5 unsat 12.2ms (agree)",
-            "P4-monolithic": "noodler unsat 19.3ms, cvc5 unknown 30s (cvc5 abstain)",
-        },
-        "all_six_fwlive_patterns_mirror_expressible": True,
+        "divergence": d10,
+        "d10_decision": d10dec["decision"],
+        "fwlive_patterns_mirror_expressible": 6,  # the Phase-1 pilot inventory
+        "measured_matrix_rows": len(json.loads(MATRIX_JSON.read_text())),
     }
-    u9 = u9_publication(reopen_trigger_hit=False, evidence=evidence)
-    report = render_report(manifest, records, m8, d10, audit, u9)
+    u9 = u9_publication(U9_DECISION, reopen_trigger_hit=False, evidence=evidence)
+    report = render_report(manifest, records, m8, d10, d10dec, audit, u9)
+
+    # 4) S14 enforcement: any unexplained disagreement FAILS the sweep
+    if audit["unexplained"]:
+        print(f"UNEXPLAINED DISAGREEMENTS: {audit['unexplained']} — sweep "
+              "FAILS (S14)", file=sys.stderr)
+        return 1
 
     (OUT / "corpus-manifest.json").write_text(json.dumps(manifest, indent=1) + "\n")
     (OUT / "sweep.json").write_text(json.dumps(records, indent=1, default=str) + "\n")
     (OUT / "sweep-report.md").write_text(report)
     print(f"\nwrote {OUT}/sweep-report.md (+ manifest, + sweep.json)")
     print(f"buckets: {[r['classification']['bucket'] for r in records]}")
+    print(f"D10: {d10dec['decision']}")
     return 0
 
 
