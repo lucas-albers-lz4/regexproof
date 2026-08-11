@@ -51,7 +51,12 @@ def witness_stock(s, r):
         v = m[d]
         try:
             if v.sort() == z3.StringVal("").sort():
-                w[d.name()] = v.as_string()
+                # as_string() returns the SMT-LIB ESCAPED form (\\u{...}) — decode
+                # to raw so witness comparison is character-level, not print-level
+                # (harness z3_str() does the same; P4-nul is the measured case).
+                raw = re.sub(r"\\u\{([0-9a-fA-F]+)\}",
+                             lambda mm: chr(int(mm.group(1), 16)), v.as_string())
+                w[d.name()] = raw
         except Exception:
             pass
     return w
@@ -103,15 +108,29 @@ def run_noodler(smt, timeout_ms):
     with open(fn, "w") as f:
         f.write(smt + "(get-model)\n")
     t0 = time.perf_counter()
+    proc = None
     try:
-        p = subprocess.run([NOODLER, "model=true", fn], capture_output=True,
-                           text=True, timeout=timeout_ms / 1000 + 5)
-        rc, out = p.returncode, p.stdout.strip()
-    except subprocess.TimeoutExpired:
-        return "TIMEOUT", timeout_ms, None, None
+        proc = subprocess.Popen([NOODLER, "model=true", fn], stdout=subprocess.PIPE,
+                                stderr=subprocess.PIPE, text=True,
+                                start_new_session=True)  # D6 process-group kill
+        try:
+            out, _ = proc.communicate(timeout=timeout_ms / 1000 + 5)
+        except subprocess.TimeoutExpired:
+            os.killpg(os.getpgid(proc.pid), 9)
+            out, _ = proc.communicate()
+            return "ABSTAIN-TIMEOUT", timeout_ms, None, None
+        rc = proc.returncode
+    except Exception as e:
+        return "DISPATCH-ERROR", 0.0, None, str(e)[:80]
     dt = (time.perf_counter() - t0) * 1000
     lines = [ln for ln in out.splitlines() if ln.strip() in ("sat", "unsat", "unknown")]
-    verdict = lines[0] if lines else ("?" if out else "NO-VERDICT")
+    verdict = lines[0] if lines else "NO-VERDICT"
+    # S13 classification: explicit abstention states, not bare exit codes
+    if verdict == "NO-VERDICT":
+        if rc == 139:
+            verdict = "ABSTAIN-SIGSEGV"
+        elif rc != 0:
+            verdict = f"DISPATCH-ERROR(rc={rc})"
     wit = parse_noodler_model(out) if verdict == "sat" else None
     return verdict, dt, wit, rc
 
@@ -125,18 +144,23 @@ def run_cvc5(smt, timeout_ms):
         f.write(smt)
     t0 = time.perf_counter()
     try:
-        p = subprocess.run([sys.executable, worker, fn, str(timeout_ms)],
-                           capture_output=True, text=True, timeout=timeout_ms / 1000 + 10)
+        p = subprocess.Popen([sys.executable, worker, fn, str(timeout_ms)],
+                             stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True,
+                             start_new_session=True)  # D6 process-group kill
+        try:
+            out, _ = p.communicate(timeout=timeout_ms / 1000 + 10)
+        except subprocess.TimeoutExpired:
+            os.killpg(os.getpgid(p.pid), 9)
+            out, _ = p.communicate()
+            return "ABSTAIN-TIMEOUT", timeout_ms, None
         dt = (time.perf_counter() - t0) * 1000
-        line = p.stdout.strip().splitlines()[-1] if p.stdout.strip() else "?"
+        line = out.strip().splitlines()[-1] if out.strip() else "?"
         if line.startswith("V "):
             verdict, ms = line[2:].split()
             return verdict, float(ms), None
         if line.startswith("E "):
             return "PARSE-ERROR", 0.0, line[2:][:80]
-        return "?", 0.0, line[:80]
-    except subprocess.TimeoutExpired:
-        return "TIMEOUT", timeout_ms, None
+        return "NO-VERDICT", 0.0, line[:80]
     except Exception as e:
         return "DISPATCH-ERROR", 0.0, str(e)[:80]
 

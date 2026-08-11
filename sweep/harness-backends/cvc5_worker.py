@@ -9,6 +9,9 @@ import sys, time
 def main():
     fn, timeout_ms = sys.argv[1], int(sys.argv[2])
     smt = open(fn).read()
+    # The shared SMT text carries a trailing (check-sat). Parse declarations only,
+    # then run exactly ONE explicit checkSat (no duplicate query).
+    smt = smt.replace("\n(check-sat)\n", "\n")
     try:
         import cvc5
     except ImportError:
