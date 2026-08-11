@@ -8,7 +8,8 @@ provable on the mirror holds for the as-written pattern.
   Branch B: from_ecma2020 (as-written, search-wrapped) → escalated-unconfirmed
   Branch C: neither decides → still-unknown
 
-Writes sweep/harness-backends/p1-baseline/blocker-probe.md + blocker-probe.json
+Writes sweep/harness-backends/p1-baseline/blocker-probe.json (the narrative report
+blocker-probe.md is authored from the JSON).
 """
 import sys, os, re, json, time, subprocess, tempfile
 
@@ -116,13 +117,24 @@ def main():
     bset = ["xIN=", "xIN=y", "x IN=", "\tIN=", "=IN=", "x\nIN=", "SPT=", "eth0IN=",
             "xSPT=", "a=bIN=", "IN=", " xIN=", "x\x00IN="]
     st = {}
+    cvc = {}
     for st_ in bset:
         sol = z3.Solver()
         sol.add(InRe(s, MIRROR))
         sol.add(s == StringVal(st_))
         st[st_] = str(sol.check())
+        bsm = ("(set-logic QF_SLIA)\n(declare-const s String)\n"
+               f"(assert (str.in_re s {mirror_smt_text()}))\n"
+               f"(assert (= s {ep.smt_string(st_)}))\n(check-sat)\n")
+        r_c, _, _ = run_cvc5(bsm, 30000)
+        cvc[st_] = r_c
     results["branch_A_boundary_stock"] = st
+    results["branch_A_boundary_cvc5"] = cvc
+    agree = all(st[k] == cvc[k] for k in bset if cvc[k] in ("sat", "unsat"))
+    results["branch_A_boundary_agreement"] = agree
     print("Branch A stock (boundary):", st)
+    print("Branch A cvc5  (boundary):", cvc)
+    print("Boundary agreement:", agree)
 
     with open(os.path.join(OUT, "blocker-probe.json"), "w") as f:
         json.dump(results, f, indent=1, default=str)

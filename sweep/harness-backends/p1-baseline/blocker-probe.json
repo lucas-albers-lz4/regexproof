@@ -8,9 +8,9 @@
   "a=bSRC=": "True"
  },
  "theorem_M2E": "EMPTY/rc=-6",
- "theorem_M2E_ms": 32.7,
+ "theorem_M2E_ms": 22.4,
  "theorem_E2M": "unsat/rc=0",
- "theorem_E2M_ms": 47.0,
+ "theorem_E2M_ms": 42.4,
  "equivalence_theorem": "REFUTED (EMPTY/rc=-6, unsat/rc=0)",
  "branch_A_stock_nonempty": "sat",
  "branch_A_cvc5_nonempty": "sat",
@@ -28,5 +28,21 @@
   "IN=": "unsat",
   " xIN=": "sat",
   "x\u0000IN=": "sat"
- }
+ },
+ "branch_A_boundary_cvc5": {
+  "xIN=": "sat",
+  "xIN=y": "sat",
+  "x IN=": "unsat",
+  "\tIN=": "ABSTAIN-SIGSEGV",
+  "=IN=": "sat",
+  "x\nIN=": "ABSTAIN-SIGSEGV",
+  "SPT=": "unsat",
+  "eth0IN=": "sat",
+  "xSPT=": "sat",
+  "a=bIN=": "sat",
+  "IN=": "unsat",
+  " xIN=": "sat",
+  "x\u0000IN=": "ABSTAIN-SIGSEGV"
+ },
+ "branch_A_boundary_agreement": true
 }
