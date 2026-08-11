@@ -131,13 +131,14 @@ def _gen(alpha, L):
                 yield p + c
 
 def node_verdicts(pat, flags, strs):
-    """R1: real JS implementation. Returns {s: bool}."""
+    """R1: real JS implementation. A /g regex's .test() is STATEFUL — lastIndex
+    must be reset per string or later tests start mid-string (luna finding)."""
     js = []
     for s in strs:
         js.append(json.dumps(s))
     src = f"""const r = new RegExp({json.dumps(pat)}, {json.dumps(flags)});
 const strs = [{','.join(js)}];
-for (const s of strs) process.stdout.write(r.test(s) ? '1' : '0');
+for (const s of strs) {{ r.lastIndex = 0; process.stdout.write(r.test(s) ? '1' : '0'); }}
 """
     with tempfile.NamedTemporaryFile("w", suffix=".js", delete=False) as f:
         f.write(src)
@@ -159,7 +160,9 @@ def smt_string(s):
     return '"' + s.replace('"', '""') + '"'
 
 def noodler_ecma(pat_ecma, strs):
-    """R2: from_ecma2020 membership per string."""
+    """R2: from_ecma2020 membership per string. Records the first-line verdict AND
+    the return code so abstentions are classified (unknown vs empty-output vs
+    crash) — the report claims only what the committed JSON proves."""
     out = {}
     smt = ("(set-logic QF_SLIA)\n(declare-const s String)\n"
            f"(assert (str.in_re s (re.from_ecma2020 '{pat_ecma}')))\n")
@@ -170,8 +173,10 @@ def noodler_ecma(pat_ecma, strs):
             path = f.name
         try:
             p = subprocess.run([NOODLER, path], capture_output=True, text=True, timeout=35)
-            first = p.stdout.strip().splitlines()[0] if p.stdout.strip() else "?"
-            out[s] = True if first == "sat" else (False if first == "unsat" else first)
+            first = p.stdout.strip().splitlines()[0] if p.stdout.strip() else "EMPTY"
+            out[s] = (True if first == "sat" else
+                      False if first == "unsat" else
+                      f"{first}/rc={p.returncode}")
         finally:
             os.unlink(path)
     return out

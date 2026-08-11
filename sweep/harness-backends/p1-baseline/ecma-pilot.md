@@ -2,7 +2,13 @@
 
 Run 2026-08-11 on the pinned Noodler v1.6.1 (sha256 22b19f12…464), stock z3 5.0.0,
 node v22.23.1. Patterns fetched verbatim from `lucas-albers-lz4/fwlive` master
-`core/fwlive-log.js` (CLASSIFY_SPEC). Declared input domain: ASCII (D14 scoping).
+`core/fwlive-log.js` (CLASSIFY_SPEC). Declared input domain: ASCII (D14 scoping;
+\s gap NBSP/U+2028 noted).
+
+**Pattern count: SIX** (the code's authoritative count — NON_FIREWALL_PREFIX,
+FIREWALL_HINT, ACTION_RE, DENY_ACTION, TCP_FLAG_TAIL, NETFILTER_KV_GLUE). The
+design's U9/R9 "5" referenced an earlier count that omitted DENY_ACTION's separate
+name; corrected in #213 rev 7.1.
 
 ## Routes
 
@@ -37,13 +43,15 @@ per pattern, 5,622 decided comparisons total.
 
 ## Abstention class (measured, honest)
 
-from_ecma2020 returns `unknown` on **exact-boundary anchored forms**: the
-`(^|…)`-alternation positions (word + boundary compositions like `\tfw4`, `logd\t`,
-`\tDENY`) and `$`-anchored tails at the exact string boundary (bare flag words for
-TCP_FLAG_TAIL: `ACK`, `SYN`, …). Same family as the measured key=`=`-lookahead
-exact-boundary quirk. All abstentions are `unknown` (never a wrong verdict); the
-tier logic caps them, and the mirror route decides every abstaining string — the
-proof-capable path is complete for all six patterns.
+from_ecma2020 returns `unknown` (rc 0, spot-verified on the abstain sample:
+`\tfw4`, `\tDENY`, `ACK`, `logd\t` all `unknown/rc=0` — never empty output or
+crashes) on **exact-boundary anchored forms**: the `(^|…)`-alternation positions
+(word + boundary compositions like `\tfw4`, `logd\t`, `\tDENY`) and `$`-anchored
+tails at the exact string boundary (bare flag words for TCP_FLAG_TAIL: `ACK`,
+`SYN`, …). Same family as the measured key=`=`-lookahead exact-boundary quirk. All
+abstentions are honest `unknown`s; the tier logic caps them, and the mirror route
+decides every abstaining string — the proof-capable path is complete for all six
+patterns.
 
 ## Divergence rate → D10 / U9 evidence
 
