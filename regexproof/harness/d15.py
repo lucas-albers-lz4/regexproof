@@ -41,15 +41,20 @@ def order(v: Optional[str]) -> int:
 
 
 def resolve(primary: Optional[str], cross: Optional[str],
-            reproduce: Optional[Callable[[], bool]] = None) -> dict:
+            reproduce: Optional[Callable[[], str]] = None) -> dict:
     """Classify a (primary, cross) verdict pair per D15.
 
+    reproduce: a callback returning the REPRODUCTION OUTCOME as a tri-state
+    string — "sat" (the sat witness re-asserted sat in the unsat solver: the
+    unsat side was wrong), "unsat" (the witness did not hold: genuine
+    disagreement), or "unknown" (the reproduction itself ABSTAINED — timeout,
+    sigsegv, no-verdict — which is outside the D15 order, S16, and never a
+    disagreement). None = no reproduction available (conservative: a
+    concrete-vs-concrete conflict that cannot be cleared is a genuine
+    disagreement).
+
     Returns {kind, disagreement, wrong_verdict_event, detail}:
-      kind: "agree" | "disagreement" | "abstain-involved"
-      disagreement: True only for a genuine concrete-vs-concrete disagreement
-        after the mechanical reproduction rule (HARD FAIL + exit 2).
-      wrong_verdict_event: True when the reproduction showed the unsat side
-        was wrong (recorded; the sat side stands; NOT a hard fail).
+      kind: "agree" | "disagreement" | "wrong-verdict-event" | "abstain-involved"
     """
     if primary not in CONCRETE or cross not in CONCRETE:
         return {"kind": "abstain-involved", "disagreement": False,
@@ -63,16 +68,24 @@ def resolve(primary: Optional[str], cross: Optional[str],
         return {"kind": "disagreement", "disagreement": True,
                 "wrong_verdict_event": False,
                 "detail": "no reproduction callback (cannot clear)"}
+    outcome = reproduce()
+    if outcome not in ("sat", "unsat", "unknown"):
+        raise ValueError(f"reproduction outcome {outcome!r} is not tri-state")
     sat_side = "primary" if primary == "sat" else "cross"
-    reproduced = bool(reproduce())
-    if reproduced:
+    if outcome == "sat":
         # the sat witness re-asserts sat in the UNSAT solver: the unsat side
         # was wrong — a wrong-verdict EVENT, the sat side stands
         return {"kind": "wrong-verdict-event", "disagreement": False,
                 "wrong_verdict_event": True,
                 "detail": f"{sat_side}=sat reproduced in the unsat solver"}
-    # the witness does NOT hold in the unsat solver's theory: genuine
-    # disagreement → HARD FAIL + exit 2
+    if outcome == "unknown":
+        # the reproduction ABSTAINED — outside the D15 order (S16), never a
+        # disagreement and never a wrong-verdict event
+        return {"kind": "abstain-involved", "disagreement": False,
+                "wrong_verdict_event": False,
+                "detail": "reproduction abstained (timeout/sigsegv/no-verdict)"}
+    # outcome == "unsat": the witness does NOT hold in the unsat solver's
+    # theory: genuine disagreement → HARD FAIL + exit 2
     return {"kind": "disagreement", "disagreement": True,
             "wrong_verdict_event": False,
             "detail": f"{sat_side}=sat witness NOT reproduced (unsat stands)"}

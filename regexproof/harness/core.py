@@ -322,7 +322,6 @@ def _run_one_noodler(name, entry, constraints, bad, engines, result):
     at report time (S15) — never stored here. Absence (binary not found) is
     recorded as the triage_fallback state, never a failure (PR C wires the
     operator contract)."""
-    from regexproof.harness.d16 import revalidate_witness
     from regexproof.harness.noodler_runner import (
         NoodlerAbsent,
         binary_path,
@@ -367,6 +366,26 @@ def _run_one_noodler(name, entry, constraints, bad, engines, result):
     # parse the witness up-front (the D15 reproduction + D16 both consume it)
     witness = nd.get("witness") or {}
     result["witness"] = witness
+    # D16 re-validation runs BEFORE the cross-check leg and D15 (luna r1 on
+    # #233): an invalid witness must never reach the disagreement machinery —
+    # the result is rejected as witness-unvalidated (not-proven, exit 1).
+    if v == "sat":
+        from regexproof.harness.d16 import revalidate_witness
+
+        revalidated = bool(witness) and revalidate_witness(
+            constraints, bad, witness, entry["timeout_ms"]
+        )
+        result["d16_revalidated"] = revalidated
+        result["ground_truth"] = None
+        if not witness or not revalidated:
+            result["result"] = SolveResult.SAT.value
+            result["ok"] = False
+            result["not_proven"] = True
+            result["state"] = "witness-unvalidated"
+            print(f"[FAIL] {name}: Noodler sat but the witness did NOT re-assert "
+                  f"sat in stock z3 (D16) — do NOT report this counterexample, "
+                  f"result unusable", file=sys.stderr)
+            return result
     # cross-check leg (Phase 3 PR A): the SAME decomposed form, via the cvc5
     # worker with D12 bounded-loop expansion; raw evidence only. Disagreement
     # handling (D15 + exit 2) is the Phase-3 PR B machinery.
@@ -400,11 +419,16 @@ def _run_one_noodler(name, entry, constraints, bad, engines, result):
 
             if v == "sat" and result.get("witness"):
                 def _reproduce():
+                    # tri-state reproduction outcome (D15): "sat" = the witness
+                    # re-asserted sat in cvc5, "unsat" = it did not hold,
+                    # "unknown" = the reproduction itself ABSTAINED (timeout /
+                    # sigsegv / no-verdict — outside the order, never a
+                    # disagreement)
                     rep = x_smt
                     for k, wv in (result.get("witness") or {}).items():
                         rep += f"(assert (= {k} {smt_string(str(wv))}))\n"
                     r = run_cvc5(rep, entry["timeout_ms"])
-                    return r["state"] == "decided" and r["verdict"] == "sat"
+                    return r["verdict"] if r["state"] == "decided" else "unknown"
 
                 res = resolve("sat", cc["verdict"], reproduce=_reproduce)
             else:
@@ -422,27 +446,9 @@ def _run_one_noodler(name, entry, constraints, bad, engines, result):
         print(f"[{'PASS' if result['ok'] else 'FAIL'}] {name}: UNSAT via "
               f"Noodler (property HOLDS)  [{nd['wall_ms']}ms]")
         return result
-    # sat — D16 re-validation BEFORE the result is usable (uniform, no ECMA
-    # clause per the U9 DROP)
+    # sat — D16 already ran UP-FRONT (gating the cross-check/D15 machinery);
+    # reaching here means the witness re-validated in stock z3
     result["result"] = SolveResult.SAT.value
-    revalidated = bool(witness) and revalidate_witness(
-        constraints, bad, witness, entry["timeout_ms"]
-    )
-    result["d16_revalidated"] = revalidated
-    result["ground_truth"] = None
-    if not witness:
-        result["ok"] = False
-        result["state"] = "witness-unvalidated"
-        print(f"[FAIL] {name}: Noodler sat but no model was parsed — "
-              "witness_unvalidated, result unusable", file=sys.stderr)
-        return result
-    if not revalidated:
-        result["ok"] = False
-        result["state"] = "witness-unvalidated"
-        print(f"[FAIL] {name}: Noodler sat but the witness did NOT re-assert "
-              "sat in stock z3 (D16) — do NOT report this counterexample",
-              file=sys.stderr)
-        return result
     result["ok"] = not entry["expect_unsat"]
     result["state"] = "decided"
     print(f"[{'PASS' if result['ok'] else 'FAIL'}] {name}: SAT via Noodler "
