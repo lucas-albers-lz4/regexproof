@@ -17,7 +17,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from regexproof.batch.runner import _compile_all, _extract  # noqa: E402
+from regexproof.batch.compile_records import compile_records
+from regexproof.batch.extract import extract_corpus  # noqa: E402
 from regexproof.redos.runner import analyze_record  # noqa: E402
 
 OUT = ROOT / "properties" / "generated"
@@ -102,12 +103,12 @@ def main(argv: list[str] | None = None) -> int:
         return 2
 
     # Reuse corpus extract via temporary CORPUS path — call extract_modsec path.
-    from regexproof.batch import runner as batch_runner
+    from regexproof.batch.manifests import CORPUS_MANIFESTS
 
-    meta = dict(batch_runner.CORPUS_MANIFESTS["coreruleset"])
+    meta = dict(CORPUS_MANIFESTS["coreruleset"])
     meta["path"] = args.rules
-    records = batch_runner._extract("coreruleset", meta)
-    compiled = _compile_all(records, lift_inline=True, corpus_slug="coreruleset")
+    records = extract_corpus("coreruleset", meta)
+    compiled = compile_records(records, lift_inline=True, corpus_slug="coreruleset")
     rx_only = [c for c in compiled if not c.get("selector")]
 
     reasons = Counter((c.get("compile_reason") or "ok") for c in rx_only)

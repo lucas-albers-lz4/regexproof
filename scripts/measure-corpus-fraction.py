@@ -31,15 +31,13 @@ sys.path.insert(0, str(ROOT))
 
 import z3  # noqa: E402
 
-from regexproof.batch.runner import (  # noqa: E402
-    CORPUS_MANIFESTS,
-    WAVE_CORPORA,
-    BudgetBreached,
-    _compile_all,
-    _extract,
-)
+from regexproof.batch.budgets import BudgetBreached  # noqa: E402
+from regexproof.batch.compile_records import compile_records  # noqa: E402
+from regexproof.batch.extract import extract_corpus  # noqa: E402
+from regexproof.batch.manifests import CORPUS_MANIFESTS, WAVE_CORPORA  # noqa: E402
 from regexproof.regex_id import REGEX_ID_FORMULA_VERSION  # noqa: E402
 from regexproof.schemas import EXTRACTOR_SCHEMA_VERSION  # noqa: E402
+from regexproof.z3_pin import assert_z3_pinned  # noqa: E402
 
 OUT = ROOT / "properties" / "generated"
 
@@ -197,7 +195,7 @@ def measure(corpus: str, *, assert_determinism: bool = False) -> dict:
     budget = meta.get("budget") or {}
     t0 = time.perf_counter()
     wall_t0 = time.monotonic()
-    records = _extract(corpus, meta)
+    records = extract_corpus(corpus, meta)
     if not records and corpus in WAVE_CORPORA:
         raise SystemExit(
             f"HARD ERROR: {corpus} extraction produced 0 records — "
@@ -205,7 +203,7 @@ def measure(corpus: str, *, assert_determinism: bool = False) -> dict:
         )
 
     try:
-        compiled = _compile_all(
+        compiled = compile_records(
             records,
             lift_inline=bool(meta.get("lift_inline")),
             corpus_slug=corpus,
@@ -221,8 +219,8 @@ def measure(corpus: str, *, assert_determinism: bool = False) -> dict:
         return report
 
     if assert_determinism:
-        again = _compile_all(
-            _extract(corpus, meta),
+        again = compile_records(
+            extract_corpus(corpus, meta),
             lift_inline=bool(meta.get("lift_inline")),
             corpus_slug=corpus,
             budget=budget,
@@ -386,6 +384,7 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--corpus", required=True, choices=sorted(CORPUS_MANIFESTS))
     ap.add_argument("--assert-determinism", action="store_true")
     args = ap.parse_args(argv)
+    assert_z3_pinned()
     report = measure(args.corpus, assert_determinism=args.assert_determinism)
     if args.corpus in WAVE_CORPORA and report.get("unclassified_parse_errors"):
         return 2

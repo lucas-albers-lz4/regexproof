@@ -6,6 +6,10 @@ on:
     branches: [main]
   workflow_dispatch:
 
+concurrency:
+  group: verify-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 permissions:
   contents: read
 
@@ -13,6 +17,7 @@ jobs:
   matrix:
     name: Read Python matrix
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     outputs:
       minors: ${{ steps.set.outputs.minors }}
     steps:
@@ -36,6 +41,7 @@ jobs:
   proof:
     name: Z3 proof harness
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-python@v6
@@ -91,6 +97,7 @@ jobs:
     name: Golden suite (Python ${{ matrix.python-version }})
     needs: matrix
     runs-on: ubuntu-latest
+    timeout-minutes: 60
     strategy:
       fail-fast: false
       matrix:
@@ -151,6 +158,7 @@ jobs:
   redos:
     name: ReDoS stage (isolated)
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-python@v6
@@ -211,6 +219,7 @@ jobs:
   links:
     name: Link check
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v5
       - name: Check markdown links

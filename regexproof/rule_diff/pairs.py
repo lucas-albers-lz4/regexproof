@@ -149,10 +149,11 @@ def discover_pairs(
 
 
 def write_jsonl(path: Path, records: list[dict[str, Any]]) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    with path.open("w", encoding="utf-8") as fh:
-        for rec in records:
-            fh.write(json.dumps(rec, sort_keys=True) + "\n")
+    from regexproof.io_atomic import atomic_write_lines
+
+    atomic_write_lines(
+        path, (json.dumps(rec, sort_keys=True) for rec in records)
+    )
 
 
 def _drop(

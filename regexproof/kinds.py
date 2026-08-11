@@ -2,22 +2,48 @@
 
 from __future__ import annotations
 
+from enum import StrEnum
+
+
+class PropertyKind(StrEnum):
+    """Harness / scanner property kinds — NDJSON values are the enum values."""
+
+    PROPERTY = "property"
+    COUNTEREXAMPLE_FINDER = "counterexample_finder"
+    MUTATION_GUARD = "mutation_guard"
+    BUG_DEMO = "bug_demo"
+    RULE_DIFF = "rule_diff"
+    # Scanner finding kinds (REPORTING.md)
+    REDOS = "redos"
+    USAGE_MISMATCH = "usage_mismatch"
+    INTENT_MISMATCH = "intent_mismatch"
+    TRIAGE = "triage"
+
+
+class SolveResult(StrEnum):
+    """Solver outcome strings in NDJSON (must stay identical)."""
+
+    UNSAT = "unsat"
+    SAT = "sat"
+    TIMEOUT = "timeout"
+
+
 PROPERTY_KINDS = frozenset(
     {
-        "property",
-        "counterexample_finder",
-        "mutation_guard",
-        "bug_demo",
-        "rule_diff",
+        PropertyKind.PROPERTY.value,
+        PropertyKind.COUNTEREXAMPLE_FINDER.value,
+        PropertyKind.MUTATION_GUARD.value,
+        PropertyKind.BUG_DEMO.value,
+        PropertyKind.RULE_DIFF.value,
     }
 )
 
 # Families that require a mutation_guard sibling (check_mutation_coverage).
 KINDS_NEEDING_MUTATION_GUARD = frozenset(
     {
-        "property",
-        "counterexample_finder",
-        "rule_diff",
+        PropertyKind.PROPERTY.value,
+        PropertyKind.COUNTEREXAMPLE_FINDER.value,
+        PropertyKind.RULE_DIFF.value,
     }
 )
 

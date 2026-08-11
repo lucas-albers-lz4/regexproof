@@ -47,7 +47,8 @@ first; it is faster than reading the call site.
 | `reject_shell_subprocess_usage()` | `regexproof/fuzz/adapters.py` | static AST ban on `shell=True` in fuzz/ReDoS paths; wired into CI |
 | `reject_untimed_subprocess_usage()` | `regexproof/fuzz/adapters.py` | static AST ban on missing `timeout=` in `regexproof/compiler` + `helpers/`; wired into CI (#171) |
 | `ci-assert-toolchain.py --job {proof,golden,redos}` | `scripts/ci-assert-toolchain.py` | z3 5.0.x, Python/Node/Go majors, pcre2/yara/perl presence, npm + regexploit pins — **per CI job env** |
-| z3 pin guard (exit 3) | `scripts/z3-verify.py`, `differential-fuzz.py`, `mirror-fidelity-gate.py` | refuses non-5.0.x solver at runtime |
+| z3 pin guard (exit 3) | `regexproof/harness/core.py` (via `scripts/z3-verify.py`), `differential-fuzz.py`, `mirror-fidelity-gate.py` | refuses non-5.0.x solver at runtime |
+| Public batch extract/compile | `regexproof/batch/extract.py`, `compile_records.py`, `manifests.py` | scripts use public API; runner keeps one-release `_` aliases (#193) |
 | `default_output_path()` containment | `regexproof/admission/author.py` | `is_relative_to(properties/generated)` on the *default* path |
 | `--output` containment (`author-gate-decision.py`) | `scripts/author-gate-decision.py` | explicit `-o` must stay under `properties/generated` unless `--allow-outside-generated` (#176) |
 | Clone destination guard | `regexproof/admission/clone.py` | probe clones cannot land under `batch/corpora/` |
@@ -63,7 +64,11 @@ first; it is faster than reading the call site.
 **Known asymmetries** (each is a real gap, each already has an issue — do not
 re-file): ledger writes are atomic but batch NDJSON writes are not;
 `search_code` retries but `enrich_repo` does not. (Batch extraction size cap
-landed with #175 — no longer asymmetric vs admission walk.)
+landed with #175 — no longer asymmetric vs admission walk.) Measure scripts
+share `compiler_fingerprint` via `batch/measure.py` (#197 partial); 
+`measure-corpus-fraction.py` still uses a historical `simple_parse.py` sha1
+for its `compiler_fingerprint` field so committed fraction artifacts stay
+stable — do not "fix" that divergence without regenerating artifacts.
 
 ---
 
@@ -226,6 +231,12 @@ This playbook is only useful if citations stay true. Maintenance rule:
 | Wave | Scope | Outcome |
 |---|---|---|
 | 2026-08 | Full repo: command injection, code exec, path traversal, untrusted parsing, network/supply chain, secrets, GitHub Actions, DoS | 9 issues (#169–#177). Clean: no `shell=True` in production paths, no `pull_request_target`, no `pickle`/unsafe `yaml.load`, no archive extraction, no hardcoded credentials, `contents: read` default on the verify workflow |
+| Wave 0 | Doc-review playbook | #185 signed off; `docs/SECURITY-AUDIT.md` on `main` via #184 |
+| Wave 1 | Gate integrity | #169 template `sys.exit` + CI fail contract; #186 shared `timeout_gate`; #205 required `verify` checks — #206 |
+| Wave 2 | Trust boundary | #170 symlink skip + README containment; #174 clone allowlist; #173 mine fail-closed — #207 |
+| Wave 3 | Hang / fail-open / DoS | #171 timeouts; #172 `helper_gate_missing`; #175 size cap; #176/#177 hardening + CodeQL dismiss — #208 |
+| Wave 4 | Reliability | #187 atomic writes; #188 silent-failure counters; #189 test gates; #190 `assert_z3_pinned`; #191 CI timeouts/concurrency + 429 retry — #209 |
+| Waves 5–7 | Fowler refactors + types | #192 harness package; #193 public batch API; #194/`#197` pilot_runner + measure; #198 dialect template; #195 extractor registry (partial); #196 `run_corpus` steps; #199 StrEnums; #201 spike/bootstrap thin — closes #202 |
 
 Findings from the 2026-08 wave, for orientation on what this repo's issues
 actually look like: #169 CI gate cannot fail · #170 symlink read from cloned

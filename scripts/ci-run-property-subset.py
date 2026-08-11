@@ -18,16 +18,11 @@ def _load_toml(path: Path) -> dict:
 
 
 def _subset_property_names(families: list[str]) -> list[str]:
-    import importlib.util
+    from regexproof.harness import REGISTRY
 
-    path = ROOT / "scripts" / "z3-verify.py"
-    spec = importlib.util.spec_from_file_location("z3_verify_subset", path)
-    mod = importlib.util.module_from_spec(spec)
-    assert spec.loader is not None
-    spec.loader.exec_module(mod)
     names = []
-    for name in sorted(mod.REGISTRY):
-        fam = mod.REGISTRY[name]["family"]
+    for name in sorted(REGISTRY):
+        fam = REGISTRY[name]["family"]
         if fam in families:
             names.append(name)
     return names

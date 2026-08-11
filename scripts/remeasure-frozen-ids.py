@@ -13,7 +13,6 @@ Usage:
 from __future__ import annotations
 
 import argparse
-import hashlib
 import json
 import platform
 import sys
@@ -26,16 +25,17 @@ sys.path.insert(0, str(ROOT))
 
 import z3  # noqa: E402
 
-from regexproof.batch.runner import CORPUS_MANIFESTS, _compile_all, _extract  # noqa: E402
+from regexproof.batch.compile_records import compile_records
+from regexproof.batch.extract import extract_corpus
+from regexproof.batch.measure import compiler_fingerprint  # noqa: E402
+from regexproof.batch.manifests import CORPUS_MANIFESTS  # noqa: E402
 
 OUT = ROOT / "properties" / "generated"
 
 
 def _compiler_fingerprint() -> str:
-    h = hashlib.sha256()
-    for p in sorted((ROOT / "regexproof" / "compiler").rglob("*.py")):
-        h.update(p.read_bytes())
-    return h.hexdigest()[:16]
+    return compiler_fingerprint()
+
 
 
 def _load_ids(path: Path) -> list[str]:
@@ -56,8 +56,8 @@ def measure(corpus: str) -> tuple[list[dict], dict]:
     sample = ROOT / "batch" / "corpora" / corpus / "sample"
     if not path.exists() and sample.exists():
         meta["path"] = sample
-    records = _extract(corpus, meta)
-    compiled = _compile_all(
+    records = extract_corpus(corpus, meta)
+    compiled = compile_records(
         records, lift_inline=bool(meta.get("lift_inline")), corpus_slug=corpus
     )
     enc = sum(1 for c in compiled if c.get("encodable"))

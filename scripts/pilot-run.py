@@ -24,6 +24,7 @@ from regexproof.extractors.js_babel import extract_js  # noqa: E402
 from regexproof.extractors.rule_file import extract_rule_file  # noqa: E402
 from regexproof.fuzz.adapters import reject_shell_subprocess_usage  # noqa: E402
 from regexproof.schemas import EXTRACTOR_SCHEMA_VERSION  # noqa: E402
+from regexproof.z3_pin import assert_z3_pinned  # noqa: E402
 
 try:
     import jsonschema
@@ -186,6 +187,7 @@ def run_gitleaks(manifest: dict) -> dict:
 
 
 def main() -> int:
+    assert_z3_pinned()
     vjs_manifest = json.loads((ROOT / "pilots/validatorjs/manifest.json").read_text())
     gl_manifest = json.loads((ROOT / "pilots/gitleaks/manifest.json").read_text())
     out_dir = ROOT / "properties" / "generated"

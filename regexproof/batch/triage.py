@@ -6,6 +6,8 @@ import json
 from pathlib import Path
 from typing import Any
 
+from regexproof.io_atomic import atomic_write_lines
+
 TRIAGE_SCHEMA_VERSION = "1"
 
 
@@ -44,7 +46,4 @@ def triage_records_from_compiled(compiled: list[dict[str, Any]]) -> list[dict[st
 
 
 def write_triage_ndjson(path: Path, records: list[dict[str, Any]]) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    with path.open("w", encoding="utf-8") as fh:
-        for rec in records:
-            fh.write(json.dumps(rec, sort_keys=True) + "\n")
+    atomic_write_lines(path, (json.dumps(rec, sort_keys=True) for rec in records))

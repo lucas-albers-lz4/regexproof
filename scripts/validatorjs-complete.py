@@ -21,12 +21,13 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-import importlib.util  # noqa: E402
 
 from z3 import Contains, InRe, Length, Not, Re, String  # noqa: E402
 
 from regexproof.batch.inventory import load_inventory  # noqa: E402
-from regexproof.batch.runner import CORPUS_MANIFESTS, _compile_all, _extract  # noqa: E402
+from regexproof.batch.compile_records import compile_records
+from regexproof.batch.extract import extract_corpus
+from regexproof.batch.manifests import CORPUS_MANIFESTS  # noqa: E402
 from regexproof.compiler import compile_pattern  # noqa: E402
 
 OUT = ROOT / "properties" / "generated"
@@ -37,12 +38,8 @@ TIMEOUT_MS = 10000
 
 
 def _load_harness():
-    path = ROOT / "scripts" / "z3-verify.py"
-    spec = importlib.util.spec_from_file_location("z3_verify", path)
-    mod = importlib.util.module_from_spec(spec)
-    assert spec.loader is not None
-    spec.loader.exec_module(mod)
-    return mod
+    import regexproof.harness as harness
+    return harness
 
 
 def _node_test(pattern: str, flags: str, s: str) -> bool:
@@ -65,8 +62,8 @@ def main(argv: list[str] | None = None) -> int:
 
     meta = CORPUS_MANIFESTS["validatorjs"]
     verified_domain = meta.get("verified_domain") or str(meta["path"])
-    records = _extract("validatorjs", meta)
-    compiled = _compile_all(records, lift_inline=False, corpus_slug="validatorjs")
+    records = extract_corpus("validatorjs", meta)
+    compiled = compile_records(records, lift_inline=False, corpus_slug="validatorjs")
 
     # Crash-regression: {1} must compile after lower.py fix
     crash = compile_pattern("x{1}", "", "ecma", "fullmatch")

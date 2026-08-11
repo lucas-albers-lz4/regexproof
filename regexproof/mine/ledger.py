@@ -3,10 +3,10 @@
 from __future__ import annotations
 
 import json
-import os
-import tempfile
 from pathlib import Path
 from typing import Any, Callable
+
+from regexproof.io_atomic import atomic_write_text
 
 LEDGER_SCHEMA_VERSION = "1"
 
@@ -52,24 +52,8 @@ def load_ledger(path: Path | str) -> dict[str, Any]:
 
 def save_ledger(path: Path | str, ledger: dict[str, Any]) -> None:
     """Atomic write: temp file in same directory + os.replace."""
-    p = Path(path)
-    p.parent.mkdir(parents=True, exist_ok=True)
     text = json.dumps(ledger, indent=2, sort_keys=True, ensure_ascii=False) + "\n"
-    fd, tmp_name = tempfile.mkstemp(prefix=f".{p.name}.", suffix=".tmp", dir=p.parent)
-    try:
-        with os.fdopen(fd, "w", encoding="utf-8") as f:
-            f.write(text)
-            f.flush()
-            os.fsync(f.fileno())
-        if _crash_before_replace is not None:
-            _crash_before_replace()
-        os.replace(tmp_name, p)
-    except Exception:
-        try:
-            os.unlink(tmp_name)
-        except OSError:
-            pass
-        raise
+    atomic_write_text(path, text, crash_before_replace=_crash_before_replace)
 
 
 def find_candidate(ledger: dict[str, Any], url: str) -> dict[str, Any] | None:

@@ -46,6 +46,7 @@ from regexproof.fuzz.adapters import (  # noqa: E402
     real_accepts_perl,
     real_accepts_yara,
 )
+from regexproof.z3_pin import assert_z3_pinned  # noqa: E402
 
 OUT = ROOT / "properties" / "generated" / "mirror_fidelity_gate.json"
 FIXTURES = ROOT / "sweep" / "corpus-wave2" / "fixtures"
@@ -574,9 +575,7 @@ def main(argv: list[str] | None = None) -> int:
     )
     args = ap.parse_args(argv)
 
-    if not z3.get_version_string().startswith("5.0"):
-        print("FATAL: need z3-solver 5.0.x", file=sys.stderr)
-        return 3
+    assert_z3_pinned()
 
     # Wave-3 runs never pass via synthetic fallback.
     disable_fallback = bool(args.disable_fallback or args.wave3_only)
@@ -626,11 +625,13 @@ def main(argv: list[str] | None = None) -> int:
         for name, inv, dialect in corpora:
             rows = _sample_from_inventory(inv, dialect=dialect, limit=args.max_per_corpus)
             if name == "gitleaks" and not rows:
-                from regexproof.batch.runner import CORPUS_MANIFESTS, _compile_all, _extract
+                from regexproof.batch.compile_records import compile_records
+                from regexproof.batch.extract import extract_corpus
+                from regexproof.batch.manifests import CORPUS_MANIFESTS
 
                 meta = dict(CORPUS_MANIFESTS["gitleaks"])
-                compiled = _compile_all(
-                    _extract("gitleaks", meta),
+                compiled = compile_records(
+                    extract_corpus("gitleaks", meta),
                     lift_inline=True,
                     corpus_slug="gitleaks",
                 )
