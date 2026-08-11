@@ -207,7 +207,8 @@ def run_one(name, entry, require_ground_truth=False):
     }
     constraints, bad = entry["fn"]()
     if entry.get("backend") == "noodler":
-        r = _run_one_noodler(name, entry, constraints, bad, engines, result)
+        r = _run_one_noodler(name, entry, constraints, bad, engines, result,
+                             require_ground_truth)
         if r is not None:
             return r
         # None = binary absent: the absence is recorded (triage_fallback) and
@@ -315,7 +316,8 @@ def validate_registry(registry=None):
 # ---------------------------------------------------------------------------
 # Noodler backend path (Phase 2 PR B — D6 runner + D16 re-validation)
 # ---------------------------------------------------------------------------
-def _run_one_noodler(name, entry, constraints, bad, engines, result):
+def _run_one_noodler(name, entry, constraints, bad, engines, result,
+                     require_ground_truth=False):
     """backend="noodler" properties run the pinned Noodler CLI through the
     normal result path. Raw evidence only: the per-solver verdict, rc, wall
     ms, and the D16 re-validation outcome. The verification tier is DERIVED
@@ -449,7 +451,31 @@ def _run_one_noodler(name, entry, constraints, bad, engines, result):
     # sat — D16 already ran UP-FRONT (gating the cross-check/D15 machinery);
     # reaching here means the witness re-validated in stock z3
     result["result"] = SolveResult.SAT.value
-    result["ok"] = not entry["expect_unsat"]
+    result["ok"] = not entry["expect_unsat"]  # set FIRST — the ground-truth
+    # gate below may override ok=False (a failure must not be clobbered)
+    # ground-truth gate (cumulative zen-MCR finding — laguna F4/big-pickle #3):
+    # the noodler sat path must honor the SAME --require-ground-truth contract
+    # as the stock path (a real-implementation callback, not just D16)
+    gt = entry.get("ground_truth")
+    if entry["kind"] == PropertyKind.MUTATION_GUARD.value:
+        result["ground_truth"] = "mutation-guard-sat-expected"
+        print("    mutation guard: SAT expected (harness-sensitivity probe, "
+              "not a finding)")
+    elif gt is not None:
+        reproduced = bool(gt(witness))
+        result["ground_truth"] = "reproduced" if reproduced else "failed"
+        print(f"    ground-truth: {'REPRODUCED' if reproduced else 'FAILED TO REPRODUCE'}")
+        if not reproduced:
+            print("    WARNING: SAT witness did not reproduce against the real "
+                  "implementation — do NOT report this as a vulnerability.",
+                  file=sys.stderr)
+            result["ok"] = False
+    elif require_ground_truth:
+        result["ground_truth"] = "refused-no-callback"
+        print("    ERROR: SAT witness has no ground_truth callback, but "
+              "--require-ground-truth is set — refusing to report an "
+              "unverified counterexample.", file=sys.stderr)
+        result["ok"] = False
     result["state"] = "decided"
     print(f"[{'PASS' if result['ok'] else 'FAIL'}] {name}: SAT via Noodler "
           f"(D16 re-validated)  [{nd['wall_ms']}ms]")

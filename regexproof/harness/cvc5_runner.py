@@ -47,7 +47,7 @@ def _match_balanced(text: str, i: int) -> int:
     return len(text)
 
 
-def expand_loops(smt: str, cap: int = RELOOP_CAP) -> str:
+def expand_loops(smt: str, cap: int = RELOOP_CAP) -> tuple[str, list[str]]:
     """D12 bounded-loop expansion: rewrite `(re.loop ARG n m)` occurrences with
     n <= cap into the explicit `(re.++ ARG ARG ...)` form cvc5 CAN parse (n=0
     becomes `(str.to_re "")` — the empty repetition). ARG is matched with a
