@@ -351,6 +351,7 @@ def _run_one_noodler(name, entry, constraints, bad, engines, result):
     result["noodler_verdict"] = nd["verdict"]
     result["noodler_rc"] = nd["rc"]
     result["noodler_wall_ms"] = nd["wall_ms"]
+    result["route"] = "mirror"  # every harness result is mirror-route (U9 DROP)
     engines["noodler"] = noodler_version(binary)  # the INVOKED binary's version
     result["engine_versions"] = engines
     result["wall_ms"] = nd["wall_ms"]
@@ -363,6 +364,24 @@ def _run_one_noodler(name, entry, constraints, bad, engines, result):
         print(f"[ABSTAIN] {name}: Noodler {v} — not proven "
               f"[{nd['wall_ms']}ms] (abstention is an error state, D15)")
         return result
+    # cross-check leg (Phase 3 PR A): the SAME decomposed form, via the cvc5
+    # worker with D12 bounded-loop expansion; raw evidence only. Disagreement
+    # handling (D15 + exit 2) is the Phase-3 PR B machinery.
+    from regexproof.harness.cvc5_runner import expand_loops, run_cvc5
+
+    x_smt, capped = expand_loops(s.sexpr())
+    if capped:
+        result["cross_check_abstained"] = True
+        result["cross_check_reason"] = f"re.loop-cap ({capped[0][:60]})"
+    else:
+        cc = run_cvc5(x_smt, entry["timeout_ms"])
+        result["cross_check_backend"] = "cvc5"
+        result["cross_check_abstained"] = cc["state"] == "abstain"
+        if cc["state"] == "abstain":
+            result["cross_check_reason"] = cc["reason"]
+        else:
+            result["cross_check_verdict"] = cc["verdict"]
+        result["cross_check_wall_ms"] = cc["wall_ms"]
     result["state"] = "decided"
     if v == "unsat":
         result["result"] = SolveResult.UNSAT.value

@@ -116,9 +116,19 @@ def main(argv=None):
                 not_proven_count += 1
     failures += domain_fail
     if as_json_legacy:
-        print(json.dumps(results, indent=2, sort_keys=True))
+        # REPORT mode (one-release array): the verification tier is DERIVED at
+        # report time (S15) — added to a COPY, never stored in the record.
+        from regexproof.harness.tiers import derive_tier
+
+        report = [dict(r, verification_tier=derive_tier(r)) for r in results]
+        print(json.dumps(report, indent=2, sort_keys=True))
     elif not as_json:
+        from regexproof.harness.tiers import tier_summary
+
         print(f"\n{len(names) - failures}/{len(names)} passed")
+        ts = tier_summary(results)
+        print("verification tiers (derived at report time, never stored): "
+              + ", ".join(f"{k}={v}" for k, v in ts.items()))
     # §10 operator contract (design rev 7, luna-final): 0 = result recorded
     # (proven, finding, or recorded fallback — a FAILED property still RECORDED
     # its verdict); 1 = any not-proven (unknown/abstain, per #186) or a
