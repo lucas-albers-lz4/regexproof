@@ -427,6 +427,111 @@
       "stars": 616,
       "status": "mined",
       "url": "https://github.com/hubtype/botonic"
+    },
+    {
+      "default_branch": "main",
+      "first_seen": "2026-08-11T13:46:49Z",
+      "pin": "a664dd18b4b0468215126c6f524e91b2a0deec26",
+      "pushed_date": "2026-07-22",
+      "source_query": "SecRule filename:REQUEST path:rules",
+      "stars": 56,
+      "status": "mined",
+      "url": "https://github.com/corazawaf/coraza-coreruleset"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "first_seen": "2026-08-11T13:46:49Z",
+      "pin": "5cc871d82361de8a80d387ec8bbd01fe4258b4a9",
+      "pushed_date": "2026-01-28",
+      "source_query": "path:rules extension:yar OR extension:yara",
+      "stars": 389,
+      "status": "mined",
+      "url": "https://github.com/bartblaze/Yara-rules"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "first_seen": "2026-08-11T13:46:49Z",
+      "pin": "8e978d5e70084df6d2fae0727677ec4f60e3e639",
+      "pushed_date": "2025-01-31",
+      "source_query": "path:rules extension:yar OR extension:yara",
+      "stars": 44,
+      "status": "mined",
+      "url": "https://github.com/ail-project/ail-yara-rules"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "first_seen": "2026-08-11T13:46:49Z",
+      "pin": "1d7c4faed70fae431b8189c904881cc0e12436e6",
+      "pushed_date": "2024-11-18",
+      "source_query": "path:rules extension:yar OR extension:yara",
+      "stars": 9,
+      "status": "mined",
+      "url": "https://github.com/VaccinatorSec/yara-rules"
+    },
+    {
+      "default_branch": "main",
+      "first_seen": "2026-08-11T13:46:49Z",
+      "pin": "63d10cff904d9398e0b099ef2a1118b9ad2cf079",
+      "pushed_date": "2026-08-09",
+      "source_query": "filename:rules.yml path:.semgrep OR path:semgrep",
+      "stars": 5031,
+      "status": "mined",
+      "url": "https://github.com/PurpleAILAB/Decepticon"
+    },
+    {
+      "default_branch": "develop",
+      "first_seen": "2026-08-11T13:46:49Z",
+      "pin": "978def55c8e68cab3a50a7ee4725039da753f0a1",
+      "pushed_date": "2026-08-10",
+      "source_query": "filename:rules.yml path:.semgrep OR path:semgrep",
+      "stars": 504,
+      "status": "mined",
+      "url": "https://github.com/xibosignage/xibo-cms"
+    },
+    {
+      "default_branch": "main",
+      "first_seen": "2026-08-11T13:46:49Z",
+      "pin": "c712baeaaa2a45d954ebc266195f8d1fb6947a2a",
+      "pushed_date": "2026-08-08",
+      "source_query": "filename:rules.yml path:.semgrep OR path:semgrep",
+      "stars": 179,
+      "status": "mined",
+      "url": "https://github.com/freedomofpress/securedrop-workstation"
+    },
+    {
+      "default_branch": "main",
+      "first_seen": "2026-08-11T13:46:49Z",
+      "pin": "d4a39726cad8d8e27e4c0502d1843c3b4180ffbc",
+      "pushed_date": "2026-08-10",
+      "source_query": "filename:rules.yml path:.semgrep OR path:semgrep",
+      "stars": 154,
+      "status": "mined",
+      "url": "https://github.com/grcengineering/gigachad-grc"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "first_seen": "2026-08-11T13:46:49Z",
+      "pin": "f4a47e2cf2822196275075ab9a2e258b6fa9be8b",
+      "pushed_date": "2026-08-10",
+      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
+      "stars": 436,
+      "status": "mined",
+      "url": "https://github.com/BakeLens/crust"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "first_seen": "2026-08-11T13:46:49Z",
+      "pin": "a1736886d18c14f6e19520813d2b3e432179e3b9",
+      "pushed_date": "2026-06-19",
+      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
+      "stars": 455,
+      "status": "mined",
+      "url": "https://github.com/Grid2op/grid2op"
     }
   ],
   "run": {
