@@ -114,6 +114,11 @@ for _name, _ch in INJECTION_CHARS:
         "family": "P1",
         "input_domain": "ascii",
         "ground_truth": None,
+        # S16 fixture (#220): P1-space is the backend="noodler" fixture property —
+        # in stock-only CI the binary is absent → triage_fallback (stock result,
+        # exit unchanged, tier seq-only); in the noodler CI job the real binary
+        # runs with the cvc5 cross-check leg.
+        "backend": "noodler" if _name == "space" else "seq",
     }
 
 ACTOR_CLS = Union(

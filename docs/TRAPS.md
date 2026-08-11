@@ -618,3 +618,27 @@ right:    full tree file count == expected; budget breach → complete_run=false
 ```
 
 See `sweep/corpus-wave3/testdata-p5.md` / Wave-3 P5 (#116); TRAPS §31.
+
+## Escape-input class (4 confirmed occurrences, now a rule — #220)
+
+Never write Python/JSON escapes into SMT-LIB: Noodler reads `\t` as a literal
+backslash+char, and SMT-LIB has no backslash escapes. String literals go
+through the harness `smt_string()` (quote-doubling only, raw bytes). Occurred
+in: C1 probes, the ECMA pilot, the \p-gate probe, and the matrix `\u{...}`.
+The control-char round-trip test is the regression gate.
+
+## \p{} silent literalization (U9 evidence — #226/#220)
+
+`from_ecma2020` treats `\p{L}` as an IDENTITY ESCAPE (never an error): the
+probe `p{L}` matches "p{L}" — the property token literally. The registration
+gate rejects all real `\p`/`\P` tokens via the odd/even backslash-chain
+tokenizer; escaped `\\p` literals pass.
+
+## Signal deaths are negative returncodes (S13 — #230)
+
+Popen reports signal deaths as NEGATIVE returncodes (-11 for SIGSEGV), so
+`rc == 139` (the bash 128+11 convention) NEVER fires for direct Popen. The
+runner's S13 rule: `rc < 0 or rc == 139` → signal death → **ABSTAIN-SIGSEGV**
+(output untrusted EVEN with a printed verdict). Only `rc 0/1` WITH a verdict
+is valid; a NON-signal invalid rc (e.g. 2, 127) with a printed verdict is a
+**DISPATCH-ERROR** abstention — the two classes are distinct in the records.

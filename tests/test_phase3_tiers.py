@@ -45,6 +45,15 @@ def test_derive_escalated_leg_absent():
     assert derive_tier(r) == TIER_ESCALATED  # cross-check leg absent
 
 
+def test_derive_fallback_not_proven_is_seq_only():
+    # §10 ordering (luna r1 on #235): an ABSENT backend whose stock fallback is
+    # not-proven still derives seq-only — the fallback's evidence is the stock
+    # result (never escalated by the D5 check).
+    r = {"backend": "noodler", "route": "mirror", "not_proven": True,
+         "noodler_verdict": "ABSENT", "triage_fallback": True}
+    assert derive_tier(r) == TIER_SEQ_ONLY
+
+
 def test_derive_cross_checked_agree():
     r = {"backend": "noodler", "route": "mirror", "not_proven": False,
          "noodler_verdict": "unsat", "cross_check_verdict": "unsat"}
@@ -159,15 +168,21 @@ def test_ndjson_still_raw_only():
     assert "verification_tier" not in rec  # NDJSON storage is raw (S15)
 
 
-def test_legacy_report_has_derived_tier():
-    proc = subprocess.run(
-        [sys.executable, str(ROOT / "scripts" / "z3-verify.py"), "--json-legacy",
-         "P1-space"],
-        cwd=ROOT, check=False, capture_output=True, text=True,
-    )
-    assert proc.returncode == 0, proc.stderr
-    report = json.loads(proc.stdout)
-    assert report[0]["verification_tier"] == TIER_SEQ_ONLY
+def test_legacy_report_has_derived_tier(monkeypatch, capsys):
+    # Deterministic: force the noodler binary ABSENT so the S16 fixture
+    # (P1-space, backend="noodler") falls back to stock → §10 tier seq-only.
+    # Run the CLI in-process (the monkeypatch cannot cross a subprocess).
+    import regexproof.harness.noodler_runner as nr
+    from regexproof.harness import cli
+
+    def _absent():
+        raise nr.NoodlerAbsent("absent (test)")
+
+    monkeypatch.setattr(nr, "binary_path", _absent)
+    rc = cli.main(["--json-legacy", "P1-space"])
+    assert rc == 0
+    report = json.loads(capsys.readouterr().out)
+    assert report[0]["verification_tier"] == TIER_SEQ_ONLY  # §10 fallback row
 
 
 # --- real cvc5 cross-check (skip if the cvc5 venv is absent) ----------------

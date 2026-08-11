@@ -72,3 +72,16 @@ Start with stock `z3-solver` `seq` backend + the 5 canonical shapes (incl.
 shape-5 `rule_diff`). Escalate to Z3-Noodler only when: (a) the pattern is
 JS/ECMA and you want to verify it as written, or (b) stock Z3 times out on a
 property that decomposition couldn't fix.
+
+### U9 scope note (Phase 1/4, #228/#220 — NORMATIVE)
+
+The harness does **not** route through `re.from_ecma2020` (U9 DROP, measured:
+silent `\p{}` literalization, negated-membership SIGABRT, no flag
+representation). All harness routes are **mirror-route only**; the S3
+authority guard requires an explicitly recorded `route: "mirror"` for the
+`cross-checked` tier. The backend binary is sha256-pinned (R5 policy: cache
+key = asset sha256; bump = verify cold download → update `preflight.py` + CI +
+`PIN.md` → luna-gated PR). The `noodler` CI job downloads the pinned asset,
+runs the R8 pre-flight, and exercises the S16 noodler-backed fixture
+(`P1-space`) with the real binary; stock-only CI keeps that same fixture
+treated as absent (`triage_fallback`, exit unchanged, tier `seq-only`).
