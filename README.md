@@ -71,6 +71,7 @@ stage, read `docs/REDOS.md` first.
 | `docs/DYNAMIC.md` | Dynamic compiles (`re.compile` from variables): classify, bound, prove or file | 
 | `docs/LOOKBEHIND_REWRITE.md` | Variable-width lookbehind → string-ops rewrite (the `(?<=^)` + MULTILINE case) |
 | `docs/REPORTING.md` | Scanner NDJSON / triage / batch MD field contracts |
+| `docs/why.md` | Why this project exists: the problem, the approach, and progress |
 | `docs/examples/shape5-rule_diff.md` | Shape-5 `rule_diff` kind/family/mutation guards |
 | `docs/verified-findings.jsonl` | Machine-readable verified implementation findings |
 | `docs/REDOS.md` | ReDoS (complexity) tooling — complements, not replaces, the SMT approach |
