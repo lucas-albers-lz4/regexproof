@@ -16,8 +16,9 @@ def main():
     try:
         import cvc5
     except ImportError:
-        print("E cvc5 not importable (need the cvc5 wheel; cross-check leg "
-              "records absent)")
+        # distinct LEG-ABSENT marker (the §10 table: cross-check leg absent is
+        # a separate recorded state from an installed-backend abstention)
+        print("A cvc5 wheel not installed (cross-check leg absent)")
         return
     # The shared text carries a trailing (check-sat). Parse declarations only,
     # then run exactly ONE explicit checkSat.

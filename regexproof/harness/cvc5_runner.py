@@ -34,42 +34,75 @@ class Cvc5Absent(Exception):
     leg records cross_check_abstained (reason absent) — never a failure."""
 
 
-def expand_loops(smt: str, cap: int = RELOOP_CAP) -> str:
-    """D12 bounded-loop expansion: rewrite `(re.loop r n m)` occurrences with
-    n <= cap into the explicit `(re.++ r r ...)` form cvc5 CAN parse. Loops
-    with bound > cap are left untouched (the caller records the cap abstain).
-    Returns (expanded_text, capped_loops_found)."""
-    pattern = re.compile(
-        r"\(re\.loop\s+((?:\([^()]*\)|[^()\s]+))\s+(\d+)(?:\s+(\d+))?\)"
-    )
-    capped = []
+def _match_balanced(text: str, i: int) -> int:
+    """Index just past the balanced paren group starting at i (text[i]=='(')."""
+    depth = 0
+    for j in range(i, len(text)):
+        if text[j] == "(":
+            depth += 1
+        elif text[j] == ")":
+            depth -= 1
+            if depth == 0:
+                return j + 1
+    return len(text)
 
-    def repl(m):
-        r, lo = m.group(1), int(m.group(2))
-        hi = int(m.group(3)) if m.group(3) else lo
+
+def expand_loops(smt: str, cap: int = RELOOP_CAP) -> str:
+    """D12 bounded-loop expansion: rewrite `(re.loop ARG n m)` occurrences with
+    n <= cap into the explicit `(re.++ ARG ARG ...)` form cvc5 CAN parse (n=0
+    becomes `(str.to_re "")` — the empty repetition). ARG is matched with a
+    balanced-paren scanner (nested parenthesized regexes included). Loops with
+    bound > cap are left untouched (the caller records the cap abstain).
+    Returns (expanded_text, capped_loops_found)."""
+    out = []
+    i = 0
+    capped = []
+    while i < len(smt):
+        m = re.match(r"\(re\.loop\s+", smt[i:])
+        if not m:
+            out.append(smt[i])
+            i += 1
+            continue
+        j = i + m.end()
+        # balanced-paren argument
+        if smt[j] == "(":
+            arg_end = _match_balanced(smt, j)
+        else:
+            arg_end = re.search(r"\s", smt[j:]).start() + j if re.search(r"\s", smt[j:]) else len(smt)
+        arg = smt[j:arg_end]
+        rest = re.match(r"\s+(\d+)(?:\s+(\d+))?\s*\)", smt[arg_end:])
+        if not rest:
+            out.append(smt[i])
+            i += 1
+            continue
+        lo, hi = int(rest.group(1)), int(rest.group(2)) if rest.group(2) else int(rest.group(1))
         if lo > cap or hi > cap:
-            capped.append(m.group(0))
-            return m.group(0)
-        # min..max repetition as union of concatenations (cvc5-parseable)
+            capped.append(smt[i:arg_end + rest.end()])
+            out.append(smt[i:arg_end + rest.end()])
+            i = arg_end + rest.end()
+            continue
         parts = []
         for n in range(lo, hi + 1):
-            parts.append("(re.++ " + " ".join([r] * n) + ")")
-        return "(re.union " + " ".join(parts) + ")" if len(parts) > 1 else parts[0]
+            if n == 0:
+                parts.append('(str.to_re "")')
+            else:
+                parts.append("(re.++ " + " ".join([arg] * n) + ")")
+        out.append("(re.union " + " ".join(parts) + ")" if len(parts) > 1 else parts[0])
+        i = arg_end + rest.end()
+    return "".join(out), capped
 
-    out = pattern.sub(repl, smt)
-    return out, capped
 
-
-def run_cvc5(smt: str, timeout_ms: int = 30000, python: str | None = None) -> dict:
+def run_cvc5(smt: str, timeout_ms: int = 30000, python: str | None = None,
+             worker: str | None = None) -> dict:
     """Run the cvc5 cross-check query in an isolated worker process. Returns
     the raw-evidence dict: {verdict, wall_ms, state, reason}.
 
     verdict: "sat" | "unsat" | "unknown" | "PARSE-ERROR" | "ABSTAIN-SIGSEGV" |
-             "ABSTAIN-TIMEOUT" | "DISPATCH-ERROR"
-    state: "decided" | "abstain"
+             "ABSTAIN-TIMEOUT" | "DISPATCH-ERROR" | "ABSENT"
+    state: "decided" | "abstain" | "absent"
     """
-    worker = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                          "_cvc5_worker.py")
+    worker = worker or os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                    "_cvc5_worker.py")
     fd, path = tempfile.mkstemp(suffix=".smt2")
     try:
         with os.fdopen(fd, "w") as f:
@@ -104,9 +137,18 @@ def run_cvc5(smt: str, timeout_ms: int = 30000, python: str | None = None) -> di
         return {"verdict": f"ABSTAIN-SIGSEGV(rc={rc})", "wall_ms": dt,
                 "state": "abstain", "reason": "sigsegv"}
     line = out.strip().splitlines()[-1] if out.strip() else "?"
+    if line.startswith("A "):
+        # cvc5 wheel absent: the cross-check LEG is ABSENT (a distinct recorded
+        # state from an installed-backend abstention, per the §10 table)
+        return {"verdict": "ABSENT", "wall_ms": dt, "state": "absent",
+                "reason": line[2:][:100]}
     if line.startswith("V "):
         try:
             verdict, ms = line[2:].split()
+            if verdict == "unknown":
+                # an unknown IS an abstention (D5) — never a decided verdict
+                return {"verdict": "unknown", "wall_ms": float(ms),
+                        "state": "abstain", "reason": "unknown"}
             return {"verdict": verdict, "wall_ms": float(ms),
                     "state": "decided", "reason": None}
         except ValueError:

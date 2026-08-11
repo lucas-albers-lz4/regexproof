@@ -36,14 +36,22 @@ def derive_tier(result: dict) -> str:
         return TIER_SEQ_ONLY if backend == "seq" else TIER_ESCALATED
     if result.get("cross_check_abstained"):
         return TIER_ESCALATED
-    if str(result.get("noodler_verdict", "")).startswith("ABSTAIN"):
+    if result.get("noodler_verdict") == "unknown" or str(
+        result.get("noodler_verdict", "")
+    ).startswith("ABSTAIN"):
+        # an "unknown" verdict IS an abstention (D5) — never cross-checked
+        return TIER_ESCALATED
+    if result.get("cross_check_verdict") == "unknown":
+        # defensive: a recorded unknown cross-check verdict is an abstention
         return TIER_ESCALATED
 
     if backend == "seq":
         return TIER_SEQ_ONLY
 
     # S3 authority guard: cross-checked requires route:"mirror"
-    if result.get("route", "mirror") != "mirror":
+    if result.get("route") != "mirror":
+        # S3 authority guard: cross-checked REQUIRES an EXPLICITLY recorded
+        # route:"mirror" — a missing route also fails the guard (no default).
         return TIER_ESCALATED
 
     if result.get("cross_check_verdict") is None:

@@ -68,6 +68,21 @@ def test_derive_s3_guard_non_mirror_route():
     assert derive_tier(r) == TIER_ESCALATED
 
 
+def test_derive_s3_guard_missing_route_fails():
+    # A record WITHOUT an explicit route must also fail the guard (no default —
+    # luna r1 finding: `get("route", "mirror")` over-claimed).
+    r = {"backend": "noodler", "not_proven": False,
+         "noodler_verdict": "unsat", "cross_check_verdict": "unsat"}
+    assert derive_tier(r) == TIER_ESCALATED
+
+
+def test_derive_double_unknown_never_cross_checked():
+    # cvc5 unknown is an abstention (D5): both-unknown must NOT be cross-checked.
+    r = {"backend": "noodler", "route": "mirror", "not_proven": False,
+         "noodler_verdict": "unknown", "cross_check_verdict": "unknown"}
+    assert derive_tier(r) == TIER_ESCALATED
+
+
 def test_derive_disagreement_never_cross_checked():
     r = {"backend": "noodler", "route": "mirror", "not_proven": False,
          "noodler_verdict": "sat", "cross_check_verdict": "unsat"}
@@ -76,7 +91,7 @@ def test_derive_disagreement_never_cross_checked():
 
 # --- D12 bounded-loop expansion ---------------------------------------------
 def test_expand_loops_within_cap():
-    smt = "(assert (str.in_re s (re.loop (str.to_re \"a\") 2 3)))\n(check-sat)\n"
+    smt = '(assert (str.in_re s (re.loop (str.to_re "a") 2 3)))\n(check-sat)\n'
     out, capped = expand_loops(smt)
     assert capped == []
     assert "(re.loop" not in out
@@ -84,10 +99,53 @@ def test_expand_loops_within_cap():
 
 
 def test_expand_loops_over_cap_abstains():
-    smt = "(assert (str.in_re s (re.loop (str.to_re \"a\") 17)))\n(check-sat)\n"
+    smt = '(assert (str.in_re s (re.loop (str.to_re "a") 17)))\n(check-sat)\n'
     out, capped = expand_loops(smt)
     assert len(capped) == 1  # bound > 16 → capped, left untouched
     assert "(re.loop" in out
+
+
+def test_expand_loops_zero_repetition_valid():
+    # n=0 must expand to the empty-string regex — `(re.++ )` would be invalid.
+    smt = '(assert (str.in_re s (re.loop (str.to_re "a") 0)))\n(check-sat)\n'
+    out, capped = expand_loops(smt)
+    assert capped == []
+    assert '(str.to_re "")' in out
+    assert "(re.++ )" not in out
+
+
+def test_expand_loops_nested_parenthesized_arg():
+    # The loop argument may itself be a parenthesized regex (balanced-paren
+    # scan — luna r1 finding).
+    smt = ("(assert (str.in_re s (re.loop (re.union (str.to_re \"a\") "
+           '(str.to_re "b")) 1 2)))\n(check-sat)\n')
+    out, capped = expand_loops(smt)
+    assert capped == []
+    assert "re.union" in out
+    assert "(re.loop" not in out
+
+
+# --- run_cvc5 state classification (fake workers) ---------------------------
+def test_run_cvc5_unknown_is_abstain(tmp_path):
+    # cvc5's unknown IS an abstention (D5) — never a decided verdict.
+    import regexproof.harness.cvc5_runner as cr
+
+    w = tmp_path / "wk.py"
+    w.write_text("import sys\nprint('V unknown 12.3')\n")
+    r = cr.run_cvc5("(check-sat)", python=sys.executable, worker=str(w))
+    assert r["state"] == "abstain"
+    assert r["verdict"] == "unknown"
+    assert r["reason"] == "unknown"
+
+
+def test_run_cvc5_absent_state_without_cvc5():
+    # The harness venv has no cvc5 wheel: the worker must report the distinct
+    # LEG-ABSENT state (never a generic parse-error or an installed abstention).
+    import regexproof.harness.cvc5_runner as cr
+
+    r = cr.run_cvc5("(check-sat)")
+    assert r["state"] == "absent"
+    assert r["verdict"] == "ABSENT"
 
 
 # --- NDJSON raw-only + legacy report tier -----------------------------------

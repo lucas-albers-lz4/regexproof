@@ -376,11 +376,17 @@ def _run_one_noodler(name, entry, constraints, bad, engines, result):
     else:
         cc = run_cvc5(x_smt, entry["timeout_ms"])
         result["cross_check_backend"] = "cvc5"
-        result["cross_check_abstained"] = cc["state"] == "abstain"
-        if cc["state"] == "abstain":
+        if cc["state"] == "absent":
+            # distinct LEG-ABSENT state (§10 table) — the cvc5 wheel is not
+            # installed; never conflated with an installed-backend abstention
+            result["cross_check_absent"] = True
             result["cross_check_reason"] = cc["reason"]
         else:
-            result["cross_check_verdict"] = cc["verdict"]
+            result["cross_check_abstained"] = cc["state"] == "abstain"
+            if cc["state"] == "abstain":
+                result["cross_check_reason"] = cc["reason"]
+            else:
+                result["cross_check_verdict"] = cc["verdict"]
         result["cross_check_wall_ms"] = cc["wall_ms"]
     result["state"] = "decided"
     if v == "unsat":
