@@ -30,8 +30,9 @@ RELOOP_CAP = 16
 
 
 class Cvc5Absent(Exception):
-    """cvc5 is not importable in a worker (no wheel installed). The cross-check
-    leg records cross_check_abstained (reason absent) — never a failure."""
+    """Unused (the absent-cvc5 path is the worker's "A " line, not an
+    exception) — kept for in-process callers only; do not raise in the
+    subprocess path."""
 
 
 def _match_balanced(text: str, i: int) -> int:

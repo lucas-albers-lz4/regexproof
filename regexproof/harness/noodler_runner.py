@@ -214,9 +214,11 @@ def run_noodler(smt: str, timeout_ms: int = 30000, want_model: bool = False,
 
 def noodler_version(binary: str | None = None) -> str | None:
     """Record the INVOKED binary's version string (engine_versions). The
-    caller passes the resolved binary (binary_path()); the default is only a
-    fallback — never record a version for a binary that was not invoked."""
-    binary = binary or DEFAULT_NOODLER
+    caller MUST pass the resolved binary (binary_path()); None raises —
+    never record a version for a binary that was not invoked
+    (cumulative zen-MCR finding, mimo #3)."""
+    if binary is None:
+        raise ValueError("noodler_version requires the invoked binary path")
     try:
         p = subprocess.run([binary, "-version"], capture_output=True, text=True,
                            timeout=15)
