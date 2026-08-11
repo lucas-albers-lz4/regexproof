@@ -19,24 +19,17 @@ PIN_SHA256 = "22b19f123d3e7f54e10fdc46af3f91de23d89148c9a259eb072bc9e12f083464"
 EXPECT_VERSION = "Z3 version 4.16.0"
 DEFAULT = "/tmp/noodler/z3-noodler-ubuntu-24.04-x86_64-shared"
 HERE = os.path.dirname(os.path.abspath(__file__))
-FIXTURES = os.path.join(os.path.dirname(HERE), "p1-baseline", "fixtures")
+FIXTURES = os.path.join(HERE, "p1-baseline", "fixtures")
 
-FIXTURE_316 = """(declare-fun s () String)
-(assert (= 1 (+ (str.indexof s " " 0) (str.to_int (str.substr s 0 (ite (str.contains " " s) 1 0))))))
-(check-sat)
-"""
-FIXTURE_325 = """(declare-const x Real)
-(declare-const t String)
-(assert (forall ((i Int)) (or (< i 0) (> i (to_int x)))))
-(assert (> 1 (ite (str.< t ";") 1 0)))
-(check-sat)
-"""
-FIXTURE_344 = """(set-logic QF_SLIA)
-(declare-const x Int)
-(declare-fun a () String)
-(assert (= (str.++ a (str.from_int x)) (str.replace_re (str.++ a (str.from_int 1)) (re.union (str.to_re "") (str.to_re (str.from_int 1))) (str.from_code 0))))
-(check-sat)
-"""
+FIXTURE_316 = os.path.join(FIXTURES, "gh316.smt2")
+FIXTURE_325 = os.path.join(FIXTURES, "gh325.smt2")
+FIXTURE_344 = os.path.join(FIXTURES, "gh344.smt2")  # carries (set-logic QF_SLIA) in-file
+
+def fixture(name):
+    """Read a fixture file — the checked-in files are the single source of truth
+    (fixture edits must not silently diverge from the runtime checks)."""
+    with open(name) as f:
+        return f.read()
 ABSTAIN_CASE = "(set-logic QF_SLIA)\n(declare-const s String)\n(assert (str.in_re s (re.from_ecma2020 '.*(?=IN=).*')))\n(assert (= s \"IN=\"))\n(check-sat)\n"
 SAT_CASE = "(set-logic QF_SLIA)\n(declare-const s String)\n(assert (str.in_re s (re.from_ecma2020 '.*(?=IN=).*')))\n(assert (= s \"xIN=\"))\n(check-sat)\n"
 
@@ -45,12 +38,22 @@ def run(binary, smt, timeout=35):
         f.write(smt)
     t0 = time.perf_counter()
     try:
-        p = subprocess.run([binary, "/tmp/_preflight_q.smt2"], capture_output=True,
-                           text=True, timeout=timeout)
-        rc, out = p.returncode, p.stdout.strip()
-    except subprocess.TimeoutExpired:
-        return "TIMEOUT", timeout * 1000, None
+        p = subprocess.Popen([binary, "/tmp/_preflight_q.smt2"], stdout=subprocess.PIPE,
+                             stderr=subprocess.PIPE, text=True,
+                             start_new_session=True)  # D6 process-group kill
+        try:
+            out, _ = p.communicate(timeout=timeout)
+        except subprocess.TimeoutExpired:
+            os.killpg(os.getpgid(p.pid), 9)
+            out, _ = p.communicate()
+            return "TIMEOUT", timeout * 1000, None
+        rc, out = p.returncode, out.strip()
+    except Exception as e:
+        return f"DISPATCH-ERROR: {e}", 0.0, None
     dt = (time.perf_counter() - t0) * 1000
+    if rc < 0:
+        # signal death: output untrusted even with a printed verdict (S13 literal)
+        return f"CRASH(rc={rc})", round(dt, 1), out
     first = out.splitlines()[0] if out else "EMPTY"
     return f"{first}/rc={rc}", round(dt, 1), out
 
@@ -63,16 +66,16 @@ def main():
     rows.append(("sha256 pin", "PASS" if h == PIN_SHA256 else "FAIL",
                  f"{h[:16]}… (expect {PIN_SHA256[:16]}…)"))
 
-    # 2. wrong-UNSAT replays (must be sat)
-    for name, smt in (("#316", FIXTURE_316), ("#325", FIXTURE_325)):
-        v, ms, _ = run(binary, smt)
+    # 2. wrong-UNSAT replays (must be sat) — fixtures read from the checked-in files
+    for name, path in (("#316", FIXTURE_316), ("#325", FIXTURE_325)):
+        v, ms, _ = run(binary, fixture(path))
         rows.append((f"{name} replay (expect sat)", "PASS" if v.startswith("sat") else "FAIL",
                      f"{v} ({ms:.0f}ms)"))
 
     # 3. #344 with set-logic (containment: verdict OR timeout-contained hang,
     # NEVER a crash — the measured behavior on v1.6.1 is a >30s hang, the
     # improvement over the v1.5.x-era segfault; the runner's timeout contains it)
-    v, ms, _ = run(binary, FIXTURE_344)
+    v, ms, _ = run(binary, fixture(FIXTURE_344))
     kind = v.split("/")[0]
     ok = kind in ("sat", "unsat", "unknown", "TIMEOUT")
     rows.append(("#344 set-logic (contained)", "PASS" if ok else "FAIL",
