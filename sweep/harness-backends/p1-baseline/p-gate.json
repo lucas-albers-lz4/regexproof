@@ -168,7 +168,7 @@
   "gate": "REJECT"
  },
  {
-  "position": "malformed",
+  "position": "flag-u",
   "form": "\\p{L}",
   "flags": "u",
   "node_bits": "11001101",

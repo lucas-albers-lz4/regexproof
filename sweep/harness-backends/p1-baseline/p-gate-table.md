@@ -42,7 +42,7 @@ solver level (intentional; the flags exist only in the node column).
 | malformed | `\p{L}}` | — | 00000000 | 0000 | REJECT |
 | malformed | `\p{L}{` | — | 00000000 | 0000 | REJECT |
 | malformed | `\p{Xyz}` | — | 00000000 | 0000 | REJECT |
-| malformed | `\p{L}` | u | 11001101 | 0100 | REJECT |
+| flag-u | `\p{L}` | u | 11001101 | 0100 | REJECT |
 
 ## Reading
 - **from_ecma2020 probe column**: RAW pattern text in the SMT-LIB

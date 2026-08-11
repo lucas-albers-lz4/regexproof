@@ -41,7 +41,7 @@ FORMS = [
     ("malformed", r"\p{L}}", ""),
     ("malformed", r"\p{L}{", ""),
     ("malformed", r"\p{Xyz}", ""),
-    ("malformed", r"\p{L}", "u"),        # VALID with /u — real property semantics
+    ("flag-u", r"\p{L}", "u"),            # VALID with /u — real property semantics
 ]
 
 # discriminating probe strings: the literal interpretation of \p{L} matches
