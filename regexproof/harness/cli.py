@@ -91,6 +91,7 @@ def main(argv=None):
     coverage_fail = check_mutation_coverage()
     domain_fail = check_domain_coverage(require=require_domain)
     failures = 0
+    not_proven_count = 0
     results = []
     if as_json or as_json_legacy:
         sink = io.StringIO()
@@ -100,6 +101,8 @@ def main(argv=None):
                 results.append(res)
                 if not res["ok"]:
                     failures += 1
+                if res.get("not_proven"):
+                    not_proven_count += 1
                 if as_json:
                     # Flush each record immediately so partial streams stay valid.
                     print(json.dumps(res, sort_keys=True), file=sys.__stdout__)
@@ -109,12 +112,18 @@ def main(argv=None):
             results.append(res)
             if not res["ok"]:
                 failures += 1
+            if res.get("not_proven"):
+                not_proven_count += 1
     failures += domain_fail
     if as_json_legacy:
         print(json.dumps(results, indent=2, sort_keys=True))
     elif not as_json:
         print(f"\n{len(names) - failures}/{len(names)} passed")
-    return 1 if (failures or coverage_fail) else 0
+    # §10 operator contract (design rev 7, luna-final): 0 = result recorded
+    # (proven, finding, or recorded fallback — a FAILED property still RECORDED
+    # its verdict); 1 = any not-proven (unknown/abstain, per #186) or a
+    # coverage/domain gate failure. Disagreement = 2 is Phase 3 (#219).
+    return 1 if (not_proven_count or coverage_fail or domain_fail) else 0
 
 
 if __name__ == "__main__":
