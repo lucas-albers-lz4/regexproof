@@ -322,6 +322,11 @@ chain intact).
   agree.
 - Create: `tests/test_extract_shell_posix.py`
 - Create: `tests/test_compile_posix_shell.py`
+- Create: `properties/generated/shell_precision_seed.bin` +
+  `properties/generated/shell_precision_spotcheck_seed.bin` (random-source
+  files sized per AC2) + `properties/generated/shell_precision_sample_50.txt`
+  (chosen-50 path list) + `properties/generated/shell_precision_sample.json`
+  (labels + draw records) — the committed precision evidence (P2 AC2)
 - Create: `properties/generated/dogfood_shell_gate_decision.json` (admission
   artifact for the shell corpus itself; GO-class on condition id
   `new-surface` — authored via `author-gate-decision.py` FROM A DRAFT: the
@@ -429,21 +434,26 @@ wc -l` recorded and every caller's args checked against the typed signature
    file; gaps documented per file.
 2. **Precision:** on a hand-labeled 50-file sample drawn from the frozen P1
    `file_lists`, precision ≥ 90%. The draw is REPRODUCIBLE: GNU `shuf`
-   takes `--random-source=FILE`, not a bare seed — commit
-   `properties/generated/shell_precision_seed.bin` (64+ random bytes,
-   recorded in the P2a PR) and draw with
-   `shuf -n 50 --random-source=properties/generated/shell_precision_seed.bin <sorted-file-list>`.
-   The chosen sample (file list) and the per-record
-   TP/FP labels are COMMITTED with the P2a PR as
-   `properties/generated/shell_precision_sample.json` (schema: seed file,
-   draw command, files, records with label; zero-record files excluded from
-   the denominator and counted separately). Definition: a true positive is an extracted
+   takes `--random-source=FILE`, not a bare seed, and FAILS with
+   `end of file` on an undersized source — size both seed files to the
+   input (`bytes >= 4*N + 64` for N input lines; record byte counts in the
+   sample JSON). Commit `properties/generated/shell_precision_seed.bin`
+   (50-draw) and `properties/generated/shell_precision_spotcheck_seed.bin`
+   (10-draw), plus the chosen-50 path list as
+   `properties/generated/shell_precision_sample_50.txt` (sorted, one per
+   line). Draws:
+   `shuf -n 50 --random-source=properties/generated/shell_precision_seed.bin <properties/generated/shell_precision_sample_50.txt`
+   and
+   `shuf -n 10 --random-source=properties/generated/shell_precision_spotcheck_seed.bin <properties/generated/shell_precision_sample_50.txt`.
+   The per-record TP/FP labels are COMMITTED with the P2a PR as
+   `properties/generated/shell_precision_sample.json` (schema: seed files +
+   byte counts, draw commands, files, records with label; zero-record files
+   excluded from the denominator and counted separately). Definition: a true positive is an extracted
    pattern that is a regex used in a grep/sed/awk/`[[ =~ ]]` context (not a
    literal, assignment, or comment). Numerator/denominator = TP/(TP+FP)
    over the 50 files. Independent spot-check: a DIFFERENT human labeler
-   reviews a random 10-file subset (`shuf -n 10 --random-source=properties/generated/shell_precision_spotcheck_seed.bin`
-   over the chosen-50 list — the spot-check seed file is ALSO committed;
-   two distinct seed files, one per draw);
+   reviews the 10-file subset produced by the spot-check draw (distinct
+   seed file;
    disagreement = fraction of records where the two labelers disagree on
    TP/FP classification, over the union of records in the subset;
    disagreement > 10% → relabel the full 50 files; AC fails if relabeled
@@ -464,7 +474,8 @@ wc -l` recorded and every caller's args checked against the typed signature
    the branch — the double-normalize test asserts a BRE `a\+b` record
    compiles to one-or-more, not literal).
 7. **P2.5 re-freeze (mandatory, within P2):** after extractor registration
-   and BEFORE P3 begins, re-run the singleton analysis via the registered
+   and BEFORE P3-B begins (P3-A evidence capture runs pre-P2 and is the
+   exception — see AC7 and P3 Step 7), re-run the singleton analysis via the registered
    extractor; commit
    `properties/generated/dogfooding_novelty_2026-08-12_POST_P2.json`
    (Create entry in this phase's Files) with a delta report (site count,
