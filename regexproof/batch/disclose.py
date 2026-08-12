@@ -32,6 +32,7 @@ SECURITY_TOOL_CORPORA = frozenset(
         "gigachad-grc",
         "bartblaze-yara-rules",
         "crust",
+        "yara-rules",
     }
 )
 
