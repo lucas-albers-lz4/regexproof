@@ -1,0 +1,169 @@
+{
+  "dialect_surface": {
+    "ecma": 1445,
+    "posix-shell": 290,
+    "py_re": 1139
+  },
+  "file_lists": {
+    "fwlive": [
+      "openwrt-feed/luci-app-fwlive/root/usr/libexec/fwlive-is-firewall-event.sh",
+      "openwrt-feed/luci-app-fwlive/root/usr/libexec/fwlive-logging.sh",
+      "out/upstream/luci-app-fwlive/root/usr/libexec/fwlive-is-firewall-event.sh",
+      "out/upstream/luci-app-fwlive/root/usr/libexec/fwlive-logging.sh",
+      "scripts/fwlive-iptables-ping-log.sh",
+      "scripts/fwlive-nft-ping-log.sh",
+      "scripts/lib/feed-keys.sh",
+      "scripts/lib/feed-publish.sh",
+      "scripts/lib/sdk-matrix.sh",
+      "scripts/qemu-i18n-spotcheck.sh",
+      "scripts/qemu-install-from-feed.sh",
+      "scripts/qemu-lab-prepare-image.sh",
+      "scripts/qemu-reload-revert-smoke.sh",
+      "scripts/qemu-smoke-fwlive.sh",
+      "scripts/qemu-theme-tint-smoke.sh",
+      "scripts/run-openwrt-x86-experiment.sh",
+      "scripts/upstream-cut.sh",
+      "scripts/validate-feed-keys.sh",
+      "tests/feed-publish-release-assets.test.sh"
+    ],
+    "happycow": [],
+    "hermes-agent": [
+      "docker/stage2-hook.sh",
+      "optional-skills/creative/hyperframes/scripts/setup.sh",
+      "optional-skills/security/web-pentest/scripts/recon-scan.sh",
+      "scripts/install.sh",
+      "scripts/kill_modal.sh",
+      "scripts/lib/node-bootstrap.sh",
+      "setup-hermes.sh",
+      "skills/creative/comfyui/scripts/comfyui_setup.sh",
+      "skills/creative/touchdesigner-mcp/scripts/setup.sh",
+      "skills/github/github-auth/scripts/gh-env.sh"
+    ],
+    "usrmanage": [
+      "openwrt-feed/usrmanage/files/usr/lib/usrmanage/usrmanage-lib.sh",
+      "openwrt-feed/usrmanage/files/usr/lib/usrmanage/usrmanage-luci-login.sh",
+      "scripts/lib/feed-keys.sh",
+      "scripts/lib/feed-publish.sh",
+      "scripts/lib/sdk-matrix.sh",
+      "scripts/qemu-install-from-feed.sh",
+      "scripts/qemu-lab-prepare-image.sh",
+      "scripts/smoke-package-layout.sh",
+      "scripts/validate-feed-keys.sh",
+      "tests/lib.sh",
+      "tests/test_luci_login.sh",
+      "tests/test_mutators-busybox-fallback.sh",
+      "tests/test_mutators.sh",
+      "tests/test_password_control.sh",
+      "tests/test_phase1_foundation.sh",
+      "tests/test_sdk_matrix_digests.sh",
+      "tests/test_validators.sh"
+    ]
+  },
+  "repos": {
+    "fwlive": {
+      "sha": "3477ace8846bec8c2f5766c5cea6fe07bb4e4570"
+    },
+    "happycow": {
+      "sha": "ee7212c9df8d7004b1bb180d73b31aebf2df4afa"
+    },
+    "hermes-agent": {
+      "sha": "7b5ba2054721dde998ed47fd4a0f031955278e99"
+    },
+    "usrmanage": {
+      "sha": "abe0fe73f9700eca2cd51a53be48aca701b2abe4"
+    }
+  },
+  "schema_version": "1",
+  "site_counts_per_file": {
+    "fwlive": {
+      "openwrt-feed/luci-app-fwlive/root/usr/libexec/fwlive-is-firewall-event.sh": 5,
+      "openwrt-feed/luci-app-fwlive/root/usr/libexec/fwlive-logging.sh": 1,
+      "out/upstream/luci-app-fwlive/root/usr/libexec/fwlive-is-firewall-event.sh": 5,
+      "out/upstream/luci-app-fwlive/root/usr/libexec/fwlive-logging.sh": 1,
+      "scripts/fwlive-iptables-ping-log.sh": 2,
+      "scripts/fwlive-nft-ping-log.sh": 8,
+      "scripts/lib/feed-keys.sh": 5,
+      "scripts/lib/feed-publish.sh": 2,
+      "scripts/lib/sdk-matrix.sh": 1,
+      "scripts/qemu-i18n-spotcheck.sh": 2,
+      "scripts/qemu-install-from-feed.sh": 1,
+      "scripts/qemu-lab-prepare-image.sh": 14,
+      "scripts/qemu-reload-revert-smoke.sh": 7,
+      "scripts/qemu-smoke-fwlive.sh": 5,
+      "scripts/qemu-theme-tint-smoke.sh": 2,
+      "scripts/run-openwrt-x86-experiment.sh": 1,
+      "scripts/upstream-cut.sh": 6,
+      "scripts/validate-feed-keys.sh": 2,
+      "tests/feed-publish-release-assets.test.sh": 12
+    },
+    "happycow": {},
+    "hermes-agent": {
+      "docker/stage2-hook.sh": 2,
+      "optional-skills/creative/hyperframes/scripts/setup.sh": 3,
+      "optional-skills/security/web-pentest/scripts/recon-scan.sh": 1,
+      "scripts/install.sh": 15,
+      "scripts/kill_modal.sh": 4,
+      "scripts/lib/node-bootstrap.sh": 4,
+      "setup-hermes.sh": 4,
+      "skills/creative/comfyui/scripts/comfyui_setup.sh": 1,
+      "skills/creative/touchdesigner-mcp/scripts/setup.sh": 1,
+      "skills/github/github-auth/scripts/gh-env.sh": 7
+    },
+    "usrmanage": {
+      "openwrt-feed/usrmanage/files/usr/lib/usrmanage/usrmanage-lib.sh": 18,
+      "openwrt-feed/usrmanage/files/usr/lib/usrmanage/usrmanage-luci-login.sh": 3,
+      "scripts/lib/feed-keys.sh": 5,
+      "scripts/lib/feed-publish.sh": 2,
+      "scripts/lib/sdk-matrix.sh": 1,
+      "scripts/qemu-install-from-feed.sh": 1,
+      "scripts/qemu-lab-prepare-image.sh": 8,
+      "scripts/smoke-package-layout.sh": 7,
+      "scripts/validate-feed-keys.sh": 2,
+      "tests/lib.sh": 1,
+      "tests/test_luci_login.sh": 41,
+      "tests/test_mutators-busybox-fallback.sh": 9,
+      "tests/test_mutators.sh": 28,
+      "tests/test_password_control.sh": 15,
+      "tests/test_phase1_foundation.sh": 11,
+      "tests/test_sdk_matrix_digests.sh": 2,
+      "tests/test_validators.sh": 12
+    }
+  },
+  "snapshot_date": "2026-08-12",
+  "stats": {
+    "global": {
+      "distinct_canon": 2002,
+      "distinct_exact": 2022,
+      "per_observation_singleton_sites": 0.9126652748782185,
+      "singleton_frac_canon": 0.984015984015984,
+      "singleton_frac_exact": 0.9846686449060337,
+      "sites": 2874
+    },
+    "per_repo": {
+      "fwlive": {
+        "distinct_canon": 130,
+        "distinct_exact": 134,
+        "joint_novelty": 0.8307692307692308,
+        "sites": 230
+      },
+      "happycow": {
+        "distinct_canon": 81,
+        "distinct_exact": 81,
+        "joint_novelty": 0.8888888888888888,
+        "sites": 100
+      },
+      "hermes-agent": {
+        "distinct_canon": 1685,
+        "distinct_exact": 1695,
+        "joint_novelty": 0.9905044510385757,
+        "sites": 2350
+      },
+      "usrmanage": {
+        "distinct_canon": 141,
+        "distinct_exact": 146,
+        "joint_novelty": 0.8581560283687943,
+        "sites": 194
+      }
+    }
+  }
+}
