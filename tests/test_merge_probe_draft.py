@@ -6,8 +6,6 @@ import importlib.util
 import json
 from pathlib import Path
 
-import pytest
-
 import regexproof.admission.merge_probe as merge_probe_mod
 from regexproof.admission.constructs import count_constructs
 from regexproof.admission.merge_probe import merge_draft

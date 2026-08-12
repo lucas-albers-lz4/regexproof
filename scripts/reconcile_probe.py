@@ -6,7 +6,7 @@ migration), so the reconciliation compares the P3-A FROZEN probe export
 (pre-P2 capture semantics) against a fresh final-semantics export of the
 same tree, PER FILE, with a tolerance percentage:
 
-    |probe_file - now_file| / max(probe_file, now_file)  <= tolerance_pct/100
+    |probe_file - now_file| / probe_file  <= tolerance_pct/100
 
 The per-file tolerance report is COMMITTED (the P3 deliverable — the plan's
 reconcile step).  Exit codes: 0 = within tolerance; 1 = ≥1 file over
