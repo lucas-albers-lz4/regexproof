@@ -145,6 +145,44 @@ def test_new_regexp_concat_is_composite():
         assert r["unencodable_reason"] == "composite-pattern"
 
 
+def test_new_regexp_dynamic_args_composite():
+    """Comment-separated concat, variable flags, and template interpolation are
+    all dynamic — must be composite, never a fixed literal (luna r2 F1/F4)."""
+    src = (
+        'const a = new RegExp("a" /* c */ + x, "i");\n'
+        'const b = new RegExp("a", flags);\n'
+        "const c = new RegExp(`foo${x}`, 'g');\n"
+    )
+    recs = extract_js_precise(src, repo="t", file="x.js")
+    assert len(recs) == 3, [r["line"] for r in recs]
+    for r in recs:
+        assert r["pattern"] == ""
+        assert r["unencodable_reason"] == "composite-pattern"
+
+
+def test_new_regexp_backtick_flags():
+    """Plain template-literal first arg with a literal flags arg is static."""
+    recs = extract_js_precise("const r = new RegExp(`foo`, \"i\");", repo="t", file="x.js")
+    assert len(recs) == 1
+    assert recs[0]["pattern"] == "foo"
+    assert recs[0]["flags"] == "i"
+    assert recs[0].get("unencodable_reason") is None
+
+
+def test_unescape_js_string_escapes():
+    """JS escape decoding: octal, \\u{...} code points, \\xHH, NUL, unknown-drop."""
+    from regexproof.extractors.js_babel import _unescape_js_string
+
+    assert _unescape_js_string(r"\141") == "a"          # octal
+    assert _unescape_js_string(r"\u{1F600}") == "😀"     # code point
+    assert _unescape_js_string(r"\0") == "\0"           # lone NUL
+    assert _unescape_js_string(r"\08") == "\0" + "8"    # NUL + literal 8
+    assert _unescape_js_string(r"\x41") == "A"          # hex
+    assert _unescape_js_string(r"\u0041") == "A"        # uHHHH
+    assert _unescape_js_string(r"\d+") == "d+"          # unknown escape drops backslash
+    assert _unescape_js_string(r"\\[") == r"\["         # escaped backslash stays
+
+
 def test_new_regexp_two_arg_legacy_extract_js():
     """The legacy extract_js path shares _NEW_REGEXP — same two-arg contract."""
     src = "const a = new RegExp('\\\\d+', 'g');\n"

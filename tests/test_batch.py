@@ -100,6 +100,13 @@ def test_intent_negated_class_whitespace_no_false_positive():
     hits = detect_intent_mismatches([pos])
     assert len(hits) == 1
     assert hits[0]["detail"]["admitted_char"] == "' '"
+    # Escaped-backslash class [^\\s@] does NOT exclude space -> fires (luna r2 F3).
+    esc = dict(rec, pattern=r"^[^\\s@]+@[^\\s@]+$")
+    hits = detect_intent_mismatches([esc])
+    assert len(hits) == 1, hits
+    assert hits[0]["detail"]["admitted_char"] == "' '"
+    # [^ ] excludes a literal space -> no fire.
+    assert detect_intent_mismatches([dict(rec, pattern=r"^[^ ]+@x$")]) == []
 
 
 def test_markdown_section_headers_unique(tmp_path: Path):
