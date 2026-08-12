@@ -14,8 +14,10 @@ Measured `@owasp_crs` at pin: 193/343 = 0.5627 encodable (complete, deterministi
 — but **88.4% of patterns are identical to the already-admitted `coreruleset`
 inventory** (260/294), and the residual is version drift of the same rule
 families (SQLi/XSS/RCE/JS-URI) against the unpinned admitted corpus. Coraza
-packaging adds no distinct extract surface worth a second full CRS corpus:
-duplicate → **no-go**.
+packaging adds **no distinct rule-corpus surface worth retaining**: the only
+Coraza-specific regexes are 3 Content-Type WAF-config entries in
+`@coraza.conf-recommended` (config, not a rule corpus); `@crs-setup.conf.example`'s
+`@rx` is commented out. Duplicate → **no-go**.
 
 Gate: `properties/generated/coraza-coreruleset_gate_decision.json` →
 **no-go** (supersedes `triage-trial`).

@@ -7,7 +7,7 @@
       "met": false
     },
     {
-      "evidence": "Smith: the tree IS the admitted OWASP CRS — 260/294 patterns (88.4%) byte-identical to the coreruleset inventory; Coraza-specific surface is 3 WAF-config regexes, not a rule corpus. No distinct security-boundary extract surface.",
+      "evidence": "Smith: the tree IS the admitted OWASP CRS — 260/294 patterns (88.4%) byte-identical to the coreruleset inventory; Coraza-specific surface is 3 WAF-config regexes, not a rule corpus. No distinct rule-corpus surface worth retaining.",
       "id": "security-boundary",
       "met": false
     },
