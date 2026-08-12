@@ -3,206 +3,6 @@
     {
       "capped": true,
       "default_branch": "main",
-      "pin": "75110983d7c018134a6e3b6ccc1c664a79de6efa",
-      "pushed_date": "2026-08-11",
-      "queued_at": "2026-08-09",
-      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
-      "stars": 4,
-      "url": "https://github.com/howard86/howardism"
-    },
-    {
-      "capped": true,
-      "default_branch": "master",
-      "pin": "ab66d24393ce0f5bea3e4e6814098c1cd5c0b6dd",
-      "pushed_date": "2026-05-27",
-      "queued_at": "2026-08-09",
-      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
-      "stars": 3,
-      "url": "https://github.com/IndikaMaligaspe/agentforge"
-    },
-    {
-      "capped": true,
-      "default_branch": "main",
-      "pin": "0b76e32ac8508eb8bea9d1791d9d05f53a015730",
-      "pushed_date": "2026-08-11",
-      "queued_at": "2026-08-09",
-      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
-      "stars": 4,
-      "url": "https://github.com/atimofeev/nixos-config"
-    },
-    {
-      "capped": true,
-      "default_branch": "main",
-      "pin": "3ff106afbec73509b9bb2455d635f73ec065c2e4",
-      "pushed_date": "2026-07-18",
-      "queued_at": "2026-08-09",
-      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
-      "stars": 3,
-      "url": "https://github.com/brandon-behring/book-scaffold-astro"
-    },
-    {
-      "capped": true,
-      "default_branch": "main",
-      "pin": "c9fb13ef513d3f6dc8288b4e61ab62dc71abb8a2",
-      "pushed_date": "2026-05-03",
-      "queued_at": "2026-08-09",
-      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
-      "stars": 3,
-      "url": "https://github.com/cham-space/AICAM"
-    },
-    {
-      "capped": true,
-      "default_branch": "main",
-      "pin": "cd67dd16f05c50e7d80c84254e42e1f05e4decbc",
-      "pushed_date": "2026-08-10",
-      "queued_at": "2026-08-09",
-      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
-      "stars": 3,
-      "url": "https://github.com/frecar/beam"
-    },
-    {
-      "capped": true,
-      "default_branch": "main",
-      "pin": "692d37dff72211f1d5be8251fff1e6adc504e6f4",
-      "pushed_date": "2026-08-10",
-      "queued_at": "2026-08-09",
-      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
-      "stars": 3,
-      "url": "https://github.com/ivegamsft/basecoat"
-    },
-    {
-      "capped": true,
-      "default_branch": "main",
-      "pin": "7cfb8b65cc0aef650cf1540756d0d1dedef4409f",
-      "pushed_date": "2026-07-23",
-      "queued_at": "2026-08-09",
-      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
-      "stars": 3,
-      "url": "https://github.com/miravuong/tripwire"
-    },
-    {
-      "capped": true,
-      "default_branch": "main",
-      "pin": "65eba34328454e7c681a5fa00239fc8900f1b4b6",
-      "pushed_date": "2026-07-15",
-      "queued_at": "2026-08-09",
-      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
-      "stars": 2,
-      "url": "https://github.com/508-dev/508-devkit"
-    },
-    {
-      "capped": true,
-      "default_branch": "main",
-      "pin": "9c3ec2ab3647396bf0f3d0e7b9b85fff65b867d4",
-      "pushed_date": "2026-08-11",
-      "queued_at": "2026-08-09",
-      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
-      "stars": 2,
-      "url": "https://github.com/Beach-complex/Beach_complex"
-    },
-    {
-      "capped": true,
-      "default_branch": "master",
-      "pin": "a6552d17180dbf4a43a74c875db3e9a77f9437d6",
-      "pushed_date": "2026-08-10",
-      "queued_at": "2026-08-09",
-      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
-      "stars": 2,
-      "url": "https://github.com/Tarcoin/tarcoin"
-    },
-    {
-      "capped": true,
-      "default_branch": "main",
-      "pin": "b08953b393f2b7d8a82d05bd112e4474b90d2534",
-      "pushed_date": "2026-08-09",
-      "queued_at": "2026-08-09",
-      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
-      "stars": 2,
-      "url": "https://github.com/andyholst/obsidian-timestamp-utility"
-    },
-    {
-      "capped": true,
-      "default_branch": "main",
-      "pin": "006bfbc7ca13ba4ed2e8436e45010f808bd015e8",
-      "pushed_date": "2026-06-23",
-      "queued_at": "2026-08-09",
-      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
-      "stars": 2,
-      "url": "https://github.com/greglamb/macos-screenshot-button-app"
-    },
-    {
-      "capped": true,
-      "default_branch": "main",
-      "pin": "be8d2ff41f36f571231e6ffc7605ce259b30e674",
-      "pushed_date": "2026-08-05",
-      "queued_at": "2026-08-09",
-      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
-      "stars": 2,
-      "url": "https://github.com/jjhickman/garbanzo-bot"
-    },
-    {
-      "capped": true,
-      "default_branch": "main",
-      "pin": "1886cc82002a9a0aa6dec97ee35a89177423f7d1",
-      "pushed_date": "2026-06-04",
-      "queued_at": "2026-08-09",
-      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
-      "stars": 2,
-      "url": "https://github.com/knishioka/ib-sec-mcp"
-    },
-    {
-      "capped": true,
-      "default_branch": "main",
-      "pin": "34ac5b98a2e1ba1cb48246ed8758c273b9983752",
-      "pushed_date": "2026-08-05",
-      "queued_at": "2026-08-09",
-      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
-      "stars": 2,
-      "url": "https://github.com/ovumcy/ovumcy-app"
-    },
-    {
-      "capped": true,
-      "default_branch": "main",
-      "pin": "f4e7c8ad0b4019ad3eb1602e8152ecd89d6cda2a",
-      "pushed_date": "2026-06-07",
-      "queued_at": "2026-08-09",
-      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
-      "stars": 2,
-      "url": "https://github.com/qrdx-org/qrdx-chain"
-    },
-    {
-      "capped": true,
-      "default_branch": "master",
-      "pin": "8c420e935718f0d6867153b781e58943ecaf2338",
-      "pushed_date": "2021-06-30",
-      "queued_at": "2026-08-09",
-      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
-      "stars": 162,
-      "url": "https://github.com/uber/bayesmark"
-    },
-    {
-      "capped": true,
-      "default_branch": "develop",
-      "pin": "21aaad53023eb3f448ff09820fee1a3936b6175d",
-      "pushed_date": "2025-04-01",
-      "queued_at": "2026-08-09",
-      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
-      "stars": 5,
-      "url": "https://github.com/00labs/huma-contracts-v2"
-    },
-    {
-      "capped": true,
-      "default_branch": "main",
-      "pin": "eca55a2093cc5d1759f6e430b201412683a9c69c",
-      "pushed_date": "2021-10-19",
-      "queued_at": "2026-08-09",
-      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
-      "stars": 12,
-      "url": "https://github.com/thecybermafia/orgleaks"
-    },
-    {
-      "capped": true,
-      "default_branch": "main",
       "pin": "9e848b504a5778ef6e2ead53f8243cdee6da0710",
       "pushed_date": "2026-06-19",
       "queued_at": "2026-08-12",
@@ -323,8 +123,8 @@
     {
       "capped": true,
       "default_branch": "main",
-      "pin": "174823b68645b84b74e6ac3f583ded579878881c",
-      "pushed_date": "2026-08-11",
+      "pin": "38360141bd2baea38db189b204e98846f7d22daf",
+      "pushed_date": "2026-08-12",
       "queued_at": "2026-08-12",
       "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
       "stars": 34,
@@ -403,8 +203,8 @@
     {
       "capped": true,
       "default_branch": "main",
-      "pin": "81c8180a5a7854807592a76c6c563ae8e51e212a",
-      "pushed_date": "2026-08-03",
+      "pin": "7b02a8c4337fe453c67d4afca3489008d1ab25d0",
+      "pushed_date": "2026-08-12",
       "queued_at": "2026-08-12",
       "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
       "stars": 27,
@@ -513,8 +313,8 @@
     {
       "capped": false,
       "default_branch": "main",
-      "pin": "81df1ff12f5cf660d6189b3c0dcf375beb0ab1bd",
-      "pushed_date": "2026-08-11",
+      "pin": "24bd3b33f9c6d1a3d32ab297457f7a1b73984263",
+      "pushed_date": "2026-08-12",
       "queued_at": "2026-08-12",
       "source_query": "filename:re_tests OR filename:test_re.py path:Lib/test",
       "stars": 22273,
@@ -547,14 +347,14 @@
       "pushed_date": "2026-07-28",
       "queued_at": "2026-08-12",
       "source_query": "path:testdata filename:regex OR filename:regexp",
-      "stars": 2049,
+      "stars": 2050,
       "url": "https://github.com/benhoyt/goawk"
     },
     {
       "capped": false,
       "default_branch": "meta/3.14",
       "pin": "279ffafabd1b804645084704e0b33e9aa30843a2",
-      "pushed_date": "2026-08-11",
+      "pushed_date": "2026-08-12",
       "queued_at": "2026-08-12",
       "source_query": "filename:re_tests OR filename:test_re.py path:Lib/test",
       "stars": 3792,
@@ -597,7 +397,7 @@
       "pushed_date": "2026-08-11",
       "queued_at": "2026-08-12",
       "source_query": "path:testdata filename:regex OR filename:regexp",
-      "stars": 26190,
+      "stars": 26193,
       "url": "https://github.com/microsoft/typescript-go"
     },
     {
@@ -623,11 +423,11 @@
     {
       "capped": false,
       "default_branch": "main",
-      "pin": "ee68f5f46a14e2bbf22d72796e45e5f467951792",
+      "pin": "b11e749f7590e9a0907db908fa3e7e76c772c28f",
       "pushed_date": "2026-08-12",
       "queued_at": "2026-08-12",
       "source_query": "filename:re_tests OR filename:test_re.py path:Lib/test",
-      "stars": 74292,
+      "stars": 74294,
       "url": "https://github.com/python/cpython"
     },
     {
@@ -833,8 +633,8 @@
     {
       "capped": false,
       "default_branch": "main",
-      "pin": "72eba540f3aca88ebc4c7c1a8925d5c2e72c28be",
-      "pushed_date": "2026-08-09",
+      "pin": "976e4b6f1d43337cc2b6a67b485bab3368b2d4a1",
+      "pushed_date": "2026-08-12",
       "queued_at": "2026-08-12",
       "source_query": "filename:rules.yml path:.semgrep OR path:semgrep",
       "stars": 2,
@@ -863,7 +663,7 @@
     {
       "capped": false,
       "default_branch": "main",
-      "pin": "d66a6e44f33faac1bd8c6370cbc06fcb18dd5a6b",
+      "pin": "77915c4b649b7efaf3f563e548ca005eda8cf558",
       "pushed_date": "2026-08-12",
       "queued_at": "2026-08-12",
       "source_query": "filename:rules.yml path:.semgrep OR path:semgrep",
@@ -883,8 +683,8 @@
     {
       "capped": false,
       "default_branch": "master",
-      "pin": "fc3d6cefd2aa1e7d2a1aa556b18778a570a5da55",
-      "pushed_date": "2026-08-10",
+      "pin": "f822beee76781888ff04ebc612cd245f8ec02a1d",
+      "pushed_date": "2026-08-12",
       "queued_at": "2026-08-12",
       "source_query": "path:testdata filename:regex OR filename:regexp",
       "stars": 946,
@@ -993,12 +793,212 @@
     {
       "capped": true,
       "default_branch": "main",
-      "pin": "e86000f94152be3b2a2ae288dfd608598e91a26e",
+      "pin": "be4564213e86218fa2cf2306e2dcf72bd90e6405",
       "pushed_date": "2026-08-12",
       "queued_at": "2026-08-12",
       "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
       "stars": 8,
       "url": "https://github.com/mitodl/ocw-hugo-themes"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "0b76e32ac8508eb8bea9d1791d9d05f53a015730",
+      "pushed_date": "2026-08-11",
+      "queued_at": "2026-08-09",
+      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
+      "stars": 4,
+      "url": "https://github.com/atimofeev/nixos-config"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "d7606b2c5bc22883341c0553006d08b564548cd5",
+      "pushed_date": "2026-08-12",
+      "queued_at": "2026-08-09",
+      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
+      "stars": 4,
+      "url": "https://github.com/howard86/howardism"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "ab66d24393ce0f5bea3e4e6814098c1cd5c0b6dd",
+      "pushed_date": "2026-05-27",
+      "queued_at": "2026-08-09",
+      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
+      "stars": 3,
+      "url": "https://github.com/IndikaMaligaspe/agentforge"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "3ff106afbec73509b9bb2455d635f73ec065c2e4",
+      "pushed_date": "2026-07-18",
+      "queued_at": "2026-08-09",
+      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
+      "stars": 3,
+      "url": "https://github.com/brandon-behring/book-scaffold-astro"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "c9fb13ef513d3f6dc8288b4e61ab62dc71abb8a2",
+      "pushed_date": "2026-05-03",
+      "queued_at": "2026-08-09",
+      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
+      "stars": 3,
+      "url": "https://github.com/cham-space/AICAM"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "cd67dd16f05c50e7d80c84254e42e1f05e4decbc",
+      "pushed_date": "2026-08-10",
+      "queued_at": "2026-08-09",
+      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
+      "stars": 3,
+      "url": "https://github.com/frecar/beam"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "692d37dff72211f1d5be8251fff1e6adc504e6f4",
+      "pushed_date": "2026-08-10",
+      "queued_at": "2026-08-09",
+      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
+      "stars": 3,
+      "url": "https://github.com/ivegamsft/basecoat"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "7cfb8b65cc0aef650cf1540756d0d1dedef4409f",
+      "pushed_date": "2026-07-23",
+      "queued_at": "2026-08-09",
+      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
+      "stars": 3,
+      "url": "https://github.com/miravuong/tripwire"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "65eba34328454e7c681a5fa00239fc8900f1b4b6",
+      "pushed_date": "2026-07-15",
+      "queued_at": "2026-08-09",
+      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
+      "stars": 2,
+      "url": "https://github.com/508-dev/508-devkit"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "9c3ec2ab3647396bf0f3d0e7b9b85fff65b867d4",
+      "pushed_date": "2026-08-12",
+      "queued_at": "2026-08-09",
+      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
+      "stars": 2,
+      "url": "https://github.com/Beach-complex/Beach_complex"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "a6552d17180dbf4a43a74c875db3e9a77f9437d6",
+      "pushed_date": "2026-08-10",
+      "queued_at": "2026-08-09",
+      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
+      "stars": 2,
+      "url": "https://github.com/Tarcoin/tarcoin"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "b08953b393f2b7d8a82d05bd112e4474b90d2534",
+      "pushed_date": "2026-08-09",
+      "queued_at": "2026-08-09",
+      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
+      "stars": 2,
+      "url": "https://github.com/andyholst/obsidian-timestamp-utility"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "006bfbc7ca13ba4ed2e8436e45010f808bd015e8",
+      "pushed_date": "2026-06-23",
+      "queued_at": "2026-08-09",
+      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
+      "stars": 2,
+      "url": "https://github.com/greglamb/macos-screenshot-button-app"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "be8d2ff41f36f571231e6ffc7605ce259b30e674",
+      "pushed_date": "2026-08-05",
+      "queued_at": "2026-08-09",
+      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
+      "stars": 2,
+      "url": "https://github.com/jjhickman/garbanzo-bot"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "1886cc82002a9a0aa6dec97ee35a89177423f7d1",
+      "pushed_date": "2026-06-04",
+      "queued_at": "2026-08-09",
+      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
+      "stars": 2,
+      "url": "https://github.com/knishioka/ib-sec-mcp"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "34ac5b98a2e1ba1cb48246ed8758c273b9983752",
+      "pushed_date": "2026-08-12",
+      "queued_at": "2026-08-09",
+      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
+      "stars": 2,
+      "url": "https://github.com/ovumcy/ovumcy-app"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "f4e7c8ad0b4019ad3eb1602e8152ecd89d6cda2a",
+      "pushed_date": "2026-06-07",
+      "queued_at": "2026-08-09",
+      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
+      "stars": 2,
+      "url": "https://github.com/qrdx-org/qrdx-chain"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "8c420e935718f0d6867153b781e58943ecaf2338",
+      "pushed_date": "2021-06-30",
+      "queued_at": "2026-08-09",
+      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
+      "stars": 162,
+      "url": "https://github.com/uber/bayesmark"
+    },
+    {
+      "capped": true,
+      "default_branch": "develop",
+      "pin": "21aaad53023eb3f448ff09820fee1a3936b6175d",
+      "pushed_date": "2025-04-01",
+      "queued_at": "2026-08-09",
+      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
+      "stars": 5,
+      "url": "https://github.com/00labs/huma-contracts-v2"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "eca55a2093cc5d1759f6e430b201412683a9c69c",
+      "pushed_date": "2021-10-19",
+      "queued_at": "2026-08-09",
+      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
+      "stars": 12,
+      "url": "https://github.com/thecybermafia/orgleaks"
     }
   ],
   "schema_version": "1"
