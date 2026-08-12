@@ -117,10 +117,15 @@ def _in_comment_or_string(src: str, pos: int) -> bool:
     i = line_start
     while i < pos:
         c = src[i]
-        if c == "\\":
-            i += 1  # escaped char — literal in or out of quotes; skip both
-        elif quote:
-            if c == quote:
+        if quote == "'":
+            # POSIX: backslash is LITERAL inside single quotes — only the
+            # closing quote matters
+            if c == "'":
+                quote = None
+        elif c == "\\":
+            i += 1  # escape — literal in unquoted/double-quoted context
+        elif quote == '"':
+            if c == '"':
                 quote = None
         elif c in ("'", '"'):
             quote = c

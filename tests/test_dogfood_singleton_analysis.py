@@ -386,3 +386,10 @@ def test_bash_ere_partial_quoted_rhs_rejected():
     (pre-fold extracted 'foo"bar"' — this test discriminates)."""
     assert dsa.extract_bash_ere('[[ $x =~ foo"bar" ]]') == []
     assert dsa.extract_bash_ere("[[ $x =~ foo'bar' ]]") == []
+
+
+def test_single_quote_backslash_is_literal():
+    """POSIX: backslash is LITERAL inside single quotes — the closing quote
+    still closes the string, and a later grep is a real site."""
+    assert dsa.extract_shell_patterns("echo 'x\\'; grep 'foo' f") == ["foo"]
+    assert dsa.extract_shell_patterns('echo "a\\""; grep \'foo\' f') == ["foo"]
