@@ -1,0 +1,17 @@
+{
+  "schema_version": "1",
+  "corpus": "bike4mind",
+  "corpus_pin": "391c37a5d7de13c9296667ceb65b3148bc276f82",
+  "candidate_url": "https://github.com/Bike4Mind/bike4mind",
+  "smith_decision": "go",
+  "supersedes": null,
+  "reason": "First-party ecma allowlist (top 60 files by probe sites, excl. vendored public/static/lib + tests + playwright) measured: 815/1386 = 0.5880 encodable (complete_run, parse-error=0, budget clean). 194 findings (175 usage_mismatch + 15 intent_mismatch + 4 property) - the property pipeline produces real signal on AI-workbench code. Non-security corpus (AI workbench, classifier false positive) - NOT in SECURITY_TOOL_CORPORA; findings go public-first per policy. GO admit confirmed.",
+  "regex_sites": 1386,
+  "sites_by_bucket": {
+    "ecma first-party allowlist (60 files, 1386 sites measured; 815 encodable)": 1386,
+    "excluded vendored/test (public/static/lib + tests + playwright, ~2014 sites)": 2014
+  },
+  "additional_surface_outside_probe_scope": {
+    "first-party files beyond top-60 (687 files, ~1552 sites)": 1552
+  }
+}
