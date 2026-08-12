@@ -1,0 +1,48 @@
+{
+  "budget": {
+    "max_disk_mb": 500,
+    "max_mem_mb": 2048,
+    "max_patterns": 5000,
+    "max_wall_s": 900,
+    "redos_wall_s": 180
+  },
+  "budget_breaches": null,
+  "commit": "d9164ff679c6f2cd3e1fa19c311db7a9eed32c7e",
+  "compiler_fingerprint": "71d2ce23b4cd",
+  "complete_run": true,
+  "corpus_pin": "d9164ff679c6f2cd3e1fa19c311db7a9eed32c7e",
+  "decision": "go",
+  "decision_rule": "go iff encodable/sample_size >= 0.3",
+  "dialect": "py_re",
+  "encodable": 359,
+  "engine_versions": {
+    "python": "3.13.5",
+    "z3": "5.0.0"
+  },
+  "extractor_schema_version": "2",
+  "fraction": 0.4233,
+  "go_no_go_threshold": 0.3,
+  "id_formula": "v2-domain-optional-ascii-default",
+  "inventory_path": "properties/generated/JARVIS-inventory.ndjson",
+  "path": "batch/corpora/JARVIS/rules",
+  "pilot": "JARVIS",
+  "reasons": {
+    "backref": 2,
+    "composite-pattern": 103,
+    "lookaround": 5,
+    "m-flag": 29,
+    "multi-match": 13,
+    "negated-class": 5,
+    "negated-shorthand": 23,
+    "ok": 359,
+    "pattern-too-long": 4,
+    "per-alternative-anchor": 10,
+    "unicode-not-literal": 18,
+    "word-boundary": 277
+  },
+  "sample_size": 848,
+  "schema_version": "1",
+  "scope": "full_corpus",
+  "unclassified_parse_errors": 0,
+  "wall_s": 6.963
+}

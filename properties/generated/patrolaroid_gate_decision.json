@@ -1,0 +1,84 @@
+{
+  "candidate_url": "https://github.com/rpetrich/patrolaroid",
+  "conditions": [
+    {
+      "evidence": "Dialect(s) already covered by admitted corpora; no first-seen construct class.",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "rpetrich AWS malware scanner; 4491 yara sites; security tool (deterministic-true).",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Sites >= 1000 in a dialect below 0.85 encodable.",
+      "id": "large-under-saturated",
+      "met": true
+    }
+  ],
+  "corpus": "patrolaroid",
+  "corpus_pin": "ed7ad98fa495ca9a7d9e855dd260218ba4e67a9b",
+  "decision": "go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "\\K": 1,
+      "backref": 5
+    },
+    "dialect": {
+      "yara": 4491
+    },
+    "flags": {
+      "W": 2804,
+      "i": 299
+    },
+    "pin": "ed7ad98fa495ca9a7d9e855dd260218ba4e67a9b",
+    "predicted_buckets": {
+      "backref": 5,
+      "inline-flag": 299,
+      "reset": 1
+    },
+    "regex_sites": 4491,
+    "regex_sites_per_file": {
+      "rules/ACBackdoor_Malware.yara": 19,
+      "rules/Bew_Backdoor_Miner.yara": 3,
+      "rules/Chicken_DOS.yara": 18,
+      "rules/Dacls_Trojan.yara": 11,
+      "rules/Derubsi_Malware.yara": 137,
+      "rules/DirtyCow_Exploit.yara": 15,
+      "rules/ELF_Malware_Strings.yara": 32,
+      "rules/Equation_Group_Toolkit.yara": 549,
+      "rules/Equation_Group_Toolkit_2.yara": 187,
+      "rules/Equation_Group_Toolkit_3.yara": 314,
+      "rules/Erebus_Ransomware.yara": 2,
+      "rules/EvilGnome_Malware.yara": 41,
+      "rules/GodLua_Malware.yara": 23,
+      "rules/Helios_Malware.yara": 3,
+      "rules/KORKERDS_Miner.yara": 12,
+      "rules/LemonDuck_Miner.yara": 14,
+      "rules/Mandibule_Toolkit.yara": 14,
+      "rules/Mirai_Okiru_Malware.yara": 16,
+      "rules/Mirai_Satori_Malware.yara": 22,
+      "rules/Misc_Malware.yara": 108,
+      "rules/Moose_Malware.yara": 20,
+      "rules/Rebirth_Vulcan_Malware.yara": 38,
+      "rules/RedGhost_Malware.yara": 21,
+      "rules/Rocke_Group_Toolkit.yara": 8,
+      "rules/Sofacy_Backdoor.yara": 12,
+      "rules/Thor_Toolkit.yara": 922,
+      "rules/Thor_Webshells.yara": 1774,
+      "rules/TinyShell_Backdoor.yara": 32,
+      "rules/Torte_ELF_Malware.yara": 20,
+      "rules/Vit_Virus.yara": 1,
+      "rules/WatchDog_Malware.yara": 64,
+      "rules/Winnti_Malware.yara": 22,
+      "rules/XMRig_Miner_Strings.yara": 17
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "New dialect/flag/encoding surface: dialects [yara:4491]; predicted_buckets [backref:5, inline-flag:299, reset:1].",
+  "schema_version": "1"
+}

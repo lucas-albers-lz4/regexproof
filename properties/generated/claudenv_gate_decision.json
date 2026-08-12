@@ -1,0 +1,78 @@
+{
+  "candidate_url": "https://github.com/AGoldian/claudenv",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. AGoldian; 108 ecma sites < 200 scale flag, classifier false positive.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (or unprobeable).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "claudenv",
+  "corpus_pin": "062471aebc3f0fe2ce26ec27998803a3dd439b5e",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "lookaround": 3
+    },
+    "dialect": {
+      "ecma": 100,
+      "posix-shell": 8
+    },
+    "flags": {
+      "g": 17,
+      "i": 18,
+      "m": 2
+    },
+    "pin": "062471aebc3f0fe2ce26ec27998803a3dd439b5e",
+    "predicted_buckets": {
+      "inline-flag": 18,
+      "lookaround": 3,
+      "m-flag": 2,
+      "stateful": 17
+    },
+    "regex_sites": 108,
+    "regex_sites_per_file": {
+      "bin/cli.js": 3,
+      "scaffold/.claude/skills/doc-generator/scripts/validate.sh": 4,
+      "scaffold/global/.claude/skills/claudenv/scaffold/.claude/skills/doc-generator/scripts/validate.sh": 4,
+      "src/canon.js": 5,
+      "src/capabilities.js": 1,
+      "src/hooks/decisions-logger.js": 7,
+      "src/hooks/regen-index.js": 4,
+      "src/loop.js": 5,
+      "src/memory-paths.js": 4,
+      "src/prompts.js": 1,
+      "src/skills-registry.js": 28,
+      "src/sources.js": 8,
+      "src/validator.js": 8,
+      "src/workspaces.js": 4,
+      "src/worktree.js": 1,
+      "test/autonomy.test.js": 3,
+      "test/canon.test.js": 1,
+      "test/doctor.test.js": 1,
+      "test/hooks-gen.test.js": 2,
+      "test/hooks/decisions-logger.test.js": 1,
+      "test/loop.test.js": 2,
+      "test/profiles.test.js": 2,
+      "test/skills-registry.test.js": 3,
+      "test/workspaces.test.js": 2,
+      "test/worktree.test.js": 4
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 108 regex sites (auto-NO-GO bar 200); dialects [ecma:100, posix-shell:8]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

@@ -1,0 +1,45 @@
+{
+  "candidate_url": "https://github.com/Immersive-Labs-Sec/SliverC2-Forensics",
+  "conditions": [
+    {
+      "evidence": "6 sites (yara 4 + py 2); tiny but security tool - escape hatch.",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe deterministic-true (Sliver C2 detection tooling).",
+      "id": "security-boundary",
+      "met": true
+    },
+    {
+      "evidence": "6 sites < 1000.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "SliverC2-Forensics",
+  "corpus_pin": "33391a8c016f0e902950e8c2d9867b7e8d0e9b2a",
+  "decision": "triage-trial",
+  "decision_basis": "escape_hatch",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": true,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "py_re": 2,
+      "yara": 4
+    },
+    "flags": {},
+    "pin": "33391a8c016f0e902950e8c2d9867b7e8d0e9b2a",
+    "predicted_buckets": {},
+    "regex_sites": 6,
+    "regex_sites_per_file": {
+      "Rules/sliver.yar": 4,
+      "sliver_decrypt.py": 1,
+      "sliver_pcap_parser.py": 1
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Security-boundary corpus (boundary=deterministic-true) with findings-triage potential; 6 sites across [py_re:2, yara:4].",
+  "schema_version": "1"
+}

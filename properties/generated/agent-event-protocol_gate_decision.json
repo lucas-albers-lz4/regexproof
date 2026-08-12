@@ -1,0 +1,101 @@
+{
+  "candidate_url": "https://github.com/surpradhan/agent-event-protocol",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. surpradhan; 288 ecma sites < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (or unprobeable).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "agent-event-protocol",
+  "corpus_pin": "9bf4bd33c83776d6331fdb0ddced7803556cae85",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "lookaround": 1
+    },
+    "dialect": {
+      "ecma": 277,
+      "posix-shell": 9,
+      "py_re": 2
+    },
+    "flags": {
+      "g": 26,
+      "i": 19,
+      "m": 2,
+      "s": 1
+    },
+    "pin": "9bf4bd33c83776d6331fdb0ddced7803556cae85",
+    "predicted_buckets": {
+      "inline-flag": 20,
+      "lookaround": 1,
+      "m-flag": 2,
+      "stateful": 26
+    },
+    "regex_sites": 288,
+    "regex_sites_per_file": {
+      ".github/scripts/check_required_checks.py": 1,
+      "index.js": 1,
+      "sdks/go/test_realtime.sh": 9,
+      "sdks/node/src/client.ts": 1,
+      "sdks/node/src/instrument.ts": 1,
+      "sdks/node/src/validator.ts": 5,
+      "sdks/node/tests/unit/event.test.ts": 4,
+      "sdks/node/tsup.config.ts": 1,
+      "sdks/python/tests/unit/test_create_event.py": 1,
+      "src/audit-pdf.js": 1,
+      "src/cli-validate.js": 1,
+      "src/cli.js": 9,
+      "src/compliance-pdf.js": 1,
+      "src/db/backends/sqlite.js": 1,
+      "src/db/migrate.js": 1,
+      "src/errors.js": 3,
+      "src/export.js": 1,
+      "src/export/formats.js": 1,
+      "src/export/index.js": 5,
+      "src/middleware/accessLog.js": 1,
+      "src/middleware/queryValidation.js": 2,
+      "src/prune.js": 1,
+      "src/server.js": 1,
+      "src/ssrf.js": 3,
+      "src/validator.js": 6,
+      "src/webhookDelivery.js": 1,
+      "tests/integration/cli-commands.test.js": 68,
+      "tests/integration/operator-cli-errors.test.js": 12,
+      "tests/integration/server.test.js": 34,
+      "tests/unit/audit-pdf.test.js": 11,
+      "tests/unit/audit.test.js": 9,
+      "tests/unit/cli-validate.test.js": 1,
+      "tests/unit/compliance.test.js": 2,
+      "tests/unit/coreEventTypes.test.js": 1,
+      "tests/unit/createEvent.test.js": 5,
+      "tests/unit/customQuery.test.js": 22,
+      "tests/unit/errors.test.js": 13,
+      "tests/unit/export.test.js": 16,
+      "tests/unit/exportFormats.test.js": 2,
+      "tests/unit/exportS3.test.js": 7,
+      "tests/unit/retention.test.js": 2,
+      "tests/unit/signature.test.js": 9,
+      "tests/unit/ssrf.test.js": 3,
+      "tests/unit/webhookDelivery.test.js": 3,
+      "tests/unit/webhookSignature.test.js": 1,
+      "tests/unit/webhooks.test.js": 4
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 288 regex sites (auto-NO-GO bar 200); dialects [ecma:277, posix-shell:9, py_re:2]; boundary=unknown.",
+  "schema_version": "1"
+}

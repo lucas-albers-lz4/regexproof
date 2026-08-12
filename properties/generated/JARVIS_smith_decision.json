@@ -1,0 +1,17 @@
+{
+  "schema_version": "1",
+  "corpus": "JARVIS",
+  "corpus_pin": "d9164ff679c6f2cd3e1fa19c311db7a9eed32c7e",
+  "candidate_url": "https://github.com/drussell23/JARVIS",
+  "smith_decision": "go",
+  "supersedes": null,
+  "reason": "First-party py_re allowlist (top 60 py files by probe sites; excludes tests/vendored) measured: 359/848 = 0.4233 encodable (complete_run, parse-error=0, budget clean). 95 findings. Lower fraction than other py corpora (cpython_re 0.556) - the AGI-OS codebase has heavy f-string/complex patterns - but usable and findings-positive. Non-security (AI OS, classifier false positive) - NOT in SECURITY_TOOL_CORPORA; findings public-first. GO admit confirmed.",
+  "regex_sites": 848,
+  "sites_by_bucket": {
+    "py_re first-party allowlist (60 files, 848 sites measured; 359 encodable)": 848
+  },
+  "additional_surface_outside_probe_scope": {
+    "first-party py files beyond top-60 (420 files, ~950 sites)": 950,
+    "ecma/shell surface excluded from py-only manifest": 380
+  }
+}

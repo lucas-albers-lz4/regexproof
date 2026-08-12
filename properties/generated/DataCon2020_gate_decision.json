@@ -1,0 +1,56 @@
+{
+  "candidate_url": "https://github.com/yuriufo/DataCon2020",
+  "conditions": [
+    {
+      "evidence": "Dialect(s) already covered by admitted corpora; no first-seen construct class.",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "DataCon2020 malware-analysis competition winner (yuriufo); 1293 yara sites; security tool (deterministic-true).",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Sites >= 1000 in a dialect below 0.85 encodable.",
+      "id": "large-under-saturated",
+      "met": true
+    }
+  ],
+  "corpus": "DataCon2020",
+  "corpus_pin": "b22446263c872a651a1cba781c1f3d892c552af8",
+  "decision": "go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "backref": 6
+    },
+    "dialect": {
+      "py_re": 8,
+      "yara": 1285
+    },
+    "flags": {
+      "W": 1195,
+      "i": 36
+    },
+    "pin": "b22446263c872a651a1cba781c1f3d892c552af8",
+    "predicted_buckets": {
+      "backref": 6,
+      "inline-flag": 36
+    },
+    "regex_sites": 1293,
+    "regex_sites_per_file": {
+      "old/cg/funtion_name.py": 3,
+      "raw_features.py": 5,
+      "rules/black_rules.yar": 139,
+      "rules/crypto_signatures.yar": 56,
+      "rules/packer.yar": 22,
+      "rules/rule20.yar": 1068
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "New dialect/flag/encoding surface: dialects [py_re:8, yara:1285]; predicted_buckets [backref:6, inline-flag:36].",
+  "schema_version": "1"
+}

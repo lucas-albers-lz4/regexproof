@@ -1,0 +1,38 @@
+{
+  "candidate_url": "https://github.com/uc-cdis/dcfdictionary",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. uc-cdis; 0 regex sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (or unprobeable).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "dcfdictionary",
+  "corpus_pin": "aaaa26190bd2ae55044c9b763d0f973549cfc368",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {},
+    "flags": {},
+    "pin": "aaaa26190bd2ae55044c9b763d0f973549cfc368",
+    "predicted_buckets": {},
+    "regex_sites": 0,
+    "regex_sites_per_file": {},
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 0 regex sites (auto-NO-GO bar 200); dialects [none]; boundary=unknown.",
+  "schema_version": "1"
+}

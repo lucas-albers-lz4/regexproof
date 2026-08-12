@@ -1,0 +1,56 @@
+{
+  "candidate_url": "https://github.com/mc-zone/IDValidator",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. mc-zone ID validator; 25 ecma sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (or unprobeable).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "IDValidator",
+  "corpus_pin": "5f564db1dc7ea9e5c95ca8f82539eb9f5c8f625c",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "backref": 1,
+      "lookaround": 1
+    },
+    "dialect": {
+      "ecma": 25
+    },
+    "flags": {
+      "g": 9,
+      "i": 1,
+      "m": 1
+    },
+    "pin": "5f564db1dc7ea9e5c95ca8f82539eb9f5c8f625c",
+    "predicted_buckets": {
+      "backref": 1,
+      "inline-flag": 1,
+      "lookaround": 1,
+      "m-flag": 1,
+      "stateful": 9
+    },
+    "regex_sites": 25,
+    "regex_sites_per_file": {
+      "examples/client-side/lib/require.js": 9,
+      "examples/client-side/lib/sea.js": 16
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 25 regex sites (auto-NO-GO bar 200); dialects [ecma:25]; boundary=unknown.",
+  "schema_version": "1"
+}

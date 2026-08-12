@@ -1,0 +1,82 @@
+{
+  "candidate_url": "https://github.com/getprovenant/provenant",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. getprovenant Rust scanner; 695 ecma sites < 1000, not security.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (or unprobeable).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "provenant",
+  "corpus_pin": "5322834e608e17314f8a76afb8f0dbe786d1211e",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "backref": 6,
+      "lookaround": 6
+    },
+    "dialect": {
+      "ecma": 607,
+      "posix-shell": 40,
+      "py_re": 48
+    },
+    "flags": {
+      "g": 168,
+      "i": 125,
+      "m": 1
+    },
+    "pin": "5322834e608e17314f8a76afb8f0dbe786d1211e",
+    "predicted_buckets": {
+      "backref": 6,
+      "inline-flag": 125,
+      "lookaround": 6,
+      "m-flag": 1,
+      "stateful": 168
+    },
+    "regex_sites": 695,
+    "regex_sites_per_file": {
+      "scripts/check_dco_signoff.sh": 1,
+      "scripts/smoke_scan_check.sh": 2,
+      "testdata/conan/recipes/boost/manifest/conanfile.py": 1,
+      "testdata/copyright-golden/copyrights/ext_all_js-ext_all_js.js": 134,
+      "testdata/copyright-golden/copyrights/misco4/linux-copyrights/tools/testing/selftests/ntb/ntb_test.sh": 1,
+      "testdata/copyright-golden/copyrights/utilities_js-utilities_js.js": 34,
+      "testdata/copyright-golden/holders/holder_javascript-utilities_js.js": 34,
+      "testdata/copyright-golden/holders/holder_javascript_large-ext_all_js.js": 134,
+      "testdata/copyright-golden/ics/chromium-chrome-common-extensions-docs-examples-extensions-benchmark-jquery/jquery-1.4.2.min.js": 6,
+      "testdata/copyright-golden/ics/doclava-res-assets-templates-assets/jquery-resizable.min.js": 75,
+      "testdata/license-golden/datadriven/external/fossology-tests/AFL/dojo.js": 24,
+      "testdata/license-golden/datadriven/external/fossology-tests/Dual-license/jquery.ui.core.js": 7,
+      "testdata/license-golden/datadriven/external/fossology-tests/Dual-license/respond.js": 7,
+      "testdata/license-golden/datadriven/external/fossology-tests/Dual-license/sarissa.js": 11,
+      "testdata/license-golden/datadriven/external/fossology-tests/GPL/doxygen.sh": 36,
+      "testdata/license-golden/datadriven/external/fossology-tests/JSON/jslint.js": 29,
+      "testdata/license-golden/datadriven/external/fossology-tests/MPL/webutil.js": 2,
+      "testdata/license-golden/datadriven/external/license_tools/spdx-correct.js/index.js": 18,
+      "testdata/license-golden/datadriven/external/license_tools/spdx-correct.js/test.js": 1,
+      "testdata/license-golden/datadriven/external/slic-tests/2/jquery-history.js": 1,
+      "testdata/license-golden/datadriven/external/slic-tests/codemirror.js": 56,
+      "testdata/license-golden/datadriven/external/slic-tests/jquery-history.js": 1,
+      "testdata/license-golden/datadriven/external/slic-tests/jquery.jscrollpane.min.js": 2,
+      "testdata/license-golden/datadriven/external/slic-tests/mail_app.js": 31,
+      "testdata/license-golden/datadriven/lic2/2206-misc-python/capi_maps.py": 3,
+      "testdata/license-golden/datadriven/lic2/2206-misc-python/cpuinfo.py": 44
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 695 regex sites (auto-NO-GO bar 200); dialects [ecma:607, posix-shell:40, py_re:48]; boundary=unknown.",
+  "schema_version": "1"
+}

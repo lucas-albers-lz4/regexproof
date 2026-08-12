@@ -1,0 +1,87 @@
+{
+  "candidate_url": "https://github.com/sipcapture/gossipper",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. sipcapture; 81 sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (or unprobeable).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "gossipper",
+  "corpus_pin": "7f2285ea6bceb4b6269b99bc435b7e005fe8772c",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "(?i)": 8,
+      "(?m)": 12,
+      "posix-class": 2
+    },
+    "dialect": {
+      "ecma": 39,
+      "posix-shell": 28,
+      "re2": 14
+    },
+    "flags": {
+      "g": 5,
+      "i": 8,
+      "s": 2,
+      "u": 1,
+      "v": 4
+    },
+    "pin": "7f2285ea6bceb4b6269b99bc435b7e005fe8772c",
+    "predicted_buckets": {
+      "inline-flag": 18,
+      "m-flag": 12,
+      "posix-class": 2,
+      "stateful": 5,
+      "u-flag": 1,
+      "v-flag": 4
+    },
+    "regex_sites": 81,
+    "regex_sites_per_file": {
+      "internal/pcap2scenario/generator.go": 13,
+      "internal/uistore/preprocess.go": 1,
+      "scripts/benchmark-sipp-vs-gossipper.sh": 21,
+      "scripts/build_package.sh": 3,
+      "scripts/smoke-api-v2.sh": 3,
+      "scripts/smoke-webrtc-loopback.sh": 1,
+      "web/control-ui/src/components/v2/AuditLogPanel.tsx": 1,
+      "web/control-ui/src/components/v2/JobMonitorPanel.tsx": 1,
+      "web/control-ui/src/components/v2/ManagementV1Panel.tsx": 3,
+      "web/control-ui/src/components/v2/PcapImportPanel.tsx": 1,
+      "web/control-ui/src/components/v2/PrepToolsPanel.tsx": 1,
+      "web/control-ui/src/components/v2/ScenarioSelect.tsx": 1,
+      "web/control-ui/src/components/v2/TransportListEditor.tsx": 1,
+      "web/control-ui/src/components/v2/WebRTCDiagnosticsStrip.tsx": 1,
+      "web/control-ui/src/lib/jobId.test.ts": 2,
+      "web/control-ui/src/lib/jobId.ts": 1,
+      "web/control-ui/src/lib/lineDiff.ts": 1,
+      "web/control-ui/src/lib/mediaRefs.ts": 1,
+      "web/control-ui/src/lib/routing.ts": 1,
+      "web/control-ui/src/lib/summaryParse.ts": 1,
+      "web/control-ui/src/lib/xmlValidate.test.ts": 2,
+      "web/control-ui/src/lib/xmlValidate.ts": 1,
+      "web/control-ui/src/views/v2/AdminApp.tsx": 1,
+      "web/control-ui/src/views/v2/JobsV2.tsx": 4,
+      "web/control-ui/src/views/v2/ScenariosV2.tsx": 6,
+      "web/control-ui/src/views/v2/SettingsV2.tsx": 7,
+      "web/control-ui/src/views/v2/UsersV2.tsx": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 81 regex sites (auto-NO-GO bar 200); dialects [ecma:39, posix-shell:28, re2:14]; boundary=unknown.",
+  "schema_version": "1"
+}

@@ -1,0 +1,18 @@
+{
+  "address_space_cap": true,
+  "complete_run": true,
+  "corpus": "JARVIS",
+  "corpus_type": "rule_corpus",
+  "encodable": 359,
+  "engine": {
+    "python": "3.13.5"
+  },
+  "extracted": 848,
+  "findings": 95,
+  "inventory_questions": 4,
+  "join_regex_ids": 95,
+  "redos_findings": 0,
+  "redos_incomplete": false,
+  "schema_version": "1",
+  "triage": 489
+}
