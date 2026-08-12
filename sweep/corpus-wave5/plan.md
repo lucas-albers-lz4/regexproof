@@ -434,7 +434,7 @@ wc -l` recorded and every caller's args checked against the typed signature
 1. **Recall:** registered extractor extracts ≥262 of the 273 frozen heuristic
    shell sites (96% — the P1-frozen per-file
    site counts (`site_counts_per_file`), measured per
-   file; gaps documented per file.
+   file; gaps documented per file).
 2. **Precision:** on a hand-labeled 50-file sample drawn from the frozen P1
    `file_lists`, precision ≥ 90%. The draw is REPRODUCIBLE: GNU `shuf`
    takes `--random-source=FILE`, not a bare seed, and FAILS with
