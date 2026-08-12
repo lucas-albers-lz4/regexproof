@@ -1,0 +1,17 @@
+{
+  "schema_version": "1",
+  "corpus": "coraza-coreruleset",
+  "corpus_pin": "a664dd18b4b0468215126c6f524e91b2a0deec26",
+  "candidate_url": "https://github.com/corazawaf/coraza-coreruleset",
+  "smith_decision": "no-go",
+  "supersedes": "triage-trial",
+  "reason": "343/343 probed regex sites are rules/@owasp_crs/*.conf = unmodified OWASP CRS v4.25.0 embedded verbatim (rule lines byte-identical to upstream v4.25.0 tag; only comments stripped). Measured @owasp_crs: 193/343 = 0.5627 encodable (complete, deterministic), but 260/294 patterns (88.4%) are byte-identical to the already-admitted coreruleset inventory; residual is version drift of the same rule families against the unpinned admitted corpus. Coraza packaging adds no distinct rule-corpus surface worth retaining: @coraza.conf-recommended holds 3 WAF-config Content-Type regexes (config, not a rule corpus), @crs-setup.conf.example's @rx line is commented out. Duplicate of admitted corpus -> no-go; a second full CRS corpus adds near-zero novel value.",
+  "regex_sites": 343,
+  "sites_by_bucket": {
+    "rules_@owasp_crs_unmodified_crs_v4_25_0 (probe scope)": 343
+  },
+  "additional_surface_outside_probe_scope": {
+    "rules_@coraza.conf-recommended_waf_config (grep)": 3,
+    "rules_@crs-setup.conf.example (commented out @rx)": 0
+  }
+}
