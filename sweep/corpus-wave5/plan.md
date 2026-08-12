@@ -381,7 +381,7 @@ wc -l` recorded and every caller's args checked against the typed signature
    disagreement > 10% → relabel the full 50 files; AC fails if relabeled
    precision < 90%.
 3. All records schema-valid. Exact validator:
-   `python -c "import json,jsonschema,regexproof.schemas as s; [jsonschema.validate(json.loads(l), s.extractor_schema()) for l in open('records.ndjson')]"`
+   `python -c "import json,jsonschema,regexproof.schemas as s; [jsonschema.validate(json.loads(l), s.extractor_schema()) for l in open('extractor_records.ndjson')]"`
    (per-line validation — `json.loads`, not `json.load`; `extractor_schema()`
    is the exported accessor). Requires the `posix-shell` enum entry from
    this phase's Files list.
