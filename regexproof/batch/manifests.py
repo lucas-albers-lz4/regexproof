@@ -246,6 +246,29 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
             "max_disk_mb": 500,
         },
     },
+    "claude-code-plugins": {
+        "corpus_type": "rule_corpus",
+        # Materialize: ln -sfn /tmp/ccp-check batch/corpora/claude-code-plugins/rules
+        # Claude Code plugin marketplace (skills/hooks/MCP). SHELL RECORD:
+        # 1,344 posix-shell sites (largest shell corpus; mycelium 1,029,
+        # OpenWrt 713). batch-7 GO admit (#292).
+        "path": ROOT / "batch" / "corpora" / "claude-code-plugins" / "rules",
+        "glob": "**/*.sh",
+        "dialect": "posix-shell",
+        "extractor": "shell_posix",
+        "repo": "melodic-software/claude-code-plugins",
+        "security_tool": False,
+        "lift_inline": False,
+        "corpus_pin": "f44d0df5e7bf023b88cccc37301402ba7f9dcdb1",
+        "commit": "f44d0df5e7bf023b88cccc37301402ba7f9dcdb1",
+        "budget": {
+            "max_patterns": 5000,
+            "max_wall_s": 900,
+            "redos_wall_s": 180,
+            "max_mem_mb": 2048,
+            "max_disk_mb": 500,
+        },
+    },
     "bike4mind": {
         "corpus_type": "rule_corpus",
         # Materialize: ln -sfn /tmp/b4m-check batch/corpora/bike4mind/rules

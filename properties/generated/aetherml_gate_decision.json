@@ -1,0 +1,53 @@
+{
+  "candidate_url": "https://github.com/Arman-Bisht/aetherml",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. Arman-Bisht; 16 ecma sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "aetherml",
+  "corpus_pin": "fff63d7fef12183db3a1da778cd5977ce311243d",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 16
+    },
+    "flags": {
+      "g": 9,
+      "i": 3
+    },
+    "pin": "fff63d7fef12183db3a1da778cd5977ce311243d",
+    "predicted_buckets": {
+      "inline-flag": 3,
+      "stateful": 9
+    },
+    "regex_sites": 16,
+    "regex_sites_per_file": {
+      "bin/aetherml.js": 1,
+      "src/core/css-manager.js": 4,
+      "src/core/lexer.js": 4,
+      "src/core/parser.js": 1,
+      "src/core/transformer.js": 1,
+      "src/utils/escapeHtml.js": 5
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 16 regex sites (auto-NO-GO bar 200); dialects [ecma:16]; boundary=unknown.",
+  "schema_version": "1"
+}

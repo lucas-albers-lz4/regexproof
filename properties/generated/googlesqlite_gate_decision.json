@@ -1,0 +1,59 @@
+{
+  "candidate_url": "https://github.com/goccy/googlesqlite",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. goccy; 30 ecma/re2 sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "googlesqlite",
+  "corpus_pin": "4abf5dd08aa40eeeedf2e49c18319b83571fb7a5",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "(?i)": 2,
+      "(?s)": 1
+    },
+    "dialect": {
+      "ecma": 13,
+      "re2": 17
+    },
+    "flags": {
+      "i": 6
+    },
+    "pin": "4abf5dd08aa40eeeedf2e49c18319b83571fb7a5",
+    "predicted_buckets": {
+      "inline-flag": 9
+    },
+    "regex_sites": 30,
+    "regex_sites_per_file": {
+      "cmd/specctl/extract_testdata.go": 2,
+      "docs/playground/e2e-check.mjs": 13,
+      "internal/analyzer.go": 4,
+      "internal/encoder.go": 2,
+      "internal/formatter.go": 1,
+      "internal/functions/helper/datetime_time_parser.go": 1,
+      "internal/functions/net/net_helpers.go": 1,
+      "internal/functions/spanner/mysql_helpers_extra.go": 1,
+      "internal/value/location.go": 2,
+      "internal/value/value_safe.go": 3
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 30 regex sites (auto-NO-GO bar 200); dialects [ecma:13, re2:17]; boundary=unknown.",
+  "schema_version": "1"
+}

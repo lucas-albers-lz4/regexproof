@@ -1,0 +1,59 @@
+{
+  "candidate_url": "https://github.com/ald3ns/XPR-dump",
+  "conditions": [
+    {
+      "evidence": "Dialects already covered. ald3ns yara extraction from XProtectRemediators; 402 yara sites; security tool.",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary=deterministic-true.",
+      "id": "security-boundary",
+      "met": true
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "XPR-dump",
+  "corpus_pin": "510bf67808d018cbbaa51b7e66282da965917c95",
+  "decision": "triage-trial",
+  "decision_basis": "escape_hatch",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": true,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "yara": 402
+    },
+    "flags": {
+      "W": 2,
+      "i": 3
+    },
+    "pin": "510bf67808d018cbbaa51b7e66282da965917c95",
+    "predicted_buckets": {
+      "inline-flag": 3
+    },
+    "regex_sites": 402,
+    "regex_sites_per_file": {
+      "rules/Adload.yar": 172,
+      "rules/ColdSnap.yar": 5,
+      "rules/DubRobber.yar": 9,
+      "rules/Eicar.yar": 1,
+      "rules/GreenAcre.yar": 9,
+      "rules/Pirrit.yar": 18,
+      "rules/RankStank.yar": 4,
+      "rules/RedPine.yar": 4,
+      "rules/SheepSwap.yar": 57,
+      "rules/SnowBeagle.yar": 102,
+      "rules/SnowDrift.yar": 4,
+      "rules/ToyDrop.yar": 4,
+      "rules/WaterNet.yar": 13
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Security-boundary corpus (boundary=deterministic-true) with findings-triage potential; 402 sites across [yara:402].",
+  "schema_version": "1"
+}

@@ -116,37 +116,37 @@
     "wall_s": 21.527
   },
   "corpora": {
-    "volatility3-mcp": {
+    "claude-code-plugins": {
       "address_space_cap": true,
       "complete_run": true,
-      "corpus": "volatility3-mcp",
+      "corpus": "claude-code-plugins",
       "corpus_type": "rule_corpus",
-      "encodable": 11534,
+      "encodable": 1093,
       "engine": {
         "python": "3.13.5"
       },
-      "extracted": 17574,
-      "findings": 71,
+      "extracted": 1344,
+      "findings": 429,
       "inventory_questions": 4,
-      "join_regex_ids": 71,
+      "join_regex_ids": 429,
       "redos_findings": 0,
       "redos_incomplete": false,
       "schema_version": "1",
-      "triage": 6040
+      "triage": 251
     }
   },
   "pair_counts": {
+    "claude-code-plugins": {
+      "admitted": 0,
+      "dropped": 0,
+      "note": "no independent-spec catalog"
+    },
     "coreruleset": {
       "admitted": 0,
       "dropped": 0,
       "fraction": 0.6908,
       "note": "fraction gate go; CRS rule-derived adapter is Phase-2 rule_diff",
       "scope": "full_corpus"
-    },
-    "volatility3-mcp": {
-      "admitted": 0,
-      "dropped": 0,
-      "note": "no independent-spec catalog"
     }
   },
   "schema_version": "1"

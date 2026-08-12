@@ -1,0 +1,14 @@
+{
+  "schema_version": "1",
+  "corpus": "claude-code-plugins",
+  "corpus_pin": "f44d0df5e7bf023b88cccc37301402ba7f9dcdb1",
+  "candidate_url": "https://github.com/melodic-software/claude-code-plugins",
+  "smith_decision": "go",
+  "supersedes": null,
+  "reason": "NEW SHELL RECORD: 1,093/1,344 = 0.8132 encodable (complete_run, parse-error=0, budget clean) - the largest shell corpus (1,344 sites; mycelium 1,029, OpenWrt 713) at the strongest shell fraction (anax 0.7990, mycelium 0.8105). 429 findings - the HIGHEST finding yield of any corpus yet (shell usage/intent mismatches in plugin hooks). The BRE->ERE -> pcre backend handles real plugin-marketplace shell at 81%. Non-security (plugin marketplace) - public-first. GO admit confirmed.",
+  "regex_sites": 1344,
+  "sites_by_bucket": {
+    "posix-shell (1,344 sites measured; 1,093 encodable)": 1344
+  },
+  "additional_surface_outside_probe_scope": {}
+}

@@ -1,0 +1,51 @@
+{
+  "candidate_url": "https://github.com/karabaja4/racuni",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. karabaja4; 8 ecma sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "racuni",
+  "corpus_pin": "d8549eaf38a4a2bdbcaf03f6f01f0b0ba31ac31b",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 8
+    },
+    "flags": {
+      "g": 3,
+      "i": 2
+    },
+    "pin": "d8549eaf38a4a2bdbcaf03f6f01f0b0ba31ac31b",
+    "predicted_buckets": {
+      "inline-flag": 2,
+      "stateful": 3
+    },
+    "regex_sites": 8,
+    "regex_sites_per_file": {
+      "src/assets/template/barcode.js": 1,
+      "src/assets/web/form.js": 4,
+      "src/model.js": 2,
+      "src/validator.js": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 8 regex sites (auto-NO-GO bar 200); dialects [ecma:8]; boundary=unknown.",
+  "schema_version": "1"
+}

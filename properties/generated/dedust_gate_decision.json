@@ -1,0 +1,50 @@
+{
+  "candidate_url": "https://github.com/axetroy/dedust",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. axetroy; 15 ecma sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "dedust",
+  "corpus_pin": "951bcdf1acbbd6dd2f2fe6016a2bee792dd5ac7c",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 15
+    },
+    "flags": {
+      "g": 6
+    },
+    "pin": "951bcdf1acbbd6dd2f2fe6016a2bee792dd5ac7c",
+    "predicted_buckets": {
+      "stateful": 6
+    },
+    "regex_sites": 15,
+    "regex_sites_per_file": {
+      "bin/dedust.js": 1,
+      "rslib.config.js": 8,
+      "src/evaluator.js": 1,
+      "src/tokenizer.js": 2,
+      "test/parser.test.js": 3
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 15 regex sites (auto-NO-GO bar 200); dialects [ecma:15]; boundary=unknown.",
+  "schema_version": "1"
+}

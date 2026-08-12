@@ -1,0 +1,64 @@
+{
+  "candidate_url": "https://github.com/eReader/detekt",
+  "conditions": [
+    {
+      "evidence": "Dialects already covered. eReader spyware detection tool; 245 yara + 38 ecma + 8 py; security tool.",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary=deterministic-true.",
+      "id": "security-boundary",
+      "met": true
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "detekt",
+  "corpus_pin": "14aea88a5ff4cb2840d3712dbd8a85078cd03b28",
+  "decision": "triage-trial",
+  "decision_basis": "escape_hatch",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": true,
+  "probe": {
+    "construct_counts": {
+      "lookaround": 13
+    },
+    "dialect": {
+      "ecma": 38,
+      "py_re": 8,
+      "yara": 245
+    },
+    "flags": {
+      "g": 1,
+      "i": 8
+    },
+    "pin": "14aea88a5ff4cb2840d3712dbd8a85078cd03b28",
+    "predicted_buckets": {
+      "inline-flag": 8,
+      "lookaround": 13,
+      "stateful": 1
+    },
+    "regex_sites": 291,
+    "regex_sites_per_file": {
+      "bottle.py": 8,
+      "gui/static/js/bootstrap.js": 12,
+      "gui/static/js/bootstrap.min.js": 12,
+      "gui/static/js/icheck.min.js": 11,
+      "gui/static/js/jquery.fs.selecter.min.js": 3,
+      "rules/blackshades.yar": 44,
+      "rules/darkcomet.yar": 36,
+      "rules/finfisher.yar": 69,
+      "rules/njrat.yar": 21,
+      "rules/rcs.yar": 46,
+      "rules/shadowtech.yar": 5,
+      "rules/xtreme.yar": 24
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Security-boundary corpus (boundary=deterministic-true) with findings-triage potential; 291 sites across [ecma:38, py_re:8, yara:245].",
+  "schema_version": "1"
+}

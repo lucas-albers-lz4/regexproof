@@ -1,0 +1,96 @@
+{
+  "candidate_url": "https://github.com/oat-sa/tao-core-ui-fe",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. oat-sa; 97 ecma sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "tao-core-ui-fe",
+  "corpus_pin": "bdd1216816473dd2a55e0b3fa7e45869d3c74bc5",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "lookaround": 5
+    },
+    "dialect": {
+      "ecma": 97
+    },
+    "flags": {
+      "g": 21,
+      "i": 10,
+      "m": 14
+    },
+    "pin": "bdd1216816473dd2a55e0b3fa7e45869d3c74bc5",
+    "predicted_buckets": {
+      "inline-flag": 10,
+      "lookaround": 5,
+      "m-flag": 14,
+      "stateful": 21
+    },
+    "regex_sites": 97,
+    "regex_sites_per_file": {
+      "environment/require.js": 10,
+      "lib/jquery.fileDownload.js": 11,
+      "src/datatable/filterStrategy/multiple.js": 3,
+      "src/datetime/picker.js": 4,
+      "src/documentViewer/providers/pdfViewer/pdfjs/searchEngine.js": 1,
+      "src/dynamicComponent.js": 1,
+      "src/feedback.js": 2,
+      "src/form/widget/providers/default.js": 1,
+      "src/form/widget/providers/hiddenBox.js": 1,
+      "src/generis/widget/comboBox/comboBox.js": 1,
+      "src/generis/widget/hiddenBox/hiddenBox.js": 1,
+      "src/generis/widget/textBox/textBox.js": 1,
+      "src/highlighter.js": 1,
+      "src/image/ImgStateActive/extractLabel.js": 3,
+      "src/image/ImgStateActive/initMediaEditor.js": 1,
+      "src/incrementer.js": 2,
+      "src/inplacer.js": 1,
+      "src/liststyler.js": 1,
+      "src/maths/calculator/plugins/screen/simpleScreen/simpleScreen.js": 1,
+      "src/mediaEditor/plugins/mediaDimension/mediaDimensionComponent.js": 2,
+      "src/mediaplayer.js": 1,
+      "src/mediaplayer/support.js": 2,
+      "src/mediaplayer/youtubeManager.js": 1,
+      "src/mediasizer.js": 1,
+      "src/propertySelector/propertySelector.js": 1,
+      "src/resourcemgr/fileSelector.js": 2,
+      "src/searchModal/advancedSearch.js": 2,
+      "src/transformer.js": 1,
+      "src/validator.js": 6,
+      "src/validator/validators.js": 2,
+      "test/datatable/demo/test.js": 1,
+      "test/documentViewer/pdfViewer/fallback/test.js": 1,
+      "test/documentViewer/pdfViewer/viewer/test.js": 1,
+      "test/form/validator/validator/test.js": 2,
+      "test/generis/validator/test.js": 2,
+      "test/generis/widget/hiddenBox/test.js": 1,
+      "test/generis/widget/textBox/test.js": 3,
+      "test/lock/test.js": 6,
+      "test/mediaplayer/mocks/youtubeManagerMock.js": 1,
+      "test/mediaplayer/mocks/youtubeMock.js": 1,
+      "test/mediaplayer/players/html5/test.js": 1,
+      "test/pageStatus/test.js": 1,
+      "test/searchModal/advancedSearch/test.js": 6,
+      "test/searchModal/test.js": 2
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 97 regex sites (auto-NO-GO bar 200); dialects [ecma:97]; boundary=unknown.",
+  "schema_version": "1"
+}

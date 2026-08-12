@@ -1,0 +1,54 @@
+{
+  "candidate_url": "https://github.com/guillaumepotier/validator.js",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. guillaumepotier validator.js; 74 ecma sites (upstream of validatorjs pilot, below scale).",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "validator.js",
+  "corpus_pin": "34636f22363a9b9ab1def526c0f4241ff0e25bdd",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 74
+    },
+    "flags": {
+      "g": 52,
+      "i": 4,
+      "m": 9
+    },
+    "pin": "34636f22363a9b9ab1def526c0f4241ff0e25bdd",
+    "predicted_buckets": {
+      "inline-flag": 4,
+      "m-flag": 9,
+      "stateful": 52
+    },
+    "regex_sites": 74,
+    "regex_sites_per_file": {
+      "src/extras.js": 2,
+      "src/validator.js": 9,
+      "tests/resources/expect.js": 16,
+      "tests/resources/mocha.js": 46,
+      "tests/tests.js": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 74 regex sites (auto-NO-GO bar 200); dialects [ecma:74]; boundary=unknown.",
+  "schema_version": "1"
+}

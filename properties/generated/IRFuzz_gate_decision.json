@@ -1,0 +1,49 @@
+{
+  "candidate_url": "https://github.com/oxiqa/IRFuzz",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. oxiqa yara fuzz; 45 sites, tiny (yara 41 + py 4).",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "IRFuzz",
+  "corpus_pin": "76f52e1eb4f294fcbc487d78b0d004c1caae5f83",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "py_re": 4,
+      "yara": 41
+    },
+    "flags": {
+      "W": 22,
+      "i": 23
+    },
+    "pin": "76f52e1eb4f294fcbc487d78b0d004c1caae5f83",
+    "predicted_buckets": {
+      "inline-flag": 23
+    },
+    "regex_sites": 45,
+    "regex_sites_per_file": {
+      "rules/phpscan.yar": 41,
+      "watchd/zipdump.py": 4
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 45 regex sites (auto-NO-GO bar 200); dialects [py_re:4, yara:41]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

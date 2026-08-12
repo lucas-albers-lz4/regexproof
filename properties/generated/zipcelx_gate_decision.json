@@ -1,0 +1,48 @@
+{
+  "candidate_url": "https://github.com/egeriis/zipcelx",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. egeriis; 22 ecma sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "zipcelx",
+  "corpus_pin": "c080b2586aae395b5c4cc7cb94b5376fa8290bb3",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 22
+    },
+    "flags": {
+      "g": 13,
+      "i": 2
+    },
+    "pin": "c080b2586aae395b5c4cc7cb94b5376fa8290bb3",
+    "predicted_buckets": {
+      "inline-flag": 2,
+      "stateful": 13
+    },
+    "regex_sites": 22,
+    "regex_sites_per_file": {
+      "lib/standalone.js": 22
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 22 regex sites (auto-NO-GO bar 200); dialects [ecma:22]; boundary=unknown.",
+  "schema_version": "1"
+}

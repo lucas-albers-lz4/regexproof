@@ -1,0 +1,54 @@
+{
+  "candidate_url": "https://github.com/Deng-Xian-Sheng/cherthon",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. Deng-Xian-Sheng; 11 ecma/shell sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "cherthon",
+  "corpus_pin": "5859cc74b0be2df19f0fcbb9e90f3d6c15aefe7f",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "posix-class": 1
+    },
+    "dialect": {
+      "ecma": 2,
+      "posix-shell": 9
+    },
+    "flags": {
+      "g": 1
+    },
+    "pin": "5859cc74b0be2df19f0fcbb9e90f3d6c15aefe7f",
+    "predicted_buckets": {
+      "posix-class": 1,
+      "stateful": 1
+    },
+    "regex_sites": 11,
+    "regex_sites_per_file": {
+      "Doc/tools/static/changelog_search.js": 1,
+      "Doc/tools/static/glossary_search.js": 1,
+      "Modules/_hacl/refresh.sh": 7,
+      "Modules/expat/refresh.sh": 1,
+      "Modules/makexp_aix": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 11 regex sites (auto-NO-GO bar 200); dialects [ecma:2, posix-shell:9]; boundary=unknown.",
+  "schema_version": "1"
+}

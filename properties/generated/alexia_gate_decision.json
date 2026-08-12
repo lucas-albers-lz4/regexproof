@@ -1,0 +1,51 @@
+{
+  "candidate_url": "https://github.com/Accenture/alexia",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. Accenture; 5 ecma sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "alexia",
+  "corpus_pin": "623d56797cef38358f6553989bb35231e69a4054",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 5
+    },
+    "flags": {
+      "g": 3,
+      "i": 3,
+      "m": 3
+    },
+    "pin": "623d56797cef38358f6553989bb35231e69a4054",
+    "predicted_buckets": {
+      "inline-flag": 3,
+      "m-flag": 3,
+      "stateful": 3
+    },
+    "regex_sites": 5,
+    "regex_sites_per_file": {
+      "src/parse-rich-utterances.js": 1,
+      "src/validator.js": 4
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 5 regex sites (auto-NO-GO bar 200); dialects [ecma:5]; boundary=unknown.",
+  "schema_version": "1"
+}

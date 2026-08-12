@@ -1,0 +1,43 @@
+{
+  "budget": {
+    "max_disk_mb": 500,
+    "max_mem_mb": 2048,
+    "max_patterns": 5000,
+    "max_wall_s": 900,
+    "redos_wall_s": 180
+  },
+  "budget_breaches": null,
+  "commit": "f44d0df5e7bf023b88cccc37301402ba7f9dcdb1",
+  "compiler_fingerprint": "71d2ce23b4cd",
+  "complete_run": true,
+  "corpus_pin": "f44d0df5e7bf023b88cccc37301402ba7f9dcdb1",
+  "decision": "go",
+  "decision_rule": "go iff encodable/sample_size >= 0.3",
+  "dialect": "posix-shell",
+  "encodable": 1093,
+  "engine_versions": {
+    "python": "3.13.5",
+    "z3": "5.0.0"
+  },
+  "extractor_schema_version": "2",
+  "fraction": 0.8132,
+  "go_no_go_threshold": 0.3,
+  "id_formula": "v2-domain-optional-ascii-default",
+  "inventory_path": "properties/generated/claude-code-plugins-inventory.ndjson",
+  "path": "batch/corpora/claude-code-plugins/rules",
+  "pilot": "claude-code-plugins",
+  "reasons": {
+    "empty-class": 3,
+    "gnu-word-boundary": 1,
+    "internal-anchor": 190,
+    "ok": 1093,
+    "per-alternative-anchor": 45,
+    "unclosed-class": 10,
+    "unclosed-group": 2
+  },
+  "sample_size": 1344,
+  "schema_version": "1",
+  "scope": "full_corpus",
+  "unclassified_parse_errors": 0,
+  "wall_s": 242.603
+}

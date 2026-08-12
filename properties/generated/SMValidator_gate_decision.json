@@ -1,0 +1,49 @@
+{
+  "candidate_url": "https://github.com/WLDragon/SMValidator",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. WLDragon; 5 ecma sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "SMValidator",
+  "corpus_pin": "7434b253cda0e673570bcbe27d06f8bd7a24405b",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 5
+    },
+    "flags": {
+      "g": 1,
+      "i": 2
+    },
+    "pin": "7434b253cda0e673570bcbe27d06f8bd7a24405b",
+    "predicted_buckets": {
+      "inline-flag": 2,
+      "stateful": 1
+    },
+    "regex_sites": 5,
+    "regex_sites_per_file": {
+      "src/SMValidator.js": 1,
+      "src/config.js": 4
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 5 regex sites (auto-NO-GO bar 200); dialects [ecma:5]; boundary=unknown.",
+  "schema_version": "1"
+}

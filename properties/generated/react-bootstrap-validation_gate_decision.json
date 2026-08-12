@@ -1,0 +1,38 @@
+{
+  "candidate_url": "https://github.com/heilhead/react-bootstrap-validation",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. heilhead; 0 regex sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "react-bootstrap-validation",
+  "corpus_pin": "f1bcbd0284ac65389bec138acb94e39f9743b4dd",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {},
+    "flags": {},
+    "pin": "f1bcbd0284ac65389bec138acb94e39f9743b4dd",
+    "predicted_buckets": {},
+    "regex_sites": 0,
+    "regex_sites_per_file": {},
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 0 regex sites (auto-NO-GO bar 200); dialects [none]; boundary=unknown.",
+  "schema_version": "1"
+}

@@ -1,0 +1,52 @@
+{
+  "candidate_url": "https://github.com/3vangel1st/100DaysOfYARA",
+  "conditions": [
+    {
+      "evidence": "Dialects already covered. 3vangel1st yara learning pack; 100 yara sites; security-adjacent rules pack.",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary=deterministic-true.",
+      "id": "security-boundary",
+      "met": true
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "100DaysOfYARA",
+  "corpus_pin": "50c8516ecb73db2a7b44e0bf42a99b0eaf94155d",
+  "decision": "triage-trial",
+  "decision_basis": "escape_hatch",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": true,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "yara": 100
+    },
+    "flags": {
+      "i": 26
+    },
+    "pin": "50c8516ecb73db2a7b44e0bf42a99b0eaf94155d",
+    "predicted_buckets": {
+      "inline-flag": 26
+    },
+    "regex_sites": 100,
+    "regex_sites_per_file": {
+      "Rules/Hunt_4_Rust.yar": 2,
+      "Rules/Hunt_hacktools_RDP.yar": 21,
+      "Rules/Hunt_physicalDrive.yar": 48,
+      "Rules/Hunt_shellcode_Metasploit.yar": 1,
+      "Rules/Hunt_stat_compiled_openSSL.yar": 2,
+      "Rules/Susp_Linux_Kernel_Module.yar": 14,
+      "Rules/b64_windows_recon_cmd.yar": 12
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Security-boundary corpus (boundary=deterministic-true) with findings-triage potential; 100 sites across [yara:100].",
+  "schema_version": "1"
+}

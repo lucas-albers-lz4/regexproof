@@ -1,0 +1,43 @@
+{
+  "candidate_url": "https://github.com/gnoverse/tlin",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. gnoverse; 9 re2 sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "tlin",
+  "corpus_pin": "fc7bb83e174b807db4f7e93b00b334c9a5fbdb32",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "re2": 9
+    },
+    "flags": {},
+    "pin": "fc7bb83e174b807db4f7e93b00b334c9a5fbdb32",
+    "predicted_buckets": {},
+    "regex_sites": 9,
+    "regex_sites_per_file": {
+      "internal/lints/gno_analyzer.go": 1,
+      "internal/lints/regex_lint_test.go": 8
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 9 regex sites (auto-NO-GO bar 200); dialects [re2:9]; boundary=unknown.",
+  "schema_version": "1"
+}

@@ -1,0 +1,48 @@
+{
+  "candidate_url": "https://github.com/semisleep/simple-vue-validator",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. semisleep; 12 ecma sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "simple-vue-validator",
+  "corpus_pin": "4427435cc706b422cf884fb66105da09bc94a7ab",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 12
+    },
+    "flags": {
+      "g": 1
+    },
+    "pin": "4427435cc706b422cf884fb66105da09bc94a7ab",
+    "predicted_buckets": {
+      "stateful": 1
+    },
+    "regex_sites": 12,
+    "regex_sites_per_file": {
+      "src/rule.js": 6,
+      "src/utils.js": 2,
+      "webpack-doc-site.config.js": 4
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 12 regex sites (auto-NO-GO bar 200); dialects [ecma:12]; boundary=unknown.",
+  "schema_version": "1"
+}

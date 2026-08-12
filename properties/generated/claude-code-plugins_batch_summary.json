@@ -1,0 +1,18 @@
+{
+  "address_space_cap": true,
+  "complete_run": true,
+  "corpus": "claude-code-plugins",
+  "corpus_type": "rule_corpus",
+  "encodable": 1093,
+  "engine": {
+    "python": "3.13.5"
+  },
+  "extracted": 1344,
+  "findings": 429,
+  "inventory_questions": 4,
+  "join_regex_ids": 429,
+  "redos_findings": 0,
+  "redos_incomplete": false,
+  "schema_version": "1",
+  "triage": 251
+}

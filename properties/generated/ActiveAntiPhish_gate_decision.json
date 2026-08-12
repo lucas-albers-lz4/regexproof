@@ -1,0 +1,46 @@
+{
+  "candidate_url": "https://github.com/mrcbax/ActiveAntiPhish",
+  "conditions": [
+    {
+      "evidence": "Dialects already covered. mrcbax anti-phishing yara pack; 207 yara sites; security tool (deterministic-true).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary=deterministic-true.",
+      "id": "security-boundary",
+      "met": true
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "ActiveAntiPhish",
+  "corpus_pin": "6148bb167ebe641901fc468157b640a03ee4e388",
+  "decision": "triage-trial",
+  "decision_basis": "escape_hatch",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": true,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "yara": 207
+    },
+    "flags": {
+      "i": 47
+    },
+    "pin": "6148bb167ebe641901fc468157b640a03ee4e388",
+    "predicted_buckets": {
+      "inline-flag": 47
+    },
+    "regex_sites": 207,
+    "regex_sites_per_file": {
+      "rules/phishkit.yar": 207
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Security-boundary corpus (boundary=deterministic-true) with findings-triage potential; 207 sites across [yara:207].",
+  "schema_version": "1"
+}

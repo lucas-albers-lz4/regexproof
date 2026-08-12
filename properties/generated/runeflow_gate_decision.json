@@ -1,0 +1,91 @@
+{
+  "candidate_url": "https://github.com/paritoshmmmec/runeflow",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. paritoshmmmec; 215 ecma sites < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "runeflow",
+  "corpus_pin": "60fcc89c6cbe6bac42ecb69ea21fe1bfbc93f408",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "lookaround": 2
+    },
+    "dialect": {
+      "ecma": 215
+    },
+    "flags": {
+      "g": 23,
+      "i": 13,
+      "m": 17,
+      "s": 1
+    },
+    "pin": "60fcc89c6cbe6bac42ecb69ea21fe1bfbc93f408",
+    "predicted_buckets": {
+      "inline-flag": 14,
+      "lookaround": 2,
+      "m-flag": 17,
+      "stateful": 23
+    },
+    "regex_sites": 215,
+    "regex_sites_per_file": {
+      "bin/runeflow.js": 1,
+      "eval/3p-updates.js": 3,
+      "eval/cookbook/runtimes/weekly-digest-runtime.js": 1,
+      "fixtures/mcp-test-server.js": 1,
+      "packages/runeflow-mcp/index.js": 1,
+      "scenarios/harness/concept-counter.js": 1,
+      "scenarios/harness/run-agent.js": 3,
+      "scenarios/harness/run-scripted.js": 1,
+      "src/claude-cli-provider.js": 1,
+      "src/cli.js": 4,
+      "src/default-runtime.js": 1,
+      "src/expression.js": 7,
+      "src/init-converter.js": 16,
+      "src/init-inspector.js": 11,
+      "src/init-utils.js": 2,
+      "src/init.js": 1,
+      "src/parser.js": 13,
+      "src/runtime.js": 1,
+      "src/utils.js": 4,
+      "src/validator.js": 1,
+      "test/assembler.test.js": 3,
+      "test/builder.test.js": 1,
+      "test/builtins.test.js": 1,
+      "test/cli.test.js": 33,
+      "test/core-loop-reliability.property.test.js": 3,
+      "test/dryrun.test.js": 1,
+      "test/env-allowlist.test.js": 3,
+      "test/importer.test.js": 4,
+      "test/init-converter.property.test.js": 1,
+      "test/init-converter.test.js": 15,
+      "test/init-heuristics.test.js": 1,
+      "test/init-templates.test.js": 4,
+      "test/init.property.test.js": 2,
+      "test/init.test.js": 2,
+      "test/parser.test.js": 10,
+      "test/runtime.test.js": 18,
+      "test/test-runner.test.js": 5,
+      "test/validator.test.js": 34
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 215 regex sites (auto-NO-GO bar 200); dialects [ecma:215]; boundary=unknown.",
+  "schema_version": "1"
+}

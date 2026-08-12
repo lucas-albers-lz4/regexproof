@@ -1,0 +1,62 @@
+{
+  "candidate_url": "https://github.com/mitchellnemitz/wisp",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. mitchellnemitz; 39 re2 sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "wisp",
+  "corpus_pin": "c7c8f2f3c6734dac7fc062278d76af3f1c06806d",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "(?m)": 4
+    },
+    "dialect": {
+      "posix-shell": 2,
+      "re2": 37
+    },
+    "flags": {},
+    "pin": "c7c8f2f3c6734dac7fc062278d76af3f1c06806d",
+    "predicted_buckets": {
+      "m-flag": 4
+    },
+    "regex_sites": 39,
+    "regex_sites_per_file": {
+      "install.sh": 2,
+      "internal/codegen/builtin_coverage_test.go": 1,
+      "internal/codegen/codegen_test.go": 3,
+      "internal/codegen/core_byteidentity_test.go": 1,
+      "internal/codegen/located_abort_test.go": 1,
+      "internal/codegen/mono_test.go": 2,
+      "internal/codegen/on_exit_test.go": 2,
+      "internal/codegen/substring_charat_multibyte_runtime_test.go": 1,
+      "internal/docslint/docslint.go": 12,
+      "internal/golden/builtinref_position_test.go": 1,
+      "internal/lsp/navigation.go": 1,
+      "internal/module/module.go": 2,
+      "internal/pkgtool/validate.go": 5,
+      "internal/residualcheck/residualcheck.go": 3,
+      "internal/types/accessors_test.go": 1,
+      "internal/types/core_members_test.go": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 39 regex sites (auto-NO-GO bar 200); dialects [posix-shell:2, re2:37]; boundary=unknown.",
+  "schema_version": "1"
+}

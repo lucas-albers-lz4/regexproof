@@ -1,0 +1,48 @@
+{
+  "candidate_url": "https://github.com/charliermarsh/script",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. charliermarsh; 86 ecma sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "script",
+  "corpus_pin": "550beaae1a544ae7baa2d00d210c261df897f250",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 86
+    },
+    "flags": {
+      "g": 6
+    },
+    "pin": "550beaae1a544ae7baa2d00d210c261df897f250",
+    "predicted_buckets": {
+      "stateful": 6
+    },
+    "regex_sites": 86,
+    "regex_sites_per_file": {
+      "live-editor/code-mirror-editor.jsx": 4,
+      "live-editor/live-editor.jsx": 1,
+      "src/script.js": 81
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 86 regex sites (auto-NO-GO bar 200); dialects [ecma:86]; boundary=unknown.",
+  "schema_version": "1"
+}

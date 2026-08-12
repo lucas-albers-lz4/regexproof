@@ -1,0 +1,59 @@
+{
+  "candidate_url": "https://github.com/enketo/enketo-validate",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. enketo form validation; 196 ecma sites < 200 scale flag.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "enketo-validate",
+  "corpus_pin": "96f41f19d57a1e07612f5d0c95a8d91d352cd1f5",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "backref": 2,
+      "lookaround": 9
+    },
+    "dialect": {
+      "ecma": 196
+    },
+    "flags": {
+      "g": 14,
+      "i": 108
+    },
+    "pin": "96f41f19d57a1e07612f5d0c95a8d91d352cd1f5",
+    "predicted_buckets": {
+      "backref": 2,
+      "inline-flag": 108,
+      "lookaround": 9,
+      "stateful": 14
+    },
+    "regex_sites": 196,
+    "regex_sites_per_file": {
+      "docs/scripts/collapse.js": 2,
+      "docs/scripts/nav.js": 2,
+      "docs/scripts/prettify/lang-css.js": 14,
+      "docs/scripts/prettify/prettify.js": 64,
+      "src/validator.js": 2,
+      "src/xform.js": 16,
+      "test/spec/xform.spec.js": 96
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 196 regex sites (auto-NO-GO bar 200); dialects [ecma:196]; boundary=unknown.",
+  "schema_version": "1"
+}
