@@ -784,6 +784,27 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
             "max_disk_mb": 50,
         },
     },
+    "ail-yara-rules": {
+        "corpus_type": "rule_corpus",
+        # Materialize: ln -sfn /tmp/ail-yara-rules/rules batch/corpora/ail-yara-rules/rules
+        # ail-project YARA pack (delta vs admitted yara_rules).
+        "path": ROOT / "batch" / "corpora" / "ail-yara-rules" / "rules",
+        "glob": "**/*.yar,**/*.yara",
+        "dialect": "yara",
+        "extractor": "yara",
+        "repo": "ail-project/ail-yara-rules",
+        "security_tool": True,
+        "lift_inline": False,
+        "corpus_pin": "8e978d5e70084df6d2fae0727677ec4f60e3e639",
+        "commit": "8e978d5e70084df6d2fae0727677ec4f60e3e639",
+        "budget": {
+            "max_patterns": 5000,
+            "max_wall_s": 600,
+            "redos_wall_s": 120,
+            "max_mem_mb": 1024,
+            "max_disk_mb": 100,
+        },
+    },
     # Wave-3 P5 testdata corpora (#116) — exempt from admission gate_decision.
     "perl_tre": {
         "corpus_type": "testdata",
@@ -869,6 +890,7 @@ WAVE_CORPORA = frozenset({
     "bartblaze-yara-rules",
     "crust",
     "yara-rules",
+    "ail-yara-rules",
     "perl_tre", "go_regexp_tests", "v8_mjsunit",
 })
 
