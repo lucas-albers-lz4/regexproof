@@ -1,0 +1,15 @@
+{
+  "schema_version": "1",
+  "corpus": "PEpper",
+  "corpus_pin": "9dfcade04b41422b5c8457956f984cd25fe3e6d2",
+  "candidate_url": "https://github.com/0x0be/PEpper",
+  "smith_decision": "go",
+  "supersedes": null,
+  "reason": "PE malware static-analysis yara pack (520 files): 9,733/15,626 = 0.6229 encodable (complete_run, parse-error=1, budget clean; 1 file >2MB skipped per MAX_FILE_BYTES). 64 findings + 5,893 triage. Security tool (malware analysis) - SECURITY_TOOL_CORPORA private_first. GO admit confirmed. NOTE: rules/ structure identical to sec_check (utils/virustotal/url/suspicious_strings/magic) - likely shared/derived ruleset; overlap analysis is a follow-on.",
+  "regex_sites": 15626,
+  "sites_by_bucket": {
+    "yara (520 files, 15,626 sites measured; 9,733 encodable)": 15626,
+    "1 oversized file >2MB skipped": 1
+  },
+  "additional_surface_outside_probe_scope": {}
+}

@@ -460,6 +460,116 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
             "max_disk_mb": 200,
         },
     },
+    "SMAT": {
+        "corpus_type": "rule_corpus",
+        # Materialize: ln -sfn /tmp/smat-check/rules batch/corpora/SMAT/rules
+        # mr-satan1 Simple Malware Analysis Tool yara pack (628 files:
+        # malware/packer/ransomware families). batch-15 GO (#344).
+        "path": ROOT / "batch" / "corpora" / "SMAT" / "rules",
+        "glob": "**/*.yar,**/*.yara",
+        "dialect": "yara",
+        "extractor": "yara",
+        "repo": "mr-satan1/SMAT",
+        "security_tool": True,
+        "lift_inline": False,
+        "corpus_pin": "def00ebdfb7f3e004677c0edf15164819a8e6c6d",
+        "commit": "def00ebdfb7f3e004677c0edf15164819a8e6c6d",
+        "budget": {
+            "max_patterns": 30000,
+            "max_wall_s": 1200,
+            "redos_wall_s": 240,
+            "max_mem_mb": 4096,
+            "max_disk_mb": 1000,
+        },
+    },
+    "PEpper": {
+        "corpus_type": "rule_corpus",
+        # Materialize: ln -sfn /tmp/pepper-check/rules batch/corpora/PEpper/rules
+        # 0x0be PE malware static-analysis yara pack (520 files). batch-12
+        # GO admit (#318).
+        "path": ROOT / "batch" / "corpora" / "PEpper" / "rules",
+        "glob": "**/*.yar,**/*.yara",
+        "dialect": "yara",
+        "extractor": "yara",
+        "repo": "0x0be/PEpper",
+        "security_tool": True,
+        "lift_inline": False,
+        "corpus_pin": "9dfcade04b41422b5c8457956f984cd25fe3e6d2",
+        "commit": "9dfcade04b41422b5c8457956f984cd25fe3e6d2",
+        "budget": {
+            "max_patterns": 30000,
+            "max_wall_s": 1200,
+            "redos_wall_s": 240,
+            "max_mem_mb": 4096,
+            "max_disk_mb": 1000,
+        },
+    },
+    "sec_check": {
+        "corpus_type": "rule_corpus",
+        # Materialize: ln -sfn /tmp/sec-check/rules batch/corpora/sec_check/rules
+        # netxfly cross-platform security detection tool yara pack (509
+        # files). batch-12 GO admit (#319).
+        "path": ROOT / "batch" / "corpora" / "sec_check" / "rules",
+        "glob": "**/*.yar,**/*.yara",
+        "dialect": "yara",
+        "extractor": "yara",
+        "repo": "netxfly/sec_check",
+        "security_tool": True,
+        "lift_inline": False,
+        "corpus_pin": "b7b9841432f0f4c69f360d910c5fcce4d0e4a01f",
+        "commit": "b7b9841432f0f4c69f360d910c5fcce4d0e4a01f",
+        "budget": {
+            "max_patterns": 30000,
+            "max_wall_s": 1200,
+            "redos_wall_s": 240,
+            "max_mem_mb": 4096,
+            "max_disk_mb": 1000,
+        },
+    },
+    "Antivirus": {
+        "corpus_type": "rule_corpus",
+        # Materialize: ln -sfn /tmp/antivirus-check/rules batch/corpora/Antivirus/rules
+        # smartytinker yara-based AV pack (710 files: TOOLKIT/malware/
+        # phishing families). batch-15 GO admit (#345).
+        "path": ROOT / "batch" / "corpora" / "Antivirus" / "rules",
+        "glob": "**/*.yar,**/*.yara",
+        "dialect": "yara",
+        "extractor": "yara",
+        "repo": "smartytinker/Antivirus",
+        "security_tool": True,
+        "lift_inline": False,
+        "corpus_pin": "2d7fea93eca3be3df4ad7087e339d21bcd915103",
+        "commit": "2d7fea93eca3be3df4ad7087e339d21bcd915103",
+        "budget": {
+            "max_patterns": 30000,
+            "max_wall_s": 1200,
+            "redos_wall_s": 240,
+            "max_mem_mb": 4096,
+            "max_disk_mb": 1000,
+        },
+    },
+    "patrolaroid": {
+        "corpus_type": "rule_corpus",
+        # Materialize: ln -sfn /tmp/patrol-check/rules batch/corpora/patrolaroid/rules
+        # rpetrich AWS malware scanner yara pack (38 files: miner/backdoor/
+        # webshell families). batch-13 GO admit (#331).
+        "path": ROOT / "batch" / "corpora" / "patrolaroid" / "rules",
+        "glob": "**/*.yar,**/*.yara",
+        "dialect": "yara",
+        "extractor": "yara",
+        "repo": "rpetrich/patrolaroid",
+        "security_tool": True,
+        "lift_inline": False,
+        "corpus_pin": "ed7ad98fa495ca9a7d9e855dd260218ba4e67a9b",
+        "commit": "ed7ad98fa495ca9a7d9e855dd260218ba4e67a9b",
+        "budget": {
+            "max_patterns": 5000,
+            "max_wall_s": 600,
+            "redos_wall_s": 120,
+            "max_mem_mb": 2048,
+            "max_disk_mb": 500,
+        },
+    },
     "bike4mind": {
         "corpus_type": "rule_corpus",
         # Materialize: ln -sfn /tmp/b4m-check batch/corpora/bike4mind/rules
@@ -1557,6 +1667,11 @@ WAVE_CORPORA = frozenset({
     "xibo-cms",
     "malcontent",
     "volatility3-mcp",
+    "SMAT",
+    "PEpper",
+    "sec_check",
+    "Antivirus",
+    "patrolaroid",
 })
 
 

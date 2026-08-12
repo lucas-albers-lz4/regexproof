@@ -1,0 +1,18 @@
+{
+  "address_space_cap": true,
+  "complete_run": true,
+  "corpus": "SMAT",
+  "corpus_type": "rule_corpus",
+  "encodable": 5652,
+  "engine": {
+    "python": "3.13.5"
+  },
+  "extracted": 9016,
+  "findings": 52,
+  "inventory_questions": 4,
+  "join_regex_ids": 52,
+  "redos_findings": 0,
+  "redos_incomplete": false,
+  "schema_version": "1",
+  "triage": 3364
+}

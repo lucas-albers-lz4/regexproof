@@ -1,0 +1,18 @@
+{
+  "address_space_cap": true,
+  "complete_run": true,
+  "corpus": "sec_check",
+  "corpus_type": "rule_corpus",
+  "encodable": 9567,
+  "engine": {
+    "python": "3.13.5"
+  },
+  "extracted": 15459,
+  "findings": 64,
+  "inventory_questions": 4,
+  "join_regex_ids": 64,
+  "redos_findings": 0,
+  "redos_incomplete": false,
+  "schema_version": "1",
+  "triage": 5892
+}

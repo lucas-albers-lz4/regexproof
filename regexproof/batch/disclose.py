@@ -36,6 +36,11 @@ SECURITY_TOOL_CORPORA = frozenset(
         "ail-yara-rules",
         "malcontent",
         "volatility3-mcp",
+        "SMAT",
+        "PEpper",
+        "sec_check",
+        "Antivirus",
+        "patrolaroid",
     }
 )
 

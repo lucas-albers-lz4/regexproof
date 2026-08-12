@@ -1,0 +1,15 @@
+{
+  "schema_version": "1",
+  "corpus": "sec_check",
+  "corpus_pin": "b7b9841432f0f4c69f360d910c5fcce4d0e4a01f",
+  "candidate_url": "https://github.com/netxfly/sec_check",
+  "smith_decision": "go",
+  "supersedes": null,
+  "reason": "Cross-platform security detection tool yara pack (509 files): 9,567/15,459 = 0.6189 encodable (complete_run, parse-error=1, budget clean; 1 file >2MB skipped per MAX_FILE_BYTES). 64 findings + 5,892 triage. Security tool - SECURITY_TOOL_CORPORA private_first. GO admit confirmed. NOTE: rules/ structure identical to PEpper (shared/derived ruleset); overlap analysis is a follow-on.",
+  "regex_sites": 15459,
+  "sites_by_bucket": {
+    "yara (509 files, 15,459 sites measured; 9,567 encodable)": 15459,
+    "1 oversized file >2MB skipped": 1
+  },
+  "additional_surface_outside_probe_scope": {}
+}

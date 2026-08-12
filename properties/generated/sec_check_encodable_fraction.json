@@ -1,0 +1,42 @@
+{
+  "budget": {
+    "max_disk_mb": 1000,
+    "max_mem_mb": 4096,
+    "max_patterns": 30000,
+    "max_wall_s": 1200,
+    "redos_wall_s": 240
+  },
+  "budget_breaches": null,
+  "commit": "b7b9841432f0f4c69f360d910c5fcce4d0e4a01f",
+  "compiler_fingerprint": "71d2ce23b4cd",
+  "complete_run": true,
+  "corpus_pin": "b7b9841432f0f4c69f360d910c5fcce4d0e4a01f",
+  "decision": "go",
+  "decision_note": "1 unclassified parse-error rows \u2014 Phase 1 requires zero",
+  "decision_rule": "go iff encodable/sample_size >= 0.3",
+  "dialect": "yara",
+  "encodable": 9567,
+  "engine_versions": {
+    "python": "3.13.5",
+    "z3": "5.0.0"
+  },
+  "extractor_schema_version": "2",
+  "fraction": 0.6189,
+  "go_no_go_threshold": 0.3,
+  "id_formula": "v2-domain-optional-ascii-default",
+  "inventory_path": "properties/generated/sec_check-inventory.ndjson",
+  "path": "batch/corpora/sec_check/rules",
+  "pilot": "sec_check",
+  "reasons": {
+    "fullword-boundary": 5758,
+    "ok": 9567,
+    "parse-error": 1,
+    "pattern-too-long": 5,
+    "wide-non-literal": 128
+  },
+  "sample_size": 15459,
+  "schema_version": "1",
+  "scope": "full_corpus",
+  "unclassified_parse_errors": 1,
+  "wall_s": 44.119
+}

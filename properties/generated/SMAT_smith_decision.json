@@ -1,0 +1,14 @@
+{
+  "schema_version": "1",
+  "corpus": "SMAT",
+  "corpus_pin": "def00ebdfb7f3e004677c0edf15164819a8e6c6d",
+  "candidate_url": "https://github.com/mr-satan1/SMAT",
+  "smith_decision": "go",
+  "supersedes": null,
+  "reason": "Simple Malware Analysis Tool yara pack (628 files): 5,652/9,016 = 0.6269 encodable (complete_run, parse-error=0, budget clean). 52 findings + 3,364 triage. Security tool (malware analysis) - SECURITY_TOOL_CORPORA private_first. GO admit confirmed.",
+  "regex_sites": 9016,
+  "sites_by_bucket": {
+    "yara (628 files, 9,016 sites measured; 5,652 encodable)": 9016
+  },
+  "additional_surface_outside_probe_scope": {}
+}
