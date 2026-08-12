@@ -1,10 +1,12 @@
 # Why regexproof
 
-> **Last updated:** 2026-08-11 · **Next review:** 2026-11-11 — the point-in-time stats in "Where it stands" age fast; re-verify them before quoting.
+> **Last updated:** 2026-08-12 · **Next review:** 2026-11-12 — the point-in-time stats in "Where it stands" age fast; re-verify them before quoting.
 
-## What regexproof is, in one paragraph
+## What regexproof is
 
 **regexproof is a Z3-based verification toolkit.** It turns "I think this regex is safe" into "no string in the declared domain can violate this property — machine-checked." It is a playbook and an installable toolkit that coding agents can consume directly (Hermes, Claude Code, Codex). It also comes with a corpus-scale measurement pipeline. That pipeline quantifies how much of the real-world regex surface the toolkit can prove.
+
+**The core capability is relational, not syntactic.** regexproof does not "verify a regex" in the abstract. It verifies that two symbolic descriptions of the allowed/denied input space relate in a specified way: equivalence, containment, or non-overlap. Each property in the 5-shape taxonomy is such a relation. Regex is the first domain where that description space is expressible in string theory.
 
 ## The problem it solves
 
@@ -40,10 +42,10 @@ The gap in the ecosystem: **existing tooling is almost entirely ReDoS-focused** 
 
 **7. A security-and-reliability audit pass.** The 2026-08 audit (#202, #184, #205) closed 30+ issues: the CI verify workflow that silently did not run, fail-open compiler helper gates, probe clone URL allowlists, subprocess timeouts, non-atomic artifact writes, plus a wave of structural refactors (harness moved into the package, extractor registry, template-method compilers).
 
-**8. Forward-looking backend research.** Spikes for Noodler escalation + cvc5 cross-check (#212/#213, planning-only) verified verdict parity on 11 registry queries and found `re.from_ecma2020` FULL-MATCH semantics — the path to handling lookarounds and backreferences soundly. Java dialect graduation (#150) is the next corpus frontier.
+**8. Backend research, delivered.** The Noodler escalation + cvc5 cross-check wave (#212/#213, phases #216–#221) is implemented and merged (PRs #222–#237). It verified verdict parity on 11 registry queries and 0 ECMA-pilot divergences on 5,622 decided comparisons. The U9 decision dropped `re.from_ecma2020` from harness scope. Lookaheads compile away to exact regular mirrors (13/13 equivalence measured) instead. Java dialect graduation (#150) is the next corpus frontier.
 
 ## Where it stands
 
-Five days in (as of 2026-08-11): 97 commits, 87 merged PRs, ~209 closed issues, 14 corpora in the cross-corpus matrix, a validated admission gate, a soundness-hardened compiler, and a decided scale strategy. The four open issues are all forward-looking (backend design review, Java dialect, Smith automation). There is no open correctness debt. The honest framing for explaining it: **it started as a verification method for your own repos, and it has become a measured, gated, continuously-improving engine for proving regex security properties across the ecosystem.**
+Six days in (as of 2026-08-12): 207 commits, 109 merged PRs, 131 closed issues, 23 corpora in the cross-corpus matrix. The admission gate is validated, the compiler is soundness-hardened, and the scale strategy is decided. The open issues are all forward-looking work: Smith automation (#149), the Java dialect (#150), and the Smith batch-3 admits (#240–#247). There is no open correctness debt. The honest framing for explaining it: **it started as a verification method for your own repos, and it has become a measured, gated, continuously-improving engine for proving regex security properties across the ecosystem.**
 
 Note caveat for accuracy: the [docs/verified-findings.jsonl](verified-findings.jsonl) file holds 10 *implementation/toolkit* findings (the trap lessons), while security-relevant findings from scanned corpora go `private_first` per [SECURITY.md](../SECURITY.md). So "10 verified findings" is a toolkit artifact, not a vulnerability count.
