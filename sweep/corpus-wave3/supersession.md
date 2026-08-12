@@ -13,7 +13,7 @@ snapshots as live for these corpora.
 | `email_addresses_*` | wave3-p4 / #125 | plan ~71 FP | fraction **0.5000**; admit **NO-GO** |
 | `perl_tre_*` | wave3-p5 / #127 | sample-only risk | **0.3541 go** full suite |
 | `go_regexp_tests_*` | wave3-p5 / #127 | sample-only risk | **0.7524 go** full suite |
-| `v8_mjsunit_*` | wave3-p5 / #127 | sample-only risk | **0.5383 go** full suite |
+| `v8_mjsunit_*` | wave3-p5 / #127 | sample-only risk | **0.5346 go** full suite |
 | `yara_rules_*` gate backfill | wave3 coordination | wave2-p2 measure | gate schema-valid; fraction still **0.6563** (wave2-p2) |
 | `cross_corpus_matrix.*` | wave3-p6 / #117 | caret-in-x-103 rollup | wave `corpus-wave3` |
 | `wave3_artifact_repro.sha256` | wave3-p6 / #117 | n/a | SHA256 of wave-3 fraction + inventory artifacts |

@@ -17,7 +17,7 @@ All are `corpus_type: testdata` — **exempt** from admission `gate_decision`
 |---|---|---|---|---|
 | perl_tre | 1645 | 4646 | **0.3541** | go |
 | go_regexp_tests | 556 | 739 | **0.7524** | go |
-| v8_mjsunit | 2494 | 4633 | **0.5383** | go |
+| v8_mjsunit | 2477 | 4633 | **0.5346** | go |
 
 ## Fail-closed
 
