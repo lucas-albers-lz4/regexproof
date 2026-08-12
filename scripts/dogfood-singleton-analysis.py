@@ -75,7 +75,9 @@ SKIP_DIRS = {".git", "node_modules", "dist", "build", ".venv", "venv",
 # `-qE'pat'` (glued flags+quote) and `[[ $x =~ foo\ bar ]]` (escaped-space
 # RHS) are not matched.
 _SHELL_CMD = re.compile(
-    r"(?<![A-Za-z0-9_])(?P<cmd>grep|egrep|fgrep|sed|awk)"  # word boundary:
+    r"(?<![A-Za-z0-9_\-])(?P<cmd>grep|egrep|fgrep|sed|awk)"  # shell token
+    # boundary: hyphens are valid inside shell words (my-grep, ./grep - path
+    # invocations still match — those ARE real greps)
     r"(?P<flags>(?:[ \t]+-[A-Za-z][A-Za-z0-9]*)*)"  # flag runs incl. separate flags
     r"[ \t]+(?P<e>-e[ \t]+|--regexp=[ \t]*)?"
     r"(?P<q>['\"])(?P<pat>.*?)(?P=q)"
@@ -91,7 +93,7 @@ _SHELL_BASH = re.compile(
 )
 # awk -F'ERE' with the flag glued to the quoted separator (the spaced form
 # `awk -F 'ERE'` is handled by _SHELL_CMD via the F flag token).
-_SHELL_AWK_F = re.compile(r"(?<![A-Za-z0-9_])awk[ \t]+-F(?P<q>['\"])(?P<pat>.*?)(?P=q)")
+_SHELL_AWK_F = re.compile(r"(?<![A-Za-z0-9_\-])awk[ \t]+-F(?P<q>['\"])(?P<pat>.*?)(?P=q)")
 
 _SED_S = re.compile(r"^s(?P<d>[^A-Za-z0-9])(?P<search>.*?)(?P=d)")
 _SED_ADDR = re.compile(r"^/(?P<re>[^/]+)/")
@@ -103,21 +105,28 @@ def _in_comment_or_string(src: str, pos: int) -> bool:
     """True if ``pos`` sits inside a shell comment or quoted string on its line.
 
     Labeled heuristic: scans the line from its start to ``pos`` tracking
-    quote state (single/double) and comment markers (``#`` at line start or
-    after whitespace, outside quotes).  Prevents phantom sites from
+    quote state (single/double), backslash escapes inside quotes (``\\``
+    makes the next char literal — ``echo "a\\\""`` does not close the
+    string), and comment markers (``#`` at line start or after whitespace
+    or a shell separator ``; | & ( ) { }``, outside quotes — ``echo ok;#
+    grep 'x'`` starts a comment).  Prevents phantom sites from
     ``echo "use grep 'x'"`` and ``# grep 'foo'``.
     """
     line_start = src.rfind("\n", 0, pos) + 1
     quote: str | None = None
-    for i in range(line_start, pos):
+    i = line_start
+    while i < pos:
         c = src[i]
-        if quote:
+        if c == "\\":
+            i += 1  # escaped char — literal in or out of quotes; skip both
+        elif quote:
             if c == quote:
                 quote = None
         elif c in ("'", '"'):
             quote = c
-        elif c == "#" and (i == line_start or src[i - 1] in " \t"):
+        elif c == "#" and (i == line_start or src[i - 1] in " \t;|&(){}"):
             return True
+        i += 1
     return quote is not None
 
 

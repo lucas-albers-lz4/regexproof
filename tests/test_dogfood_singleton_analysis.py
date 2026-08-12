@@ -358,3 +358,31 @@ def test_main_identity_keeps_bre_ere_distinct(capsys, tmp_path):
     dsa.main(["--dir", str(repo), "--name", "t"])
     out = capsys.readouterr().out
     assert "total distinct: 2" in out, out
+
+
+# --- r2 precision folds (escaped quotes, separators, token boundary) ---
+
+def test_context_guard_escaped_quotes():
+    """Escaped quotes inside strings do not leak a phantom quote state."""
+    assert dsa.extract_shell_patterns('echo "a\\""; grep \'foo\' f') == ["foo"]
+    assert dsa.extract_shell_patterns("echo \\'grep \\'foo\\'\\'") == []
+
+
+def test_comment_after_separator():
+    """`#` after a shell separator starts a comment (echo ok;# grep ...)."""
+    assert dsa.extract_shell_patterns("echo ok;# grep 'foo' f") == []
+    assert dsa.extract_shell_patterns("grep 'foo' f # real") == ["foo"]
+
+
+def test_token_boundary_excludes_hyphen():
+    """my-grep / my-awk are shell words, not grep invocations."""
+    assert dsa.extract_shell_patterns("my-grep 'foo' f") == []
+    assert dsa.extract_shell_patterns("my-awk -F'[, ]' f") == []
+    assert dsa.extract_shell_patterns("grep 'foo' f") == ["foo"]
+
+
+def test_bash_ere_partial_quoted_rhs_rejected():
+    """RHS starting unquoted but containing a quote is not a regex
+    (pre-fold extracted 'foo"bar"' — this test discriminates)."""
+    assert dsa.extract_bash_ere('[[ $x =~ foo"bar" ]]') == []
+    assert dsa.extract_bash_ere("[[ $x =~ foo'bar' ]]") == []
