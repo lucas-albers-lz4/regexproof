@@ -1,0 +1,55 @@
+{
+  "candidate_url": "https://github.com/aws-samples/sample-eks-enterprise-quickstart",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. aws-samples EKS quickstart; 45 shell sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "sample-eks-enterprise-quickstart",
+  "corpus_pin": "1f594b97a94b2ab6c9ca0c8c1a52a65e381bc961",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "posix-shell": 45
+    },
+    "flags": {},
+    "pin": "1f594b97a94b2ab6c9ca0c8c1a52a65e381bc961",
+    "predicted_buckets": {},
+    "regex_sites": 45,
+    "regex_sites_per_file": {
+      "examples/option_test_pod_scheduling.sh": 2,
+      "scripts/0_setup_env.sh": 1,
+      "scripts/legacy/5_check_environment.sh": 4,
+      "scripts/legacy/6_create_system_nodegroup.sh": 6,
+      "scripts/legacy/7_install_eks_addon.sh": 1,
+      "scripts/legacy/option_install_csi_drivers.sh": 1,
+      "scripts/legacy/option_install_gpu_nodegroups.sh": 4,
+      "scripts/legacy/option_install_karpenter.sh": 6,
+      "scripts/legacy/pod_identity_helpers.sh": 1,
+      "scripts/option_create_bastion.sh": 5,
+      "scripts/option_inspect_eks.sh": 6,
+      "scripts/option_show_nodegroup_topology.sh": 1,
+      "scripts/option_verify_gpu_efa.sh": 5,
+      "terraform/scripts/safe-destroy.sh": 2
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 45 regex sites (auto-NO-GO bar 200); dialects [posix-shell:45]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

@@ -1,0 +1,62 @@
+{
+  "candidate_url": "https://github.com/EarthSpark/thundercloud",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. EarthSpark; 41 ecma/py sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "thundercloud",
+  "corpus_pin": "b9ec2def88f7a6da51a76a7b812a956dd8daa090",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 11,
+      "py_re": 30
+    },
+    "flags": {
+      "g": 7,
+      "m": 1
+    },
+    "pin": "b9ec2def88f7a6da51a76a7b812a956dd8daa090",
+    "predicted_buckets": {
+      "m-flag": 1,
+      "stateful": 7
+    },
+    "regex_sites": 41,
+    "regex_sites_per_file": {
+      "assets/javascripts/dateutils.js": 1,
+      "scripts/create-release.py": 2,
+      "sparkmeter/api/historyviews0.py": 1,
+      "sparkmeter/config/js/smstemplate.js": 1,
+      "sparkmeter/event/eventdomain.py": 1,
+      "sparkmeter/event/js/smsmessagelist.js": 5,
+      "sparkmeter/meter/meterutils.py": 2,
+      "sparkmeter/metering/_generated/core/cattrs_converter.py": 2,
+      "sparkmeter/metering/_generated/core/utils.py": 14,
+      "sparkmeter/tariff/js/tariff-domain.js": 1,
+      "sparkmeter/tariff/js/tariff-form.js": 2,
+      "sparkmeter/tariff/js/tariff-view.js": 1,
+      "sparkmeter/tariff/tariffdomain.py": 1,
+      "sparkmeter/web/unittestutils.py": 7
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 41 regex sites (auto-NO-GO bar 200); dialects [ecma:11, py_re:30]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

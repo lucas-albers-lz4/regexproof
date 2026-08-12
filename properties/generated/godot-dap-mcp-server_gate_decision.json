@@ -1,0 +1,49 @@
+{
+  "candidate_url": "https://github.com/TransitionMatrix/godot-dap-mcp-server",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. TransitionMatrix godot debugger MCP; 35 shell/re2 sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "godot-dap-mcp-server",
+  "corpus_pin": "fdaddf667c7bbc29645f2fa1289338fd80af2be9",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "posix-shell": 29,
+      "re2": 6
+    },
+    "flags": {},
+    "pin": "fdaddf667c7bbc29645f2fa1289338fd80af2be9",
+    "predicted_buckets": {},
+    "regex_sites": 35,
+    "regex_sites_per_file": {
+      ".claude/hooks/pre-commit.sh": 4,
+      "internal/tools/advanced.go": 2,
+      "internal/tools/formatting.go": 4,
+      "scripts/automated-integration-test.sh": 13,
+      "scripts/integration-test.sh": 10,
+      "scripts/test-dap-compliance.sh": 1,
+      "tests/integration/test_set_variable.sh": 1
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 35 regex sites (auto-NO-GO bar 200); dialects [posix-shell:29, re2:6]; boundary=deterministic-true.",
+  "schema_version": "1"
+}
