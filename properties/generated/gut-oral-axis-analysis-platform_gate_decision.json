@@ -1,0 +1,56 @@
+{
+  "candidate_url": "https://github.com/waynegao05/gut-oral-axis-analysis-platform",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. waynegao05 research app; 9 sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (or unprobeable at gate disk budget).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "gut-oral-axis-analysis-platform",
+  "corpus_pin": "41f8ae7806a1d623f5b5fd1c5a28d4397a9b43e9",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "lookaround": 1
+    },
+    "dialect": {
+      "ecma": 1,
+      "py_re": 8
+    },
+    "flags": {
+      "i": 1
+    },
+    "pin": "41f8ae7806a1d623f5b5fd1c5a28d4397a9b43e9",
+    "predicted_buckets": {
+      "inline-flag": 1,
+      "lookaround": 1
+    },
+    "regex_sites": 9,
+    "regex_sites_per_file": {
+      "experiments/temporal_independent_v3/export_figure_diagnostics.py": 1,
+      "experiments/temporal_independent_v3/topology_aft_fusion.py": 2,
+      "research/mainline_split_selector_replay_v2.py": 1,
+      "src/clinical_standardizer.py": 1,
+      "src/drug_knowledge.py": 2,
+      "src/validators.py": 1,
+      "static/app.js": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 9 regex sites (auto-NO-GO bar 200); dialects [ecma:1, py_re:8]; boundary=unknown.",
+  "schema_version": "1"
+}

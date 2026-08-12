@@ -1,0 +1,57 @@
+{
+  "candidate_url": "https://github.com/google/fhir",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (java deferred #150).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary=unknown; FHIR SDK, 14 sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "14 sites < 1000.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "fhir",
+  "corpus_pin": "73aecbf47f9f2666c641474225ea7bd608d25274",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "lookaround": 3
+    },
+    "dialect": {
+      "java": 8,
+      "posix-shell": 3,
+      "re2": 3
+    },
+    "flags": {},
+    "pin": "73aecbf47f9f2666c641474225ea7bd608d25274",
+    "predicted_buckets": {
+      "lookaround": 3
+    },
+    "regex_sites": 14,
+    "regex_sites_per_file": {
+      "examples/gcp_datalab/01-prep.sh": 1,
+      "examples/gcp_datalab/init-scripts/datalab_fhir.sh": 2,
+      "go/jsonformat/internal/jsonpbhelper/fhirutil.go": 3,
+      "java/com/google/fhir/protogen/GeneratorUtils.java": 2,
+      "java/com/google/fhir/protogen/ProfileGenerator.java": 1,
+      "java/com/google/fhir/protogen/ValueSetGenerator.java": 1,
+      "java/com/google/fhir/protogen/ValueSetGeneratorV2.java": 1,
+      "java/com/google/fhir/wrappers/XhtmlWrapper.java": 1,
+      "java/com/google/fhir/wrappers/r5/XhtmlWrapper.java": 1,
+      "javatests/com/google/fhir/protogen/ProfileGeneratorTest.java": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 14 regex sites (auto-NO-GO bar 200); dialects [java:8, posix-shell:3, re2:3]; boundary=unknown.",
+  "schema_version": "1"
+}

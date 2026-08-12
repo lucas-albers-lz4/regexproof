@@ -1,0 +1,42 @@
+{
+  "candidate_url": "https://github.com/GovWifi/govwifi-admin",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. GovWifi admin; 5 shell sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (or unprobeable at gate disk budget).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "govwifi-admin",
+  "corpus_pin": "9fada5b57992ae2ae779fb13a0824e7efdf69aec",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "posix-shell": 5
+    },
+    "flags": {},
+    "pin": "9fada5b57992ae2ae779fb13a0824e7efdf69aec",
+    "predicted_buckets": {},
+    "regex_sites": 5,
+    "regex_sites_per_file": {
+      "bin/ecs-deploy": 5
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 5 regex sites (auto-NO-GO bar 200); dialects [posix-shell:5]; boundary=unknown.",
+  "schema_version": "1"
+}

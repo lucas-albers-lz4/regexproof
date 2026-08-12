@@ -1,0 +1,59 @@
+{
+  "candidate_url": "https://github.com/uc-cdis/gen3-helm",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. uc-cdis helm charts; 23 sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (or unprobeable at gate disk budget).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "gen3-helm",
+  "corpus_pin": "e4b45b263b3bce8720c84f93f5b309fc82f8aafa",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "lookaround": 1
+    },
+    "dialect": {
+      "ecma": 14,
+      "posix-shell": 2,
+      "py_re": 7
+    },
+    "flags": {
+      "m": 1
+    },
+    "pin": "e4b45b263b3bce8720c84f93f5b309fc82f8aafa",
+    "predicted_buckets": {
+      "lookaround": 1,
+      "m-flag": 1
+    },
+    "regex_sites": 23,
+    "regex_sites_per_file": {
+      ".github/scripts/release.py": 4,
+      "docs/portal/overrides/getSchema.js": 3,
+      "docs/portal/overrides/runWebpack.sh": 2,
+      "docs/portal/overrides/webpack.config.js": 7,
+      "helm/fence/fence-secret/config_helper.py": 1,
+      "helm/peregrine/peregrine-secret/config_helper.py": 1,
+      "helm/revproxy/nginx/helpers.js": 2,
+      "helm/revproxy/nginxPrivate/helpers.js": 2,
+      "helm/sheepdog/sheepdog-secret/config_helper.py": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 23 regex sites (auto-NO-GO bar 200); dialects [ecma:14, posix-shell:2, py_re:7]; boundary=unknown.",
+  "schema_version": "1"
+}

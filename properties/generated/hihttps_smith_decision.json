@@ -1,0 +1,17 @@
+{
+  "schema_version": "1",
+  "corpus": "hihttps",
+  "corpus_pin": "545a3bf676786f475509434724a25765f27a29f6",
+  "candidate_url": "https://github.com/qq4108863/hihttps",
+  "smith_decision": "no-go",
+  "supersedes": "triage-trial",
+  "reason": "hihttps is a Chinese WAF (hihttps.com) whose rules/ dir ships OWASP CRS-named files (REQUEST-920/932/933/941/942...) that are a MODIFIED fork of CRS 3.x-lineage rules (rule IDs 942011... = 3.x numbering; comment-stripped diff vs CRS v4.11.0 = 1,078 lines, vs v3.3.5 = 734 lines). Surface: 243 SecRule @rx patterns (CRS-derived) + 1 custom MainRule ('rx:select|union|update|delete|insert|table|from|ascii|hex|unhex|drop', id:1000) + 253 .data scanner-list lines + 12 webattack sample lines. The only non-CRS regex surface is the single MainRule pattern - negligible (1 site). The CRS-derived rows are duplicates of the admitted coreruleset corpus families (SQLi/XSS/PHP/RCE). Modified-CRS fork with ~1 novel pattern -> no-go (coraza-coreruleset #245 precedent: vendored CRS = duplicate of admitted corpus, near-zero novel value).",
+  "regex_sites": 137,
+  "sites_by_bucket": {
+    "rules/REQUEST-*.conf SecRule @rx (CRS-derived, modified fork)": 243,
+    "rules/main.rule MainRule rx: (custom)": 1,
+    "rules/*.data scanner lists (not regex)": 253,
+    "rules/webattack.txt attack samples (not regex)": 12
+  },
+  "additional_surface_outside_probe_scope": {}
+}

@@ -2,27 +2,27 @@
   "candidate_url": "https://github.com/qq4108863/hihttps",
   "conditions": [
     {
-      "evidence": "CRS-derived conf files (modified fork vs CRS v4.11.0/v3.3.5) + custom MainRule rx: surface; Smith to separate vendored vs novel.",
+      "evidence": "CRS-derived pcre rules are the coreruleset class (modified fork, rule IDs 942011...); no novel construct class beyond 1 custom MainRule.",
       "id": "new-surface",
       "met": false
     },
     {
-      "evidence": "Probe security_boundary=deterministic-true; WAF on request path (QQ hihttps).",
+      "evidence": "Probe deterministic-true (WAF) BUT superseded by Smith triage: 243/244 regex sites are CRS-derived, 1 novel pattern, zero findings value.",
       "id": "security-boundary",
-      "met": true
+      "met": false
     },
     {
-      "evidence": "137 sites < 1000 scale bar.",
+      "evidence": "137 probe sites < 1000; novel surface is 1 pattern.",
       "id": "large-under-saturated",
       "met": false
     }
   ],
   "corpus": "hihttps",
   "corpus_pin": "545a3bf676786f475509434724a25765f27a29f6",
-  "decision": "triage-trial",
-  "decision_basis": "escape_hatch",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
   "decision_date": "2026-08-12",
-  "escape_hatch_applied": true,
+  "escape_hatch_applied": false,
   "probe": {
     "construct_counts": {
       "(?i)": 75,
@@ -50,6 +50,6 @@
     },
     "security_boundary": "deterministic-true"
   },
-  "rationale": "Security-boundary corpus (boundary=deterministic-true) with findings-triage potential; 137 sites across [pcre:137].",
+  "rationale": "Below admission scale: 137 regex sites (auto-NO-GO bar 200); dialects [pcre:137]; boundary=deterministic-true.",
   "schema_version": "1"
 }

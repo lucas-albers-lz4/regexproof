@@ -1,0 +1,66 @@
+{
+  "candidate_url": "https://github.com/open-horizon/exchange-api",
+  "conditions": [
+    {
+      "evidence": "Dialect(s) already covered by admitted corpora; no first-seen construct class.",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive; condition NOT claimed. open-horizon exchange REST API; 1309 ecma sites >= 1000; ecma under-saturated.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Sites >= 1000 in a dialect below 0.85 encodable.",
+      "id": "large-under-saturated",
+      "met": true
+    }
+  ],
+  "corpus": "exchange-api",
+  "corpus_pin": "dfaabdccf3eda5e0bee4d7b95e90c3f52001b70e",
+  "decision": "go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "backref": 16,
+      "lookaround": 122
+    },
+    "dialect": {
+      "ecma": 1305,
+      "posix-shell": 4
+    },
+    "flags": {
+      "g": 419,
+      "i": 185,
+      "m": 18,
+      "u": 2
+    },
+    "pin": "dfaabdccf3eda5e0bee4d7b95e90c3f52001b70e",
+    "predicted_buckets": {
+      "backref": 16,
+      "inline-flag": 185,
+      "lookaround": 122,
+      "m-flag": 18,
+      "stateful": 419,
+      "u-flag": 2
+    },
+    "regex_sites": 1309,
+    "regex_sites_per_file": {
+      "src/main/resources/swagger/swagger-ui-bundle.js": 555,
+      "src/main/resources/swagger/swagger-ui-es-bundle-core.js": 78,
+      "src/main/resources/swagger/swagger-ui-es-bundle.js": 555,
+      "src/main/resources/swagger/swagger-ui-standalone-preset.js": 43,
+      "src/main/resources/swagger/swagger-ui.js": 74,
+      "src/test/bash/scale/functions.sh": 1,
+      "src/test/bash/scale/scaledriver.sh": 1,
+      "src/test/bash/scale/summarize.sh": 1,
+      "src/test/bash/scale/test.sh": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "New dialect/flag/encoding surface: dialects [ecma:1305, posix-shell:4]; predicted_buckets [backref:16, inline-flag:185, lookaround:122, m-flag:18, stateful:419, u-flag:2].",
+  "schema_version": "1"
+}

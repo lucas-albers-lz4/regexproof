@@ -1,0 +1,42 @@
+{
+  "candidate_url": "https://github.com/opencv/opencv_extra",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface.",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary=unknown; opencv test-data repo, 1 shell site.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "1 site < 1000.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "opencv_extra",
+  "corpus_pin": "67aac02d4d8d2ae1e252ae253a341732d150879d",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "posix-shell": 1
+    },
+    "flags": {},
+    "pin": "67aac02d4d8d2ae1e252ae253a341732d150879d",
+    "predicted_buckets": {},
+    "regex_sites": 1,
+    "regex_sites_per_file": {
+      "testdata/cv/detectors_descriptors_evaluation/descriptors/plots/createPlots.sh": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 1 regex sites (auto-NO-GO bar 200); dialects [posix-shell:1]; boundary=unknown.",
+  "schema_version": "1"
+}

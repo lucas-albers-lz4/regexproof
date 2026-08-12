@@ -1,0 +1,92 @@
+{
+  "candidate_url": "https://github.com/mitodl/ocw-hugo-themes",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. mitodl; 149 ecma sites < 200 scale flag.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (or unprobeable at gate disk budget).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "ocw-hugo-themes",
+  "corpus_pin": "63a249c8b5284055251189d800330702cfda422f",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "lookaround": 2
+    },
+    "dialect": {
+      "ecma": 148,
+      "posix-shell": 1
+    },
+    "flags": {
+      "g": 8,
+      "i": 41
+    },
+    "pin": "63a249c8b5284055251189d800330702cfda422f",
+    "predicted_buckets": {
+      "inline-flag": 41,
+      "lookaround": 2,
+      "stateful": 8
+    },
+    "regex_sites": 149,
+    "regex_sites_per_file": {
+      "base-theme/assets/js/navigation.js": 2,
+      "base-theme/assets/js/utils.ts": 3,
+      "base-theme/assets/webpack/webpack.common.ts": 8,
+      "course-v2/assets/js/div_toggle.js": 1,
+      "course-v2/assets/js/init_image_galleries_from_markup.ts": 1,
+      "course-v3/assets/js/div_toggle.js": 1,
+      "course-v3/assets/js/init_image_galleries_from_markup.ts": 1,
+      "package_scripts/build-course-v3-prefixed.ts": 3,
+      "package_scripts/build.sh": 1,
+      "package_scripts/subset-fonts.ts": 2,
+      "tests-e2e/LocalOcw.ts": 2,
+      "tests-e2e/jest/build-failures.test.ts": 6,
+      "tests-e2e/ocw-ci-test-course-v3-offline/external-resources-v3-offline.spec.ts": 2,
+      "tests-e2e/ocw-ci-test-course-v3-offline/generic-content-pages.spec.ts": 1,
+      "tests-e2e/ocw-ci-test-course-v3-offline/image-gallery-v3-offline.spec.ts": 1,
+      "tests-e2e/ocw-ci-test-course-v3-offline/resource-list-v3-offline.spec.ts": 2,
+      "tests-e2e/ocw-ci-test-course-v3-offline/resource-page-v3-offline.spec.ts": 2,
+      "tests-e2e/ocw-ci-test-course-v3-offline/routing-v3-offline.spec.ts": 2,
+      "tests-e2e/ocw-ci-test-course-v3/course-home-v3.spec.ts": 2,
+      "tests-e2e/ocw-ci-test-course-v3/header-v3.spec.ts": 14,
+      "tests-e2e/ocw-ci-test-course-v3/mobile-course-info-v3.spec.ts": 21,
+      "tests-e2e/ocw-ci-test-course-v3/resource-list-v3.spec.ts": 2,
+      "tests-e2e/ocw-ci-test-course-v3/resource-page-v3.spec.ts": 2,
+      "tests-e2e/ocw-ci-test-course-v3/video-gallery-v3.spec.ts": 2,
+      "tests-e2e/ocw-ci-test-course-v3/video-tabs-v3.spec.ts": 11,
+      "tests-e2e/ocw-ci-test-course/course-info.spec.ts": 2,
+      "tests-e2e/ocw-ci-test-course/homepage.spec.ts": 1,
+      "tests-e2e/ocw-ci-test-course/subscripts-and-superscripts.spec.ts": 3,
+      "tests-e2e/ocw-ci-test-course/video-tabs.spec.ts": 15,
+      "tests-e2e/ocw-ci-test-course/video.spec.ts": 5,
+      "tests-e2e/util/VideoElement.ts": 1,
+      "tests-e2e/util/constants.ts": 5,
+      "tests-e2e/util/offline-build.ts": 4,
+      "tests-e2e/util/test_sites.ts": 1,
+      "www/assets/js/components/Card.tsx": 1,
+      "www/assets/js/components/SearchFilter.test.tsx": 1,
+      "www/assets/js/components/SearchFilterDrawer.test.tsx": 6,
+      "www/assets/js/components/SearchPage.test.tsx": 3,
+      "www/assets/js/components/SearchPage.tsx": 2,
+      "www/assets/js/lib/search.ts": 2,
+      "www/assets/js/lib/util.ts": 2
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 149 regex sites (auto-NO-GO bar 200); dialects [ecma:148, posix-shell:1]; boundary=unknown.",
+  "schema_version": "1"
+}

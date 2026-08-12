@@ -1,0 +1,44 @@
+{
+  "candidate_url": "https://github.com/ChainSafe/forest-iac",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. ChainSafe; 2 shell/py sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (or unprobeable at gate disk budget).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "forest-iac",
+  "corpus_pin": "43c77dad20fd4ba4858f2aef8cb040da4c4bd728",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "posix-shell": 1,
+      "py_re": 1
+    },
+    "flags": {},
+    "pin": "43c77dad20fd4ba4858f2aef8cb040da4c4bd728",
+    "predicted_buckets": {},
+    "regex_sites": 2,
+    "regex_sites_per_file": {
+      "scripts/mirror-actors/mirror_actors/__main__.py": 1,
+      "tf-managed/modules/sync-check/service/health_check.sh": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 2 regex sites (auto-NO-GO bar 200); dialects [posix-shell:1, py_re:1]; boundary=unknown.",
+  "schema_version": "1"
+}

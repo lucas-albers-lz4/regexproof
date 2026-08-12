@@ -1,0 +1,71 @@
+{
+  "candidate_url": "https://github.com/wgpsec/whohk",
+  "conditions": [
+    {
+      "evidence": "Dialect(s) already covered by admitted corpora; no first-seen construct class.",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive; condition NOT claimed. wgpsec Linux incident-response tool; 2145 yara sites >= 1000; yara under-saturated (yara_rules 0.656).",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Sites >= 1000 in a dialect below 0.85 encodable.",
+      "id": "large-under-saturated",
+      "met": true
+    }
+  ],
+  "corpus": "whohk",
+  "corpus_pin": "1143af45b06c2e49c9f13efb149cd20067e8ea38",
+  "decision": "go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "\\K": 1,
+      "backref": 5
+    },
+    "dialect": {
+      "py_re": 7,
+      "yara": 2138
+    },
+    "flags": {
+      "W": 819
+    },
+    "pin": "1143af45b06c2e49c9f13efb149cd20067e8ea38",
+    "predicted_buckets": {
+      "backref": 5,
+      "reset": 1
+    },
+    "regex_sites": 2145,
+    "regex_sites_per_file": {
+      "rules/malware/MALW_BackdoorSSH.yar": 6,
+      "rules/malware/MALW_BlackRev.yar": 19,
+      "rules/malware/MALW_PE_sections.yar": 126,
+      "rules/malware/ddg.yar": 8,
+      "rules/malware/h2miner.yar": 11,
+      "rules/malware/lsdminer.yar": 8,
+      "rules/malware/rainbowminer.yar": 9,
+      "rules/malware/skipmap.yar": 5,
+      "rules/malware/startminer.yar": 13,
+      "rules/malware/sysupdataminer.yar": 17,
+      "rules/malware/teamtnt.yar": 12,
+      "rules/malware/watchbogminer.yar": 7,
+      "rules/utils/wget.yar": 2,
+      "rules/webshells/WShell_APT_Laudanum.yar": 65,
+      "rules/webshells/WShell_ASPXSpy.yar": 10,
+      "rules/webshells/WShell_Behinder.yar": 38,
+      "rules/webshells/WShell_Drupalgeddon2_icos.yar": 2,
+      "rules/webshells/WShell_PHP_Anuna.yar": 4,
+      "rules/webshells/WShell_PHP_in_images.yar": 2,
+      "rules/webshells/WShell_THOR_Webshells.yar": 1774,
+      "whohk.py": 7
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "New dialect/flag/encoding surface: dialects [py_re:7, yara:2138]; predicted_buckets [backref:5, reset:1].",
+  "schema_version": "1"
+}

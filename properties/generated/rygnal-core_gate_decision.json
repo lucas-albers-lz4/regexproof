@@ -1,0 +1,62 @@
+{
+  "candidate_url": "https://github.com/Rygnal/rygnal-core",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. Rygnal core; 61 py_re sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (or unprobeable at gate disk budget).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "rygnal-core",
+  "corpus_pin": "976e4b6f1d43337cc2b6a67b485bab3368b2d4a1",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "(?i)": 25
+    },
+    "dialect": {
+      "py_re": 60,
+      "re2": 1
+    },
+    "flags": {
+      "i": 1
+    },
+    "pin": "976e4b6f1d43337cc2b6a67b485bab3368b2d4a1",
+    "predicted_buckets": {
+      "inline-flag": 26
+    },
+    "regex_sites": 61,
+    "regex_sites_per_file": {
+      "internal/cli/local_review.go": 1,
+      "src/rygnal/action_intent.py": 8,
+      "src/rygnal/action_normalizer.py": 3,
+      "src/rygnal/api.py": 5,
+      "src/rygnal/api_security.py": 1,
+      "src/rygnal/change_risk.py": 9,
+      "src/rygnal/changed_files.py": 1,
+      "src/rygnal/policy_engine.py": 2,
+      "src/rygnal/production_containment.py": 1,
+      "src/rygnal/production_qualification.py": 4,
+      "src/rygnal/recovery_reconciler.py": 2,
+      "src/rygnal/risk_engine.py": 17,
+      "src/rygnal/runtime_config.py": 1,
+      "src/rygnal/security.py": 6
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 61 regex sites (auto-NO-GO bar 200); dialects [py_re:60, re2:1]; boundary=unknown.",
+  "schema_version": "1"
+}

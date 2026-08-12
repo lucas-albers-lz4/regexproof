@@ -1,0 +1,93 @@
+{
+  "candidate_url": "https://github.com/mitodl/open-discussions",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. mitodl; 88 ecma/py/shell sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (or unprobeable at gate disk budget).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "open-discussions",
+  "corpus_pin": "7f993960bbb080a13da941d87eea6de0642cc8ab",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "backref": 1,
+      "lookaround": 3
+    },
+    "dialect": {
+      "ecma": 59,
+      "posix-shell": 7,
+      "py_re": 22
+    },
+    "flags": {
+      "d": 1,
+      "g": 13,
+      "i": 5,
+      "m": 1,
+      "v": 1
+    },
+    "pin": "7f993960bbb080a13da941d87eea6de0642cc8ab",
+    "predicted_buckets": {
+      "backref": 1,
+      "inline-flag": 5,
+      "lookaround": 3,
+      "m-flag": 1,
+      "stateful": 13,
+      "v-flag": 1
+    },
+    "regex_sites": 88,
+    "regex_sites_per_file": {
+      ".yarn/plugins/@yarnpkg/plugin-workspace-tools.cjs": 22,
+      "course_catalog/etl/edx_shared.py": 3,
+      "course_catalog/etl/mitxonline.py": 2,
+      "course_catalog/etl/prolearn.py": 1,
+      "course_catalog/etl/utils.py": 8,
+      "course_catalog/utils.py": 1,
+      "frontends/infinite-corridor/src/pages/field-details/WidgetsList.test.tsx": 2,
+      "frontends/infinite-corridor/webpack.config.js": 7,
+      "frontends/ol-ckeditor/src/components/CkeditorArticle.tsx": 1,
+      "frontends/ol-ckeditor/src/webpack-utils.js": 2,
+      "frontends/ol-search-ui/src/components/LearningResourceCardTemplate.test.tsx": 1,
+      "frontends/ol-search-ui/src/components/SearchFacetItem.tsx": 1,
+      "frontends/ol-search-ui/src/components/TruncatedText.tsx": 1,
+      "frontends/ol-util/src/lib/utils.ts": 1,
+      "frontends/ol-widgets/src/components/editing/ManageWidgetDialog-EmbeddedUrl.test.tsx": 2,
+      "frontends/open-discussions/babel.config.js": 1,
+      "frontends/open-discussions/scripts/js_test.sh": 6,
+      "frontends/open-discussions/src/components/ArticleEditor.js": 1,
+      "frontends/open-discussions/src/components/Card.js": 1,
+      "frontends/open-discussions/src/components/DropdownMenu_test.js": 1,
+      "frontends/open-discussions/src/components/TruncatedText.js": 1,
+      "frontends/open-discussions/src/lib/profile.js": 1,
+      "frontends/open-discussions/src/lib/url.js": 2,
+      "frontends/open-discussions/src/lib/util.js": 2,
+      "frontends/open-discussions/src/lib/validation.js": 2,
+      "frontends/open-discussions/src/pages/App.js": 1,
+      "frontends/open-discussions/src/pages/CourseSearchPage.js": 2,
+      "frontends/open-discussions/webpack.config.js": 4,
+      "mail/api.py": 2,
+      "moira_lists/moira_api.py": 1,
+      "profiles/serializers.py": 1,
+      "profiles/utils.py": 1,
+      "scripts/test/detect_missing_migrations.sh": 1,
+      "search/serializers.py": 2
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 88 regex sites (auto-NO-GO bar 200); dialects [ecma:59, posix-shell:7, py_re:22]; boundary=unknown.",
+  "schema_version": "1"
+}

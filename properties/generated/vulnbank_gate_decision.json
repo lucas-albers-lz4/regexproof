@@ -1,0 +1,43 @@
+{
+  "candidate_url": "https://github.com/gadaugherty/vulnbank",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. DevSecOps training app with DELIBERATE vulns; 11 ecma sites; training target not a corpus (vulns are the point, not findings candidates).",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (or unprobeable at gate disk budget).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "vulnbank",
+  "corpus_pin": "49bf22201b6498cb33efd0c41bd42679668edce0",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 11
+    },
+    "flags": {},
+    "pin": "49bf22201b6498cb33efd0c41bd42679668edce0",
+    "predicted_buckets": {},
+    "regex_sites": 11,
+    "regex_sites_per_file": {
+      "frontend/src/components/Account.js": 6,
+      "frontend/src/components/Dashboard.js": 5
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 11 regex sites (auto-NO-GO bar 200); dialects [ecma:11]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

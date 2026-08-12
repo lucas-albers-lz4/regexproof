@@ -1,0 +1,68 @@
+{
+  "candidate_url": "https://github.com/alphagov/pay-frontend",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. alphagov pay frontend; 37 ecma sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (or unprobeable at gate disk budget).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "pay-frontend",
+  "corpus_pin": "f05039f622d97746544c0baebce0ee68e8c8f427",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "lookaround": 2
+    },
+    "dialect": {
+      "ecma": 37
+    },
+    "flags": {
+      "g": 15,
+      "i": 2
+    },
+    "pin": "f05039f622d97746544c0baebce0ee68e8c8f427",
+    "predicted_buckets": {
+      "inline-flag": 2,
+      "lookaround": 2,
+      "stateful": 15
+    },
+    "regex_sites": 37,
+    "regex_sites_per_file": {
+      "app/assets/javascripts/modules/form-card-type.js": 4,
+      "app/controllers/secure.controller.js": 1,
+      "app/controllers/web-payments/apple-pay/normalise-apple-pay-payload.js": 1,
+      "app/controllers/web-payments/google-pay/normalise-google-pay-payload.js": 1,
+      "app/middleware/state-enforcer.js": 1,
+      "app/services/normalise-charge.js": 1,
+      "app/utils/charge-validation-fields.js": 10,
+      "app/utils/email-validation.js": 3,
+      "app/utils/key-camelizer.js": 2,
+      "app/utils/luhn.js": 2,
+      "app/utils/random.js": 1,
+      "server.js": 1,
+      "test/charge-ui.test.js": 1,
+      "test/cypress/integration/card/payment.test.cy.js": 2,
+      "test/middleware/csp.test.js": 1,
+      "test/middleware/state-enforcer.test.js": 1,
+      "test/services/state.service.test.js": 2,
+      "test/unit/cookies.test.js": 2
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 37 regex sites (auto-NO-GO bar 200); dialects [ecma:37]; boundary=unknown.",
+  "schema_version": "1"
+}

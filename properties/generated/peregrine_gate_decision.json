@@ -1,0 +1,49 @@
+{
+  "candidate_url": "https://github.com/uc-cdis/peregrine",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. uc-cdis graphql; 4 py_re sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (or unprobeable at gate disk budget).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "peregrine",
+  "corpus_pin": "78bcdeedfa81c2a7e995e408dd4588bdc6ae8f8c",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "lookaround": 2
+    },
+    "dialect": {
+      "py_re": 4
+    },
+    "flags": {},
+    "pin": "78bcdeedfa81c2a7e995e408dd4588bdc6ae8f8c",
+    "predicted_buckets": {
+      "lookaround": 2
+    },
+    "regex_sites": 4,
+    "regex_sites_per_file": {
+      "peregrine/blueprints/datasets.py": 1,
+      "peregrine/resources/submission/constants.py": 1,
+      "peregrine/resources/submission/graphql/node.py": 1,
+      "tests/graphql/utils.py": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 4 regex sites (auto-NO-GO bar 200); dialects [py_re:4]; boundary=unknown.",
+  "schema_version": "1"
+}

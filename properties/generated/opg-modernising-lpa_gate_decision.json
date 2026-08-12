@@ -1,0 +1,94 @@
+{
+  "candidate_url": "https://github.com/ministryofjustice/opg-modernising-lpa",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. ministryofjustice; 144 ecma sites; classifier deterministic-true false positive (LPA app, not security).",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (or unprobeable at gate disk budget).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "opg-modernising-lpa",
+  "corpus_pin": "15df6582a510a5757325b62613a147527d1f8c0c",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 127,
+      "posix-shell": 6,
+      "re2": 11
+    },
+    "flags": {
+      "g": 5,
+      "i": 3
+    },
+    "pin": "15df6582a510a5757325b62613a147527d1f8c0c",
+    "predicted_buckets": {
+      "inline-flag": 3,
+      "stateful": 5
+    },
+    "regex_sites": 144,
+    "regex_sites_per_file": {
+      "cmd/mlpa/main_test.go": 3,
+      "cypress/e2e/donor/choose-attorneys-summary.cy.js": 3,
+      "cypress/e2e/donor/choose-replacement-attorneys-summary.cy.js": 1,
+      "cypress/e2e/donor/long-running/payment.cy.js": 3,
+      "cypress/support/commands.js": 1,
+      "docker/localstack/localstack-init.sh": 1,
+      "docker/mainstream-content/alpine_image_hardening.sh": 4,
+      "internal/pay/client.go": 1,
+      "internal/validation/check.go": 4,
+      "playwright.config.js": 1,
+      "playwright/attorney/agreed-to-be-attorney.spec.js": 1,
+      "playwright/attorney/replacement-attorney-pa-flow.spec.js": 1,
+      "playwright/attorney/replacement-attorney-pw-flow.spec.js": 1,
+      "playwright/attorney/trust-corp-attorney-flow.spec.js": 1,
+      "playwright/certificateProvider/cp-cant-id.spec.js": 1,
+      "playwright/certificateProvider/cp-fails-id-check.spec.js": 1,
+      "playwright/certificateProvider/cp-must-sign-welsh.spec.js": 1,
+      "playwright/certificateProvider/cp-opts-out-at-certificate.spec.js": 1,
+      "playwright/certificateProvider/personal-cp-flow.spec.js": 1,
+      "playwright/certificateProvider/pro-cp-flow.spec.js": 1,
+      "playwright/certificateProvider/start-cp-journey.spec.js": 1,
+      "playwright/complete-donor-flow.spec.js": 80,
+      "playwright/donor/cp-interruption-page.spec.js": 1,
+      "playwright/donor/donor-cant-sign.spec.js": 1,
+      "playwright/donor/donor-has-not-known-cp-long-enough.spec.js": 1,
+      "playwright/donor/donor-post-office-vouching-journey.spec.js": 1,
+      "playwright/donor/donor-pro-cp-flow.spec.js": 1,
+      "playwright/donor/exemption-with-uploaded-evidence.spec.js": 1,
+      "playwright/donor/hardship-application.spec.js": 1,
+      "playwright/donor/how-should-replacement-attorneys-make-decisions.spec.js": 1,
+      "playwright/donor/pfa-lpa-flow.spec.js": 2,
+      "playwright/donor/pw-variations.spec.js": 2,
+      "playwright/donor/remission-with-postal-evidence.spec.js": 1,
+      "playwright/donor/repeat-application-legacy-ref.spec.js": 1,
+      "playwright/donor/repeat-application-modernise-ref.spec.js": 1,
+      "playwright/e2e.js": 1,
+      "playwright/textExtractor.js": 3,
+      "playwright/voucher/vouch-journey-start.spec.js": 2,
+      "playwright/voucher/voucher-cant-id.spec.js": 1,
+      "playwright/voucher/voucher-cant-vouch.spec.js": 1,
+      "playwright/voucher/vouching-journey-2.spec.js": 2,
+      "playwright/voucher/vouching-journey.spec.js": 2,
+      "scripts/pre-commit/prevent_it_only/main.go": 1,
+      "scripts/pre-commit/prevent_unsafe_chains/main.go": 2,
+      "scripts/terraform-version.sh": 1
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 144 regex sites (auto-NO-GO bar 200); dialects [ecma:127, posix-shell:6, re2:11]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

@@ -1,0 +1,88 @@
+{
+  "candidate_url": "https://github.com/aofusa/veil-proxy",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. aofusa proxy; 97 shell sites < 200.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (or unprobeable at gate disk budget).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "veil-proxy",
+  "corpus_pin": "f8842b860d8e786880c53560b21878a475d36ba3",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "posix-class": 2
+    },
+    "dialect": {
+      "posix-shell": 97
+    },
+    "flags": {
+      "i": 24
+    },
+    "pin": "f8842b860d8e786880c53560b21878a475d36ba3",
+    "predicted_buckets": {
+      "inline-flag": 24,
+      "posix-class": 2
+    },
+    "regex_sites": 97,
+    "regex_sites_per_file": {
+      "packaging/scripts/build.sh": 2,
+      "packaging/scripts/test-deb.sh": 5,
+      "packaging/scripts/test-rpm.sh": 5,
+      "tests/e2e_setup.sh": 2,
+      "tests/load/compare.sh": 1,
+      "tools/container_security/chaos/bad_backend_chaos.sh": 2,
+      "tools/container_security/chaos/e2e_sanitizer_chaos.sh": 2,
+      "tools/container_security/chaos/pumba_chaos.sh": 1,
+      "tools/container_security/chaos/resource_exhaustion_chaos.sh": 3,
+      "tools/container_security/chaos/syscall_chaos.sh": 4,
+      "tools/container_security/harness/scripts/admin_security_probe.sh": 1,
+      "tools/container_security/harness/scripts/circuit_breaker_chaos.sh": 5,
+      "tools/container_security/harness/scripts/compression_cache_probe.sh": 2,
+      "tools/container_security/harness/scripts/differential_probe.sh": 2,
+      "tools/container_security/harness/scripts/health_check.sh": 1,
+      "tools/container_security/harness/scripts/http3_probe.sh": 2,
+      "tools/container_security/harness/scripts/l4_flood_probe.sh": 1,
+      "tools/container_security/harness/scripts/metrics_probe.sh": 1,
+      "tools/container_security/harness/scripts/security_scan.sh": 2,
+      "tools/container_security/harness/scripts/smuggling_probe.sh": 1,
+      "tools/container_security/harness/scripts/toxiproxy_chaos.sh": 3,
+      "tools/container_security/harness/scripts/wasm_invalid_module_probe.sh": 1,
+      "tools/container_security/harness/scripts/wasm_security_probe.sh": 3,
+      "tools/container_security/lib/capabilities.sh": 1,
+      "tools/container_security/lib/common.sh": 3,
+      "tools/container_security/lib/report.sh": 4,
+      "tools/container_security/run.sh": 2,
+      "tools/container_security/security/run_gitleaks.sh": 1,
+      "tools/container_security/security/run_semgrep.sh": 1,
+      "tools/container_security/security/run_testssl.sh": 1,
+      "tools/perf/analyze_results.sh": 1,
+      "tools/perf/freebsd/ab_content_cache.sh": 1,
+      "tools/perf/freebsd/run_perf_freebsd.sh": 2,
+      "tools/perf/profile_ab.sh": 1,
+      "tools/perf/run_perf.sh": 13,
+      "tools/qemu/aarch64-vm.sh": 2,
+      "tools/qemu/bsd-vm.sh": 4,
+      "tools/qemu/fbsd-arm64-smoke.sh": 2,
+      "tools/qemu/fbsd-capmode-e2e.sh": 3,
+      "tools/qemu/run-e2e-aarch64.sh": 3
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 97 regex sites (auto-NO-GO bar 200); dialects [posix-shell:97]; boundary=unknown.",
+  "schema_version": "1"
+}
