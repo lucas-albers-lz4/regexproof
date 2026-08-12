@@ -1,7 +1,7 @@
 {
   "dialect_surface": {
     "ecma": 1445,
-    "posix-shell": 273,
+    "posix-shell": 281,
     "py_re": 1139
   },
   "file_lists": {
@@ -26,6 +26,8 @@
     "happycow": [],
     "hermes-agent": [
       "docker/stage2-hook.sh",
+      "optional-skills/creative/hyperframes/scripts/setup.sh",
+      "optional-skills/security/web-pentest/scripts/recon-scan.sh",
       "scripts/install.sh",
       "scripts/kill_modal.sh",
       "scripts/lib/node-bootstrap.sh",
@@ -80,7 +82,7 @@
       "scripts/lib/feed-publish.sh": 2,
       "scripts/lib/sdk-matrix.sh": 1,
       "scripts/qemu-lab-prepare-image.sh": 14,
-      "scripts/qemu-reload-revert-smoke.sh": 6,
+      "scripts/qemu-reload-revert-smoke.sh": 7,
       "scripts/qemu-smoke-fwlive.sh": 5,
       "scripts/run-openwrt-x86-experiment.sh": 1,
       "scripts/upstream-cut.sh": 6,
@@ -90,7 +92,9 @@
     "happycow": {},
     "hermes-agent": {
       "docker/stage2-hook.sh": 1,
-      "scripts/install.sh": 14,
+      "optional-skills/creative/hyperframes/scripts/setup.sh": 3,
+      "optional-skills/security/web-pentest/scripts/recon-scan.sh": 1,
+      "scripts/install.sh": 15,
       "scripts/kill_modal.sh": 4,
       "scripts/lib/node-bootstrap.sh": 4,
       "setup-hermes.sh": 4,
@@ -108,31 +112,31 @@
       "scripts/smoke-package-layout.sh": 7,
       "scripts/validate-feed-keys.sh": 2,
       "tests/lib.sh": 1,
-      "tests/test_luci_login.sh": 40,
+      "tests/test_luci_login.sh": 41,
       "tests/test_mutators-busybox-fallback.sh": 9,
       "tests/test_mutators.sh": 28,
       "tests/test_password_control.sh": 15,
       "tests/test_phase1_foundation.sh": 11,
-      "tests/test_sdk_matrix_digests.sh": 1,
+      "tests/test_sdk_matrix_digests.sh": 2,
       "tests/test_validators.sh": 12
     }
   },
   "snapshot_date": "2026-08-12",
   "stats": {
     "global": {
-      "distinct_canon": 1990,
-      "distinct_exact": 2008,
-      "per_observation_singleton_sites": 0.912145607280364,
-      "singleton_frac_canon": 0.9839195979899498,
-      "singleton_frac_exact": 0.9845617529880478,
-      "sites": 2857
+      "distinct_canon": 1994,
+      "distinct_exact": 2013,
+      "per_observation_singleton_sites": 0.91239092495637,
+      "singleton_frac_canon": 0.9839518555667001,
+      "singleton_frac_exact": 0.9846000993541977,
+      "sites": 2865
     },
     "per_repo": {
       "fwlive": {
-        "distinct_canon": 123,
-        "distinct_exact": 126,
-        "joint_novelty": 0.8211382113821138,
-        "sites": 222
+        "distinct_canon": 124,
+        "distinct_exact": 127,
+        "joint_novelty": 0.8225806451612904,
+        "sites": 223
       },
       "happycow": {
         "distinct_canon": 81,
@@ -141,16 +145,16 @@
         "sites": 100
       },
       "hermes-agent": {
-        "distinct_canon": 1682,
-        "distinct_exact": 1692,
-        "joint_novelty": 0.990487514863258,
-        "sites": 2344
+        "distinct_canon": 1684,
+        "distinct_exact": 1694,
+        "joint_novelty": 0.9904988123515439,
+        "sites": 2349
       },
       "usrmanage": {
-        "distinct_canon": 139,
-        "distinct_exact": 143,
-        "joint_novelty": 0.8561151079136691,
-        "sites": 191
+        "distinct_canon": 140,
+        "distinct_exact": 145,
+        "joint_novelty": 0.8571428571428571,
+        "sites": 193
       }
     }
   }
