@@ -1,0 +1,103 @@
+{
+  "candidate_url": "https://github.com/gittor/ndk-python",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. gittor; 135 py sites, duplicate class.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "ndk-python",
+  "corpus_pin": "7ff45d2c63b021a92b4ea3f0e782c5ba5a8247e3",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "(?i)": 1,
+      "(?x)": 2,
+      "backref": 3,
+      "lookaround": 18
+    },
+    "dialect": {
+      "py_re": 135
+    },
+    "flags": {
+      "i": 7,
+      "m": 5,
+      "s": 2,
+      "x": 15
+    },
+    "pin": "7ff45d2c63b021a92b4ea3f0e782c5ba5a8247e3",
+    "predicted_buckets": {
+      "backref": 3,
+      "inline-flag": 27,
+      "lookaround": 18,
+      "m-flag": 5
+    },
+    "regex_sites": 135,
+    "regex_sites_per_file": {
+      "Lib/Cookie.py": 3,
+      "Lib/HTMLParser.py": 15,
+      "Lib/_LWPCookieJar.py": 1,
+      "Lib/_MozillaCookieJar.py": 1,
+      "Lib/_osx_support.py": 8,
+      "Lib/cookielib.py": 23,
+      "Lib/ctypes/macholib/dylib.py": 1,
+      "Lib/ctypes/macholib/framework.py": 1,
+      "Lib/ctypes/test/test_array_in_pointer.py": 1,
+      "Lib/ctypes/test/test_pep3118.py": 1,
+      "Lib/distutils/command/config.py": 1,
+      "Lib/distutils/command/install_egg_info.py": 2,
+      "Lib/distutils/sysconfig.py": 5,
+      "Lib/distutils/tests/test_filelist.py": 1,
+      "Lib/distutils/versionpredicate.py": 4,
+      "Lib/email/feedparser.py": 6,
+      "Lib/email/generator.py": 2,
+      "Lib/email/header.py": 4,
+      "Lib/email/message.py": 1,
+      "Lib/email/quoprimime.py": 3,
+      "Lib/email/utils.py": 6,
+      "Lib/encodings/idna.py": 1,
+      "Lib/fnmatch.py": 2,
+      "Lib/fractions.py": 1,
+      "Lib/glob.py": 1,
+      "Lib/idlelib/CodeContext.py": 1,
+      "Lib/idlelib/FormatParagraph.py": 4,
+      "Lib/idlelib/OutputWindow.py": 1,
+      "Lib/idlelib/PyParse.py": 7,
+      "Lib/idlelib/ZoomHeight.py": 1,
+      "Lib/inspect.py": 2,
+      "Lib/json/decoder.py": 2,
+      "Lib/json/scanner.py": 1,
+      "Lib/keyword.py": 1,
+      "Lib/logging/handlers.py": 1,
+      "Lib/markupbase.py": 5,
+      "Lib/posixpath.py": 1,
+      "Lib/test/crashers/infinite_loop_re.py": 1,
+      "Lib/test/test_commands.py": 1,
+      "Lib/test/test_logging.py": 1,
+      "Lib/test/test_mmap.py": 1,
+      "Lib/test/test_sgmllib.py": 1,
+      "Lib/test/test_strtod.py": 1,
+      "Lib/test/test_wsgiref.py": 1,
+      "Lib/wsgiref/headers.py": 1,
+      "Lib/wsgiref/validate.py": 2,
+      "Lib/xml/etree/ElementPath.py": 3
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 135 regex sites (auto-NO-GO bar 200); dialects [py_re:135]; boundary=unknown.",
+  "schema_version": "1"
+}

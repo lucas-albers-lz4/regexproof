@@ -1,5 +1,5 @@
 {
-  "candidate_url": "https://github.com/Zveromag/validator",
+  "candidate_url": "https://github.com/storrisi/react-form-tools",
   "conditions": [
     {
       "evidence": "No extractable novel surface (dialects already admitted).",
@@ -7,7 +7,7 @@
       "met": false
     },
     {
-      "evidence": "Probe security_boundary unknown or false positive. aralejs; 6 ecma sites.",
+      "evidence": "Probe security_boundary unknown or false positive. storrisi; 21 ecma sites.",
       "id": "security-boundary",
       "met": false
     },
@@ -17,34 +17,36 @@
       "met": false
     }
   ],
-  "corpus": "validator",
-  "corpus_pin": "9ce8a5ebea0608e919dcc066836b44d9c228baf7",
+  "corpus": "react-form-tools",
+  "corpus_pin": "e07400feba5402dd05cb25cb40013ecc30948151",
   "decision": "no-go",
   "decision_basis": "admission_conditions",
   "decision_date": "2026-08-12",
   "escape_hatch_applied": false,
   "probe": {
     "construct_counts": {
-      "lookaround": 3
+      "lookaround": 2
     },
     "dialect": {
-      "ecma": 6
+      "ecma": 21
     },
     "flags": {
-      "i": 3
+      "g": 3,
+      "i": 5
     },
-    "pin": "9ce8a5ebea0608e919dcc066836b44d9c228baf7",
+    "pin": "e07400feba5402dd05cb25cb40013ecc30948151",
     "predicted_buckets": {
-      "inline-flag": 3,
-      "lookaround": 3
+      "inline-flag": 5,
+      "lookaround": 2,
+      "stateful": 3
     },
-    "regex_sites": 6,
+    "regex_sites": 21,
     "regex_sites_per_file": {
-      "src/rules.js": 4,
-      "src/validator.js": 2
+      "src/validator.js": 19,
+      "webpack.config.js": 2
     },
     "security_boundary": "unknown"
   },
-  "rationale": "Below admission scale: 6 regex sites (auto-NO-GO bar 200); dialects [ecma:6]; boundary=unknown.",
+  "rationale": "Below admission scale: 21 regex sites (auto-NO-GO bar 200); dialects [ecma:21]; boundary=unknown.",
   "schema_version": "1"
 }

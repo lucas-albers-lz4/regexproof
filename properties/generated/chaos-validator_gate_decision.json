@@ -1,5 +1,5 @@
 {
-  "candidate_url": "https://github.com/Zveromag/validator",
+  "candidate_url": "https://github.com/crysalead-js/chaos-validator",
   "conditions": [
     {
       "evidence": "No extractable novel surface (dialects already admitted).",
@@ -7,7 +7,7 @@
       "met": false
     },
     {
-      "evidence": "Probe security_boundary unknown or false positive. aralejs; 6 ecma sites.",
+      "evidence": "Probe security_boundary unknown or false positive. crysalead-js; 59 ecma sites.",
       "id": "security-boundary",
       "met": false
     },
@@ -17,34 +17,37 @@
       "met": false
     }
   ],
-  "corpus": "validator",
-  "corpus_pin": "9ce8a5ebea0608e919dcc066836b44d9c228baf7",
+  "corpus": "chaos-validator",
+  "corpus_pin": "aaf6f15e89f6fe4ab4344160c5f91e5277c3ab49",
   "decision": "no-go",
   "decision_basis": "admission_conditions",
   "decision_date": "2026-08-12",
   "escape_hatch_applied": false,
   "probe": {
     "construct_counts": {
-      "lookaround": 3
+      "backref": 2,
+      "lookaround": 4
     },
     "dialect": {
-      "ecma": 6
+      "ecma": 59
     },
     "flags": {
-      "i": 3
+      "g": 1
     },
-    "pin": "9ce8a5ebea0608e919dcc066836b44d9c228baf7",
+    "pin": "aaf6f15e89f6fe4ab4344160c5f91e5277c3ab49",
     "predicted_buckets": {
-      "inline-flag": 3,
-      "lookaround": 3
+      "backref": 2,
+      "lookaround": 4,
+      "stateful": 1
     },
-    "regex_sites": 6,
+    "regex_sites": 59,
     "regex_sites_per_file": {
-      "src/rules.js": 4,
-      "src/validator.js": 2
+      "spec/suite/checker.spec.js": 16,
+      "spec/suite/validator.spec.js": 14,
+      "src/checker.js": 29
     },
     "security_boundary": "unknown"
   },
-  "rationale": "Below admission scale: 6 regex sites (auto-NO-GO bar 200); dialects [ecma:6]; boundary=unknown.",
+  "rationale": "Below admission scale: 59 regex sites (auto-NO-GO bar 200); dialects [ecma:59]; boundary=unknown.",
   "schema_version": "1"
 }

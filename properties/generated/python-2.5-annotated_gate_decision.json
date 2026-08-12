@@ -1,0 +1,106 @@
+{
+  "candidate_url": "https://github.com/kmiku7/python-2.5-annotated",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. kmiku7; 143 py sites, duplicate class.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "python-2.5-annotated",
+  "corpus_pin": "96fe79057f93273682444b2629ec4891f7318ca4",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "(?i)": 1,
+      "(?x)": 2,
+      "backref": 2,
+      "lookaround": 5
+    },
+    "dialect": {
+      "posix-shell": 35,
+      "py_re": 108
+    },
+    "flags": {
+      "i": 6,
+      "m": 1,
+      "s": 1,
+      "x": 12
+    },
+    "pin": "96fe79057f93273682444b2629ec4891f7318ca4",
+    "predicted_buckets": {
+      "backref": 2,
+      "inline-flag": 22,
+      "lookaround": 5,
+      "m-flag": 1
+    },
+    "regex_sites": 143,
+    "regex_sites_per_file": {
+      "Doc/tools/indfix.py": 1,
+      "Doc/tools/makesec.sh": 1,
+      "Doc/tools/push-docs.sh": 2,
+      "Doc/tools/toc2bkm.py": 4,
+      "Doc/tools/update-docs.sh": 2,
+      "Doc/tools/whichlibs": 1,
+      "Lib/Cookie.py": 3,
+      "Lib/HTMLParser.py": 13,
+      "Lib/_LWPCookieJar.py": 1,
+      "Lib/_MozillaCookieJar.py": 1,
+      "Lib/cookielib.py": 23,
+      "Lib/ctypes/macholib/dylib.py": 1,
+      "Lib/ctypes/macholib/framework.py": 1,
+      "Lib/ctypes/test/test_array_in_pointer.py": 1,
+      "Lib/distutils/command/install_egg_info.py": 2,
+      "Lib/distutils/versionpredicate.py": 4,
+      "Lib/email/feedparser.py": 6,
+      "Lib/email/utils.py": 6,
+      "Lib/encodings/idna.py": 1,
+      "Lib/fnmatch.py": 2,
+      "Lib/glob.py": 1,
+      "Lib/idlelib/CodeContext.py": 1,
+      "Lib/idlelib/FormatParagraph.py": 4,
+      "Lib/idlelib/OutputWindow.py": 1,
+      "Lib/idlelib/PyParse.py": 7,
+      "Lib/idlelib/ZoomHeight.py": 1,
+      "Lib/keyword.py": 1,
+      "Lib/markupbase.py": 5,
+      "Lib/posixpath.py": 1,
+      "Lib/test/test_commands.py": 1,
+      "Lib/test/test_mailbox.py": 2,
+      "Lib/test/test_sgmllib.py": 1,
+      "Lib/wsgiref/validate.py": 2,
+      "Lib/xml/etree/ElementPath.py": 1,
+      "Lib/xml/etree/ElementTree.py": 2,
+      "Misc/build.sh": 6,
+      "Modules/_ctypes/libffi/install-sh": 3,
+      "Modules/ar_beos": 1,
+      "Modules/ld_so_aix": 6,
+      "Modules/makexp_aix": 1,
+      "Modules/zlib/configure": 7,
+      "Tools/faqwiz/move-faqwiz.sh": 2,
+      "Tools/framer/framer/structparse.py": 1,
+      "Tools/scripts/eptags.py": 1,
+      "Tools/scripts/gprof2html.py": 2,
+      "Tools/scripts/parseentities.py": 1,
+      "Tools/scripts/ptags.py": 1,
+      "Tools/scripts/svneol.py": 1,
+      "install-sh": 3
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 143 regex sites (auto-NO-GO bar 200); dialects [posix-shell:35, py_re:108]; boundary=unknown.",
+  "schema_version": "1"
+}

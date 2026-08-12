@@ -1,0 +1,60 @@
+{
+  "candidate_url": "https://github.com/acolwell/msetools-js",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. acolwell; 202 ecma sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "msetools-js",
+  "corpus_pin": "92df80bf5929d942fc7c6e6eefa7dcf8bbc362a9",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "backref": 1,
+      "lookaround": 3
+    },
+    "dialect": {
+      "ecma": 202
+    },
+    "flags": {
+      "g": 27,
+      "i": 26,
+      "m": 1
+    },
+    "pin": "92df80bf5929d942fc7c6e6eefa7dcf8bbc362a9",
+    "predicted_buckets": {
+      "backref": 1,
+      "inline-flag": 26,
+      "lookaround": 3,
+      "m-flag": 1,
+      "stateful": 27
+    },
+    "regex_sites": 202,
+    "regex_sites_per_file": {
+      "examples/ISOClient.js": 8,
+      "examples/hex-viewer.js": 1,
+      "examples/lib/jquery-1.9.1.js": 100,
+      "examples/lib/jquery-ui.js": 90,
+      "examples/simple-playback.js": 2,
+      "src/file.js": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 202 regex sites (auto-NO-GO bar 200); dialects [ecma:202]; boundary=unknown.",
+  "schema_version": "1"
+}

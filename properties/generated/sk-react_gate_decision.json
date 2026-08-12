@@ -1,5 +1,5 @@
 {
-  "candidate_url": "https://github.com/Zveromag/validator",
+  "candidate_url": "https://github.com/ShaneKingFriendly/sk-react",
   "conditions": [
     {
       "evidence": "No extractable novel surface (dialects already admitted).",
@@ -7,7 +7,7 @@
       "met": false
     },
     {
-      "evidence": "Probe security_boundary unknown or false positive. aralejs; 6 ecma sites.",
+      "evidence": "Probe security_boundary unknown or false positive. ShaneKingFriendly; 2 ecma sites.",
       "id": "security-boundary",
       "met": false
     },
@@ -17,34 +17,31 @@
       "met": false
     }
   ],
-  "corpus": "validator",
-  "corpus_pin": "9ce8a5ebea0608e919dcc066836b44d9c228baf7",
+  "corpus": "sk-react",
+  "corpus_pin": "dc9c886c49d8c344a1e5925c1cdbba2fff95ffc1",
   "decision": "no-go",
   "decision_basis": "admission_conditions",
   "decision_date": "2026-08-12",
   "escape_hatch_applied": false,
   "probe": {
-    "construct_counts": {
-      "lookaround": 3
-    },
+    "construct_counts": {},
     "dialect": {
-      "ecma": 6
+      "ecma": 2
     },
     "flags": {
-      "i": 3
+      "g": 1
     },
-    "pin": "9ce8a5ebea0608e919dcc066836b44d9c228baf7",
+    "pin": "dc9c886c49d8c344a1e5925c1cdbba2fff95ffc1",
     "predicted_buckets": {
-      "inline-flag": 3,
-      "lookaround": 3
+      "stateful": 1
     },
-    "regex_sites": 6,
+    "regex_sites": 2,
     "regex_sites_per_file": {
-      "src/rules.js": 4,
-      "src/validator.js": 2
+      "src/3/Codemirror.js": 1,
+      "src/Validator.js": 1
     },
     "security_boundary": "unknown"
   },
-  "rationale": "Below admission scale: 6 regex sites (auto-NO-GO bar 200); dialects [ecma:6]; boundary=unknown.",
+  "rationale": "Below admission scale: 2 regex sites (auto-NO-GO bar 200); dialects [ecma:2]; boundary=unknown.",
   "schema_version": "1"
 }

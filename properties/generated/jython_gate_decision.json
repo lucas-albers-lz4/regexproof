@@ -1,5 +1,5 @@
 {
-  "candidate_url": "https://github.com/jython/jython",
+  "candidate_url": "https://github.com/int3/jython",
   "conditions": [
     {
       "evidence": "No extractable novel surface (dialects already admitted).",
@@ -7,7 +7,7 @@
       "met": false
     },
     {
-      "evidence": "Probe security_boundary unknown or false positive. Jython; 196 py_re sites + 1013 extractor_errors (probe quality flag), below scale.",
+      "evidence": "Probe security_boundary unknown or false positive. nriley jython; 165 py sites, duplicate class of admitted jython wave-15.",
       "id": "security-boundary",
       "met": false
     },
@@ -18,7 +18,7 @@
     }
   ],
   "corpus": "jython",
-  "corpus_pin": "18c4d311143d5dcc9cbf0f9acf306d0273e4bc6a",
+  "corpus_pin": "d6db3fcf6198bb9a8f26feff0084beefb25141b2",
   "decision": "no-go",
   "decision_basis": "admission_conditions",
   "decision_date": "2026-08-12",
@@ -28,47 +28,42 @@
       "(?i)": 1,
       "(?x)": 2,
       "backref": 3,
-      "lookaround": 20
+      "lookaround": 19
     },
     "dialect": {
-      "java": 13,
-      "posix-shell": 13,
-      "py_re": 170
+      "java": 10,
+      "posix-shell": 9,
+      "py_re": 146
     },
     "flags": {
-      "i": 10,
+      "i": 9,
       "m": 5,
       "s": 2,
-      "x": 16
+      "x": 15
     },
-    "pin": "18c4d311143d5dcc9cbf0f9acf306d0273e4bc6a",
+    "pin": "d6db3fcf6198bb9a8f26feff0084beefb25141b2",
     "predicted_buckets": {
       "backref": 3,
-      "inline-flag": 31,
-      "lookaround": 20,
+      "inline-flag": 29,
+      "lookaround": 19,
       "m-flag": 5
     },
-    "regex_sites": 196,
+    "regex_sites": 165,
     "regex_sites_per_file": {
-      "Lib/_sslcerts.py": 1,
-      "Lib/distutils/sysconfig.py": 5,
       "Lib/inspect.py": 2,
-      "Lib/lib2to3/tests/test_main.py": 1,
+      "Lib/posixpath.py": 1,
       "Lib/test/junit_xml.py": 1,
-      "Lib/test/test_complex_jy.py": 1,
       "Lib/test/test_javashell.py": 1,
       "Lib/test/test_logging.py": 1,
-      "Lib/test/test_re_jy.py": 10,
-      "Lib/test/test_strtod.py": 1,
+      "Lib/test/test_re_jy.py": 4,
       "Lib/xml/Uri.py": 3,
+      "Lib/xml/etree/ElementTree.py": 2,
       "bugtests/test327.py": 3,
       "bugtests/test362.py": 2,
-      "gradlew": 2,
       "lib-python/2.7/Cookie.py": 3,
       "lib-python/2.7/HTMLParser.py": 15,
       "lib-python/2.7/_LWPCookieJar.py": 1,
       "lib-python/2.7/_MozillaCookieJar.py": 1,
-      "lib-python/2.7/_osx_support.py": 8,
       "lib-python/2.7/cookielib.py": 23,
       "lib-python/2.7/ctypes/macholib/dylib.py": 1,
       "lib-python/2.7/ctypes/macholib/framework.py": 1,
@@ -76,7 +71,6 @@
       "lib-python/2.7/ctypes/test/test_pep3118.py": 1,
       "lib-python/2.7/distutils/command/config.py": 1,
       "lib-python/2.7/distutils/command/install_egg_info.py": 2,
-      "lib-python/2.7/distutils/sysconfig.py": 5,
       "lib-python/2.7/distutils/tests/test_filelist.py": 1,
       "lib-python/2.7/distutils/versionpredicate.py": 4,
       "lib-python/2.7/email/feedparser.py": 6,
@@ -96,6 +90,7 @@
       "lib-python/2.7/idlelib/ZoomHeight.py": 1,
       "lib-python/2.7/inspect.py": 2,
       "lib-python/2.7/json/decoder.py": 2,
+      "lib-python/2.7/json/encoder.py": 3,
       "lib-python/2.7/json/scanner.py": 1,
       "lib-python/2.7/keyword.py": 1,
       "lib-python/2.7/lib2to3/tests/test_main.py": 1,
@@ -112,21 +107,17 @@
       "lib-python/2.7/wsgiref/headers.py": 1,
       "lib-python/2.7/wsgiref/validate.py": 2,
       "lib-python/2.7/xml/etree/ElementPath.py": 3,
-      "src/org/python/compiler/Module.java": 1,
       "src/org/python/core/ParserFacade.java": 1,
-      "src/org/python/core/PrePy.java": 1,
-      "src/org/python/core/PyString.java": 2,
-      "src/org/python/core/PySystemState.java": 2,
       "src/org/python/core/io/TextIOWrapper.java": 1,
       "src/org/python/indexer/demos/Linker.java": 1,
       "src/org/python/indexer/demos/Styler.java": 2,
       "src/org/python/indexer/types/NType.java": 1,
-      "src/org/python/servlet/PyServlet.java": 1,
-      "src/shell/jython.py": 2,
-      "tests/shell/test-jython.sh": 11
+      "src/org/python/modules/binascii.java": 3,
+      "src/org/python/util/PyServlet.java": 1,
+      "tests/shell/test-jython.sh": 9
     },
     "security_boundary": "unknown"
   },
-  "rationale": "Below admission scale: 196 regex sites (auto-NO-GO bar 200); dialects [java:13, posix-shell:13, py_re:170]; boundary=unknown.",
+  "rationale": "Below admission scale: 165 regex sites (auto-NO-GO bar 200); dialects [java:10, posix-shell:9, py_re:146]; boundary=unknown.",
   "schema_version": "1"
 }

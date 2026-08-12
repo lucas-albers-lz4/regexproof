@@ -1,0 +1,47 @@
+{
+  "candidate_url": "https://github.com/husjay/DeepPacketInspection",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. husjay DPI tool; 3 shell sites, boundary unknown - below any proof floor.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "DeepPacketInspection",
+  "corpus_pin": "5247f44dac2bc246a264ebadce8352c5d80867c1",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "posix-shell": 3
+    },
+    "flags": {
+      "i": 3
+    },
+    "pin": "5247f44dac2bc246a264ebadce8352c5d80867c1",
+    "predicted_buckets": {
+      "inline-flag": 3
+    },
+    "regex_sites": 3,
+    "regex_sites_per_file": {
+      "TestData/l7-protocols-2009-05-28/groups.sh": 1,
+      "TestData/l7-protocols-2009-05-28/testing/test_match.sh": 2
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 3 regex sites (auto-NO-GO bar 200); dialects [posix-shell:3]; boundary=unknown.",
+  "schema_version": "1"
+}

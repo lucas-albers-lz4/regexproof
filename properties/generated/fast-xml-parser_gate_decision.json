@@ -1,0 +1,63 @@
+{
+  "candidate_url": "https://github.com/hamravesh/fast-xml-parser",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. hamravesh; 183 ecma sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "fast-xml-parser",
+  "corpus_pin": "07595848051a2f302f6d3f648029d4416a1fe07b",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "backref": 5,
+      "lookaround": 15
+    },
+    "dialect": {
+      "ecma": 183
+    },
+    "flags": {
+      "g": 34,
+      "i": 35,
+      "m": 1
+    },
+    "pin": "07595848051a2f302f6d3f648029d4416a1fe07b",
+    "predicted_buckets": {
+      "backref": 5,
+      "inline-flag": 35,
+      "lookaround": 15,
+      "m-flag": 1,
+      "stateful": 34
+    },
+    "regex_sites": 183,
+    "regex_sites_per_file": {
+      "cli.js": 1,
+      "lib/parser.js": 8,
+      "src/validator.js": 4,
+      "src/x2j.js": 4,
+      "static/js/bootstrap.min.js": 12,
+      "static/js/jquery-3.2.1.min.js": 81,
+      "static/js/jquery-confirm.min.js": 2,
+      "static/js/prettify.min.js": 70,
+      "tasks/postbundle.js": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 183 regex sites (auto-NO-GO bar 200); dialects [ecma:183]; boundary=unknown.",
+  "schema_version": "1"
+}

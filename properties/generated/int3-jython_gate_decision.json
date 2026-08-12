@@ -1,0 +1,42 @@
+{
+  "schema_version": "1",
+  "candidate_url": "https://github.com/int3/jython",
+  "conditions": [
+    {
+      "id": "new-surface",
+      "met": false,
+      "evidence": "Probe unavailable (clone failure/timeout) or jython fork - duplicate class."
+    },
+    {
+      "id": "security-boundary",
+      "met": false,
+      "evidence": "Not determinable - probe unavailable."
+    },
+    {
+      "id": "large-under-saturated",
+      "met": false,
+      "evidence": "Unprobeable or below scale."
+    }
+  ],
+  "corpus": "int3-jython",
+  "corpus_pin": "",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "regex_sites": 0,
+    "dialect": {},
+    "flags": {},
+    "construct_counts": {},
+    "predicted_buckets": {},
+    "security_boundary": "unknown",
+    "pin": "",
+    "extractor_errors": 0,
+    "regex_sites_per_file": {}
+  },
+  "rationale": "jython fork - duplicate class. No admission condition met.",
+  "related": {
+    "probe_failure": "clone failure/timeout"
+  }
+}
