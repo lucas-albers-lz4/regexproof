@@ -2,14 +2,14 @@
   "candidate_url": "https://github.com/corazawaf/coraza-coreruleset",
   "conditions": [
     {
-      "evidence": "CRS/ModSec already covered by admitted coreruleset; not a new dialect class.",
+      "evidence": "CRS/ModSec already covered by admitted coreruleset; not a new dialect class. Smith: 343/343 sites are unmodified OWASP CRS v4.25.0 (byte-identical rule lines vs upstream tag).",
       "id": "new-surface",
       "met": false
     },
     {
-      "evidence": "Probe security_boundary=deterministic-true (OWASP CRS rules).",
+      "evidence": "Smith: the tree IS the admitted OWASP CRS — 260/294 patterns (88.4%) byte-identical to the coreruleset inventory; Coraza-specific surface is 3 WAF-config regexes, not a rule corpus. No distinct security-boundary extract surface.",
       "id": "security-boundary",
-      "met": true
+      "met": false
     },
     {
       "evidence": "343 sites < 1000 scale bar.",
@@ -19,10 +19,11 @@
   ],
   "corpus": "coraza-coreruleset",
   "corpus_pin": "a664dd18b4b0468215126c6f524e91b2a0deec26",
-  "decision": "triage-trial",
-  "decision_basis": "escape_hatch",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
   "decision_date": "2026-08-12",
-  "escape_hatch_applied": true,
+  "escape_hatch_applied": false,
+  "fraction_decision": "go",
   "probe": {
     "construct_counts": {
       "(?i)": 137,
@@ -63,7 +64,7 @@
     },
     "security_boundary": "deterministic-true"
   },
-  "rationale": "Triage-trial: Coraza CRS packaging (343 pcre, boundary=deterministic-true). Nearest admitted corpus is coreruleset; use escape hatch to evaluate delta / findings pipeline without treating as a net-new dialect class.",
+  "rationale": "Superseded triage-trial -> no-go by Smith measurement: 343/343 regex sites are unmodified OWASP CRS v4.25.0 (byte-identical rule lines; only comments stripped), 88.4% pattern overlap with admitted coreruleset, residual = version drift of the same rule families. Coraza packaging adds no distinct extract surface (3 WAF-config regexes). Duplicate of an admitted corpus; fraction (0.5627) would GO but the corpus adds near-zero novel value. See coraza-coreruleset_smith_decision.json.",
   "related": {
     "nearest_admitted": "coreruleset"
   },
