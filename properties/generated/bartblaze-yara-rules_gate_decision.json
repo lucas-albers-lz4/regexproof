@@ -17,7 +17,7 @@
       "met": false
     }
   ],
-  "corpus": "Yara-rules",
+  "corpus": "bartblaze-yara-rules",
   "corpus_pin": "5cc871d82361de8a80d387ec8bbd01fe4258b4a9",
   "decision": "triage-trial",
   "decision_basis": "escape_hatch",

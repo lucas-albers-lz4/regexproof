@@ -30,6 +30,7 @@ SECURITY_TOOL_CORPORA = frozenset(
         "magic-js",
         "lonkero",
         "gigachad-grc",
+        "bartblaze-yara-rules",
     }
 )
 
