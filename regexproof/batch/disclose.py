@@ -29,6 +29,7 @@ SECURITY_TOOL_CORPORA = frozenset(
         "tracecat",
         "magic-js",
         "lonkero",
+        "gigachad-grc",
     }
 )
 
