@@ -713,11 +713,12 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
             "max_disk_mb": 500,
         },
     },
-    "Yara-rules": {
+    "bartblaze-yara-rules": {
         "corpus_type": "rule_corpus",
-        # Materialize: ln -sfn /tmp/Yara-rules/rules batch/corpora/Yara-rules/rules
-        # bartblaze YARA pack (delta vs admitted yara_rules).
-        "path": ROOT / "batch" / "corpora" / "Yara-rules" / "rules",
+        # Materialize: ln -sfn /tmp/Yara-rules/rules batch/corpora/bartblaze-yara-rules/rules
+        # bartblaze YARA pack (delta vs admitted yara_rules). Owner-prefixed slug
+        # stays case-distinct from VaccinatorSec yara-rules / admitted yara_rules.
+        "path": ROOT / "batch" / "corpora" / "bartblaze-yara-rules" / "rules",
         "glob": "**/*.yar,**/*.yara",
         "dialect": "yara",
         "extractor": "yara",
@@ -816,7 +817,7 @@ WAVE_CORPORA = frozenset({
     "lonkero",
     "serviceradar",
     "gigachad-grc",
-    "Yara-rules",
+    "bartblaze-yara-rules",
     "perl_tre", "go_regexp_tests", "v8_mjsunit",
 })
 
