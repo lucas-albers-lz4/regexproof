@@ -1,0 +1,40 @@
+{
+  "budget": {
+    "max_disk_mb": 500,
+    "max_mem_mb": 2048,
+    "max_patterns": 5000,
+    "max_wall_s": 900,
+    "redos_wall_s": 180
+  },
+  "budget_breaches": null,
+  "commit": "978def55c8e68cab3a50a7ee4725039da753f0a1",
+  "compiler_fingerprint": "71d2ce23b4cd",
+  "complete_run": true,
+  "corpus_pin": "978def55c8e68cab3a50a7ee4725039da753f0a1",
+  "decision": "go",
+  "decision_rule": "go iff encodable/sample_size >= 0.3",
+  "dialect": "ecma",
+  "encodable": 29,
+  "engine_versions": {
+    "python": "3.13.5",
+    "z3": "5.0.0"
+  },
+  "extractor_schema_version": "2",
+  "fraction": 0.4394,
+  "go_no_go_threshold": 0.3,
+  "id_formula": "v2-domain-optional-ascii-default",
+  "inventory_path": "properties/generated/xibo-cms-inventory.ndjson",
+  "path": "batch/corpora/xibo-cms/rules",
+  "pilot": "xibo-cms",
+  "reasons": {
+    "composite-pattern": 4,
+    "ok": 29,
+    "per-alternative-anchor": 1,
+    "stateful": 32
+  },
+  "sample_size": 66,
+  "schema_version": "1",
+  "scope": "full_corpus",
+  "unclassified_parse_errors": 0,
+  "wall_s": 2.477
+}

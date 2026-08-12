@@ -7,7 +7,7 @@ from pathlib import Path
 import jsonschema
 import pytest
 
-from regexproof.extractors.js_babel import extract_js
+from regexproof.extractors.js_babel import extract_js, extract_js_precise
 from regexproof.extractors.python_ast import extract_python
 from regexproof.extractors.rule_file import extract_rule_file
 from regexproof.schemas import extractor_schema
@@ -96,3 +96,134 @@ def test_toml_concat_not_literal_pattern():
     assert recs
     assert recs[0].get("unencodable_reason") == "composite-pattern"
     assert recs[0]["pattern"] == ""
+
+
+def test_new_regexp_two_arg_string_flags():
+    """Two-arg `new RegExp('pat', 'g')` must not swallow `, 'g'` into the pattern,
+    must decode JS string escapes to the runtime value, and must classify `g/y`
+    flags as stateful (the luna-gate catch on PR #258 / xibo-cms)."""
+    src = (
+        "const a = new RegExp('\\\\[.*?\\\\]', 'g');\n"
+        'const b = new RegExp("[\\\\A]", "u");\n'
+        'const c = new RegExp("^[a-z]+$");\n'
+        "const d = new RegExp(/foo/i);\n"
+        "const e = new RegExp('\\\\d+', 'i');\n"
+    )
+    recs = extract_js_precise(src, repo="t", file="x.js")
+    by_line: dict[int, list] = {}
+    for r in recs:
+        by_line.setdefault(r["line"], []).append(r)
+    assert len(recs) == 6, [(r["line"], r["column"]) for r in recs]
+    a = by_line[1][0]
+    assert a["pattern"] == r"\[.*?\]", a["pattern"]
+    assert a["flags"] == "g"
+    assert a["unencodable_reason"] == "stateful"
+    b = by_line[2][0]
+    assert b["pattern"] == r"[\A]", b["pattern"]
+    assert b["flags"] == "u"
+    assert b["unencodable_reason"] == "u-flag"
+    c = by_line[3][0]
+    assert c["pattern"] == "^[a-z]+$" and c["flags"] == "" and c.get("unencodable_reason") is None
+    # new RegExp(/foo/i) emits BOTH the literal record and the composite wrapper.
+    d_wrap, d_lit = by_line[4]
+    assert d_wrap["pattern"] == "" and d_wrap["unencodable_reason"] == "composite-pattern"
+    assert d_lit["pattern"] == "foo" and d_lit["flags"] == "i"
+    e = by_line[5][0]
+    assert e["pattern"] == r"\d+" and e["flags"] == "i", (e["pattern"], e["flags"])
+
+
+def test_new_regexp_concat_is_composite():
+    """Non-literal first args (and literal + concat) stay composite-pattern."""
+    src = (
+        'const r = new RegExp(prefix + "x20");\n'
+        'const s = new RegExp("a" + x, "g");\n'
+    )
+    recs = extract_js(src, repo="t", file="x.js")
+    assert len(recs) == 2, [r["line"] for r in recs]
+    for r in recs:
+        assert r["pattern"] == ""
+        assert r["unencodable_reason"] == "composite-pattern"
+
+
+def test_new_regexp_dynamic_args_composite():
+    """Comment-separated concat, variable flags, and template interpolation are
+    all dynamic — must be composite, never a fixed literal (luna r2 F1/F4)."""
+    src = (
+        'const a = new RegExp("a" /* c */ + x, "i");\n'
+        'const b = new RegExp("a", flags);\n'
+        "const c = new RegExp(`foo${x}`, 'g');\n"
+    )
+    recs = extract_js_precise(src, repo="t", file="x.js")
+    assert len(recs) == 3, [r["line"] for r in recs]
+    for r in recs:
+        assert r["pattern"] == ""
+        assert r["unencodable_reason"] == "composite-pattern"
+
+
+def test_new_regexp_backtick_flags():
+    """Plain template-literal first arg with a literal flags arg is static."""
+    recs = extract_js_precise("const r = new RegExp(`foo`, \"i\");", repo="t", file="x.js")
+    assert len(recs) == 1
+    assert recs[0]["pattern"] == "foo"
+    assert recs[0]["flags"] == "i"
+    assert recs[0].get("unencodable_reason") is None
+
+
+def test_unescape_js_string_escapes():
+    """JS escape decoding: octal, \\u{...} code points, \\xHH, NUL, unknown-drop."""
+    from regexproof.extractors.js_babel import _unescape_js_string
+
+    assert _unescape_js_string(r"\141") == "a"          # octal
+    assert _unescape_js_string(r"\u{1F600}") == "😀"     # code point
+    assert _unescape_js_string(r"\0") == "\0"           # lone NUL
+    assert _unescape_js_string(r"\08") == "\0" + "8"    # NUL + literal 8
+    assert _unescape_js_string(r"\x41") == "A"          # hex
+    assert _unescape_js_string(r"\u0041") == "A"        # uHHHH
+    assert _unescape_js_string(r"\d+") == "d+"          # unknown escape drops backslash
+    assert _unescape_js_string(r"\\[") == r"\["         # escaped backslash stays
+    # Annex-B octal digit caps (luna r3 #2): leading 4-7 takes only 2 digits.
+    assert _unescape_js_string(r"\400") == " 0"         # \40 + '0' (Node-verified)
+    assert _unescape_js_string(r"\477") == "'7"         # \47 + '7' (Node-verified)
+    assert _unescape_js_string(r"\377") == "\xff"       # 3 digits allowed for 0-3 lead
+
+
+def test_new_regexp_third_arg_and_ignored_args():
+    """Flags come only from the SECOND argument; third+ args are ignored by JS
+    and must not drive flags or the concat check (luna r3 #1/#5)."""
+    recs = extract_js_precise(
+        'const a = new RegExp("a", flags, "i");\nconst b = new RegExp("a", "i", 1 + 2);\n',
+        repo="t",
+        file="x.js",
+    )
+    a, b = recs
+    assert a["pattern"] == "" and a["unencodable_reason"] == "composite-pattern"
+    assert b["pattern"] == "a" and b["flags"] == "i"
+    assert b.get("unencodable_reason") is None
+
+
+def test_new_regexp_dynamic_flags_expression_composite():
+    """A second argument that is a flags EXPRESSION ("i" + flags) is dynamic —
+    the literal prefix must not be accepted as static flags (luna r4 NF1)."""
+    src = (
+        'const a = new RegExp("a", "i" + flags);\n'
+        'const b = new RegExp("a", "i");\n'
+        'const c = new RegExp("a" , "i");\n'
+        'const d = new RegExp("a", "i" /* c */);\n'
+    )
+    recs = extract_js_precise(src, repo="t", file="x.js")
+    assert len(recs) == 4, [(r["line"], r["pattern"]) for r in recs]
+    a, b, c, d = recs
+    assert a["pattern"] == "" and a["unencodable_reason"] == "composite-pattern"
+    for r in (b, c, d):
+        assert r["pattern"] == "a" and r["flags"] == "i"
+        assert r.get("unencodable_reason") is None
+
+
+def test_new_regexp_two_arg_legacy_extract_js():
+    """The legacy extract_js path shares _NEW_REGEXP — same two-arg contract."""
+    src = "const a = new RegExp('\\\\d+', 'g');\n"
+    recs = extract_js(src, repo="t", file="x.js")
+    assert len(recs) == 1
+    assert recs[0]["pattern"] == r"\d+"
+    assert recs[0]["flags"] == "g"
+    assert recs[0]["unencodable_reason"] == "stateful"

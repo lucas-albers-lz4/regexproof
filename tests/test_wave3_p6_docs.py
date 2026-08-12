@@ -21,7 +21,7 @@ WAVE3_FRACTIONS = {
     "email_addresses": 0.5000,
     "perl_tre": 0.3541,
     "go_regexp_tests": 0.7524,
-    "v8_mjsunit": 0.5383,
+    "v8_mjsunit": 0.5346,
 }
 
 

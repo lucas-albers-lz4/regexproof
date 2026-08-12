@@ -20,7 +20,7 @@ Rollup after Corpus Wave 3 (#117).
 | email_addresses | go | 0.5 | 2 | 4 | full_corpus | 0 |
 | perl_tre | go | 0.3541 | 1645 | 4646 | full_corpus | 0 |
 | go_regexp_tests | go | 0.7524 | 556 | 739 | full_corpus | 0 |
-| v8_mjsunit | go | 0.5383 | 2494 | 4633 | full_corpus | 0 |
+| v8_mjsunit | go | 0.5346 | 2477 | 4633 | full_corpus | 0 |
 | pcre2_testdata | go | 1.0 | 2 | 2 | sample | 0 |
 | re2_testdata | go | 1.0 | 4 | 4 | sample | 0 |
 | cpython_re | go | 0.5556 | 15 | 27 | sample | 0 |

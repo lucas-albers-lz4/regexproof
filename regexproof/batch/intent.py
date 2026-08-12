@@ -84,6 +84,86 @@ def detect_usage_mismatches(records: list[dict[str, Any]]) -> list[dict[str, Any
     return findings
 
 
+def _class_has_whitespace_shorthand(content: str) -> bool:
+    """True when a character-class body contains a REAL whitespace shorthand
+    (``\\s`` — backslash not itself escaped) that covers SPACE. ``\\S`` is the
+    NON-whitespace class and ``\\t`` is tab only: neither excludes space inside
+    a negated class nor admits it inside a positive one. ``\\\\s`` inside a
+    class is a literal backslash + s, which does NOT exclude whitespace."""
+    i = 0
+    n = len(content)
+    while i < n:
+        if content[i] != "\\":
+            i += 1
+            continue
+        if i + 1 >= n:
+            return False
+        if content[i + 1] == "\\":
+            i += 2  # escaped backslash: the next char is a literal
+            continue
+        if content[i + 1] == "s":
+            return True
+        i += 2
+    return False
+
+
+def _pattern_admits_space(pattern: str) -> bool:
+    """True when the pattern can match a literal space (email/hostname context).
+
+    Class-aware: ``\\s`` inside a NEGATED class excludes whitespace (no fire);
+    ``\\\\s`` (escaped backslash + s) inside any class is literal backslash + s
+    and does NOT exclude space (fire); ``\\S`` is the non-whitespace class (a
+    negated class containing it still admits space — fire); a positive class
+    admits space iff it holds a real ``\\s`` or a literal space; a negated class
+    admits space unless it excludes it; ``\\s`` outside any class admits space.
+    A ``]`` immediately after ``[``/``[^`` is a literal class char, not the
+    terminator.
+    """
+    i = 0
+    n = len(pattern)
+    while i < n:
+        ch = pattern[i]
+        if ch == "[" and i + 1 < n:
+            j = i + 1
+            negated = pattern[j] == "^"
+            if negated:
+                j += 1
+            content = ""
+            if j < n and pattern[j] == "]":
+                content = "]"
+                j += 1
+            while j < n:
+                if pattern[j] == "\\" and j + 1 < n:
+                    content += pattern[j : j + 2]
+                    j += 2
+                elif pattern[j] == "]":
+                    break
+                else:
+                    content += pattern[j]
+                    j += 1
+            if j < n:  # closing ] found
+                if negated:
+                    if not _class_has_whitespace_shorthand(content) and " " not in content:
+                        return True
+                else:
+                    if _class_has_whitespace_shorthand(content) or " " in content:
+                        return True
+                i = j + 1
+                continue
+            # unterminated '[' — treat as literal
+            i += 1
+            continue
+        if ch == "\\" and i + 1 < n:
+            if pattern[i + 1] == "s":
+                return True
+            i += 2  # any other escape (incl. \\\\ -> literal backslash)
+            continue
+        if ch == " ":
+            return True
+        i += 1
+    return False
+
+
 def detect_intent_mismatches(records: list[dict[str, Any]]) -> list[dict[str, Any]]:
     """Name/comment claims a validation the language does not enforce."""
     findings: list[dict[str, Any]] = []
@@ -109,14 +189,17 @@ def detect_intent_mismatches(records: list[dict[str, Any]]) -> list[dict[str, An
                     # hostname pattern that includes @ literally is suspicious
                     findings.append(_intent_finding(rec, key, ch))
                     break
-                if ch == " " and (" " in pattern or r"\s" in pattern) and key in (
+                if ch == " " and key in (
                     "email",
                     "isemail",
                     "hostname",
                     "ishostname",
                 ):
-                    # whitespace class in email/hostname claim
-                    if r"\s" in pattern or "[ ]" in pattern:
+                    # whitespace class in email/hostname claim (class-aware;
+                    # no cheap pre-filter — _pattern_admits_space is precise and
+                    # cheap, and a pre-filter would miss e.g. [^\S@] which admits
+                    # whitespace without any literal space or \s signal)
+                    if _pattern_admits_space(pattern):
                         findings.append(_intent_finding(rec, key, ch))
                         break
     # Deduplicate by regex_id+keyword

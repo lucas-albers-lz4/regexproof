@@ -14,10 +14,106 @@ from typing import Any
 from regexproof.extractors.record import make_record
 
 _LITERAL = re.compile(r"/(?P<pat>(?:\\.|[^/\\])+)/(?P<flags>[dgimsuvy]*)")
+# new RegExp(<string-literal>[, <string-literal-flags>]) — first arg captured as a
+# proper JS string literal (escapes respected, stops at its closing quote), so a
+# two-arg call never swallows `, 'g'` into the pattern. Falls back to the legacy
+# `[^)]+` capture for non-literal first args (concatenations -> composite-pattern).
+# Flags parsed from `rest`.
 _NEW_REGEXP = re.compile(
-    r"new\s+RegExp\s*\(\s*(?P<arg>[^)]+)\s*\)",
+    r"new\s+RegExp\s*\(\s*"
+    r"(?P<arg>(?:\"(?:[^\"\\]|\\.)*\")|(?:'(?:[^'\\]|\\.)*')|(?:`(?:[^`\\]|\\.)*`)|[^)]+)"
+    r"(?P<rest>[^)]*)\)",
     re.MULTILINE,
 )
+_NEW_REGEXP_FLAGS = re.compile(r",\s*(['\"])([dgimsuvy]*)\1")
+
+_JS_STRING_ESCAPES = {
+    "n": "\n",
+    "r": "\r",
+    "t": "\t",
+    "b": "\b",
+    "f": "\f",
+    "v": "\v",
+}
+
+
+def _unescape_js_string(raw: str) -> str:
+    """Decode JS string-literal content to its VALUE (what the runtime sees).
+
+    `new RegExp('\\\\[.*?\\\\]')` receives `\\[.*?\\]` at runtime — the extractor
+    must emit the decoded value, not the raw source text, or the compiler
+    mis-reads `\\\\d` as escaped-backslash + d instead of the digit class.
+    Handles \\\\ xHH uHHHH u{...} legacy octal (\\0-\\7, up to 3 digits) and
+    unknown escapes (backslash dropped per JS semantics: ``'\\d' === 'd'``).
+    """
+    out: list[str] = []
+    i = 0
+    n = len(raw)
+    while i < n:
+        ch = raw[i]
+        if ch != "\\":
+            out.append(ch)
+            i += 1
+            continue
+        i += 1
+        if i >= n:
+            out.append("\\")
+            break
+        e = raw[i]
+        if e in "01234567":
+            # Legacy octal escape (Annex B): leading 0-3 allows up to 3 digits,
+            # leading 4-7 allows only 2 (\\400 -> \\40 + '0', per Node). A lone
+            # \\0 (not followed by an octal digit) is NUL; \\08 -> NUL + '8'.
+            j = i
+            digits = e
+            cap = 3 if e in "0123" else 2
+            while j + 1 < n and len(digits) < cap and raw[j + 1] in "01234567":
+                j += 1
+                digits += raw[j]
+            if digits == "0" and (j + 1 >= n or raw[j + 1] not in "01234567"):
+                out.append("\0")
+            else:
+                out.append(chr(int(digits, 8)))
+            i = j + 1
+            continue
+        if e == "x" and i + 2 < n and re.fullmatch(r"[0-9a-fA-F]{2}", raw[i + 1 : i + 3]):
+            out.append(chr(int(raw[i + 1 : i + 3], 16)))
+            i += 3
+            continue
+        if e == "u" and i + 1 < n and raw[i + 1] == "{":
+            # ES6 code-point escape \\u{...}: 1-6 hex digits.
+            close = raw.find("}", i + 2)
+            if close != -1 and 1 <= close - (i + 2) <= 6:
+                try:
+                    out.append(chr(int(raw[i + 2 : close], 16)))
+                    i = close + 1
+                    continue
+                except ValueError:
+                    pass
+        if e == "u" and i + 4 < n and re.fullmatch(r"[0-9a-fA-F]{4}", raw[i + 1 : i + 5]):
+            out.append(chr(int(raw[i + 1 : i + 5], 16)))
+            i += 5
+            continue
+        out.append(_JS_STRING_ESCAPES.get(e, e))
+        i += 1
+    return "".join(out)
+
+
+def _strip_js_comments(text: str) -> str:
+    """Remove /* */ and // comments (used to detect concatenation across them)."""
+    out: list[str] = []
+    i = 0
+    n = len(text)
+    while i < n:
+        if text.startswith("/*", i):
+            j = text.find("*/", i + 2)
+            i = n if j < 0 else j + 2
+            continue
+        if text.startswith("//", i):
+            break
+        out.append(text[i])
+        i += 1
+    return "".join(out)
 
 _FLAGS = frozenset("dgimsuvy")
 _REGEX_PREV = frozenset({"sof", "op", "kw", "lp", "colon", "comma", "return"})
@@ -65,19 +161,49 @@ def extract_js(source: str, *, repo: str, file: str) -> list[dict[str, Any]]:
         arg = m.group("arg").strip()
         line_no = source.count("\n", 0, m.start()) + 1
         col = m.start() - (source.rfind("\n", 0, m.start()) + 1)
+        rest_clean = _strip_js_comments(m.group("rest"))
+        first_comma = rest_clean.find(",")
+        head = rest_clean[:first_comma] if first_comma != -1 else rest_clean
+        tail = rest_clean[first_comma:] if first_comma != -1 else ""
+        # Flags come ONLY from the second argument (anchored at the first comma);
+        # args beyond the second are ignored by JS and must not affect anything.
+        flags_m = _NEW_REGEXP_FLAGS.match(tail)
+        if flags_m:
+            # The second argument must be EXACTLY the string literal: anything
+            # after its closing quote before the next comma (e.g. "i" + flags)
+            # makes the flags a dynamic expression -> composite.
+            after = tail[flags_m.end():]
+            second_arg_tail = after.split(",", 1)[0]
+            if second_arg_tail.strip():
+                flags_m = None
+        # Composite when the pattern is dynamic: template interpolation, a
+        # concatenation in the FIRST argument (comments stripped), or a second
+        # argument that is not a plain string-literal flag set.
+        dynamic = "${" in arg or "+" in head or (first_comma != -1 and not flags_m)
         if (arg.startswith("'") and arg.endswith("'")) or (
             arg.startswith('"') and arg.endswith('"')
-        ) or (arg.startswith("`") and arg.endswith("`") and "${" not in arg):
-            pattern = arg[1:-1]
-            reason = None
+        ) or (arg.startswith("`") and arg.endswith("`")):
+            if dynamic:
+                pattern = ""
+                flags = ""
+                reason = "composite-pattern"
+            else:
+                pattern = _unescape_js_string(arg[1:-1])
+                flags = "".join(c for c in "dgimsuvy" if c in (flags_m.group(2) if flags_m else ""))
+                reason = None
+                if any(f in flags for f in "gy"):
+                    reason = "stateful"
+                elif "u" in flags or "v" in flags:
+                    reason = "u-flag" if "u" in flags else "v-flag"
         else:
             pattern = ""
+            flags = ""
             reason = "composite-pattern"
         out.append(
             make_record(
                 repo=repo,
                 pattern=pattern,
-                flags="",
+                flags=flags,
                 dialect="ecma",
                 call_kind="search",
                 file=file,
@@ -143,19 +269,49 @@ def extract_js_precise(source: str, *, repo: str, file: str) -> list[dict[str, A
         arg = m.group("arg").strip()
         line_no = source.count("\n", 0, m.start()) + 1
         col = m.start() - (source.rfind("\n", 0, m.start()) + 1)
+        rest_clean = _strip_js_comments(m.group("rest"))
+        first_comma = rest_clean.find(",")
+        head = rest_clean[:first_comma] if first_comma != -1 else rest_clean
+        tail = rest_clean[first_comma:] if first_comma != -1 else ""
+        # Flags come ONLY from the second argument (anchored at the first comma);
+        # args beyond the second are ignored by JS and must not affect anything.
+        flags_m = _NEW_REGEXP_FLAGS.match(tail)
+        if flags_m:
+            # The second argument must be EXACTLY the string literal: anything
+            # after its closing quote before the next comma (e.g. "i" + flags)
+            # makes the flags a dynamic expression -> composite.
+            after = tail[flags_m.end():]
+            second_arg_tail = after.split(",", 1)[0]
+            if second_arg_tail.strip():
+                flags_m = None
+        # Composite when the pattern is dynamic: template interpolation, a
+        # concatenation in the FIRST argument (comments stripped), or a second
+        # argument that is not a plain string-literal flag set.
+        dynamic = "${" in arg or "+" in head or (first_comma != -1 and not flags_m)
         if (arg.startswith("'") and arg.endswith("'")) or (
             arg.startswith('"') and arg.endswith('"')
-        ) or (arg.startswith("`") and arg.endswith("`") and "${" not in arg):
-            pattern = arg[1:-1]
-            reason = None
+        ) or (arg.startswith("`") and arg.endswith("`")):
+            if dynamic:
+                pattern = ""
+                flags = ""
+                reason = "composite-pattern"
+            else:
+                pattern = _unescape_js_string(arg[1:-1])
+                flags = "".join(c for c in "dgimsuvy" if c in (flags_m.group(2) if flags_m else ""))
+                reason = None
+                if any(f in flags for f in "gy"):
+                    reason = "stateful"
+                elif "u" in flags or "v" in flags:
+                    reason = "u-flag" if "u" in flags else "v-flag"
         else:
             pattern = ""
+            flags = ""
             reason = "composite-pattern"
         out.append(
             make_record(
                 repo=repo,
                 pattern=pattern,
-                flags="",
+                flags=flags,
                 dialect="ecma",
                 call_kind="search",
                 file=file,

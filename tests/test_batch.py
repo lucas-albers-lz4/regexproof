@@ -82,6 +82,41 @@ def test_intent_no_substring_false_positive_on_curl():
     assert hits == []
 
 
+def test_intent_negated_class_whitespace_no_false_positive():
+    """`\s` inside a NEGATED class ([^\s@]) EXCLUDES whitespace — must not fire the
+    "admits space" intent finding (the luna-gate catch on PR #258 / FeedbackForm)."""
+    rec = {
+        "regex_id": "b" * 32,
+        "pattern": r"^[^\s@]+@[^\s@]+\.[^\s@]+$",
+        "context_snippet": "email-validator",
+        "file": "FeedbackForm.tsx",
+        "site": "FeedbackForm.tsx:42:17",
+        "name": "isEmail",
+        "corpus_slug": "xibo-cms",
+    }
+    assert detect_intent_mismatches([rec]) == []
+    # Positive control: `\s` outside a negated class still fires.
+    pos = dict(rec, pattern=r"^.+@.+\s+$")
+    hits = detect_intent_mismatches([pos])
+    assert len(hits) == 1
+    assert hits[0]["detail"]["admitted_char"] == "' '"
+    # Escaped-backslash class [^\\s@] does NOT exclude space -> fires (luna r2 F3).
+    esc = dict(rec, pattern=r"^[^\\s@]+@[^\\s@]+$")
+    hits = detect_intent_mismatches([esc])
+    assert len(hits) == 1, hits
+    assert hits[0]["detail"]["admitted_char"] == "' '"
+    # [^ ] excludes a literal space -> no fire.
+    assert detect_intent_mismatches([dict(rec, pattern=r"^[^ ]+@x$")]) == []
+    # \S is the NON-whitespace class: [^\S@] admits whitespace -> fires (luna r3 #3).
+    hits = detect_intent_mismatches([dict(rec, pattern=r"^[^\S@]+@[^\S@]+$")])
+    assert len(hits) == 1, hits
+    # ] right after [^ is a literal class char: [^] ] excludes space -> no fire (luna r3 #4).
+    assert detect_intent_mismatches([dict(rec, pattern=r"^[^] ]+@x$")]) == []
+    # [] ] is a positive class containing space -> fires.
+    hits = detect_intent_mismatches([dict(rec, pattern=r"^[] ]+@x$")])
+    assert len(hits) == 1, hits
+
+
 def test_markdown_section_headers_unique(tmp_path: Path):
     from regexproof.batch.report import write_markdown
 
