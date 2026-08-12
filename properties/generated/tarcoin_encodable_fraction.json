@@ -1,0 +1,46 @@
+{
+  "budget": {
+    "max_disk_mb": 200,
+    "max_mem_mb": 1024,
+    "max_patterns": 5000,
+    "max_wall_s": 600,
+    "redos_wall_s": 120
+  },
+  "budget_breaches": [
+    "max_disk_mb: limit=200 actual=238.5"
+  ],
+  "commit": "a6552d17180dbf4a43a74c875db3e9a77f9437d6",
+  "compiler_fingerprint": "71d2ce23b4cd",
+  "complete_run": false,
+  "corpus_pin": "a6552d17180dbf4a43a74c875db3e9a77f9437d6",
+  "decision": "go",
+  "decision_note": "1 unclassified parse-error rows \u2014 Phase 1 requires zero",
+  "decision_rule": "go iff encodable/sample_size >= 0.3",
+  "dialect": "ecma",
+  "encodable": 118,
+  "engine_versions": {
+    "python": "3.13.5",
+    "z3": "5.0.0"
+  },
+  "extractor_schema_version": "2",
+  "fraction": 0.9147,
+  "go_no_go_threshold": 0.3,
+  "id_formula": "v2-domain-optional-ascii-default",
+  "inventory_path": "properties/generated/tarcoin-inventory.ndjson",
+  "path": "batch/corpora/tarcoin/rules",
+  "pilot": "tarcoin",
+  "reasons": {
+    "ok": 118,
+    "parse-error": 1,
+    "pattern-too-long": 1,
+    "stateful": 5,
+    "u-flag": 1,
+    "unclosed-group": 2,
+    "unsupported-syntax": 1
+  },
+  "sample_size": 129,
+  "schema_version": "1",
+  "scope": "full_corpus",
+  "unclassified_parse_errors": 1,
+  "wall_s": 9.945
+}

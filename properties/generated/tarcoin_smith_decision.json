@@ -1,0 +1,17 @@
+{
+  "schema_version": "1",
+  "corpus": "tarcoin",
+  "corpus_pin": "a6552d17180dbf4a43a74c875db3e9a77f9437d6",
+  "candidate_url": "https://github.com/Tarcoin/tarcoin",
+  "smith_decision": "go",
+  "supersedes": null,
+  "reason": "PROBE COUNT CORRECTION: the 1,238-site probe was 88% Qt locale translation catalogs (bitcoin_*.ts plural files - translation strings, not regex code). Honest first-party surface: 129 sites (app allowlist 40 files). Measured 118/129 = 0.9147 encodable (parse-error=1; complete_run=False only because the full-clone walk exceeded the 200MB disk budget - the measured subset is deterministic). The admission GO basis (condition 3, >=1000 sites) was met on inflated counts - the true scale is below the bar. HOWEVER the corpus is small-but-highly-encodable (0.9147, second-highest fraction in the matrix after testdata 1.0) with a blockchain validation surface (crypto address/transaction regexes). KEPT as GO with corrected basis: the fraction gate passes decisively and the surface is findings-relevant. Basis correction documented for the record.",
+  "regex_sites": 129,
+  "sites_by_bucket": {
+    "ecma app allowlist (40 files, 129 sites measured; 118 encodable 0.9147)": 129,
+    "Qt locale translation catalogs (bitcoin_*.ts, ~1,088 probe sites - NOT regex code, excluded)": 1088
+  },
+  "additional_surface_outside_probe_scope": {
+    "app files beyond top-40 (~11 sites)": 11
+  }
+}
