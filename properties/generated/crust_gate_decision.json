@@ -7,7 +7,7 @@
       "met": false
     },
     {
-      "evidence": "Probe security_boundary=deterministic-true (gitleaks.toml).",
+      "evidence": "Probe security_boundary=deterministic-true (Go DLP/rules regexp.MustCompile secrets surface).",
       "id": "security-boundary",
       "met": true
     },
@@ -53,7 +53,7 @@
     },
     "security_boundary": "deterministic-true"
   },
-  "rationale": "Triage-trial: BakeLens/crust (75 sites, gitleaks.toml, boundary=deterministic-true). Below scale; gitleaks already admitted — escape hatch for small delta check.",
+  "rationale": "Triage-trial: BakeLens/crust (75 sites, Go DLP/rules + configscan, boundary=deterministic-true). Below scale; nearest admitted=gitleaks — escape hatch for small delta check.",
   "related": {
     "nearest_admitted": "gitleaks"
   },
