@@ -52,6 +52,7 @@ Implementation: `regexproof/compiler/fold.py`. Closures, not pair lists.
 | `pcre` (encodable subset) | ASCII-style fold when `i` set | Same discipline as ASCII py-re for the subset |
 | `perl` (encodable subset) | ASCII-style fold when `i` set | POSIX `[[:alpha:]]` etc. rewritten; `\K` stripped; lookarounds / `(?{` / `\g{` / `\p{` / `\Q` rejected — see `PERL_REJECT_MARKERS` |
 | `yara` | `re2_fold_closure` when `nocase`→`i` | Ascii-domain compile delegates to `compile_re2`; wide domain is NUL-interleaved literals (non-literals reject) |
+| `posix-shell` | ASCII-style fold when `i` set (routes through the pcre path, P2b) | BRE/ERE syntax selector travels in the record `shell_flags` (`syntax`/`grep_mode`); BRE backslash-metas `\+ \? \|` are GNU/busybox quantifiers; ERE backslash-metas are literals — see `regexproof/compiler/posix_shell.py` |
 
 **verified-finding: VF-008** — Python vs RE2 divergence on İ/ı is load-bearing
 for any cross-dialect “same pattern” claim.

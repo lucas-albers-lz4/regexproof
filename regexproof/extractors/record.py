@@ -21,9 +21,20 @@ def make_record(
     domain: str = DEFAULT_DOMAIN,
     context_snippet: str = "",
     unencodable_reason: str | None = None,
+    extra_fields: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
+    """Build a versioned extractor record.
+
+    ``extra_fields`` is the field-extensibility contract: a typed dict merged
+    into the record BEFORE the fixed fields are set — fixed fields win, so an
+    ``extra_fields`` attempt to override ``pattern``/``dialect``/``regex_id``
+    (or any fixed field) is silently ignored.  Deliberately NOT bare
+    ``**kwargs``: a typo'd kwarg from any of the 30+ callers would silently
+    corrupt records.
+    """
     site = f"{file}:{line}:{column}"
-    rec: dict[str, Any] = {
+    rec: dict[str, Any] = dict(extra_fields or {})
+    rec.update({
         "schema_version": EXTRACTOR_SCHEMA_VERSION,
         "regex_id": make_regex_id(repo, pattern, flags, dialect, call_kind, site, domain=domain),
         "repo": repo,
@@ -37,7 +48,7 @@ def make_record(
         "column": column,
         "domain": domain,
         "context_snippet": context_snippet[:500],
-    }
+    })
     if unencodable_reason:
         rec["unencodable_reason"] = unencodable_reason
     return rec

@@ -65,6 +65,7 @@ DIALECTS = frozenset(
         "pcre",
         "yara",
         "perl",
+        "posix-shell",
     }
 )
 
