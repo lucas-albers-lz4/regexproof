@@ -715,7 +715,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
     },
     "bartblaze-yara-rules": {
         "corpus_type": "rule_corpus",
-        # Materialize: ln -sfn /tmp/Yara-rules/rules batch/corpora/bartblaze-yara-rules/rules
+        # Materialize: ln -sfn /tmp/bartblaze-yara-rules/rules batch/corpora/bartblaze-yara-rules/rules
         # bartblaze YARA pack (delta vs admitted yara_rules). Owner-prefixed slug
         # stays case-distinct from VaccinatorSec yara-rules / admitted yara_rules.
         "path": ROOT / "batch" / "corpora" / "bartblaze-yara-rules" / "rules",

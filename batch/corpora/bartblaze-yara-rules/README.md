@@ -11,11 +11,11 @@ VaccinatorSec `yara-rules` and admitted `yara_rules`.
 
 ```bash
 PIN=5cc871d82361de8a80d387ec8bbd01fe4258b4a9
-git clone --filter=blob:none https://github.com/bartblaze/Yara-rules.git /tmp/Yara-rules
-git -C /tmp/Yara-rules fetch --depth 1 origin "$PIN"
-git -C /tmp/Yara-rules checkout "$PIN"
-ln -sfn /tmp/Yara-rules/rules batch/corpora/bartblaze-yara-rules/rules
-test "$(git -C /tmp/Yara-rules rev-parse HEAD)" = "$PIN"
+git clone --filter=blob:none https://github.com/bartblaze/Yara-rules.git /tmp/bartblaze-yara-rules
+git -C /tmp/bartblaze-yara-rules fetch --depth 1 origin "$PIN"
+git -C /tmp/bartblaze-yara-rules checkout "$PIN"
+ln -sfn /tmp/bartblaze-yara-rules/rules batch/corpora/bartblaze-yara-rules/rules
+test "$(git -C /tmp/bartblaze-yara-rules rev-parse HEAD)" = "$PIN"
 ```
 
 Gate: `properties/generated/bartblaze-yara-rules_gate_decision.json` (`triage-trial`).
