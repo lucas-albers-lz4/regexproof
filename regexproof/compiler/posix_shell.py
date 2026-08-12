@@ -85,6 +85,8 @@ def normalize_shell(pattern: str, syntax: str) -> str:
     pass-through (ERE).  Single pass; escape semantics per the module
     docstring (machine-verified).
     """
+    if syntax not in ("bre", "ere", "bash_ksh"):
+        syntax = "bre"  # documented default: missing/unknown -> BRE
     if syntax in ("ere", "bash_ksh") and "(?" in pattern:
         raise Unencodable("inline-flag-like")
     out: list[str] = []

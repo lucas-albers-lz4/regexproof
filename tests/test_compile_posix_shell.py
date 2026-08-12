@@ -139,7 +139,7 @@ def test_unknown_escape_drops_backslash():
 
 
 def test_ere_unknown_escape_drops_backslash():
-    """ERE `a\d` = literal ad on grep AND busybox (verified); pcre would
+    r"""ERE `a\d` = literal ad on grep AND busybox (verified); pcre would
     read \d as a digit class — the drop keeps them agreeing."""
     assert normalize_shell(r"a\d", "ere") == "ad"
     assert normalize_shell(r"a\d", "bash_ksh") == "ad"
@@ -181,6 +181,14 @@ def test_missing_shell_flags_defaults_bre():
     r = comp(r"a+b")  # no shell_flags — defaults to BRE
     assert r.encodable
     assert normalize_shell(r"a+b", "bre") == r"a\+b"
+
+
+def test_unknown_syntax_defaults_bre():
+    """Unknown syntax selectors fall back to BRE (documented contract) —
+    literal-escape applies and the ERE inline-flag guard does not."""
+    assert normalize_shell(r"a+b", "fixed") == r"a\+b"  # BRE literal
+    assert normalize_shell(r"(?i)foo", "bogus") == r"\(\?i\)foo"  # literal
+    assert normalize_shell(r"a\+b", "fixed") == "a+b"  # BRE one-or-more
 
 
 def test_dialect_result_and_pattern():
