@@ -1,0 +1,42 @@
+{
+  "candidate_url": "https://github.com/aws-samples/amazon-comprehend-s3-object-lambda-functions",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. aws-samples; 3 py_re sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (or unprobeable).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "amazon-comprehend-s3-object-lambda-functions",
+  "corpus_pin": "08f9d056bb4f3b1690f8e3486a78d377163beefa",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "py_re": 3
+    },
+    "flags": {},
+    "pin": "08f9d056bb4f3b1690f8e3486a78d377163beefa",
+    "predicted_buckets": {},
+    "regex_sites": 3,
+    "regex_sites_per_file": {
+      "src/clients/s3_client.py": 3
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 3 regex sites (auto-NO-GO bar 200); dialects [py_re:3]; boundary=unknown.",
+  "schema_version": "1"
+}

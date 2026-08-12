@@ -1,0 +1,47 @@
+{
+  "candidate_url": "https://github.com/lekoala/bs-companion",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. lekoala; 3 ecma sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (or unprobeable).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "bs-companion",
+  "corpus_pin": "dba257832bc85770d4375a0c6af23c1c30e0ff0d",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 3
+    },
+    "flags": {
+      "i": 1
+    },
+    "pin": "dba257832bc85770d4375a0c6af23c1c30e0ff0d",
+    "predicted_buckets": {
+      "inline-flag": 1
+    },
+    "regex_sites": 3,
+    "regex_sites_per_file": {
+      "src/BsTabs.js": 1,
+      "src/FormValidator.js": 2
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 3 regex sites (auto-NO-GO bar 200); dialects [ecma:3]; boundary=unknown.",
+  "schema_version": "1"
+}

@@ -1,0 +1,90 @@
+{
+  "candidate_url": "https://github.com/obra/issue-cards",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. obra; 149 ecma sites < 200.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (or unprobeable).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "issue-cards",
+  "corpus_pin": "76e0af70f53a0f326afccb31130006b212035874",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "lookaround": 3
+    },
+    "dialect": {
+      "ecma": 149
+    },
+    "flags": {
+      "g": 55,
+      "m": 10,
+      "s": 1
+    },
+    "pin": "76e0af70f53a0f326afccb31130006b212035874",
+    "predicted_buckets": {
+      "inline-flag": 1,
+      "lookaround": 3,
+      "m-flag": 10,
+      "stateful": 55
+    },
+    "regex_sites": 149,
+    "regex_sites_per_file": {
+      "bin/issue-cards.js": 1,
+      "bin/mcp-server.js": 1,
+      "bin/mcp-stdio-server.js": 1,
+      "scripts/postinstall.js": 1,
+      "scripts/validate-links.js": 1,
+      "src/commands/help.js": 8,
+      "src/commands/setCurrent.js": 1,
+      "src/mcp/onboardingTools.js": 3,
+      "src/mcp/registration.js": 7,
+      "src/mcp/validator.js": 1,
+      "src/scripts/validate-docs.js": 1,
+      "src/scripts/validate-links.js": 1,
+      "src/utils/documentationParser.js": 13,
+      "src/utils/documentationValidator.js": 16,
+      "src/utils/issueManager.js": 4,
+      "src/utils/linkValidator.js": 1,
+      "src/utils/mcpLogger.js": 1,
+      "src/utils/mcpServer.js": 2,
+      "src/utils/sectionManager.js": 1,
+      "src/utils/taskExpander.js": 2,
+      "src/utils/taskParser.js": 4,
+      "tests/bin/binary.test.js": 1,
+      "tests/commands/create.test.js": 10,
+      "tests/e2e/api-smoke-test.js": 1,
+      "tests/e2e/cli-edge-cases.test.js": 2,
+      "tests/e2e/cli-exec.test.js": 1,
+      "tests/e2e/cli.test.js": 1,
+      "tests/e2e/commands.test.js": 2,
+      "tests/e2e/create-task-option.test.js": 3,
+      "tests/e2e/current-output.test.js": 1,
+      "tests/e2e/lifecycle.test.js": 1,
+      "tests/integration/output-capture.test.js": 2,
+      "tests/mcp/tdd-mcp-examples.test.js": 12,
+      "tests/mcp/tdd-tag-templates.test.js": 30,
+      "tests/mcp/workflow-command-sequences.test.js": 2,
+      "tests/utils/mcpLogger.test.js": 4,
+      "tests/utils/outputManager.test.js": 2,
+      "tests/utils/sectionManager.test.js": 3
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 149 regex sites (auto-NO-GO bar 200); dialects [ecma:149]; boundary=unknown.",
+  "schema_version": "1"
+}

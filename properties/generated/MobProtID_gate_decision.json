@@ -1,0 +1,44 @@
+{
+  "candidate_url": "https://github.com/arbitraryrw/MobProtID",
+  "conditions": [
+    {
+      "evidence": "Dialects already covered. arbitraryrw mobile-analysis rule engine (Go); 6 yara sites; security tool.",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary=deterministic-true.",
+      "id": "security-boundary",
+      "met": true
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "MobProtID",
+  "corpus_pin": "8c5d24910eae4dc9864a658b59d24a9dfd345b5b",
+  "decision": "triage-trial",
+  "decision_basis": "escape_hatch",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": true,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "yara": 6
+    },
+    "flags": {},
+    "pin": "8c5d24910eae4dc9864a658b59d24a9dfd345b5b",
+    "predicted_buckets": {},
+    "regex_sites": 6,
+    "regex_sites_per_file": {
+      "rules/example.yara": 1,
+      "rules/second.yara": 4,
+      "rules/testrules/yarachecker/simpleYaraRule.yara": 1
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Security-boundary corpus (boundary=deterministic-true) with findings-triage potential; 6 sites across [yara:6].",
+  "schema_version": "1"
+}

@@ -1,0 +1,44 @@
+{
+  "candidate_url": "https://github.com/karthikgenius/YaraCapper",
+  "conditions": [
+    {
+      "evidence": "Dialects already covered. karthikgenius yara network-attack detection; 11 yara sites; security tool.",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary=deterministic-true.",
+      "id": "security-boundary",
+      "met": true
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "YaraCapper",
+  "corpus_pin": "686abc24b291acfe759b8250b176df8eb8171c2b",
+  "decision": "triage-trial",
+  "decision_basis": "escape_hatch",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": true,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "yara": 11
+    },
+    "flags": {},
+    "pin": "686abc24b291acfe759b8250b176df8eb8171c2b",
+    "predicted_buckets": {},
+    "regex_sites": 11,
+    "regex_sites_per_file": {
+      "rules/crimepack_jar.yar": 7,
+      "rules/cve_2013_0074.yar": 3,
+      "rules/solarbot.yar": 1
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Security-boundary corpus (boundary=deterministic-true) with findings-triage potential; 11 sites across [yara:11].",
+  "schema_version": "1"
+}

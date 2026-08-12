@@ -1,0 +1,46 @@
+{
+  "candidate_url": "https://github.com/gojek/clickstream-web",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. gojek; 1 ecma site.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (or unprobeable).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "clickstream-web",
+  "corpus_pin": "37e108b8b31aa0709060bdd0b96158a89eaba9b0",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 1
+    },
+    "flags": {
+      "g": 1
+    },
+    "pin": "37e108b8b31aa0709060bdd0b96158a89eaba9b0",
+    "predicted_buckets": {
+      "stateful": 1
+    },
+    "regex_sites": 1,
+    "regex_sites_per_file": {
+      "src/id.js": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 1 regex sites (auto-NO-GO bar 200); dialects [ecma:1]; boundary=unknown.",
+  "schema_version": "1"
+}

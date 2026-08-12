@@ -1,0 +1,60 @@
+{
+  "candidate_url": "https://github.com/lemon07r/SlopScoreTool",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. lemon07r; 64 ecma/re2 sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (or unprobeable).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "SlopScoreTool",
+  "corpus_pin": "d69224bdf1b4af34b442e7b3f8e41327b972d92f",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "backref": 1
+    },
+    "dialect": {
+      "ecma": 58,
+      "re2": 6
+    },
+    "flags": {
+      "g": 44,
+      "i": 31,
+      "s": 1
+    },
+    "pin": "d69224bdf1b4af34b442e7b3f8e41327b972d92f",
+    "predicted_buckets": {
+      "backref": 1,
+      "inline-flag": 32,
+      "stateful": 44
+    },
+    "regex_sites": 64,
+    "regex_sites_per_file": {
+      "slop/data.go": 1,
+      "slop/metrics.go": 5,
+      "testdata/upstream/js/metrics.js": 4,
+      "testdata/upstream/js/regexes-stage1.js": 10,
+      "testdata/upstream/js/regexes-stage2.js": 35,
+      "testdata/upstream/js/utils.js": 6,
+      "testdata/upstream/js/wordfreq.js": 1,
+      "testdata/upstream/runner.mjs": 2
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 64 regex sites (auto-NO-GO bar 200); dialects [ecma:58, re2:6]; boundary=unknown.",
+  "schema_version": "1"
+}

@@ -1,0 +1,53 @@
+{
+  "candidate_url": "https://github.com/afincha/validity",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. afincha; 75 ecma sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (or unprobeable).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "validity",
+  "corpus_pin": "0d00b424fd9847e9f5d568c98270a1771858c91e",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "lookaround": 6
+    },
+    "dialect": {
+      "ecma": 75
+    },
+    "flags": {
+      "g": 26,
+      "i": 12
+    },
+    "pin": "0d00b424fd9847e9f5d568c98270a1771858c91e",
+    "predicted_buckets": {
+      "inline-flag": 12,
+      "lookaround": 6,
+      "stateful": 26
+    },
+    "regex_sites": 75,
+    "regex_sites_per_file": {
+      "min/validator_validity.min.js": 27,
+      "src/validator.js": 27,
+      "test/qunit/qunit-1.14.0.js": 21
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 75 regex sites (auto-NO-GO bar 200); dialects [ecma:75]; boundary=unknown.",
+  "schema_version": "1"
+}

@@ -1,0 +1,54 @@
+{
+  "candidate_url": "https://github.com/qiime2/Keemei",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. qiime2; 85 ecma sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (or unprobeable).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "Keemei",
+  "corpus_pin": "b673492e27a688ecdf3d1ddf67b1e04032e4cd18",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 85
+    },
+    "flags": {
+      "g": 20,
+      "i": 15
+    },
+    "pin": "b673492e27a688ecdf3d1ddf67b1e04032e4cd18",
+    "predicted_buckets": {
+      "inline-flag": 15,
+      "stateful": 20
+    },
+    "regex_sites": 85,
+    "regex_sites_per_file": {
+      "src/Benchmark.js": 3,
+      "src/Moment.js": 71,
+      "src/Qiime1Format.js": 5,
+      "src/Qiime2Format.js": 2,
+      "src/QiitaSampleInformationFormat.js": 1,
+      "src/Utilities.js": 2,
+      "src/Validator.js": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 85 regex sites (auto-NO-GO bar 200); dialects [ecma:85]; boundary=unknown.",
+  "schema_version": "1"
+}

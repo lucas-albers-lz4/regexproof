@@ -1,6 +1,6 @@
 {
   "schema_version": "1",
-  "candidate_url": "https://github.com/zrsx/cpython",
+  "candidate_url": "https://github.com/Zephyr3311/Go-Typescript",
   "conditions": [
     {
       "id": "new-surface",
@@ -18,7 +18,7 @@
       "evidence": "Unprobeable; no site count."
     }
   ],
-  "corpus": "cpython",
+  "corpus": "Go-Typescript",
   "corpus_pin": "",
   "decision": "no-go",
   "decision_basis": "admission_conditions",

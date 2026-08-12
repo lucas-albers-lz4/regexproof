@@ -1,6 +1,6 @@
 {
   "schema_version": "1",
-  "candidate_url": "https://github.com/zrsx/cpython",
+  "candidate_url": "https://github.com/buke/typescript-go-internal",
   "conditions": [
     {
       "id": "new-surface",
@@ -18,7 +18,7 @@
       "evidence": "Unprobeable; no site count."
     }
   ],
-  "corpus": "cpython",
+  "corpus": "typescript-go-internal",
   "corpus_pin": "",
   "decision": "no-go",
   "decision_basis": "admission_conditions",

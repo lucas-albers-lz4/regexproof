@@ -1,0 +1,48 @@
+{
+  "candidate_url": "https://github.com/Q42/vue-dotnet-validator",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. Q42; 5 ecma sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (or unprobeable).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "vue-dotnet-validator",
+  "corpus_pin": "1a21248278ca34f33da5368d8be250ef708fd389",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 5
+    },
+    "flags": {
+      "g": 2
+    },
+    "pin": "1a21248278ca34f33da5368d8be250ef708fd389",
+    "predicted_buckets": {
+      "stateful": 2
+    },
+    "regex_sites": 5,
+    "regex_sites_per_file": {
+      "src/validator-group.js": 2,
+      "src/validators/regexvalidator.js": 1,
+      "webpack.config.js": 2
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 5 regex sites (auto-NO-GO bar 200); dialects [ecma:5]; boundary=unknown.",
+  "schema_version": "1"
+}

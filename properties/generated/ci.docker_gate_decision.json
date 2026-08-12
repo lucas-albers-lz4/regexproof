@@ -1,5 +1,5 @@
 {
-  "candidate_url": "https://github.com/OpenLiberty/ci.docker",
+  "candidate_url": "https://github.com/WASdev/ci.docker",
   "conditions": [
     {
       "evidence": "No extractable novel surface (dialects already admitted).",
@@ -7,83 +7,61 @@
       "met": false
     },
     {
-      "evidence": "Probe security_boundary unknown or false positive. OpenLiberty docker image; 154 shell sites.",
+      "evidence": "Probe security_boundary unknown or false positive. OpenLiberty docker image; 82 shell sites.",
       "id": "security-boundary",
       "met": false
     },
     {
-      "evidence": "Below 1000 scale bar.",
+      "evidence": "Below 1000 scale bar (or unprobeable).",
       "id": "large-under-saturated",
       "met": false
     }
   ],
   "corpus": "ci.docker",
-  "corpus_pin": "d2b1b3154d7a5322141952ef32f6d6bcb493db81",
+  "corpus_pin": "27600591ce6d9c32407ab0f9407d66db403b4270",
   "decision": "no-go",
   "decision_basis": "admission_conditions",
   "decision_date": "2026-08-12",
   "escape_hatch_applied": false,
   "probe": {
     "construct_counts": {
-      "posix-class": 22
+      "posix-class": 10
     },
     "dialect": {
-      "posix-shell": 154
+      "posix-shell": 82
     },
     "flags": {},
-    "pin": "d2b1b3154d7a5322141952ef32f6d6bcb493db81",
+    "pin": "27600591ce6d9c32407ab0f9407d66db403b4270",
     "predicted_buckets": {
-      "posix-class": 22
+      "posix-class": 10
     },
-    "regex_sites": 154,
+    "regex_sites": 82,
     "regex_sites_per_file": {
-      "releases/25.0.0.12/full/helpers/runtime/docker-server.sh": 8,
-      "releases/25.0.0.12/full/helpers/runtime/livenessHealthCheck.sh": 2,
-      "releases/25.0.0.12/full/helpers/runtime/readinessHealthCheck.sh": 2,
-      "releases/25.0.0.12/full/helpers/runtime/startupHealthCheck.sh": 2,
-      "releases/25.0.0.12/kernel-slim/helpers/runtime/docker-server.sh": 8,
-      "releases/25.0.0.12/kernel-slim/helpers/runtime/livenessHealthCheck.sh": 2,
-      "releases/25.0.0.12/kernel-slim/helpers/runtime/readinessHealthCheck.sh": 2,
-      "releases/25.0.0.12/kernel-slim/helpers/runtime/startupHealthCheck.sh": 2,
-      "releases/26.0.0.3/full/helpers/runtime/docker-server.sh": 8,
-      "releases/26.0.0.3/full/helpers/runtime/livenessHealthCheck.sh": 2,
-      "releases/26.0.0.3/full/helpers/runtime/readinessHealthCheck.sh": 2,
-      "releases/26.0.0.3/full/helpers/runtime/startupHealthCheck.sh": 2,
-      "releases/26.0.0.3/kernel-slim/helpers/runtime/docker-server.sh": 8,
-      "releases/26.0.0.3/kernel-slim/helpers/runtime/livenessHealthCheck.sh": 2,
-      "releases/26.0.0.3/kernel-slim/helpers/runtime/readinessHealthCheck.sh": 2,
-      "releases/26.0.0.3/kernel-slim/helpers/runtime/startupHealthCheck.sh": 2,
-      "releases/26.0.0.6/full/helpers/runtime/docker-server.sh": 8,
-      "releases/26.0.0.6/full/helpers/runtime/livenessHealthCheck.sh": 2,
-      "releases/26.0.0.6/full/helpers/runtime/readinessHealthCheck.sh": 2,
-      "releases/26.0.0.6/full/helpers/runtime/startupHealthCheck.sh": 2,
-      "releases/26.0.0.6/kernel-slim/helpers/runtime/docker-server.sh": 8,
-      "releases/26.0.0.6/kernel-slim/helpers/runtime/livenessHealthCheck.sh": 2,
-      "releases/26.0.0.6/kernel-slim/helpers/runtime/readinessHealthCheck.sh": 2,
-      "releases/26.0.0.6/kernel-slim/helpers/runtime/startupHealthCheck.sh": 2,
-      "releases/26.0.0.8/full/helpers/runtime/docker-server.sh": 8,
-      "releases/26.0.0.8/full/helpers/runtime/livenessHealthCheck.sh": 2,
-      "releases/26.0.0.8/full/helpers/runtime/readinessHealthCheck.sh": 2,
-      "releases/26.0.0.8/full/helpers/runtime/startupHealthCheck.sh": 2,
-      "releases/26.0.0.8/kernel-slim/helpers/runtime/docker-server.sh": 8,
-      "releases/26.0.0.8/kernel-slim/helpers/runtime/livenessHealthCheck.sh": 2,
-      "releases/26.0.0.8/kernel-slim/helpers/runtime/readinessHealthCheck.sh": 2,
-      "releases/26.0.0.8/kernel-slim/helpers/runtime/startupHealthCheck.sh": 2,
-      "releases/latest/beta/helpers/runtime/docker-server.sh": 8,
-      "releases/latest/beta/helpers/runtime/livenessHealthCheck.sh": 2,
-      "releases/latest/beta/helpers/runtime/readinessHealthCheck.sh": 2,
-      "releases/latest/beta/helpers/runtime/startupHealthCheck.sh": 2,
-      "releases/latest/full/helpers/runtime/docker-server.sh": 8,
-      "releases/latest/full/helpers/runtime/livenessHealthCheck.sh": 2,
-      "releases/latest/full/helpers/runtime/readinessHealthCheck.sh": 2,
-      "releases/latest/full/helpers/runtime/startupHealthCheck.sh": 2,
-      "releases/latest/kernel-slim/helpers/runtime/docker-server.sh": 8,
-      "releases/latest/kernel-slim/helpers/runtime/livenessHealthCheck.sh": 2,
-      "releases/latest/kernel-slim/helpers/runtime/readinessHealthCheck.sh": 2,
-      "releases/latest/kernel-slim/helpers/runtime/startupHealthCheck.sh": 2
+      "ga/25.0.0.12/kernel/helpers/runtime/docker-server.sh": 9,
+      "ga/25.0.0.12/kernel/helpers/runtime/livenessHealthCheck.sh": 2,
+      "ga/25.0.0.12/kernel/helpers/runtime/readinessHealthCheck.sh": 2,
+      "ga/25.0.0.12/kernel/helpers/runtime/startupHealthCheck.sh": 2,
+      "ga/26.0.0.3/kernel/helpers/runtime/docker-server.sh": 9,
+      "ga/26.0.0.3/kernel/helpers/runtime/livenessHealthCheck.sh": 2,
+      "ga/26.0.0.3/kernel/helpers/runtime/readinessHealthCheck.sh": 2,
+      "ga/26.0.0.3/kernel/helpers/runtime/startupHealthCheck.sh": 2,
+      "ga/26.0.0.6/kernel/helpers/runtime/docker-server.sh": 9,
+      "ga/26.0.0.6/kernel/helpers/runtime/livenessHealthCheck.sh": 2,
+      "ga/26.0.0.6/kernel/helpers/runtime/readinessHealthCheck.sh": 2,
+      "ga/26.0.0.6/kernel/helpers/runtime/startupHealthCheck.sh": 2,
+      "ga/26.0.0.8/kernel/helpers/runtime/docker-server.sh": 9,
+      "ga/26.0.0.8/kernel/helpers/runtime/livenessHealthCheck.sh": 2,
+      "ga/26.0.0.8/kernel/helpers/runtime/readinessHealthCheck.sh": 2,
+      "ga/26.0.0.8/kernel/helpers/runtime/startupHealthCheck.sh": 2,
+      "ga/latest/kernel/helpers/runtime/docker-server.sh": 9,
+      "ga/latest/kernel/helpers/runtime/livenessHealthCheck.sh": 2,
+      "ga/latest/kernel/helpers/runtime/readinessHealthCheck.sh": 2,
+      "ga/latest/kernel/helpers/runtime/startupHealthCheck.sh": 2,
+      "test/verify.sh": 4,
+      "tools/updateBeta.sh": 3
     },
     "security_boundary": "unknown"
   },
-  "rationale": "Below admission scale: 154 regex sites (auto-NO-GO bar 200); dialects [posix-shell:154]; boundary=unknown.",
+  "rationale": "Below admission scale: 82 regex sites (auto-NO-GO bar 200); dialects [posix-shell:82]; boundary=unknown.",
   "schema_version": "1"
 }

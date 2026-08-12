@@ -1,0 +1,49 @@
+{
+  "candidate_url": "https://github.com/x41x41x90/pm_shredder",
+  "conditions": [
+    {
+      "evidence": "Dialects already covered. x41x41x90 yara pack; 834 yara sites; security tool (deterministic-true).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary=deterministic-true.",
+      "id": "security-boundary",
+      "met": true
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "pm_shredder",
+  "corpus_pin": "7fa83b2250a434bfe153a67eb52e015558e9409a",
+  "decision": "triage-trial",
+  "decision_basis": "escape_hatch",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": true,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "yara": 834
+    },
+    "flags": {
+      "i": 12
+    },
+    "pin": "7fa83b2250a434bfe153a67eb52e015558e9409a",
+    "predicted_buckets": {
+      "inline-flag": 12
+    },
+    "regex_sites": 834,
+    "regex_sites_per_file": {
+      "Rules/email_contents.yar": 9,
+      "Rules/magic.yar": 6,
+      "Rules/spyeye.yar": 22,
+      "Rules/zeus.yar": 797
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Security-boundary corpus (boundary=deterministic-true) with findings-triage potential; 834 sites across [yara:834].",
+  "schema_version": "1"
+}

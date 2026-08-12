@@ -1,0 +1,18 @@
+{
+  "address_space_cap": true,
+  "complete_run": true,
+  "corpus": "typescript-go",
+  "corpus_type": "testdata",
+  "encodable": 1483,
+  "engine": {
+    "python": "3.13.5"
+  },
+  "extracted": 2558,
+  "findings": 12,
+  "inventory_questions": 0,
+  "join_regex_ids": 12,
+  "redos_findings": 0,
+  "redos_incomplete": false,
+  "schema_version": "1",
+  "triage": 1075
+}

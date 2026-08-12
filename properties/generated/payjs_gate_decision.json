@@ -1,0 +1,51 @@
+{
+  "candidate_url": "https://github.com/google/payjs",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. google; 12 ecma sites, deterministic-false.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (or unprobeable).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "payjs",
+  "corpus_pin": "715e72d6fe59f98bc6f35f62c024fc1c9e8d741e",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 12
+    },
+    "flags": {
+      "g": 1,
+      "i": 9
+    },
+    "pin": "715e72d6fe59f98bc6f35f62c024fc1c9e8d741e",
+    "predicted_buckets": {
+      "inline-flag": 9,
+      "stateful": 1
+    },
+    "regex_sites": 12,
+    "regex_sites_per_file": {
+      "src/payjs_async.js": 4,
+      "third_party/random_uuid/Random.uuid.js": 1,
+      "third_party/web_activities/activities.js": 4,
+      "third_party/web_activities/activity-ports.js": 3
+    },
+    "security_boundary": "deterministic-false"
+  },
+  "rationale": "Below admission scale: 12 regex sites (auto-NO-GO bar 200); dialects [ecma:12]; boundary=deterministic-false.",
+  "schema_version": "1"
+}
