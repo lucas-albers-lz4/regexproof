@@ -33,6 +33,7 @@ SECURITY_TOOL_CORPORA = frozenset(
         "bartblaze-yara-rules",
         "crust",
         "yara-rules",
+        "ail-yara-rules",
     }
 )
 
