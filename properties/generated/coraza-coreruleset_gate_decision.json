@@ -64,7 +64,7 @@
     },
     "security_boundary": "deterministic-true"
   },
-  "rationale": "Superseded triage-trial -> no-go by Smith measurement: 343/343 regex sites are unmodified OWASP CRS v4.25.0 (byte-identical rule lines; only comments stripped), 88.4% pattern overlap with admitted coreruleset, residual = version drift of the same rule families. Coraza packaging adds no distinct extract surface (3 WAF-config regexes). Duplicate of an admitted corpus; fraction (0.5627) would GO but the corpus adds near-zero novel value. See coraza-coreruleset_smith_decision.json.",
+  "rationale": "Superseded triage-trial -> no-go by Smith measurement: 343/343 regex sites are unmodified OWASP CRS v4.25.0 (byte-identical rule lines; only comments stripped), 88.4% pattern overlap with admitted coreruleset, residual = version drift of the same rule families. Coraza packaging adds no distinct rule-corpus surface worth retaining (3 WAF-config regexes). Duplicate of an admitted corpus; fraction (0.5627) would GO but the corpus adds near-zero novel value. See coraza-coreruleset_smith_decision.json.",
   "related": {
     "nearest_admitted": "coreruleset"
   },
