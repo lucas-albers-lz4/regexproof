@@ -13,7 +13,7 @@
   "decision": "go",
   "decision_rule": "go iff encodable/sample_size >= 0.3",
   "dialect": "ecma",
-  "encodable": 2482,
+  "encodable": 2477,
   "engine_versions": {
     "python": "3.13.5",
     "z3": "5.0.0"
@@ -22,7 +22,7 @@
   "extractor_schema_version": "2",
   "files_ok": true,
   "files_seen": 91,
-  "fraction": 0.5357,
+  "fraction": 0.5346,
   "go_no_go_threshold": 0.3,
   "id_formula": "v2-domain-optional-ascii-default",
   "inventory_path": "properties/generated/v8_mjsunit-inventory.ndjson",
@@ -125,14 +125,14 @@
     "backref": 122,
     "bad-range": 6,
     "class-escape": 2,
-    "composite-pattern": 37,
+    "composite-pattern": 43,
     "empty-class": 25,
     "inline-flag": 23,
     "internal-anchor": 6,
-    "lookaround": 344,
+    "lookaround": 343,
     "m-flag": 95,
     "negated-shorthand": 19,
-    "ok": 2482,
+    "ok": 2477,
     "pattern-too-large": 8,
     "pattern-too-long": 24,
     "per-alternative-anchor": 48,
@@ -145,5 +145,5 @@
   "schema_version": "1",
   "scope": "full_corpus",
   "unclassified_parse_errors": 0,
-  "wall_s": 178.808
+  "wall_s": 177.623
 }
