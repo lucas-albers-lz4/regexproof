@@ -1,0 +1,14 @@
+{
+  "schema_version": "1",
+  "corpus": "patrolaroid",
+  "corpus_pin": "ed7ad98fa495ca9a7d9e855dd260218ba4e67a9b",
+  "candidate_url": "https://github.com/rpetrich/patrolaroid",
+  "smith_decision": "go",
+  "supersedes": null,
+  "reason": "AWS malware scanner yara pack (38 files: miner/backdoor/webshell families): 1,687/4,491 = 0.3756 encodable (complete_run, parse-error=0, budget clean). LOWEST yara fraction yet - the scanner's own malware-detection rules are fullword-boundary-heavy (matches the yara reject profile). 22 findings + 2,804 triage. Security tool - SECURITY_TOOL_CORPORA private_first. GO admit confirmed (above 0.30 gate).",
+  "regex_sites": 4491,
+  "sites_by_bucket": {
+    "yara (38 files, 4,491 sites measured; 1,687 encodable)": 4491
+  },
+  "additional_surface_outside_probe_scope": {}
+}

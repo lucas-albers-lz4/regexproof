@@ -1,0 +1,14 @@
+{
+  "schema_version": "1",
+  "corpus": "Antivirus",
+  "corpus_pin": "2d7fea93eca3be3df4ad7087e339d21bcd915103",
+  "candidate_url": "https://github.com/smartytinker/Antivirus",
+  "smith_decision": "go",
+  "supersedes": null,
+  "reason": "Yara-based antivirus pack (710 files: TOOLKIT/malware/phishing families): 6,825/11,769 = 0.5799 encodable (complete_run, parse-error=1, budget clean). 50 findings + 4,944 triage. Security tool - SECURITY_TOOL_CORPORA private_first. GO admit confirmed.",
+  "regex_sites": 11769,
+  "sites_by_bucket": {
+    "yara (710 files, 11,769 sites measured; 6,825 encodable)": 11769
+  },
+  "additional_surface_outside_probe_scope": {}
+}
