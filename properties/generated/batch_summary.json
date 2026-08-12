@@ -116,37 +116,37 @@
     "wall_s": 21.527
   },
   "corpora": {
-    "malcontent": {
+    "bike4mind": {
       "address_space_cap": true,
       "complete_run": true,
-      "corpus": "malcontent",
+      "corpus": "bike4mind",
       "corpus_type": "rule_corpus",
-      "encodable": 5540,
+      "encodable": 815,
       "engine": {
         "python": "3.13.5"
       },
-      "extracted": 7922,
-      "findings": 9,
+      "extracted": 1386,
+      "findings": 194,
       "inventory_questions": 4,
-      "join_regex_ids": 9,
+      "join_regex_ids": 194,
       "redos_findings": 0,
       "redos_incomplete": false,
       "schema_version": "1",
-      "triage": 2382
+      "triage": 571
     }
   },
   "pair_counts": {
+    "bike4mind": {
+      "admitted": 0,
+      "dropped": 0,
+      "note": "no independent-spec catalog"
+    },
     "coreruleset": {
       "admitted": 0,
       "dropped": 0,
       "fraction": 0.6908,
       "note": "fraction gate go; CRS rule-derived adapter is Phase-2 rule_diff",
       "scope": "full_corpus"
-    },
-    "malcontent": {
-      "admitted": 0,
-      "dropped": 0,
-      "note": "no independent-spec catalog"
     }
   },
   "schema_version": "1"
