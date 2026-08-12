@@ -1,0 +1,47 @@
+{
+  "budget": {
+    "max_disk_mb": 500,
+    "max_mem_mb": 2048,
+    "max_patterns": 30000,
+    "max_wall_s": 900,
+    "redos_wall_s": 180
+  },
+  "budget_breaches": null,
+  "commit": "ea3e83e24676a1678a9522141da29b636c9451ab",
+  "compiler_fingerprint": "71d2ce23b4cd",
+  "complete_run": true,
+  "corpus_pin": "ea3e83e24676a1678a9522141da29b636c9451ab",
+  "decision": "go",
+  "decision_note": "2 unclassified parse-error rows \u2014 Phase 1 requires zero",
+  "decision_rule": "go iff encodable/sample_size >= 0.3",
+  "dialect": "yara",
+  "encodable": 5540,
+  "engine_versions": {
+    "python": "3.13.5",
+    "z3": "5.0.0"
+  },
+  "extractor_schema_version": "2",
+  "fraction": 0.6993,
+  "go_no_go_threshold": 0.3,
+  "id_formula": "v2-domain-optional-ascii-default",
+  "inventory_path": "properties/generated/malcontent-inventory.ndjson",
+  "path": "batch/corpora/malcontent/rules",
+  "pilot": "malcontent",
+  "reasons": {
+    "empty-class": 3,
+    "fullword-boundary": 2158,
+    "ok": 5540,
+    "parse-error": 2,
+    "pattern-too-long": 3,
+    "repeat-count": 15,
+    "unsupported-modifier:base64": 190,
+    "unsupported-modifier:xor": 6,
+    "wide-non-literal": 4,
+    "word-boundary": 1
+  },
+  "sample_size": 7922,
+  "schema_version": "1",
+  "scope": "full_corpus",
+  "unclassified_parse_errors": 2,
+  "wall_s": 28.804
+}

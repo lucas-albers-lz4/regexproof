@@ -34,6 +34,7 @@ SECURITY_TOOL_CORPORA = frozenset(
         "crust",
         "yara-rules",
         "ail-yara-rules",
+        "malcontent",
     }
 )
 

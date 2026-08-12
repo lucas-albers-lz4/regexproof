@@ -1,75 +1,149 @@
 {
   "coreruleset": {
+    "budget": {
+      "redos_wall_s": 180
+    },
+    "commit": null,
+    "compiler_fingerprint": "6cb6c870dcce1b00",
+    "complete_run": true,
+    "corpus_pin": null,
     "decision": "go",
+    "decision_rule": "go iff encodable/sample_size >= 0.3",
     "dialect": "pcre",
-    "encodable": 8,
-    "fraction": 0.8,
+    "encodable": 239,
+    "engine_versions": {
+      "python": "3.14.6",
+      "z3": "5.0.0"
+    },
+    "fraction": 0.6908,
     "go_no_go_threshold": 0.3,
+    "inventory_path": "properties/generated/coreruleset-inventory.ndjson",
     "pilot": "coreruleset",
-    "sample_path": "batch/corpora/coreruleset/sample.rules",
-    "sample_size": 10,
-    "schema_version": "1"
+    "reasons": {
+      "inline-flag": 1,
+      "internal-anchor": 2,
+      "negated-shorthand": 3,
+      "ok": 239,
+      "pattern-too-long": 73,
+      "per-alternative-anchor": 9,
+      "word-boundary": 19
+    },
+    "remeasure": {
+      "baseline_encodable": 248,
+      "baseline_fraction": 0.7168,
+      "flips": {
+        "now_encodable": 0,
+        "now_rejected": 9,
+        "unchanged": 337
+      },
+      "from": "frozen_inventory",
+      "prior_artifact_encodable": 239,
+      "prior_artifact_fraction": 0.6908,
+      "prior_compiler_fingerprint": "4a86d0cffde9046c",
+      "samples": {
+        "now_encodable": [],
+        "now_rejected": [
+          {
+            "flags": "",
+            "pattern": "br|compress|deflate|(?:pack200-)?gzip|identity|\\*|^$|aes128gcm|exi|zstd|x-(?:compress|gzip)",
+            "reason": "per-alternative-anchor",
+            "regex_id": "39762ab894d372041a94535811e92e5a",
+            "site": "batch/corpora/coreruleset/rules/REQUEST-920-PROTOCOL-ENFORCEMENT.conf:1829:0"
+          },
+          {
+            "flags": "",
+            "pattern": "(?:^|[^\\x5c])\\x5c[cdeghijklmpqwxyz123456789]",
+            "reason": "per-alternative-anchor",
+            "regex_id": "a5a5071868f6b77eff6bebbc2ec5a19d",
+            "site": "batch/corpora/coreruleset/rules/REQUEST-920-PROTOCOL-ENFORCEMENT.conf:1979:0"
+          },
+          {
+            "flags": "",
+            "pattern": "(][^\\]]+$|][^\\]]+\\[)",
+            "reason": "per-alternative-anchor",
+            "regex_id": "a2aee51a050e42295efc866987590bed",
+            "site": "batch/corpora/coreruleset/rules/REQUEST-921-PROTOCOL-ATTACK.conf:551:0"
+          },
+          {
+            "flags": "",
+            "pattern": "(?:^|[/;\\x5c])\\.{2,3}[/;\\x5c]",
+            "reason": "per-alternative-anchor",
+            "regex_id": "5610f531e236dd58a09793508805952d",
+            "site": "batch/corpora/coreruleset/rules/REQUEST-930-APPLICATION-ATTACK-LFI.conf:73:0"
+          },
+          {
+            "flags": "",
+            "pattern": "~[\\+\\-](?:$|[0-9]+)",
+            "reason": "per-alternative-anchor",
+            "regex_id": "8d849010be9687c39d87d29eb97e1a68",
+            "site": "batch/corpora/coreruleset/rules/REQUEST-932-APPLICATION-ATTACK-RCE.conf:384:0"
+          },
+          {
+            "flags": "i",
+            "pattern": "<\\?(?:php[\\s\\x0b]|[\\s\\x0b=]|xml(?:[\\s\\x0b]+[^a-z]|:)|$)|\\[[/\\x5c]?php\\]|\\{/?php\\}",
+            "reason": "per-alternative-anchor",
+            "regex_id": "4626105c7ec07b19194e84a8c5236d12",
+            "site": "batch/corpora/coreruleset/rules/REQUEST-933-APPLICATION-ATTACK-PHP.conf:53:0"
+          },
+          {
+            "flags": "",
+            "pattern": "(?:^|[/\\x5c])sess_[,\\-0-9a-z]{20,256}$",
+            "reason": "per-alternative-anchor",
+            "regex_id": "93814b54da34f813048dafe300a88c57",
+            "site": "batch/corpora/coreruleset/rules/REQUEST-933-APPLICATION-ATTACK-PHP.conf:615:0"
+          },
+          {
+            "flags": "",
+            "pattern": "__[^\\\"&=]*__(?:i?(?:startswith|e(?:ndswith|xact)|contains|regex)|i(?:snull|n)|range|[gl]te?|has_(?:keys?|any_keys)|contained_by)(?:$|\\\"[\\s\\x0b]*:)",
+            "reason": "per-alternative-anchor",
+            "regex_id": "b18bbb61415133c7b4032ba969969293",
+            "site": "batch/corpora/coreruleset/rules/REQUEST-934-APPLICATION-ATTACK-GENERIC.conf:470:0"
+          },
+          {
+            "flags": "",
+            "pattern": "__(?:i?(?:startswith|e(?:ndswith|xact)|contains|regex)|i(?:snull|n)|range|[gl]te?|has_(?:keys?|any_keys)|contained_by)(?:$|\\\"[\\s\\x0b]*:)",
+            "reason": "per-alternative-anchor",
+            "regex_id": "5a8d7fa7af78dfc2df8ef4fcebce6713",
+            "site": "batch/corpora/coreruleset/rules/REQUEST-934-APPLICATION-ATTACK-GENERIC.conf:516:0"
+          }
+        ]
+      }
+    },
+    "sample_size": 346,
+    "schema_version": "1",
+    "scope": "full_corpus",
+    "unclassified_parse_errors": 0,
+    "wall_s": 21.527
   },
   "corpora": {
-    "detect-secrets": {
-      "corpus": "detect-secrets",
+    "malcontent": {
+      "address_space_cap": true,
+      "complete_run": true,
+      "corpus": "malcontent",
       "corpus_type": "rule_corpus",
-      "encodable": 4,
+      "encodable": 5540,
       "engine": {
-        "python": "3.14.6"
+        "python": "3.13.5"
       },
-      "extracted": 4,
-      "findings": 5,
+      "extracted": 7922,
+      "findings": 9,
       "inventory_questions": 4,
-      "join_regex_ids": 5,
+      "join_regex_ids": 9,
+      "redos_findings": 0,
+      "redos_incomplete": false,
       "schema_version": "1",
-      "triage": 0
-    },
-    "gitleaks": {
-      "corpus": "gitleaks",
-      "corpus_type": "rule_corpus",
-      "encodable": 41,
-      "engine": {
-        "python": "3.14.6"
-      },
-      "extracted": 221,
-      "findings": 4,
-      "inventory_questions": 4,
-      "join_regex_ids": 4,
-      "schema_version": "1",
-      "triage": 180
-    },
-    "validatorjs": {
-      "corpus": "validatorjs",
-      "corpus_type": "validator",
-      "encodable": 145,
-      "engine": {
-        "python": "3.14.6"
-      },
-      "extracted": 212,
-      "findings": 106,
-      "inventory_questions": 4,
-      "join_regex_ids": 104,
-      "schema_version": "1",
-      "triage": 67
+      "triage": 2382
     }
   },
   "pair_counts": {
     "coreruleset": {
       "admitted": 0,
       "dropped": 0,
-      "note": "fraction gate go; no independent-spec R1 catalog in Phase 5"
+      "fraction": 0.6908,
+      "note": "fraction gate go; CRS rule-derived adapter is Phase-2 rule_diff",
+      "scope": "full_corpus"
     },
-    "detect-secrets": {
-      "admitted": 0,
-      "dropped": 0,
-      "note": "no independent-spec catalog"
-    },
-    "gitleaks": {
-      "admitted": 22,
-      "dropped": 1
-    },
-    "validatorjs": {
+    "malcontent": {
       "admitted": 0,
       "dropped": 0,
       "note": "no independent-spec catalog"

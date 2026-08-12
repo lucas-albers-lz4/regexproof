@@ -2,18 +2,11 @@
   "coreruleset": {
     "admitted": 0,
     "dropped": 0,
-    "note": "fraction gate go; no independent-spec R1 catalog in Phase 5"
+    "fraction": 0.6908,
+    "note": "fraction gate go; CRS rule-derived adapter is Phase-2 rule_diff",
+    "scope": "full_corpus"
   },
-  "detect-secrets": {
-    "admitted": 0,
-    "dropped": 0,
-    "note": "no independent-spec catalog"
-  },
-  "gitleaks": {
-    "admitted": 22,
-    "dropped": 1
-  },
-  "validatorjs": {
+  "malcontent": {
     "admitted": 0,
     "dropped": 0,
     "note": "no independent-spec catalog"

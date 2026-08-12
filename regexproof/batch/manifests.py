@@ -862,6 +862,30 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
             "max_disk_mb": 500,
         },
     },
+    "malcontent": {
+        "corpus_type": "rule_corpus",
+        # Materialize: ln -sfn /tmp/malcontent/rules batch/corpora/malcontent/rules
+        # Chainguard malware-content scanner own rules pack (rules/ only —
+        # third_party/ vendored packs excluded by pinning path to rules/).
+        # batch-4 GO admit (#261): 1,156 files / 32,908 lines, largest yara
+        # corpus in the matrix (probe 19,578 sites incl. third_party).
+        "path": ROOT / "batch" / "corpora" / "malcontent" / "rules",
+        "glob": "**/*.yar,**/*.yara",
+        "dialect": "yara",
+        "extractor": "yara",
+        "repo": "chainguard-dev/malcontent",
+        "security_tool": True,
+        "lift_inline": False,
+        "corpus_pin": "ea3e83e24676a1678a9522141da29b636c9451ab",
+        "commit": "ea3e83e24676a1678a9522141da29b636c9451ab",
+        "budget": {
+            "max_patterns": 30000,
+            "max_wall_s": 900,
+            "redos_wall_s": 180,
+            "max_mem_mb": 2048,
+            "max_disk_mb": 500,
+        },
+    },
     "dogfood_shell": {
         "corpus_type": "rule_corpus",
         # Materialize: ln -sfn <merged dogfooding tree> batch/corpora/dogfood_shell/rules
@@ -976,6 +1000,7 @@ WAVE_CORPORA = frozenset({
     "ail-yara-rules",
     "perl_tre", "go_regexp_tests", "v8_mjsunit",
     "xibo-cms",
+    "malcontent",
 })
 
 
