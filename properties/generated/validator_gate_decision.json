@@ -1,48 +1,42 @@
 {
-  "candidate_url": "https://github.com/aralejs/validator",
+  "schema_version": "1",
+  "candidate_url": "https://github.com/beeblebrox3/validator",
   "conditions": [
     {
-      "evidence": "No extractable novel surface (dialects already admitted).",
       "id": "new-surface",
-      "met": false
+      "met": false,
+      "evidence": "Clone/checkout failure (git 128 / promisor / write error) - unprobeable at gate budget"
     },
     {
-      "evidence": "Probe security_boundary unknown or false positive. aralejs; 17 ecma sites.",
       "id": "security-boundary",
-      "met": false
+      "met": false,
+      "evidence": "Not determinable - probe unavailable."
     },
     {
-      "evidence": "Below 1000 scale bar (or unprobeable).",
       "id": "large-under-saturated",
-      "met": false
+      "met": false,
+      "evidence": "Unprobeable; no site count."
     }
   ],
   "corpus": "validator",
-  "corpus_pin": "722645bceeac4fe60cf881a8e42f057facef2afb",
+  "corpus_pin": "",
   "decision": "no-go",
   "decision_basis": "admission_conditions",
   "decision_date": "2026-08-12",
   "escape_hatch_applied": false,
   "probe": {
+    "regex_sites": 0,
+    "dialect": {},
+    "flags": {},
     "construct_counts": {},
-    "dialect": {
-      "ecma": 17
-    },
-    "flags": {
-      "g": 2
-    },
-    "pin": "722645bceeac4fe60cf881a8e42f057facef2afb",
-    "predicted_buckets": {
-      "stateful": 2
-    },
-    "regex_sites": 17,
-    "regex_sites_per_file": {
-      "src/core.js": 2,
-      "src/rule.js": 12,
-      "src/utils.js": 3
-    },
-    "security_boundary": "unknown"
+    "predicted_buckets": {},
+    "security_boundary": "unknown",
+    "pin": "",
+    "extractor_errors": 0,
+    "regex_sites_per_file": {}
   },
-  "rationale": "Below admission scale: 17 regex sites (auto-NO-GO bar 200); dialects [ecma:17]; boundary=unknown.",
-  "schema_version": "1"
+  "rationale": "Clone/checkout failure (git 128 / promisor / write error) - unprobeable at gate budget. No admission condition met.",
+  "related": {
+    "probe_failure": "git clone/checkout error"
+  }
 }

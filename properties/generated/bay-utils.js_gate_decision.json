@@ -1,0 +1,53 @@
+{
+  "candidate_url": "https://github.com/ShanbayFE/bay-utils.js",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. ShanbayFE; 45 ecma sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "bay-utils.js",
+  "corpus_pin": "f778516136d1b94c8ba35eb8dc12c6d7f3beccfa",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 45
+    },
+    "flags": {
+      "g": 22,
+      "i": 7
+    },
+    "pin": "f778516136d1b94c8ba35eb8dc12c6d7f3beccfa",
+    "predicted_buckets": {
+      "inline-flag": 7,
+      "stateful": 22
+    },
+    "regex_sites": 45,
+    "regex_sites_per_file": {
+      "src/dom.js": 2,
+      "src/format.js": 3,
+      "src/others.js": 10,
+      "src/validator.js": 26,
+      "src/wxSdkConfig.js": 1,
+      "webpack.config.js": 3
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 45 regex sites (auto-NO-GO bar 200); dialects [ecma:45]; boundary=unknown.",
+  "schema_version": "1"
+}

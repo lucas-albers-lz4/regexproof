@@ -1,0 +1,77 @@
+{
+  "candidate_url": "https://github.com/taskrabbit/pie",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. taskrabbit; 142 ecma sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "pie",
+  "corpus_pin": "fb0b4fefb6f4a1030d16a1792dbf2f4b32c8eae5",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "lookaround": 2
+    },
+    "dialect": {
+      "ecma": 142
+    },
+    "flags": {
+      "g": 28,
+      "i": 7,
+      "m": 4
+    },
+    "pin": "fb0b4fefb6f4a1030d16a1792dbf2f4b32c8eae5",
+    "predicted_buckets": {
+      "inline-flag": 7,
+      "lookaround": 2,
+      "m-flag": 4,
+      "stateful": 28
+    },
+    "regex_sites": 142,
+    "regex_sites_per_file": {
+      "docs/guide/js/app.js": 47,
+      "examples/js/transitionsApp.js": 1,
+      "server.js": 5,
+      "spec/extensions/arraySpec.js": 1,
+      "spec/extensions/stringSpec.js": 5,
+      "spec/modelSpec.js": 5,
+      "spec/performanceSpec.js": 4,
+      "src/app.js": 1,
+      "src/appState.js": 1,
+      "src/binding.js": 1,
+      "src/emitter.js": 1,
+      "src/extensions/browser.js": 6,
+      "src/extensions/date.js": 3,
+      "src/extensions/dom.js": 3,
+      "src/extensions/object.js": 5,
+      "src/extensions/string.js": 23,
+      "src/i18n.js": 5,
+      "src/model.js": 1,
+      "src/pathHelper.js": 1,
+      "src/pie.js": 1,
+      "src/resources.js": 3,
+      "src/route.js": 7,
+      "src/router.js": 1,
+      "src/validator.js": 10,
+      "src/viewTransition.js": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 142 regex sites (auto-NO-GO bar 200); dialects [ecma:142]; boundary=unknown.",
+  "schema_version": "1"
+}

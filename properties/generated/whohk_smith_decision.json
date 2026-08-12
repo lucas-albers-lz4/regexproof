@@ -1,0 +1,14 @@
+{
+  "schema_version": "1",
+  "corpus": "whohk",
+  "corpus_pin": "1143af45b06c2e49c9f13efb149cd20067e8ea38",
+  "candidate_url": "https://github.com/wgpsec/whohk",
+  "smith_decision": "go",
+  "supersedes": null,
+  "reason": "Linux incident-response tool yara pack (22 files): 1,318/2,138 = 0.6165 encodable (complete_run, parse-error=0, budget clean). 18 findings + 820 triage. IR-tool rules (not a vendor security tool per se) - public-first. GO admit confirmed.",
+  "regex_sites": 2138,
+  "sites_by_bucket": {
+    "yara (22 files, 2,138 sites measured; 1,318 encodable)": 2138
+  },
+  "additional_surface_outside_probe_scope": {}
+}

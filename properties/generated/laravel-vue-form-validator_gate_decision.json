@@ -1,11 +1,11 @@
 {
   "schema_version": "1",
-  "candidate_url": "https://github.com/python/cpython",
+  "candidate_url": "https://github.com/chantouchsek/laravel-vue-form-validator",
   "conditions": [
     {
       "id": "new-surface",
       "met": false,
-      "evidence": "DUPLICATE of already-admitted cpython_re corpus"
+      "evidence": "Clone/checkout failure (git 128 / promisor / write error) - unprobeable at gate budget"
     },
     {
       "id": "security-boundary",
@@ -18,7 +18,7 @@
       "evidence": "Unprobeable; no site count."
     }
   ],
-  "corpus": "cpython",
+  "corpus": "laravel-vue-form-validator",
   "corpus_pin": "",
   "decision": "no-go",
   "decision_basis": "admission_conditions",
@@ -35,8 +35,8 @@
     "extractor_errors": 0,
     "regex_sites_per_file": {}
   },
-  "rationale": "DUPLICATE of already-admitted cpython_re corpus. No admission condition met.",
+  "rationale": "Clone/checkout failure (git 128 / promisor / write error) - unprobeable at gate budget. No admission condition met.",
   "related": {
-    "probe_failure": "duplicate of admitted corpus"
+    "probe_failure": "git clone/checkout error"
   }
 }

@@ -1,0 +1,54 @@
+{
+  "candidate_url": "https://github.com/klabbet/azure-naming",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. klabbet; 37 ecma sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "azure-naming",
+  "corpus_pin": "82b39a5b50a3efb9e6d8fac003980d7e2bea7b4b",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 37
+    },
+    "flags": {
+      "g": 25
+    },
+    "pin": "82b39a5b50a3efb9e6d8fac003980d7e2bea7b4b",
+    "predicted_buckets": {
+      "stateful": 25
+    },
+    "regex_sites": 37,
+    "regex_sites_per_file": {
+      "lib/lib/characterReplacement.js": 1,
+      "lib/lib/transformer.js": 7,
+      "lib/lib/validator.js": 4,
+      "lib/src/lib/characterReplacement.js": 1,
+      "lib/src/lib/transformer.js": 7,
+      "lib/src/lib/validator.js": 4,
+      "src/lib/characterReplacement.js": 1,
+      "src/lib/transformer.js": 8,
+      "src/lib/validator.js": 4
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 37 regex sites (auto-NO-GO bar 200); dialects [ecma:37]; boundary=unknown.",
+  "schema_version": "1"
+}

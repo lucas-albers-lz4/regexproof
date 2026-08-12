@@ -1,0 +1,62 @@
+{
+  "candidate_url": "https://github.com/icaife/code-snippet",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. icaife; 153 ecma sites < 200.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "code-snippet",
+  "corpus_pin": "b3ab1bd400e0e93ad4a6ab585c90d87f157a0729",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "backref": 1,
+      "lookaround": 5
+    },
+    "dialect": {
+      "ecma": 153
+    },
+    "flags": {
+      "g": 30,
+      "i": 17,
+      "m": 1
+    },
+    "pin": "b3ab1bd400e0e93ad4a6ab585c90d87f157a0729",
+    "predicted_buckets": {
+      "backref": 1,
+      "inline-flag": 17,
+      "lookaround": 5,
+      "m-flag": 1,
+      "stateful": 30
+    },
+    "regex_sites": 153,
+    "regex_sites_per_file": {
+      "src/cookie.js": 6,
+      "src/jquery.js": 81,
+      "src/moment.js": 10,
+      "src/navigation.js": 2,
+      "src/number-format.js": 3,
+      "src/third.js": 27,
+      "src/url-format.js": 8,
+      "src/validator.js": 16
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 153 regex sites (auto-NO-GO bar 200); dialects [ecma:153]; boundary=unknown.",
+  "schema_version": "1"
+}

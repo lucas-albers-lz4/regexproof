@@ -116,23 +116,23 @@
     "wall_s": 21.527
   },
   "corpora": {
-    "typescript-go": {
+    "whohk": {
       "address_space_cap": true,
       "complete_run": true,
-      "corpus": "typescript-go",
-      "corpus_type": "testdata",
-      "encodable": 1483,
+      "corpus": "whohk",
+      "corpus_type": "rule_corpus",
+      "encodable": 1318,
       "engine": {
         "python": "3.13.5"
       },
-      "extracted": 2558,
-      "findings": 12,
-      "inventory_questions": 0,
-      "join_regex_ids": 12,
+      "extracted": 2138,
+      "findings": 18,
+      "inventory_questions": 4,
+      "join_regex_ids": 18,
       "redos_findings": 0,
       "redos_incomplete": false,
       "schema_version": "1",
-      "triage": 1075
+      "triage": 820
     }
   },
   "pair_counts": {
@@ -143,7 +143,7 @@
       "note": "fraction gate go; CRS rule-derived adapter is Phase-2 rule_diff",
       "scope": "full_corpus"
     },
-    "typescript-go": {
+    "whohk": {
       "admitted": 0,
       "dropped": 0,
       "note": "no independent-spec catalog"

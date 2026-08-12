@@ -1,0 +1,44 @@
+{
+  "candidate_url": "https://github.com/animify/Minicons",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. animify; 6 ecma sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "Minicons",
+  "corpus_pin": "02175b5f852810fa38fec9d2d699bb95baf550d3",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 6
+    },
+    "flags": {},
+    "pin": "02175b5f852810fa38fec9d2d699bb95baf550d3",
+    "predicted_buckets": {},
+    "regex_sites": 6,
+    "regex_sites_per_file": {
+      "test/suites/files.js": 2,
+      "webpack.config.babel.js": 2,
+      "webpack.config.prod.babel.js": 2
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 6 regex sites (auto-NO-GO bar 200); dialects [ecma:6]; boundary=unknown.",
+  "schema_version": "1"
+}

@@ -1,0 +1,58 @@
+{
+  "candidate_url": "https://github.com/StefanRudvin/CodeMarkerFront",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. StefanRudvin; 20 ecma sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "CodeMarkerFront",
+  "corpus_pin": "2a6a23c8a39825683a6e6e1a38208995176549d9",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 20
+    },
+    "flags": {
+      "d": 1,
+      "g": 1,
+      "i": 1,
+      "v": 1
+    },
+    "pin": "2a6a23c8a39825683a6e6e1a38208995176549d9",
+    "predicted_buckets": {
+      "inline-flag": 1,
+      "stateful": 1,
+      "v-flag": 1
+    },
+    "regex_sites": 20,
+    "regex_sites_per_file": {
+      "src/Components/Report.js": 7,
+      "src/Components/common/ConfigurableTable.js": 1,
+      "src/Views/Admin.js": 4,
+      "src/Views/Assessment.js": 1,
+      "src/Views/NewAssessment.js": 2,
+      "src/Views/Submission.js": 1,
+      "src/Views/User.js": 3,
+      "src/registerServiceWorker.js": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 20 regex sites (auto-NO-GO bar 200); dialects [ecma:20]; boundary=unknown.",
+  "schema_version": "1"
+}

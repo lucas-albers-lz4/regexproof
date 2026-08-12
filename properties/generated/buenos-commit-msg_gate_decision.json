@@ -1,0 +1,46 @@
+{
+  "candidate_url": "https://github.com/KrekkieD/buenos-commit-msg",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. KrekkieD; 6 ecma sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "buenos-commit-msg",
+  "corpus_pin": "de15b92ca21b23659ff58467456d536e06acbf1c",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 6
+    },
+    "flags": {
+      "i": 1
+    },
+    "pin": "de15b92ca21b23659ff58467456d536e06acbf1c",
+    "predicted_buckets": {
+      "inline-flag": 1
+    },
+    "regex_sites": 6,
+    "regex_sites_per_file": {
+      "src/validator.js": 6
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 6 regex sites (auto-NO-GO bar 200); dialects [ecma:6]; boundary=unknown.",
+  "schema_version": "1"
+}

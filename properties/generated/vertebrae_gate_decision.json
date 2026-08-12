@@ -1,0 +1,54 @@
+{
+  "candidate_url": "https://github.com/evisions-restored/vertebrae",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. evisions-restored; 30 ecma sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "vertebrae",
+  "corpus_pin": "07e29f866732ef7b4d613a7a2867852a79e47c78",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "backref": 1
+    },
+    "dialect": {
+      "ecma": 30
+    },
+    "flags": {
+      "g": 12,
+      "i": 3
+    },
+    "pin": "07e29f866732ef7b4d613a7a2867852a79e47c78",
+    "predicted_buckets": {
+      "backref": 1,
+      "inline-flag": 3,
+      "stateful": 12
+    },
+    "regex_sites": 30,
+    "regex_sites_per_file": {
+      "src/app.js": 2,
+      "src/model.js": 8,
+      "src/validator.js": 3,
+      "tasks/build.js": 17
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 30 regex sites (auto-NO-GO bar 200); dialects [ecma:30]; boundary=unknown.",
+  "schema_version": "1"
+}

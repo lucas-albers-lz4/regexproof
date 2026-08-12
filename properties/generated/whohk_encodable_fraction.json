@@ -1,0 +1,39 @@
+{
+  "budget": {
+    "max_disk_mb": 500,
+    "max_mem_mb": 2048,
+    "max_patterns": 5000,
+    "max_wall_s": 900,
+    "redos_wall_s": 180
+  },
+  "budget_breaches": null,
+  "commit": "1143af45b06c2e49c9f13efb149cd20067e8ea38",
+  "compiler_fingerprint": "71d2ce23b4cd",
+  "complete_run": true,
+  "corpus_pin": "1143af45b06c2e49c9f13efb149cd20067e8ea38",
+  "decision": "go",
+  "decision_rule": "go iff encodable/sample_size >= 0.3",
+  "dialect": "yara",
+  "encodable": 1318,
+  "engine_versions": {
+    "python": "3.13.5",
+    "z3": "5.0.0"
+  },
+  "extractor_schema_version": "2",
+  "fraction": 0.6165,
+  "go_no_go_threshold": 0.3,
+  "id_formula": "v2-domain-optional-ascii-default",
+  "inventory_path": "properties/generated/whohk-inventory.ndjson",
+  "path": "batch/corpora/whohk/rules",
+  "pilot": "whohk",
+  "reasons": {
+    "fullword-boundary": 819,
+    "ok": 1318,
+    "wide-non-literal": 1
+  },
+  "sample_size": 2138,
+  "schema_version": "1",
+  "scope": "full_corpus",
+  "unclassified_parse_errors": 0,
+  "wall_s": 10.219
+}

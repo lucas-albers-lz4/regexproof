@@ -1,0 +1,47 @@
+{
+  "candidate_url": "https://github.com/dargue3/laravel-like-vue-validator",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. dargue3; 5 ecma sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "laravel-like-vue-validator",
+  "corpus_pin": "2beffeeafcb314d795ebeeb2d31d7b0ed682d7e7",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 5
+    },
+    "flags": {
+      "i": 1
+    },
+    "pin": "2beffeeafcb314d795ebeeb2d31d7b0ed682d7e7",
+    "predicted_buckets": {
+      "inline-flag": 1
+    },
+    "regex_sites": 5,
+    "regex_sites_per_file": {
+      "src/Validator.js": 4,
+      "tests/Validator.spec.js": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 5 regex sites (auto-NO-GO bar 200); dialects [ecma:5]; boundary=unknown.",
+  "schema_version": "1"
+}
