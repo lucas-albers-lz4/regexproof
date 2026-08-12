@@ -5,7 +5,7 @@ Extracts regex sites from the four dogfooding repos (usrmanage, fwlive,
 happycow, hermes-agent-fork) using the project's own extractors (python_ast,
 js_babel) plus the REGISTERED posix-shell extractor
 (regexproof/extractors/shell_posix.py — the P1-frozen heuristic semantics,
-P2c migration; scan_shell deleted), then computes:
+P2c migration), then computes:
 
   - distinct patterns per repo (exact pattern+flags+dialect identity)
   - singleton fraction  -> Good-Turing P(next repo yields something unseen)
@@ -68,8 +68,8 @@ SKIP_DIRS = {".git", "node_modules", "dist", "build", ".venv", "venv",
              "__pycache__", ".tox", "coverage", "htmlcov", ".next"}
 
 # --- shell extraction via the REGISTERED extractor (P2c migration) ---
-# scan_shell and the heuristic scanner internals were deleted in P2c: the
-# registered `regexproof.extractors.shell_posix` is the single source of the
+# The P1 heuristic scanner internals were removed in P2c: the registered
+# `regexproof.extractors.shell_posix` is the single source of the
 # P1-frozen semantics (unquoted =~ RHS, fgrep/-F literal skip, -i -> flags,
 # sed s/// + /re/ forms, awk /re/ + -F ERE, comment/string guards, token
 # boundary).  Thin wrappers keep the probe-facing helpers stable.
@@ -173,7 +173,7 @@ def extract_repo(name: str, path: str, *, dir_mode: bool = False,
         for r in recs:
             if not r.get("pattern"):
                 continue  # empty placeholder (composite-pattern etc.) — not a user regex
-            r["extractor"] = r.get("extractor", "shell_posix")
+            r["extractor"] = r.get("extractor", "shell_posix" if kind == "sh" else kind)
             records.append(r)
             kept += 1
         per_file.append((rel, kept))

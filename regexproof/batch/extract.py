@@ -82,6 +82,7 @@ def extract_corpus(corpus: str, meta: dict[str, Any]) -> list[dict[str, Any]]:
         "spamassassin",
         "noseyparker",
         "shhgit",
+        "shell_posix",
         "dompurify",
         "isemail",
         "email_addresses",

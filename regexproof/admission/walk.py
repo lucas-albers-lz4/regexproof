@@ -146,7 +146,7 @@ def _is_shell_context(path: Path) -> bool:
     """init.d/ path segment or extensionless file with a shell shebang
     (matches the P1 `--dir` counter's selection; suffix files are handled
     by their suffix extractor first)."""
-    if "init.d" in str(path).lower():
+    if any(p == "init.d" for p in path.parts):
         return True
     if path.suffix == "":
         try:

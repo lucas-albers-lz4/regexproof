@@ -344,3 +344,20 @@ def test_json_legacy_rejected():
     from regexproof.batch.runner import main
 
     assert main(["--json-legacy"]) == 2
+
+
+def test_extract_corpus_routes_shell_posix_through_registry(tmp_path):
+    """P2c luna finding: extract_corpus must dispatch shell_posix via the
+    registry allowlist (not fall through to a legacy ValueError)."""
+    from regexproof.batch.extract import extract_corpus
+    from regexproof.batch.manifests import CORPUS_MANIFESTS
+
+    (tmp_path / "rules").mkdir()
+    (tmp_path / "rules" / "a.sh").write_text(
+        "grep 'syn_flood' /tmp/x\n[[ $x =~ ^[0-9]+$ ]]\n", encoding="utf-8")
+    meta = dict(CORPUS_MANIFESTS["dogfood_shell"])
+    meta["path"] = tmp_path / "rules"
+    recs = extract_corpus("dogfood_shell", meta)
+    assert len(recs) == 2
+    assert all(r["dialect"] == "posix-shell" for r in recs)
+    assert {r["pattern"] for r in recs} == {"syn_flood", "^[0-9]+$"}

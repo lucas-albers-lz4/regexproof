@@ -321,3 +321,14 @@ def test_walk_repo_suffix_precedence_over_initd(tmp_path):
     assert res["regex_sites"] == 1
     assert res["dialect"].get("py_re") == 1
     assert "posix-shell" not in res["dialect"]
+
+
+def test_walk_repo_initd_component_not_substring(tmp_path):
+    """P2c luna finding: 'init.d' must match a path COMPONENT, not a
+    substring — not-init.d-notes/README is not a shell file."""
+    (tmp_path / "not-init.d-notes").mkdir()
+    (tmp_path / "not-init.d-notes" / "README").write_text(
+        "grep 'phantom' f\n", encoding="utf-8")
+    res = walk_repo(tmp_path)
+    assert res["regex_sites"] == 0
+    assert "posix-shell" not in res["dialect"]
