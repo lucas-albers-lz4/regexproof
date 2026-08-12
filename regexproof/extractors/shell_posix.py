@@ -10,8 +10,9 @@ Semantics (verified on GNU grep 3.11 + busybox 1.37, 2026-08-12):
 - grep/egrep quoted args are BRE/ERE patterns; fgrep / ``grep -F`` args are
   LITERALS and are skipped; ``-i`` maps to the record ``flags`` field.
   ``egrep``/``-E`` → ``shell_flags.syntax = "ere"``; bare grep → ``"bre"``.
-- sed contributes the search part of ``s///`` (any delimiter) and ``/re/``
-  address forms only; numeric addresses/ranges (e.g. ``1,20p``) are rejected.
+- sed contributes the search part of ``s///`` (any delimiter, call_kind
+  ``substitution``) and ``/re/`` address forms only (call_kind ``search``);
+  numeric addresses/ranges (e.g. ``1,20p``) are rejected.
   ``sed -i`` is in-place editing, NOT caseless — never mapped to flags.
 - awk program text is skipped; ``awk '/re/'`` address forms and
   ``awk -F'ERE'`` field separators (spaced and glued) are extracted (ERE).
@@ -104,16 +105,6 @@ def _grep_mode(cmd: str, letters: str) -> str:
     return "basic"
 
 
-def _sed_search(pat: str) -> str | None:
-    m = _SED_S.match(pat)
-    if m:
-        return m.group("search")
-    m = _SED_ADDR.match(pat)
-    if m:
-        return m.group("re")
-    return None  # numeric address / range / other — not a regex
-
-
 def extract_shell_posix(
     src: str, *, repo: str, file: str, dialect: str
 ) -> list[dict]:
@@ -163,11 +154,19 @@ def extract_shell_posix(
             add(m.start(), pat, flags, shell_flags, "search",
                 src[m.start():m.end()])
         elif cmd == "sed":
-            search = _sed_search(pat)
-            if search is None:
+            # s/// = substitution; /re/ address form = search
+            sm = _SED_S.match(pat)
+            if sm:
+                add(m.start(), sm.group("search"), "",
+                    {"syntax": "bre", "grep_mode": "basic"},
+                    "substitution", src[m.start():m.end()])
+                continue
+            addr = _SED_ADDR.match(pat)
+            if not addr:
                 continue  # numeric address / range — not a regex
-            add(m.start(), search, "", {"syntax": "bre", "grep_mode": "basic"},
-                "substitution", src[m.start():m.end()])
+            add(m.start(), addr.group("re"), "",
+                {"syntax": "bre", "grep_mode": "basic"},
+                "search", src[m.start():m.end()])
         else:  # awk
             if "F" in letters:
                 # -F 'ERE' — the quoted arg is the field-separator regex
