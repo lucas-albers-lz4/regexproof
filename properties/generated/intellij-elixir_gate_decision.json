@@ -1,0 +1,47 @@
+{
+  "candidate_url": "https://github.com/KronicDeth/intellij-elixir",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. KronicDeth elixir plugin; 11 java/shell sites (java #150).",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "intellij-elixir",
+  "corpus_pin": "3b32af6e9eb124eefaa2baf4cf90583129b4e640",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "java": 8,
+      "posix-shell": 3
+    },
+    "flags": {},
+    "pin": "3b32af6e9eb124eefaa2baf4cf90583129b4e640",
+    "predicted_buckets": {},
+    "regex_sites": 11,
+    "regex_sites_per_file": {
+      "jps-builder/src/org/elixir_lang/jps/builder/execution/ProcessAdapter.java": 4,
+      "src/org/elixir_lang/console/FileReferenceFilter.java": 1,
+      "src/org/elixir_lang/mix/runner/Status.java": 2,
+      "src/org/elixir_lang/module/ElixirProjectStructureDetector.java": 1,
+      "testData/org/elixir_lang/cli/gen_elixir_cli_base_args.sh": 3
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 11 regex sites (auto-NO-GO bar 200); dialects [java:8, posix-shell:3]; boundary=unknown.",
+  "schema_version": "1"
+}

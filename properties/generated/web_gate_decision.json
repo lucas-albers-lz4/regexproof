@@ -1,0 +1,64 @@
+{
+  "candidate_url": "https://github.com/UPchieve/web",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. UPchieve web; 60 ecma sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "web",
+  "corpus_pin": "6dd2ef9d06adaea3b352dc71bd1f4b736ce68db1",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 60
+    },
+    "flags": {
+      "g": 29,
+      "i": 10,
+      "u": 1
+    },
+    "pin": "6dd2ef9d06adaea3b352dc71bd1f4b736ce68db1",
+    "predicted_buckets": {
+      "inline-flag": 10,
+      "stateful": 29,
+      "u-flag": 1
+    },
+    "regex_sites": 60,
+    "regex_sites_per_file": {
+      ".storybook/preview.js": 2,
+      "playwright.config.js": 2,
+      "public/static/js/zwibbler-demo.js": 39,
+      "src/composables/useVerification.ts": 1,
+      "src/stories/Page.stories.js": 2,
+      "src/utils/chatbot-utils.ts": 1,
+      "src/utils/export-to-csv.js": 2,
+      "src/utils/get-operating-system.js": 2,
+      "src/utils/get-user-mobile-app-version.js": 1,
+      "src/utils/image-pipeline.ts": 2,
+      "src/utils/is-integrated-math.js": 1,
+      "src/utils/secondary-email-modal-utils.ts": 1,
+      "src/utils/word-count.ts": 1,
+      "tests/e2e/page-object-models/student-dashboard.js": 1,
+      "tests/e2e/sign-up/student/eligibility-flow.spec.js": 2
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 60 regex sites (auto-NO-GO bar 200); dialects [ecma:60]; boundary=unknown.",
+  "schema_version": "1"
+}

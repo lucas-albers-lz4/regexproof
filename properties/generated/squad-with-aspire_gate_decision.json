@@ -1,0 +1,86 @@
+{
+  "candidate_url": "https://github.com/bradygaster/squad-with-aspire",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. bradygaster; 318 ecma sites < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "squad-with-aspire",
+  "corpus_pin": "38af50f4bc65adf0e4056f980e0310442309209f",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "lookaround": 1
+    },
+    "dialect": {
+      "ecma": 318
+    },
+    "flags": {
+      "g": 86,
+      "i": 62,
+      "m": 1,
+      "s": 1,
+      "u": 1
+    },
+    "pin": "38af50f4bc65adf0e4056f980e0310442309209f",
+    "predicted_buckets": {
+      "inline-flag": 63,
+      "lookaround": 1,
+      "m-flag": 1,
+      "stateful": 86,
+      "u-flag": 1
+    },
+    "regex_sites": 318,
+    "regex_sites_per_file": {
+      "packages/last-page-contract/src/last-page.ts": 4,
+      "packages/retro-privacy-contract/src/privacy.ts": 1,
+      "squads/application-development/.squad/templates/ralph-triage.js": 24,
+      "squads/azure-infrastructure/.squad/templates/ralph-triage.js": 24,
+      "squads/experience-design/.squad/templates/ralph-triage.js": 24,
+      "squads/ideation-research-planning/.squad/templates/ralph-triage.js": 24,
+      "squads/quality-testing/.squad/templates/ralph-triage.js": 24,
+      "squads/review-deployment/.squad/templates/ralph-triage.js": 24,
+      "squads/security-hardening/.squad/templates/ralph-triage.js": 24,
+      "src/squad-chat-ui/src/App.tsx": 3,
+      "src/squad-chat-ui/src/components/ComposeBar.tsx": 1,
+      "src/squad-chat-ui/src/components/MessageBubble.tsx": 1,
+      "tests/e2e/dark-mode/persistence.spec.ts": 4,
+      "tests/e2e/last-page/restore.spec.ts": 8,
+      "tests/regression/auth-rate-limit-contract.test.ts": 2,
+      "tests/regression/copilot-cli-adjacent-preflights.test.ts": 9,
+      "tests/regression/copilot-cli-e2e-windows.test.ts": 2,
+      "tests/regression/copilot-cli-missing-message.test.ts": 12,
+      "tests/regression/copilot-cli-mutation-coverage.test.ts": 2,
+      "tests/regression/copilot-cli-property.test.ts": 1,
+      "tests/regression/copilot-cli-shared-util.test.ts": 2,
+      "tests/regression/copilot-cli-windows-shim.test.ts": 6,
+      "tests/regression/monitor-degrade-state-machine.test.ts": 4,
+      "tests/regression/retro-privacy-tr008.test.ts": 8,
+      "tests/regression/spawn-agent-shell-injection.test.ts": 21,
+      "tests/unit/theme/contrast.test.ts": 2,
+      "tests/unit/theme/no-fouc-script.test.ts": 15,
+      "tests/unit/theme/toggle-a11y.test.ts": 15,
+      "upstream-transplants/last-viewed-page/LP-001-restore-flow/apps/web/src/navigation/lastPage.denylist.ts": 20,
+      "upstream-transplants/squad-1372/files/test/copilot-cli-windows-shim.test.ts": 6,
+      "upstream-transplants/squad-1372/verify-signature.ts": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 318 regex sites (auto-NO-GO bar 200); dialects [ecma:318]; boundary=unknown.",
+  "schema_version": "1"
+}

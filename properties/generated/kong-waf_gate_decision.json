@@ -1,0 +1,65 @@
+{
+  "candidate_url": "https://github.com/thattrain/kong-waf",
+  "conditions": [
+    {
+      "evidence": "Dialects already covered. kong-waf ruleset (thattrain); 300 pcre sites; deterministic-true WAF. Vendored-CRS question like hihttps - Smith separates.",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary=deterministic-true.",
+      "id": "security-boundary",
+      "met": true
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "kong-waf",
+  "corpus_pin": "bb1bb34e63be9b11b26114882fcdc69e1cee5906",
+  "decision": "triage-trial",
+  "decision_basis": "escape_hatch",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": true,
+  "probe": {
+    "construct_counts": {
+      "(?i)": 127,
+      "(?s)": 3
+    },
+    "dialect": {
+      "pcre": 300
+    },
+    "flags": {},
+    "pin": "bb1bb34e63be9b11b26114882fcdc69e1cee5906",
+    "predicted_buckets": {
+      "inline-flag": 130
+    },
+    "regex_sites": 300,
+    "regex_sites_per_file": {
+      "rules/REQUEST-901-INITIALIZATION.conf": 3,
+      "rules/REQUEST-905-COMMON-EXCEPTIONS.conf": 1,
+      "rules/REQUEST-920-PROTOCOL-ENFORCEMENT.conf": 42,
+      "rules/REQUEST-921-PROTOCOL-ATTACK.conf": 15,
+      "rules/REQUEST-922-MULTIPART-ATTACK.conf": 4,
+      "rules/REQUEST-930-APPLICATION-ATTACK-LFI.conf": 2,
+      "rules/REQUEST-931-APPLICATION-ATTACK-RFI.conf": 5,
+      "rules/REQUEST-932-APPLICATION-ATTACK-RCE.conf": 44,
+      "rules/REQUEST-933-APPLICATION-ATTACK-PHP.conf": 17,
+      "rules/REQUEST-934-APPLICATION-ATTACK-GENERIC.conf": 8,
+      "rules/REQUEST-941-APPLICATION-ATTACK-XSS.conf": 30,
+      "rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf": 62,
+      "rules/REQUEST-943-APPLICATION-ATTACK-SESSION-FIXATION.conf": 4,
+      "rules/REQUEST-944-APPLICATION-ATTACK-JAVA.conf": 15,
+      "rules/RESPONSE-950-DATA-LEAKAGES.conf": 3,
+      "rules/RESPONSE-951-DATA-LEAKAGES-SQL.conf": 16,
+      "rules/RESPONSE-953-DATA-LEAKAGES-PHP.conf": 2,
+      "rules/RESPONSE-954-DATA-LEAKAGES-IIS.conf": 4,
+      "rules/RESPONSE-955-WEB-SHELLS.conf": 23
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Security-boundary corpus (boundary=deterministic-true) with findings-triage potential; 300 sites across [pcre:300].",
+  "schema_version": "1"
+}

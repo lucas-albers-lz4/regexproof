@@ -34,6 +34,28 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
             "max_disk_mb": 100,
         },
     },
+    "anax": {
+        "corpus_type": "rule_corpus",
+        # Materialize: ln -sfn /tmp/anax-check batch/corpora/anax/rules
+        # IBM Open Horizon edge agent control system. First non-dogfooding
+        # posix-shell datapoint (194 shell sites). batch-5 triage-trial (#280).
+        "path": ROOT / "batch" / "corpora" / "anax" / "rules",
+        "glob": "**/*.sh",
+        "dialect": "posix-shell",
+        "extractor": "shell_posix",
+        "repo": "open-horizon/anax",
+        "security_tool": False,
+        "lift_inline": False,
+        "corpus_pin": "2f3fa5a506d6565fa68858b7963450567ddda114",
+        "commit": "2f3fa5a506d6565fa68858b7963450567ddda114",
+        "budget": {
+            "max_patterns": 5000,
+            "max_wall_s": 900,
+            "redos_wall_s": 180,
+            "max_mem_mb": 2048,
+            "max_disk_mb": 500,
+        },
+    },
     "gitleaks": {
         "corpus_type": "rule_corpus",
         "path": ROOT / "pilots" / "gitleaks" / "config" / "gitleaks.toml",

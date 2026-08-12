@@ -1,0 +1,51 @@
+{
+  "candidate_url": "https://github.com/mozilla/remote-settings",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. mozilla remote settings; 21 sites, deterministic-false.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "remote-settings",
+  "corpus_pin": "f25857e3b09971dbc4479656b442667550128830",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "posix-shell": 3,
+      "py_re": 18
+    },
+    "flags": {},
+    "pin": "f25857e3b09971dbc4479656b442667550128830",
+    "predicted_buckets": {},
+    "regex_sites": 21,
+    "regex_sites_per_file": {
+      "browser-tests/plugins/test_slack.py": 1,
+      "browser-tests/test_review.py": 10,
+      "cronjobs/src/commands/backport_records.py": 1,
+      "git-reader/run.sh": 3,
+      "kinto-remote-settings/src/kinto_remote_settings/signer/__init__.py": 1,
+      "kinto-remote-settings/src/kinto_remote_settings/signer/utils.py": 2,
+      "kinto-remote-settings/tests/signer/test_signer_attachments.py": 1,
+      "kinto-remote-settings/tests/signer/test_signoff_flow.py": 1,
+      "kinto-slack/src/kinto_slack/__init__.py": 1
+    },
+    "security_boundary": "deterministic-false"
+  },
+  "rationale": "Below admission scale: 21 regex sites (auto-NO-GO bar 200); dialects [posix-shell:3, py_re:18]; boundary=deterministic-false.",
+  "schema_version": "1"
+}

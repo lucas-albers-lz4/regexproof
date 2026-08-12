@@ -1,0 +1,63 @@
+{
+  "candidate_url": "https://github.com/IBM/platform-services-python-sdk",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. IBM python SDK; 22 py_re sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "platform-services-python-sdk",
+  "corpus_pin": "9729632ec9f442a307680f6d501bd7fdfa975c92",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "py_re": 22
+    },
+    "flags": {},
+    "pin": "9729632ec9f442a307680f6d501bd7fdfa975c92",
+    "predicted_buckets": {},
+    "regex_sites": 22,
+    "regex_sites_per_file": {
+      "test/unit/test_account_management_v4.py": 1,
+      "test/unit/test_case_management_v1.py": 1,
+      "test/unit/test_catalog_management_v1.py": 1,
+      "test/unit/test_context_based_restrictions_v1.py": 1,
+      "test/unit/test_enterprise_billing_units_v1.py": 1,
+      "test/unit/test_enterprise_management_v1.py": 1,
+      "test/unit/test_enterprise_usage_reports_v1.py": 1,
+      "test/unit/test_global_catalog_v1.py": 1,
+      "test/unit/test_global_search_v2.py": 1,
+      "test/unit/test_global_tagging_v1.py": 1,
+      "test/unit/test_iam_access_groups_v2.py": 1,
+      "test/unit/test_iam_identity_v1.py": 1,
+      "test/unit/test_iam_policy_management_v1.py": 1,
+      "test/unit/test_ibm_cloud_shell_v1.py": 1,
+      "test/unit/test_open_service_broker_v1.py": 1,
+      "test/unit/test_partner_management_v1.py": 1,
+      "test/unit/test_platform_notifications_v1.py": 1,
+      "test/unit/test_resource_controller_v2.py": 1,
+      "test/unit/test_resource_manager_v2.py": 1,
+      "test/unit/test_usage_metering_v4.py": 1,
+      "test/unit/test_usage_reports_v4.py": 1,
+      "test/unit/test_user_management_v1.py": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 22 regex sites (auto-NO-GO bar 200); dialects [py_re:22]; boundary=unknown.",
+  "schema_version": "1"
+}

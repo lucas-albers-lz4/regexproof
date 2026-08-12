@@ -1,0 +1,44 @@
+{
+  "candidate_url": "https://github.com/dlclark/regexp2",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. dlclark .NET regex engine; 6 re2 sites (engine, no pattern surface).",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "regexp2",
+  "corpus_pin": "cf7f64f5904845948c31b1305672745e68cd9a16",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "re2": 6
+    },
+    "flags": {},
+    "pin": "cf7f64f5904845948c31b1305672745e68cd9a16",
+    "predicted_buckets": {},
+    "regex_sites": 6,
+    "regex_sites_per_file": {
+      "compat/regexp_test.go": 4,
+      "regexp_corpus_pcre_test.go": 1,
+      "regexp_corpus_re2_test.go": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 6 regex sites (auto-NO-GO bar 200); dialects [re2:6]; boundary=unknown.",
+  "schema_version": "1"
+}

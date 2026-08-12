@@ -1,0 +1,42 @@
+{
+  "candidate_url": "https://github.com/terraform-ibm-modules/terraform-ibm-satellite",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. IBM terraform module; 1 shell site.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "terraform-ibm-satellite",
+  "corpus_pin": "3d6ba2ae2f718b47f624cb82893235659cd3907e",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "posix-shell": 1
+    },
+    "flags": {},
+    "pin": "3d6ba2ae2f718b47f624cb82893235659cd3907e",
+    "predicted_buckets": {},
+    "regex_sites": 1,
+    "regex_sites_per_file": {
+      "make-release-satellite.sh": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 1 regex sites (auto-NO-GO bar 200); dialects [posix-shell:1]; boundary=unknown.",
+  "schema_version": "1"
+}

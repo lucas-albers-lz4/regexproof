@@ -1,0 +1,70 @@
+{
+  "candidate_url": "https://github.com/IBM/node-sdk-core",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. IBM Node SDK; 52 ecma sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "node-sdk-core",
+  "corpus_pin": "16ea5d64204a3b6a92406fe21314d49838981c65",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 52
+    },
+    "flags": {
+      "g": 2,
+      "i": 3,
+      "m": 1
+    },
+    "pin": "16ea5d64204a3b6a92406fe21314d49838981c65",
+    "predicted_buckets": {
+      "inline-flag": 3,
+      "m-flag": 1,
+      "stateful": 2
+    },
+    "regex_sites": 52,
+    "regex_sites_per_file": {
+      "lib/helper.ts": 3,
+      "lib/private-helpers.ts": 3,
+      "lib/request-wrapper.ts": 1,
+      "test/unit/base-service.test.js": 2,
+      "test/unit/basic-authenticator.test.js": 2,
+      "test/unit/container-token-manager.test.js": 1,
+      "test/unit/cp4d-authenticator.test.js": 7,
+      "test/unit/cp4d-token-manager.test.js": 5,
+      "test/unit/file-reading-helpers.test.js": 1,
+      "test/unit/get-query-param.test.js": 1,
+      "test/unit/iam-assume-token-manager.test.js": 2,
+      "test/unit/iam-authenticator.test.js": 1,
+      "test/unit/iam-token-manager.test.js": 1,
+      "test/unit/jwt-token-manager.test.js": 1,
+      "test/unit/mcsp-authenticator.test.js": 2,
+      "test/unit/mcsp-token-manager.test.js": 3,
+      "test/unit/mcspv2-authenticator.test.js": 4,
+      "test/unit/mcspv2-token-manager.test.js": 6,
+      "test/unit/parameterized-url.test.js": 1,
+      "test/unit/request-wrapper.test.js": 3,
+      "test/unit/vpc-instance-token-manager.test.js": 2
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 52 regex sites (auto-NO-GO bar 200); dialects [ecma:52]; boundary=unknown.",
+  "schema_version": "1"
+}

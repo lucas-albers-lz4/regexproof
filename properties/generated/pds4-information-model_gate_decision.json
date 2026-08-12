@@ -1,0 +1,49 @@
+{
+  "candidate_url": "https://github.com/NASA-PDS/pds4-information-model",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. NASA-PDS model; 6 shell/py sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "pds4-information-model",
+  "corpus_pin": "535aa2c132c575f684f8b89a9c7a4b3c0efac869",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "posix-shell": 5,
+      "py_re": 1
+    },
+    "flags": {
+      "s": 1
+    },
+    "pin": "535aa2c132c575f684f8b89a9c7a4b3c0efac869",
+    "predicted_buckets": {
+      "inline-flag": 1
+    },
+    "regex_sites": 6,
+    "regex_sites_per_file": {
+      "scripts/generate-core-ldd.sh": 1,
+      "scripts/update_version.py": 1,
+      "test/smoke-tests.sh": 4
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 6 regex sites (auto-NO-GO bar 200); dialects [posix-shell:5, py_re:1]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

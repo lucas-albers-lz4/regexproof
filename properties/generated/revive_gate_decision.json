@@ -1,0 +1,52 @@
+{
+  "candidate_url": "https://github.com/mgechev/revive",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. mgechev Go linter; 26 re2 sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "revive",
+  "corpus_pin": "1de8243783d480e24c0db1a3dc45976aeaf715e9",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "re2": 26
+    },
+    "flags": {},
+    "pin": "1de8243783d480e24c0db1a3dc45976aeaf715e9",
+    "predicted_buckets": {},
+    "regex_sites": 26,
+    "regex_sites_per_file": {
+      "lint/file.go": 1,
+      "lint/filefilter.go": 1,
+      "lint/linter.go": 1,
+      "rule/file_header.go": 2,
+      "rule/filename_format.go": 1,
+      "rule/import_alias_naming_test.go": 8,
+      "rule/imports_blocklist.go": 1,
+      "rule/unused_param.go": 1,
+      "rule/unused_param_test.go": 5,
+      "rule/unused_receiver_test.go": 4,
+      "rule/utils.go": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 26 regex sites (auto-NO-GO bar 200); dialects [re2:26]; boundary=unknown.",
+  "schema_version": "1"
+}

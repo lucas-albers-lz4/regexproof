@@ -1,0 +1,45 @@
+{
+  "candidate_url": "https://github.com/uc-cdis/arborist",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. uc-cdis access control; 4 shell/re2 sites (small but security-adjacent - below any proof floor).",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "arborist",
+  "corpus_pin": "a46af80acd88b6e5a00e864e811a7f16e89c34ea",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "posix-shell": 1,
+      "re2": 3
+    },
+    "flags": {},
+    "pin": "a46af80acd88b6e5a00e864e811a7f16e89c34ea",
+    "predicted_buckets": {},
+    "regex_sites": 4,
+    "regex_sites_per_file": {
+      "arborist/resource_test.go": 1,
+      "arborist/server.go": 2,
+      "migrations/up": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 4 regex sites (auto-NO-GO bar 200); dialects [posix-shell:1, re2:3]; boundary=unknown.",
+  "schema_version": "1"
+}

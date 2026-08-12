@@ -1,0 +1,69 @@
+{
+  "candidate_url": "https://github.com/Johbrun/MidHack",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. Johbrun hackathon app; 54 sites, not security.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "MidHack",
+  "corpus_pin": "e3d0d0352216620700b506fabfee6cf095be1c8c",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "posix-class": 8
+    },
+    "dialect": {
+      "ecma": 34,
+      "posix-shell": 18,
+      "py_re": 2
+    },
+    "flags": {
+      "g": 3,
+      "i": 3,
+      "s": 8
+    },
+    "pin": "e3d0d0352216620700b506fabfee6cf095be1c8c",
+    "predicted_buckets": {
+      "inline-flag": 11,
+      "posix-class": 8,
+      "stateful": 3
+    },
+    "regex_sites": 54,
+    "regex_sites_per_file": {
+      "client/src/App.jsx": 4,
+      "client/src/components/FreezeOverlay.jsx": 1,
+      "client/src/context/AuthContext.jsx": 1,
+      "client/src/pages/Home.jsx": 3,
+      "dashboard/client/src/components/Scoreboard.jsx": 1,
+      "exploit-server/client/src/components/OnboardingModal.jsx": 10,
+      "exploit-server/client/src/lib/exportReport.js": 1,
+      "exploit-server/client/src/pages/AcademyPage.jsx": 4,
+      "exploit-server/client/src/pages/WebhookPage.jsx": 1,
+      "exploit-server/src/index.js": 2,
+      "scanner/run-scans.sh": 1,
+      "scanner/zap-to-sarif.py": 2,
+      "server/src/index.js": 1,
+      "server/src/routes/products.js": 2,
+      "server/src/routes/reviews.js": 3,
+      "setup.sh": 17
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 54 regex sites (auto-NO-GO bar 200); dialects [ecma:34, posix-shell:18, py_re:2]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

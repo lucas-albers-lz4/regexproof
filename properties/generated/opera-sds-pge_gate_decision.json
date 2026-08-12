@@ -1,0 +1,63 @@
+{
+  "candidate_url": "https://github.com/nasa/opera-sds-pge",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. NASA opera SDS; 58 py_re sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "opera-sds-pge",
+  "corpus_pin": "11e0a5efe1149be47b195fd71951862f67c09198",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "posix-shell": 2,
+      "py_re": 56
+    },
+    "flags": {},
+    "pin": "11e0a5efe1149be47b195fd71951862f67c09198",
+    "predicted_buckets": {},
+    "regex_sites": 58,
+    "regex_sites_per_file": {
+      ".ci/scripts/rtc_s1/compare_rtc_s1_products.sh": 1,
+      ".ci/scripts/rtc_s1/compare_rtc_s1_static_products.sh": 1,
+      "src/opera/pge/cal_disp/cal_disp_pge.py": 1,
+      "src/opera/pge/disp_ni/disp_ni_pge.py": 1,
+      "src/opera/pge/disp_s1/disp_s1_pge.py": 1,
+      "src/opera/pge/dist_s1/dist_s1_pge.py": 4,
+      "src/opera/pge/dswx_hls/dswx_hls_pge.py": 5,
+      "src/opera/pge/dswx_ni/dswx_ni_pge.py": 1,
+      "src/opera/pge/dswx_s1/dswx_s1_pge.py": 2,
+      "src/opera/pge/tropo/tropo_pge.py": 2,
+      "src/opera/test/pge/base/test_base_pge.py": 2,
+      "src/opera/test/pge/cslc_s1/test_cslc_s1_pge.py": 3,
+      "src/opera/test/pge/dswx_hls/test_dswx_hls_pge.py": 1,
+      "src/opera/test/pge/rtc_s1/test_rtc_s1_pge.py": 1,
+      "src/opera/test/util/test_logger.py": 6,
+      "src/opera/test/util/test_time.py": 12,
+      "src/opera/test/util/test_usage_metrics.py": 6,
+      "src/opera/util/dataset_utils.py": 2,
+      "src/opera/util/input_validation.py": 1,
+      "src/opera/util/render_jinja2.py": 4,
+      "src/opera/util/run_utils.py": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 58 regex sites (auto-NO-GO bar 200); dialects [posix-shell:2, py_re:56]; boundary=unknown.",
+  "schema_version": "1"
+}

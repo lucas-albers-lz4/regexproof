@@ -1,0 +1,65 @@
+{
+  "candidate_url": "https://github.com/kalessil/phpinspectionsea",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. kalessil PHP inspection; 29 java sites (#150).",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "phpinspectionsea",
+  "corpus_pin": "0883e41d235376276485744635032739f3542146",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "backref": 4,
+      "lookaround": 1
+    },
+    "dialect": {
+      "java": 29
+    },
+    "flags": {},
+    "pin": "0883e41d235376276485744635032739f3542146",
+    "predicted_buckets": {
+      "backref": 4,
+      "lookaround": 1
+    },
+    "regex_sites": 29,
+    "regex_sites_per_file": {
+      "src/main/java/com/kalessil/phpStorm/phpInspectionsEA/inspectors/apiUsage/ConstantCanBeUsedInspector.java": 1,
+      "src/main/java/com/kalessil/phpStorm/phpInspectionsEA/inspectors/apiUsage/PrintfScanfArgumentsInspector.java": 1,
+      "src/main/java/com/kalessil/phpStorm/phpInspectionsEA/inspectors/apiUsage/dateTime/DateIntervalSpecificationInspector.java": 2,
+      "src/main/java/com/kalessil/phpStorm/phpInspectionsEA/inspectors/apiUsage/strings/StrTrUsageAsStrReplaceInspector.java": 2,
+      "src/main/java/com/kalessil/phpStorm/phpInspectionsEA/inspectors/apiUsage/strings/StringNormalizationInspector.java": 1,
+      "src/main/java/com/kalessil/phpStorm/phpInspectionsEA/inspectors/languageConstructions/ClassConstantCanBeUsedInspector.java": 1,
+      "src/main/java/com/kalessil/phpStorm/phpInspectionsEA/inspectors/phpDoc/UnknownInspectionInspector.java": 1,
+      "src/main/java/com/kalessil/phpStorm/phpInspectionsEA/inspectors/regularExpressions/NotOptimalRegularExpressionsInspector.java": 5,
+      "src/main/java/com/kalessil/phpStorm/phpInspectionsEA/inspectors/regularExpressions/apiUsage/PlainApiUseCheckStrategy.java": 4,
+      "src/main/java/com/kalessil/phpStorm/phpInspectionsEA/inspectors/regularExpressions/explosiveStrategy/GreedyCharactersSetCheckStrategy.java": 1,
+      "src/main/java/com/kalessil/phpStorm/phpInspectionsEA/inspectors/regularExpressions/explosiveStrategy/QuantifierCompoundsQuantifierCheckStrategy.java": 2,
+      "src/main/java/com/kalessil/phpStorm/phpInspectionsEA/inspectors/regularExpressions/modifiersStrategy/MissingDotAllCheckStrategy.java": 1,
+      "src/main/java/com/kalessil/phpStorm/phpInspectionsEA/inspectors/regularExpressions/modifiersStrategy/MissingUnicodeModifierStrategy.java": 2,
+      "src/main/java/com/kalessil/phpStorm/phpInspectionsEA/inspectors/regularExpressions/modifiersStrategy/UselessIgnoreCaseModifierCheckStrategy.java": 1,
+      "src/main/java/com/kalessil/phpStorm/phpInspectionsEA/inspectors/regularExpressions/optimizeStrategy/SequentialClassesCollapseCheckStrategy.java": 1,
+      "src/main/java/com/kalessil/phpStorm/phpInspectionsEA/inspectors/security/HostnameSubstitutionInspector.java": 1,
+      "src/main/java/com/kalessil/phpStorm/phpInspectionsEA/inspectors/security/UntrustedInclusionInspector.java": 1,
+      "src/main/java/com/kalessil/phpStorm/phpInspectionsEA/inspectors/semanticalAnalysis/classes/AutoloadingIssuesInspector.java": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 29 regex sites (auto-NO-GO bar 200); dialects [java:29]; boundary=unknown.",
+  "schema_version": "1"
+}

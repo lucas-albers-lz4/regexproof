@@ -1,0 +1,65 @@
+{
+  "candidate_url": "https://github.com/stackrox/acs-fleet-manager",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. stackrox fleet manager; 28 shell/re2 sites + 7 extractor_errors.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "acs-fleet-manager",
+  "corpus_pin": "684cec766a10259a39ab00771b1a5acf6f181d4e",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "(?i)": 10
+    },
+    "dialect": {
+      "posix-shell": 13,
+      "re2": 15
+    },
+    "flags": {},
+    "pin": "684cec766a10259a39ab00771b1a5acf6f181d4e",
+    "predicted_buckets": {
+      "inline-flag": 10
+    },
+    "regex_sites": 28,
+    "regex_sites_per_file": {
+      "dev/env/scripts/docker.sh": 1,
+      "dev/env/scripts/lib.sh": 4,
+      "emailsender/pkg/client/openapi/client.go": 2,
+      "emailsender/pkg/client/openapi/git_push.sh": 1,
+      "internal/central/pkg/api/admin/private/client.go": 2,
+      "internal/central/pkg/api/admin/private/git_push.sh": 1,
+      "internal/central/pkg/api/private/client.go": 2,
+      "internal/central/pkg/api/private/git_push.sh": 1,
+      "internal/central/pkg/api/public/client.go": 2,
+      "internal/central/pkg/api/public/git_push.sh": 1,
+      "internal/central/pkg/handlers/admin_central.go": 1,
+      "internal/central/pkg/handlers/validation.go": 1,
+      "internal/central/pkg/services/util.go": 1,
+      "pkg/client/redhatsso/api/client.go": 2,
+      "pkg/client/redhatsso/api/git_push.sh": 1,
+      "pkg/handlers/metrics_middleware.go": 1,
+      "pkg/services/types.go": 1,
+      "scripts/ci/central_compatibility/run_compatibility_test.sh": 2,
+      "scripts/fmcurl": 1
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 28 regex sites (auto-NO-GO bar 200); dialects [posix-shell:13, re2:15]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

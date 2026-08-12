@@ -1,0 +1,40 @@
+{
+  "budget": {
+    "max_disk_mb": 500,
+    "max_mem_mb": 2048,
+    "max_patterns": 5000,
+    "max_wall_s": 900,
+    "redos_wall_s": 180
+  },
+  "budget_breaches": null,
+  "commit": "2f3fa5a506d6565fa68858b7963450567ddda114",
+  "compiler_fingerprint": "71d2ce23b4cd",
+  "complete_run": true,
+  "corpus_pin": "2f3fa5a506d6565fa68858b7963450567ddda114",
+  "decision": "go",
+  "decision_rule": "go iff encodable/sample_size >= 0.3",
+  "dialect": "posix-shell",
+  "encodable": 155,
+  "engine_versions": {
+    "python": "3.13.5",
+    "z3": "5.0.0"
+  },
+  "extractor_schema_version": "2",
+  "fraction": 0.799,
+  "go_no_go_threshold": 0.3,
+  "id_formula": "v2-domain-optional-ascii-default",
+  "inventory_path": "properties/generated/anax-inventory.ndjson",
+  "path": "batch/corpora/anax/rules",
+  "pilot": "anax",
+  "reasons": {
+    "gnu-extension": 1,
+    "internal-anchor": 34,
+    "ok": 155,
+    "per-alternative-anchor": 4
+  },
+  "sample_size": 194,
+  "schema_version": "1",
+  "scope": "full_corpus",
+  "unclassified_parse_errors": 0,
+  "wall_s": 44.369
+}

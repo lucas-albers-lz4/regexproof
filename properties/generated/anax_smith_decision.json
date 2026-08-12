@@ -1,0 +1,14 @@
+{
+  "schema_version": "1",
+  "corpus": "anax",
+  "corpus_pin": "2f3fa5a506d6565fa68858b7963450567ddda114",
+  "candidate_url": "https://github.com/open-horizon/anax",
+  "smith_decision": "triage-continues",
+  "supersedes": null,
+  "reason": "First non-dogfooding posix-shell corpus measured: 155/194 = 0.7990 encodable (complete_run, parse-error=0, budget clean). The BRE->ERE normalize -> pcre backend handles real edge-agent shell at 80% - a strong shell P(compiles) datapoint (compare: shell family dogfooding 292 sites, OpenWrt feed 713). Corpus KEPT in triage - next step is the batch run + findings pipeline on the shell surface (agent control = trust boundary). Not superseded to no-go; shell corpus family value stream is live.",
+  "regex_sites": 194,
+  "sites_by_bucket": {
+    "posix-shell (194 probe sites; 155 encodable)": 194
+  },
+  "additional_surface_outside_probe_scope": {}
+}

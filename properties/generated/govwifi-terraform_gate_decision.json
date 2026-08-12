@@ -1,0 +1,44 @@
+{
+  "candidate_url": "https://github.com/GovWifi/govwifi-terraform",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. GovWifi terraform; 8 shell sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "govwifi-terraform",
+  "corpus_pin": "a83dd39a658ac2d7fe9220419b0f0b5fbfaae27b",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "posix-shell": 8
+    },
+    "flags": {},
+    "pin": "a83dd39a658ac2d7fe9220419b0f0b5fbfaae27b",
+    "predicted_buckets": {},
+    "regex_sites": 8,
+    "regex_sites_per_file": {
+      "govwifi-grafana/user_data.sh": 1,
+      "govwifi-prometheus/user_data.sh": 3,
+      "scripts/bootstrap.sh": 4
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 8 regex sites (auto-NO-GO bar 200); dialects [posix-shell:8]; boundary=unknown.",
+  "schema_version": "1"
+}

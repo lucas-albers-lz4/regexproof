@@ -1,0 +1,50 @@
+{
+  "candidate_url": "https://github.com/NOAA-CO-OPS/Next-Gen-NOS-OFS-Skill-Assessment",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. NOAA skill assessment; 15 py_re sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "Next-Gen-NOS-OFS-Skill-Assessment",
+  "corpus_pin": "1ce7d29d6f8808d651797733a06d1b391ffb0696",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "py_re": 15
+    },
+    "flags": {},
+    "pin": "1ce7d29d6f8808d651797733a06d1b391ffb0696",
+    "predicted_buckets": {},
+    "regex_sites": 15,
+    "regex_sites_per_file": {
+      "bin/obs_retrieval/get_hf_radar.py": 1,
+      "bin/open_boundary/make_open_boundary_transect.py": 1,
+      "bin/utils/insert_skill_stats.py": 1,
+      "src/ofs_skill/obs_retrieval/chs_utils.py": 1,
+      "src/ofs_skill/obs_retrieval/currents_bins_override.py": 1,
+      "src/ofs_skill/visualization/plotting_2d.py": 1,
+      "tests/coops_adcp_mounting_test.py": 5,
+      "tests/coops_currents_bins_test.py": 2,
+      "tests/test_s3_fallback.py": 2
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 15 regex sites (auto-NO-GO bar 200); dialects [py_re:15]; boundary=unknown.",
+  "schema_version": "1"
+}
