@@ -1,0 +1,69 @@
+{
+  "candidate_url": "https://github.com/mole-ids/mole",
+  "conditions": [
+    {
+      "evidence": "Dialects already covered. mole-ids yara NIDS (PF_RING); 256 sites (ecma 173 + yara 68 + re2 14); security tool.",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary=deterministic-true.",
+      "id": "security-boundary",
+      "met": true
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "mole",
+  "corpus_pin": "eb5356d56e914552d6b1c8dc822f19bd6f0e5774",
+  "decision": "triage-trial",
+  "decision_basis": "escape_hatch",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": true,
+  "probe": {
+    "construct_counts": {
+      "(?i)": 3,
+      "(?m)": 1,
+      "lookaround": 1
+    },
+    "dialect": {
+      "ecma": 173,
+      "posix-shell": 1,
+      "re2": 14,
+      "yara": 68
+    },
+    "flags": {
+      "g": 8,
+      "i": 2,
+      "m": 1
+    },
+    "pin": "eb5356d56e914552d6b1c8dc822f19bd6f0e5774",
+    "predicted_buckets": {
+      "inline-flag": 5,
+      "lookaround": 1,
+      "m-flag": 2,
+      "stateful": 8
+    },
+    "regex_sites": 256,
+    "regex_sites_per_file": {
+      "docs/content/assets/js/hljs/highlight.pack.js": 173,
+      "internal/nodes/net.go": 1,
+      "internal/nodes/port.go": 1,
+      "make-release.sh": 1,
+      "pkg/rules/helpers.go": 2,
+      "pkg/rules/rules.go": 10,
+      "rules/DNP3.yar": 3,
+      "rules/OPC-UA.yar": 14,
+      "rules/demo.yar": 1,
+      "rules/modbus.yar": 1,
+      "rules/mtconnect.yar": 48,
+      "test_rules/t1.yar": 1
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Security-boundary corpus (boundary=deterministic-true) with findings-triage potential; 256 sites across [ecma:173, posix-shell:1, re2:14, yara:68].",
+  "schema_version": "1"
+}

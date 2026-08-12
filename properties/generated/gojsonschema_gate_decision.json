@@ -1,0 +1,47 @@
+{
+  "candidate_url": "https://github.com/xeipuuv/gojsonschema",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. xeipuuv; 6 re2 sites (engine).",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (or unprobeable).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "gojsonschema",
+  "corpus_pin": "b076d39a02e5015af0a2a96636e4cc479ecd9f45",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "(?i)": 1
+    },
+    "dialect": {
+      "re2": 6
+    },
+    "flags": {},
+    "pin": "b076d39a02e5015af0a2a96636e4cc479ecd9f45",
+    "predicted_buckets": {
+      "inline-flag": 1
+    },
+    "regex_sites": 6,
+    "regex_sites_per_file": {
+      "format_checkers.go": 5,
+      "jsonschema_test.go": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 6 regex sites (auto-NO-GO bar 200); dialects [re2:6]; boundary=unknown.",
+  "schema_version": "1"
+}

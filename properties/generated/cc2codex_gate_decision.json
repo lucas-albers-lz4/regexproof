@@ -1,0 +1,58 @@
+{
+  "candidate_url": "https://github.com/ussumant/cc2codex",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. ussumant; 68 ecma sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (or unprobeable).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "cc2codex",
+  "corpus_pin": "e6445162f5fb05fb63cd82347bcac7620314fcc2",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 68
+    },
+    "flags": {
+      "g": 29,
+      "i": 29
+    },
+    "pin": "e6445162f5fb05fb63cd82347bcac7620314fcc2",
+    "predicted_buckets": {
+      "inline-flag": 29,
+      "stateful": 29
+    },
+    "regex_sites": 68,
+    "regex_sites_per_file": {
+      "bin/cc2codex.js": 2,
+      "plugins/cc2codex-migration-assistant/scripts/mcp-server.js": 2,
+      "src/converters/agents-converter.js": 4,
+      "src/converters/claude-md-converter.js": 13,
+      "src/converters/memory-converter.js": 7,
+      "src/converters/skills-converter.js": 2,
+      "src/doctor.js": 2,
+      "src/generator.js": 2,
+      "src/utils.js": 18,
+      "src/validator.js": 1,
+      "test/cc2codex.test.js": 15
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 68 regex sites (auto-NO-GO bar 200); dialects [ecma:68]; boundary=unknown.",
+  "schema_version": "1"
+}

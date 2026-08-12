@@ -1,0 +1,83 @@
+{
+  "candidate_url": "https://github.com/ory/lumen",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. ory lumen (auth); 107 sites < 200 scale flag.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (or unprobeable).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "lumen",
+  "corpus_pin": "f60f9ecee41723b42f3758e9a9409141881ac7d5",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "lookaround": 1,
+      "posix-class": 20
+    },
+    "dialect": {
+      "ecma": 61,
+      "posix-shell": 28,
+      "py_re": 7,
+      "re2": 11
+    },
+    "flags": {
+      "g": 24,
+      "i": 4,
+      "u": 1
+    },
+    "pin": "f60f9ecee41723b42f3758e9a9409141881ac7d5",
+    "predicted_buckets": {
+      "inline-flag": 4,
+      "lookaround": 1,
+      "posix-class": 20,
+      "stateful": 24,
+      "u-flag": 1
+    },
+    "regex_sites": 107,
+    "regex_sites_per_file": {
+      "bench-swe/internal/task/task.go": 1,
+      "e2e_lang_snapshot_test.go": 1,
+      "e2e_test.go": 6,
+      "plugins/lumen/scripts/run": 6,
+      "scripts/run": 6,
+      "scripts/test_agent_installations.sh": 6,
+      "scripts/test_run.sh": 10,
+      "scripts/testdata/mcp_smoke_client/main.go": 1,
+      "testdata/fixtures/go/config.go": 1,
+      "testdata/fixtures/go/relabel.go": 1,
+      "testdata/fixtures/js/express-response.js": 4,
+      "testdata/fixtures/js/node-buffer.js": 1,
+      "testdata/fixtures/js/node-path.js": 2,
+      "testdata/fixtures/js/node-url.js": 7,
+      "testdata/fixtures/python/django-common.py": 1,
+      "testdata/fixtures/python/django-resolvers.py": 5,
+      "testdata/fixtures/python/flask-cli.py": 1,
+      "testdata/fixtures/ts/color.ts": 2,
+      "testdata/fixtures/ts/glob.ts": 8,
+      "testdata/fixtures/ts/lifecycle.ts": 2,
+      "testdata/fixtures/ts/network.ts": 1,
+      "testdata/fixtures/ts/path.ts": 2,
+      "testdata/fixtures/ts/resources.ts": 1,
+      "testdata/fixtures/ts/strings.ts": 22,
+      "testdata/fixtures/ts/uri.ts": 8,
+      "testdata/fixtures/ts/uuid.ts": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 107 regex sites (auto-NO-GO bar 200); dialects [ecma:61, posix-shell:28, py_re:7, re2:11]; boundary=unknown.",
+  "schema_version": "1"
+}

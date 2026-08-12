@@ -1,0 +1,114 @@
+{
+  "candidate_url": "https://github.com/mageaustralia/maho-storefront",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. mageaustralia; 241 ecma sites < 1000, classifier false positive.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (or unprobeable).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "maho-storefront",
+  "corpus_pin": "2ccb5051cca8c02ad25c4daab7f1c4d63bf9c539",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "lookaround": 2
+    },
+    "dialect": {
+      "ecma": 240,
+      "posix-shell": 1
+    },
+    "flags": {
+      "d": 13,
+      "g": 61,
+      "i": 34,
+      "s": 28,
+      "v": 13
+    },
+    "pin": "2ccb5051cca8c02ad25c4daab7f1c4d63bf9c539",
+    "predicted_buckets": {
+      "inline-flag": 62,
+      "lookaround": 2,
+      "stateful": 61,
+      "v-flag": 13
+    },
+    "regex_sites": 241,
+    "regex_sites_per_file": {
+      "deploy.sh": 1,
+      "scripts/build-theme.js": 2,
+      "scripts/generate-manifest.js": 1,
+      "scripts/generate-plugin-registry.js": 9,
+      "scripts/generate-store-registry.js": 1,
+      "scripts/refactor-css.js": 11,
+      "scripts/split-css.js": 3,
+      "src/agents/markdown.ts": 24,
+      "src/agents/sitemap.ts": 9,
+      "src/api-client.test.ts": 1,
+      "src/api-client.ts": 1,
+      "src/content-rewriter.ts": 4,
+      "src/embed/api.ts": 1,
+      "src/embed/checkout-flow.ts": 5,
+      "src/embed/embed.ts": 1,
+      "src/embed/lightbox.ts": 4,
+      "src/embed/payments/stripe.ts": 1,
+      "src/embed/product-card.ts": 4,
+      "src/i18n/hreflang.ts": 1,
+      "src/i18n/index.ts": 1,
+      "src/index.tsx": 13,
+      "src/js/controllers/account-controller.js": 2,
+      "src/js/controllers/category-filter-controller.js": 3,
+      "src/js/controllers/search-meilisearch-controller.js": 6,
+      "src/plugins/custom-forms/controller.js": 2,
+      "src/plugins/filterable-pages/api.ts": 1,
+      "src/plugins/filterable-pages/templates/FilterPage.tsx": 4,
+      "src/routes.integration.test.ts": 1,
+      "src/routes/cache-ops.ts": 4,
+      "src/routes/url-resolver.tsx": 7,
+      "src/templates/Account.tsx": 1,
+      "src/templates/Blog.tsx": 2,
+      "src/templates/BlogPost.tsx": 2,
+      "src/templates/Cart.tsx": 6,
+      "src/templates/Category.tsx": 2,
+      "src/templates/Layout.tsx": 1,
+      "src/templates/Product.tsx": 4,
+      "src/templates/components/CartDrawer.tsx": 6,
+      "src/templates/components/Footer.tsx": 9,
+      "src/templates/components/StimulusTemplates.tsx": 1,
+      "src/templates/components/account/address-book/AddressBookStandard.tsx": 1,
+      "src/templates/components/cart/drawer/DrawerSlide.tsx": 6,
+      "src/templates/components/checkout/layout/CheckoutMultiStep.tsx": 15,
+      "src/templates/components/checkout/layout/CheckoutSinglePage.tsx": 22,
+      "src/templates/components/homepage/shop-by-category/ShopByCategoryTiles.tsx": 1,
+      "src/templates/components/marketplace/Faq.tsx": 2,
+      "src/templates/components/navigation/footer/FooterStandard.tsx": 9,
+      "src/templates/components/product-display/card/CardStandard.tsx": 2,
+      "src/templates/components/product-display/layout/LayoutMasonry.tsx": 3,
+      "src/templates/components/product-options/GiftcardOptions.tsx": 4,
+      "src/templates/components/product-options/GroupedOptions.tsx": 3,
+      "src/utils/format.ts": 1,
+      "src/utils/image.ts": 2,
+      "src/utils/json-ld.test.ts": 1,
+      "src/utils/json-ld.ts": 1,
+      "src/utils/sanitize-html.test.ts": 1,
+      "src/utils/sanitize-html.ts": 1,
+      "uno.config.ts": 3,
+      "vitest.config.ts": 1
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 241 regex sites (auto-NO-GO bar 200); dialects [ecma:240, posix-shell:1]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

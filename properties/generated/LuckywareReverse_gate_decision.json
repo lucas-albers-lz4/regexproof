@@ -1,0 +1,48 @@
+{
+  "candidate_url": "https://github.com/runtimefailure/LuckywareReverse",
+  "conditions": [
+    {
+      "evidence": "Dialects already covered. runtimefailure rootkit removal tool; 54 yara sites; security tool.",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary=deterministic-true.",
+      "id": "security-boundary",
+      "met": true
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "LuckywareReverse",
+  "corpus_pin": "350ed405971a723d54bce08080e5a7491c930b01",
+  "decision": "triage-trial",
+  "decision_basis": "escape_hatch",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": true,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "py_re": 3,
+      "yara": 51
+    },
+    "flags": {
+      "i": 48
+    },
+    "pin": "350ed405971a723d54bce08080e5a7491c930b01",
+    "predicted_buckets": {
+      "inline-flag": 48
+    },
+    "regex_sites": 54,
+    "regex_sites_per_file": {
+      "rules/luckyware.yar": 51,
+      "src/LuckyScanner.py": 3
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Security-boundary corpus (boundary=deterministic-true) with findings-triage potential; 54 sites across [py_re:3, yara:51].",
+  "schema_version": "1"
+}

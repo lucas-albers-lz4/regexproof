@@ -1,0 +1,44 @@
+{
+  "candidate_url": "https://github.com/GaijinEntertainment/quirrel",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. GaijinEntertainment; 8 py_re sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (or unprobeable).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "quirrel",
+  "corpus_pin": "9878c4873fb5f06b163f8d4beffcbbc1bdae38e3",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "py_re": 8
+    },
+    "flags": {},
+    "pin": "9878c4873fb5f06b163f8d4beffcbbc1bdae38e3",
+    "predicted_buckets": {},
+    "regex_sites": 8,
+    "regex_sites_per_file": {
+      "doc/source/conf.py": 3,
+      "doc/source/quirrel_pygment_lexer.py": 1,
+      "testRunner.py": 4
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 8 regex sites (auto-NO-GO bar 200); dialects [py_re:8]; boundary=unknown.",
+  "schema_version": "1"
+}

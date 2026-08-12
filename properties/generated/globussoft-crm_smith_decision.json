@@ -1,0 +1,17 @@
+{
+  "schema_version": "1",
+  "corpus": "globussoft-crm",
+  "corpus_pin": "8a53d8b624cacad6049d9a49255f4f8493169085",
+  "candidate_url": "https://github.com/Globussoft-Technologies/globussoft-crm",
+  "smith_decision": "go",
+  "supersedes": null,
+  "reason": "First-party ecma allowlist (top 60 files by probe sites; excludes 14,437 vendored/test sites - 88% of probe surface was node_modules/dist/public) measured: 665/975 = 0.6821 encodable (complete_run, parse-error=0, budget clean). 252 findings - the property pipeline produces strong signal on CRM code (validators.js, sanitizeJson.js, inboundLeadVerification.js, auth.js in allowlist). Non-security corpus (CRM, classifier false positive) - NOT in SECURITY_TOOL_CORPORA; findings public-first. GO admit confirmed.",
+  "regex_sites": 975,
+  "sites_by_bucket": {
+    "ecma first-party allowlist (60 files, 975 sites measured; 665 encodable)": 975,
+    "excluded vendored/test (node_modules/dist/public/test, ~14437 sites)": 14437
+  },
+  "additional_surface_outside_probe_scope": {
+    "first-party files beyond top-60 (421 files, ~1153 sites)": 1153
+  }
+}

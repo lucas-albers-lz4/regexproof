@@ -1,0 +1,58 @@
+{
+  "candidate_url": "https://github.com/JetBrains-Research/snakecharm",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. JetBrains; 40 py_re sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (or unprobeable).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "snakecharm",
+  "corpus_pin": "aa529e6b82ac4226244caa94a879a5a4ebafa8db",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "backref": 2,
+      "lookaround": 2
+    },
+    "dialect": {
+      "py_re": 40
+    },
+    "flags": {
+      "a": 1,
+      "x": 2
+    },
+    "pin": "aa529e6b82ac4226244caa94a879a5a4ebafa8db",
+    "predicted_buckets": {
+      "backref": 2,
+      "inline-flag": 2,
+      "lookaround": 2
+    },
+    "regex_sites": 40,
+    "regex_sites_per_file": {
+      "testData/MockPackages3_smk_6.1/snakemake/io.py": 10,
+      "testData/MockPackages3_smk_7.32.4/snakemake/io.py": 11,
+      "testData/MockPackages3_smk_7.32.4/snakemake/workflow.py": 1,
+      "testData/MockPackages3_smk_8.20.6/snakemake/io.py": 8,
+      "testData/MockPackages3_smk_8.20.6/snakemake/ioutils.py": 1,
+      "testData/MockPackages3_smk_9.3.0/snakemake/io/__init__.py": 8,
+      "testData/MockPackages3_smk_9.3.0/snakemake/ioutils/lookup.py": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 40 regex sites (auto-NO-GO bar 200); dialects [py_re:40]; boundary=unknown.",
+  "schema_version": "1"
+}

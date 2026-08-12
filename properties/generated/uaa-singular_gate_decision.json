@@ -1,0 +1,49 @@
+{
+  "candidate_url": "https://github.com/cloudfoundry/uaa-singular",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. cloudfoundry; 2 ecma sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (or unprobeable).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "uaa-singular",
+  "corpus_pin": "977b2e8adcfb4506980084191aa2357756900134",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 2
+    },
+    "flags": {
+      "g": 1,
+      "i": 1
+    },
+    "pin": "977b2e8adcfb4506980084191aa2357756900134",
+    "predicted_buckets": {
+      "inline-flag": 1,
+      "stateful": 1
+    },
+    "regex_sites": 2,
+    "regex_sites_per_file": {
+      "src/rpFrame.js": 1,
+      "webpack.config.js": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 2 regex sites (auto-NO-GO bar 200); dialects [ecma:2]; boundary=unknown.",
+  "schema_version": "1"
+}

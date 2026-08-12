@@ -1,0 +1,18 @@
+{
+  "address_space_cap": true,
+  "complete_run": true,
+  "corpus": "globussoft-crm",
+  "corpus_type": "rule_corpus",
+  "encodable": 665,
+  "engine": {
+    "python": "3.13.5"
+  },
+  "extracted": 975,
+  "findings": 252,
+  "inventory_questions": 4,
+  "join_regex_ids": 252,
+  "redos_findings": 0,
+  "redos_incomplete": false,
+  "schema_version": "1",
+  "triage": 310
+}

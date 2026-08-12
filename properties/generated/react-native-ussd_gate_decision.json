@@ -1,0 +1,51 @@
+{
+  "candidate_url": "https://github.com/arcslash/react-native-ussd",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. arcslash; 29 ecma sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (or unprobeable).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "react-native-ussd",
+  "corpus_pin": "603dee211a3a7c9acc7f7bf99d53e7e689503a87",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 29
+    },
+    "flags": {
+      "g": 5,
+      "i": 12,
+      "m": 1
+    },
+    "pin": "603dee211a3a7c9acc7f7bf99d53e7e689503a87",
+    "predicted_buckets": {
+      "inline-flag": 12,
+      "m-flag": 1,
+      "stateful": 5
+    },
+    "regex_sites": 29,
+    "regex_sites_per_file": {
+      "src/parser.js": 22,
+      "src/validator.js": 7
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 29 regex sites (auto-NO-GO bar 200); dialects [ecma:29]; boundary=unknown.",
+  "schema_version": "1"
+}

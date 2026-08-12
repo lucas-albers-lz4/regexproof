@@ -1,0 +1,82 @@
+{
+  "candidate_url": "https://github.com/ajitpratap0/GoSQLX",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. ajitpratap0; 82 sites, not security.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (or unprobeable).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "GoSQLX",
+  "corpus_pin": "31b5b1ce22bcf220819bc2f99f253e7b1ffdaeb3",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "(?i)": 39
+    },
+    "dialect": {
+      "ecma": 25,
+      "posix-shell": 7,
+      "re2": 50
+    },
+    "flags": {
+      "d": 1,
+      "g": 6,
+      "i": 4,
+      "m": 2,
+      "v": 1
+    },
+    "pin": "31b5b1ce22bcf220819bc2f99f253e7b1ffdaeb3",
+    "predicted_buckets": {
+      "inline-flag": 43,
+      "m-flag": 2,
+      "stateful": 6,
+      "v-flag": 1
+    },
+    "regex_sites": 82,
+    "regex_sites_per_file": {
+      "action/scripts/find-files.sh": 2,
+      "action/scripts/validate.sh": 1,
+      "cmd/gosqlx/internal/actioncmd/action.go": 1,
+      "integrations/gorm/plugin.go": 1,
+      "pkg/cbinding/cbinding.go": 1,
+      "pkg/errors/suggestions.go": 8,
+      "pkg/linter/rules/whitespace/redundant_whitespace.go": 1,
+      "pkg/lsp/handler.go": 3,
+      "pkg/sql/security/dollar_quote.go": 1,
+      "pkg/sql/security/scanner.go": 34,
+      "scripts/check-dialect-migration.sh": 1,
+      "scripts/mcp-e2e-test.sh": 1,
+      "scripts/validate-security-setup.sh": 2,
+      "vscode-extension/src/test/unit/commands.test.ts": 1,
+      "vscode-extension/src/test/unit/lsp.test.ts": 1,
+      "vscode-extension/src/test/unit/validation.test.ts": 1,
+      "vscode-extension/src/utils/binaryResolver.ts": 1,
+      "vscode-extension/src/utils/errors.ts": 1,
+      "vscode-extension/src/utils/validation.ts": 1,
+      "website/scripts/split-changelog.js": 6,
+      "website/src/app/docs/[...slug]/page.tsx": 3,
+      "website/src/components/docs/Sidebar.tsx": 2,
+      "website/src/components/ui/TerminalMockup.tsx": 1,
+      "website/src/instrumentation-client.ts": 2,
+      "website/src/lib/blog.ts": 1,
+      "website/src/lib/docs.ts": 4
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 82 regex sites (auto-NO-GO bar 200); dialects [ecma:25, posix-shell:7, re2:50]; boundary=unknown.",
+  "schema_version": "1"
+}

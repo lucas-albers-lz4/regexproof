@@ -1,0 +1,42 @@
+{
+  "schema_version": "1",
+  "candidate_url": "https://github.com/nirholas/three.ws",
+  "conditions": [
+    {
+      "id": "new-surface",
+      "met": false,
+      "evidence": "Clone checkout fails (16,371 files, git clone 128) - unprobeable at gate budget; WebSocket lib, no novel surface claim."
+    },
+    {
+      "id": "security-boundary",
+      "met": false,
+      "evidence": "Not a security tool (WebSocket wrapper); probe unavailable."
+    },
+    {
+      "id": "large-under-saturated",
+      "met": false,
+      "evidence": "Unprobeable; no site count."
+    }
+  ],
+  "corpus": "three.ws",
+  "corpus_pin": "c30f27e5c9b8225d812306e0227034514ed78f23",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "regex_sites": 0,
+    "dialect": {},
+    "flags": {},
+    "construct_counts": {},
+    "predicted_buckets": {},
+    "security_boundary": "unknown",
+    "pin": "c30f27e5c9b8225d812306e0227034514ed78f23",
+    "extractor_errors": 0,
+    "regex_sites_per_file": {}
+  },
+  "rationale": "Clone checkout fails repeatedly (16,371-file tree, git clone exit 128) - unprobeable at gate budget. No admission condition met.",
+  "related": {
+    "probe_failure": "git clone checkout error"
+  }
+}

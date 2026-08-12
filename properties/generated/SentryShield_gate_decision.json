@@ -1,0 +1,49 @@
+{
+  "candidate_url": "https://github.com/Rizzy1857/SentryShield",
+  "conditions": [
+    {
+      "evidence": "Dialects already covered. Rizzy1857 TKAP internship security project; 186 yara sites; security tool.",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary=deterministic-true.",
+      "id": "security-boundary",
+      "met": true
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "SentryShield",
+  "corpus_pin": "4f43015c80fde0cb1bd3f001a7551c40eed2682c",
+  "decision": "triage-trial",
+  "decision_basis": "escape_hatch",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": true,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "py_re": 6,
+      "yara": 180
+    },
+    "flags": {
+      "i": 183,
+      "s": 4
+    },
+    "pin": "4f43015c80fde0cb1bd3f001a7551c40eed2682c",
+    "predicted_buckets": {
+      "inline-flag": 187
+    },
+    "regex_sites": 186,
+    "regex_sites_per_file": {
+      "SentryPython/cert_in_parser.py": 6,
+      "rules/malware.yar": 180
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Security-boundary corpus (boundary=deterministic-true) with findings-triage potential; 186 sites across [py_re:6, yara:180].",
+  "schema_version": "1"
+}

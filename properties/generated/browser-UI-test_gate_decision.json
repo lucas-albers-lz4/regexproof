@@ -1,0 +1,51 @@
+{
+  "candidate_url": "https://github.com/GuillaumeGomez/browser-UI-test",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. GuillaumeGomez; 15 ecma sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (or unprobeable).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "browser-UI-test",
+  "corpus_pin": "b12831dd1fdb3a5c012b066be692bab30a860526",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 15
+    },
+    "flags": {
+      "g": 3
+    },
+    "pin": "b12831dd1fdb3a5c012b066be692bab30a860526",
+    "predicted_buckets": {
+      "stateful": 3
+    },
+    "regex_sites": 15,
+    "regex_sites_per_file": {
+      "src/command-helpers.js": 1,
+      "src/css-color-converter.js": 8,
+      "src/helpers.js": 1,
+      "src/index.js": 1,
+      "src/options.js": 2,
+      "src/parser.js": 2
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 15 regex sites (auto-NO-GO bar 200); dialects [ecma:15]; boundary=unknown.",
+  "schema_version": "1"
+}

@@ -1,0 +1,99 @@
+{
+  "candidate_url": "https://github.com/Saleslogix/argos-saleslogix",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. Saleslogix CRM; 106 ecma sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (or unprobeable).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "argos-saleslogix",
+  "corpus_pin": "95f4425ddbd80cace32780a2616b01c3b745d173",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 106
+    },
+    "flags": {
+      "g": 8,
+      "i": 9
+    },
+    "pin": "95f4425ddbd80cace32780a2616b01c3b745d173",
+    "predicted_buckets": {
+      "inline-flag": 9,
+      "stateful": 8
+    },
+    "regex_sites": 106,
+    "regex_sites_per_file": {
+      "configuration/production.default.js": 1,
+      "src-out/Application.js": 3,
+      "src-out/AttachmentManager.js": 4,
+      "src-out/Bootstrap.js": 1,
+      "src-out/Bootstrap.localization.js": 1,
+      "src-out/Integrations/BOE/Views/ERPBillTos/Edit.js": 1,
+      "src-out/Integrations/BOE/Views/ERPShipTos/Edit.js": 1,
+      "src-out/Integrations/BOE/Views/Quotes/Edit.js": 1,
+      "src-out/Integrations/BOE/Views/SalesOrders/Edit.js": 1,
+      "src-out/Validator.js": 8,
+      "src-out/Views/Activity/Complete.js": 4,
+      "src-out/Views/Activity/Detail.js": 1,
+      "src-out/Views/Activity/Edit.js": 5,
+      "src-out/Views/Activity/MyList.js": 1,
+      "src-out/Views/Activity/Recurring.js": 1,
+      "src-out/Views/Contact/Edit.js": 1,
+      "src-out/Views/Event/Edit.js": 1,
+      "src-out/Views/Help.js": 1,
+      "src-out/Views/History/Detail.js": 1,
+      "src-out/Views/History/Edit.js": 2,
+      "src-out/Views/History/List.js": 1,
+      "src-out/Views/Home.js": 1,
+      "src-out/Views/Opportunity/Edit.js": 1,
+      "src-out/Views/Ticket/Edit.js": 1,
+      "src/Application.js": 3,
+      "src/AttachmentManager.js": 4,
+      "src/Bootstrap.js": 1,
+      "src/Bootstrap.localization.js": 1,
+      "src/Integrations/BOE/Views/ERPBillTos/Edit.js": 1,
+      "src/Integrations/BOE/Views/ERPShipTos/Edit.js": 1,
+      "src/Integrations/BOE/Views/Quotes/Edit.js": 1,
+      "src/Integrations/BOE/Views/SalesOrders/Edit.js": 1,
+      "src/Validator.js": 8,
+      "src/Views/Activity/Complete.js": 4,
+      "src/Views/Activity/Detail.js": 1,
+      "src/Views/Activity/Edit.js": 5,
+      "src/Views/Activity/MyList.js": 1,
+      "src/Views/Activity/Recurring.js": 1,
+      "src/Views/Contact/Edit.js": 1,
+      "src/Views/Event/Edit.js": 1,
+      "src/Views/Help.js": 1,
+      "src/Views/History/Detail.js": 1,
+      "src/Views/History/Edit.js": 2,
+      "src/Views/History/List.js": 1,
+      "src/Views/Home.js": 1,
+      "src/Views/Opportunity/Edit.js": 1,
+      "src/Views/Ticket/Edit.js": 1,
+      "tests/e2e/Activity.test.js": 10,
+      "tests/e2e/Detail.test.js": 4,
+      "tests/e2e/Groups.test.js": 2,
+      "tests/e2e/Login.test.js": 1,
+      "tests/src/Format.spec.js": 2
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 106 regex sites (auto-NO-GO bar 200); dialects [ecma:106]; boundary=unknown.",
+  "schema_version": "1"
+}

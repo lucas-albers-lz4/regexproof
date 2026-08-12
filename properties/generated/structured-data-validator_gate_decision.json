@@ -1,0 +1,48 @@
+{
+  "candidate_url": "https://github.com/adobe/structured-data-validator",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. adobe; 4 ecma sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (or unprobeable).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "structured-data-validator",
+  "corpus_pin": "66e7610a7f084d07dafaade17673e5df915e34c4",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "lookaround": 1
+    },
+    "dialect": {
+      "ecma": 4
+    },
+    "flags": {},
+    "pin": "66e7610a7f084d07dafaade17673e5df915e34c4",
+    "predicted_buckets": {
+      "lookaround": 1
+    },
+    "regex_sites": 4,
+    "regex_sites_per_file": {
+      "src/types/BreadcrumbList.js": 1,
+      "src/types/base.js": 2,
+      "src/types/schemaOrg.js": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 4 regex sites (auto-NO-GO bar 200); dialects [ecma:4]; boundary=unknown.",
+  "schema_version": "1"
+}

@@ -1,0 +1,53 @@
+{
+  "candidate_url": "https://github.com/dmknght/rkcheck",
+  "conditions": [
+    {
+      "evidence": "Dialects already covered. dmknght malware scanner (yara + ClamAV); 207 yara sites; security tool.",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary=deterministic-true.",
+      "id": "security-boundary",
+      "met": true
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "rkcheck",
+  "corpus_pin": "ca4b30b254861b5f76d6cad68c9cc5c9e49a58ac",
+  "decision": "triage-trial",
+  "decision_basis": "escape_hatch",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": true,
+  "probe": {
+    "construct_counts": {
+      "backref": 6
+    },
+    "dialect": {
+      "yara": 207
+    },
+    "flags": {
+      "W": 17,
+      "i": 4
+    },
+    "pin": "ca4b30b254861b5f76d6cad68c9cc5c9e49a58ac",
+    "predicted_buckets": {
+      "backref": 6,
+      "inline-flag": 4
+    },
+    "regex_sites": 207,
+    "regex_sites_per_file": {
+      "rules/botnet.yar": 22,
+      "rules/ransomware.yar": 7,
+      "rules/rootkit.yar": 104,
+      "rules/trojan.yar": 74
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Security-boundary corpus (boundary=deterministic-true) with findings-triage potential; 207 sites across [yara:207].",
+  "schema_version": "1"
+}

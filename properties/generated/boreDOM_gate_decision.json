@@ -1,0 +1,65 @@
+{
+  "candidate_url": "https://github.com/HugoDaniel/boreDOM",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. HugoDaniel; 152 ecma sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (or unprobeable).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "boreDOM",
+  "corpus_pin": "5fe013b3d39b7be6f4dcd911e7e2ead51322a97a",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "backref": 5,
+      "lookaround": 62
+    },
+    "dialect": {
+      "ecma": 152
+    },
+    "flags": {
+      "g": 15,
+      "i": 26,
+      "m": 2
+    },
+    "pin": "5fe013b3d39b7be6f4dcd911e7e2ead51322a97a",
+    "predicted_buckets": {
+      "backref": 5,
+      "inline-flag": 26,
+      "lookaround": 62,
+      "m-flag": 2,
+      "stateful": 15
+    },
+    "regex_sites": 152,
+    "regex_sites_per_file": {
+      "bin/boredom.js": 1,
+      "e2e/drawing.spec.ts": 9,
+      "e2e/layer-tree.spec.ts": 9,
+      "e2e/todolist.spec.ts": 3,
+      "landing-page/boreDOM.js": 3,
+      "landing-page/prism.js": 84,
+      "packages/vite-plugin-boredom/src/component-loader.js": 1,
+      "packages/vite-plugin-boredom/src/index.ts": 9,
+      "src/boreDOM.js": 3,
+      "src/serve.js": 1,
+      "src/validator.js": 29
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 152 regex sites (auto-NO-GO bar 200); dialects [ecma:152]; boundary=unknown.",
+  "schema_version": "1"
+}

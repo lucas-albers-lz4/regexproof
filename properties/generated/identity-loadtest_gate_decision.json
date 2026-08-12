@@ -1,0 +1,42 @@
+{
+  "candidate_url": "https://github.com/18F/identity-loadtest",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. 18F identity loadtest; 1 py_re site.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (or unprobeable).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "identity-loadtest",
+  "corpus_pin": "8fb18800e241b63b8e152b67aa20b9c033fbe5d7",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "py_re": 1
+    },
+    "flags": {},
+    "pin": "8fb18800e241b63b8e152b67aa20b9c033fbe5d7",
+    "predicted_buckets": {},
+    "regex_sites": 1,
+    "regex_sites_per_file": {
+      "tests/test_flow_helpers.py": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 1 regex sites (auto-NO-GO bar 200); dialects [py_re:1]; boundary=unknown.",
+  "schema_version": "1"
+}

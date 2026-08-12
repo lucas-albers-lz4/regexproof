@@ -1,0 +1,48 @@
+{
+  "candidate_url": "https://github.com/airtai/faststream-gen",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. airtai; 4 py_re sites, deterministic-false.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (or unprobeable).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "faststream-gen",
+  "corpus_pin": "6dc69af7609ddff47ac24cdcf5ec1213ad719634",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "py_re": 4
+    },
+    "flags": {
+      "s": 1
+    },
+    "pin": "6dc69af7609ddff47ac24cdcf5ec1213ad719634",
+    "predicted_buckets": {
+      "inline-flag": 1
+    },
+    "regex_sites": 4,
+    "regex_sites_per_file": {
+      "faststream_gen/_code_generator/helper.py": 1,
+      "faststream_gen/_components/embeddings.py": 1,
+      "faststream_gen/_components/integration_test_generator.py": 2
+    },
+    "security_boundary": "deterministic-false"
+  },
+  "rationale": "Below admission scale: 4 regex sites (auto-NO-GO bar 200); dialects [py_re:4]; boundary=deterministic-false.",
+  "schema_version": "1"
+}

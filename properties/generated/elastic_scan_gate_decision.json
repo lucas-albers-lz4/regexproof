@@ -1,0 +1,48 @@
+{
+  "candidate_url": "https://github.com/Ibonok/elastic_scan",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. Ibonok; 12 sites (yara 10 + py 2), tiny.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (or unprobeable).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "elastic_scan",
+  "corpus_pin": "36c6b8353fa6cdcad93c1bd6d2fb10b24d763be8",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "py_re": 2,
+      "yara": 10
+    },
+    "flags": {
+      "i": 6
+    },
+    "pin": "36c6b8353fa6cdcad93c1bd6d2fb10b24d763be8",
+    "predicted_buckets": {
+      "inline-flag": 6
+    },
+    "regex_sites": 12,
+    "regex_sites_per_file": {
+      "Rules/somestring.yar": 10,
+      "elastic_scan.py": 2
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 12 regex sites (auto-NO-GO bar 200); dialects [py_re:2, yara:10]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

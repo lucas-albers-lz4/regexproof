@@ -1,0 +1,46 @@
+{
+  "candidate_url": "https://github.com/grafana/regexp",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. grafana regexp fork; 32 re2 sites (engine, no pattern surface).",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (or unprobeable).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "regexp",
+  "corpus_pin": "f7b3be9d18538c56fb03caa6088db55404e784e8",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "(?m)": 4
+    },
+    "dialect": {
+      "re2": 32
+    },
+    "flags": {},
+    "pin": "f7b3be9d18538c56fb03caa6088db55404e784e8",
+    "predicted_buckets": {
+      "m-flag": 4
+    },
+    "regex_sites": 32,
+    "regex_sites_per_file": {
+      "example_test.go": 32
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 32 regex sites (auto-NO-GO bar 200); dialects [re2:32]; boundary=unknown.",
+  "schema_version": "1"
+}

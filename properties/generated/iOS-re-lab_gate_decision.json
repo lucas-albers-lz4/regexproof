@@ -1,0 +1,50 @@
+{
+  "candidate_url": "https://github.com/juliangrtz/iOS-re-lab",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. juliangrtz; 10 yara/py sites, tiny.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (or unprobeable).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "iOS-re-lab",
+  "corpus_pin": "035e872d96654dc3f10f4f102f9bcdccf3f03e41",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "py_re": 1,
+      "yara": 9
+    },
+    "flags": {
+      "i": 3
+    },
+    "pin": "035e872d96654dc3f10f4f102f9bcdccf3f03e41",
+    "predicted_buckets": {
+      "inline-flag": 3
+    },
+    "regex_sites": 10,
+    "regex_sites_per_file": {
+      "core/scan.py": 1,
+      "rules/protectors/IOSSecuritySuite.yara": 3,
+      "rules/protectors/promon_shield.yara": 3,
+      "rules/protectors/talsec.yara": 3
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 10 regex sites (auto-NO-GO bar 200); dialects [py_re:1, yara:9]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

@@ -1,0 +1,53 @@
+{
+  "candidate_url": "https://github.com/Ph4wkm00n/Astra_AV",
+  "conditions": [
+    {
+      "evidence": "Dialects already covered. Ph4wkm00n self-healing antivirus engine (Go); 103 sites (yara 97); security tool.",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary=deterministic-true.",
+      "id": "security-boundary",
+      "met": true
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "Astra_AV",
+  "corpus_pin": "87fe9529fdf9c64126bd81fc45658bb86bd64755",
+  "decision": "triage-trial",
+  "decision_basis": "escape_hatch",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": true,
+  "probe": {
+    "construct_counts": {
+      "(?i)": 1
+    },
+    "dialect": {
+      "re2": 6,
+      "yara": 97
+    },
+    "flags": {
+      "i": 31
+    },
+    "pin": "87fe9529fdf9c64126bd81fc45658bb86bd64755",
+    "predicted_buckets": {
+      "inline-flag": 32
+    },
+    "regex_sites": 103,
+    "regex_sites_per_file": {
+      "internal/heuristic/structure.go": 1,
+      "internal/yara/engine.go": 5,
+      "rules/emotet.yar": 17,
+      "rules/ransomware_generic.yar": 63,
+      "rules/wannacry.yar": 17
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Security-boundary corpus (boundary=deterministic-true) with findings-triage potential; 103 sites across [re2:6, yara:97].",
+  "schema_version": "1"
+}
