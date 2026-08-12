@@ -1,0 +1,47 @@
+{
+  "candidate_url": "https://github.com/VaccinatorSec/yara-rules",
+  "conditions": [
+    {
+      "evidence": "YARA dialect already covered by admitted yara_rules corpus.",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary=deterministic-true (YARA rules).",
+      "id": "security-boundary",
+      "met": true
+    },
+    {
+      "evidence": "13 sites < 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "yara-rules",
+  "corpus_pin": "1d7c4faed70fae431b8189c904881cc0e12436e6",
+  "decision": "triage-trial",
+  "decision_basis": "escape_hatch",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": true,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "yara": 13
+    },
+    "flags": {},
+    "pin": "1d7c4faed70fae431b8189c904881cc0e12436e6",
+    "predicted_buckets": {},
+    "regex_sites": 13,
+    "regex_sites_per_file": {
+      "rules/compilers.yar": 5,
+      "rules/compressed.yar": 1,
+      "rules/token-grabbers.yar": 7
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Triage-trial: VaccinatorSec/yara-rules (13 yara, boundary=deterministic-true). Tiny pack; escape hatch only — likely low value vs admitted yara_rules.",
+  "related": {
+    "nearest_admitted": "yara_rules"
+  },
+  "schema_version": "1"
+}

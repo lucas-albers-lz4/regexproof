@@ -1,0 +1,61 @@
+{
+  "candidate_url": "https://github.com/BakeLens/crust",
+  "conditions": [
+    {
+      "evidence": "Secrets-scanner surface already admitted (gitleaks).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary=deterministic-true (gitleaks.toml).",
+      "id": "security-boundary",
+      "met": true
+    },
+    {
+      "evidence": "75 sites < 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "crust",
+  "corpus_pin": "f4a47e2cf2822196275075ab9a2e258b6fa9be8b",
+  "decision": "triage-trial",
+  "decision_basis": "escape_hatch",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": true,
+  "probe": {
+    "construct_counts": {
+      "(?i)": 7,
+      "(?m)": 1,
+      "lookaround": 1
+    },
+    "dialect": {
+      "py_re": 5,
+      "re2": 70
+    },
+    "flags": {},
+    "pin": "f4a47e2cf2822196275075ab9a2e258b6fa9be8b",
+    "predicted_buckets": {
+      "inline-flag": 7,
+      "lookaround": 1,
+      "m-flag": 1
+    },
+    "regex_sites": 75,
+    "regex_sites_per_file": {
+      "internal/configscan/scan.go": 4,
+      "internal/rules/builtin_verify.go": 1,
+      "internal/rules/dlp.go": 51,
+      "internal/rules/dlp_crypto.go": 2,
+      "internal/rules/extractor_powershell.go": 9,
+      "internal/rules/lint.go": 1,
+      "internal/selfprotect/selfprotect_test.go": 2,
+      "scripts/update-cve-tracker.py": 5
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Triage-trial: BakeLens/crust (75 sites, gitleaks.toml, boundary=deterministic-true). Below scale; gitleaks already admitted — escape hatch for small delta check.",
+  "related": {
+    "nearest_admitted": "gitleaks"
+  },
+  "schema_version": "1"
+}

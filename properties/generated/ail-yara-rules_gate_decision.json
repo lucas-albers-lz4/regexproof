@@ -1,0 +1,118 @@
+{
+  "candidate_url": "https://github.com/ail-project/ail-yara-rules",
+  "conditions": [
+    {
+      "evidence": "YARA dialect already covered by admitted yara_rules corpus.",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary=deterministic-true (YARA rules).",
+      "id": "security-boundary",
+      "met": true
+    },
+    {
+      "evidence": "915 sites < 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "ail-yara-rules",
+  "corpus_pin": "8e978d5e70084df6d2fae0727677ec4f60e3e639",
+  "decision": "triage-trial",
+  "decision_basis": "escape_hatch",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": true,
+  "probe": {
+    "construct_counts": {
+      "backref": 5
+    },
+    "dialect": {
+      "yara": 915
+    },
+    "flags": {
+      "W": 116,
+      "i": 198
+    },
+    "pin": "8e978d5e70084df6d2fae0727677ec4f60e3e639",
+    "predicted_buckets": {
+      "backref": 5,
+      "inline-flag": 198
+    },
+    "regex_sites": 915,
+    "regex_sites_per_file": {
+      "rules/api-keys/aws_api.yar": 1,
+      "rules/api-keys/discord_api.yar": 2,
+      "rules/api-keys/generic_api.yar": 7,
+      "rules/api-keys/github_api.yar": 1,
+      "rules/api-keys/google_api.yar": 1,
+      "rules/api-keys/heroku_api.yar": 1,
+      "rules/api-keys/slack_api.yar": 2,
+      "rules/api-keys/twitter_api.yar": 3,
+      "rules/b64_encoded/b64_doc.yar": 1,
+      "rules/b64_encoded/b64_docx.yar": 6,
+      "rules/b64_encoded/b64_elf.yar": 1,
+      "rules/b64_encoded/b64_exe.yar": 1,
+      "rules/b64_encoded/b64_gzip.yar": 1,
+      "rules/b64_encoded/b64_rar.yar": 1,
+      "rules/b64_encoded/b64_rtf.yar": 1,
+      "rules/b64_encoded/b64_url.yar": 4,
+      "rules/b64_encoded/b64_xml_doc.yar": 5,
+      "rules/b64_encoded/b64_zip.yar": 1,
+      "rules/blacklist/default.yar": 8,
+      "rules/classified/nato.yar": 20,
+      "rules/classified/us.yar": 32,
+      "rules/cloud/aws_cli.yar": 6,
+      "rules/cloud/sw_bucket.yar": 1,
+      "rules/code/autoit.yar": 20,
+      "rules/code/hex_mz.yar": 2,
+      "rules/code/powershell.yar": 28,
+      "rules/code/vbscript.yar": 18,
+      "rules/crypto/certificate.yar": 13,
+      "rules/database/db_connection.yar": 3,
+      "rules/database/db_create_user.yar": 4,
+      "rules/database/db_structure.yar": 8,
+      "rules/detection/avdetect.yar": 396,
+      "rules/detection/dbgdetect_files.yar": 8,
+      "rules/detection/dbgdetect_func.yar": 9,
+      "rules/detection/dbgdetect_procs.yar": 18,
+      "rules/detection/sandboxdetect.yar": 12,
+      "rules/detection/vmdetect.yar": 110,
+      "rules/keylogger/bunny_code.yar": 7,
+      "rules/keylogger/ducky_code.yar": 7,
+      "rules/obfuscation/php_obfuscation.yar": 5,
+      "rules/password/amazon-credentials.yar": 3,
+      "rules/password/password_leak.yar": 1,
+      "rules/stealer/ailurophile.yara": 4,
+      "rules/stealer/arechclientv2.yara": 5,
+      "rules/stealer/astris.yara": 7,
+      "rules/stealer/atomic.yara": 6,
+      "rules/stealer/banshee.yara": 7,
+      "rules/stealer/blankgrabber.yara": 6,
+      "rules/stealer/cryptbot.yara": 6,
+      "rules/stealer/darkcrystal.yara": 4,
+      "rules/stealer/luca.yara": 6,
+      "rules/stealer/lumma.yara": 6,
+      "rules/stealer/lumma2.yara": 5,
+      "rules/stealer/meduza.yara": 6,
+      "rules/stealer/noxy.yara": 6,
+      "rules/stealer/phemedrone.yara": 6,
+      "rules/stealer/raccoon.yara": 6,
+      "rules/stealer/raccoon2.yara": 6,
+      "rules/stealer/redline.yara": 6,
+      "rules/stealer/risepro.yara": 6,
+      "rules/stealer/rlstealer.yara": 6,
+      "rules/stealer/skalka.yara": 5,
+      "rules/stealer/stealc.yara": 6,
+      "rules/stealer/stealerium.yara": 6,
+      "rules/stealer/vidar.yara": 4,
+      "rules/stealer/xfiles.yara": 5
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Triage-trial: ail-yara-rules (915 yara, boundary=deterministic-true). Duplicate YARA pack vs yara_rules; escape hatch for pack-delta evaluation.",
+  "related": {
+    "nearest_admitted": "yara_rules"
+  },
+  "schema_version": "1"
+}
