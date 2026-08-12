@@ -2,506 +2,6 @@
   "items": [
     {
       "capped": true,
-      "default_branch": "main",
-      "pin": "8d9674bbccb3aec45f87deed4d9727714cd30b61",
-      "pushed_date": "2026-06-25",
-      "queued_at": "2026-08-12",
-      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
-      "stars": 4,
-      "url": "https://github.com/mozilla/refractr"
-    },
-    {
-      "capped": true,
-      "default_branch": "main",
-      "pin": "c30f27e5c9b8225d812306e0227034514ed78f23",
-      "pushed_date": "2026-08-12",
-      "queued_at": "2026-08-12",
-      "source_query": "filename:validator.js path:src OR filename:validators.py",
-      "stars": 94,
-      "url": "https://github.com/nirholas/three.ws"
-    },
-    {
-      "capped": false,
-      "default_branch": "main",
-      "pin": "13550ee05461121a74a6467aefc479a62026cdfc",
-      "pushed_date": "2026-03-12",
-      "queued_at": "2026-08-12",
-      "source_query": "path:testdata filename:regex OR filename:regexp",
-      "stars": 346,
-      "url": "https://github.com/ryanrasti/typenix"
-    },
-    {
-      "capped": true,
-      "default_branch": "main",
-      "pin": "8fb18800e241b63b8e152b67aa20b9c033fbe5d7",
-      "pushed_date": "2026-07-21",
-      "queued_at": "2026-08-12",
-      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
-      "stars": 3,
-      "url": "https://github.com/18F/identity-loadtest"
-    },
-    {
-      "capped": true,
-      "default_branch": "master",
-      "pin": "36c6b8353fa6cdcad93c1bd6d2fb10b24d763be8",
-      "pushed_date": "2026-01-07",
-      "queued_at": "2026-08-12",
-      "source_query": "path:rules extension:yar OR extension:yara",
-      "stars": 15,
-      "url": "https://github.com/Ibonok/elastic_scan"
-    },
-    {
-      "capped": true,
-      "default_branch": "master",
-      "pin": "219f19f8bf11240fe128df8704f1c9e98c26af16",
-      "pushed_date": "2026-08-12",
-      "queued_at": "2026-08-12",
-      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
-      "stars": 3,
-      "url": "https://github.com/Yelp/nerve-tools"
-    },
-    {
-      "capped": true,
-      "default_branch": "main",
-      "pin": "6e349a740774d1b92f00b91aef5528d666e50eed",
-      "pushed_date": "2026-08-04",
-      "queued_at": "2026-08-12",
-      "source_query": "filename:validator.js path:src OR filename:validators.py",
-      "stars": 67,
-      "url": "https://github.com/bransoned/MemorEasy"
-    },
-    {
-      "capped": true,
-      "default_branch": "main",
-      "pin": "2ccb5051cca8c02ad25c4daab7f1c4d63bf9c539",
-      "pushed_date": "2026-08-12",
-      "queued_at": "2026-08-12",
-      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
-      "stars": 3,
-      "url": "https://github.com/mageaustralia/maho-storefront"
-    },
-    {
-      "capped": false,
-      "default_branch": "main",
-      "pin": "f60f9ecee41723b42f3758e9a9409141881ac7d5",
-      "pushed_date": "2026-08-11",
-      "queued_at": "2026-08-12",
-      "source_query": "path:testdata filename:regex OR filename:regexp",
-      "stars": 245,
-      "url": "https://github.com/ory/lumen"
-    },
-    {
-      "capped": false,
-      "default_branch": "master",
-      "pin": "9878c4873fb5f06b163f8d4beffcbbc1bdae38e3",
-      "pushed_date": "2026-06-08",
-      "queued_at": "2026-08-12",
-      "source_query": "path:testdata filename:regex OR filename:regexp",
-      "stars": 222,
-      "url": "https://github.com/GaijinEntertainment/quirrel"
-    },
-    {
-      "capped": true,
-      "default_branch": "main",
-      "pin": "6dc69af7609ddff47ac24cdcf5ec1213ad719634",
-      "pushed_date": "2024-03-12",
-      "queued_at": "2026-08-12",
-      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
-      "stars": 48,
-      "url": "https://github.com/airtai/faststream-gen"
-    },
-    {
-      "capped": true,
-      "default_branch": "main",
-      "pin": "ca4b30b254861b5f76d6cad68c9cc5c9e49a58ac",
-      "pushed_date": "2026-05-23",
-      "queued_at": "2026-08-12",
-      "source_query": "path:rules extension:yar OR extension:yara",
-      "stars": 12,
-      "url": "https://github.com/dmknght/rkcheck"
-    },
-    {
-      "capped": true,
-      "default_branch": "main",
-      "pin": "3eda2a06b917e0ed9bbf83658e68643e249c646e",
-      "pushed_date": "2026-08-10",
-      "queued_at": "2026-08-12",
-      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
-      "stars": 2,
-      "url": "https://github.com/jasonmichaelbell78-creator/sonash-v0"
-    },
-    {
-      "capped": true,
-      "default_branch": "main",
-      "pin": "e6445162f5fb05fb63cd82347bcac7620314fcc2",
-      "pushed_date": "2026-05-20",
-      "queued_at": "2026-08-12",
-      "source_query": "filename:validator.js path:src OR filename:validators.py",
-      "stars": 44,
-      "url": "https://github.com/ussumant/cc2codex"
-    },
-    {
-      "capped": true,
-      "default_branch": "main",
-      "pin": "5fe013b3d39b7be6f4dcd911e7e2ead51322a97a",
-      "pushed_date": "2026-03-01",
-      "queued_at": "2026-08-12",
-      "source_query": "filename:validator.js path:src OR filename:validators.py",
-      "stars": 34,
-      "url": "https://github.com/HugoDaniel/boreDOM"
-    },
-    {
-      "capped": true,
-      "default_branch": "develop",
-      "pin": "95f4425ddbd80cace32780a2616b01c3b745d173",
-      "pushed_date": "2026-06-25",
-      "queued_at": "2026-08-12",
-      "source_query": "filename:validator.js path:src OR filename:validators.py",
-      "stars": 35,
-      "url": "https://github.com/Saleslogix/argos-saleslogix"
-    },
-    {
-      "capped": true,
-      "default_branch": "main",
-      "pin": "2649265f804bf6becafd9ef4410f93f242bd0052",
-      "pushed_date": "2026-08-05",
-      "queued_at": "2026-08-12",
-      "source_query": "filename:validator.js path:src OR filename:validators.py",
-      "stars": 31,
-      "url": "https://github.com/schorfES/node-lintspaces"
-    },
-    {
-      "capped": false,
-      "default_branch": "main",
-      "pin": "31b5b1ce22bcf220819bc2f99f253e7b1ffdaeb3",
-      "pushed_date": "2026-07-31",
-      "queued_at": "2026-08-12",
-      "source_query": "path:testdata filename:regex OR filename:regexp",
-      "stars": 110,
-      "url": "https://github.com/ajitpratap0/GoSQLX"
-    },
-    {
-      "capped": true,
-      "default_branch": "main",
-      "pin": "035e872d96654dc3f10f4f102f9bcdccf3f03e41",
-      "pushed_date": "2026-01-22",
-      "queued_at": "2026-08-12",
-      "source_query": "path:rules extension:yar OR extension:yara",
-      "stars": 5,
-      "url": "https://github.com/juliangrtz/iOS-re-lab"
-    },
-    {
-      "capped": true,
-      "default_branch": "main",
-      "pin": "350ed405971a723d54bce08080e5a7491c930b01",
-      "pushed_date": "2026-05-17",
-      "queued_at": "2026-08-12",
-      "source_query": "path:rules extension:yar OR extension:yara",
-      "stars": 6,
-      "url": "https://github.com/runtimefailure/LuckywareReverse"
-    },
-    {
-      "capped": true,
-      "default_branch": "master",
-      "pin": "9dfcade04b41422b5c8457956f984cd25fe3e6d2",
-      "pushed_date": "2023-05-23",
-      "queued_at": "2026-08-12",
-      "source_query": "path:rules extension:yar OR extension:yara",
-      "stars": 333,
-      "url": "https://github.com/0x0be/PEpper"
-    },
-    {
-      "capped": true,
-      "default_branch": "main",
-      "pin": "aced73f8c0778e6f11f27bcaf75c1ad982fd68b6",
-      "pushed_date": "2026-07-30",
-      "queued_at": "2026-08-12",
-      "source_query": "filename:validator.js path:src OR filename:validators.py",
-      "stars": 21,
-      "url": "https://github.com/NaturalIntelligence/detailed-xml-validator"
-    },
-    {
-      "capped": true,
-      "default_branch": "main",
-      "pin": "4f43015c80fde0cb1bd3f001a7551c40eed2682c",
-      "pushed_date": "2026-06-12",
-      "queued_at": "2026-08-12",
-      "source_query": "path:rules extension:yar OR extension:yara",
-      "stars": 4,
-      "url": "https://github.com/Rizzy1857/SentryShield"
-    },
-    {
-      "capped": false,
-      "default_branch": "master",
-      "pin": "500c111dbfffec4ee11c629b102f4ac04d09ac3a",
-      "pushed_date": "2016-05-12",
-      "queued_at": "2026-08-12",
-      "source_query": "SecRule filename:REQUEST path:rules",
-      "stars": 22,
-      "url": "https://github.com/SEC642/modsec"
-    },
-    {
-      "capped": false,
-      "default_branch": "main",
-      "pin": "f7b3be9d18538c56fb03caa6088db55404e784e8",
-      "pushed_date": "2026-02-05",
-      "queued_at": "2026-08-12",
-      "source_query": "path:testdata filename:regex OR filename:regexp",
-      "stars": 78,
-      "url": "https://github.com/grafana/regexp"
-    },
-    {
-      "capped": false,
-      "default_branch": "master",
-      "pin": "b076d39a02e5015af0a2a96636e4cc479ecd9f45",
-      "pushed_date": "2024-06-28",
-      "queued_at": "2026-08-12",
-      "source_query": "path:testdata filename:regex OR filename:regexp",
-      "stars": 2737,
-      "url": "https://github.com/xeipuuv/gojsonschema"
-    },
-    {
-      "capped": true,
-      "default_branch": "main",
-      "pin": "b12831dd1fdb3a5c012b066be692bab30a860526",
-      "pushed_date": "2026-08-11",
-      "queued_at": "2026-08-12",
-      "source_query": "filename:validator.js path:src OR filename:validators.py",
-      "stars": 14,
-      "url": "https://github.com/GuillaumeGomez/browser-UI-test"
-    },
-    {
-      "capped": false,
-      "default_branch": "master",
-      "pin": "aa529e6b82ac4226244caa94a879a5a4ebafa8db",
-      "pushed_date": "2025-08-14",
-      "queued_at": "2026-08-12",
-      "source_query": "path:testdata filename:regex OR filename:regexp",
-      "stars": 64,
-      "url": "https://github.com/JetBrains-Research/snakecharm"
-    },
-    {
-      "capped": true,
-      "default_branch": "main",
-      "pin": "87fe9529fdf9c64126bd81fc45658bb86bd64755",
-      "pushed_date": "2026-04-02",
-      "queued_at": "2026-08-12",
-      "source_query": "path:rules extension:yar OR extension:yara",
-      "stars": 3,
-      "url": "https://github.com/Ph4wkm00n/Astra_AV"
-    },
-    {
-      "capped": true,
-      "default_branch": "main",
-      "pin": "66e7610a7f084d07dafaade17673e5df915e34c4",
-      "pushed_date": "2026-08-12",
-      "queued_at": "2026-08-12",
-      "source_query": "filename:validator.js path:src OR filename:validators.py",
-      "stars": 15,
-      "url": "https://github.com/adobe/structured-data-validator"
-    },
-    {
-      "capped": true,
-      "default_branch": "master",
-      "pin": "603dee211a3a7c9acc7f7bf99d53e7e689503a87",
-      "pushed_date": "2026-05-09",
-      "queued_at": "2026-08-12",
-      "source_query": "filename:validator.js path:src OR filename:validators.py",
-      "stars": 15,
-      "url": "https://github.com/arcslash/react-native-ussd"
-    },
-    {
-      "capped": true,
-      "default_branch": "main",
-      "pin": "977b2e8adcfb4506980084191aa2357756900134",
-      "pushed_date": "2026-08-11",
-      "queued_at": "2026-08-12",
-      "source_query": "filename:validator.js path:src OR filename:validators.py",
-      "stars": 14,
-      "url": "https://github.com/cloudfoundry/uaa-singular"
-    },
-    {
-      "capped": true,
-      "default_branch": "master",
-      "pin": "eb5356d56e914552d6b1c8dc822f19bd6f0e5774",
-      "pushed_date": "2024-05-11",
-      "queued_at": "2026-08-12",
-      "source_query": "path:rules extension:yar OR extension:yara",
-      "stars": 70,
-      "url": "https://github.com/mole-ids/mole"
-    },
-    {
-      "capped": true,
-      "default_branch": "master",
-      "pin": "b7b9841432f0f4c69f360d910c5fcce4d0e4a01f",
-      "pushed_date": "2018-09-26",
-      "queued_at": "2026-08-12",
-      "source_query": "path:rules extension:yar OR extension:yara",
-      "stars": 252,
-      "url": "https://github.com/netxfly/sec_check"
-    },
-    {
-      "capped": true,
-      "default_branch": "main",
-      "pin": "062471aebc3f0fe2ce26ec27998803a3dd439b5e",
-      "pushed_date": "2026-06-08",
-      "queued_at": "2026-08-12",
-      "source_query": "filename:validator.js path:src OR filename:validators.py",
-      "stars": 10,
-      "url": "https://github.com/AGoldian/claudenv"
-    },
-    {
-      "capped": true,
-      "default_branch": "master",
-      "pin": "5f564db1dc7ea9e5c95ca8f82539eb9f5c8f625c",
-      "pushed_date": "2017-12-20",
-      "queued_at": "2026-08-12",
-      "source_query": "filename:validator.js path:src OR filename:validators.py",
-      "stars": 968,
-      "url": "https://github.com/mc-zone/IDValidator"
-    },
-    {
-      "capped": true,
-      "default_branch": "main",
-      "pin": "ed7ad98fa495ca9a7d9e855dd260218ba4e67a9b",
-      "pushed_date": "2021-07-14",
-      "queued_at": "2026-08-12",
-      "source_query": "path:rules extension:yar OR extension:yara",
-      "stars": 202,
-      "url": "https://github.com/rpetrich/patrolaroid"
-    },
-    {
-      "capped": true,
-      "default_branch": "main",
-      "pin": "33391a8c016f0e902950e8c2d9867b7e8d0e9b2a",
-      "pushed_date": "2023-04-24",
-      "queued_at": "2026-08-12",
-      "source_query": "path:rules extension:yar OR extension:yara",
-      "stars": 137,
-      "url": "https://github.com/Immersive-Labs-Sec/SliverC2-Forensics"
-    },
-    {
-      "capped": false,
-      "default_branch": "main",
-      "pin": "5322834e608e17314f8a76afb8f0dbe786d1211e",
-      "pushed_date": "2026-08-12",
-      "queued_at": "2026-08-12",
-      "source_query": "path:testdata filename:regex OR filename:regexp",
-      "stars": 40,
-      "url": "https://github.com/getprovenant/provenant"
-    },
-    {
-      "capped": false,
-      "default_branch": "branches/3.3-px",
-      "pin": "5e0b13026072ba0de7dcc86d254e8b357ca3e9db",
-      "pushed_date": "2024-12-10",
-      "queued_at": "2026-08-12",
-      "source_query": "filename:re_tests OR filename:test_re.py path:Lib/test",
-      "stars": 595,
-      "url": "https://github.com/pyparallel/pyparallel"
-    },
-    {
-      "capped": false,
-      "default_branch": "main",
-      "pin": "7f2285ea6bceb4b6269b99bc435b7e005fe8772c",
-      "pushed_date": "2026-08-12",
-      "queued_at": "2026-08-12",
-      "source_query": "path:testdata filename:regex OR filename:regexp",
-      "stars": 38,
-      "url": "https://github.com/sipcapture/gossipper"
-    },
-    {
-      "capped": true,
-      "default_branch": "master",
-      "pin": "65aaf717b9b57f3aa6379a836fe28dfc9b4f671b",
-      "pushed_date": "2021-03-25",
-      "queued_at": "2026-08-12",
-      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
-      "stars": 37,
-      "url": "https://github.com/uber/hypothesis-gufunc"
-    },
-    {
-      "capped": true,
-      "default_branch": "main",
-      "pin": "c21b982a9f1583a44a5d9d15df403964d8c8aa0b",
-      "pushed_date": "2026-07-30",
-      "queued_at": "2026-08-12",
-      "source_query": "filename:validator.js path:src OR filename:validators.py",
-      "stars": 6,
-      "url": "https://github.com/nirholas/three-ui"
-    },
-    {
-      "capped": false,
-      "default_branch": "master",
-      "pin": "aa9d96aa67dbeb81676c8ddba22b3f200cd7d6c1",
-      "pushed_date": "2024-12-18",
-      "queued_at": "2026-08-12",
-      "source_query": "path:testdata filename:regex OR filename:regexp",
-      "stars": 482,
-      "url": "https://github.com/qri-io/jsonschema"
-    },
-    {
-      "capped": true,
-      "default_branch": "main",
-      "pin": "9bf4bd33c83776d6331fdb0ddced7803556cae85",
-      "pushed_date": "2026-07-31",
-      "queued_at": "2026-08-12",
-      "source_query": "filename:validator.js path:src OR filename:validators.py",
-      "stars": 5,
-      "url": "https://github.com/surpradhan/agent-event-protocol"
-    },
-    {
-      "capped": true,
-      "default_branch": "master",
-      "pin": "aaaa26190bd2ae55044c9b763d0f973549cfc368",
-      "pushed_date": "2025-04-02",
-      "queued_at": "2026-08-12",
-      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
-      "stars": 6,
-      "url": "https://github.com/uc-cdis/dcfdictionary"
-    },
-    {
-      "capped": true,
-      "default_branch": "master",
-      "pin": "bdb1917342ae45e0111b1ffc187e1c4c30d216ce",
-      "pushed_date": "2025-04-02",
-      "queued_at": "2026-08-12",
-      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
-      "stars": 6,
-      "url": "https://github.com/uc-cdis/ndh-demo"
-    },
-    {
-      "capped": true,
-      "default_branch": "master",
-      "pin": "b22446263c872a651a1cba781c1f3d892c552af8",
-      "pushed_date": "2020-11-17",
-      "queued_at": "2026-08-12",
-      "source_query": "path:rules extension:yar OR extension:yara",
-      "stars": 117,
-      "url": "https://github.com/yuriufo/DataCon2020"
-    },
-    {
-      "capped": true,
-      "default_branch": "main",
-      "pin": "7584dd793937672ffd713603bdceb5f8f28425f0",
-      "pushed_date": "2026-08-02",
-      "queued_at": "2026-08-12",
-      "source_query": "filename:validator.js path:src OR filename:validators.py",
-      "stars": 4,
-      "url": "https://github.com/EpicDima/SavingSeries"
-    },
-    {
-      "capped": true,
-      "default_branch": "main",
-      "pin": "edc50f35005032c940bf6260ca791dab700eaabc",
-      "pushed_date": "2025-07-08",
-      "queued_at": "2026-08-12",
-      "source_query": "path:rules extension:yar OR extension:yara",
-      "stars": 18,
-      "url": "https://github.com/Kirandawadi/volatility3-mcp"
-    },
-    {
-      "capped": true,
       "default_branch": "master",
       "pin": "7434b253cda0e673570bcbe27d06f8bd7a24405b",
       "pushed_date": "2017-07-16",
@@ -999,6 +499,506 @@
       "source_query": "filename:validator.js path:src OR filename:validators.py",
       "stars": 33,
       "url": "https://github.com/ameerthehacker/covid-vaccine-gh-action"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "722645bceeac4fe60cf881a8e42f057facef2afb",
+      "pushed_date": "2016-01-06",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:validator.js path:src OR filename:validators.py",
+      "stars": 40,
+      "url": "https://github.com/aralejs/validator"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "8c5d24910eae4dc9864a658b59d24a9dfd345b5b",
+      "pushed_date": "2020-07-20",
+      "queued_at": "2026-08-12",
+      "source_query": "path:rules extension:yar OR extension:yara",
+      "stars": 8,
+      "url": "https://github.com/arbitraryrw/MobProtID"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "08f9d056bb4f3b1690f8e3486a78d377163beefa",
+      "pushed_date": "2021-04-03",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:validator.js path:src OR filename:validators.py",
+      "stars": 31,
+      "url": "https://github.com/aws-samples/amazon-comprehend-s3-object-lambda-functions"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "715e72d6fe59f98bc6f35f62c024fc1c9e8d741e",
+      "pushed_date": "2025-07-18",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:validator.js path:src OR filename:validators.py",
+      "stars": 7,
+      "url": "https://github.com/google/payjs"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "0d00b424fd9847e9f5d568c98270a1771858c91e",
+      "pushed_date": "2014-05-27",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:validator.js path:src OR filename:validators.py",
+      "stars": 26,
+      "url": "https://github.com/afincha/validity"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "def00ebdfb7f3e004677c0edf15164819a8e6c6d",
+      "pushed_date": "2017-01-23",
+      "queued_at": "2026-08-12",
+      "source_query": "path:rules extension:yar OR extension:yara",
+      "stars": 5,
+      "url": "https://github.com/mr-satan1/SMAT"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "b673492e27a688ecdf3d1ddf67b1e04032e4cd18",
+      "pushed_date": "2024-06-03",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:validator.js path:src OR filename:validators.py",
+      "stars": 5,
+      "url": "https://github.com/qiime2/Keemei"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "af7592b2fef3ced32fc1f69e5e78731acfefa8f8",
+      "pushed_date": "2023-01-22",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:validator.js path:src OR filename:validators.py",
+      "stars": 26,
+      "url": "https://github.com/red-perfume/red-perfume-task-runner"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "7059e6ffbddd63b1feae750085628428449bfcad",
+      "pushed_date": "2023-10-22",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:validator.js path:src OR filename:validators.py",
+      "stars": 4,
+      "url": "https://github.com/red-perfume/red-perfume-css"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "4803f7ccea62a8861292c83bc3ae785535e4b280",
+      "pushed_date": "2015-01-09",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:validator.js path:src OR filename:validators.py",
+      "stars": 17,
+      "url": "https://github.com/webforms/webforms"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "9d222c77e983f2a6c44de92aa13871a89666ff33",
+      "pushed_date": "2017-10-19",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:validator.js path:src OR filename:validators.py",
+      "stars": 14,
+      "url": "https://github.com/CircleOfNice/CoreWorker"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "006c8aab3422796f9b56941bd3c09459049c64e3",
+      "pushed_date": "2015-02-19",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:validator.js path:src OR filename:validators.py",
+      "stars": 15,
+      "url": "https://github.com/NullRefExcep/AngularFormus"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "02175b5f852810fa38fec9d2d699bb95baf550d3",
+      "pushed_date": "2022-11-15",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:validator.js path:src OR filename:validators.py",
+      "stars": 14,
+      "url": "https://github.com/animify/Minicons"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "7d41144632559dd563644ba1bfe89cfe1bd4efdc",
+      "pushed_date": "2018-10-17",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:validator.js path:src OR filename:validators.py",
+      "stars": 13,
+      "url": "https://github.com/boldare/testing-framework"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "61e783ca5ff86604d8240ebc3f4af4cf0d2a3d0d",
+      "pushed_date": "2019-07-07",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:validator.js path:src OR filename:validators.py",
+      "stars": 16,
+      "url": "https://github.com/carlitux/koa-async-validator"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "12928efec3304d51502f9250bf13fd549b6f7d4b",
+      "pushed_date": "2022-07-06",
+      "queued_at": "2026-08-12",
+      "source_query": "path:rules extension:yar OR extension:yara",
+      "stars": 3,
+      "url": "https://github.com/coraltk/pkt"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "b3ab1bd400e0e93ad4a6ab585c90d87f157a0729",
+      "pushed_date": "2017-10-27",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:validator.js path:src OR filename:validators.py",
+      "stars": 14,
+      "url": "https://github.com/icaife/code-snippet"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "3e4d26d06d02a32f309afaac1bdf82cada149c2a",
+      "pushed_date": "2021-04-29",
+      "queued_at": "2026-08-12",
+      "source_query": "path:rules extension:yar OR extension:yara",
+      "stars": 3,
+      "url": "https://github.com/rastrea2r/rastrea2r-server"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "61f2ba03bd71d0eee360bed521c1cfb05cae1d8e",
+      "pushed_date": "2021-05-31",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:validator.js path:src OR filename:validators.py",
+      "stars": 10,
+      "url": "https://github.com/ameerthehacker/jquery-simple-validator"
+    },
+    {
+      "capped": false,
+      "default_branch": "nogil-3.12-final",
+      "pin": "2073d800327d7eccebffffdf2885945687ffb906",
+      "pushed_date": "2023-12-26",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:re_tests OR filename:test_re.py path:Lib/test",
+      "stars": 9,
+      "url": "https://github.com/colesbury/nogil-3.12-final"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "23768f144ae0b028161e704deca17826fab68d3e",
+      "pushed_date": "2020-11-20",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:validator.js path:src OR filename:validators.py",
+      "stars": 11,
+      "url": "https://github.com/raycharius/clean-redirect"
+    },
+    {
+      "capped": false,
+      "default_branch": "master",
+      "pin": "c2336038b7f1ea84b8ae287e17381acb9ea438ff",
+      "pushed_date": "2014-08-08",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:re_tests OR filename:test_re.py path:Lib/test",
+      "stars": 46,
+      "url": "https://github.com/wklken/Python-2.7.8"
+    },
+    {
+      "capped": false,
+      "default_branch": "main",
+      "pin": "33906cc0e7135d91dc94dd61780b3f8654106a05",
+      "pushed_date": "2024-05-24",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:re_tests OR filename:test_re.py path:Lib/test",
+      "stars": 7,
+      "url": "https://github.com/R-YaTian/CPython3.5.10WinXP"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "f778516136d1b94c8ba35eb8dc12c6d7f3beccfa",
+      "pushed_date": "2018-07-11",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:validator.js path:src OR filename:validators.py",
+      "stars": 8,
+      "url": "https://github.com/ShanbayFE/bay-utils.js"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "eddbb53b8c7e124c0265485aa3de354f280c7545",
+      "pushed_date": "2023-01-27",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:validator.js path:src OR filename:validators.py",
+      "stars": 7,
+      "url": "https://github.com/chantouchsek/laravel-vue-form-validator"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "2beffeeafcb314d795ebeeb2d31d7b0ed682d7e7",
+      "pushed_date": "2016-12-16",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:validator.js path:src OR filename:validators.py",
+      "stars": 7,
+      "url": "https://github.com/dargue3/laravel-like-vue-validator"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "fb0b4fefb6f4a1030d16a1792dbf2f4b32c8eae5",
+      "pushed_date": "2015-09-02",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:validator.js path:src OR filename:validators.py",
+      "stars": 8,
+      "url": "https://github.com/taskrabbit/pie"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "d43870462b9400f7d1f18d5d5bdc2a196f65ae46",
+      "pushed_date": "2015-07-20",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:validator.js path:src OR filename:validators.py",
+      "stars": 6,
+      "url": "https://github.com/RumbleInc/react-validator-mixin"
+    },
+    {
+      "capped": false,
+      "default_branch": "master",
+      "pin": "c55af8c594ead09718e787ab26dc733d6da7ee21",
+      "pushed_date": "2021-01-18",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:re_tests OR filename:test_re.py path:Lib/test",
+      "stars": 26,
+      "url": "https://github.com/Setonas/setonas"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "79ad04b73b28b895f75de3ede9eff11de04f5bd1",
+      "pushed_date": "2016-10-06",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:validator.js path:src OR filename:validators.py",
+      "stars": 5,
+      "url": "https://github.com/beeblebrox3/validator"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "de15b92ca21b23659ff58467456d536e06acbf1c",
+      "pushed_date": "2017-05-03",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:validator.js path:src OR filename:validators.py",
+      "stars": 4,
+      "url": "https://github.com/KrekkieD/buenos-commit-msg"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "2a6a23c8a39825683a6e6e1a38208995176549d9",
+      "pushed_date": "2023-01-23",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:validator.js path:src OR filename:validators.py",
+      "stars": 4,
+      "url": "https://github.com/StefanRudvin/CodeMarkerFront"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "32543e2ed8ab55195dcec8451d6298d486aaefa7",
+      "pushed_date": "2017-01-05",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:validator.js path:src OR filename:validators.py",
+      "stars": 4,
+      "url": "https://github.com/Tombre/makerule"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "07e29f866732ef7b4d613a7a2867852a79e47c78",
+      "pushed_date": "2015-01-27",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:validator.js path:src OR filename:validators.py",
+      "stars": 4,
+      "url": "https://github.com/evisions-restored/vertebrae"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "22be62db30b6c88059113647abb0a0f45311530f",
+      "pushed_date": "2018-05-11",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:validator.js path:src OR filename:validators.py",
+      "stars": 4,
+      "url": "https://github.com/frontui/BrickPlus"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "82b39a5b50a3efb9e6d8fac003980d7e2bea7b4b",
+      "pushed_date": "2021-11-24",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:validator.js path:src OR filename:validators.py",
+      "stars": 4,
+      "url": "https://github.com/klabbet/azure-naming"
+    },
+    {
+      "capped": false,
+      "default_branch": "invokedynamic",
+      "pin": "b5f87d963384b62cb43bf56f90d0b6297af30b65",
+      "pushed_date": "2009-07-15",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:re_tests OR filename:test_re.py path:Lib/test",
+      "stars": 17,
+      "url": "https://github.com/nriley/jython"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "5664b01fcb8c307698bb5b5bf34fbefc175d4693",
+      "pushed_date": "2023-03-04",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:validator.js path:src OR filename:validators.py",
+      "stars": 4,
+      "url": "https://github.com/nwutils/nw-utils-builder"
+    },
+    {
+      "capped": false,
+      "default_branch": "gh-pages",
+      "pin": "58108f90c30e89cd8350ce743251e251b7b7261d",
+      "pushed_date": "2016-08-10",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:re_tests OR filename:test_re.py path:Lib/test",
+      "stars": 17,
+      "url": "https://github.com/swenson/python-xr"
+    },
+    {
+      "capped": false,
+      "default_branch": "main",
+      "pin": "4925e0cc53dc460499fcf82924d47121ff8b3e3b",
+      "pushed_date": "2024-10-07",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:re_tests OR filename:test_re.py path:Lib/test",
+      "stars": 3,
+      "url": "https://github.com/JacobCoffee/cpython-shibuya"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "dc9c886c49d8c344a1e5925c1cdbba2fff95ffc1",
+      "pushed_date": "2021-01-03",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:validator.js path:src OR filename:validators.py",
+      "stars": 3,
+      "url": "https://github.com/ShaneKingFriendly/sk-react"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "92df80bf5929d942fc7c6e6eefa7dcf8bbc362a9",
+      "pushed_date": "2014-08-06",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:validator.js path:src OR filename:validators.py",
+      "stars": 3,
+      "url": "https://github.com/acolwell/msetools-js"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "59f313541408356ded40ed778ef3ab5b3265a5dd",
+      "pushed_date": "2016-07-05",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:validator.js path:src OR filename:validators.py",
+      "stars": 3,
+      "url": "https://github.com/dpoindexter/immutable-validation"
+    },
+    {
+      "capped": false,
+      "default_branch": "master",
+      "pin": "7ff45d2c63b021a92b4ea3f0e782c5ba5a8247e3",
+      "pushed_date": "2016-01-15",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:re_tests OR filename:test_re.py path:Lib/test",
+      "stars": 14,
+      "url": "https://github.com/gittor/ndk-python"
+    },
+    {
+      "capped": false,
+      "default_branch": "master",
+      "pin": "c7b03e7b57cedccb77e37f65f9bbcb82050c2bb5",
+      "pushed_date": "2022-10-23",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:re_tests OR filename:test_re.py path:Lib/test",
+      "stars": 13,
+      "url": "https://github.com/idobatter/cpython"
+    },
+    {
+      "capped": false,
+      "default_branch": "master",
+      "pin": "3af283c4d24848dbb7a38a63c2e13e302ebc24da",
+      "pushed_date": "2020-11-22",
+      "queued_at": "2026-08-12",
+      "source_query": "path:testdata filename:regex OR filename:regexp",
+      "stars": 15,
+      "url": "https://github.com/jeffsvajlenko/MutationInjectionFramework"
+    },
+    {
+      "capped": false,
+      "default_branch": "master",
+      "pin": "96fe79057f93273682444b2629ec4891f7318ca4",
+      "pushed_date": "2015-01-07",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:re_tests OR filename:test_re.py path:Lib/test",
+      "stars": 14,
+      "url": "https://github.com/kmiku7/python-2.5-annotated"
+    },
+    {
+      "capped": false,
+      "default_branch": "master",
+      "pin": "f0220f10d2eae50d8bbce6d9a38745e0f1af2291",
+      "pushed_date": "2017-07-16",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:re_tests OR filename:test_re.py path:Lib/test",
+      "stars": 15,
+      "url": "https://github.com/xbmc/python"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "3d586420eeee509ef604b8133ce246b00775acf0",
+      "pushed_date": "2017-02-06",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:validator.js path:src OR filename:validators.py",
+      "stars": 3,
+      "url": "https://github.com/zhoukekestar/wxc-form"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "9ce8a5ebea0608e919dcc066836b44d9c228baf7",
+      "pushed_date": "2023-01-07",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:validator.js path:src OR filename:validators.py",
+      "stars": 2,
+      "url": "https://github.com/Zveromag/validator"
     }
   ],
   "schema_version": "1"
