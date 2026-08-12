@@ -1,0 +1,39 @@
+{
+  "budget": {
+    "max_disk_mb": 200,
+    "max_mem_mb": 1024,
+    "max_patterns": 5000,
+    "max_wall_s": 600,
+    "redos_wall_s": 120
+  },
+  "budget_breaches": null,
+  "commit": "f4a47e2cf2822196275075ab9a2e258b6fa9be8b",
+  "compiler_fingerprint": "71d2ce23b4cd",
+  "complete_run": true,
+  "corpus_pin": "f4a47e2cf2822196275075ab9a2e258b6fa9be8b",
+  "decision": "go",
+  "decision_rule": "go iff encodable/sample_size >= 0.3",
+  "dialect": "re2",
+  "encodable": 60,
+  "engine_versions": {
+    "python": "3.14.6",
+    "z3": "5.0.0"
+  },
+  "extractor_schema_version": "2",
+  "fraction": 0.8824,
+  "go_no_go_threshold": 0.3,
+  "id_formula": "v2-domain-optional-ascii-default",
+  "inventory_path": "properties/generated/crust-inventory.ndjson",
+  "path": "batch/corpora/crust/rules",
+  "pilot": "crust",
+  "reasons": {
+    "inline-flag": 6,
+    "ok": 60,
+    "word-boundary": 2
+  },
+  "sample_size": 68,
+  "schema_version": "1",
+  "scope": "full_corpus",
+  "unclassified_parse_errors": 0,
+  "wall_s": 0.329
+}

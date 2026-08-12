@@ -735,6 +735,34 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
             "max_disk_mb": 100,
         },
     },
+    "crust": {
+        "corpus_type": "rule_corpus",
+        # Materialize: ln -sfn /tmp/crust batch/corpora/crust/rules
+        # First-party Go DLP/rules + configscan; no tests / py CVE script.
+        "path": ROOT / "batch" / "corpora" / "crust" / "rules",
+        "files": [
+            "internal/configscan/scan.go",
+            "internal/rules/builtin_verify.go",
+            "internal/rules/dlp.go",
+            "internal/rules/dlp_crypto.go",
+            "internal/rules/extractor_powershell.go",
+            "internal/rules/lint.go",
+        ],
+        "dialect": "re2",
+        "extractor": "go_regexp",
+        "repo": "BakeLens/crust",
+        "security_tool": True,
+        "lift_inline": False,
+        "corpus_pin": "f4a47e2cf2822196275075ab9a2e258b6fa9be8b",
+        "commit": "f4a47e2cf2822196275075ab9a2e258b6fa9be8b",
+        "budget": {
+            "max_patterns": 5000,
+            "max_wall_s": 600,
+            "redos_wall_s": 120,
+            "max_mem_mb": 1024,
+            "max_disk_mb": 200,
+        },
+    },
     # Wave-3 P5 testdata corpora (#116) — exempt from admission gate_decision.
     "perl_tre": {
         "corpus_type": "testdata",
@@ -818,6 +846,7 @@ WAVE_CORPORA = frozenset({
     "serviceradar",
     "gigachad-grc",
     "bartblaze-yara-rules",
+    "crust",
     "perl_tre", "go_regexp_tests", "v8_mjsunit",
 })
 

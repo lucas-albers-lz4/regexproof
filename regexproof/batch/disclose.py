@@ -31,6 +31,7 @@ SECURITY_TOOL_CORPORA = frozenset(
         "lonkero",
         "gigachad-grc",
         "bartblaze-yara-rules",
+        "crust",
     }
 )
 
