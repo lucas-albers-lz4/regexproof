@@ -53,6 +53,10 @@ def _draft_with(**probe_overrides) -> dict:
 
 def test_human_go_with_met_condition_schema_valid():
     draft = load_probe_draft(WTFORMS_DRAFT)
+    # AC4: a go with new-surface carries NON-EMPTY predicted_buckets (the
+    # under-report rule is enforced at the tool since P3); a realistic
+    # go-new-surface draft has shell/construct evidence.
+    draft["probe"]["predicted_buckets"] = {"posix-class": 3, "inline-flag": 1}
     dec = author_human(
         draft,
         decision="go",
@@ -63,6 +67,22 @@ def test_human_go_with_met_condition_schema_valid():
     )
     assert dec["decision"] == "go"
     _validate(dec)
+
+
+def test_go_new_surface_empty_buckets_refused():
+    """AC4 under-report rule (P3): go + new-surface + EMPTY
+    predicted_buckets is refused at the tool — enforcement, not review."""
+    draft = load_probe_draft(WTFORMS_DRAFT)
+    draft["probe"]["predicted_buckets"] = {}
+    with pytest.raises(AuthorError, match="predicted_buckets"):
+        author_human(
+            draft,
+            decision="go",
+            rationale="New surface at scale.",
+            met={"new-surface"},
+            evidence={"new-surface": "First-seen construct class X."},
+            decision_date=date(2026, 8, 9),
+        )
 
 
 def test_refuse_decision_without_rationale():
