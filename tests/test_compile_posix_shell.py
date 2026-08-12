@@ -7,6 +7,7 @@ import inspect
 import pytest
 
 from regexproof.batch import compile_records as cr_mod
+from regexproof.batch.compile_records import compile_records
 from regexproof.compiler import compile_pattern
 from regexproof.compiler.base import Unencodable
 from regexproof.compiler.posix_shell import compile_posix_shell, normalize_shell
@@ -59,25 +60,64 @@ def test_normalize_four_way_text():
 
 def test_bre_backref_rejected():
     with pytest.raises(Unencodable) as ei:
-        comp(r"\(ab\)\1", shell_flags={"syntax": "bre", "grep_mode": "basic"})
+        normalize_shell(r"\(ab\)\1", "bre")
     assert ei.value.reason == "backref"
+
+
+def test_rejection_returns_compile_result_not_raise():
+    """Finding-1 regression: normalize runs INSIDE compile_pattern's
+    try/except, so a rejection returns a rejected CompileResult instead of
+    propagating (which would abort batch)."""
+    r = comp(r"\(ab\)\1", shell_flags={"syntax": "bre", "grep_mode": "basic"})
+    assert not r.encodable
+    assert r.unencodable_reason == "backref"
+    assert r.dialect == "posix-shell"
+    r2 = comp(r"(?i)foo", shell_flags={"syntax": "ere", "grep_mode": "extended"})
+    assert not r2.encodable
+    assert r2.unencodable_reason == "inline-flag-like"
+
+
+def test_batch_backref_row_not_abort():
+    """compile_records must not abort on a rejected shell record."""
+    rec = {
+        "schema_version": "2", "repo": "t", "pattern": r"\(ab\)\1",
+        "flags": "", "dialect": "posix-shell", "call_kind": "search",
+        "site": "x.sh:1:0", "file": "x.sh", "line": 1, "column": 0,
+        "shell_flags": {"syntax": "bre", "grep_mode": "basic"},
+    }
+    rows = compile_records([rec], lift_inline=False, corpus_slug="dogfood_shell")
+    assert len(rows) == 1
+    assert rows[0]["encodable"] is False
+    assert rows[0]["compile_reason"] == "backref"
 
 
 def test_gnu_word_boundary_rejected():
     for pat in (r"foo\<", r"\>bar", r"a\<b"):
         with pytest.raises(Unencodable) as ei:
-            comp(pat, shell_flags={"syntax": "bre", "grep_mode": "basic"})
+            normalize_shell(pat, "bre")
         assert ei.value.reason == "gnu-word-boundary"
+
+
+def test_gnu_shorthand_classes_rejected():
+    r"""\w \W \s \S  \B are GNU/busybox classes/boundaries in BOTH BRE and
+    ERE (machine-verified) — rejected, never silently translated to pcre."""
+    for pat in (r"\w", r"\W", r"\s", r"\S", r"\b", r"\B"):
+        for syntax in ("bre", "ere"):
+            with pytest.raises(Unencodable) as ei:
+                normalize_shell(pat, syntax)
+            assert ei.value.reason == "gnu-extension", (pat, syntax)
 
 
 def test_ere_inline_flag_guard():
     """`(?` in an ERE record is Unencodable — pcre would read it as flags."""
-    with pytest.raises(Unencodable) as ei:
-        comp(r"(?i)foo", shell_flags={"syntax": "ere", "grep_mode": "extended"})
-    assert ei.value.reason == "inline-flag-like"
-    with pytest.raises(Unencodable) as ei:
-        comp(r"(?:foo)", shell_flags={"syntax": "ere", "grep_mode": "extended"})
-    assert ei.value.reason == "inline-flag-like"
+    for pat in (r"(?i)foo", r"(?:foo)"):
+        with pytest.raises(Unencodable) as ei:
+            normalize_shell(pat, "ere")
+        assert ei.value.reason == "inline-flag-like"
+    # and through compile_pattern it surfaces as a rejected result
+    r = comp(r"(?i)foo", shell_flags={"syntax": "ere", "grep_mode": "extended"})
+    assert not r.encodable
+    assert r.unencodable_reason == "inline-flag-like"
 
 
 def test_bre_inline_flag_is_literal():
@@ -88,12 +128,26 @@ def test_bre_inline_flag_is_literal():
 
 
 def test_unknown_escape_drops_backslash():
-    """BRE unknown escape = literal char (grep semantics); pcre would read it as a class."""
+    r"""BRE `a\d` = literal ad (grep semantics); pcre would read \d as class.
+    \w is a GNU CLASS (rejected separately) — the drop applies only to
+    truly-unknown escapes like \d."""
     assert normalize_shell(r"a\d", "bre") == "ad"
-    assert normalize_shell(r"\w+", "bre") == r"w\+"
+    assert normalize_shell(r"\d+", "bre") == r"d\+"
     # kept escapes stay identical
     assert normalize_shell(r"a\.b", "bre") == r"a\.b"
     assert normalize_shell(r"a\*b", "bre") == r"a\*b"
+
+
+def test_ere_unknown_escape_drops_backslash():
+    """ERE `a\d` = literal ad on grep AND busybox (verified); pcre would
+    read \d as a digit class — the drop keeps them agreeing."""
+    assert normalize_shell(r"a\d", "ere") == "ad"
+    assert normalize_shell(r"a\d", "bash_ksh") == "ad"
+    # ERE backslash-metas stay literal-identical (grep and pcre agree)
+    assert normalize_shell(r"a\+b", "ere") == r"a\+b"
+    assert normalize_shell(r"a\?b", "ere") == r"a\?b"
+    # ERE has no backrefs: \1 is the literal 1
+    assert normalize_shell(r"a\1b", "ere") == "a1b"
 
 
 # --- double-normalize guard -------------------------------------------------

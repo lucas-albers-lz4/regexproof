@@ -88,17 +88,13 @@ def compile_pattern(
 
     ``shell_flags`` (posix-shell only): the record's syntax selector
     (``{"syntax": "bre"|"ere"|"bash_ksh", ...}``); missing/unknown selectors
-    default to BRE.  The BRE→ERE normalize runs HERE — at entry, before the
-    caret_in_x / trailing_alt_dollar hooks, which then see normalized ERE
-    text — and is never re-run inside the dialect branch.
+    default to BRE.  The BRE→ERE normalize runs HERE — at entry, inside the
+    try/except (so a rejection returns a rejected ``CompileResult`` instead
+    of propagating and aborting batch), before the caret_in_x /
+    trailing_alt_dollar hooks, which then see normalized ERE text — and is
+    never re-run inside the dialect branch.
     """
     import z3
-
-    if dialect == "posix-shell":
-        from regexproof.compiler.posix_shell import normalize_shell
-
-        sf = shell_flags or {}
-        pattern = normalize_shell(pattern, sf.get("syntax", "bre"))
 
     def compile_bare(pat: str, fl: str, dia: str, ck: str) -> CompileResult:
         return _compile_dialect(
@@ -106,6 +102,12 @@ def compile_pattern(
         )
 
     try:
+        if dialect == "posix-shell":
+            from regexproof.compiler.posix_shell import normalize_shell
+
+            sf = shell_flags or {}
+            pattern = normalize_shell(pattern, sf.get("syntax", "bre"))
+
         # Caret-in-X is more specific than A1B; try it first (#103).
         caret = try_compile_caret_in_x(
             pattern,
