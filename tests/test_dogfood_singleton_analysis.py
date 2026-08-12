@@ -34,14 +34,6 @@ def test_canon_vars_and_digits():
     assert dsa.canon(r"${index_url}") == "$V"
     assert dsa.canon(r"$_u") == "$V"
 
-
-def test_sed_search_rejects_numeric_address():
-    assert dsa._sed_search("1,20p") is None  # line address, not a regex
-    assert dsa._sed_search("s/foo/bar/") == "foo"
-    assert dsa._sed_search("s#foo#bar#") == "foo"  # alternate delimiter
-    assert dsa._sed_search("/listen_https/d") == "listen_https"
-
-
 def test_bash_ere_unquoted_only():
     assert dsa.extract_bash_ere("[[ $x =~ ^[0-9]+$ ]]") == ["^[0-9]+$"]
     assert dsa.extract_bash_ere('[[ $x =~ "^[0-9]+$" ]]') == []
@@ -51,14 +43,6 @@ def test_fgrep_and_F_are_literal():
     assert dsa.extract_shell_patterns("fgrep 'a.b' f") == []
     assert dsa.extract_shell_patterns("grep -F 'a.b' f") == []
     assert dsa.extract_shell_patterns("grep 'a.b' f") == ["a.b"]
-
-
-def test_grep_i_maps_to_flags():
-    recs = dsa.scan_shell("grep -i 'foo' f", repo="t", file="x.sh")
-    assert recs[0]["flags"] == "i"
-
-
-# --- awk forms ----------------------------------------------------------------
 
 def test_awk_address_and_field_separator_extracted():
     assert dsa.extract_shell_patterns("awk '/listen_https/' f") == ["listen_https"]
@@ -72,68 +56,10 @@ def test_awk_program_text_not_extracted():
 
 # --- filters, flag runs, syntax selector -------------------------------------
 
-def test_empty_pattern_dropped():
-    assert dsa.scan_shell("grep '' f", repo="t", file="x.sh") == []
-    assert dsa.scan_shell("sed 's//x/' f", repo="t", file="x.sh") == []
-
-
 def test_length_two_filter():
     assert dsa.extract_shell_patterns("grep 'a' f") == []
     assert dsa.extract_shell_patterns("grep 'ab' f") == ["ab"]
 
-
-def test_flag_runs():
-    recs = dsa.scan_shell("grep -q 'foo' f", repo="t", file="x.sh")
-    assert [r["pattern"] for r in recs] == ["foo"]
-    assert recs[0]["flags"] == ""
-    recs = dsa.scan_shell("grep -i -q 'foo' f", repo="t", file="x.sh")
-    assert recs[0]["flags"] == "i"
-    recs = dsa.scan_shell("grep -qi 'foo' f", repo="t", file="x.sh")
-    assert recs[0]["flags"] == "i"
-    # sed -i is in-place editing, NOT case-insensitive — must not set flags
-    recs = dsa.scan_shell("sed -i 's/foo/bar/' f", repo="t", file="x.sh")
-    assert recs[0]["flags"] == ""
-
-
-def test_shell_flags_syntax_selector():
-    def sf(src):
-        recs = dsa.scan_shell(src, repo="t", file="x.sh")
-        assert len(recs) == 1, src
-        return recs[0]["shell_flags"]
-
-    assert sf("sed 's/foo/bar/' f") == {"syntax": "bre", "grep_mode": "basic"}
-    assert sf("grep 'foo' f") == {"syntax": "bre", "grep_mode": "basic"}
-    assert sf("grep -E 'foo' f") == {"syntax": "ere", "grep_mode": "extended"}
-    assert sf("egrep 'foo' f") == {"syntax": "ere", "grep_mode": "extended"}
-    assert sf("awk '/foo/'") == {"syntax": "ere", "grep_mode": None}
-    assert sf("[[ $x =~ ^[0-9]+$ ]]") == {"syntax": "bash_ksh", "grep_mode": None}
-    # fixed-string greps are literals — no record at all
-    assert dsa.scan_shell("grep -F 'a.b' f", repo="t", file="x.sh") == []
-    assert dsa.scan_shell("fgrep 'a.b' f", repo="t", file="x.sh") == []
-
-
-def test_known_bash_ere_sites_have_bash_ksh_provenance():
-    # The 3 real sites: setup-hermes.sh (x2, unquoted LHS) and
-    # node-bootstrap.sh (quoted LHS, unquoted RHS).
-    src = (
-        "    if [[ $REPLY =~ ^[Yy]$ ]] || [[ -z $REPLY ]]; then\n"
-        "if [[ $REPLY =~ ^[Yy]$ ]] || [[ -z $REPLY ]]; then\n"
-        '    [[ "$v" =~ ^[0-9]+$ ]] && echo "$v" || echo 0\n'
-    )
-    recs = dsa.scan_shell(src, repo="t", file="setup-hermes.sh")
-    assert [r["pattern"] for r in recs] == ["^[Yy]$", "^[Yy]$", "^[0-9]+$"]
-    assert all(r["shell_flags"] == {"syntax": "bash_ksh", "grep_mode": None}
-               for r in recs)
-    assert all(r["dialect"] == "posix-shell" for r in recs)
-    assert [r["line"] for r in recs] == [1, 2, 3]
-
-
-def test_var_grep_kept():
-    recs = dsa.scan_shell('grep "$pattern" "$file"', repo="t", file="x.sh")
-    assert [r["pattern"] for r in recs] == ["$pattern"]
-
-
-# --- repo walk: --dir surface, --ext, MAX_FILE_BYTES --------------------------
 
 def _write_fixture(root: Path) -> None:
     (root / "etc" / "init.d").mkdir(parents=True)

@@ -2,9 +2,10 @@
 """Dogfooding singleton analysis — P(compiles) distribution novelty curve.
 
 Extracts regex sites from the four dogfooding repos (usrmanage, fwlive,
-happycow, hermes-agent-fork) using the project's own extractors where they
-exist (python_ast, js_babel) plus a labeled heuristic shell scanner (no shell
-extractor exists yet — the OpenWrt dialect gap), then computes:
+happycow, hermes-agent-fork) using the project's own extractors (python_ast,
+js_babel) plus the REGISTERED posix-shell extractor
+(regexproof/extractors/shell_posix.py — the P1-frozen heuristic semantics,
+P2c migration), then computes:
 
   - distinct patterns per repo (exact pattern+flags+dialect identity)
   - singleton fraction  -> Good-Turing P(next repo yields something unseen)
@@ -29,7 +30,6 @@ Known false negatives (documented, not code paths):
 from __future__ import annotations
 
 import argparse
-import bisect
 import json
 import re
 import subprocess
@@ -43,6 +43,7 @@ sys.path.insert(0, str(ROOT))
 from regexproof.batch.manifests import MAX_FILE_BYTES  # noqa: E402
 from regexproof.extractors.js_babel import extract_js_precise  # noqa: E402
 from regexproof.extractors.python_ast import extract_python  # noqa: E402
+from regexproof.extractors.shell_posix import extract_shell_posix  # noqa: E402
 
 DOGFOOD = {
     "usrmanage": "/root/workspace/usrmanage",
@@ -66,177 +67,28 @@ def canon(pattern: str) -> str:
 SKIP_DIRS = {".git", "node_modules", "dist", "build", ".venv", "venv",
              "__pycache__", ".tox", "coverage", "htmlcov", ".next"}
 
-# --- heuristic shell scanner (labeled; no shell extractor in the project) ---
-# grep/egrep/sed/awk 'PAT' | "PAT"; sed 's/SEARCH/REPL/' (search part);
-# sed '/ADDR/d' address forms (first /re/ token); awk '/re/' addresses and
-# awk -F'ERE' field separators; [[ $var =~ PAT ]].  NOTE: no VERBOSE mode —
-# literal spaces are load-bearing.  fgrep / grep -F args are literals, never
-# extracted.  Known false negatives (documented, not code paths):
-# `-qE'pat'` (glued flags+quote) and `[[ $x =~ foo\ bar ]]` (escaped-space
-# RHS) are not matched.
-_SHELL_CMD = re.compile(
-    r"(?<![A-Za-z0-9_\-])(?P<cmd>grep|egrep|fgrep|sed|awk)"  # shell token
-    # boundary: hyphens are valid inside shell words (my-grep, ./grep - path
-    # invocations still match — those ARE real greps)
-    r"(?P<flags>(?:[ \t]+-[A-Za-z][A-Za-z0-9]*)*)"  # flag runs incl. separate flags
-    r"[ \t]+(?P<e>-e[ \t]+|--regexp=[ \t]*)?"
-    r"(?P<q>['\"])(?P<pat>.*?)(?P=q)"
-)
-# bash/ksh [[ $x =~ ere ]]: UNQUOTED single-token RHS only — under bash 3.2+
-# semantics a quoted RHS is a literal string match, not a regex.  The RHS
-# token class excludes quotes/spaces, so a quoted RHS makes the whole match
-# fail (no partial capture inside the quoted text).  The LHS may be quoted
-# (`[[ "$v" =~ ^[0-9]+$ ]]`).
-_SHELL_BASH = re.compile(
-    r"\[\[[ \t]+(?:\"[^\"]*\"|'[^']*'|[^ \t'\"]+)[ \t]+=~[ \t]+"
-    r"(?P<pat>[^ \t'\"]+)[ \t]*\]\]"
-)
-# awk -F'ERE' with the flag glued to the quoted separator (the spaced form
-# `awk -F 'ERE'` is handled by _SHELL_CMD via the F flag token).
-_SHELL_AWK_F = re.compile(r"(?<![A-Za-z0-9_\-])awk[ \t]+-F(?P<q>['\"])(?P<pat>.*?)(?P=q)")
-
-_SED_S = re.compile(r"^s(?P<d>[^A-Za-z0-9])(?P<search>.*?)(?P=d)")
-_SED_ADDR = re.compile(r"^/(?P<re>[^/]+)/")
-
-_FLAG_TOKEN = re.compile(r"-([A-Za-z][A-Za-z0-9]*)")
-
-
-def _in_comment_or_string(src: str, pos: int) -> bool:
-    """True if ``pos`` sits inside a shell comment or quoted string on its line.
-
-    Labeled heuristic: scans the line from its start to ``pos`` tracking
-    quote state (single/double), backslash escapes inside quotes (``\\``
-    makes the next char literal — ``echo "a\\\""`` does not close the
-    string), and comment markers (``#`` at line start or after whitespace
-    or a shell separator ``; | & ( ) { }``, outside quotes — ``echo ok;#
-    grep 'x'`` starts a comment).  Prevents phantom sites from
-    ``echo "use grep 'x'"`` and ``# grep 'foo'``.
-    """
-    line_start = src.rfind("\n", 0, pos) + 1
-    quote: str | None = None
-    i = line_start
-    while i < pos:
-        c = src[i]
-        if quote == "'":
-            # POSIX: backslash is LITERAL inside single quotes — only the
-            # closing quote matters
-            if c == "'":
-                quote = None
-        elif c == "\\":
-            i += 1  # escape — literal in unquoted/double-quoted context
-        elif quote == '"':
-            if c == '"':
-                quote = None
-        elif c in ("'", '"'):
-            quote = c
-        elif c == "#" and (i == line_start or src[i - 1] in " \t;|&(){}"):
-            return True
-        i += 1
-    return quote is not None
-
-
-def _sed_search(pat: str) -> str | None:
-    m = _SED_S.match(pat)
-    if m:
-        return m.group("search")
-    m = _SED_ADDR.match(pat)
-    if m:
-        return m.group("re")
-    return None  # numeric address / range / other — not a regex
-
-
-def _flag_letters(flags_src: str) -> str:
-    """All short-flag letters from a flag run, e.g. ' -i -q' -> 'iq'."""
-    return "".join(_FLAG_TOKEN.findall(flags_src or ""))
-
-
-def _grep_mode(cmd: str, letters: str) -> str:
-    """grep syntax selector: fixed (literal) > extended > basic (BRE)."""
-    if cmd == "fgrep" or "F" in letters:
-        return "fixed"
-    if cmd == "egrep" or "E" in letters:
-        return "extended"
-    return "basic"
-
-
-def _newline_index(src: str) -> list[int]:
-    """Offsets of every '\\n' — computed ONCE per file; bisect for lookups."""
-    return [m.start() for m in re.finditer("\n", src)]
-
-
-def scan_shell(src: str, *, repo: str, file: str) -> list[dict]:
-    nl = _newline_index(src)
-    hits: list[tuple[int, dict]] = []
-
-    def add(pos: int, pat: str, flags: str, shell_flags: dict) -> None:
-        if _in_comment_or_string(src, pos):
-            return  # inside a comment or quoted string — not a real site
-        if not pat or len(pat) < 2:
-            return  # empty / 1-char patterns carry no signal
-        hits.append((pos, {
-            "pattern": pat,
-            "flags": flags,
-            "dialect": "posix-shell",
-            "shell_flags": shell_flags,
-            "file": file,
-            "line": bisect.bisect_left(nl, pos) + 1,
-            "extractor": "shell-heuristic",
-        }))
-
-    for m in _SHELL_CMD.finditer(src):
-        cmd, pat = m.group("cmd"), m.group("pat")
-        if not pat:
-            continue
-        letters = _flag_letters(m.group("flags"))
-        if cmd in ("grep", "egrep", "fgrep"):
-            mode = _grep_mode(cmd, letters)
-            if mode == "fixed":
-                continue  # fgrep / grep -F take LITERALS, not regexes
-            # grep/egrep: quoted arg IS the regex (flags consumed above)
-            flags = "i" if "i" in letters else ""
-            shell_flags = {"syntax": "ere" if mode == "extended" else "bre",
-                           "grep_mode": mode}
-        elif cmd == "sed":
-            search = _sed_search(pat)
-            if search is None:
-                continue  # numeric address / range — not a regex
-            pat = search
-            flags = ""
-            shell_flags = {"syntax": "bre", "grep_mode": "basic"}
-        else:  # awk
-            if "F" in letters:
-                pass  # -F 'ERE' — the quoted arg is the field-separator regex
-            elif pat.startswith("/"):
-                am = _SED_ADDR.match(pat)
-                if not am:
-                    continue
-                pat = am.group("re")
-            else:
-                continue  # awk program text is not a regex literal
-            flags = ""
-            shell_flags = {"syntax": "ere", "grep_mode": None}
-        add(m.start(), pat, flags, shell_flags)
-
-    for m in _SHELL_AWK_F.finditer(src):
-        add(m.start(), m.group("pat"), "", {"syntax": "ere", "grep_mode": None})
-
-    for m in _SHELL_BASH.finditer(src):
-        add(m.start(), m.group("pat"), "", {"syntax": "bash_ksh", "grep_mode": None})
-
-    hits.sort(key=lambda h: h[0])
-    return [r for _, r in hits]
+# --- shell extraction via the REGISTERED extractor (P2c migration) ---
+# The P1 heuristic scanner internals were removed in P2c: the registered
+# `regexproof.extractors.shell_posix` is the single source of the
+# P1-frozen semantics (unquoted =~ RHS, fgrep/-F literal skip, -i -> flags,
+# sed s/// + /re/ forms, awk /re/ + -F ERE, comment/string guards, token
+# boundary).  Thin wrappers keep the probe-facing helpers stable.
 
 
 def extract_bash_ere(src: str) -> list[str]:
-    """Unquoted RHS patterns of bash/ksh [[ $x =~ ere ]] tests."""
-    return [m.group("pat") for m in _SHELL_BASH.finditer(src)
-            if m.group("pat") and len(m.group("pat")) >= 2]
+    """Unquoted RHS patterns of bash/ksh [[ $x =~ ere ]] tests (via the
+    registered extractor)."""
+    return [r["pattern"] for r in _shell(src) if
+            (r.get("shell_flags") or {}).get("syntax") == "bash_ksh"]
 
 
 def extract_shell_patterns(src: str) -> list[str]:
-    """Pattern strings only — thin wrapper over scan_shell for tests/probes."""
-    return [r["pattern"] for r in scan_shell(src, repo="", file="")]
+    """Pattern strings only — thin wrapper for tests/probes."""
+    return [r["pattern"] for r in _shell(src)]
 
+
+def _shell(src: str) -> list[dict]:
+    return extract_shell_posix(src, repo="", file="", dialect="posix-shell")
 
 # --- repo walk / extraction -------------------------------------------------
 
@@ -315,12 +167,13 @@ def extract_repo(name: str, path: str, *, dir_mode: bool = False,
         elif kind == "js":
             recs = extract_js_precise(src, repo=name, file=rel)
         else:
-            recs = scan_shell(src, repo=name, file=rel)
+            recs = extract_shell_posix(src, repo=name, file=rel,
+                                       dialect="posix-shell")
         kept = 0
         for r in recs:
             if not r.get("pattern"):
                 continue  # empty placeholder (composite-pattern etc.) — not a user regex
-            r["extractor"] = r.get("extractor", p.suffix.lower().lstrip(".") or kind)
+            r["extractor"] = r.get("extractor", "shell_posix" if kind == "sh" else kind)
             records.append(r)
             kept += 1
         per_file.append((rel, kept))
@@ -393,6 +246,11 @@ def _parse_args(argv: list[str] | None) -> argparse.Namespace:
                          "(pinned per-repo SHAs, file lists, per-file site "
                          "counts, shell_flags-aware identity); refuses on "
                          "repo HEAD != recorded SHA; rerun is byte-identical")
+    ap.add_argument("--snapshot-out", metavar="PATH", default=None,
+                    help="write the snapshot to a different path (P2.5 "
+                         "re-freeze: dogfooding_novelty_2026-08-12_POST_P2.json); "
+                         "the pin-verification still reads the canonical "
+                         "SNAPSHOT_PATH")
     args = ap.parse_args(argv)
     if args.name and not args.dir:
         ap.error("--name requires --dir")
@@ -424,6 +282,7 @@ def write_ndjson(by_repo: dict[str, list[dict]], out_path: Path) -> int:
 
 SNAPSHOT_PATH = ROOT / "properties" / "generated" / "dogfooding_novelty_2026-08-12.json"
 SNAPSHOT_DATE = "2026-08-12"
+_SNAPSHOT_OUT: str | None = None
 
 
 def _ident_of(r: dict, *, canon_pat: bool = False) -> tuple:
@@ -536,10 +395,14 @@ def _snapshot() -> None:
             r["dialect"] for recs in by_repo.values() for r in recs)),
     }
     SNAPSHOT_PATH.parent.mkdir(parents=True, exist_ok=True)
-    SNAPSHOT_PATH.write_text(
+    target = SNAPSHOT_PATH
+    if _SNAPSHOT_OUT:
+        target = Path(_SNAPSHOT_OUT)
+        target.parent.mkdir(parents=True, exist_ok=True)
+    target.write_text(
         json.dumps(data, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     g = data["stats"]["global"]
-    print(f"snapshot -> {SNAPSHOT_PATH}")
+    print(f"snapshot -> {target}")
     print(f"sites={g['sites']} distinct(exact)={g['distinct_exact']} "
           f"distinct(canon)={g['distinct_canon']} "
           f"singleton_frac(exact)={g['singleton_frac_exact']:.3f} "
@@ -556,6 +419,8 @@ def main(argv: list[str] | None = None) -> None:
         if args.dir or args.ext or args.dry_run or args.ndjson:
             raise SystemExit("--snapshot is exclusive: no --dir/--ext/"
                              "--dry-run/--ndjson")
+        global _SNAPSHOT_OUT
+        _SNAPSHOT_OUT = args.snapshot_out
         _snapshot()
         return
     if args.dir:
