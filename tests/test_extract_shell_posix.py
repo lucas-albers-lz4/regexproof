@@ -28,12 +28,12 @@ def patterns(src: str) -> list[str]:
 def test_four_way_syntax_selector():
     src = (
         "grep 'a+b' f\n"          # BRE bare + = literal
-        "grep 'a\\\\+b' f\n"      # BRE backslash-meta + = one-or-more
+        "grep 'a\\+b' f\n"      # BRE backslash-meta + = one-or-more
         "grep -E 'a+b' f\n"       # ERE one-or-more
-        "grep -E 'a\\\\+b' f\n"   # ERE backslash-meta = literal a+b
+        "grep -E 'a\\+b' f\n"   # ERE backslash-meta = literal a+b
     )
     recs = extract(src)
-    assert [r["pattern"] for r in recs] == ["a+b", "a\\\\+b", "a+b", "a\\\\+b"]
+    assert [r["pattern"] for r in recs] == ["a+b", "a\\+b", "a+b", "a\\+b"]
     sf = [r["shell_flags"] for r in recs]
     assert sf[0] == {"syntax": "bre", "grep_mode": "basic"}
     assert sf[1] == {"syntax": "bre", "grep_mode": "basic"}
