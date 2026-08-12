@@ -41,8 +41,8 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 from regexproof.batch.manifests import MAX_FILE_BYTES  # noqa: E402
-from regexproof.extractors.python_ast import extract_python  # noqa: E402
 from regexproof.extractors.js_babel import extract_js_precise  # noqa: E402
+from regexproof.extractors.python_ast import extract_python  # noqa: E402
 
 DOGFOOD = {
     "usrmanage": "/root/workspace/usrmanage",
@@ -71,27 +71,54 @@ SKIP_DIRS = {".git", "node_modules", "dist", "build", ".venv", "venv",
 # sed '/ADDR/d' address forms (first /re/ token); awk '/re/' addresses and
 # awk -F'ERE' field separators; [[ $var =~ PAT ]].  NOTE: no VERBOSE mode —
 # literal spaces are load-bearing.  fgrep / grep -F args are literals, never
-# extracted.  Known false negative: `-qE'pat'` (glued flags+quote) is missed.
+# extracted.  Known false negatives (documented, not code paths):
+# `-qE'pat'` (glued flags+quote) and `[[ $x =~ foo\ bar ]]` (escaped-space
+# RHS) are not matched.
 _SHELL_CMD = re.compile(
-    r"(?P<cmd>grep|egrep|fgrep|sed|awk)"
+    r"(?<![A-Za-z0-9_])(?P<cmd>grep|egrep|fgrep|sed|awk)"  # word boundary:
     r"(?P<flags>(?:[ \t]+-[A-Za-z][A-Za-z0-9]*)*)"  # flag runs incl. separate flags
     r"[ \t]+(?P<e>-e[ \t]+|--regexp=[ \t]*)?"
     r"(?P<q>['\"])(?P<pat>.*?)(?P=q)"
 )
-# bash/ksh [[ $x =~ ere ]]: UNQUOTED RHS only — under bash 3.2+ semantics a
-# quoted RHS is a literal string match, not a regex.
+# bash/ksh [[ $x =~ ere ]]: UNQUOTED single-token RHS only — under bash 3.2+
+# semantics a quoted RHS is a literal string match, not a regex.  The RHS
+# token class excludes quotes/spaces, so a quoted RHS makes the whole match
+# fail (no partial capture inside the quoted text).  The LHS may be quoted
+# (`[[ "$v" =~ ^[0-9]+$ ]]`).
 _SHELL_BASH = re.compile(
-    r"\[\[[ \t]+(?:\"[^\"]*\"|'[^']*'|[^ \t]+)[ \t]+=~[ \t]+"
-    r"(?P<pat>[^ \t'\"][^ \t]*?)[ \t]*\]\]"
+    r"\[\[[ \t]+(?:\"[^\"]*\"|'[^']*'|[^ \t'\"]+)[ \t]+=~[ \t]+"
+    r"(?P<pat>[^ \t'\"]+)[ \t]*\]\]"
 )
 # awk -F'ERE' with the flag glued to the quoted separator (the spaced form
 # `awk -F 'ERE'` is handled by _SHELL_CMD via the F flag token).
-_SHELL_AWK_F = re.compile(r"awk[ \t]+-F(?P<q>['\"])(?P<pat>.*?)(?P=q)")
+_SHELL_AWK_F = re.compile(r"(?<![A-Za-z0-9_])awk[ \t]+-F(?P<q>['\"])(?P<pat>.*?)(?P=q)")
 
 _SED_S = re.compile(r"^s(?P<d>[^A-Za-z0-9])(?P<search>.*?)(?P=d)")
 _SED_ADDR = re.compile(r"^/(?P<re>[^/]+)/")
 
 _FLAG_TOKEN = re.compile(r"-([A-Za-z][A-Za-z0-9]*)")
+
+
+def _in_comment_or_string(src: str, pos: int) -> bool:
+    """True if ``pos`` sits inside a shell comment or quoted string on its line.
+
+    Labeled heuristic: scans the line from its start to ``pos`` tracking
+    quote state (single/double) and comment markers (``#`` at line start or
+    after whitespace, outside quotes).  Prevents phantom sites from
+    ``echo "use grep 'x'"`` and ``# grep 'foo'``.
+    """
+    line_start = src.rfind("\n", 0, pos) + 1
+    quote: str | None = None
+    for i in range(line_start, pos):
+        c = src[i]
+        if quote:
+            if c == quote:
+                quote = None
+        elif c in ("'", '"'):
+            quote = c
+        elif c == "#" and (i == line_start or src[i - 1] in " \t"):
+            return True
+    return quote is not None
 
 
 def _sed_search(pat: str) -> str | None:
@@ -128,6 +155,8 @@ def scan_shell(src: str, *, repo: str, file: str) -> list[dict]:
     hits: list[tuple[int, dict]] = []
 
     def add(pos: int, pat: str, flags: str, shell_flags: dict) -> None:
+        if _in_comment_or_string(src, pos):
+            return  # inside a comment or quoted string — not a real site
         if not pat or len(pat) < 2:
             return  # empty / 1-char patterns carry no signal
         hits.append((pos, {
@@ -554,10 +583,14 @@ def main(argv: list[str] | None = None) -> None:
         print("no regex sites found")
         return
 
-    # identity = (pattern, flags, dialect)
-    ident_of = lambda r: (r["pattern"], r.get("flags", ""), r["dialect"])
-    pattern_of = lambda r: r["pattern"]
-    cident_of = lambda r: (canon(r["pattern"]), r.get("flags", ""), r["dialect"])
+    # identity = (pattern, flags, dialect) — shell records additionally carry
+    # the syntax selector so a BRE literal `a+b` and an ERE one-or-more `a+b`
+    # do NOT collapse into one distinct pattern (same rule as --snapshot).
+    def ident_of(r: dict) -> tuple:
+        return _ident_of(r)
+
+    def cident_of(r: dict) -> tuple:
+        return _ident_of(r, canon_pat=True)
 
     def summarize(label: str, ident_of) -> dict[tuple, set[str]]:
         owner: dict[tuple, set[str]] = {}
@@ -567,21 +600,37 @@ def main(argv: list[str] | None = None) -> None:
         all_idents = list(owner)
         singletons = [i for i, owners in owner.items() if len(owners) == 1]
         shared = [i for i, owners in owner.items() if len(owners) > 1]
-        gt = len(singletons) / len(all_idents)
+        frac = len(singletons) / len(all_idents)
         print(f"=== {label} ===")
-        print(f"total distinct: {len(all_idents)}  singleton: {len(singletons)}  shared(>=2 repos): {len(shared)}")
-        print(f"Good-Turing estimate P(next repo yields unseen pattern) = {gt:.3f}  ({gt*100:.1f}%)")
+        print(f"total distinct: {len(all_idents)}  "
+              f"singleton: {len(singletons)}  shared(>=2 repos): {len(shared)}")
+        print(f"distinct-pattern singleton fraction (convenience-sample "
+              f"estimate, NOT a formal Good-Turing estimator) = {frac:.3f}  "
+              f"({frac*100:.1f}%)")
         print()
         return owner
 
-    owner = summarize("identity = exact (pattern, flags, dialect)", ident_of)
-    cowner = summarize("identity = canonicalized (vars->$V, digits->#)", cident_of)
+    owner = summarize("identity = exact (pattern, flags, dialect, shell syntax)",
+                      ident_of)
+    cowner = summarize("identity = canonicalized (vars->$V, digits->#)",
+                       cident_of)
+
+    # per-observation singleton fraction: n1/N over SITES (the honest
+    # Good-Turing-adjacent figure; the distinct fraction above is a
+    # convenience-sample estimate, not a formal estimator).
+    n1 = sum(1 for recs in by_repo.values() for r in recs
+             if len(owner[_ident_of(r)]) == 1)
+    n_sites = sum(len(recs) for recs in by_repo.values())
+    print(f"per-observation singleton fraction (n1/N over sites) = "
+          f"{n1/n_sites:.3f}  ({n1}/{n_sites})")
+    print()
 
     print("=== per-repo novelty (canonicalized) ===")
-    for name in by_repo:
+    for name, recs in by_repo.items():
         own = sum(1 for i, owners in cowner.items() if owners == {name})
-        tot = len({cident_of(r) for r in by_repo[name]})
-        print(f"  {name:<14} unique-to-repo={own:>4}/{tot}  ({(own/tot*100) if tot else 0:.0f}%)")
+        tot = len({cident_of(r) for r in recs})
+        print(f"  {name:<14} unique-to-repo={own:>4}/{tot}  "
+              f"{(own/tot*100) if tot else 0:.0f}%")
 
     print("\n=== accumulation curve (canonicalized, order: size asc) ===")
     order = sorted(by_repo, key=lambda n: len({cident_of(r) for r in by_repo[n]}))
@@ -600,14 +649,14 @@ def main(argv: list[str] | None = None) -> None:
         cum += c
         print(f"  {i[0][:60]!r:62} x{c}  cum={cum/tot*100:.1f}%")
 
-    print("\n=== pattern-only view (no flags/dialect split) ===")
+    print("\n=== pattern-only view (no flags/dialect/syntax split) ===")
     powner: dict[str, set[str]] = {}
     for name, recs in by_repo.items():
         for r in recs:
-            powner.setdefault(pattern_of(r), set()).add(name)
+            powner.setdefault(r["pattern"], set()).add(name)
     psing = [p for p, o in powner.items() if len(o) == 1]
     print(f"distinct patterns: {len(powner)}  singleton: {len(psing)}  "
-          f"GT = {len(psing)/len(powner):.3f}")
+          f"pattern-singleton fraction = {len(psing)/len(powner):.3f}")
 
     # shared patterns of interest (the 'seen-before' mass)
     print("\n=== most-shared patterns ===")

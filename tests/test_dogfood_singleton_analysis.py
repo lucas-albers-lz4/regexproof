@@ -291,7 +291,7 @@ def _fixed_records(*, repo: str, file: str) -> list[dict]:
     }]
 
 
-def test_snapshot_rerun_byte_identical(monkeypatch, tmp_path, capsys):
+def test_snapshot_rerun_byte_identical(monkeypatch, tmp_path):
     """AC2: rerun against the same pins is byte-identical (sha256)."""
     monkeypatch.setattr(dsa, "SNAPSHOT_PATH", tmp_path / "snap.json")
     monkeypatch.setattr(dsa, "DOGFOOD", {"t": "/tmp/fakerepo"})
@@ -301,7 +301,6 @@ def test_snapshot_rerun_byte_identical(monkeypatch, tmp_path, capsys):
 
     dsa._snapshot()
     first = (tmp_path / "snap.json").read_bytes()
-    out1 = capsys.readouterr().out
     dsa._snapshot()
     assert (tmp_path / "snap.json").read_bytes() == first
 
@@ -322,3 +321,40 @@ def test_snapshot_refuses_on_head_mismatch(monkeypatch, tmp_path):
 
     with pytest.raises(SystemExit):
         dsa._snapshot()
+
+
+# --- precision guards (luna gate round 1 folds) ---
+
+def test_command_word_boundary_no_mygrep():
+    """'mygrep'/'xsed'/'awkward' must not produce phantom sites."""
+    assert dsa.extract_shell_patterns("mygrep 'foo' f") == []
+    assert dsa.extract_shell_patterns("xsed 's/a/b/' f") == []
+    assert dsa.extract_shell_patterns("echo awk 'x'") == []
+    assert dsa.extract_shell_patterns("grep 'foo' f") == ["foo"]
+
+
+def test_comment_and_string_context_skipped():
+    """Matches inside comments or quoted strings are not real sites."""
+    assert dsa.extract_shell_patterns("# grep 'foo' f") == []
+    assert dsa.extract_shell_patterns('echo "use grep \'foo\' here"') == []
+    assert dsa.extract_shell_patterns("echo 'sed s/a/b/ in doc'") == []
+    assert dsa.extract_shell_patterns("grep 'foo' # grep 'bar'") == ["foo"]
+
+
+def test_bash_ere_quoted_rhs_no_partial_capture():
+    """A quoted RHS is a literal string match — no partial capture."""
+    assert dsa.extract_bash_ere('[[ "$v" =~ "^[0-9]+$" ]]') == []
+    assert dsa.extract_bash_ere('[[ $x =~ "pat with spaces" ]]') == []
+    # quoted LHS + unquoted RHS still extracts (node-bootstrap form)
+    assert dsa.extract_bash_ere('[[ "$v" =~ ^[0-9]+$ ]]') == ["^[0-9]+$"]
+
+
+def test_main_identity_keeps_bre_ere_distinct(capsys, tmp_path):
+    """Normal-path identity must NOT collapse BRE vs ERE a+b."""
+    repo = tmp_path / "r"
+    repo.mkdir()
+    (repo / "a.sh").write_text(
+        "grep 'a+b' f\ngrep -E 'a+b' f\n")  # BRE literal vs ERE one-or-more
+    dsa.main(["--dir", str(repo), "--name", "t"])
+    out = capsys.readouterr().out
+    assert "total distinct: 2" in out, out
