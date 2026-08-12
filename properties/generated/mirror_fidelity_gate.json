@@ -1,9 +1,9 @@
 {
   "checked_ok": 4,
   "engine_versions": {
-    "perl": "v5.38.2",
-    "python": "3.14.6",
-    "yara": "4.5.8",
+    "perl": "v5.40.1",
+    "python": "3.13.5",
+    "yara": "4.5.2",
     "z3": "5.0.0"
   },
   "fallback_disabled": false,

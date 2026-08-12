@@ -1,7 +1,7 @@
 {
   "dialect_surface": {
     "ecma": 1445,
-    "posix-shell": 281,
+    "posix-shell": 272,
     "py_re": 1139
   },
   "file_lists": {
@@ -10,8 +10,6 @@
       "openwrt-feed/luci-app-fwlive/root/usr/libexec/fwlive-logging.sh",
       "out/upstream/luci-app-fwlive/root/usr/libexec/fwlive-is-firewall-event.sh",
       "out/upstream/luci-app-fwlive/root/usr/libexec/fwlive-logging.sh",
-      "scripts/fwlive-iptables-ping-log.sh",
-      "scripts/fwlive-nft-ping-log.sh",
       "scripts/lib/feed-keys.sh",
       "scripts/lib/feed-publish.sh",
       "scripts/lib/sdk-matrix.sh",
@@ -76,8 +74,6 @@
       "openwrt-feed/luci-app-fwlive/root/usr/libexec/fwlive-logging.sh": 1,
       "out/upstream/luci-app-fwlive/root/usr/libexec/fwlive-is-firewall-event.sh": 5,
       "out/upstream/luci-app-fwlive/root/usr/libexec/fwlive-logging.sh": 1,
-      "scripts/fwlive-iptables-ping-log.sh": 1,
-      "scripts/fwlive-nft-ping-log.sh": 7,
       "scripts/lib/feed-keys.sh": 5,
       "scripts/lib/feed-publish.sh": 2,
       "scripts/lib/sdk-matrix.sh": 1,
@@ -112,7 +108,7 @@
       "scripts/smoke-package-layout.sh": 7,
       "scripts/validate-feed-keys.sh": 2,
       "tests/lib.sh": 1,
-      "tests/test_luci_login.sh": 41,
+      "tests/test_luci_login.sh": 40,
       "tests/test_mutators-busybox-fallback.sh": 9,
       "tests/test_mutators.sh": 28,
       "tests/test_password_control.sh": 15,
@@ -124,19 +120,19 @@
   "snapshot_date": "2026-08-12",
   "stats": {
     "global": {
-      "distinct_canon": 1994,
-      "distinct_exact": 2013,
-      "per_observation_singleton_sites": 0.91239092495637,
-      "singleton_frac_canon": 0.9839518555667001,
-      "singleton_frac_exact": 0.9846000993541977,
-      "sites": 2865
+      "distinct_canon": 1989,
+      "distinct_exact": 2007,
+      "per_observation_singleton_sites": 0.9121148459383753,
+      "singleton_frac_canon": 0.983911513323278,
+      "singleton_frac_exact": 0.9845540607872446,
+      "sites": 2856
     },
     "per_repo": {
       "fwlive": {
-        "distinct_canon": 124,
-        "distinct_exact": 127,
-        "joint_novelty": 0.8225806451612904,
-        "sites": 223
+        "distinct_canon": 119,
+        "distinct_exact": 122,
+        "joint_novelty": 0.8151260504201681,
+        "sites": 215
       },
       "happycow": {
         "distinct_canon": 81,
@@ -152,9 +148,9 @@
       },
       "usrmanage": {
         "distinct_canon": 140,
-        "distinct_exact": 145,
+        "distinct_exact": 144,
         "joint_novelty": 0.8571428571428571,
-        "sites": 193
+        "sites": 192
       }
     }
   }

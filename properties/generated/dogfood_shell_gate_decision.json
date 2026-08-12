@@ -2,7 +2,7 @@
   "candidate_url": "dogfooding universe (usrmanage/fwlive/happycow/hermes-agent-fork) at P1-frozen pins (dogfooding_novelty_2026-08-12.json)",
   "conditions": [
     {
-      "evidence": "POSIX-shell dialect surface in the dogfooding universe (usrmanage/fwlive/happycow/hermes-agent-fork at the P1-frozen pins): 276 shell regex sites across 112 shell files (273 on the .sh-only frozen surface per dogfooding_novelty_2026-08-12.json, +3 on the init.d/shebang surface) — no admitted corpus covered posix-shell before this wave (no shell extractor existed pre-P1; DIALECTS gained posix-shell in P2a; the BRE/ERE normalize + pcre backend landed in P2b). Dialect surface: ecma 1455 / posix-shell 276 / py_re 1234. Non-empty predicted_buckets (backref 10, inline-flag 690, lookaround 117, m-flag 83, posix-class 14, stateful 329, u-flag 13).",
+      "evidence": "POSIX-shell dialect surface in the dogfooding universe (usrmanage/fwlive/happycow/hermes-agent-fork at the P1-frozen pins): 275 shell regex sites post-correction on the dir-mode walk (2964 total: ecma 1455 / posix-shell 275 / py_re 1234). Authoring-time probe: 276 (273 .sh-only frozen + 3 init.d/shebang). PR #274 restored +5 command-substitution sites (281 pre-fold). The cumulative zen-MCR fold removed 6 false positives (heredoc data bodies, grep -P rebranched, escaped sed delimiters, sed -E -> ERE; the .sh-only frozen re-freeze dogfooding_novelty_2026-08-12_POST_P2.json records 272 shell sites, 2856 total \u2014 consistent with the walk's +3 init.d/shebang). No admitted corpus covered posix-shell before this wave. Non-empty predicted_buckets (backref 10, inline-flag 690, lookaround 117, m-flag 83, posix-class 14, stateful 329, u-flag 13).",
       "id": "new-surface",
       "met": true
     },
@@ -34,7 +34,7 @@
     },
     "dialect": {
       "ecma": 1455,
-      "posix-shell": 276,
+      "posix-shell": 275,
       "py_re": 1234
     },
     "flags": {
@@ -55,7 +55,7 @@
       "stateful": 329,
       "u-flag": 13
     },
-    "regex_sites": 2965,
+    "regex_sites": 2964,
     "regex_sites_per_file": {
       "fwlive/core/fwlive-log.js": 15,
       "fwlive/openwrt-feed/luci-app-fwlive/htdocs/luci-static/resources/fwlive/log.js": 21,
@@ -67,15 +67,13 @@
       "fwlive/openwrt-feed/luci-app-fwlive/root/usr/libexec/rpcd/fwlive": 9,
       "fwlive/scripts/capture-fwlive-screenshots.mjs": 1,
       "fwlive/scripts/embed-fwlive-css.js": 1,
-      "fwlive/scripts/fwlive-iptables-ping-log.sh": 1,
-      "fwlive/scripts/fwlive-nft-ping-log.sh": 7,
       "fwlive/scripts/gen-luci-wrapper.js": 1,
       "fwlive/scripts/gen-shell-classifier.js": 2,
       "fwlive/scripts/lib/feed-keys.sh": 5,
       "fwlive/scripts/lib/feed-publish.sh": 2,
       "fwlive/scripts/lib/sdk-matrix.sh": 1,
       "fwlive/scripts/qemu-lab-prepare-image.sh": 14,
-      "fwlive/scripts/qemu-reload-revert-smoke.sh": 6,
+      "fwlive/scripts/qemu-reload-revert-smoke.sh": 7,
       "fwlive/scripts/qemu-smoke-fwlive.sh": 5,
       "fwlive/scripts/run-openwrt-x86-experiment.sh": 1,
       "fwlive/scripts/upstream-cut.sh": 6,
@@ -442,6 +440,7 @@
       "hermes-agent/hermes_state.py": 12,
       "hermes-agent/mcp_serve.py": 1,
       "hermes-agent/model_tools.py": 4,
+      "hermes-agent/optional-skills/creative/hyperframes/scripts/setup.sh": 3,
       "hermes-agent/optional-skills/creative/kanban-video-orchestrator/scripts/bootstrap_pipeline.py": 3,
       "hermes-agent/optional-skills/devops/watchers/scripts/watch_github.py": 1,
       "hermes-agent/optional-skills/mcp/fastmcp/templates/database_server.py": 1,
@@ -460,6 +459,7 @@
       "hermes-agent/optional-skills/security/unbroker/scripts/email_modes.py": 2,
       "hermes-agent/optional-skills/security/unbroker/scripts/emailer.py": 1,
       "hermes-agent/optional-skills/security/unbroker/scripts/registry.py": 7,
+      "hermes-agent/optional-skills/security/web-pentest/scripts/recon-scan.sh": 1,
       "hermes-agent/optional-skills/web-development/cloudflare-temporary-deploy/scripts/parse_deploy_output.py": 5,
       "hermes-agent/plugins/disk-cleanup/__init__.py": 1,
       "hermes-agent/plugins/google_meet/meet_bot.py": 2,
@@ -504,7 +504,7 @@
       "hermes-agent/scripts/check-windows-footguns.py": 13,
       "hermes-agent/scripts/check_subprocess_stdin.py": 1,
       "hermes-agent/scripts/contributor_audit.py": 20,
-      "hermes-agent/scripts/install.sh": 14,
+      "hermes-agent/scripts/install.sh": 15,
       "hermes-agent/scripts/kill_modal.sh": 4,
       "hermes-agent/scripts/lib/node-bootstrap.sh": 4,
       "hermes-agent/scripts/release.py": 12,
@@ -753,7 +753,7 @@
       "usrmanage/tests/test_mutators.sh": 28,
       "usrmanage/tests/test_password_control.sh": 15,
       "usrmanage/tests/test_phase1_foundation.sh": 11,
-      "usrmanage/tests/test_sdk_matrix_digests.sh": 1,
+      "usrmanage/tests/test_sdk_matrix_digests.sh": 2,
       "usrmanage/tests/test_validators.sh": 12,
       "usrmanage/tests/usrmanage-i18n.test.js": 6,
       "usrmanage/tests/usrmanage-parity.test.js": 17,
@@ -761,6 +761,6 @@
     },
     "security_boundary": "unknown"
   },
-  "rationale": "New dialect/flag/encoding surface: dialects [ecma:1455, posix-shell:276, py_re:1234]; predicted_buckets [backref:10, inline-flag:690, lookaround:117, m-flag:83, posix-class:14, stateful:329, u-flag:13].",
+  "rationale": "New dialect/flag/encoding surface: dialects [ecma:1455, posix-shell:275, py_re:1234] (2964 total \u2014 post-correction walk; authoring-time probe was 276/2965, pre-#274/pre-fold); predicted_buckets [backref:10, inline-flag:690, lookaround:117, m-flag:83, posix-class:14, stateful:329, u-flag:13]. The shell corpus admits the posix-shell dialect measured by the registered extractor (frozen at dogfooding_novelty_2026-08-12_POST_P2.json, 272 shell sites on the .sh-only surface; the dir-mode walk counts 275).",
   "schema_version": "1"
 }

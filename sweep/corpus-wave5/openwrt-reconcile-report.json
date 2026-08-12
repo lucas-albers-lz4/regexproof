@@ -1,6 +1,6 @@
 {
   "corpus": "openwrt_packages",
-  "now_ndjson": "openwrt-feed-records-fixed.ndjson",
+  "now_ndjson": "openwrt-feed-records-fold.ndjson",
   "per_file": {
     "admin/btop/files/btop.uci": {
       "delta_pct": 0.0,
@@ -81,7 +81,7 @@
       "registered": 7
     },
     "libs/nacl/do-openwrt": {
-      "delta_pct": 15.38,
+      "delta_pct": 15.3846,
       "over": true,
       "probe": 13,
       "registered": 11
@@ -297,7 +297,7 @@
       "registered": 1
     },
     "net/dcwapd/files/dcwapd.init": {
-      "delta_pct": 14.29,
+      "delta_pct": 14.2857,
       "over": true,
       "probe": 7,
       "registered": 6
@@ -657,10 +657,10 @@
       "registered": 2
     },
     "net/mwan3/files/lib/mwan3/common.sh": {
-      "delta_pct": 0.0,
-      "over": false,
+      "delta_pct": 100.0,
+      "over": true,
       "probe": 1,
-      "registered": 1
+      "registered": 0
     },
     "net/mwan3/files/lib/mwan3/mwan3.sh": {
       "delta_pct": 0.0,
@@ -801,7 +801,7 @@
       "registered": 1
     },
     "net/pbr/files/etc/init.d/pbr": {
-      "delta_pct": 4.55,
+      "delta_pct": 4.5455,
       "over": false,
       "probe": 66,
       "registered": 63
@@ -1053,10 +1053,10 @@
       "registered": 5
     },
     "net/wg-installer/common/wg.sh": {
-      "delta_pct": 0.0,
-      "over": false,
+      "delta_pct": 25.0,
+      "over": true,
       "probe": 4,
-      "registered": 4
+      "registered": 5
     },
     "net/wg-installer/wg-server/config/wgserver.init": {
       "delta_pct": 0.0,
@@ -1257,13 +1257,13 @@
       "registered": 3
     }
   },
-  "probe_ndjson": "openwrt-feed-records.ndjson",
+  "probe_ndjson": "openwrt-feed-records-preP2.ndjson",
   "schema_version": "1",
   "summary": {
-    "over_tolerance_files": 11,
-    "over_tolerance_pct": 5.26,
+    "over_tolerance_files": 13,
+    "over_tolerance_pct": 6.22,
     "probe_files": 209,
-    "registered_files": 203
+    "registered_files": 202
   },
   "tolerance_pct": 10.0
 }

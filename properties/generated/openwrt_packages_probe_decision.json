@@ -2,7 +2,7 @@
   "candidate_url": "https://github.com/openwrt/packages",
   "conditions": [
     {
-      "evidence": "posix-shell dialect surface at FEED scale: 713 shell regex sites / 203 files / 140 packages in openwrt/packages @ e99adbc49f7a11d0377c8135fe706c7757b9e68c (pre-P2 capture 2026-08-12: 739 sites on the PR #259 branch @ 93f4333; final-semantics 659; the P3 reconcile found and fixed a REAL guard regression — command substitutions suppressed as string literals, PR #274 — restoring 54 real sites; final reconcile vs the fixed registered extractor: 11 files over 10% per-file tolerance, all boundary-fix phantoms like pgrep $x, documented in openwrt-reconcile-report.json). Novelty: posix-shell was unadmitted at capture time (no shell extractor existed pre-P1; the shell corpus's own admission is dogfood_shell_gate_decision.json in the same wave). Syntax: BRE 610 / ERE 98 / bash_ksh 5; -i 39. Non-empty predicted_buckets: posix-class 17, inline-flag 39.",
+      "evidence": "posix-shell dialect surface at FEED scale: 713 shell regex sites / 202 files / 140 packages (the cumulative-review fold re-measured the feed with heredoc-body suppression + grep -P skip + sed fixes \u2014 net zero on the feed: the heredoc bodies contain no regex patterns; an interim 688 measurement was an offset-drift artifact of the blanking implementation, fixed) in openwrt/packages @ e99adbc49f7a11d0377c8135fe706c7757b9e68c (pre-P2 capture 2026-08-12: 739 sites on the PR #259 branch @ 93f4333; final-semantics 659; the P3 reconcile found and fixed a REAL guard regression \u2014 command substitutions suppressed as string literals, PR #274 \u2014 restoring 54 real sites; final reconcile vs the fixed registered extractor: 13 files over 10% per-file tolerance (final reconcile, all documented corrections), documented in openwrt-reconcile-report.json). Novelty: posix-shell was unadmitted at capture time (no shell extractor existed pre-P1; the shell corpus's own admission is dogfood_shell_gate_decision.json in the same wave). Syntax: BRE 590 / ERE 118 / bash_ksh 5; -i 39 (final fold-semantics syntax split). Non-empty predicted_buckets: posix-class 17, inline-flag 39. Probe input: sweep/corpus-wave5/openwrt-feed-records-fold.ndjson (tracked; final fold-semantics export of openwrt/packages @ e99adbc). Canonical probe.flags {i: 39}, construct_counts {(?i): 39, posix-class: 17}.",
       "id": "new-surface",
       "met": true
     },
@@ -18,18 +18,23 @@
     }
   ],
   "corpus": "openwrt_packages",
-  "corpus_pin": "local",
+  "corpus_pin": "e99adbc49f7a11d0377c8135fe706c7757b9e68c",
   "decision": "go",
   "decision_basis": "admission_conditions",
   "decision_date": "2026-08-12",
   "escape_hatch_applied": false,
   "probe": {
-    "construct_counts": {},
+    "construct_counts": {
+      "(?i)": 39,
+      "posix-class": 17
+    },
     "dialect": {
       "posix-shell": 713
     },
-    "flags": {},
-    "pin": "local",
+    "flags": {
+      "i": 39
+    },
+    "pin": "e99adbc49f7a11d0377c8135fe706c7757b9e68c",
     "predicted_buckets": {
       "inline-flag": 39,
       "posix-class": 17
@@ -145,7 +150,6 @@
       "net/modemmanager/files/usr/share/ModemManager/modemmanager.common": 4,
       "net/mosquitto/files/etc/init.d/mosquitto": 4,
       "net/mwan3/files/etc/init.d/mwan3": 2,
-      "net/mwan3/files/lib/mwan3/common.sh": 1,
       "net/mwan3/files/lib/mwan3/mwan3.sh": 24,
       "net/natmap/test.sh": 1,
       "net/nebula/files/nebula.init": 1,
@@ -207,7 +211,7 @@
       "net/uanytun/files/uanytun.init": 1,
       "net/unbound/files/unbound.sh": 2,
       "net/unbound/test.sh": 5,
-      "net/wg-installer/common/wg.sh": 4,
+      "net/wg-installer/common/wg.sh": 5,
       "net/wg-installer/wg-server/config/wgserver.init": 1,
       "net/wg-installer/wg-server/lib/wg_functions.sh": 1,
       "net/wifischedule/net/usr/bin/wifi_schedule.sh": 4,

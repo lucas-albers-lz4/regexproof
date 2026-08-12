@@ -114,6 +114,35 @@ def test_empty_buckets_preflight_exits_nonzero(tmp_path, monkeypatch):
     assert not (tmp_path / "out.json").exists()
 
 
+def test_merge_adds_to_walk_count(tmp_path):
+    """Cumulative finding #5: merge ADDITIVELY extends the scaffold walk's
+    regex_sites (a draft with non-shell surface must not be under-reported
+    — replacing would make regex_sites inconsistent with the dialect sum)."""
+    draft = json.loads(json.dumps(FIXTURE_DRAFT))
+    draft["probe"]["regex_sites"] = 1000
+    draft["probe"]["dialect"] = {"py_re": 1000}
+    merged = merge_draft(draft, [{"pattern": "a+b", "flags": "",
+                                  "file": "x.sh", "line": 1,
+                                  "dialect": "posix-shell"}])
+    assert merged["probe"]["regex_sites"] == 1001
+    assert merged["probe"]["dialect"]["posix-shell"] == 1
+    assert merged["probe"]["dialect"]["py_re"] == 1000
+
+
+def test_merge_ignores_non_shell_records():
+    """Cumulative finding #5b: py/js records in a full export are NOT
+    aggregated (the scaffold's walk already counted them)."""
+    merged = merge_draft(
+        FIXTURE_DRAFT,
+        [{"pattern": "py+", "flags": "", "file": "x.py", "line": 1,
+          "dialect": "py_re"},
+         {"pattern": "sh+", "flags": "", "file": "x.sh", "line": 1,
+          "dialect": "posix-shell"}],
+    )
+    assert merged["probe"]["_shell_evidence"]["records"] == 1
+    assert merged["probe"]["regex_sites"] == 1
+
+
 def test_cli_emits_merged_draft(tmp_path):
     m = _load_cli()
 
@@ -127,3 +156,28 @@ def test_cli_emits_merged_draft(tmp_path):
     merged = json.loads((tmp_path / "out.json").read_text())
     assert merged["probe"]["regex_sites"] == 1
     assert merged["probe"]["predicted_buckets"]
+
+
+def test_merge_carries_flags_and_construct_counts():
+    """Cumulative Reviewer B #6: canonical probe.flags / construct_counts
+    must carry the shell evidence (the decision's narrative said `-i 39`
+    but the fields were empty before the merge populated them)."""
+    merged = merge_draft(
+        FIXTURE_DRAFT,
+        [{"pattern": "foo", "flags": "i", "file": "x.sh", "line": 1,
+          "dialect": "posix-shell"}],
+    )
+    assert merged["probe"]["flags"] == {"i": 1}
+    assert merged["probe"]["construct_counts"].get("(?i)") == 1
+
+
+def test_merge_refuses_shell_aware_scaffold():
+    """luna #276 -r3 #2: a scaffold whose walk ALREADY counted posix-shell
+    would be double-counted by the merge (it is the PRE-P2 bridge) — fail
+    closed instead of silently doubling."""
+    import pytest
+    draft = json.loads(json.dumps(FIXTURE_DRAFT))
+    draft["probe"]["dialect"] = {"posix-shell": 5}
+    with pytest.raises(ValueError, match="already counted posix-shell"):
+        merge_draft(draft, [{"pattern": "a+b", "flags": "", "file": "x.sh",
+                             "line": 1, "dialect": "posix-shell"}])

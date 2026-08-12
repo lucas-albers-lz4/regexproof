@@ -8,10 +8,10 @@
       "encodable": 163
     },
     "gitleaks": {
-      "fraction": 0.2262,
-      "decision": "no-go",
+      "fraction": 0.819,
+      "decision": "go",
       "sample_size": 221,
-      "encodable": 50
+      "encodable": 181
     }
   },
   "shell_true_violations": [],

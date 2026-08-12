@@ -35,10 +35,22 @@ the `MAX_FILE_BYTES`/`--ext` bounds.
   `"$(cmd 'pat')"` command substitutions were suppressed as string
   literals (fixed in PR #274). The fix restored 54 real sites
   (659 → 713; 134 → 140 packages). The final reconcile (pre-P2 capture vs
-  fixed registered extractor): 11 files over the 10% per-file tolerance
-  (5.26%), every one a documented boundary-fix phantom (`pgrep "$x"` →
-  `$x`, mygrep-prefixed commands) — NOT a false removal. Reconcile report:
+  fixed registered extractor): 13 files over the 10% per-file tolerance
+  (6.22%), every one a documented correction (boundary-fix phantoms
+  `pgrep "$x"` → `$x`, mygrep-prefixed commands + fold corrections). NOT a
+  false removal. Reconcile report:
   `openwrt-reconcile-report.json`.
+- **Cumulative-review fold re-measure (final): 713 sites / 202 files /
+  140 packages — NET ZERO vs the post-reconcile count.** The close-out
+  zen-MCR's precision folds (heredoc bodies are data not code, `grep -P`
+  rebranched, escaped sed delimiters, `sed -E` → ERE) were applied and the
+  feed re-measured: the OpenWrt heredoc bodies contain NO regex patterns,
+  so the corrected count is unchanged at 713 (an interim 688 measurement
+  was an offset-drift artifact of the heredoc-blanking implementation —
+  fixed by offset-aligned blanking). The final reconcile vs the fold-
+  adjusted extractor: 13 files over tolerance (6.22%), all documented
+  corrections. The merged draft + `openwrt_packages_probe_decision.json`
+  carry the final 713.
 
 Command (both runs, `LC_ALL=C`):
 ```
@@ -60,9 +72,15 @@ graduates):
   (net/pbr) · total=**713**
 - Top packages: net/pbr 127, net/ddns-scripts 90, net/https-dns-proxy 46,
   net/mwan3 27, multimedia/imagemagick 17.
-- Syntax surface: BRE 610 · ERE 98 · bash_ksh 5. Flag surface: `-i` 39.
-- Full per-file export: `openwrt-feed-records-fixed.ndjson` (registered
-  extractor, post-guard-fix — the merge-probe-draft input).
+- Syntax surface: BRE 590 · ERE 118 · bash_ksh 5 (final fold-semantics
+  split — sed -E → ERE reclassification moved 20 sites). Flag surface:
+  `-i` 39.
+- Full per-file export: `openwrt-feed-records-fold.ndjson` (registered
+  extractor, post-guard-fix + fold semantics — the merge-probe-draft
+  input; tracked in-tree). The pre-P2 frozen capture is tracked as
+  `openwrt-feed-records-preP2.ndjson` — the reconcile report's
+  `probe_ndjson`/`now_ndjson` fields reference the tracked files (the
+  report is reproducible from the tree).
 
 **Scale red flag explicitly OVERRIDDEN** (documented in the artifact's
 `rationale`): a feed is not a repo; the scale signal is meaningless at this

@@ -1,35 +1,2271 @@
 {
-  "budget": {
-    "redos_wall_s": 120
-  },
-  "commit": null,
-  "compiler_fingerprint": "71d2ce23b4cd",
-  "complete_run": true,
-  "corpus_pin": null,
-  "decision": "go",
-  "decision_rule": "go iff encodable/sample_size >= 0.3",
+  "schema_version": "1",
+  "pilot": "gitleaks",
   "dialect": "re2",
+  "extractor_schema_version": "2",
+  "sample_size": 221,
   "encodable": 181,
-  "engine_versions": {
-    "python": "3.14.6",
-    "z3": "5.0.0"
-  },
   "fraction": 0.819,
   "go_no_go_threshold": 0.3,
-  "inventory_path": "properties/generated/gitleaks-inventory.ndjson",
-  "path": "pilots/gitleaks/config/gitleaks.toml",
-  "pilot": "gitleaks",
+  "decision": "go",
+  "decision_rule": "go iff encodable/sample_size >= 0.3 (Phase 3 admits only encodable pairs; no-go blocks scaling that corpus)",
   "reasons": {
-    "inline-flag": 29,
-    "negated-shorthand": 2,
     "ok": 181,
+    "inline-flag": 29,
     "pattern-too-long": 4,
     "per-alternative-anchor": 1,
-    "word-boundary": 4
+    "word-boundary": 4,
+    "negated-shorthand": 2
   },
-  "sample_size": 221,
-  "schema_version": "1",
-  "scope": "full_corpus",
-  "unclassified_parse_errors": 0,
-  "wall_s": 2.564
+  "call_kinds": {
+    "search": 221
+  },
+  "engine_versions": {
+    "python": "3.13.5",
+    "z3": "5.0.0",
+    "node": "v22.23.1",
+    "go": "go version go1.24.4 linux/amd64"
+  },
+  "shell_true_violations": [],
+  "records": [
+    {
+      "regex_id": "45fb01484e6593d0c34922f594e7344b",
+      "site": "pilots/gitleaks/config/gitleaks.toml:74:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "\\bA3-[A-Z0-9]{6}-(?:(?:[A-Z0-9]{11})|(?:[A-Z0-9]{6}-[A-Z0-9]{5}))-[A-Z0-9]{5}-[A-Z0-9]{5}-[A-Z0-9]{5}\\b",
+      "flags": ""
+    },
+    {
+      "regex_id": "f66e76a3534be1d3727febcfd8db409f",
+      "site": "pilots/gitleaks/config/gitleaks.toml:81:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "ops_eyJ[a-zA-Z0-9+/]{250,}={0,3}",
+      "flags": ""
+    },
+    {
+      "regex_id": "ac8604fcd5ba993051be817dd6147a21",
+      "site": "pilots/gitleaks/config/gitleaks.toml:88:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "[\\w.-]{0,50}?(?:adafruit)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}([a-z0-9_-]{32})(?",
+      "flags": "i"
+    },
+    {
+      "regex_id": "41131f3939b610cc8c15586511750818",
+      "site": "pilots/gitleaks/config/gitleaks.toml:94:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "[\\w.-]{0,50}?(?:adobe)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}([a-f0-9]{32})(?:[\\x6",
+      "flags": "i"
+    },
+    {
+      "regex_id": "2ea489673992a57020424e728e789560",
+      "site": "pilots/gitleaks/config/gitleaks.toml:101:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": false,
+      "reason": "inline-flag",
+      "pattern": "\\b(p8e-(?i)[a-z0-9]{32})(?:[\\x60'\"\\s;]|\\\\[nr]|$)",
+      "flags": ""
+    },
+    {
+      "regex_id": "c0f37f1028802aaaba673dc005d5fe2c",
+      "site": "pilots/gitleaks/config/gitleaks.toml:108:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "AGE-SECRET-KEY-1[QPZRY9X8GF2TVDW0S3JN54KHCE6MUA7L]{58}",
+      "flags": ""
+    },
+    {
+      "regex_id": "7e1b515f4a13cba11c0609302fa8dff1",
+      "site": "pilots/gitleaks/config/gitleaks.toml:114:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "[\\w.-]{0,50}?(?:airtable)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}([a-z0-9]{17})(?:[",
+      "flags": "i"
+    },
+    {
+      "regex_id": "c2df990f2f50948a62a8c134d13ecddb",
+      "site": "pilots/gitleaks/config/gitleaks.toml:120:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "\\b(pat[[:alnum:]]{14}\\.[a-f0-9]{64})\\b",
+      "flags": ""
+    },
+    {
+      "regex_id": "3d5d72fe4899f145402ee93743f3552f",
+      "site": "pilots/gitleaks/config/gitleaks.toml:126:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "[\\w.-]{0,50}?(?:algolia)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}([a-z0-9]{32})(?:[\\",
+      "flags": "i"
+    },
+    {
+      "regex_id": "2501363a9c4207267106b9ed0a7d7194",
+      "site": "pilots/gitleaks/config/gitleaks.toml:132:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": false,
+      "reason": "inline-flag",
+      "pattern": "\\b(LTAI(?i)[a-z0-9]{20})(?:[\\x60'\"\\s;]|\\\\[nr]|$)",
+      "flags": ""
+    },
+    {
+      "regex_id": "af05f24163c0f84869a1596def89d1b8",
+      "site": "pilots/gitleaks/config/gitleaks.toml:139:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "[\\w.-]{0,50}?(?:alibaba)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}([a-z0-9]{30})(?:[\\",
+      "flags": "i"
+    },
+    {
+      "regex_id": "a6e8f5ff3888ba5b9f0d01e84646c268",
+      "site": "pilots/gitleaks/config/gitleaks.toml:146:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "\\b(sk-ant-admin01-[a-zA-Z0-9_\\-]{93}AA)(?:[\\x60'\"\\s;]|\\\\[nr]|$)",
+      "flags": ""
+    },
+    {
+      "regex_id": "7659754f2cb2ecf3548ffbae58f2613d",
+      "site": "pilots/gitleaks/config/gitleaks.toml:152:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "\\b(sk-ant-api03-[a-zA-Z0-9_\\-]{93}AA)(?:[\\x60'\"\\s;]|\\\\[nr]|$)",
+      "flags": ""
+    },
+    {
+      "regex_id": "fe9f0523bce369f55cfc783b0b6aca70",
+      "site": "pilots/gitleaks/config/gitleaks.toml:158:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "\\bAKCp[A-Za-z0-9]{69}\\b",
+      "flags": ""
+    },
+    {
+      "regex_id": "369501785eb6c62ea97828d5c9abfc76",
+      "site": "pilots/gitleaks/config/gitleaks.toml:165:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "\\bcmVmd[A-Za-z0-9]{59}\\b",
+      "flags": ""
+    },
+    {
+      "regex_id": "da53e9828dd436469913703fb8dab716",
+      "site": "pilots/gitleaks/config/gitleaks.toml:172:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "[\\w.-]{0,50}?(?:asana)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}([0-9]{16})(?:[\\x60'\"",
+      "flags": "i"
+    },
+    {
+      "regex_id": "9e31211915bc44e6711c76e185f40185",
+      "site": "pilots/gitleaks/config/gitleaks.toml:178:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "[\\w.-]{0,50}?(?:asana)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}([a-z0-9]{32})(?:[\\x6",
+      "flags": "i"
+    },
+    {
+      "regex_id": "940db10c80ccb64e1173cca47dab4947",
+      "site": "pilots/gitleaks/config/gitleaks.toml:184:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": false,
+      "reason": "pattern-too-long",
+      "pattern": "[\\w.-]{0,50}?(?:(?-i:ATLASSIAN|[Aa]tlassian)|(?-i:CONFLUENCE|[Cc]onfluence)|(?-i:JIRA|[Jj]ira))(?:[ \\t\\w.-]{0,20})[\\s'\"]",
+      "flags": "i"
+    },
+    {
+      "regex_id": "cc9b56ff92bd0731ccbc17a0a7e15994",
+      "site": "pilots/gitleaks/config/gitleaks.toml:196:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": false,
+      "reason": "inline-flag",
+      "pattern": "\\b((?:sc|ext|scauth|authress)_(?i)[a-z0-9]{5,30}\\.[a-z0-9]{4,6}\\.(?-i:acc)[_-][a-z0-9-]{10,32}\\.[a-z0-9+/_=-]{30,120})(?",
+      "flags": ""
+    },
+    {
+      "regex_id": "5ae00a581404116cf8dbfc6585b9ea09",
+      "site": "pilots/gitleaks/config/gitleaks.toml:208:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "\\b((?:A3T[A-Z0-9]|AKIA|ASIA|ABIA|ACCA)[A-Z2-7]{16})\\b",
+      "flags": ""
+    },
+    {
+      "regex_id": "07bed9c9f7fe8fb30cf9f5dba9cda323",
+      "site": "pilots/gitleaks/config/gitleaks.toml:225:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "\\b(ABSK[A-Za-z0-9+/]{109,269}={0,2})(?:[\\x60'\"\\s;]|\\\\[nr]|$)",
+      "flags": ""
+    },
+    {
+      "regex_id": "8e85516ffe8da0722025a25b39228d52",
+      "site": "pilots/gitleaks/config/gitleaks.toml:232:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "bedrock-api-key-YmVkcm9jay5hbWF6b25hd3MuY29t",
+      "flags": ""
+    },
+    {
+      "regex_id": "1c97a66dcdc9e6d11a16e998a7fa8a92",
+      "site": "pilots/gitleaks/config/gitleaks.toml:239:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": false,
+      "reason": "per-alternative-anchor",
+      "pattern": "(?:^|[\\\\'\"\\x60\\s>=:(,)])([a-zA-Z0-9_~.]{3}\\dQ~[a-zA-Z0-9_~.-]{31,34})(?:$|[\\\\'\"\\x60\\s<),])",
+      "flags": ""
+    },
+    {
+      "regex_id": "a12a3f44d97a270c7b9473b723b261f9",
+      "site": "pilots/gitleaks/config/gitleaks.toml:246:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "[\\w.-]{0,50}?(?:beamer)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}(b_[a-z0-9=_\\-]{44})",
+      "flags": "i"
+    },
+    {
+      "regex_id": "83b38c6ddf8958938233a80cd29a74c1",
+      "site": "pilots/gitleaks/config/gitleaks.toml:252:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "[\\w.-]{0,50}?(?:bitbucket)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}([a-z0-9]{32})(?:",
+      "flags": "i"
+    },
+    {
+      "regex_id": "807762946cd391f3d22ba9d89a2f7354",
+      "site": "pilots/gitleaks/config/gitleaks.toml:258:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "[\\w.-]{0,50}?(?:bitbucket)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}([a-z0-9=_\\-]{64}",
+      "flags": "i"
+    },
+    {
+      "regex_id": "5931e3d00d78b24d7d0e95d1d031bc15",
+      "site": "pilots/gitleaks/config/gitleaks.toml:264:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "[\\w.-]{0,50}?(?:bittrex)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}([a-z0-9]{32})(?:[\\",
+      "flags": "i"
+    },
+    {
+      "regex_id": "79fdb1940dc024417f9851e376a29b85",
+      "site": "pilots/gitleaks/config/gitleaks.toml:270:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "[\\w.-]{0,50}?(?:bittrex)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}([a-z0-9]{32})(?:[\\",
+      "flags": "i"
+    },
+    {
+      "regex_id": "e0396ad182bc5501498ed70dc7068d29",
+      "site": "pilots/gitleaks/config/gitleaks.toml:276:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": false,
+      "reason": "inline-flag",
+      "pattern": "[\\w.-]{0,50}?(?i:[\\w.-]{0,50}?(?:(?-i:[Mm]eraki|MERAKI))(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3})(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\",
+      "flags": ""
+    },
+    {
+      "regex_id": "9e6244920851537076c48a27b3e3664f",
+      "site": "pilots/gitleaks/config/gitleaks.toml:283:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "\\b(4b1d[A-Za-z0-9]{38})\\b",
+      "flags": ""
+    },
+    {
+      "regex_id": "174b0eb882ae1305fcbb90bed67a7c76",
+      "site": "pilots/gitleaks/config/gitleaks.toml:290:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "CLOJARS_[a-z0-9]{60}",
+      "flags": "i"
+    },
+    {
+      "regex_id": "c2af44b139806f35036f15b8ee65b7e0",
+      "site": "pilots/gitleaks/config/gitleaks.toml:297:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "[\\w.-]{0,50}?(?:cloudflare)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}([a-z0-9_-]{40})",
+      "flags": "i"
+    },
+    {
+      "regex_id": "0d57b78a3a971be1a56c32105a920440",
+      "site": "pilots/gitleaks/config/gitleaks.toml:304:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "[\\w.-]{0,50}?(?:cloudflare)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}([a-f0-9]{37})(?",
+      "flags": "i"
+    },
+    {
+      "regex_id": "2c3da3d19d89a3605f845516838dafd6",
+      "site": "pilots/gitleaks/config/gitleaks.toml:311:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "\\b(v1\\.0-[a-f0-9]{24}-[a-f0-9]{146})(?:[\\x60'\"\\s;]|\\\\[nr]|$)",
+      "flags": ""
+    },
+    {
+      "regex_id": "06818279436e56309cf2811b727aec35",
+      "site": "pilots/gitleaks/config/gitleaks.toml:321:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "[\\w.-]{0,50}?(?:codecov)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}([a-z0-9]{32})(?:[\\",
+      "flags": "i"
+    },
+    {
+      "regex_id": "955c43b9dc836be914c5cde5ee1d0f34",
+      "site": "pilots/gitleaks/config/gitleaks.toml:327:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "[\\w.-]{0,50}?(?i:[\\w.-]{0,50}?(?:cohere|CO_API_KEY)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3})(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"",
+      "flags": ""
+    },
+    {
+      "regex_id": "58d20e50ed971541040c646272352218",
+      "site": "pilots/gitleaks/config/gitleaks.toml:337:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "[\\w.-]{0,50}?(?:coinbase)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}([a-z0-9_-]{64})(?",
+      "flags": "i"
+    },
+    {
+      "regex_id": "976cbea5520109796dd8483b32e561c1",
+      "site": "pilots/gitleaks/config/gitleaks.toml:343:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "[\\w.-]{0,50}?(?:confluent)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}([a-z0-9]{16})(?:",
+      "flags": "i"
+    },
+    {
+      "regex_id": "e946d312e9668a4ad397443cad6e0dd2",
+      "site": "pilots/gitleaks/config/gitleaks.toml:349:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "[\\w.-]{0,50}?(?:confluent)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}([a-z0-9]{64})(?:",
+      "flags": "i"
+    },
+    {
+      "regex_id": "b0beca1531f1b99ef56a07295a165107",
+      "site": "pilots/gitleaks/config/gitleaks.toml:355:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "[\\w.-]{0,50}?(?:contentful)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}([a-z0-9=_\\-]{43",
+      "flags": "i"
+    },
+    {
+      "regex_id": "05fa87af971ce63a93881230d7461ddb",
+      "site": "pilots/gitleaks/config/gitleaks.toml:361:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": false,
+      "reason": "pattern-too-long",
+      "pattern": "\\bcurl\\b(?:.*?|.*?(?:[\\r\\n]{1,2}.*?){1,5})[ \\t\\n\\r](?:-H|--header)(?:=|[ \\t]{0,5})(?:\"(?i)(?:Authorization:[ \\t]{0,5}(?:",
+      "flags": ""
+    },
+    {
+      "regex_id": "f4686d2e58118dca2b3382abaee04c9c",
+      "site": "pilots/gitleaks/config/gitleaks.toml:368:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": false,
+      "reason": "word-boundary",
+      "pattern": "\\bcurl\\b(?:.*|.*(?:[\\r\\n]{1,2}.*){1,5})[ \\t\\n\\r](?:-u|--user)(?:=|[ \\t]{0,5})(\"(:[^\"]{3,}|[^:\"]{3,}:|[^:\"]{3,}:[^\"]{3,})",
+      "flags": ""
+    },
+    {
+      "regex_id": "71837a14c3da215f5a5c94f0ef799111",
+      "site": "pilots/gitleaks/config/gitleaks.toml:384:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "\\b(dapi[a-f0-9]{32}(?:-\\d)?)(?:[\\x60'\"\\s;]|\\\\[nr]|$)",
+      "flags": ""
+    },
+    {
+      "regex_id": "7eb09b462929166c5709bb1ff144633d",
+      "site": "pilots/gitleaks/config/gitleaks.toml:391:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "[\\w.-]{0,50}?(?:datadog)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}([a-z0-9]{40})(?:[\\",
+      "flags": "i"
+    },
+    {
+      "regex_id": "02e3224794efbcfed1577b160002807b",
+      "site": "pilots/gitleaks/config/gitleaks.toml:397:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "[\\w.-]{0,50}?(?:dnkey)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}(dnkey-[a-z0-9=_\\-]{2",
+      "flags": "i"
+    },
+    {
+      "regex_id": "f595dccb562b1259644510238f5d671d",
+      "site": "pilots/gitleaks/config/gitleaks.toml:403:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "\\b(doo_v1_[a-f0-9]{64})(?:[\\x60'\"\\s;]|\\\\[nr]|$)",
+      "flags": ""
+    },
+    {
+      "regex_id": "04af05e74767ba1def688618531494b8",
+      "site": "pilots/gitleaks/config/gitleaks.toml:410:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "\\b(dop_v1_[a-f0-9]{64})(?:[\\x60'\"\\s;]|\\\\[nr]|$)",
+      "flags": ""
+    },
+    {
+      "regex_id": "ec58d128a4ef5188a8e05f609e0fd44f",
+      "site": "pilots/gitleaks/config/gitleaks.toml:417:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "\\b(dor_v1_[a-f0-9]{64})(?:[\\x60'\"\\s;]|\\\\[nr]|$)",
+      "flags": "i"
+    },
+    {
+      "regex_id": "477180dfc141c9d12ce5ad44a657603c",
+      "site": "pilots/gitleaks/config/gitleaks.toml:423:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "[\\w.-]{0,50}?(?:discord)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}([a-f0-9]{64})(?:[\\",
+      "flags": "i"
+    },
+    {
+      "regex_id": "a57fd8a3f4fc8310b6eade6a090bd32b",
+      "site": "pilots/gitleaks/config/gitleaks.toml:429:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "[\\w.-]{0,50}?(?:discord)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}([0-9]{18})(?:[\\x60",
+      "flags": "i"
+    },
+    {
+      "regex_id": "4041f8effdc7cc137f2f3466681f4b65",
+      "site": "pilots/gitleaks/config/gitleaks.toml:436:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "[\\w.-]{0,50}?(?:discord)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}([a-z0-9=_\\-]{32})(",
+      "flags": "i"
+    },
+    {
+      "regex_id": "d3a8297df41836a680d8620f94e32313",
+      "site": "pilots/gitleaks/config/gitleaks.toml:443:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": false,
+      "reason": "inline-flag",
+      "pattern": "dp\\.pt\\.(?i)[a-z0-9]{43}",
+      "flags": ""
+    },
+    {
+      "regex_id": "7eb560b54c017b8b3573839134710bae",
+      "site": "pilots/gitleaks/config/gitleaks.toml:450:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "[\\w.-]{0,50}?(?:droneci)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}([a-z0-9]{32})(?:[\\",
+      "flags": "i"
+    },
+    {
+      "regex_id": "821b8fe4a45644994ba9458ac5376876",
+      "site": "pilots/gitleaks/config/gitleaks.toml:456:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "[\\w.-]{0,50}?(?:dropbox)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}([a-z0-9]{15})(?:[\\",
+      "flags": "i"
+    },
+    {
+      "regex_id": "6c537fa094652891c3edfeb942461ed3",
+      "site": "pilots/gitleaks/config/gitleaks.toml:462:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "[\\w.-]{0,50}?(?:dropbox)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}([a-z0-9]{11}(AAAAA",
+      "flags": "i"
+    },
+    {
+      "regex_id": "3846049addc5bab6fb5796efe09409ba",
+      "site": "pilots/gitleaks/config/gitleaks.toml:468:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "[\\w.-]{0,50}?(?:dropbox)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}(sl\\.[a-z0-9\\-=_]{1",
+      "flags": "i"
+    },
+    {
+      "regex_id": "b88e3b67193d1cc27c76fff7ff716c0f",
+      "site": "pilots/gitleaks/config/gitleaks.toml:474:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": false,
+      "reason": "inline-flag",
+      "pattern": "duffel_(?:test|live)_(?i)[a-z0-9_\\-=]{43}",
+      "flags": ""
+    },
+    {
+      "regex_id": "c2bcbfdf7a8cb2fa06265f8169f50179",
+      "site": "pilots/gitleaks/config/gitleaks.toml:481:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": false,
+      "reason": "inline-flag",
+      "pattern": "dt0c01\\.(?i)[a-z0-9]{24}\\.[a-z0-9]{64}",
+      "flags": ""
+    },
+    {
+      "regex_id": "2fdd3a59ba11492e8e9c96660abd83d2",
+      "site": "pilots/gitleaks/config/gitleaks.toml:488:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": false,
+      "reason": "inline-flag",
+      "pattern": "\\bEZAK(?i)[a-z0-9]{54}\\b",
+      "flags": ""
+    },
+    {
+      "regex_id": "387df87e420e68068b8b013020a8ce42",
+      "site": "pilots/gitleaks/config/gitleaks.toml:495:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": false,
+      "reason": "inline-flag",
+      "pattern": "\\bEZTK(?i)[a-z0-9]{54}\\b",
+      "flags": ""
+    },
+    {
+      "regex_id": "721ddac51276b4e7e80a9173b870c70d",
+      "site": "pilots/gitleaks/config/gitleaks.toml:502:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": false,
+      "reason": "inline-flag",
+      "pattern": "[\\w.-]{0,50}?(?:(?-i:ETSY|[Ee]tsy))(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}([a-z0-9",
+      "flags": "i"
+    },
+    {
+      "regex_id": "1c23eb80fb07b5410eb55b25a1e05efb",
+      "site": "pilots/gitleaks/config/gitleaks.toml:509:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "\\b(\\d{15,16}(\\||%)[0-9a-z\\-_]{27,40})(?:[\\x60'\"\\s;]|\\\\[nr]|$)",
+      "flags": "i"
+    },
+    {
+      "regex_id": "d2aeefe39e143467e2830ed86858cab2",
+      "site": "pilots/gitleaks/config/gitleaks.toml:516:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": false,
+      "reason": "inline-flag",
+      "pattern": "\\b(EAA[MC](?i)[a-z0-9]{100,})(?:[\\x60'\"\\s;]|\\\\[nr]|$)",
+      "flags": ""
+    },
+    {
+      "regex_id": "5fd84a6a519693c9e69889efe8ae8b78",
+      "site": "pilots/gitleaks/config/gitleaks.toml:526:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "[\\w.-]{0,50}?(?:facebook)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}([a-f0-9]{32})(?:[",
+      "flags": "i"
+    },
+    {
+      "regex_id": "f8a0f9cf16d2e27e307f4a15a52db5b2",
+      "site": "pilots/gitleaks/config/gitleaks.toml:533:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "[\\w.-]{0,50}?(?:fastly)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}([a-z0-9=_\\-]{32})(?",
+      "flags": "i"
+    },
+    {
+      "regex_id": "38104956799573182b8c1c0e57236ef8",
+      "site": "pilots/gitleaks/config/gitleaks.toml:539:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "[\\w.-]{0,50}?(?:finicity)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}([a-f0-9]{32})(?:[",
+      "flags": "i"
+    },
+    {
+      "regex_id": "58f8f184f5aab6330e9d51ed089091b5",
+      "site": "pilots/gitleaks/config/gitleaks.toml:545:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "[\\w.-]{0,50}?(?:finicity)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}([a-z0-9]{20})(?:[",
+      "flags": "i"
+    },
+    {
+      "regex_id": "bb43b9b1bb6544c968eb00e20ae6d769",
+      "site": "pilots/gitleaks/config/gitleaks.toml:551:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "[\\w.-]{0,50}?(?:finnhub)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}([a-z0-9]{20})(?:[\\",
+      "flags": "i"
+    },
+    {
+      "regex_id": "a39075f5fa9c151f5989f78948c2d6ad",
+      "site": "pilots/gitleaks/config/gitleaks.toml:557:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "[\\w.-]{0,50}?(?:flickr)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}([a-z0-9]{32})(?:[\\x",
+      "flags": "i"
+    },
+    {
+      "regex_id": "24f68a0ed229e3b11a71ff27ca9caa11",
+      "site": "pilots/gitleaks/config/gitleaks.toml:563:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": false,
+      "reason": "inline-flag",
+      "pattern": "FLWSECK_TEST-(?i)[a-h0-9]{12}",
+      "flags": ""
+    },
+    {
+      "regex_id": "1efdbdd76d3402658dad5326c81b8691",
+      "site": "pilots/gitleaks/config/gitleaks.toml:570:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": false,
+      "reason": "inline-flag",
+      "pattern": "FLWPUBK_TEST-(?i)[a-h0-9]{32}-X",
+      "flags": ""
+    },
+    {
+      "regex_id": "b028c6ddb51b1535aa24b9bb5e1177a4",
+      "site": "pilots/gitleaks/config/gitleaks.toml:577:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": false,
+      "reason": "inline-flag",
+      "pattern": "FLWSECK_TEST-(?i)[a-h0-9]{32}-X",
+      "flags": ""
+    },
+    {
+      "regex_id": "b9afdedf5cadcd9a1fc6221800d712f6",
+      "site": "pilots/gitleaks/config/gitleaks.toml:584:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "\\b((?:fo1_[\\w-]{43}|fm1[ar]_[a-zA-Z0-9+\\/]{100,}={0,3}|fm2_[a-zA-Z0-9+\\/]{100,}={0,3}))(?:[\\x60'\"\\s;]|\\\\[nr]|$)",
+      "flags": ""
+    },
+    {
+      "regex_id": "257eb62a9a6ea9258038b0922a0c6102",
+      "site": "pilots/gitleaks/config/gitleaks.toml:595:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": false,
+      "reason": "inline-flag",
+      "pattern": "fio-u-(?i)[a-z0-9\\-_=]{64}",
+      "flags": ""
+    },
+    {
+      "regex_id": "67cb80311ece119ef8c94e97ab0360c9",
+      "site": "pilots/gitleaks/config/gitleaks.toml:601:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": false,
+      "reason": "negated-shorthand",
+      "pattern": "[\"']secret_key[\"']\\s*=>\\s*[\"'](sk_[\\S]{29})[\"']",
+      "flags": "i"
+    },
+    {
+      "regex_id": "312b163356905626d163b59c46262c0f",
+      "site": "pilots/gitleaks/config/gitleaks.toml:608:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "[\\w.-]{0,50}?(?:freshbooks)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}([a-z0-9]{64})(?",
+      "flags": "i"
+    },
+    {
+      "regex_id": "519d6679edf0e7270c2168542b342eeb",
+      "site": "pilots/gitleaks/config/gitleaks.toml:614:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "\\b(AIza[\\w-]{35})(?:[\\x60'\"\\s;]|\\\\[nr]|$)",
+      "flags": ""
+    },
+    {
+      "regex_id": "f3be736e57f2a490d4ae87b545cb3158",
+      "site": "pilots/gitleaks/config/gitleaks.toml:640:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": false,
+      "reason": "inline-flag",
+      "pattern": "[\\w.-]{0,50}?(?:access|auth|(?-i:[Aa]pi|API)|credential|creds|key|passw(?:or)?d|secret|token)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0",
+      "flags": "i"
+    },
+    {
+      "regex_id": "89f0b3e0fab988bce925ea5a4b3a4fd4",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2133:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "(?:ghu|ghs)_[0-9a-zA-Z]{36}",
+      "flags": ""
+    },
+    {
+      "regex_id": "04acb44f5ff6814c0fcddb78ff750615",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2147:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "github_pat_\\w{82}",
+      "flags": ""
+    },
+    {
+      "regex_id": "dbcaaf86d1043b173b9e5b326b2db352",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2154:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "gho_[0-9a-zA-Z]{36}",
+      "flags": ""
+    },
+    {
+      "regex_id": "744a90c843ea77c77259cc357d9ebec3",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2161:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "ghp_[0-9a-zA-Z]{36}",
+      "flags": ""
+    },
+    {
+      "regex_id": "2b51dbd04e455535b3e3a7885698af37",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2172:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "ghr_[0-9a-zA-Z]{36}",
+      "flags": ""
+    },
+    {
+      "regex_id": "13d7917dbc832d53b469e54a1f3c266e",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2179:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "glcbt-[0-9a-zA-Z]{1,5}_[0-9a-zA-Z_-]{20}",
+      "flags": ""
+    },
+    {
+      "regex_id": "6f08a9109dc65ce1e408ae5c12ffb103",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2186:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "gldt-[0-9a-zA-Z_\\-]{20}",
+      "flags": ""
+    },
+    {
+      "regex_id": "718d002ce737ed78d6351f7890e407a7",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2193:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "glffct-[0-9a-zA-Z_\\-]{20}",
+      "flags": ""
+    },
+    {
+      "regex_id": "8c6cfc3514ae624e1f0cd92d6374dc71",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2200:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "glft-[0-9a-zA-Z_\\-]{20}",
+      "flags": ""
+    },
+    {
+      "regex_id": "85af104ed1dbf180cf79d708d37eaa35",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2207:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "glimt-[0-9a-zA-Z_\\-]{25}",
+      "flags": ""
+    },
+    {
+      "regex_id": "dff06cb06d5e62a0827a0aba626fae5d",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2214:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "glagent-[0-9a-zA-Z_\\-]{50}",
+      "flags": ""
+    },
+    {
+      "regex_id": "0c49a88d44517f83b9068006edd7a25e",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2221:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "gloas-[0-9a-zA-Z_\\-]{64}",
+      "flags": ""
+    },
+    {
+      "regex_id": "a2d374ce5ef8ef50a688e12a31540aa5",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2228:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "glpat-[\\w-]{20}",
+      "flags": ""
+    },
+    {
+      "regex_id": "1aa5f360e1cde7c7782a76901370dcdf",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2235:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "\\bglpat-[0-9a-zA-Z_-]{27,300}\\.[0-9a-z]{2}[0-9a-z]{7}\\b",
+      "flags": ""
+    },
+    {
+      "regex_id": "6b0c20724376ce929118ce2ce1411478",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2242:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "glptt-[0-9a-f]{40}",
+      "flags": ""
+    },
+    {
+      "regex_id": "694d083f4f32aea337f83a26b08ef19e",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2249:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "GR1348941[\\w-]{20}",
+      "flags": ""
+    },
+    {
+      "regex_id": "486592a2dfbca98126a7c5efb932dc5f",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2256:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "glrt-[0-9a-zA-Z_\\-]{20}",
+      "flags": ""
+    },
+    {
+      "regex_id": "a161232e7fe0588057e521ded2d0348b",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2263:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "\\bglrt-t\\d_[0-9a-zA-Z_\\-]{27,300}\\.[0-9a-z]{2}[0-9a-z]{7}\\b",
+      "flags": ""
+    },
+    {
+      "regex_id": "2d0e5c83421e5bd5f7a22dc21f695879",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2270:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "glsoat-[0-9a-zA-Z_\\-]{20}",
+      "flags": ""
+    },
+    {
+      "regex_id": "02311166d82eee2be879feba8bc37308",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2277:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "_gitlab_session=[0-9a-z]{32}",
+      "flags": ""
+    },
+    {
+      "regex_id": "a98e2a8c7e62b547a2d0b90c65765698",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2284:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "[\\w.-]{0,50}?(?:gitter)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}([a-z0-9_-]{40})(?:[",
+      "flags": "i"
+    },
+    {
+      "regex_id": "8f808966856e642c231aa75a214e5203",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2290:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": false,
+      "reason": "inline-flag",
+      "pattern": "[\\w.-]{0,50}?(?:gocardless)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}(live_(?i)[a-z0-",
+      "flags": "i"
+    },
+    {
+      "regex_id": "dae9f973e3c33ca0cd0c89a44bc15b4f",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2299:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "\\b(eyJrIjoi[A-Za-z0-9]{70,400}={0,3})(?:[\\x60'\"\\s;]|\\\\[nr]|$)",
+      "flags": "i"
+    },
+    {
+      "regex_id": "83e95c27b23a9b491634148f79ff3422",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2306:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "\\b(glc_[A-Za-z0-9+/]{32,400}={0,3})(?:[\\x60'\"\\s;]|\\\\[nr]|$)",
+      "flags": "i"
+    },
+    {
+      "regex_id": "e345ac223b4b12bfed61a07a34f9b6cd",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2313:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "\\b(glsa_[A-Za-z0-9]{32}_[A-Fa-f0-9]{8})(?:[\\x60'\"\\s;]|\\\\[nr]|$)",
+      "flags": "i"
+    },
+    {
+      "regex_id": "6b67e673a9f69748b251f191ef308699",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2320:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "(?:pat|sat)\\.[a-zA-Z0-9_-]{22}\\.[a-zA-Z0-9]{24}\\.[a-zA-Z0-9]{20}",
+      "flags": ""
+    },
+    {
+      "regex_id": "7df01108e83effbeeb837ea4a2cfa583",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2329:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": false,
+      "reason": "inline-flag",
+      "pattern": "[a-z0-9]{14}\\.(?-i:atlasv1)\\.[a-z0-9\\-_=]{60,70}",
+      "flags": "i"
+    },
+    {
+      "regex_id": "ed2cc1d26d2d9bae8c30888ce9549fbb",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2336:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "[\\w.-]{0,50}?(?:administrator_login_password|password)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60",
+      "flags": "i"
+    },
+    {
+      "regex_id": "98f37153602eda8f57d9dc09aa2ffb7f",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2347:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "[\\w.-]{0,50}?(?:heroku)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}([0-9a-f]{8}-[0-9a-f",
+      "flags": "i"
+    },
+    {
+      "regex_id": "1f53539c115f9d9731354fcb3941dbb1",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2353:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "\\b((HRKU-AA[0-9a-zA-Z_-]{58}))(?:[\\x60'\"\\s;]|\\\\[nr]|$)",
+      "flags": ""
+    },
+    {
+      "regex_id": "a17cff6f06c645012a92e8fcdd913f36",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2360:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "[\\w.-]{0,50}?(?:hubspot)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}([0-9A-F]{8}-[0-9A-",
+      "flags": "i"
+    },
+    {
+      "regex_id": "5bfdc051e5b96c4d775c420f6647ca03",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2366:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "\\b(hf_(?i:[a-z]{34}))(?:[\\x60'\"\\s;]|\\\\[nr]|$)",
+      "flags": ""
+    },
+    {
+      "regex_id": "f96ab70de22c878f2fc19acb6d2a99d8",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2373:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "\\b(api_org_(?i:[a-z]{34}))(?:[\\x60'\"\\s;]|\\\\[nr]|$)",
+      "flags": ""
+    },
+    {
+      "regex_id": "5b04bec44fd8759ae15afdfbc8b6cefa",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2380:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "\\b(ico-[a-zA-Z0-9]{32})(?:[\\x60'\"\\s;]|\\\\[nr]|$)",
+      "flags": ""
+    },
+    {
+      "regex_id": "668b9cda484b01a8f42702fa6ced69e8",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2387:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "[\\w.-]{0,50}?(?:intercom)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}([a-z0-9=_\\-]{60})",
+      "flags": "i"
+    },
+    {
+      "regex_id": "381599ee0ffe9dc04e43af02ef55eec4",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2393:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": false,
+      "reason": "inline-flag",
+      "pattern": "\\b(s-s4t2(?:ud|af)-(?i)[abcdef0123456789]{64})(?:[\\x60'\"\\s;]|\\\\[nr]|$)",
+      "flags": ""
+    },
+    {
+      "regex_id": "7ce1c58fd9c756d70e3fa61e977a5d96",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2404:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "[\\w.-]{0,50}?(?:jfrog|artifactory|bintray|xray)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{",
+      "flags": "i"
+    },
+    {
+      "regex_id": "667a414757e52ff47cef327dfe84ff7d",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2415:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "[\\w.-]{0,50}?(?:jfrog|artifactory|bintray|xray)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{",
+      "flags": "i"
+    },
+    {
+      "regex_id": "6b4db4fc7e495fee3877c58d0ecd8ba7",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2426:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "\\b(ey[a-zA-Z0-9]{17,}\\.ey[a-zA-Z0-9\\/\\\\_-]{17,}\\.(?:[a-zA-Z0-9\\/\\\\_-]{10,}={0,2})?)(?:[\\x60'\"\\s;]|\\\\[nr]|$)",
+      "flags": ""
+    },
+    {
+      "regex_id": "9196cf09a56961cd479ae3448e317c35",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2433:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": false,
+      "reason": "pattern-too-long",
+      "pattern": "\\bZXlK(?:(?P<alg>aGJHY2lPaU)|(?P<apu>aGNIVWlPaU)|(?P<apv>aGNIWWlPaU)|(?P<aud>aGRXUWlPaU)|(?P<b64>aU5qUWlP)|(?P<crit>amNt",
+      "flags": ""
+    },
+    {
+      "regex_id": "4db3c4beeed7c6a32d11c056d65c7b00",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2440:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "[\\w.-]{0,50}?(?:kraken)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}([a-z0-9\\/=_\\+\\-]{80",
+      "flags": "i"
+    },
+    {
+      "regex_id": "b9835d745b05683bec4aada1275d2a0d",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2446:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": false,
+      "reason": "pattern-too-long",
+      "pattern": "(?:\\bkind:[ \\t]*[\"']?\\bsecret\\b[\"']?(?s:.){0,200}?\\bdata:(?s:.){0,100}?\\s+([\\w.-]+:(?:[ \\t]*(?:\\||>[-+]?)\\s+)?[ \\t]*(?:[",
+      "flags": "i"
+    },
+    {
+      "regex_id": "b858ad87052ef8de1f258d4eb979c91c",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2462:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "[\\w.-]{0,50}?(?:kucoin)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}([a-f0-9]{24})(?:[\\x",
+      "flags": "i"
+    },
+    {
+      "regex_id": "4ccb621b18ad66c59d1d88bed0fcf1a2",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2468:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "[\\w.-]{0,50}?(?:kucoin)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}([0-9a-f]{8}-[0-9a-f",
+      "flags": "i"
+    },
+    {
+      "regex_id": "d096a4fb42f673d542e3cb6c9e21a622",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2474:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "[\\w.-]{0,50}?(?:launchdarkly)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}([a-z0-9=_\\-]{",
+      "flags": "i"
+    },
+    {
+      "regex_id": "ddda3abe762e6194ab8b6d1475d2a80b",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2480:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": false,
+      "reason": "inline-flag",
+      "pattern": "lin_api_(?i)[a-z0-9]{40}",
+      "flags": ""
+    },
+    {
+      "regex_id": "bea9fd4a95d1c6835e9866d2c62ec1ef",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2487:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "[\\w.-]{0,50}?(?:linear)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}([a-f0-9]{32})(?:[\\x",
+      "flags": "i"
+    },
+    {
+      "regex_id": "31f83dfe72260c8a920da71fdcd35836",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2494:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "[\\w.-]{0,50}?(?:linked[_-]?in)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}([a-z0-9]{14}",
+      "flags": "i"
+    },
+    {
+      "regex_id": "5559ff992be84b421747701c0b1688c4",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2505:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "[\\w.-]{0,50}?(?:linked[_-]?in)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}([a-z0-9]{16}",
+      "flags": "i"
+    },
+    {
+      "regex_id": "0bfe44907b1ca8599efeddd4c6f902fd",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2516:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "[\\w.-]{0,50}?(?:lob)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}((live|test)_[a-f0-9]{3",
+      "flags": "i"
+    },
+    {
+      "regex_id": "be248fb6f7dca4d1aca9e5cb140c0ae3",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2525:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "[\\w.-]{0,50}?(?:lob)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}((test|live)_pub_[a-f0-",
+      "flags": "i"
+    },
+    {
+      "regex_id": "6f26a3c2d8414a295ce237fb21278086",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2535:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "[\\w.-]{0,50}?(?:looker)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}([a-z0-9]{20})(?:[\\x",
+      "flags": "i"
+    },
+    {
+      "regex_id": "766529a17f362846536d247b9259b2af",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2541:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "[\\w.-]{0,50}?(?:looker)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}([a-z0-9]{24})(?:[\\x",
+      "flags": "i"
+    },
+    {
+      "regex_id": "b58de5300d8784b862c833703d0529eb",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2547:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "[\\w.-]{0,50}?(?:MailchimpSDK.initialize|mailchimp)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s",
+      "flags": "i"
+    },
+    {
+      "regex_id": "0f020fe2199ccc198a9e190be014d4ce",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2553:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "[\\w.-]{0,50}?(?:mailgun)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}(key-[a-f0-9]{32})(",
+      "flags": "i"
+    },
+    {
+      "regex_id": "0da705e14e177a860788abbdf93581ba",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2559:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "[\\w.-]{0,50}?(?:mailgun)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}(pubkey-[a-f0-9]{32",
+      "flags": "i"
+    },
+    {
+      "regex_id": "3866c3006627b4a700cec300c322c2e9",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2565:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "[\\w.-]{0,50}?(?:mailgun)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}([a-h0-9]{32}-[a-h0",
+      "flags": "i"
+    },
+    {
+      "regex_id": "98b067ecebabb7646a7c7c4e23ff7c01",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2571:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "[\\w.-]{0,50}?(?:mapbox)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}(pk\\.[a-z0-9]{60}\\.[",
+      "flags": "i"
+    },
+    {
+      "regex_id": "2b6c65b081a8e1165a3e9759c9c327ff",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2577:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "[\\w.-]{0,50}?(?:mattermost)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}([a-z0-9]{26})(?",
+      "flags": "i"
+    },
+    {
+      "regex_id": "91f0bf2312f6448cf25323b457277e74",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2583:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "\\b([A-Za-z0-9]{6}_[A-Za-z0-9]{29}_mmk)(?:[\\x60'\"\\s;]|\\\\[nr]|$)",
+      "flags": ""
+    },
+    {
+      "regex_id": "fed46822480730768c5f98104718fe53",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2590:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "[\\w.-]{0,50}?(?:message[_-]?bird)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}([a-z0-9]{",
+      "flags": "i"
+    },
+    {
+      "regex_id": "5ebf61a36e42985050b812d3d5f3c59c",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2600:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "[\\w.-]{0,50}?(?:message[_-]?bird)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}([0-9a-f]{",
+      "flags": "i"
+    },
+    {
+      "regex_id": "5f47c797f846930cc4aa22ce64fc0589",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2610:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "https://[a-z0-9]+\\.webhook\\.office\\.com/webhookb2/[a-z0-9]{8}-([a-z0-9]{4}-){3}[a-z0-9]{12}@[a-z0-9]{8}-([a-z0-9]{4}-){3",
+      "flags": ""
+    },
+    {
+      "regex_id": "bc944686aa79ebe6416a2dd1354edef2",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2620:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "[\\w.-]{0,50}?(?:netlify)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}([a-z0-9=_\\-]{40,46",
+      "flags": "i"
+    },
+    {
+      "regex_id": "9539b5ff606c20327c8eb0c82fcfec69",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2626:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "[\\w.-]{0,50}?(?:new-relic|newrelic|new_relic)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,",
+      "flags": "i"
+    },
+    {
+      "regex_id": "60d0570856c1fdcaf0f8c1b05e888573",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2632:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "[\\w.-]{0,50}?(?:new-relic|newrelic|new_relic)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,",
+      "flags": "i"
+    },
+    {
+      "regex_id": "fb51b401d5ec357f2d0a23304338f028",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2638:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "[\\w.-]{0,50}?(?:new-relic|newrelic|new_relic)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,",
+      "flags": "i"
+    },
+    {
+      "regex_id": "a82ad297acece47b5aeefcd40c3354f6",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2648:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "[\\w.-]{0,50}?(?:new-relic|newrelic|new_relic)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,",
+      "flags": "i"
+    },
+    {
+      "regex_id": "4850f32f6f8a8c6340d07cf89d6dc692",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2654:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "\\b(ntn_[0-9]{11}[A-Za-z0-9]{32}[A-Za-z0-9]{3})(?:[\\x60'\"\\s;]|\\\\[nr]|$)",
+      "flags": ""
+    },
+    {
+      "regex_id": "2f0be2e9ef12a380197c45e930e106db",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2661:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "\\b(npm_[a-z0-9]{36})(?:[\\x60'\"\\s;]|\\\\[nr]|$)",
+      "flags": "i"
+    },
+    {
+      "regex_id": "5a52b61d2395ca18fb3d2afcf3700d1d",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2668:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "<add key=\\\"(?:(?:ClearText)?Password)\\\"\\s*value=\\\"(.{8,})\\\"\\s*/>",
+      "flags": "i"
+    },
+    {
+      "regex_id": "afe15580e0a8b687b9e2432fe1f5e9c0",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2682:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "[\\w.-]{0,50}?(?:nytimes|new-york-times,|newyorktimes)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'",
+      "flags": "i"
+    },
+    {
+      "regex_id": "e81dabc67b57c3caa18dd1fa7049bfad",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2692:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "\\b(API-[A-Z0-9]{26})(?:[\\x60'\"\\s;]|\\\\[nr]|$)",
+      "flags": ""
+    },
+    {
+      "regex_id": "40a9a3bf3d57891a1c7b9fd3909383ee",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2699:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": false,
+      "reason": "inline-flag",
+      "pattern": "[\\w.-]{0,50}?(?i:[\\w.-]{0,50}?(?:(?-i:[Oo]kta|OKTA))(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3})(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'",
+      "flags": ""
+    },
+    {
+      "regex_id": "287a1c142d93f45d4f0ce0e9714ef9d7",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2706:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": false,
+      "reason": "word-boundary",
+      "pattern": "\\b(sk-(?:proj|svcacct|admin)-(?:[A-Za-z0-9_-]{74}|[A-Za-z0-9_-]{58})T3BlbkFJ(?:[A-Za-z0-9_-]{74}|[A-Za-z0-9_-]{58})\\b|sk",
+      "flags": ""
+    },
+    {
+      "regex_id": "c2554c562e8c20d6d4c4141645b88a8f",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2713:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "\\b(sha256~[\\w-]{43})(?:[^\\w-]|\\z)",
+      "flags": ""
+    },
+    {
+      "regex_id": "ca3665a5f2d387f2661ecbbdc8ab32bb",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2720:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": false,
+      "reason": "word-boundary",
+      "pattern": "\\b(pplx-[a-zA-Z0-9]{48})(?:[\\x60'\"\\s;]|\\\\[nr]|$|\\b)",
+      "flags": ""
+    },
+    {
+      "regex_id": "8e0ba90172563f7cfaf02d11ab80c8a4",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2732:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "[\\w.-]{0,50}?(?:plaid)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}(access-(?:sandbox|de",
+      "flags": "i"
+    },
+    {
+      "regex_id": "7beb94b5d66432f6880a7eebbaeef64e",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2738:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "[\\w.-]{0,50}?(?:plaid)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}([a-z0-9]{24})(?:[\\x6",
+      "flags": "i"
+    },
+    {
+      "regex_id": "f0b6225b8a02d84f5d3b463b4c309970",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2745:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "[\\w.-]{0,50}?(?:plaid)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}([a-z0-9]{30})(?:[\\x6",
+      "flags": "i"
+    },
+    {
+      "regex_id": "9bc610a51ca446a253216b28658f88a2",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2752:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": false,
+      "reason": "inline-flag",
+      "pattern": "\\b(pscale_tkn_(?i)[\\w=\\.-]{32,64})(?:[\\x60'\"\\s;]|\\\\[nr]|$)",
+      "flags": ""
+    },
+    {
+      "regex_id": "e7ff6e23853704114028754b129ed5c1",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2759:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "\\b(pscale_oauth_[\\w=\\.-]{32,64})(?:[\\x60'\"\\s;]|\\\\[nr]|$)",
+      "flags": ""
+    },
+    {
+      "regex_id": "100bd740c320abe81b5005d06f823306",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2766:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": false,
+      "reason": "inline-flag",
+      "pattern": "\\b(pscale_pw_(?i)[\\w=\\.-]{32,64})(?:[\\x60'\"\\s;]|\\\\[nr]|$)",
+      "flags": "i"
+    },
+    {
+      "regex_id": "a4b185664c1566be3738c58ead020769",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2773:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": false,
+      "reason": "inline-flag",
+      "pattern": "\\b(PMAK-(?i)[a-f0-9]{24}\\-[a-f0-9]{34})(?:[\\x60'\"\\s;]|\\\\[nr]|$)",
+      "flags": ""
+    },
+    {
+      "regex_id": "acfba3142faefd106daed98923dffdcb",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2780:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "\\b(pnu_[a-zA-Z0-9]{36})(?:[\\x60'\"\\s;]|\\\\[nr]|$)",
+      "flags": ""
+    },
+    {
+      "regex_id": "7f12f6a88a453f034f8857f842cb1d36",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2787:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": false,
+      "reason": "negated-shorthand",
+      "pattern": "-----BEGIN[ A-Z0-9_-]{0,100}PRIVATE KEY(?: BLOCK)?-----[\\s\\S-]{64,}?KEY(?: BLOCK)?-----",
+      "flags": "i"
+    },
+    {
+      "regex_id": "1258f2bb1706ffcd35dcc2d67e940b67",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2793:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "[\\w.-]{0,50}?(?i:[\\w.-]{0,50}?(?:private[_-]?ai)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3})(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=",
+      "flags": ""
+    },
+    {
+      "regex_id": "787f8874315b1c576000c63721cbbf2a",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2804:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "\\b(pul-[a-f0-9]{40})(?:[\\x60'\"\\s;]|\\\\[nr]|$)",
+      "flags": ""
+    },
+    {
+      "regex_id": "1d566c984c3fdb2df596df60be7a497b",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2811:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "pypi-AgEIcHlwaS5vcmc[\\w-]{50,1000}",
+      "flags": ""
+    },
+    {
+      "regex_id": "b803e871a668f99d4e1c7ba6b8d96f2f",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2818:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "[\\w.-]{0,50}?(?:rapidapi)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}([a-z0-9_-]{50})(?",
+      "flags": "i"
+    },
+    {
+      "regex_id": "4eda66d89ad56912405ba9cfbb7d54cb",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2824:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "\\b(rdme_[a-z0-9]{70})(?:[\\x60'\"\\s;]|\\\\[nr]|$)",
+      "flags": ""
+    },
+    {
+      "regex_id": "bd3d2f7274ca925cb05d8d41e373a35f",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2831:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "\\b(rubygems_[a-f0-9]{48})(?:[\\x60'\"\\s;]|\\\\[nr]|$)",
+      "flags": ""
+    },
+    {
+      "regex_id": "ef1eb0b1b25b1fbf82ed6889739d86f5",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2838:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "\\b(tk-us-[\\w-]{48})(?:[\\x60'\"\\s;]|\\\\[nr]|$)",
+      "flags": ""
+    },
+    {
+      "regex_id": "8e02be73807ebce25dad3532ea543123",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2845:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "[\\w.-]{0,50}?(?:sendbird)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}([0-9a-f]{8}-[0-9a",
+      "flags": "i"
+    },
+    {
+      "regex_id": "559f5c7e7cd6cbc87ec569117055bd10",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2851:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "[\\w.-]{0,50}?(?:sendbird)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}([a-f0-9]{40})(?:[",
+      "flags": "i"
+    },
+    {
+      "regex_id": "00b85bb56fa0dfeab682245bd945e7bd",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2857:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": false,
+      "reason": "inline-flag",
+      "pattern": "\\b(SG\\.(?i)[a-z0-9=_\\-\\.]{66})(?:[\\x60'\"\\s;]|\\\\[nr]|$)",
+      "flags": ""
+    },
+    {
+      "regex_id": "1747c5122d876f7426b15879e0313c7d",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2864:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": false,
+      "reason": "inline-flag",
+      "pattern": "\\b(xkeysib-[a-f0-9]{64}\\-(?i)[a-z0-9]{16})(?:[\\x60'\"\\s;]|\\\\[nr]|$)",
+      "flags": ""
+    },
+    {
+      "regex_id": "df135272e5404bfd40f9b7ba70d90fcc",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2871:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "[\\w.-]{0,50}?(?:sentry)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}([a-f0-9]{64})(?:[\\x",
+      "flags": "i"
+    },
+    {
+      "regex_id": "58585f481307865fd58c2a362a90c20e",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2878:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "\\bsntrys_eyJpYXQiO[a-zA-Z0-9+/]{10,200}(?:LCJyZWdpb25fdXJs|InJlZ2lvbl91cmwi|cmVnaW9uX3VybCI6)[a-zA-Z0-9+/]{10,200}={0,2}",
+      "flags": ""
+    },
+    {
+      "regex_id": "448bd96b4cc33acf0778a365a2f86855",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2885:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "\\b(sntryu_[a-f0-9]{64})(?:[\\x60'\"\\s;]|\\\\[nr]|$)",
+      "flags": ""
+    },
+    {
+      "regex_id": "b252d5fdd62b62ecebb86aaaa1dd491a",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2892:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "\\b(sm_aat_[a-zA-Z0-9]{16})(?:[\\x60'\"\\s;]|\\\\[nr]|$)",
+      "flags": ""
+    },
+    {
+      "regex_id": "953bbbd68f8b8d6031b0c5f471cf9c4d",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2899:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "\\b(sm_pat_[a-zA-Z0-9]{16})(?:[\\x60'\"\\s;]|\\\\[nr]|$)",
+      "flags": ""
+    },
+    {
+      "regex_id": "81b90e72491fee6d13ca3edddc4d3e61",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2906:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "\\b(sm_sat_[a-zA-Z0-9]{16})(?:[\\x60'\"\\s;]|\\\\[nr]|$)",
+      "flags": ""
+    },
+    {
+      "regex_id": "42b215c31d65226a7c1d6314ddaa5c88",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2913:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "\\b(shippo_(?:live|test)_[a-fA-F0-9]{40})(?:[\\x60'\"\\s;]|\\\\[nr]|$)",
+      "flags": ""
+    },
+    {
+      "regex_id": "bf7fb5c4e9415b03f859ac170411e807",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2920:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "shpat_[a-fA-F0-9]{32}",
+      "flags": ""
+    },
+    {
+      "regex_id": "948761e183cbc98566e248d6e2177e90",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2927:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "shpca_[a-fA-F0-9]{32}",
+      "flags": ""
+    },
+    {
+      "regex_id": "65aa7c6dcf1442e6476a7f91b5097b16",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2934:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "shppa_[a-fA-F0-9]{32}",
+      "flags": ""
+    },
+    {
+      "regex_id": "c8f46ba46d0cb2415aee4bdbb8710283",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2941:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "shpss_[a-fA-F0-9]{32}",
+      "flags": ""
+    },
+    {
+      "regex_id": "92d1d84faf912cb2e0ea628009742726",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2948:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "[\\w.-]{0,50}?(?:BUNDLE_ENTERPRISE__CONTRIBSYS__COM|BUNDLE_GEMS__CONTRIBSYS__COM)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1",
+      "flags": "i"
+    },
+    {
+      "regex_id": "92130a8833eff5843c24b2a29b5f5712",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2957:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "\\bhttps?://([a-f0-9]{8}:[a-f0-9]{8})@(?:gems.contribsys.com|enterprise.contribsys.com)(?:[\\/|\\#|\\?|:]|$)",
+      "flags": "i"
+    },
+    {
+      "regex_id": "764194f07ad860a1cc892ce097e35978",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2966:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "xapp-\\d-[A-Z0-9]+-\\d+-[a-z0-9]+",
+      "flags": "i"
+    },
+    {
+      "regex_id": "926db647f68c3fc0a0a80945ce0366cd",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2973:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "xoxb-[0-9]{10,13}-[0-9]{10,13}[a-zA-Z0-9-]*",
+      "flags": ""
+    },
+    {
+      "regex_id": "3cbfe657a699c1eb1d282517fe9e9c7f",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2980:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "xoxe.xox[bp]-\\d-[A-Z0-9]{163,166}",
+      "flags": "i"
+    },
+    {
+      "regex_id": "7e7c16b7721c23631891e5afc765e234",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2990:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "xoxe-\\d-[A-Z0-9]{146}",
+      "flags": "i"
+    },
+    {
+      "regex_id": "6c7d71cbe123726b4661e6df7fdcb455",
+      "site": "pilots/gitleaks/config/gitleaks.toml:2997:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "xoxb-[0-9]{8,14}-[a-zA-Z0-9]{18,26}",
+      "flags": ""
+    },
+    {
+      "regex_id": "796ac9327345c7d15ad1a13463028c33",
+      "site": "pilots/gitleaks/config/gitleaks.toml:3004:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "xox[os]-\\d+-\\d+-\\d+-[a-fA-F\\d]+",
+      "flags": ""
+    },
+    {
+      "regex_id": "b760e71091ac73462a7a2221f0a9d6a0",
+      "site": "pilots/gitleaks/config/gitleaks.toml:3014:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "xox[ar]-(?:\\d-)?[0-9a-zA-Z]{8,48}",
+      "flags": ""
+    },
+    {
+      "regex_id": "1dbe91243348b6d2a467f254b0a1b9b9",
+      "site": "pilots/gitleaks/config/gitleaks.toml:3024:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "xox[pe](?:-[0-9]{10,13}){3}-[a-zA-Z0-9-]{28,34}",
+      "flags": ""
+    },
+    {
+      "regex_id": "ca86a38252cb5fe86338d616bca0aa03",
+      "site": "pilots/gitleaks/config/gitleaks.toml:3034:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "(?:https?://)?hooks.slack.com/(?:services|workflows|triggers)/[A-Za-z0-9+/]{43,56}",
+      "flags": ""
+    },
+    {
+      "regex_id": "106823fb17d6b3ae64f86273e37a50e9",
+      "site": "pilots/gitleaks/config/gitleaks.toml:3040:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "[\\w.-]{0,50}?(?:snyk[_.-]?(?:(?:api|oauth)[_.-]?)?(?:key|token))(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\",
+      "flags": "i"
+    },
+    {
+      "regex_id": "1f2937970e03c6f8e66964de24bc19bf",
+      "site": "pilots/gitleaks/config/gitleaks.toml:3046:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "[\\w.-]{0,50}?(?:sonar[_.-]?(login|token))(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}((",
+      "flags": "i"
+    },
+    {
+      "regex_id": "da7a31c4123fd732b96bea22052b10f0",
+      "site": "pilots/gitleaks/config/gitleaks.toml:3053:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": false,
+      "reason": "word-boundary",
+      "pattern": "\\b(\\b(sgp_(?:[a-fA-F0-9]{16}|local)_[a-fA-F0-9]{40}|sgp_[a-fA-F0-9]{40}|[a-fA-F0-9]{40})\\b)(?:[\\x60'\"\\s;]|\\\\[nr]|$)",
+      "flags": "i"
+    },
+    {
+      "regex_id": "2a382f896ebac0d396c5cf4cdbd2efc9",
+      "site": "pilots/gitleaks/config/gitleaks.toml:3063:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "\\b((?:EAAA|sq0atp-)[\\w-]{22,60})(?:[\\x60'\"\\s;]|\\\\[nr]|$)",
+      "flags": ""
+    },
+    {
+      "regex_id": "fbfdd3df4523c7c5c52b02ee2d410064",
+      "site": "pilots/gitleaks/config/gitleaks.toml:3073:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "[\\w.-]{0,50}?(?:squarespace)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}([0-9a-f]{8}-[0",
+      "flags": "i"
+    },
+    {
+      "regex_id": "a12f744943183371bbcad7a85e2fb5ab",
+      "site": "pilots/gitleaks/config/gitleaks.toml:3079:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "\\b((?:sk|rk)_(?:test|live|prod)_[a-zA-Z0-9]{10,99})(?:[\\x60'\"\\s;]|\\\\[nr]|$)",
+      "flags": ""
+    },
+    {
+      "regex_id": "2edd372d0a3b1c4e0aa3867c2d6776cb",
+      "site": "pilots/gitleaks/config/gitleaks.toml:3093:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": false,
+      "reason": "inline-flag",
+      "pattern": "[\\w.-]{0,50}?(?i:[\\w.-]{0,50}?(?:(?-i:[Ss]umo|SUMO))(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3})(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'",
+      "flags": ""
+    },
+    {
+      "regex_id": "e1a2d00df872fa9b31cb471916a1db3c",
+      "site": "pilots/gitleaks/config/gitleaks.toml:3100:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": false,
+      "reason": "inline-flag",
+      "pattern": "[\\w.-]{0,50}?(?:(?-i:[Ss]umo|SUMO))(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}([a-z0-9",
+      "flags": "i"
+    },
+    {
+      "regex_id": "78d220617ed7c20816a4dc0a73f39602",
+      "site": "pilots/gitleaks/config/gitleaks.toml:3107:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": false,
+      "reason": "inline-flag",
+      "pattern": "[\\w.-]{0,50}?(?:telegr)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}([0-9]{5,16}:(?-i:A)",
+      "flags": "i"
+    },
+    {
+      "regex_id": "124f78e32d1c60ec23ff444c991d0168",
+      "site": "pilots/gitleaks/config/gitleaks.toml:3113:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "[\\w.-]{0,50}?(?:travis)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}([a-z0-9]{22})(?:[\\x",
+      "flags": "i"
+    },
+    {
+      "regex_id": "4bdb1d0ea564c5967d6e27fcf63c3733",
+      "site": "pilots/gitleaks/config/gitleaks.toml:3119:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "SK[0-9a-fA-F]{32}",
+      "flags": ""
+    },
+    {
+      "regex_id": "aa45d4cc8a0a005fef3d6d26a2eec7ae",
+      "site": "pilots/gitleaks/config/gitleaks.toml:3126:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "[\\w.-]{0,50}?(?:twitch)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}([a-z0-9]{30})(?:[\\x",
+      "flags": "i"
+    },
+    {
+      "regex_id": "04a71cfb63ffa544818abd31a26701b2",
+      "site": "pilots/gitleaks/config/gitleaks.toml:3132:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "[\\w.-]{0,50}?(?:twitter)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}([a-z0-9]{45})(?:[\\",
+      "flags": "i"
+    },
+    {
+      "regex_id": "225892a0d2512a63897cd987768d0ca1",
+      "site": "pilots/gitleaks/config/gitleaks.toml:3138:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "[\\w.-]{0,50}?(?:twitter)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}([0-9]{15,25}-[a-zA",
+      "flags": "i"
+    },
+    {
+      "regex_id": "b78b425e669d6b94917e1a27ba8105f7",
+      "site": "pilots/gitleaks/config/gitleaks.toml:3144:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "[\\w.-]{0,50}?(?:twitter)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}([a-z0-9]{25})(?:[\\",
+      "flags": "i"
+    },
+    {
+      "regex_id": "072e419b2ebaf38b9a8464fb15b5f210",
+      "site": "pilots/gitleaks/config/gitleaks.toml:3150:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "[\\w.-]{0,50}?(?:twitter)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}([a-z0-9]{50})(?:[\\",
+      "flags": "i"
+    },
+    {
+      "regex_id": "3630c6944a64e7cf5a047e04a8359fa6",
+      "site": "pilots/gitleaks/config/gitleaks.toml:3156:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "[\\w.-]{0,50}?(?:twitter)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}(A{22}[a-zA-Z0-9%]{",
+      "flags": "i"
+    },
+    {
+      "regex_id": "03861d6b8a72af2857f90322193890da",
+      "site": "pilots/gitleaks/config/gitleaks.toml:3162:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "[\\w.-]{0,50}?(?:typeform)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}(tfp_[a-z0-9\\-_\\.=",
+      "flags": "i"
+    },
+    {
+      "regex_id": "c30ba88c188f43ebda11ee1acb17ef56",
+      "site": "pilots/gitleaks/config/gitleaks.toml:3168:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "\\b(hvb\\.[\\w-]{138,300})(?:[\\x60'\"\\s;]|\\\\[nr]|$)",
+      "flags": ""
+    },
+    {
+      "regex_id": "30b2c22070518dfcd1e0faa015e1df50",
+      "site": "pilots/gitleaks/config/gitleaks.toml:3175:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "\\b((?:hvs\\.[\\w-]{90,120}|s\\.(?i:[a-z0-9]{24})))(?:[\\x60'\"\\s;]|\\\\[nr]|$)",
+      "flags": ""
+    },
+    {
+      "regex_id": "2f869c3c37347ef3217c8b89933b353c",
+      "site": "pilots/gitleaks/config/gitleaks.toml:3189:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "[\\w.-]{0,50}?(?:yandex)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}(t1\\.[A-Z0-9a-z_-]+[",
+      "flags": "i"
+    },
+    {
+      "regex_id": "af9937622e99bf718f86e9346e2a683c",
+      "site": "pilots/gitleaks/config/gitleaks.toml:3195:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "[\\w.-]{0,50}?(?:yandex)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}(AQVN[A-Za-z0-9_\\-]{",
+      "flags": "i"
+    },
+    {
+      "regex_id": "aac7671c5062687613c87231c731d988",
+      "site": "pilots/gitleaks/config/gitleaks.toml:3201:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "[\\w.-]{0,50}?(?:yandex)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}(YC[a-zA-Z0-9_\\-]{38",
+      "flags": "i"
+    },
+    {
+      "regex_id": "9af4436a199be26593d920d6eb49548e",
+      "site": "pilots/gitleaks/config/gitleaks.toml:3207:0",
+      "call_kind": "search",
+      "dialect": "re2",
+      "encodable": true,
+      "reason": null,
+      "pattern": "[\\w.-]{0,50}?(?:zendesk)(?:[ \\t\\w.-]{0,20})[\\s'\"]{0,3}(?:=|>|:{1,3}=|\\|\\||:|=>|\\?=|,)[\\x60'\"\\s=]{0,5}([a-z0-9]{40})(?:[\\",
+      "flags": "i"
+    }
+  ],
+  "manifest": {
+    "schema_version": "1",
+    "pilot": "gitleaks",
+    "repo": "gitleaks/gitleaks",
+    "repo_url": "https://github.com/gitleaks/gitleaks",
+    "commit": "b58d3f102cf3a2c84cb7f923d05c25c9b1aed84b",
+    "corpus_path": "pilots/gitleaks/config/gitleaks.toml",
+    "dialect": "re2",
+    "shapes": [
+      1,
+      2,
+      3,
+      5
+    ],
+    "property_module": "scripts/pilot-properties.py",
+    "rule_diff_module": "scripts/rule-diff-pilot.py",
+    "canonical_specs": "pilots/gitleaks/canonical_specs/catalog.json",
+    "report_path": "properties/generated/gitleaks_encodable_fraction.json",
+    "rule_diff_report_path": "properties/generated/gitleaks_rule_diff_report.json",
+    "go_no_go_threshold": 0.3,
+    "selection_rationale": "Chose gitleaks (RE2) over detect-secrets because Phase 1 already ships the Go regexp/syntax helper + rule-file extractor; RE2 fold divergence (\u0130/\u0131) and rule-corpus scale are the hardest dialect probes before Phase 3 rule_diff. Leading (?i) flags are lifted into flags=i for compile; \\b remains unencodable.",
+    "commands": [
+      "python scripts/pilot-run.py",
+      "python scripts/pilot-properties.py --require-ground-truth",
+      "python scripts/rule-diff-pilot.py --require-ground-truth"
+    ],
+    "notes": "Phase 3 admits only encodable pairs from this report. Decision=no-go means do not scale the full corpus; the encodable subset may still pilot shape-5."
+  },
+  "selection_rationale": "Chose gitleaks (RE2) over detect-secrets because Phase 1 already ships the Go regexp/syntax helper + rule-file extractor; RE2 fold divergence (\u0130/\u0131) and rule-corpus scale are the hardest dialect probes before Phase 3 rule_diff. Leading (?i) flags are lifted into flags=i for compile; \\b remains unencodable."
 }
