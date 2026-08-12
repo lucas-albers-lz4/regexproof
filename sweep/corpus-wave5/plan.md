@@ -435,6 +435,14 @@ wc -l` recorded and every caller's args checked against the typed signature
    shell sites (96% — the P1-frozen per-file
    site counts (`site_counts_per_file`), measured per
    file; gaps documented per file).
+   **SUPERSEDED by the cumulative zen-MCR corrections (close-out review):**
+   the review's precision folds (heredoc bodies are data, `grep -P`
+   rebranched, escaped sed delimiters, `sed -E` → ERE) deliberately REMOVE
+   false positives the P1 heuristic counted, breaking the superset property
+   the 96%-vs-frozen metric measured. The corrected frozen surface is 272
+   shell sites (2,856 total) in `dogfooding_novelty_2026-08-12_POST_P2.json`;
+   each removal is a documented, test-covered fold. The 273-site P1 freeze
+   stands as the historical baseline.
 2. **Precision:** on a hand-labeled 50-file sample drawn from the frozen P1
    `file_lists`, precision ≥ 90%. The draw is REPRODUCIBLE: GNU `shuf`
    takes `--random-source=FILE`, not a bare seed, and FAILS with

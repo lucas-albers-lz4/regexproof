@@ -114,6 +114,10 @@ def test_ere_inline_flag_guard():
         with pytest.raises(Unencodable) as ei:
             normalize_shell(pat, "ere")
         assert ei.value.reason == "inline-flag-like"
+    # class-aware: [(?] and nested-POSIX-class classes are NOT flags
+    assert normalize_shell("[(?]", "ere") == "[(?]"
+    assert normalize_shell("[[:digit:](?]", "ere") == "[[:digit:](?]"
+    assert normalize_shell(r"\(?a", "ere") == r"\(?a"
     # and through compile_pattern it surfaces as a rejected result
     r = comp(r"(?i)foo", shell_flags={"syntax": "ere", "grep_mode": "extended"})
     assert not r.encodable
@@ -125,6 +129,16 @@ def test_bre_inline_flag_is_literal():
     r = comp(r"(?i)foo", shell_flags={"syntax": "bre", "grep_mode": "basic"})
     assert r.encodable
     assert normalize_shell(r"(?i)foo", "bre") == r"\(\?i\)foo"
+
+
+def test_ere_backref_rejected():
+    """GNU grep 3.11 + busybox 1.37 support `\1` as an ERE backref
+    (verified: `grep -E '^(a)\1$'` matches aa) — modeling it faithfully is
+    out of scope, so the mirror fails closed (cumulative Reviewer B #1)."""
+    for pat in (r"a\1b", r"^(a)\1$"):
+        with pytest.raises(Unencodable) as ei:
+            normalize_shell(pat, "ere")
+        assert ei.value.reason == "backref"
 
 
 def test_unknown_escape_drops_backslash():
@@ -146,8 +160,6 @@ def test_ere_unknown_escape_drops_backslash():
     # ERE backslash-metas stay literal-identical (grep and pcre agree)
     assert normalize_shell(r"a\+b", "ere") == r"a\+b"
     assert normalize_shell(r"a\?b", "ere") == r"a\?b"
-    # ERE has no backrefs: \1 is the literal 1
-    assert normalize_shell(r"a\1b", "ere") == "a1b"
 
 
 # --- double-normalize guard -------------------------------------------------
@@ -231,3 +243,9 @@ def test_compile_records_threads_shell_flags():
     batch route (a BRE a+b compiles encodable, i.e. the literal-escape ran)."""
     src = inspect.getsource(cr_mod)
     assert "shell_flags=rec.get(\"shell_flags\")" in src
+
+
+def test_negated_class_with_first_member_close_bracket():
+    """luna #276 -r3 #5: `[^](?]` is a valid GNU ERE class (first member ]
+    after the ^ negation is literal) — not an inline flag."""
+    assert normalize_shell("[^](?]", "ere") == "[^](?]"

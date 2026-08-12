@@ -98,6 +98,17 @@ def resolve_corpus_path(corpus: str, meta: dict[str, Any]) -> dict[str, Any]:
                 )
                 meta["path"] = sample
                 meta["measure_scope"] = "sample"
+            elif (ROOT / "properties" / "generated" / f"{corpus}_gate_decision.json").exists():
+                # ADMITTED corpus, no tree AND no sample: FAIL CLOSED — a
+                # 0-site run would read 'go' against an empty tree (luna
+                # #276 -r3 finding #1: the dogfood_shell seam; the sample
+                # fallback stays, the silent empty run does not)
+                raise SystemExit(
+                    f"HARD ERROR: {corpus} is ADMITTED (committed gate decision) "
+                    f"but its corpus path is missing/empty ({path}) with no "
+                    f"sample fallback — materialize the tree before batch runs "
+                    f"(0-site silent pass blocked)"
+                )
     if meta.get("measure_scope") == "sample":
         sp = meta.get("sample_path")
         if isinstance(sp, str):

@@ -869,6 +869,11 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         # hermes-agent-fork) at the P1-frozen pins (dogfooding_novelty_2026-08-12.json).
         # Registration-only this wave (the #149 automation pipeline is separate);
         # the batch run + merged-tree materialization are follow-on.
+        # NOTE (cumulative review finding #10): NOT in WAVE_CORPORA — the
+        # empty-root fail-closed only guards wave corpora, so a follow-on
+        # batch run MUST NOT start until the merged tree is materialized at
+        # this path (a 0-site silent pass would read 'go' against an empty
+        # tree). Materialize + add to WAVE_CORPORA together.
         "path": ROOT / "batch" / "corpora" / "dogfood_shell" / "rules",
         "dialect": "posix-shell",
         "extractor": "shell_posix",

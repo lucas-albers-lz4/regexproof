@@ -1,0 +1,739 @@
+{"pattern": "utf-force", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "admin/btop/files/btop.uci", "line": 3}
+{"pattern": "utf-force", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "admin/btop/files/btop.uci", "line": 3}
+{"pattern": "signal|SIGSEGV", "flags": "i", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": "extended"}, "file": "admin/fluent-bit/test.sh", "line": 42}
+{"pattern": "$PKG_VERSION", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "admin/nload/test.sh", "line": 3}
+{"pattern": "^\\s*#", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "admin/rsyslog/files/20_rsyslog", "line": 3}
+{"pattern": "${pattern}", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": "extended"}, "file": "admin/syslog-ng/files/logread.sh", "line": 56}
+{"pattern": "${pattern}", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": "extended"}, "file": "admin/syslog-ng/files/logread.sh", "line": 66}
+{"pattern": "usage\\|debugger\\|help", "flags": "i", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "devel/delve/test.sh", "line": 12}
+{"pattern": "\\.\\(c\\|cc\\|cpp\\|go\\|h\\|hh\\|hpp\\|proto\\|s\\)$", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "lang/golang/golang-build.sh", "line": 57}
+{"pattern": "/testdata/", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "lang/golang/golang-build.sh", "line": 58}
+{"pattern": "/go\\.\\(mod\\|sum\\|work\\)$", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "lang/golang/golang-build.sh", "line": 59}
+{"pattern": "$pattern", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "lang/golang/golang-build.sh", "line": 62}
+{"pattern": "^[[:space:]]*$", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "lang/golang/golang-build.sh", "line": 65}
+{"pattern": "$pattern", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "lang/golang/golang-build.sh", "line": 109}
+{"pattern": "{API_KEY}", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "lang/lua/lua-cs-bouncer/files/lua-cs-bouncer.defaults", "line": 5}
+{"pattern": "^\\(\\s*API_KEY\\s*=\\s*\\).*\\$", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "lang/lua/lua-cs-bouncer/files/lua-cs-bouncer.defaults", "line": 8}
+{"pattern": "^$", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "lang/perl/files/perl-run_tests.sh", "line": 62}
+{"pattern": "\\t.*$", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "lang/perl/files/perl-run_tests.sh", "line": 70}
+{"pattern": "\\.t$", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "lang/perl/files/perl-run_tests.sh", "line": 70}
+{"pattern": "^t/", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "lang/perl/files/perl-run_tests.sh", "line": 71}
+{"pattern": "$2", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "lang/php8/test.sh", "line": 5}
+{"pattern": "$2", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "lang/php8/test.sh", "line": 8}
+{"pattern": "$2", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "lang/php8/test.sh", "line": 11}
+{"pattern": "$PHP_MOD", "flags": "i", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "lang/php8/test.sh", "line": 23}
+{"pattern": "\\.", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "lang/python/python3-find-stdlib-depends.sh", "line": 197}
+{"pattern": "^\\./", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "lang/ruby/ruby_missingfiles", "line": 45}
+{"pattern": ".* \\./", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "lang/ruby/ruby_missingfiles", "line": 50}
+{"pattern": "|$", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "lang/ruby/ruby_missingfiles", "line": 57}
+{"pattern": "^  - name: ", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": null}, "file": "lang/ruby/ruby_missingfiles", "line": 58}
+{"pattern": "use-ipv4=yes", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "libs/avahi/test.sh", "line": 17}
+{"pattern": "<service-group>", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "libs/avahi/test.sh", "line": 101}
+{"pattern": "<type>_${stype}._tcp</type>", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "libs/avahi/test.sh", "line": 102}
+{"pattern": "<port>$port</port>", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "libs/avahi/test.sh", "line": 106}
+{"pattern": "avahi", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "libs/avahi/test.sh", "line": 122}
+{"pattern": "usage\\|help\\|option", "flags": "i", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "libs/avahi/test.sh", "line": 174}
+{"pattern": "avahi\\|failed\\|error\\|No.*daemon\\|socket\\|service", "flags": "i", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "libs/avahi/test.sh", "line": 183}
+{"pattern": "\\.c$", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "libs/nacl/do-openwrt", "line": 105}
+{"pattern": "\\.[sS]$", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "libs/nacl/do-openwrt", "line": 106}
+{"pattern": "${o}", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": "extended"}, "file": "libs/nacl/do-openwrt", "line": 123}
+{"pattern": "$o", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "libs/nacl/do-openwrt", "line": 124}
+{"pattern": "$op", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "libs/nacl/do-openwrt", "line": 126}
+{"pattern": "[ \t]CRYPTO_", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "libs/nacl/do-openwrt", "line": 138}
+{"pattern": "${o}", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": "extended"}, "file": "libs/nacl/do-openwrt", "line": 141}
+{"pattern": "$o", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "libs/nacl/do-openwrt", "line": 142}
+{"pattern": "${o}", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": "extended"}, "file": "libs/nacl/do-openwrt", "line": 145}
+{"pattern": "$o", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "libs/nacl/do-openwrt", "line": 146}
+{"pattern": "${o}", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": "extended"}, "file": "libs/nacl/do-openwrt", "line": 151}
+{"pattern": "$o", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "libs/nacl/do-openwrt", "line": 152}
+{"pattern": "$opi", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "libs/nacl/do-openwrt", "line": 154}
+{"pattern": "libopenblas", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "libs/openblas/test.sh", "line": 5}
+{"pattern": "localhost$", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "libs/postgresql/files/postgresql.init", "line": 11}
+{"pattern": ".* $mountpoint ", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "libs/postgresql/files/postgresql.init", "line": 39}
+{"pattern": "0 rows", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "libs/postgresql/files/postgresql.sh", "line": 33}
+{"pattern": "0 rows", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "libs/postgresql/files/postgresql.sh", "line": 65}
+{"pattern": "dir /var/lib/redis", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "libs/redis/test.sh", "line": 31}
+{"pattern": "could not connect|no such", "flags": "i", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": "extended"}, "file": "libs/redis/test.sh", "line": 40}
+{"pattern": ".*\\[(.*)\\]", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "libs/sqlite3/test.sh", "line": 17}
+{"pattern": "$2", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "libs/sx1302_hal/test.sh", "line": 4}
+{"pattern": "$2", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "libs/sx1302_hal/test.sh", "line": 6}
+{"pattern": "^port\\|^bind\\|^dir\\|^logfile\\|^daemonize\\|^maxmemory\\|^save\\|^appendonly\\|^appendfilename", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "libs/valkey/files/valkey.init", "line": 48}
+{"pattern": "#.*", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "mail/bogofilter/files/postfix-bogofilter", "line": 6}
+{"pattern": "PNG.*32x32", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": "extended"}, "file": "multimedia/graphicsmagick/test.sh", "line": 13}
+{"pattern": "JPEG", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "multimedia/graphicsmagick/test.sh", "line": 17}
+{"pattern": "PNG.*16x16", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": "extended"}, "file": "multimedia/graphicsmagick/test.sh", "line": 21}
+{"pattern": "red|ff0000", "flags": "i", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": "extended"}, "file": "multimedia/graphicsmagick/test.sh", "line": 25}
+{"pattern": "PNG", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "multimedia/graphicsmagick/test.sh", "line": 32}
+{"pattern": "PNG", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "multimedia/graphicsmagick/test.sh", "line": 36}
+{"pattern": "TIFF", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "multimedia/graphicsmagick/test.sh", "line": 40}
+{"pattern": "PNG.*32x32", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": "extended"}, "file": "multimedia/graphicsmagick/test.sh", "line": 42}
+{"pattern": "PNM|PPM", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": "extended"}, "file": "multimedia/graphicsmagick/test.sh", "line": 46}
+{"pattern": "GIF", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "multimedia/graphicsmagick/test.sh", "line": 48}
+{"pattern": "PNG.*10x10", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": "extended"}, "file": "multimedia/graphicsmagick/test.sh", "line": 52}
+{"pattern": "PNG.*20x40", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": "extended"}, "file": "multimedia/graphicsmagick/test.sh", "line": 56}
+{"pattern": "PNG", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "multimedia/graphicsmagick/test.sh", "line": 60}
+{"pattern": "PNG.*20x20", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": "extended"}, "file": "multimedia/graphicsmagick/test.sh", "line": 65}
+{"pattern": "\\.\\([0-9]*\\)$", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "multimedia/imagemagick/test-version.sh", "line": 8}
+{"pattern": "\\.\\([0-9]*\\)$", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "multimedia/imagemagick/test.sh", "line": 6}
+{"pattern": "PNG.*32x32", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": "extended"}, "file": "multimedia/imagemagick/test.sh", "line": 19}
+{"pattern": "JPEG", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "multimedia/imagemagick/test.sh", "line": 23}
+{"pattern": "PNG.*16x16", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": "extended"}, "file": "multimedia/imagemagick/test.sh", "line": 27}
+{"pattern": "^255$", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": "extended"}, "file": "multimedia/imagemagick/test.sh", "line": 32}
+{"pattern": "BMP", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "multimedia/imagemagick/test.sh", "line": 36}
+{"pattern": "gray", "flags": "i", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "multimedia/imagemagick/test.sh", "line": 40}
+{"pattern": "PNG", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "multimedia/imagemagick/test.sh", "line": 45}
+{"pattern": "TIFF", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "multimedia/imagemagick/test.sh", "line": 49}
+{"pattern": "PNG.*32x32", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": "extended"}, "file": "multimedia/imagemagick/test.sh", "line": 51}
+{"pattern": "PNM|PPM", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": "extended"}, "file": "multimedia/imagemagick/test.sh", "line": 55}
+{"pattern": "GIF", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "multimedia/imagemagick/test.sh", "line": 57}
+{"pattern": "PNG.*10x10", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": "extended"}, "file": "multimedia/imagemagick/test.sh", "line": 61}
+{"pattern": "PNG.*20x40", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": "extended"}, "file": "multimedia/imagemagick/test.sh", "line": 65}
+{"pattern": "PNG", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "multimedia/imagemagick/test.sh", "line": 69}
+{"pattern": "PNG.*24x24", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": "extended"}, "file": "multimedia/imagemagick/test.sh", "line": 73}
+{"pattern": "PNG.*20x20", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": "extended"}, "file": "multimedia/imagemagick/test.sh", "line": 78}
+{"pattern": "\\.0\\+", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "multimedia/yt-dlp/test-version.sh", "line": 9}
+{"pattern": "$pid", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/acme-acmesh/files/hook.sh", "line": 80}
+{"pattern": "acme-staging", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/acme-acmesh/files/hook.sh", "line": 111}
+{"pattern": "/etc/init.d/acme", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/acme-common/files/acme.init", "line": 149}
+{"pattern": "/etc/init.d/acme start", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/acme-common/files/acme.uci-defaults", "line": 81}
+{"pattern": "/etc/init.d/acme", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/acme-common/files/acme.uci-defaults", "line": 82}
+{"pattern": "0 0 * * * \\", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/acme-common/files/acme.uci-defaults", "line": 83}
+{"pattern": "handle [0-9]\\+", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/acme-common/files/functions.sh", "line": 27}
+{"pattern": "${value}", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/adblock/files/95-adblock-housekeeping", "line": 23}
+{"pattern": "${value}", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/adblock/files/95-adblock-housekeeping", "line": 28}
+{"pattern": "${value}", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/adblock/files/95-adblock-housekeeping", "line": 33}
+{"pattern": "${value}", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/adblock/files/95-adblock-housekeeping", "line": 38}
+{"pattern": "${value}", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/adblock/files/95-adblock-housekeeping", "line": 43}
+{"pattern": "^(wildcard/|domains/)", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": "extended"}, "file": "net/adblock/files/95-adblock-housekeeping", "line": 58}
+{"pattern": "${value}", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/adblock/files/95-adblock-housekeeping", "line": 67}
+{"pattern": "${value}", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/adblock/files/95-adblock-housekeeping", "line": 72}
+{"pattern": "${value}", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/adblock/files/95-adblock-housekeeping", "line": 77}
+{"pattern": "$1", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/adblock-fast/files/etc/uci-defaults/90-adblock-fast", "line": 25}
+{"pattern": "$2", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/adblock-fast/test.sh", "line": 3}
+{"pattern": "TESTDIR", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/adblock-fast/tests/run_tests.sh", "line": 37}
+{"pattern": "TESTDIR", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/adblock-fast/tests/run_tests.sh", "line": 198}
+{"pattern": "TESTDIR", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/adblock-fast/tests/run_tests.sh", "line": 201}
+{"pattern": "^#!/bin/sh", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/adblock-fast/tests/run_tests.sh", "line": 370}
+{"pattern": "$cert_path", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/adguardhome/files/adguardhome.defaults", "line": 74}
+{"pattern": "$private_key_path", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/adguardhome/files/adguardhome.defaults", "line": 87}
+{"pattern": "$PKG_VERSION", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/ampr-ripd/test.sh", "line": 3}
+{"pattern": "AntiBlock $PKG_VERSION", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/antiblock/test.sh", "line": 3}
+{"pattern": "HWaddr", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": null}, "file": "net/apfree-wifidog/files/wifidogx.init", "line": 25}
+{"pattern": "\\(HTML\\|TITLE\\|H1\\|H2\\|by\\|^#\\)", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/apinger/files/graphs.sh", "line": 22}
+{"pattern": "\\(HTML\\|TITLE\\|H1\\|H2\\|by\\)", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/apinger/files/graphs.sh", "line": 24}
+{"pattern": "^$", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/aria2/files/aria2.init", "line": 313}
+{"pattern": "input\\|forwardwan\\|forwardlan", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/banip/files/95-banip-housekeeping", "line": 25}
+{"pattern": "\"rule_4\"", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/banip/files/95-banip-housekeeping", "line": 38}
+{"pattern": "^([1-9][0-9]*(ms|s|m|h|d|w))+$", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": "extended"}, "file": "net/banip/files/banip-functions.sh", "line": 2643}
+{"pattern": "scope link", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/bcp38/files/run.sh", "line": 37}
+{"pattern": "$2", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/boinc/test.sh", "line": 5}
+{"pattern": "^DRIVER=", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/bsbf-openwrt-resources/files/etc/hotplug.d/net/99-bsbf-autoconf-cellular", "line": 6}
+{"pattern": "mbim|qmi", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": "extended"}, "file": "net/bsbf-openwrt-resources/files/etc/hotplug.d/net/99-bsbf-autoconf-cellular", "line": 6}
+{"pattern": ".device='$DEVICENAME'", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/bsbf-openwrt-resources/files/etc/hotplug.d/net/99-bsbf-autoconf-cellular", "line": 20}
+{"pattern": ".devpath='$devpath'", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/bsbf-openwrt-resources/files/etc/hotplug.d/net/99-bsbf-autoconf-cellular", "line": 30}
+{"pattern": ".metric='$metric'", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/bsbf-openwrt-resources/files/etc/hotplug.d/net/99-bsbf-autoconf-cellular", "line": 43}
+{"pattern": "wwan$index", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/bsbf-openwrt-resources/files/etc/hotplug.d/net/99-bsbf-autoconf-cellular", "line": 53}
+{"pattern": "name='wan'", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/bsbf-openwrt-resources/files/etc/hotplug.d/net/99-bsbf-autoconf-cellular", "line": 65}
+{"pattern": "^DRIVER=(cdc_ether|r8152|rndis_host|ipheth)$", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": "extended"}, "file": "net/bsbf-openwrt-resources/files/etc/hotplug.d/net/99-bsbf-autoconf-dhcp", "line": 7}
+{"pattern": "[^a-zA-Z0-9_]", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/bsbf-openwrt-resources/files/etc/hotplug.d/net/99-bsbf-autoconf-dhcp", "line": 11}
+{"pattern": ".metric='$metric'", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/bsbf-openwrt-resources/files/etc/hotplug.d/net/99-bsbf-autoconf-dhcp", "line": 21}
+{"pattern": "name='wan'", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/bsbf-openwrt-resources/files/etc/hotplug.d/net/99-bsbf-autoconf-dhcp", "line": 35}
+{"pattern": "usage|command", "flags": "i", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": "extended"}, "file": "net/cifs-utils/test.sh", "line": 20}
+{"pattern": "^\\(\\s*data_dir\\s*:\\s*\\).*\\$", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/crowdsec/files/crowdsec.defaults", "line": 5}
+{"pattern": "^\\(\\s*db_path\\s*:\\s*\\).*\\$", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/crowdsec/files/crowdsec.defaults", "line": 7}
+{"pattern": "login:", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/crowdsec/files/crowdsec.defaults", "line": 14}
+{"pattern": "$2", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/csshnpd/test.sh", "line": 3}
+{"pattern": "=channel-set$", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/dcwapd/files/dcwapd.init", "line": 17}
+{"pattern": "$CONFIGURATION\\.(.*)=.*", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/dcwapd/files/dcwapd.init", "line": 19}
+{"pattern": "wlan", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/dcwapd/files/dcwapd.init", "line": 70}
+{"pattern": "wlan([0-9]*).*", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/dcwapd/files/dcwapd.init", "line": 71}
+{"pattern": "br-", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/dcwapd/files/dcwapd.init", "line": 80}
+{"pattern": "^br-", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/dcwapd/files/dcwapd.init", "line": 101}
+{"pattern": "^uci: ", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/dcwapd/files/dcwapd.init", "line": 136}
+{"pattern": "luci", "flags": "i", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/ddns-scripts/files/usr/lib/ddns/dynamic_dns_functions.sh", "line": 83}
+{"pattern": "all_proxy", "flags": "i", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/ddns-scripts/files/usr/lib/ddns/dynamic_dns_functions.sh", "line": 102}
+{"pattern": "$URL_PASS", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/ddns-scripts/files/usr/lib/ddns/dynamic_dns_functions.sh", "line": 217}
+{"pattern": "^http", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/ddns-scripts/files/usr/lib/ddns/dynamic_dns_functions.sh", "line": 295}
+{"pattern": "(^0|^10\\.|^100\\.6[4-9]\\.|^100\\.[7-9][0-9]\\.|^100\\.1[0-1][0-9]\\.|^100\\.12[0-7]\\.|^127|^169\\.254|^172\\.1[6-9]\\.|^172\\.2[0-9]\\.|^172\\.3[0-1]\\.|^192\\.168)", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": "extended"}, "file": "net/ddns-scripts/files/usr/lib/ddns/dynamic_dns_functions.sh", "line": 823}
+{"pattern": "^[0-9a-eA-E]", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/ddns-scripts/files/usr/lib/ddns/dynamic_dns_functions.sh", "line": 824}
+{"pattern": "\\[USERNAME\\]", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/ddns-scripts/files/usr/lib/ddns/dynamic_dns_functions.sh", "line": 841}
+{"pattern": "^http:", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/ddns-scripts/files/usr/lib/ddns/dynamic_dns_functions.sh", "line": 844}
+{"pattern": "$UPD_ANSWER", "flags": "i", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": "extended"}, "file": "net/ddns-scripts/files/usr/lib/ddns/dynamic_dns_functions.sh", "line": 852}
+{"pattern": "[.-]", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/ddns-scripts/files/usr/lib/ddns/dynamic_dns_functions.sh", "line": 962}
+{"pattern": "^$lookup_host", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/ddns-scripts/files/usr/lib/ddns/dynamic_dns_functions.sh", "line": 1063}
+{"pattern": "$__REGEX", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/ddns-scripts/files/usr/lib/ddns/dynamic_dns_functions.sh", "line": 1063}
+{"pattern": "address ", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": null}, "file": "net/ddns-scripts/files/usr/lib/ddns/dynamic_dns_functions.sh", "line": 1065}
+{"pattern": "$__REGEX", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/ddns-scripts/files/usr/lib/ddns/dynamic_dns_functions.sh", "line": 1070}
+{"pattern": "^Name:", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/ddns-scripts/files/usr/lib/ddns/dynamic_dns_functions.sh", "line": 1072}
+{"pattern": ":\\([0-9a-f]\\{3\\}\\):", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/ddns-scripts/files/usr/lib/ddns/dynamic_dns_functions.sh", "line": 1181}
+{"pattern": "::", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/ddns-scripts/files/usr/lib/ddns/dynamic_dns_functions.sh", "line": 1196}
+{"pattern": "[0-9a-f]", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/ddns-scripts/files/usr/lib/ddns/dynamic_dns_functions.sh", "line": 1198}
+{"pattern": "\\(.\\)::\\(.\\)", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/ddns-scripts/files/usr/lib/ddns/dynamic_dns_functions.sh", "line": 1207}
+{"pattern": "=service", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/ddns-scripts/files/usr/lib/ddns/dynamic_dns_updater.sh", "line": 179}
+{"pattern": "\\s\\+", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/ddns-scripts/files/usr/lib/ddns/update_aliyun_com.sh", "line": 74}
+{"pattern": "\\s", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/ddns-scripts/files/usr/lib/ddns/update_aliyun_com.sh", "line": 74}
+{"pattern": "RecordId=[^&]*", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/ddns-scripts/files/usr/lib/ddns/update_aliyun_com.sh", "line": 115}
+{"pattern": "dnsrecordupdated", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/ddns-scripts/files/usr/lib/ddns/update_blazingfast_io.sh", "line": 524}
+{"pattern": "\"success\":\\s*true", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/ddns-scripts/files/usr/lib/ddns/update_cloudflare_com_v4.sh", "line": 132}
+{"pattern": "\"content\":\\s*\"[^\"]*", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/ddns-scripts/files/usr/lib/ddns/update_cloudflare_com_v4.sh", "line": 245}
+{"pattern": "[^\"]*$", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/ddns-scripts/files/usr/lib/ddns/update_cloudflare_com_v4.sh", "line": 245}
+{"pattern": "<td>$domain<\\", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": null}, "file": "net/ddns-scripts/files/usr/lib/ddns/update_cnkuai_cn.sh", "line": 71}
+{"pattern": "^.*name=\\x27domainid\\x27 value=\"", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/ddns-scripts/files/usr/lib/ddns/update_cnkuai_cn.sh", "line": 73}
+{"pattern": "\".*$", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/ddns-scripts/files/usr/lib/ddns/update_cnkuai_cn.sh", "line": 73}
+{"pattern": "^.*name=\\x27dnslistid\\x27 value=\"", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/ddns-scripts/files/usr/lib/ddns/update_cnkuai_cn.sh", "line": 75}
+{"pattern": "\".*$", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/ddns-scripts/files/usr/lib/ddns/update_cnkuai_cn.sh", "line": 75}
+{"pattern": "\"Error\"", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/ddns-scripts/files/usr/lib/ddns/update_dnspod_cn_v3.sh", "line": 77}
+{"pattern": "\"Code\":\\s*\"[^\"]*", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/ddns-scripts/files/usr/lib/ddns/update_dnspod_cn_v3.sh", "line": 78}
+{"pattern": "[^\"]*$", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/ddns-scripts/files/usr/lib/ddns/update_dnspod_cn_v3.sh", "line": 78}
+{"pattern": "\"Error\":", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/ddns-scripts/files/usr/lib/ddns/update_dnspod_cn_v3.sh", "line": 109}
+{"pattern": "\"Code\":\\s*\"[^\"]*", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/ddns-scripts/files/usr/lib/ddns/update_dnspod_cn_v3.sh", "line": 110}
+{"pattern": "[^\"]*$", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/ddns-scripts/files/usr/lib/ddns/update_dnspod_cn_v3.sh", "line": 110}
+{"pattern": "\"RecordId\":[[:space:]]*[0-9]*", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/ddns-scripts/files/usr/lib/ddns/update_dnspod_cn_v3.sh", "line": 312}
+{"pattern": "[0-9]*", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/ddns-scripts/files/usr/lib/ddns/update_dnspod_cn_v3.sh", "line": 312}
+{"pattern": "\"Line\":\\s*\"[^\"]*", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/ddns-scripts/files/usr/lib/ddns/update_dnspod_cn_v3.sh", "line": 318}
+{"pattern": "[^\"]*$", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/ddns-scripts/files/usr/lib/ddns/update_dnspod_cn_v3.sh", "line": 318}
+{"pattern": "\"Value\":\\s*\"[^\"]*", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/ddns-scripts/files/usr/lib/ddns/update_dnspod_cn_v3.sh", "line": 319}
+{"pattern": "[^\"]*$", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/ddns-scripts/files/usr/lib/ddns/update_dnspod_cn_v3.sh", "line": 319}
+{"pattern": "\\[USERNAME\\]", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/ddns-scripts/files/usr/lib/ddns/update_freedns_42_pl.sh", "line": 11}
+{"pattern": "<fault>", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/ddns-scripts/files/usr/lib/ddns/update_freedns_42_pl.sh", "line": 15}
+{"pattern": "<name>serial</name>", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/ddns-scripts/files/usr/lib/ddns/update_freedns_42_pl.sh", "line": 16}
+{"pattern": ".+data\":\"(.+)\",\"t.+", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/ddns-scripts/files/usr/lib/ddns/update_godaddy_com_v1.sh", "line": 133}
+{"pattern": "/$", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": "extended"}, "file": "net/ddns-scripts/files/usr/lib/ddns/update_huaweicloud_com.sh", "line": 52}
+{"pattern": "^.* ", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/ddns-scripts/files/usr/lib/ddns/update_huaweicloud_com.sh", "line": 64}
+{"pattern": "^.* ", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/ddns-scripts/files/usr/lib/ddns/update_huaweicloud_com.sh", "line": 68}
+{"pattern": "^.* ", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/ddns-scripts/files/usr/lib/ddns/update_huaweicloud_com.sh", "line": 71}
+{"pattern": "\"id\":\"[a-z0-9]+\"", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": "extended"}, "file": "net/ddns-scripts/files/usr/lib/ddns/update_huaweicloud_com.sh", "line": 94}
+{"pattern": "\"id\":\"[a-z0-9]+\"", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": "extended"}, "file": "net/ddns-scripts/files/usr/lib/ddns/update_huaweicloud_com.sh", "line": 105}
+{"pattern": "\"id\":\"[a-z0-9]+\"", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": "extended"}, "file": "net/ddns-scripts/files/usr/lib/ddns/update_huaweicloud_com.sh", "line": 118}
+{"pattern": "\"id\":\"[a-z0-9]+\"", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": "extended"}, "file": "net/ddns-scripts/files/usr/lib/ddns/update_huaweicloud_com.sh", "line": 132}
+{"pattern": "\"records\":\\[[^]]+]", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": "extended"}, "file": "net/ddns-scripts/files/usr/lib/ddns/update_huaweicloud_com.sh", "line": 137}
+{"pattern": "[^\"]*", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/ddns-scripts/files/usr/lib/ddns/update_luadns_v1.sh", "line": 154}
+{"pattern": "<code>.*</code>", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/ddns-scripts/files/usr/lib/ddns/update_namesilo_com_v1.sh", "line": 114}
+{"pattern": "<code>", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/ddns-scripts/files/usr/lib/ddns/update_namesilo_com_v1.sh", "line": 114}
+{"pattern": "<detail>.*</detail>", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/ddns-scripts/files/usr/lib/ddns/update_namesilo_com_v1.sh", "line": 137}
+{"pattern": "<detail>", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/ddns-scripts/files/usr/lib/ddns/update_namesilo_com_v1.sh", "line": 137}
+{"pattern": "<resource_record>", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/ddns-scripts/files/usr/lib/ddns/update_namesilo_com_v1.sh", "line": 175}
+{"pattern": "<resource_record>.*<host>$username</host>.*</resource_record>", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/ddns-scripts/files/usr/lib/ddns/update_namesilo_com_v1.sh", "line": 176}
+{"pattern": ".*<type>", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/ddns-scripts/files/usr/lib/ddns/update_namesilo_com_v1.sh", "line": 177}
+{"pattern": ".*<record_id>", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/ddns-scripts/files/usr/lib/ddns/update_namesilo_com_v1.sh", "line": 179}
+{"pattern": "\\[USERNAME\\]", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/ddns-scripts/files/usr/lib/ddns/update_no-ip_com.sh", "line": 25}
+{"pattern": "^http:", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/ddns-scripts/files/usr/lib/ddns/update_no-ip_com.sh", "line": 27}
+{"pattern": "good|nochg", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": "extended"}, "file": "net/ddns-scripts/files/usr/lib/ddns/update_no-ip_com.sh", "line": 35}
+{"pattern": "\\[USERNAME\\]", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/ddns-scripts/files/usr/lib/ddns/update_no-ip_com.sh", "line": 42}
+{"pattern": "^http:", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/ddns-scripts/files/usr/lib/ddns/update_no-ip_com.sh", "line": 44}
+{"pattern": "good|nochg", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": "extended"}, "file": "net/ddns-scripts/files/usr/lib/ddns/update_no-ip_com.sh", "line": 52}
+{"pattern": "[^\\.]*\\.[^\\.]*$", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/ddns-scripts/files/usr/lib/ddns/update_one_com.sh", "line": 24}
+{"pattern": "${__SUBDOMAIN}\\.", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/ddns-scripts/files/usr/lib/ddns/update_one_com.sh", "line": 25}
+{"pattern": "Login-form login autofill", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/ddns-scripts/files/usr/lib/ddns/update_one_com.sh", "line": 35}
+{"pattern": ".*action=\"", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/ddns-scripts/files/usr/lib/ddns/update_one_com.sh", "line": 36}
+{"pattern": "Invalid username or password.", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/ddns-scripts/files/usr/lib/ddns/update_one_com.sh", "line": 49}
+{"pattern": "<meta name=\\", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/ddns-scripts/files/usr/lib/ddns/update_one_com.sh", "line": 63}
+{"pattern": "priority", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/ddns-scripts/files/usr/lib/ddns/update_one_com.sh", "line": 132}
+{"pattern": "$__DOMAIN_REGEX", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/ddns-scripts/files/usr/lib/ddns/update_porkbun_v3.sh", "line": 34}
+{"pattern": "$__DOMAIN_REGEX", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/ddns-scripts/files/usr/lib/ddns/update_porkbun_v3.sh", "line": 35}
+{"pattern": "$__DOMAIN_REGEX", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/ddns-scripts/files/usr/lib/ddns/update_porkbun_v3.sh", "line": 36}
+{"pattern": "^.* ", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/ddns-scripts/files/usr/lib/ddns/update_route53_v1.sh", "line": 28}
+{"pattern": "^.* ", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/ddns-scripts/files/usr/lib/ddns/update_route53_v1.sh", "line": 35}
+{"pattern": "^.* ", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/ddns-scripts/files/usr/lib/ddns/update_route53_v1.sh", "line": 42}
+{"pattern": "-----BEGIN PRIVATE KEY-----\\s*", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/ddns-scripts/files/usr/lib/ddns/update_transip_nl.sh", "line": 42}
+{"pattern": "^.*\"token\" *: *\"\\([^\"]*\\)\".*$", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/ddns-scripts/files/usr/lib/ddns/update_transip_nl.sh", "line": 96}
+{"pattern": "\\[USERNAME\\]", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/ddns-scripts/samples/update_sample.sh", "line": 27}
+{"pattern": "^http:", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/ddns-scripts/samples/update_sample.sh", "line": 30}
+{"pattern": "good|nochg", "flags": "i", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": "extended"}, "file": "net/ddns-scripts/samples/update_sample.sh", "line": 39}
+{"pattern": "Support for plugins: present", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/dnscrypt-proxy/files/dnscrypt-proxy.init", "line": 27}
+{"pattern": "option listen_addr", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/dnsproxy/files/dnsproxy.defaults", "line": 6}
+{"pattern": ".$", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/eoip/files/eoip.init", "line": 47}
+{"pattern": "zeoip${name}", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/eoip/files/eoip.init", "line": 80}
+{"pattern": "..", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/etherwake/files/etherwake.init", "line": 129}
+{"pattern": "fail2ban", "flags": "i", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/fail2ban/test.sh", "line": 6}
+{"pattern": "^raddbdir = $FR_ETC\\$", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/freeradius3/test.sh", "line": 18}
+{"pattern": "^raddbdir", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/freeradius3/test.sh", "line": 20}
+{"pattern": "^\\$INCLUDE[[:space:]][[:space:]]*\\(dictionary\\.[^[:space:]]*\\).*", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/freeradius3/test.sh", "line": 48}
+{"pattern": "Usage: $t", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/freeradius3/test.sh", "line": 64}
+{"pattern": "Usage: radtest", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/freeradius3/test.sh", "line": 72}
+{"pattern": "NAS-IP-Address = $nas_ip", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/freeradius3/test.sh", "line": 88}
+{"pattern": "nas=|NAS-IP-Address", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": "extended"}, "file": "net/freeradius3/test.sh", "line": 90}
+{"pattern": "BEGIN CERTIFICATE", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/freeradius3/test.sh", "line": 100}
+{"pattern": "BEGIN .*PRIVATE KEY", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/freeradius3/test.sh", "line": 104}
+{"pattern": "$CONFIG_SECTION", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/frp/files/frpc.init", "line": 25}
+{"pattern": "^[[:blank:]]*\\(#\\|$\\)", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/frr/files/frrcommon.sh", "line": 357}
+{"pattern": "^declare -a", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/frr/files/frrcommon.sh", "line": 382}
+{"pattern": "$2", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/fsh/test.sh", "line": 3}
+{"pattern": "^\\s*PCAP_INTF\\s\\+", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/fwknop/files/fwknopd.init", "line": 131}
+{"pattern": "track", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/git-lfs/test.sh", "line": 6}
+{"pattern": "git\\|lfs\\|endpoint", "flags": "i", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/git-lfs/test.sh", "line": 9}
+{"pattern": "track", "flags": "i", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/git-lfs/test.sh", "line": 12}
+{"pattern": "push", "flags": "i", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/git-lfs/test.sh", "line": 13}
+{"pattern": "pull", "flags": "i", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/git-lfs/test.sh", "line": 14}
+{"pattern": "^.*_transport_\\(.*\\)\\.so$", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/gnunet/files/gnunet.init", "line": 42}
+{"pattern": "$transplug", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/gnunet/files/gnunet.init", "line": 43}
+{"pattern": "$2", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/gnunet/test.sh", "line": 5}
+{"pattern": "$2", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/gsocket/test.sh", "line": 3}
+{"pattern": "$2", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/hev-socks5-server/test.sh", "line": 3}
+{"pattern": "$2", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/hev-socks5-tproxy/test.sh", "line": 3}
+{"pattern": "$2", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/hev-socks5-tunnel/test.sh", "line": 3}
+{"pattern": "^\\.php", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/hs20/files/hs20-server.defaults", "line": 3}
+{"pattern": "\\x1b\\[[0-9;]*m", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/https-dns-proxy/files/etc/init.d/https-dns-proxy", "line": 113}
+{"pattern": "$2", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/https-dns-proxy/files/etc/init.d/https-dns-proxy", "line": 122}
+{"pattern": "update_dnsmasq_config", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/https-dns-proxy/files/etc/uci-defaults/50-https-dns-proxy-migrate-options.sh", "line": 4}
+{"pattern": "wan6_trigger", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/https-dns-proxy/files/etc/uci-defaults/50-https-dns-proxy-migrate-options.sh", "line": 5}
+{"pattern": "procd_fw_src_interfaces", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/https-dns-proxy/files/etc/uci-defaults/50-https-dns-proxy-migrate-options.sh", "line": 6}
+{"pattern": "use_http1", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/https-dns-proxy/files/etc/uci-defaults/50-https-dns-proxy-migrate-options.sh", "line": 7}
+{"pattern": "use_ipv6_resolvers_only", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/https-dns-proxy/files/etc/uci-defaults/50-https-dns-proxy-migrate-options.sh", "line": 8}
+{"pattern": "option force_ipv6_resolvers '1'", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/https-dns-proxy/files/etc/uci-defaults/50-https-dns-proxy-migrate-options.sh", "line": 9}
+{"pattern": "option force_ipv6_resolvers", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/https-dns-proxy/files/etc/uci-defaults/50-https-dns-proxy-migrate-options.sh", "line": 10}
+{"pattern": "$2", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/https-dns-proxy/test.sh", "line": 3}
+{"pattern": "$2", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/https-dns-proxy/test.sh", "line": 3}
+{"pattern": "^readonly NOTRACK_NFT_FILE=.*", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/https-dns-proxy/tests/run_tests.sh", "line": 206}
+{"pattern": "/mask.icloud.com/", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/https-dns-proxy/tests/run_tests.sh", "line": 362}
+{"pattern": "/use-application-dns.net/", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/https-dns-proxy/tests/run_tests.sh", "line": 364}
+{"pattern": "127.0.0.1#5053", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/https-dns-proxy/tests/run_tests.sh", "line": 366}
+{"pattern": "127.0.0.1#5053", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/https-dns-proxy/tests/run_tests.sh", "line": 407}
+{"pattern": "127.0.0.1#5054", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/https-dns-proxy/tests/run_tests.sh", "line": 409}
+{"pattern": "8.8.8.8", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/https-dns-proxy/tests/run_tests.sh", "line": 447}
+{"pattern": "8.8.8.8", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/https-dns-proxy/tests/run_tests.sh", "line": 454}
+{"pattern": "update_dnsmasq_config", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/https-dns-proxy/tests/run_tests.sh", "line": 589}
+{"pattern": "wan6_trigger", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/https-dns-proxy/tests/run_tests.sh", "line": 590}
+{"pattern": "procd_fw_src_interfaces", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/https-dns-proxy/tests/run_tests.sh", "line": 591}
+{"pattern": "use_http1", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/https-dns-proxy/tests/run_tests.sh", "line": 592}
+{"pattern": "use_ipv6_resolvers_only", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/https-dns-proxy/tests/run_tests.sh", "line": 593}
+{"pattern": "option force_ipv6_resolvers '1'", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/https-dns-proxy/tests/run_tests.sh", "line": 594}
+{"pattern": "option force_ipv6_resolvers", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/https-dns-proxy/tests/run_tests.sh", "line": 595}
+{"pattern": "dnsmasq_config_update", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/https-dns-proxy/tests/run_tests.sh", "line": 597}
+{"pattern": "procd_trigger_wan6", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/https-dns-proxy/tests/run_tests.sh", "line": 600}
+{"pattern": "force_dns_src_interface", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/https-dns-proxy/tests/run_tests.sh", "line": 603}
+{"pattern": "force_http1", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/https-dns-proxy/tests/run_tests.sh", "line": 606}
+{"pattern": "option force_ip_family 'ipv6'", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/https-dns-proxy/tests/run_tests.sh", "line": 609}
+{"pattern": "force_ipv6_resolvers", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/https-dns-proxy/tests/run_tests.sh", "line": 612}
+{"pattern": "use_ipv6_resolvers_only", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/https-dns-proxy/tests/run_tests.sh", "line": 615}
+{"pattern": "option force_ip_family", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/https-dns-proxy/tests/run_tests.sh", "line": 618}
+{"pattern": "update_dnsmasq_config", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/https-dns-proxy/tests/run_tests.sh", "line": 622}
+{"pattern": "wan6_trigger", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/https-dns-proxy/tests/run_tests.sh", "line": 625}
+{"pattern": "wan6_trigger", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/https-dns-proxy/tests/run_tests.sh", "line": 627}
+{"pattern": "use_http1", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/https-dns-proxy/tests/run_tests.sh", "line": 630}
+{"pattern": "use_http1", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/https-dns-proxy/tests/run_tests.sh", "line": 632}
+{"pattern": "mask.icloud.com", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/https-dns-proxy/tests/run_tests.sh", "line": 669}
+{"pattern": "use-application-dns.net", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/https-dns-proxy/tests/run_tests.sh", "line": 671}
+{"pattern": "table inet https_dns_proxy_notrack", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/https-dns-proxy/tests/run_tests.sh", "line": 728}
+{"pattern": "type filter hook output priority raw", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/https-dns-proxy/tests/run_tests.sh", "line": 731}
+{"pattern": "53 5053", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/https-dns-proxy/tests/run_tests.sh", "line": 734}
+{"pattern": "delete table inet https_dns_proxy_notrack", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/https-dns-proxy/tests/run_tests.sh", "line": 760}
+{"pattern": "^#!/bin/sh", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/https-dns-proxy/tests/run_tests.sh", "line": 816}
+{"pattern": " on $CPATH ", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/ibrdtnd/files/mountcontainer.sh", "line": 32}
+{"pattern": "$DIR", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/ibrdtnd/files/systemcheck.sh", "line": 8}
+{"pattern": "^[[:blank:]]+", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/ieee8021xclient/files/ieee8021xclient.sh", "line": 11}
+{"pattern": "\\t", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/kea/files/dhcp4.sh", "line": 1011}
+{"pattern": "^config global_defs 'globals'$", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/keepalived/files/etc/uci-defaults/keepalived", "line": 8}
+{"pattern": "${RSYNC_DIR}", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/keepalived/files/usr/bin/keepalived-rsync-inotify", "line": 38}
+{"pattern": "^$ssh_pubkey$", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/keepalived/files/usr/share/keepalived/scripts/rsync.sh", "line": 107}
+{"pattern": "device: \\([0-9]:[0-9]:[0-9]\\):[0-9].*", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/knxd/files/knxd.init", "line": 57}
+{"pattern": "\\..*", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/ksmbd-tools/files/ksmbd.init", "line": 53}
+{"pattern": "|NAME|", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/ksmbd-tools/files/ksmbd.init", "line": 60}
+{"pattern": "='$INTERFACE'$", "flags": "i", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/libreswan/files/etc/hotplug.d/iface/89-libreswan", "line": 7}
+{"pattern": "[\":/]", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": null}, "file": "net/libreswan/files/etc/init.d/ipsec", "line": 265}
+{"pattern": "NFLOG", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/libreswan/files/etc/libreswan_firewall.sh", "line": 85}
+{"pattern": "[: ]", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": null}, "file": "net/libreswan/files/usr/libexec/rpcd/libreswan", "line": 67}
+{"pattern": "with\\ false$", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/mini_snmpd/files/mini_snmpd.init", "line": 172}
+{"pattern": "Add port redirection\\|port redirection\\|upnp", "flags": "i", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/miniupnpc/test.sh", "line": 11}
+{"pattern": "${object", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/modemmanager/files/usr/sbin/ModemManager-monitor", "line": 57}
+{"pattern": "${sysfspath}", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/modemmanager/files/usr/sbin/ModemManager-monitor", "line": 81}
+{"pattern": "${wwan} ${cdcwdm}", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/modemmanager/files/usr/share/ModemManager/modemmanager.common", "line": 91}
+{"pattern": "${name},${subsystem}", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/modemmanager/files/usr/share/ModemManager/modemmanager.common", "line": 152}
+{"pattern": "${name},${subsystem}", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/modemmanager/files/usr/share/ModemManager/modemmanager.common", "line": 157}
+{"pattern": "${field} ", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/modemmanager/files/usr/share/ModemManager/modemmanager.common", "line": 246}
+{"pattern": "CONFIG_$1_auth_opt_", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/mosquitto/files/etc/init.d/mosquitto", "line": 101}
+{"pattern": "^.*_\\(auth_opt_.*\\)='\\(.*\\)'", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/mosquitto/files/etc/init.d/mosquitto", "line": 101}
+{"pattern": "CONFIG_$1_auth_opt_", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/mosquitto/files/etc/init.d/mosquitto", "line": 166}
+{"pattern": "^.*_\\(auth_opt_.*\\)='\\(.*\\)'", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/mosquitto/files/etc/init.d/mosquitto", "line": 166}
+{"pattern": ".*table \\([0-9]\\+\\).*", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/mwan3/files/etc/init.d/mwan3", "line": 75}
+{"pattern": "^[1-3][0-9]{3}:", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": "extended"}, "file": "net/mwan3/files/etc/init.d/mwan3", "line": 80}
+{"pattern": ":*/.*$", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/mwan3/files/lib/mwan3/common.sh", "line": 89}
+{"pattern": ".*dev \\([^ ]*\\).*", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/mwan3/files/lib/mwan3/mwan3.sh", "line": 74}
+{"pattern": "$IPv4_REGEX", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": "extended"}, "file": "net/mwan3/files/lib/mwan3/mwan3.sh", "line": 115}
+{"pattern": "$IPv6_REGEX", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": "extended"}, "file": "net/mwan3/files/lib/mwan3/mwan3.sh", "line": 125}
+{"pattern": "$IPv4_REGEX", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": "extended"}, "file": "net/mwan3/files/lib/mwan3/mwan3.sh", "line": 166}
+{"pattern": "$IPv6_REGEX", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": "extended"}, "file": "net/mwan3/files/lib/mwan3/mwan3.sh", "line": 196}
+{"pattern": "\\-N mwan3_${chain}_${family}$", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/mwan3/files/lib/mwan3/mwan3.sh", "line": 275}
+{"pattern": "$(mwan3_id2mask id MMX_MASK | awk '{ printf ", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/mwan3/files/lib/mwan3/mwan3.sh", "line": 566}
+{"pattern": "^-A mwan3_policy_$policy.*--comment .* [0-9]* [0-9]*", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/mwan3/files/lib/mwan3/mwan3.sh", "line": 655}
+{"pattern": "^-A $policy", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/mwan3/files/lib/mwan3/mwan3.sh", "line": 744}
+{"pattern": "$IPv6_REGEX", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": "extended"}, "file": "net/mwan3/files/lib/mwan3/mwan3.sh", "line": 814}
+{"pattern": "^-A mwan3_rules.*-i $device", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/mwan3/files/lib/mwan3/mwan3.sh", "line": 943}
+{"pattern": ".*--comment \"out .*\" .*$", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/mwan3/files/lib/mwan3/mwan3.sh", "line": 1148}
+{"pattern": ".*--comment \"out .*\" .*$", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/mwan3/files/lib/mwan3/mwan3.sh", "line": 1151}
+{"pattern": ".*--comment \"out .*\" .*$", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/mwan3/files/lib/mwan3/mwan3.sh", "line": 1152}
+{"pattern": ".*--comment \"out .*\" .*$", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/mwan3/files/lib/mwan3/mwan3.sh", "line": 1157}
+{"pattern": ".*--comment \\([^ ]*\\) .*$", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/mwan3/files/lib/mwan3/mwan3.sh", "line": 1157}
+{"pattern": "mwan3_policy_", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/mwan3/files/lib/mwan3/mwan3.sh", "line": 1166}
+{"pattern": "mwan3_policy_", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/mwan3/files/lib/mwan3/mwan3.sh", "line": 1176}
+{"pattern": "mark.*", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/mwan3/files/lib/mwan3/mwan3.sh", "line": 1198}
+{"pattern": "mwan3_policy_", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/mwan3/files/lib/mwan3/mwan3.sh", "line": 1198}
+{"pattern": "mwan3_rule_", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/mwan3/files/lib/mwan3/mwan3.sh", "line": 1198}
+{"pattern": "mark.*", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/mwan3/files/lib/mwan3/mwan3.sh", "line": 1205}
+{"pattern": "mwan3_policy_", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/mwan3/files/lib/mwan3/mwan3.sh", "line": 1205}
+{"pattern": "mwan3_rule_", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/mwan3/files/lib/mwan3/mwan3.sh", "line": 1205}
+{"pattern": "$2", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/natmap/test.sh", "line": 3}
+{"pattern": "\\x1b\\[[0-9;]*m", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/nebula/files/nebula.init", "line": 28}
+{"pattern": "$2", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/nebula/test.sh", "line": 4}
+{"pattern": "readonly PKG_VERSION=", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/nebula/test.sh", "line": 5}
+{"pattern": "$2", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/nebula/test.sh", "line": 5}
+{"pattern": "$2", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/nebula/test.sh", "line": 6}
+{"pattern": "\\s.*$", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/netopeer2/files/netopeer2-server-setup.default", "line": 31}
+{"pattern": "\\([^|]*|\\)\\{6\\}\\(.*\\)", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/netopeer2/files/netopeer2-server-setup.default", "line": 57}
+{"pattern": "[^ ]* \\(.*\\)", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/netopeer2/files/netopeer2-server-setup.default", "line": 59}
+{"pattern": "\\([^[:space:]]*\\).*", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/netopeer2/files/netopeer2-server-setup.default", "line": 64}
+{"pattern": " ${feature} ", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/netopeer2/files/netopeer2-server-setup.default", "line": 67}
+{"pattern": "[^[:space:]]* \\(.*\\)", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/netopeer2/files/netopeer2-server-setup.default", "line": 74}
+{"pattern": "\\([^@]*\\).*", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/netopeer2/files/netopeer2-server-setup.default", "line": 83}
+{"pattern": "^$name \\+|[^|]*| I", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/netopeer2/files/netopeer2-server-setup.default", "line": 85}
+{"pattern": "[^|]*| \\([^ ]*\\).*", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/netopeer2/files/netopeer2-server-setup.default", "line": 93}
+{"pattern": "[^@]*@\\([^\\.]*\\).*", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/netopeer2/files/netopeer2-server-setup.default", "line": 94}
+{"pattern": "$RPC_PIPEFS_D", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/nfs-kernel-server/files/nfsd.v4.init", "line": 18}
+{"pattern": "$RPC_PIPEFS_D", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/nfs-kernel-server/files/nfsd.v4.init", "line": 48}
+{"pattern": "# UCI_CONF_VERSION=(.*)", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/nginx/files/nginx.init", "line": 19}
+{"pattern": "^include module\\.d\\", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/nginx/files/nginx.init", "line": 29}
+{"pattern": "events {", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/nginx/files/nginx.init", "line": 31}
+{"pattern": "# UCI_CONF_VERSION=.*", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/nginx/files/nginx.init", "line": 35}
+{"pattern": "^include module\\.d/\\*\\.module;$", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/nginx/files/nginx.init", "line": 40}
+{"pattern": "events {", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/nginx/files/nginx.init", "line": 41}
+{"pattern": "/var/run/ubus.sock", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/nginx/files-luci-support/60_nginx-luci-support", "line": 20}
+{"pattern": "^\\s*$1=\\s*(\\S*)\\s*\\\\\\\\$", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/nginx-util/files/README.sh", "line": 24}
+{"pattern": "\\\\n$", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/nginx-util/src/test-nginx-util-root.sh", "line": 59}
+{"pattern": "[&", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/nginx-util/src/test-nginx-util-root.sh", "line": 63}
+{"pattern": "[$]", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/nginx-util/src/test-nginx-util-root.sh", "line": 67}
+{"pattern": "[^^_a-zA-Z0-9-]", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/nginx-util/src/test-nginx-util-root.sh", "line": 71}
+{"pattern": "^(\\[\\s])*", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/nginx-util/src/test-nginx-util-root.sh", "line": 75}
+{"pattern": "^\\s*#UCI_HTTP_CONFIG\\s*$", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/nginx-util/src/test-nginx-util-root.sh", "line": 93}
+{"pattern": "$(_regex ", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": "extended"}, "file": "net/nginx-util/src/test-nginx-util-root.sh", "line": 127}
+{"pattern": "$(_regex ", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": "extended"}, "file": "net/nginx-util/src/test-nginx-util-root.sh", "line": 129}
+{"pattern": "^\\s*ssl_session_cache\\s", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": "extended"}, "file": "net/nginx-util/src/test-nginx-util-root.sh", "line": 131}
+{"pattern": "^\\s*ssl_session_timeout\\s", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": "extended"}, "file": "net/nginx-util/src/test-nginx-util-root.sh", "line": 133}
+{"pattern": "^\\\\n", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/nginx-util/src/test-nginx-util-root.sh", "line": 138}
+{"pattern": "$(_regex ", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": "extended"}, "file": "net/nginx-util/src/test-nginx-util-root.sh", "line": 139}
+{"pattern": "^\\t#UCI_HTTP_CONFIG$", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/nginx-util/src/test-nginx-util-root.sh", "line": 440}
+{"pattern": "443 ssl", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/nginx-util/src/test-nginx-util-root.sh", "line": 512}
+{"pattern": "^/cgi-bin/nut", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/nut/files/add_nut_httpd_conf.default", "line": 19}
+{"pattern": "MODE=netserver", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/nut/files/nut-monitor-config.sh.functions", "line": 373}
+{"pattern": "netserver", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/nut/files/nut-monitor-config.sh.functions", "line": 375}
+{"pattern": "^MODE=none", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/nut/files/nut-server-config.sh.functions", "line": 154}
+{"pattern": "^MODE=netclient", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/nut/files/nut-server-config.sh.functions", "line": 163}
+{"pattern": "^MODE=netclient", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/nut/files/nut-server-config.sh.functions", "line": 165}
+{"pattern": "$process_name", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/nut/files/nut-service.sh.functions", "line": 126}
+{"pattern": "|PORT|", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/ocserv/files/ocserv.init", "line": 89}
+{"pattern": "^#", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/open-iscsi/files/iscsi-gen-initiatorname", "line": 27}
+{"pattern": "transport_name", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": null}, "file": "net/open-iscsi/files/iscsi_discovery", "line": 163}
+{"pattern": " *link\\", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/open-iscsi/files/iscsi_offload", "line": 89}
+{"pattern": "$name = \\(.*\\)", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/open-iscsi/files/iscsi_offload", "line": 109}
+{"pattern": "^$mod", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/open-iscsi/files/iscsi_offload", "line": 201}
+{"pattern": "^$mod", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/open-iscsi/files/iscsi_offload", "line": 206}
+{"pattern": "iface\\.hwaddress = \\(.*\\)", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/open-iscsi/files/iscsi_offload", "line": 233}
+{"pattern": "iface\\.transport_name = \\(.*\\)", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/open-iscsi/files/iscsi_offload", "line": 234}
+{"pattern": "iface\\.ipaddress = \\(.*\\)", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/open-iscsi/files/iscsi_offload", "line": 235}
+{"pattern": "iface\\.ipaddress = \\(.*\\)", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/open-iscsi/files/iscsi_offload", "line": 265}
+{"pattern": "$IPv4_REGEX", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": "extended"}, "file": "net/openfortivpn/files/openfortivpn.sh", "line": 56}
+{"pattern": "^Port ", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": null}, "file": "net/openssh/files/sshd.init", "line": 31}
+{"pattern": "_p", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/openssh/test-version.sh", "line": 4}
+{"pattern": "$want", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/openssh/test-version.sh", "line": 7}
+{"pattern": "$2.*SSL (mbed TLS)", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/openvpn/test.sh", "line": 5}
+{"pattern": "$2.*SSL (OpenSSL)", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/openvpn/test.sh", "line": 8}
+{"pattern": "^$DRIVER_HOME_DEFAULT$", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/p910nd/files/p910nd.hotplug", "line": 169}
+{"pattern": "$2", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/files/etc/init.d/pbr", "line": 212}
+{"pattern": "[\\. ~`!@#$%^&*()+=,<>?;:\\", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/files/etc/init.d/pbr", "line": 213}
+{"pattern": "\\x1b\\[[0-9;]*m", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/files/etc/init.d/pbr", "line": 232}
+{"pattern": "via", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": null}, "file": "net/pbr/files/etc/init.d/pbr", "line": 269}
+{"pattern": "POINTOPOINT", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/files/etc/init.d/pbr", "line": 271}
+{"pattern": "POINTOPOINT", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/files/etc/init.d/pbr", "line": 272}
+{"pattern": "^fe80:.*router", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": null}, "file": "net/pbr/files/etc/init.d/pbr", "line": 296}
+{"pattern": "POINTOPOINT", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/files/etc/init.d/pbr", "line": 298}
+{"pattern": "POINTOPOINT", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/files/etc/init.d/pbr", "line": 299}
+{"pattern": "\"\\$nft\" list", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/files/etc/init.d/pbr", "line": 334}
+{"pattern": "\"\\$nft\" -f", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/files/etc/init.d/pbr", "line": 334}
+{"pattern": "^[a-zA-Z0-9][a-zA-Z0-9_-]{0,61}[a-zA-Z0-9]$|^[a-zA-Z0-9]$", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": "extended"}, "file": "net/pbr/files/etc/init.d/pbr", "line": 353}
+{"pattern": "^([a-zA-Z0-9]([a-zA-Z0-9_-]{0,61}[a-zA-Z0-9])?\\.)+[a-zA-Z]{2,}$", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": "extended"}, "file": "net/pbr/files/etc/init.d/pbr", "line": 354}
+{"pattern": "^([a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\\.)+[a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?$", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": "extended"}, "file": "net/pbr/files/etc/init.d/pbr", "line": 355}
+{"pattern": "(^|\\.)xn--", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": "extended"}, "file": "net/pbr/files/etc/init.d/pbr", "line": 355}
+{"pattern": "^((25[0-5]|2[0-4][0-9]|1?[0-9]{1,2})\\.){3}(25[0-5]|2[0-4][0-9]|1?[0-9]{1,2})(/(3[0-2]|[12]?[0-9]))?$", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": "extended"}, "file": "net/pbr/files/etc/init.d/pbr", "line": 364}
+{"pattern": "^([0-9A-Fa-f]{2}:){5}([0-9A-Fa-f]{2})$", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": "extended"}, "file": "net/pbr/files/etc/init.d/pbr", "line": 373}
+{"pattern": "^([0-9A-Fa-f]{2}-){5}([0-9A-Fa-f]{2})$", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": "extended"}, "file": "net/pbr/files/etc/init.d/pbr", "line": 374}
+{"pattern": "ip.table.*$1", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/files/etc/init.d/pbr", "line": 376}
+{"pattern": "^${1:--}", "flags": "i", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/files/etc/init.d/pbr", "line": 385}
+{"pattern": "${ipTablePrefix}_${iface}\\$", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/files/etc/init.d/pbr", "line": 420}
+{"pattern": "${ipTablePrefix}_", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/files/etc/init.d/pbr", "line": 422}
+{"pattern": "${nftPrefix}_mark_", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/files/etc/init.d/pbr", "line": 433}
+{"pattern": "set", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/files/etc/init.d/pbr", "line": 434}
+{"pattern": "${nftPrefix}_", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/files/etc/init.d/pbr", "line": 434}
+{"pattern": "#.*", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/files/etc/init.d/pbr", "line": 479}
+{"pattern": "${nftPrefix}_mark_", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/files/etc/init.d/pbr", "line": 484}
+{"pattern": "Compile time options:", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/files/etc/init.d/pbr", "line": 490}
+{"pattern": "+https", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/files/etc/init.d/pbr", "line": 717}
+{"pattern": "Protocols: .*https.*", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/files/etc/init.d/pbr", "line": 724}
+{"pattern": "+ssl", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/files/etc/init.d/pbr", "line": 725}
+{"pattern": "$1", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/files/etc/init.d/pbr", "line": 998}
+{"pattern": "$2", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/files/etc/init.d/pbr", "line": 998}
+{"pattern": "$3", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/files/etc/init.d/pbr", "line": 1080}
+{"pattern": "\\.", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/files/etc/init.d/pbr", "line": 1140}
+{"pattern": "[/.^$*\\[\\\\]", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/files/etc/init.d/pbr", "line": 1142}
+{"pattern": "[/.^$*\\[\\\\]", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/files/etc/init.d/pbr", "line": 1143}
+{"pattern": "^nftset=/${escaped_param}/.*#${safe_nftset4}(,| |$)", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": "extended"}, "file": "net/pbr/files/etc/init.d/pbr", "line": 1144}
+{"pattern": "^nftset=/${escaped_param}/", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/files/etc/init.d/pbr", "line": 1145}
+{"pattern": "^nftset=/${escaped_param}/.*#${safe_nftset6}(,| |$)", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": "extended"}, "file": "net/pbr/files/etc/init.d/pbr", "line": 1147}
+{"pattern": "[|&\\\\]", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/files/etc/init.d/pbr", "line": 1151}
+{"pattern": "[|&\\\\]", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/files/etc/init.d/pbr", "line": 1152}
+{"pattern": "^nftset=\\", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/files/etc/init.d/pbr", "line": 1153}
+{"pattern": "${ipTablePrefix}_.*", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/files/etc/init.d/pbr", "line": 1245}
+{"pattern": "${i}", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/files/etc/init.d/pbr", "line": 1249}
+{"pattern": "[.=]", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": null}, "file": "net/pbr/files/etc/init.d/pbr", "line": 1368}
+{"pattern": "$tid ${ipTablePrefix}_${table_iface}", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/files/etc/init.d/pbr", "line": 2313}
+{"pattern": "${ipTablePrefix}_${table_iface}", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/files/etc/init.d/pbr", "line": 2314}
+{"pattern": "POINTOPOINT", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/files/etc/init.d/pbr", "line": 2348}
+{"pattern": "POINTOPOINT", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/files/etc/init.d/pbr", "line": 2354}
+{"pattern": "POINTOPOINT", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/files/etc/init.d/pbr", "line": 2374}
+{"pattern": "POINTOPOINT", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/files/etc/init.d/pbr", "line": 2380}
+{"pattern": "${ipTablePrefix}_${table_iface}\\$", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/files/etc/init.d/pbr", "line": 2420}
+{"pattern": "POINTOPOINT", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/files/etc/init.d/pbr", "line": 2435}
+{"pattern": "POINTOPOINT", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/files/etc/init.d/pbr", "line": 2441}
+{"pattern": "POINTOPOINT", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/files/etc/init.d/pbr", "line": 2461}
+{"pattern": "POINTOPOINT", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/files/etc/init.d/pbr", "line": 2467}
+{"pattern": "curl", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/files/etc/init.d/pbr", "line": 2850}
+{"pattern": "^$", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/files/etc/init.d/pbr", "line": 3233}
+{"pattern": "chain ${nftPrefix}_${i} {", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/files/etc/init.d/pbr", "line": 3245}
+{"pattern": "chain ${i} {", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/files/etc/init.d/pbr", "line": 3250}
+{"pattern": "set ${i} {", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/files/etc/init.d/pbr", "line": 3255}
+{"pattern": "${packageName}_", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/files/etc/init.d/pbr", "line": 3263}
+{"pattern": "${packageName}_", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/files/etc/init.d/pbr", "line": 3266}
+{"pattern": "^${tid}[[:space:]]", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/files/etc/init.d/pbr", "line": 3269}
+{"pattern": "([a-fA-F0-9:]{2,}:){1,7}[a-fA-F0-9]{2,}", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/files/etc/init.d/pbr", "line": 3375}
+{"pattern": "resolver_ipset", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/files/etc/uci-defaults/90-pbr", "line": 13}
+{"pattern": "'FORWARD'", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/files/etc/uci-defaults/90-pbr", "line": 14}
+{"pattern": "'INPUT'", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/files/etc/uci-defaults/90-pbr", "line": 15}
+{"pattern": "'OUTPUT'", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/files/etc/uci-defaults/90-pbr", "line": 16}
+{"pattern": "'PREROUTING'", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/files/etc/uci-defaults/90-pbr", "line": 17}
+{"pattern": "'POSTROUTING'", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/files/etc/uci-defaults/90-pbr", "line": 18}
+{"pattern": "option fw_mask '0x\\(.*\\)'", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/files/etc/uci-defaults/90-pbr", "line": 19}
+{"pattern": "option wan_mark '0x\\(.*\\)'", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/files/etc/uci-defaults/90-pbr", "line": 20}
+{"pattern": "procd_lan_interface", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/files/etc/uci-defaults/90-pbr", "line": 21}
+{"pattern": "procd_lan_device", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/files/etc/uci-defaults/90-pbr", "line": 22}
+{"pattern": "procd_wan_interface", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/files/etc/uci-defaults/90-pbr", "line": 23}
+{"pattern": "procd_wan6_interface", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/files/etc/uci-defaults/90-pbr", "line": 24}
+{"pattern": "wan_ip_rules_priority", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/files/etc/uci-defaults/90-pbr", "line": 25}
+{"pattern": "wan_mark", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/files/etc/uci-defaults/90-pbr", "line": 26}
+{"pattern": "\\x1b\\[[0-9;]*m", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/files/usr/share/pbr/pbr.user.dnsprefetch", "line": 12}
+{"pattern": "pbr", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/files/usr/share/pbr/pbr.user.dnsprefetch", "line": 20}
+{"pattern": "dnsmasq.dns", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/files/usr/share/pbr/pbr.user.dnsprefetch", "line": 68}
+{"pattern": "$2", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/test.sh", "line": 3}
+{"pattern": "auto-merge", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/tests/04_config/01_load_config", "line": 41}
+{"pattern": "flags interval", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/tests/04_config/01_load_config", "line": 43}
+{"pattern": "option enabled '1'", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/tests/04_config/02_disabled_service", "line": 9}
+{"pattern": "option ipv6_enabled '0'", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/tests/04_config/03_config_ipv6", "line": 9}
+{"pattern": "#!/usr/sbin/nft -f", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/tests/05_nft/01_nft_file_operations", "line": 21}
+{"pattern": "add chain inet fw4 pbr_dstnat", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/tests/05_nft/01_nft_file_operations", "line": 26}
+{"pattern": "add chain inet fw4 pbr_forward", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/tests/05_nft/01_nft_file_operations", "line": 27}
+{"pattern": "add chain inet fw4 pbr_output", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/tests/05_nft/01_nft_file_operations", "line": 28}
+{"pattern": "add chain inet fw4 pbr_prerouting", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/tests/05_nft/01_nft_file_operations", "line": 29}
+{"pattern": "jump pbr_dstnat", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/tests/05_nft/01_nft_file_operations", "line": 34}
+{"pattern": "jump pbr_prerouting", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/tests/05_nft/01_nft_file_operations", "line": 35}
+{"pattern": "jump pbr_output", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/tests/05_nft/01_nft_file_operations", "line": 36}
+{"pattern": "jump pbr_forward", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/tests/05_nft/01_nft_file_operations", "line": 37}
+{"pattern": "meta mark & 0x00ff0000 != 0 return", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/tests/05_nft/01_nft_file_operations", "line": 42}
+{"pattern": "192.168.1.0/24", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/tests/05_nft/01_nft_file_operations", "line": 48}
+{"pattern": "via", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": null}, "file": "net/pbr/tests/06_network/01_gateway_discovery", "line": 31}
+{"pattern": "POINTOPOINT", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/tests/06_network/01_gateway_discovery", "line": 32}
+{"pattern": "^fe80:.*router", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": null}, "file": "net/pbr/tests/06_network/01_gateway_discovery", "line": 45}
+{"pattern": "POINTOPOINT", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/tests/06_network/01_gateway_discovery", "line": 46}
+{"pattern": "warningInterfaceRoutingUnknownGateway", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/tests/06_network/01_gateway_discovery", "line": 157}
+{"pattern": "eth0", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/tests/06_network/01_gateway_discovery", "line": 159}
+{"pattern": "warningInterfaceRoutingUnknownGateway", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/tests/06_network/01_gateway_discovery", "line": 198}
+{"pattern": "eth1", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/tests/06_network/01_gateway_discovery", "line": 200}
+{"pattern": "warningInterfaceRoutingUnknownGateway", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/tests/06_network/01_gateway_discovery", "line": 319}
+{"pattern": "warningInterfaceRoutingUnknownGateway", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/tests/06_network/01_gateway_discovery", "line": 339}
+{"pattern": "eth0", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/tests/06_network/01_gateway_discovery", "line": 341}
+{"pattern": "warningInterfaceRoutingUnknownGateway", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/tests/06_network/01_gateway_discovery", "line": 386}
+{"pattern": "^nftset=/example\\.com/", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/tests/08_dns/01_nftset_element", "line": 29}
+{"pattern": "4#inet#fw4#pbr_policyA_4_dst_ip", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/tests/08_dns/01_nftset_element", "line": 32}
+{"pattern": "# policyA", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/tests/08_dns/01_nftset_element", "line": 35}
+{"pattern": "^nftset=/example\\.com/", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/tests/08_dns/01_nftset_element", "line": 47}
+{"pattern": "pbr_policyA_4_dst_ip", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/tests/08_dns/01_nftset_element", "line": 50}
+{"pattern": "^nftset=/example\\.com/", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/tests/08_dns/01_nftset_element", "line": 62}
+{"pattern": "^nftset=/example\\.com/", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/tests/08_dns/01_nftset_element", "line": 65}
+{"pattern": "pbr_policyA_4_dst_ip", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/tests/08_dns/01_nftset_element", "line": 67}
+{"pattern": "pbr_policyB_4_dst_ip", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/tests/08_dns/01_nftset_element", "line": 70}
+{"pattern": "^nftset=/example\\.com/", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/tests/08_dns/01_nftset_element", "line": 82}
+{"pattern": "policyA", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/tests/08_dns/01_nftset_element", "line": 84}
+{"pattern": "policyB", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/tests/08_dns/01_nftset_element", "line": 87}
+{"pattern": "^nftset=/example\\.com/", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/tests/08_dns/01_nftset_element", "line": 99}
+{"pattern": "4#inet#fw4#pbr_policyA_4_dst_ip", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/tests/08_dns/01_nftset_element", "line": 101}
+{"pattern": "6#inet#fw4#pbr_policyA_6_dst_ip", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/tests/08_dns/01_nftset_element", "line": 104}
+{"pattern": "pbr_policyA_6_dst_ip", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/tests/08_dns/01_nftset_element", "line": 119}
+{"pattern": "4#inet#fw4#pbr_policyA_4_dst_ip", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/tests/08_dns/01_nftset_element", "line": 122}
+{"pattern": "^nftset=/example\\.com/", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/tests/08_dns/01_nftset_element", "line": 135}
+{"pattern": "4#inet#fw4#pbr_policyA_4_dst_ip(,| |$)", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": "extended"}, "file": "net/pbr/tests/08_dns/01_nftset_element", "line": 137}
+{"pattern": "^nftset=/", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/tests/08_dns/01_nftset_element", "line": 149}
+{"pattern": "^nftset=/example\\.com/", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/tests/08_dns/01_nftset_element", "line": 152}
+{"pattern": "^nftset=/other\\.com/", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/tests/08_dns/01_nftset_element", "line": 155}
+{"pattern": "^config[[:space:", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bash_ksh", "grep_mode": null}, "file": "net/pbr/tests/lib/mocks/functions.sh", "line": 32}
+{"pattern": "^option[[:space:", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bash_ksh", "grep_mode": null}, "file": "net/pbr/tests/lib/mocks/functions.sh", "line": 38}
+{"pattern": "^option[[:space:", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bash_ksh", "grep_mode": null}, "file": "net/pbr/tests/lib/mocks/functions.sh", "line": 42}
+{"pattern": "^list[[:space:", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bash_ksh", "grep_mode": null}, "file": "net/pbr/tests/lib/mocks/functions.sh", "line": 48}
+{"pattern": "^list[[:space:", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bash_ksh", "grep_mode": null}, "file": "net/pbr/tests/lib/mocks/functions.sh", "line": 56}
+{"pattern": " $first ", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/tests/lib/mocks/jshn.sh", "line": 112}
+{"pattern": "^readonly ", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/tests/lib/setup.sh", "line": 72}
+{"pattern": "$pattern", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pbr/tests/run_tests.sh", "line": 27}
+{"pattern": "\\s", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pptpd/files/pptpd.init", "line": 57}
+{"pattern": "^\\w+\\s+pptp-server\\s+.+$", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/pptpd/files/pptpd.init", "line": 65}
+{"pattern": "debug_", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/privoxy/files/privoxy.init", "line": 31}
+{"pattern": "_LENGTH", "flags": "i", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/privoxy/files/privoxy.init", "line": 34}
+{"pattern": "_ITEM", "flags": "i", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/privoxy/files/privoxy.init", "line": 36}
+{"pattern": "_ITEM.*", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/privoxy/files/privoxy.init", "line": 36}
+{"pattern": "Lua 5.4", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/prosody/test.sh", "line": 29}
+{"pattern": "\\[$section\\]", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/radicale3/files/radicale3.init", "line": 144}
+{"pattern": "^[0-9]+$", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": "extended"}, "file": "net/radius-mac/files/radius-mac.init", "line": 38}
+{"pattern": "^([0-9]{1,3}\\.){3}[0-9]{1,3}$", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": "extended"}, "file": "net/radius-mac/files/radius-mac.init", "line": 67}
+{"pattern": "^([0-9a-f]{2}[:-]){5}[0-9a-f]{2}$", "flags": "i", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": "extended"}, "file": "net/radius-mac/files/radius-mac.init", "line": 78}
+{"pattern": "$applet", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/ripe-atlas/test.sh", "line": 38}
+{"pattern": "^REG_[0-9]+_HOST=[^[:space:]]", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": "extended"}, "file": "net/ripe-atlas/test.sh", "line": 106}
+{"pattern": "ssh-\\|ecdsa-", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/ripe-atlas/test.sh", "line": 111}
+{"pattern": "Address\\ [0-9]\\+:", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/safe-search/files/safe-search-maintenance", "line": 9}
+{"pattern": "^Address [0-9]+: ", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/safe-search/files/safe-search-maintenance", "line": 9}
+{"pattern": "^[:0-9a-f]", "flags": "i", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/safe-search/files/safe-search-maintenance", "line": 12}
+{"pattern": " .*", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/safe-search/files/safe-search-maintenance", "line": 12}
+{"pattern": "\\..*", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/samba4/files/samba.init", "line": 29}
+{"pattern": "|NAME|", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/samba4/files/samba.init", "line": 44}
+{"pattern": "socket options", "flags": "i", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/samba4/files/samba.init", "line": 56}
+{"pattern": "(tcp-segmentation-offload|receive-offload): on", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": "extended"}, "file": "net/snort3/files/snort-mgr", "line": 42}
+{"pattern": "${table_type} snort", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/snort3/files/snort-mgr", "line": 51}
+{"pattern": "coreutils", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/snort3/files/snort-mgr", "line": 173}
+{"pattern": "$PATTERN", "flags": "i", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": "extended"}, "file": "net/snort3/files/snort-mgr", "line": 205}
+{"pattern": "\\bsid:${sid};", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/snort3/files/snort-mgr", "line": 246}
+{"pattern": "\\bgid:${gid};", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/snort3/files/snort-mgr", "line": 247}
+{"pattern": "^${gid}:${sid}\\b", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/snort3/files/snort-mgr", "line": 255}
+{"pattern": "(.*", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/snort3/files/snort-mgr", "line": 273}
+{"pattern": "name = ", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": null}, "file": "net/snort3/files/snort-mgr", "line": 276}
+{"pattern": "name = ", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": null}, "file": "net/snort3/files/snort-mgr", "line": 277}
+{"pattern": "PID|$PROG ", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": "extended"}, "file": "net/snort3/files/snort-mgr", "line": 295}
+{"pattern": "Version", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": null}, "file": "net/snort3/files/snort-rules", "line": 67}
+{"pattern": "^.*time=\\([^ ]*\\) ms", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/speedtest-netperf/files/speedtest-netperf.sh", "line": 66}
+{"pattern": "PING", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/speedtest-netperf/files/speedtest-netperf.sh", "line": 66}
+{"pattern": "^cpu[0-9]*", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/speedtest-netperf/files/speedtest-netperf.sh", "line": 170}
+{"pattern": "^$module ", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/sstp-client/files/lib/netifd/proto/sstp.sh", "line": 69}
+{"pattern": "^[[:space:]]*option ignore_routing_tables", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": "extended"}, "file": "net/strongswan/files/etc/uci-defaults/strongswan", "line": 18}
+{"pattern": " src ", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": null}, "file": "net/strongswan/files/ipsec.init", "line": 225}
+{"pattern": "$2", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/swgp-go/test.sh", "line": 4}
+{"pattern": "link:up", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/switchdev-poller/files/switchdev-poller", "line": 130}
+{"pattern": "DOWN", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/switchdev-poller/files/switchdev-poller", "line": 140}
+{"pattern": "ietf-netconf-notifications ", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/sysrepo/files/libsysrepo.default", "line": 6}
+{"pattern": "ietf-netconf-with-default ", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/sysrepo/files/libsysrepo.default", "line": 11}
+{"pattern": "ietf-origin ", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/sysrepo/files/libsysrepo.default", "line": 16}
+{"pattern": "sysrepo ", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/sysrepo/files/libsysrepo.default", "line": 21}
+{"pattern": "ietf-netconf ", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/sysrepo/files/libsysrepo.default", "line": 26}
+{"pattern": "^ *$if:", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/tayga/files/tayga.sh", "line": 5}
+{"pattern": "^ *$if:", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/tayga/files/tayga.sh", "line": 15}
+{"pattern": "$2", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/tcpreplay/test.sh", "line": 9}
+{"pattern": "$onion", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/tor-hs/files/nextcloud-update.sh", "line": 16}
+{"pattern": " default", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/trafficshaper/files/trafficshaper.init", "line": 504}
+{"pattern": "^MemTotal:[[:space:]]*\\([0-9]*\\) kB$", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/transmission/files/transmission.init", "line": 80}
+{"pattern": "^wireless.trm_uplink[0-9]+=", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": "extended"}, "file": "net/travelmate/files/travelmate.init", "line": 152}
+{"pattern": "BEGIN RSA PRIVATE KEY", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/uacme/files/dnsapi_helper.sh", "line": 527}
+{"pattern": "^publicExponent:", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/uacme/files/dnsapi_helper.sh", "line": 527}
+{"pattern": "BEGIN EC PRIVATE KEY", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/uacme/files/dnsapi_helper.sh", "line": 536}
+{"pattern": "^NIST CURVE:", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/uacme/files/dnsapi_helper.sh", "line": 536}
+{"pattern": "^[^ ][^ ]", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/uacme/files/dnsapi_helper.sh", "line": 881}
+{"pattern": "\\([0-9A-F]\\{2\\}\\)", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/uacme/files/dnsapi_helper.sh", "line": 959}
+{"pattern": "\\([0-9A-F]\\{2\\}\\)", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/uacme/files/dnsapi_helper.sh", "line": 961}
+{"pattern": "\\([0-9A-F]\\)", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/uacme/files/dnsapi_helper.sh", "line": 969}
+{"pattern": "^ *\\([^ ]\\)", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/uacme/files/dnsapi_helper.sh", "line": 1049}
+{"pattern": "^$__opt$__sep", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/uacme/files/dnsapi_helper.sh", "line": 1070}
+{"pattern": "^$__opt$__sep.*$", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/uacme/files/dnsapi_helper.sh", "line": 1079}
+{"pattern": "^#$__opt$__sep", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/uacme/files/dnsapi_helper.sh", "line": 1081}
+{"pattern": "^#$__opt$__sep.*$", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/uacme/files/dnsapi_helper.sh", "line": 1089}
+{"pattern": "^$__opt$__sep", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/uacme/files/dnsapi_helper.sh", "line": 1095}
+{"pattern": "^$_sdkey *=.*$", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/uacme/files/dnsapi_helper.sh", "line": 1123}
+{"pattern": "^$_sdkey *=", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/uacme/files/dnsapi_helper.sh", "line": 1135}
+{"pattern": "${B64CONF_START}", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/uacme/files/dnsapi_helper.sh", "line": 1139}
+{"pattern": "${B64CONF_END}", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/uacme/files/dnsapi_helper.sh", "line": 1139}
+{"pattern": "^${acme_server:-$staging}$", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/uacme/files/hook.sh", "line": 71}
+{"pattern": " $varname ", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/uanytun/files/uanytun.init", "line": 14}
+{"pattern": "nameserver", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": null}, "file": "net/unbound/files/unbound.sh", "line": 198}
+{"pattern": "Linked libs:.*libevent", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/unbound/files/unbound.sh", "line": 710}
+{"pattern": "unbound\\|anchor\\|usage\\|option", "flags": "i", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/unbound/test.sh", "line": 14}
+{"pattern": "unbound\\|usage\\|option\\|config", "flags": "i", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/unbound/test.sh", "line": 19}
+{"pattern": "unbound\\|usage\\|option", "flags": "i", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/unbound/test.sh", "line": 24}
+{"pattern": "openssl\\|unbound", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/unbound/test.sh", "line": 33}
+{"pattern": "unbound\\|usage\\|option", "flags": "i", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/unbound/test.sh", "line": 38}
+{"pattern": "$i", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/wg-installer/common/wg.sh", "line": 10}
+{"pattern": "scope link", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/wg-installer/common/wg.sh", "line": 30}
+{"pattern": "from", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": null}, "file": "net/wg-installer/common/wg.sh", "line": 31}
+{"pattern": ".$", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/wg-installer/common/wg.sh", "line": 31}
+{"pattern": "/usr/share/wginstaller/wg.sh cleanup_wginterfaces", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/wg-installer/wg-server/config/wgserver.init", "line": 8}
+{"pattern": "$key", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/wg-installer/wg-server/lib/wg_functions.sh", "line": 9}
+{"pattern": "${nowdow}", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/wifischedule/net/usr/bin/wifi_schedule.sh", "line": 109}
+{"pattern": "[^[:alnum:]]ESSID[^[:alnum:]]", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": null}, "file": "net/wifischedule/net/usr/bin/wifi_schedule.sh", "line": 303}
+{"pattern": "${mac_filter}", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": "extended"}, "file": "net/wifischedule/net/usr/bin/wifi_schedule.sh", "line": 354}
+{"pattern": "${ignore_stations_filter}", "flags": "i", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": "extended"}, "file": "net/wifischedule/net/usr/bin/wifi_schedule.sh", "line": 358}
+{"pattern": "\\..*", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/wsdd2/files/wsdd2.init", "line": 8}
+{"pattern": "^[[:blank:]]*[^[:blank:]#;]", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/wsdd2/files/wsdd2.init", "line": 38}
+{"pattern": "netbios name", "flags": "i", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/wsdd2/files/wsdd2.init", "line": 41}
+{"pattern": "mdns name", "flags": "i", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/wsdd2/files/wsdd2.init", "line": 46}
+{"pattern": "workgroup", "flags": "i", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/wsdd2/files/wsdd2.init", "line": 50}
+{"pattern": "${2#*v}", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/xray-core/test.sh", "line": 5}
+{"pattern": "$protocol", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "net/yggdrasil/files/yggdrasil.sh", "line": 121}
+{"pattern": "^File[0-9]*", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "sound/mpc/files/pls-handler.sh", "line": 4}
+{"pattern": "^File[0-9]*=", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "sound/mpc/files/pls-handler.sh", "line": 4}
+{"pattern": "null", "flags": "i", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "sound/mpd/test.sh", "line": 9}
+{"pattern": "\\.\\([^.]*\\)$", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "sound/squeezelite/test-version.sh", "line": 6}
+{"pattern": "friendlyname", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "sound/upmpdcli/test.sh", "line": 30}
+{"pattern": "mpdhost", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "sound/upmpdcli/test.sh", "line": 32}
+{"pattern": "\\.", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "utils/airos-dfs-reset/files/airos-dfs-reset", "line": 25}
+{"pattern": "radio.1.freq", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "utils/airos-dfs-reset/files/airos-dfs-reset", "line": 36}
+{"pattern": "^.[ ]*$PID ", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "utils/ap51-flash/files/ap51-flash.init", "line": 20}
+{"pattern": "^.+\\.new-[0-9\\.]+_[0-9]+$", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": "extended"}, "file": "utils/apparmor/files/apparmor.sh", "line": 99}
+{"pattern": "processor\\t:", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "utils/apparmor/files/apparmor.sh", "line": 125}
+{"pattern": " (\\(enforce\\|complain\\))$", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "utils/apparmor/files/apparmor.sh", "line": 278}
+{"pattern": "$2", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "utils/arp-whisper/test.sh", "line": 5}
+{"pattern": "canonical name =", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "utils/cache-domains/files/test.sh", "line": 30}
+{"pattern": "canonical name =", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "utils/cache-domains/files/test.sh", "line": 31}
+{"pattern": "canonical name =", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "utils/cache-domains/files/test.sh", "line": 33}
+{"pattern": "canonical name =", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "utils/cache-domains/files/test.sh", "line": 34}
+{"pattern": "10.10.3.10", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "utils/cache-domains/files/test.sh", "line": 38}
+{"pattern": "10.10.3.11", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "utils/cache-domains/files/test.sh", "line": 39}
+{"pattern": "10.10.3.13", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "utils/cache-domains/files/test.sh", "line": 42}
+{"pattern": "canonical name =", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "utils/cache-domains/files/test.sh", "line": 47}
+{"pattern": "canonical name =", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "utils/cache-domains/files/test.sh", "line": 48}
+{"pattern": "canonical name =", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "utils/cache-domains/files/test.sh", "line": 50}
+{"pattern": "canonical name =", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "utils/cache-domains/files/test.sh", "line": 51}
+{"pattern": "^tini version", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "utils/catatonit/test.sh", "line": 5}
+{"pattern": "^   CLICON_XMLDB_DIR ", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": null}, "file": "utils/clixon/files/clixon.init", "line": 12}
+{"pattern": "^Please report bugs to mouse@ya.ru", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "utils/fatresize/test.sh", "line": 5}
+{"pattern": "runtime\\s*org.freedesktop.fwupd\\s*$2", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "utils/fwupd/test.sh", "line": 4}
+{"pattern": "^8086", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "utils/hwdata/test.sh", "line": 6}
+{"pattern": "^0781", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "utils/hwdata/test.sh", "line": 10}
+{"pattern": "PNP", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "utils/hwdata/test.sh", "line": 14}
+{"pattern": "^Timestamp,Server Name,Address,Ping,Jitter,Download,Upload,Share,IP$", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "utils/librespeed-cli-rust/test.sh", "line": 9}
+{"pattern": "github.com/BKPepe/speedtest-cli-rust", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "utils/librespeed-cli-rust/test.sh", "line": 13}
+{"pattern": "GNU Lesser General Public License", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "utils/librespeed-cli-rust/test.sh", "line": 14}
+{"pattern": "^7: Example", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "utils/librespeed-cli-rust/test.sh", "line": 21}
+{"pattern": "not responding", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "utils/librespeed-cli-rust/test.sh", "line": 48}
+{"pattern": ".*Ver[[:blank:]]*\\([0-9.]*\\)-.*", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "utils/mariadb/files/mysqld.init", "line": 70}
+{"pattern": "$2", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "utils/miniflux/test.sh", "line": 2}
+{"pattern": "^Copyright", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "utils/parted/test.sh", "line": 5}
+{"pattern": ".*pfn\\(..\\).*", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "utils/pcmciautils/files/etc/init.d/pcmcia", "line": 20}
+{"pattern": "RTL2832", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "utils/rtl-sdr/test.sh", "line": 7}
+{"pattern": "RTL2832", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "utils/rtl-sdr/test.sh", "line": 8}
+{"pattern": "RTL2832", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "utils/rtl-sdr/test.sh", "line": 9}
+{"pattern": "RTL2832", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "utils/rtl-sdr/test.sh", "line": 10}
+{"pattern": "RTL2832", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "utils/rtl-sdr/test.sh", "line": 11}
+{"pattern": "ADS-B", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "utils/rtl-sdr/test.sh", "line": 12}
+{"pattern": "RTL2832", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "utils/rtl-sdr/test.sh", "line": 13}
+{"pattern": "^$SANE_GROUP:", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": "extended"}, "file": "utils/sane-backends/files/saned.hotplug", "line": 6}
+{"pattern": "ENCRYPT_METHOD.*BCRYPT", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "utils/shadow/test.sh", "line": 20}
+{"pattern": "no changes|pwck:", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": "extended"}, "file": "utils/shadow/test.sh", "line": 42}
+{"pattern": "Last password change", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "utils/shadow/test.sh", "line": 62}
+{"pattern": "^GROUP=", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "utils/shadow/test.sh", "line": 72}
+{"pattern": "^root", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "utils/shadow/test.sh", "line": 82}
+{"pattern": "Login|Username|Failures", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "ere", "grep_mode": "extended"}, "file": "utils/shadow/test.sh", "line": 95}
+{"pattern": "$2", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "utils/smartmontools/test.sh", "line": 4}
+{"pattern": "$ver", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "utils/syncthing/test.sh", "line": 6}
+{"pattern": "Content-Type:\\ application\\", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "utils/ubnt-manager/files/ubnt-manager.sh", "line": 76}
+{"pattern": "Usage:", "flags": "", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "utils/usbutils/test.sh", "line": 15}
+{"pattern": "xfs_admin\\|usage", "flags": "i", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "utils/xfsprogs/test.sh", "line": 11}
+{"pattern": "xfs_db\\|usage", "flags": "i", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "utils/xfsprogs/test.sh", "line": 12}
+{"pattern": "xfs_growfs\\|usage", "flags": "i", "dialect": "posix-shell", "shell_flags": {"syntax": "bre", "grep_mode": "basic"}, "file": "utils/xfsprogs/test.sh", "line": 15}

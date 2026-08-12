@@ -1,4 +1,4 @@
-"""POSIX-shell compiler route: BRE→ERE normalize + pcre backend.
+r"""POSIX-shell compiler route: BRE→ERE normalize + pcre backend.
 
 Dialect ``posix-shell`` (ONE dialect — user decision 2026-08-12).  The
 BRE/ERE semantics fork is real and is carried in the record ``shell_flags``
@@ -21,8 +21,10 @@ Escape semantics are MACHINE-VERIFIED on GNU grep 3.11 + busybox 1.37
   (probe: ``grep 'a\\d'`` matches ``ad``, not ``a0``) — pcre would read
   ``\\d`` as a digit class, so the backslash is DROPPED to keep the two
   engines agreeing.
-- BRE ``\\(...\\)\\1`` backrefs → Unencodable("backref").  ERE has no
-  backrefs: ``\\1`` is the literal ``1`` (backslash dropped).
+- BRE ``\(...\)\1`` backrefs → Unencodable("backref").  ERE backrefs are
+  also rejected: GNU grep 3.11 AND busybox 1.37 support ``\1`` in ERE
+  (verified: ``grep -E '^(a)\1$'`` matches ``aa``) — the mirror fails
+  closed rather than rewrite the pattern into a different language.
 - grep ERE has no inline modifiers: ``(?i)`` warns ``? at start of
   expression`` and matches nothing; ``(?:`` warns and matches the literal
   text — a ``(?`` sequence in an ERE record is rejected
@@ -71,13 +73,56 @@ def _handle_escape(nxt: str, syntax: str, out: list[str]) -> None:
         out.append(nxt)
         return
     elif nxt in "123456789":
-        out.append(nxt)  # ERE has no backrefs: \1 = literal 1
-        return
+        # ERE backrefs: GNU grep 3.11 AND busybox 1.37 support `\1` in ERE
+        # (verified: `grep -E '^(a)\1$'` matches aa) — the old literal-drop
+        # rewrote the mirror into a DIFFERENT language (cumulative Reviewer
+        # B finding #1). Fail closed instead.
+        raise Unencodable("backref")
+    # independent of the syntax branches above — BRE falls through here too
     if nxt in _KEEP_IDENTICAL:
         out.append("\\")
         out.append(nxt)
     else:
         out.append(nxt)  # drop backslash — the literal char per grep
+
+
+def _has_inline_flag(pattern: str) -> bool:
+    """True when ``(?`` appears OUTSIDE a char class (the inline-flag guard,
+    cumulative review finding #3): ``[(?]`` is a valid ERE class matching
+    ``(`` or ``?`` — a substring test would falsely reject it.  Class scan
+    honors ``]`` as the FIRST class char (``[]]`` = a class of ``]``) and
+    skips backslash escapes (``\\(?`` is a literal paren + quantifier,
+    luna #276 finding #5)."""
+    i = 0
+    while i + 1 < len(pattern):
+        c = pattern[i]
+        if c == "\\":
+            i += 2  # escaped char — literal
+            continue
+        if c == "[":
+            # scan the class: `]` as the FIRST member is literal (after an
+            # optional `^` negation — luna #276 -r3 finding #5: `[^](?]`);
+            # close on the next ] OUTSIDE a nested [: :] POSIX class
+            j = i + 1
+            if j < len(pattern) and pattern[j] in "^]":
+                j += 1
+            if j < len(pattern) and pattern[j] == "]":
+                j += 1  # first-member ] is literal, not the close
+            while j < len(pattern):
+                if pattern[j] == "[" and j + 1 < len(pattern) and pattern[j + 1] == ":":
+                    # nested [: ... :] — skip to its closing :]
+                    k = pattern.find(":]", j + 2)
+                    j = k + 2 if k != -1 else len(pattern)
+                    continue
+                if pattern[j] == "]":
+                    break
+                j += 1
+            i = j + 1
+            continue
+        if c == "(" and pattern[i + 1] == "?":
+            return True
+        i += 1
+    return False
 
 
 def normalize_shell(pattern: str, syntax: str) -> str:
@@ -87,7 +132,7 @@ def normalize_shell(pattern: str, syntax: str) -> str:
     """
     if syntax not in ("bre", "ere", "bash_ksh"):
         syntax = "bre"  # documented default: missing/unknown -> BRE
-    if syntax in ("ere", "bash_ksh") and "(?" in pattern:
+    if syntax in ("ere", "bash_ksh") and _has_inline_flag(pattern):
         raise Unencodable("inline-flag-like")
     out: list[str] = []
     i, n = 0, len(pattern)

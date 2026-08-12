@@ -11,6 +11,7 @@ import pytest
 
 from regexproof.admission.author import (
     AuthorError,
+    assemble_decision,
     author_auto,
     author_human,
     emit_decision_text,
@@ -82,6 +83,25 @@ def test_go_new_surface_empty_buckets_refused():
             met={"new-surface"},
             evidence={"new-surface": "First-seen construct class X."},
             decision_date=date(2026, 8, 9),
+        )
+
+
+def test_go_new_surface_empty_buckets_refused_at_assemble():
+    """Cumulative finding #9 (defense-in-depth): the AC4 rule lives in the
+    SHARED builder — a DIRECT assemble_decision call (bypassing the CLI
+    authoring path) also fails closed."""
+    draft = load_probe_draft(WTFORMS_DRAFT)
+    draft["probe"]["predicted_buckets"] = {}
+    with pytest.raises(AuthorError, match="predicted_buckets"):
+        assemble_decision(
+            draft,
+            decision="go",
+            rationale="New surface at scale.",
+            conditions=[
+                {"id": "new-surface", "met": True, "evidence": "X."},
+                {"id": "security-boundary", "met": False, "evidence": "-"},
+                {"id": "large-under-saturated", "met": False, "evidence": "-"},
+            ],
         )
 
 

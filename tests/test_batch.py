@@ -270,15 +270,57 @@ def test_pr_dry_run_no_auto_publish(tmp_path: Path):
     assert art["would_open_public_upstream_issue"] is False
 
 
-def test_batch_runner_smoke(tmp_path: Path):
+def test_shell_posix_batch_includes_extensionless_shebang(tmp_path):
+    """luna #276 -r7 #3: the batch walk must include extensionless files
+    with a recognized shell shebang (the admission walker counts them)."""
+    from regexproof.batch.extract import _is_shell_script
+    from regexproof.batch.extractor_registry import registry_glob
+    from regexproof.batch.extract import extract_glob
+
+    root = tmp_path / "tree"
+    (root / "bin").mkdir(parents=True)
+    (root / "bin" / "service").write_text(
+        "#!/bin/sh\ngrep 'xya' /etc/passwd\n", encoding="utf-8")
+    (root / "bin" / "tool.sh").write_text(
+        "grep 'xyb' f\n", encoding="utf-8")
+    (root / "bin" / "zsh-job").write_text(
+        "#!/usr/bin/zsh\ngrep 'xyz' f\n", encoding="utf-8")
+    (root / "notes.txt").write_text("not shell\n", encoding="utf-8")
+
+    meta = {"repo": "t"}
+    recs = extract_glob(
+        root, meta, glob="**/*", file_filter=_is_shell_script,
+        extract_fn=lambda src, rel: [
+            {"pattern": "xy", "file": rel, "line": 1, "site": f"{rel}:1:1"}]
+        if "grep" in src else [],
+    )
+    files = {r["file"] for r in recs}
+    assert any(f.endswith("bin/service") for f in files)  # extensionless + shebang
+    assert any(f.endswith("bin/tool.sh") for f in files)  # normal .sh
+    # zsh shebang is NOT in the walker's exact allowlist — batch must agree
+    assert not any(f.endswith("bin/zsh-job") for f in files)
+    assert not any(f.endswith("notes.txt") for f in files)  # non-shell excluded
+    assert registry_glob("shell_posix", {"extractor": "shell_posix"})
+
+
+def test_batch_runner_smoke(tmp_path: Path, monkeypatch):
     out = tmp_path / "generated"
     # Admission gate: run_batch requires a committed decision artifact for
     # rule corpora (see tests/test_admission_gate.py). Copy the committed one.
-    from regexproof.batch.runner import ROOT as _ROOT
+    from regexproof.batch import runner as runner_mod
 
-    committed = _ROOT / "properties" / "generated" / "detect-secrets_gate_decision.json"
+    committed = runner_mod.ROOT / "properties" / "generated" / "detect-secrets_gate_decision.json"
     out.mkdir(parents=True, exist_ok=True)
     (out / committed.name).write_bytes(committed.read_bytes())
+    # Admitted-corpus fail-closed (luna #276 -r3 #1) + test isolation
+    # (luna #276 -r6 #5): point the manifest at a SCRATCH tree — the test
+    # must never write into or delete the repo's materialized corpus dir.
+    scratch = tmp_path / "detect-secrets" / "plugins"
+    scratch.mkdir(parents=True, exist_ok=True)
+    (scratch / "rules.py").write_text("SECRET = re.compile(r'[A-Z0-9]{20}')\n",
+                                      encoding="utf-8")
+    monkeypatch.setitem(runner_mod.CORPUS_MANIFESTS["detect-secrets"],
+                        "path", scratch)
     batch = run_batch(["detect-secrets"], out_dir=out, with_redos=False)
     assert "detect-secrets" in batch["corpora"]
     ndjson = (out / "detect-secrets.ndjson").read_text().strip().splitlines()

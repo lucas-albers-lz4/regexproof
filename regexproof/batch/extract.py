@@ -6,6 +6,7 @@ import sys
 from pathlib import Path
 from typing import Any
 
+from regexproof.admission.walk import _SHELL_SHEBANGS
 from regexproof.batch.extractor_registry import (
     EXTRACTORS,
     registry_glob,
@@ -88,6 +89,17 @@ def extract_corpus(corpus: str, meta: dict[str, Any]) -> list[dict[str, Any]]:
         "email_addresses",
     }:
         fn = EXTRACTORS[extractor]
+        if extractor == "shell_posix":
+            # the admission walker counts extensionless files with a
+            # recognized shell shebang — batch must match (luna #276 -r7
+            # finding #3): enumerate everything, admit by filter
+            return extract_glob(
+                path,
+                meta,
+                glob="**/*",
+                file_filter=_is_shell_script,
+                extract_fn=lambda src, rel: fn(src, rel, meta),
+            )
         return extract_glob(
             path,
             meta,
@@ -417,17 +429,41 @@ def extract_corpus(corpus: str, meta: dict[str, Any]) -> list[dict[str, Any]]:
     raise ValueError(meta["extractor"])
 
 
+def _is_shell_script(fp: Path) -> bool:
+    """shell_posix batch file filter — mirrors the admission walker's
+    `_is_shell_context` EXACTLY (luna #276 -r8 finding: the first version
+    substring-matched `sh` and wrongly admitted `#!/usr/bin/zsh`):
+    init.d path segment, known suffix, or extensionless file whose first
+    line is in the walker's exact shebang allowlist."""
+    if fp.suffix in (".sh", ".bash", ".init"):
+        return True
+    if any(p == "init.d" for p in fp.parts):
+        return True
+    if fp.suffix:
+        return False  # other extensions are not shell
+    try:
+        with fp.open("r", encoding="utf-8", errors="replace") as fh:
+            first = fh.readline(80).strip()
+    except OSError:
+        return False
+    return first in _SHELL_SHEBANGS
+
+
 def extract_glob(
     path: Path,
     meta: dict[str, Any],
     *,
     glob: str,
     extract_fn,
+    file_filter=None,
 ) -> list[dict[str, Any]]:
     """Deterministic directory walk: sorted paths, fixed order.
 
     ``glob`` may be a single pattern or a comma-separated list (brace-free),
-    e.g. ``**/*.yml,**/*.yaml``.
+    e.g. ``**/*.yml,**/*.yaml``.  ``file_filter`` (optional callable
+    Path→bool) further prunes matched files — used by shell_posix to admit
+    extensionless files with a recognized shell shebang (the admission
+    walker includes them; batch must match — luna #276 -r7 finding #3).
 
     Files larger than ``MAX_FILE_BYTES`` are skipped (counted on
     ``meta["skipped_oversized"]``). Symlinks are followed — detect-secrets
@@ -461,6 +497,8 @@ def extract_glob(
     seen: set[Path] = set()
     for fp in sorted(files, key=lambda p: str(p)):
         if fp in seen or not fp.is_file():
+            continue
+        if file_filter is not None and not file_filter(fp):
             continue
         seen.add(fp)
         try:

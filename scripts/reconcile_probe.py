@@ -72,7 +72,7 @@ def reconcile_per_file(
         delta = abs(p - n) / p if p else (1.0 if n else 0.0)
         over = delta > tolerance_pct / 100.0
         report[rel] = {"probe": p, "registered": n,
-                       "delta_pct": round(delta * 100.0, 2), "over": over}
+                       "delta_pct": round(delta * 100.0, 4), "over": over}
         if over:
             violations.append(rel)
     return report, violations

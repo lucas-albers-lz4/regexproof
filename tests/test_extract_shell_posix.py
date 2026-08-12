@@ -7,6 +7,8 @@ import json
 import jsonschema
 import pytest
 
+from regexproof.compiler.base import Unencodable
+from regexproof.compiler.posix_shell import normalize_shell
 from regexproof.extractors import shell_posix as sp
 from regexproof.extractors.record import make_record
 from regexproof.schemas import extractor_schema
@@ -229,3 +231,155 @@ def test_string_literal_still_suppressed():
     assert extract('echo "use grep \'x\'"') == []
     # a $( inside single quotes is literal
     assert extract("echo '$(grep \"nope\" f)'") == []
+
+
+# --- cumulative zen-MCR fold (wave #264 close-out review) --------------------
+
+def test_sed_E_is_extended_syntax():
+    """Cumulative finding #1: sed -E/-r switches to ERE — the mirror must
+    match the executing engine (GNU sed 4.x + busybox both support -E)."""
+    recs = extract("sed -E 's/[0-9]+//' f")
+    assert len(recs) == 1
+    assert recs[0]["pattern"] == "[0-9]+"
+    assert recs[0]["shell_flags"]["syntax"] == "ere"
+
+
+def test_grep_P_skipped():
+    """Cumulative finding #2: grep -P is PCRE-in-shell — the documented
+    false negative must actually skip (was recorded as BRE, contradicting
+    the docstring)."""
+    assert extract("grep -P '[0-9]+' f") == []
+
+
+def test_ere_class_with_question_paren_not_rejected():
+    """Cumulative finding #3: [(?] is a valid ERE char class — the inline-
+    flag guard must be class-aware (grep -E '[(?]' matches '(' and '?')."""
+    assert normalize_shell("[(?]", "ere") == "[(?]"
+    with pytest.raises(Unencodable):
+        normalize_shell("(?i)foo", "ere")
+
+
+def test_sed_escaped_delimiter_search():
+    r"""Cumulative finding #4: s/a\/b/c/ must yield the full search regex
+    a\/b (the old lazy scan truncated at the escaped delimiter)."""
+    recs = extract(r"sed 's/a\/b/c/' f")
+    assert len(recs) == 1
+    assert recs[0]["pattern"] == "a\\/b"
+    assert recs[0]["call_kind"] == "substitution"
+    recs = extract("sed 's/\\/usr\\/local/\\/opt/g' f")
+    assert len(recs) == 1
+    assert recs[0]["pattern"] == "\\/usr\\/local"
+
+
+def test_sed_unterminated_rejected():
+    """luna #276 -r6 #2: sed 's' and sed 's/foo/bar' (missing replacement
+    delimiter) are rejected by GNU sed AND busybox — not sites, no crash."""
+    assert extract("sed 's' f") == []
+    assert extract("sed 's/foo' f") == []
+    assert extract("sed 's/foo/bar' f") == []
+
+
+def test_grep_trailing_flags():
+    """luna #276 -r7 #1: flags AFTER the -e pattern still apply —
+    grep -e 'a.b' -F is fixed-string (literal, not a regex site) and
+    grep -e '(?i)foo' -P is skipped PCRE."""
+    assert extract("grep -e 'a.b' -F f") == []
+    assert extract("grep -e '(?i)foo' -P f") == []
+    # -E trailing still selects ERE
+    recs = extract("grep -e 'a.b' -E f")
+    assert len(recs) == 1
+    assert recs[0]["shell_flags"]["syntax"] == "ere"
+
+
+def test_mixed_heredoc_openers_sequential():
+    """luna #276 -r7 #2: `cat <<A <<'B'` — A is unquoted (LIVE: its
+    $(grep) executes) and B is quoted (blanked); B's body starts AFTER
+    A's terminator."""
+    src = ("cat <<A <<'B'\n"
+           "x=\"$(grep 'xy' f)\"\n"
+           "A\n"
+           "grep 'zzz'\n"
+           "B\n")
+    recs = extract(src)
+    assert [r["pattern"] for r in recs] == ["xy"]
+
+
+def test_heredoc_body_not_extracted():
+    """Cumulative finding #7: QUOTED heredoc bodies are DATA, not shell
+    code — cat <<'EOF' prints them literally; a grep inside is not a site."""
+    assert extract("cat <<'EOF'\ngrep 'never-executed'\nEOF\n") == []
+    # real code after the heredoc still extracts
+    recs = extract("cat <<'EOF'\ndata\ngrep 'body'\nEOF\ngrep 'real' f\n")
+    assert [r["pattern"] for r in recs] == ["real"]
+
+
+def test_heredoc_unquoted_body_is_live():
+    """luna #276 -r6 #1: an UNQUOTED delimiter (<<EOF) EXPANDS command
+    substitutions during heredoc processing — $(grep 'xy') in the body is a
+    REAL executed site (verified: bash runs the substitution). Pattern is
+    2+ chars (the P1-frozen min-length-2 filter drops single-char args)."""
+    recs = extract("cat <<EOF\nprintf '%s\\n' \"$(grep 'xy' f)\"\nEOF\n")
+    assert [r["pattern"] for r in recs] == ["xy"]
+
+
+def test_heredoc_double_quoted_delimiter_and_exact_terminator():
+    """luna #276 -r2: `<<\"EOF\"` is a valid opener, and the terminator must
+    be EXACTLY the delimiter — ` EOF ` (padded) does NOT terminate."""
+    assert extract('cat <<"EOF"\ngrep \'x\'\nEOF\n') == []
+    # padded terminator: the body extends (grep stays suppressed)
+    assert extract("cat <<'EOF'\ngrep 'x'\n EOF \nEOF\n") == []
+
+
+def test_heredoc_tab_terminator_with_dash_form():
+    assert extract("cat <<-EOF\n\tgrep 'x'\n\tEOF\n") == []
+
+
+def test_case_in_substitution_documented():
+    """Cumulative finding #6 is a DOCUMENTED limitation: case-pattern `)`
+    inside $(...) pops the substitution frame early (a full case parser is
+    out of scope for the labeled heuristic)."""
+    # the case body after `a)` is mis-tracked as string context — the
+    # docstring carries the limitation; assert the current (documented)
+    # behavior rather than an over-promise.
+    assert "case" in (sp._in_comment_or_string.__doc__ or "")
+
+
+def test_arithmetic_expansion_does_not_pop_substitution_frame():
+    """Cumulative Reviewer B #4: $((1+2)) arithmetic is NOT a substitution —
+    its `))` must not pop the enclosing $() frame (the grep after it is a
+    real site; quoted pattern per the extractor's documented contract)."""
+    src = 'x="$(echo $((1+2)); printf real | grep \'real\')"'
+    recs = extract(src)
+    assert [r["pattern"] for r in recs] == ["real"]
+    # standalone arithmetic inside a double-quoted string stays literal
+    assert extract('echo "$((1+2))"') == []
+
+
+def test_multiple_heredocs_per_line_sequential():
+    """luna #276 -r3 #4: `cat <<A <<B` — QUOTED bodies are SEQUENTIAL; the
+    second body's grep must not leak (bash -n accepts the script)."""
+    src = "cat <<'A' <<'B'\nbody-a\ngrep 'leak-a'\nA\nbody-b\ngrep 'leak-b'\nB\n"
+    assert extract(src) == []
+
+
+def test_nested_arithmetic_parens():
+    """luna #276 -r3 #6: $((1+(2*3))) — the inner `))` must not close the
+    arithmetic frame early; the grep after still extracts."""
+    src = 'x=$((1+(2*3))); printf real | grep \'real\''
+    recs = extract(src)
+    assert [r["pattern"] for r in recs] == ["real"]
+
+
+def test_subshell_inside_substitution():
+    """luna #276 -r6 #4: a balanced subshell `( ... )` inside $() must not
+    pop the substitution frame (verified: bash runs it)."""
+    src = 'x="$( (echo a); grep \'real\' f)"'
+    recs = extract(src)
+    assert [r["pattern"] for r in recs] == ["real"]
+
+
+def test_heredoc_escaped_and_dotted_delimiters():
+    """luna #276 -r6 #3: `<<\\EOF` behaves like a QUOTED heredoc (no
+    expansion — verified) and `<<'END.SQL'` is a valid dotted delimiter."""
+    assert extract("cat <<\\EOF\ngrep 'x'\nEOF\n") == []
+    assert extract("cat <<'END.SQL'\ngrep 'x'\nEND.SQL\n") == []

@@ -51,7 +51,7 @@ def test_probe_decision_records_shell_evidence():
     """The merged-draft evidence survived authoring (regex_sites + the
     _shell_evidence provenance recorded by merge-probe-draft)."""
     artifact = json.loads(PROBE_DECISION.read_text(encoding="utf-8"))
-    assert artifact["probe"]["regex_sites"] >= 700  # the 713-site feed count
+    assert artifact["probe"]["regex_sites"] >= 680  # 688-site fold-adjusted count
     assert "posix-shell" in artifact["probe"]["dialect"]
 
 

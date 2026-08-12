@@ -1,7 +1,7 @@
 {
   "candidate_url": "https://github.com/openwrt/packages",
   "corpus": "openwrt_packages",
-  "corpus_pin": "local",
+  "corpus_pin": "e99adbc49f7a11d0377c8135fe706c7757b9e68c",
   "draft": true,
   "fields_remaining": [
     "decision",
@@ -21,13 +21,18 @@
       },
       "records": 713
     },
-    "construct_counts": {},
+    "construct_counts": {
+      "(?i)": 39,
+      "posix-class": 17
+    },
     "dialect": {
       "posix-shell": 713
     },
     "extractor_errors": 0,
-    "flags": {},
-    "pin": "local",
+    "flags": {
+      "i": 39
+    },
+    "pin": "e99adbc49f7a11d0377c8135fe706c7757b9e68c",
     "predicted_buckets": {
       "inline-flag": 39,
       "posix-class": 17
@@ -143,7 +148,6 @@
       "net/modemmanager/files/usr/share/ModemManager/modemmanager.common": 4,
       "net/mosquitto/files/etc/init.d/mosquitto": 4,
       "net/mwan3/files/etc/init.d/mwan3": 2,
-      "net/mwan3/files/lib/mwan3/common.sh": 1,
       "net/mwan3/files/lib/mwan3/mwan3.sh": 24,
       "net/natmap/test.sh": 1,
       "net/nebula/files/nebula.init": 1,
@@ -205,7 +209,7 @@
       "net/uanytun/files/uanytun.init": 1,
       "net/unbound/files/unbound.sh": 2,
       "net/unbound/test.sh": 5,
-      "net/wg-installer/common/wg.sh": 4,
+      "net/wg-installer/common/wg.sh": 5,
       "net/wg-installer/wg-server/config/wgserver.init": 1,
       "net/wg-installer/wg-server/lib/wg_functions.sh": 1,
       "net/wifischedule/net/usr/bin/wifi_schedule.sh": 4,

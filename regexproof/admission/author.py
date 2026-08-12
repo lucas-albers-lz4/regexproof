@@ -117,6 +117,16 @@ def assemble_decision(
 
     probe = _probe_subset(dict(draft.get("probe") or {}))
     any_met = any(c.get("met") for c in conditions)
+    met_ids = {c.get("id") for c in conditions if c.get("met")}
+    # AC4 under-report rule (P3, cumulative review finding #9): enforced at
+    # the SHARED builder so author_human/author_auto AND any direct call all
+    # fail closed — go + new-surface with EMPTY predicted_buckets refuses.
+    if (decision == "go" and "new-surface" in met_ids
+            and not (probe.get("predicted_buckets") or {})):
+        raise AuthorError(
+            "go with condition new-surface requires NON-EMPTY "
+            "probe.predicted_buckets (AC4 under-report rule); "
+            "re-run merge-probe-draft.py or author triage-trial/no-go")
     basis = decision_basis
     if decision == "go" and not any_met:
         if basis not in {"grandfathered", "escape_hatch"}:
@@ -175,13 +185,6 @@ def author_human(
         raise AuthorError(f"unknown condition id(s): {sorted(unknown)}")
 
     probe = dict(draft.get("probe") or {})
-    buckets = probe.get("predicted_buckets") or {}
-    if decision == "go" and "new-surface" in met and not buckets:
-        raise AuthorError(
-            "go with condition new-surface requires NON-EMPTY "
-            "probe.predicted_buckets (AC4 under-report rule — enforced at "
-            "the tool, not by review); re-run merge-probe-draft.py, or "
-            "author triage-trial/no-go")
     if template:
         if template not in TEMPLATE_NAMES:
             raise TemplateError(f"unknown rationale template: {template!r}")

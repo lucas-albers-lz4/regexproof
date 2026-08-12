@@ -16,6 +16,8 @@ Semantics (verified on GNU grep 3.11 + busybox 1.37, 2026-08-12):
   ``sed -i`` is in-place editing, NOT caseless — never mapped to flags.
 - awk program text is skipped; ``awk '/re/'`` address forms and
   ``awk -F'ERE'`` field separators (spaced and glued) are extracted (ERE).
+  NOTE (cumulative review finding #11): the ``len<2`` filter drops 1-char
+  separators like ``-F ':'`` — a documented P1-frozen filter, not a bug.
 - ``[[ $x =~ PAT ]]`` extracts the UNQUOTED single-token RHS only (bash 3.2+:
   a quoted RHS is a literal string match, not a regex).  The LHS may be
   quoted (``[[ "$v" =~ ^[0-9]+$ ]]``).
@@ -49,6 +51,7 @@ _SHELL_CMD = re.compile(
     r"(?P<flags>(?:[ \t]+-[A-Za-z][A-Za-z0-9]*)*)"  # flag runs incl. separate flags
     r"[ \t]+(?P<e>-e[ \t]+|--regexp=[ \t]*)?"
     r"(?P<q>['\"])(?P<pat>.*?)(?P=q)"
+    r"(?P<tail>(?:[ \t]+-[A-Za-z][A-Za-z0-9]*)*)"  # TRAILING flags (luna -r7 #1)
 )
 _SHELL_BASH = re.compile(
     r"\[\[[ \t]+(?:\"[^\"]*\"|'[^']*'|[^ \t'\"]+)[ \t]+=~[ \t]+"
@@ -56,10 +59,147 @@ _SHELL_BASH = re.compile(
 )
 _SHELL_AWK_F = re.compile(r"(?<![A-Za-z0-9_\-])awk[ \t]+-F(?P<q>['\"])(?P<pat>.*?)(?P=q)")
 
-_SED_S = re.compile(r"^s(?P<d>[^A-Za-z0-9])(?P<search>.*?)(?P=d)")
-_SED_ADDR = re.compile(r"^/(?P<re>[^/]+)/")
+def _sed_search(pat: str) -> str | None:
+    """Search part of an ``s///`` substitution, honoring ``\\``-escaped
+    delimiters (cumulative review finding #4: the old lazy regex stopped at
+    the FIRST delimiter, truncating ``s/a\\/b/c/`` to ``a\\``).
+
+    ``pat`` is the raw quoted arg (e.g. ``s/a\\/b/c/``). Returns the raw
+    search text (backslash escapes preserved for the BRE/ERE normalize) or
+    None when the arg is not an s/// substitution.  Unterminated forms
+    (``sed 's'``, ``sed 's/foo'``) return None — GNU sed and busybox reject
+    them (luna #276 finding #3).
+    """
+    if len(pat) < 2 or not pat.startswith("s"):
+        return None
+    d = pat[1]
+    if d.isalnum() or d.isspace():
+        return None
+    out: list[str] = []
+    closed = False
+    i = 2
+    while i < len(pat):
+        c = pat[i]
+        if c == "\\" and i + 1 < len(pat):
+            out.append(c)
+            out.append(pat[i + 1])
+            i += 2
+            continue
+        if c == d:
+            closed = True
+            break
+        out.append(c)
+        i += 1
+    if not closed:
+        return None
+    # the REPLACEMENT must have its own closing delimiter: s/foo/bar is
+    # rejected by GNU sed AND busybox ("unterminated s command" — verified,
+    # luna #276 -r6 finding #2); scan the remainder escape-aware
+    i += 1
+    while i < len(pat):
+        if pat[i] == "\\" and i + 1 < len(pat):
+            i += 2
+            continue
+        if pat[i] == d:
+            return "".join(out)
+        i += 1
+    return None  # unterminated replacement
+
+
+def _sed_addr(pat: str) -> str | None:
+    """Regex of a ``/re/`` address form, honoring ``\\``-escaped
+    delimiters; None for numeric addresses/ranges and unterminated forms."""
+    if len(pat) < 2 or not pat.startswith("/"):
+        return None
+    out: list[str] = []
+    i = 1
+    while i < len(pat):
+        c = pat[i]
+        if c == "\\" and i + 1 < len(pat):
+            out.append(c)
+            out.append(pat[i + 1])
+            i += 2
+            continue
+        if c == "/":
+            return "".join(out)
+        out.append(c)
+        i += 1
+    return None  # unterminated — GNU sed and busybox reject it
 
 _FLAG_TOKEN = re.compile(r"-([A-Za-z][A-Za-z0-9]*)")
+
+_HEREDOC_OPEN = re.compile(
+    r"<<-?\s*(?:'([A-Za-z0-9_.-]+)'|\"([A-Za-z0-9_.-]+)\"|\\?([A-Za-z0-9_.-]+))")
+
+
+def _blank_heredoc_bodies(src: str) -> str:
+    """Blank heredoc body lines (cumulative review finding #7).
+
+    Heredoc bodies are DATA, not shell code: ``cat <<'EOF'`` prints them
+    literally; even an UNQUOTED delimiter (``<<EOF``) expands the body but
+    never EXECUTES its lines, so a ``grep 'x'`` inside a body is not a
+    site.  Line-oriented: an opener ``<<[-]?DELIM`` (quoted or not) blanks
+    every following line until a line whose stripped content is DELIM.
+
+    Body lines are replaced with SPACES (not removed) so every scan offset
+    stays aligned with the original source (luna #276 finding #1).  Openers
+    inside quoted strings/comments are ignored (guard re-use); the FIRST
+    opener on a line wins; the delimiter charset is ``[A-Za-z0-9_-]+``
+    (``EOF-1`` is a valid delimiter — luna finding #2).
+    """
+    lines = src.split("\n")
+    line_offsets: list[int] = []
+    acc = 0
+    for ln in lines:
+        line_offsets.append(acc)
+        acc += len(ln) + 1
+    i = 0
+    while i < len(lines):
+        line = lines[i]
+        openers = []
+        for m in _HEREDOC_OPEN.finditer(line):
+            # ignore openers inside quotes/comments on the ORIGINAL line
+            if not _in_comment_or_string(src, line_offsets[i] + m.start()):
+                openers.append(m)
+        # multiple openers on one line: `cat <<A <<B` — bodies are
+        # SEQUENTIAL (luna #276 -r3 finding #4): each opener's body runs
+        # until its own delimiter line
+        for open_m in openers:
+            delim = (open_m.group(1) or open_m.group(2)
+                     or open_m.group(3))
+            # quoted forms: 'EOF', "EOF", \EOF — pure data (blanked).
+            # UNQUOTED (<<EOF) EXPANDS substitutions — $(grep 'x') in the
+            # body is a REAL executed site, so those bodies stay live
+            # (luna #276 -r6 finding #1); plain-line false positives in
+            # unquoted bodies are a documented heuristic cost.
+            after = open_m.group(0).split("<<", 1)[1].lstrip("-\t ")
+            quoted = bool(open_m.group(1) or open_m.group(2)
+                          or after[:1] == "\\")
+            tab_ok = open_m.group(0).startswith("<<-")
+            if not quoted:
+                # unquoted body stays LIVE (expansions execute) — but still
+                # ADVANCE past its terminator so a FOLLOWING opener's body
+                # starts at the right line (mixed `cat <<A <<'B'` — luna
+                # #276 -r7 finding #2)
+                j = i + 1
+                while j < len(lines):
+                    if (lines[j].lstrip("\t") if tab_ok else lines[j]) == delim:
+                        break
+                    j += 1
+                i = j
+                continue
+            j = i + 1
+            while j < len(lines):
+                # terminator must be EXACTLY the delimiter (no .strip():
+                # ` EOF ` is NOT a valid terminator — luna #276 -r2 finding);
+                # only the <<- form allows leading TABS
+                if (lines[j].lstrip("\t") if tab_ok else lines[j]) == delim:
+                    break
+                lines[j] = " " * len(lines[j])  # keep offsets aligned
+                j += 1
+            i = j  # next opener's body starts after this terminator
+        i += 1
+    return "\n".join(lines)
 
 
 def _in_comment_or_string(src: str, pos: int) -> bool:
@@ -76,10 +216,15 @@ def _in_comment_or_string(src: str, pos: int) -> bool:
     open/close normally inside the substitution (P3 reconcile finding:
     the pre-fix guard suppressed every ``"$(cmd 'pat')"`` site — 80 phantom
     removals in the OpenWrt feed probe, e.g. golang-build.sh 6 real sites).
+    DOCUMENTED LIMITATION (cumulative review finding #6): a case-pattern
+    terminator ``a)`` inside ``$( ... )`` pops the substitution frame early
+    (the frame stack tracks ``(``/``)`` balance, not case-statement
+    structure) — a full case parser is out of scope for this heuristic;
+    such sites are undercounted.
     """
     line_start = src.rfind("\n", 0, pos) + 1
     quote: str | None = None  # None | "'" | '"'
-    frames: list[tuple[str, str | None]] = []  # (kind, saved quote) — sub/bt
+    frames: list[tuple[str, str | None, int]] = []  # (kind, saved quote, depth)
     i = line_start
     while i < pos:
         c = src[i]
@@ -94,34 +239,86 @@ def _in_comment_or_string(src: str, pos: int) -> bool:
             if c == '"':
                 quote = None
             elif c == "$" and i + 1 < pos and src[i + 1] == "(":
-                frames.append(("sub", quote))  # nested parse context
-                quote = None
-                i += 1  # consume "("
+                if i + 2 < pos and src[i + 2] == "(":
+                    # $(( arithmetic — NOT a substitution; its `))` must not
+                    # pop the outer $() frame (cumulative Reviewer B #4)
+                    frames.append(("arith", quote, 0))
+                    quote = None
+                    i += 2  # consume "(("
+                else:
+                    frames.append(("sub", quote, 0))  # nested parse context
+                    quote = None
+                    i += 1  # consume "("
             elif c == "`":
-                frames.append(("bt", quote))
+                frames.append(("bt", quote, 0))
                 quote = None
         elif frames and frames[-1][0] == "bt":
             if c == "`":
-                _, saved = frames.pop()
+                _, saved, _ = frames.pop()
                 quote = saved
             elif c in ("'", '"'):
                 quote = c  # substitution body is shell code
             elif c == "$" and i + 1 < pos and src[i + 1] == "(":
-                frames.append(("sub", quote))
-                quote = None
-                i += 1
+                if i + 2 < pos and src[i + 2] == "(":
+                    frames.append(("arith", quote, 0))
+                    quote = None
+                    i += 2
+                else:
+                    frames.append(("sub", quote, 0))
+                    quote = None
+                    i += 1
+            elif c == "#" and (i == line_start or src[i - 1] in " \t;|&(){}"):
+                return True
+        elif frames and frames[-1][0] == "arith":
+            # arithmetic body: close on `))` at the OUTER paren depth —
+            # nested expression parens must not close it early (luna #276
+            # -r3 finding #6: $((1+(2*3))) )
+            depth = frames[-1][2]
+            if c == "(":
+                frames[-1] = ("arith", frames[-1][1], depth + 1)
+            elif c == ")" and depth > 0:
+                frames[-1] = ("arith", frames[-1][1], depth - 1)
+            elif c == ")" and i + 1 < pos and src[i + 1] == ")":
+                _, saved, _ = frames.pop()
+                quote = saved
+                i += 1  # consume the second ")"
+            elif c == "$" and i + 1 < pos and src[i + 1] == "(":
+                if i + 2 < pos and src[i + 2] == "(":
+                    frames.append(("arith", quote, 0))
+                    quote = None
+                    i += 2
+                else:
+                    frames.append(("sub", quote, 0))
+                    quote = None
+                    i += 1
+            elif c in ("'", '"'):
+                quote = c
             elif c == "#" and (i == line_start or src[i - 1] in " \t;|&(){}"):
                 return True
         elif frames and frames[-1][0] == "sub":
-            if c == "$" and i + 1 < pos and src[i + 1] == "(":
-                frames.append(("sub", quote))
-                quote = None
-                i += 1
+            # paren-depth tracking (luna #276 -r6 finding #4): a SUBSHELL
+            # `( ... )` inside the substitution must not pop the $() frame
+            # (x="$( (echo); grep 'real' f)" — the (echo) ) is balanced);
+            # case-pattern `a)` terminators stay a documented limitation
+            depth = frames[-1][2]
+            if c == "(":
+                frames[-1] = ("sub", frames[-1][1], depth + 1)
+            elif c == ")" and depth > 0:
+                frames[-1] = ("sub", frames[-1][1], depth - 1)
             elif c == ")":
-                _, saved = frames.pop()  # restore outer quote context
+                _, saved, _ = frames.pop()  # restore outer quote context
                 quote = saved
+            elif c == "$" and i + 1 < pos and src[i + 1] == "(":
+                if i + 2 < pos and src[i + 2] == "(":
+                    frames.append(("arith", quote, 0))
+                    quote = None
+                    i += 2
+                else:
+                    frames.append(("sub", quote, 0))
+                    quote = None
+                    i += 1
             elif c == "`":
-                frames.append(("bt", quote))
+                frames.append(("bt", quote, 0))
                 quote = None
             elif c in ("'", '"'):
                 quote = c  # substitution body is shell code
@@ -130,11 +327,16 @@ def _in_comment_or_string(src: str, pos: int) -> bool:
         elif c in ("'", '"'):
             quote = c
         elif c == "$" and i + 1 < pos and src[i + 1] == "(":
-            frames.append(("sub", quote))
-            quote = None
-            i += 1  # consume "("
+            if i + 2 < pos and src[i + 2] == "(":
+                frames.append(("arith", quote, 0))
+                quote = None
+                i += 2
+            else:
+                frames.append(("sub", quote, 0))
+                quote = None
+                i += 1  # consume "("
         elif c == "`":
-            frames.append(("bt", quote))
+            frames.append(("bt", quote, 0))
             quote = None
         elif c == "#" and (i == line_start or src[i - 1] in " \t;|&(){}"):
             return True
@@ -171,6 +373,7 @@ def extract_shell_posix(
     """
     nl = [m.start() for m in re.finditer("\n", src)]
     hits: list[tuple[int, dict]] = []
+    scan_src = _blank_heredoc_bodies(src)  # bodies are DATA, not code (#7)
 
     def add(pos: int, pat: str, flags: str, shell_flags: dict,
             call_kind: str, snippet: str) -> None:
@@ -193,12 +396,16 @@ def extract_shell_posix(
         )
         hits.append((pos, rec))
 
-    for m in _SHELL_CMD.finditer(src):
+    for m in _SHELL_CMD.finditer(scan_src):
         cmd, pat = m.group("cmd"), m.group("pat")
         if not pat:
             continue
-        letters = _flag_letters(m.group("flags"))
+        letters = (_flag_letters(m.group("flags"))
+                   + _flag_letters(m.group("tail")))
         if cmd in ("grep", "egrep", "fgrep"):
+            if "P" in letters:
+                continue  # grep -P = PCRE-in-shell — documented false
+                # negative (rebranched to a follow-on PCRE stream)
             mode = _grep_mode(cmd, letters)
             if mode == "fixed":
                 continue  # fgrep / grep -F take LITERALS, not regexes
@@ -208,38 +415,42 @@ def extract_shell_posix(
             add(m.start(), pat, flags, shell_flags, "search",
                 src[m.start():m.end()])
         elif cmd == "sed":
+            # -E/-r switch sed to ERE (GNU sed 4.x + busybox both support
+            # -E; the mirror must match the executing engine, cumulative
+            # review finding #1)
+            sed_syntax = "ere" if ("E" in letters or "r" in letters) else "bre"
             # s/// = substitution; /re/ address form = search
-            sm = _SED_S.match(pat)
-            if sm:
-                add(m.start(), sm.group("search"), "",
-                    {"syntax": "bre", "grep_mode": "basic"},
+            search = _sed_search(pat)
+            if search is not None:
+                add(m.start(), search, "",
+                    {"syntax": sed_syntax, "grep_mode": "basic"},
                     "substitution", src[m.start():m.end()])
                 continue
-            addr = _SED_ADDR.match(pat)
+            addr = _sed_addr(pat)
             if not addr:
                 continue  # numeric address / range — not a regex
-            add(m.start(), addr.group("re"), "",
-                {"syntax": "bre", "grep_mode": "basic"},
+            add(m.start(), addr, "",
+                {"syntax": sed_syntax, "grep_mode": "basic"},
                 "search", src[m.start():m.end()])
         else:  # awk
             if "F" in letters:
                 # -F 'ERE' — the quoted arg is the field-separator regex
                 pass
             elif pat.startswith("/"):
-                am = _SED_ADDR.match(pat)
+                am = _sed_addr(pat)
                 if not am:
                     continue
-                pat = am.group("re")
+                pat = am
             else:
                 continue  # awk program text is not a regex literal
             add(m.start(), pat, "", {"syntax": "ere", "grep_mode": None},
                 "search", src[m.start():m.end()])
 
-    for m in _SHELL_AWK_F.finditer(src):
+    for m in _SHELL_AWK_F.finditer(scan_src):
         add(m.start(), m.group("pat"), "", {"syntax": "ere", "grep_mode": None},
             "search", src[m.start():m.end()])
 
-    for m in _SHELL_BASH.finditer(src):
+    for m in _SHELL_BASH.finditer(scan_src):
         add(m.start(), m.group("pat"), "", {"syntax": "bash_ksh",
                                             "grep_mode": None},
             "search", src[m.start():m.end()])

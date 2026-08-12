@@ -28,7 +28,7 @@ def test_plan_denominator_probe_undercount_fails():
     m = _load_cli()
     report, violations = m.reconcile_per_file(
         {"a.sh": 90}, {"a.sh": 100}, tolerance_pct=10.0)
-    assert report["a.sh"]["delta_pct"] == 11.11
+    assert report["a.sh"]["delta_pct"] == 11.1111
     assert report["a.sh"]["over"] is True
     assert violations == ["a.sh"]
 
@@ -37,7 +37,7 @@ def test_plan_denominator_within_tolerance_passes():
     m = _load_cli()
     report, violations = m.reconcile_per_file(
         {"a.sh": 95}, {"a.sh": 100}, tolerance_pct=10.0)
-    assert report["a.sh"]["delta_pct"] == 5.26
+    assert report["a.sh"]["delta_pct"] == 5.2632
     assert violations == []
 
 
@@ -91,3 +91,15 @@ def test_cli_exit_status_and_report_persistence(tmp_path):
                  "--now-ndjson", str(tmp_path / "n2.ndjson"),
                  "--tolerance-pct", "10", "-o", str(tmp_path / "r2.json")])
     assert rc == 0
+
+
+def test_delta_pct_four_decimals_disambiguates_threshold():
+    """Cumulative Reviewer B #8 (NIT): 20001 vs 22002 is 10.0045% — the
+    4-decimal report shows the exact delta next to over:true (2 decimals
+    showed a contradictory 10.0)."""
+    m = _load_cli()
+    report, violations = m.reconcile_per_file(
+        {"a.sh": 20001}, {"a.sh": 22002}, tolerance_pct=10.0)
+    assert report["a.sh"]["delta_pct"] == 10.0045
+    assert report["a.sh"]["over"] is True
+    assert violations == ["a.sh"]
