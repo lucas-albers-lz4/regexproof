@@ -56,7 +56,9 @@ with regex_id/site/column/schema_version).
   code = the P(compiles) distribution). 2,878 regex sites / 2,025 distinct
   (exact) / 2,004 (canonicalized) at first measure; a re-run showed 2,876 /
   2,023 — a 2-site drift from working-tree changes in the dogfooding repos,
-  which is evidence that snapshots must PIN state (see P1 AC2).
+  which is evidence that snapshots must PIN state (see P1 AC2). The
+  P1-frozen snapshot (post-precision-guard fixes) reports 2,857 / 2,008 /
+  1,990 — the authoritative current numbers.
 - Singleton fraction 0.984 (convenience-sample estimate — pooled distinct
   singleton fraction, NOT a formal Good-Turing estimator; see P1 Step 4) —
   the P(compiles) curve is still deep in the steep region at n=4; the ~20–50
@@ -67,9 +69,10 @@ with regex_id/site/column/schema_version).
   `untrusted comment:`, `listen_https` shared between fwlive + usrmanage
   (both OpenWrt); nothing shared with happycow/hermes-agent. Closure holds
   only within a dialect family, matching the corpus-side finding.
-- Shell surface: 292 sites (10% of dogfooding) extracted by a LABELED
-  heuristic scanner because no shell extractor exists. The OpenWrt admission
-  argument has a number attached.
+- Shell surface: 273 sites (9.6% of dogfooding) extracted by a LABELED
+  heuristic scanner (frozen at P1, PR #259 — the pre-fix heuristic count
+  was 292; the P1 precision guards removed the phantoms) because no shell
+  extractor exists. The OpenWrt admission argument has a number attached.
 - Heuristic scanner bugs found during development and review (all fixed in
   this plan's P1): re.VERBOSE stripped literal spaces in flag runs; `[[ =~ ]]`
   matched only QUOTED RHS while bash 3.2+ treats unquoted RHS as the regex
@@ -243,7 +246,7 @@ standard gates) pass.
    under the `file_lists` key; byte-identical on rerun against the same
    pins (verifiable: rerun + sha256 diff); script refuses to snapshot when
    a repo HEAD != recorded SHA.
-3. `docs/why.md` carries the shell-gap finding with the 292-site number and
+3. `docs/why.md` carries the shell-gap finding with the frozen 273-site number and
    the GT figures labeled as convenience-sample estimates.
 4. The 3 known `[[ =~ ]]` sites (`^[Yy]$` x2, `^[0-9]+$`) appear in the
    extraction output with the `bash_ksh` provenance field.
@@ -428,9 +431,9 @@ wc -l` recorded and every caller's args checked against the typed signature
 `.sh`/`.init` files yields non-zero `regex_sites`).
 
 **ACs (falsifiable):**
-1. **Recall:** registered extractor extracts ≥280 of the 292 heuristic shell
-   sites on the usrmanage+fwlive slice. Denominator = the frozen per-file
-   site counts (`site_counts_per_file`) in the P1 snapshot, measured per
+1. **Recall:** registered extractor extracts ≥262 of the 273 frozen heuristic
+   shell sites (96% — the P1-frozen per-file
+   site counts (`site_counts_per_file`), measured per
    file; gaps documented per file.
 2. **Precision:** on a hand-labeled 50-file sample drawn from the frozen P1
    `file_lists`, precision ≥ 90%. The draw is REPRODUCIBLE: GNU `shuf`
