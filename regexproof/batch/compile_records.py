@@ -18,6 +18,7 @@ from regexproof.batch.negation_policy import (
 from regexproof.compiler import compile_pattern
 from regexproof.compiler.normalize import normalize_inline_flags
 
+
 def compile_records(
     records: list[dict[str, Any]],
     *,
@@ -75,6 +76,7 @@ def compile_records(
                 rec["dialect"],
                 rec["call_kind"],
                 domain=rec.get("domain") or "ascii",
+                shell_flags=rec.get("shell_flags"),
             )
         except MemoryError as exc:
             raise BudgetBreached(
