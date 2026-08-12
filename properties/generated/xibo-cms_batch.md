@@ -1,7 +1,7 @@
 ---
 schema_version: "1"
 corpus: xibo-cms
-findings: 12
+findings: 11
 ---
 
 # xibo-cms batch findings
@@ -164,39 +164,6 @@ site: "batch/corpora/xibo-cms/rules/ui/src/helpers/date-format-helper.js:4:20"
 
 ```json
 {"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
-```
-
-### Witness
-
-```json
-null
-```
-
-### Ground-truth
-
-None
-
-## intent_mismatch:bdc4999c952a6eb3467bdb2f52572b6e:email
-
-```yaml
-regex_id: bdc4999c952a6eb3467bdb2f52572b6e
-schema_version: "1"
-kind: intent_mismatch
-corpus: xibo-cms
-shape: null
-result: finding
-disclosure: null
-site: "batch/corpora/xibo-cms/rules/frontend/src/components/help/FeedbackForm.tsx:42:17"
-```
-
-### Pattern
-
-`^[^\s@]+@[^\s@]+\.[^\s@]+$`
-
-### Context
-
-```json
-{"admitted_char": "' '", "keyword": "email", "reason": "name/comment claims validation but pattern admits excluded char"}
 ```
 
 ### Witness

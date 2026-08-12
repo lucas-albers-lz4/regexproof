@@ -14,28 +14,27 @@
   "decision": "go",
   "decision_rule": "go iff encodable/sample_size >= 0.3",
   "dialect": "ecma",
-  "encodable": 31,
+  "encodable": 29,
   "engine_versions": {
     "python": "3.13.5",
     "z3": "5.0.0"
   },
   "extractor_schema_version": "2",
-  "fraction": 0.4697,
+  "fraction": 0.4394,
   "go_no_go_threshold": 0.3,
   "id_formula": "v2-domain-optional-ascii-default",
   "inventory_path": "properties/generated/xibo-cms-inventory.ndjson",
   "path": "batch/corpora/xibo-cms/rules",
   "pilot": "xibo-cms",
   "reasons": {
-    "composite-pattern": 3,
-    "ok": 31,
+    "composite-pattern": 4,
+    "ok": 29,
     "per-alternative-anchor": 1,
-    "stateful": 30,
-    "unclosed-group": 1
+    "stateful": 32
   },
   "sample_size": 66,
   "schema_version": "1",
   "scope": "full_corpus",
   "unclassified_parse_errors": 0,
-  "wall_s": 2.637
+  "wall_s": 2.503
 }
