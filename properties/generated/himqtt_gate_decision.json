@@ -1,0 +1,53 @@
+{
+  "candidate_url": "https://github.com/qq4108863/himqtt",
+  "conditions": [
+    {
+      "evidence": "Dialects already covered. qq4108863 MQTT broker (hihttps author's sibling project); deterministic-true; 87 pcre sites. IoT broker on trust boundary.",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary=deterministic-true.",
+      "id": "security-boundary",
+      "met": true
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "himqtt",
+  "corpus_pin": "77d53aa41dfacbe088127cca6e0332f139893edd",
+  "decision": "triage-trial",
+  "decision_basis": "escape_hatch",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": true,
+  "probe": {
+    "construct_counts": {
+      "(?i)": 71,
+      "backref": 5,
+      "lookaround": 16
+    },
+    "dialect": {
+      "pcre": 87
+    },
+    "flags": {},
+    "pin": "77d53aa41dfacbe088127cca6e0332f139893edd",
+    "predicted_buckets": {
+      "backref": 5,
+      "inline-flag": 71,
+      "lookaround": 16
+    },
+    "regex_sites": 87,
+    "regex_sites_per_file": {
+      "rules/REQUEST-20-APPLICATION-BRUTE-DDOS.conf": 2,
+      "rules/REQUEST-932-APPLICATION-ATTACK-RCE.conf": 13,
+      "rules/REQUEST-941-APPLICATION-ATTACK-XSS.conf": 26,
+      "rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf": 46
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Security-boundary corpus (boundary=deterministic-true) with findings-triage potential; 87 sites across [pcre:87].",
+  "schema_version": "1"
+}

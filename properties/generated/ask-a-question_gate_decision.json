@@ -1,0 +1,46 @@
+{
+  "candidate_url": "https://github.com/IDinsight/ask-a-question",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. IDinsight; 5 ecma/py sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "ask-a-question",
+  "corpus_pin": "d7fec0c7da4ac0c0d2468dc19efffa7b31b4f33f",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 1,
+      "py_re": 4
+    },
+    "flags": {},
+    "pin": "d7fec0c7da4ac0c0d2468dc19efffa7b31b4f33f",
+    "predicted_buckets": {},
+    "regex_sites": 5,
+    "regex_sites_per_file": {
+      "admin_app/src/app/content/edit/page.tsx": 1,
+      "core_backend/app/docmuncher/routers.py": 1,
+      "core_backend/app/docmuncher/utils.py": 2,
+      "core_backend/app/llm_call/llm_prompts.py": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 5 regex sites (auto-NO-GO bar 200); dialects [ecma:1, py_re:4]; boundary=unknown.",
+  "schema_version": "1"
+}

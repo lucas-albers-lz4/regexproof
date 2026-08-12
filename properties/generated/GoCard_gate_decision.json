@@ -1,0 +1,45 @@
+{
+  "candidate_url": "https://github.com/DavidMiserak/GoCard",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. DavidMiserak; 7 shell/re2 sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "GoCard",
+  "corpus_pin": "56ef204f41d3ae6309b4d6250edb5e61a3e453e5",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "posix-shell": 3,
+      "re2": 4
+    },
+    "flags": {},
+    "pin": "56ef204f41d3ae6309b4d6250edb5e61a3e453e5",
+    "predicted_buckets": {},
+    "regex_sites": 7,
+    "regex_sites_per_file": {
+      "internal/data/markdown_writer.go": 1,
+      "internal/data/store.go": 3,
+      "scripts/generate_coverage_report.sh": 3
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 7 regex sites (auto-NO-GO bar 200); dialects [posix-shell:3, re2:4]; boundary=unknown.",
+  "schema_version": "1"
+}

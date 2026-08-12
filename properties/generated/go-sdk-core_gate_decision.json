@@ -1,0 +1,49 @@
+{
+  "candidate_url": "https://github.com/IBM/go-sdk-core",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. IBM Go SDK; 6 re2 sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "go-sdk-core",
+  "corpus_pin": "38360141bd2baea38db189b204e98846f7d22daf",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "(?m)": 1,
+      "(?s)": 1
+    },
+    "dialect": {
+      "re2": 6
+    },
+    "flags": {},
+    "pin": "38360141bd2baea38db189b204e98846f7d22daf",
+    "predicted_buckets": {
+      "inline-flag": 1,
+      "m-flag": 1
+    },
+    "regex_sites": 6,
+    "regex_sites_per_file": {
+      "core/base_service.go": 4,
+      "core/utils.go": 2
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 6 regex sites (auto-NO-GO bar 200); dialects [re2:6]; boundary=unknown.",
+  "schema_version": "1"
+}

@@ -1,0 +1,119 @@
+{
+  "candidate_url": "https://github.com/DavidROliverBA/ArchitectKB",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. DavidROliverBA knowledge base; 567 ecma sites < 1000, not security (classifier false positive).",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "ArchitectKB",
+  "corpus_pin": "c3232578aa1dbf3ae136059b48d6b045a45032c3",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "backref": 9,
+      "lookaround": 21
+    },
+    "dialect": {
+      "ecma": 529,
+      "posix-shell": 1,
+      "py_re": 37
+    },
+    "flags": {
+      "g": 157,
+      "i": 80,
+      "m": 12,
+      "s": 6,
+      "u": 27
+    },
+    "pin": "c3232578aa1dbf3ae136059b48d6b045a45032c3",
+    "predicted_buckets": {
+      "backref": 9,
+      "inline-flag": 86,
+      "lookaround": 21,
+      "m-flag": 12,
+      "stateful": 157,
+      "u-flag": 27
+    },
+    "regex_sites": 567,
+    "regex_sites_per_file": {
+      ".claude/hooks/bash-safety.py": 2,
+      ".claude/hooks/file-protection.py": 1,
+      ".claude/hooks/filename-convention-checker.py": 4,
+      ".claude/hooks/frontmatter-validator.py": 2,
+      ".claude/hooks/graph-search-hint.sh": 1,
+      ".claude/hooks/secret-file-scanner.py": 1,
+      ".claude/hooks/skill-rename-guard.py": 2,
+      ".claude/hooks/tag-taxonomy-enforcer.py": 4,
+      ".claude/hooks/validators/validate_file_contains.py": 1,
+      ".claude/hooks/validators/validate_frontmatter.py": 2,
+      ".claude/hooks/wiki-link-checker.py": 1,
+      ".claude/scripts/add-person-aliases.py": 2,
+      ".claude/scripts/add-skill-descriptions.py": 3,
+      ".claude/scripts/add-skill-model.py": 1,
+      ".claude/scripts/analyze_metadata.js": 2,
+      ".claude/scripts/build-semantic-neighbors.js": 2,
+      ".claude/scripts/csv-to-markdown.js": 11,
+      ".claude/scripts/csv-to-sqlite.js": 8,
+      ".claude/scripts/embeddings/build-index.js": 4,
+      ".claude/scripts/embeddings/similarity.js": 1,
+      ".claude/scripts/embeddings/update-index.js": 4,
+      ".claude/scripts/find_duplicates.py": 5,
+      ".claude/scripts/generate-graph-enhanced.js": 16,
+      ".claude/scripts/graph-analysis/cross-project-patterns.js": 7,
+      ".claude/scripts/graph-analysis/index.js": 1,
+      ".claude/scripts/graph-analysis/tag-correlation.js": 1,
+      ".claude/scripts/graph-analysis/unlinked-mentions.js": 6,
+      ".claude/scripts/graph-pipeline.js": 1,
+      ".claude/scripts/graph-query.js": 26,
+      ".claude/scripts/graph-view.js": 2,
+      ".claude/scripts/graph-watcher.js": 2,
+      ".claude/scripts/health-check.js": 3,
+      ".claude/scripts/memory-prune.js": 1,
+      ".claude/scripts/memory-search.js": 4,
+      ".claude/scripts/outline.js": 3,
+      ".claude/scripts/pptx_extract_template.py": 3,
+      ".claude/scripts/refactor_tags.py": 1,
+      ".claude/scripts/semantic-search.js": 4,
+      ".claude/scripts/task-query.js": 4,
+      ".claude/scripts/validate.js": 3,
+      ".claude/scripts/vault-graph-builder.js": 6,
+      ".claude/scripts/vault-to-sqlite.js": 6,
+      ".claude/tools/boxes-cli/bin/boxes.mjs": 3,
+      ".claude/tools/boxes-cli/src/parse.mjs": 1,
+      ".claude/tools/boxes-cli/src/render-svg.mjs": 6,
+      ".claude/tools/boxes-cli/test/render.test.mjs": 1,
+      ".obsidian/plugins/dataview/main.js": 152,
+      ".obsidian/plugins/terminal/main.js": 176,
+      "scripts/analyze_metadata.js": 2,
+      "scripts/analyze_metadata.py": 1,
+      "scripts/check_broken_links.py": 1,
+      "scripts/generate-graph-enhanced.js": 16,
+      "scripts/generate-graph.js": 4,
+      "scripts/graph-query.js": 23,
+      "scripts/graph-watcher.js": 2,
+      "scripts/health-check.js": 3,
+      "scripts/migrate-to-bitwarden.cjs": 2,
+      "scripts/tests/test-vault-to-sqlite.cjs": 1,
+      "scripts/validate.js": 3,
+      "scripts/vault-to-sqlite.js": 6
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 567 regex sites (auto-NO-GO bar 200); dialects [ecma:529, posix-shell:1, py_re:37]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

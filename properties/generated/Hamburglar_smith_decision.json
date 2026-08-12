@@ -1,0 +1,17 @@
+{
+  "schema_version": "1",
+  "corpus": "Hamburglar",
+  "corpus_pin": "87cec6a57add4bd487df37e80f04559555c1b01c",
+  "candidate_url": "https://github.com/needmorecowbell/Hamburglar",
+  "smith_decision": "no-go",
+  "supersedes": "triage-trial",
+  "reason": "Hamburglar is a secret/recon scanner (collects info from urls/dirs/files). Pattern surface: 22 dict-literal secret patterns in src/hamburglar/detectors/regex_detector.py (AWS keys, GitHub tokens, RSA private keys - the gitleaks class) + 143 yara rules across 19 files (1,973 lines, mostly string-match malware-signature rules). The probe undercounts (8 sites: 5 py_re + 3 yara) because patterns are dict literals, not re.compile() calls, and yara rules are string-based. The secret-detection pattern class is already covered by FOUR admitted corpora: gitleaks (0.819), detect-secrets (0.372), noseyparker, shhgit. The yara string rules are the yara_rules/ail-yara-rules class. No novel dialect, no new construct class, no findings-pipeline surface beyond the admitted duplicate classes. Duplicate class -> no-go; tiny surface, extractor-blind patterns, zero novel value.",
+  "regex_sites": 8,
+  "sites_by_bucket": {
+    "py_re dict-literal secret patterns (grep, extractor-blind)": 22,
+    "yara rules (19 files, 143 rules, string-match)": 143
+  },
+  "additional_surface_outside_probe_scope": {
+    "src/hamburglar/detectors/regex_detector.py DEFAULT_PATTERNS": 22
+  }
+}

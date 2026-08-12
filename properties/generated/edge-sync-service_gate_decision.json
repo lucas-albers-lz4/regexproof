@@ -1,0 +1,43 @@
+{
+  "candidate_url": "https://github.com/open-horizon/edge-sync-service",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. open-horizon edge sync; 3 re2 sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "edge-sync-service",
+  "corpus_pin": "53869b3d9ca2eb361f015c3b869b245132bb0815",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "re2": 3
+    },
+    "flags": {},
+    "pin": "53869b3d9ca2eb361f015c3b869b245132bb0815",
+    "predicted_buckets": {},
+    "regex_sites": 3,
+    "regex_sites_per_file": {
+      "common/common.go": 2,
+      "core/communications/httpCommunication.go": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 3 regex sites (auto-NO-GO bar 200); dialects [re2:3]; boundary=unknown.",
+  "schema_version": "1"
+}

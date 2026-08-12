@@ -1,0 +1,64 @@
+{
+  "candidate_url": "https://github.com/dmytro-yemelianov/raps",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. dmytro-yemelianov; 33 sites < 200 scale flag.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "raps",
+  "corpus_pin": "17efff15b5b6315f0def2178b0be972d3f355948",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 24,
+      "posix-shell": 6,
+      "py_re": 3
+    },
+    "flags": {
+      "g": 15,
+      "i": 2
+    },
+    "pin": "17efff15b5b6315f0def2178b0be972d3f355948",
+    "predicted_buckets": {
+      "inline-flag": 2,
+      "stateful": 15
+    },
+    "regex_sites": 33,
+    "regex_sites_per_file": {
+      "install.sh": 4,
+      "npm/scripts/postinstall.js": 1,
+      "npm/src/index.js": 1,
+      "scripts/add-md-extensions.py": 1,
+      "scripts/fix-jekyll-links.py": 1,
+      "scripts/fix-relative-links.py": 1,
+      "scripts/use-cases/pdm-admin/user-offboarding.sh": 1,
+      "scripts/use-cases/pdm-admin/user-onboarding.sh": 1,
+      "workers/device-auth/src/durable/DeviceSession.js": 1,
+      "workers/device-auth/src/index.js": 6,
+      "workers/rapscli-api/src/github.js": 1,
+      "workers/rapscli-api/src/urn.js": 9,
+      "workers/url-shortener/src/redirect.ts": 3,
+      "workers/webhook-gateway/src/hmac.js": 1,
+      "workers/webhook-gateway/src/index.js": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 33 regex sites (auto-NO-GO bar 200); dialects [ecma:24, posix-shell:6, py_re:3]; boundary=unknown.",
+  "schema_version": "1"
+}

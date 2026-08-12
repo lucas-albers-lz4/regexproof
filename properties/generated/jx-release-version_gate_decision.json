@@ -1,0 +1,46 @@
+{
+  "candidate_url": "https://github.com/jenkins-x-plugins/jx-release-version",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. jenkins-x; 6 re2 sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "jx-release-version",
+  "corpus_pin": "0e3a4ba38e9bc3068fc51f134f7f2dff075b8f61",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "re2": 6
+    },
+    "flags": {},
+    "pin": "0e3a4ba38e9bc3068fc51f134f7f2dff075b8f61",
+    "predicted_buckets": {},
+    "regex_sites": 6,
+    "regex_sites_per_file": {
+      "pkg/strategy/fromfile/automake.go": 1,
+      "pkg/strategy/fromfile/cmake.go": 1,
+      "pkg/strategy/fromfile/gradle.go": 1,
+      "pkg/strategy/fromfile/python.go": 2,
+      "pkg/strategy/semantic/semantic.go": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 6 regex sites (auto-NO-GO bar 200); dialects [re2:6]; boundary=unknown.",
+  "schema_version": "1"
+}

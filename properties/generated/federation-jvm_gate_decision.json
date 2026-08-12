@@ -1,0 +1,42 @@
+{
+  "candidate_url": "https://github.com/apollographql/federation-jvm",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. apollographql JVM federation; 1 java site - Java deferred #150.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "federation-jvm",
+  "corpus_pin": "eb25c5d125f1dd9e69cd359886ad70f28eda1fcc",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "java": 1
+    },
+    "flags": {},
+    "pin": "eb25c5d125f1dd9e69cd359886ad70f28eda1fcc",
+    "predicted_buckets": {},
+    "regex_sites": 1,
+    "regex_sites_per_file": {
+      "graphql-java-support/src/main/java/com/apollographql/federation/graphqljava/directives/LinkDirectiveProcessor.java": 1
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 1 regex sites (auto-NO-GO bar 200); dialects [java:1]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

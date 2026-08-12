@@ -1,0 +1,52 @@
+{
+  "candidate_url": "https://github.com/tsvikas/sync-with-uv",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. tsvikas uv sync tool; 9 py_re sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "sync-with-uv",
+  "corpus_pin": "27f1d396fb0b29ed36dbb0b3b3989af747abad61",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "backref": 2,
+      "lookaround": 1
+    },
+    "dialect": {
+      "py_re": 9
+    },
+    "flags": {
+      "x": 2
+    },
+    "pin": "27f1d396fb0b29ed36dbb0b3b3989af747abad61",
+    "predicted_buckets": {
+      "backref": 2,
+      "inline-flag": 2,
+      "lookaround": 1
+    },
+    "regex_sites": 9,
+    "regex_sites_per_file": {
+      "src/sync_with_uv/dependency_line.py": 5,
+      "src/sync_with_uv/sync_with_uv.py": 4
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 9 regex sites (auto-NO-GO bar 200); dialects [py_re:9]; boundary=unknown.",
+  "schema_version": "1"
+}

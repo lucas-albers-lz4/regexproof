@@ -1,0 +1,53 @@
+{
+  "candidate_url": "https://github.com/IBM-Cloud/ibm-cloud-cli-sdk",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. IBM Cloud CLI SDK; 14 sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "ibm-cloud-cli-sdk",
+  "corpus_pin": "b7c302991f5f1d3c898bb2cb2963f8ecc7ad8f1b",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "(?i)": 2,
+      "(?m)": 1
+    },
+    "dialect": {
+      "posix-shell": 3,
+      "re2": 11
+    },
+    "flags": {},
+    "pin": "b7c302991f5f1d3c898bb2cb2963f8ecc7ad8f1b",
+    "predicted_buckets": {
+      "inline-flag": 2,
+      "m-flag": 1
+    },
+    "regex_sites": 14,
+    "regex_sites_per_file": {
+      "bluemix/terminal/color.go": 1,
+      "bluemix/trace/trace.go": 3,
+      "plugin/plugin_metadata_validator.go": 7,
+      "utils/new-command.sh": 1,
+      "utils/setup-project.sh": 2
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 14 regex sites (auto-NO-GO bar 200); dialects [posix-shell:3, re2:11]; boundary=unknown.",
+  "schema_version": "1"
+}

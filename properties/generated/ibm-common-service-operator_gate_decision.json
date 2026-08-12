@@ -1,0 +1,46 @@
+{
+  "candidate_url": "https://github.com/IBM/ibm-common-service-operator",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. IBM operator; 18 shell/re2 sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "ibm-common-service-operator",
+  "corpus_pin": "a74f5350d57b3f7d5a5333c2354a8dac7e17ca34",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "posix-shell": 17,
+      "re2": 1
+    },
+    "flags": {},
+    "pin": "a74f5350d57b3f7d5a5333c2354a8dac7e17ca34",
+    "predicted_buckets": {},
+    "regex_sites": 18,
+    "regex_sites_per_file": {
+      "common/scripts/force-uninstall.sh": 1,
+      "common/scripts/lint_copyright_banner.sh": 2,
+      "common/scripts/next-csv.sh": 14,
+      "internal/controller/constant/odlm.go": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 18 regex sites (auto-NO-GO bar 200); dialects [posix-shell:17, re2:1]; boundary=unknown.",
+  "schema_version": "1"
+}

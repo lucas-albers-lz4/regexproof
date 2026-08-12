@@ -1,0 +1,49 @@
+{
+  "candidate_url": "https://github.com/Yelp/pidtree-bcc",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. Yelp pidtree bcc; 12 shell/py sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "pidtree-bcc",
+  "corpus_pin": "af711a4aa78180542ff623a465c586672890f4f2",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "posix-shell": 9,
+      "py_re": 3
+    },
+    "flags": {},
+    "pin": "af711a4aa78180542ff623a465c586672890f4f2",
+    "predicted_buckets": {},
+    "regex_sites": 12,
+    "regex_sites_per_file": {
+      "itest/entrypoint_deb_package.sh": 2,
+      "itest/gen-ip-mapping.sh": 1,
+      "itest/itest_autoreload.sh": 2,
+      "itest/itest_generic.sh": 4,
+      "pidtree_bcc/probes/__init__.py": 1,
+      "pidtree_bcc/yaml_loader.py": 1,
+      "setup.py": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 12 regex sites (auto-NO-GO bar 200); dialects [posix-shell:9, py_re:3]; boundary=unknown.",
+  "schema_version": "1"
+}

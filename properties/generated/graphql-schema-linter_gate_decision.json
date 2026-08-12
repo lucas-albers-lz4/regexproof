@@ -1,0 +1,51 @@
+{
+  "candidate_url": "https://github.com/cjoudrey/graphql-schema-linter",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. cjoudrey; 8 ecma sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "graphql-schema-linter",
+  "corpus_pin": "fb0dd421138a5385de9be783393fd5f684219400",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 8
+    },
+    "flags": {
+      "g": 3
+    },
+    "pin": "fb0dd421138a5385de9be783393fd5f684219400",
+    "predicted_buckets": {
+      "stateful": 3
+    },
+    "regex_sites": 8,
+    "regex_sites_per_file": {
+      "src/cli.js": 1,
+      "src/inline_configuration.js": 2,
+      "src/rules/relay_connection_types_spec.js": 1,
+      "src/source_map.js": 1,
+      "test/assertions.js": 2,
+      "test/strip_ansi.js": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 8 regex sites (auto-NO-GO bar 200); dialects [ecma:8]; boundary=unknown.",
+  "schema_version": "1"
+}

@@ -12,6 +12,28 @@ ROOT = Path(__file__).resolve().parents[2]
 MAX_FILE_BYTES = 2_000_000
 
 CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
+    "json-editor": {
+        "corpus_type": "validator",
+        # Materialize: ln -sfn /tmp/je-check/src batch/corpora/json-editor/rules
+        # JSON-schema form editor; validation regexes (URL/email/pattern)
+        # on input boundaries. batch-5 triage-trial (#282).
+        "path": ROOT / "batch" / "corpora" / "json-editor" / "rules",
+        "glob": "**/*.js",
+        "dialect": "ecma",
+        "extractor": "js_precise_dir",
+        "repo": "json-editor/json-editor",
+        "security_tool": False,
+        "lift_inline": False,
+        "corpus_pin": "b31ddabecf4ed3209d37a2f5b29956120cd8f9ce",
+        "commit": "b31ddabecf4ed3209d37a2f5b29956120cd8f9ce",
+        "budget": {
+            "max_patterns": 5000,
+            "max_wall_s": 600,
+            "redos_wall_s": 120,
+            "max_mem_mb": 1024,
+            "max_disk_mb": 100,
+        },
+    },
     "gitleaks": {
         "corpus_type": "rule_corpus",
         "path": ROOT / "pilots" / "gitleaks" / "config" / "gitleaks.toml",

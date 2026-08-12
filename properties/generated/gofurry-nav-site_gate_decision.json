@@ -1,0 +1,97 @@
+{
+  "candidate_url": "https://github.com/gofurry/gofurry-nav-site",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. gofurry nav site; 431 sites (pcre 357 + ecma 69) < 1000, not security.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "gofurry-nav-site",
+  "corpus_pin": "cb920f2cb6beebad87b8e96ebe30ae03247814eb",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "(?i)": 153,
+      "(?s)": 3
+    },
+    "dialect": {
+      "ecma": 69,
+      "pcre": 357,
+      "re2": 5
+    },
+    "flags": {
+      "g": 19,
+      "i": 33
+    },
+    "pin": "cb920f2cb6beebad87b8e96ebe30ae03247814eb",
+    "predicted_buckets": {
+      "inline-flag": 189,
+      "stateful": 19
+    },
+    "regex_sites": 431,
+    "regex_sites_per_file": {
+      "gofurry-admin/config/coraza.conf": 7,
+      "gofurry-admin/internal/app/shared/adminutil/db.go": 1,
+      "gofurry-game-backend/common/util/parse.go": 2,
+      "gofurry-nav-backend/common/util/parse.go": 2,
+      "gofurry-nav-web/app/composables/useSiteDetailPage.ts": 1,
+      "gofurry-nav-web/app/composables/useSiteMetadataProbePanel.ts": 1,
+      "gofurry-nav-web/app/utils/customNavHeaderBackground.ts": 1,
+      "gofurry-nav-web/app/utils/recentSites.ts": 1,
+      "gofurry-nav-web/app/utils/seo.ts": 10,
+      "gofurry-nav-web/app/utils/steamAssets.ts": 7,
+      "gofurry-nav-web/app/utils/util.ts": 1,
+      "gofurry-nav-web/nuxt.config.ts": 1,
+      "gofurry-nav-web/scripts/perf/guard.mjs": 1,
+      "gofurry-nav-web/scripts/perf/measure.mjs": 1,
+      "gofurry-nav-web/scripts/perf/shared.mjs": 23,
+      "gofurry-nav-web/scripts/perf/trace.mjs": 1,
+      "gofurry-nav-web/scripts/perf/visual-guard.mjs": 9,
+      "gofurry-nav-web/server/routes/sitemap.xml.ts": 6,
+      "legacy/gofurry-nav-frontend-legacy/src/utils/customNavHeaderBackground.ts": 1,
+      "legacy/gofurry-nav-frontend-legacy/src/utils/recentSites.ts": 1,
+      "legacy/gofurry-nav-frontend-legacy/src/utils/util.ts": 1,
+      "legacy/gofurry-rag/web/src/api.ts": 2,
+      "rules/coraza.conf": 7,
+      "rules/coreruleset-4.25.0/rules/REQUEST-901-INITIALIZATION.conf": 3,
+      "rules/coreruleset-4.25.0/rules/REQUEST-905-COMMON-EXCEPTIONS.conf": 1,
+      "rules/coreruleset-4.25.0/rules/REQUEST-920-PROTOCOL-ENFORCEMENT.conf": 42,
+      "rules/coreruleset-4.25.0/rules/REQUEST-921-PROTOCOL-ATTACK.conf": 15,
+      "rules/coreruleset-4.25.0/rules/REQUEST-922-MULTIPART-ATTACK.conf": 4,
+      "rules/coreruleset-4.25.0/rules/REQUEST-930-APPLICATION-ATTACK-LFI.conf": 2,
+      "rules/coreruleset-4.25.0/rules/REQUEST-931-APPLICATION-ATTACK-RFI.conf": 5,
+      "rules/coreruleset-4.25.0/rules/REQUEST-932-APPLICATION-ATTACK-RCE.conf": 55,
+      "rules/coreruleset-4.25.0/rules/REQUEST-933-APPLICATION-ATTACK-PHP.conf": 18,
+      "rules/coreruleset-4.25.0/rules/REQUEST-934-APPLICATION-ATTACK-GENERIC.conf": 9,
+      "rules/coreruleset-4.25.0/rules/REQUEST-941-APPLICATION-ATTACK-XSS.conf": 30,
+      "rules/coreruleset-4.25.0/rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf": 60,
+      "rules/coreruleset-4.25.0/rules/REQUEST-943-APPLICATION-ATTACK-SESSION-FIXATION.conf": 4,
+      "rules/coreruleset-4.25.0/rules/REQUEST-944-APPLICATION-ATTACK-JAVA.conf": 15,
+      "rules/coreruleset-4.25.0/rules/REQUEST-999-COMMON-EXCEPTIONS-AFTER.conf": 28,
+      "rules/coreruleset-4.25.0/rules/RESPONSE-950-DATA-LEAKAGES.conf": 3,
+      "rules/coreruleset-4.25.0/rules/RESPONSE-951-DATA-LEAKAGES-SQL.conf": 16,
+      "rules/coreruleset-4.25.0/rules/RESPONSE-952-DATA-LEAKAGES-JAVA.conf": 1,
+      "rules/coreruleset-4.25.0/rules/RESPONSE-953-DATA-LEAKAGES-PHP.conf": 3,
+      "rules/coreruleset-4.25.0/rules/RESPONSE-954-DATA-LEAKAGES-IIS.conf": 5,
+      "rules/coreruleset-4.25.0/rules/RESPONSE-955-WEB-SHELLS.conf": 23,
+      "rules/coreruleset-4.25.0/rules/RESPONSE-956-DATA-LEAKAGES-RUBY.conf": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 431 regex sites (auto-NO-GO bar 200); dialects [ecma:69, pcre:357, re2:5]; boundary=unknown.",
+  "schema_version": "1"
+}

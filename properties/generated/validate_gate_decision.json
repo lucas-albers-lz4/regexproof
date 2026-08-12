@@ -1,0 +1,47 @@
+{
+  "candidate_url": "https://github.com/NASA-PDS/validate",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. NASA-PDS validate; 30 sites (27 java - #150 deferred).",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "validate",
+  "corpus_pin": "2f62de65e0964548009c87a980ee1d80166286be",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "java": 27,
+      "posix-shell": 3
+    },
+    "flags": {},
+    "pin": "2f62de65e0964548009c87a980ee1d80166286be",
+    "predicted_buckets": {},
+    "regex_sites": 30,
+    "regex_sites_per_file": {
+      "src/main/java/gov/nasa/pds/tools/validate/content/table/FieldValueValidator.java": 24,
+      "src/main/java/gov/nasa/pds/tools/validate/rule/pds3/VolumeValidationRule.java": 1,
+      "src/main/java/gov/nasa/pds/tools/validate/rule/pds4/FileAndDirectoryNamingRule.java": 1,
+      "src/main/java/gov/nasa/pds/web/ui/containers/LabelContainer.java": 1,
+      "src/main/resources/bin/validate-bundle": 3
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 30 regex sites (auto-NO-GO bar 200); dialects [java:27, posix-shell:3]; boundary=unknown.",
+  "schema_version": "1"
+}

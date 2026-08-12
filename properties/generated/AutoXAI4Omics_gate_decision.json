@@ -1,0 +1,42 @@
+{
+  "candidate_url": "https://github.com/IBM/AutoXAI4Omics",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. IBM AutoXAI; 1 py_re site.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "AutoXAI4Omics",
+  "corpus_pin": "8d3357819df263057c89f3d25c793b5d88e9c0a4",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "py_re": 1
+    },
+    "flags": {},
+    "pin": "8d3357819df263057c89f3d25c793b5d88e9c0a4",
+    "predicted_buckets": {},
+    "regex_sites": 1,
+    "regex_sites_per_file": {
+      "autoxai4omics/utils/utils.py": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 1 regex sites (auto-NO-GO bar 200); dialects [py_re:1]; boundary=unknown.",
+  "schema_version": "1"
+}

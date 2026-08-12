@@ -1,0 +1,57 @@
+{
+  "candidate_url": "https://github.com/agentic-research/rosary",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. agentic-research; 29 shell sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "rosary",
+  "corpus_pin": "52b3db7e6a10e2d3bd890f022620639aba0c533a",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "posix-shell": 29
+    },
+    "flags": {
+      "i": 4
+    },
+    "pin": "52b3db7e6a10e2d3bd890f022620639aba0c533a",
+    "predicted_buckets": {
+      "inline-flag": 4
+    },
+    "regex_sites": 29,
+    "regex_sites_per_file": {
+      "scripts/check-bead-ref.sh": 3,
+      "scripts/check-install-restart.sh": 3,
+      "scripts/check-persist-status-ratchet.sh": 3,
+      "scripts/check-semgrep-rules.sh": 1,
+      "scripts/check-taskfile-contract.sh": 1,
+      "scripts/check-versioned-files.sh": 1,
+      "scripts/e2e-fresh-setup.sh": 7,
+      "scripts/e2e-sandbox.sh": 5,
+      "scripts/install-rsry-service.test.sh": 2,
+      "scripts/jj-lib-cost-gate.sh": 1,
+      "scripts/run-semgrep.sh": 1,
+      "scripts/run-semgrep.test.sh": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 29 regex sites (auto-NO-GO bar 200); dialects [posix-shell:29]; boundary=unknown.",
+  "schema_version": "1"
+}

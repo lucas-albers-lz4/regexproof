@@ -1,0 +1,63 @@
+{
+  "candidate_url": "https://github.com/deslicer/mcp-for-splunk",
+  "conditions": [
+    {
+      "evidence": "Dialects already covered. deslicer MCP server for Splunk; deterministic-true; 68 sites (shell 44 + py 24). Splunk access boundary.",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary=deterministic-true.",
+      "id": "security-boundary",
+      "met": true
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "mcp-for-splunk",
+  "corpus_pin": "697f92649f5f1c9f77958d874e5ce2de1b43bd90",
+  "decision": "triage-trial",
+  "decision_basis": "escape_hatch",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": true,
+  "probe": {
+    "construct_counts": {
+      "posix-class": 3
+    },
+    "dialect": {
+      "posix-shell": 44,
+      "py_re": 24
+    },
+    "flags": {
+      "i": 4,
+      "s": 5
+    },
+    "pin": "697f92649f5f1c9f77958d874e5ce2de1b43bd90",
+    "predicted_buckets": {
+      "inline-flag": 9,
+      "posix-class": 3
+    },
+    "regex_sites": 68,
+    "regex_sites_per_file": {
+      "contrib/scripts/generate_tool.py": 2,
+      "scripts/build_and_run.sh": 34,
+      "scripts/check-prerequisites.sh": 2,
+      "scripts/generate_api_docs.py": 3,
+      "scripts/get-docker.sh": 8,
+      "scripts/itsi_schema/parse_schema_md.py": 5,
+      "src/core/discovery.py": 2,
+      "src/core/otel/logging.py": 1,
+      "src/core/security.py": 1,
+      "src/resources/embedded.py": 1,
+      "src/resources/processors/html_processor.py": 6,
+      "src/tools/dashboards/studio_wrapper.py": 1,
+      "src/tools/workflows/workflow_builder.py": 2
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Security-boundary corpus (boundary=deterministic-true) with findings-triage potential; 68 sites across [posix-shell:44, py_re:24].",
+  "schema_version": "1"
+}

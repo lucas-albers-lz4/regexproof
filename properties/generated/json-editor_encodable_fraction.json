@@ -1,0 +1,39 @@
+{
+  "budget": {
+    "max_disk_mb": 100,
+    "max_mem_mb": 1024,
+    "max_patterns": 5000,
+    "max_wall_s": 600,
+    "redos_wall_s": 120
+  },
+  "budget_breaches": null,
+  "commit": "b31ddabecf4ed3209d37a2f5b29956120cd8f9ce",
+  "compiler_fingerprint": "71d2ce23b4cd",
+  "complete_run": true,
+  "corpus_pin": "b31ddabecf4ed3209d37a2f5b29956120cd8f9ce",
+  "decision": "go",
+  "decision_rule": "go iff encodable/sample_size >= 0.3",
+  "dialect": "ecma",
+  "encodable": 6,
+  "engine_versions": {
+    "python": "3.13.5",
+    "z3": "5.0.0"
+  },
+  "extractor_schema_version": "2",
+  "fraction": 0.4615,
+  "go_no_go_threshold": 0.3,
+  "id_formula": "v2-domain-optional-ascii-default",
+  "inventory_path": "properties/generated/json-editor-inventory.ndjson",
+  "path": "batch/corpora/json-editor/rules",
+  "pilot": "json-editor",
+  "reasons": {
+    "composite-pattern": 4,
+    "ok": 6,
+    "stateful": 3
+  },
+  "sample_size": 13,
+  "schema_version": "1",
+  "scope": "full_corpus",
+  "unclassified_parse_errors": 0,
+  "wall_s": 0.542
+}
