@@ -7,7 +7,7 @@ from regexproof.compiler.caret_in_x import try_compile_caret_in_x
 from regexproof.compiler.py_re import compile_py_re
 from regexproof.compiler.trailing_alt_dollar import try_compile_trailing_alt_dollar
 
-__all__ = ["CompileResult", "Unencodable", "compile_py_re", "compile_pattern"]
+__all__ = ["CompileResult", "Unencodable", "compile_pattern", "compile_py_re"]
 
 
 def _compile_dialect(
@@ -41,6 +41,20 @@ def _compile_dialect(
         return compile_pcre(
             pattern, flags=flags, call_kind=call_kind, max_length=max_length
         )
+    if dialect == "posix-shell":
+        # Entry-only normalize: compile_pattern normalized BEFORE the hooks;
+        # this branch compiles the already-normalized text directly and
+        # never re-normalizes (a re-normalize would round-trip BRE
+        # `\+`→`+`→`\+` and cancel the fix).
+        from regexproof.compiler.posix_shell import compile_posix_shell
+
+        return compile_posix_shell(
+            pattern,
+            flags=flags,
+            call_kind=call_kind,
+            max_length=max_length,
+            domain=domain,
+        )
     if dialect == "yara":
         from regexproof.compiler.yara import compile_yara
 
@@ -68,8 +82,18 @@ def compile_pattern(
     *,
     max_length: int = 256,
     domain: str = "ascii",
+    shell_flags: dict | None = None,
 ):
-    """Dispatch to a dialect compiler. Never use z3.Re(pattern_string)."""
+    """Dispatch to a dialect compiler. Never use z3.Re(pattern_string).
+
+    ``shell_flags`` (posix-shell only): the record's syntax selector
+    (``{"syntax": "bre"|"ere"|"bash_ksh", ...}``); missing/unknown selectors
+    default to BRE.  The BRE→ERE normalize runs HERE — at entry, inside the
+    try/except (so a rejection returns a rejected ``CompileResult`` instead
+    of propagating and aborting batch), before the caret_in_x /
+    trailing_alt_dollar hooks, which then see normalized ERE text — and is
+    never re-run inside the dialect branch.
+    """
     import z3
 
     def compile_bare(pat: str, fl: str, dia: str, ck: str) -> CompileResult:
@@ -78,6 +102,12 @@ def compile_pattern(
         )
 
     try:
+        if dialect == "posix-shell":
+            from regexproof.compiler.posix_shell import normalize_shell
+
+            sf = shell_flags or {}
+            pattern = normalize_shell(pattern, sf.get("syntax", "bre"))
+
         # Caret-in-X is more specific than A1B; try it first (#103).
         caret = try_compile_caret_in_x(
             pattern,
