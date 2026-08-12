@@ -1,0 +1,96 @@
+{
+  "candidate_url": "https://github.com/bartblaze/Yara-rules",
+  "conditions": [
+    {
+      "evidence": "YARA dialect already covered by admitted yara_rules corpus.",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary=deterministic-true (YARA malware rules).",
+      "id": "security-boundary",
+      "met": true
+    },
+    {
+      "evidence": "530 sites < 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "Yara-rules",
+  "corpus_pin": "5cc871d82361de8a80d387ec8bbd01fe4258b4a9",
+  "decision": "triage-trial",
+  "decision_basis": "escape_hatch",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": true,
+  "probe": {
+    "construct_counts": {
+      "\\K": 2,
+      "backref": 8
+    },
+    "dialect": {
+      "yara": 530
+    },
+    "flags": {
+      "W": 53,
+      "i": 38
+    },
+    "pin": "5cc871d82361de8a80d387ec8bbd01fe4258b4a9",
+    "predicted_buckets": {
+      "backref": 8,
+      "inline-flag": 38,
+      "reset": 2
+    },
+    "regex_sites": 530,
+    "regex_sites_per_file": {
+      "rules/APT/Autumn_Backdoor.yar": 11,
+      "rules/APT/Autumn_Backdoor_Loader.yar": 2,
+      "rules/APT/NikiGo.yar": 15,
+      "rules/APT/NikiHTTP.yar": 8,
+      "rules/APT/RokRAT.yar": 28,
+      "rules/APT/RoyalRoad_RTF.yar": 3,
+      "rules/APT/StormDNS.yar": 11,
+      "rules/crimeware/BazarLoader.yar": 2,
+      "rules/crimeware/BroEx.yar": 17,
+      "rules/crimeware/IcedID.yar": 18,
+      "rules/crimeware/JSSLoader.yar": 26,
+      "rules/crimeware/KeyBase.yar": 28,
+      "rules/crimeware/PurpleFox.yar": 6,
+      "rules/crimeware/ShinnyShield.yar": 38,
+      "rules/crimeware/Unk_Crime_Downloader_2.yar": 16,
+      "rules/crimeware/ZLoader.yar": 14,
+      "rules/generic/Costura_Protobuf.yar": 2,
+      "rules/generic/DotNet_Reactor.yar": 8,
+      "rules/generic/Generic_Phishing_PDF.yar": 2,
+      "rules/generic/GrimResource.yar": 6,
+      "rules/generic/MalScript_Tricks.yar": 4,
+      "rules/generic/OLEfile_in_CAD_FAS_LSP.yar": 4,
+      "rules/generic/Webshell_in_image.yar": 10,
+      "rules/generic/WinRAR_ADS_Traversal.yar": 14,
+      "rules/generic/oAuth_Phishing_PDF.yar": 3,
+      "rules/hacktools/Adaptix_Beacon.yar": 26,
+      "rules/hacktools/Extract_MachineKey_SharePoint.yar": 17,
+      "rules/hacktools/GhostShell_SharePoint.yar": 8,
+      "rules/hacktools/IISRaid.yar": 11,
+      "rules/hacktools/IIS_Backdoor.yar": 6,
+      "rules/hacktools/KPortScan.yar": 26,
+      "rules/hacktools/Orca.yar": 11,
+      "rules/hacktools/SharpAdidnsdump.yar": 10,
+      "rules/hacktools/SharpHostInfo.yar": 11,
+      "rules/ransomware/Avaddon.yar": 16,
+      "rules/ransomware/DearCry.yar": 1,
+      "rules/ransomware/Fusion.yar": 24,
+      "rules/ransomware/Pysa.yar": 6,
+      "rules/ransomware/Sfile.yar": 1,
+      "rules/ransomware/Warlock.yar": 10,
+      "rules/ransomware/WinLock.yar": 30,
+      "rules/ransomware/Zeppelin.yar": 20
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Triage-trial: bartblaze/Yara-rules (530 yara, boundary=deterministic-true). YARA surface already admitted (yara_rules); escape hatch for pack-delta evaluation.",
+  "related": {
+    "nearest_admitted": "yara_rules"
+  },
+  "schema_version": "1"
+}

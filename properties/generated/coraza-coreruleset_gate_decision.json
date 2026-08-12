@@ -1,0 +1,71 @@
+{
+  "candidate_url": "https://github.com/corazawaf/coraza-coreruleset",
+  "conditions": [
+    {
+      "evidence": "CRS/ModSec already covered by admitted coreruleset; not a new dialect class.",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary=deterministic-true (OWASP CRS rules).",
+      "id": "security-boundary",
+      "met": true
+    },
+    {
+      "evidence": "343 sites < 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "coraza-coreruleset",
+  "corpus_pin": "a664dd18b4b0468215126c6f524e91b2a0deec26",
+  "decision": "triage-trial",
+  "decision_basis": "escape_hatch",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": true,
+  "probe": {
+    "construct_counts": {
+      "(?i)": 137,
+      "(?s)": 3
+    },
+    "dialect": {
+      "pcre": 343
+    },
+    "flags": {},
+    "pin": "a664dd18b4b0468215126c6f524e91b2a0deec26",
+    "predicted_buckets": {
+      "inline-flag": 140
+    },
+    "regex_sites": 343,
+    "regex_sites_per_file": {
+      "rules/@owasp_crs/REQUEST-901-INITIALIZATION.conf": 3,
+      "rules/@owasp_crs/REQUEST-905-COMMON-EXCEPTIONS.conf": 1,
+      "rules/@owasp_crs/REQUEST-920-PROTOCOL-ENFORCEMENT.conf": 42,
+      "rules/@owasp_crs/REQUEST-921-PROTOCOL-ATTACK.conf": 15,
+      "rules/@owasp_crs/REQUEST-922-MULTIPART-ATTACK.conf": 4,
+      "rules/@owasp_crs/REQUEST-930-APPLICATION-ATTACK-LFI.conf": 2,
+      "rules/@owasp_crs/REQUEST-931-APPLICATION-ATTACK-RFI.conf": 5,
+      "rules/@owasp_crs/REQUEST-932-APPLICATION-ATTACK-RCE.conf": 55,
+      "rules/@owasp_crs/REQUEST-933-APPLICATION-ATTACK-PHP.conf": 18,
+      "rules/@owasp_crs/REQUEST-934-APPLICATION-ATTACK-GENERIC.conf": 9,
+      "rules/@owasp_crs/REQUEST-941-APPLICATION-ATTACK-XSS.conf": 30,
+      "rules/@owasp_crs/REQUEST-942-APPLICATION-ATTACK-SQLI.conf": 60,
+      "rules/@owasp_crs/REQUEST-943-APPLICATION-ATTACK-SESSION-FIXATION.conf": 4,
+      "rules/@owasp_crs/REQUEST-944-APPLICATION-ATTACK-JAVA.conf": 15,
+      "rules/@owasp_crs/REQUEST-999-COMMON-EXCEPTIONS-AFTER.conf": 28,
+      "rules/@owasp_crs/RESPONSE-950-DATA-LEAKAGES.conf": 3,
+      "rules/@owasp_crs/RESPONSE-951-DATA-LEAKAGES-SQL.conf": 16,
+      "rules/@owasp_crs/RESPONSE-952-DATA-LEAKAGES-JAVA.conf": 1,
+      "rules/@owasp_crs/RESPONSE-953-DATA-LEAKAGES-PHP.conf": 3,
+      "rules/@owasp_crs/RESPONSE-954-DATA-LEAKAGES-IIS.conf": 5,
+      "rules/@owasp_crs/RESPONSE-955-WEB-SHELLS.conf": 23,
+      "rules/@owasp_crs/RESPONSE-956-DATA-LEAKAGES-RUBY.conf": 1
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Triage-trial: Coraza CRS packaging (343 pcre, boundary=deterministic-true). Nearest admitted corpus is coreruleset; use escape hatch to evaluate delta / findings pipeline without treating as a net-new dialect class.",
+  "related": {
+    "nearest_admitted": "coreruleset"
+  },
+  "schema_version": "1"
+}

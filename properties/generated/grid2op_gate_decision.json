@@ -1,0 +1,67 @@
+{
+  "candidate_url": "https://github.com/Grid2op/grid2op",
+  "conditions": [
+    {
+      "evidence": "detect-secrets / py_re surface already admitted.",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary=unknown with non-zero sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "57 sites < 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "grid2op",
+  "corpus_pin": "a1736886d18c14f6e19520813d2b3e432179e3b9",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "py_re": 57
+    },
+    "flags": {
+      "i": 1,
+      "m": 1
+    },
+    "pin": "a1736886d18c14f6e19520813d2b3e432179e3b9",
+    "predicted_buckets": {
+      "inline-flag": 1,
+      "m-flag": 1
+    },
+    "regex_sites": 57,
+    "regex_sites_per_file": {
+      "grid2op/Chronics/handlers/persitenceForecastHandler.py": 1,
+      "grid2op/Download/DownloadDataset.py": 1,
+      "grid2op/Environment/environment.py": 7,
+      "grid2op/Episode/EpisodeReboot.py": 1,
+      "grid2op/MakeEnv/UpdateEnv.py": 1,
+      "grid2op/MakeEnv/UserUtils.py": 1,
+      "grid2op/Space/SerializableSpace.py": 1,
+      "grid2op/_create_test_suite.py": 1,
+      "grid2op/check_release.py": 1,
+      "grid2op/tests/test_Action.py": 1,
+      "grid2op/tests/test_ActionProperties.py": 4,
+      "grid2op/tests/test_ChronicsHandler.py": 3,
+      "grid2op/tests/test_generate_classes.py": 2,
+      "grid2op/tests/test_issue_285.py": 1,
+      "grid2op/tests/test_issue_369.py": 1,
+      "grid2op/tests/test_utils.py": 1,
+      "grid2op/utils/l2rpn_2020_scores.py": 1,
+      "grid2op/utils/underlying_statistics.py": 9,
+      "scripts/check_dco_msg.py": 1,
+      "utils/make_release.py": 18
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "NO-GO: detect-secrets query hit, 57 py_re sites, security_boundary=unknown. detect-secrets already admitted; unknown boundary + below scale.",
+  "schema_version": "1"
+}

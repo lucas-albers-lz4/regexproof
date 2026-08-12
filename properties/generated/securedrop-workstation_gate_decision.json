@@ -1,0 +1,47 @@
+{
+  "candidate_url": "https://github.com/freedomofpress/securedrop-workstation",
+  "conditions": [
+    {
+      "evidence": "py_re already covered by admitted corpora.",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary=unknown with non-zero sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "16 sites < 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "securedrop-workstation",
+  "corpus_pin": "c712baeaaa2a45d954ebc266195f8d1fb6947a2a",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "py_re": 16
+    },
+    "flags": {},
+    "pin": "c712baeaaa2a45d954ebc266195f8d1fb6947a2a",
+    "predicted_buckets": {},
+    "regex_sites": 16,
+    "regex_sites_per_file": {
+      "files/validate_config.py": 1,
+      "launcher/tests/test_notify.py": 5,
+      "launcher/tests/test_util.py": 4,
+      "sdw_util/Util.py": 1,
+      "sdw_util/config_types.py": 3,
+      "tests/base.py": 2
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "NO-GO: 16 py_re sites, security_boundary=unknown. Below scale; boundary classifier did not affirm a security-tool corpus.",
+  "schema_version": "1"
+}
