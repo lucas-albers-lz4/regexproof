@@ -1,0 +1,15 @@
+{
+  "schema_version": "1",
+  "corpus": "gilectomy",
+  "corpus_pin": "4315ec3f1d6d4f813cc82ce27a24e7f784dbfc1a",
+  "candidate_url": "https://github.com/larryhastings/gilectomy",
+  "smith_decision": "go",
+  "supersedes": null,
+  "reason": "Gilectomy CPython branch; first-party py_re allowlist (top-60 .py files; NON-PY FILES EXCLUDED - initial allowlist included Modules/zlib/configure + Modules/_ctypes/libffi/msvcc.sh which break ast.parse; fixed to .py-only): 480/904 = 0.5310 encodable (complete_run, parse-error=0, budget clean). 129+ findings. Non-security (interpreter) - public-first. GO admit confirmed.",
+  "regex_sites": 904,
+  "sites_by_bucket": {
+    "py_re allowlist (60 files, 904 sites measured; 480 encodable)": 904,
+    "additional first-party py files beyond top-60 (~203 sites)": 203
+  },
+  "additional_surface_outside_probe_scope": {}
+}

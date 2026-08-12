@@ -1,0 +1,15 @@
+{
+  "schema_version": "1",
+  "corpus": "nogil-3.12",
+  "corpus_pin": "cedde4f5ec3759ad723c89d44738776f362df564",
+  "candidate_url": "https://github.com/colesbury/nogil-3.12",
+  "smith_decision": "go",
+  "supersedes": null,
+  "reason": "Multithreaded Python (nogil); first-party py_re allowlist (top-60 .py files): 539/1,084 = 0.4972 encodable (complete_run, parse-error=0, budget clean). 140 findings + 545 triage. Non-security (interpreter) - public-first. GO admit confirmed.",
+  "regex_sites": 1084,
+  "sites_by_bucket": {
+    "py_re allowlist (60 files, 1,084 sites measured; 539 encodable)": 1084,
+    "additional first-party py files beyond top-60 (~198 sites)": 198
+  },
+  "additional_surface_outside_probe_scope": {}
+}

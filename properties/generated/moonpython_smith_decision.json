@@ -1,0 +1,15 @@
+{
+  "schema_version": "1",
+  "corpus": "moonpython",
+  "corpus_pin": "03f07eadcef3b4a4b9592d7d62703a6840e3e5d5",
+  "candidate_url": "https://github.com/moonbit-community/moonpython",
+  "smith_decision": "go",
+  "supersedes": null,
+  "reason": "Python interpreter in MoonBit; first-party py_re allowlist (top-60 .py files by probe sites): 585/1,251 = 0.4676 encodable (complete_run, parse-error=0, budget clean). 129 findings + 666 triage. Non-security (interpreter) - public-first. GO admit confirmed.",
+  "regex_sites": 1251,
+  "sites_by_bucket": {
+    "py_re allowlist (60 files, 1,251 sites measured; 585 encodable)": 1251,
+    "additional first-party py files beyond top-60 (~149 sites)": 149
+  },
+  "additional_surface_outside_probe_scope": {}
+}

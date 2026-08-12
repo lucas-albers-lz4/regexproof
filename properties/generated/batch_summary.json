@@ -116,23 +116,23 @@
     "wall_s": 21.527
   },
   "corpora": {
-    "patrolaroid": {
+    "gilectomy": {
       "address_space_cap": true,
       "complete_run": true,
-      "corpus": "patrolaroid",
+      "corpus": "gilectomy",
       "corpus_type": "rule_corpus",
-      "encodable": 1687,
+      "encodable": 480,
       "engine": {
         "python": "3.13.5"
       },
-      "extracted": 4491,
-      "findings": 22,
+      "extracted": 904,
+      "findings": 140,
       "inventory_questions": 4,
-      "join_regex_ids": 22,
+      "join_regex_ids": 137,
       "redos_findings": 0,
       "redos_incomplete": false,
       "schema_version": "1",
-      "triage": 2804
+      "triage": 424
     }
   },
   "pair_counts": {
@@ -143,7 +143,7 @@
       "note": "fraction gate go; CRS rule-derived adapter is Phase-2 rule_diff",
       "scope": "full_corpus"
     },
-    "patrolaroid": {
+    "gilectomy": {
       "admitted": 0,
       "dropped": 0,
       "note": "no independent-spec catalog"

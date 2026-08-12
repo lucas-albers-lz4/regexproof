@@ -1,0 +1,52 @@
+{
+  "budget": {
+    "max_disk_mb": 500,
+    "max_mem_mb": 2048,
+    "max_patterns": 5000,
+    "max_wall_s": 900,
+    "redos_wall_s": 180
+  },
+  "budget_breaches": null,
+  "commit": "03f07eadcef3b4a4b9592d7d62703a6840e3e5d5",
+  "compiler_fingerprint": "71d2ce23b4cd",
+  "complete_run": true,
+  "corpus_pin": "03f07eadcef3b4a4b9592d7d62703a6840e3e5d5",
+  "decision": "go",
+  "decision_rule": "go iff encodable/sample_size >= 0.3",
+  "dialect": "py_re",
+  "encodable": 585,
+  "engine_versions": {
+    "python": "3.13.5",
+    "z3": "5.0.0"
+  },
+  "extractor_schema_version": "2",
+  "fraction": 0.4676,
+  "go_no_go_threshold": 0.3,
+  "id_formula": "v2-domain-optional-ascii-default",
+  "inventory_path": "properties/generated/moonpython-inventory.ndjson",
+  "path": "batch/corpora/moonpython/rules",
+  "pilot": "moonpython",
+  "reasons": {
+    "backref": 25,
+    "composite-pattern": 310,
+    "inline-flag": 6,
+    "lookaround": 51,
+    "m-flag": 24,
+    "multi-match": 29,
+    "negated-shorthand": 15,
+    "ok": 585,
+    "parse-error:PatternError": 2,
+    "pattern-too-long": 14,
+    "per-alternative-anchor": 2,
+    "unicode-not-literal": 17,
+    "unsupported:ATOMIC_GROUP": 37,
+    "unsupported:FAILURE": 1,
+    "unsupported:POSSESSIVE_REPEAT": 61,
+    "word-boundary": 72
+  },
+  "sample_size": 1251,
+  "schema_version": "1",
+  "scope": "full_corpus",
+  "unclassified_parse_errors": 0,
+  "wall_s": 11.263
+}
