@@ -1,0 +1,18 @@
+{
+  "address_space_cap": true,
+  "complete_run": true,
+  "corpus": "xibo-cms",
+  "corpus_type": "rule_corpus",
+  "encodable": 31,
+  "engine": {
+    "python": "3.13.5"
+  },
+  "extracted": 66,
+  "findings": 12,
+  "inventory_questions": 4,
+  "join_regex_ids": 11,
+  "redos_findings": 0,
+  "redos_incomplete": false,
+  "schema_version": "1",
+  "triage": 35
+}
