@@ -1,0 +1,87 @@
+{
+  "candidate_url": "https://github.com/adibirzu/oci-skills",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. Oracle OCI skills; 131 shell/py sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "oci-skills",
+  "corpus_pin": "da1d1326ee69e9d45ad95468b0224ddaa42add0d",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "(?m)": 3,
+      "lookaround": 7,
+      "posix-class": 2
+    },
+    "dialect": {
+      "posix-shell": 45,
+      "py_re": 86
+    },
+    "flags": {
+      "i": 46,
+      "m": 2,
+      "s": 3
+    },
+    "pin": "da1d1326ee69e9d45ad95468b0224ddaa42add0d",
+    "predicted_buckets": {
+      "inline-flag": 49,
+      "lookaround": 7,
+      "m-flag": 5,
+      "posix-class": 2
+    },
+    "regex_sites": 131,
+    "regex_sites_per_file": {
+      "hooks/guard_destructive.py": 14,
+      "install.sh": 1,
+      "scripts/check_action_contracts.py": 6,
+      "scripts/check_doc_links.py": 1,
+      "scripts/common.sh": 9,
+      "scripts/forward_eval.py": 8,
+      "scripts/forward_eval_contract.py": 2,
+      "scripts/kb_lookup.py": 2,
+      "scripts/oci_cli_help.py": 4,
+      "scripts/oci_cli_lint.py": 4,
+      "scripts/oci_context.py": 3,
+      "scripts/oci_logan.sh": 2,
+      "scripts/oci_project.sh": 2,
+      "scripts/oci_tf.sh": 1,
+      "scripts/platform_bundle.py": 1,
+      "scripts/product_contracts.py": 1,
+      "scripts/redact.py": 14,
+      "skills/oci-observability-db/scripts/promql_to_mql.py": 5,
+      "tests/check_eval_routing.py": 2,
+      "tests/common_helpers_smoke.sh": 3,
+      "tests/oci_adb_smoke.sh": 4,
+      "tests/oci_logan_smoke.sh": 4,
+      "tests/oci_project_smoke.sh": 19,
+      "tests/test_codex_plugin_manifest.py": 1,
+      "tests/test_doc_links.py": 5,
+      "tests/test_forward_eval.py": 2,
+      "tests/test_gap_closure_contracts.py": 4,
+      "tests/test_internal_links.py": 3,
+      "tests/test_product_operational_contracts.py": 1,
+      "tests/test_routing_consistency.py": 1,
+      "tests/test_skill_quality_gap_contracts.py": 1,
+      "tests/test_v2_contracts.py": 1
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 131 regex sites (auto-NO-GO bar 200); dialects [posix-shell:45, py_re:86]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

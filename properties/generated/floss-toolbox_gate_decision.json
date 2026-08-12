@@ -1,0 +1,52 @@
+{
+  "candidate_url": "https://github.com/Orange-OpenSource/floss-toolbox",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. Orange FLOSS toolbox; 16 shell sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "floss-toolbox",
+  "corpus_pin": "2be49b1d624140749ad93e39fdc3a013b75bce84",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "posix-shell": 16
+    },
+    "flags": {},
+    "pin": "2be49b1d624140749ad93e39fdc3a013b75bce84",
+    "predicted_buckets": {},
+    "regex_sites": 16,
+    "regex_sites_per_file": {
+      "toolbox/diver/extract-emails-from-history.sh": 2,
+      "toolbox/diver/find-contributors-in-git-logs.sh": 1,
+      "toolbox/diver/find-missing-developers-in-git-commits.sh": 1,
+      "toolbox/diver/list-contributions-by-contributors.sh": 1,
+      "toolbox/diver/list-contributors-in-history.sh": 1,
+      "toolbox/diver/utils/find-hotwords-in-files.sh": 1,
+      "toolbox/github/utils/check-leaks-from-github.sh": 2,
+      "toolbox/github/utils/check-vulnerabilities-from-github.sh": 2,
+      "toolbox/github/utils/dump-git-repositories-from-github.sh": 1,
+      "toolbox/gitlab/utils/check-leaks-from-gitlab.sh": 2,
+      "toolbox/gitlab/utils/dump-git-repositories-from-gitlab.sh": 2
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 16 regex sites (auto-NO-GO bar 200); dialects [posix-shell:16]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

@@ -1,0 +1,52 @@
+{
+  "candidate_url": "https://github.com/AaronLPS/loop-builder",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. AaronLPS; 16 shell/py sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "loop-builder",
+  "corpus_pin": "741c88771f964791f4453d5ab1859ffff8f20cac",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "posix-class": 8
+    },
+    "dialect": {
+      "posix-shell": 9,
+      "py_re": 7
+    },
+    "flags": {},
+    "pin": "741c88771f964791f4453d5ab1859ffff8f20cac",
+    "predicted_buckets": {
+      "posix-class": 8
+    },
+    "regex_sites": 16,
+    "regex_sites_per_file": {
+      "skills/feedback-to-issue/scripts/feedback/dedupe.py": 1,
+      "skills/feedback-to-issue/scripts/feedback/sanitize.py": 6,
+      "skills/loop-builder/scripts/lint_skill_bank_catalog.sh": 1,
+      "skills/loop-builder/scripts/lint_skill_bank_recommended.sh": 1,
+      "skills/loop-builder/scripts/refresh_skill_bank.sh": 2,
+      "tools/privacy-scan.sh": 5
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 16 regex sites (auto-NO-GO bar 200); dialects [posix-shell:9, py_re:7]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

@@ -1,0 +1,101 @@
+{
+  "candidate_url": "https://github.com/redpersongpt/oudenOS",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. redpersongpt AI OS; 149 ecma sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "oudenOS",
+  "corpus_pin": "62d18db0cd0dee06c258157f1a71793cb3473641",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 143,
+      "posix-shell": 6
+    },
+    "flags": {
+      "g": 34,
+      "i": 9,
+      "m": 3,
+      "s": 3
+    },
+    "pin": "62d18db0cd0dee06c258157f1a71793cb3473641",
+    "predicted_buckets": {
+      "inline-flag": 12,
+      "m-flag": 3,
+      "stateful": 34
+    },
+    "regex_sites": 149,
+    "regex_sites_per_file": {
+      "apps/cloud-api/src/lib/email.ts": 5,
+      "apps/cloud-api/src/routes/admin.ts": 2,
+      "apps/cloud-api/src/routes/users.ts": 1,
+      "apps/os-api/src/routes/updates.ts": 2,
+      "apps/os-desktop/src/renderer/i18n/index.ts": 1,
+      "apps/os-desktop/src/renderer/pages/wizard/steps/AssessmentStep.tsx": 2,
+      "apps/os-desktop/src/renderer/pages/wizard/steps/PlaybookReviewStep.tsx": 1,
+      "apps/os-desktop/src/renderer/pages/wizard/steps/ReportStep.tsx": 5,
+      "apps/os-desktop/test/mock-service.mjs": 1,
+      "apps/os-desktop/test/production-proof.mjs": 2,
+      "apps/os-desktop/test/questionnaire-invariants.mjs": 9,
+      "apps/os-website/src/pages/DownloadPage.tsx": 1,
+      "apps/tuning-api/src/lib/email.ts": 1,
+      "apps/tuning-api/src/routes/users.ts": 1,
+      "apps/tuning-desktop/src/renderer/App.tsx": 14,
+      "apps/tuning-desktop/src/renderer/components/tier/TierGate.tsx": 1,
+      "apps/tuning-desktop/src/renderer/pages/apply-workflow/ApplyWorkflowPage.tsx": 5,
+      "apps/tuning-desktop/src/renderer/pages/auth/RegisterPage.tsx": 3,
+      "apps/tuning-desktop/test/headed-proof-full.mjs": 1,
+      "apps/tuning-desktop/test/headed-proof.mjs": 1,
+      "apps/tuning-desktop/test/mock-service.mjs": 1,
+      "apps/tuning-website/src/pages/PricingPage.tsx": 1,
+      "apps/web/src/app/api/auth/forgot-password/route.ts": 1,
+      "apps/web/src/app/api/setup/route.ts": 1,
+      "apps/web/src/app/setup/page.tsx": 1,
+      "apps/web/src/lib/app-url.ts": 1,
+      "apps/web/src/lib/auth.ts": 2,
+      "apps/web/src/lib/email.ts": 5,
+      "apps/web/src/lib/github-release.ts": 2,
+      "ecosystem.config.cjs": 1,
+      "packages/system-analyzer/src/analyzers/network-analyzer.ts": 1,
+      "packages/system-analyzer/src/components/AnalysisTimeline.tsx": 1,
+      "packages/system-analyzer/src/components/SystemAnalysisCard.tsx": 1,
+      "scripts/build-os-apbx-package.ts": 1,
+      "scripts/build-os-source-catalog.mjs": 1,
+      "scripts/build-os-wizard-package.mjs": 7,
+      "scripts/db-converge.mjs": 6,
+      "scripts/gen-technical-details.mjs": 15,
+      "scripts/generate-app-icons.mjs": 1,
+      "scripts/generate-os-playbook-fallback-data.mjs": 14,
+      "scripts/lib/evidence-contract.mjs": 1,
+      "scripts/release-gate.mjs": 3,
+      "scripts/run-os-mac-demo.mjs": 1,
+      "scripts/seal-proof-bundle.mjs": 1,
+      "scripts/smoke-test-os-service.mjs": 2,
+      "scripts/sync-os-wizard-metadata.ts": 1,
+      "scripts/validate-proof.mjs": 3,
+      "scripts/validate-tauri-bridge.mjs": 8,
+      "scripts/vds-deploy.sh": 1,
+      "scripts/vds-install-hermes-and-fix-web.sh": 5
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 149 regex sites (auto-NO-GO bar 200); dialects [ecma:143, posix-shell:6]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

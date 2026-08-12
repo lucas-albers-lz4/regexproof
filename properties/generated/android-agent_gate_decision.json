@@ -1,0 +1,44 @@
+{
+  "candidate_url": "https://github.com/instana/android-agent",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. Instana Android agent; 6 shell sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "android-agent",
+  "corpus_pin": "db24c5ccabc82edb1cccec53d266082383f0035f",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "posix-shell": 6
+    },
+    "flags": {},
+    "pin": "db24c5ccabc82edb1cccec53d266082383f0035f",
+    "predicted_buckets": {},
+    "regex_sites": 6,
+    "regex_sites_per_file": {
+      "gradlew": 2,
+      "instana-example/app/gradlew": 2,
+      "instana-example/gradlew": 2
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 6 regex sites (auto-NO-GO bar 200); dialects [posix-shell:6]; boundary=unknown.",
+  "schema_version": "1"
+}

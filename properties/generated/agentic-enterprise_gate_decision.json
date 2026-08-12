@@ -1,0 +1,74 @@
+{
+  "candidate_url": "https://github.com/wlfghdr/agentic-enterprise",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. AI enterprise scaffold; 169 py_re sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "agentic-enterprise",
+  "corpus_pin": "4a9241ae870ff1b2dcc402d4ccc5d16debd6c0e8",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "lookaround": 6
+    },
+    "dialect": {
+      "posix-shell": 2,
+      "py_re": 167
+    },
+    "flags": {
+      "i": 78,
+      "m": 7,
+      "s": 3
+    },
+    "pin": "4a9241ae870ff1b2dcc402d4ccc5d16debd6c0e8",
+    "predicted_buckets": {
+      "inline-flag": 81,
+      "lookaround": 6,
+      "m-flag": 7
+    },
+    "regex_sites": 169,
+    "regex_sites_per_file": {
+      "scripts/approval_queue.py": 1,
+      "scripts/archive_work.sh": 2,
+      "scripts/check_locks.py": 2,
+      "scripts/check_placeholders.py": 10,
+      "scripts/find_pending_work.py": 5,
+      "scripts/triage_signals.py": 5,
+      "scripts/validate_agent_instructions.py": 3,
+      "scripts/validate_compliance_coverage.py": 24,
+      "scripts/validate_compliance_mapping.py": 37,
+      "scripts/validate_config_completeness.py": 6,
+      "scripts/validate_content_security.py": 22,
+      "scripts/validate_control_linkage.py": 4,
+      "scripts/validate_cross_references.py": 9,
+      "scripts/validate_exception_expiry.py": 7,
+      "scripts/validate_integration_registry.py": 1,
+      "scripts/validate_otel_contract.py": 3,
+      "scripts/validate_otel_evidence_chain.py": 2,
+      "scripts/validate_policy_structure.py": 7,
+      "scripts/validate_schema.py": 4,
+      "scripts/validate_vendor_compliance.py": 8,
+      "scripts/validate_work_artifacts.py": 6,
+      "scripts/work_backend.py": 1
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 169 regex sites (auto-NO-GO bar 200); dialects [posix-shell:2, py_re:167]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

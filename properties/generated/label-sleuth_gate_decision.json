@@ -1,0 +1,57 @@
+{
+  "candidate_url": "https://github.com/label-sleuth/label-sleuth",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. Label Sleuth; 33 ecma/py sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "label-sleuth",
+  "corpus_pin": "b37a1f5279a113a0b0dee8bdbd7fcc4057328cf2",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 30,
+      "py_re": 3
+    },
+    "flags": {
+      "g": 1,
+      "i": 25
+    },
+    "pin": "b37a1f5279a113a0b0dee8bdbd7fcc4057328cf2",
+    "predicted_buckets": {
+      "inline-flag": 25,
+      "stateful": 1
+    },
+    "regex_sites": 33,
+    "regex_sites_per_file": {
+      "frontend/src/const.ts": 2,
+      "frontend/src/customHooks/useLoadDoc.ts": 1,
+      "frontend/src/modules/Workplace/__tests__/test_upperbar.tsx": 15,
+      "frontend/src/modules/Workplace/__tests__/test_workspaceInfo.tsx": 7,
+      "frontend/src/modules/Workspace-config/__tests__/test_worspaceConfig.tsx": 1,
+      "frontend/src/utils/test-utils.tsx": 4,
+      "label_sleuth/app_utils.py": 1,
+      "label_sleuth/data_access/file_based/utils.py": 1,
+      "label_sleuth/models/core/tools.py": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 33 regex sites (auto-NO-GO bar 200); dialects [ecma:30, py_re:3]; boundary=unknown.",
+  "schema_version": "1"
+}

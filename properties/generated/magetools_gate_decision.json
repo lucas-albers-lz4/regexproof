@@ -1,0 +1,43 @@
+{
+  "candidate_url": "https://github.com/sheldonhull/magetools",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. sheldonhull; 2 re2 sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "magetools",
+  "corpus_pin": "7f15f9e031cd83f2a28b8e8d782ba5df0c9c4ba3",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "re2": 2
+    },
+    "flags": {},
+    "pin": "7f15f9e031cd83f2a28b8e8d782ba5df0c9c4ba3",
+    "predicted_buckets": {},
+    "regex_sites": 2,
+    "regex_sites_per_file": {
+      ".examples/generating-adr-report/main.go": 1,
+      "precommit/precommit.go": 1
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 2 regex sites (auto-NO-GO bar 200); dialects [re2:2]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

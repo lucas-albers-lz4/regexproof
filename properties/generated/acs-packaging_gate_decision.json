@@ -1,0 +1,61 @@
+{
+  "candidate_url": "https://github.com/Alfresco/acs-packaging",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. Alfresco packaging; 75 shell/py sites below scale.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "acs-packaging",
+  "corpus_pin": "8cc85fe6f39e487ade44ec1860b82954cfff53c7",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "posix-shell": 73,
+      "py_re": 2
+    },
+    "flags": {
+      "i": 1
+    },
+    "pin": "8cc85fe6f39e487ade44ec1860b82954cfff53c7",
+    "predicted_buckets": {
+      "inline-flag": 1
+    },
+    "regex_sites": 75,
+    "regex_sites_per_file": {
+      "scripts/ci/build.sh": 10,
+      "scripts/ci/build_functions.sh": 5,
+      "scripts/ci/update_downstream.sh": 3,
+      "scripts/ci/verify_release_tag.sh": 3,
+      "scripts/dev/checkout.sh": 1,
+      "scripts/dev/find-fix.py": 1,
+      "scripts/dev/linkPoms.sh": 6,
+      "scripts/dev/newReleaseBranch.py": 1,
+      "scripts/dev/newReleaseBranch.sh": 9,
+      "scripts/dev/resetMasterVersion.sh": 3,
+      "tests/environment/ldap-container/startup.sh": 28,
+      "tests/pipeline-all-amps/repo/run.sh": 1,
+      "tests/pipeline-all-amps/share/run.sh": 1,
+      "tests/scripts/checkLibraryDuplicates.sh": 1,
+      "tests/scripts/output_logs_for_failures.sh": 2
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 75 regex sites (auto-NO-GO bar 200); dialects [posix-shell:73, py_re:2]; boundary=unknown.",
+  "schema_version": "1"
+}

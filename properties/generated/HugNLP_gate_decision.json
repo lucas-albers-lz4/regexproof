@@ -1,0 +1,54 @@
+{
+  "candidate_url": "https://github.com/HugAILab/HugNLP",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. HugAILab NLP toolkit; 61 py_re sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "HugNLP",
+  "corpus_pin": "36d8b728690725caff58484323953b242789654d",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "(?i)": 1,
+      "backref": 1,
+      "lookaround": 3
+    },
+    "dialect": {
+      "py_re": 61
+    },
+    "flags": {
+      "i": 8,
+      "s": 13,
+      "x": 1
+    },
+    "pin": "36d8b728690725caff58484323953b242789654d",
+    "predicted_buckets": {
+      "backref": 1,
+      "inline-flag": 23,
+      "lookaround": 3
+    },
+    "regex_sites": 61,
+    "regex_sites_per_file": {
+      "processors/pretraining/kg_enhance_plm/WikiExtractor.py": 61
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 61 regex sites (auto-NO-GO bar 200); dialects [py_re:61]; boundary=unknown.",
+  "schema_version": "1"
+}

@@ -1,0 +1,96 @@
+{
+  "candidate_url": "https://github.com/MahdiHedhli/vedetta",
+  "conditions": [
+    {
+      "evidence": "Dialects already covered. Open-source SIEM + threat-intel network (MahdiHedhli/vedetta); deterministic-true; 396 sites mixed (py_re 138 + re2 103 + shell 79 + ecma 76). Security tool -> escape hatch.",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary=deterministic-true.",
+      "id": "security-boundary",
+      "met": true
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "vedetta",
+  "corpus_pin": "cec6a1caef7a576c036e6d07eabd482fe0a6b059",
+  "decision": "triage-trial",
+  "decision_basis": "escape_hatch",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": true,
+  "probe": {
+    "construct_counts": {
+      "(?i)": 147,
+      "(?s)": 35,
+      "backref": 1,
+      "lookaround": 40,
+      "posix-class": 18
+    },
+    "dialect": {
+      "ecma": 76,
+      "posix-shell": 79,
+      "py_re": 138,
+      "re2": 103
+    },
+    "flags": {
+      "g": 2,
+      "i": 32,
+      "s": 8
+    },
+    "pin": "cec6a1caef7a576c036e6d07eabd482fe0a6b059",
+    "predicted_buckets": {
+      "backref": 1,
+      "inline-flag": 222,
+      "lookaround": 40,
+      "posix-class": 18,
+      "stateful": 2
+    },
+    "regex_sites": 396,
+    "regex_sites_per_file": {
+      "backend/internal/dbupdate/manifest.go": 3,
+      "backend/internal/dbupdate/puller.go": 1,
+      "backend/internal/discovery/validate.go": 1,
+      "backend/internal/dnsintel/tunnel.go": 3,
+      "backend/internal/fingerprint/hostname.go": 63,
+      "backend/internal/store/devices_correlate.go": 1,
+      "backend/internal/updatecheck/updatecheck.go": 2,
+      "collector/test/test_parser.py": 1,
+      "frontend/src/App.jsx": 13,
+      "frontend/src/SensorsView.test.jsx": 3,
+      "frontend/src/TelemetryAcknowledgementDialog.test.jsx": 22,
+      "frontend/src/UpdateNotice.test.jsx": 9,
+      "frontend/src/findings/FindingsView.jsx": 2,
+      "frontend/src/findings/FindingsView.test.jsx": 19,
+      "frontend/src/identity/IdentityPanel.jsx": 1,
+      "frontend/src/identity/IdentityPanel.test.jsx": 6,
+      "frontend/src/lib/api.js": 1,
+      "scripts/check_repo_sanitization.py": 137,
+      "scripts/gen-env.sh": 3,
+      "scripts/run-trusted-pr-sanitation.sh": 2,
+      "scripts/select-sanitation-range.sh": 1,
+      "scripts/tests/deploy-sanitation-test.sh": 15,
+      "scripts/tests/port-config-test.sh": 5,
+      "scripts/tests/trusted-pr-sanitation-test.sh": 6,
+      "scripts/update-all.sh": 8,
+      "scripts/update-oui.sh": 1,
+      "scripts/update-sensor.sh": 1,
+      "sensor/deploy/install.sh": 21,
+      "sensor/deploy/install_test.sh": 16,
+      "sensor/internal/netscan/scanner.go": 1,
+      "sensor/internal/netscan/target_validation.go": 1,
+      "telemetry/internal/export/leakscan.go": 3,
+      "threat-network/internal/corpus/canonical.go": 17,
+      "threat-network/internal/corpus/privacy.go": 4,
+      "threat-network/internal/ingest/privacy.go": 1,
+      "threat-network/internal/valid/valid.go": 2
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Security-boundary corpus (boundary=deterministic-true) with findings-triage potential; 396 sites across [ecma:76, posix-shell:79, py_re:138, re2:103].",
+  "schema_version": "1"
+}

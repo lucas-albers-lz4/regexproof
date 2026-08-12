@@ -1,0 +1,70 @@
+{
+  "candidate_url": "https://github.com/fabriziosalmi/nis2-public",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. NIS2 compliance public (fabriziosalmi); 47 sites - compliance-adjacent but below scale.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "nis2-public",
+  "corpus_pin": "83a865fc095ae388ac8728dfd8b3f14b477a0449",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "lookaround": 2
+    },
+    "dialect": {
+      "ecma": 29,
+      "py_re": 18
+    },
+    "flags": {
+      "g": 3,
+      "i": 5,
+      "s": 2
+    },
+    "pin": "83a865fc095ae388ac8728dfd8b3f14b477a0449",
+    "predicted_buckets": {
+      "inline-flag": 7,
+      "lookaround": 2,
+      "stateful": 3
+    },
+    "regex_sites": 47,
+    "regex_sites_per_file": {
+      "packages/api/app/tasks/report_tasks.py": 6,
+      "packages/api/app/utils/slug.py": 2,
+      "packages/api/app/utils/target_validator.py": 1,
+      "packages/api/tests/test_health_checks.py": 1,
+      "packages/scanner/nis2scan/legal.py": 1,
+      "packages/scanner/nis2scan/resilience.py": 2,
+      "packages/scanner/nis2scan/secrets.py": 5,
+      "packages/web/src/app/dashboard/findings/page.tsx": 1,
+      "packages/web/src/app/dashboard/governance/page.tsx": 1,
+      "packages/web/src/app/dashboard/scans/[id]/compare/page.tsx": 2,
+      "packages/web/src/app/dashboard/scans/[id]/page.tsx": 16,
+      "packages/web/src/app/dashboard/scans/schedules/page.tsx": 1,
+      "packages/web/src/app/dashboard/settings/profile/page.tsx": 2,
+      "packages/web/src/app/page.tsx": 1,
+      "packages/web/src/components/brand/logo.tsx": 1,
+      "packages/web/src/components/layout/header.tsx": 1,
+      "packages/web/src/components/ui/safe-html.tsx": 2,
+      "packages/web/src/lib/api-client.ts": 1
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 47 regex sites (auto-NO-GO bar 200); dialects [ecma:29, py_re:18]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

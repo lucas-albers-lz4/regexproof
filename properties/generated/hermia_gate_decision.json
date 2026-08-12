@@ -1,0 +1,58 @@
+{
+  "candidate_url": "https://github.com/scottblydotcom/hermia",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. scottblydotcom; 28 py_re sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "hermia",
+  "corpus_pin": "5d8df6c3e9286d23081cbfc102d3a73d2ed156c6",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "lookaround": 2
+    },
+    "dialect": {
+      "py_re": 28
+    },
+    "flags": {
+      "i": 9,
+      "m": 2,
+      "s": 4
+    },
+    "pin": "5d8df6c3e9286d23081cbfc102d3a73d2ed156c6",
+    "predicted_buckets": {
+      "inline-flag": 13,
+      "lookaround": 2,
+      "m-flag": 2
+    },
+    "regex_sites": 28,
+    "regex_sites_per_file": {
+      "scripts/extract_install_commands.py": 3,
+      "src/hermia/metrics.py": 2,
+      "src/hermia/normalize.py": 1,
+      "src/hermia/schemas.py": 1,
+      "src/hermia/submit.py": 15,
+      "src/hermia/tui/transport_adapter.py": 1,
+      "tests/unit/test_workstream_a_fixes.py": 5
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 28 regex sites (auto-NO-GO bar 200); dialects [py_re:28]; boundary=deterministic-true.",
+  "schema_version": "1"
+}
