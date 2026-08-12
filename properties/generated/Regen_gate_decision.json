@@ -1,0 +1,81 @@
+{
+  "candidate_url": "https://github.com/FluidifyAI/Regen",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown (or classifier false positive). FluidifyAI Regen; 66 sites ecma/shell/re2 below scale.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "Regen",
+  "corpus_pin": "d1a2f90555f29b0566ce2ec4d3570f56f730bf3c",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "(?m)": 2
+    },
+    "dialect": {
+      "ecma": 53,
+      "posix-shell": 5,
+      "re2": 8
+    },
+    "flags": {
+      "g": 20,
+      "m": 1,
+      "s": 17
+    },
+    "pin": "d1a2f90555f29b0566ce2ec4d3570f56f730bf3c",
+    "predicted_buckets": {
+      "inline-flag": 17,
+      "m-flag": 3,
+      "stateful": 20
+    },
+    "regex_sites": 66,
+    "regex_sites_per_file": {
+      "backend/internal/services/incident_service.go": 2,
+      "backend/internal/services/slack_event_handler.go": 4,
+      "backend/internal/services/slack_service.go": 2,
+      "frontend/scripts/inject-sw-assets.mjs": 2,
+      "frontend/scripts/resize-icons.mjs": 1,
+      "frontend/src/components/ProfileModal.tsx": 1,
+      "frontend/src/components/SlackSetupModal.tsx": 8,
+      "frontend/src/components/TeamsSetupModal.tsx": 7,
+      "frontend/src/components/TelegramSetupModal.tsx": 1,
+      "frontend/src/components/incidents/AddTimelineEntry.tsx": 1,
+      "frontend/src/components/incidents/AttachmentsPanel.tsx": 1,
+      "frontend/src/components/incidents/NeuriPanel.tsx": 2,
+      "frontend/src/components/incidents/Timeline.tsx": 8,
+      "frontend/src/components/layout/Sidebar.tsx": 1,
+      "frontend/src/components/onboarding/WizardStepSchedule.tsx": 1,
+      "frontend/src/components/onboarding/WizardStepSlack.tsx": 3,
+      "frontend/src/components/oncall/GanttCalendar.tsx": 1,
+      "frontend/src/components/ui/TimezoneSelect.tsx": 1,
+      "frontend/src/hooks/usePushNotifications.ts": 2,
+      "frontend/src/pages/IncidentDetailPage.tsx": 3,
+      "frontend/src/pages/IntegrationsPage.tsx": 1,
+      "frontend/src/pages/RoutingRulesPage.tsx": 2,
+      "frontend/src/pages/ScheduleDetailPage.tsx": 3,
+      "frontend/src/pages/SystemSettingsPage.tsx": 3,
+      "scripts/k8s-test/00-setup-cluster.sh": 2,
+      "scripts/k8s-test/01-install-chart.sh": 1,
+      "scripts/k8s-test/04-rolling-deploy.sh": 1,
+      "scripts/k8s-test/99-teardown.sh": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 66 regex sites (auto-NO-GO bar 200); dialects [ecma:53, posix-shell:5, re2:8]; boundary=unknown.",
+  "schema_version": "1"
+}

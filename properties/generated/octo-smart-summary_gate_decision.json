@@ -1,0 +1,50 @@
+{
+  "candidate_url": "https://github.com/Mininglamp-OSS/octo-smart-summary",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown (or classifier false positive). LLM summarizer (Mininglamp); 7 re2 sites; classifier deterministic-true is a false positive (not a security tool).",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "octo-smart-summary",
+  "corpus_pin": "9e9cf2c90f122f918666e3c3f1466eaa8521ddca",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "(?m)": 1
+    },
+    "dialect": {
+      "re2": 7
+    },
+    "flags": {},
+    "pin": "9e9cf2c90f122f918666e3c3f1466eaa8521ddca",
+    "predicted_buckets": {
+      "m-flag": 1
+    },
+    "regex_sites": 7,
+    "regex_sites_per_file": {
+      "internal/api/handler/agent_chat.go": 1,
+      "internal/api/handler/bot_summary_create.go": 1,
+      "internal/service/edit.go": 1,
+      "internal/worker/citation.go": 3,
+      "internal/worker/meta_processor.go": 1
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 7 regex sites (auto-NO-GO bar 200); dialects [re2:7]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

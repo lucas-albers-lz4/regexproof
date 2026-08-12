@@ -1,0 +1,58 @@
+{
+  "candidate_url": "https://github.com/lumigo-io/lumigo-node",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown (or classifier false positive). Lumigo Node agent; 29 ecma sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "lumigo-node",
+  "corpus_pin": "33603a3ede210594777becf9c2f57679b723b24b",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 29
+    },
+    "flags": {
+      "g": 16,
+      "i": 2,
+      "m": 1
+    },
+    "pin": "33603a3ede210594777becf9c2f57679b723b24b",
+    "predicted_buckets": {
+      "inline-flag": 2,
+      "m-flag": 1,
+      "stateful": 16
+    },
+    "regex_sites": 29,
+    "regex_sites_per_file": {
+      "auto-instrument-handler/aws/aws-user-function.js": 1,
+      "auto-instrument-handler/index.js": 1,
+      "src/tools/jsonSortify.js": 1,
+      "src/tools/jsonSortify.test.js": 1,
+      "src/tools/xmlToJson.js": 8,
+      "src/tools/xmlToJson.test.js": 5,
+      "src/utils.ts": 7,
+      "src/utils/payloadStringify.js": 4,
+      "src/utils/w3cUtils.ts": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 29 regex sites (auto-NO-GO bar 200); dialects [ecma:29]; boundary=unknown.",
+  "schema_version": "1"
+}

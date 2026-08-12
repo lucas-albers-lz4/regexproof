@@ -1,0 +1,52 @@
+{
+  "candidate_url": "https://github.com/donmccurdy/three-gltf-viewer",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown (or classifier false positive). three-gltf-viewer demo; 12 ecma sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "three-gltf-viewer",
+  "corpus_pin": "bd83b39339a525708387006aba976342f036713e",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 12
+    },
+    "flags": {
+      "g": 7,
+      "i": 2,
+      "m": 2
+    },
+    "pin": "bd83b39339a525708387006aba976342f036713e",
+    "predicted_buckets": {
+      "inline-flag": 2,
+      "m-flag": 2,
+      "stateful": 7
+    },
+    "regex_sites": 12,
+    "regex_sites_per_file": {
+      "src/app.js": 3,
+      "src/validator.js": 8,
+      "src/viewer.js": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 12 regex sites (auto-NO-GO bar 200); dialects [ecma:12]; boundary=unknown.",
+  "schema_version": "1"
+}

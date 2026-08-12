@@ -1,0 +1,42 @@
+{
+  "candidate_url": "https://github.com/IBM/aspera-cli",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown (or classifier false positive). IBM Aspera CLI; 1 shell site.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "aspera-cli",
+  "corpus_pin": "e0d7fcaac98279bc8909cd00a4e8ae7e33f578bd",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "posix-shell": 1
+    },
+    "flags": {},
+    "pin": "e0d7fcaac98279bc8909cd00a4e8ae7e33f578bd",
+    "predicted_buckets": {},
+    "regex_sites": 1,
+    "regex_sites_per_file": {
+      "tests/post_proc_test.sh": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 1 regex sites (auto-NO-GO bar 200); dialects [posix-shell:1]; boundary=unknown.",
+  "schema_version": "1"
+}

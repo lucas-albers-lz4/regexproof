@@ -1,0 +1,60 @@
+{
+  "candidate_url": "https://github.com/watson-developer-cloud/swift-sdk",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown (or classifier false positive). Watson Swift SDK; 85 ecma/shell sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "swift-sdk",
+  "corpus_pin": "f85f1649a1354957284def2ebd6beb4f68d8a61b",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "backref": 1,
+      "lookaround": 2
+    },
+    "dialect": {
+      "ecma": 80,
+      "posix-shell": 5
+    },
+    "flags": {
+      "g": 12,
+      "i": 14,
+      "m": 1
+    },
+    "pin": "f85f1649a1354957284def2ebd6beb4f68d8a61b",
+    "predicted_buckets": {
+      "backref": 1,
+      "inline-flag": 14,
+      "lookaround": 2,
+      "m-flag": 1,
+      "stateful": 12
+    },
+    "regex_sites": 85,
+    "regex_sites_per_file": {
+      "Scripts/coverage.sh": 2,
+      "Scripts/generate-documentation-resources/js/jazzy.js": 1,
+      "Scripts/generate-documentation-resources/js/jquery.min.js": 79,
+      "Scripts/generate-documentation.sh": 2,
+      "Scripts/upload-coverage.sh": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 85 regex sites (auto-NO-GO bar 200); dialects [ecma:80, posix-shell:5]; boundary=unknown.",
+  "schema_version": "1"
+}

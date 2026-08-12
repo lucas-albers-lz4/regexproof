@@ -1,0 +1,52 @@
+{
+  "candidate_url": "https://github.com/demisto/demisto-py",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown (or classifier false positive). Palo Alto XSOAR API client; 20 py/shell sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "demisto-py",
+  "corpus_pin": "351d0958ead897d564317b2fd6dfe8b036a87fdc",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "posix-shell": 13,
+      "py_re": 7
+    },
+    "flags": {
+      "i": 1
+    },
+    "pin": "351d0958ead897d564317b2fd6dfe8b036a87fdc",
+    "predicted_buckets": {
+      "inline-flag": 1
+    },
+    "regex_sites": 20,
+    "regex_sites_per_file": {
+      ".gitlab/helper_functions.sh": 3,
+      ".hooks/install.python-poetry.py": 1,
+      "demisto_client/__init__.py": 2,
+      "demisto_client/demisto_api/api_client.py": 3,
+      "demisto_client/demisto_api/rest.py": 1,
+      "gen-code.sh": 10
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 20 regex sites (auto-NO-GO bar 200); dialects [posix-shell:13, py_re:7]; boundary=unknown.",
+  "schema_version": "1"
+}

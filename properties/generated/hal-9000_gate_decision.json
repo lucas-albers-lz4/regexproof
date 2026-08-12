@@ -1,0 +1,51 @@
+{
+  "candidate_url": "https://github.com/vinta/hal-9000",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown (or classifier false positive). vinta Hal 9000 (personal assistant); 10 sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "hal-9000",
+  "corpus_pin": "c61d359ddf853854cecd1689c27a931b84795c90",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "posix-shell": 2,
+      "py_re": 8
+    },
+    "flags": {
+      "i": 2
+    },
+    "pin": "c61d359ddf853854cecd1689c27a931b84795c90",
+    "predicted_buckets": {
+      "inline-flag": 2
+    },
+    "regex_sites": 10,
+    "regex_sites_per_file": {
+      ".codex/hooks/sync-dotfiles.sh": 2,
+      "dotfiles/.claude/hooks/guard-bash-paths.py": 4,
+      "plugins/hal-session-auto-rename/scripts/hal-session-auto-rename.py": 1,
+      "plugins/hal-voice/scripts/hal-voice.py": 2,
+      "tests/plugins/test_hal_statusline.py": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 10 regex sites (auto-NO-GO bar 200); dialects [posix-shell:2, py_re:8]; boundary=unknown.",
+  "schema_version": "1"
+}

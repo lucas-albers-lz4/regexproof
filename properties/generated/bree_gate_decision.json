@@ -1,0 +1,46 @@
+{
+  "candidate_url": "https://github.com/breejs/bree",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown (or classifier false positive). job scheduler; 10 ecma sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "bree",
+  "corpus_pin": "465a5e2f452048c99790229ba813bed795b9f366",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 10
+    },
+    "flags": {},
+    "pin": "465a5e2f452048c99790229ba813bed795b9f366",
+    "predicted_buckets": {},
+    "regex_sites": 10,
+    "regex_sites_per_file": {
+      "test/add.js": 2,
+      "test/index.js": 1,
+      "test/issues/issue-180/test.js": 1,
+      "test/job-validator.js": 5,
+      "test/remove.js": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 10 regex sites (auto-NO-GO bar 200); dialects [ecma:10]; boundary=unknown.",
+  "schema_version": "1"
+}

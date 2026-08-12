@@ -1,0 +1,50 @@
+{
+  "candidate_url": "https://github.com/Azure-Samples/postgres-agentic-shop",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown (or classifier false positive). Azure sample; 10 sites ecma/py below scale.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "postgres-agentic-shop",
+  "corpus_pin": "c32548c859f0c909597460571ca8ceeed5ad1a08",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 3,
+      "py_re": 7
+    },
+    "flags": {
+      "g": 2
+    },
+    "pin": "c32548c859f0c909597460571ca8ceeed5ad1a08",
+    "predicted_buckets": {
+      "stateful": 2
+    },
+    "regex_sites": 10,
+    "regex_sites_per_file": {
+      "backend/src/llama_index/vector_stores/pgdiskann/base.py": 1,
+      "backend/src/utils/utils.py": 6,
+      "frontend/src/components/agent-tab-detail/render-output.tsx": 2,
+      "frontend/src/services/api-callers.ts": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 10 regex sites (auto-NO-GO bar 200); dialects [ecma:3, py_re:7]; boundary=unknown.",
+  "schema_version": "1"
+}

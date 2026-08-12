@@ -1,0 +1,94 @@
+{
+  "candidate_url": "https://github.com/open-horizon/anax",
+  "conditions": [
+    {
+      "evidence": "Dialects already covered; no first-seen class. IBM Open Horizon edge agent control system; probe boundary deterministic-true; 218 sites incl. 194 posix-shell - shell-corpus datapoint + security-adjacent edge agent. Escape hatch.",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary=deterministic-true.",
+      "id": "security-boundary",
+      "met": true
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "anax",
+  "corpus_pin": "2f3fa5a506d6565fa68858b7963450567ddda114",
+  "decision": "triage-trial",
+  "decision_basis": "escape_hatch",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": true,
+  "probe": {
+    "construct_counts": {
+      "(?s)": 2,
+      "posix-class": 7
+    },
+    "dialect": {
+      "posix-shell": 194,
+      "re2": 24
+    },
+    "flags": {
+      "i": 5
+    },
+    "pin": "2f3fa5a506d6565fa68858b7963450567ddda114",
+    "predicted_buckets": {
+      "inline-flag": 7,
+      "posix-class": 7
+    },
+    "regex_sites": 218,
+    "regex_sites_per_file": {
+      ".github/scripts/configure_versions_script.sh": 6,
+      "agent-install/agent-auto-upgrade.sh": 6,
+      "agent-install/agent-install.sh": 54,
+      "agent-install/agent-uninstall.sh": 6,
+      "agent-install/edgeNodeFiles.sh": 5,
+      "agent-install/test/assertions.sh": 3,
+      "agent-install/test/common.sh": 2,
+      "agent-install/test/test.sh": 8,
+      "agreementbot/api.go": 1,
+      "anax-in-container/horizon-container": 9,
+      "anax-in-k8s/cronjobs/auto-upgrade-cronjob.sh": 18,
+      "api/api.go": 1,
+      "cli/cliconfig/config.go": 2,
+      "cli/cliutils/cliutils.go": 5,
+      "cli/dev/dependency.go": 2,
+      "cli/eventlog/eventlog.go": 1,
+      "cli/sync_service/object.go": 1,
+      "cutil/cutil.go": 11,
+      "pkg/deb/horizon/DEBIAN/postrm": 1,
+      "pkg/mac/scripts/horizon-cli-uninstall.sh": 1,
+      "test/docker/fs/hzn/service/cpu/service.sh": 2,
+      "test/docker/fs/hzn/service/leaf/service.sh": 2,
+      "test/gov/agbot_apitest.sh": 3,
+      "test/gov/agbot_del_loop.sh": 8,
+      "test/gov/check_node_status.sh": 1,
+      "test/gov/gov-combined.sh": 5,
+      "test/gov/helm_package.sh": 1,
+      "test/gov/hzn_apikey.sh": 2,
+      "test/gov/hzn_compcheck.sh": 8,
+      "test/gov/hzn_dev_services.sh": 10,
+      "test/gov/hzn_nmp.sh": 2,
+      "test/gov/hzn_secretsmanager.sh": 1,
+      "test/gov/init_exchange.sh": 3,
+      "test/gov/pattern_change.sh": 1,
+      "test/gov/resource_package.sh": 1,
+      "test/gov/run_kube.sh": 1,
+      "test/gov/service_apireg.sh": 6,
+      "test/gov/service_upgrading_downgrading_test.sh": 4,
+      "test/gov/sync_service_test.sh": 2,
+      "test/gov/unconfig_loop.sh": 4,
+      "tools/copy-i18n-messages": 2,
+      "tools/image-exists": 2,
+      "tools/unpack-i18n-messages": 2,
+      "tools/update-i18n-messages": 2
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Security-boundary corpus (boundary=deterministic-true) with findings-triage potential; 218 sites across [posix-shell:194, re2:24].",
+  "schema_version": "1"
+}

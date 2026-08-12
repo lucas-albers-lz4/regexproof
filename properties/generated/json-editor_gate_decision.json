@@ -1,0 +1,75 @@
+{
+  "candidate_url": "https://github.com/json-editor/json-editor",
+  "conditions": [
+    {
+      "evidence": "Dialects already covered; no first-seen class. JSON schema form/validator editor; probe boundary deterministic-true; 122 ecma sites; validator class on input boundaries. Escape hatch.",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary=deterministic-true.",
+      "id": "security-boundary",
+      "met": true
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "json-editor",
+  "corpus_pin": "b31ddabecf4ed3209d37a2f5b29956120cd8f9ce",
+  "decision": "triage-trial",
+  "decision_basis": "escape_hatch",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": true,
+  "probe": {
+    "construct_counts": {
+      "lookaround": 7
+    },
+    "dialect": {
+      "ecma": 122
+    },
+    "flags": {
+      "g": 27,
+      "i": 31,
+      "m": 1,
+      "u": 1
+    },
+    "pin": "b31ddabecf4ed3209d37a2f5b29956120cd8f9ce",
+    "predicted_buckets": {
+      "inline-flag": 31,
+      "lookaround": 7,
+      "m-flag": 1,
+      "stateful": 27,
+      "u-flag": 1
+    },
+    "regex_sites": 122,
+    "regex_sites_per_file": {
+      "config/webpack.common.js": 4,
+      "docs/scripts/ajv-validator.js": 70,
+      "src/defaults.js": 1,
+      "src/editor.js": 2,
+      "src/editors/base64.js": 1,
+      "src/editors/enum.js": 3,
+      "src/editors/multiselect.js": 2,
+      "src/editors/object.js": 2,
+      "src/editors/signature.js": 1,
+      "src/editors/string.js": 3,
+      "src/editors/upload.js": 3,
+      "src/editors/uuid.js": 1,
+      "src/templates/default.js": 2,
+      "src/themes/bootstrap2.js": 4,
+      "src/themes/materialize.js": 1,
+      "src/utilities.js": 3,
+      "src/validator.js": 7,
+      "tests/codeceptjs/editors/colorpicker_test.js": 1,
+      "tests/codeceptjs/editors/uuid_test.js": 9,
+      "tests/codeceptjs/issues/issue-gh-1367_test.js": 1,
+      "tests/unit/validator.spec.js": 1
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Security-boundary corpus (boundary=deterministic-true) with findings-triage potential; 122 sites across [ecma:122].",
+  "schema_version": "1"
+}

@@ -1,0 +1,51 @@
+{
+  "candidate_url": "https://github.com/open-toolchain/tekton-catalog",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown (or classifier false positive). Open-toolchain tekton catalog; 16 sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "tekton-catalog",
+  "corpus_pin": "f7b166bc5556fc11ecbbae1e350153cf883af95d",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "posix-shell": 3,
+      "py_re": 13
+    },
+    "flags": {
+      "i": 1
+    },
+    "pin": "f7b166bc5556fc11ecbbae1e350153cf883af95d",
+    "predicted_buckets": {
+      "inline-flag": 1
+    },
+    "regex_sites": 16,
+    "regex_sites_per_file": {
+      ".ci/check_tasks.sh": 1,
+      ".ci/generate_pipeline_doc.py": 6,
+      ".ci/update_all_samples_readmes.sh": 2,
+      ".ci/update_readme.py": 4,
+      ".ci/update_root_readme.py": 3
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 16 regex sites (auto-NO-GO bar 200); dialects [posix-shell:3, py_re:13]; boundary=unknown.",
+  "schema_version": "1"
+}

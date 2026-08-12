@@ -1,0 +1,86 @@
+{
+  "candidate_url": "https://github.com/snyk/snyk-ls",
+  "conditions": [
+    {
+      "evidence": "Dialects already covered; no first-seen class. Snyk language server (SAST tool); probe boundary deterministic-true; 130 sites (ecma 89 + re2 35 + shell 6). Escape hatch.",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary=deterministic-true.",
+      "id": "security-boundary",
+      "met": true
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "snyk-ls",
+  "corpus_pin": "68dc3ee1a1d3cc31820daa762475292675464799",
+  "decision": "triage-trial",
+  "decision_basis": "escape_hatch",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": true,
+  "probe": {
+    "construct_counts": {
+      "(?m)": 12,
+      "(?s)": 2,
+      "lookaround": 8
+    },
+    "dialect": {
+      "ecma": 89,
+      "posix-shell": 6,
+      "re2": 35
+    },
+    "flags": {
+      "g": 29,
+      "i": 1,
+      "s": 2
+    },
+    "pin": "68dc3ee1a1d3cc31820daa762475292675464799",
+    "predicted_buckets": {
+      "inline-flag": 5,
+      "lookaround": 8,
+      "m-flag": 12,
+      "stateful": 29
+    },
+    "regex_sites": 130,
+    "regex_sites_per_file": {
+      ".github/create-cli-pr.sh": 1,
+      ".github/upload-to-s3.sh": 1,
+      "application/config/config.go": 1,
+      "benchmark/testdata/code_template.js": 3,
+      "domain/ide/converter/converter.go": 1,
+      "domain/snyk/remediation/remy.go": 1,
+      "getLanguageServer.sh": 1,
+      "infrastructure/code/code_html.go": 1,
+      "infrastructure/code/convert.go": 4,
+      "infrastructure/code/snyk_code_http_client.go": 1,
+      "infrastructure/code/template/scripts.js": 1,
+      "infrastructure/configuration/config_html_test.go": 5,
+      "infrastructure/configuration/template/js/core/dom.js": 1,
+      "infrastructure/configuration/template/js/core/polyfills.js": 58,
+      "infrastructure/configuration/template/js/core/utils.js": 3,
+      "infrastructure/configuration/template/js/features/filter-sync.js": 1,
+      "infrastructure/configuration/template/js/features/validation.js": 8,
+      "infrastructure/configuration/template/js/state/form-state.js": 1,
+      "infrastructure/configuration/template/js/ui/form-handler.js": 1,
+      "infrastructure/oss/code_actions.go": 1,
+      "infrastructure/oss/oss_html_test.go": 2,
+      "internal/html/ignore/ignore_scripts.js": 2,
+      "internal/uri/uri_util.go": 1,
+      "internal/vcs/git_utils.go": 1,
+      "js-tests/global-reset.test.mjs": 6,
+      "js-tests/settings-fallback.test.mjs": 1,
+      "js-tests/tree-runtime.test.mjs": 3,
+      "scripts/check-tests-run.sh": 3,
+      "scripts/compatibility-matrix/cli_analyzer.go": 4,
+      "scripts/compatibility-matrix/plugins.go": 12
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Security-boundary corpus (boundary=deterministic-true) with findings-triage potential; 130 sites across [ecma:89, posix-shell:6, re2:35].",
+  "schema_version": "1"
+}

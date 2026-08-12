@@ -1,0 +1,52 @@
+{
+  "candidate_url": "https://github.com/deepnote/deepnote-toolkit",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown (or classifier false positive). Deepnote SDK; 8 sites, 3 extractor errors.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "deepnote-toolkit",
+  "corpus_pin": "2d60c2292615eb2c6cc6df42be6ac7ca1b992580",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "lookaround": 2
+    },
+    "dialect": {
+      "posix-shell": 2,
+      "py_re": 6
+    },
+    "flags": {},
+    "pin": "2d60c2292615eb2c6cc6df42be6ac7ca1b992580",
+    "predicted_buckets": {
+      "lookaround": 2
+    },
+    "regex_sites": 8,
+    "regex_sites_per_file": {
+      "deepnote_toolkit/chart/spec_utils.py": 1,
+      "deepnote_toolkit/sql/jinjasql_utils.py": 1,
+      "deepnote_toolkit/sql/spark_sql_magic.py": 2,
+      "deepnote_toolkit/sql/sql_execution.py": 1,
+      "dockerfiles/builder/bundle.sh": 2,
+      "installer/module/kernels.py": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 8 regex sites (auto-NO-GO bar 200); dialects [posix-shell:2, py_re:6]; boundary=unknown.",
+  "schema_version": "1"
+}

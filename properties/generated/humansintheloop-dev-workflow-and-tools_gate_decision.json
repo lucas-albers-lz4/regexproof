@@ -1,0 +1,69 @@
+{
+  "candidate_url": "https://github.com/humansintheloop-dev/humansintheloop-dev-workflow-and-tools",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown (or classifier false positive). HITL workflow/tools repo; 56 sites; classifier deterministic-true is a false positive (workflow tools, not security).",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "humansintheloop-dev-workflow-and-tools",
+  "corpus_pin": "103980af9666b2fca94fdfcc0d3d9507c9dbf853",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "(?i)": 1
+    },
+    "dialect": {
+      "ecma": 27,
+      "posix-shell": 12,
+      "py_re": 17
+    },
+    "flags": {
+      "s": 1
+    },
+    "pin": "103980af9666b2fca94fdfcc0d3d9507c9dbf853",
+    "predicted_buckets": {
+      "inline-flag": 2
+    },
+    "regex_sites": 56,
+    "regex_sites_per_file": {
+      "claude-code-plugins/idea-to-code/hooks/debug-hook.js": 1,
+      "claude-code-plugins/idea-to-code/hooks/enforce-bash-conventions.js": 9,
+      "claude-code-plugins/idea-to-code/hooks/issue-session-tagger.js": 1,
+      "claude-code-plugins/idea-to-code/hooks/session-recorder.js": 3,
+      "claude-code-plugins/idea-to-code/hooks/session-recorder.test.js": 13,
+      "config-files/git-hooks/precommit.sh": 1,
+      "src/i2code/implement/git_setup.py": 2,
+      "src/i2code/implement/pull_request_review_processor.py": 1,
+      "src/i2code/improve/analyze_sessions.py": 1,
+      "src/i2code/plan_domain/parser.py": 2,
+      "src/i2code/plan_domain/plan.py": 1,
+      "src/i2code/plan_domain/task.py": 3,
+      "src/i2code/plan_domain/thread.py": 2,
+      "src/i2code/setup_cmd/update_project.py": 4,
+      "test-scripts/test-i2code-implement.sh": 5,
+      "test-scripts/test-plan-cli-smoke.sh": 3,
+      "test-scripts/test-subcommands-smoke.sh": 1,
+      "test-scripts/test-verify-all-tests-have-markers.sh": 1,
+      "test-scripts/test-wheel-contents.sh": 1,
+      "tests/setup-cmd/test_update_project_idempotence.py": 1
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 56 regex sites (auto-NO-GO bar 200); dialects [ecma:27, posix-shell:12, py_re:17]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

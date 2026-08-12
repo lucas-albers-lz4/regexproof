@@ -1,0 +1,64 @@
+{
+  "candidate_url": "https://github.com/wildfly-security/wildfly-elytron",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown (or classifier false positive). WildFly Elytron security framework; 45 java sites - Java dialect deferred (#150), revisit at Java graduation.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "wildfly-elytron",
+  "corpus_pin": "5ba1da3ce4b6130e7a924dbf0dbc5187ee961763",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "java": 45
+    },
+    "flags": {},
+    "pin": "5ba1da3ce4b6130e7a924dbf0dbc5187ee961763",
+    "predicted_buckets": {},
+    "regex_sites": 45,
+    "regex_sites_per_file": {
+      "auth/client/src/main/java/org/wildfly/security/auth/client/MatchHostRule.java": 1,
+      "auth/server/base/src/test/java/org/wildfly/security/authz/RoleDecoderTest.java": 3,
+      "auth/util/src/test/java/org/wildfly/security/auth/util/MappedRegexRealmMapperTest.java": 5,
+      "auth/util/src/test/java/org/wildfly/security/auth/util/RegexNameRewriterTest.java": 1,
+      "auth/util/src/test/java/org/wildfly/security/auth/util/SimpleRegexRealmMapperTest.java": 5,
+      "credential/store/src/main/java/org/wildfly/security/credential/store/impl/KeyStoreCredentialStore.java": 1,
+      "credential/store/src/main/java/org/wildfly/security/credential/store/impl/PropertiesCredentialStore.java": 1,
+      "http/base/src/main/java/org/wildfly/security/http/HttpConstants.java": 1,
+      "http/bearer/src/main/java/org/wildfly/security/http/bearer/BearerTokenAuthenticationMechanism.java": 1,
+      "http/oidc/src/main/java/org/wildfly/security/http/oidc/Encode.java": 5,
+      "http/oidc/src/main/java/org/wildfly/security/http/oidc/Oidc.java": 2,
+      "http/oidc/src/main/java/org/wildfly/security/http/oidc/OidcClientUriBuilder.java": 4,
+      "http/oidc/src/main/java/org/wildfly/security/http/oidc/PathHelper.java": 1,
+      "ssl/src/main/java/org/wildfly/security/ssl/MechanismDatabase.java": 1,
+      "tests/base/src/test/java/org/wildfly/security/auth/server/CustomRealmMapperTest.java": 1,
+      "tests/base/src/test/java/org/wildfly/security/auth/server/MutableNameRewriterTest.java": 1,
+      "tests/base/src/test/java/org/wildfly/security/auth/server/RegexNameValidatingRewriterTest.java": 1,
+      "tests/base/src/test/java/org/wildfly/security/sasl/gs2/Gs2SuiteChild.java": 1,
+      "tests/base/src/test/java/org/wildfly/security/sasl/oauth2/OAuth2SaslTest.java": 1,
+      "tests/base/src/test/java/org/wildfly/security/x500/X509PeerCertificateChainEvidenceDecoderTest.java": 3,
+      "tool/src/main/java/org/wildfly/security/tool/Command.java": 1,
+      "tool/src/test/java/org/wildfly/security/tool/FileSystemRealmIntegrityCommandTest.java": 3,
+      "x500/cert/base/src/main/java/org/wildfly/security/pem/Pem.java": 1
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 45 regex sites (auto-NO-GO bar 200); dialects [java:45]; boundary=deterministic-true.",
+  "schema_version": "1"
+}
