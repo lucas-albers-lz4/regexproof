@@ -713,6 +713,27 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
             "max_disk_mb": 500,
         },
     },
+    "Yara-rules": {
+        "corpus_type": "rule_corpus",
+        # Materialize: ln -sfn /tmp/Yara-rules/rules batch/corpora/Yara-rules/rules
+        # bartblaze YARA pack (delta vs admitted yara_rules).
+        "path": ROOT / "batch" / "corpora" / "Yara-rules" / "rules",
+        "glob": "**/*.yar,**/*.yara",
+        "dialect": "yara",
+        "extractor": "yara",
+        "repo": "bartblaze/Yara-rules",
+        "security_tool": True,
+        "lift_inline": False,
+        "corpus_pin": "5cc871d82361de8a80d387ec8bbd01fe4258b4a9",
+        "commit": "5cc871d82361de8a80d387ec8bbd01fe4258b4a9",
+        "budget": {
+            "max_patterns": 5000,
+            "max_wall_s": 600,
+            "redos_wall_s": 120,
+            "max_mem_mb": 1024,
+            "max_disk_mb": 100,
+        },
+    },
     # Wave-3 P5 testdata corpora (#116) — exempt from admission gate_decision.
     "perl_tre": {
         "corpus_type": "testdata",
@@ -795,6 +816,7 @@ WAVE_CORPORA = frozenset({
     "lonkero",
     "serviceradar",
     "gigachad-grc",
+    "Yara-rules",
     "perl_tre", "go_regexp_tests", "v8_mjsunit",
 })
 
