@@ -88,6 +88,9 @@ def test_shell_construct_keys_covered_by_vocabulary():
         r"a\Kb",                 # \K
         r"a\g{x}",               # \g{
         "(?i)foo",               # (?i)
+        "(?x)foo bar",           # (?x) — verbose
+        "(?s)foo.bar",           # (?s) — dotall
+        "(?m)^foo$",             # (?m) — multiline
     ]
     emitted = set()
     for pat in samples:
@@ -118,8 +121,8 @@ def test_cli_emits_merged_draft(tmp_path):
 
     (tmp_path / "draft.json").write_text(json.dumps(FIXTURE_DRAFT))
     (tmp_path / "r.ndjson").write_text(
-        json.dumps({"pattern": "[[:alpha:]]", "flags": "i",
-                    "file": "x.sh", "line": 1}) + "\n")
+        json.dumps({"pattern": "[[:alpha:]]", "flags": "i", "file": "x.sh",
+                    "line": 1, "dialect": "posix-shell"}) + "\n")
     rc = m.main([str(tmp_path / "draft.json"), "--ndjson",
                  str(tmp_path / "r.ndjson"), "-o", str(tmp_path / "out.json")])
     assert rc == 0

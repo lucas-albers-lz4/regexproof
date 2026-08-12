@@ -30,10 +30,17 @@ from regexproof.admission.walk import _FLAG_LETTER_TO_CONSTRUCT
 
 
 def merge_draft(draft: dict[str, Any], records: list[dict[str, Any]]) -> dict[str, Any]:
-    """Return a copy of *draft* with shell evidence merged from *records*."""
-    patterns = [r.get("pattern") or "" for r in records]
+    """Return a copy of *draft* with SHELL evidence merged from *records*.
+
+    Only ``posix-shell`` records are aggregated (the merge is the shell-
+    evidence bridge; the scaffold's walk already counted the non-shell
+    surface — mixing py/js records from a full export would double-count
+    and corrupt the dialect totals, luna #275 finding).
+    """
+    shell = [r for r in records if r.get("dialect") == "posix-shell"]
+    patterns = [r.get("pattern") or "" for r in shell]
     flags: Counter[str] = Counter()
-    for r in records:
+    for r in shell:
         for ch in r.get("flags") or "":
             flags[ch] += 1
     merged = Counter(accumulate_constructs(patterns))
@@ -42,18 +49,18 @@ def merge_draft(draft: dict[str, Any], records: list[dict[str, Any]]) -> dict[st
         if key:
             merged[key] += n
     out = json.loads(json.dumps(draft))  # deep copy
-    out["probe"]["regex_sites"] = len(records)
+    out["probe"]["regex_sites"] = len(shell)
     out["probe"]["regex_sites_per_file"] = dict(sorted(
-        Counter(r.get("file") or "" for r in records).items()))
+        Counter(r.get("file") or "" for r in shell).items()))
     # dialect: the scaffold's walk saw no shell pre-P2 — aggregate the
-    # record dialects on top of whatever the scaffold counted.
+    # SHELL record dialects on top of whatever the scaffold counted.
     dialect = Counter(out["probe"].get("dialect") or {})
-    for r in records:
+    for r in shell:
         dialect[r.get("dialect") or "unknown"] += 1
     out["probe"]["dialect"] = dict(dialect)
     out["probe"]["predicted_buckets"] = predict_buckets(dict(merged))
     out["probe"]["_shell_evidence"] = {
-        "records": len(records),
+        "records": len(shell),
         "construct_counts": dict(merged),
     }
     return out

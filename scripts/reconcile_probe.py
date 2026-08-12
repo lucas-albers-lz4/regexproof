@@ -23,6 +23,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math as _math
 import sys
 from collections import Counter
 from pathlib import Path
@@ -30,6 +31,19 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
+
+
+def _finite_percent(value: str) -> float:
+    """argparse type: finite tolerance percent in (0, 100] — nan/inf/0/out-of-
+    range must not fail open (a nan comparison is always False)."""
+    try:
+        pct = float(value)
+    except ValueError:
+        raise argparse.ArgumentTypeError(f"not a number: {value!r}")
+    if not _math.isfinite(pct) or not (0 < pct <= 100.0):
+        raise argparse.ArgumentTypeError(
+            f"tolerance must be a finite value in (0, 100]: {value!r}")
+    return pct
 
 
 def _per_file_counts(ndjson_path: Path) -> dict[str, int]:
@@ -52,8 +66,10 @@ def reconcile_per_file(
     violations: list[str] = []
     for rel in sorted(set(probe_counts) | set(now_counts)):
         p, n = probe_counts.get(rel, 0), now_counts.get(rel, 0)
-        denom = max(p, n)
-        delta = abs(p - n) / denom if denom else 0.0
+        # Plan denominator: |probe - extractor| / probe (plan.md:535) — the
+        # probe count is the evidence being validated. A probe undercount of
+        # 11% (90 vs 100) must FAIL a 10% tolerance.
+        delta = abs(p - n) / p if p else (1.0 if n else 0.0)
         over = delta > tolerance_pct / 100.0
         report[rel] = {"probe": p, "registered": n,
                        "delta_pct": round(delta * 100.0, 2), "over": over}
@@ -72,8 +88,9 @@ def main(argv: list[str] | None = None) -> int:
                     help="P3-A frozen probe export (P1 --dir --ndjson)")
     ap.add_argument("--now-ndjson", required=True, metavar="FRESH.ndjson",
                     help="fresh final-semantics export of the same tree")
-    ap.add_argument("--tolerance-pct", type=float, default=10.0,
-                    help="per-file tolerance percent (default 10)")
+    ap.add_argument("--tolerance-pct", type=_finite_percent, default=10.0,
+                    help="per-file tolerance percent (default 10; must be a "
+                         "finite value in (0, 100])")
     ap.add_argument("-o", "--output", required=True, metavar="REPORT.json")
     args = ap.parse_args(argv)
 
