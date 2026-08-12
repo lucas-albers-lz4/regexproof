@@ -1,710 +1,10 @@
 {
   "items": [
     {
-      "capped": false,
-      "default_branch": "master",
-      "pin": "bb22020cf5c20bfe1e2279fbf453f2d634d08c7b",
-      "pushed_date": "2026-08-09",
-      "queued_at": "2026-08-10",
-      "source_query": "filename:rules.yml path:.semgrep OR path:semgrep",
-      "stars": 130,
-      "url": "https://github.com/cosanlab/nltools"
-    },
-    {
-      "capped": true,
-      "default_branch": "master",
-      "pin": "a32d03cc8567be8c6dbde58910129f1aa9cef185",
-      "pushed_date": "2026-08-10",
-      "queued_at": "2026-08-09",
-      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
-      "stars": 551,
-      "url": "https://github.com/simion/pip-upgrader"
-    },
-    {
-      "capped": true,
-      "default_branch": "main",
-      "pin": "6eaaacaed7ba53af3002726fc0a25b5e5e1e2de0",
-      "pushed_date": "2026-07-01",
-      "queued_at": "2026-08-09",
-      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
-      "stars": 342,
-      "url": "https://github.com/IBM/portieris"
-    },
-    {
-      "capped": true,
-      "default_branch": "master",
-      "pin": "2afd1ecabb944efeb402fe3e1a0f1cf4f7a2ea18",
-      "pushed_date": "2026-08-05",
-      "queued_at": "2026-08-09",
-      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
-      "stars": 374,
-      "url": "https://github.com/Yelp/docker-custodian"
-    },
-    {
-      "capped": true,
-      "default_branch": "master",
-      "pin": "784d98c1a2c9b29cb41a51d86554d768edcc7f6f",
-      "pushed_date": "2026-04-02",
-      "queued_at": "2026-08-09",
-      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
-      "stars": 409,
-      "url": "https://github.com/Yelp/swagger-gradle-codegen"
-    },
-    {
-      "capped": true,
-      "default_branch": "main",
-      "pin": "2881a9e72cfc2ad7abfe99496c3aa40d82caf5ad",
-      "pushed_date": "2026-04-21",
-      "queued_at": "2026-08-09",
-      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
-      "stars": 324,
-      "url": "https://github.com/victorskl/yawsso"
-    },
-    {
-      "capped": true,
-      "default_branch": "master",
-      "pin": "779be7d1b70be372fe4de4c5625276cdf795379e",
-      "pushed_date": "2026-06-16",
-      "queued_at": "2026-08-09",
-      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
-      "stars": 285,
-      "url": "https://github.com/Yelp/threat_intel"
-    },
-    {
-      "capped": true,
-      "default_branch": "master",
-      "pin": "d272527ea3f8a288bf934528da873ec1dabc7bcd",
-      "pushed_date": "2026-08-11",
-      "queued_at": "2026-08-09",
-      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
-      "stars": 177,
-      "url": "https://github.com/convox/convox"
-    },
-    {
-      "capped": true,
-      "default_branch": "main",
-      "pin": "e186ef046ce908fcc7f7c6b265cfb1ccd22628b8",
-      "pushed_date": "2026-08-10",
-      "queued_at": "2026-08-09",
-      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
-      "stars": 133,
-      "url": "https://github.com/alphagov/gds-way"
-    },
-    {
-      "capped": true,
-      "default_branch": "main",
-      "pin": "ea3e83e24676a1678a9522141da29b636c9451ab",
-      "pushed_date": "2026-08-11",
-      "queued_at": "2026-08-10",
-      "source_query": "path:rules extension:yar OR extension:yara",
-      "stars": 672,
-      "url": "https://github.com/chainguard-dev/malcontent"
-    },
-    {
-      "capped": true,
-      "default_branch": "master",
-      "pin": "b07f865003fa622c4cd8418c732efd64b67204b3",
-      "pushed_date": "2026-08-09",
-      "queued_at": "2026-08-09",
-      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
-      "stars": 164,
-      "url": "https://github.com/rancherlabs/support-tools"
-    },
-    {
-      "capped": true,
-      "default_branch": "master",
-      "pin": "3d4d10507f5489763dc1b0da9fc9bbb38ce9fa27",
-      "pushed_date": "2026-05-19",
-      "queued_at": "2026-08-09",
-      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
-      "stars": 148,
-      "url": "https://github.com/watson-developer-cloud/dotnet-standard-sdk"
-    },
-    {
-      "capped": true,
-      "default_branch": "main",
-      "pin": "c32548c859f0c909597460571ca8ceeed5ad1a08",
-      "pushed_date": "2026-08-07",
-      "queued_at": "2026-08-09",
-      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
-      "stars": 103,
-      "url": "https://github.com/Azure-Samples/postgres-agentic-shop"
-    },
-    {
-      "capped": true,
-      "default_branch": "develop",
-      "pin": "0b95ae4cd4fbecaae8059a9f7e8823914d3d2a83",
-      "pushed_date": "2026-08-09",
-      "queued_at": "2026-08-09",
-      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
-      "stars": 131,
-      "url": "https://github.com/GAMS-dev/gamspy"
-    },
-    {
-      "capped": true,
-      "default_branch": "main",
-      "pin": "e0d7fcaac98279bc8909cd00a4e8ae7e33f578bd",
-      "pushed_date": "2026-08-04",
-      "queued_at": "2026-08-09",
-      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
-      "stars": 100,
-      "url": "https://github.com/IBM/aspera-cli"
-    },
-    {
-      "capped": true,
-      "default_branch": "main",
-      "pin": "71fe986450f2ecfd9639b22eac95c194d222b0af",
-      "pushed_date": "2026-07-31",
-      "queued_at": "2026-08-09",
-      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
-      "stars": 129,
-      "url": "https://github.com/WASdev/ci.docker"
-    },
-    {
-      "capped": true,
-      "default_branch": "develop",
-      "pin": "2adea6b0d151bfc7396795c3b5e982db735cc11e",
-      "pushed_date": "2026-06-04",
-      "queued_at": "2026-08-09",
-      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
-      "stars": 110,
-      "url": "https://github.com/brunowego/cookbook"
-    },
-    {
-      "capped": true,
-      "default_branch": "2.x",
-      "pin": "5ba1da3ce4b6130e7a924dbf0dbc5187ee961763",
-      "pushed_date": "2026-07-27",
-      "queued_at": "2026-08-09",
-      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
-      "stars": 117,
-      "url": "https://github.com/wildfly-security/wildfly-elytron"
-    },
-    {
-      "capped": true,
-      "default_branch": "main",
-      "pin": "df607a07aedd114560ff808d58ebae4e956906f9",
-      "pushed_date": "2026-08-11",
-      "queued_at": "2026-08-09",
-      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
-      "stars": 85,
-      "url": "https://github.com/Bike4Mind/bike4mind"
-    },
-    {
-      "capped": true,
-      "default_branch": "master",
-      "pin": "33603a3ede210594777becf9c2f57679b723b24b",
-      "pushed_date": "2026-08-06",
-      "queued_at": "2026-08-09",
-      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
-      "stars": 78,
-      "url": "https://github.com/lumigo-io/lumigo-node"
-    },
-    {
-      "capped": true,
-      "default_branch": "master",
-      "pin": "2f3fa5a506d6565fa68858b7963450567ddda114",
-      "pushed_date": "2026-07-29",
-      "queued_at": "2026-08-09",
-      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
-      "stars": 78,
-      "url": "https://github.com/open-horizon/anax"
-    },
-    {
-      "capped": true,
-      "default_branch": "main",
-      "pin": "1cf40fcabd330a1fe4e8eb9493b15a99a392e17f",
-      "pushed_date": "2026-08-11",
-      "queued_at": "2026-08-09",
-      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
-      "stars": 83,
-      "url": "https://github.com/snyk/snyk-ls"
-    },
-    {
-      "capped": true,
-      "default_branch": "master",
-      "pin": "351d0958ead897d564317b2fd6dfe8b036a87fdc",
-      "pushed_date": "2026-07-29",
-      "queued_at": "2026-08-09",
-      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
-      "stars": 73,
-      "url": "https://github.com/demisto/demisto-py"
-    },
-    {
-      "capped": true,
-      "default_branch": "master",
-      "pin": "f7b166bc5556fc11ecbbae1e350153cf883af95d",
-      "pushed_date": "2026-06-20",
-      "queued_at": "2026-08-09",
-      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
-      "stars": 62,
-      "url": "https://github.com/open-toolchain/tekton-catalog"
-    },
-    {
-      "capped": true,
-      "default_branch": "main",
-      "pin": "4bbe6925652c03b02329c5fb15d34df96faf994c",
-      "pushed_date": "2026-08-07",
-      "queued_at": "2026-08-09",
-      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
-      "stars": 66,
-      "url": "https://github.com/tyxak/remotepower"
-    },
-    {
-      "capped": true,
-      "default_branch": "master",
-      "pin": "4d61e8986350009abab78241747b7fd34bda94dc",
-      "pushed_date": "2026-08-10",
-      "queued_at": "2026-08-09",
-      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
-      "stars": 49,
-      "url": "https://github.com/alphagov/pay-publicapi"
-    },
-    {
-      "capped": true,
-      "default_branch": "master",
-      "pin": "b59f87ec3a4989a38db8a9d2e9bede12524c6b34",
-      "pushed_date": "2026-07-03",
-      "queued_at": "2026-08-09",
-      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
-      "stars": 54,
-      "url": "https://github.com/softlayer/softlayer-go"
-    },
-    {
-      "capped": true,
-      "default_branch": "master",
-      "pin": "2884379746eca5b6aa208bb66ff852eeb8ab8fe8",
-      "pushed_date": "2026-08-05",
-      "queued_at": "2026-08-09",
-      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
-      "stars": 45,
-      "url": "https://github.com/uc-cdis/cloud-automation"
-    },
-    {
-      "capped": true,
-      "default_branch": "master",
-      "pin": "f85f1649a1354957284def2ebd6beb4f68d8a61b",
-      "pushed_date": "2025-04-22",
-      "queued_at": "2026-08-09",
-      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
-      "stars": 869,
-      "url": "https://github.com/watson-developer-cloud/swift-sdk"
-    },
-    {
-      "capped": true,
-      "default_branch": "main",
-      "pin": "9e9cf2c90f122f918666e3c3f1466eaa8521ddca",
-      "pushed_date": "2026-08-11",
-      "queued_at": "2026-08-09",
-      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
-      "stars": 32,
-      "url": "https://github.com/Mininglamp-OSS/octo-smart-summary"
-    },
-    {
-      "capped": true,
-      "default_branch": "main",
-      "pin": "150d2a8dbc79389027537ea2a606d0a5a3139d49",
-      "pushed_date": "2026-01-28",
-      "queued_at": "2026-08-09",
-      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
-      "stars": 33,
-      "url": "https://github.com/astronomer/telescope"
-    },
-    {
-      "capped": true,
-      "default_branch": "master",
-      "pin": "103980af9666b2fca94fdfcc0d3d9507c9dbf853",
-      "pushed_date": "2026-07-17",
-      "queued_at": "2026-08-09",
-      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
-      "stars": 40,
-      "url": "https://github.com/humansintheloop-dev/humansintheloop-dev-workflow-and-tools"
-    },
-    {
-      "capped": true,
-      "default_branch": "master",
-      "pin": "473737e8217974a46482fa1a0e004861fd0f4f5c",
-      "pushed_date": "2026-08-10",
-      "queued_at": "2026-08-09",
-      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
-      "stars": 32,
-      "url": "https://github.com/uc-cdis/data-portal"
-    },
-    {
-      "capped": true,
-      "default_branch": "main",
-      "pin": "741c88771f964791f4453d5ab1859ffff8f20cac",
-      "pushed_date": "2026-06-27",
-      "queued_at": "2026-08-09",
-      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
-      "stars": 27,
-      "url": "https://github.com/AaronLPS/loop-builder"
-    },
-    {
-      "capped": true,
-      "default_branch": "master",
-      "pin": "918d4a47c7c869869012e2785fadbe1b817f4b5c",
-      "pushed_date": "2026-08-09",
-      "queued_at": "2026-08-09",
-      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
-      "stars": 28,
-      "url": "https://github.com/Alfresco/acs-packaging"
-    },
-    {
-      "capped": true,
-      "default_branch": "develop",
-      "pin": "b2c847517ce2f8dcaeaeff821c9a5cc239b13d84",
-      "pushed_date": "2025-10-21",
-      "queued_at": "2026-08-09",
-      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
-      "stars": 24,
-      "url": "https://github.com/NCI-GDC/psqlgraph"
-    },
-    {
-      "capped": true,
-      "default_branch": "dev",
-      "pin": "2be49b1d624140749ad93e39fdc3a013b75bce84",
-      "pushed_date": "2026-07-28",
-      "queued_at": "2026-08-09",
-      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
-      "stars": 27,
-      "url": "https://github.com/Orange-OpenSource/floss-toolbox"
-    },
-    {
-      "capped": true,
-      "default_branch": "main",
-      "pin": "07c70313f5c2728d009a2e8e2ccaaf4c86717ee8",
-      "pushed_date": "2026-08-11",
-      "queued_at": "2026-08-09",
-      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
-      "stars": 27,
-      "url": "https://github.com/drussell23/JARVIS"
-    },
-    {
-      "capped": true,
-      "default_branch": "main",
-      "pin": "83a865fc095ae388ac8728dfd8b3f14b477a0449",
-      "pushed_date": "2026-08-10",
-      "queued_at": "2026-08-09",
-      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
-      "stars": 26,
-      "url": "https://github.com/fabriziosalmi/nis2-public"
-    },
-    {
-      "capped": true,
-      "default_branch": "master",
-      "pin": "db24c5ccabc82edb1cccec53d266082383f0035f",
-      "pushed_date": "2026-05-28",
-      "queued_at": "2026-08-09",
-      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
-      "stars": 23,
-      "url": "https://github.com/instana/android-agent"
-    },
-    {
-      "capped": true,
-      "default_branch": "main",
-      "pin": "36d8b728690725caff58484323953b242789654d",
-      "pushed_date": "2023-10-31",
-      "queued_at": "2026-08-09",
-      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
-      "stars": 393,
-      "url": "https://github.com/HugAILab/HugNLP"
-    },
-    {
-      "capped": true,
-      "default_branch": "master",
-      "pin": "08c82635b3fa2bc3384718cec0a284a09322357b",
-      "pushed_date": "2026-07-23",
-      "queued_at": "2026-08-09",
-      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
-      "stars": 21,
-      "url": "https://github.com/instana/iOSAgent"
-    },
-    {
-      "capped": true,
-      "default_branch": "main",
-      "pin": "b766466b19927e43e6d829be9b94158facc1a9f9",
-      "pushed_date": "2026-08-11",
-      "queued_at": "2026-08-09",
-      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
-      "stars": 20,
-      "url": "https://github.com/mondweep/vibe-cast"
-    },
-    {
-      "capped": true,
-      "default_branch": "main",
-      "pin": "d4f01ba6202d50909d1977810d322259482e0b82",
-      "pushed_date": "2026-08-10",
-      "queued_at": "2026-08-09",
-      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
-      "stars": 21,
-      "url": "https://github.com/mycelium0/mycelium"
-    },
-    {
-      "capped": true,
-      "default_branch": "main",
-      "pin": "b37a1f5279a113a0b0dee8bdbd7fcc4057328cf2",
-      "pushed_date": "2025-05-26",
-      "queued_at": "2026-08-09",
-      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
-      "stars": 274,
-      "url": "https://github.com/label-sleuth/label-sleuth"
-    },
-    {
-      "capped": true,
-      "default_branch": "main",
-      "pin": "7f15f9e031cd83f2a28b8e8d782ba5df0c9c4ba3",
-      "pushed_date": "2026-04-09",
-      "queued_at": "2026-08-09",
-      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
-      "stars": 13,
-      "url": "https://github.com/sheldonhull/magetools"
-    },
-    {
-      "capped": true,
-      "default_branch": "main",
-      "pin": "4a9241ae870ff1b2dcc402d4ccc5d16debd6c0e8",
-      "pushed_date": "2026-07-21",
-      "queued_at": "2026-08-09",
-      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
-      "stars": 16,
-      "url": "https://github.com/wlfghdr/agentic-enterprise"
-    },
-    {
-      "capped": true,
-      "default_branch": "main",
-      "pin": "cec6a1caef7a576c036e6d07eabd482fe0a6b059",
-      "pushed_date": "2026-08-11",
-      "queued_at": "2026-08-09",
-      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
-      "stars": 9,
-      "url": "https://github.com/MahdiHedhli/vedetta"
-    },
-    {
-      "capped": true,
-      "default_branch": "main",
-      "pin": "b472dd091b5d0228d3747b3a7175366edc20fc58",
-      "pushed_date": "2026-01-22",
-      "queued_at": "2026-08-09",
-      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
-      "stars": 10,
-      "url": "https://github.com/TheRealHaoLiu/cardputer-adv"
-    },
-    {
-      "capped": true,
-      "default_branch": "main",
-      "pin": "f5b474697edb169c079d5c57bb5fd22805d25e80",
-      "pushed_date": "2026-08-10",
-      "queued_at": "2026-08-09",
-      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
-      "stars": 12,
-      "url": "https://github.com/WangWilly/OctopusBeak"
-    },
-    {
-      "capped": true,
-      "default_branch": "main",
-      "pin": "62d18db0cd0dee06c258157f1a71793cb3473641",
-      "pushed_date": "2026-06-18",
-      "queued_at": "2026-08-09",
-      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
-      "stars": 9,
-      "url": "https://github.com/redpersongpt/oudenOS"
-    },
-    {
-      "capped": true,
-      "default_branch": "main",
-      "pin": "1d4f5e33bafd7682bd557733179eaf83759897f7",
-      "pushed_date": "2026-04-12",
-      "queued_at": "2026-08-09",
-      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
-      "stars": 7,
-      "url": "https://github.com/Kanevry/bitgn-pac-agent-public"
-    },
-    {
-      "capped": true,
-      "default_branch": "main",
-      "pin": "fae29089b1308b42f89d13d6f47d6343c514b96c",
-      "pushed_date": "2026-08-04",
-      "queued_at": "2026-08-09",
-      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
-      "stars": 7,
-      "url": "https://github.com/awslabs/media-resource-manager"
-    },
-    {
-      "capped": true,
-      "default_branch": "main",
-      "pin": "9421f4397815a5071eb89fa4c8a8eb095fd168fa",
-      "pushed_date": "2026-07-04",
-      "queued_at": "2026-08-09",
-      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
-      "stars": 8,
-      "url": "https://github.com/dhanesh/manifold"
-    },
-    {
-      "capped": true,
-      "default_branch": "main",
-      "pin": "ef9baeb3743426c58853e58fbad820e69e459144",
-      "pushed_date": "2026-07-16",
-      "queued_at": "2026-08-09",
-      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
-      "stars": 7,
-      "url": "https://github.com/markpasternak/canvas-drop"
-    },
-    {
-      "capped": true,
-      "default_branch": "main",
-      "pin": "2978c449d72c3bdd4c91067ac175e90cba7a349f",
-      "pushed_date": "2026-02-19",
-      "queued_at": "2026-08-09",
-      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
-      "stars": 7,
-      "url": "https://github.com/nhsbsa-data-analytics/nhsbsaShinyR"
-    },
-    {
-      "capped": true,
-      "default_branch": "main",
-      "pin": "5d8df6c3e9286d23081cbfc102d3a73d2ed156c6",
-      "pushed_date": "2026-08-10",
-      "queued_at": "2026-08-09",
-      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
-      "stars": 8,
-      "url": "https://github.com/scottblydotcom/hermia"
-    },
-    {
-      "capped": true,
-      "default_branch": "main",
-      "pin": "0f28450f67704deba1671260b923a372464af7b2",
-      "pushed_date": "2026-08-10",
-      "queued_at": "2026-08-09",
-      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
-      "stars": 5,
-      "url": "https://github.com/GSA-TTS/searchgov-spider"
-    },
-    {
-      "capped": true,
-      "default_branch": "main",
-      "pin": "c245f67c020954a93cfde21346a3d54f134ebe34",
-      "pushed_date": "2026-08-11",
-      "queued_at": "2026-08-09",
-      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
-      "stars": 6,
-      "url": "https://github.com/Globussoft-Technologies/globussoft-crm"
-    },
-    {
-      "capped": true,
-      "default_branch": "main",
-      "pin": "da1d1326ee69e9d45ad95468b0224ddaa42add0d",
-      "pushed_date": "2026-08-06",
-      "queued_at": "2026-08-09",
-      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
-      "stars": 6,
-      "url": "https://github.com/adibirzu/oci-skills"
-    },
-    {
-      "capped": true,
-      "default_branch": "main",
-      "pin": "2df5152555e7604d03c952fd819e106593205d3e",
-      "pushed_date": "2026-08-11",
-      "queued_at": "2026-08-09",
-      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
-      "stars": 6,
-      "url": "https://github.com/elastic/observability-migration-platform"
-    },
-    {
-      "capped": true,
-      "default_branch": "master",
-      "pin": "cfb695e7b0cd029c2bed3ce8694e19350bb86e71",
-      "pushed_date": "2026-07-23",
-      "queued_at": "2026-08-09",
-      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
-      "stars": 6,
-      "url": "https://github.com/i2p/i2p.newsxml"
-    },
-    {
-      "capped": true,
-      "default_branch": "main",
-      "pin": "bc02957f13069f67a13601b2910ce9f43688116a",
-      "pushed_date": "2026-07-16",
-      "queued_at": "2026-08-09",
-      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
-      "stars": 6,
-      "url": "https://github.com/innomotics/sealpack"
-    },
-    {
-      "capped": true,
-      "default_branch": "main",
-      "pin": "cea68022f477680f4bb502396c705fe14b3c412f",
-      "pushed_date": "2026-08-11",
-      "queued_at": "2026-08-09",
-      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
-      "stars": 6,
-      "url": "https://github.com/melodic-software/claude-code-plugins"
-    },
-    {
-      "capped": true,
-      "default_branch": "master",
-      "pin": "06a61c4fa83b902f9f436daa29289323011d99cd",
-      "pushed_date": "2026-08-08",
-      "queued_at": "2026-08-09",
-      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
-      "stars": 5,
-      "url": "https://github.com/stateset/stateset-icommerce"
-    },
-    {
-      "capped": true,
-      "default_branch": "main",
-      "pin": "5db589afb3ab71fc94083adf695350c1edbb88a8",
-      "pushed_date": "2026-08-07",
-      "queued_at": "2026-08-09",
-      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
-      "stars": 5,
-      "url": "https://github.com/traylorre/sentiment-analyzer-gsk"
-    },
-    {
-      "capped": true,
-      "default_branch": "main",
-      "pin": "30d8e87dcdfd2f0c6965c25c6e4a249ae53e6baa",
-      "pushed_date": "2025-11-14",
-      "queued_at": "2026-08-09",
-      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
-      "stars": 4,
-      "url": "https://github.com/DIGIT-X-Lab/ANNOTATEX"
-    },
-    {
-      "capped": true,
-      "default_branch": "main",
-      "pin": "b9ec2def88f7a6da51a76a7b812a956dd8daa090",
-      "pushed_date": "2026-08-06",
-      "queued_at": "2026-08-09",
-      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
-      "stars": 4,
-      "url": "https://github.com/EarthSpark/thundercloud"
-    },
-    {
-      "capped": true,
-      "default_branch": "main",
-      "pin": "fdaddf667c7bbc29645f2fa1289338fd80af2be9",
-      "pushed_date": "2025-12-05",
-      "queued_at": "2026-08-09",
-      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
-      "stars": 4,
-      "url": "https://github.com/TransitionMatrix/godot-dap-mcp-server"
-    },
-    {
-      "capped": true,
-      "default_branch": "main",
-      "pin": "1f594b97a94b2ab6c9ca0c8c1a52a65e381bc961",
-      "pushed_date": "2026-07-20",
-      "queued_at": "2026-08-09",
-      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
-      "stars": 4,
-      "url": "https://github.com/aws-samples/sample-eks-enterprise-quickstart"
-    },
-    {
       "capped": true,
       "default_branch": "main",
       "pin": "75110983d7c018134a6e3b6ccc1c664a79de6efa",
-      "pushed_date": "2026-08-10",
+      "pushed_date": "2026-08-11",
       "queued_at": "2026-08-09",
       "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
       "stars": 4,
@@ -723,11 +23,11 @@
     {
       "capped": true,
       "default_branch": "main",
-      "pin": "e6cabf876c570ea1c7013b76e037a0443a26c9c4",
-      "pushed_date": "2026-08-10",
+      "pin": "0b76e32ac8508eb8bea9d1791d9d05f53a015730",
+      "pushed_date": "2026-08-11",
       "queued_at": "2026-08-09",
       "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
-      "stars": 3,
+      "stars": 4,
       "url": "https://github.com/atimofeev/nixos-config"
     },
     {
@@ -901,104 +201,804 @@
       "url": "https://github.com/thecybermafia/orgleaks"
     },
     {
-      "capped": false,
+      "capped": true,
+      "default_branch": "main",
+      "pin": "9e848b504a5778ef6e2ead53f8243cdee6da0710",
+      "pushed_date": "2026-06-19",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
+      "stars": 81,
+      "url": "https://github.com/roles-ansible/ansible_role_gitea"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "27f1d396fb0b29ed36dbb0b3b3989af747abad61",
+      "pushed_date": "2026-07-18",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
+      "stars": 85,
+      "url": "https://github.com/tsvikas/sync-with-uv"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "56ef204f41d3ae6309b4d6250edb5e61a3e453e5",
+      "pushed_date": "2026-05-15",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
+      "stars": 58,
+      "url": "https://github.com/DavidMiserak/GoCard"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "c3232578aa1dbf3ae136059b48d6b045a45032c3",
+      "pushed_date": "2026-03-02",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
+      "stars": 49,
+      "url": "https://github.com/DavidROliverBA/ArchitectKB"
+    },
+    {
+      "capped": true,
       "default_branch": "master",
-      "pin": "545a3bf676786f475509434724a25765f27a29f6",
-      "pushed_date": "2025-06-06",
-      "queued_at": "2026-08-11",
-      "source_query": "SecRule filename:REQUEST path:rules",
-      "stars": 576,
-      "url": "https://github.com/qq4108863/hihttps"
+      "pin": "fb14e9b6b0c0f8342fbe1c6a4e3fadc6c99803fc",
+      "pushed_date": "2026-05-07",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
+      "stars": 46,
+      "url": "https://github.com/JamesWoolfenden/packer-by-example"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "07e8b0afb5c2637b9a34779d4da35df2bc56fb85",
+      "pushed_date": "2026-08-11",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
+      "stars": 50,
+      "url": "https://github.com/OpenLiberty/ci.docker"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "af711a4aa78180542ff623a465c586672890f4f2",
+      "pushed_date": "2026-08-07",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
+      "stars": 45,
+      "url": "https://github.com/Yelp/pidtree-bcc"
     },
     {
       "capped": false,
-      "default_branch": "main",
-      "pin": "b288a018894718becae545d810e99759eee46d95",
-      "pushed_date": "2026-08-11",
-      "queued_at": "2026-08-11",
+      "default_branch": "master",
+      "pin": "55aa7ef43a9c129beba90823cd8a4db10bb01211",
+      "pushed_date": "2026-08-10",
+      "queued_at": "2026-08-12",
       "source_query": "filename:rules.yml path:.semgrep OR path:semgrep",
-      "stars": 26,
-      "url": "https://github.com/deepnote/deepnote-toolkit"
+      "stars": 10,
+      "url": "https://github.com/greydragon888/real-router"
+    },
+    {
+      "capped": false,
+      "default_branch": "master",
+      "pin": "8eb632721c41e66d30f084c8a60535d22bed35d0",
+      "pushed_date": "2026-08-08",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:rules.yml path:.semgrep OR path:semgrep",
+      "stars": 12,
+      "url": "https://github.com/modelsuite-ai/modelsuite-qualification"
     },
     {
       "capped": true,
       "default_branch": "main",
-      "pin": "42e0d700bb3e9a37ece80b6e7aa4d41c42707b4a",
+      "pin": "cba5c80b4d1b0aebd7db737b93f9076a0f263aaa",
+      "pushed_date": "2025-12-25",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
+      "stars": 38,
+      "url": "https://github.com/AUGMXNT/perfi"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "b7c302991f5f1d3c898bb2cb2963f8ecc7ad8f1b",
+      "pushed_date": "2026-08-06",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
+      "stars": 35,
+      "url": "https://github.com/IBM-Cloud/ibm-cloud-cli-sdk"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "8d3357819df263057c89f3d25c793b5d88e9c0a4",
+      "pushed_date": "2026-06-08",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
+      "stars": 36,
+      "url": "https://github.com/IBM/AutoXAI4Omics"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "174823b68645b84b74e6ac3f583ded579878881c",
       "pushed_date": "2026-08-11",
-      "queued_at": "2026-08-11",
+      "queued_at": "2026-08-12",
       "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
-      "stars": 124,
-      "url": "https://github.com/vinta/hal-9000"
+      "stars": 34,
+      "url": "https://github.com/IBM/go-sdk-core"
     },
     {
       "capped": true,
       "default_branch": "main",
-      "pin": "d1a2f90555f29b0566ce2ec4d3570f56f730bf3c",
-      "pushed_date": "2026-08-09",
-      "queued_at": "2026-08-11",
+      "pin": "d7fec0c7da4ac0c0d2468dc19efffa7b31b4f33f",
+      "pushed_date": "2026-02-11",
+      "queued_at": "2026-08-12",
       "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
-      "stars": 74,
-      "url": "https://github.com/FluidifyAI/Regen"
+      "stars": 37,
+      "url": "https://github.com/IDinsight/ask-a-question"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "fb0dd421138a5385de9be783393fd5f684219400",
+      "pushed_date": "2026-08-12",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:validator.js path:src OR filename:validators.py",
+      "stars": 704,
+      "url": "https://github.com/cjoudrey/graphql-schema-linter"
+    },
+    {
+      "capped": false,
+      "default_branch": "main",
+      "pin": "cb920f2cb6beebad87b8e96ebe30ae03247814eb",
+      "pushed_date": "2026-08-06",
+      "queued_at": "2026-08-12",
+      "source_query": "SecRule filename:REQUEST path:rules",
+      "stars": 7,
+      "url": "https://github.com/gofurry/gofurry-nav-site"
     },
     {
       "capped": true,
       "default_branch": "main",
-      "pin": "8899d15240bd50bc08e7d90b2d6e8fc119260b9d",
-      "pushed_date": "2026-08-01",
-      "queued_at": "2026-08-11",
+      "pin": "0e3a4ba38e9bc3068fc51f134f7f2dff075b8f61",
+      "pushed_date": "2026-08-10",
+      "queued_at": "2026-08-12",
       "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
-      "stars": 97,
-      "url": "https://github.com/Yelp/beans"
-    },
-    {
-      "capped": true,
-      "default_branch": "master",
-      "pin": "465a5e2f452048c99790229ba813bed795b9f366",
-      "pushed_date": "2026-02-17",
-      "queued_at": "2026-08-11",
-      "source_query": "filename:validator.js path:src OR filename:validators.py",
-      "stars": 3290,
-      "url": "https://github.com/breejs/bree"
+      "stars": 41,
+      "url": "https://github.com/jenkins-x-plugins/jx-release-version"
     },
     {
       "capped": true,
       "default_branch": "main",
-      "pin": "bd83b39339a525708387006aba976342f036713e",
-      "pushed_date": "2026-04-09",
-      "queued_at": "2026-08-11",
-      "source_query": "filename:validator.js path:src OR filename:validators.py",
-      "stars": 2455,
-      "url": "https://github.com/donmccurdy/three-gltf-viewer"
-    },
-    {
-      "capped": true,
-      "default_branch": "master",
-      "pin": "b31ddabecf4ed3209d37a2f5b29956120cd8f9ce",
-      "pushed_date": "2026-07-03",
-      "queued_at": "2026-08-11",
-      "source_query": "filename:validator.js path:src OR filename:validators.py",
-      "stars": 4902,
-      "url": "https://github.com/json-editor/json-editor"
-    },
-    {
-      "capped": true,
-      "default_branch": "master",
-      "pin": "0cfbc3f1b589f2181aff027811d48a889f432966",
-      "pushed_date": "2026-05-11",
-      "queued_at": "2026-08-11",
-      "source_query": "filename:validator.js path:src OR filename:validators.py",
-      "stars": 2383,
-      "url": "https://github.com/liriliri/licia"
-    },
-    {
-      "capped": true,
-      "default_branch": "master",
-      "pin": "87cec6a57add4bd487df37e80f04559555c1b01c",
-      "pushed_date": "2026-05-27",
-      "queued_at": "2026-08-11",
+      "pin": "c901f97b7df03e41917da74c2a84b04c227316c2",
+      "pushed_date": "2026-05-18",
+      "queued_at": "2026-08-12",
       "source_query": "path:rules extension:yar OR extension:yara",
-      "stars": 318,
-      "url": "https://github.com/needmorecowbell/Hamburglar"
+      "stars": 147,
+      "url": "https://github.com/malpedia/signator-rules"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "2f62de65e0964548009c87a980ee1d80166286be",
+      "pushed_date": "2026-08-09",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
+      "stars": 23,
+      "url": "https://github.com/NASA-PDS/validate"
+    },
+    {
+      "capped": false,
+      "default_branch": "main",
+      "pin": "52b3db7e6a10e2d3bd890f022620639aba0c533a",
+      "pushed_date": "2026-08-05",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:rules.yml path:.semgrep OR path:semgrep",
+      "stars": 5,
+      "url": "https://github.com/agentic-research/rosary"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "81c8180a5a7854807592a76c6c563ae8e51e212a",
+      "pushed_date": "2026-08-03",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
+      "stars": 27,
+      "url": "https://github.com/deslicer/mcp-for-splunk"
+    },
+    {
+      "capped": false,
+      "default_branch": "main",
+      "pin": "17efff15b5b6315f0def2178b0be972d3f355948",
+      "pushed_date": "2026-06-18",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:rules.yml path:.semgrep OR path:semgrep",
+      "stars": 6,
+      "url": "https://github.com/dmytro-yemelianov/raps"
+    },
+    {
+      "capped": false,
+      "default_branch": "main",
+      "pin": "c20951c13607d8776877cddc60db583bdaeef5b2",
+      "pushed_date": "2026-08-11",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:rules.yml path:.semgrep OR path:semgrep",
+      "stars": 5,
+      "url": "https://github.com/gabinotech22-cmyk/AegisLink"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "53869b3d9ca2eb361f015c3b869b245132bb0815",
+      "pushed_date": "2026-07-16",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
+      "stars": 29,
+      "url": "https://github.com/open-horizon/edge-sync-service"
+    },
+    {
+      "capped": false,
+      "default_branch": "master",
+      "pin": "77d53aa41dfacbe088127cca6e0332f139893edd",
+      "pushed_date": "2024-06-06",
+      "queued_at": "2026-08-12",
+      "source_query": "SecRule filename:REQUEST path:rules",
+      "stars": 119,
+      "url": "https://github.com/qq4108863/himqtt"
+    },
+    {
+      "capped": false,
+      "default_branch": "main",
+      "pin": "efcf8e4c0087def553a737dc1c4eebda5d8a90cd",
+      "pushed_date": "2026-08-10",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:rules.yml path:.semgrep OR path:semgrep",
+      "stars": 4,
+      "url": "https://github.com/Agenticstiger/forge-cli"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "a52c8ce21fcac3df63ba2b4cae8383679b1733ce",
+      "pushed_date": "2026-06-24",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
+      "stars": 22,
+      "url": "https://github.com/GAMS-dev/gamspy-examples"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "a74f5350d57b3f7d5a5333c2354a8dac7e17ca34",
+      "pushed_date": "2026-08-11",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
+      "stars": 19,
+      "url": "https://github.com/IBM/ibm-common-service-operator"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "16ea5d64204a3b6a92406fe21314d49838981c65",
+      "pushed_date": "2026-08-07",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
+      "stars": 20,
+      "url": "https://github.com/IBM/node-sdk-core"
+    },
+    {
+      "capped": false,
+      "default_branch": "main",
+      "pin": "e3d0d0352216620700b506fabfee6cf095be1c8c",
+      "pushed_date": "2026-06-13",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:rules.yml path:.semgrep OR path:semgrep",
+      "stars": 4,
+      "url": "https://github.com/Johbrun/MidHack"
+    },
+    {
+      "capped": false,
+      "default_branch": "main",
+      "pin": "3b32af6e9eb124eefaa2baf4cf90583129b4e640",
+      "pushed_date": "2026-08-11",
+      "queued_at": "2026-08-12",
+      "source_query": "path:testdata filename:regex OR filename:regexp",
+      "stars": 1899,
+      "url": "https://github.com/KronicDeth/intellij-elixir"
+    },
+    {
+      "capped": false,
+      "default_branch": "main",
+      "pin": "81df1ff12f5cf660d6189b3c0dcf375beb0ab1bd",
+      "pushed_date": "2026-08-11",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:re_tests OR filename:test_re.py path:Lib/test",
+      "stars": 22273,
+      "url": "https://github.com/RustPython/RustPython"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "5992a67eeb85d8a9cace18eabaa5c88ead559fe9",
+      "pushed_date": "2026-08-11",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
+      "stars": 22,
+      "url": "https://github.com/UPchieve/web"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "a9c0f06affc35e1f8e45bb77f835b92350c68a0b",
+      "pushed_date": "2023-12-12",
+      "queued_at": "2026-08-12",
+      "source_query": "path:rules extension:yar OR extension:yara",
+      "stars": 1454,
+      "url": "https://github.com/airbnb/binaryalert"
+    },
+    {
+      "capped": false,
+      "default_branch": "master",
+      "pin": "4c907fb2838a4f819252cc3030e898eebf8a1c10",
+      "pushed_date": "2026-07-28",
+      "queued_at": "2026-08-12",
+      "source_query": "path:testdata filename:regex OR filename:regexp",
+      "stars": 2049,
+      "url": "https://github.com/benhoyt/goawk"
+    },
+    {
+      "capped": false,
+      "default_branch": "meta/3.14",
+      "pin": "279ffafabd1b804645084704e0b33e9aa30843a2",
+      "pushed_date": "2026-08-11",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:re_tests OR filename:test_re.py path:Lib/test",
+      "stars": 3792,
+      "url": "https://github.com/facebookincubator/cinder"
+    },
+    {
+      "capped": false,
+      "default_branch": "master",
+      "pin": "18c4d311143d5dcc9cbf0f9acf306d0273e4bc6a",
+      "pushed_date": "2026-08-10",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:re_tests OR filename:test_re.py path:Lib/test",
+      "stars": 1532,
+      "url": "https://github.com/jython/jython"
+    },
+    {
+      "capped": false,
+      "default_branch": "master",
+      "pin": "0883e41d235376276485744635032739f3542146",
+      "pushed_date": "2026-07-09",
+      "queued_at": "2026-08-12",
+      "source_query": "path:testdata filename:regex OR filename:regexp",
+      "stars": 1485,
+      "url": "https://github.com/kalessil/phpinspectionsea"
+    },
+    {
+      "capped": false,
+      "default_branch": "master",
+      "pin": "1de8243783d480e24c0db1a3dc45976aeaf715e9",
+      "pushed_date": "2026-08-12",
+      "queued_at": "2026-08-12",
+      "source_query": "path:testdata filename:regex OR filename:regexp",
+      "stars": 5543,
+      "url": "https://github.com/mgechev/revive"
+    },
+    {
+      "capped": false,
+      "default_branch": "main",
+      "pin": "ffdcc67b1568ef5f7fc192c3b88c296a6c836a36",
+      "pushed_date": "2026-08-11",
+      "queued_at": "2026-08-12",
+      "source_query": "path:testdata filename:regex OR filename:regexp",
+      "stars": 26190,
+      "url": "https://github.com/microsoft/typescript-go"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "f25857e3b09971dbc4479656b442667550128830",
+      "pushed_date": "2026-08-11",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
+      "stars": 21,
+      "url": "https://github.com/mozilla/remote-settings"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "11e0a5efe1149be47b195fd71951862f67c09198",
+      "pushed_date": "2026-07-31",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
+      "stars": 20,
+      "url": "https://github.com/nasa/opera-sds-pge"
+    },
+    {
+      "capped": false,
+      "default_branch": "main",
+      "pin": "ee68f5f46a14e2bbf22d72796e45e5f467951792",
+      "pushed_date": "2026-08-12",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:re_tests OR filename:test_re.py path:Lib/test",
+      "stars": 74292,
+      "url": "https://github.com/python/cpython"
+    },
+    {
+      "capped": false,
+      "default_branch": "master",
+      "pin": "72d650cb0a880a01ab6dc2137c0888e8f89740f7",
+      "pushed_date": "2026-08-10",
+      "queued_at": "2026-08-12",
+      "source_query": "path:testdata filename:regex OR filename:regexp",
+      "stars": 4003,
+      "url": "https://github.com/rust-lang/regex"
+    },
+    {
+      "capped": false,
+      "default_branch": "master",
+      "pin": "bb1bb34e63be9b11b26114882fcdc69e1cee5906",
+      "pushed_date": "2025-09-19",
+      "queued_at": "2026-08-12",
+      "source_query": "SecRule filename:REQUEST path:rules",
+      "stars": 4,
+      "url": "https://github.com/thattrain/kong-waf"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "a83dd39a658ac2d7fe9220419b0f0b5fbfaae27b",
+      "pushed_date": "2026-08-10",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
+      "stars": 13,
+      "url": "https://github.com/GovWifi/govwifi-terraform"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "8ea10dc570ef3923069d1308389633f19f0068c1",
+      "pushed_date": "2026-08-12",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
+      "stars": 13,
+      "url": "https://github.com/HHS/OPRE-OPS"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "9729632ec9f442a307680f6d501bd7fdfa975c92",
+      "pushed_date": "2026-08-11",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
+      "stars": 15,
+      "url": "https://github.com/IBM/platform-services-python-sdk"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "e3c190f81f8f7087e9b6ab52fe7adb7b7534df2d",
+      "pushed_date": "2026-07-31",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
+      "stars": 16,
+      "url": "https://github.com/Jellyfish-AI/jf_agent"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "535aa2c132c575f684f8b89a9c7a4b3c0efac869",
+      "pushed_date": "2026-08-07",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
+      "stars": 14,
+      "url": "https://github.com/NASA-PDS/pds4-information-model"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "1ce7d29d6f8808d651797733a06d1b391ffb0696",
+      "pushed_date": "2026-08-03",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
+      "stars": 13,
+      "url": "https://github.com/NOAA-CO-OPS/Next-Gen-NOS-OFS-Skill-Assessment"
+    },
+    {
+      "capped": false,
+      "default_branch": "main",
+      "pin": "38af50f4bc65adf0e4056f980e0310442309209f",
+      "pushed_date": "2026-06-25",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:rules.yml path:.semgrep OR path:semgrep",
+      "stars": 3,
+      "url": "https://github.com/bradygaster/squad-with-aspire"
+    },
+    {
+      "capped": false,
+      "default_branch": "master",
+      "pin": "cf7f64f5904845948c31b1305672745e68cd9a16",
+      "pushed_date": "2026-08-08",
+      "queued_at": "2026-08-12",
+      "source_query": "path:testdata filename:regex OR filename:regexp",
+      "stars": 1184,
+      "url": "https://github.com/dlclark/regexp2"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "f30a631337c4012e4fdc20e2e6b063bbacd3bcb8",
+      "pushed_date": "2026-08-11",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
+      "stars": 15,
+      "url": "https://github.com/mozilla/terraform-modules"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "3d6ba2ae2f718b47f624cb82893235659cd3907e",
+      "pushed_date": "2026-06-08",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
+      "stars": 14,
+      "url": "https://github.com/terraform-ibm-modules/terraform-ibm-satellite"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "a46af80acd88b6e5a00e864e811a7f16e89c34ea",
+      "pushed_date": "2026-08-07",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
+      "stars": 16,
+      "url": "https://github.com/uc-cdis/arborist"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "af7fed09d68c1254936ed3b263b95fc8d6a7558e",
+      "pushed_date": "2026-08-11",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
+      "stars": 14,
+      "url": "https://github.com/uc-cdis/gen3-helm"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "5922ddf6f34890295af67a15d547cce7fc6eaab3",
+      "pushed_date": "2026-08-06",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
+      "stars": 13,
+      "url": "https://github.com/uc-cdis/gen3.org"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "78bcdeedfa81c2a7e995e408dd4588bdc6ae8f8c",
+      "pushed_date": "2026-07-30",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
+      "stars": 13,
+      "url": "https://github.com/uc-cdis/peregrine"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "43c77dad20fd4ba4858f2aef8cb040da4c4bd728",
+      "pushed_date": "2026-08-11",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
+      "stars": 11,
+      "url": "https://github.com/ChainSafe/forest-iac"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "a3d5ce31054e5553e16daeb090bd85b9170f75d1",
+      "pushed_date": "2026-04-21",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
+      "stars": 11,
+      "url": "https://github.com/Crown-Commercial-Service/digitalmarketplace-supplier-frontend"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "b44d5a039cb95df31cc94408329c27dbd17d47bf",
+      "pushed_date": "2026-03-25",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:validator.js path:src OR filename:validators.py",
+      "stars": 177,
+      "url": "https://github.com/F5Networks/f5-appsvcs-extension"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "9fada5b57992ae2ae779fb13a0824e7efdf69aec",
+      "pushed_date": "2026-08-11",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
+      "stars": 12,
+      "url": "https://github.com/GovWifi/govwifi-admin"
+    },
+    {
+      "capped": false,
+      "default_branch": "main",
+      "pin": "72eba540f3aca88ebc4c7c1a8925d5c2e72c28be",
+      "pushed_date": "2026-08-09",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:rules.yml path:.semgrep OR path:semgrep",
+      "stars": 2,
+      "url": "https://github.com/Rygnal/rygnal-core"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "f05039f622d97746544c0baebce0ee68e8c8f427",
+      "pushed_date": "2026-08-10",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
+      "stars": 12,
+      "url": "https://github.com/alphagov/pay-frontend"
+    },
+    {
+      "capped": false,
+      "default_branch": "main",
+      "pin": "f8842b860d8e786880c53560b21878a475d36ba3",
+      "pushed_date": "2026-08-09",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:rules.yml path:.semgrep OR path:semgrep",
+      "stars": 2,
+      "url": "https://github.com/aofusa/veil-proxy"
+    },
+    {
+      "capped": false,
+      "default_branch": "main",
+      "pin": "d66a6e44f33faac1bd8c6370cbc06fcb18dd5a6b",
+      "pushed_date": "2026-08-12",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:rules.yml path:.semgrep OR path:semgrep",
+      "stars": 2,
+      "url": "https://github.com/flavordrake/mobissh"
+    },
+    {
+      "capped": false,
+      "default_branch": "main-secure",
+      "pin": "49bf22201b6498cb33efd0c41bd42679668edce0",
+      "pushed_date": "2026-04-07",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:rules.yml path:.semgrep OR path:semgrep",
+      "stars": 2,
+      "url": "https://github.com/gadaugherty/vulnbank"
+    },
+    {
+      "capped": false,
+      "default_branch": "master",
+      "pin": "fc3d6cefd2aa1e7d2a1aa556b18778a570a5da55",
+      "pushed_date": "2026-08-10",
+      "queued_at": "2026-08-12",
+      "source_query": "path:testdata filename:regex OR filename:regexp",
+      "stars": 946,
+      "url": "https://github.com/google/fhir"
+    },
+    {
+      "capped": false,
+      "default_branch": "main",
+      "pin": "74de1d9d45b17c602040cbde82e2d7623a2d379d",
+      "pushed_date": "2026-08-11",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:rules.yml path:.semgrep OR path:semgrep",
+      "stars": 2,
+      "url": "https://github.com/israel12132/weissman-cybersecurity"
+    },
+    {
+      "capped": false,
+      "default_branch": "main",
+      "pin": "788d4d0760dfaec214bd1fd4b363391ac6c5a7a7",
+      "pushed_date": "2026-05-28",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:rules.yml path:.semgrep OR path:semgrep",
+      "stars": 2,
+      "url": "https://github.com/kubilitics/kubilitics"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "87bde35d2de575eddf98ddfb8dbef0d4f594e950",
+      "pushed_date": "2026-08-08",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
+      "stars": 10,
+      "url": "https://github.com/mitodl/open-discussions"
+    },
+    {
+      "capped": false,
+      "default_branch": "4.x",
+      "pin": "67aac02d4d8d2ae1e252ae253a341732d150879d",
+      "pushed_date": "2026-08-04",
+      "queued_at": "2026-08-12",
+      "source_query": "path:testdata filename:regex OR filename:regexp",
+      "stars": 973,
+      "url": "https://github.com/opencv/opencv_extra"
+    },
+    {
+      "capped": false,
+      "default_branch": "develop",
+      "pin": "95e3ba012416cfd7c92c6689ba9fc399e06cbc20",
+      "pushed_date": "2026-07-09",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:rules.yml path:.semgrep OR path:semgrep",
+      "stars": 2,
+      "url": "https://github.com/prakashgbid/caia"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "d33ad2f4e4cd37b560ec89e6c7ea3c44666e9fbb",
+      "pushed_date": "2026-08-08",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
+      "stars": 9,
+      "url": "https://github.com/terraform-ibm-modules/terraform-ibm-vpc"
+    },
+    {
+      "capped": false,
+      "default_branch": "main",
+      "pin": "d09fb81484c69936c864979a91d455e2d0b4a17f",
+      "pushed_date": "2026-08-05",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:rules.yml path:.semgrep OR path:semgrep",
+      "stars": 2,
+      "url": "https://github.com/tkhq/turnkey-agent-skills"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "3c3913c88c504a92efc39ffbdf151b449f3debd4",
+      "pushed_date": "2026-05-25",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
+      "stars": 8,
+      "url": "https://github.com/Lenders-Cooperative/django-redis-task-lock"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "10539a47c5874ec2b19b1a216be5d3f99dbcea73",
+      "pushed_date": "2023-12-06",
+      "queued_at": "2026-08-12",
+      "source_query": "path:rules extension:yar OR extension:yara",
+      "stars": 690,
+      "url": "https://github.com/gwillem/magento-malware-scanner"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "15df6582a510a5757325b62613a147527d1f8c0c",
+      "pushed_date": "2026-08-12",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
+      "stars": 7,
+      "url": "https://github.com/ministryofjustice/opg-modernising-lpa"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "e86000f94152be3b2a2ae288dfd608598e91a26e",
+      "pushed_date": "2026-08-12",
+      "queued_at": "2026-08-12",
+      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
+      "stars": 8,
+      "url": "https://github.com/mitodl/ocw-hugo-themes"
     }
   ],
   "schema_version": "1"
