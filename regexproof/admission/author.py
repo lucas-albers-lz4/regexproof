@@ -175,6 +175,13 @@ def author_human(
         raise AuthorError(f"unknown condition id(s): {sorted(unknown)}")
 
     probe = dict(draft.get("probe") or {})
+    buckets = probe.get("predicted_buckets") or {}
+    if decision == "go" and "new-surface" in met and not buckets:
+        raise AuthorError(
+            "go with condition new-surface requires NON-EMPTY "
+            "probe.predicted_buckets (AC4 under-report rule — enforced at "
+            "the tool, not by review); re-run merge-probe-draft.py, or "
+            "author triage-trial/no-go")
     if template:
         if template not in TEMPLATE_NAMES:
             raise TemplateError(f"unknown rationale template: {template!r}")

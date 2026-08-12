@@ -27,8 +27,18 @@ the `MAX_FILE_BYTES`/`--ext` bounds.
 - **Final-semantics re-measure** (merged main `f48a850`, guard-fixed
   scanner — the P2.5 re-freeze proved the registered extractor reproduces
   these semantics byte-identically): **659 sites / 1,097 files / 1 oversized
-  skipped**. The guards removed 80 phantom sites (mygrep-prefixed commands,
-  comment/string contexts). **659 is the authoritative count.**
+  skipped**. The guards removed 80 phantom sites (mygrep/pgrep-prefixed
+  commands, comment/string contexts). 659 was the interim authoritative
+  count.
+- **Post-reconcile count (authoritative): 713 sites / 203 files** — the P3
+  reconcile exposed a REAL scanner regression in the context guard:
+  `"$(cmd 'pat')"` command substitutions were suppressed as string
+  literals (fixed in PR #274). The fix restored 54 real sites
+  (659 → 713; 134 → 140 packages). The final reconcile (pre-P2 capture vs
+  fixed registered extractor): 11 files over the 10% per-file tolerance
+  (5.26%), every one a documented boundary-fix phantom (`pgrep "$x"` →
+  `$x`, mygrep-prefixed commands) — NOT a false removal. Reconcile report:
+  `openwrt-reconcile-report.json`.
 
 Command (both runs, `LC_ALL=C`):
 ```
@@ -46,13 +56,13 @@ reported as a distribution (the gate schema has no per-package field — the
 distribution is a probe artifact; schema extension is follow-on if the stream
 graduates):
 
-- Packages with sites: **134** · min=**1** · median=**1** · max=**116**
-  (net/pbr) · total=**659**
-- Top packages: net/pbr 116, net/ddns-scripts 85, net/https-dns-proxy 44,
-  net/mwan3 25, multimedia/imagemagick 17.
-- Syntax surface: BRE 562 · ERE 92 · bash_ksh 5. Flag surface: `-i` 35.
-- Full per-file export: `openwrt-feed-records-final.ndjson` (P1 `--ndjson`
-  typed contract — the merge-probe-draft input).
+- Packages with sites: **140** · min=**1** · median=**1** · max=**127**
+  (net/pbr) · total=**713**
+- Top packages: net/pbr 127, net/ddns-scripts 90, net/https-dns-proxy 46,
+  net/mwan3 27, multimedia/imagemagick 17.
+- Syntax surface: BRE 610 · ERE 98 · bash_ksh 5. Flag surface: `-i` 39.
+- Full per-file export: `openwrt-feed-records-fixed.ndjson` (registered
+  extractor, post-guard-fix — the merge-probe-draft input).
 
 **Scale red flag explicitly OVERRIDDEN** (documented in the artifact's
 `rationale`): a feed is not a repo; the scale signal is meaningless at this

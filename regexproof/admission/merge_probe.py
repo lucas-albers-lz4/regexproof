@@ -45,6 +45,12 @@ def merge_draft(draft: dict[str, Any], records: list[dict[str, Any]]) -> dict[st
     out["probe"]["regex_sites"] = len(records)
     out["probe"]["regex_sites_per_file"] = dict(sorted(
         Counter(r.get("file") or "" for r in records).items()))
+    # dialect: the scaffold's walk saw no shell pre-P2 — aggregate the
+    # record dialects on top of whatever the scaffold counted.
+    dialect = Counter(out["probe"].get("dialect") or {})
+    for r in records:
+        dialect[r.get("dialect") or "unknown"] += 1
+    out["probe"]["dialect"] = dict(dialect)
     out["probe"]["predicted_buckets"] = predict_buckets(dict(merged))
     out["probe"]["_shell_evidence"] = {
         "records": len(records),

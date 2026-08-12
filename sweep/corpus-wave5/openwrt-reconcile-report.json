@@ -1,0 +1,1269 @@
+{
+  "corpus": "openwrt_packages",
+  "now_ndjson": "openwrt-feed-records-fixed.ndjson",
+  "per_file": {
+    "admin/btop/files/btop.uci": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 2,
+      "registered": 2
+    },
+    "admin/fluent-bit/test.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "admin/nload/test.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "admin/rsyslog/files/20_rsyslog": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "admin/syslog-ng/files/logread.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 2,
+      "registered": 2
+    },
+    "devel/delve/test.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "lang/golang/golang-build.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 6,
+      "registered": 6
+    },
+    "lang/lua/lua-cs-bouncer/files/lua-cs-bouncer.defaults": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 2,
+      "registered": 2
+    },
+    "lang/perl/files/perl-run_tests.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 4,
+      "registered": 4
+    },
+    "lang/php8/test.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 4,
+      "registered": 4
+    },
+    "lang/python/python3-find-stdlib-depends.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "lang/ruby/ruby_missingfiles": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 4,
+      "registered": 4
+    },
+    "libs/avahi/test.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 7,
+      "registered": 7
+    },
+    "libs/nacl/do-openwrt": {
+      "delta_pct": 15.38,
+      "over": true,
+      "probe": 13,
+      "registered": 11
+    },
+    "libs/openblas/test.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "libs/postgresql/files/postgresql.init": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 2,
+      "registered": 2
+    },
+    "libs/postgresql/files/postgresql.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 2,
+      "registered": 2
+    },
+    "libs/redis/test.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 2,
+      "registered": 2
+    },
+    "libs/sqlite3/test.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "libs/sx1302_hal/test.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 2,
+      "registered": 2
+    },
+    "libs/valkey/files/valkey.init": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "mail/bogofilter/files/postfix-bogofilter": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "multimedia/graphicsmagick/test.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 14,
+      "registered": 14
+    },
+    "multimedia/imagemagick/test-version.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "multimedia/imagemagick/test.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 17,
+      "registered": 17
+    },
+    "multimedia/yt-dlp/test-version.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "net/acme-acmesh/files/hook.sh": {
+      "delta_pct": 50.0,
+      "over": true,
+      "probe": 2,
+      "registered": 1
+    },
+    "net/acme-common/files/acme.init": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "net/acme-common/files/acme.uci-defaults": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 3,
+      "registered": 3
+    },
+    "net/acme-common/files/functions.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "net/adblock-fast/files/etc/uci-defaults/90-adblock-fast": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "net/adblock-fast/test.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "net/adblock-fast/tests/run_tests.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 4,
+      "registered": 4
+    },
+    "net/adblock/files/95-adblock-housekeeping": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 9,
+      "registered": 9
+    },
+    "net/adguardhome/files/adguardhome.defaults": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 2,
+      "registered": 2
+    },
+    "net/ampr-ripd/test.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "net/antiblock/test.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "net/apfree-wifidog/files/wifidogx.init": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "net/apinger/files/graphs.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 2,
+      "registered": 2
+    },
+    "net/aria2/files/aria2.init": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "net/banip/files/95-banip-housekeeping": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 2,
+      "registered": 2
+    },
+    "net/banip/files/banip-functions.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "net/bcp38/files/run.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "net/boinc/test.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "net/bsbf-openwrt-resources/files/etc/hotplug.d/net/99-bsbf-autoconf-cellular": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 7,
+      "registered": 7
+    },
+    "net/bsbf-openwrt-resources/files/etc/hotplug.d/net/99-bsbf-autoconf-dhcp": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 4,
+      "registered": 4
+    },
+    "net/cifs-utils/test.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "net/crowdsec/files/crowdsec.defaults": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 3,
+      "registered": 3
+    },
+    "net/csshnpd/test.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "net/dcwapd/files/dcwapd.init": {
+      "delta_pct": 14.29,
+      "over": true,
+      "probe": 7,
+      "registered": 6
+    },
+    "net/ddns-scripts/files/usr/lib/ddns/dynamic_dns_functions.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 19,
+      "registered": 19
+    },
+    "net/ddns-scripts/files/usr/lib/ddns/dynamic_dns_updater.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "net/ddns-scripts/files/usr/lib/ddns/update_aliyun_com.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 3,
+      "registered": 3
+    },
+    "net/ddns-scripts/files/usr/lib/ddns/update_blazingfast_io.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "net/ddns-scripts/files/usr/lib/ddns/update_cloudflare_com_v4.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 3,
+      "registered": 3
+    },
+    "net/ddns-scripts/files/usr/lib/ddns/update_cnkuai_cn.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 5,
+      "registered": 5
+    },
+    "net/ddns-scripts/files/usr/lib/ddns/update_dnspod_cn_v3.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 12,
+      "registered": 12
+    },
+    "net/ddns-scripts/files/usr/lib/ddns/update_freedns_42_pl.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 3,
+      "registered": 3
+    },
+    "net/ddns-scripts/files/usr/lib/ddns/update_godaddy_com_v1.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "net/ddns-scripts/files/usr/lib/ddns/update_huaweicloud_com.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 9,
+      "registered": 9
+    },
+    "net/ddns-scripts/files/usr/lib/ddns/update_luadns_v1.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "net/ddns-scripts/files/usr/lib/ddns/update_namesilo_com_v1.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 8,
+      "registered": 8
+    },
+    "net/ddns-scripts/files/usr/lib/ddns/update_no-ip_com.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 6,
+      "registered": 6
+    },
+    "net/ddns-scripts/files/usr/lib/ddns/update_one_com.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 7,
+      "registered": 7
+    },
+    "net/ddns-scripts/files/usr/lib/ddns/update_porkbun_v3.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 3,
+      "registered": 3
+    },
+    "net/ddns-scripts/files/usr/lib/ddns/update_route53_v1.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 3,
+      "registered": 3
+    },
+    "net/ddns-scripts/files/usr/lib/ddns/update_transip_nl.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 2,
+      "registered": 2
+    },
+    "net/ddns-scripts/samples/update_sample.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 3,
+      "registered": 3
+    },
+    "net/dnscrypt-proxy/files/dnscrypt-proxy.init": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "net/dnsproxy/files/dnsproxy.defaults": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "net/eoip/files/eoip.init": {
+      "delta_pct": 50.0,
+      "over": true,
+      "probe": 2,
+      "registered": 1
+    },
+    "net/etherwake/files/etherwake.init": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "net/fail2ban/test.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "net/freeradius3/test.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 9,
+      "registered": 9
+    },
+    "net/frp/files/frpc.init": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "net/frr/files/frrcommon.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 2,
+      "registered": 2
+    },
+    "net/fsh/test.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "net/fwknop/files/fwknopd.init": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "net/git-lfs/test.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 5,
+      "registered": 5
+    },
+    "net/gnunet/files/gnunet.init": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 2,
+      "registered": 2
+    },
+    "net/gnunet/test.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "net/gsocket/test.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "net/hev-socks5-server/test.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "net/hev-socks5-tproxy/test.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "net/hev-socks5-tunnel/test.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "net/hs20/files/hs20-server.defaults": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "net/https-dns-proxy/files/etc/init.d/https-dns-proxy": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 2,
+      "registered": 2
+    },
+    "net/https-dns-proxy/files/etc/uci-defaults/50-https-dns-proxy-migrate-options.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 7,
+      "registered": 7
+    },
+    "net/https-dns-proxy/test.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 2,
+      "registered": 2
+    },
+    "net/https-dns-proxy/tests/run_tests.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 35,
+      "registered": 35
+    },
+    "net/ibrdtnd/files/mountcontainer.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "net/ibrdtnd/files/systemcheck.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "net/ieee8021xclient/files/ieee8021xclient.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "net/kea/files/dhcp4.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "net/keepalived/files/etc/uci-defaults/keepalived": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "net/keepalived/files/usr/bin/keepalived-rsync-inotify": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "net/keepalived/files/usr/share/keepalived/scripts/rsync.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "net/knxd/files/knxd.init": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "net/ksmbd-tools/files/ksmbd.init": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 2,
+      "registered": 2
+    },
+    "net/libreswan/files/etc/hotplug.d/iface/89-libreswan": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "net/libreswan/files/etc/init.d/ipsec": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "net/libreswan/files/etc/libreswan_firewall.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "net/libreswan/files/usr/libexec/rpcd/libreswan": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "net/mini_snmpd/files/mini_snmpd.init": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "net/miniupnpc/test.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "net/modemmanager/files/usr/sbin/ModemManager-monitor": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 2,
+      "registered": 2
+    },
+    "net/modemmanager/files/usr/share/ModemManager/modemmanager.common": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 4,
+      "registered": 4
+    },
+    "net/mosquitto/files/etc/init.d/mosquitto": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 4,
+      "registered": 4
+    },
+    "net/mwan3/files/etc/init.d/mwan3": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 2,
+      "registered": 2
+    },
+    "net/mwan3/files/lib/mwan3/common.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "net/mwan3/files/lib/mwan3/mwan3.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 24,
+      "registered": 24
+    },
+    "net/natmap/test.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "net/nebula/files/nebula.init": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "net/nebula/test.sh": {
+      "delta_pct": 25.0,
+      "over": true,
+      "probe": 4,
+      "registered": 3
+    },
+    "net/netopeer2/files/netopeer2-server-setup.default": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 10,
+      "registered": 10
+    },
+    "net/nfs-kernel-server/files/nfsd.v4.init": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 2,
+      "registered": 2
+    },
+    "net/nginx-util/files/README.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "net/nginx-util/src/test-nginx-util-root.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 14,
+      "registered": 14
+    },
+    "net/nginx/files-luci-support/60_nginx-luci-support": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "net/nginx/files/nginx.init": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 6,
+      "registered": 6
+    },
+    "net/nut/files/add_nut_httpd_conf.default": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "net/nut/files/nut-monitor-config.sh.functions": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 2,
+      "registered": 2
+    },
+    "net/nut/files/nut-server-config.sh.functions": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 3,
+      "registered": 3
+    },
+    "net/nut/files/nut-service.sh.functions": {
+      "delta_pct": 100.0,
+      "over": true,
+      "probe": 1,
+      "registered": 0
+    },
+    "net/ocserv/files/ocserv.init": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "net/open-iscsi/files/iscsi-gen-initiatorname": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "net/open-iscsi/files/iscsi_discovery": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "net/open-iscsi/files/iscsi_offload": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 8,
+      "registered": 8
+    },
+    "net/openfortivpn/files/openfortivpn.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "net/openssh/files/sshd.init": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "net/openssh/test-version.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 2,
+      "registered": 2
+    },
+    "net/openvpn/test.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 2,
+      "registered": 2
+    },
+    "net/p910nd/files/p910nd.hotplug": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "net/pbr/files/etc/init.d/pbr": {
+      "delta_pct": 4.55,
+      "over": false,
+      "probe": 66,
+      "registered": 63
+    },
+    "net/pbr/files/etc/uci-defaults/90-pbr": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 14,
+      "registered": 14
+    },
+    "net/pbr/files/usr/share/pbr/pbr.user.dnsprefetch": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 3,
+      "registered": 3
+    },
+    "net/pbr/test.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "net/pbr/tests/04_config/01_load_config": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 2,
+      "registered": 2
+    },
+    "net/pbr/tests/04_config/02_disabled_service": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "net/pbr/tests/04_config/03_config_ipv6": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "net/pbr/tests/05_nft/01_nft_file_operations": {
+      "delta_pct": 100.0,
+      "over": true,
+      "probe": 11,
+      "registered": 0
+    },
+    "net/pbr/tests/06_network/01_gateway_discovery": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 12,
+      "registered": 12
+    },
+    "net/pbr/tests/08_dns/01_nftset_element": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 22,
+      "registered": 22
+    },
+    "net/pbr/tests/lib/mocks/functions.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 5,
+      "registered": 5
+    },
+    "net/pbr/tests/lib/mocks/jshn.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "net/pbr/tests/lib/setup.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "net/pbr/tests/run_tests.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "net/pptpd/files/pptpd.init": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 2,
+      "registered": 2
+    },
+    "net/privoxy/files/privoxy.init": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 4,
+      "registered": 4
+    },
+    "net/prosody/test.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "net/radicale3/files/radicale3.init": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "net/radius-mac/files/radius-mac.init": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 3,
+      "registered": 3
+    },
+    "net/ripe-atlas/test.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 3,
+      "registered": 3
+    },
+    "net/safe-search/files/safe-search-maintenance": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 4,
+      "registered": 4
+    },
+    "net/samba4/files/samba.init": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 3,
+      "registered": 3
+    },
+    "net/snort3/files/snort-mgr": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 11,
+      "registered": 11
+    },
+    "net/snort3/files/snort-rules": {
+      "delta_pct": 100.0,
+      "over": true,
+      "probe": 1,
+      "registered": 0
+    },
+    "net/speedtest-netperf/files/speedtest-netperf.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 3,
+      "registered": 3
+    },
+    "net/sstp-client/files/lib/netifd/proto/sstp.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "net/strongswan/files/etc/uci-defaults/strongswan": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "net/strongswan/files/ipsec.init": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "net/swgp-go/test.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "net/switchdev-poller/files/switchdev-poller": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 2,
+      "registered": 2
+    },
+    "net/sysrepo/files/libsysrepo.default": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 5,
+      "registered": 5
+    },
+    "net/tayga/files/tayga.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 2,
+      "registered": 2
+    },
+    "net/tcpreplay/test.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "net/tor-hs/files/nextcloud-update.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "net/trafficshaper/files/trafficshaper.init": {
+      "delta_pct": 100.0,
+      "over": true,
+      "probe": 1,
+      "registered": 0
+    },
+    "net/transmission/files/transmission.init": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "net/travelmate/files/travelmate.init": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "net/uacme/files/dnsapi_helper.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 18,
+      "registered": 18
+    },
+    "net/uacme/files/hook.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "net/uanytun/files/uanytun.init": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "net/unbound/files/unbound.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 2,
+      "registered": 2
+    },
+    "net/unbound/test.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 5,
+      "registered": 5
+    },
+    "net/wg-installer/common/wg.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 4,
+      "registered": 4
+    },
+    "net/wg-installer/wg-server/config/wgserver.init": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "net/wg-installer/wg-server/lib/wg_functions.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "net/wifischedule/net/usr/bin/wifi_schedule.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 4,
+      "registered": 4
+    },
+    "net/wsdd2/files/wsdd2.init": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 5,
+      "registered": 5
+    },
+    "net/xray-core/test.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "net/yggdrasil/files/yggdrasil.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "sound/mpc/files/pls-handler.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 2,
+      "registered": 2
+    },
+    "sound/mpd/test.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "sound/squeezelite/test-version.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "sound/upmpdcli/test.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 2,
+      "registered": 2
+    },
+    "utils/airos-dfs-reset/files/airos-dfs-reset": {
+      "delta_pct": 100.0,
+      "over": true,
+      "probe": 2,
+      "registered": 0
+    },
+    "utils/ap51-flash/files/ap51-flash.init": {
+      "delta_pct": 100.0,
+      "over": true,
+      "probe": 1,
+      "registered": 0
+    },
+    "utils/apparmor/files/apparmor.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 3,
+      "registered": 3
+    },
+    "utils/arp-whisper/test.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "utils/cache-domains/files/test.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 11,
+      "registered": 11
+    },
+    "utils/catatonit/test.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "utils/clixon/files/clixon.init": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "utils/fatresize/test.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "utils/fwupd/test.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "utils/hwdata/test.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 3,
+      "registered": 3
+    },
+    "utils/librespeed-cli-rust/test.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 5,
+      "registered": 5
+    },
+    "utils/mariadb/files/mysqld.init": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "utils/miniflux/test.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "utils/parted/test.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "utils/pcmciautils/files/etc/init.d/pcmcia": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "utils/rtl-sdr/test.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 7,
+      "registered": 7
+    },
+    "utils/sane-backends/files/saned.hotplug": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "utils/shadow/test.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 6,
+      "registered": 6
+    },
+    "utils/smartmontools/test.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "utils/syncthing/test.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "utils/ubnt-manager/files/ubnt-manager.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "utils/usbutils/test.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 1,
+      "registered": 1
+    },
+    "utils/xfsprogs/test.sh": {
+      "delta_pct": 0.0,
+      "over": false,
+      "probe": 3,
+      "registered": 3
+    }
+  },
+  "probe_ndjson": "openwrt-feed-records.ndjson",
+  "schema_version": "1",
+  "summary": {
+    "over_tolerance_files": 11,
+    "over_tolerance_pct": 5.26,
+    "probe_files": 209,
+    "registered_files": 203
+  },
+  "tolerance_pct": 10.0
+}

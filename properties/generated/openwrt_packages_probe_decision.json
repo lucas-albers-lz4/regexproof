@@ -1,31 +1,33 @@
 {
   "candidate_url": "https://github.com/openwrt/packages",
+  "conditions": [
+    {
+      "evidence": "posix-shell dialect surface at FEED scale: 713 shell regex sites / 203 files / 140 packages in openwrt/packages @ e99adbc49f7a11d0377c8135fe706c7757b9e68c (pre-P2 capture 2026-08-12: 739 sites on the PR #259 branch @ 93f4333; final-semantics 659; the P3 reconcile found and fixed a REAL guard regression — command substitutions suppressed as string literals, PR #274 — restoring 54 real sites; final reconcile vs the fixed registered extractor: 11 files over 10% per-file tolerance, all boundary-fix phantoms like pgrep $x, documented in openwrt-reconcile-report.json). Novelty: posix-shell was unadmitted at capture time (no shell extractor existed pre-P1; the shell corpus's own admission is dogfood_shell_gate_decision.json in the same wave). Syntax: BRE 610 / ERE 98 / bash_ksh 5; -i 39. Non-empty predicted_buckets: posix-class 17, inline-flag 39.",
+      "id": "new-surface",
+      "met": true
+    },
+    {
+      "evidence": "Not a security boundary (probe.security_boundary=unknown).",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "713 sites < 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
   "corpus": "openwrt_packages",
   "corpus_pin": "local",
-  "draft": true,
-  "fields_remaining": [
-    "decision",
-    "rationale",
-    "conditions[].met",
-    "conditions[].evidence",
-    "decision_basis",
-    "escape_hatch_applied",
-    "related",
-    "decision_date"
-  ],
+  "decision": "go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
   "probe": {
-    "_shell_evidence": {
-      "construct_counts": {
-        "(?i)": 39,
-        "posix-class": 17
-      },
-      "records": 713
-    },
     "construct_counts": {},
     "dialect": {
       "posix-shell": 713
     },
-    "extractor_errors": 0,
     "flags": {},
     "pin": "local",
     "predicted_buckets": {
@@ -240,5 +242,6 @@
     },
     "security_boundary": "unknown"
   },
+  "rationale": "New dialect/flag/encoding surface: dialects [posix-shell:713]; predicted_buckets [inline-flag:39, posix-class:17].",
   "schema_version": "1"
 }
