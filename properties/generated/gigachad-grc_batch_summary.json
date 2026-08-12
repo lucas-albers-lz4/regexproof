@@ -1,0 +1,18 @@
+{
+  "address_space_cap": true,
+  "complete_run": true,
+  "corpus": "gigachad-grc",
+  "corpus_type": "rule_corpus",
+  "encodable": 227,
+  "engine": {
+    "python": "3.14.6"
+  },
+  "extracted": 364,
+  "findings": 33,
+  "inventory_questions": 4,
+  "join_regex_ids": 33,
+  "redos_findings": 0,
+  "redos_incomplete": false,
+  "schema_version": "1",
+  "triage": 137
+}
