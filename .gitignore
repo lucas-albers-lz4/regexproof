@@ -15,6 +15,9 @@ helpers/go-re2/go-re2.exe
 redos-env/
 batch/corpora/coreruleset/rules
 
+# Admission probe drafts (authoring inputs; promote via gate_decision only)
+properties/generated/*_probe_draft.json
+
 # Materialized corpus checkouts (see batch/corpora/*/README.md)
 batch/corpora/*/rules
 batch/corpora/*/detectors

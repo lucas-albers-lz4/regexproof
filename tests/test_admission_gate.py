@@ -309,3 +309,33 @@ def test_run_batch_rejects_missing_decision(tmp_path):
     with pytest.raises(SystemExit) as exc:
         run_batch(["gitleaks"], out_dir=tmp_path)
     assert "admission gate failed" in str(exc.value)
+
+
+def test_security_tool_manifests_are_in_disclose_set():
+    """Every security_tool corpus must get private_first via SECURITY_TOOL_CORPORA.
+
+    ReDoS tagging uses meta["security_tool"]; property/usage findings use the
+    frozenset. Partial wiring would under-disclose on one path.
+    """
+    from regexproof.batch.disclose import SECURITY_TOOL_CORPORA
+
+    flagged = sorted(
+        name
+        for name, meta in CORPUS_MANIFESTS.items()
+        if meta.get("security_tool")
+    )
+    missing = [n for n in flagged if n not in SECURITY_TOOL_CORPORA]
+    assert missing == [], (
+        "manifest security_tool=True but missing from SECURITY_TOOL_CORPORA: "
+        + ", ".join(missing)
+    )
+    # Reverse: disclose-set members that are manifests must also flag security_tool.
+    unflagged = sorted(
+        n
+        for n in SECURITY_TOOL_CORPORA
+        if n in CORPUS_MANIFESTS and not CORPUS_MANIFESTS[n].get("security_tool")
+    )
+    assert unflagged == [], (
+        "SECURITY_TOOL_CORPORA member lacks manifest security_tool=True: "
+        + ", ".join(unflagged)
+    )
