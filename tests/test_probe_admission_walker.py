@@ -53,6 +53,38 @@ def test_ecma_noise_fixture_counts_two_real_literals():
     assert walked["dialect"].get("ecma") == 2
 
 
+def test_walk_prunes_skip_dirs_and_skips_non_extractor_reads(tmp_path: Path, monkeypatch):
+    """Prune node_modules/.git; do not read_text files with no extractor."""
+    from regexproof.admission import walk as walk_mod
+
+    (tmp_path / "src").mkdir()
+    (tmp_path / "src" / "ok.py").write_text("import re\nre.compile(r'a')\n", encoding="utf-8")
+    (tmp_path / "README.md").write_text("# noise\n" * 5000, encoding="utf-8")
+    (tmp_path / "node_modules" / "pkg").mkdir(parents=True)
+    (tmp_path / "node_modules" / "pkg" / "evil.py").write_text(
+        "import re\nre.compile(r'should-not-see')\n", encoding="utf-8"
+    )
+    (tmp_path / ".git" / "objects").mkdir(parents=True)
+    (tmp_path / ".git" / "objects" / "x.py").write_text(
+        "import re\nre.compile(r'git-noise')\n", encoding="utf-8"
+    )
+
+    reads: list[str] = []
+    real_read = Path.read_text
+
+    def tracking_read(self, *args, **kwargs):
+        reads.append(str(self))
+        return real_read(self, *args, **kwargs)
+
+    monkeypatch.setattr(Path, "read_text", tracking_read)
+    walked = walk_mod.walk_repo(tmp_path, repo_name="prune")
+    assert walked["regex_sites"] >= 1
+    assert all("node_modules" not in p for p in reads)
+    assert all("/.git/" not in p and not p.endswith("/.git/objects/x.py") for p in reads)
+    assert not any(p.endswith("README.md") for p in reads)
+    assert any(p.endswith("ok.py") for p in reads)
+
+
 def test_java_html_sanitizer_pin_recorded_in_spike():
     from regexproof.admission.java_pin import (
         JAVA_HTML_SANITIZER_PIN,

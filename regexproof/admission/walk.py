@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import os
 import re
 from collections import Counter
 from pathlib import Path
@@ -45,22 +46,30 @@ ExtractFn = Callable[[str, str], list[dict[str, Any]]]
 
 
 def _iter_files(root: Path) -> list[Path]:
+    """List candidate files under *root*, pruning skip-dir names in-place.
+
+    Same membership as the prior ``rglob`` + post-filter path: skip
+    ``_SKIP_DIR_NAMES`` subtrees, symlinks (``is_file()`` follows links), and
+    files larger than ``_MAX_FILE_BYTES``. Result is sorted for stable walk order.
+    """
     files: list[Path] = []
-    for p in sorted(root.rglob("*")):
-        # Skip symlinks before is_file() — is_file() follows links.
-        if p.is_symlink():
-            continue
-        if not p.is_file():
-            continue
-        if any(part in _SKIP_DIR_NAMES for part in p.parts):
-            continue
-        try:
-            if p.stat().st_size > _MAX_FILE_BYTES:
+    root_s = str(root)
+    for dirpath, dirnames, filenames in os.walk(root_s, topdown=True, followlinks=False):
+        dirnames[:] = sorted(d for d in dirnames if d not in _SKIP_DIR_NAMES)
+        for name in filenames:
+            p = Path(dirpath) / name
+            # Skip symlinks before is_file() — is_file() follows links.
+            if p.is_symlink():
                 continue
-        except OSError:
-            continue
-        files.append(p)
-    return files
+            if not p.is_file():
+                continue
+            try:
+                if p.stat().st_size > _MAX_FILE_BYTES:
+                    continue
+            except OSError:
+                continue
+            files.append(p)
+    return sorted(files)
 
 
 def _rel(root: Path, path: Path) -> str:
@@ -112,6 +121,13 @@ def _extractors_for(path: Path) -> list[ExtractFn]:
     return []
 
 
+def _should_read(path: Path) -> bool:
+    """True when *path* has a java count path or at least one extractor."""
+    if path.suffix.lower() == ".java":
+        return True
+    return bool(_extractors_for(path))
+
+
 def count_java_pattern_compile(source: str) -> list[str]:
     """Return Java Pattern.compile string literals (count-only path)."""
     return [m.group(1) for m in _JAVA_PATTERN_COMPILE.finditer(source)]
@@ -127,6 +143,8 @@ def walk_repo(root: Path | str, *, repo_name: str = "probe") -> dict[str, Any]:
     extractor_errors = 0
 
     for fp in _iter_files(root_p):
+        if not _should_read(fp):
+            continue
         rel = _rel(root_p, fp)
         try:
             text = fp.read_text(encoding="utf-8", errors="replace")
