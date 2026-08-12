@@ -61,18 +61,20 @@ def _unescape_js_string(raw: str) -> str:
             break
         e = raw[i]
         if e in "01234567":
-            # Legacy octal escape: up to 3 digits; lone \\0 (not followed by a
-            # digit) is NUL. \\08 -> NUL + '8' (the '8' is a separate literal).
+            # Legacy octal escape (Annex B): leading 0-3 allows up to 3 digits,
+            # leading 4-7 allows only 2 (\\400 -> \\40 + '0', per Node). A lone
+            # \\0 (not followed by an octal digit) is NUL; \\08 -> NUL + '8'.
             j = i
-            digits = ""
-            while j < n and len(digits) < 3 and raw[j] in "01234567":
-                digits += raw[j]
+            digits = e
+            cap = 3 if e in "0123" else 2
+            while j + 1 < n and len(digits) < cap and raw[j + 1] in "01234567":
                 j += 1
-            if digits == "0" and (j >= n or raw[j] not in "01234567"):
+                digits += raw[j]
+            if digits == "0" and (j + 1 >= n or raw[j + 1] not in "01234567"):
                 out.append("\0")
             else:
                 out.append(chr(int(digits, 8)))
-            i = j
+            i = j + 1
             continue
         if e == "x" and i + 2 < n and re.fullmatch(r"[0-9a-fA-F]{2}", raw[i + 1 : i + 3]):
             out.append(chr(int(raw[i + 1 : i + 3], 16)))
@@ -160,11 +162,16 @@ def extract_js(source: str, *, repo: str, file: str) -> list[dict[str, Any]]:
         line_no = source.count("\n", 0, m.start()) + 1
         col = m.start() - (source.rfind("\n", 0, m.start()) + 1)
         rest_clean = _strip_js_comments(m.group("rest"))
-        flags_m = _NEW_REGEXP_FLAGS.search(rest_clean)
-        # Composite when the pattern is dynamic: template interpolation, any
-        # concatenation (comments stripped), or a second arg that is not a
-        # string-literal flag set (variable flags -> unknown semantics).
-        dynamic = "${" in arg or "+" in rest_clean or ("," in rest_clean and not flags_m)
+        first_comma = rest_clean.find(",")
+        head = rest_clean[:first_comma] if first_comma != -1 else rest_clean
+        tail = rest_clean[first_comma:] if first_comma != -1 else ""
+        # Flags come ONLY from the second argument (anchored at the first comma);
+        # args beyond the second are ignored by JS and must not affect anything.
+        flags_m = _NEW_REGEXP_FLAGS.match(tail)
+        # Composite when the pattern is dynamic: template interpolation, a
+        # concatenation in the FIRST argument (comments stripped), or a second
+        # argument that is not a string-literal flag set (variable flags).
+        dynamic = "${" in arg or "+" in head or (first_comma != -1 and not flags_m)
         if (arg.startswith("'") and arg.endswith("'")) or (
             arg.startswith('"') and arg.endswith('"')
         ) or (arg.startswith("`") and arg.endswith("`")):
@@ -255,11 +262,16 @@ def extract_js_precise(source: str, *, repo: str, file: str) -> list[dict[str, A
         line_no = source.count("\n", 0, m.start()) + 1
         col = m.start() - (source.rfind("\n", 0, m.start()) + 1)
         rest_clean = _strip_js_comments(m.group("rest"))
-        flags_m = _NEW_REGEXP_FLAGS.search(rest_clean)
-        # Composite when the pattern is dynamic: template interpolation, any
-        # concatenation (comments stripped), or a second arg that is not a
-        # string-literal flag set (variable flags -> unknown semantics).
-        dynamic = "${" in arg or "+" in rest_clean or ("," in rest_clean and not flags_m)
+        first_comma = rest_clean.find(",")
+        head = rest_clean[:first_comma] if first_comma != -1 else rest_clean
+        tail = rest_clean[first_comma:] if first_comma != -1 else ""
+        # Flags come ONLY from the second argument (anchored at the first comma);
+        # args beyond the second are ignored by JS and must not affect anything.
+        flags_m = _NEW_REGEXP_FLAGS.match(tail)
+        # Composite when the pattern is dynamic: template interpolation, a
+        # concatenation in the FIRST argument (comments stripped), or a second
+        # argument that is not a string-literal flag set (variable flags).
+        dynamic = "${" in arg or "+" in head or (first_comma != -1 and not flags_m)
         if (arg.startswith("'") and arg.endswith("'")) or (
             arg.startswith('"') and arg.endswith('"')
         ) or (arg.startswith("`") and arg.endswith("`")):

@@ -181,6 +181,24 @@ def test_unescape_js_string_escapes():
     assert _unescape_js_string(r"\u0041") == "A"        # uHHHH
     assert _unescape_js_string(r"\d+") == "d+"          # unknown escape drops backslash
     assert _unescape_js_string(r"\\[") == r"\["         # escaped backslash stays
+    # Annex-B octal digit caps (luna r3 #2): leading 4-7 takes only 2 digits.
+    assert _unescape_js_string(r"\400") == " 0"         # \40 + '0' (Node-verified)
+    assert _unescape_js_string(r"\477") == "'7"         # \47 + '7' (Node-verified)
+    assert _unescape_js_string(r"\377") == "\xff"       # 3 digits allowed for 0-3 lead
+
+
+def test_new_regexp_third_arg_and_ignored_args():
+    """Flags come only from the SECOND argument; third+ args are ignored by JS
+    and must not drive flags or the concat check (luna r3 #1/#5)."""
+    recs = extract_js_precise(
+        'const a = new RegExp("a", flags, "i");\nconst b = new RegExp("a", "i", 1 + 2);\n',
+        repo="t",
+        file="x.js",
+    )
+    a, b = recs
+    assert a["pattern"] == "" and a["unencodable_reason"] == "composite-pattern"
+    assert b["pattern"] == "a" and b["flags"] == "i"
+    assert b.get("unencodable_reason") is None
 
 
 def test_new_regexp_two_arg_legacy_extract_js():

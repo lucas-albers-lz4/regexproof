@@ -107,6 +107,14 @@ def test_intent_negated_class_whitespace_no_false_positive():
     assert hits[0]["detail"]["admitted_char"] == "' '"
     # [^ ] excludes a literal space -> no fire.
     assert detect_intent_mismatches([dict(rec, pattern=r"^[^ ]+@x$")]) == []
+    # \S is the NON-whitespace class: [^\S@] admits whitespace -> fires (luna r3 #3).
+    hits = detect_intent_mismatches([dict(rec, pattern=r"^[^\S@]+@[^\S@]+$")])
+    assert len(hits) == 1, hits
+    # ] right after [^ is a literal class char: [^] ] excludes space -> no fire (luna r3 #4).
+    assert detect_intent_mismatches([dict(rec, pattern=r"^[^] ]+@x$")]) == []
+    # [] ] is a positive class containing space -> fires.
+    hits = detect_intent_mismatches([dict(rec, pattern=r"^[] ]+@x$")])
+    assert len(hits) == 1, hits
 
 
 def test_markdown_section_headers_unique(tmp_path: Path):
