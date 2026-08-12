@@ -31,6 +31,23 @@ the compiler dispatch (`regexproof/compiler/__init__.py` `_compile_dialect`),
 pcre backend as the BRE→ERE target, the existing probe/author tooling
 (`scripts/probe-corpus-admission.py`, `scripts/author-gate-decision.py`).
 
+## Artifact contract (cross-phase)
+
+| Artifact | Produced-by | Consumed-by | Schema owner |
+|---|---|---|---|
+| `dogfooding_novelty_2026-08-12.json` | P1 | P2 AC1 denominator, docs/why.md, P2.5 | P1 |
+| `probe_records.ndjson` (P1 script `--dir --ndjson` export) | P1 | merge-probe-draft.py, reconcile_probe.py | P1 |
+| `extractor_records.ndjson` (registered-extractor output) | P2a | reconcile_probe.py (P3-B), P2 AC3 validation | P2a |
+| `dogfooding_novelty_2026-08-12_POST_P2.json` | P2.5 | P3-B wave review, docs/why.md | P2 |
+| `dogfood_shell_gate_decision.json` | P2c (author-gate-decision.py) | check_admission_gates | admission schema |
+| `openwrt_packages_probe_decision.json` | P3-B (probe evidence from P3-A; merge → author) | test_probe_decision_artifacts.py, wave review, follow-on stream kickoff | admission schema |
+| `prediction_vocabulary.json` shell entries | P3 | predict_buckets | admission vocabulary |
+
+The two NDJSON artifact names are DISTINCT and never shared: P1's lightweight
+`probe_records.ndjson` (fields: pattern, flags, dialect, shell_flags, file,
+line) vs P2a's schema-valid `extractor_records.ndjson` (full extractor schema
+with regex_id/site/column/schema_version).
+
 ---
 
 ## Context (measured 2026-08-12)
@@ -39,7 +56,9 @@ pcre backend as the BRE→ERE target, the existing probe/author tooling
   code = the P(compiles) distribution). 2,878 regex sites / 2,025 distinct
   (exact) / 2,004 (canonicalized) at first measure; a re-run showed 2,876 /
   2,023 — a 2-site drift from working-tree changes in the dogfooding repos,
-  which is evidence that snapshots must PIN state (see P1 AC2).
+  which is evidence that snapshots must PIN state (see P1 AC2). The
+  P1-frozen snapshot (post-precision-guard fixes) reports 2,857 / 2,008 /
+  1,990 — the authoritative current numbers.
 - Singleton fraction 0.984 (convenience-sample estimate — pooled distinct
   singleton fraction, NOT a formal Good-Turing estimator; see P1 Step 4) —
   the P(compiles) curve is still deep in the steep region at n=4; the ~20–50
@@ -50,9 +69,10 @@ pcre backend as the BRE→ERE target, the existing probe/author tooling
   `untrusted comment:`, `listen_https` shared between fwlive + usrmanage
   (both OpenWrt); nothing shared with happycow/hermes-agent. Closure holds
   only within a dialect family, matching the corpus-side finding.
-- Shell surface: 292 sites (10% of dogfooding) extracted by a LABELED
-  heuristic scanner because no shell extractor exists. The OpenWrt admission
-  argument has a number attached.
+- Shell surface: 273 sites (9.6% of dogfooding) extracted by a LABELED
+  heuristic scanner (frozen at P1, PR #259 — the pre-fix heuristic count
+  was 292; the P1 precision guards removed the phantoms) because no shell
+  extractor exists. The OpenWrt admission argument has a number attached.
 - Heuristic scanner bugs found during development and review (all fixed in
   this plan's P1): re.VERBOSE stripped literal spaces in flag runs; `[[ =~ ]]`
   matched only QUOTED RHS while bash 3.2+ treats unquoted RHS as the regex
@@ -200,7 +220,10 @@ novelty, labeled as a convenience-sample estimate — do not present the pooled
 distinct-singleton fraction as a formal estimator. Also freeze the FILE LIST
 per repo under an explicit snapshot key (`file_lists: {repo: [paths]}`) —
 this is the recall/precision denominator for P2 ACs and the probe surface
-(three file universes collapse into one). Shell identity includes the
+(three file universes collapse into one). The snapshot ALSO freezes per-file
+site counts (`site_counts_per_file: {repo: {path: count}}`) — the P2a recall
+AC is measured per FILE against this frozen count table, not against a bare
+path list. Shell identity includes the
 `shell_flags` syntax selector (BRE `a+b` literal vs ERE `a+b` one-or-more
 must not collapse into one distinct pattern).
 
@@ -223,7 +246,7 @@ standard gates) pass.
    under the `file_lists` key; byte-identical on rerun against the same
    pins (verifiable: rerun + sha256 diff); script refuses to snapshot when
    a repo HEAD != recorded SHA.
-3. `docs/why.md` carries the shell-gap finding with the 292-site number and
+3. `docs/why.md` carries the shell-gap finding with the frozen 273-site number and
    the GT figures labeled as convenience-sample estimates.
 4. The 3 known `[[ =~ ]]` sites (`^[Yy]$` x2, `^[0-9]+$`) appear in the
    extraction output with the `bash_ksh` provenance field.
@@ -282,9 +305,14 @@ chain intact).
   corpus (extractor registration ONLY — does not touch the #149 automation
   pipeline): key `dogfood_shell`, `corpus_type` set, `path` pointing at a
   committed/cloned tree (NOT an uncommitted local checkout),
-  `dialect: "posix-shell"`, **`lift_inline: false`** (real grep treats a
-  leading `(?i)` as literal — `normalize_inline_flags` must not strip it
-  from shell records)
+  `dialect: "posix-shell"`, **`lift_inline: false`** (grep has NO inline
+  modifiers: BRE treats a leading `(?i)` as literal text; GNU grep ERE
+  warns `? at start of expression` and matches nothing — verified GNU grep
+  3.11 + busybox 1.37, 2026-08-12. `normalize_inline_flags` must not strip
+  it; the literal-(?i) semantics are handled by the P2b normalize +
+  inline-flag guard, NOT by inline-flag stripping), `corpus_type:
+  "rule_corpus"` (NON-EXEMPT — `check_admission_gates` requires the
+  decision artifact for every corpus except testdata/inventory_only)
 - Modify: `scripts/dogfood-singleton-analysis.py` — use the registered
   extractor instead of `scan_shell`
 - Modify: `regexproof/admission/walk.py` — add shell dispatch to
@@ -297,12 +325,32 @@ chain intact).
   agree.
 - Create: `tests/test_extract_shell_posix.py`
 - Create: `tests/test_compile_posix_shell.py`
+- Create: `properties/generated/shell_precision_seed.bin` +
+  `properties/generated/shell_precision_spotcheck_seed.bin` (random-source
+  files sized per AC2) + `properties/generated/shell_precision_sample_50.txt`
+  (chosen-50 path list) + `properties/generated/shell_precision_sample.json`
+  (labels + draw records) — the committed precision evidence (P2 AC2)
 - Create: `properties/generated/dogfood_shell_gate_decision.json` (admission
   artifact for the shell corpus itself; GO-class on condition id
-  `new-surface` — authored via `author-gate-decision.py`; NOTE: this
-  artifact is intentionally manifest-gated (consumed by
-  `check_admission_gates` via the `dogfood_shell` key) WITHOUT a probe-draft
-  record — it is the shell corpus's own admission, distinct from the
+  `new-surface` — authored via `author-gate-decision.py` FROM A DRAFT: the
+  tooling hard-requires a positional draft + `--decision` + `--evidence`
+  per met condition. The draft is produced by running
+  `scripts/probe-corpus-admission.py` against the `dogfood_shell` corpus
+  tree AFTER P2c's walk_repo shell dispatch lands (so `probe.regex_sites`
+  counts shell files), then authored from the repo ROOT with the complete
+  invocation:
+  `python scripts/author-gate-decision.py <draft.json> --human --decision go
+  --met new-surface --evidence "new-surface=<text>" --template new-surface
+  -o properties/generated/dogfood_shell_gate_decision.json`.
+  Authoring is a P2c deliverable (depends on walk dispatch; verified
+  machine fact: `check_admission_gates` at runner.py:550 skips only
+  `testdata`/`inventory_only` corpus_types and requires the
+  `{manifest_key}_gate_decision.json` for every other corpus). The manifest
+  `corpus_type` must therefore be NON-EXEMPT (`rule_corpus` — consumes
+  `batch/inventories/rule_corpus.json` like the other rule corpora; NOT a
+  testdata/inventory-only corpus). NOTE: this artifact is intentionally
+  manifest-gated (consumed by `check_admission_gates` via the `dogfood_shell`
+  key) — it is the shell corpus's own admission, distinct from the
   OpenWrt probe decision in P3)
 - Create: `properties/generated/dogfooding_novelty_2026-08-12_POST_P2.json`
   (the P2.5 re-freeze snapshot — listed HERE as a Create)
@@ -327,9 +375,10 @@ chain intact).
   directions for BRE-syntax records:
   - unescape BRE escapes: `\(` `\)` `\{` `\}` `\|` `\+` `\?` → `(` `)` `{`
     `}` `|` `+` `?`
-  - literal-escape direction: bare `+` `?` `{` `|` in a BRE-syntax record
-    are LITERALS and must be escaped (`\+` `\?` `\{` `\|`) so the ERE/pcre
-    compile does not widen them
+  - literal-escape direction: bare `+` `?` `{` `|` `(` `)` in a
+    BRE-syntax record are LITERALS (BRE has no unescaped group syntax) and
+    must be escaped (`\+` `\?` `\{` `\|` `\(` `\)`) so the ERE/pcre
+    compile does not widen or re-parse them
   - BRE = GNU/busybox flavor (documented in module docstring; `\+` `\?`
     `\|` are POSIX-undefined but GNU/busybox-supported — the OpenWrt target)
   - reject GNU extensions `\<` `\>` as Unencodable (documented, not silent)
@@ -340,10 +389,25 @@ chain intact).
   are LITERALS in GNU/busybox ERE (verified: `grep -E 'a\+b'` matches
   literal `a+b` on GNU grep 3.11 + busybox 1.37) and pcre reads them
   identically. No silent corruption exists in this direction.
+  **ONE ERE exception — the inline-flag guard:** a `(?` sequence in an
+  ERE-syntax record is rejected as Unencodable("inline-flag-like")
+  (documented, not silent). GNU grep ERE does NOT support inline modifiers:
+  `grep -E '(?i)foo'` emits `? at start of expression` and matches nothing;
+  BRE `grep '(?i)foo'` matches the LITERAL text `(?i)foo` (both verified on
+  GNU grep 3.11 + busybox 1.37, 2026-08-12). Routed unguarded to pcre, `(?i)`
+  would be read as a case-insensitive flag and diverge from real grep, so
+  the guard is mandatory — and `normalize_inline_flags` must never strip it
+  (`lift_inline: false` in the manifest). For BRE-syntax records the
+  literal-escape direction handles it: `(` `?` are escaped to `\(` `\?`, so
+  `(?i)foo` compiles as literal text.
   Fixture tests must cover the 4-way distinction: `a+b` (BRE literal → needs
   `\+` escape) vs `a\+b` (BRE one-or-more → unescape to `a+b`) vs
   `grep -E 'a+b'` (ERE one-or-more → pass-through) vs `grep -E 'a\+b'`
-  (ERE literal `a+b` → pass-through, compile-success).
+  (ERE literal `a+b` → pass-through, compile-success). PLUS the inline-flag
+  guard pair: BRE `(?i)foo` compiles to a LITERAL match and ERE `(?i)foo`
+  → Unencodable("inline-flag-like") — both asserted against a GNU grep /
+  busybox ground-truth differential fixture (`grep -E '(?i)foo'` warns +
+  matches nothing; `grep '(?i)foo'` matches literal).
 - **Heuristic-by-nature labeling:** module docstring documents the
   false-positive/negative profile — numeric addresses rejected, awk program
   text skipped (`awk '/re/'` and `awk -F` ERE forms extracted),
@@ -367,15 +431,32 @@ wc -l` recorded and every caller's args checked against the typed signature
 `.sh`/`.init` files yields non-zero `regex_sites`).
 
 **ACs (falsifiable):**
-1. **Recall:** registered extractor extracts ≥280 of the 292 heuristic shell
-   sites on the usrmanage+fwlive slice (denominator = the frozen `file_lists`
-   in the P1 snapshot; gaps documented per file).
-2. **Precision:** on a hand-labeled 50-file sample from the frozen P1 file
-   list, precision ≥ 90%. Definition: a true positive is an extracted
+1. **Recall:** registered extractor extracts ≥262 of the 273 frozen heuristic
+   shell sites (96% — the P1-frozen per-file
+   site counts (`site_counts_per_file`), measured per
+   file; gaps documented per file).
+2. **Precision:** on a hand-labeled 50-file sample drawn from the frozen P1
+   `file_lists`, precision ≥ 90%. The draw is REPRODUCIBLE: GNU `shuf`
+   takes `--random-source=FILE`, not a bare seed, and FAILS with
+   `end of file` on an undersized source — size both seed files to the
+   input (`bytes >= 4*N + 64` for N input lines; record byte counts in the
+   sample JSON). Commit `properties/generated/shell_precision_seed.bin`
+   (50-draw) and `properties/generated/shell_precision_spotcheck_seed.bin`
+   (10-draw), plus the chosen-50 path list as
+   `properties/generated/shell_precision_sample_50.txt` (sorted, one per
+   line). Draws:
+   `shuf -n 50 --random-source=properties/generated/shell_precision_seed.bin <properties/generated/shell_precision_sample_50.txt`
+   and
+   `shuf -n 10 --random-source=properties/generated/shell_precision_spotcheck_seed.bin <properties/generated/shell_precision_sample_50.txt`.
+   The per-record TP/FP labels are COMMITTED with the P2a PR as
+   `properties/generated/shell_precision_sample.json` (schema: seed files +
+   byte counts, draw commands, files, records with label; zero-record files
+   excluded from the denominator and counted separately). Definition: a true positive is an extracted
    pattern that is a regex used in a grep/sed/awk/`[[ =~ ]]` context (not a
    literal, assignment, or comment). Numerator/denominator = TP/(TP+FP)
    over the 50 files. Independent spot-check: a DIFFERENT human labeler
-   reviews a random 10-file subset (`shuf -n 10` from the 50);
+   reviews the 10-file subset produced by the spot-check draw (distinct
+   seed file;
    disagreement = fraction of records where the two labelers disagree on
    TP/FP classification, over the union of records in the subset;
    disagreement > 10% → relabel the full 50 files; AC fails if relabeled
@@ -396,12 +477,18 @@ wc -l` recorded and every caller's args checked against the typed signature
    the branch — the double-normalize test asserts a BRE `a\+b` record
    compiles to one-or-more, not literal).
 7. **P2.5 re-freeze (mandatory, within P2):** after extractor registration
-   and BEFORE P3 begins, re-run the singleton analysis via the registered
+   and BEFORE P3-B begins (P3-A evidence capture runs pre-P2 and is the
+   exception — see AC7 and P3 Step 7), re-run the singleton analysis via the registered
    extractor; commit
    `properties/generated/dogfooding_novelty_2026-08-12_POST_P2.json`
    (Create entry in this phase's Files) with a delta report (site count,
    singleton fraction, dialect surface changes); update `docs/why.md` with
-   both snapshots. P3 cannot start without this commit.
+   both snapshots. P3-B (artifact authoring + reconciliation) cannot start
+   without this commit. **P3-A (probe evidence capture) is the explicit
+   exception**: it must COMPLETE before P2 merges (shell still novel —
+   condition `new-surface` requires the evidence to be captured while the
+   dialect is unadmitted) and runs against the PR #259 branch counter per
+   P3 Step 1. The P2.5 gate applies to P3-B only.
 8. `make_record` caller audit recorded (caller count + arg check); typed
    `extra_fields` merged BEFORE fixed fields; override-attempt test passes;
    no bare `**kwargs` in the diff.
@@ -430,6 +517,16 @@ follow-on, not this wave.
 - Create: `tests/test_probe_decision_artifacts.py` — globs
   `properties/generated/*_probe_decision.json` and schema-validates each
   (THE probe artifact's validator)
+- Modify: `scripts/author-gate-decision.py` — **go/new-surface guard** (the
+  under-report rule's ENFORCEMENT point, not just workflow convention):
+  for `--decision go` with `--met new-surface`, refuse (exit non-zero,
+  clear message) when the draft's `probe.predicted_buckets` is EMPTY.
+  Regression test: a draft with `new-surface` met + empty
+  `predicted_buckets` fails authoring; the same draft with a non-empty
+  `predicted_buckets` authors cleanly. (The merge-probe-draft.py preflight
+  is the first line; this guard closes the direct-draft bypass at
+  author.py:118-153, where `assemble_decision` would otherwise emit `go`
+  for a hand-supplied empty-bucket draft.)
 - Create: `scripts/reconcile_probe.py` — probe-count vs extractor-output
   reconciliation: per-file delta, `--tolerance-pct` flag, tolerance report.
   Input contract: probe side = per-file counts AGGREGATED from the P1
@@ -451,7 +548,12 @@ follow-on, not this wave.
   into a merged Counter — so shell `grep -i` records land in the
   `(?i)`/inline-flag bucket, not silently dropped — and only THEN feeds the
   merged Counter through `regexproof.admission.vocabulary.predict_buckets`
-  (the same path as walk.py:199). The shell construct keys it emits MUST be
+  (the same path as walk.py:199). **Preflight enforcement: if the merged
+  draft's `probe.predicted_buckets` is EMPTY, `merge-probe-draft.py` exits
+  NON-ZERO before any authoring can proceed** — the AC4 "under-report
+  forces triage-trial/no-go" rule is thereby enforced by the merge tool,
+  not by human review: an empty-bucket draft cannot reach
+  `author-gate-decision.py --decision go`. The shell construct keys it emits MUST be
   present as `construct_to_bucket` entries in `prediction_vocabulary.json`
   (P3 deliverable — see Files), keyed to the constructs `count_constructs`
   actually emits for shell patterns (add a shell fixture to
@@ -515,14 +617,19 @@ follow-on, not this wave.
    condition `new-surface`; the under-report escape forces
    `triage-trial`/`no-go` (no soft OR).
 7. **Author the gate decision artifact via existing tooling, with the
-   shell-evidence merge:** (a) run `scripts/probe-corpus-admission.py` to
-   emit the probe draft scaffold (its `walk_repo` path sees only
-   non-shell files pre-P2 — expected); (b) run
-   `scripts/merge-probe-draft.py` to populate the draft's
+   shell-evidence merge — SPLIT INTO P3-A and P3-B with an explicit
+   handoff:**
+   **P3-A (pre-P2, evidence + merge):** (a) run
+   `scripts/probe-corpus-admission.py` to emit the probe draft scaffold
+   (its `walk_repo` path sees only non-shell files pre-P2 — expected);
+   (b) run `scripts/merge-probe-draft.py` to populate the draft's
    `probe.regex_sites` (aggregated from records) and
    `probe.predicted_buckets` (constructs derived from record pattern text)
    from the P1 `--dir --ndjson` FULL-RECORD export — this is the step that
-   makes the artifact's shell novelty evidence real; (c) author with the
+   makes the artifact's shell novelty evidence real. **The MERGED DRAFT is
+   the P3-A → P3-B handoff artifact** (committed at the P3-A evidence
+   freeze); authoring does NOT run in the same step.
+   **P3-B (post-P2.5, authoring):** (c) author with the
    COMPLETE invocation, run from the REPO ROOT (the `-o` path is
    CWD-relative and
    `_resolve_output` refuses paths outside `properties/generated`):
@@ -578,7 +685,8 @@ SHA + actual runtime/disk recorded in the probe doc).
    constructs `count_constructs` (constructs.py:25) actually emits for
    shell patterns (fixture-verified); `predicted_buckets`
    in the artifact is NON-EMPTY for a `go` with condition `new-surface`;
-   the under-report escape forces `triage-trial`/`no-go`.
+   the under-report escape forces `triage-trial`/`no-go` (enforced by the
+   merge-probe-draft.py preflight — P3 Files).
 5. `scripts/reconcile_probe.py` exists, `--tolerance-pct` tested with the
    defined input contract (per-file counts aggregated from `--dir --ndjson`
    records vs extractor NDJSON), and the tolerance report committed to the
