@@ -1,0 +1,45 @@
+{
+  "candidate_url": "https://github.com/simion/pip-upgrader",
+  "conditions": [
+    {
+      "evidence": "py_re dialect already covered; no first-seen construct class.",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary=unknown with 8 non-zero sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "8 sites < 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "pip-upgrader",
+  "corpus_pin": "a32d03cc8567be8c6dbde58910129f1aa9cef185",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "py_re": 8
+    },
+    "flags": {},
+    "pin": "a32d03cc8567be8c6dbde58910129f1aa9cef185",
+    "predicted_buckets": {},
+    "regex_sites": 8,
+    "regex_sites_per_file": {
+      "pip_upgrader/constraint_validator.py": 2,
+      "pip_upgrader/packages_interactive_selector.py": 2,
+      "pip_upgrader/packages_status_detector.py": 1,
+      "pip_upgrader/packages_upgrader.py": 3
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 8 regex sites (auto-NO-GO bar 200); dialects [py_re:8]; boundary=unknown.",
+  "schema_version": "1"
+}

@@ -1,0 +1,38 @@
+{
+  "candidate_url": "https://github.com/rancherlabs/support-tools",
+  "conditions": [
+    {
+      "evidence": "No extractable regex surface (0 sites).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary=unknown; zero-sites override applies. rancherlabs support-tools; 0 regex literals.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "0 sites < 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "support-tools",
+  "corpus_pin": "b7e0101e0d4b048ae5580cea83ff27efee1ff2e9",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {},
+    "flags": {},
+    "pin": "b7e0101e0d4b048ae5580cea83ff27efee1ff2e9",
+    "predicted_buckets": {},
+    "regex_sites": 0,
+    "regex_sites_per_file": {},
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 0 regex sites (auto-NO-GO bar 200); dialects [none]; boundary=unknown.",
+  "schema_version": "1"
+}

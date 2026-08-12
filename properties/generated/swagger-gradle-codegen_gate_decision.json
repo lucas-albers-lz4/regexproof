@@ -1,0 +1,38 @@
+{
+  "candidate_url": "https://github.com/Yelp/swagger-gradle-codegen",
+  "conditions": [
+    {
+      "evidence": "No extractable regex surface (0 sites).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary=unknown; zero-sites override applies. Kotlin codegen; probe 0 sites but MANUAL check found 7 Kotlin Regex()/toRegex() sites - Java/Kotlin extractor deferred (#150); below scale regardless.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "0 sites < 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "swagger-gradle-codegen",
+  "corpus_pin": "784d98c1a2c9b29cb41a51d86554d768edcc7f6f",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {},
+    "flags": {},
+    "pin": "784d98c1a2c9b29cb41a51d86554d768edcc7f6f",
+    "predicted_buckets": {},
+    "regex_sites": 0,
+    "regex_sites_per_file": {},
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 0 regex sites (auto-NO-GO bar 200); dialects [none]; boundary=unknown.",
+  "schema_version": "1"
+}

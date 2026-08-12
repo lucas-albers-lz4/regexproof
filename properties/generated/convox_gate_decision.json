@@ -1,0 +1,87 @@
+{
+  "candidate_url": "https://github.com/convox/convox",
+  "conditions": [
+    {
+      "evidence": "ecma+re2 dialects already covered by admitted corpora; no first-seen construct class.",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary=unknown with non-zero sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "246 sites < 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "convox",
+  "corpus_pin": "d272527ea3f8a288bf934528da873ec1dabc7bcd",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "(?m)": 69,
+      "(?s)": 6,
+      "backref": 1,
+      "lookaround": 3
+    },
+    "dialect": {
+      "ecma": 95,
+      "re2": 151
+    },
+    "flags": {
+      "g": 14,
+      "i": 21,
+      "m": 1
+    },
+    "pin": "d272527ea3f8a288bf934528da873ec1dabc7bcd",
+    "predicted_buckets": {
+      "backref": 1,
+      "inline-flag": 27,
+      "lookaround": 3,
+      "m-flag": 70,
+      "stateful": 14
+    },
+    "regex_sites": 246,
+    "regex_sites_per_file": {
+      "cmd/docs/public/assets/bootstrap.min.js": 15,
+      "cmd/docs/public/assets/jquery.min.js": 80,
+      "pkg/api/budget_test.go": 1,
+      "pkg/atom/atom.go": 1,
+      "pkg/billing/gen/main.go": 28,
+      "pkg/billing/prices_azure_test.go": 1,
+      "pkg/billing/prices_gcp_test.go": 1,
+      "pkg/billing/prices_test.go": 1,
+      "pkg/cli/env.go": 1,
+      "pkg/cli/env_test.go": 4,
+      "pkg/cli/helpers.go": 1,
+      "pkg/cli/rack.go": 12,
+      "pkg/cli/rack_test.go": 60,
+      "pkg/common/format.go": 1,
+      "pkg/common/linux.go": 1,
+      "pkg/console/auth.go": 1,
+      "pkg/docs/docs.go": 5,
+      "pkg/generate/method.go": 1,
+      "pkg/hmac/hmac.go": 2,
+      "pkg/manifest/helpers.go": 1,
+      "pkg/manifest/resource.go": 1,
+      "pkg/manifest/service.go": 2,
+      "pkg/manifest/validate.go": 2,
+      "pkg/rack/terraform.go": 1,
+      "pkg/start/gen2.go": 3,
+      "provider/aws/helpers.go": 1,
+      "provider/k8s/build.go": 4,
+      "provider/k8s/dcgm_csv_test.go": 11,
+      "provider/k8s/helpers.go": 1,
+      "provider/k8s/prometheus_queries_test.go": 2
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 246 regex sites (auto-NO-GO bar 200); dialects [ecma:95, re2:151]; boundary=unknown.",
+  "schema_version": "1"
+}
