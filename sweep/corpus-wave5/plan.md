@@ -428,16 +428,22 @@ wc -l` recorded and every caller's args checked against the typed signature
    site counts (`site_counts_per_file`) in the P1 snapshot, measured per
    file; gaps documented per file.
 2. **Precision:** on a hand-labeled 50-file sample drawn from the frozen P1
-   `file_lists` with a RECORDED random seed (`shuf -n 50 --random-source`),
-   precision ≥ 90%. The sample (seed, file list) and the per-record
+   `file_lists`, precision ≥ 90%. The draw is REPRODUCIBLE: GNU `shuf`
+   takes `--random-source=FILE`, not a bare seed — commit
+   `properties/generated/shell_precision_seed.bin` (64+ random bytes,
+   recorded in the P2a PR) and draw with
+   `shuf -n 50 --random-source=properties/generated/shell_precision_seed.bin <sorted-file-list>`.
+   The chosen sample (file list) and the per-record
    TP/FP labels are COMMITTED with the P2a PR as
-   `properties/generated/shell_precision_sample.json` (schema: seed, files,
-   records with label; zero-record files excluded from the denominator and
-   counted separately). Definition: a true positive is an extracted
+   `properties/generated/shell_precision_sample.json` (schema: seed file,
+   draw command, files, records with label; zero-record files excluded from
+   the denominator and counted separately). Definition: a true positive is an extracted
    pattern that is a regex used in a grep/sed/awk/`[[ =~ ]]` context (not a
    literal, assignment, or comment). Numerator/denominator = TP/(TP+FP)
    over the 50 files. Independent spot-check: a DIFFERENT human labeler
-   reviews a random 10-file subset (`shuf -n 10` from the 50);
+   reviews a random 10-file subset (`shuf -n 10 --random-source=properties/generated/shell_precision_spotcheck_seed.bin`
+   over the chosen-50 list — the spot-check seed file is ALSO committed;
+   two distinct seed files, one per draw);
    disagreement = fraction of records where the two labelers disagree on
    TP/FP classification, over the union of records in the subset;
    disagreement > 10% → relabel the full 50 files; AC fails if relabeled
@@ -497,6 +503,16 @@ follow-on, not this wave.
 - Create: `tests/test_probe_decision_artifacts.py` — globs
   `properties/generated/*_probe_decision.json` and schema-validates each
   (THE probe artifact's validator)
+- Modify: `scripts/author-gate-decision.py` — **go/new-surface guard** (the
+  under-report rule's ENFORCEMENT point, not just workflow convention):
+  for `--decision go` with `--met new-surface`, refuse (exit non-zero,
+  clear message) when the draft's `probe.predicted_buckets` is EMPTY.
+  Regression test: a draft with `new-surface` met + empty
+  `predicted_buckets` fails authoring; the same draft with a non-empty
+  `predicted_buckets` authors cleanly. (The merge-probe-draft.py preflight
+  is the first line; this guard closes the direct-draft bypass at
+  author.py:118-153, where `assemble_decision` would otherwise emit `go`
+  for a hand-supplied empty-bucket draft.)
 - Create: `scripts/reconcile_probe.py` — probe-count vs extractor-output
   reconciliation: per-file delta, `--tolerance-pct` flag, tolerance report.
   Input contract: probe side = per-file counts AGGREGATED from the P1
@@ -587,14 +603,19 @@ follow-on, not this wave.
    condition `new-surface`; the under-report escape forces
    `triage-trial`/`no-go` (no soft OR).
 7. **Author the gate decision artifact via existing tooling, with the
-   shell-evidence merge:** (a) run `scripts/probe-corpus-admission.py` to
-   emit the probe draft scaffold (its `walk_repo` path sees only
-   non-shell files pre-P2 — expected); (b) run
-   `scripts/merge-probe-draft.py` to populate the draft's
+   shell-evidence merge — SPLIT INTO P3-A and P3-B with an explicit
+   handoff:**
+   **P3-A (pre-P2, evidence + merge):** (a) run
+   `scripts/probe-corpus-admission.py` to emit the probe draft scaffold
+   (its `walk_repo` path sees only non-shell files pre-P2 — expected);
+   (b) run `scripts/merge-probe-draft.py` to populate the draft's
    `probe.regex_sites` (aggregated from records) and
    `probe.predicted_buckets` (constructs derived from record pattern text)
    from the P1 `--dir --ndjson` FULL-RECORD export — this is the step that
-   makes the artifact's shell novelty evidence real; (c) author with the
+   makes the artifact's shell novelty evidence real. **The MERGED DRAFT is
+   the P3-A → P3-B handoff artifact** (committed at the P3-A evidence
+   freeze); authoring does NOT run in the same step.
+   **P3-B (post-P2.5, authoring):** (c) author with the
    COMPLETE invocation, run from the REPO ROOT (the `-o` path is
    CWD-relative and
    `_resolve_output` refuses paths outside `properties/generated`):
