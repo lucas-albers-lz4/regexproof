@@ -83,6 +83,9 @@ fraction, compile likelihood.
 
 `mine_run_summary` includes `"allocator": "score-v1"`.
 
+Operator terms (mine / queue drain / rank / probe / gate / Smith):
+[`docs/terminology.md`](terminology.md).
+
 ### Rank then probe (operator loop)
 
 ```bash
