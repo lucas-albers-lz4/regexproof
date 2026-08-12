@@ -291,3 +291,33 @@ def test_partial_clone_rejects_bad_url_before_run(tmp_path: Path):
             dest=tmp_path / "repo",
             run=boom,
         )
+
+
+def test_walk_repo_counts_shell_surface(tmp_path):
+    """P2 AC9: the probe path yields non-zero regex_sites for shell files
+    (.sh suffix, init.d/ path, extensionless shebang) — the shell dispatch
+    in _extractors_for makes the authored gate artifact's shell evidence
+    real."""
+    (tmp_path / "init.d").mkdir()
+    (tmp_path / "init.d" / "start.sh").write_text(
+        "grep 'foo' f\n[[ $x =~ ^[0-9]+$ ]]\n", encoding="utf-8")
+    (tmp_path / "tool").write_text(
+        "#!/bin/sh\ngrep -i 'bar' f\n", encoding="utf-8")
+    (tmp_path / "README").write_text("no shebang\n", encoding="utf-8")
+    res = walk_repo(tmp_path)
+    assert res["regex_sites"] == 3
+    assert res["regex_sites_per_file"] == {
+        "init.d/start.sh": 2, "tool": 1}
+    assert "posix-shell" in res["dialect"]
+    assert res["flags"].get("i") == 1
+
+
+def test_walk_repo_suffix_precedence_over_initd(tmp_path):
+    """A .py under init.d/ keeps the python extractor (P1 counter order)."""
+    (tmp_path / "init.d").mkdir()
+    (tmp_path / "init.d" / "app.py").write_text(
+        "import re\nre.search(r'x', 'y')\n", encoding="utf-8")
+    res = walk_repo(tmp_path)
+    assert res["regex_sites"] == 1
+    assert res["dialect"].get("py_re") == 1
+    assert "posix-shell" not in res["dialect"]

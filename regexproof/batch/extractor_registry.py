@@ -19,6 +19,7 @@ from regexproof.extractors.noseyparker import extract_noseyparker
 from regexproof.extractors.pcre2_testdata import extract_pcre2_testdata
 from regexproof.extractors.python_ast import extract_python
 from regexproof.extractors.re2_testdata import extract_re2_testdata
+from regexproof.extractors.shell_posix import extract_shell_posix
 from regexproof.extractors.shhgit import extract_shhgit
 from regexproof.extractors.spamassassin import extract_spamassassin
 from regexproof.extractors.yara import extract_yara
@@ -38,6 +39,7 @@ EXTRACTOR_GLOBS: dict[str, str] = {
     "spamassassin": "**/*.cf",
     "noseyparker": "**/*.yml",
     "shhgit": "config.yaml",
+    "shell_posix": "**/*.sh,**/*.bash,**/*.init,**/init.d/**",
     "dompurify": "src/*.ts",
     "isemail": "*.js",
     "email_addresses": "*.js",
@@ -65,6 +67,7 @@ EXTRACTORS: dict[str, ExtractorFn] = {
     "spamassassin": _with_dialect(extract_spamassassin, dialect_kw=False),
     "noseyparker": _with_dialect(extract_noseyparker),
     "shhgit": _with_dialect(extract_shhgit),
+    "shell_posix": _with_dialect(extract_shell_posix),
     "dompurify": _with_dialect(extract_dompurify, dialect_kw=False),
     "isemail": _with_dialect(extract_isemail, dialect_kw=False),
     "email_addresses": _with_dialect(extract_email_addresses, dialect_kw=False),

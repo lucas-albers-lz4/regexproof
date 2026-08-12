@@ -862,6 +862,27 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
             "max_disk_mb": 500,
         },
     },
+    "dogfood_shell": {
+        "corpus_type": "rule_corpus",
+        # Materialize: ln -sfn <merged dogfooding tree> batch/corpora/dogfood_shell/rules
+        # The dogfooding universe (usrmanage / fwlive / happycow /
+        # hermes-agent-fork) at the P1-frozen pins (dogfooding_novelty_2026-08-12.json).
+        # Registration-only this wave (the #149 automation pipeline is separate);
+        # the batch run + merged-tree materialization are follow-on.
+        "path": ROOT / "batch" / "corpora" / "dogfood_shell" / "rules",
+        "dialect": "posix-shell",
+        "extractor": "shell_posix",
+        "repo": "dogfooding (usrmanage/fwlive/happycow/hermes-agent-fork)",
+        "security_tool": False,
+        "lift_inline": False,
+        "budget": {
+            "max_patterns": 5000,
+            "max_wall_s": 900,
+            "redos_wall_s": 180,
+            "max_mem_mb": 2048,
+            "max_disk_mb": 500,
+        },
+    },
     # Wave-3 P5 testdata corpora (#116) — exempt from admission gate_decision.
     "perl_tre": {
         "corpus_type": "testdata",

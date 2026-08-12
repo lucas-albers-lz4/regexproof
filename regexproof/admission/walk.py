@@ -17,6 +17,7 @@ from regexproof.extractors.js_babel import extract_js_precise
 from regexproof.extractors.modsec import extract_modsec
 from regexproof.extractors.python_ast import extract_python
 from regexproof.extractors.rule_file import extract_rule_file
+from regexproof.extractors.shell_posix import extract_shell_posix
 from regexproof.extractors.spamassassin import extract_spamassassin
 from regexproof.extractors.test262 import extract_test262
 from regexproof.extractors.yara import extract_yara
@@ -87,6 +88,8 @@ def _extractors_for(path: Path) -> list[ExtractFn]:
 
     if suffix == ".java":
         return []  # handled by count-only path
+    if suffix in _SHELL_SUFFIXES:
+        return [_shell_extractor]
     if suffix in {".js", ".jsx", ".ts", ".tsx", ".mjs", ".cjs"}:
         if "test262" in path_s:
             return [lambda src, rel: extract_test262(src, repo="probe", file=rel)]
@@ -118,6 +121,10 @@ def _extractors_for(path: Path) -> list[ExtractFn]:
             lambda src, rel: extract_modsec(src, repo="probe", file=rel),
             lambda src, rel: extract_spamassassin(src, repo="probe", file=rel),
         ]
+    # init.d/ + shebang files come LAST — suffix extractors (py/js/conf…)
+    # take precedence, matching the P1 `--dir` counter's selection order.
+    if _is_shell_context(path):
+        return [_shell_extractor]
     return []
 
 
@@ -126,6 +133,34 @@ def _should_read(path: Path) -> bool:
     if path.suffix.lower() == ".java":
         return True
     return bool(_extractors_for(path))
+
+
+_SHELL_SUFFIXES = frozenset({".sh", ".bash", ".init"})
+_SHELL_SHEBANGS = frozenset({
+    "#!/bin/sh", "#!/bin/bash",
+    "#!/usr/bin/env sh", "#!/usr/bin/env bash",
+})
+
+
+def _is_shell_context(path: Path) -> bool:
+    """init.d/ path segment or extensionless file with a shell shebang
+    (matches the P1 `--dir` counter's selection; suffix files are handled
+    by their suffix extractor first)."""
+    if "init.d" in str(path).lower():
+        return True
+    if path.suffix == "":
+        try:
+            with path.open("r", encoding="utf-8", errors="replace") as fh:
+                first = fh.readline(80).strip()
+        except OSError:
+            return False
+        return first in _SHELL_SHEBANGS
+    return False
+
+
+def _shell_extractor(src: str, rel: str) -> list[dict]:
+    """Probe-path shell extractor (repo='probe', dialect posix-shell)."""
+    return extract_shell_posix(src, repo="probe", file=rel, dialect="posix-shell")
 
 
 def count_java_pattern_compile(source: str) -> list[str]:
