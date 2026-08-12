@@ -1,0 +1,14 @@
+{
+  "schema_version": "1",
+  "corpus": "mycelium",
+  "corpus_pin": "4b53dc7629ca3bc88bf5467db481ad2af7130711",
+  "candidate_url": "https://github.com/mycelium0/mycelium",
+  "smith_decision": "go",
+  "supersedes": null,
+  "reason": "Shell milestone corpus measured: 834/1029 = 0.8105 encodable (complete_run, parse-error=0, budget clean). LARGEST posix-shell corpus in the matrix (1,029 sites; compare OpenWrt feed 713, dogfooding 292, anax 194) and the strongest shell fraction yet (anax 0.7990). The BRE->ERE normalize -> pcre backend handles real mesh-networking shell at 81%. GO admit confirmed - corpus proves the shell value stream (compiler-fix discovery + P(compiles) datapoint).",
+  "regex_sites": 1029,
+  "sites_by_bucket": {
+    "posix-shell (1029 probe sites; 834 encodable)": 1029
+  },
+  "additional_surface_outside_probe_scope": {}
+}

@@ -1,0 +1,64 @@
+{
+  "candidate_url": "https://github.com/IndikaMaligaspe/agentforge",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. IndikaMaligaspe; 50 py_re sites + 6 extractor_errors.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (or unprobeable at gate budget).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "agentforge",
+  "corpus_pin": "ab66d24393ce0f5bea3e4e6814098c1cd5c0b6dd",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "lookaround": 2
+    },
+    "dialect": {
+      "py_re": 50
+    },
+    "flags": {
+      "i": 7,
+      "m": 1,
+      "s": 10
+    },
+    "pin": "ab66d24393ce0f5bea3e4e6814098c1cd5c0b6dd",
+    "predicted_buckets": {
+      "inline-flag": 17,
+      "lookaround": 2,
+      "m-flag": 1
+    },
+    "regex_sites": 50,
+    "regex_sites_per_file": {
+      "agentforge-runtime/agentforge_runtime/security/prompt_secret_scanner.py": 5,
+      "agentforge-runtime/agentforge_runtime/security/sanitizer.py": 2,
+      "agentforge-runtime/tests/test_observability.py": 1,
+      "agentforge/engine/filters.py": 2,
+      "tests/e2e/test_full_scaffold.py": 1,
+      "tests/e2e/test_v2_patterns.py": 1,
+      "tests/engine/test_benchmarks_render.py": 2,
+      "tests/engine/test_entry_render.py": 18,
+      "tests/engine/test_fanout_render.py": 3,
+      "tests/engine/test_planner_render.py": 3,
+      "tests/engine/test_react_render.py": 8,
+      "tests/engine/test_workflow_render.py": 3,
+      "tests/test_provider_registry_template.py": 1
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 50 regex sites (auto-NO-GO bar 200); dialects [py_re:50]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

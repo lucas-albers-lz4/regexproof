@@ -1,0 +1,101 @@
+{
+  "candidate_url": "https://github.com/ovumcy/ovumcy-app",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. ovumcy; 235 ecma sites < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (or unprobeable at gate budget).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "ovumcy-app",
+  "corpus_pin": "34ac5b98a2e1ba1cb48246ed8758c273b9983752",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "lookaround": 1
+    },
+    "dialect": {
+      "ecma": 235
+    },
+    "flags": {
+      "g": 31,
+      "i": 32
+    },
+    "pin": "34ac5b98a2e1ba1cb48246ed8758c273b9983752",
+    "predicted_buckets": {
+      "inline-flag": 32,
+      "lookaround": 1,
+      "stateful": 31
+    },
+    "regex_sites": 235,
+    "regex_sites_per_file": {
+      "e2e/web-smoke.spec.ts": 53,
+      "plugins/withIosExcludeDataFromICloudBackup.js": 1,
+      "scripts/check-cross-repo-contracts.mjs": 48,
+      "scripts/patchcov.mjs": 3,
+      "scripts/release-account-smoke.mjs": 3,
+      "src/i18n/localization-fixes.test.ts": 11,
+      "src/models/postpartum.test.ts": 1,
+      "src/models/postpartum.ts": 1,
+      "src/models/pregnancy.test.ts": 1,
+      "src/models/pregnancy.ts": 2,
+      "src/models/screening.test.ts": 1,
+      "src/models/screening.ts": 1,
+      "src/security/cert-pin-store.ts": 1,
+      "src/security/entitlement-token.property.test.ts": 3,
+      "src/security/entitlement-token.test.ts": 3,
+      "src/security/entitlement-token.ts": 3,
+      "src/security/partner-share-crypto.property.test.ts": 2,
+      "src/security/partner-share-crypto.test.ts": 2,
+      "src/security/partner-share-crypto.ts": 1,
+      "src/security/sync-crypto.ts": 1,
+      "src/services/calendar-view-service.ts": 1,
+      "src/services/contraction-timer-service.test.ts": 6,
+      "src/services/export-pdf-service.ts": 2,
+      "src/services/export-service.ts": 1,
+      "src/services/kick-counter-service.test.ts": 2,
+      "src/services/local-reminder-plan-service.test.ts": 2,
+      "src/services/manual-cycle-start-service.test.ts": 2,
+      "src/services/postpartum-mode-service.test.ts": 1,
+      "src/services/profile-settings-policy.ts": 3,
+      "src/services/recovery-phrase-delivery-service.test.ts": 3,
+      "src/services/settings-view-service.ts": 1,
+      "src/services/symptom-policy.ts": 4,
+      "src/storage/local/sqlite-app-storage.test.ts": 1,
+      "src/storage/local/sqlite-local-data-key.test.ts": 2,
+      "src/storage/local/sqlite-schema-migrations.test.ts": 2,
+      "src/sync/cert-pin-policy.ts": 1,
+      "src/sync/managed-cloud-api-client.ts": 1,
+      "src/sync/sync-api-client.ts": 1,
+      "src/sync/sync-endpoint-policy.ts": 7,
+      "src/sync/sync-totp-service.ts": 3,
+      "src/ui/components/DayLogEditorCard.tsx": 6,
+      "src/ui/components/SettingsImportSection.tsx": 1,
+      "src/ui/screens/BackupSyncScreen.test.tsx": 3,
+      "src/ui/screens/CalendarScreen.test.tsx": 11,
+      "src/ui/screens/DashboardScreen.test.tsx": 7,
+      "src/ui/screens/PartnerSharedScreen.test.tsx": 3,
+      "src/ui/screens/SettingsScreen.test.tsx": 5,
+      "src/ui/screens/StatsScreen.test.tsx": 4,
+      "src/ui/screens/backup-sync/SettingsSyncSetupSection.test.tsx": 1,
+      "src/ui/screens/postpartum/ScreeningScreen.test.tsx": 3,
+      "src/ui/screens/pregnancy/ContractionTimerScreen.test.tsx": 3
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 235 regex sites (auto-NO-GO bar 200); dialects [ecma:235]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

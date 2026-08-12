@@ -1,0 +1,47 @@
+{
+  "candidate_url": "https://github.com/uber/bayesmark",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. uber; 7 shell sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (or unprobeable at gate budget).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "bayesmark",
+  "corpus_pin": "8c420e935718f0d6867153b781e58943ecaf2338",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "posix-shell": 7
+    },
+    "flags": {
+      "i": 3
+    },
+    "pin": "8c420e935718f0d6867153b781e58943ecaf2338",
+    "predicted_buckets": {
+      "inline-flag": 3
+    },
+    "regex_sites": 7,
+    "regex_sites_per_file": {
+      "test.sh": 4,
+      "tools/deploy.sh": 3
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 7 regex sites (auto-NO-GO bar 200); dialects [posix-shell:7]; boundary=unknown.",
+  "schema_version": "1"
+}

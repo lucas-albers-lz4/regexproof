@@ -1,0 +1,56 @@
+{
+  "candidate_url": "https://github.com/qrdx-org/qrdx-chain",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. qrdx-org blockchain; 38 shell/py sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (or unprobeable at gate budget).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "qrdx-chain",
+  "corpus_pin": "f4e7c8ad0b4019ad3eb1602e8152ecd89d6cda2a",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "posix-shell": 21,
+      "py_re": 17
+    },
+    "flags": {
+      "i": 1
+    },
+    "pin": "f4e7c8ad0b4019ad3eb1602e8152ecd89d6cda2a",
+    "predicted_buckets": {
+      "inline-flag": 1
+    },
+    "regex_sites": 38,
+    "regex_sites_per_file": {
+      "docker/docker-entrypoint.sh": 2,
+      "qrdx/constants.py": 5,
+      "qrdx/logger.py": 7,
+      "qrdx/node/identity.py": 1,
+      "qrdx/node/main.py": 1,
+      "qrdx/p2p/dns_seeds.py": 1,
+      "qrdx/p2p/node.py": 1,
+      "scripts/testnet.sh": 7,
+      "setup.sh": 12,
+      "tests/test_dht_discovery.py": 1
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 38 regex sites (auto-NO-GO bar 200); dialects [posix-shell:21, py_re:17]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

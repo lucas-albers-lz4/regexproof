@@ -1,0 +1,96 @@
+{
+  "candidate_url": "https://github.com/andyholst/obsidian-timestamp-utility",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. andyholst; 216 py_re sites < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (or unprobeable at gate budget).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "obsidian-timestamp-utility",
+  "corpus_pin": "4372de55be5d530934f195366163fab1f325f6e1",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "(?m)": 3,
+      "lookaround": 2,
+      "posix-class": 2
+    },
+    "dialect": {
+      "ecma": 18,
+      "posix-shell": 13,
+      "py_re": 185
+    },
+    "flags": {
+      "g": 3,
+      "i": 23,
+      "m": 14,
+      "s": 28
+    },
+    "pin": "4372de55be5d530934f195366163fab1f325f6e1",
+    "predicted_buckets": {
+      "inline-flag": 51,
+      "lookaround": 2,
+      "m-flag": 17,
+      "posix-class": 2,
+      "stateful": 3
+    },
+    "regex_sites": 216,
+    "regex_sites_per_file": {
+      "agents/agentics/src/code_generator_agent.py": 11,
+      "agents/agentics/src/code_integrator_agent.py": 37,
+      "agents/agentics/src/code_validator.py": 10,
+      "agents/agentics/src/collaborative_generator.py": 2,
+      "agents/agentics/src/composable_workflows.py": 1,
+      "agents/agentics/src/dependency_analyzer_agent.py": 1,
+      "agents/agentics/src/dependency_installer_agent.py": 1,
+      "agents/agentics/src/llm_validator.py": 10,
+      "agents/agentics/src/openspec_loader.py": 5,
+      "agents/agentics/src/post_test_runner_agent.py": 3,
+      "agents/agentics/src/pre_test_runner_agent.py": 3,
+      "agents/agentics/src/test_generator_agent.py": 8,
+      "agents/agentics/src/test_suite.py": 20,
+      "agents/agentics/src/ticket_clarity_agent.py": 3,
+      "agents/agentics/src/utils.py": 12,
+      "agents/agentics/tests/integration/_e2e_helpers.py": 2,
+      "agents/agentics/tests/integration/test_agents_integration.py": 4,
+      "agents/agentics/tests/integration/test_change_driven_ts_generation_e2e.py": 3,
+      "agents/agentics/tests/integration/test_composable_workflows_integration.py": 3,
+      "agents/agentics/tests/unit/test_pipeline_flow_alignment_unit.py": 1,
+      "git-hooks/pre-commit": 4,
+      "scripts/bump_from_changelog.py": 12,
+      "scripts/changelog_closed.py": 4,
+      "scripts/check-docs-sync.py": 5,
+      "scripts/engine-wrapper.sh": 5,
+      "scripts/gen_changelog.py": 3,
+      "scripts/install_dagger.sh": 1,
+      "scripts/merge_changelog.py": 6,
+      "scripts/openspec_change_flow.py": 5,
+      "scripts/release.py": 1,
+      "scripts/test_metrics.sh": 3,
+      "scripts/ts_test_floor.py": 1,
+      "scripts/validate-makefile/test_validator.py": 1,
+      "scripts/validate-makefile/validate_makefile.py": 3,
+      "src/__tests__/main.test.ts": 10,
+      "src/main.ts": 6,
+      "src/taskProcessor.ts": 2,
+      "tests/test_readme_sync.py": 4
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 216 regex sites (auto-NO-GO bar 200); dialects [ecma:18, posix-shell:13, py_re:185]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

@@ -1,0 +1,45 @@
+{
+  "candidate_url": "https://github.com/radareorg/r2yara",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. radare2 yara bridge; 8 sites (6 shell + 2 yara) - radare2 engine, tiny bridge surface.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (or unprobeable at gate budget).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "r2yara",
+  "corpus_pin": "3f02b5541463c29ed5263b2e8278986d23b23be3",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "posix-shell": 6,
+      "yara": 2
+    },
+    "flags": {},
+    "pin": "3f02b5541463c29ed5263b2e8278986d23b23be3",
+    "predicted_buckets": {},
+    "regex_sites": 8,
+    "regex_sites_per_file": {
+      "configure": 6,
+      "yara-r2-module/rules/simple_test.yar": 1,
+      "yara-r2-module/rules/upx.yar": 1
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 8 regex sites (auto-NO-GO bar 200); dialects [posix-shell:6, yara:2]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

@@ -1,0 +1,112 @@
+{
+  "candidate_url": "https://github.com/howard86/howardism",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. howard86; 220 ecma sites < 1000, classifier false positive.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (or unprobeable at gate budget).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "howardism",
+  "corpus_pin": "d7606b2c5bc22883341c0553006d08b564548cd5",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "lookaround": 7
+    },
+    "dialect": {
+      "ecma": 217,
+      "posix-shell": 3
+    },
+    "flags": {
+      "g": 73,
+      "i": 37,
+      "m": 15
+    },
+    "pin": "d7606b2c5bc22883341c0553006d08b564548cd5",
+    "predicted_buckets": {
+      "inline-flag": 37,
+      "lookaround": 7,
+      "m-flag": 15,
+      "stateful": 73
+    },
+    "regex_sites": 220,
+    "regex_sites_per_file": {
+      ".claude/skills/generate-wiki-images/scripts/sequential-images.sh": 3,
+      "apps/blog/mdx-components.tsx": 1,
+      "apps/blog/next.config.ts": 1,
+      "apps/blog/scripts/migrate-mdx.ts": 11,
+      "apps/blog/src/__tests__/articles/index-row.test.tsx": 2,
+      "apps/blog/src/__tests__/articles/questions-worklist.test.tsx": 4,
+      "apps/blog/src/__tests__/articles/resume-reading.test.tsx": 1,
+      "apps/blog/src/__tests__/howardism/page-frame.test.ts": 3,
+      "apps/blog/src/__tests__/howardism/reduced-motion.test.tsx": 2,
+      "apps/blog/src/__tests__/llms-txt.test.ts": 2,
+      "apps/blog/src/__tests__/search/search-palette.test.tsx": 2,
+      "apps/blog/src/__tests__/shelf/save-button.test.tsx": 6,
+      "apps/blog/src/__tests__/shelf/shelf-selection.test.tsx": 7,
+      "apps/blog/src/__tests__/shelf/shelf-tabs.test.tsx": 14,
+      "apps/blog/src/__tests__/tweaks/tweaks.test.tsx": 2,
+      "apps/blog/src/app/(blog)/articles/page.tsx": 1,
+      "apps/blog/src/app/(blog)/articles/service.ts": 1,
+      "apps/blog/src/app/(blog)/desk.tsx": 1,
+      "apps/blog/src/app/(blog)/questions/questions-worklist.tsx": 3,
+      "apps/blog/src/components/internal-link.tsx": 1,
+      "apps/blog/src/components/search/search-data.ts": 1,
+      "apps/blog/src/config/env.ts": 1,
+      "apps/blog/src/utils/humanize-tag.ts": 1,
+      "apps/blog/test/config/security-headers.test.ts": 1,
+      "apps/cli/src/__tests__/agy.test.ts": 2,
+      "apps/cli/src/__tests__/codex.test.ts": 2,
+      "apps/cli/src/__tests__/domains.test.ts": 2,
+      "apps/cli/src/__tests__/entity-types.test.ts": 2,
+      "apps/cli/src/__tests__/translate-engines.test.ts": 2,
+      "apps/cli/src/__tests__/translate-headings.test.ts": 1,
+      "apps/cli/src/__tests__/translate-pricing.test.ts": 1,
+      "apps/cli/src/__tests__/translate-report.test.ts": 2,
+      "apps/cli/src/__tests__/translate-structured.test.ts": 3,
+      "apps/cli/src/__tests__/translate-surface.test.ts": 2,
+      "apps/cli/src/__tests__/translate-validate.test.ts": 2,
+      "apps/cli/src/content-check.ts": 4,
+      "apps/cli/src/glossary/harvest.ts": 13,
+      "apps/cli/src/glossary/seed.ts": 1,
+      "apps/cli/src/images-to-webp.ts": 2,
+      "apps/cli/src/import-wiki/entity-types.ts": 1,
+      "apps/cli/src/import-wiki/index.ts": 3,
+      "apps/cli/src/import-wiki/pages/open-questions.ts": 6,
+      "apps/cli/src/import-wiki/pages/wiki-sources.ts": 5,
+      "apps/cli/src/import-wiki/parse.ts": 4,
+      "apps/cli/src/import-wiki/plain-text.ts": 12,
+      "apps/cli/src/import-wiki/transform.ts": 31,
+      "apps/cli/src/import-wiki/wikilink.ts": 9,
+      "apps/cli/src/search-index.ts": 1,
+      "apps/cli/src/translate/enforce.ts": 1,
+      "apps/cli/src/translate/engines.ts": 2,
+      "apps/cli/src/translate/headings.ts": 2,
+      "apps/cli/src/translate/index.ts": 1,
+      "apps/cli/src/translate/postprocess.ts": 5,
+      "apps/cli/src/translate/surface.ts": 4,
+      "apps/cli/src/translate/validate.ts": 11,
+      "apps/cli/src/webp.ts": 1,
+      "packages/article-contract/src/markup.ts": 4,
+      "packages/article-contract/src/surface.ts": 1,
+      "packages/test-config/preload.ts": 3
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 220 regex sites (auto-NO-GO bar 200); dialects [ecma:217, posix-shell:3]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

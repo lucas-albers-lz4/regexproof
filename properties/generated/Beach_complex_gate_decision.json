@@ -1,0 +1,50 @@
+{
+  "candidate_url": "https://github.com/Beach-complex/Beach_complex",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. Beach-complex; 11 shell sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (or unprobeable at gate budget).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "Beach_complex",
+  "corpus_pin": "9c3ec2ab3647396bf0f3d0e7b9b85fff65b867d4",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "posix-class": 2
+    },
+    "dialect": {
+      "posix-shell": 11
+    },
+    "flags": {
+      "i": 4
+    },
+    "pin": "9c3ec2ab3647396bf0f3d0e7b9b85fff65b867d4",
+    "predicted_buckets": {
+      "inline-flag": 4,
+      "posix-class": 2
+    },
+    "regex_sites": 11,
+    "regex_sites_per_file": {
+      ".githooks/commit-msg": 7,
+      ".githooks/prepare-commit-msg": 4
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 11 regex sites (auto-NO-GO bar 200); dialects [posix-shell:11]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

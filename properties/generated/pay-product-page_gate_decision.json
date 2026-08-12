@@ -1,0 +1,42 @@
+{
+  "candidate_url": "https://github.com/alphagov/pay-product-page",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. alphagov; 1 ecma site.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (or unprobeable at gate budget).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "pay-product-page",
+  "corpus_pin": "aa69fbdd6dda2b315b69eccedb5ef3967358c504",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 1
+    },
+    "flags": {},
+    "pin": "aa69fbdd6dda2b315b69eccedb5ef3967358c504",
+    "predicted_buckets": {},
+    "regex_sites": 1,
+    "regex_sites_per_file": {
+      "source/javascripts/helpers/cookie/cookie-functions.js": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 1 regex sites (auto-NO-GO bar 200); dialects [ecma:1]; boundary=unknown.",
+  "schema_version": "1"
+}

@@ -1,0 +1,58 @@
+{
+  "candidate_url": "https://github.com/andypf/json-viewer",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. andypf; 118 ecma sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (or unprobeable at gate budget).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "json-viewer",
+  "corpus_pin": "e5db1d3d1c142cce9857f5e66aa1c8f375685993",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "lookaround": 7
+    },
+    "dialect": {
+      "ecma": 118
+    },
+    "flags": {
+      "g": 22,
+      "i": 36
+    },
+    "pin": "e5db1d3d1c142cce9857f5e66aa1c8f375685993",
+    "predicted_buckets": {
+      "inline-flag": 36,
+      "lookaround": 7,
+      "stateful": 22
+    },
+    "regex_sites": 118,
+    "regex_sites_per_file": {
+      "coverage/lcov-report/prettify.js": 93,
+      "coverage/lcov-report/sorter.js": 2,
+      "esbuild.config.mjs": 3,
+      "src/component.js": 2,
+      "src/data-helpers.js": 11,
+      "src/renderer/search-optimizer.js": 2,
+      "tests/issue-71.test.js": 3,
+      "tests/themes.test.js": 2
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 118 regex sites (auto-NO-GO bar 200); dialects [ecma:118]; boundary=unknown.",
+  "schema_version": "1"
+}

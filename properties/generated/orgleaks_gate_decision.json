@@ -1,0 +1,42 @@
+{
+  "candidate_url": "https://github.com/thecybermafia/orgleaks",
+  "conditions": [
+    {
+      "evidence": "4 shell sites; tiny but security tool - escape hatch.",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary=deterministic-true (thecybermafia orgleaks - org recon/leak tool).",
+      "id": "security-boundary",
+      "met": true
+    },
+    {
+      "evidence": "4 sites < 1000.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "orgleaks",
+  "corpus_pin": "eca55a2093cc5d1759f6e430b201412683a9c69c",
+  "decision": "triage-trial",
+  "decision_basis": "escape_hatch",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": true,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "posix-shell": 4
+    },
+    "flags": {},
+    "pin": "eca55a2093cc5d1759f6e430b201412683a9c69c",
+    "predicted_buckets": {},
+    "regex_sites": 4,
+    "regex_sites_per_file": {
+      "orgleaks.sh": 4
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Security-boundary corpus (boundary=deterministic-true) with findings-triage potential; 4 sites across [posix-shell:4].",
+  "schema_version": "1"
+}

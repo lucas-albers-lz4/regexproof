@@ -1,0 +1,72 @@
+{
+  "candidate_url": "https://github.com/frecar/beam",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. frecar; 120 ecma/shell sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (or unprobeable at gate budget).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "beam",
+  "corpus_pin": "cd67dd16f05c50e7d80c84254e42e1f05e4decbc",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "backref": 1,
+      "posix-class": 4
+    },
+    "dialect": {
+      "ecma": 104,
+      "posix-shell": 14,
+      "py_re": 2
+    },
+    "flags": {
+      "g": 12,
+      "i": 5
+    },
+    "pin": "cd67dd16f05c50e7d80c84254e42e1f05e4decbc",
+    "predicted_buckets": {
+      "backref": 1,
+      "inline-flag": 5,
+      "posix-class": 4,
+      "stateful": 12
+    },
+    "regex_sites": 120,
+    "regex_sites_per_file": {
+      "scripts/beam-doctor": 2,
+      "scripts/check-no-internal-refs.sh": 2,
+      "scripts/check_no_external_llm.py": 1,
+      "scripts/check_no_private_git_deps.py": 1,
+      "scripts/dev-setup.sh": 1,
+      "scripts/install.sh": 4,
+      "scripts/package-smoke.sh": 1,
+      "scripts/post-deploy-smoke.sh": 2,
+      "scripts/uninstall.sh": 1,
+      "scripts/verify-apt-repo.sh": 1,
+      "web/e2e/shared/tests/assertions.test.ts": 19,
+      "web/e2e/shared/tests/config.test.ts": 3,
+      "web/src/clipboard.ts": 1,
+      "web/src/index-html.test.ts": 68,
+      "web/src/main.ts": 7,
+      "web/src/monitoring.ts": 3,
+      "web/src/platform.ts": 1,
+      "web/src/settings.test.ts": 2
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 120 regex sites (auto-NO-GO bar 200); dialects [ecma:104, posix-shell:14, py_re:2]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

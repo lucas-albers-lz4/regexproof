@@ -1,0 +1,42 @@
+{
+  "candidate_url": "https://github.com/00labs/huma-contracts-v2",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. 00labs; 1 ecma site.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (or unprobeable at gate budget).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "huma-contracts-v2",
+  "corpus_pin": "21aaad53023eb3f448ff09820fee1a3936b6175d",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 1
+    },
+    "flags": {},
+    "pin": "21aaad53023eb3f448ff09820fee1a3936b6175d",
+    "predicted_buckets": {},
+    "regex_sites": 1,
+    "regex_sites_per_file": {
+      "test/unit/common/UpgradeabilityTest.ts": 1
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 1 regex sites (auto-NO-GO bar 200); dialects [ecma:1]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

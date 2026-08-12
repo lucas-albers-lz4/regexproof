@@ -1,0 +1,82 @@
+{
+  "candidate_url": "https://github.com/ivegamsft/basecoat",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. ivegamsft; 103 ecma/shell/py sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (or unprobeable at gate budget).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "basecoat",
+  "corpus_pin": "692d37dff72211f1d5be8251fff1e6adc504e6f4",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "posix-class": 11
+    },
+    "dialect": {
+      "ecma": 35,
+      "posix-shell": 66,
+      "py_re": 2
+    },
+    "flags": {
+      "g": 13,
+      "i": 17,
+      "m": 1
+    },
+    "pin": "692d37dff72211f1d5be8251fff1e6adc504e6f4",
+    "predicted_buckets": {
+      "inline-flag": 17,
+      "m-flag": 1,
+      "posix-class": 11,
+      "stateful": 13
+    },
+    "regex_sites": 103,
+    "regex_sites_per_file": {
+      "mcp/basecoat-extension/src/write-tools.ts": 3,
+      "mcp/basecoat-metrics/src/index.ts": 5,
+      "mcp/index.js": 4,
+      "plugins/copilot-cli-plugin/src/cli.ts": 1,
+      "plugins/copilot-cli-plugin/src/parser/index.ts": 4,
+      "portal/ui/.storybook/preview.ts": 2,
+      "rollback.sh": 4,
+      "scripts/bootstrap-dashboard.sh": 1,
+      "scripts/bootstrap-fabric-workspace.sh": 1,
+      "scripts/generate-release-notes.sh": 1,
+      "scripts/generate-token-context-inventory.py": 1,
+      "scripts/install-hooks.sh": 2,
+      "scripts/onboard-basecoat.sh": 3,
+      "scripts/package-basecoat.sh": 1,
+      "scripts/submit-learning.sh": 5,
+      "scripts/validate-basecoat.sh": 7,
+      "sdks/agent-sdk/bin/basecoat-agent.d.ts": 1,
+      "sdks/agent-sdk/bin/basecoat-agent.js": 1,
+      "sdks/agent-sdk/src/cli.ts": 1,
+      "sdks/agent-sdk/src/compile.ts": 1,
+      "sdks/agent-sdk/src/init.ts": 1,
+      "sdks/agent-sdk/src/validate.ts": 3,
+      "skills/agentic-sdlc-autonomy/scripts/classify_pr_risk.py": 1,
+      "skills/backlog-rebalance-engine/scripts/project-sync.sh": 3,
+      "skills/environment-audit-drift/src/cli.ts": 5,
+      "skills/issue-triage/scripts/triage-issues.sh": 30,
+      "skills/operation-context-resolver/src/resolver.ts": 3,
+      "sync.sh": 8
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 103 regex sites (auto-NO-GO bar 200); dialects [ecma:35, posix-shell:66, py_re:2]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

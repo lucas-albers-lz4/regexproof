@@ -1,0 +1,66 @@
+{
+  "candidate_url": "https://github.com/govuk-one-login/ipv-core-front",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. govuk-one-login frontend; 28 ecma sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (or unprobeable at gate budget).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "ipv-core-front",
+  "corpus_pin": "9b26aec6b88c9a5e849b003efd652caa92de0a4c",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 28
+    },
+    "flags": {
+      "g": 4,
+      "i": 1
+    },
+    "pin": "9b26aec6b88c9a5e849b003efd652caa92de0a4c",
+    "predicted_buckets": {
+      "inline-flag": 1,
+      "stateful": 4
+    },
+    "regex_sites": 28,
+    "regex_sites_per_file": {
+      "browser-tests/e2e-tests/helpers/string-helpers.ts": 1,
+      "browser-tests/e2e-tests/steps/cri.steps.ts": 2,
+      "browser-tests/e2e-tests/steps/ipv-page-steps/confirm-your-details.steps.ts": 2,
+      "browser-tests/e2e-tests/steps/ipv-page-steps/live-in-uk.steps.ts": 1,
+      "browser-tests/e2e-tests/steps/ipv-page-steps/page-ipv-identity-document-start.steps.ts": 1,
+      "browser-tests/e2e-tests/steps/ipv-page-steps/page-multiple-doc-check.steps.ts": 1,
+      "browser-tests/e2e-tests/steps/ipv-page-steps/personal-independence-payment.steps.ts": 1,
+      "browser-tests/e2e-tests/steps/ipv-page-steps/pyi-triage-select-device.steps.ts": 1,
+      "browser-tests/e2e-tests/steps/ipv-page-steps/pyi-triage-select-smartphone.steps.ts": 1,
+      "browser-tests/functional-tests/core-back-errors.spec.ts": 1,
+      "browser-tests/functional-tests/device.spec.ts": 4,
+      "browser-tests/functional-tests/strategic-app-vc-polling.spec.ts": 4,
+      "browser-tests/playwright.config.ts": 1,
+      "locales/check-translations.ts": 1,
+      "src/app.ts": 2,
+      "src/app/ipv/middleware.ts": 1,
+      "src/app/shared/stringHelper.ts": 1,
+      "src/config/nunjucks.ts": 1,
+      "src/handlers/notification-banner-handler.ts": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 28 regex sites (auto-NO-GO bar 200); dialects [ecma:28]; boundary=unknown.",
+  "schema_version": "1"
+}

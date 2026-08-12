@@ -56,6 +56,29 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
             "max_disk_mb": 500,
         },
     },
+    "mycelium": {
+        "corpus_type": "rule_corpus",
+        # Materialize: ln -sfn /tmp/mycelium-check batch/corpora/mycelium/rules
+        # Mesh networking in degrading networks. SHELL MILESTONE: 1,029
+        # posix-shell sites (3.5x OpenWrt feed 713, 3.5x dogfooding 292).
+        # batch-6 GO admit (#288).
+        "path": ROOT / "batch" / "corpora" / "mycelium" / "rules",
+        "glob": "**/*.sh",
+        "dialect": "posix-shell",
+        "extractor": "shell_posix",
+        "repo": "mycelium0/mycelium",
+        "security_tool": False,
+        "lift_inline": False,
+        "corpus_pin": "4b53dc7629ca3bc88bf5467db481ad2af7130711",
+        "commit": "4b53dc7629ca3bc88bf5467db481ad2af7130711",
+        "budget": {
+            "max_patterns": 5000,
+            "max_wall_s": 900,
+            "redos_wall_s": 180,
+            "max_mem_mb": 2048,
+            "max_disk_mb": 500,
+        },
+    },
     "gitleaks": {
         "corpus_type": "rule_corpus",
         "path": ROOT / "pilots" / "gitleaks" / "config" / "gitleaks.toml",

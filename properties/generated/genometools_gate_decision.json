@@ -1,0 +1,63 @@
+{
+  "candidate_url": "https://github.com/genometools/genometools",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. genometools; 44 shell sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (or unprobeable at gate budget).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "genometools",
+  "corpus_pin": "1f0ff66b3ab77021250b7bc474a8d423149290db",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "posix-shell": 44
+    },
+    "flags": {},
+    "pin": "1f0ff66b3ab77021250b7bc474a8d423149290db",
+    "predicted_buckets": {},
+    "regex_sites": 44,
+    "regex_sites_per_file": {
+      "scripts/check_api_includes": 1,
+      "scripts/check_core_includes": 2,
+      "scripts/checkmaxpairs.sh": 1,
+      "scripts/checktallymer.sh": 4,
+      "scripts/checkunique.sh": 2,
+      "scripts/cmpdbfile.sh": 2,
+      "scripts/compare_dust.sh": 2,
+      "scripts/genswtest.sh": 3,
+      "scripts/gtgrep.sh": 1,
+      "scripts/hop.sh": 8,
+      "scripts/maketags.sh": 1,
+      "scripts/pre-commit": 2,
+      "scripts/rdj-runbenchmark.sh": 1,
+      "scripts/repfvsrepf.sh": 1,
+      "scripts/runfirstcodes.sh": 1,
+      "scripts/runmaxpairs.sh": 1,
+      "scripts/sim-read-mapping.sh": 4,
+      "scripts/spmcheck.sh": 1,
+      "src/external/bzip2-1.0.6/bzdiff": 3,
+      "src/external/bzip2-1.0.6/bzgrep": 1,
+      "src/external/bzip2-1.0.6/bzmore": 1,
+      "src/external/bzip2-1.0.6/xmlproc.sh": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 44 regex sites (auto-NO-GO bar 200); dialects [posix-shell:44]; boundary=unknown.",
+  "schema_version": "1"
+}

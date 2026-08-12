@@ -1,0 +1,45 @@
+{
+  "candidate_url": "https://github.com/instana/react-native-agent",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. instana; 6 ecma/shell sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (or unprobeable at gate budget).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "react-native-agent",
+  "corpus_pin": "10b313dca108c0135cbc8e3ed341273948da674c",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 2,
+      "posix-shell": 4
+    },
+    "flags": {},
+    "pin": "10b313dca108c0135cbc8e3ed341273948da674c",
+    "predicted_buckets": {},
+    "regex_sites": 6,
+    "regex_sites_per_file": {
+      "InstanaExample/android/gradlew": 2,
+      "android/gradlew": 2,
+      "scripts/examples_postinstall.js": 2
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 6 regex sites (auto-NO-GO bar 200); dialects [ecma:2, posix-shell:4]; boundary=unknown.",
+  "schema_version": "1"
+}

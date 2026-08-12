@@ -1,0 +1,46 @@
+{
+  "candidate_url": "https://github.com/ladda-js/ladda",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. ladda-js button lib; 23 ecma sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (or unprobeable at gate budget).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "ladda",
+  "corpus_pin": "5188f51f4c2bef8da6b6ac13e8e107b7eed09d11",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 23
+    },
+    "flags": {},
+    "pin": "5188f51f4c2bef8da6b6ac13e8e107b7eed09d11",
+    "predicted_buckets": {},
+    "regex_sites": 23,
+    "regex_sites_per_file": {
+      "examples/minimal-react-ladda/webpack.config.js": 2,
+      "examples/minimal-vanilla-ladda/webpack.config.js": 2,
+      "examples/minimal-vue-ladda/webpack.config.js": 2,
+      "src/plugins/cache/query-cache.js": 1,
+      "src/validator.spec.js": 16
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 23 regex sites (auto-NO-GO bar 200); dialects [ecma:23]; boundary=unknown.",
+  "schema_version": "1"
+}

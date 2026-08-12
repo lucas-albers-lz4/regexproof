@@ -1,0 +1,46 @@
+{
+  "candidate_url": "https://github.com/knishioka/ib-sec-mcp",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or false positive. knishioka security MCP; 11 sites - tiny.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (or unprobeable at gate budget).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "ib-sec-mcp",
+  "corpus_pin": "1886cc82002a9a0aa6dec97ee35a89177423f7d1",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-12",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "posix-shell": 4,
+      "py_re": 7
+    },
+    "flags": {},
+    "pin": "1886cc82002a9a0aa6dec97ee35a89177423f7d1",
+    "predicted_buckets": {},
+    "regex_sites": 11,
+    "regex_sites_per_file": {
+      ".claude/hooks/pre-tool-use.sh": 4,
+      ".claude/scripts/validate_claude_config.py": 4,
+      "ib_sec_mcp/mcp/validators.py": 1,
+      "ib_sec_mcp/utils/validators.py": 2
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 11 regex sites (auto-NO-GO bar 200); dialects [posix-shell:4, py_re:7]; boundary=deterministic-true.",
+  "schema_version": "1"
+}
