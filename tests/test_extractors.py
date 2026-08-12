@@ -201,6 +201,24 @@ def test_new_regexp_third_arg_and_ignored_args():
     assert b.get("unencodable_reason") is None
 
 
+def test_new_regexp_dynamic_flags_expression_composite():
+    """A second argument that is a flags EXPRESSION ("i" + flags) is dynamic —
+    the literal prefix must not be accepted as static flags (luna r4 NF1)."""
+    src = (
+        'const a = new RegExp("a", "i" + flags);\n'
+        'const b = new RegExp("a", "i");\n'
+        'const c = new RegExp("a" , "i");\n'
+        'const d = new RegExp("a", "i" /* c */);\n'
+    )
+    recs = extract_js_precise(src, repo="t", file="x.js")
+    assert len(recs) == 4, [(r["line"], r["pattern"]) for r in recs]
+    a, b, c, d = recs
+    assert a["pattern"] == "" and a["unencodable_reason"] == "composite-pattern"
+    for r in (b, c, d):
+        assert r["pattern"] == "a" and r["flags"] == "i"
+        assert r.get("unencodable_reason") is None
+
+
 def test_new_regexp_two_arg_legacy_extract_js():
     """The legacy extract_js path shares _NEW_REGEXP — same two-arg contract."""
     src = "const a = new RegExp('\\\\d+', 'g');\n"

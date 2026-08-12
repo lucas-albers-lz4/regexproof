@@ -168,9 +168,17 @@ def extract_js(source: str, *, repo: str, file: str) -> list[dict[str, Any]]:
         # Flags come ONLY from the second argument (anchored at the first comma);
         # args beyond the second are ignored by JS and must not affect anything.
         flags_m = _NEW_REGEXP_FLAGS.match(tail)
+        if flags_m:
+            # The second argument must be EXACTLY the string literal: anything
+            # after its closing quote before the next comma (e.g. "i" + flags)
+            # makes the flags a dynamic expression -> composite.
+            after = tail[flags_m.end():]
+            second_arg_tail = after.split(",", 1)[0]
+            if second_arg_tail.strip():
+                flags_m = None
         # Composite when the pattern is dynamic: template interpolation, a
         # concatenation in the FIRST argument (comments stripped), or a second
-        # argument that is not a string-literal flag set (variable flags).
+        # argument that is not a plain string-literal flag set.
         dynamic = "${" in arg or "+" in head or (first_comma != -1 and not flags_m)
         if (arg.startswith("'") and arg.endswith("'")) or (
             arg.startswith('"') and arg.endswith('"')
@@ -268,9 +276,17 @@ def extract_js_precise(source: str, *, repo: str, file: str) -> list[dict[str, A
         # Flags come ONLY from the second argument (anchored at the first comma);
         # args beyond the second are ignored by JS and must not affect anything.
         flags_m = _NEW_REGEXP_FLAGS.match(tail)
+        if flags_m:
+            # The second argument must be EXACTLY the string literal: anything
+            # after its closing quote before the next comma (e.g. "i" + flags)
+            # makes the flags a dynamic expression -> composite.
+            after = tail[flags_m.end():]
+            second_arg_tail = after.split(",", 1)[0]
+            if second_arg_tail.strip():
+                flags_m = None
         # Composite when the pattern is dynamic: template interpolation, a
         # concatenation in the FIRST argument (comments stripped), or a second
-        # argument that is not a string-literal flag set (variable flags).
+        # argument that is not a plain string-literal flag set.
         dynamic = "${" in arg or "+" in head or (first_comma != -1 and not flags_m)
         if (arg.startswith("'") and arg.endswith("'")) or (
             arg.startswith('"') and arg.endswith('"')
