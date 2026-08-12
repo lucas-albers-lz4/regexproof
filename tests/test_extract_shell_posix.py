@@ -192,3 +192,40 @@ def test_ndjson_round_trip_line_records():
     lines = [json.dumps(r) for r in recs]
     for line in lines:
         jsonschema.validate(instance=json.loads(line), schema=extractor_schema())
+
+
+# --- P3 reconcile finding: command substitution is SHELL CODE ----------------
+
+def test_substitution_double_quoted_grep_extracted():
+    """`"$(grep 'pat')"` is a real grep — the guard must not treat the
+    double-quoted $( ) body as a string literal (golang-build.sh class)."""
+    recs = extract("files=\"$(printf '%s\\n' \"$x\" | grep '\\.\\(c\\|go\\)$')\"")
+    assert len(recs) == 1
+    assert recs[0]["pattern"] == r"\.\(c\|go\)$"
+
+
+def test_substitution_unquoted_and_nested():
+    recs = extract("x=$(grep -i 'foo' f)")
+    assert [r["pattern"] for r in recs] == ["foo"]
+    assert recs[0]["shell_flags"]["syntax"] == "bre"
+    assert recs[0]["flags"] == "i"
+    recs = extract('y="$(echo "$(grep \'bar\' f)")"')
+    assert [r["pattern"] for r in recs] == ["bar"]
+
+
+def test_backtick_substitution_extracted():
+    recs = extract('z=`grep "baz" f`')
+    assert [r["pattern"] for r in recs] == ["baz"]
+
+
+def test_substitution_comment_still_suppresses():
+    recs = extract('x="$(grep "real" f # comment)"')
+    assert [r["pattern"] for r in recs] == ["real"]
+
+
+def test_string_literal_still_suppressed():
+    """The pre-fix behavior stays: `echo "use grep 'x'"` is a string, not a
+    site (and the string is not re-opened as substitution)."""
+    assert extract('echo "use grep \'x\'"') == []
+    # a $( inside single quotes is literal
+    assert extract("echo '$(grep \"nope\" f)'") == []

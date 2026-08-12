@@ -65,29 +65,83 @@ _FLAG_TOKEN = re.compile(r"-([A-Za-z][A-Za-z0-9]*)")
 def _in_comment_or_string(src: str, pos: int) -> bool:
     """True if ``pos`` sits inside a shell comment or quoted string on its line.
 
-    Labeled heuristic (frozen at P1): quote state per line, backslash escapes
-    in unquoted/double-quoted context (POSIX single quotes treat backslash
-    literally), and comment markers (``#`` at line start or after whitespace
-    or a shell separator ``; | & ( ) { }``).
+    Labeled heuristic (P1-frozen + P3 command-substitution fix): scans the
+    line from its start to ``pos`` tracking quote state (single/double),
+    backslash escapes (unquoted/double-quoted/backtick context; POSIX single
+    quotes treat backslash literally), comment markers (``#`` at line start
+    or after whitespace or a shell separator ``; | & ( ) { }``, outside
+    quotes — ``echo ok;# grep 'x'`` starts a comment), and COMMAND
+    SUBSTITUTION: ``$( ... )`` (nested) and backticks are SHELL CODE — a
+    ``"$(grep 'pat')"`` site is a real grep, not a string literal, so quotes
+    open/close normally inside the substitution (P3 reconcile finding:
+    the pre-fix guard suppressed every ``"$(cmd 'pat')"`` site — 80 phantom
+    removals in the OpenWrt feed probe, e.g. golang-build.sh 6 real sites).
     """
     line_start = src.rfind("\n", 0, pos) + 1
-    quote: str | None = None
+    quote: str | None = None  # None | "'" | '"'
+    frames: list[tuple[str, str | None]] = []  # (kind, saved quote) — sub/bt
     i = line_start
     while i < pos:
         c = src[i]
         if quote == "'":
+            # POSIX: backslash is LITERAL inside single quotes — only the
+            # closing quote matters (no substitution inside single quotes)
             if c == "'":
                 quote = None
         elif c == "\\":
-            i += 1  # escape — literal in unquoted/double-quoted context
+            i += 1  # escape — literal in unquoted/double-quoted/backtick
         elif quote == '"':
             if c == '"':
                 quote = None
+            elif c == "$" and i + 1 < pos and src[i + 1] == "(":
+                frames.append(("sub", quote))  # nested parse context
+                quote = None
+                i += 1  # consume "("
+            elif c == "`":
+                frames.append(("bt", quote))
+                quote = None
+        elif frames and frames[-1][0] == "bt":
+            if c == "`":
+                _, saved = frames.pop()
+                quote = saved
+            elif c in ("'", '"'):
+                quote = c  # substitution body is shell code
+            elif c == "$" and i + 1 < pos and src[i + 1] == "(":
+                frames.append(("sub", quote))
+                quote = None
+                i += 1
+            elif c == "#" and (i == line_start or src[i - 1] in " \t;|&(){}"):
+                return True
+        elif frames and frames[-1][0] == "sub":
+            if c == "$" and i + 1 < pos and src[i + 1] == "(":
+                frames.append(("sub", quote))
+                quote = None
+                i += 1
+            elif c == ")":
+                _, saved = frames.pop()  # restore outer quote context
+                quote = saved
+            elif c == "`":
+                frames.append(("bt", quote))
+                quote = None
+            elif c in ("'", '"'):
+                quote = c  # substitution body is shell code
+            elif c == "#" and (i == line_start or src[i - 1] in " \t;|&(){}"):
+                return True
         elif c in ("'", '"'):
             quote = c
+        elif c == "$" and i + 1 < pos and src[i + 1] == "(":
+            frames.append(("sub", quote))
+            quote = None
+            i += 1  # consume "("
+        elif c == "`":
+            frames.append(("bt", quote))
+            quote = None
         elif c == "#" and (i == line_start or src[i - 1] in " \t;|&(){}"):
             return True
         i += 1
+    # frames exist only to make quote+comment state CORRECT inside command
+    # substitutions — the position itself is SHELL CODE there, so only the
+    # quote/comment state suppresses (P3 reconcile fix).
     return quote is not None
 
 
