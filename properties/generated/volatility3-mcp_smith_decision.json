@@ -1,0 +1,15 @@
+{
+  "schema_version": "1",
+  "corpus": "volatility3-mcp",
+  "corpus_pin": "edc50f35005032c940bf6260ca791dab700eaabc",
+  "candidate_url": "https://github.com/Kirandawadi/volatility3-mcp",
+  "smith_decision": "go",
+  "supersedes": null,
+  "reason": "Largest yara corpus in the matrix: 11,534/17,574 = 0.6563 encodable (complete_run, parse-error=1, budget clean; 1 file >2MB skipped per MAX_FILE_BYTES). 566 yara files (webshell/stealer/evilginx/antidebug/crypto packs). 71 findings + 6,040 triage. Security tool (memory forensics) - SECURITY_TOOL_CORPORA, private_first. GO admit confirmed.",
+  "regex_sites": 17574,
+  "sites_by_bucket": {
+    "yara (566 files, 17,574 sites measured; 11,534 encodable)": 17574,
+    "1 oversized file >2MB skipped": 1
+  },
+  "additional_surface_outside_probe_scope": {}
+}

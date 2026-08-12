@@ -1,0 +1,43 @@
+{
+  "budget": {
+    "max_disk_mb": 1000,
+    "max_mem_mb": 4096,
+    "max_patterns": 50000,
+    "max_wall_s": 1200,
+    "redos_wall_s": 240
+  },
+  "budget_breaches": null,
+  "commit": "edc50f35005032c940bf6260ca791dab700eaabc",
+  "compiler_fingerprint": "71d2ce23b4cd",
+  "complete_run": true,
+  "corpus_pin": "edc50f35005032c940bf6260ca791dab700eaabc",
+  "decision": "go",
+  "decision_note": "1 unclassified parse-error rows \u2014 Phase 1 requires zero",
+  "decision_rule": "go iff encodable/sample_size >= 0.3",
+  "dialect": "yara",
+  "encodable": 11534,
+  "engine_versions": {
+    "python": "3.13.5",
+    "z3": "5.0.0"
+  },
+  "extractor_schema_version": "2",
+  "fraction": 0.6563,
+  "go_no_go_threshold": 0.3,
+  "id_formula": "v2-domain-optional-ascii-default",
+  "inventory_path": "properties/generated/volatility3-mcp-inventory.ndjson",
+  "path": "batch/corpora/volatility3-mcp/rules",
+  "pilot": "volatility3-mcp",
+  "reasons": {
+    "fullword-boundary": 5902,
+    "ok": 11534,
+    "parse-error": 1,
+    "pattern-too-long": 6,
+    "per-alternative-anchor": 1,
+    "wide-non-literal": 130
+  },
+  "sample_size": 17574,
+  "schema_version": "1",
+  "scope": "full_corpus",
+  "unclassified_parse_errors": 1,
+  "wall_s": 50.744
+}

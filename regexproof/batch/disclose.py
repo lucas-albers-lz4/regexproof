@@ -35,6 +35,7 @@ SECURITY_TOOL_CORPORA = frozenset(
         "yara-rules",
         "ail-yara-rules",
         "malcontent",
+        "volatility3-mcp",
     }
 )
 

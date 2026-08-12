@@ -56,6 +56,29 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
             "max_disk_mb": 500,
         },
     },
+    "volatility3-mcp": {
+        "corpus_type": "rule_corpus",
+        # Materialize: ln -sfn /tmp/v3-check/rules batch/corpora/volatility3-mcp/rules
+        # Volatility3 memory-forensics MCP server yara pack (566 files:
+        # webshell/stealer/evilginx/antidebug/crypto packs). LARGEST yara
+        # corpus in the matrix (29,364 probe sites). batch-13 GO (#329).
+        "path": ROOT / "batch" / "corpora" / "volatility3-mcp" / "rules",
+        "glob": "**/*.yar,**/*.yara",
+        "dialect": "yara",
+        "extractor": "yara",
+        "repo": "Kirandawadi/volatility3-mcp",
+        "security_tool": True,
+        "lift_inline": False,
+        "corpus_pin": "edc50f35005032c940bf6260ca791dab700eaabc",
+        "commit": "edc50f35005032c940bf6260ca791dab700eaabc",
+        "budget": {
+            "max_patterns": 50000,
+            "max_wall_s": 1200,
+            "redos_wall_s": 240,
+            "max_mem_mb": 4096,
+            "max_disk_mb": 1000,
+        },
+    },
     "globussoft-crm": {
         "corpus_type": "rule_corpus",
         # Materialize: ln -sfn /tmp/gsc-check batch/corpora/globussoft-crm/rules
@@ -1319,6 +1342,7 @@ WAVE_CORPORA = frozenset({
     "perl_tre", "go_regexp_tests", "v8_mjsunit",
     "xibo-cms",
     "malcontent",
+    "volatility3-mcp",
 })
 
 
