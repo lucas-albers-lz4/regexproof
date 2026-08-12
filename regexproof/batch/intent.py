@@ -97,6 +97,9 @@ def detect_intent_mismatches(records: list[dict[str, Any]]) -> list[dict[str, An
             ]
         )
         pattern = rec.get("pattern") or ""
+        # `\s` inside a NEGATED class ([^\s@]) EXCLUDES whitespace — strip negated
+        # classes before the whitespace check so [^\s...] never triggers "admits space".
+        unnegated = re.sub(r"\[\^[^\]\\]*(?:\\.[^\]\\]*)*\]", "", pattern)
         for key, excluded in INTENT_TABLE.items():
             if not _keyword_hit(hay, key):
                 continue
@@ -115,8 +118,8 @@ def detect_intent_mismatches(records: list[dict[str, Any]]) -> list[dict[str, An
                     "hostname",
                     "ishostname",
                 ):
-                    # whitespace class in email/hostname claim
-                    if r"\s" in pattern or "[ ]" in pattern:
+                    # whitespace class in email/hostname claim (outside negated classes)
+                    if r"\s" in unnegated or "[ ]" in unnegated:
                         findings.append(_intent_finding(rec, key, ch))
                         break
     # Deduplicate by regex_id+keyword

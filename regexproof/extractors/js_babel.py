@@ -14,10 +14,63 @@ from typing import Any
 from regexproof.extractors.record import make_record
 
 _LITERAL = re.compile(r"/(?P<pat>(?:\\.|[^/\\])+)/(?P<flags>[dgimsuvy]*)")
+# new RegExp(<string-literal>[, <string-literal-flags>]) — first arg captured as a
+# proper JS string literal (escapes respected, stops at its closing quote), so a
+# two-arg call never swallows `, 'g'` into the pattern. Falls back to the legacy
+# `[^)]+` capture for non-literal first args (concatenations -> composite-pattern).
+# Flags parsed from `rest`.
 _NEW_REGEXP = re.compile(
-    r"new\s+RegExp\s*\(\s*(?P<arg>[^)]+)\s*\)",
+    r"new\s+RegExp\s*\(\s*"
+    r"(?P<arg>(?:\"(?:[^\"\\]|\\.)*\")|(?:'(?:[^'\\]|\\.)*')|[^)]+)"
+    r"(?P<rest>[^)]*)\)",
     re.MULTILINE,
 )
+_NEW_REGEXP_FLAGS = re.compile(r",\s*(['\"])([dgimsuvy]*)\1")
+
+_JS_STRING_ESCAPES = {
+    "n": "\n",
+    "r": "\r",
+    "t": "\t",
+    "b": "\b",
+    "f": "\f",
+    "v": "\v",
+    "0": "\0",
+}
+
+
+def _unescape_js_string(raw: str) -> str:
+    """Decode JS string-literal content to its VALUE (what the runtime sees).
+
+    `new RegExp('\\\\[.*?\\\\]')` receives `\\[.*?\\]` at runtime — the extractor
+    must emit the decoded value, not the raw source text, or the compiler
+    mis-reads `\\\\d` as escaped-backslash + d instead of the digit class.
+    Unknown escapes drop the backslash per JS semantics (``'\\d' === 'd'``).
+    """
+    out: list[str] = []
+    i = 0
+    n = len(raw)
+    while i < n:
+        ch = raw[i]
+        if ch != "\\":
+            out.append(ch)
+            i += 1
+            continue
+        i += 1
+        if i >= n:
+            out.append("\\")
+            break
+        e = raw[i]
+        if e == "x" and i + 2 < n and re.fullmatch(r"[0-9a-fA-F]{2}", raw[i + 1 : i + 3]):
+            out.append(chr(int(raw[i + 1 : i + 3], 16)))
+            i += 3
+            continue
+        if e == "u" and i + 4 < n and re.fullmatch(r"[0-9a-fA-F]{4}", raw[i + 1 : i + 5]):
+            out.append(chr(int(raw[i + 1 : i + 5], 16)))
+            i += 5
+            continue
+        out.append(_JS_STRING_ESCAPES.get(e, e))
+        i += 1
+    return "".join(out)
 
 _FLAGS = frozenset("dgimsuvy")
 _REGEX_PREV = frozenset({"sof", "op", "kw", "lp", "colon", "comma", "return"})
@@ -68,16 +121,29 @@ def extract_js(source: str, *, repo: str, file: str) -> list[dict[str, Any]]:
         if (arg.startswith("'") and arg.endswith("'")) or (
             arg.startswith('"') and arg.endswith('"')
         ) or (arg.startswith("`") and arg.endswith("`") and "${" not in arg):
-            pattern = arg[1:-1]
-            reason = None
+            if re.match(r"\s*\+", m.group("rest")):
+                # new RegExp("a" + x) — concatenated pattern is composite.
+                pattern = ""
+                flags = ""
+                reason = "composite-pattern"
+            else:
+                pattern = _unescape_js_string(arg[1:-1])
+                flags_m = _NEW_REGEXP_FLAGS.search(m.group("rest"))
+                flags = "".join(c for c in "dgimsuvy" if c in (flags_m.group(2) if flags_m else ""))
+                reason = None
+                if any(f in flags for f in "gy"):
+                    reason = "stateful"
+                elif "u" in flags or "v" in flags:
+                    reason = "u-flag" if "u" in flags else "v-flag"
         else:
             pattern = ""
+            flags = ""
             reason = "composite-pattern"
         out.append(
             make_record(
                 repo=repo,
                 pattern=pattern,
-                flags="",
+                flags=flags,
                 dialect="ecma",
                 call_kind="search",
                 file=file,
@@ -146,16 +212,29 @@ def extract_js_precise(source: str, *, repo: str, file: str) -> list[dict[str, A
         if (arg.startswith("'") and arg.endswith("'")) or (
             arg.startswith('"') and arg.endswith('"')
         ) or (arg.startswith("`") and arg.endswith("`") and "${" not in arg):
-            pattern = arg[1:-1]
-            reason = None
+            if re.match(r"\s*\+", m.group("rest")):
+                # new RegExp("a" + x) — concatenated pattern is composite.
+                pattern = ""
+                flags = ""
+                reason = "composite-pattern"
+            else:
+                pattern = _unescape_js_string(arg[1:-1])
+                flags_m = _NEW_REGEXP_FLAGS.search(m.group("rest"))
+                flags = "".join(c for c in "dgimsuvy" if c in (flags_m.group(2) if flags_m else ""))
+                reason = None
+                if any(f in flags for f in "gy"):
+                    reason = "stateful"
+                elif "u" in flags or "v" in flags:
+                    reason = "u-flag" if "u" in flags else "v-flag"
         else:
             pattern = ""
+            flags = ""
             reason = "composite-pattern"
         out.append(
             make_record(
                 repo=repo,
                 pattern=pattern,
-                flags="",
+                flags=flags,
                 dialect="ecma",
                 call_kind="search",
                 file=file,

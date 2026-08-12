@@ -82,6 +82,26 @@ def test_intent_no_substring_false_positive_on_curl():
     assert hits == []
 
 
+def test_intent_negated_class_whitespace_no_false_positive():
+    """`\s` inside a NEGATED class ([^\s@]) EXCLUDES whitespace — must not fire the
+    "admits space" intent finding (the luna-gate catch on PR #258 / FeedbackForm)."""
+    rec = {
+        "regex_id": "b" * 32,
+        "pattern": r"^[^\s@]+@[^\s@]+\.[^\s@]+$",
+        "context_snippet": "email-validator",
+        "file": "FeedbackForm.tsx",
+        "site": "FeedbackForm.tsx:42:17",
+        "name": "isEmail",
+        "corpus_slug": "xibo-cms",
+    }
+    assert detect_intent_mismatches([rec]) == []
+    # Positive control: `\s` outside a negated class still fires.
+    pos = dict(rec, pattern=r"^.+@.+\s+$")
+    hits = detect_intent_mismatches([pos])
+    assert len(hits) == 1
+    assert hits[0]["detail"]["admitted_char"] == "' '"
+
+
 def test_markdown_section_headers_unique(tmp_path: Path):
     from regexproof.batch.report import write_markdown
 
