@@ -181,7 +181,13 @@ def compile_pattern(
                     declared_domain=str(
                         artifact.metadata.get("_declared_domain", domain)
                     ),
-                    meta=artifact.metadata,
+                    # Re-gate 5 (minor): strip the cache-only fields so the
+                    # returned meta is identical to a fresh compile's meta.
+                    meta={
+                        k: v
+                        for k, v in artifact.metadata.items()
+                        if not k.startswith("_")
+                    },
                 )
             if cache_stats is not None:
                 cache_stats["misses"] = cache_stats.get("misses", 0) + 1

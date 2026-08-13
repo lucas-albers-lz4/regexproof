@@ -159,7 +159,11 @@ class MirrorCache:
             # triggers a fresh compile instead of serving a wrong mirror.
             expected = metadata.get("_script_sha256")
             core = script.split(_METADATA_PREFIX, 1)[0]
-            actual = hashlib.sha256((key + ":" + core).encode("utf-8")).hexdigest()
+            meta_wo_digest = {k: v for k, v in metadata.items() if k != "_script_sha256"}
+            payload = json.dumps(
+                (key, core, meta_wo_digest), ensure_ascii=True, sort_keys=True
+            )
+            actual = hashlib.sha256(payload.encode("utf-8")).hexdigest()
             if not expected or expected != actual:
                 return None
             # Minor (luna gate 1): metadata SIDECAR (the plan's "metadata
@@ -175,7 +179,21 @@ class MirrorCache:
                     if not isinstance(side_meta, dict):
                         return None
                     side_digest = side_meta.get("_script_sha256")
-                    if not side_digest or side_digest != actual:
+                    # The sidecar's digest must match ITS OWN metadata payload
+                    # (re-gate 5): an edited sidecar changes the payload and
+                    # fails validation even when the embedded copy is intact.
+                    side_wo = {
+                        kk: vv
+                        for kk, vv in side_meta.items()
+                        if kk != "_script_sha256"
+                    }
+                    side_payload = json.dumps(
+                        (key, core, side_wo), ensure_ascii=True, sort_keys=True
+                    )
+                    side_actual = hashlib.sha256(
+                        side_payload.encode("utf-8")
+                    ).hexdigest()
+                    if not side_digest or side_digest != side_actual:
                         return None
                     metadata = side_meta
                 except (OSError, json.JSONDecodeError):
@@ -198,9 +216,14 @@ class MirrorCache:
         # another key changes the digest and triggers a fresh compile.
         meta = dict(_metadata_from_script(script))
         core = script.split(_METADATA_PREFIX, 1)[0]
-        meta["_script_sha256"] = hashlib.sha256(
-            (key + ":" + core).encode("utf-8")
-        ).hexdigest()
+        # Re-gate 5: the digest covers the METADATA too — an edited sidecar
+        # changing mirror_exact/shape flags must fail validation, not just a
+        # replaced mirror script.
+        meta_wo_digest = {k: v for k, v in meta.items() if k != "_script_sha256"}
+        payload = json.dumps(
+            (key, core, meta_wo_digest), ensure_ascii=True, sort_keys=True
+        )
+        meta["_script_sha256"] = hashlib.sha256(payload.encode("utf-8")).hexdigest()
         script = script.split(_METADATA_PREFIX, 1)[0] + _METADATA_PREFIX + json.dumps(
             meta, ensure_ascii=True, sort_keys=True, separators=(",", ":")
         ) + "\n"
