@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 import math
 import random
 from datetime import date, datetime, timezone
@@ -232,16 +233,23 @@ def _archive_gate_decision(generated_dir: Path, url: str) -> None:
     Renames ``<slug>_gate_decision.json`` to ``<slug>_gate_decision.audit-failed.json``
     so the read-only sync has nothing to reapply and rank treats the URL as
     eligible for re-probe. A NEW decision file written after recovery applies
-    normally (P7 fold, luna re-gate 5).
+    normally (P7 fold, luna re-gates 5+6). The file is located by its
+    ``candidate_url`` field (decision files are named from the SANITIZED
+    corpus slug, which is not the URL's last path segment).
     """
     if not generated_dir.is_dir():
         return
-    slug = str(url or "").rstrip("/").split("/")[-1]
-    if not slug:
+    want = normalize_repo_url(str(url or ""))
+    if not want:
         return
-    candidate = generated_dir / f"{slug}_gate_decision.json"
-    if candidate.is_file():
-        candidate.rename(generated_dir / f"{slug}_gate_decision.audit-failed.json")
+    for f in generated_dir.glob("*_gate_decision.json"):
+        try:
+            payload = json.loads(f.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            continue
+        if normalize_repo_url(str(payload.get("candidate_url") or "")) == want:
+            f.rename(f.with_name(f"{f.stem}.audit-failed.json"))
+            return
 
 
 def run_audit_sampler(

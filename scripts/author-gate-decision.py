@@ -200,6 +200,7 @@ def main(argv: list[str] | None = None) -> int:
             week=args.week,
             seed=args.seed,
             fail_urls=set(args.fail_url),
+            generated_dir=ROOT / "properties" / "generated",
         )
         sys.stdout.write(json.dumps(result, indent=2, sort_keys=True) + "\n")
         return 0

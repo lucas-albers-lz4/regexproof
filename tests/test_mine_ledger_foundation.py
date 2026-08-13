@@ -277,7 +277,9 @@ def test_audit_requeue_archives_gate_and_new_decision_applies(tmp_path: Path):
         encoding="utf-8",
     )
 
-    # 1. Audit failure requeues + archives the decision file.
+    # 1. Audit failure requeues + archives the decision file. The archive
+    #    matches by candidate_url (the file name uses a SANITIZED corpus slug,
+    #    not the URL segment — luna re-gate 6).
     out = run_audit_sampler(
         ledger_path, week="2026-W32", fail_urls={"https://github.com/acme/recovered"},
         generated_dir=gen,
@@ -305,3 +307,36 @@ def test_audit_requeue_archives_gate_and_new_decision_applies(tmp_path: Path):
     )
     assert mod.sync_gate_decisions(ledger_path, gen) == 1
     assert load_ledger(ledger_path)["candidates"][0]["status"] == "gated:go"
+
+
+def test_archive_matches_by_candidate_url_not_slug(tmp_path: Path):
+    """P7 fold (luna re-gate 6): the archive locates the decision file by its
+    candidate_url field — the file name is derived from a SANITIZED corpus
+    slug, which is not the URL's last path segment."""
+    from regexproof.mine.audit import _archive_gate_decision
+
+    gen = tmp_path / "generated"
+    gen.mkdir()
+    (gen / "sanitized_slug_gate_decision.json").write_text(
+        json.dumps(
+            {
+                "schema_version": "1",
+                "corpus": "sanitized-slug",
+                "candidate_url": "https://github.com/acme/recovered",
+                "decision": "no-go",
+            }
+        ),
+        encoding="utf-8",
+    )
+    _archive_gate_decision(gen, "https://github.com/acme/recovered")
+    assert not (gen / "sanitized_slug_gate_decision.json").exists()
+    assert (gen / "sanitized_slug_gate_decision.audit-failed.json").exists()
+    # A different candidate's file is untouched.
+    (gen / "other_gate_decision.json").write_text(
+        json.dumps({"schema_version": "1", "corpus": "other",
+                    "candidate_url": "https://github.com/acme/other",
+                    "decision": "go"}),
+        encoding="utf-8",
+    )
+    _archive_gate_decision(gen, "https://github.com/acme/recovered")
+    assert (gen / "other_gate_decision.json").exists()
