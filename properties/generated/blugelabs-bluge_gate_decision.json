@@ -1,0 +1,46 @@
+{
+  "candidate_url": "https://github.com/blugelabs/bluge",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 6 re2 < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "bluge",
+  "corpus_pin": "57414197005148539c5dc5db8ab581594969df79",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "re2": 6
+    },
+    "flags": {},
+    "pin": "57414197005148539c5dc5db8ab581594969df79",
+    "predicted_buckets": {},
+    "regex_sites": 6,
+    "regex_sites_per_file": {
+      "analysis/char/html.go": 1,
+      "analysis/char/zerowidthnonjoiner.go": 1,
+      "analysis/tokenizer/regexp.go": 1,
+      "analysis/tokenizer/regexp_test.go": 2,
+      "search_test.go": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 6 regex sites (auto-NO-GO bar 200); dialects [re2:6]; boundary=unknown.",
+  "schema_version": "1"
+}

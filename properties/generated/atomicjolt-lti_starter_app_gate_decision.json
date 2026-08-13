@@ -1,0 +1,51 @@
+{
+  "candidate_url": "https://github.com/atomicjolt/lti_starter_app",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 25 sites (starter app).",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "lti_starter_app",
+  "corpus_pin": "45ccf98accbd792e6c3e7ecca1661506ab081956",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 25
+    },
+    "flags": {},
+    "pin": "45ccf98accbd792e6c3e7ecca1661506ab081956",
+    "predicted_buckets": {},
+    "regex_sites": 25,
+    "regex_sites_per_file": {
+      "client/apps/admin/components/application_instances/authentications_modal.jsx": 5,
+      "client/apps/admin/components/applications/application_row.jsx": 1,
+      "client/apps/admin/components/applications/index.jsx": 4,
+      "client/apps/admin/components/atomic_admin/list.jsx": 3,
+      "client/apps/admin/components/atomic_admin/lti_platforms/list.jsx": 3,
+      "client/apps/admin/components/common/heading.jsx": 3,
+      "client/apps/admin/components/lti_installs/course_installs.jsx": 1,
+      "client/apps/admin/components/lti_installs/sidebar.jsx": 1,
+      "client/apps/admin/components/sites/list.jsx": 3,
+      "client/apps/hello_world/components/deep_link.jsx": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 25 regex sites (auto-NO-GO bar 200); dialects [ecma:25]; boundary=unknown.",
+  "schema_version": "1"
+}

@@ -1,0 +1,49 @@
+{
+  "candidate_url": "https://github.com/Ruin0x11/OpenNefia",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 21 ecma, deterministic-false (game).",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "OpenNefia",
+  "corpus_pin": "dbe3eaa38fb8730bc74007bf9734a54376429490",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 21
+    },
+    "flags": {
+      "g": 16
+    },
+    "pin": "dbe3eaa38fb8730bc74007bf9734a54376429490",
+    "predicted_buckets": {
+      "stateful": 16
+    },
+    "regex_sites": 21,
+    "regex_sites_per_file": {
+      "editor/vscode/src/OpenNefiaColorProvider.ts": 1,
+      "editor/vscode/src/OpenNefiaHoverProvider.ts": 2,
+      "editor/vscode/src/commands.ts": 14,
+      "editor/vscode/src/util.ts": 4
+    },
+    "security_boundary": "deterministic-false"
+  },
+  "rationale": "Below admission scale: 21 regex sites (auto-NO-GO bar 200); dialects [ecma:21]; boundary=deterministic-false.",
+  "schema_version": "1"
+}

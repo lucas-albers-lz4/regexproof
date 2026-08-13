@@ -1,0 +1,68 @@
+{
+  "candidate_url": "https://github.com/cerbos/cerbos",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 36 sites < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "cerbos",
+  "corpus_pin": "a1f8f8a8e6f61c64552ee131e79977d5604f213a",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "posix-class": 2
+    },
+    "dialect": {
+      "ecma": 4,
+      "posix-shell": 21,
+      "re2": 11
+    },
+    "flags": {
+      "g": 1
+    },
+    "pin": "a1f8f8a8e6f61c64552ee131e79977d5604f213a",
+    "predicted_buckets": {
+      "posix-class": 2,
+      "stateful": 1
+    },
+    "regex_sites": 36,
+    "regex_sites_per_file": {
+      "cmd/cerbos/repl/internal/repl.go": 3,
+      "cmd/cerbosctl/get/get_test.go": 1,
+      "deploy/linux/scripts/post-install.sh": 2,
+      "docs/supplemental-ui/tabs-block/extension.js": 1,
+      "hack/loadtest/gcp/deploy.sh": 2,
+      "hack/loadtest/gcp/env.sh": 3,
+      "hack/loadtest/gcp/sweep.sh": 6,
+      "hack/loadtest/loadtest.sh": 4,
+      "hack/loadtest/scrape.sh": 1,
+      "hack/scripts/prep-release.sh": 3,
+      "hack/tools/confdocs/confdocs.go": 1,
+      "hack/tools/generate-npm-packages/templates/wrapper/bin.js": 1,
+      "internal/conditions/identifiers.go": 1,
+      "internal/namer/namer.go": 2,
+      "internal/observability/metrics/metrics.go": 2,
+      "internal/ruletable/planner/struct_matcher_test.go": 1,
+      "npm/packages/cerbos/bin.js": 1,
+      "npm/packages/cerbosctl/bin.js": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 36 regex sites (auto-NO-GO bar 200); dialects [ecma:4, posix-shell:21, re2:11]; boundary=unknown.",
+  "schema_version": "1"
+}

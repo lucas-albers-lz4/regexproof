@@ -1,0 +1,59 @@
+{
+  "candidate_url": "https://github.com/aws-samples/sample-ai-coding-standards-template",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 69 sites (template).",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "sample-ai-coding-standards-template",
+  "corpus_pin": "f15a7fb1c95e543da4bfd55358b5bf2740b7473f",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "lookaround": 6
+    },
+    "dialect": {
+      "ecma": 67,
+      "py_re": 2
+    },
+    "flags": {
+      "g": 1,
+      "i": 51
+    },
+    "pin": "f15a7fb1c95e543da4bfd55358b5bf2740b7473f",
+    "predicted_buckets": {
+      "inline-flag": 51,
+      "lookaround": 6,
+      "stateful": 1
+    },
+    "regex_sites": 69,
+    "regex_sites_per_file": {
+      "template/hooks/pre_gen_project.py": 2,
+      "template/{{cookiecutter.project_name}}/frontend/src/modules/auth/components/PasswordStrength.tsx": 4,
+      "template/{{cookiecutter.project_name}}/frontend/src/modules/auth/components/PasswordStrengthIndicator.tsx": 4,
+      "template/{{cookiecutter.project_name}}/frontend/src/modules/auth/schemas/authSchemas.ts": 4,
+      "template/{{cookiecutter.project_name}}/frontend/src/pages/Dashboard.tsx": 2,
+      "template/{{cookiecutter.project_name}}/frontend/tests/e2e/auth.spec.ts": 25,
+      "template/{{cookiecutter.project_name}}/frontend/tests/e2e/oidc-custom-claims.spec.ts": 2,
+      "template/{{cookiecutter.project_name}}/frontend/tests/e2e/status.spec.ts": 26
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 69 regex sites (auto-NO-GO bar 200); dialects [ecma:67, py_re:2]; boundary=unknown.",
+  "schema_version": "1"
+}

@@ -1,0 +1,48 @@
+{
+  "candidate_url": "https://github.com/yardenadi24/Anubis_EDR_Project",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 5 yara sites — EDR project stub.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "Anubis_EDR_Project",
+  "corpus_pin": "2e28f26c8745300d936c98604d2c35e7f4897179",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "yara": 5
+    },
+    "flags": {
+      "i": 3
+    },
+    "pin": "2e28f26c8745300d936c98604d2c35e7f4897179",
+    "predicted_buckets": {
+      "inline-flag": 3
+    },
+    "regex_sites": 5,
+    "regex_sites_per_file": {
+      "rules/anubis_copy_test.yar": 2,
+      "rules/content_rules.yar": 2,
+      "rules/test_rules.yar": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 5 regex sites (auto-NO-GO bar 200); dialects [yara:5]; boundary=unknown.",
+  "schema_version": "1"
+}

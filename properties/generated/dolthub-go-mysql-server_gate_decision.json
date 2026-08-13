@@ -1,0 +1,64 @@
+{
+  "candidate_url": "https://github.com/dolthub/go-mysql-server",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 35 sites < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "go-mysql-server",
+  "corpus_pin": "bda99d66b4bf019ae8098f7ff32a463eb215b883",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "(?m)": 4
+    },
+    "dialect": {
+      "posix-shell": 9,
+      "re2": 26
+    },
+    "flags": {
+      "i": 1
+    },
+    "pin": "bda99d66b4bf019ae8098f7ff32a463eb215b883",
+    "predicted_buckets": {
+      "inline-flag": 1,
+      "m-flag": 4
+    },
+    "regex_sites": 35,
+    "regex_sites_per_file": {
+      ".github/workflows/scripts/sanitize_payload.sh": 4,
+      "check_repo.sh": 2,
+      "format_repo.sh": 3,
+      "server/handler.go": 1,
+      "sql/events.go": 3,
+      "sql/expression/arithmetic.go": 1,
+      "sql/expression/function/math.go": 2,
+      "sql/expression/function/uuid_test.go": 1,
+      "sql/expression/interval.go": 11,
+      "sql/memo/select_hints.go": 2,
+      "sql/stats/statistic.go": 1,
+      "sql/time.go": 1,
+      "sql/types/datetime.go": 1,
+      "sql/types/json_value.go": 1,
+      "sql/types/number.go": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 35 regex sites (auto-NO-GO bar 200); dialects [posix-shell:9, re2:26]; boundary=unknown.",
+  "schema_version": "1"
+}

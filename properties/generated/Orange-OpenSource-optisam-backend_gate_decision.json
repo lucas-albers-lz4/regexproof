@@ -1,0 +1,110 @@
+{
+  "candidate_url": "https://github.com/Orange-OpenSource/optisam-backend",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 1,119 sites but top files are vendored thirdparty product.pb.validate.go — no-go.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "optisam-backend",
+  "corpus_pin": "8a85db3ed164a33cbedd6ac285ea4d45f91943b3",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "backref": 2,
+      "lookaround": 3
+    },
+    "dialect": {
+      "ecma": 123,
+      "re2": 996
+    },
+    "flags": {
+      "g": 33,
+      "i": 7,
+      "m": 3
+    },
+    "pin": "8a85db3ed164a33cbedd6ac285ea4d45f91943b3",
+    "predicted_buckets": {
+      "backref": 2,
+      "inline-flag": 7,
+      "lookaround": 3,
+      "m-flag": 3,
+      "stateful": 33
+    },
+    "regex_sites": 1119,
+    "regex_sites_per_file": {
+      "account-service/pkg/api/v1/account.pb.validate.go": 22,
+      "account-service/thirdparty/application-service/pkg/api/v1/application.pb.validate.go": 13,
+      "account-service/thirdparty/dps-service/pkg/api/v1/dps.pb.validate.go": 7,
+      "account-service/thirdparty/equipment-service/pkg/api/v1/equipment.pb.validate.go": 12,
+      "account-service/thirdparty/metric-service/pkg/api/v1/metric.pb.validate.go": 25,
+      "account-service/thirdparty/notification-service/pkg/api/v1/notification.pb.validate.go": 1,
+      "account-service/thirdparty/product-service/pkg/api/v1/product.pb.validate.go": 82,
+      "account-service/thirdparty/report-service/pkg/api/v1/report.pb.validate.go": 5,
+      "application-service/pkg/api/v1/application.pb.validate.go": 13,
+      "application-service/thirdparty/product-service/pkg/api/v1/product.pb.validate.go": 85,
+      "auth-service/pkg/api/v1/notification.pb.validate.go": 1,
+      "auth-service/thirdparty/notification-service/pkg/api/v1/notification.pb.validate.go": 1,
+      "catalog-service/pkg/api/v1/catalog-service.pb.validate.go": 1,
+      "common/optisam/helper/pb2json.go": 2,
+      "docs/assets/javascripts/bundle.8aa65030.min.js": 25,
+      "docs/assets/javascripts/lunr/min/lunr.ar.min.js": 14,
+      "docs/assets/javascripts/lunr/min/lunr.hi.min.js": 1,
+      "docs/assets/javascripts/lunr/min/lunr.ja.min.js": 3,
+      "docs/assets/javascripts/lunr/min/lunr.stemmer.support.min.js": 2,
+      "docs/assets/javascripts/lunr/min/lunr.th.min.js": 1,
+      "docs/assets/javascripts/lunr/tinyseg.js": 1,
+      "docs/assets/javascripts/lunr/wordcut.js": 47,
+      "docs/assets/javascripts/workers/search.bd0b6b67.min.js": 29,
+      "dps-service/pkg/api/v1/dps.pb.validate.go": 7,
+      "dps-service/thirdparty/account-service/pkg/api/v1/account.pb.validate.go": 21,
+      "dps-service/thirdparty/application-service/pkg/api/v1/application.pb.validate.go": 13,
+      "dps-service/thirdparty/equipment-service/pkg/api/v1/equipment.pb.validate.go": 12,
+      "dps-service/thirdparty/metric-service/pkg/api/v1/metric.pb.validate.go": 24,
+      "dps-service/thirdparty/product-service/pkg/api/v1/product.pb.validate.go": 85,
+      "equipment-service/pkg/api/v1/equipment.pb.validate.go": 12,
+      "import-service/pkg/service/v1/import.go": 2,
+      "import-service/thirdparty/account-service/pkg/api/v1/account.pb.validate.go": 21,
+      "import-service/thirdparty/catalog-service/pkg/api/v1/catalog.pb.validate.go": 1,
+      "import-service/thirdparty/dps-service/pkg/api/v1/dps.pb.validate.go": 7,
+      "import-service/thirdparty/notification-service/pkg/api/v1/notification.pb.validate.go": 1,
+      "import-service/thirdparty/product-service/pkg/api/v1/product.pb.validate.go": 85,
+      "import-service/thirdparty/simulation-service/pkg/api/v1/simulation.pb.validate.go": 10,
+      "license-service/pkg/api/v1/license.pb.validate.go": 10,
+      "license-service/thirdparty/product-service/pkg/api/v1/product.pb.validate.go": 82,
+      "metric-service/pkg/api/v1/metric.pb.validate.go": 25,
+      "metric-service/thirdparty/account-service/pkg/api/v1/account.pb.validate.go": 21,
+      "metric-service/thirdparty/equipment-service/pkg/api/v1/equipment.pb.validate.go": 12,
+      "notification-service/pkg/api/v1/notification.pb.validate.go": 1,
+      "product-service/pkg/api/v1/product.pb.validate.go": 82,
+      "product-service/pkg/service/v1/acqrights.go": 1,
+      "product-service/thirdparty/account-service/pkg/api/v1/account.pb.validate.go": 22,
+      "product-service/thirdparty/application-service/pkg/api/v1/application.pb.validate.go": 13,
+      "product-service/thirdparty/equipment-service/pkg/api/v1/equipment.pb.validate.go": 12,
+      "product-service/thirdparty/license-service/pkg/api/v1/license.pb.validate.go": 10,
+      "product-service/thirdparty/metric-service/pkg/api/v1/metric.pb.validate.go": 24,
+      "product-service/thirdparty/notification-service/pkg/api/v1/notification.pb.validate.go": 1,
+      "report-service/pkg/api/v1/report.pb.validate.go": 5,
+      "report-service/thirdparty/license-service/pkg/api/v1/license.pb.validate.go": 10,
+      "report-service/thirdparty/product-service/pkg/api/v1/product.pb.validate.go": 84,
+      "simulation-service/pkg/api/v1/simulation.pb.validate.go": 10
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 1119 regex sites (auto-NO-GO bar 200); dialects [ecma:123, re2:996]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

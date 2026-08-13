@@ -1,0 +1,50 @@
+{
+  "candidate_url": "https://github.com/alex-cart/LEAF",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 92 yara < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "LEAF",
+  "corpus_pin": "3e596533aff7044f8cc6af96ba14f9baf4469577",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "yara": 92
+    },
+    "flags": {
+      "W": 63
+    },
+    "pin": "3e596533aff7044f8cc6af96ba14f9baf4469577",
+    "predicted_buckets": {},
+    "regex_sites": 92,
+    "regex_sites_per_file": {
+      "yara_rules/webshells/WShell_APT_Laudanum.yar": 65,
+      "yara_rules/webshells/WShell_ASPXSpy.yar": 10,
+      "yara_rules/webshells/WShell_Drupalgeddon2_icos.yar": 2,
+      "yara_rules/webshells/WShell_PHP_Anuna.yar": 4,
+      "yara_rules/webshells/WShell_PHP_in_images.yar": 2,
+      "yara_rules/webshells/Wshell_ChineseSpam.yar": 7,
+      "yara_rules/webshells/Wshell_fire2013.yar": 2
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 92 regex sites (auto-NO-GO bar 200); dialects [yara:92]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

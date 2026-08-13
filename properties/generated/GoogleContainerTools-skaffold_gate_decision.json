@@ -1,0 +1,116 @@
+{
+  "candidate_url": "https://github.com/GoogleContainerTools/skaffold",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 1,027 sites but 636+ in vendored swagger-ui bundles — honest ~370 < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "skaffold",
+  "corpus_pin": "b0d643a5b5944a7d3f82bd5c00d5eaa0902226bd",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "(?i)": 1,
+      "(?m)": 2,
+      "backref": 24,
+      "lookaround": 52,
+      "posix-class": 1
+    },
+    "dialect": {
+      "ecma": 938,
+      "posix-shell": 28,
+      "py_re": 5,
+      "re2": 56
+    },
+    "flags": {
+      "g": 358,
+      "i": 182,
+      "m": 31
+    },
+    "pin": "b0d643a5b5944a7d3f82bd5c00d5eaa0902226bd",
+    "predicted_buckets": {
+      "backref": 24,
+      "inline-flag": 183,
+      "lookaround": 52,
+      "m-flag": 33,
+      "posix-class": 1,
+      "stateful": 358
+    },
+    "regex_sites": 1027,
+    "regex_sites_per_file": {
+      "cmd/skaffold/app/exitcode.go": 5,
+      "deploy/vuln-monitor/report.sh": 3,
+      "deploy/vuln-monitor/scan.sh": 2,
+      "docs-v1/static/javascripts/schemas.js": 1,
+      "docs-v1/static/scripts/iframeResizer.contentWindow.js": 1,
+      "docs-v1/static/scripts/iframeResizer.contentWindow.min.js": 1,
+      "docs-v1/static/swagger/swagger-ui-bundle.js": 318,
+      "docs-v1/static/swagger/swagger-ui-standalone-preset.js": 50,
+      "docs-v1/static/swagger/swagger-ui.js": 92,
+      "docs-v2/static/javascripts/schemas.js": 1,
+      "docs-v2/static/scripts/iframeResizer.contentWindow.js": 1,
+      "docs-v2/static/scripts/iframeResizer.contentWindow.min.js": 1,
+      "docs-v2/static/swagger/swagger-ui-bundle.js": 318,
+      "docs-v2/static/swagger/swagger-ui-standalone-preset.js": 50,
+      "docs-v2/static/swagger/swagger-ui.js": 92,
+      "examples/grpc-e2e-tests/cloud-spanner-bootstrap/main/spanner-bootstrap-utils.go": 2,
+      "examples/react-reload-docker/app/webpack.config.js": 3,
+      "examples/react-reload/app/webpack.config.js": 3,
+      "fs/assets/credits_generated/github.com/letsencrypt/boulder/core/util.go": 1,
+      "hack/boilerplate/boilerplate.py": 5,
+      "hack/check-docs.sh": 2,
+      "hack/check-samples.sh": 3,
+      "hack/gofmt.sh": 2,
+      "hack/golangci-lint.sh": 2,
+      "hack/install-golint.sh": 3,
+      "hack/schemas/main.go": 3,
+      "hack/struct-json/main.go": 1,
+      "hack/update-lts-dependencies.sh": 10,
+      "hack/versions/cmd/new/version.go": 2,
+      "hack/versions/pkg/schema/version.go": 1,
+      "integration/examples/grpc-e2e-tests/cloud-spanner-bootstrap/main/spanner-bootstrap-utils.go": 2,
+      "integration/examples/react-reload-docker/app/webpack.config.js": 3,
+      "integration/examples/react-reload/app/webpack.config.js": 3,
+      "integration/render_test.go": 1,
+      "integration/testdata/debug/java/scripts/check-jdwp.sh": 1,
+      "pkg/skaffold/apiversion/apiversion.go": 1,
+      "pkg/skaffold/deploy/deploy_problems.go": 1,
+      "pkg/skaffold/deploy/error/errors.go": 1,
+      "pkg/skaffold/docker/default_repo.go": 1,
+      "pkg/skaffold/gcs/client/native_test.go": 1,
+      "pkg/skaffold/helm/bin.go": 1,
+      "pkg/skaffold/initializer/config.go": 1,
+      "pkg/skaffold/kubernetes/manifest/manifests.go": 1,
+      "pkg/skaffold/kubernetes/manifest/selector.go": 1,
+      "pkg/skaffold/kubernetes/manifest/selector_test.go": 4,
+      "pkg/skaffold/kubernetes/manifest/visitor_test.go": 12,
+      "pkg/skaffold/kubernetes/status/resource/deployment.go": 1,
+      "pkg/skaffold/logfile/logfile.go": 1,
+      "pkg/skaffold/render/applysetters/apply_setters.go": 1,
+      "pkg/skaffold/schema/v1beta9/upgrade.go": 1,
+      "pkg/skaffold/schema/v2beta29/upgrade.go": 1,
+      "pkg/skaffold/schema/validation/validation.go": 3,
+      "pkg/skaffold/schema/versions.go": 2,
+      "pkg/skaffold/tag/git_commit.go": 2,
+      "pkg/skaffold/verify/docker/verify.go": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 1027 regex sites (auto-NO-GO bar 200); dialects [ecma:938, posix-shell:28, py_re:5, re2:56]; boundary=unknown.",
+  "schema_version": "1"
+}

@@ -1,0 +1,44 @@
+{
+  "candidate_url": "https://github.com/cryptnox/cryptnox-sdk-py",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 4 py_re < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "cryptnox-sdk-py",
+  "corpus_pin": "0c25beccc85d09ec743f70d0a331d31717328d60",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "py_re": 4
+    },
+    "flags": {},
+    "pin": "0c25beccc85d09ec743f70d0a331d31717328d60",
+    "predicted_buckets": {},
+    "regex_sites": 4,
+    "regex_sites_per_file": {
+      "cryptnox_sdk_py/card/authenticity.py": 1,
+      "cryptnox_sdk_py/cryptos/main.py": 2,
+      "cryptnox_sdk_py/cryptos/py2specials.py": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 4 regex sites (auto-NO-GO bar 200); dialects [py_re:4]; boundary=unknown.",
+  "schema_version": "1"
+}

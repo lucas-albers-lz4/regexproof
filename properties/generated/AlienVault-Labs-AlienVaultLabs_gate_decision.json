@@ -1,0 +1,64 @@
+{
+  "candidate_url": "https://github.com/AlienVault-Labs/AlienVaultLabs",
+  "conditions": [
+    {
+      "evidence": "Covered dialects; novelty is pack content (novel yara pattern sets).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe deterministic-true; malware detection system / OTX rules. AlienVault OTX yara rules. 1,466 sites (1,463 yara). 725 patterns, 20% overlap, 577 novel. Security tool. GO 2+3.",
+      "id": "security-boundary",
+      "met": true
+    },
+    {
+      "evidence": "Yara sites >= 1000, under-saturated. AlienVault OTX yara rules. 1,466 sites (1,463 yara). 725 patterns, 20% overlap, 577 novel. Security tool. GO 2+3.",
+      "id": "large-under-saturated",
+      "met": true
+    }
+  ],
+  "corpus": "AlienVaultLabs",
+  "corpus_pin": "347a57b31829b6f8e3280e0fd6a0ed49e5453c67",
+  "decision": "go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "pcre": 2,
+      "py_re": 1,
+      "yara": 1463
+    },
+    "flags": {
+      "W": 15,
+      "i": 49
+    },
+    "pin": "347a57b31829b6f8e3280e0fd6a0ed49e5453c67",
+    "predicted_buckets": {
+      "inline-flag": 49
+    },
+    "regex_sites": 1466,
+    "regex_sites_per_file": {
+      "clearcutter/src/clearcutter/commonvars.py": 1,
+      "malware_analysis/APT_NGO_wuaclt/yara/APT_NGO_wuaclt.yar": 8,
+      "malware_analysis/APT_NGO_wuaclt/yara/APT_NGO_wuaclt_PDF.yar": 1,
+      "malware_analysis/CommentCrew/apt1.yara": 693,
+      "malware_analysis/Hangover/hangover.yar": 132,
+      "malware_analysis/KINS/kins.yar": 24,
+      "malware_analysis/OSX_Leverage/leverage.yar": 7,
+      "malware_analysis/OSX_Leverage/snort_leverage.rules": 1,
+      "malware_analysis/OSX_Malware/snort_oceanlotus.rules": 1,
+      "malware_analysis/TheMask_Careto/mask.yar": 34,
+      "malware_analysis/Urausy/urausy_skypedat.yar": 10,
+      "malware_rulesets/yara/avdetect.yar": 396,
+      "malware_rulesets/yara/dbgdetect.yar": 35,
+      "malware_rulesets/yara/sandboxdetect.yar": 12,
+      "malware_rulesets/yara/vmdetect.yar": 110,
+      "yarad/yarad/fingerprints/flash.yar": 1
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Security-boundary corpus (boundary=deterministic-true) with findings-triage potential; 1466 sites across [pcre:2, py_re:1, yara:1463].",
+  "schema_version": "1"
+}

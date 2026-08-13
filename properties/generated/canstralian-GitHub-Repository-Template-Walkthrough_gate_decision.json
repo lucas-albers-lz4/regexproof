@@ -1,0 +1,38 @@
+{
+  "candidate_url": "https://github.com/canstralian/GitHub-Repository-Template-Walkthrough",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 0 regex sites (template walkthrough).",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "GitHub-Repository-Template-Walkthrough",
+  "corpus_pin": "08cf3eac5c31c3708fa5743361a127477cd2e890",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {},
+    "flags": {},
+    "pin": "08cf3eac5c31c3708fa5743361a127477cd2e890",
+    "predicted_buckets": {},
+    "regex_sites": 0,
+    "regex_sites_per_file": {},
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 0 regex sites (auto-NO-GO bar 200); dialects [none]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

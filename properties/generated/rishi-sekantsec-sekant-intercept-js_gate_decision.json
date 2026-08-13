@@ -1,0 +1,87 @@
+{
+  "candidate_url": "https://github.com/rishi-sekantsec/sekant-intercept-js",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 752 sites (445 ecma/307 yara) < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "sekant-intercept-js",
+  "corpus_pin": "4711be6d40d066f67870ed77d59519a9f196f6be",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "lookaround": 8
+    },
+    "dialect": {
+      "ecma": 445,
+      "yara": 307
+    },
+    "flags": {
+      "W": 2,
+      "g": 85,
+      "i": 88,
+      "m": 8,
+      "s": 1
+    },
+    "pin": "4711be6d40d066f67870ed77d59519a9f196f6be",
+    "predicted_buckets": {
+      "inline-flag": 89,
+      "lookaround": 8,
+      "m-flag": 8,
+      "stateful": 85
+    },
+    "regex_sites": 752,
+    "regex_sites_per_file": {
+      "examples/browser/sekant-intercept.browser.mjs": 92,
+      "examples/browser_context/sekant-intercept.browser.mjs": 92,
+      "examples/worker/src/sekant-intercept.node.mjs": 92,
+      "rules/base64_tests.yar": 11,
+      "rules/basic.yar": 3,
+      "rules/conditions.yar": 92,
+      "rules/literals.yar": 19,
+      "rules/regex.yar": 50,
+      "rules/ruleMods.yar": 20,
+      "rules/top25_rules.yar": 112,
+      "src/interceptScanner.mjs": 5,
+      "src/peModule.mjs": 1,
+      "src/yaraConditionParser.mjs": 34,
+      "src/yaraConditionsMatch.mjs": 7,
+      "src/yaraRuleCompiler.mjs": 16,
+      "src/yaraStringMatch.mjs": 31,
+      "tests/direct_compare/compare_implementations.mjs": 1,
+      "tests/direct_compare/node_yara_runner.js": 2,
+      "tests/runAllForLoopTests.mjs": 5,
+      "tests/runAllIntegrationTests.mjs": 11,
+      "tests/runAllMatchingTests.mjs": 8,
+      "tests/runAllModuleTests.mjs": 8,
+      "tests/runAllUnitTests.mjs": 11,
+      "tests/testEnhancedStringSetOps.mjs": 1,
+      "tests/testHashModule.mjs": 8,
+      "tests/testImports.mjs": 1,
+      "tests/testPEModule.mjs": 4,
+      "tests/testWithinOperator.mjs": 1,
+      "vitest/testEnhancedStringSetOps.test.mjs": 1,
+      "vitest/testHashModule.test.mjs": 8,
+      "vitest/testPEModule.test.mjs": 4,
+      "vitest/testWithinOperator.test.mjs": 1
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 752 regex sites (auto-NO-GO bar 200); dialects [ecma:445, yara:307]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

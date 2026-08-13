@@ -1,0 +1,57 @@
+{
+  "candidate_url": "https://github.com/alecthomas/chroma",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 32 sites < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "chroma",
+  "corpus_pin": "f3fe59704f669b70ce1262bacab147ddfe8015b1",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 14,
+      "py_re": 1,
+      "re2": 17
+    },
+    "flags": {
+      "g": 10
+    },
+    "pin": "f3fe59704f669b70ce1262bacab147ddfe8015b1",
+    "predicted_buckets": {
+      "stateful": 10
+    },
+    "regex_sites": 32,
+    "regex_sites_per_file": {
+      "_tools/format_supported_langs.py": 1,
+      "cmd/chroma/main.go": 1,
+      "cmd/chromad/static/base64.js": 12,
+      "cmd/chromad/static/index.js": 2,
+      "formatters/html/html_test.go": 8,
+      "formatters/tty_truecolour.go": 1,
+      "lexers/mysql.go": 2,
+      "lexers/raku.go": 3,
+      "serialise.go": 1,
+      "serialise_test.go": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 32 regex sites (auto-NO-GO bar 200); dialects [ecma:14, py_re:1, re2:17]; boundary=unknown.",
+  "schema_version": "1"
+}

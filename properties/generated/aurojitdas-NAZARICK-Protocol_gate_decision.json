@@ -1,0 +1,46 @@
+{
+  "candidate_url": "https://github.com/aurojitdas/NAZARICK-Protocol",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 3 yara sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "NAZARICK-Protocol",
+  "corpus_pin": "70b0bd7d3e4cd5b260528310272a65b0ef434213",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "yara": 3
+    },
+    "flags": {
+      "i": 2
+    },
+    "pin": "70b0bd7d3e4cd5b260528310272a65b0ef434213",
+    "predicted_buckets": {
+      "inline-flag": 2
+    },
+    "regex_sites": 3,
+    "regex_sites_per_file": {
+      "rules/rule.yara": 3
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 3 regex sites (auto-NO-GO bar 200); dialects [yara:3]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

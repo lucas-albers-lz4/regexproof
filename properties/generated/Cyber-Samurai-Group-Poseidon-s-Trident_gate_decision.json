@@ -1,0 +1,49 @@
+{
+  "candidate_url": "https://github.com/Cyber-Samurai-Group/Poseidon-s-Trident",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 3 sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "Poseidon-s-Trident",
+  "corpus_pin": "177a82bb8f3a330bccd17f9fd6824777bcd683ed",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 2,
+      "py_re": 1
+    },
+    "flags": {
+      "i": 3
+    },
+    "pin": "177a82bb8f3a330bccd17f9fd6824777bcd683ed",
+    "predicted_buckets": {
+      "inline-flag": 3
+    },
+    "regex_sites": 3,
+    "regex_sites_per_file": {
+      "frontend/src/App.test.js": 1,
+      "logger.py": 1,
+      "my-react-frontend/src/App.test.js": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 3 regex sites (auto-NO-GO bar 200); dialects [ecma:2, py_re:1]; boundary=unknown.",
+  "schema_version": "1"
+}

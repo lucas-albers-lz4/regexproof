@@ -1,0 +1,90 @@
+{
+  "candidate_url": "https://github.com/earthly/earthly",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 93 sites < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "earthly",
+  "corpus_pin": "6e641c15d3b4d7dd396363b61d2381faa2658f3d",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "(?s)": 2
+    },
+    "dialect": {
+      "posix-shell": 59,
+      "py_re": 1,
+      "re2": 33
+    },
+    "flags": {},
+    "pin": "6e641c15d3b4d7dd396363b61d2381faa2658f3d",
+    "predicted_buckets": {
+      "inline-flag": 2
+    },
+    "regex_sites": 93,
+    "regex_sites_per_file": {
+      "ast/env_var.go": 1,
+      "ast/listener.go": 1,
+      "buildcontext/gitlookup.go": 1,
+      "buildkitd/dockerd-wrapper.sh": 3,
+      "buildkitd/entrypoint.sh": 4,
+      "buildkitd/runc-ps": 1,
+      "cmd/earthly/app/run.go": 5,
+      "config/config.go": 1,
+      "conslogging/prefix_formatter.go": 6,
+      "earthfile2llb/interpretererror.go": 1,
+      "examples/clojure/earthly-example/extractJarVersion": 1,
+      "inputgraph/loader.go": 1,
+      "logbus/run.go": 1,
+      "logbus/solvermon/vertexmon.go": 3,
+      "not-a-unit-test.sh": 2,
+      "release/changelogparser.py": 1,
+      "release/release.sh": 1,
+      "scripts/acbtest/acbgrep": 2,
+      "scripts/install-all-versions.sh": 3,
+      "scripts/tests/auth/test-hello-world-no-ssh-keys.sh": 1,
+      "scripts/tests/auth/test-hello-world-with-non-authorized-key.sh": 1,
+      "scripts/tests/auth/test-self-hosted.sh": 2,
+      "scripts/tests/backwards-compatability.sh": 2,
+      "scripts/tests/cloud-docker-credentials-integration.sh": 1,
+      "tests/bootstrap/test-bootstrap.sh": 3,
+      "tests/push-images/test.sh": 12,
+      "tests/registry-command/test-ecr-project.sh": 3,
+      "tests/registry-command/test-ecr-user.sh": 1,
+      "tests/registry-command/test-gcp-project.sh": 3,
+      "tests/registry-command/test-gcp-user.sh": 2,
+      "tests/registry-command/test-multi.sh": 2,
+      "tests/secret-provider-config/test-secret-provider": 1,
+      "tests/try-catch/docker-try-finally-fail/test.sh": 1,
+      "tests/try-catch/try-catch-not-currently-implemented/test.sh": 1,
+      "tests/wait-block/common/test.sh": 2,
+      "tests/wait-block/run-push/test.sh": 2,
+      "tests/wait-block/save-artifact/test.sh": 2,
+      "util/errutil/earthly_git_stderr.go": 1,
+      "util/hint/hinterror.go": 1,
+      "util/llbutil/dockertag.go": 2,
+      "util/stringutil/regex_test.go": 5,
+      "util/stringutil/scrub.go": 2,
+      "util/vertexmeta/vertexmeta.go": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 93 regex sites (auto-NO-GO bar 200); dialects [posix-shell:59, py_re:1, re2:33]; boundary=unknown.",
+  "schema_version": "1"
+}
