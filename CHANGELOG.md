@@ -6,6 +6,11 @@ the work by phase; dates are merge dates.
 
 ## Dual-model audit wave (2026-08-12)
 
+- **#377**: Harden required `Link check` — `lychee.toml` caps concurrency /
+  retries, caches results, and keeps ACM/Microsoft bot-wall excludes. Corpus
+  READMEs (`batch/corpora/**`) and `properties/generated/**` move off the
+  required hot path to a path-filtered `Link check (corpora)` job so Smith
+  issue-link fan-out no longer flakes merges on GitHub HTTP/2 errors.
 - **#360**: `--fail-on-property-failure` CI overlay on the harness CLI and
   `z3-property-template.py`. Default exit stays the §10 recorder (FAIL is a
   recorded finding, exit 0). The required proof job now passes the flag so a
