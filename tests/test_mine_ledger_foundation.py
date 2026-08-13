@@ -313,6 +313,19 @@ def test_audit_requeue_archives_gate_and_new_decision_applies(tmp_path: Path):
     led2 = load_ledger(ledger_path)
     assert mod.find_candidate(led2, "https://github.com/acme/recovered") is not None
     assert led2["candidates"][0]["status"] == "queued"
+    # Surface the swallowed TransitionError (CI-only divergence):
+    try:
+        mod.set_status(
+            ledger_path, "https://github.com/acme/recovered", decision="go",
+            reason="diag",
+        )
+    except Exception as exc:  # noqa: BLE001
+        raise AssertionError(f"set_status raised in CI: {exc!r}") from exc
+    # Revert the diagnostic transition so the sync still sees "queued".
+    mod.transition_candidate(
+        ledger_path, "https://github.com/acme/recovered", to="queued",
+        reason="diag-revert",
+    )
     assert mod.sync_gate_decisions(ledger_path, gen) == 1
     assert load_ledger(ledger_path)["candidates"][0]["status"] == "gated:go"
 
