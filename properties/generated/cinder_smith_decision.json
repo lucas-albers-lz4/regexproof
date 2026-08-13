@@ -1,0 +1,14 @@
+{
+  "schema_version": "1",
+  "corpus": "cinder",
+  "corpus_pin": "1d5a99b2990628ae505c26df0c2a7c9d7871481e",
+  "candidate_url": "https://github.com/facebookincubator/cinder",
+  "smith_decision": "go",
+  "supersedes": null,
+  "reason": "Meta CPython fork (py_re .py-only top-60 allowlist): 612/1,290 = 0.4744 encodable (complete_run, parse-error=0, budget clean). 132 findings + 678 triage. Non-security (interpreter) - public-first. GO admit confirmed.",
+  "regex_sites": 1290,
+  "sites_by_bucket": {
+    "py_re allowlist (60 files, 1,290 sites measured; 612 encodable)": 1290
+  },
+  "additional_surface_outside_probe_scope": {"first-party beyond top-60": 282}
+}

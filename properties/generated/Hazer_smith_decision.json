@@ -1,0 +1,14 @@
+{
+  "schema_version": "1",
+  "corpus": "Hazer",
+  "corpus_pin": "080ce7f699b3e3f84dbde3fae1e27308320dc75a",
+  "candidate_url": "https://github.com/c0mblasterR/Hazer",
+  "smith_decision": "go",
+  "supersedes": null,
+  "reason": "Python fork (py_re .py-only top-60 allowlist): 616/1,300 = 0.4738 encodable (complete_run, parse-error=0, budget clean). Non-security (interpreter) - public-first. GO admit confirmed.",
+  "regex_sites": 1300,
+  "sites_by_bucket": {
+    "py_re allowlist (60 files, 1,300 sites measured; 616 encodable)": 1300
+  },
+  "additional_surface_outside_probe_scope": {"first-party beyond top-60": 354}
+}

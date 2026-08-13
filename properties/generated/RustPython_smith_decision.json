@@ -1,0 +1,14 @@
+{
+  "schema_version": "1",
+  "corpus": "RustPython",
+  "corpus_pin": "24bd3b33f9c6d1a3d32ab297457f7a1b73984263",
+  "candidate_url": "https://github.com/RustPython/RustPython",
+  "smith_decision": "go",
+  "supersedes": null,
+  "reason": "Python interpreter in Rust (py_re .py-only top-60 allowlist): 587/1,265 = 0.4640 encodable (complete_run, parse-error=0, budget clean). 131 findings + 678 triage. Non-security (interpreter) - public-first. GO admit confirmed.",
+  "regex_sites": 1265,
+  "sites_by_bucket": {
+    "py_re allowlist (60 files, 1,265 sites measured; 587 encodable)": 1265
+  },
+  "additional_surface_outside_probe_scope": {"first-party beyond top-60": 242}
+}

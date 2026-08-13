@@ -116,37 +116,37 @@
     "wall_s": 21.527
   },
   "corpora": {
-    "real-router": {
+    "Hazer": {
       "address_space_cap": true,
       "complete_run": true,
-      "corpus": "real-router",
+      "corpus": "Hazer",
       "corpus_type": "rule_corpus",
-      "encodable": 1225,
+      "encodable": 616,
       "engine": {
         "python": "3.13.5"
       },
-      "extracted": 1249,
-      "findings": 246,
+      "extracted": 1300,
+      "findings": 132,
       "inventory_questions": 4,
-      "join_regex_ids": 241,
+      "join_regex_ids": 128,
       "redos_findings": 0,
       "redos_incomplete": false,
       "schema_version": "1",
-      "triage": 24
+      "triage": 684
     }
   },
   "pair_counts": {
+    "Hazer": {
+      "admitted": 0,
+      "dropped": 0,
+      "note": "no independent-spec catalog"
+    },
     "coreruleset": {
       "admitted": 0,
       "dropped": 0,
       "fraction": 0.6908,
       "note": "fraction gate go; CRS rule-derived adapter is Phase-2 rule_diff",
       "scope": "full_corpus"
-    },
-    "real-router": {
-      "admitted": 0,
-      "dropped": 0,
-      "note": "no independent-spec catalog"
     }
   },
   "schema_version": "1"

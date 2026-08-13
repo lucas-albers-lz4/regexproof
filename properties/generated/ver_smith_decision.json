@@ -1,0 +1,14 @@
+{
+  "schema_version": "1",
+  "corpus": "ver",
+  "corpus_pin": "d60bf50736401b92b3e81626768b583c91e6a279",
+  "candidate_url": "https://github.com/zrsx/ver",
+  "smith_decision": "go",
+  "supersedes": null,
+  "reason": "Python fork (py_re .py-only top-60 allowlist): 608/1,285 = 0.4732 encodable (complete_run, parse-error=0, budget clean). 132 findings + 677 triage. Non-security (interpreter) - public-first. GO admit confirmed.",
+  "regex_sites": 1285,
+  "sites_by_bucket": {
+    "py_re allowlist (60 files, 1,285 sites measured; 608 encodable)": 1285
+  },
+  "additional_surface_outside_probe_scope": {"first-party beyond top-60": 280}
+}
