@@ -32,8 +32,12 @@ def main(argv: list[str] | None = None) -> int:
     )
     ap.add_argument(
         "--status",
-        default="mined",
-        help="Only include candidates with this status (default: mined)",
+        default="",
+        help=(
+            "Only include candidates with this status (default: none — the "
+            "skip-gated default excludes gated:* rows; pass --no-skip-gated "
+            "to include them)"
+        ),
     )
     ap.add_argument(
         "--limit",

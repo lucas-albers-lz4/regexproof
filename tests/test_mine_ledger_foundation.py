@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import importlib.util
 import json
 from pathlib import Path
 
@@ -175,3 +176,58 @@ def test_sync_through_api_persists_gated_status(tmp_path: Path):
     cand = final["candidates"][0]
     assert cand["status"] == "gated:no-go"
     assert cand["audit"]["transitions"][-1]["to"] == "gated:no-go"
+
+
+def test_main_sequence_reload_after_sync_prevents_stale_save(tmp_path: Path):
+    """Red/green for the stale-save regression (luna re-gate 2).
+
+    main() previously loaded the ledger BEFORE sync_gate_decisions(), then
+    saved that pre-sync object AFTER the sync — overwriting the transitions.
+    The fix reloads from disk after the sync. Prove both directions.
+    """
+    spec = importlib.util.spec_from_file_location(
+        "mine_corpus_candidates", ROOT / "scripts" / "mine-corpus-candidates.py"
+    )
+    assert spec is not None and spec.loader is not None
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    sync_gate_decisions = mod.sync_gate_decisions
+
+    ledger_path = tmp_path / "candidate-ledger.json"
+    gen = tmp_path / "generated"
+    gen.mkdir()
+    ledger = empty_ledger()
+    ledger["candidates"].append(
+        _sample_candidate(
+            url="https://github.com/acme/stale-save",
+            status="mined",
+        )
+    )
+    save_ledger(ledger_path, ledger)
+    (gen / "stale-save_gate_decision.json").write_text(
+        json.dumps(
+            {
+                "schema_version": "1",
+                "corpus": "stale-save",
+                "candidate_url": "https://github.com/acme/stale-save",
+                "decision": "no-go",
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    # BUGGY sequence: load -> sync -> save the PRE-SYNC object (what main()
+    # did before the fold). The persisted status must NOT be gated — this is
+    # the red direction; if it were gated, the test would not discriminate.
+    pre = load_ledger(ledger_path)
+    sync_gate_decisions(ledger_path, gen)
+    save_ledger(ledger_path, pre)  # stale overwrite
+    stale = load_ledger(ledger_path)
+    assert stale["candidates"][0]["status"] != "gated:no-go"
+
+    # FIXED sequence: load -> sync -> RELOAD from disk -> save (the fold).
+    sync_gate_decisions(ledger_path, gen)
+    fresh = load_ledger(ledger_path)
+    save_ledger(ledger_path, fresh)
+    final = load_ledger(ledger_path)
+    assert final["candidates"][0]["status"] == "gated:no-go"

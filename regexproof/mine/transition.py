@@ -22,6 +22,11 @@ DECISION_STATUS_MAP: dict[str, str] = {
 _ALLOWED: dict[str, frozenset[str]] = {
     "queued": frozenset({"mined", "queued", "gated:go", "gated:no-go", "gated:triage-trial"}),
     "mined": frozenset({"queued", "gated:go", "gated:no-go", "gated:triage-trial"}),
+    # Audit-failure recovery: the sampler re-queues a synced candidate when
+    # its gate decision is found to be a false positive (P7 fold).
+    "gated:go": frozenset({"queued"}),
+    "gated:no-go": frozenset({"queued"}),
+    "gated:triage-trial": frozenset({"queued"}),
 }
 
 
