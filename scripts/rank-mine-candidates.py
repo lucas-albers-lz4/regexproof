@@ -84,7 +84,8 @@ def main(argv: list[str] | None = None) -> int:
         default=0,
         help=(
             "Max uncached GitHub tree calls. Cached responses do not consume "
-            "the budget; 0 degrades to score-v1 metadata-only ranking."
+            "the budget; 0 disables fresh probes (score-v2 still joins the "
+            "tracked mine-tree-features.json)."
         ),
     )
     ap.add_argument(
