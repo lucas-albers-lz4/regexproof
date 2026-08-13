@@ -1,0 +1,192 @@
+{
+  "allocator": "score-v2",
+  "date": "2026-08-13",
+  "default_allocator": "score-v1",
+  "evaluation": {
+    "gate": {
+      "ablation_beats_v1_features": true,
+      "default_allocator_flip_allowed": true,
+      "holdout_auc_ge_0_70": true,
+      "mean_gap_beats_v1_baseline_informational": true
+    },
+    "holdout_auc": 0.9596354166666666,
+    "label_set": "gate-labels.json",
+    "positive_mapping": "go-only",
+    "recomputed_v1_baseline_auc": 0.4505208333333333,
+    "recomputed_v1_baseline_mean_gap": -2.6388888888888857,
+    "same_holdout_label_set": true,
+    "same_positive_class_definition": true,
+    "sanity": {
+      "passed": true,
+      "scores": [
+        -0.9920514143671506,
+        -1.684979206820448,
+        -2.1836039325459544
+      ],
+      "v1_scores": [
+        101.0,
+        51.0,
+        11.0
+      ],
+      "v1_weight_order": [
+        50.0,
+        0.0,
+        -40.0
+      ],
+      "verdicts": [
+        "deterministic-true",
+        "unknown",
+        "deterministic-false"
+      ]
+    },
+    "score_v2_mean_gap": 4.5322916039878525,
+    "v1_feature_ablation_auc": 0.736328125,
+    "v1_feature_ablation_mean_gap": 0.9539323545241141
+  },
+  "feature_names": [
+    "boundary_true",
+    "boundary_false",
+    "family_security",
+    "family_rules",
+    "family_validators",
+    "family_testdata",
+    "family_other",
+    "stars_points",
+    "recency_points",
+    "capped",
+    "enrich_fork",
+    "enrich_fork_missing",
+    "enrich_archived",
+    "enrich_archived_missing",
+    "enrich_size_log",
+    "enrich_size_missing",
+    "enrich_language_missing",
+    "enrich_language_python",
+    "enrich_language_javascript",
+    "enrich_language_typescript",
+    "enrich_language_go",
+    "enrich_language_rust",
+    "enrich_language_java",
+    "enrich_language_c_cpp",
+    "enrich_language_csharp",
+    "enrich_language_php",
+    "enrich_language_ruby",
+    "enrich_language_shell",
+    "enrich_language_other",
+    "tree_complete",
+    "tree_incomplete",
+    "tree_boundary_true",
+    "tree_boundary_false",
+    "tree_path_log",
+    "tree_regex_files_log",
+    "tree_python",
+    "tree_javascript",
+    "tree_config",
+    "tree_yara",
+    "tree_shell",
+    "probe_regex_sites_log",
+    "probe_boundary_true",
+    "probe_boundary_false",
+    "probe_dialect_count_log",
+    "probe_bucket_count_log"
+  ],
+  "feature_set": "v2",
+  "holdout_auc": 0.9596354166666666,
+  "holdout_auc_bootstrap_95": [
+    0.9206088029617442,
+    0.9864285714285714
+  ],
+  "holdout_negative_count": 144,
+  "holdout_positive_count": 16,
+  "intercept": -1.2913246062965211,
+  "n": 806,
+  "schema_version": "1",
+  "training": {
+    "dev_n": 161,
+    "feature_set_frozen": true,
+    "fit_date": "2026-08-13",
+    "fitter": {
+      "boundary_prior_strength": 0.02,
+      "iterations": 3000,
+      "l2": 0.03,
+      "learning_rate": 0.08,
+      "learning_rate_decay": 0.001,
+      "method": "balanced-logistic-gradient-descent"
+    },
+    "grouped_by": "normalized_url",
+    "holdout_evaluated_once": true,
+    "holdout_n": 160,
+    "mapping_decision": {
+      "go-only": {
+        "dev_auc": 0.9591503267973857,
+        "dev_negative_count": 144,
+        "dev_positive_count": 17,
+        "positive_labels": [
+          "go"
+        ],
+        "train_positive_count": 31
+      },
+      "go-or-triage-trial": {
+        "dev_auc": 0.9342177998894416,
+        "dev_negative_count": 134,
+        "dev_positive_count": 27,
+        "positive_labels": [
+          "go",
+          "triage-trial"
+        ],
+        "train_positive_count": 52
+      }
+    },
+    "n": 806,
+    "positive_mapping": "go-only",
+    "seed": 432,
+    "train_n": 485
+  },
+  "weights": {
+    "boundary_false": -0.4986247257255064,
+    "boundary_true": 0.46531905730492495,
+    "capped": -1.696224165267483,
+    "enrich_archived": 0.0,
+    "enrich_archived_missing": 0.0,
+    "enrich_fork": 0.0,
+    "enrich_fork_missing": 0.0,
+    "enrich_language_c_cpp": 0.06628375694170822,
+    "enrich_language_csharp": -0.0825900553535004,
+    "enrich_language_go": -0.1954421460730778,
+    "enrich_language_java": -0.34382998683327876,
+    "enrich_language_javascript": -0.475161193487932,
+    "enrich_language_missing": 0.20101066383421953,
+    "enrich_language_other": 0.696354195625513,
+    "enrich_language_php": -0.0720421997018261,
+    "enrich_language_python": -0.5548467021929928,
+    "enrich_language_ruby": -0.40359538420808144,
+    "enrich_language_rust": -0.42725536501518113,
+    "enrich_language_shell": 0.5635079627232005,
+    "enrich_language_typescript": -0.05704336919777067,
+    "enrich_size_log": -0.34330738718155074,
+    "enrich_size_missing": 0.0,
+    "family_other": 0.0,
+    "family_rules": 0.003089812679369308,
+    "family_security": -0.4252081682889685,
+    "family_testdata": 0.02718896814335626,
+    "family_validators": -0.8907310993069752,
+    "probe_boundary_false": -0.12237650975899374,
+    "probe_boundary_true": 0.4359489568116733,
+    "probe_bucket_count_log": 2.655309448797707,
+    "probe_dialect_count_log": 2.556197565493919,
+    "probe_regex_sites_log": 2.547389078736166,
+    "recency_points": -1.0572833650051232,
+    "stars_points": -0.27550897086681925,
+    "tree_boundary_false": 0.0,
+    "tree_boundary_true": 0.7842121029120802,
+    "tree_complete": -1.253339599897779,
+    "tree_config": 0.07014173512166019,
+    "tree_incomplete": -0.03232088687543838,
+    "tree_javascript": 0.2983434146892302,
+    "tree_path_log": -0.07575038457829611,
+    "tree_python": 0.5109020116297657,
+    "tree_regex_files_log": 0.3275361627800829,
+    "tree_shell": -0.026410016786055434,
+    "tree_yara": 0.7297648873373248
+  }
+}

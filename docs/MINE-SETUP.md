@@ -83,6 +83,23 @@ fraction, compile likelihood.
 
 `mine_run_summary` includes `"allocator": "score-v1"`.
 
+### Score-v2 allocator (#432)
+
+Score-v2 is an explicit comparison allocator; score-v1 remains the production
+default. It is a pure-Python deterministic fit over the committed
+`properties/generated/gate-labels.json` artifact. Refit manually when the gate
+decision count grows by about 20%; the daily mine job does not refit weights.
+
+```bash
+python scripts/fit-score-v2.py
+python scripts/rank-mine-candidates.py --allocator score-v2 --limit 10
+```
+
+The fit output records the grouped split, dev-only positive-class decision,
+holdout AUC and interval, v1-feature ablation, and the informational gap
+comparison. Runtime scores are recomputed and never persisted. Each rank line
+tags both `allocator` and `score_version`.
+
 Operator terms (mine / queue drain / rank / probe / gate / Smith):
 [`docs/terminology.md`](terminology.md).
 
