@@ -1,0 +1,14 @@
+{
+  "schema_version": "1",
+  "corpus": "ActiveAntiPhish",
+  "corpus_pin": "6148bb167ebe641901fc468157b640a03ee4e388",
+  "candidate_url": "https://github.com/mrcbax/ActiveAntiPhish",
+  "smith_decision": "go",
+  "supersedes": "triage-trial (#341)",
+  "reason": "GRADUATED from triage-trial: 207/207 = 1.0000 encodable (complete_run, parse-error=0, budget clean) - PERFECT. Single phishkit.yar (anti-phishing family, novel vs admitted packs). Security tool - SECURITY_TOOL_CORPORA private_first. GO admit confirmed.",
+  "regex_sites": 207,
+  "sites_by_bucket": {
+    "yara (1 file, 207 sites measured; 207 encodable 1.0000)": 207
+  },
+  "additional_surface_outside_probe_scope": {}
+}

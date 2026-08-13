@@ -1,0 +1,14 @@
+{
+  "schema_version": "1",
+  "corpus": "rkcheck",
+  "corpus_pin": "ca4b30b254861b5f76d6cad68c9cc5c9e49a58ac",
+  "candidate_url": "https://github.com/dmknght/rkcheck",
+  "smith_decision": "go",
+  "supersedes": "triage-trial (#324)",
+  "reason": "GRADUATED from triage-trial: 186/207 = 0.8986 encodable (complete_run, parse-error=0, budget clean). Malware scanner yara pack (8 files: botnet/coin_miner/ransomware families). Security tool - SECURITY_TOOL_CORPORA private_first. GO admit confirmed.",
+  "regex_sites": 207,
+  "sites_by_bucket": {
+    "yara (8 files, 207 sites measured; 186 encodable)": 207
+  },
+  "additional_surface_outside_probe_scope": {}
+}

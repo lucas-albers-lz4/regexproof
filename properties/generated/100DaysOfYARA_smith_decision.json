@@ -1,0 +1,14 @@
+{
+  "schema_version": "1",
+  "corpus": "100DaysOfYARA",
+  "corpus_pin": "50c8516ecb73db2a7b44e0bf42a99b0eaf94155d",
+  "candidate_url": "https://github.com/3vangel1st/100DaysOfYARA",
+  "smith_decision": "go",
+  "supersedes": "triage-trial (#342)",
+  "reason": "GRADUATED from triage-trial: 98/100 = 0.9800 encodable (complete_run, parse-error=0, budget clean). Yara learning pack (19 files). Educational rules are a distinct corpus value (structured teaching patterns). Security-adjacent - SECURITY_TOOL_CORPORA private_first. GO admit confirmed.",
+  "regex_sites": 100,
+  "sites_by_bucket": {
+    "yara (19 files, 100 sites measured; 98 encodable)": 100
+  },
+  "additional_surface_outside_probe_scope": {}
+}

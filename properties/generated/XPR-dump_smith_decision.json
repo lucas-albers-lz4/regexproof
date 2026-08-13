@@ -1,0 +1,14 @@
+{
+  "schema_version": "1",
+  "corpus": "XPR-dump",
+  "corpus_pin": "510bf67808d018cbbaa51b7e66282da965917c95",
+  "candidate_url": "https://github.com/ald3ns/XPR-dump",
+  "smith_decision": "go",
+  "supersedes": "triage-trial (#339)",
+  "reason": "GRADUATED from triage-trial: 394/402 = 0.9801 encodable (complete_run, parse-error=0, budget clean). Apple XProtect yara extraction tool (16 files - WaterNet/ToyDrop/SnowDrift families). XProtect-derived rules are a novel family vs the 10+ admitted yara packs. Security tool - SECURITY_TOOL_CORPORA private_first. GO admit confirmed.",
+  "regex_sites": 402,
+  "sites_by_bucket": {
+    "yara (16 files, 402 sites measured; 394 encodable)": 402
+  },
+  "additional_surface_outside_probe_scope": {}
+}

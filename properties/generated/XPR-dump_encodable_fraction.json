@@ -1,0 +1,39 @@
+{
+  "budget": {
+    "max_disk_mb": 500,
+    "max_mem_mb": 2048,
+    "max_patterns": 5000,
+    "max_wall_s": 600,
+    "redos_wall_s": 120
+  },
+  "budget_breaches": null,
+  "commit": "510bf67808d018cbbaa51b7e66282da965917c95",
+  "compiler_fingerprint": "71d2ce23b4cd",
+  "complete_run": true,
+  "corpus_pin": "510bf67808d018cbbaa51b7e66282da965917c95",
+  "decision": "go",
+  "decision_rule": "go iff encodable/sample_size >= 0.3",
+  "dialect": "yara",
+  "encodable": 394,
+  "engine_versions": {
+    "python": "3.13.5",
+    "z3": "5.0.0"
+  },
+  "extractor_schema_version": "2",
+  "fraction": 0.9801,
+  "go_no_go_threshold": 0.3,
+  "id_formula": "v2-domain-optional-ascii-default",
+  "inventory_path": "properties/generated/XPR-dump-inventory.ndjson",
+  "path": "batch/corpora/XPR-dump/rules",
+  "pilot": "XPR-dump",
+  "reasons": {
+    "fullword-boundary": 2,
+    "ok": 394,
+    "wide-non-literal": 6
+  },
+  "sample_size": 402,
+  "schema_version": "1",
+  "scope": "full_corpus",
+  "unclassified_parse_errors": 0,
+  "wall_s": 1.783
+}

@@ -43,6 +43,12 @@ SECURITY_TOOL_CORPORA = frozenset(
         "patrolaroid",
         "binaryalert",
         "detekt",
+        "100DaysOfYARA",
+        "rkcheck",
+        "Astra_AV",
+        "SentryShield",
+        "ActiveAntiPhish",
+        "XPR-dump",
         "mole",
         "pm_shredder",
     }

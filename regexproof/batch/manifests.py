@@ -1253,6 +1253,132 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
             "max_disk_mb": 500,
         },
     },
+    "XPR-dump": {
+        "corpus_type": "rule_corpus",
+        # Materialize: ln -sfn /tmp/t-xpr-dump batch/corpora/XPR-dump/rules
+        # Apple XProtect yara extraction (16 files) - triage-trial (#339).
+        "path": ROOT / "batch" / "corpora" / "XPR-dump" / "rules",
+        "glob": "**/*.yar,**/*.yara",
+        "dialect": "yara",
+        "extractor": "yara",
+        "repo": "ald3ns/XPR-dump",
+        "security_tool": True,
+        "lift_inline": False,
+        "corpus_pin": "510bf67808d018cbbaa51b7e66282da965917c95",
+        "commit": "510bf67808d018cbbaa51b7e66282da965917c95",
+        "budget": {
+            "max_patterns": 5000,
+            "max_wall_s": 600,
+            "redos_wall_s": 120,
+            "max_mem_mb": 2048,
+            "max_disk_mb": 500,
+        },
+    },
+    "ActiveAntiPhish": {
+        "corpus_type": "rule_corpus",
+        # Materialize: ln -sfn /tmp/t-activeantiphish batch/corpora/ActiveAntiPhish/rules
+        # anti-phishing yara (phishkit, 1 file) - triage-trial (#341).
+        "path": ROOT / "batch" / "corpora" / "ActiveAntiPhish" / "rules",
+        "glob": "**/*.yar,**/*.yara",
+        "dialect": "yara",
+        "extractor": "yara",
+        "repo": "mrcbax/ActiveAntiPhish",
+        "security_tool": True,
+        "lift_inline": False,
+        "corpus_pin": "6148bb167ebe641901fc468157b640a03ee4e388",
+        "commit": "6148bb167ebe641901fc468157b640a03ee4e388",
+        "budget": {
+            "max_patterns": 5000,
+            "max_wall_s": 600,
+            "redos_wall_s": 120,
+            "max_mem_mb": 2048,
+            "max_disk_mb": 500,
+        },
+    },
+    "SentryShield": {
+        "corpus_type": "rule_corpus",
+        # Materialize: ln -sfn /tmp/t-sentryshield batch/corpora/SentryShield/rules
+        # malware yara (1 file) - triage-trial (#325).
+        "path": ROOT / "batch" / "corpora" / "SentryShield" / "rules",
+        "glob": "**/*.yar,**/*.yara",
+        "dialect": "yara",
+        "extractor": "yara",
+        "repo": "Rizzy1857/SentryShield",
+        "security_tool": True,
+        "lift_inline": False,
+        "corpus_pin": "4f43015c80fde0cb1bd3f001a7551c40eed2682c",
+        "commit": "4f43015c80fde0cb1bd3f001a7551c40eed2682c",
+        "budget": {
+            "max_patterns": 5000,
+            "max_wall_s": 600,
+            "redos_wall_s": 120,
+            "max_mem_mb": 2048,
+            "max_disk_mb": 500,
+        },
+    },
+    "Astra_AV": {
+        "corpus_type": "rule_corpus",
+        # Materialize: ln -sfn /tmp/t-astra_av batch/corpora/Astra_AV/rules
+        # AV yara (emotet/wannacry, 3 files) - triage-trial (#326).
+        "path": ROOT / "batch" / "corpora" / "Astra_AV" / "rules",
+        "glob": "**/*.yar,**/*.yara",
+        "dialect": "yara",
+        "extractor": "yara",
+        "repo": "Ph4wkm00n/Astra_AV",
+        "security_tool": True,
+        "lift_inline": False,
+        "corpus_pin": "87fe9529fdf9c64126bd81fc45658bb86bd64755",
+        "commit": "87fe9529fdf9c64126bd81fc45658bb86bd64755",
+        "budget": {
+            "max_patterns": 5000,
+            "max_wall_s": 600,
+            "redos_wall_s": 120,
+            "max_mem_mb": 2048,
+            "max_disk_mb": 500,
+        },
+    },
+    "rkcheck": {
+        "corpus_type": "rule_corpus",
+        # Materialize: ln -sfn /tmp/t-rkcheck batch/corpora/rkcheck/rules
+        # malware scanner yara (8 files) - triage-trial (#324).
+        "path": ROOT / "batch" / "corpora" / "rkcheck" / "rules",
+        "glob": "**/*.yar,**/*.yara",
+        "dialect": "yara",
+        "extractor": "yara",
+        "repo": "dmknght/rkcheck",
+        "security_tool": True,
+        "lift_inline": False,
+        "corpus_pin": "ca4b30b254861b5f76d6cad68c9cc5c9e49a58ac",
+        "commit": "ca4b30b254861b5f76d6cad68c9cc5c9e49a58ac",
+        "budget": {
+            "max_patterns": 5000,
+            "max_wall_s": 600,
+            "redos_wall_s": 120,
+            "max_mem_mb": 2048,
+            "max_disk_mb": 500,
+        },
+    },
+    "100DaysOfYARA": {
+        "corpus_type": "rule_corpus",
+        # Materialize: ln -sfn /tmp/t-100dy batch/corpora/100DaysOfYARA/rules
+        # yara learning pack (19 files) - triage-trial (#342).
+        "path": ROOT / "batch" / "corpora" / "100DaysOfYARA" / "rules",
+        "glob": "**/*.yar,**/*.yara",
+        "dialect": "yara",
+        "extractor": "yara",
+        "repo": "3vangel1st/100DaysOfYARA",
+        "security_tool": True,
+        "lift_inline": False,
+        "corpus_pin": "50c8516ecb73db2a7b44e0bf42a99b0eaf94155d",
+        "commit": "50c8516ecb73db2a7b44e0bf42a99b0eaf94155d",
+        "budget": {
+            "max_patterns": 5000,
+            "max_wall_s": 600,
+            "redos_wall_s": 120,
+            "max_mem_mb": 2048,
+            "max_disk_mb": 500,
+        },
+    },
     "bike4mind": {
         "corpus_type": "rule_corpus",
         # Materialize: ln -sfn /tmp/b4m-check batch/corpora/bike4mind/rules

@@ -116,37 +116,37 @@
     "wall_s": 21.527
   },
   "corpora": {
-    "detekt": {
+    "100DaysOfYARA": {
       "address_space_cap": true,
       "complete_run": true,
-      "corpus": "detekt",
+      "corpus": "100DaysOfYARA",
       "corpus_type": "rule_corpus",
-      "encodable": 165,
+      "encodable": 98,
       "engine": {
         "python": "3.13.5"
       },
-      "extracted": 245,
-      "findings": 10,
+      "extracted": 100,
+      "findings": 5,
       "inventory_questions": 4,
-      "join_regex_ids": 10,
+      "join_regex_ids": 5,
       "redos_findings": 0,
       "redos_incomplete": false,
       "schema_version": "1",
-      "triage": 80
+      "triage": 2
     }
   },
   "pair_counts": {
+    "100DaysOfYARA": {
+      "admitted": 0,
+      "dropped": 0,
+      "note": "no independent-spec catalog"
+    },
     "coreruleset": {
       "admitted": 0,
       "dropped": 0,
       "fraction": 0.6908,
       "note": "fraction gate go; CRS rule-derived adapter is Phase-2 rule_diff",
       "scope": "full_corpus"
-    },
-    "detekt": {
-      "admitted": 0,
-      "dropped": 0,
-      "note": "no independent-spec catalog"
     }
   },
   "schema_version": "1"

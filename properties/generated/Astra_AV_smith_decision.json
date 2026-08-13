@@ -1,0 +1,14 @@
+{
+  "schema_version": "1",
+  "corpus": "Astra_AV",
+  "corpus_pin": "87fe9529fdf9c64126bd81fc45658bb86bd64755",
+  "candidate_url": "https://github.com/Ph4wkm00n/Astra_AV",
+  "smith_decision": "go",
+  "supersedes": "triage-trial (#326)",
+  "reason": "GRADUATED from triage-trial: 97/97 = 1.0000 encodable (complete_run, parse-error=0, budget clean) - PERFECT despite tiny size (3 files: emotet/ransomware_generic/wannacry). Security tool - SECURITY_TOOL_CORPORA private_first. GO admit confirmed. (Reverses the tiny-size no-go assumption: hand-curated packs are fully encodable.)",
+  "regex_sites": 97,
+  "sites_by_bucket": {
+    "yara (3 files, 97 sites measured; 97 encodable 1.0000)": 97
+  },
+  "additional_surface_outside_probe_scope": {}
+}
