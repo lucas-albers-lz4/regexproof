@@ -1,0 +1,96 @@
+{
+  "candidate_url": "https://github.com/mongodb/mongo-tools",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 94 sites < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "mongo-tools",
+  "corpus_pin": "8895040ec9e3be695e5c5ab3eecf5563c4451016",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "(?i)": 3,
+      "(?m)": 3,
+      "(?s)": 3
+    },
+    "dialect": {
+      "ecma": 42,
+      "posix-shell": 11,
+      "py_re": 21,
+      "re2": 20
+    },
+    "flags": {
+      "g": 14,
+      "i": 2,
+      "m": 2,
+      "s": 1
+    },
+    "pin": "8895040ec9e3be695e5c5ab3eecf5563c4451016",
+    "predicted_buckets": {
+      "inline-flag": 9,
+      "m-flag": 5,
+      "stateful": 14
+    },
+    "regex_sites": 94,
+    "regex_sites_per_file": {
+      "buildscript/deps.go": 4,
+      "buildscript/sa.go": 1,
+      "common/options/options_test.go": 1,
+      "common/util/strings.go": 1,
+      "etc/mise.run.sh": 6,
+      "evergreen/evergreen.go": 2,
+      "mongodump/mongodump_test.go": 1,
+      "mongoimport/typed_fields.go": 1,
+      "mongorestore/ns/ns.go": 2,
+      "mongostat/status/readers.go": 2,
+      "mongotop/smoke.sh": 1,
+      "release/download/download.go": 1,
+      "release/platform/platform.go": 1,
+      "release/release.go": 2,
+      "release/version/version.go": 1,
+      "scripts/install-go-without-mise.sh": 2,
+      "scripts/regenerate-sbom-lite.sh": 1,
+      "scripts/set-expansions-for-papertrail.sh": 1,
+      "test/legacy42/jstests/tool/csvexport1.js": 1,
+      "test/legacy42/jstests/tool/exportimport4.js": 2,
+      "test/legacy42/jstests/tool/exportimport5.js": 4,
+      "test/qa-tests/buildscripts/buildlogger.py": 1,
+      "test/qa-tests/buildscripts/cleanbb.py": 1,
+      "test/qa-tests/buildscripts/resmokelib/core/programs.py": 1,
+      "test/qa-tests/buildscripts/resmokelib/utils/globstar.py": 1,
+      "test/qa-tests/buildscripts/resmokelib/utils/jscomment.py": 1,
+      "test/qa-tests/buildscripts/setup_multiversion_mongodb.py": 5,
+      "test/qa-tests/buildscripts/smoke.py": 6,
+      "test/qa-tests/buildscripts/utils.py": 5,
+      "test/qa-tests/jstests/dump/query_extended_json.js": 2,
+      "test/qa-tests/jstests/dump/version_test.js": 4,
+      "test/qa-tests/jstests/files/mongofiles_get.js": 1,
+      "test/qa-tests/jstests/files/mongofiles_search.js": 1,
+      "test/qa-tests/jstests/libs/check_log.js": 1,
+      "test/qa-tests/jstests/libs/host_ipaddr.js": 3,
+      "test/qa-tests/jstests/libs/output.js": 5,
+      "test/qa-tests/jstests/libs/servers.js": 16,
+      "test/qa-tests/jstests/libs/wc_framework.js": 1,
+      "test/qa-tests/jstests/stat/stat_header.js": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 94 regex sites (auto-NO-GO bar 200); dialects [ecma:42, posix-shell:11, py_re:21, re2:20]; boundary=unknown.",
+  "schema_version": "1"
+}

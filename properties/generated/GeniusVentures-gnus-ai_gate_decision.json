@@ -1,0 +1,101 @@
+{
+  "candidate_url": "https://github.com/GeniusVentures/gnus-ai",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 327 sites < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "gnus-ai",
+  "corpus_pin": "0b7f92eb2a30c5d69e5d1fc0d914f329574e1b53",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "lookaround": 14
+    },
+    "dialect": {
+      "ecma": 285,
+      "posix-shell": 42
+    },
+    "flags": {
+      "g": 30,
+      "i": 75,
+      "m": 3
+    },
+    "pin": "0b7f92eb2a30c5d69e5d1fc0d914f329574e1b53",
+    "predicted_buckets": {
+      "inline-flag": 75,
+      "lookaround": 14,
+      "m-flag": 3,
+      "stateful": 30
+    },
+    "regex_sites": 327,
+    "regex_sites_per_file": {
+      "coverage/lcov-report/prettify.js": 93,
+      "coverage/lcov-report/sorter.js": 2,
+      "coverage/prettify.js": 93,
+      "coverage/sorter.js": 2,
+      "scripts/deploy/rpc/deploy-rpc-manual.ts": 1,
+      "scripts/deploy/rpc/deploy-rpc.ts": 1,
+      "scripts/deploy/rpc/status-rpc.ts": 1,
+      "scripts/deploy/rpc/upgrade-rpc.ts": 1,
+      "scripts/deploy/rpc/verify-rpc.ts": 1,
+      "scripts/devops/check-package-age.mjs": 3,
+      "scripts/devops/ci-perf-monitor.js": 1,
+      "scripts/devops/ci-performance-dashboard.js": 1,
+      "scripts/devops/container-registry-manager.sh": 2,
+      "scripts/devops/cost-analyzer.ts": 1,
+      "scripts/devops/devcontainer-performance-benchmark.sh": 14,
+      "scripts/devops/devcontainer-setup-validation.sh": 2,
+      "scripts/devops/emergency-bypass.ts": 1,
+      "scripts/devops/health-check.ts": 1,
+      "scripts/devops/incident-response.ts": 4,
+      "scripts/devops/maintenance-automation.ts": 1,
+      "scripts/devops/perf-monitor.ts": 1,
+      "scripts/devops/provenance-validator.ts": 5,
+      "scripts/devops/security-alerting.ts": 1,
+      "scripts/devops/security-commit-check.ts": 9,
+      "scripts/devops/security-health-checks.ts": 5,
+      "scripts/devops/security-metrics-dashboard.ts": 3,
+      "scripts/devops/security-monitoring-webhook.ts": 12,
+      "scripts/devops/security-tool-updater.ts": 5,
+      "scripts/devops/sign-artifacts.ts": 1,
+      "scripts/devops/signed-artifacts/verify.ts": 1,
+      "scripts/devops/sigstore-integration.ts": 1,
+      "scripts/devops/slsa-attestation.ts": 1,
+      "scripts/devops/smart-trigger.ts": 7,
+      "scripts/devops/supply-chain-risk-assessment.ts": 1,
+      "scripts/devops/test-sharding.ts": 2,
+      "scripts/safe/proposeSafeTransaction.ts": 1,
+      "scripts/safe/safeUpgrade.ts": 4,
+      "scripts/safe/writeSafeProposalArtifact.ts": 1,
+      "scripts/setup/RPCDiamondDeployer.ts": 1,
+      "scripts/utils/iObjToString.ts": 1,
+      "test/integration/rpc/rpc-deployment.test.ts": 2,
+      "test/unit/GNUSERC20.test.ts": 3,
+      "test/unit/NFTFactory.test.ts": 6,
+      "test/unit/cleanup-01-01.test.sh": 13,
+      "test/unit/cleanup-02-01.test.sh": 7,
+      "test/unit/cleanup-02-02.test.sh": 4,
+      "test/unit/rpc/RPCDiamondDeployer.hardhat.test.ts": 2,
+      "test/unit/safe/proposeSafeTransaction.test.ts": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 327 regex sites (auto-NO-GO bar 200); dialects [ecma:285, posix-shell:42]; boundary=unknown.",
+  "schema_version": "1"
+}

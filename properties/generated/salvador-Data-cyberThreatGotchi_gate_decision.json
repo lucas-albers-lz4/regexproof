@@ -1,0 +1,123 @@
+{
+  "candidate_url": "https://github.com/salvador-Data/cyberThreatGotchi",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 301 sites (cyber-Threat-Gotchi) < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "cyberThreatGotchi",
+  "corpus_pin": "76b5f2c76ae05415e6611bca84807764b2ddc7df",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "(?i)": 4,
+      "posix-class": 22
+    },
+    "dialect": {
+      "ecma": 36,
+      "posix-shell": 152,
+      "py_re": 97,
+      "yara": 16
+    },
+    "flags": {
+      "g": 26,
+      "i": 51,
+      "m": 2,
+      "s": 18
+    },
+    "pin": "76b5f2c76ae05415e6611bca84807764b2ddc7df",
+    "predicted_buckets": {
+      "inline-flag": 73,
+      "m-flag": 2,
+      "posix-class": 22,
+      "stateful": 26
+    },
+    "regex_sites": 301,
+    "regex_sites_per_file": {
+      "core/ctg_email_notify.py": 2,
+      "core/fulfillment_queue.py": 1,
+      "core/security.py": 1,
+      "docs/web/js/cart.js": 4,
+      "docs/web/js/fulfillment-dashboard.js": 7,
+      "docs/web/js/payments.js": 6,
+      "docs/web/js/shipping-tracker.js": 1,
+      "rules/custom_rules.yar": 10,
+      "rules/pro/pro_rules.yar": 6,
+      "rules/signatures.py": 5,
+      "scripts/audit_dropship.py": 4,
+      "scripts/check_payments.py": 6,
+      "scripts/check_shop.py": 1,
+      "scripts/dropship_order_export.py": 4,
+      "scripts/kali/ctg-display-scale.sh": 21,
+      "scripts/kali/ctg-event-notify.sh": 1,
+      "scripts/kali/ctg-exploit-mitigations-check.sh": 2,
+      "scripts/kali/ctg-fail2ban-ssh-stub.sh": 1,
+      "scripts/kali/ctg-ids-ips-autorun.sh": 15,
+      "scripts/kali/ctg-lab-playground.sh": 5,
+      "scripts/kali/ctg-mount-share.sh": 2,
+      "scripts/kali/ctg-nmap-ask.sh": 4,
+      "scripts/kali/ctg-ram-mitigation-enforcer.sh": 14,
+      "scripts/kali/ctg-reboot-if-needed.sh": 1,
+      "scripts/kali/ctg-retbleed-check.sh": 1,
+      "scripts/kali/ctg-seamless-guest.sh": 10,
+      "scripts/kali/ctg-siem-autorun.sh": 1,
+      "scripts/kali/ctg-wifi-lab-autorun.sh": 18,
+      "scripts/kali/fix-kali-blank-screen.sh": 4,
+      "scripts/kali/fix-retbleed-mitigation.sh": 14,
+      "scripts/kali/harden-password-policy.sh": 6,
+      "scripts/kali/kali-boot-autopatch.sh": 11,
+      "scripts/kali/kali-lab-bootstrap.sh": 8,
+      "scripts/kali/rogue-ap-guard.sh": 3,
+      "scripts/kali/tor-http-scrambler/ctg-shield-rotate.sh": 5,
+      "scripts/kali/tor-http-scrambler/scrambler-daemon.sh": 1,
+      "scripts/kali/tor-http-scrambler/siem-hook.sh": 4,
+      "scripts/mr_crackbot/password_generator.py": 1,
+      "scripts/normalize_website_ascii.py": 10,
+      "scripts/partner_fulfillment_export.py": 3,
+      "scripts/patch_website_branding.py": 5,
+      "scripts/patch_website_nav_logo.py": 1,
+      "scripts/stripe_bootstrap_payment_links.py": 4,
+      "scripts/stripe_link_checklist.py": 5,
+      "scripts/sync_seo.py": 11,
+      "scripts/sync_website_to_docs.py": 1,
+      "scripts/wireshark_ids/analyze_traffic.py": 2,
+      "tests/test_cpu_performance.py": 1,
+      "tests/test_ctg_display_scale.py": 5,
+      "tests/test_ctg_secret_vault.py": 5,
+      "tests/test_ctg_vault.py": 1,
+      "tests/test_ctg_wifi_lab_autorun.py": 1,
+      "tests/test_daily_utms_alert.py": 2,
+      "tests/test_device_encryption.py": 5,
+      "tests/test_device_hardening.py": 2,
+      "tests/test_firewall_baseline.py": 1,
+      "tests/test_gpu_performance.py": 1,
+      "tests/test_nmap_ask.py": 2,
+      "tests/test_seo.py": 1,
+      "tests/test_signal_alerts.py": 1,
+      "tests/test_windows_snort_ids.py": 1,
+      "tests/test_windows_suricata_ids.py": 1,
+      "website/js/cart.js": 4,
+      "website/js/fulfillment-dashboard.js": 7,
+      "website/js/payments.js": 6,
+      "website/js/shipping-tracker.js": 1
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 301 regex sites (auto-NO-GO bar 200); dialects [ecma:36, posix-shell:152, py_re:97, yara:16]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

@@ -1,0 +1,49 @@
+{
+  "candidate_url": "https://github.com/podemos-info/participa",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 2 sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "participa",
+  "corpus_pin": "ba54d4ceecf865892dcf5cf6ce45303eac9507d7",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 2
+    },
+    "flags": {
+      "g": 1,
+      "i": 1
+    },
+    "pin": "ba54d4ceecf865892dcf5cf6ce45303eac9507d7",
+    "predicted_buckets": {
+      "inline-flag": 1,
+      "stateful": 1
+    },
+    "regex_sites": 2,
+    "regex_sites_per_file": {
+      "app/assets/javascripts/ccc.js": 1,
+      "app/assets/javascripts/misc.js": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 2 regex sites (auto-NO-GO bar 200); dialects [ecma:2]; boundary=unknown.",
+  "schema_version": "1"
+}

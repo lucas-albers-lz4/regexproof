@@ -1,0 +1,51 @@
+{
+  "candidate_url": "https://github.com/AIScientists-Dev/AI-Powered-PDF-Accessibility",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 31 sites, deterministic-false.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "AI-Powered-PDF-Accessibility",
+  "corpus_pin": "5b10cfa1eb12df8cf5b2c7cf3e7366116ae7daf3",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "posix-shell": 2,
+      "py_re": 29
+    },
+    "flags": {
+      "i": 2,
+      "s": 1
+    },
+    "pin": "5b10cfa1eb12df8cf5b2c7cf3e7366116ae7daf3",
+    "predicted_buckets": {
+      "inline-flag": 3
+    },
+    "regex_sites": 31,
+    "regex_sites_per_file": {
+      "deploy/deploy.sh": 2,
+      "src/latex_processor.py": 19,
+      "src/pdf_tagger.py": 2,
+      "src/validator.py": 8
+    },
+    "security_boundary": "deterministic-false"
+  },
+  "rationale": "Below admission scale: 31 regex sites (auto-NO-GO bar 200); dialects [posix-shell:2, py_re:29]; boundary=deterministic-false.",
+  "schema_version": "1"
+}

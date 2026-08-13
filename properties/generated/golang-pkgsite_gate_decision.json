@@ -1,0 +1,81 @@
+{
+  "candidate_url": "https://github.com/golang/pkgsite",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 46 sites < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "pkgsite",
+  "corpus_pin": "87ad201175e81c89d34ae301a43baa4f2768b732",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "(?i)": 3,
+      "(?m)": 2,
+      "(?s)": 1,
+      "posix-class": 2
+    },
+    "dialect": {
+      "ecma": 16,
+      "posix-shell": 4,
+      "re2": 26
+    },
+    "flags": {
+      "g": 10
+    },
+    "pin": "87ad201175e81c89d34ae301a43baa4f2768b732",
+    "predicted_buckets": {
+      "inline-flag": 4,
+      "m-flag": 2,
+      "posix-class": 2,
+      "stateful": 10
+    },
+    "regex_sites": 46,
+    "regex_sites_per_file": {
+      "all.bash": 3,
+      "devtools/cmd/csphash/main.go": 3,
+      "devtools/cmd/css/main.go": 1,
+      "devtools/cmd/seeddb/main.go": 1,
+      "devtools/lib.sh": 1,
+      "internal/api/docpage.go": 2,
+      "internal/api/openapi_test.go": 2,
+      "internal/database/database.go": 1,
+      "internal/frontend/fetchserver/404.go": 1,
+      "internal/godoc/dochtml/deprecated.go": 1,
+      "internal/godoc/dochtml/internal/render/linkify.go": 2,
+      "internal/godoc/dochtml/internal/render/render.go": 1,
+      "internal/postgres/search/symbolsearch.go": 1,
+      "internal/source/source.go": 4,
+      "internal/static/static.go": 1,
+      "internal/stdlib/stdlib.go": 1,
+      "internal/stdlib/testdata/v1.12.5/src/encoding/json/number_test.go": 2,
+      "internal/symbol/goapi.go": 1,
+      "internal/version/version.go": 1,
+      "static/frontend/frontend.js": 1,
+      "static/frontend/frontend.ts": 1,
+      "static/frontend/unit/main/main.js": 4,
+      "static/markdown.ts": 1,
+      "static/shared/outline/tree.ts": 2,
+      "static/shared/playground/playground.test.ts": 5,
+      "static/shared/playground/playground.ts": 2
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 46 regex sites (auto-NO-GO bar 200); dialects [ecma:16, posix-shell:4, re2:26]; boundary=unknown.",
+  "schema_version": "1"
+}

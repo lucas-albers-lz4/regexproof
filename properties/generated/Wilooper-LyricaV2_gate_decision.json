@@ -1,0 +1,50 @@
+{
+  "candidate_url": "https://github.com/Wilooper/LyricaV2",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 8 py_re < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "LyricaV2",
+  "corpus_pin": "7bb20962548c4a029670192d4abdbdb9568f584b",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "py_re": 8
+    },
+    "flags": {
+      "i": 2,
+      "s": 1
+    },
+    "pin": "7bb20962548c4a029670192d4abdbdb9568f584b",
+    "predicted_buckets": {
+      "inline-flag": 3
+    },
+    "regex_sites": 8,
+    "regex_sites_per_file": {
+      "src/sources/lrclib_fetcher.py": 2,
+      "src/sources/lyricsfreek_fetcher.py": 1,
+      "src/sources/simp_music_fetcher.py": 1,
+      "src/validator.py": 4
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 8 regex sites (auto-NO-GO bar 200); dialects [py_re:8]; boundary=unknown.",
+  "schema_version": "1"
+}

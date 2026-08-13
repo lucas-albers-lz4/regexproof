@@ -1,0 +1,77 @@
+{
+  "candidate_url": "https://github.com/prompt-chainmail/prompt-chainmail-ts",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 237 ecma < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "prompt-chainmail-ts",
+  "corpus_pin": "bd427ddcb4ea208c0d9ebc4291616b680e267d76",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 237
+    },
+    "flags": {
+      "g": 24,
+      "i": 124,
+      "m": 7,
+      "u": 2
+    },
+    "pin": "bd427ddcb4ea208c0d9ebc4291616b680e267d76",
+    "predicted_buckets": {
+      "inline-flag": 124,
+      "m-flag": 7,
+      "stateful": 24,
+      "u-flag": 2
+    },
+    "regex_sites": 237,
+    "regex_sites_per_file": {
+      "examples.ts": 13,
+      "examples/_lib.mjs": 4,
+      "examples/example_2.js": 1,
+      "examples/example_5.js": 1,
+      "examples/example_6.js": 1,
+      "scripts/compare-benchmarks.mjs": 1,
+      "scripts/fetch-classifier-model.mjs": 2,
+      "scripts/stamp-benchmark-baseline.mjs": 1,
+      "src/@shared/classifier/classifier-manifest.test.ts": 9,
+      "src/@shared/classifier/classifier-manifest.ts": 1,
+      "src/@shared/classifier/classifier-normalize.test.ts": 1,
+      "src/@shared/classifier/classifier-normalize.ts": 2,
+      "src/@shared/classifier/classifier-session.test.ts": 1,
+      "src/@shared/language-detection/language-detection.const.ts": 5,
+      "src/@shared/language-detection/language-detection.test.ts": 3,
+      "src/@shared/language-detection/language-detection.ts": 3,
+      "src/@shared/regex-patterns/common.const.ts": 33,
+      "src/rivets/code-injection/code-injection.const.ts": 30,
+      "src/rivets/delimiter-confusion/delimiter-confusion.const.ts": 29,
+      "src/rivets/encoding-detection/encoding-detection.ts": 5,
+      "src/rivets/pattern-detection/pattern-detection.test.ts": 1,
+      "src/rivets/pattern-detection/pattern-detection.utils.ts": 8,
+      "src/rivets/sanitize/sanitize.const.ts": 7,
+      "src/rivets/sql-injection/slq-injection.const.ts": 65,
+      "src/rivets/structure-analysis/structure-analysis.ts": 1,
+      "src/rivets/template-injection/template-injection.const.ts": 9
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 237 regex sites (auto-NO-GO bar 200); dialects [ecma:237]; boundary=unknown.",
+  "schema_version": "1"
+}

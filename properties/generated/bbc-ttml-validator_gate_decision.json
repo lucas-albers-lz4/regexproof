@@ -1,0 +1,50 @@
+{
+  "candidate_url": "https://github.com/bbc/ttml-validator",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 31 py_re < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "ttml-validator",
+  "corpus_pin": "03b591f7392df1c41fffea107db4e07027d1e2b3",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "backref": 8
+    },
+    "dialect": {
+      "py_re": 31
+    },
+    "flags": {},
+    "pin": "03b591f7392df1c41fffea107db4e07027d1e2b3",
+    "predicted_buckets": {
+      "backref": 8
+    },
+    "regex_sites": 31,
+    "regex_sites_per_file": {
+      "src/styleAttribs.py": 23,
+      "src/timeExpression.py": 4,
+      "src/ttmlValidator.py": 1,
+      "src/xmlChecks/ttXmlCheck.py": 2,
+      "test/test_styleAttribs.py": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 31 regex sites (auto-NO-GO bar 200); dialects [py_re:31]; boundary=unknown.",
+  "schema_version": "1"
+}

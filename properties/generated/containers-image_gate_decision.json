@@ -1,0 +1,54 @@
+{
+  "candidate_url": "https://github.com/containers/image",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 7 sites < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "image",
+  "corpus_pin": "df7e80d2d19872b61f352a8a182ec934dc0c2346",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "(?m)": 1,
+      "posix-class": 1
+    },
+    "dialect": {
+      "posix-shell": 4,
+      "re2": 3
+    },
+    "flags": {},
+    "pin": "df7e80d2d19872b61f352a8a182ec934dc0c2346",
+    "predicted_buckets": {
+      "m-flag": 1,
+      "posix-class": 1
+    },
+    "regex_sites": 7,
+    "regex_sites_per_file": {
+      "contrib/cirrus/runner.sh": 1,
+      "docker/docker_image_src_test.go": 1,
+      "hack/validate.sh": 1,
+      "oci/internal/oci_util.go": 1,
+      "signature/fixtures/regenerate-keys.sh": 2,
+      "signature/internal/sequoia/sequoia_test.go": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 7 regex sites (auto-NO-GO bar 200); dialects [posix-shell:4, re2:3]; boundary=unknown.",
+  "schema_version": "1"
+}

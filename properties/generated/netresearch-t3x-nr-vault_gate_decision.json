@@ -1,0 +1,64 @@
+{
+  "candidate_url": "https://github.com/netresearch/t3x-nr-vault",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 46 sites < 1000 (TYPO3 vault).",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "t3x-nr-vault",
+  "corpus_pin": "00df80c99b73683494c9b2d763296ff607f147bc",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 39,
+      "posix-shell": 7
+    },
+    "flags": {
+      "g": 2,
+      "i": 17
+    },
+    "pin": "00df80c99b73683494c9b2d763296ff607f147bc",
+    "predicted_buckets": {
+      "inline-flag": 17,
+      "stateful": 2
+    },
+    "regex_sites": 46,
+    "regex_sites_per_file": {
+      "Build/Scripts/runTests.sh": 7,
+      "Resources/Public/JavaScript/SecretForm.js": 1,
+      "Resources/Public/JavaScript/SecretsList.js": 1,
+      "Tests/E2E/fixtures/auth.ts": 1,
+      "Tests/E2E/security/audit-extended.spec.ts": 5,
+      "Tests/E2E/security/audit-tamper.spec.ts": 1,
+      "Tests/E2E/security/csrf-cookies.spec.ts": 1,
+      "Tests/E2E/security/lifecycle-extended.spec.ts": 10,
+      "Tests/E2E/security/migration-extended.spec.ts": 5,
+      "Tests/E2E/security/security.spec.ts": 2,
+      "Tests/E2E/user-pathways/cross-module.spec.ts": 2,
+      "Tests/E2E/user-pathways/migration.spec.ts": 2,
+      "Tests/E2E/user-pathways/overview.spec.ts": 3,
+      "Tests/E2E/user-pathways/secrets.spec.ts": 3,
+      "Tests/E2E/vault-module.spec.ts": 1,
+      "playwright.config.ts": 1
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 46 regex sites (auto-NO-GO bar 200); dialects [ecma:39, posix-shell:7]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

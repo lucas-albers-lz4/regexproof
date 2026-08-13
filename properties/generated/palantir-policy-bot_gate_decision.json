@@ -1,0 +1,64 @@
+{
+  "candidate_url": "https://github.com/palantir/policy-bot",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 61 sites < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "policy-bot",
+  "corpus_pin": "b8eee7d64f185f50267aeffb0048a167bf1ba414",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "(?i)": 6,
+      "(?m)": 2,
+      "posix-class": 2
+    },
+    "dialect": {
+      "ecma": 2,
+      "posix-shell": 6,
+      "re2": 53
+    },
+    "flags": {
+      "i": 2
+    },
+    "pin": "b8eee7d64f185f50267aeffb0048a167bf1ba414",
+    "predicted_buckets": {
+      "inline-flag": 8,
+      "m-flag": 2,
+      "posix-class": 2
+    },
+    "regex_sites": 61,
+    "regex_sites_per_file": {
+      "godelw": 6,
+      "policy/approval/approve_test.go": 4,
+      "policy/approval/evaluate_test.go": 3,
+      "policy/common/methods_test.go": 3,
+      "policy/disapproval/disapprove_test.go": 2,
+      "policy/policy_test.go": 1,
+      "policy/predicate/file_test.go": 24,
+      "policy/predicate/repository_test.go": 5,
+      "policy/predicate/title_test.go": 5,
+      "server/handler/eval_options_test.go": 6,
+      "webpack.config.js": 2
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 61 regex sites (auto-NO-GO bar 200); dialects [ecma:2, posix-shell:6, re2:53]; boundary=unknown.",
+  "schema_version": "1"
+}

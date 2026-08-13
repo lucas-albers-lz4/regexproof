@@ -1,0 +1,68 @@
+{
+  "candidate_url": "https://github.com/TimePulse/TimePulse",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 411 ecma < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "TimePulse",
+  "corpus_pin": "f01084a2e2fb63eaf305cce312d60b6aecd76314",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "backref": 8,
+      "lookaround": 9
+    },
+    "dialect": {
+      "ecma": 411
+    },
+    "flags": {
+      "g": 106,
+      "i": 46,
+      "m": 2
+    },
+    "pin": "f01084a2e2fb63eaf305cce312d60b6aecd76314",
+    "predicted_buckets": {
+      "backref": 8,
+      "inline-flag": 46,
+      "lookaround": 9,
+      "m-flag": 2,
+      "stateful": 106
+    },
+    "regex_sites": 411,
+    "regex_sites_per_file": {
+      "app/assets/javascripts/fullcalendar.js": 31,
+      "app/assets/javascripts/jquery-1.9.1.js": 100,
+      "app/assets/javascripts/jquery-ui-1.10.2.js": 90,
+      "app/assets/javascripts/jquery.selectBoxIt.js": 9,
+      "app/assets/javascripts/jquery.timepicker.js": 21,
+      "app/assets/javascripts/jquery.tools.min.js": 3,
+      "app/assets/javascripts/jquery.ui.datetimepicker.js": 15,
+      "app/assets/javascripts/jquery.ui.datetimepicker.min.js": 15,
+      "app/assets/javascripts/logical_tabs_jquery.js": 11,
+      "app/assets/javascripts/moment.min.js": 47,
+      "app/assets/javascripts/ninjascript.js": 26,
+      "app/assets/javascripts/ns.min.js": 34,
+      "public/flot/jquery.flot.axislabels.js": 1,
+      "public/flot/jquery.flot.js": 8
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 411 regex sites (auto-NO-GO bar 200); dialects [ecma:411]; boundary=unknown.",
+  "schema_version": "1"
+}

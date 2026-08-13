@@ -1,0 +1,54 @@
+{
+  "candidate_url": "https://github.com/k8gb-io/k8gb",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 14 sites < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "k8gb",
+  "corpus_pin": "cd6f19e70b5c9c5c1924cfa7df81645640d598ea",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "posix-class": 1
+    },
+    "dialect": {
+      "posix-shell": 6,
+      "py_re": 1,
+      "re2": 7
+    },
+    "flags": {},
+    "pin": "cd6f19e70b5c9c5c1924cfa7df81645640d598ea",
+    "predicted_buckets": {
+      "posix-class": 1
+    },
+    "regex_sites": 14,
+    "regex_sites_per_file": {
+      "controllers/providers/metrics/prometheus.go": 1,
+      "controllers/resolver/resolver_spec.go": 1,
+      "controllers/utils/regex_test.go": 5,
+      "dns-provider-test/route53/test.sh": 4,
+      "docs/link_fixer.py": 1,
+      "hack/ai-inference-demo.sh": 1,
+      "hack/demo-failover.sh": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 14 regex sites (auto-NO-GO bar 200); dialects [posix-shell:6, py_re:1, re2:7]; boundary=unknown.",
+  "schema_version": "1"
+}

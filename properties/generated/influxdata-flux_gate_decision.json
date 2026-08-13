@@ -1,0 +1,63 @@
+{
+  "candidate_url": "https://github.com/influxdata/flux",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 33 sites < 1000 (query language).",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "flux",
+  "corpus_pin": "9ff345187ee76ad5e5d55351f6fd75c593d6fa6b",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "posix-class": 4
+    },
+    "dialect": {
+      "posix-shell": 7,
+      "re2": 26
+    },
+    "flags": {},
+    "pin": "9ff345187ee76ad5e5d55351f6fd75c593d6fa6b",
+    "predicted_buckets": {
+      "posix-class": 4
+    },
+    "regex_sites": 33,
+    "regex_sites_per_file": {
+      "ast/copy_test.go": 1,
+      "ast/json_test.go": 1,
+      "cmd/flux/cmd/test.go": 1,
+      "cmd/flux/test_test.go": 1,
+      "csv/result_test.go": 1,
+      "etc/checkfmt.sh": 1,
+      "etc/checkprepared.sh": 1,
+      "etc/spawn-containers.sh": 1,
+      "lang/compiler_test.go": 1,
+      "libflux/go/libflux/internal/buildinfo/main.go": 1,
+      "release.sh": 4,
+      "stdlib/contrib/sranka/sensu/to_sensu_name.go": 1,
+      "stdlib/internal/testutil/testutil.go": 1,
+      "stdlib/regexp/regexp_test.go": 8,
+      "values/binary_test.go": 6,
+      "values/display_test.go": 1,
+      "values/values_test.go": 2
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 33 regex sites (auto-NO-GO bar 200); dialects [posix-shell:7, re2:26]; boundary=unknown.",
+  "schema_version": "1"
+}

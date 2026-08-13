@@ -1,0 +1,61 @@
+{
+  "candidate_url": "https://github.com/PostgresConf/pgem",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 121 ecma < 1000 (PG extensions site).",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "pgem",
+  "corpus_pin": "b7c451530302fd695bde7c21995f0f3d1aeec108",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "backref": 1,
+      "lookaround": 3
+    },
+    "dialect": {
+      "ecma": 121
+    },
+    "flags": {
+      "g": 30,
+      "i": 25
+    },
+    "pin": "b7c451530302fd695bde7c21995f0f3d1aeec108",
+    "predicted_buckets": {
+      "backref": 1,
+      "inline-flag": 25,
+      "lookaround": 3,
+      "stateful": 30
+    },
+    "regex_sites": 121,
+    "regex_sites_per_file": {
+      "app/assets/javascripts/accounting.min.js": 2,
+      "app/assets/javascripts/bootstrap-select.js": 12,
+      "app/assets/javascripts/color-picker.js": 1,
+      "app/assets/javascripts/jquery.countdown.js": 15,
+      "app/assets/javascripts/jquery.mobile.custom.min.js": 3,
+      "app/assets/javascripts/jquery.prettySocial.js": 6,
+      "app/assets/javascripts/osem.js": 1,
+      "app/pdf/shared/javascripts/Chart.bundle.min.js": 76,
+      "app/pdf/shared/javascripts/chartkick.js": 5
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 121 regex sites (auto-NO-GO bar 200); dialects [ecma:121]; boundary=unknown.",
+  "schema_version": "1"
+}

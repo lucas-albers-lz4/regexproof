@@ -1,0 +1,55 @@
+{
+  "candidate_url": "https://github.com/dollaraday/dollaraday_template",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 16 sites (template).",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "dollaraday_template",
+  "corpus_pin": "157f8c561d9a84ebc35341bd6813752af546471a",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 16
+    },
+    "flags": {
+      "g": 9,
+      "i": 8,
+      "m": 2
+    },
+    "pin": "157f8c561d9a84ebc35341bd6813752af546471a",
+    "predicted_buckets": {
+      "inline-flag": 8,
+      "m-flag": 2,
+      "stateful": 9
+    },
+    "regex_sites": 16,
+    "regex_sites_per_file": {
+      "app/assets/javascripts/admin.js": 5,
+      "app/assets/javascripts/application.js": 2,
+      "app/assets/javascripts/donors/new.js": 1,
+      "app/assets/javascripts/gifts/new.js": 1,
+      "app/assets/javascripts/library/validate_email.js": 1,
+      "app/assets/javascripts/share.js": 6
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 16 regex sites (auto-NO-GO bar 200); dialects [ecma:16]; boundary=unknown.",
+  "schema_version": "1"
+}
