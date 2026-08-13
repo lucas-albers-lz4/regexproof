@@ -162,10 +162,13 @@ jobs:
         run: |
           # --require-ground-truth (P1, #425): SAT-ish Z3-verdict findings must
           # carry ground_truth_status=reproduced or the evidence gate fails.
-          python -m regexproof.batch --corpus all --require-ground-truth
-          pytest -q tests/test_batch.py
+          # --synthesize (P3, #427): the committed synthesized rows + guards
+          # are regenerated here; the evidence gate enforces the guard SAT
+          # contract, so a regression flips CI red.
+          python -m regexproof.batch --corpus all --require-ground-truth --synthesize
+          pytest -q tests/test_batch.py tests/test_synth_fixtures.py
       - name: Two-run batch reproducibility
-        run: python scripts/ci-batch-repro.py
+        run: python scripts/ci-batch-repro.py --synthesize
 
   noodler:
     # Quoted: unquoted YAML treats `#220)` as a comment and truncates the

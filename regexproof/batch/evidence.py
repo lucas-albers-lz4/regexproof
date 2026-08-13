@@ -47,6 +47,11 @@ def evidence_gate_errors(
                 "'mutation-guard-sat-expected'"
             )
             continue
+        # P3 fold (luna gate 1 minor): expected_result must be enforced in the
+        # evidence gate itself, not only by the synthesized-path coverage check.
+        if kind == "mutation_guard" and f.get("expected_result") != "sat":
+            errors.append(f"{rid}: mutation_guard expected_result must be 'sat'")
+            continue
         if fail_planned and result == "planned":
             qid = (f.get("detail") or {}).get("question_id") or rid
             unexecuted.append(str(qid))

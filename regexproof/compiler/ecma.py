@@ -93,7 +93,9 @@ def compile_ecma(
         # Local AST reject first so scoped `(?i:…)` stays `inline-flag`
         # (regexpp alone reports a generic parse-error).
         stripped = strip_language_transparent(pattern)
-        ast = parse_pattern(stripped, allow_scoped_i=False)
+        # P3 fold (luna gate 1): \uXXXX/\u{...} escapes are ECMAScript-only —
+        # the shared parser must not apply them to RE2/PCRE/perl patterns.
+        ast = parse_pattern(stripped, allow_scoped_i=False, unicode_escapes=True)
         gate = _run_regexpp(pattern, flags)
         # regexpp is a required capability gate (#172 fail-closed) — never
         # soft-open on missing node / timeout.

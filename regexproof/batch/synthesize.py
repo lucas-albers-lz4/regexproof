@@ -197,7 +197,13 @@ def _contains_shorthand(node: Any) -> bool:
 
 def _parse_for_certification(pattern: str) -> Any | None:
     try:
-        return parse_pattern(pattern)
+        # P3 fold (luna gate 1): the synthesizer's patterns are ECMAScript
+        # (validatorjs); \uXXXX/\u{...} escapes must parse as codepoints, not
+        # as literal 'u' sequences. With the dialect-blind default, the
+        # Gurmukhi class [\u0A00-\u0A7F] parsed as [u0A00-u0A7F] — the range
+        # 0->u (0x30-0x75) contains ';', producing a wrong SAT verdict that
+        # the witness replay then (correctly) rejected.
+        return parse_pattern(pattern, unicode_escapes=True)
     except Exception:
         return None
 
@@ -495,13 +501,13 @@ def _widened_guard(
             if certification.repeat_kind == "plus"
             else Star(widened_class)
         )
-        # The widened language is materialized above, but membership of the
-        # newly unioned literal is a concrete tautology.  Solving the full
-        # expanded Unicode class once per bad character is both unnecessary
-        # and unstable in Z3 5.0.0; retain a tiny solver query for the guard's
-        # SAT result while the non-vacuity check covers the original class.
-        _ = widened_language
-        result, _ = _check_formula(InRe(StringVal(bad_char), Re(bad_char)))
+        # The guard's SAT must be PROVEN against the real widened structure —
+        # a tautological InRe(bad_char, Re(bad_char)) would never detect a
+        # widening/class regression (luna gate 1, PR #438). The bad char is in
+        # the widened class by construction, so Z3 decides the membership
+        # query fast; a regression that drops the union or the repeat flips it
+        # to unsat and the gate fails.
+        result, _ = _check_formula(InRe(StringVal(bad_char), widened_language))
         return result, bad_char
     widened = Union(mirror, Re(bad_char))
     return _shape2_query(widened, bad_char, bound, want_model=True)

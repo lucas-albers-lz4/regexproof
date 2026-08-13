@@ -41,7 +41,7 @@ def _fingerprint(out_dir: Path) -> dict[str, str]:
     return digests
 
 
-def _run_batch(out_dir: Path) -> None:
+def _run_batch(out_dir: Path, *, synthesize: bool = False) -> None:
     out_dir.mkdir(parents=True, exist_ok=True)
     # Admission gate: batch runs require committed decision artifacts for rule
     # corpora. The reproducibility check exercises extraction determinism, not
@@ -50,16 +50,22 @@ def _run_batch(out_dir: Path) -> None:
     committed = ROOT / "properties" / "generated"
     for path in committed.glob("*_gate_decision.json"):
         (out_dir / path.name).write_bytes(path.read_bytes())
+    cmd = [
+        sys.executable,
+        "-m",
+        "regexproof.batch",
+        "--corpus",
+        "all",
+        "--out",
+        str(out_dir),
+    ]
+    if synthesize:
+        # P3 fold (luna gate 1): the two-run reproducibility check must also
+        # regenerate the synthesized rows, or a synthesis regression passes
+        # CI while the golden job's --synthesize step catches it.
+        cmd.append("--synthesize")
     proc = subprocess.run(
-        [
-            sys.executable,
-            "-m",
-            "regexproof.batch",
-            "--corpus",
-            "all",
-            "--out",
-            str(out_dir),
-        ],
+        cmd,
         cwd=ROOT,
         shell=False,
         check=False,
@@ -100,6 +106,11 @@ def main(argv: list[str] | None = None) -> int:
         default="all",
         help="all (default two-run batch) or a single CORPUS_MANIFESTS name",
     )
+    ap.add_argument(
+        "--synthesize",
+        action="store_true",
+        help="P3: regenerate the synthesized rows in both runs",
+    )
     args = ap.parse_args(argv)
     if args.corpus != "all":
         return _extract_determinism(args.corpus)
@@ -108,8 +119,8 @@ def main(argv: list[str] | None = None) -> int:
         base = Path(tmp)
         a = base / "run1" / "generated"
         b = base / "run2" / "generated"
-        _run_batch(a)
-        _run_batch(b)
+        _run_batch(a, synthesize=args.synthesize)
+        _run_batch(b, synthesize=args.synthesize)
         fa = _fingerprint(a)
         fb = _fingerprint(b)
         if fa != fb:

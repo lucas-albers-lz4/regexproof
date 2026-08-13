@@ -79,22 +79,22 @@ def _as_seq(node):
     return Seq([node])
 
 
-def _parse_alt(s: str, i: int, *, allow_scoped_i: bool = True):
+def _parse_alt(s: str, i: int, *, allow_scoped_i: bool = True, unicode_escapes: bool = False):
     items = []
-    node, i = _parse_concat(s, i, allow_scoped_i=allow_scoped_i)
+    node, i = _parse_concat(s, i, allow_scoped_i=allow_scoped_i, unicode_escapes=unicode_escapes)
     items.append(node)
     while i < len(s) and s[i] == "|":
-        node, i = _parse_concat(s, i + 1, allow_scoped_i=allow_scoped_i)
+        node, i = _parse_concat(s, i + 1, allow_scoped_i=allow_scoped_i, unicode_escapes=unicode_escapes)
         items.append(node)
     if len(items) == 1:
         return items[0], i
     return Alt(items), i
 
 
-def _parse_concat(s: str, i: int, *, allow_scoped_i: bool = True):
+def _parse_concat(s: str, i: int, *, allow_scoped_i: bool = True, unicode_escapes: bool = False):
     items = []
     while i < len(s) and s[i] not in "|)":
-        node, i = _parse_atom(s, i, allow_scoped_i=allow_scoped_i)
+        node, i = _parse_atom(s, i, allow_scoped_i=allow_scoped_i, unicode_escapes=unicode_escapes)
         # quantifier
         if i < len(s) and s[i] in "?*+{":
             node, i = _parse_quant(s, i, node)
@@ -106,7 +106,7 @@ def _parse_concat(s: str, i: int, *, allow_scoped_i: bool = True):
     return Seq(items), i
 
 
-def _parse_atom(s: str, i: int, *, allow_scoped_i: bool = True):
+def _parse_atom(s: str, i: int, *, allow_scoped_i: bool = True, unicode_escapes: bool = False):
     if i >= len(s):
         return Seq([]), i
     ch = s[i]
@@ -122,7 +122,7 @@ def _parse_atom(s: str, i: int, *, allow_scoped_i: bool = True):
             if s[i + 2] in ("=", "!", "<"):
                 raise Unencodable("lookaround")
             if s[i + 2] == ":":
-                inner, j = _parse_alt(s, i + 3, allow_scoped_i=allow_scoped_i)
+                inner, j = _parse_alt(s, i + 3, allow_scoped_i=allow_scoped_i, unicode_escapes=unicode_escapes)
                 if j >= len(s) or s[j] != ")":
                     raise Unencodable("unsupported-syntax")
                 return inner, j + 1
@@ -139,21 +139,21 @@ def _parse_atom(s: str, i: int, *, allow_scoped_i: bool = True):
                 # Only ``i`` is modeled; m/s/x scoped still reject honestly.
                 if set(scoped) - {"i"}:
                     raise Unencodable("inline-flag")
-                inner, k = _parse_alt(s, j + 1, allow_scoped_i=allow_scoped_i)
+                inner, k = _parse_alt(s, j + 1, allow_scoped_i=allow_scoped_i, unicode_escapes=unicode_escapes)
                 if k >= len(s) or s[k] != ")":
                     raise Unencodable("unsupported-syntax")
                 if "i" in scoped:
                     return Folded(inner), k + 1
                 return inner, k + 1
             raise Unencodable("inline-flag")
-        inner, j = _parse_alt(s, i + 1, allow_scoped_i=allow_scoped_i)
+        inner, j = _parse_alt(s, i + 1, allow_scoped_i=allow_scoped_i, unicode_escapes=unicode_escapes)
         if j >= len(s) or s[j] != ")":
             raise Unencodable("unclosed-group")
         return inner, j + 1
     if ch == "[":
-        return _parse_class(s, i)
+        return _parse_class(s, i, unicode_escapes=unicode_escapes)
     if ch == "\\":
-        return _parse_escape(s, i)
+        return _parse_escape(s, i, unicode_escapes=unicode_escapes)
     if ch == "{":
         # Lone '{' as atom (e.g. pattern starts with '{?') — literal.
         brace: object = Lit("{")
@@ -166,7 +166,7 @@ def _parse_atom(s: str, i: int, *, allow_scoped_i: bool = True):
     return Lit(ch), i + 1
 
 
-def _parse_escape(s: str, i: int):
+def _parse_escape(s: str, i: int, *, unicode_escapes: bool = False):
     if i + 1 >= len(s):
         raise Unencodable("unsupported-syntax")
     e = s[i + 1]
@@ -190,7 +190,7 @@ def _parse_escape(s: str, i: int):
         return Lit("\r"), i + 2
     if e == "x":
         return _parse_hex_escape(s, i)
-    if e == "u":
+    if e == "u" and unicode_escapes:
         return _parse_unicode_escape(s, i)
     if e in r"\\.^$*+?()[]{}|":
         return Lit(e), i + 2
@@ -235,7 +235,7 @@ def _parse_unicode_escape(s: str, i: int):
     raise Unencodable("bad-range")
 
 
-def _parse_class(s: str, i: int):
+def _parse_class(s: str, i: int, *, unicode_escapes: bool = False):
     assert s[i] == "["
     j = i + 1
     negate = False
@@ -244,7 +244,7 @@ def _parse_class(s: str, i: int):
         j += 1
     chars: list[str] = []
     while j < len(s) and s[j] != "]":
-        atom, j, kind = _parse_class_atom(s, j)
+        atom, j, kind = _parse_class_atom(s, j, unicode_escapes=unicode_escapes)
         # Range: lo-hi where both ends are single characters (incl. \\xNN).
         if (
             kind == "char"
@@ -254,7 +254,7 @@ def _parse_class(s: str, i: int):
             and s[j + 1] != "]"
         ):
             j += 1  # skip '-'
-            hi_atom, j, hi_kind = _parse_class_atom(s, j)
+            hi_atom, j, hi_kind = _parse_class_atom(s, j, unicode_escapes=unicode_escapes)
             if hi_kind != "char":
                 raise Unencodable("bad-range")
             lo, hi = atom, hi_atom
@@ -272,7 +272,7 @@ def _parse_class(s: str, i: int):
     return Cls(chars=chars, negate=negate), j + 1
 
 
-def _parse_class_atom(s: str, j: int) -> tuple[str | list[str], int, str]:
+def _parse_class_atom(s: str, j: int, *, unicode_escapes: bool = False) -> tuple[str | list[str], int, str]:
     """Parse one class member. Returns (payload, next_index, kind).
 
     kind ``char`` → payload is a one-char string; ``shorthand`` → list of
@@ -281,7 +281,7 @@ def _parse_class_atom(s: str, j: int) -> tuple[str | list[str], int, str]:
     if j >= len(s):
         raise Unencodable("unsupported-syntax")
     if s[j] == "\\":
-        node, nj = _parse_escape(s, j)
+        node, nj = _parse_escape(s, j, unicode_escapes=unicode_escapes)
         if isinstance(node, Lit):
             return node.ch, nj, "char"
         if isinstance(node, Cls):
@@ -364,13 +364,13 @@ def _parse_quant(s: str, i: int, node):
     return node, i
 
 
-def parse_pattern(pattern: str, *, allow_scoped_i: bool = True):
+def parse_pattern(pattern: str, *, allow_scoped_i: bool = True, unicode_escapes: bool = False):
     """Parse encodable-subset pattern.
 
     ``allow_scoped_i``: PCRE/RE2 may encode ``(?i:…)``; ECMA must keep
     ``False`` (JS has no scoped inline flags — reject as ``inline-flag``).
     """
-    node, i = _parse_alt(pattern, 0, allow_scoped_i=allow_scoped_i)
+    node, i = _parse_alt(pattern, 0, allow_scoped_i=allow_scoped_i, unicode_escapes=unicode_escapes)
     if i != len(pattern):
         raise Unencodable("unsupported-syntax")
     return rewrite_word_boundaries(node)
