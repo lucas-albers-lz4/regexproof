@@ -31,9 +31,16 @@ If unsure, treat as non-trivial.
 
 1. Open or update the PR; wait for **CI** to go green (or fix failures first).
    **Presence, not just green:** required `verify` jobs must appear in
-   `gh pr checks` (Z3 proof harness, Golden suite, Link check, …). A rollup
-   that only shows CodeQL is *not* green — the gate never ran (issue #205).
-   Assert expected check names are present *and* successful before merge.
+   `gh pr checks` — a rollup that only shows CodeQL is *not* green (issue #205).
+   Exact required names on `main` (#364):
+   - `Z3 proof harness`
+   - `Golden suite (Python 3.12)`
+   - `Golden suite (Python 3.13)`
+   - `Link check`
+   - `ReDoS stage (isolated)`
+   - `Read Python matrix`
+   - `Noodler backend (pinned asset + pre-flight, #220)`
+   Assert those names are present *and* successful before merge.
 2. Ensure the PR head branch is checked out locally.
 3. Run Bugbot via the `review-bugbot` skill / `bugbot` subagent on **branch changes** (merge-base vs default base, usually `main`).
 4. If Bugbot reports findings: **fix them** (or explicitly document why a finding is a false positive), push, re-run Bugbot once after substantive fixes.
