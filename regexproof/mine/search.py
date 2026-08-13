@@ -24,6 +24,22 @@ SEARCH_QUERIES: list[str] = [
     # testdata
     "filename:re_tests OR filename:test_re.py path:Lib/test",
     "path:testdata filename:regex OR filename:regexp",
+    # security tools (expanded config surface, 2026-08-13 — funnel plateaued,
+    # live-verified total_counts: .gitleaks.toml 13k, .trufflehog 688,
+    # secretlintrc 233, semgrep.yml 7.9k; index.yar 1.5k)
+    "filename:.gitleaks.toml",
+    "filename:.trufflehog.yml OR filename:.trufflehog.toml OR filename:trufflehog.yml",
+    "filename:secretlintrc.json OR filename:.secretlintrc",
+    "filename:semgrep.yml OR filename:semgrep.yaml",
+    "path:config filename:secrets.yml OR path:config filename:secrets.yaml",
+    # rule sets (yara pack conventions — curated packs = highest-value class)
+    "filename:index.yar",
+    "path:signatures extension:yar",
+    "filename:rules.yar path:rules",
+    # validators (python validator class)
+    "filename:validator.py path:src OR filename:validators.py path:src",
+    # testdata (go regex test surface — new dialect for go_regexp/re2)
+    "filename:regex_test.go OR filename:regexp_test.go",
 ]
 
 DEFAULT_QUERY_BUDGET = 30

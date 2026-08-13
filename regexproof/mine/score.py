@@ -38,6 +38,16 @@ _QUERY_FAMILY: dict[str, str] = {
     SEARCH_QUERIES[7]: "rules",
     SEARCH_QUERIES[8]: "testdata",
     SEARCH_QUERIES[9]: "testdata",
+    SEARCH_QUERIES[10]: "security",   # .gitleaks.toml
+    SEARCH_QUERIES[11]: "security",   # .trufflehog.yml/.toml
+    SEARCH_QUERIES[12]: "security",   # secretlintrc
+    SEARCH_QUERIES[13]: "rules",      # semgrep.yml/yaml (semgrep = rules family)
+    SEARCH_QUERIES[14]: "security",   # secrets.yml/yaml
+    SEARCH_QUERIES[15]: "rules",      # index.yar
+    SEARCH_QUERIES[16]: "rules",      # path:signatures extension:yar
+    SEARCH_QUERIES[17]: "rules",      # rules.yar path:rules
+    SEARCH_QUERIES[18]: "validators", # validator.py/validators.py path:src
+    SEARCH_QUERIES[19]: "testdata",   # regex_test.go / regexp_test.go
 }
 
 _BOUNDARY_WEIGHTS: dict[str, float] = {
@@ -74,13 +84,13 @@ def _query_family(source_query: str) -> str:
         return _QUERY_FAMILY[q]
     # Fuzzy fallback if query text drifted slightly
     ql = q.lower()
-    if "gitleaks" in ql or "detect-secrets" in ql or "trufflehog" in ql:
+    if "gitleaks" in ql or "detect-secrets" in ql or "trufflehog" in ql or "secretlint" in ql or "secrets." in ql:
         return "security"
-    if "semgrep" in ql or "yara" in ql or "secrule" in ql:
+    if "semgrep" in ql or "yara" in ql or "secrule" in ql or "extension:yar" in ql or ".yar" in ql or "yar " in ql:
         return "rules"
     if "validator" in ql:
         return "validators"
-    if "testdata" in ql or "re_tests" in ql or "test_re" in ql:
+    if "testdata" in ql or "re_tests" in ql or "test_re" in ql or "regex_test" in ql or "regexp_test" in ql:
         return "testdata"
     return "other"
 

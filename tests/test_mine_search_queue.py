@@ -505,3 +505,11 @@ def test_mine_cli_prints_run_summary(tmp_path: Path, monkeypatch, capsys):
     assert summary["dry_run"] is True
     assert summary["accepted"] == 0
     assert summary["allocator"] == "score-v1"
+
+
+def test_search_queries_nonempty_unique():
+    """Guard against empty/duplicate query strings in search.py."""
+    from regexproof.mine.search import SEARCH_QUERIES
+    assert len(SEARCH_QUERIES) >= 15
+    assert len(set(SEARCH_QUERIES)) == len(SEARCH_QUERIES)
+    assert all(q.strip() for q in SEARCH_QUERIES)
