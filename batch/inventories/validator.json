@@ -1,34 +1,47 @@
 {
   "schema_version": "1",
   "corpus_type": "validator",
+  "description": "Validator questions retain the v1 id/shape/threat/encoding_hint vocabulary. Executable questions add bad_chars and a structured selector; questions without bad_chars remain planned stubs.",
   "questions": [
     {
       "id": "v-shape1-injection-chars",
       "shape": 1,
+      "bad_chars": [";", "|", "&", "`", "$", "\n", "\u0000"],
       "threat": "Validator alphabet admits shell/HTML injection characters",
       "encoding_hint": "single-char InRe alphabet disjointness",
-      "applies_when": "ASCII/username/URL charset validators"
+      "selector": {
+        "file_globs": ["**/*alpha*", "**/*ascii*"],
+        "context_regex": ["(?:const ascii\\s*=|:\\s*/\\^.*\\+\\$(?!.*\\]\\+\\[))"],
+        "dialects": ["ecma", "py_re"]
+      },
+      "description": "accepted strings must not contain shell metacharacters"
     },
     {
       "id": "v-shape2-whitelist-space",
       "shape": 2,
+      "bad_chars": [" ", "\t", "\n", "\r", "@", "/"],
       "threat": "Whitelisted string of bounded length contains forbidden separator",
       "encoding_hint": "InRe whitelist ∧ length bound → ¬Contains",
-      "applies_when": "port/digit/hostname-like whitelists"
+      "selector": {
+        "file_globs": ["**/*email*", "**/*FQDN*", "**/*URL*"],
+        "context_regex": ["hostname", "port", "domain", "email"],
+        "dialects": ["ecma", "py_re"]
+      },
+      "description": "bounded whitelists must not admit separators"
     },
     {
       "id": "v-shape3-prefix-vs-full",
       "shape": 3,
       "threat": "Prefix match accepts values that fail full-string validation intent",
       "encoding_hint": "string-ops counterexample between match and fullmatch",
-      "applies_when": "call_kind match/search on anchored validators"
+      "selector": {"dialects": ["ecma", "py_re"]}
     },
     {
       "id": "v-shape4-escape-image",
       "shape": 4,
       "threat": "Escaped output still contains raw control characters",
       "encoding_hint": "per-token escape image",
-      "applies_when": "sanitizers/escapers (Phase 2 deferred SSRF shape-4)"
+      "selector": {"dialects": ["ecma", "py_re"]}
     }
   ]
 }

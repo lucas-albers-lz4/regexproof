@@ -36,13 +36,13 @@ Schema: `regexproof/schemas/scanner_finding.schema.json`.
 |---|---|
 | `schema_version` | `"1"` |
 | `regex_id` | Stable id (or `inventory:…` stubs) |
-| `kind` | `property` \| `rule_diff` \| `redos` \| `usage_mismatch` \| `intent_mismatch` \| `triage` |
+| `kind` | `property` \| `counterexample_finder` \| `bug_demo` \| `mutation_guard` \| `rule_diff` \| `redos` \| `usage_mismatch` \| `intent_mismatch` \| `triage` |
 | `corpus` | Short pilot name (`gitleaks`, …) |
 | `result` | Finding outcome / planned status |
 | `site` | `file:line:column` or inventory id |
 | `pattern` | Pattern text when applicable |
 | `shape` | 1–5 or null |
-| `ground_truth_status` | Replay status. Present on Z3-verdict findings (`property`, `rule_diff`); omitted on classification findings (`usage_mismatch`, `intent_mismatch`, `triage`, `redos`) — absence means "not a Z3 verdict", never a silent `N/A` |
+| `ground_truth_status` | Replay status. Present on Z3-verdict findings (`property`, `counterexample_finder`, `bug_demo`, `mutation_guard`, `rule_diff`); mutation guards require the exact `mutation-guard-sat-expected` value. Omitted on classification findings (`usage_mismatch`, `intent_mismatch`, `triage`, `redos`) — absence means "not a Z3 verdict", never a silent `N/A` |
 | `ground_truth` | Optional **per-engine** evidence object for cross-engine `rule_diff` (e.g. `{pcre2: {status, version, cmd, matched, replay}, go_re2: {...}, status}`). A single `ground_truth_status` alone is not sufficient to claim dual-engine ground truth. |
 | `disclosure` | `private_first` \| `public_ok` \| null |
 | `witness` | Redacted when committed |

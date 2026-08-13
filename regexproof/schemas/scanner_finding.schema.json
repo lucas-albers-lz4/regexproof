@@ -19,6 +19,9 @@
       "type": "string",
       "enum": [
         "property",
+        "counterexample_finder",
+        "bug_demo",
+        "mutation_guard",
         "rule_diff",
         "redos",
         "usage_mismatch",

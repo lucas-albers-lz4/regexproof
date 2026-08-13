@@ -93,7 +93,16 @@ def compile_ecma(
         # Local AST reject first so scoped `(?i:…)` stays `inline-flag`
         # (regexpp alone reports a generic parse-error).
         stripped = strip_language_transparent(pattern)
-        ast = parse_pattern(stripped, allow_scoped_i=False)
+        # P3 folds (luna gate 1 + re-gate 3): \uXXXX/\u{...} escapes are
+        # ECMAScript-only, and the BRACED form additionally requires the
+        # u/v mode flags — without them the real engine treats \u as an
+        # identity escape (\u{2} matches "uu", not U+0002).
+        ast = parse_pattern(
+            stripped,
+            allow_scoped_i=False,
+            unicode_escapes=True,
+            allow_braced=("u" in flags or "v" in flags),
+        )
         gate = _run_regexpp(pattern, flags)
         # regexpp is a required capability gate (#172 fail-closed) — never
         # soft-open on missing node / timeout.

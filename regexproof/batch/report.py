@@ -59,8 +59,20 @@ def redact_witness(witness: object) -> object:
 
 def write_ndjson(path: Path, records: list[dict[str, Any]]) -> None:
     lines: list[str] = []
-    for rec in sorted(records, key=lambda r: (r.get("regex_id") or "", r.get("kind") or "")):
+    for rec in sorted(
+        records,
+        key=lambda r: (
+            r.get("regex_id") or "",
+            r.get("question_id") or (r.get("detail") or {}).get("question_id") or "",
+            r.get("bad_char") or (r.get("detail") or {}).get("bad_char") or "",
+            r.get("kind") or "",
+        ),
+    ):
         payload = dict(rec)
+        if payload.get("synthesized"):
+            # Solver timing is deliberately not part of the reproducibility
+            # artifact (cache/parallel workstreams may change it).
+            payload["wall_ms"] = 0
         if "witness" in payload:
             payload["witness"] = redact_witness(payload.get("witness"))
         lines.append(json.dumps(payload, sort_keys=True))

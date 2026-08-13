@@ -44,6 +44,7 @@ from regexproof.batch.manifests import (  # noqa: F401
     WAVE_CORPORA,
 )
 from regexproof.batch.report import write_markdown, write_ndjson
+from regexproof.batch.synthesize import check_guard_coverage, synthesize_compiled
 from regexproof.batch.triage import triage_records_from_compiled, write_triage_ndjson
 from regexproof.compiler import compile_pattern
 from regexproof.extractors.modsec import count_operators
@@ -196,6 +197,8 @@ def run_corpus(
     fail_planned: bool = False,
     redos_timeout_s: float | None = None,
     emit_planned: bool = True,
+    synthesize: bool = False,
+    synth_diff_fuzz_sample: int | None = None,
 ) -> dict[str, Any]:
     meta = CORPUS_MANIFESTS[corpus]
     if meta.get("corpus_type") == "inventory_only":
@@ -227,9 +230,18 @@ def run_corpus(
     inventory = load_inventory(meta["corpus_type"])
     records, compiled = extract_and_compile_corpus(corpus, meta)
 
-    # C1 (issue #426): rows stay lean (no AST); the streamed mirrors/metadata
-    # are discarded explicitly in the interim until P3 synthesis lands.
     rows = [pair[0] for pair in compiled]
+    synthesis = None
+    if synthesize:
+        synthesis = synthesize_compiled(
+            corpus,
+            compiled,
+            inventory,
+            meta,
+            diff_fuzz_sample=synth_diff_fuzz_sample,
+        )
+    # C1 (issue #426): rows stay lean (no AST); release streamed mirrors after
+    # the opt-in P3 consumer has completed.
     _discard_streamed_mirrors(compiled)
 
     triage = triage_records_from_compiled(rows)
@@ -239,6 +251,8 @@ def run_corpus(
     # Inventory-driven shape markers (auto property stubs — encode deferred to Z3 job)
     if emit_planned:
         for q in inventory["questions"]:
+            if synthesis is not None and q["id"] in synthesis.executed_questions:
+                continue
             findings.append(
                 {
                     "schema_version": "1",
@@ -253,6 +267,9 @@ def run_corpus(
                     "detail": {"question_id": q["id"], "threat": q["threat"]},
                 }
             )
+
+    if synthesis is not None:
+        findings.extend(synthesis.findings)
 
     findings.extend(detect_usage_mismatches(rows))
     findings.extend(detect_intent_mismatches(rows))
@@ -324,6 +341,10 @@ def run_corpus(
     joined = join_findings(z3_side, redos_findings)
 
     findings = tag_disclosure(findings, corpus=corpus)
+    if synthesis is not None:
+        guard_errors = check_guard_coverage(findings)
+        if guard_errors:
+            raise SystemExit("synthesis guard gate failed:\n  - " + "\n  - ".join(guard_errors))
     enforce_evidence_gates(
         findings,
         require_ground_truth=require_ground_truth,
@@ -356,6 +377,8 @@ def run_corpus(
         "complete_run": not redos_incomplete,
         "address_space_cap": _budgets.LAST_ADDRESS_SPACE_CAP_APPLIED,
     }
+    if synthesis is not None:
+        summary["synthesis"] = synthesis.stats
     atomic_write_text(
         out_dir / f"{corpus}_batch_summary.json",
         json.dumps(summary, indent=2, sort_keys=True) + "\n",
@@ -631,6 +654,8 @@ def run_batch(
     fail_planned: bool = False,
     redos_timeout_s: float | None = None,
     emit_planned: bool = True,
+    synthesize: bool = False,
+    synth_diff_fuzz_sample: int | None = None,
 ) -> dict[str, Any]:
     cov = check_corpus_coverage()
     if cov:
@@ -655,6 +680,8 @@ def run_batch(
             fail_planned=fail_planned,
             redos_timeout_s=redos_timeout_s,
             emit_planned=emit_planned,
+            synthesize=synthesize,
+            synth_diff_fuzz_sample=synth_diff_fuzz_sample,
         )
         # Pair-at-scale: reuse Phase-3 discovery when catalog exists
         if name == "gitleaks":
@@ -727,6 +754,17 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--out", type=Path, default=ROOT / "properties" / "generated")
     ap.add_argument("--with-redos", action="store_true")
     ap.add_argument(
+        "--synthesize",
+        action="store_true",
+        help="synthesize validator shape-1/2 properties (off by default)",
+    )
+    ap.add_argument(
+        "--synth-diff-fuzz-sample",
+        type=int,
+        default=None,
+        help="seeded differential-fuzz samples per wide/shape-2 site",
+    )
+    ap.add_argument(
         "--redos-timeout-s",
         type=float,
         default=None,
@@ -772,6 +810,9 @@ def main(argv: list[str] | None = None) -> int:
             file=sys.stderr,
         )
         return 2
+    if args.synth_diff_fuzz_sample is not None and args.synth_diff_fuzz_sample < 0:
+        print("error: --synth-diff-fuzz-sample must be non-negative", file=sys.stderr)
+        return 2
     if args.corpus == "all":
         # coreruleset is opt-in: its corpus is an external pinned clone, not
         # committed (see batch/corpora/coreruleset/README.md).
@@ -786,6 +827,8 @@ def main(argv: list[str] | None = None) -> int:
         fail_planned=args.fail_planned,
         redos_timeout_s=args.redos_timeout_s,
         emit_planned=not args.no_planned,
+        synthesize=args.synthesize,
+        synth_diff_fuzz_sample=args.synth_diff_fuzz_sample,
     )
     print("batch ok:", ", ".join(corpora))
     return 0

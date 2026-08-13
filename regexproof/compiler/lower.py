@@ -432,7 +432,12 @@ def _lit(ch: str, fold):
     if fold is None:
         return Re(ch)
     chars = sorted(fold(ch))
-    return Re(chars[0]) if len(chars) == 1 else Union(*[Re(c) for c in chars])
+    if len(chars) == 1:
+        return Re(chars[0])
+    # P3 fold (luna re-gate 2): compress contiguous runs into Range nodes —
+    # a per-char Union over a large fold set (or a wide class) builds a
+    # pathological deep z3 tree that blows the stack and grinds the solver.
+    return _codes_to_union([ord(c) for c in chars])
 
 
 def ranges_excluding(forbidden: set[int], *, hi: int = _BMP_HI):
@@ -523,6 +528,7 @@ def _class(node: sp.Cls, fold, digit, space, word, *, space_codes=_SPACE_CODES):
             raise Unencodable("empty-class")
         return ranges_excluding(forbidden)
     parts = []
+    plain_codes: list[int] = []
     for item in node.chars:
         if item == "\\d":
             parts.append(digit())
@@ -537,7 +543,18 @@ def _class(node: sp.Cls, fold, digit, space, word, *, space_codes=_SPACE_CODES):
         elif item == "\\W":
             raise Unencodable("negated-shorthand")
         else:
-            parts.append(_lit(item, fold))
+            # P3 fold (luna re-gate 2): accumulate the plain members and
+            # compress them as ONE run-based union — a wide class like
+            # isEmail's [\u00A1-\uD7FF] (55k members) must not become a
+            # 57k-deep per-char union.
+            expanded = fold(item) if fold is not None else (item,)
+            plain_codes.extend(ord(c) for c in expanded if len(c) == 1)
+    if plain_codes:
+        codes = sorted(set(plain_codes))
+        if len(codes) == 1:
+            parts.append(Re(chr(codes[0])))
+        else:
+            parts.append(_codes_to_union(codes))
     if not parts:
         raise Unencodable("empty-class")
     return Union(*parts) if len(parts) > 1 else parts[0]

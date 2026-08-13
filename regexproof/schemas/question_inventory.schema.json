@@ -2,6 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://regexproof.dev/schemas/question_inventory/v1",
   "title": "QuestionInventory",
+  "description": "Schema version 1 preserves the original question vocabulary. Executable validator questions may add a bad_chars payload and structured selector; applies_when prose is legacy-only and has no execution consumer.",
   "type": "object",
   "required": ["schema_version", "corpus_type", "questions"],
   "additionalProperties": true,
@@ -23,7 +24,22 @@
           "shape": { "type": "integer", "minimum": 1, "maximum": 4 },
           "threat": { "type": "string" },
           "encoding_hint": { "type": "string" },
-          "applies_when": { "type": "string" }
+          "bad_chars": {
+            "type": "array",
+            "items": { "type": "string", "minLength": 1, "maxLength": 1 }
+          },
+          "selector": {
+            "type": "object",
+            "description": "Structured selector replacing free-form applies_when prose.",
+            "additionalProperties": true,
+            "properties": {
+              "file_globs": { "type": "array", "items": { "type": "string" } },
+              "context_regex": { "type": "array", "items": { "type": "string" } },
+              "dialects": { "type": "array", "items": { "type": "string" } }
+            }
+          },
+          "description": { "type": "string" },
+          "applies_when": { "type": "string", "description": "Legacy prose; not consumed by the synthesizer." }
         }
       }
     }
