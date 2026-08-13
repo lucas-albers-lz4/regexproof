@@ -44,7 +44,7 @@ from regexproof.batch.manifests import (  # noqa: F401
     WAVE_CORPORA,
 )
 from regexproof.batch.report import write_markdown, write_ndjson
-from regexproof.batch.synthesize import check_guard_coverage, synthesize_compiled
+from regexproof.batch.synthesize import synthesize_compiled
 from regexproof.batch.triage import triage_records_from_compiled, write_triage_ndjson
 from regexproof.compiler import compile_pattern
 from regexproof.extractors.modsec import count_operators
@@ -260,6 +260,7 @@ def run_corpus(
                     "kind": "property",
                     "corpus": corpus,
                     "result": "planned",
+                    "ground_truth_status": "planned",
                     "site": f"inventory:{q['id']}",
                     "pattern": "",
                     "shape": q["shape"],
@@ -341,10 +342,6 @@ def run_corpus(
     joined = join_findings(z3_side, redos_findings)
 
     findings = tag_disclosure(findings, corpus=corpus)
-    if synthesis is not None:
-        guard_errors = check_guard_coverage(findings)
-        if guard_errors:
-            raise SystemExit("synthesis guard gate failed:\n  - " + "\n  - ".join(guard_errors))
     enforce_evidence_gates(
         findings,
         require_ground_truth=require_ground_truth,

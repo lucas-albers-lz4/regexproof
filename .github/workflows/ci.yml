@@ -167,7 +167,7 @@ jobs:
           # are regenerated here; the evidence gate enforces the guard SAT
           # contract, so a regression flips CI red.
           python -m regexproof.batch --corpus all --require-ground-truth --synthesize
-          pytest -q tests/test_batch.py tests/test_synth_fixtures.py
+           pytest -q tests/test_batch.py tests/test_evidence_gates.py tests/test_synth_fixtures.py
       - name: Two-run batch reproducibility
         run: python scripts/ci-batch-repro.py --synthesize
       - name: D5 compiler-feature-yield artifact (regenerated, #429)
