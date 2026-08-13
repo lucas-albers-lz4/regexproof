@@ -68,16 +68,16 @@ def compile_pcre(
         return _helper_parse(stripped)
 
     def raise_gate(gate: dict) -> None:
-        if gate.get("ok") is False:
-            ureason = gate.get("unencodable_reason")
-            if ureason == "timeout":
-                raise Unencodable("timeout")
-            if ureason not in (
-                None,
-                "pcre2-helper-unavailable",
-            ):
-                if gate.get("helper") in ("pcre2-bindings", "pcre2grep"):
-                    raise Unencodable(ureason or "parse-error")
+        if gate.get("ok") is not False:
+            return
+        ureason = gate.get("unencodable_reason")
+        if ureason == "timeout":
+            raise Unencodable("timeout")
+        if ureason == "pcre2-helper-unavailable" or gate.get("helper") in (
+            "none",
+        ):
+            raise Unencodable("helper-unavailable")
+        raise Unencodable(ureason or "parse-error")
 
     fold_fn = lambda ch: python_fold_closure(ch, ascii_only=True)
     spec = DialectSpec(

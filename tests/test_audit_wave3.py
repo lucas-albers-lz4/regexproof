@@ -89,6 +89,53 @@ def test_reject_untimed_subprocess_usage_clean_on_compilers():
     assert violations == [], violations
 
 
+def test_pcre_parse_error_rejected_when_helper_present():
+    """#361: PCRE2 parse-error must not be encoded into a Z3 mirror."""
+    from regexproof.compiler.pcre import compile_pcre, helper_used_for_parse_and_replay
+
+    if not helper_used_for_parse_and_replay():
+        pytest.skip("pcre2 helper not available")
+    cr = compile_pcre("a{2,1}")
+    assert cr.encodable is False
+    assert cr.unencodable_reason == "parse-error"
+
+
+def test_pcre_fail_closed_when_helper_unavailable(monkeypatch):
+    """#363: missing PCRE2 helper is Unencodable, not a silent encode."""
+    from regexproof.compiler import pcre as pcre_mod
+
+    monkeypatch.setattr(
+        pcre_mod,
+        "_helper_parse",
+        lambda *_a, **_k: {
+            "ok": False,
+            "unencodable_reason": "pcre2-helper-unavailable",
+            "helper": "none",
+        },
+    )
+    cr = pcre_mod.compile_pcre("abc+")
+    assert cr.mirror is None
+    assert cr.unencodable_reason == "helper-unavailable"
+
+
+def test_perl_fail_closed_when_helper_unavailable(monkeypatch):
+    """#363: missing Perl helper is Unencodable, not a silent encode."""
+    from regexproof.compiler import perl as perl_mod
+
+    monkeypatch.setattr(
+        perl_mod,
+        "_helper_parse",
+        lambda *_a, **_k: {
+            "ok": False,
+            "unencodable_reason": "perl-helper-unavailable",
+            "helper": "none",
+        },
+    )
+    cr = perl_mod.compile_perl("abc+")
+    assert cr.mirror is None
+    assert cr.unencodable_reason == "helper-unavailable"
+
+
 def test_go_re2_env_must_stay_under_helpers(monkeypatch, tmp_path):
     from regexproof.compiler import re2 as re2_mod
 
