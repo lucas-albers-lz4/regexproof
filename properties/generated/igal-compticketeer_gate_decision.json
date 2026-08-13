@@ -1,0 +1,58 @@
+{
+  "candidate_url": "https://github.com/igal/compticketeer",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 169 ecma < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "compticketeer",
+  "corpus_pin": "37aac8f2af044c0ba98e34e9e4675a331e9826b2",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "backref": 5,
+      "lookaround": 4
+    },
+    "dialect": {
+      "ecma": 169
+    },
+    "flags": {
+      "g": 38,
+      "i": 23
+    },
+    "pin": "37aac8f2af044c0ba98e34e9e4675a331e9826b2",
+    "predicted_buckets": {
+      "backref": 5,
+      "inline-flag": 23,
+      "lookaround": 4,
+      "stateful": 38
+    },
+    "regex_sites": 169,
+    "regex_sites_per_file": {
+      "public/javascripts/application.js": 1,
+      "public/javascripts/controls.js": 4,
+      "public/javascripts/dragdrop.js": 1,
+      "public/javascripts/effects.js": 4,
+      "public/javascripts/jquery-1.4.2.min.js": 92,
+      "public/javascripts/prototype.js": 67
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 169 regex sites (auto-NO-GO bar 200); dialects [ecma:169]; boundary=unknown.",
+  "schema_version": "1"
+}

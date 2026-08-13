@@ -1,0 +1,42 @@
+{
+  "candidate_url": "https://github.com/lunarway/release-manager",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 1 re2 < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "release-manager",
+  "corpus_pin": "3b77deae81f72f7e41e16051acc0e29fbf4c1b9f",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "re2": 1
+    },
+    "flags": {},
+    "pin": "3b77deae81f72f7e41e16051acc0e29fbf4c1b9f",
+    "predicted_buckets": {},
+    "regex_sites": 1,
+    "regex_sites_per_file": {
+      "cmd/hamctl/command/release_test.go": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 1 regex sites (auto-NO-GO bar 200); dialects [re2:1]; boundary=unknown.",
+  "schema_version": "1"
+}

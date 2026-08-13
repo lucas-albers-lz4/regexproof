@@ -1,0 +1,55 @@
+{
+  "candidate_url": "https://github.com/yuvrajagarwal48/OverloadOblivion_GAJSHIELD",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 57 sites (46 py/11 yara) < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "OverloadOblivion_GAJSHIELD",
+  "corpus_pin": "75e05d50e2eb42f929b2e3969c66fa2dc1f669ca",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "lookaround": 1
+    },
+    "dialect": {
+      "py_re": 46,
+      "yara": 11
+    },
+    "flags": {
+      "i": 40,
+      "m": 1,
+      "s": 1
+    },
+    "pin": "75e05d50e2eb42f929b2e3969c66fa2dc1f669ca",
+    "predicted_buckets": {
+      "inline-flag": 41,
+      "lookaround": 1,
+      "m-flag": 1
+    },
+    "regex_sites": 57,
+    "regex_sites_per_file": {
+      "rules/pdf_rules.yara": 11,
+      "scripts/excel_static.py": 33,
+      "scripts/pdf_static.py": 13
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 57 regex sites (auto-NO-GO bar 200); dialects [py_re:46, yara:11]; boundary=unknown.",
+  "schema_version": "1"
+}

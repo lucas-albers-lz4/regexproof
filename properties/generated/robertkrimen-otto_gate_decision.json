@@ -1,0 +1,63 @@
+{
+  "candidate_url": "https://github.com/robertkrimen/otto",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 29 sites < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "otto",
+  "corpus_pin": "3ca729876b8973d2faeb6f25d1c8e7dd6580063a",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "(?i)": 1,
+      "(?m)": 1
+    },
+    "dialect": {
+      "ecma": 10,
+      "re2": 19
+    },
+    "flags": {
+      "g": 5
+    },
+    "pin": "3ca729876b8973d2faeb6f25d1c8e7dd6580063a",
+    "predicted_buckets": {
+      "inline-flag": 1,
+      "m-flag": 1,
+      "stateful": 5
+    },
+    "regex_sites": 29,
+    "regex_sites_per_file": {
+      "builtin.go": 5,
+      "builtin_string.go": 1,
+      "dbg/dbg.go": 2,
+      "otto_.go": 1,
+      "parser/lexer.go": 1,
+      "parser/parser_test.go": 1,
+      "repl/autocompleter.go": 1,
+      "tools/tester/main.go": 4,
+      "type_date.go": 1,
+      "underscore/underscore-min.js": 10,
+      "value_number.go": 1,
+      "value_string.go": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 29 regex sites (auto-NO-GO bar 200); dialects [ecma:10, re2:19]; boundary=unknown.",
+  "schema_version": "1"
+}

@@ -1,0 +1,48 @@
+{
+  "candidate_url": "https://github.com/nobrick/kano",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 5 ecma < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "kano",
+  "corpus_pin": "446b988205e8429c1ae38937d9015bb65c984ed9",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 5
+    },
+    "flags": {
+      "g": 1,
+      "i": 2
+    },
+    "pin": "446b988205e8429c1ae38937d9015bb65c984ed9",
+    "predicted_buckets": {
+      "inline-flag": 2,
+      "stateful": 1
+    },
+    "regex_sites": 5,
+    "regex_sites_per_file": {
+      "app/assets/javascripts/jweixin-1.0.0.js": 5
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 5 regex sites (auto-NO-GO bar 200); dialects [ecma:5]; boundary=unknown.",
+  "schema_version": "1"
+}

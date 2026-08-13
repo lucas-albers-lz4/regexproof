@@ -1,0 +1,64 @@
+{
+  "candidate_url": "https://github.com/atomicjolt/adhesion",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 32 sites < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "adhesion",
+  "corpus_pin": "89e1fb15eb0531820499bd26282f828d9e9e929e",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 32
+    },
+    "flags": {
+      "d": 6,
+      "g": 1,
+      "i": 6,
+      "v": 6
+    },
+    "pin": "89e1fb15eb0531820499bd26282f828d9e9e929e",
+    "predicted_buckets": {
+      "inline-flag": 6,
+      "stateful": 1,
+      "v-flag": 6
+    },
+    "regex_sites": 32,
+    "regex_sites_per_file": {
+      "client/apps/admin/components/application_instances/authentications_modal.jsx": 5,
+      "client/apps/admin/components/applications/application_row.jsx": 1,
+      "client/apps/admin/components/applications/index.jsx": 4,
+      "client/apps/admin/components/common/heading.jsx": 3,
+      "client/apps/admin/components/lti_installs/course_installs.jsx": 1,
+      "client/apps/admin/components/lti_installs/sidebar.jsx": 1,
+      "client/apps/admin/components/sites/list.jsx": 3,
+      "client/apps/admin/components/sites/list.spec.jsx": 3,
+      "client/apps/admin/libs/assets.js": 1,
+      "client/apps/atomic_docs/libs/assets.js": 1,
+      "client/apps/exam_proctoring/components/exam_request_list/report_window.jsx": 1,
+      "client/apps/exam_proctoring/components/exam_request_list/schedule_form.jsx": 5,
+      "client/apps/exam_proctoring/quiz_print/components/question_types/fill_in_multiple_blanks_question.jsx": 1,
+      "config/webpack/environment.js": 2
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 32 regex sites (auto-NO-GO bar 200); dialects [ecma:32]; boundary=unknown.",
+  "schema_version": "1"
+}

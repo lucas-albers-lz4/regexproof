@@ -1,0 +1,46 @@
+{
+  "candidate_url": "https://github.com/qomoteam/qomo",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 22 ecma < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "qomo",
+  "corpus_pin": "04bd27b3f2204c634a8b0ed39e5d5ee25b8dbc61",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 22
+    },
+    "flags": {
+      "g": 3
+    },
+    "pin": "04bd27b3f2204c634a8b0ed39e5d5ee25b8dbc61",
+    "predicted_buckets": {
+      "stateful": 3
+    },
+    "regex_sites": 22,
+    "regex_sites_per_file": {
+      "app/assets/javascripts/rails.validations.js": 22
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 22 regex sites (auto-NO-GO bar 200); dialects [ecma:22]; boundary=unknown.",
+  "schema_version": "1"
+}

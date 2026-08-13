@@ -1,0 +1,68 @@
+{
+  "candidate_url": "https://github.com/wangping0105/magic_novel",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 531 ecma < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "magic_novel",
+  "corpus_pin": "33ce1425a89fbbd84c6b8381874737b688ed2ce0",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "backref": 3,
+      "lookaround": 24
+    },
+    "dialect": {
+      "ecma": 531
+    },
+    "flags": {
+      "g": 175,
+      "i": 118,
+      "m": 1
+    },
+    "pin": "33ce1425a89fbbd84c6b8381874737b688ed2ce0",
+    "predicted_buckets": {
+      "backref": 3,
+      "inline-flag": 118,
+      "lookaround": 24,
+      "m-flag": 1,
+      "stateful": 175
+    },
+    "regex_sites": 531,
+    "regex_sites_per_file": {
+      "public/agora/AgoraRTCSDK-3.0.1.js": 110,
+      "public/agora/materialize.min.js": 29,
+      "public/assets/hybird-79fa49054f617e6c72806b74f64ba4b2e86d141fdbf373433fb0aeb38d084124.js": 119,
+      "public/assets/kindeditor/kindeditor.js": 145,
+      "public/assets/kindeditor/plugins/clearhtml/clearhtml.js": 2,
+      "public/assets/kindeditor/plugins/code/prettify.js": 64,
+      "public/assets/kindeditor/plugins/flash/flash.js": 2,
+      "public/assets/kindeditor/plugins/image/image.js": 2,
+      "public/assets/kindeditor/plugins/media/media.js": 2,
+      "public/assets/kindeditor/plugins/multiimage/multiimage.js": 3,
+      "public/assets/kindeditor/plugins/plainpaste/plainpaste.js": 5,
+      "public/assets/kindeditor/plugins/quickformat/quickformat.js": 1,
+      "public/assets/kindeditor/plugins/table/table.js": 14,
+      "public/customs/trix.js": 33
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 531 regex sites (auto-NO-GO bar 200); dialects [ecma:531]; boundary=unknown.",
+  "schema_version": "1"
+}

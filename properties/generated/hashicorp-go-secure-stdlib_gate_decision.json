@@ -1,0 +1,44 @@
+{
+  "candidate_url": "https://github.com/hashicorp/go-secure-stdlib",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 4 re2 < 1000 (stdlib helpers).",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "go-secure-stdlib",
+  "corpus_pin": "33794315ee196f7ad4d4d1b3e8d4f763c094bc43",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "re2": 4
+    },
+    "flags": {},
+    "pin": "33794315ee196f7ad4d4d1b3e8d4f763c094bc43",
+    "predicted_buckets": {},
+    "regex_sites": 4,
+    "regex_sites_per_file": {
+      "configutil/encrypt_decrypt.go": 2,
+      "parseutil/parseutil.go": 1,
+      "regexp/regexp_test.go": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 4 regex sites (auto-NO-GO bar 200); dialects [re2:4]; boundary=unknown.",
+  "schema_version": "1"
+}

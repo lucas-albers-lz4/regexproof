@@ -1,0 +1,98 @@
+{
+  "candidate_url": "https://github.com/ActiveMemory/ctx",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 191 sites < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "ctx",
+  "corpus_pin": "ce5a832885d66ba3608e02d2db85e5e90a455559",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "(?i)": 3,
+      "(?m)": 4,
+      "lookaround": 6,
+      "posix-class": 6
+    },
+    "dialect": {
+      "ecma": 67,
+      "posix-shell": 66,
+      "py_re": 10,
+      "re2": 48
+    },
+    "flags": {
+      "g": 15,
+      "i": 11,
+      "m": 4
+    },
+    "pin": "ce5a832885d66ba3608e02d2db85e5e90a455559",
+    "predicted_buckets": {
+      "inline-flag": 14,
+      "lookaround": 6,
+      "m-flag": 8,
+      "posix-class": 6,
+      "stateful": 15
+    },
+    "regex_sites": 191,
+    "regex_sites_per_file": {
+      "ctx-desktop/src/adapter/ctx.ts": 3,
+      "ctx-desktop/src/lib/markdown.tsx": 11,
+      "ctx-desktop/src/screens/Hub.tsx": 1,
+      "ctx-desktop/src/screens/Search.tsx": 2,
+      "editors/vscode/src/extension.ts": 14,
+      "hack/check-tools.sh": 3,
+      "hack/detect-ai-typography.sh": 2,
+      "hack/gpg-fix.sh": 2,
+      "hack/lint-docstrings.sh": 21,
+      "hack/lint-drift.sh": 13,
+      "hack/lint-imports.sh": 6,
+      "hack/lint-mixed-funcs.sh": 5,
+      "hack/register-gemini-search.sh": 2,
+      "hack/register-gitnexus.sh": 2,
+      "hack/sync-copilot-skills.sh": 1,
+      "hack/tag.sh": 1,
+      "hack/title-case-headings.py": 7,
+      "internal/assets/claude/skills/ctx-dream/guard.sh": 8,
+      "internal/assets/claude/skills/ctx-journal-enrich-all/references/enrich-heuristic.py": 3,
+      "internal/assets/integrations/opencode/plugin/index.ts": 1,
+      "internal/audit/magic_strings_test.go": 1,
+      "internal/compliance/compliance_test.go": 8,
+      "internal/compliance/docs_nav_test.go": 1,
+      "internal/compliance/hooks_wiring_test.go": 1,
+      "internal/config/regex/budget.go": 1,
+      "internal/config/regex/claude.go": 1,
+      "internal/config/regex/cmd.go": 3,
+      "internal/config/regex/ctx.go": 4,
+      "internal/config/regex/entry.go": 1,
+      "internal/config/regex/fence.go": 4,
+      "internal/config/regex/file.go": 2,
+      "internal/config/regex/glossary.go": 1,
+      "internal/config/regex/kb.go": 4,
+      "internal/config/regex/markdown.go": 10,
+      "internal/config/regex/page.go": 3,
+      "internal/config/regex/slug.go": 2,
+      "internal/config/regex/tag.go": 1,
+      "site/assets/javascripts/bundle.d7f30b55.min.js": 34,
+      "site/assets/javascripts/workers/search.b6b7e04f.min.js": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 191 regex sites (auto-NO-GO bar 200); dialects [ecma:67, posix-shell:66, py_re:10, re2:48]; boundary=unknown.",
+  "schema_version": "1"
+}

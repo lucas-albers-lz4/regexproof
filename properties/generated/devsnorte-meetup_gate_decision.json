@@ -1,0 +1,42 @@
+{
+  "candidate_url": "https://github.com/devsnorte/meetup",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 3 sites < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "meetup",
+  "corpus_pin": "797bc84d678b10b0ee5a679480f3748dfd79e48e",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 3
+    },
+    "flags": {},
+    "pin": "797bc84d678b10b0ee5a679480f3748dfd79e48e",
+    "predicted_buckets": {},
+    "regex_sites": 3,
+    "regex_sites_per_file": {
+      "app/assets/javascripts/jquery.mobile.custom.min.js": 3
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 3 regex sites (auto-NO-GO bar 200); dialects [ecma:3]; boundary=unknown.",
+  "schema_version": "1"
+}

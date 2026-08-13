@@ -1,0 +1,54 @@
+{
+  "candidate_url": "https://github.com/AliyunContainerService/pouch",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 12 sites < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "pouch",
+  "corpus_pin": "ba854f2ded869f8096f8dc3fdae77cc552a2e0ab",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "(?i)": 1
+    },
+    "dialect": {
+      "posix-shell": 9,
+      "re2": 3
+    },
+    "flags": {},
+    "pin": "ba854f2ded869f8096f8dc3fdae77cc552a2e0ab",
+    "predicted_buckets": {
+      "inline-flag": 1
+    },
+    "regex_sites": 12,
+    "regex_sites_per_file": {
+      "contrib/completion/bash/pouch": 2,
+      "hack/kubernetes/allinone.sh": 1,
+      "hack/kubernetes/allinone_aliyun.sh": 1,
+      "hack/module": 1,
+      "pkg/bytefmt/bytefmt.go": 1,
+      "pkg/kernel/kernel_test.go": 1,
+      "test/cli_version_test.go": 1,
+      "travis_ci.sh": 4
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 12 regex sites (auto-NO-GO bar 200); dialects [posix-shell:9, re2:3]; boundary=unknown.",
+  "schema_version": "1"
+}

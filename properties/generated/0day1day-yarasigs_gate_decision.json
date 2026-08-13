@@ -1,0 +1,54 @@
+{
+  "candidate_url": "https://github.com/0day1day/yarasigs",
+  "conditions": [
+    {
+      "evidence": "Yara dialect covered; corpus novelty is pack content (large novel pattern sets).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe deterministic-true or description-confirmed security tool (malware scanning). Custom yara rules for yara-integrated scans. 1,363 yara sites. 669 patterns, 20% overlap, 534 novel. Security tool. GO 2+3.",
+      "id": "security-boundary",
+      "met": true
+    },
+    {
+      "evidence": "Yara sites >= 1000, under-saturated. Custom yara rules for yara-integrated scans. 1,363 yara sites. 669 patterns, 20% overlap, 534 novel. Security tool. GO 2+3.",
+      "id": "large-under-saturated",
+      "met": true
+    }
+  ],
+  "corpus": "yarasigs",
+  "corpus_pin": "5a07dfcde3076615e4d9394ec75ff53e74c19b45",
+  "decision": "go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "yara": 1363
+    },
+    "flags": {
+      "i": 43
+    },
+    "pin": "5a07dfcde3076615e4d9394ec75ff53e74c19b45",
+    "predicted_buckets": {
+      "inline-flag": 43
+    },
+    "regex_sites": 1363,
+    "regex_sites_per_file": {
+      "signatures/AlienVault/APT_NGO_wuaclt/yara/APT_NGO_wuaclt.yar": 8,
+      "signatures/AlienVault/APT_NGO_wuaclt/yara/APT_NGO_wuaclt_PDF.yar": 1,
+      "signatures/AlienVault/apt.yar": 693,
+      "signatures/AlienVault/avdetect.yar": 396,
+      "signatures/AlienVault/dbgdetect.yar": 35,
+      "signatures/AlienVault/hangover.yar": 102,
+      "signatures/AlienVault/sandboxdetect.yar": 12,
+      "signatures/AlienVault/vmdetect.yar": 110,
+      "signatures/cve.yar": 6
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Security-boundary corpus (boundary=deterministic-true) with findings-triage potential; 1363 sites across [yara:1363].",
+  "schema_version": "1"
+}

@@ -1,0 +1,59 @@
+{
+  "candidate_url": "https://github.com/LRDesign/LRD-CMS",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 230 ecma < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "LRD-CMS",
+  "corpus_pin": "21fcb08a7e9e1996a5a33bec917fb57413159e6b",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "backref": 3,
+      "lookaround": 6
+    },
+    "dialect": {
+      "ecma": 230
+    },
+    "flags": {
+      "g": 41,
+      "i": 28,
+      "m": 1
+    },
+    "pin": "21fcb08a7e9e1996a5a33bec917fb57413159e6b",
+    "predicted_buckets": {
+      "backref": 3,
+      "inline-flag": 28,
+      "lookaround": 6,
+      "m-flag": 1,
+      "stateful": 41
+    },
+    "regex_sites": 230,
+    "regex_sites_per_file": {
+      "app/assets/javascripts/common/logical_tabs_jquery.js": 11,
+      "app/assets/javascripts/common/ninjascript.js": 26,
+      "app/assets/javascripts/jquery-1.9.1.js": 100,
+      "app/assets/javascripts/jquery-ui-1.10.2.js": 90,
+      "app/assets/javascripts/jquery.tools.min.js": 3
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 230 regex sites (auto-NO-GO bar 200); dialects [ecma:230]; boundary=unknown.",
+  "schema_version": "1"
+}

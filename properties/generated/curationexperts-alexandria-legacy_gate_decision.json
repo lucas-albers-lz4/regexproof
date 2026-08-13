@@ -1,0 +1,46 @@
+{
+  "candidate_url": "https://github.com/curationexperts/alexandria-legacy",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 2 sites < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "alexandria-legacy",
+  "corpus_pin": "551ba5ce1c7ad95f91eaadfb504a4eefac4b34b5",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 2
+    },
+    "flags": {
+      "i": 1
+    },
+    "pin": "551ba5ce1c7ad95f91eaadfb504a4eefac4b34b5",
+    "predicted_buckets": {
+      "inline-flag": 1
+    },
+    "regex_sites": 2,
+    "regex_sites_per_file": {
+      "app/assets/javascripts/jquery.jcarousel.js": 2
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 2 regex sites (auto-NO-GO bar 200); dialects [ecma:2]; boundary=unknown.",
+  "schema_version": "1"
+}

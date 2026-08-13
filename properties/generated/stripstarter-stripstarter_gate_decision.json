@@ -1,0 +1,48 @@
+{
+  "candidate_url": "https://github.com/stripstarter/stripstarter",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 84 ecma < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "stripstarter",
+  "corpus_pin": "6aa9fff729052705d7c90d32f1170abb955ae12f",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 84
+    },
+    "flags": {
+      "g": 8,
+      "i": 7
+    },
+    "pin": "6aa9fff729052705d7c90d32f1170abb955ae12f",
+    "predicted_buckets": {
+      "inline-flag": 7,
+      "stateful": 8
+    },
+    "regex_sites": 84,
+    "regex_sites_per_file": {
+      "app/assets/javascripts/jquery-ui-1.10.4.custom.min.js": 84
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 84 regex sites (auto-NO-GO bar 200); dialects [ecma:84]; boundary=unknown.",
+  "schema_version": "1"
+}

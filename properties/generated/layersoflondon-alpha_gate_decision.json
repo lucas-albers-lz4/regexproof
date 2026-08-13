@@ -1,0 +1,61 @@
+{
+  "candidate_url": "https://github.com/layersoflondon/alpha",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 23 ecma < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "alpha",
+  "corpus_pin": "93e5ad2c8d3bbd7ec29153dcef33179c78b71fe0",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 23
+    },
+    "flags": {
+      "d": 2,
+      "i": 4,
+      "s": 4,
+      "v": 2
+    },
+    "pin": "93e5ad2c8d3bbd7ec29153dcef33179c78b71fe0",
+    "predicted_buckets": {
+      "inline-flag": 8,
+      "v-flag": 2
+    },
+    "regex_sites": 23,
+    "regex_sites_per_file": {
+      "app/assets/javascripts/components/collection_results_container.es6.jsx": 4,
+      "app/assets/javascripts/components/content_entry.es6.jsx": 3,
+      "app/assets/javascripts/components/filter_tabs.es6.jsx": 2,
+      "app/assets/javascripts/components/map_container.es6.jsx": 2,
+      "app/assets/javascripts/components/navigation_menu.es6.jsx": 3,
+      "app/assets/javascripts/components/overlay_results_container.es6.jsx": 1,
+      "app/assets/javascripts/components/pin_form/pin_attachment_fields.es6.jsx": 1,
+      "app/assets/javascripts/components/pin_form/pin_form.es6.jsx": 2,
+      "app/assets/javascripts/components/pin_form/pin_type_picker.es6.jsx": 1,
+      "app/assets/javascripts/content_overlay.js.jsx": 2,
+      "app/assets/javascripts/sources/places.js.jsx": 1,
+      "app/assets/javascripts/stores/map_container_store.js.jsx": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 23 regex sites (auto-NO-GO bar 200); dialects [ecma:23]; boundary=unknown.",
+  "schema_version": "1"
+}

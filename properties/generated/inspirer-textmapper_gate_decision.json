@@ -1,0 +1,55 @@
+{
+  "candidate_url": "https://github.com/inspirer/textmapper",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 10 sites < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "textmapper",
+  "corpus_pin": "a4b726ca7bac39abcd53a3a3f064cc2b3758f3cd",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "(?m)": 1
+    },
+    "dialect": {
+      "ecma": 2,
+      "re2": 8
+    },
+    "flags": {
+      "g": 2
+    },
+    "pin": "a4b726ca7bac39abcd53a3a3f064cc2b3758f3cd",
+    "predicted_buckets": {
+      "m-flag": 1,
+      "stateful": 2
+    },
+    "regex_sites": 10,
+    "regex_sites_per_file": {
+      "gen/post_go.go": 2,
+      "gen/post_ts.go": 1,
+      "lalr/compile_test.go": 2,
+      "parsers/js/const_test.go": 2,
+      "parsers/json/lexer_test.go": 1,
+      "testing/ts/json/lexer.ts": 2
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 10 regex sites (auto-NO-GO bar 200); dialects [ecma:2, re2:8]; boundary=unknown.",
+  "schema_version": "1"
+}

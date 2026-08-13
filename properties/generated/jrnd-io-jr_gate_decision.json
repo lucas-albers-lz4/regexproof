@@ -1,0 +1,66 @@
+{
+  "candidate_url": "https://github.com/jrnd-io/jr",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 1,064 sites but 1,022 bundled bootstrap/font-awesome — honest 42 < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "jr",
+  "corpus_pin": "5d3f24d3975473d56087f4d8ac318c80fbfb4d58",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "backref": 4,
+      "lookaround": 66
+    },
+    "dialect": {
+      "ecma": 1060,
+      "re2": 4
+    },
+    "flags": {
+      "g": 30,
+      "i": 27,
+      "u": 5
+    },
+    "pin": "5d3f24d3975473d56087f4d8ac318c80fbfb4d58",
+    "predicted_buckets": {
+      "backref": 4,
+      "inline-flag": 27,
+      "lookaround": 66,
+      "stateful": 30,
+      "u-flag": 5
+    },
+    "regex_sites": 1064,
+    "regex_sites_per_file": {
+      "pkg/cmd/html/bs/js/bootstrap.bundle.js": 19,
+      "pkg/cmd/html/bs/js/bootstrap.bundle.min.js": 19,
+      "pkg/cmd/html/bs/js/bootstrap.js": 13,
+      "pkg/cmd/html/bs/js/bootstrap.min.js": 13,
+      "pkg/cmd/html/js/font-awesome.js": 6,
+      "pkg/cmd/html/js/highlight-11.9.0.min.js": 867,
+      "pkg/cmd/html/js/javascript.min.js": 57,
+      "pkg/cmd/html/js/jquery-3.2.1.slim.min.js": 66,
+      "pkg/emitter/throughput.go": 1,
+      "pkg/functions/helper.go": 1,
+      "pkg/producers/kafka/kafkaProducer.go": 2
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 1064 regex sites (auto-NO-GO bar 200); dialects [ecma:1060, re2:4]; boundary=unknown.",
+  "schema_version": "1"
+}

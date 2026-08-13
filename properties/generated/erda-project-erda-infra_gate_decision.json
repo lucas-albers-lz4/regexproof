@@ -1,0 +1,49 @@
+{
+  "candidate_url": "https://github.com/erda-project/erda-infra",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 10 re2 < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "erda-infra",
+  "corpus_pin": "c6933a1cdf224b2fd2ac7a502f730a3519393cd7",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "re2": 10
+    },
+    "flags": {},
+    "pin": "c6933a1cdf224b2fd2ac7a502f730a3519393cd7",
+    "predicted_buckets": {},
+    "regex_sites": 10,
+    "regex_sites_per_file": {
+      "pkg/config/config.go": 2,
+      "pkg/strutil/regexp_test.go": 1,
+      "pkg/strutil/strutil.go": 2,
+      "providers/component-protocol/protocol/i18n.go": 1,
+      "providers/component-protocol/protocol/translator/translator.go": 1,
+      "providers/i18n/provider.go": 1,
+      "providers/legacy/httpendpoints/i18n/template.go": 1,
+      "providers/mysql/v2/plugins/fields/soft_delete_test.go": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 10 regex sites (auto-NO-GO bar 200); dialects [re2:10]; boundary=unknown.",
+  "schema_version": "1"
+}

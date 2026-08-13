@@ -1,0 +1,70 @@
+{
+  "candidate_url": "https://github.com/isfit/internal.isfit.org",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 283 ecma < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "internal.isfit.org",
+  "corpus_pin": "c491248eae5bbdf0ac703ff8466db6c76e3f7e75",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "backref": 3,
+      "lookaround": 7
+    },
+    "dialect": {
+      "ecma": 283
+    },
+    "flags": {
+      "g": 113,
+      "i": 54,
+      "m": 5
+    },
+    "pin": "c491248eae5bbdf0ac703ff8466db6c76e3f7e75",
+    "predicted_buckets": {
+      "backref": 3,
+      "inline-flag": 54,
+      "lookaround": 7,
+      "m-flag": 5,
+      "stateful": 113
+    },
+    "regex_sites": 283,
+    "regex_sites_per_file": {
+      "app/assets/javascripts/ajquery.jvectormap.js": 5,
+      "app/assets/javascripts/highcharts.js": 45,
+      "app/assets/javascripts/humanized_time_span.js": 3,
+      "app/assets/javascripts/jquery/jquery.fileupload-ui.js": 3,
+      "app/assets/javascripts/jquery/jquery.fileupload.js": 1,
+      "app/assets/javascripts/jquery/jquery.imgareaselect.js": 12,
+      "app/assets/javascripts/jquery/jquery.jeditable.mini.js": 4,
+      "app/assets/javascripts/jquery/jquery.prettyPhoto.js": 37,
+      "app/assets/javascripts/jquery_addons/jquery.imgareaselect.js": 12,
+      "app/assets/javascripts/jquery_addons/jquery.jeditable.mini.js": 4,
+      "app/assets/javascripts/jquery_addons/jquery.prettyPhoto.js": 37,
+      "app/assets/javascripts/kvitters.js": 9,
+      "app/assets/javascripts/layout_jobs.js": 1,
+      "doc/js/app.js": 1,
+      "doc/js/full_list.js": 3,
+      "doc/js/jquery.js": 106
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 283 regex sites (auto-NO-GO bar 200); dialects [ecma:283]; boundary=unknown.",
+  "schema_version": "1"
+}

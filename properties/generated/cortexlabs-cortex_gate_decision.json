@@ -1,0 +1,75 @@
+{
+  "candidate_url": "https://github.com/cortexlabs/cortex",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 71 sites < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "cortex",
+  "corpus_pin": "dc48c02ed50a523a87166709f6fe361b5c836e3e",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "(?i)": 1,
+      "posix-class": 2
+    },
+    "dialect": {
+      "posix-shell": 37,
+      "py_re": 9,
+      "re2": 25
+    },
+    "flags": {},
+    "pin": "dc48c02ed50a523a87166709f6fe361b5c836e3e",
+    "predicted_buckets": {
+      "inline-flag": 1,
+      "posix-class": 2
+    },
+    "regex_sites": 71,
+    "regex_sites_per_file": {
+      "cli/cmd/cluster.go": 1,
+      "cli/cmd/lib_cluster_config.go": 1,
+      "dev/export_images.sh": 1,
+      "dev/format.sh": 1,
+      "dev/generate_python_client_md.sh": 16,
+      "get-cli.sh": 2,
+      "manager/debug.sh": 2,
+      "manager/generate_eks.py": 2,
+      "manager/install.sh": 7,
+      "manager/refresh.sh": 1,
+      "pkg/lib/aws/ec2.go": 1,
+      "pkg/lib/aws/ecr.go": 1,
+      "pkg/lib/aws/gen_resource_metadata.py": 2,
+      "pkg/lib/configreader/validators.go": 1,
+      "pkg/lib/k8s/k8s.go": 4,
+      "pkg/lib/k8s/pod.go": 1,
+      "pkg/lib/regex/regex.go": 7,
+      "pkg/lib/strings/operations_test.go": 1,
+      "pkg/lib/urls/urls.go": 4,
+      "pkg/types/clusterconfig/cluster_config.go": 1,
+      "pkg/types/spec/errors.go": 2,
+      "test/apis/batch/image-classifier-alexnet/app/main.py": 2,
+      "test/apis/batch/sum/app/main.py": 1,
+      "test/apis/task/iris-classifier-trainer/app/main.py": 1,
+      "test/e2e/e2e/tests.py": 1,
+      "test/utils/build.sh": 7
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 71 regex sites (auto-NO-GO bar 200); dialects [posix-shell:37, py_re:9, re2:25]; boundary=unknown.",
+  "schema_version": "1"
+}
