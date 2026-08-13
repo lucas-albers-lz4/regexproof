@@ -195,6 +195,13 @@ class MirrorCache:
                     ).hexdigest()
                     if not side_digest or side_digest != side_actual:
                         return None
+                    # Cumulative-MCR fold (minor): the sidecar must also
+                    # MATCH the embedded copy's digest — put() writes both
+                    # with the same key-bound digest, so a sidecar with
+                    # altered metadata AND a recomputed digest still fails
+                    # when it diverges from the script's embedded copy.
+                    if expected and side_digest != expected:
+                        return None
                     metadata = side_meta
                 except (OSError, json.JSONDecodeError):
                     return None

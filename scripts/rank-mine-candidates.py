@@ -13,6 +13,7 @@ import argparse
 import json
 import sys
 from pathlib import Path
+from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
@@ -123,6 +124,23 @@ def main(argv: list[str] | None = None) -> int:
         gated = load_admitted_urls(args.generated.expanduser().resolve())
 
     status = (args.status or "").strip()
+    # Cumulative-MCR fold (M1/M2): score-v2's probe + tree features are
+    # fitted on the GATE DECISIONS' probe data, but the ledger candidates
+    # carry none of it — the runtime feature vector would zero every probe
+    # feature.  Join the decisions (by URL) and attach the decision-time
+    # probe + pin (E3 semantics: never the ledger's mined pin).
+    decisions_by_url: dict[str, dict[str, Any]] = {}
+    if args.allocator == "score-v2":
+        gen = args.generated.expanduser().resolve()
+        for path in sorted(gen.glob("*_gate_decision.json")):
+            try:
+                dec = json.loads(path.read_text(encoding="utf-8"))
+            except (OSError, json.JSONDecodeError):
+                continue
+            curl = str(dec.get("candidate_url") or "")
+            if curl:
+                decisions_by_url.setdefault(normalize_repo_url(curl), dec)
+
     pool = []
     for c in ledger.get("candidates", []):
         if not isinstance(c, dict):
@@ -135,6 +153,19 @@ def main(argv: list[str] | None = None) -> int:
             continue
         if gated and url and normalize_repo_url(str(url)) in gated:
             continue
+        if args.allocator == "score-v2" and url:
+            dec = decisions_by_url.get(normalize_repo_url(str(url)))
+            if dec is not None:
+                probe = dec.get("probe") if isinstance(dec.get("probe"), dict) else {}
+                c["probe"] = probe
+                dec_pin = str(
+                    probe.get("pin_probed")
+                    or dec.get("corpus_pin")
+                    or probe.get("pin")
+                    or ""
+                )
+                if dec_pin:
+                    c["pin_probed"] = dec_pin
         pool.append(c)
     tree_features = {}
     if args.allocator == "score-v2" and pool:

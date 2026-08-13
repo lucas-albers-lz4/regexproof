@@ -20,24 +20,20 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-# Artifacts compared across two runs (sorted regex_id NDJSON + summaries).
-COMPARE_SUFFIXES = (
-    "detect-secrets.ndjson",
-    "gitleaks.ndjson",
-    "validatorjs.ndjson",
-    "batch_pair_counts.json",
-    "batch_summary.json",
-    "batch_repro.sha256",
-)
+# Cumulative-MCR fold (M3): the two-run comparison covers EVERY committed
+# batch output (per-corpus NDJSON, batch Markdown, per-corpus summaries,
+# encodable fractions, PR dry-runs, triage NDJSON, aggregates) — a fixed
+# six-file list let other committed artifacts drift undetected.
+COMPARE_SUFFIXES = (".ndjson", ".json", ".md", ".sha256")
 
 
 def _fingerprint(out_dir: Path) -> dict[str, str]:
     digests = {}
-    for name in COMPARE_SUFFIXES:
-        path = out_dir / name
-        if not path.is_file():
-            raise FileNotFoundError(path)
-        digests[name] = hashlib.sha256(path.read_bytes()).hexdigest()
+    for path in sorted(out_dir.rglob("*")):
+        if path.is_file() and path.suffix in COMPARE_SUFFIXES:
+            digests[str(path.relative_to(out_dir))] = hashlib.sha256(
+                path.read_bytes()
+            ).hexdigest()
     return digests
 
 
