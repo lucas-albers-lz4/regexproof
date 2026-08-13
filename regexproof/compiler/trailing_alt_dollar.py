@@ -202,7 +202,11 @@ def try_compile_trailing_alt_dollar(
             meta = composite_meta(
                 leading_caret=False,
                 trailing_dollar=(call_kind == "fullmatch"),
-                word_boundary_wrap=False,
+                # C1 fold (luna re-gate): propagate the R subcompile's
+                # word-boundary wrap instead of hardcoding False.
+                word_boundary_wrap=(
+                    bool(r_cr.word_boundary_wrap) if split["r_alt"] else False
+                ),
                 wrap_kind=wrap_kind_for_call(call_kind),
                 mirror_exact=mirror_exact,
             )
@@ -283,11 +287,14 @@ def try_compile_trailing_alt_dollar(
 
         # C1 (issue #426): synthesize the metadata contract this fast path
         # bypasses ``lower()``'s ``_meta`` dict — X is anchor-free (no
-        # leading_caret) and the union is never the bare body.
+        # leading_caret) and the union is never the bare body. Any \b
+        # sub-mirror stays word-boundary-wrapped (C1 fold, luna re-gate 2).
         meta = composite_meta(
             leading_caret=False,
             trailing_dollar=(call_kind == "fullmatch"),
-            word_boundary_wrap=False,
+            word_boundary_wrap=any(
+                bool(m.get("word_boundary_wrap")) for m in sub_metas
+            ),
             wrap_kind=wrap_kind_for_call(call_kind),
             mirror_exact=all(bool(m.get("mirror_exact")) for m in sub_metas),
         )

@@ -233,3 +233,28 @@ def test_mirror_discard_path_releases_stream():
         assert "mirror" not in row  # lean rows — no AST in records
         if mirror is not None:
             assert meta is not None
+
+
+def test_fast_path_propagates_word_boundary_wrap():
+    # C1 fold (luna re-gate 2): caret_in_x / trailing_alt_dollar composites
+    # must propagate a \b-containing subcompile's word_boundary_wrap instead
+    # of hardcoding False (the child mirror is already search-shaped).
+    # caret_in_x: ^(?:\bfoo|$) under search; trailing_alt_dollar empty_x+r_alt:
+    # (?:\bfoo|$) under fullmatch (under search the union with the empty
+    # alternative is the universal language — no boundary constraint).
+    cases = [
+        (r"^(?:\bfoo|$)", "search"),
+        (r"(?:\bfoo|$)", "fullmatch"),
+    ]
+    for pat, call_kind in cases:
+        cr = compile_pattern(pat, "", "pcre", call_kind)
+        assert cr.encodable, (pat, cr.unencodable_reason)
+        assert cr.word_boundary_wrap is True, (pat, cr.word_boundary_wrap)
+        assert cr.fullmatch_shaped is False, pat
+
+
+def test_fast_path_plain_alt_no_wrap():
+    # No \b in the subcompiles -> word_boundary_wrap stays False.
+    cr = compile_pattern(r"^(?:foo|$)", "", "pcre", "search")
+    assert cr.encodable
+    assert cr.word_boundary_wrap is False

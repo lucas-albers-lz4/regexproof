@@ -105,7 +105,11 @@ def try_compile_caret_in_x(
             meta = composite_meta(
                 leading_caret=True,
                 trailing_dollar=(call_kind == "fullmatch"),
-                word_boundary_wrap=False,
+                # C1 fold (luna re-gate): a \b-containing R subcompile stays
+                # word-boundary-wrapped — propagate, never hardcode False.
+                word_boundary_wrap=(
+                    bool(r_cr.word_boundary_wrap) if split["r_alt"] else False
+                ),
                 wrap_kind=wrap_kind_for_call(call_kind),
                 mirror_exact=bool(r_cr.mirror_exact) if split["r_alt"] else True,
             )
