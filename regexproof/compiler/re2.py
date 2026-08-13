@@ -17,6 +17,7 @@ from regexproof.compiler.base import (
 )
 from regexproof.compiler.fold import re2_fold_closure
 from regexproof.compiler.pcre_strip import strip_language_transparent
+from regexproof.compiler.reject_markers import unicode_prop_unencodable
 
 HELPER_DIR = Path(__file__).resolve().parents[2] / "helpers" / "go-re2"
 DEFAULT_MAX_LENGTH = 256
@@ -137,6 +138,7 @@ def compile_re2(
         trailing_dollar_nl=False,
         allow_ascii_word_boundary=True,
         strip_fn=strip_language_transparent,
+        local_reject_fn=unicode_prop_unencodable,
         flag_reject_fn=flag_reject,
         helper_gate_fn=helper_gate,
         raise_from_gate_fn=_raise_from_gate,

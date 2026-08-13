@@ -26,7 +26,10 @@ _ROOT = Path(__file__).resolve().parents[2]
 if str(_ROOT) not in sys.path:
     sys.path.insert(0, str(_ROOT))
 
-from regexproof.compiler.reject_markers import PERL_REJECT_MARKERS  # noqa: E402
+from regexproof.compiler.reject_markers import (  # noqa: E402
+    PERL_REJECT_MARKERS,
+    unicode_prop_unencodable,
+)
 
 # Pin: major.minor must match installed perl (Wave-3 hard pre-gate).
 # Local/CI currently ship 5.38.x; prefix gate accepts 5.38+.
@@ -36,6 +39,9 @@ HELPER_TIMEOUT_S = 30
 
 
 def _reject_unencodable(pattern: str) -> str | None:
+    prop = unicode_prop_unencodable(pattern)
+    if prop:
+        return prop
     for marker, reason in PERL_REJECT_MARKERS:
         if marker in pattern:
             return reason

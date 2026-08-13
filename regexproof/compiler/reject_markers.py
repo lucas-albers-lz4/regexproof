@@ -6,6 +6,21 @@ the compiler.
 
 from __future__ import annotations
 
+import re
+
+# Odd backslash chain = real Unicode property escape; even chain = escaped
+# literal. Same tokenizer as regexproof.harness.gates.P_TOKEN (#226 / #362).
+_UNICODE_PROP_BRACED = re.compile(r"(?<!\\)(?:\\\\)*\\(?:p|P)\{")
+_UNICODE_PROP_BRACELESS = re.compile(r"(?<!\\)(?:\\\\)*\\(?:p|P)(?!\{)[A-Za-z]")
+
+
+def unicode_prop_unencodable(pattern: str) -> str | None:
+    """Return ``unicode-prop`` when *pattern* contains a real ``\\p``/``\\P`` token."""
+    if _UNICODE_PROP_BRACED.search(pattern) or _UNICODE_PROP_BRACELESS.search(pattern):
+        return "unicode-prop"
+    return None
+
+
 # (substring, unencodable_reason)
 PCRE_REJECT_MARKERS: tuple[tuple[str, str], ...] = (
     ("(?=", "lookaround"),
@@ -35,8 +50,6 @@ PERL_REJECT_MARKERS: tuple[tuple[str, str], ...] = (
     ("\\g{", "backref"),
     ("\\g<", "backref"),
     ("\\N{", "named-char"),
-    ("\\p{", "unicode-prop"),
-    ("\\P{", "unicode-prop"),
     ("\\h", "h-escape"),
     ("\\v", "v-escape"),
     ("\\Q", "quote-meta"),
