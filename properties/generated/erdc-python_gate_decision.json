@@ -1,0 +1,123 @@
+{
+  "candidate_url": "https://github.com/erdc/python",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (py_re/posix-shell already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe deterministic-false; erdc CPython fork, not a security tool.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "159 sites below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "python",
+  "corpus_pin": "25f8eb75c63f35f7594d817ffb1d9a26f3d0bb77",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "(?i)": 1,
+      "(?x)": 2,
+      "backref": 3,
+      "lookaround": 19
+    },
+    "dialect": {
+      "posix-shell": 22,
+      "py_re": 137
+    },
+    "flags": {
+      "i": 7,
+      "m": 7,
+      "s": 3,
+      "x": 16
+    },
+    "pin": "25f8eb75c63f35f7594d817ffb1d9a26f3d0bb77",
+    "predicted_buckets": {
+      "backref": 3,
+      "inline-flag": 29,
+      "lookaround": 19,
+      "m-flag": 7
+    },
+    "regex_sites": 159,
+    "regex_sites_per_file": {
+      "Doc/tools/roman.py": 1,
+      "Doc/tools/sphinxext/pyspecific.py": 2,
+      "Lib/Cookie.py": 3,
+      "Lib/HTMLParser.py": 15,
+      "Lib/_LWPCookieJar.py": 1,
+      "Lib/_MozillaCookieJar.py": 1,
+      "Lib/cookielib.py": 23,
+      "Lib/ctypes/macholib/dylib.py": 1,
+      "Lib/ctypes/macholib/framework.py": 1,
+      "Lib/ctypes/test/test_array_in_pointer.py": 1,
+      "Lib/ctypes/test/test_pep3118.py": 1,
+      "Lib/distutils/command/config.py": 1,
+      "Lib/distutils/command/install_egg_info.py": 2,
+      "Lib/distutils/tests/test_filelist.py": 1,
+      "Lib/distutils/versionpredicate.py": 4,
+      "Lib/email/feedparser.py": 6,
+      "Lib/email/generator.py": 2,
+      "Lib/email/header.py": 4,
+      "Lib/email/message.py": 1,
+      "Lib/email/quoprimime.py": 3,
+      "Lib/email/utils.py": 6,
+      "Lib/encodings/idna.py": 1,
+      "Lib/fnmatch.py": 2,
+      "Lib/fractions.py": 1,
+      "Lib/glob.py": 1,
+      "Lib/idlelib/CodeContext.py": 1,
+      "Lib/idlelib/FormatParagraph.py": 4,
+      "Lib/idlelib/OutputWindow.py": 1,
+      "Lib/idlelib/PyParse.py": 7,
+      "Lib/idlelib/ZoomHeight.py": 1,
+      "Lib/inspect.py": 2,
+      "Lib/json/decoder.py": 2,
+      "Lib/json/scanner.py": 1,
+      "Lib/keyword.py": 1,
+      "Lib/lib2to3/tests/test_main.py": 1,
+      "Lib/logging/handlers.py": 1,
+      "Lib/markupbase.py": 5,
+      "Lib/posixpath.py": 1,
+      "Lib/test/crashers/infinite_loop_re.py": 1,
+      "Lib/test/test_commands.py": 1,
+      "Lib/test/test_logging.py": 1,
+      "Lib/test/test_mmap.py": 1,
+      "Lib/test/test_sgmllib.py": 1,
+      "Lib/test/test_strtod.py": 1,
+      "Lib/test/test_wsgiref.py": 1,
+      "Lib/wsgiref/headers.py": 1,
+      "Lib/wsgiref/validate.py": 2,
+      "Lib/xml/etree/ElementPath.py": 3,
+      "Modules/_ctypes/libffi/install-sh": 1,
+      "Modules/_ctypes/libffi/ltmain.sh": 1,
+      "Modules/_ctypes/libffi/msvcc.sh": 6,
+      "Modules/ar_beos": 1,
+      "Modules/makexp_aix": 1,
+      "Modules/zlib/configure": 7,
+      "PC/VS8.0/build_ssl.py": 1,
+      "PCbuild/build_ssl.py": 1,
+      "Tools/ccbench/ccbench.py": 1,
+      "Tools/faqwiz/move-faqwiz.sh": 2,
+      "Tools/framer/framer/structparse.py": 1,
+      "Tools/iobench/iobench.py": 1,
+      "Tools/scripts/eptags.py": 1,
+      "Tools/scripts/gprof2html.py": 2,
+      "Tools/scripts/parseentities.py": 1,
+      "Tools/scripts/ptags.py": 1,
+      "Tools/ssl/get-remote-certificate.py": 1,
+      "install-sh": 3
+    },
+    "security_boundary": "deterministic-false"
+  },
+  "rationale": "Below admission scale: 159 regex sites (auto-NO-GO bar 200); dialects [posix-shell:22, py_re:137]; boundary=deterministic-false.",
+  "schema_version": "1"
+}

@@ -1,0 +1,117 @@
+{
+  "candidate_url": "https://github.com/qrees/python-no-gil",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (py_re/posix-shell already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe deterministic-false; CPython no-GIL fork, not a security tool.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "160 sites below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "python-no-gil",
+  "corpus_pin": "4e84a7dc5791b185d4a5a1854d4f9cab24522936",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "(?i)": 1,
+      "(?x)": 2,
+      "backref": 3,
+      "lookaround": 10
+    },
+    "dialect": {
+      "posix-shell": 31,
+      "py_re": 129
+    },
+    "flags": {
+      "i": 5,
+      "m": 5,
+      "s": 2,
+      "x": 13
+    },
+    "pin": "4e84a7dc5791b185d4a5a1854d4f9cab24522936",
+    "predicted_buckets": {
+      "backref": 3,
+      "inline-flag": 23,
+      "lookaround": 10,
+      "m-flag": 5
+    },
+    "regex_sites": 160,
+    "regex_sites_per_file": {
+      "Doc/tools/sphinxext/pyspecific.py": 1,
+      "Lib/Cookie.py": 3,
+      "Lib/HTMLParser.py": 14,
+      "Lib/_LWPCookieJar.py": 1,
+      "Lib/_MozillaCookieJar.py": 1,
+      "Lib/cookielib.py": 23,
+      "Lib/ctypes/macholib/dylib.py": 1,
+      "Lib/ctypes/macholib/framework.py": 1,
+      "Lib/ctypes/test/test_array_in_pointer.py": 1,
+      "Lib/ctypes/test/test_pep3118.py": 1,
+      "Lib/distutils/command/install_egg_info.py": 2,
+      "Lib/distutils/versionpredicate.py": 4,
+      "Lib/email/feedparser.py": 6,
+      "Lib/email/generator.py": 2,
+      "Lib/email/header.py": 3,
+      "Lib/email/message.py": 1,
+      "Lib/email/quoprimime.py": 3,
+      "Lib/email/utils.py": 6,
+      "Lib/encodings/idna.py": 1,
+      "Lib/fnmatch.py": 2,
+      "Lib/fractions.py": 1,
+      "Lib/glob.py": 1,
+      "Lib/idlelib/CodeContext.py": 1,
+      "Lib/idlelib/FormatParagraph.py": 4,
+      "Lib/idlelib/OutputWindow.py": 1,
+      "Lib/idlelib/PyParse.py": 7,
+      "Lib/idlelib/ZoomHeight.py": 1,
+      "Lib/inspect.py": 2,
+      "Lib/json/decoder.py": 2,
+      "Lib/json/encoder.py": 3,
+      "Lib/json/scanner.py": 1,
+      "Lib/keyword.py": 1,
+      "Lib/lib2to3/fixes/fix_unicode.py": 1,
+      "Lib/markupbase.py": 5,
+      "Lib/posixpath.py": 1,
+      "Lib/test/crashers/infinite_loop_re.py": 1,
+      "Lib/test/test_commands.py": 1,
+      "Lib/test/test_logging.py": 1,
+      "Lib/test/test_mmap.py": 1,
+      "Lib/test/test_sgmllib.py": 1,
+      "Lib/wsgiref/headers.py": 1,
+      "Lib/wsgiref/validate.py": 2,
+      "Lib/xml/etree/ElementPath.py": 1,
+      "Lib/xml/etree/ElementTree.py": 2,
+      "Misc/build.sh": 10,
+      "Modules/_ctypes/libffi/install-sh": 1,
+      "Modules/ar_beos": 1,
+      "Modules/ld_so_aix": 6,
+      "Modules/makexp_aix": 1,
+      "Modules/zlib/configure": 7,
+      "PC/VS8.0/build_ssl.py": 1,
+      "PCbuild/build_ssl.py": 1,
+      "Tools/faqwiz/move-faqwiz.sh": 2,
+      "Tools/framer/framer/structparse.py": 1,
+      "Tools/scripts/eptags.py": 1,
+      "Tools/scripts/gprof2html.py": 2,
+      "Tools/scripts/parseentities.py": 1,
+      "Tools/scripts/ptags.py": 1,
+      "Tools/ssl/get-remote-certificate.py": 1,
+      "install-sh": 3
+    },
+    "security_boundary": "deterministic-false"
+  },
+  "rationale": "Below admission scale: 160 regex sites (auto-NO-GO bar 200); dialects [posix-shell:31, py_re:129]; boundary=deterministic-false.",
+  "schema_version": "1"
+}
