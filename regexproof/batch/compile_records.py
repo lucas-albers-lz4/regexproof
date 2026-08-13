@@ -180,20 +180,26 @@ def compile_records(
     resolved_jobs = _resolved_jobs(jobs)
     cache = MirrorCache(cache_dir or DEFAULT_CACHE_DIR)
     payloads = [(rec, lift_inline, corpus_slug, budget) for rec in records]
+    # Items are (submission_index, row, script, meta, cache_hit); the index is
+    # captured at submit time so the post-gather sort is total and stable
+    # (duplicate/missing regex_ids cannot fall back to completion order).
     serialized: list[
-        tuple[dict[str, Any], str | None, dict[str, Any] | None, bool]
+        tuple[int, dict[str, Any], str | None, dict[str, Any] | None, bool]
     ] = []
 
     if resolved_jobs == 1 or len(payloads) < 2:
-        for payload in payloads:
+        for index, payload in enumerate(payloads):
             rec, lift, slug, limits = payload
             serialized.append(
-                _compile_one_record(
-                    rec,
-                    lift_inline=lift,
-                    corpus_slug=slug,
-                    budget=limits,
-                    cache=cache,
+                (
+                    index,
+                    *_compile_one_record(
+                        rec,
+                        lift_inline=lift,
+                        corpus_slug=slug,
+                        budget=limits,
+                        cache=cache,
+                    ),
                 )
             )
             if max_wall and (time.monotonic() - t0) > max_wall:
@@ -212,6 +218,7 @@ def compile_records(
             initargs=(budget, str(cache.directory)),
         )
         futures = [executor.submit(_compile_record_worker, payload) for payload in payloads]
+        future_index = {id(f): i for i, f in enumerate(futures)}
         breached = False
         try:
             # M3 (luna gate 1): as_completed must be bounded — a stuck worker
@@ -221,7 +228,8 @@ def compile_records(
                 max(0.0, max_wall - (time.monotonic() - t0)) if max_wall else None
             )
             for future in as_completed(futures, timeout=remaining):
-                serialized.append(future.result())
+                _row, _script, _meta, _hit = future.result()
+                serialized.append((future_index[id(future)], _row, _script, _meta, _hit))
                 # The parent owns the wall-clock gate.  Check between worker
                 # result batches rather than trusting child-local clocks.
                 if max_wall and (time.monotonic() - t0) > max_wall:
@@ -234,7 +242,7 @@ def compile_records(
                     raise BudgetBreached(
                         corpus_slug, "max_mem_mb", max_mem, check_budget_mem()
                     )
-        except concurrent_futures.TimeoutError:
+        except TimeoutError:
             breached = True
             raise BudgetBreached(
                 corpus_slug, "max_wall_s", max_wall, time.monotonic() - t0
@@ -243,8 +251,8 @@ def compile_records(
             executor.shutdown(wait=not breached, cancel_futures=breached)
 
     if cache_stats is not None:
-        hits = sum(bool(item[3]) for item in serialized)
-        misses = sum(1 for item in serialized if not item[3])
+        hits = sum(bool(item[4]) for item in serialized)
+        misses = sum(1 for item in serialized if not item[4])
         cache_stats["hits"] = hits
         cache_stats["misses"] = misses
         cache_stats["entries"] = hits + misses
@@ -252,10 +260,11 @@ def compile_records(
 
     # Workers return only strings/dicts.  Rebuild the live ASTs in the parent
     # after gathering all results, then sort before any downstream consumer.
+    # The tie-break is the SUBMISSION index (captured at submit time), so
+    # duplicate/missing regex_ids sort identically on every run.
     out = [
-        (row, deserialize_mirror(script) if script is not None else None, meta)
-        for row, script, meta, _cache_hit in serialized
+        (index, row, deserialize_mirror(script) if script is not None else None, meta)
+        for index, row, script, meta, _cache_hit in serialized
     ]
-    order = {id(row): i for i, row in enumerate(row for row, _s, _m, _h in serialized)}
-    out.sort(key=lambda item: (str(item[0].get("regex_id") or ""), order[id(item[0])]))
-    return out
+    out.sort(key=lambda item: (str(item[1].get("regex_id") or ""), item[0]))
+    return [(row, mirror, meta) for _index, row, mirror, meta in out]

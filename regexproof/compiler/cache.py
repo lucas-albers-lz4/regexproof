@@ -102,10 +102,9 @@ def serialize_mirror(
         f'(assert (str.in_re "" {_MIRROR_NAME}))\n'
     )
     meta = dict(metadata or {})
-    # M1 (luna gate 1): the metadata carries the digest of the mirror-only
-    # script so get() can reject a valid-looking entry placed under the
-    # wrong key instead of silently serving a wrong mirror.
-    meta["_script_sha256"] = hashlib.sha256(script.encode("utf-8")).hexdigest()
+    # M1 (luna gate 1 + re-gate 2): the KEY-BOUND digest of the mirror-only
+    # script is added by MirrorCache.put(); get() re-computes it from the
+    # requested key so a copied artifact under a different key is rejected.
     return script + _METADATA_PREFIX + json.dumps(
         meta, ensure_ascii=True, sort_keys=True, separators=(",", ":")
     ) + "\n"
@@ -160,7 +159,8 @@ class MirrorCache:
             # triggers a fresh compile instead of serving a wrong mirror.
             expected = metadata.get("_script_sha256")
             core = script.split(_METADATA_PREFIX, 1)[0]
-            if not expected or expected != hashlib.sha256(core.encode("utf-8")).hexdigest():
+            actual = hashlib.sha256((key + ":" + core).encode("utf-8")).hexdigest()
+            if not expected or expected != actual:
                 return None
             # Minor (luna gate 1): metadata SIDECAR (the plan's "metadata
             # sidecars") — the .meta.json sibling is the authoritative source
@@ -187,10 +187,19 @@ class MirrorCache:
     ) -> str:
         """Atomically write one script + a metadata sidecar."""
         script = serialize_mirror(mirror, metadata or {})
+        # Re-gate 2: the digest BINDS THE KEY — copying a valid artifact to
+        # another key changes the digest and triggers a fresh compile.
+        meta = dict(_metadata_from_script(script))
+        core = script.split(_METADATA_PREFIX, 1)[0]
+        meta["_script_sha256"] = hashlib.sha256(
+            (key + ":" + core).encode("utf-8")
+        ).hexdigest()
+        script = script.split(_METADATA_PREFIX, 1)[0] + _METADATA_PREFIX + json.dumps(
+            meta, ensure_ascii=True, sort_keys=True, separators=(",", ":")
+        ) + "\n"
         atomic_write_text(self.path_for(key), script)
         # The sidecar carries the metadata (the plan's "metadata sidecars");
         # the comment-embedded copy remains for backward compatibility.
-        meta = _metadata_from_script(script)
         atomic_write_text(self.path_for(key).with_suffix(".smt2.meta.json"),
                           json.dumps(meta, indent=2, sort_keys=True) + "\n")
         return script
