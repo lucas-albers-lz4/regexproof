@@ -65,6 +65,7 @@ def main(argv: list[str] | None = None) -> int:
     records = extract_corpus("validatorjs", meta)
     compiled = compile_records(records, lift_inline=False, corpus_slug="validatorjs")
     recs = [pair[0] for pair in compiled]
+    compiled.clear()  # C1 fold (luna re-gate 6): release the Z3 ASTs
 
     # Crash-regression: {1} must compile after lower.py fix
     crash = compile_pattern("x{1}", "", "ecma", "fullmatch")

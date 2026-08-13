@@ -242,11 +242,17 @@ def try_compile_trailing_alt_dollar(
             suffix_m = wb_leading_suffix_mirror(inner_cr.mirror)
             # xr_cr.mirror already search-shaped for WordBounded; do not re-wrap.
             mirror = Union(xr_cr.mirror, suffix_m)
+            # C1 fold (luna re-gate 6): the flag must reflect the ACTUAL
+            # compiled shape — a mixed xr (\bfoo|bar(?:x) lowers with
+            # word_boundary_wrap=False, so hardcoding True misreports it.
+            # wrap_kind stays "search": the suffix branch is boundary-shaped,
+            # so the union is never whole-string regardless.
+            wb = bool(xr_cr.word_boundary_wrap)
             meta = composite_meta(
                 leading_caret=False,
                 # C1 fold (luna re-gate 3): source-derived — trailing $ alt.
                 trailing_dollar=True,
-                word_boundary_wrap=True,
+                word_boundary_wrap=wb,
                 wrap_kind="search",
                 mirror_exact=bool(xr_cr.mirror_exact)
                 and bool(inner_cr.mirror_exact),

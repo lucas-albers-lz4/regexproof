@@ -640,6 +640,8 @@ def main(argv: list[str] | None = None) -> int:
                     for c in compiled
                     if c[0].get("encodable") and not c[0].get("selector")
                 ][: args.max_per_corpus]
+                # C1 fold (luna re-gate 6): release the Z3 ASTs before fuzzing.
+                compiled.clear()
             for rec in rows:
                 results.append(
                     {

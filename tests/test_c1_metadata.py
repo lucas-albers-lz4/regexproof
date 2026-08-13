@@ -372,3 +372,16 @@ def test_scoped_ascii_group_mirror_is_faithful():
         cr = compile_pattern(pat, "", "py_re", "search")
         assert cr.encodable, pat
         assert cr.mirror_exact is True, pat
+
+
+def test_wb_suffix_branch_reflects_actual_xr_shape():
+    # C1 fold (luna re-gate 6): the \b-suffix fast-path composite must report
+    # the ACTUAL xr shape — a mixed xr (\bfoo|bar(?:x) lowers wb=False; an
+    # all-wrapped xr (\bfoo|\bbar(?:x) lowers wb=True. Hardcoding True (the
+    # old behavior) misreported the mixed case.
+    cr = compile_pattern(r"\bfoo|bar(?:x|$)", "", "pcre", "search")
+    if cr.encodable:
+        assert cr.word_boundary_wrap is False, cr.word_boundary_wrap
+    cr2 = compile_pattern(r"\bfoo|\bbar(?:x|$)", "", "pcre", "search")
+    if cr2.encodable:
+        assert cr2.word_boundary_wrap is True, cr2.word_boundary_wrap
