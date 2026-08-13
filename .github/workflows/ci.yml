@@ -184,6 +184,19 @@ jobs:
         # Both engine verdicts must be recorded and agree; a busybox absence
         # or a GNU/busybox divergence is a hard failure.
         run: python scripts/ci-check-busybox-sed.py
+      - name: P8 gate-labels artifact (regenerated, #432)
+        # The D3 fit source regenerates OFFLINE (no network) from the
+        # tracked inputs (decisions + ledger + mine-tree-features.json).
+        run: python scripts/build-gate-labels.py
+      - name: P8 gate-labels drift check (#432, luna gate 1)
+        # Stale or hand-edited labels must fail CI, not pass silently.
+        run: git diff --exit-code -- properties/generated/gate-labels.json
+      - name: P8 score-v2 weights (refit, #432)
+        # The deterministic fit must reproduce the committed weights
+        # exactly; a stale or hand-edited model fails CI.
+        run: python scripts/fit-score-v2.py
+      - name: P8 score-v2 weights drift check (#432, luna gate 1)
+        run: git diff --exit-code -- regexproof/mine/score_v2_weights.json
 
   compiler-diff-fuzz:
     # E1 (#429): PRs touching regexproof/compiler/** run the EXPANDED

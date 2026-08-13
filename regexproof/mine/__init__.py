@@ -10,13 +10,20 @@ from regexproof.mine.ledger import (
     save_ledger,
 )
 from regexproof.mine.queue import daily_mine_cap, drain, enqueue, load_queue, save_queue
-from regexproof.mine.score import SCORE_VERSION, candidate_score, rank_candidates
+from regexproof.mine.score import (
+    ALLOCATORS,
+    SCORE_VERSION,
+    candidate_score,
+    rank_candidates,
+    score_version_for_allocator,
+)
 from regexproof.mine.search import AuthError, run_search
 from regexproof.mine.transition import TransitionError, transition_candidate
 from regexproof.mine.tree import TreeCache, materialize_tree_features, probe_tree
 
 __all__ = [
     "AuthError",
+    "ALLOCATORS",
     "LEDGER_SCHEMA_VERSION",
     "SCORE_VERSION",
     "TransitionError",
@@ -36,6 +43,7 @@ __all__ = [
     "run_audit_sampler",
     "run_search",
     "sample_size",
+    "score_version_for_allocator",
     "save_ledger",
     "save_queue",
     "transition_candidate",

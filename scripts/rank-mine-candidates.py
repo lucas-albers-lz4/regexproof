@@ -20,7 +20,12 @@ if str(ROOT) not in sys.path:
 
 from regexproof.mine.exclusions import load_admitted_urls, normalize_repo_url
 from regexproof.mine.ledger import load_ledger
-from regexproof.mine.score import SCORE_VERSION, candidate_score, rank_candidates
+from regexproof.mine.score import (
+    SCORE_VERSION,
+    candidate_score,
+    rank_candidates,
+    score_version_for_allocator,
+)
 from regexproof.mine.tree import (
     TreeCache,
     materialize_tree_features,
@@ -79,7 +84,8 @@ def main(argv: list[str] | None = None) -> int:
         default=0,
         help=(
             "Max uncached GitHub tree calls. Cached responses do not consume "
-            "the budget; 0 degrades to score-v1 metadata-only ranking."
+            "the budget; 0 disables fresh probes (score-v2 still joins the "
+            "tracked mine-tree-features.json)."
         ),
     )
     ap.add_argument(
@@ -87,6 +93,18 @@ def main(argv: list[str] | None = None) -> int:
         type=Path,
         default=None,
         help="Tree cache path (default: .cache/regexproof/mine-tree.json).",
+    )
+    ap.add_argument(
+        "--tree-features",
+        type=Path,
+        default=ROOT / "properties" / "generated" / "mine-tree-features.json",
+        help="Tracked pin-aware tree features used by score-v2.",
+    )
+    ap.add_argument(
+        "--allocator",
+        choices=("score-v1", "score-v2"),
+        default="score-v1",
+        help="Score allocator (default: score-v1).",
     )
     args = ap.parse_args(argv)
 
@@ -119,23 +137,45 @@ def main(argv: list[str] | None = None) -> int:
             continue
         pool.append(c)
     tree_features = {}
-    if args.tree_probe_budget > 0 and pool:
+    if args.allocator == "score-v2" and pool:
+        # score-v2 uses the committed materialized artifact by default. A
+        # caller can still select a writable cache for budgeted live probes.
+        cache_path = args.tree_cache or args.tree_features
+        tree_features, _calls = materialize_tree_features(
+            _http_session() if args.tree_probe_budget > 0 else None,
+            pool,
+            budget=args.tree_probe_budget,
+            cache=TreeCache(cache_path),
+        )
+    elif args.tree_probe_budget > 0 and pool:
         tree_features, _calls = materialize_tree_features(
             _http_session(),
             pool,
             budget=args.tree_probe_budget,
             cache=TreeCache(args.tree_cache),
         )
-    ranked = rank_candidates(pool)
+    ranked = rank_candidates(
+        pool,
+        allocator=args.allocator,
+        tree_features=tree_features,
+    )
     if args.limit and args.limit > 0:
         ranked = ranked[: args.limit]
 
     for cand in ranked:
-        total, breakdown = candidate_score(cand)
+        url = str(cand.get("url") or "")
+        pin = str(cand.get("pin_probed") or "")
+        tree_feature = tree_features.get((normalize_repo_url(url), pin))
+        total, breakdown = candidate_score(
+            cand,
+            allocator=args.allocator,
+            tree_feature=tree_feature,
+        )
         row = {
             "url": cand.get("url"),
             "score": total,
-            "score_version": SCORE_VERSION,
+            "score_version": score_version_for_allocator(args.allocator),
+            "allocator": args.allocator,
             "breakdown": breakdown,
             "stars": cand.get("stars"),
             "source_query": cand.get("source_query"),

@@ -9,7 +9,14 @@ from datetime import date
 from pathlib import Path
 
 from regexproof.mine.ledger import empty_ledger, save_ledger
-from regexproof.mine.score import SCORE_VERSION, _QUERY_FAMILY, _query_family, candidate_score, rank_candidates
+from regexproof.mine.score import (
+    SCORE_VERSION,
+    _QUERY_FAMILY,
+    _query_family,
+    candidate_score,
+    rank_candidates,
+)
+from regexproof.mine.score_v2 import auc, grouped_split, sanity_check_v1_boundary
 from regexproof.mine.search import SEARCH_QUERIES, SearchRunResult
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -363,3 +370,103 @@ def test_fuzzy_fallback_classifies_drifted_queries():
     ]
     for q, expected in drifted:
         assert _query_family(q) == expected, f"drifted {q!r} -> {_query_family(q)}, want {expected}"
+
+
+def test_score_v2_auc_is_pure_python_and_tie_aware():
+    assert auc([0.9, 0.1, 0.5, 0.5], [1, 0, 1, 0]) == 0.875
+
+
+def test_score_v2_grouped_split_keeps_duplicate_urls_together():
+    rows = [
+        {"url": "https://github.com/acme/same", "label": "go"},
+        {"url": "https://github.com/acme/same/", "label": "no-go"},
+        *[
+            {"url": f"https://github.com/acme/repo-{index}", "label": "no-go"}
+            for index in range(8)
+        ],
+    ]
+    folds = grouped_split(rows, seed=432)
+    locations = {
+        id(row): fold
+        for fold, rows_in_fold in enumerate(folds)
+        for row in rows_in_fold
+    }
+    assert locations[id(rows[0])] == locations[id(rows[1])]
+
+
+def test_score_v2_sanity_harness_reproduces_v1_boundary_order():
+    result = sanity_check_v1_boundary()
+    assert result["passed"] is True
+    assert result["verdicts"] == [
+        "deterministic-true",
+        "unknown",
+        "deterministic-false",
+    ]
+
+
+def test_rank_cli_score_v2_tags_allocator(tmp_path: Path, capsys):
+    ledger_path = tmp_path / "candidate-ledger.json"
+    ledger = empty_ledger()
+    ledger["candidates"] = [
+        {
+            "url": "https://github.com/acme/v2-candidate",
+            "default_branch": "main",
+            "pin": "x",
+            "pushed_date": "2026-08-01",
+            "stars": 100,
+            "source_query": SEARCH_QUERIES[0],
+            "first_seen": "2026-08-09T00:00:00Z",
+            "status": "mined",
+            "fork": False,
+            "size": 10,
+            "language": "Python",
+            "archived": False,
+        }
+    ]
+    save_ledger(ledger_path, ledger)
+    mod = _load_rank_cli()
+    assert mod.main([
+        "--ledger", str(ledger_path),
+        "--allocator", "score-v2",
+        "--limit", "1",
+    ]) == 0
+    row = json.loads(capsys.readouterr().out)
+    assert row["allocator"] == "score-v2"
+    assert row["score_version"] == "v2"
+
+
+def test_score_v2_tree_lookup_is_pin_aware():
+    base = {
+        "url": "https://github.com/acme/pin-sensitive",
+        "stars": 100,
+        "source_query": SEARCH_QUERIES[0],
+        "pushed_date": "2026-08-01",
+        "fork": False,
+        "size": 10,
+        "language": "Python",
+        "archived": False,
+    }
+    old_pin = {**base, "pin_probed": "OLD"}
+    new_pin = {**base, "pin_probed": "NEW"}
+    features = {
+        (base["url"], "OLD"): {
+            "complete": True,
+            "security_boundary": "deterministic-false",
+            "path_count": 1,
+            "regex_file_type_counts": {},
+            "truncated": False,
+        },
+        (base["url"], "NEW"): {
+            "complete": True,
+            "security_boundary": "deterministic-true",
+            "path_count": 1,
+            "regex_file_type_counts": {},
+            "truncated": False,
+        },
+    }
+    ranked = rank_candidates(
+        [old_pin, new_pin],
+        allocator="score-v2",
+        tree_features=features,
+    )
+    assert ranked[0]["pin_probed"] == "NEW"
