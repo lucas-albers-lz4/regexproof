@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import time
-from concurrent.futures import ProcessPoolExecutor, as_completed
+from concurrent.futures import ProcessPoolExecutor, TimeoutError, as_completed
 import multiprocessing
 import os
 from pathlib import Path
@@ -214,7 +214,13 @@ def compile_records(
         futures = [executor.submit(_compile_record_worker, payload) for payload in payloads]
         breached = False
         try:
-            for future in as_completed(futures):
+            # M3 (luna gate 1): as_completed must be bounded — a stuck worker
+            # cannot outlive the parent wall budget.  The timeout is the
+            # remaining budget; TimeoutError trips the same breached path.
+            remaining = (
+                max(0.0, max_wall - (time.monotonic() - t0)) if max_wall else None
+            )
+            for future in as_completed(futures, timeout=remaining):
                 serialized.append(future.result())
                 # The parent owns the wall-clock gate.  Check between worker
                 # result batches rather than trusting child-local clocks.
@@ -228,16 +234,17 @@ def compile_records(
                     raise BudgetBreached(
                         corpus_slug, "max_mem_mb", max_mem, check_budget_mem()
                     )
+        except concurrent_futures.TimeoutError:
+            breached = True
+            raise BudgetBreached(
+                corpus_slug, "max_wall_s", max_wall, time.monotonic() - t0
+            )
         finally:
             executor.shutdown(wait=not breached, cancel_futures=breached)
 
     if cache_stats is not None:
         hits = sum(bool(item[3]) for item in serialized)
-        misses = sum(
-            1
-            for item in serialized
-            if item[1] is not None and not item[3]
-        )
+        misses = sum(1 for item in serialized if not item[3])
         cache_stats["hits"] = hits
         cache_stats["misses"] = misses
         cache_stats["entries"] = hits + misses
@@ -249,5 +256,6 @@ def compile_records(
         (row, deserialize_mirror(script) if script is not None else None, meta)
         for row, script, meta, _cache_hit in serialized
     ]
-    out.sort(key=lambda item: str(item[0].get("regex_id") or ""))
+    order = {id(row): i for i, row in enumerate(row for row, _s, _m, _h in serialized)}
+    out.sort(key=lambda item: (str(item[0].get("regex_id") or ""), order[id(item[0])]))
     return out

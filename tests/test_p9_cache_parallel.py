@@ -4,6 +4,8 @@ from __future__ import annotations
 
 from pathlib import Path
 
+import json
+
 import z3
 
 from regexproof.batch.compile_records import compile_records
@@ -72,9 +74,21 @@ def test_corrupt_cache_entry_recompiles(tmp_path: Path):
     assert "define-fun mirror" in entry.read_text(encoding="utf-8")
 
 
-def test_compiler_version_tracks_source_contents():
-    assert COMPILER_VERSION.endswith(compiler_source_fingerprint())
-    assert len(compiler_source_fingerprint()) == 64
+def test_compiler_version_tracks_source_contents(tmp_path: Path):
+    # P9 (luna gate 1): the test must PROVE the fingerprint reacts to a
+    # compiler-source change, not just compare a value with itself.
+    before = compiler_source_fingerprint()
+    target = Path(compiler_source_fingerprint.__globals__["__file__"]).resolve().parent
+    extra = target / "_fingerprint_probe_sentinel.py"
+    assert not extra.exists()
+    try:
+        extra.write_text("# sentinel for fingerprint reactivity\n", encoding="utf-8")
+        after = compiler_source_fingerprint()
+        assert after != before, "fingerprint must react to a source change"
+        assert len(after) == 64
+    finally:
+        extra.unlink(missing_ok=True)
+    assert compiler_source_fingerprint() == before
 
 
 def test_spawn_workers_return_same_sorted_rows_and_mirrors(tmp_path: Path):
@@ -87,6 +101,20 @@ def test_spawn_workers_return_same_sorted_rows_and_mirrors(tmp_path: Path):
     parallel = compile_records(records, lift_inline=False, corpus_slug="p9", jobs=2, cache_dir=tmp_path / "parallel")
     assert [row["regex_id"] for row, _mirror, _meta in serial] == ["a", "b", "c"]
     assert [row for row, _mirror, _meta in serial] == [row for row, _mirror, _meta in parallel]
+    # P9 (luna gate 1): byte-identical serialization, not just equal row
+    # dicts — the mirror SMT-LIB scripts must be stable across worker modes.
+    def _ndjson(rows):
+        out = []
+        for row, mirror, meta in rows:
+            from regexproof.compiler.cache import serialize_mirror
+
+            script = serialize_mirror(mirror, meta) if mirror is not None else None
+            out.append((row, script))
+        return out
+
+    s_bytes = json.dumps(_ndjson(serial), sort_keys=True)
+    p_bytes = json.dumps(_ndjson(parallel), sort_keys=True)
+    assert s_bytes == p_bytes, "serial and spawned worker output must be byte-identical"
     for (_serial_row, serial_mirror, serial_meta), (_parallel_row, parallel_mirror, parallel_meta) in zip(serial, parallel, strict=True):
         assert serialize_mirror(serial_mirror) == serialize_mirror(parallel_mirror)
         assert serial_meta == parallel_meta

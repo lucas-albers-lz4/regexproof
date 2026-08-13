@@ -165,6 +165,7 @@ def compile_pattern(
                 shell_flags,
                 COMPILER_VERSION,
                 z3.get_version_string(),
+                max_length,
             )
             artifact = cache.get(cache_key)
             if artifact is not None:

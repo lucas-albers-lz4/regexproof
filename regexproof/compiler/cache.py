@@ -58,6 +58,7 @@ def mirror_cache_key(
     shell_flags: dict[str, Any] | None,
     compiler_version: str,
     z3_version: str,
+    max_length: int | None = None,
 ) -> str:
     """Hash the complete post-normalization compile-input tuple."""
     encoded = canonical_length_prefixed(
@@ -70,6 +71,7 @@ def mirror_cache_key(
             shell_flags,
             compiler_version,
             z3_version,
+            max_length,
         )
     )
     return hashlib.sha256(encoded).hexdigest()
@@ -99,11 +101,14 @@ def serialize_mirror(
         f"(define-fun {_MIRROR_NAME} () (RegEx String) {mirror.sexpr()})\n"
         f'(assert (str.in_re "" {_MIRROR_NAME}))\n'
     )
-    if metadata is not None:
-        script += _METADATA_PREFIX + json.dumps(
-            metadata, ensure_ascii=True, sort_keys=True, separators=(",", ":")
-        ) + "\n"
-    return script
+    meta = dict(metadata or {})
+    # M1 (luna gate 1): the metadata carries the digest of the mirror-only
+    # script so get() can reject a valid-looking entry placed under the
+    # wrong key instead of silently serving a wrong mirror.
+    meta["_script_sha256"] = hashlib.sha256(script.encode("utf-8")).hexdigest()
+    return script + _METADATA_PREFIX + json.dumps(
+        meta, ensure_ascii=True, sort_keys=True, separators=(",", ":")
+    ) + "\n"
 
 
 def _metadata_from_script(script: str) -> dict[str, Any]:
@@ -149,6 +154,25 @@ class MirrorCache:
             script = self.path_for(key).read_text(encoding="utf-8")
             mirror = deserialize_mirror(script)
             metadata = _metadata_from_script(script)
+            # M1 (luna gate 1): a parseable script under the right filename is
+            # not enough — the metadata digest must match the mirror-only
+            # script.  A swapped or partially-corrupted entry that still parses
+            # triggers a fresh compile instead of serving a wrong mirror.
+            expected = metadata.get("_script_sha256")
+            core = script.split(_METADATA_PREFIX, 1)[0]
+            if not expected or expected != hashlib.sha256(core.encode("utf-8")).hexdigest():
+                return None
+            # Minor (luna gate 1): metadata SIDECAR (the plan's "metadata
+            # sidecars") — the .meta.json sibling is the authoritative source
+            # when present; the comment-embedded copy is the legacy fallback.
+            sidecar = self.path_for(key).with_suffix(".smt2.meta.json")
+            if sidecar.is_file():
+                try:
+                    metadata = json.loads(sidecar.read_text(encoding="utf-8"))
+                    if not isinstance(metadata, dict):
+                        return None
+                except (OSError, json.JSONDecodeError):
+                    return None
             return MirrorArtifact(mirror, metadata, script)
         except (OSError, ValueError, TypeError, json.JSONDecodeError, z3.Z3Exception):
             # A corrupt entry must never turn into a skipped compile.  The
@@ -161,9 +185,14 @@ class MirrorCache:
         mirror: Any,
         metadata: dict[str, Any] | None,
     ) -> str:
-        """Atomically write one script containing the mirror and metadata."""
+        """Atomically write one script + a metadata sidecar."""
         script = serialize_mirror(mirror, metadata or {})
         atomic_write_text(self.path_for(key), script)
+        # The sidecar carries the metadata (the plan's "metadata sidecars");
+        # the comment-embedded copy remains for backward compatibility.
+        meta = _metadata_from_script(script)
+        atomic_write_text(self.path_for(key).with_suffix(".smt2.meta.json"),
+                          json.dumps(meta, indent=2, sort_keys=True) + "\n")
         return script
 
     # Explicit aliases make the cache API convenient for tests and callers
