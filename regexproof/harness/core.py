@@ -248,8 +248,14 @@ def run_one(name, entry, require_ground_truth=False):
             try:
                 if val.sort() == StringVal("").sort():
                     val = z3_str(val)
+                else:
+                    # P9: internal solver symbols (parsed-regex function
+                    # decls exposed by the mirror-cache round trip) are not
+                    # counterexamples — skipping them keeps the witness
+                    # JSON-serializable on both the fresh and cached paths.
+                    continue
             except Exception:
-                pass
+                continue
             witness[d.name()] = val
         result["witness"] = witness
         # Note: engine_versions is always populated above; the meaningful
