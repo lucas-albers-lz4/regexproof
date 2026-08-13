@@ -36,9 +36,13 @@ def _fingerprint(out_dir: Path) -> dict[str, str]:
     if triage.is_dir():
         roots.append(triage)
     for root in roots:
+        # Close-out re-gate: namespace the keys by ROOT TYPE — the generated
+        # and triage trees both emit <corpus>.ndjson; a bare relative key
+        # would let the triage digest overwrite the generated one.
+        prefix = "triage" if root.name == "triage" else "generated"
         for path in sorted(root.rglob("*")):
             if path.is_file() and path.suffix in COMPARE_SUFFIXES:
-                digests[str(path.relative_to(root))] = hashlib.sha256(
+                digests[f"{prefix}/{path.relative_to(root)}"] = hashlib.sha256(
                     path.read_bytes()
                 ).hexdigest()
     return digests
