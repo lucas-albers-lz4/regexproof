@@ -234,10 +234,11 @@ def test_main_sequence_reload_after_sync_prevents_stale_save(tmp_path: Path):
     assert final["candidates"][0]["status"] == "gated:no-go"
 
 
-def test_sync_skips_audit_requeued_candidate(tmp_path: Path):
-    """P7 fold (luna re-gate 4): a candidate deliberately requeued after
-    audit failure (gated:* -> queued, reason audit-sampler-fail) must NOT be
-    re-synced from its old decision file — the recovery would be undone."""
+def test_audit_requeue_archives_gate_and_new_decision_applies(tmp_path: Path):
+    """P7 fold (luna re-gate 5): the audit requeue ARCHIVES the decision file
+    (reset) — the read-only sync cannot reapply the old decision, rank sees
+    no gate file, and a NEW decision written after recovery applies normally.
+    """
     spec = importlib.util.spec_from_file_location(
         "mine_cli2", ROOT / "scripts" / "mine-corpus-candidates.py"
     )
@@ -245,19 +246,22 @@ def test_sync_skips_audit_requeued_candidate(tmp_path: Path):
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)
 
+    from regexproof.mine.audit import run_audit_sampler
+
     ledger_path = tmp_path / "candidate-ledger.json"
     gen = tmp_path / "generated"
     gen.mkdir()
     ledger = empty_ledger()
     cand = _sample_candidate(
         url="https://github.com/acme/recovered",
-        status="queued",
+        status="gated:no-go",
     )
     cand["audit"] = {
         "transitions": [
             {"to": "gated:no-go", "reason": "sync:recovered_gate_decision"},
-            {"to": "queued", "reason": "audit-sampler-fail"},
-        ]
+        ],
+        "auto_filed": True,
+        "auto_filed_at": "2026-08-05T00:00:00Z",  # ISO week 2026-W32
     }
     ledger["candidates"].append(cand)
     save_ledger(ledger_path, ledger)
@@ -272,7 +276,32 @@ def test_sync_skips_audit_requeued_candidate(tmp_path: Path):
         ),
         encoding="utf-8",
     )
-    synced = mod.sync_gate_decisions(ledger_path, gen)
-    assert synced == 0  # the old decision must NOT be reapplied
-    final = load_ledger(ledger_path)
-    assert final["candidates"][0]["status"] == "queued"
+
+    # 1. Audit failure requeues + archives the decision file.
+    out = run_audit_sampler(
+        ledger_path, week="2026-W32", fail_urls={"https://github.com/acme/recovered"},
+        generated_dir=gen,
+    )
+    assert out["failed_urls"] == ["https://github.com/acme/recovered"]
+    assert not (gen / "recovered_gate_decision.json").exists()
+    assert (gen / "recovered_gate_decision.audit-failed.json").exists()
+    assert load_ledger(ledger_path)["candidates"][0]["status"] == "queued"
+
+    # 2. Sync with no file: nothing to reapply.
+    assert mod.sync_gate_decisions(ledger_path, gen) == 0
+    assert load_ledger(ledger_path)["candidates"][0]["status"] == "queued"
+
+    # 3. A NEW decision file (post-recovery re-evaluation) applies normally.
+    (gen / "recovered_gate_decision.json").write_text(
+        json.dumps(
+            {
+                "schema_version": "1",
+                "corpus": "recovered",
+                "candidate_url": "https://github.com/acme/recovered",
+                "decision": "go",
+            }
+        ),
+        encoding="utf-8",
+    )
+    assert mod.sync_gate_decisions(ledger_path, gen) == 1
+    assert load_ledger(ledger_path)["candidates"][0]["status"] == "gated:go"
