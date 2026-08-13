@@ -1,0 +1,61 @@
+{
+  "candidate_url": "https://github.com/Typeform/embed",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. Embed widget — classifier false positive. 25 sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (per-dialect).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "embed",
+  "corpus_pin": "ffcede3890bed380cdfd53249026d23282cd3f48",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 25
+    },
+    "flags": {
+      "g": 4,
+      "i": 2
+    },
+    "pin": "ffcede3890bed380cdfd53249026d23282cd3f48",
+    "predicted_buckets": {
+      "inline-flag": 2,
+      "stateful": 4
+    },
+    "regex_sites": 25,
+    "regex_sites_per_file": {
+      "commitlint.config.js": 1,
+      "packages/embed-react/webpack.config.js": 4,
+      "packages/embed/cypress/support/commands.js": 1,
+      "packages/embed/e2e/spec/functional/reload.cy.ts": 3,
+      "packages/embed/src/utils/build-iframe-src.ts": 1,
+      "packages/embed/src/utils/change-color-opacity.ts": 1,
+      "packages/embed/src/utils/create-iframe/handle-form-redirect.spec.ts": 1,
+      "packages/embed/src/utils/get-text-color.ts": 1,
+      "packages/embed/src/utils/hex-rgb.ts": 3,
+      "packages/embed/src/utils/hubspot.ts": 1,
+      "packages/embed/src/utils/load-options-from-attributes.ts": 5,
+      "packages/embed/src/utils/mobile.ts": 1,
+      "packages/embed/src/utils/set-element-size.ts": 1,
+      "packages/embed/webpack.config.js": 1
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 25 regex sites (auto-NO-GO bar 200); dialects [ecma:25]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

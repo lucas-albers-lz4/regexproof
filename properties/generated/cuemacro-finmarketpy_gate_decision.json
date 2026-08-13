@@ -1,0 +1,48 @@
+{
+  "candidate_url": "https://github.com/cuemacro/finmarketpy",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. Finance lib. 6 sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (per-dialect).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "finmarketpy",
+  "corpus_pin": "afeaef28f5c8b78e613e649ecf18a9653dbf41fd",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "posix-shell": 1,
+      "py_re": 5
+    },
+    "flags": {
+      "i": 5
+    },
+    "pin": "afeaef28f5c8b78e613e649ecf18a9653dbf41fd",
+    "predicted_buckets": {
+      "inline-flag": 5
+    },
+    "regex_sites": 6,
+    "regex_sites_per_file": {
+      ".rhiza/completions/rhiza-completion.bash": 1,
+      ".rhiza/utils/suppression_audit.py": 5
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 6 regex sites (auto-NO-GO bar 200); dialects [posix-shell:1, py_re:5]; boundary=unknown.",
+  "schema_version": "1"
+}

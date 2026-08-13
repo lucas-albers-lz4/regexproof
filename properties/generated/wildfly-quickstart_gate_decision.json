@@ -1,0 +1,69 @@
+{
+  "candidate_url": "https://github.com/wildfly/quickstart",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. Java quickstarts — classifier false positive. 220 sites < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (per-dialect).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "quickstart",
+  "corpus_pin": "bdd654b0bca00debd15b50576caab5bf1b1f568f",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "backref": 3,
+      "lookaround": 15
+    },
+    "dialect": {
+      "ecma": 211,
+      "java": 2,
+      "posix-shell": 7
+    },
+    "flags": {
+      "g": 40,
+      "i": 36,
+      "m": 3
+    },
+    "pin": "bdd654b0bca00debd15b50576caab5bf1b1f568f",
+    "predicted_buckets": {
+      "backref": 3,
+      "inline-flag": 36,
+      "lookaround": 15,
+      "m-flag": 3,
+      "stateful": 40
+    },
+    "regex_sites": 220,
+    "regex_sites_per_file": {
+      ".ci/openshift-ci/build-root/scripts/openshift-test-runner.sh": 1,
+      ".ci/openshift-ci/build-root/scripts/qs-overrides/microprofile-reactive-messaging-kafka/overridable-functions.sh": 4,
+      ".github/workflows/scripts/kubernetes/core/run-quickstart-test-on-kubernetes.sh": 1,
+      ".github/workflows/scripts/kubernetes/qs-overrides/microprofile-reactive-messaging-kafka/overridable-functions.sh": 1,
+      "batch-processing/src/main/webapp/js/bootstrap.js": 19,
+      "batch-processing/src/main/webapp/js/jquery-2.0.3.js": 79,
+      "batch-processing/src/main/webapp/js/jquery-2.0.3.min.js": 55,
+      "batch-processing/src/main/webapp/js/patternfly.js": 1,
+      "batch-processing/src/main/webapp/js/patternfly.min.js": 1,
+      "jts/application-component-1/src/test/java/org/jboss/as/quickstarts/cmt/jts/BasicRuntimeIT.java": 1,
+      "logging/src/main/webapp/resources/main.js": 1,
+      "temperature-converter/src/main/java/org/jboss/as/quickstarts/temperatureconverter/ejb/Temperature.java": 1,
+      "websocket-endpoint/src/main/webapp/resources/js/jquery-2.0.3.min.js": 55
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 220 regex sites (auto-NO-GO bar 200); dialects [ecma:211, java:2, posix-shell:7]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

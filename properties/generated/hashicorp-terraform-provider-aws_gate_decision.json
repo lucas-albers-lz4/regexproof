@@ -1,0 +1,42 @@
+{
+  "schema_version": "1",
+  "candidate_url": "https://github.com/hashicorp/terraform-provider-aws",
+  "conditions": [
+    {
+      "id": "new-surface",
+      "met": false,
+      "evidence": "No probe evidence - clone failed before extraction."
+    },
+    {
+      "id": "security-boundary",
+      "met": false,
+      "evidence": "Probe unavailable; not determined a security regex tool."
+    },
+    {
+      "id": "large-under-saturated",
+      "met": false,
+      "evidence": "No site count (clone checkout failure)."
+    }
+  ],
+  "corpus": "hashicorp-terraform-provider-aws",
+  "corpus_pin": "",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "regex_sites": 0,
+    "dialect": {},
+    "flags": {},
+    "construct_counts": {},
+    "predicted_buckets": {},
+    "security_boundary": "unknown",
+    "pin": "",
+    "extractor_errors": 0,
+    "regex_sites_per_file": {}
+  },
+  "rationale": "Clone checkout fails repeatedly - unprobeable at gate budget. git clone/checkout error (promisor remote sha1 fetch failure at pin 1902b9e3). No admission condition met.",
+  "related": {
+    "probe_failure": "git clone/checkout error"
+  }
+}

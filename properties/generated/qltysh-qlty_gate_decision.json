@@ -1,0 +1,50 @@
+{
+  "candidate_url": "https://github.com/qltysh/qlty",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. Code quality tool. 15 sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (per-dialect).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "qlty",
+  "corpus_pin": "4297d406a2d64bcd4fb1320898c6d38f19e97bcd",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 11,
+      "posix-shell": 4
+    },
+    "flags": {},
+    "pin": "4297d406a2d64bcd4fb1320898c6d38f19e97bcd",
+    "predicted_buckets": {},
+    "regex_sites": 15,
+    "regex_sites_per_file": {
+      "installer/install.sh": 4,
+      "qlty-plugins/plugins/scripts/fetchLatestVersion/github.ts": 1,
+      "qlty-plugins/plugins/scripts/fetchLatestVersion/ruby.ts": 3,
+      "qlty-plugins/plugins/scripts/fetchLatestVersion/runnableArchive.ts": 1,
+      "qlty-plugins/plugins/scripts/updateLinterVersions.ts": 2,
+      "qlty-plugins/plugins/tests/driver.ts": 1,
+      "qlty-plugins/plugins/tests/index.ts": 1,
+      "qlty-plugins/plugins/tests/runLinterTest.ts": 2
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 15 regex sites (auto-NO-GO bar 200); dialects [ecma:11, posix-shell:4]; boundary=unknown.",
+  "schema_version": "1"
+}

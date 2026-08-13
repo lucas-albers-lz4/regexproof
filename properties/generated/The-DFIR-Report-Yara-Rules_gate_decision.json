@@ -1,0 +1,101 @@
+{
+  "candidate_url": "https://github.com/The-DFIR-Report/Yara-Rules",
+  "conditions": [
+    {
+      "evidence": "Yara/py_re dialects already covered; novelty is pack content, not construct class.",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe deterministic-true, verified security tool (malware/DFIR/offensive-security detection). 3,565 yara sites, 52 files by report-ID dirs. DFIR detection rules; 3,136 patterns with 0% overlap vs admitted — fully novel. Security tool. GO conditions 2+3.",
+      "id": "security-boundary",
+      "met": true
+    },
+    {
+      "evidence": "Sites >= 1000 in covered dialect below 0.85 encodable.3,565 yara sites, 52 files by report-ID dirs. DFIR detection rules; 3,136 patterns with 0% overlap vs admitted — fully novel. Security tool. GO conditions 2+3.",
+      "id": "large-under-saturated",
+      "met": true
+    }
+  ],
+  "corpus": "Yara-Rules",
+  "corpus_pin": "9034e24193b38aad1fbc0912ace3683eb5728a92",
+  "decision": "go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "backref": 75
+    },
+    "dialect": {
+      "yara": 3565
+    },
+    "flags": {
+      "W": 2884,
+      "i": 45
+    },
+    "pin": "9034e24193b38aad1fbc0912ace3683eb5728a92",
+    "predicted_buckets": {
+      "backref": 75,
+      "inline-flag": 45
+    },
+    "regex_sites": 3565,
+    "regex_sites_per_file": {
+      "1012/1012.yar": 51,
+      "1013/1013.yar": 52,
+      "1014/1014.yar": 80,
+      "1017/1017.yar": 119,
+      "1051/1051.yar": 37,
+      "11462/11462.yar": 100,
+      "12647/12647.yar": 93,
+      "12780/12780.yar": 67,
+      "12993/12993.yar": 36,
+      "13842/13842.yar": 68,
+      "14335/14335.yar": 132,
+      "14373/14373.yar": 45,
+      "15184/15184.yar": 68,
+      "17333/17333.yar": 154,
+      "17386/17386.yar": 49,
+      "18041/18041.yar": 11,
+      "18190/18190.yar": 60,
+      "18364/18364.yar": 1,
+      "18543/18543.yar": 90,
+      "19172/19172.yar": 3,
+      "19208/19208.yar": 44,
+      "19438/19438.yar": 295,
+      "19530/19530.yar": 49,
+      "19772/19772.yar": 55,
+      "21619/21619.yar": 18,
+      "23869/23869.yar": 25,
+      "24952/24952.yar": 91,
+      "25590/25590.yar": 1,
+      "26364/26364.yar": 63,
+      "27138/27138.yar": 144,
+      "27244/27244.yar": 6,
+      "27899/27899.yar": 12,
+      "28761/28761.yar": 9,
+      "3521/3521.yar": 15,
+      "3580/3580.yar": 20,
+      "3584/3584.yar": 95,
+      "3930/3930.yar": 86,
+      "4301/4301.yar": 22,
+      "4485/4485.yar": 83,
+      "4641/4641.yar": 111,
+      "4778/4778.yar": 69,
+      "5087/5087.yar": 34,
+      "5295/5295.yar": 103,
+      "5426/5426.yar": 98,
+      "5582/5582.yar": 85,
+      "5794/5794.yar": 152,
+      "6898/6898.yar": 78,
+      "7685/7685.yar": 94,
+      "8099/8099.yar": 111,
+      "8734/8734.yar": 40,
+      "9438/9438.yar": 40,
+      "9893/9893.yar": 101
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Security-boundary corpus (boundary=deterministic-true) with findings-triage potential; 3565 sites across [yara:3565].",
+  "schema_version": "1"
+}

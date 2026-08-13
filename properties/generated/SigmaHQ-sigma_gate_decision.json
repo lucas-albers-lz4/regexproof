@@ -1,0 +1,45 @@
+{
+  "candidate_url": "https://github.com/SigmaHQ/sigma",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. SIEM detection rules — but only 3 |re| regex fields in 4,259 YAML rules; rules are string-match (contains/endswith), not regex. Below-scale, not a regex corpus.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (per-dialect).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "sigma",
+  "corpus_pin": "8eaafff1f2845a696050e05e72ba1140ee190698",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "posix-shell": 2,
+      "py_re": 3
+    },
+    "flags": {},
+    "pin": "8eaafff1f2845a696050e05e72ba1140ee190698",
+    "predicted_buckets": {},
+    "regex_sites": 5,
+    "regex_sites_per_file": {
+      ".github/workflows/matchgrep.sh": 1,
+      "tests/check-baseline-local.sh": 1,
+      "tests/test_rules.py": 3
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 5 regex sites (auto-NO-GO bar 200); dialects [posix-shell:2, py_re:3]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

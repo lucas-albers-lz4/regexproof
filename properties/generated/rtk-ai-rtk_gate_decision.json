@@ -1,0 +1,71 @@
+{
+  "candidate_url": "https://github.com/rtk-ai/rtk",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. AI agent. 107 sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (per-dialect).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "rtk",
+  "corpus_pin": "6f0b0cad29bca345ecf05212c6d14d2276d964f0",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "posix-class": 1
+    },
+    "dialect": {
+      "ecma": 9,
+      "posix-shell": 98
+    },
+    "flags": {
+      "g": 1,
+      "i": 3
+    },
+    "pin": "6f0b0cad29bca345ecf05212c6d14d2276d964f0",
+    "predicted_buckets": {
+      "inline-flag": 3,
+      "posix-class": 1,
+      "stateful": 1
+    },
+    "regex_sites": 107,
+    "regex_sites_per_file": {
+      ".claude/hooks/bash/pre-commit-format.sh": 1,
+      ".claude/hooks/rtk-suggest.sh": 58,
+      "hooks/claude/test-rtk-rewrite.sh": 1,
+      "hooks/copilot/test-rtk-rewrite.sh": 2,
+      "hooks/cursor/rtk-rewrite.sh": 1,
+      "hooks/pi/rtk.ts": 2,
+      "install.sh": 6,
+      "scripts/benchmark/cleanup.ts": 1,
+      "scripts/benchmark/lib/test.ts": 1,
+      "scripts/benchmark/rebuild.ts": 2,
+      "scripts/benchmark/run.ts": 3,
+      "scripts/check-installation.sh": 4,
+      "scripts/check-test-presence.sh": 3,
+      "scripts/test-all.sh": 7,
+      "scripts/test-aristote.sh": 5,
+      "scripts/test-install.sh": 1,
+      "scripts/test-ruby.sh": 3,
+      "scripts/test-tracking.sh": 2,
+      "scripts/update-readme-metrics.sh": 2,
+      "scripts/validate-docs.sh": 2
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 107 regex sites (auto-NO-GO bar 200); dialects [ecma:9, posix-shell:98]; boundary=unknown.",
+  "schema_version": "1"
+}

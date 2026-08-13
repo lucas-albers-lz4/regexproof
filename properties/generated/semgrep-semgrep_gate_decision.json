@@ -1,0 +1,114 @@
+{
+  "candidate_url": "https://github.com/semgrep/semgrep",
+  "conditions": [
+    {
+      "evidence": "Dialects already covered (ecma/py_re); no new construct class.",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe deterministic-true; security tool (SAST engine / SIEM detections). semgrep/semgrep ENGINE (distinct from admitted semgrep_rules repo). 597 sites (493 ecma). SAST engine — security tool; escape hatch regardless of scale (gitleaks precedent).",
+      "id": "security-boundary",
+      "met": true
+    },
+    {
+      "evidence": "Below 1000 scale bar — escape hatch applied for security boundary.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "semgrep",
+  "corpus_pin": "cc97b5c47dacabe76be343ef981204b8c1f60e07",
+  "decision": "triage-trial",
+  "decision_basis": "escape_hatch",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": true,
+  "probe": {
+    "construct_counts": {
+      "(?i)": 1,
+      "backref": 6,
+      "lookaround": 21
+    },
+    "dialect": {
+      "ecma": 493,
+      "posix-shell": 11,
+      "py_re": 93
+    },
+    "flags": {
+      "g": 147,
+      "i": 172,
+      "m": 6,
+      "s": 1,
+      "x": 4
+    },
+    "pin": "cc97b5c47dacabe76be343ef981204b8c1f60e07",
+    "predicted_buckets": {
+      "backref": 6,
+      "inline-flag": 178,
+      "lookaround": 21,
+      "m-flag": 6,
+      "stateful": 147
+    },
+    "regex_sites": 597,
+    "regex_sites_per_file": {
+      "cli/src/semdep/external/packaging/_manylinux.py": 1,
+      "cli/src/semdep/external/packaging/_musllinux.py": 2,
+      "cli/src/semdep/external/packaging/specifiers.py": 3,
+      "cli/src/semdep/external/packaging/utils.py": 4,
+      "cli/src/semdep/external/packaging/version.py": 3,
+      "cli/src/semdep/external/parsy/__init__.py": 1,
+      "cli/src/semdep/golang_version.py": 1,
+      "cli/src/semdep/maven_version.py": 1,
+      "cli/src/semdep/parsers/pnpm.py": 8,
+      "cli/src/semdep/parsers/preprocessors.py": 1,
+      "cli/src/semgrep/app/project_config.py": 1,
+      "cli/src/semgrep/app/version.py": 2,
+      "cli/src/semgrep/bytesize.py": 1,
+      "cli/src/semgrep/commands/login.py": 1,
+      "cli/src/semgrep/config_resolver.py": 3,
+      "cli/src/semgrep/constants.py": 4,
+      "cli/src/semgrep/external/git_url_parser.py": 5,
+      "cli/src/semgrep/git.py": 1,
+      "cli/src/semgrep/mcp/hooks/supply_chain.py": 1,
+      "cli/src/semgrep/mcp/utilities/utils.py": 1,
+      "cli/src/semgrep/rule_lang.py": 2,
+      "cli/src/semgrep/semgrep_interfaces/generate.py": 1,
+      "cli/src/semgrep/semgrep_interfaces/scripts/check-backwards-compatibility": 3,
+      "cli/src/semgrep/target_manager.py": 1,
+      "cli/src/semgrep/util.py": 3,
+      "cli/tests/conftest.py": 10,
+      "cli/tests/default/e2e-other/test_ci.py": 16,
+      "cli/tests/default/e2e-pysemgrep/test_utility_commands.py": 1,
+      "cli/tests/default/e2e/test_fixtest.py": 2,
+      "cli/tests/default/e2e/test_metrics.py": 1,
+      "cli/tests/default/e2e/test_output.py": 1,
+      "cli/tests/default/e2e/test_version.py": 1,
+      "scripts/jsonnet_to_yaml.sh": 2,
+      "scripts/run-coverage.py": 3,
+      "scripts/validate-compiler-sha.sh": 3,
+      "scripts/validate-docker-build.sh": 2,
+      "scripts/validate-docker-release.sh": 1,
+      "tests/parsing/python/re.py": 1,
+      "tests/patterns/js/dots_regexp.js": 1,
+      "tests/patterns/js/infer_const_regexp.js": 2,
+      "tests/patterns/js/metavar_regexp.js": 1,
+      "tests/patterns/js/misc_regexp_modifier.js": 2,
+      "tests/patterns/js/regexp.js": 1,
+      "tests/patterns/ts/misc_deep_metavar.ts": 1,
+      "tests/perf/bloom/l10000.js": 9,
+      "tests/perf/l1000.js": 9,
+      "tests/perf/l10000.js": 9,
+      "tests/perf/swagger-ui-bundle.js": 399,
+      "tests/perf/three.js": 14,
+      "tests/perf/timeout.js": 41,
+      "tests/rules/misc_deep_metavar.ts": 1,
+      "tests/rules/redos_bracket_colon.js": 1,
+      "tests/rules/redos_python.py": 5,
+      "tests/rules/taint_assign_record.ts": 1,
+      "tests/rules/taint_assign_record1.ts": 1
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Security-boundary corpus (boundary=deterministic-true) with findings-triage potential; 597 sites across [ecma:493, posix-shell:11, py_re:93].",
+  "schema_version": "1"
+}

@@ -1,0 +1,46 @@
+{
+  "candidate_url": "https://github.com/ProtonVPN/android-app",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. Android app. 3 sites — no regex surface (Java extractor deferred #150, but tiny either way).",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (per-dialect).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "android-app",
+  "corpus_pin": "cc1e29f8acd5f11f63701b48f97410e90fa6a71d",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "java": 1,
+      "posix-shell": 1,
+      "py_re": 1
+    },
+    "flags": {},
+    "pin": "cc1e29f8acd5f11f63701b48f97410e90fa6a71d",
+    "predicted_buckets": {},
+    "regex_sites": 3,
+    "regex_sites_per_file": {
+      "app/src/main/java/com/protonvpn/android/third_party/ApacheStringUtils.java": 1,
+      "jacocoConverter.py": 1,
+      "verify_apk_signature.sh": 1
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 3 regex sites (auto-NO-GO bar 200); dialects [java:1, posix-shell:1, py_re:1]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

@@ -1,0 +1,79 @@
+{
+  "candidate_url": "https://github.com/panther-labs/panther-analysis",
+  "conditions": [
+    {
+      "evidence": "Dialects already covered (ecma/py_re); no new construct class.",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe deterministic-true; security tool (SAST engine / SIEM detections). Panther SIEM detection-as-code. 57 py_re sites. Security tool; escape hatch regardless of scale.",
+      "id": "security-boundary",
+      "met": true
+    },
+    {
+      "evidence": "Below 1000 scale bar — escape hatch applied for security boundary.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "panther-analysis",
+  "corpus_pin": "0cd0f5bd33469c9f03b578fe0104a4ebf23d9f4a",
+  "decision": "triage-trial",
+  "decision_basis": "escape_hatch",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": true,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "py_re": 57
+    },
+    "flags": {
+      "i": 20,
+      "m": 3
+    },
+    "pin": "0cd0f5bd33469c9f03b578fe0104a4ebf23d9f4a",
+    "predicted_buckets": {
+      "inline-flag": 20,
+      "m-flag": 3
+    },
+    "regex_sites": 57,
+    "regex_sites_per_file": {
+      ".scripts/claude_review.py": 3,
+      ".scripts/deleted_rules.py": 1,
+      ".scripts/mitre_mapping_check.py": 1,
+      "global_helpers/panther_base_helpers.py": 8,
+      "global_helpers/panther_databricks_helpers.py": 3,
+      "global_helpers/panther_gcp_helpers.py": 9,
+      "global_helpers/panther_github_helpers.py": 1,
+      "global_helpers/panther_zendesk_helpers.py": 2,
+      "queries/gsuite_queries/gsuite_login_type_anomaly_rule.py": 1,
+      "queries/gsuite_queries/gsuite_oauth_token_new_ip_rule.py": 1,
+      "queries/snowflake_queries/snowflake_user_created.py": 1,
+      "rules/anthropic_rules/anthropic_org_settings_updated.py": 2,
+      "rules/auth0_rules/auth0_user_invitation_created.py": 1,
+      "rules/aws_cloudtrail_rules/aws_imds_credential_exfiltration.py": 1,
+      "rules/aws_cloudtrail_rules/aws_s3_ransomware_note_upload.py": 1,
+      "rules/aws_waf_rules/aws_waf_managed_ip_reputation.py": 1,
+      "rules/gcp_audit_rules/gcp_gcs_object_rewrite.py": 3,
+      "rules/gcp_audit_rules/gcp_gcs_ransom_note_upload.py": 1,
+      "rules/gcp_audit_rules/gcp_log_bucket_or_sink_deleted.py": 1,
+      "rules/gcp_audit_rules/gcp_logging_sink_modified.py": 1,
+      "rules/github_rules/github_supply_chain_suspicious_user_agents.py": 1,
+      "rules/github_rules/github_workflow_skip_commits.py": 1,
+      "rules/microsoft_rules/microsoft365_external_sharing.py": 1,
+      "rules/microsoft_rules/windows_credential_dumping_tool.py": 1,
+      "rules/okta_rules/okta_admin_role_assigned.py": 1,
+      "rules/snowflake_rules/snowflake_stream_file_downloaded.py": 2,
+      "rules/snowflake_rules/snowflake_stream_table_copied_into_stage.py": 2,
+      "rules/snowflake_rules/snowflake_stream_temp_stage_created.py": 1,
+      "rules/snowflake_rules/snowflake_stream_user_created.py": 1,
+      "rules/snowflake_rules/snowflake_stream_user_enabled.py": 1,
+      "rules/zendesk_rules/zendesk_new_owner.py": 1,
+      "rules/zoom_operation_rules/zoom_user_promoted_to_privileged_role.py": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Security-boundary corpus (boundary=unknown) with findings-triage potential; 57 sites across [py_re:57].",
+  "schema_version": "1"
+}

@@ -1,0 +1,43 @@
+{
+  "candidate_url": "https://github.com/vdaas/vald",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. Vector DB. 3 re2 sites, deterministic-false.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (per-dialect).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "vald",
+  "corpus_pin": "5a1b59589ca8d10f87129e0d03bdd8fc3bf03512",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "re2": 3
+    },
+    "flags": {},
+    "pin": "5a1b59589ca8d10f87129e0d03bdd8fc3bf03512",
+    "predicted_buckets": {},
+    "regex_sites": 3,
+    "regex_sites_per_file": {
+      "hack/cspell/main.go": 1,
+      "hack/helm/schema/gen/main.go": 2
+    },
+    "security_boundary": "deterministic-false"
+  },
+  "rationale": "Below admission scale: 3 regex sites (auto-NO-GO bar 200); dialects [re2:3]; boundary=deterministic-false.",
+  "schema_version": "1"
+}

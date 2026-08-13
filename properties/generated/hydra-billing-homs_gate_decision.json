@@ -1,0 +1,63 @@
+{
+  "candidate_url": "https://github.com/hydra-billing/homs",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. Billing app. 31 ecma sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (per-dialect).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "homs",
+  "corpus_pin": "b5190d58a31648e3da088b064a256ef412dcea76",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 31
+    },
+    "flags": {
+      "d": 1,
+      "g": 13,
+      "i": 6,
+      "s": 1,
+      "v": 1
+    },
+    "pin": "b5190d58a31648e3da088b064a256ef412dcea76",
+    "predicted_buckets": {
+      "inline-flag": 7,
+      "stateful": 13,
+      "v-flag": 1
+    },
+    "regex_sites": 31,
+    "regex_sites_per_file": {
+      "app/javascript/components/order_list_cell.jsx": 1,
+      "config/webpack/loaders/babel.js": 2,
+      "config/webpack/loaders/file.js": 1,
+      "config/webpack/loaders/ts.js": 3,
+      "config/webpack/loaders/yaml.js": 1,
+      "config/webpack/plugins/symlink.js": 2,
+      "config/webpack/shared.js": 4,
+      "hbw/app/javascript/packs/hbw/components/form/group.js.jsx": 1,
+      "hbw/app/javascript/packs/hbw/components/form/static.js.jsx": 1,
+      "hbw/app/javascript/packs/hbw/components/form/string.js.jsx": 11,
+      "hbw/app/javascript/packs/hbw/components/shared/hoc/conditions.js": 3,
+      "hbw/app/javascript/packs/hbw/translator.js": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 31 regex sites (auto-NO-GO bar 200); dialects [ecma:31]; boundary=unknown.",
+  "schema_version": "1"
+}

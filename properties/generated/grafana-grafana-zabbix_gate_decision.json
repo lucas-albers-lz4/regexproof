@@ -1,0 +1,71 @@
+{
+  "candidate_url": "https://github.com/grafana/grafana-zabbix",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. Grafana plugin. 61 sites < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (per-dialect).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "grafana-zabbix",
+  "corpus_pin": "2967f627e6ca08b1770afdc027d0f6bbd9ea37ed",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 55,
+      "re2": 6
+    },
+    "flags": {
+      "g": 19,
+      "i": 7,
+      "m": 1
+    },
+    "pin": "2967f627e6ca08b1770afdc027d0f6bbd9ea37ed",
+    "predicted_buckets": {
+      "inline-flag": 7,
+      "m-flag": 1,
+      "stateful": 19
+    },
+    "regex_sites": 61,
+    "regex_sites_per_file": {
+      ".config/bundler/externals.ts": 3,
+      ".config/jest/mocks/react-inlinesvg.tsx": 1,
+      ".config/webpack/utils.ts": 1,
+      ".config/webpack/webpack.config.ts": 14,
+      "pkg/datasource/guardrails.go": 1,
+      "pkg/datasource/response_handler.go": 2,
+      "pkg/gtime/gtime.go": 1,
+      "pkg/zabbix/utils.go": 2,
+      "playwright.config.ts": 1,
+      "src/datasource/components/ConfigEditor.test.tsx": 1,
+      "src/datasource/components/QueryEditor/MetricsQueryEditor.tsx": 1,
+      "src/datasource/dataProcessor.ts": 1,
+      "src/datasource/problemsHandler.ts": 6,
+      "src/datasource/responseHandler.ts": 1,
+      "src/datasource/utils.ts": 16,
+      "src/datasource/zabbix/connectors/zabbix_api/zabbixAPIConnector.test.ts": 1,
+      "src/datasource/zabbix/zabbix.ts": 2,
+      "src/panel-triggers/components/EventTag.tsx": 1,
+      "src/panel-triggers/components/Problems/Problems.test.tsx": 1,
+      "tests/e2e/configEditor.spec.ts": 2,
+      "webpack.config.ts": 2
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 61 regex sites (auto-NO-GO bar 200); dialects [ecma:55, re2:6]; boundary=unknown.",
+  "schema_version": "1"
+}
