@@ -98,6 +98,15 @@ def _compile_wide(
                 mirror = literal
                 wrap_kind = "fullmatch"
                 fullmatch_shaped = True
+            elif call_kind == "match":
+                # C1 fold (luna re-gate 5): a match call is PREFIX-anchored —
+                # literal followed by anything — not the search shape.
+                _seq = z3.StringSort()
+                _rseq = z3.ReSort(_seq)
+                star = z3.Star(z3.AllChar(_rseq))
+                mirror = z3.Concat(literal, star)
+                wrap_kind = "match"
+                fullmatch_shaped = False
             else:
                 # C1 fold (luna re-gate): extracted YARA records use
                 # call_kind=search and wide matching is substring-based —

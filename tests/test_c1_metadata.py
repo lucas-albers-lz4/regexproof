@@ -348,3 +348,27 @@ def test_mixed_alternation_keeps_normal_wrap():
     cr2 = compile_pattern(r"\bfoo|\bbar", "", "pcre", "search")
     assert cr2.word_boundary_wrap is True
     assert cr2.fullmatch_shaped is False
+
+
+def test_yara_wide_match_is_prefix_anchored():
+    # C1 fold (luna re-gate 5): a yara wide literal under call_kind=match is
+    # prefix-anchored (literal + anything), not the search shape.
+    cr = compile_pattern("abc", "", "yara", "match", domain="wide")
+    assert cr.encodable
+    assert cr.wrap_kind == "match"
+    assert cr.fullmatch_shaped is False
+    # search shape stays search
+    cr2 = compile_pattern("abc", "", "yara", "search", domain="wide")
+    assert cr2.wrap_kind == "search"
+
+
+def test_scoped_ascii_group_mirror_is_faithful():
+    # C1 (luna re-gate 5 refuted): (?a:...) applies the ASCII scoping to the
+    # child lowering (py_re.py:261-266) — the engine is equally ASCII-limited
+    # under the scoped flag, so mirror_exact=True is faithful. Refuted with
+    # the probe: (?a:.) / (?a:[^x]) / (?a:\w+) / x(?a:.)y all encodable with
+    # the ASCII-limited mirror and mirror_exact=True.
+    for pat in (r"(?a:.)", r"(?a:[^x])", r"(?a:\w+)", r"x(?a:.)y"):
+        cr = compile_pattern(pat, "", "py_re", "search")
+        assert cr.encodable, pat
+        assert cr.mirror_exact is True, pat
