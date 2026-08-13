@@ -334,7 +334,12 @@ def test_audit_requeue_archives_gate_and_new_decision_applies(tmp_path: Path):
 
     def _spy(*a, **k):
         calls.append((a, k))
-        return orig_ss(*a, **k)
+        try:
+            return orig_ss(*a, **k)
+        except Exception as exc:  # noqa: BLE001
+            raise AssertionError(
+                f"sync's set_status raised: {exc!r} args={a} kwargs={k}"
+            ) from exc
 
     mod.set_status = _spy
     try:
