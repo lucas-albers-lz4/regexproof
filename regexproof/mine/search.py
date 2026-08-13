@@ -118,7 +118,12 @@ def search_code(
         )
         if resp.status_code == 401:
             raise AuthError("GitHub search returned 401 — check GITHUB_TOKEN")
-        if resp.status_code == 429:
+        if resp.status_code == 429 or (
+            resp.status_code == 403 and "rate limit" in resp.text.lower()
+        ):
+            # Cumulative-MCR fold (M4): primary-rate 403s are transient like
+            # 429s — treating them as ordinary errors let the mine continue
+            # with empty results after rate exhaustion.
             last_err = resp.text[:200]
             if attempt + 1 >= retry_cap:
                 raise RateLimitError(last_err)
@@ -150,7 +155,9 @@ def enrich_repo(
         )
         if resp.status_code == 401:
             raise AuthError("GitHub repos API returned 401")
-        if resp.status_code == 429:
+        if resp.status_code == 429 or (
+            resp.status_code == 403 and "rate limit" in resp.text.lower()
+        ):
             last_err = resp.text[:200]
             if attempt + 1 >= retry_cap:
                 raise RateLimitError(last_err or f"enrich rate-limited: {full_name}")
@@ -181,7 +188,9 @@ def resolve_default_pin(
         )
         if resp.status_code == 401:
             raise AuthError("GitHub commits API returned 401")
-        if resp.status_code == 429:
+        if resp.status_code == 429 or (
+            resp.status_code == 403 and "rate limit" in resp.text.lower()
+        ):
             last_err = resp.text[:200]
             if attempt + 1 >= retry_cap:
                 raise RateLimitError(last_err or f"pin rate-limited: {full_name}")

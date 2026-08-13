@@ -52,6 +52,10 @@ def load_queue(path: Path | str | None = None) -> dict[str, Any]:
     data = json.loads(p.read_text(encoding="utf-8"))
     if "items" not in data or not isinstance(data["items"], list):
         raise ValueError("mine-queue missing items list")
+    # Cumulative-MCR fold (minor): backfill the capacity_source field so
+    # legacy queues and every subsequent save carry it (empty_queue writes
+    # it; load/save must too).
+    data.setdefault("capacity_source", QUEUE_CAPACITY_SOURCE)
     return data
 
 

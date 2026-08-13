@@ -20,24 +20,31 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-# Artifacts compared across two runs (sorted regex_id NDJSON + summaries).
-COMPARE_SUFFIXES = (
-    "detect-secrets.ndjson",
-    "gitleaks.ndjson",
-    "validatorjs.ndjson",
-    "batch_pair_counts.json",
-    "batch_summary.json",
-    "batch_repro.sha256",
-)
+# Cumulative-MCR fold (M3): the two-run comparison covers EVERY committed
+# batch output (per-corpus NDJSON, batch Markdown, per-corpus summaries,
+# encodable fractions, PR dry-runs, triage NDJSON, aggregates) — a fixed
+# six-file list let other committed artifacts drift undetected.
+COMPARE_SUFFIXES = (".ndjson", ".json", ".md", ".sha256")
 
 
 def _fingerprint(out_dir: Path) -> dict[str, str]:
     digests = {}
-    for name in COMPARE_SUFFIXES:
-        path = out_dir / name
-        if not path.is_file():
-            raise FileNotFoundError(path)
-        digests[name] = hashlib.sha256(path.read_bytes()).hexdigest()
+    roots = [out_dir]
+    # Close-out gate (M3): the batch writes triage NDJSON to
+    # out_dir.parent/triage — it is a committed artifact too.
+    triage = out_dir.parent / "triage"
+    if triage.is_dir():
+        roots.append(triage)
+    for root in roots:
+        # Close-out re-gate: namespace the keys by ROOT TYPE — the generated
+        # and triage trees both emit <corpus>.ndjson; a bare relative key
+        # would let the triage digest overwrite the generated one.
+        prefix = "triage" if root.name == "triage" else "generated"
+        for path in sorted(root.rglob("*")):
+            if path.is_file() and path.suffix in COMPARE_SUFFIXES:
+                digests[f"{prefix}/{path.relative_to(root)}"] = hashlib.sha256(
+                    path.read_bytes()
+                ).hexdigest()
     return digests
 
 
