@@ -4,7 +4,7 @@
 Usage:
   python scripts/rank-mine-candidates.py
   python scripts/rank-mine-candidates.py --ledger PATH --status mined --limit 10
-  python scripts/rank-mine-candidates.py --skip-gated --limit 10
+  python scripts/rank-mine-candidates.py --no-skip-gated --limit 10
 """
 
 from __future__ import annotations
@@ -32,8 +32,12 @@ def main(argv: list[str] | None = None) -> int:
     )
     ap.add_argument(
         "--status",
-        default="mined",
-        help="Only include candidates with this status (default: mined)",
+        default="",
+        help=(
+            "Only include candidates with this status (default: none — the "
+            "skip-gated default excludes gated:* rows; pass --no-skip-gated "
+            "to include them)"
+        ),
     )
     ap.add_argument(
         "--limit",
@@ -42,18 +46,19 @@ def main(argv: list[str] | None = None) -> int:
         help="Max rows to print (default: 10; 0 = all)",
     )
     ap.add_argument(
-        "--skip-gated",
-        action="store_true",
+        "--no-skip-gated",
+        action="store_false",
+        dest="skip_gated",
         help=(
-            "Omit URLs that already have a *_gate_decision.json "
-            "(any decision). Use after a wave so rank returns the next drain."
+            "Include URLs that already have a *_gate_decision.json. "
+            "By default, gated rows are excluded."
         ),
     )
     ap.add_argument(
         "--generated",
         type=Path,
         default=ROOT / "properties" / "generated",
-        help="Directory of gate decisions for --skip-gated "
+        help="Directory of gate decisions for skip-gated "
         "(default: properties/generated)",
     )
     args = ap.parse_args(argv)
@@ -80,6 +85,9 @@ def main(argv: list[str] | None = None) -> int:
         if status and c.get("status") != status:
             continue
         url = c.get("url")
+        c_status = c.get("status", "")
+        if args.skip_gated and c_status.startswith("gated:"):
+            continue
         if gated and url and normalize_repo_url(str(url)) in gated:
             continue
         pool.append(c)

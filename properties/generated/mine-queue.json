@@ -1001,5 +1001,6 @@
       "url": "https://github.com/ivan-pinatti/docker-torrent-box-with-vpn"
     }
   ],
-  "schema_version": "1"
+  "schema_version": "1",
+  "capacity_source": "regexproof.mine.queue.DEFAULT_QUEUE_CAP"
 }
