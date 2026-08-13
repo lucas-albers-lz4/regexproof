@@ -1,0 +1,27 @@
+# Link check policy (#377) — used by the `Link check` / `Link check (corpora)`
+# jobs in .github/workflows/ci.yml.
+#
+# Keep hard-fail on real 404s. Do not blanket-accept 429 / transport errors.
+# Bot-wall hosts below return 403 to scripted clients but resolve in a browser
+# (see docs/RESEARCH.md).
+
+verbose = "info"
+no_progress = true
+
+# Cap the herd: default concurrency 128 stampedes GitHub HTML over HTTP/2
+# when Smith corpora README issue links accumulate (~100+ unique issue URLs).
+max_concurrency = 8
+max_retries = 5
+retry_wait_time = 2
+timeout = 20
+
+cache = true
+max_cache_age = "1d"
+# Do not persist failures (404 / HTTP/2 / 5xx) across runs — only successful
+# probes are reusable (#377 Bugbot: stale failure entries blocking merges).
+cache_exclude_status = "400.."
+
+exclude = [
+    '^https://dl\.acm\.org/.*',
+    '^https://www\.microsoft\.com/en-us/research/.*',
+]

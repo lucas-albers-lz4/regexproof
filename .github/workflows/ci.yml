@@ -272,15 +272,74 @@ jobs:
           redos-env/bin/python -c "from regexproof.fuzz.adapters import reject_shell_subprocess_usage; from pathlib import Path; v=reject_shell_subprocess_usage([Path('regexproof/redos'), Path('helpers/redos')]); assert not v, v"
 
   links:
+    # Required gate (branch protection name must stay exactly `Link check`).
+    # Policy: lychee.toml + #377. Corpus READMEs are path-filtered below —
+    # they dominate GitHub issue URL fan-out and cause HTTP/2 flakes.
     name: Link check
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v5
-      - name: Check markdown links
+      - uses: actions/cache@v4
+        with:
+          path: .lycheecache
+          # Include all markdown: required job still scans helpers/** and
+          # properties/*.md (only batch/corpora + properties/generated are
+          # exclude-path'd). Narrow keys left stale failures after URL recovery.
+          key: lychee-${{ runner.os }}-${{ hashFiles('lychee.toml', '**/*.md') }}
+          restore-keys: |
+            lychee-${{ runner.os }}-
+      - name: Check markdown links (required surface)
         uses: lycheeverse/lychee-action@v2
         with:
-          # Real gate: fail on broken links (NO --no-fail). The two excluded
-          # hosts return 403 to scripted clients (bot protection) but resolve
-          # in a browser — documented in docs/RESEARCH.md.
-          args: --verbose --exclude 'https://dl.acm.org/.*' --exclude 'https://www.microsoft.com/en-us/research/.*' "**/*.md"
+          # Real gate: fail on broken links (NO --no-fail).
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fail: true
+          args: >-
+            --config lychee.toml
+            --exclude-path '(^|/)batch/corpora(/|$)'
+            --exclude-path '(^|/)properties/generated(/|$)'
+            "**/*.md"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  links-corpora:
+    # Not branch-protected. Runs only when corpus READMEs change so Smith
+    # admit PRs still validate their issue links without every PR re-herding
+    # 100+ GitHub issue URLs (#377).
+    name: Link check (corpora)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      pull-requests: read
+    steps:
+      - uses: actions/checkout@v5
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            corpora_md:
+              - 'batch/corpora/**/*.md'
+      - uses: actions/cache@v4
+        if: steps.filter.outputs.corpora_md == 'true'
+        with:
+          path: .lycheecache
+          key: lychee-corpora-${{ runner.os }}-${{ hashFiles('lychee.toml') }}-${{ hashFiles('batch/corpora/**/*.md') }}
+          restore-keys: |
+            lychee-corpora-${{ runner.os }}-
+            lychee-${{ runner.os }}-
+      - name: Check corpus README links
+        if: steps.filter.outputs.corpora_md == 'true'
+        uses: lycheeverse/lychee-action@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fail: true
+          args: >-
+            --config lychee.toml
+            "batch/corpora/**/*.md"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Skip (no corpus markdown changes)
+        if: steps.filter.outputs.corpora_md != 'true'
+        run: echo "No batch/corpora/**/*.md changes — skipping corpora link check."
