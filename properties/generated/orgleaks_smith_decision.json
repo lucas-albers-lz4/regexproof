@@ -1,0 +1,14 @@
+{
+  "schema_version": "1",
+  "corpus": "orgleaks",
+  "corpus_pin": "eca55a2093cc5d1759f6e430b201412683a9c69c",
+  "candidate_url": "https://github.com/wgpsec/orgleaks",
+  "smith_decision": "no-go",
+  "supersedes": "triage-trial gate decision (#315)",
+  "reason": "SUPERSEDING NO-GO (coraza precedent): 4 shell sites - below any proof floor. Shell class already covered by dogfooding/OpenWrt/anax/mycelium/claude-code-plugins (1,344-site record).",
+  "regex_sites": 4,
+  "sites_by_bucket": {
+    "probe sites (4)": 4
+  },
+  "additional_surface_outside_probe_scope": {}
+}

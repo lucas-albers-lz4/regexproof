@@ -1,42 +1,43 @@
 {
-  "candidate_url": "https://github.com/thecybermafia/orgleaks",
+  "schema_version": "1",
+  "candidate_url": "https://github.com/wgpsec/orgleaks",
   "conditions": [
     {
-      "evidence": "4 shell sites; tiny but security tool - escape hatch.",
       "id": "new-surface",
-      "met": false
+      "met": false,
+      "evidence": "Class already admitted (yara or shell); 4 sites is below proof floor."
     },
     {
-      "evidence": "Probe security_boundary=deterministic-true (thecybermafia orgleaks - org recon/leak tool).",
       "id": "security-boundary",
-      "met": true
+      "met": false,
+      "evidence": "Tiny surface cannot support a security-boundary trial at this scale."
     },
     {
-      "evidence": "4 sites < 1000.",
       "id": "large-under-saturated",
-      "met": false
+      "met": false,
+      "evidence": "4 sites << 1000 scale bar."
     }
   ],
   "corpus": "orgleaks",
   "corpus_pin": "eca55a2093cc5d1759f6e430b201412683a9c69c",
-  "decision": "triage-trial",
-  "decision_basis": "escape_hatch",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
   "decision_date": "2026-08-12",
   "escape_hatch_applied": true,
   "probe": {
-    "construct_counts": {},
-    "dialect": {
-      "posix-shell": 4
-    },
-    "flags": {},
-    "pin": "eca55a2093cc5d1759f6e430b201412683a9c69c",
-    "predicted_buckets": {},
     "regex_sites": 4,
-    "regex_sites_per_file": {
-      "orgleaks.sh": 4
-    },
-    "security_boundary": "deterministic-true"
+    "dialect": {},
+    "flags": {},
+    "construct_counts": {},
+    "predicted_buckets": {},
+    "security_boundary": "deterministic-true",
+    "pin": "eca55a2093cc5d1759f6e430b201412683a9c69c",
+    "extractor_errors": 0,
+    "regex_sites_per_file": {}
   },
-  "rationale": "Security-boundary corpus (boundary=deterministic-true) with findings-triage potential; 4 sites across [posix-shell:4].",
-  "schema_version": "1"
+  "rationale": "4 shell sites - below any proof floor. Shell class already covered by dogfooding/OpenWrt/anax/mycelium/claude-code-plugins (1,344-site record).",
+  "related": {
+    "supersedes": "triage-trial (#315)",
+    "smith_decision": "orgleaks_smith_decision.json"
+  }
 }

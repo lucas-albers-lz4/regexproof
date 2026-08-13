@@ -1,0 +1,14 @@
+{
+  "schema_version": "1",
+  "corpus": "SliverC2-Forensics",
+  "corpus_pin": "33391a8c016f0e902950e8c2d9867b7e8d0e9b2a",
+  "candidate_url": "https://github.com/Immersive-Labs-Sec/SliverC2-Forensics",
+  "smith_decision": "no-go",
+  "supersedes": "triage-trial gate decision (#334)",
+  "reason": "SUPERSEDING NO-GO (coraza precedent): 6 yara/py sites - below any proof floor. C2-detection yara rules are a subset of the yara class already admitted (malcontent/volatility3-mcp have C2 families).",
+  "regex_sites": 6,
+  "sites_by_bucket": {
+    "probe sites (6)": 6
+  },
+  "additional_surface_outside_probe_scope": {}
+}

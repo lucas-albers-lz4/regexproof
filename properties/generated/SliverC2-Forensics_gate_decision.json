@@ -1,45 +1,43 @@
 {
+  "schema_version": "1",
   "candidate_url": "https://github.com/Immersive-Labs-Sec/SliverC2-Forensics",
   "conditions": [
     {
-      "evidence": "6 sites (yara 4 + py 2); tiny but security tool - escape hatch.",
       "id": "new-surface",
-      "met": false
+      "met": false,
+      "evidence": "Class already admitted (yara or shell); 6 sites is below proof floor."
     },
     {
-      "evidence": "Probe deterministic-true (Sliver C2 detection tooling).",
       "id": "security-boundary",
-      "met": true
+      "met": false,
+      "evidence": "Tiny surface cannot support a security-boundary trial at this scale."
     },
     {
-      "evidence": "6 sites < 1000.",
       "id": "large-under-saturated",
-      "met": false
+      "met": false,
+      "evidence": "6 sites << 1000 scale bar."
     }
   ],
   "corpus": "SliverC2-Forensics",
   "corpus_pin": "33391a8c016f0e902950e8c2d9867b7e8d0e9b2a",
-  "decision": "triage-trial",
-  "decision_basis": "escape_hatch",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
   "decision_date": "2026-08-12",
   "escape_hatch_applied": true,
   "probe": {
-    "construct_counts": {},
-    "dialect": {
-      "py_re": 2,
-      "yara": 4
-    },
-    "flags": {},
-    "pin": "33391a8c016f0e902950e8c2d9867b7e8d0e9b2a",
-    "predicted_buckets": {},
     "regex_sites": 6,
-    "regex_sites_per_file": {
-      "Rules/sliver.yar": 4,
-      "sliver_decrypt.py": 1,
-      "sliver_pcap_parser.py": 1
-    },
-    "security_boundary": "deterministic-true"
+    "dialect": {},
+    "flags": {},
+    "construct_counts": {},
+    "predicted_buckets": {},
+    "security_boundary": "deterministic-true",
+    "pin": "33391a8c016f0e902950e8c2d9867b7e8d0e9b2a",
+    "extractor_errors": 0,
+    "regex_sites_per_file": {}
   },
-  "rationale": "Security-boundary corpus (boundary=deterministic-true) with findings-triage potential; 6 sites across [py_re:2, yara:4].",
-  "schema_version": "1"
+  "rationale": "6 yara/py sites - below any proof floor. C2-detection yara rules are a subset of the yara class already admitted (malcontent/volatility3-mcp have C2 families).",
+  "related": {
+    "supersedes": "triage-trial (#334)",
+    "smith_decision": "SliverC2-Forensics_smith_decision.json"
+  }
 }

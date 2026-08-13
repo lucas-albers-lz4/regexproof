@@ -1,48 +1,43 @@
 {
+  "schema_version": "1",
   "candidate_url": "https://github.com/runtimefailure/LuckywareReverse",
   "conditions": [
     {
-      "evidence": "Dialects already covered. runtimefailure rootkit removal tool; 54 yara sites; security tool.",
       "id": "new-surface",
-      "met": false
+      "met": false,
+      "evidence": "Class already admitted (yara or shell); 51 sites is below proof floor."
     },
     {
-      "evidence": "Probe security_boundary=deterministic-true.",
       "id": "security-boundary",
-      "met": true
+      "met": false,
+      "evidence": "Tiny surface cannot support a security-boundary trial at this scale."
     },
     {
-      "evidence": "Below 1000 scale bar.",
       "id": "large-under-saturated",
-      "met": false
+      "met": false,
+      "evidence": "51 sites << 1000 scale bar."
     }
   ],
   "corpus": "LuckywareReverse",
   "corpus_pin": "350ed405971a723d54bce08080e5a7491c930b01",
-  "decision": "triage-trial",
-  "decision_basis": "escape_hatch",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
   "decision_date": "2026-08-12",
   "escape_hatch_applied": true,
   "probe": {
+    "regex_sites": 51,
+    "dialect": {},
+    "flags": {},
     "construct_counts": {},
-    "dialect": {
-      "py_re": 3,
-      "yara": 51
-    },
-    "flags": {
-      "i": 48
-    },
+    "predicted_buckets": {},
+    "security_boundary": "deterministic-true",
     "pin": "350ed405971a723d54bce08080e5a7491c930b01",
-    "predicted_buckets": {
-      "inline-flag": 48
-    },
-    "regex_sites": 54,
-    "regex_sites_per_file": {
-      "rules/luckyware.yar": 51,
-      "src/LuckyScanner.py": 3
-    },
-    "security_boundary": "deterministic-true"
+    "extractor_errors": 0,
+    "regex_sites_per_file": {}
   },
-  "rationale": "Security-boundary corpus (boundary=deterministic-true) with findings-triage potential; 54 sites across [py_re:3, yara:51].",
-  "schema_version": "1"
+  "rationale": "51 yara sites - below any proof floor. Rootkit-removal yara rules are a subset of the yara class already admitted (malcontent/volatility3-mcp have rootkit families).",
+  "related": {
+    "supersedes": "triage-trial (#327)",
+    "smith_decision": "LuckywareReverse_smith_decision.json"
+  }
 }

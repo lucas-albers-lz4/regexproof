@@ -1,0 +1,14 @@
+{
+  "schema_version": "1",
+  "corpus": "LuckywareReverse",
+  "corpus_pin": "350ed405971a723d54bce08080e5a7491c930b01",
+  "candidate_url": "https://github.com/runtimefailure/LuckywareReverse",
+  "smith_decision": "no-go",
+  "supersedes": "triage-trial gate decision (#327)",
+  "reason": "SUPERSEDING NO-GO (coraza precedent): 51 yara sites - below any proof floor. Rootkit-removal yara rules are a subset of the yara class already admitted (malcontent/volatility3-mcp have rootkit families).",
+  "regex_sites": 51,
+  "sites_by_bucket": {
+    "probe sites (51)": 51
+  },
+  "additional_surface_outside_probe_scope": {}
+}

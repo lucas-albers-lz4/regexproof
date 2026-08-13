@@ -1,0 +1,14 @@
+{
+  "schema_version": "1",
+  "corpus": "MobProtID",
+  "corpus_pin": "8c5d24910eae4dc9864a658b59d24a9dfd345b5b",
+  "candidate_url": "https://github.com/arbitraryrw/MobProtID",
+  "smith_decision": "no-go",
+  "supersedes": "triage-trial gate decision (#351)",
+  "reason": "SUPERSEDING NO-GO (coraza precedent): 6 yara sites - below any proof floor. Mobile-static-analysis rules are a subset of the yara class already admitted.",
+  "regex_sites": 6,
+  "sites_by_bucket": {
+    "probe sites (6)": 6
+  },
+  "additional_surface_outside_probe_scope": {}
+}

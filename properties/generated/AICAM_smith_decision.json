@@ -1,0 +1,14 @@
+{
+  "schema_version": "1",
+  "corpus": "AICAM",
+  "corpus_pin": "c9fb13ef513d3f6dc8288b4e61ab62dc71abb8a2",
+  "candidate_url": "https://github.com/cham-space/AICAM",
+  "smith_decision": "no-go",
+  "supersedes": "triage-trial gate decision (#316)",
+  "reason": "SUPERSEDING NO-GO (coraza precedent): 10 shell sites - below any proof floor. AI-camera security scripts are a subset of the shell class already admitted.",
+  "regex_sites": 10,
+  "sites_by_bucket": {
+    "probe sites (10)": 10
+  },
+  "additional_surface_outside_probe_scope": {}
+}

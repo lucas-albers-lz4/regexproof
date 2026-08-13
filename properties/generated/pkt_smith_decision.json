@@ -1,0 +1,14 @@
+{
+  "schema_version": "1",
+  "corpus": "pkt",
+  "corpus_pin": "12928efec3304d51502f9250bf13fd549b6f7d4b",
+  "candidate_url": "https://github.com/coraltk/pkt",
+  "smith_decision": "no-go",
+  "supersedes": "triage-trial gate decision (#355)",
+  "reason": "SUPERSEDING NO-GO (coraza precedent): 20 yara sites - below any proof floor (P(compiles) knee needs 20-50 repos of real density; 20 sites has no statistical power). Yara class already covered by malcontent/volatility3-mcp/SMAT/PEpper/sec_check/Antivirus/patrolaroid/whohk.",
+  "regex_sites": 20,
+  "sites_by_bucket": {
+    "probe sites (20)": 20
+  },
+  "additional_surface_outside_probe_scope": {}
+}

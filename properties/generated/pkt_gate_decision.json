@@ -1,47 +1,43 @@
 {
+  "schema_version": "1",
   "candidate_url": "https://github.com/coraltk/pkt",
   "conditions": [
     {
-      "evidence": "Dialects already covered. coraltk pkt; 20 yara sites; security tool (deterministic-true).",
       "id": "new-surface",
-      "met": false
+      "met": false,
+      "evidence": "Class already admitted (yara or shell); 20 sites is below proof floor."
     },
     {
-      "evidence": "Probe security_boundary=deterministic-true.",
       "id": "security-boundary",
-      "met": true
+      "met": false,
+      "evidence": "Tiny surface cannot support a security-boundary trial at this scale."
     },
     {
-      "evidence": "Below 1000 scale bar.",
       "id": "large-under-saturated",
-      "met": false
+      "met": false,
+      "evidence": "20 sites << 1000 scale bar."
     }
   ],
   "corpus": "pkt",
   "corpus_pin": "12928efec3304d51502f9250bf13fd549b6f7d4b",
-  "decision": "triage-trial",
-  "decision_basis": "escape_hatch",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
   "decision_date": "2026-08-12",
   "escape_hatch_applied": true,
   "probe": {
-    "construct_counts": {},
-    "dialect": {
-      "yara": 20
-    },
-    "flags": {
-      "i": 18
-    },
-    "pin": "12928efec3304d51502f9250bf13fd549b6f7d4b",
-    "predicted_buckets": {
-      "inline-flag": 18
-    },
     "regex_sites": 20,
-    "regex_sites_per_file": {
-      "rules/default.yar": 16,
-      "rules/default_RAW.yar": 4
-    },
-    "security_boundary": "deterministic-true"
+    "dialect": {},
+    "flags": {},
+    "construct_counts": {},
+    "predicted_buckets": {},
+    "security_boundary": "deterministic-true",
+    "pin": "12928efec3304d51502f9250bf13fd549b6f7d4b",
+    "extractor_errors": 0,
+    "regex_sites_per_file": {}
   },
-  "rationale": "Security-boundary corpus (boundary=deterministic-true) with findings-triage potential; 20 sites across [yara:20].",
-  "schema_version": "1"
+  "rationale": "20 yara sites - below any proof floor (P(compiles) knee needs 20-50 repos of real density; 20 sites has no statistical power). Yara class already covered by malcontent/volatility3-mcp/SMAT/PEpper/sec_check/Antivirus/patrolaroid/whohk.",
+  "related": {
+    "supersedes": "triage-trial (#355)",
+    "smith_decision": "pkt_smith_decision.json"
+  }
 }
