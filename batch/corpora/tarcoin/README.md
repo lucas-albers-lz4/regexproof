@@ -39,3 +39,5 @@ python -m regexproof.batch --corpus tarcoin
   Raise budget to 500MB if a full re-run is needed.
 - Lesson: translation catalogs (Qt `.ts`, gettext `.po`) inflate ecma site
   counts — probe spot-checks must exclude locale dirs before scale-based GO.
+  **Full incident writeup + 3-variant inflation taxonomy + detection
+  recipe**: `batch/corpora/tarcoin-locale-inflation.md`.

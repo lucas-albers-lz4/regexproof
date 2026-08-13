@@ -32,5 +32,10 @@ python -m regexproof.batch --corpus sec_check
 
 ## Notes
 
-- rules/ structure is identical to PEpper — likely a shared/derived ruleset.
-  Overlap analysis vs PEpper is a follow-on.
+- rules/ structure is identical to PEpper — **shared/derived ruleset
+  CONFIRMED** by overlap analysis (2026-08-13): 520/538 shared files
+  byte-identical, 19,858/19,866 pattern strings identical (99.86%),
+  45/64 findings pattern-identical. sec_check (2018-09) is the original;
+  PEpper (2019-07) vendored it and added ~128 patterns in new dirs.
+  This row is the canonical one. Full analysis:
+  `batch/corpora/pepper-sec_check-overlap.md`.

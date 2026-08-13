@@ -33,5 +33,9 @@ python -m regexproof.batch --corpus mole
 ## Notes
 
 - The OT-protocol rule family is the corpus's novelty: industrial-ICS
-  detection rules absent from the other 8 admitted yara packs. Worth a
-  follow-on rule_diff vs ICS-focused packs.
+  detection rules absent from the other 8 admitted yara packs. **Novelty
+  CONFIRMED by rule_diff (2026-08-13)**: 235 OT rules across 13 protocol
+  files; zero rule-level coverage in any admitted corpus (other packs'
+  keyword hits are literal names like `CRC16_MODBUS`, not signatures);
+  zero exact regex-literal overlap across the full admitted inventory set.
+  Full analysis: `batch/corpora/mole-ot-rule-diff.md`.

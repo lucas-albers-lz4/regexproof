@@ -32,5 +32,10 @@ python -m regexproof.batch --corpus PEpper
 ## Notes
 
 - rules/ structure is identical to sec_check (utils/virustotal, url,
-  suspicious_strings, magic) — likely a shared/derived ruleset. Overlap
-  analysis vs sec_check is a follow-on.
+  suspicious_strings, magic) — **shared/derived ruleset CONFIRMED** by
+  overlap analysis (2026-08-13): 520/538 shared files byte-identical,
+  19,858/19,986 pattern strings identical (99.4%), 45/64 findings
+  pattern-identical. PEpper = sec_check vendored (2018-09) + extended
+  (2019-07) with Capabilities/, CVE_Rules/, Antidebug_AntiVM/,
+  Malicious_Documents/, Webshells/ dirs. Full analysis:
+  `batch/corpora/pepper-sec_check-overlap.md`.
