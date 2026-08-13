@@ -1,0 +1,49 @@
+{
+  "budget": {
+    "max_disk_mb": 500,
+    "max_mem_mb": 2048,
+    "max_patterns": 5000,
+    "max_wall_s": 900,
+    "redos_wall_s": 180
+  },
+  "budget_breaches": null,
+  "commit": "06cdf3fc9ae103afc55cbd5657ba7c7d09120a81",
+  "compiler_fingerprint": "71d2ce23b4cd",
+  "complete_run": true,
+  "corpus_pin": "06cdf3fc9ae103afc55cbd5657ba7c7d09120a81",
+  "decision": "go",
+  "decision_rule": "go iff encodable/sample_size >= 0.3",
+  "dialect": "py_re",
+  "encodable": 501,
+  "engine_versions": {
+    "python": "3.13.5",
+    "z3": "5.0.0"
+  },
+  "extractor_schema_version": "2",
+  "fraction": 0.5138,
+  "go_no_go_threshold": 0.3,
+  "id_formula": "v2-domain-optional-ascii-default",
+  "inventory_path": "properties/generated/python_3_8_2-inventory.ndjson",
+  "path": "batch/corpora/python_3_8_2/rules",
+  "pilot": "python_3_8_2",
+  "reasons": {
+    "backref": 25,
+    "composite-pattern": 267,
+    "inline-flag": 4,
+    "lookaround": 49,
+    "m-flag": 27,
+    "multi-match": 31,
+    "negated-shorthand": 17,
+    "ok": 501,
+    "parse-error:PatternError": 2,
+    "pattern-too-long": 8,
+    "per-alternative-anchor": 3,
+    "unicode-not-literal": 19,
+    "word-boundary": 22
+  },
+  "sample_size": 975,
+  "schema_version": "1",
+  "scope": "full_corpus",
+  "unclassified_parse_errors": 0,
+  "wall_s": 3.887
+}

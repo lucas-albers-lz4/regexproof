@@ -1,0 +1,14 @@
+{
+  "schema_version": "1",
+  "corpus": "python_3_8_2",
+  "corpus_pin": "06cdf3fc9ae103afc55cbd5657ba7c7d09120a81",
+  "candidate_url": "https://github.com/vmssoftware/python_3_8_2",
+  "smith_decision": "go",
+  "supersedes": null,
+  "reason": "Python 3.8.2 fork; first-party py_re allowlist (top-60 .py files): 501/975 = 0.5138 encodable (complete_run, parse-error=0, budget clean). 135 findings + 474 triage. Non-security (interpreter) - public-first. GO admit confirmed.",
+  "regex_sites": 975,
+  "sites_by_bucket": {
+    "py_re allowlist (60 files, 975 sites measured; 501 encodable)": 975
+  },
+  "additional_surface_outside_probe_scope": {}
+}

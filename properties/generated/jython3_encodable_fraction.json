@@ -1,0 +1,49 @@
+{
+  "budget": {
+    "max_disk_mb": 500,
+    "max_mem_mb": 2048,
+    "max_patterns": 5000,
+    "max_wall_s": 900,
+    "redos_wall_s": 180
+  },
+  "budget_breaches": null,
+  "commit": "e0d80bbddff0d5465f2da3f9de52bff89ab00e53",
+  "compiler_fingerprint": "71d2ce23b4cd",
+  "complete_run": true,
+  "corpus_pin": "e0d80bbddff0d5465f2da3f9de52bff89ab00e53",
+  "decision": "go",
+  "decision_rule": "go iff encodable/sample_size >= 0.3",
+  "dialect": "py_re",
+  "encodable": 653,
+  "engine_versions": {
+    "python": "3.13.5",
+    "z3": "5.0.0"
+  },
+  "extractor_schema_version": "2",
+  "fraction": 0.5572,
+  "go_no_go_threshold": 0.3,
+  "id_formula": "v2-domain-optional-ascii-default",
+  "inventory_path": "properties/generated/jython3-inventory.ndjson",
+  "path": "batch/corpora/jython3/rules",
+  "pilot": "jython3",
+  "reasons": {
+    "backref": 42,
+    "composite-pattern": 262,
+    "lookaround": 62,
+    "m-flag": 27,
+    "multi-match": 37,
+    "negated-class": 2,
+    "negated-shorthand": 19,
+    "ok": 653,
+    "parse-error:PatternError": 2,
+    "pattern-too-long": 10,
+    "per-alternative-anchor": 2,
+    "unicode-not-literal": 27,
+    "word-boundary": 27
+  },
+  "sample_size": 1172,
+  "schema_version": "1",
+  "scope": "full_corpus",
+  "unclassified_parse_errors": 0,
+  "wall_s": 3.648
+}

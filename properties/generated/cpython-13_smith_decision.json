@@ -1,0 +1,14 @@
+{
+  "schema_version": "1",
+  "corpus": "cpython-13",
+  "corpus_pin": "5975602bc460d4e684807260e8ce2f6363910a55",
+  "candidate_url": "https://github.com/aikwp/cpython-13",
+  "smith_decision": "go",
+  "supersedes": null,
+  "reason": "Python 3.13 fork; first-party py_re allowlist (top-60 .py files; .py-only filter excluded Modules/_hacl/refresh.sh which breaks ast.parse): 602/1,277 = 0.4714 encodable (complete_run, parse-error=0, budget clean). 131 findings + 675 triage. Non-security (interpreter) - public-first. GO admit confirmed.",
+  "regex_sites": 1277,
+  "sites_by_bucket": {
+    "py_re allowlist (60 files, 1,277 sites measured; 602 encodable)": 1277
+  },
+  "additional_surface_outside_probe_scope": {}
+}

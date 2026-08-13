@@ -1,0 +1,14 @@
+{
+  "schema_version": "1",
+  "corpus": "jython3",
+  "corpus_pin": "e0d80bbddff0d5465f2da3f9de52bff89ab00e53",
+  "candidate_url": "https://github.com/jython/jython3",
+  "smith_decision": "go",
+  "supersedes": null,
+  "reason": "Jython 3; first-party py_re allowlist (top-60 .py files): 653/1,172 = 0.5572 encodable (complete_run, parse-error=0, budget clean). The admission-time 113 extractor_errors were outside the top-60 allowlist files - clean in-measure. 182 findings + 519 triage (HIGHEST py yield). Non-security (interpreter) - public-first. GO admit confirmed.",
+  "regex_sites": 1172,
+  "sites_by_bucket": {
+    "py_re allowlist (60 files, 1,172 sites measured; 653 encodable)": 1172
+  },
+  "additional_surface_outside_probe_scope": {}
+}

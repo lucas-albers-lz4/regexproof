@@ -1,0 +1,51 @@
+{
+  "budget": {
+    "max_disk_mb": 500,
+    "max_mem_mb": 2048,
+    "max_patterns": 5000,
+    "max_wall_s": 900,
+    "redos_wall_s": 180
+  },
+  "budget_breaches": null,
+  "commit": "2b78a358c0da53219e48cf10dddb7ad3f93d474a",
+  "compiler_fingerprint": "71d2ce23b4cd",
+  "complete_run": true,
+  "corpus_pin": "2b78a358c0da53219e48cf10dddb7ad3f93d474a",
+  "decision": "go",
+  "decision_rule": "go iff encodable/sample_size >= 0.3",
+  "dialect": "py_re",
+  "encodable": 545,
+  "engine_versions": {
+    "python": "3.13.5",
+    "z3": "5.0.0"
+  },
+  "extractor_schema_version": "2",
+  "fraction": 0.4897,
+  "go_no_go_threshold": 0.3,
+  "id_formula": "v2-domain-optional-ascii-default",
+  "inventory_path": "properties/generated/pythowon-inventory.ndjson",
+  "path": "batch/corpora/pythowon/rules",
+  "pilot": "pythowon",
+  "reasons": {
+    "backref": 25,
+    "composite-pattern": 274,
+    "inline-flag": 6,
+    "lookaround": 53,
+    "m-flag": 26,
+    "multi-match": 32,
+    "negated-shorthand": 16,
+    "ok": 545,
+    "parse-error:PatternError": 2,
+    "pattern-too-long": 8,
+    "per-alternative-anchor": 4,
+    "unicode-not-literal": 20,
+    "unsupported:ATOMIC_GROUP": 29,
+    "unsupported:POSSESSIVE_REPEAT": 50,
+    "word-boundary": 23
+  },
+  "sample_size": 1113,
+  "schema_version": "1",
+  "scope": "full_corpus",
+  "unclassified_parse_errors": 0,
+  "wall_s": 4.823
+}

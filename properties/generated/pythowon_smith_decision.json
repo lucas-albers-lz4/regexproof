@@ -1,0 +1,14 @@
+{
+  "schema_version": "1",
+  "corpus": "pythowon",
+  "corpus_pin": "2b78a358c0da53219e48cf10dddb7ad3f93d474a",
+  "candidate_url": "https://github.com/vcokltfre/pythowon",
+  "smith_decision": "go",
+  "supersedes": null,
+  "reason": "Python fork; first-party py_re allowlist (top-60 .py files): 545/1,113 = 0.4897 encodable (complete_run, parse-error=0, budget clean). 144 findings + 568 triage. Non-security (interpreter) - public-first. GO admit confirmed.",
+  "regex_sites": 1113,
+  "sites_by_bucket": {
+    "py_re allowlist (60 files, 1,113 sites measured; 545 encodable)": 1113
+  },
+  "additional_surface_outside_probe_scope": {}
+}
