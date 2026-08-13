@@ -19,7 +19,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from regexproof.io_atomic import atomic_write_text
-from regexproof.mine.score_v2 import DEFAULT_FIT_DATE, fit_report, format_report
+from regexproof.mine.score_v2 import DEFAULT_FIT_DATE, DEFAULT_SEED, fit_report, format_report
 
 
 def _load_rows(path: Path) -> list[dict[str, Any]]:
@@ -44,7 +44,12 @@ def main(argv: list[str] | None = None) -> int:
         type=Path,
         default=ROOT / "regexproof" / "mine" / "score_v2_weights.json",
     )
-    parser.add_argument("--seed", type=int, default=432)
+    # P8 (luna gate 1): the seed is PINNED (plan D3: "seed pinned in the
+    # script") — an override would allow non-reproducible committed weights.
+    parser.add_argument(
+        "--seed", type=int, default=DEFAULT_SEED, choices=[DEFAULT_SEED],
+        help="Pinned deterministic seed (plan D3; not overrideable).",
+    )
     parser.add_argument(
         "--fit-date",
         default=DEFAULT_FIT_DATE.isoformat(),

@@ -144,7 +144,11 @@ def candidate_score(
         from regexproof.mine.score_v2 import linear_score, load_weights
 
         model = load_weights(SCORE_V2_WEIGHTS_PATH)
-        total = linear_score(cand, model, today=today, tree_feature=tree_feature)
+        # P8 (luna gate 1): recency features must use the artifact's FIT
+        # date, not the runtime's clock — a refit with a later date would
+        # otherwise score inconsistently with training.
+        fit_date = today if today is not None else model.get("date")
+        total = linear_score(cand, model, today=fit_date, tree_feature=tree_feature)
         breakdown: dict[str, Any] = {
             "allocator": allocator,
             "score_version": "v2",
