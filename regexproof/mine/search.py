@@ -220,10 +220,11 @@ def run_search(
         if result.queries_run >= query_budget:
             result.capped = True
             break
+        # P7 fold (luna re-gate 4): the budget counts QUERIES, not pages —
+        # queries_run increments once per query; pages are bounded by
+        # max_pages inside the loop.
+        result.queries_run += 1
         for page in range(1, max_pages + 1):
-            if result.queries_run >= query_budget:
-                result.capped = True
-                break
             try:
                 body, hit_cap = search_code(
                     session, query, page=page, headers=hdrs, sleep_fn=sleep_fn
@@ -237,10 +238,8 @@ def run_search(
                 break
             except RuntimeError as e:
                 result.errors.append(str(e))
-                result.queries_run += 1
                 break
 
-            result.queries_run += 1
             if hit_cap:
                 result.capped = True
 

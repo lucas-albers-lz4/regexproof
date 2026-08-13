@@ -598,7 +598,7 @@ def test_enqueue_max_10_replacements_enforced():
 
 
 def test_run_search_three_page_budget():
-    """A query with >3 pages of results only fetches 3 pages; queries_run counts correctly."""
+    """A query with >3 pages of results only fetches 3 pages; the budget counts QUERIES (P7 fold — luna re-gate 4), so one query == queries_run 1 regardless of pages."""
     # Each page returns items to keep paginating; 4th page should never be hit
     page_items = {
         "total_count": 10,
@@ -637,7 +637,7 @@ def test_run_search_three_page_budget():
     # Only 3 search_code calls (pages 1-3), no 4th
     search_calls = [c for c in session.calls if "search/code" in c]
     assert len(search_calls) == 3
-    assert result.queries_run == 3
+    assert result.queries_run == 1  # budget counts queries, not pages
 
 
 def test_run_search_ratelimit_aborts_both_loops():
@@ -739,3 +739,32 @@ def test_run_search_fork_below_50_stars_dropped():
     assert any("original-lib" in u for u in urls)
     assert any("big-fork" in u for u in urls)
     assert not any("forked-lib" in u for u in urls)
+
+
+def test_query_budget_counts_queries_not_pages():
+    """P7 fold (luna re-gate 4): budget=2 with 3 queries stops after 2
+    QUERIES even though each query has multiple pages (the old per-page
+    counting stopped after 2 pages, silently skipping a full query)."""
+    page_items = {
+        "items": [
+            {"repository": {"full_name": "acme/tool0", "stargazers_count": 5,
+                            "html_url": "https://github.com/acme/tool0"}}
+        ]
+    }
+    empty_items = {"items": []}
+    responses = []
+    for q in range(3):
+        responses.append(FakeResp(200, page_items))           # search p1
+        responses.append(FakeResp(200, {"default_branch": "main",
+                                        "stargazers_count": 5,
+                                        "pushed_at": "2026-08-01T00:00:00Z",
+                                        "html_url": "https://github.com/acme/tool0"}))
+        responses.append(FakeResp(200, {"sha": "s0"}))
+        responses.append(FakeResp(200, empty_items))          # search p2 -> stop
+    session = FakeSession(responses)
+    result = run_search(session, queries=["q1", "q2", "q3"], query_budget=2,
+                        max_pages=3, sleep_fn=lambda _s: None)
+    assert result.queries_run == 2  # two QUERIES consumed, budget hit
+    assert result.capped is True
+    search_calls = [c for c in session.calls if "search/code" in c]
+    assert len(search_calls) == 4  # q1 p1+p2, q2 p1+p2 — q3 never searched
