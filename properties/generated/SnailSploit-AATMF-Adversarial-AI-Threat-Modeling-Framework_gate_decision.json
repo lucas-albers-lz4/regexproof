@@ -1,0 +1,56 @@
+{
+  "candidate_url": "https://github.com/SnailSploit/AATMF-Adversarial-AI-Threat-Modeling-Framework",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 66 sites (19 py/47 yara) < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "AATMF-Adversarial-AI-Threat-Modeling-Framework",
+  "corpus_pin": "a7bdaa76bec8c7e1bcd63bafc87085fffae688b4",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "py_re": 19,
+      "yara": 47
+    },
+    "flags": {
+      "i": 32,
+      "m": 3,
+      "s": 1
+    },
+    "pin": "a7bdaa76bec8c7e1bcd63bafc87085fffae688b4",
+    "predicted_buckets": {
+      "inline-flag": 33,
+      "m-flag": 3
+    },
+    "regex_sites": 66,
+    "regex_sites_per_file": {
+      "scripts/aatmf_taxonomy.py": 18,
+      "scripts/validate.py": 1,
+      "signatures/yara/t01-prompt-injection.yar": 22,
+      "signatures/yara/t02-encoding-evasion.yar": 5,
+      "signatures/yara/t09-multimodal-injection.yar": 1,
+      "signatures/yara/t11-mcp-tool-poisoning.yar": 10,
+      "signatures/yara/t13-supply-chain.yar": 9
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 66 regex sites (auto-NO-GO bar 200); dialects [py_re:19, yara:47]; boundary=unknown.",
+  "schema_version": "1"
+}

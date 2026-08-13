@@ -1,0 +1,74 @@
+{
+  "candidate_url": "https://github.com/Jebel-Quant/rhiza",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 63 sites < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "rhiza",
+  "corpus_pin": "15a89cfe2a8c9ef8eddd94c6aaa8b2204adcb422",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "lookaround": 5
+    },
+    "dialect": {
+      "posix-shell": 7,
+      "py_re": 55,
+      "re2": 1
+    },
+    "flags": {
+      "i": 3,
+      "m": 9,
+      "s": 8
+    },
+    "pin": "15a89cfe2a8c9ef8eddd94c6aaa8b2204adcb422",
+    "predicted_buckets": {
+      "inline-flag": 11,
+      "lookaround": 5,
+      "m-flag": 9
+    },
+    "regex_sites": 63,
+    "regex_sites_per_file": {
+      "bundles/core/.rhiza/completions/rhiza-completion.bash": 2,
+      "bundles/core/.rhiza/tests/test_readme.py": 1,
+      "bundles/go-core/.rhiza/tests/test_go_module.py": 4,
+      "bundles/go-core/internal/version/version_test.go": 1,
+      "bundles/python-core/.rhiza/tests/test_pyproject.py": 2,
+      "bundles/rust-core/.rhiza/tests/test_cargo_toml.py": 1,
+      "bundles/tests/.rhiza/tests/test_readme_validation.py": 2,
+      "tests/api/test_language_layer.py": 5,
+      "tests/api/test_workflow_hygiene.py": 1,
+      "tests/bundles/test_bundle_content_validity.py": 4,
+      "tests/bundles/test_bundle_sync.py": 4,
+      "tests/bundles/test_bundle_test_coverage.py": 1,
+      "tests/bundles/test_gitlab_ci.py": 8,
+      "tests/docs/test_doc_consistency.py": 11,
+      "tests/e2e/test_go_layer_e2e.py": 1,
+      "tests/e2e/test_rust_layer_e2e.py": 1,
+      "tests/security/test_security_md_claims.py": 2,
+      "tests/security/test_security_patterns.py": 2,
+      "tests/shell/test_scripts.sh": 5,
+      "tests/util.py": 1,
+      "tests/utils/test_make_structure.py": 4
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 63 regex sites (auto-NO-GO bar 200); dialects [posix-shell:7, py_re:55, re2:1]; boundary=unknown.",
+  "schema_version": "1"
+}

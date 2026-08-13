@@ -1,0 +1,75 @@
+{
+  "candidate_url": "https://github.com/make-software/casper-wallet",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 64 ecma < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "casper-wallet",
+  "corpus_pin": "66092d98e932544825c1acaac2acb7e60fdc91ba",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "lookaround": 1
+    },
+    "dialect": {
+      "ecma": 64
+    },
+    "flags": {
+      "g": 7,
+      "i": 9,
+      "m": 2
+    },
+    "pin": "66092d98e932544825c1acaac2acb7e60fdc91ba",
+    "predicted_buckets": {
+      "inline-flag": 9,
+      "lookaround": 1,
+      "m-flag": 2,
+      "stateful": 7
+    },
+    "regex_sites": 64,
+    "regex_sites_per_file": {
+      "e2e-tests/constants.ts": 1,
+      "e2e-tests/fixtures.ts": 1,
+      "e2e-tests/onboarding-flow/confirm-secret-phrase-flow.spec.ts": 3,
+      "scripts/audit-ci.mjs": 2,
+      "scripts/semgrep-test.mjs": 3,
+      "src/apps/import-account-with-file/pages/import-account-with-file-upload/index.tsx": 1,
+      "src/apps/popup/pages/rate-app/utils.ts": 6,
+      "src/apps/popup/pages/transfer/amount-step.tsx": 1,
+      "src/background/workers/generate-sync-wallet-qr-data-worker.ts": 1,
+      "src/content/sdk.test.ts": 3,
+      "src/libs/crypto/encryption/hex.ts": 1,
+      "src/libs/crypto/utils.test.ts": 2,
+      "src/libs/layout/unlock-vault/index.tsx": 1,
+      "src/libs/ui/components/dynamic-accounts-list-with-select/dynamic-accounts-list-with-select.tsx": 1,
+      "src/libs/ui/components/site-favicon-badge/site-favicon-badge.tsx": 1,
+      "src/libs/ui/components/svg-icon/svg-icon.tsx": 1,
+      "src/libs/ui/forms/form-validation-rules.ts": 2,
+      "src/libs/ui/utils/formatters.ts": 3,
+      "src/utils.test.ts": 4,
+      "src/utils.ts": 5,
+      "src/webpack-config.test.ts": 11,
+      "utils/commit-hash.js": 1,
+      "webpack.config.js": 9
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 64 regex sites (auto-NO-GO bar 200); dialects [ecma:64]; boundary=unknown.",
+  "schema_version": "1"
+}

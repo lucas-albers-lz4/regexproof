@@ -1,0 +1,68 @@
+{
+  "candidate_url": "https://github.com/dipsh0v/PERSEPTOR",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 54 sites < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "PERSEPTOR",
+  "corpus_pin": "bad1b8bd7dd901eb0ae80893a17e083aac6b1b7a",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "lookaround": 1
+    },
+    "dialect": {
+      "ecma": 21,
+      "posix-shell": 3,
+      "py_re": 30
+    },
+    "flags": {
+      "g": 6,
+      "i": 8,
+      "m": 9
+    },
+    "pin": "bad1b8bd7dd901eb0ae80893a17e083aac6b1b7a",
+    "predicted_buckets": {
+      "inline-flag": 8,
+      "lookaround": 1,
+      "m-flag": 9,
+      "stateful": 6
+    },
+    "regex_sites": 54,
+    "regex_sites_per_file": {
+      "docker/test_env_vars.sh": 3,
+      "modules/ai_engine.py": 1,
+      "modules/cli_formatter.py": 10,
+      "modules/pipeline/output_validator.py": 5,
+      "modules/quality_analyzer.py": 2,
+      "modules/security.py": 7,
+      "modules/sigma_generator.py": 1,
+      "modules/sigma_matcher.py": 2,
+      "modules/yara_generator.py": 2,
+      "perseptor-ui/src/App.test.tsx": 1,
+      "perseptor-ui/src/pages/AboutPerseptor.tsx": 2,
+      "perseptor-ui/src/pages/Dashboard.tsx": 8,
+      "perseptor-ui/src/pages/QA.tsx": 2,
+      "perseptor-ui/src/pages/Reports.tsx": 8
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 54 regex sites (auto-NO-GO bar 200); dialects [ecma:21, posix-shell:3, py_re:30]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

@@ -1,0 +1,111 @@
+{
+  "candidate_url": "https://github.com/rios0rios0/pipelines",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 212 sites < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "pipelines",
+  "corpus_pin": "86649a74abb32cca0a16987cdc3584b3e3804650",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "(?m)": 6,
+      "(?s)": 3,
+      "backref": 1,
+      "posix-class": 18
+    },
+    "dialect": {
+      "posix-shell": 184,
+      "py_re": 28
+    },
+    "flags": {
+      "i": 2,
+      "m": 2,
+      "s": 2
+    },
+    "pin": "86649a74abb32cca0a16987cdc3584b3e3804650",
+    "predicted_buckets": {
+      "backref": 1,
+      "inline-flag": 7,
+      "m-flag": 8,
+      "posix-class": 18
+    },
+    "regex_sites": 212,
+    "regex_sites_per_file": {
+      ".github/tests/test-basic-checks.sh": 3,
+      ".github/tests/test-cyclonedx-main-detection.sh": 1,
+      ".github/tests/test-deploy-providers.sh": 9,
+      ".github/tests/test-go-cache-trim.sh": 1,
+      ".github/tests/test-go-integration-scope.sh": 6,
+      ".github/tests/test-go-tmpdir-modcache.sh": 13,
+      ".github/tests/test-go-validation.sh": 6,
+      ".github/tests/test-goreleaser-prepare.sh": 1,
+      ".github/tests/test-lambda-templates.sh": 6,
+      ".github/tests/test-order-check.sh": 4,
+      ".github/tests/test-release-reconcile.sh": 4,
+      ".github/tests/test-release-version-extraction.sh": 7,
+      ".github/tests/test-sonarqube-auto-derive.sh": 21,
+      ".github/tests/test-terraform-provider-mirror.sh": 2,
+      "global/scripts/deploy/cloudflare/run.sh": 1,
+      "global/scripts/deploy/flyio/run.sh": 2,
+      "global/scripts/deploy/netlify/run.sh": 1,
+      "global/scripts/deploy/render/run.sh": 1,
+      "global/scripts/deploy/require-checks/run.sh": 1,
+      "global/scripts/deploy/vercel/run.sh": 1,
+      "global/scripts/languages/golang/cyclonedx/run.sh": 1,
+      "global/scripts/languages/golang/golangci-lint/run.sh": 3,
+      "global/scripts/languages/golang/goreleaser/prepare.sh": 6,
+      "global/scripts/languages/golang/govulncheck/run.sh": 1,
+      "global/scripts/languages/golang/init/run.sh": 1,
+      "global/scripts/languages/golang/test/run.sh": 5,
+      "global/scripts/languages/java/dependency-check/run.sh": 1,
+      "global/scripts/languages/java/proguard/run.sh": 1,
+      "global/scripts/languages/javascript/knip/run.sh": 1,
+      "global/scripts/languages/php/phpmd/run.sh": 1,
+      "global/scripts/languages/python/cyclonedx/run.sh": 3,
+      "global/scripts/languages/python/vulture/run.sh": 1,
+      "global/scripts/languages/ruby/debride/run.sh": 1,
+      "global/scripts/languages/terraform/cyclonedx/run.sh": 4,
+      "global/scripts/languages/terraform/order-check/check_order.py": 16,
+      "global/scripts/languages/terraform/structural/run.sh": 1,
+      "global/scripts/languages/terraform/terra-test/run.sh": 11,
+      "global/scripts/languages/terraform/terratest/run.sh": 1,
+      "global/scripts/languages/terraform/test-all/run.sh": 2,
+      "global/scripts/languages/terraform/tftest-gen/gen_smoke_tests.py": 9,
+      "global/scripts/languages/terraform/validate/run.sh": 2,
+      "global/scripts/languages/terraform/var-catalog/gen_shared_variables.py": 3,
+      "global/scripts/shared/changelog-check.sh": 8,
+      "global/scripts/shared/memory.sh": 1,
+      "global/scripts/shared/reconcile-releases.sh": 5,
+      "global/scripts/shared/terraform-provider-mirror.sh": 1,
+      "global/scripts/tools/codeql/run.sh": 3,
+      "global/scripts/tools/dependency-track/run.sh": 1,
+      "global/scripts/tools/gitleaks/run.sh": 6,
+      "global/scripts/tools/hadolint/run.sh": 5,
+      "global/scripts/tools/semgrep/run.sh": 1,
+      "global/scripts/tools/shellcheck/run.sh": 4,
+      "global/scripts/tools/sonarqube/run.sh": 3,
+      "global/scripts/tools/trivy/run-sca.sh": 4,
+      "global/scripts/tools/trivy/run.sh": 4
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 212 regex sites (auto-NO-GO bar 200); dialects [posix-shell:184, py_re:28]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

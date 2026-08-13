@@ -1,0 +1,69 @@
+{
+  "candidate_url": "https://github.com/apollosolutions/reference-architecture",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 63 sites < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "reference-architecture",
+  "corpus_pin": "683df45036a80c4bd515ebf81f1382f990b2bf64",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "posix-class": 1
+    },
+    "dialect": {
+      "ecma": 22,
+      "posix-shell": 41
+    },
+    "flags": {
+      "g": 5
+    },
+    "pin": "683df45036a80c4bd515ebf81f1382f990b2bf64",
+    "predicted_buckets": {
+      "posix-class": 1,
+      "stateful": 5
+    },
+    "regex_sites": 63,
+    "regex_sites_per_file": {
+      "client/src/tracing.ts": 3,
+      "scripts/minikube/02-setup-apollo-graph.sh": 1,
+      "scripts/minikube/02a-refresh-operator-key.sh": 2,
+      "scripts/minikube/05-deploy-subgraphs.sh": 7,
+      "scripts/minikube/06-deploy-coprocessor.sh": 1,
+      "scripts/minikube/08-deploy-operator-resources.sh": 2,
+      "scripts/minikube/09-setup-router-access.sh": 2,
+      "scripts/minikube/10-deploy-client.sh": 4,
+      "scripts/minikube/11-deploy-telemetry.sh": 17,
+      "scripts/minikube/12-deploy-mcp-server.sh": 1,
+      "scripts/minikube/12a-mcp-port-forwards.sh": 4,
+      "subgraphs/checkout/src/tracing.ts": 1,
+      "subgraphs/discovery/src/tracing.ts": 1,
+      "subgraphs/inventory/src/tracing.ts": 1,
+      "subgraphs/orders/src/tracing.ts": 1,
+      "subgraphs/products/src/tracing.ts": 1,
+      "subgraphs/reviews/src/tracing.ts": 1,
+      "subgraphs/shipping/src/tracing.ts": 1,
+      "subgraphs/users/src/index.ts": 11,
+      "subgraphs/users/src/tracing.ts": 1
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 63 regex sites (auto-NO-GO bar 200); dialects [ecma:22, posix-shell:41]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

@@ -1,0 +1,62 @@
+{
+  "candidate_url": "https://github.com/bdfinst/vsm-workshop",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 29 sites < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "vsm-workshop",
+  "corpus_pin": "cd080616c28cecf631f349dea0067c68505afaec",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 28,
+      "posix-shell": 1
+    },
+    "flags": {
+      "g": 2,
+      "i": 7
+    },
+    "pin": "cd080616c28cecf631f349dea0067c68505afaec",
+    "predicted_buckets": {
+      "inline-flag": 7,
+      "stateful": 2
+    },
+    "regex_sites": 29,
+    "regex_sites_per_file": {
+      ".claude/install-dev-team.sh": 1,
+      "features/step-definitions/cdReadiness.steps.js": 1,
+      "features/step-definitions/recommendations.steps.js": 1,
+      "src/utils/export/exportAsPdf.js": 4,
+      "src/utils/export/exportAsPng.js": 3,
+      "src/utils/import/deriveVsm.js": 7,
+      "src/utils/import/eventAdapters.js": 1,
+      "tests/e2e/canvas.spec.js": 1,
+      "tests/e2e/edge-routing.spec.js": 1,
+      "tests/unit/calculations/recommendations.test.js": 3,
+      "tests/unit/data/minimumCdPractices.test.js": 1,
+      "tests/unit/import/azureDevOpsFetch.test.js": 2,
+      "tests/unit/models/StepFactory.test.js": 1,
+      "tests/unit/utils/ui/reworkEdgePath.test.js": 2
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 29 regex sites (auto-NO-GO bar 200); dialects [ecma:28, posix-shell:1]; boundary=unknown.",
+  "schema_version": "1"
+}

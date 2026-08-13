@@ -1,0 +1,116 @@
+{
+  "candidate_url": "https://github.com/aegisgatesecurity/aegisgate-platform",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 819 re2 < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "aegisgate-platform",
+  "corpus_pin": "617c6e4784d02595e54dbff173071e03ebbd8f07",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "(?i)": 663,
+      "(?m)": 3
+    },
+    "dialect": {
+      "ecma": 3,
+      "posix-shell": 10,
+      "re2": 806
+    },
+    "flags": {
+      "g": 2,
+      "i": 1
+    },
+    "pin": "617c6e4784d02595e54dbff173071e03ebbd8f07",
+    "predicted_buckets": {
+      "inline-flag": 664,
+      "m-flag": 3,
+      "stateful": 2
+    },
+    "regex_sites": 819,
+    "regex_sites_per_file": {
+      "pkg/agentintentsign/types.go": 1,
+      "pkg/anomaly/tokenizer.go": 3,
+      "pkg/anp/guard.go": 4,
+      "pkg/atlas/detector.go": 19,
+      "pkg/compliance/api_test.go": 2,
+      "pkg/compliance/atlas.go": 52,
+      "pkg/compliance/ccpa/ccpa.go": 14,
+      "pkg/compliance/cis/cis.go": 12,
+      "pkg/compliance/cjis/cjis.go": 9,
+      "pkg/compliance/cmmcl2/cmmcl2.go": 20,
+      "pkg/compliance/eu-ai-act/eu_ai_act.go": 37,
+      "pkg/compliance/fedramp/fedramp.go": 15,
+      "pkg/compliance/ferpa/ferpa.go": 5,
+      "pkg/compliance/fips/fips.go": 15,
+      "pkg/compliance/framework_mapping_coverage_test.go": 3,
+      "pkg/compliance/glba/glba.go": 5,
+      "pkg/compliance/hipaa/hipaa.go": 8,
+      "pkg/compliance/hitrust/hitrust.go": 32,
+      "pkg/compliance/iso27001/iso27001.go": 30,
+      "pkg/compliance/iso42001/iso42001.go": 16,
+      "pkg/compliance/nerc_cip/nerc_cip.go": 10,
+      "pkg/compliance/nist800171/nist800171.go": 15,
+      "pkg/compliance/nist_ai_600_1/nist_ai_600_1.go": 16,
+      "pkg/compliance/nist_ai_rmf/nist_ai_rmf.go": 16,
+      "pkg/compliance/nist_csf/nist_csf.go": 6,
+      "pkg/compliance/owasp.go": 47,
+      "pkg/compliance/owasp_web/owasp_web.go": 6,
+      "pkg/compliance/pci/pci.go": 6,
+      "pkg/compliance/policy_opa.go": 4,
+      "pkg/compliance/soc2/soc2.go": 11,
+      "pkg/compliance/sox/sox.go": 5,
+      "pkg/compliance/tisax/tisax.go": 14,
+      "pkg/computeruse/guard.go": 10,
+      "pkg/mcpserver/stdio_validation.go": 13,
+      "pkg/metrics/cardinality.go": 13,
+      "pkg/ml/evasion_resistance.go": 15,
+      "pkg/promptcache/types.go": 1,
+      "pkg/response/hallucination_detector.go": 4,
+      "pkg/response/pii_scanner.go": 11,
+      "pkg/response/secret_detector.go": 17,
+      "pkg/response/toxicity_filter.go": 6,
+      "scripts/check-doc-go.sh": 2,
+      "tests/load/k6/break-test-v3-10k.js": 1,
+      "tools/opsec-scan.sh": 8,
+      "tools/port-detections/main.go": 5,
+      "ui/frontend/js/dashboard.js": 2,
+      "upstream/aegisgate/pkg/api/versioning.go": 3,
+      "upstream/aegisgate/pkg/auth/utils.go": 1,
+      "upstream/aegisgate/pkg/compliance/atlas.go": 52,
+      "upstream/aegisgate/pkg/compliance/hipaa/hipaa.go": 8,
+      "upstream/aegisgate/pkg/compliance/owasp.go": 47,
+      "upstream/aegisgate/pkg/compliance/pci/pci.go": 6,
+      "upstream/aegisgate/pkg/graphql/executor.go": 2,
+      "upstream/aegisgate/pkg/ml/advanced_ml.go": 45,
+      "upstream/aegisgate/pkg/ml/advanced_ml_test.go": 1,
+      "upstream/aegisgate/pkg/ml/multiturn.go": 13,
+      "upstream/aegisgate/pkg/scanner/patterns.go": 26,
+      "upstream/aegisgate/pkg/scanner/patterns_extended.go": 18,
+      "upstream/aegisgate/pkg/threatintel/stix.go": 2,
+      "upstream/aegisguard/pkg/compliance/gdpr/gdpr.go": 4,
+      "upstream/aegisguard/pkg/compliance/hipaa/hipaa.go": 5,
+      "upstream/aegisguard/pkg/compliance/owasp/owasp.go": 16,
+      "upstream/aegisguard/pkg/compliance/pci/pci.go": 4
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 819 regex sites (auto-NO-GO bar 200); dialects [ecma:3, posix-shell:10, re2:806]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

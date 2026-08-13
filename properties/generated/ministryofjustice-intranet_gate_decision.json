@@ -1,0 +1,62 @@
+{
+  "candidate_url": "https://github.com/ministryofjustice/intranet",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 58 sites < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "intranet",
+  "corpus_pin": "e844d6e06999a61d4c0df79206db4e9f6fa975dd",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 40,
+      "posix-shell": 18
+    },
+    "flags": {
+      "g": 30,
+      "i": 14
+    },
+    "pin": "e844d6e06999a61d4c0df79206db4e9f6fa975dd",
+    "predicted_buckets": {
+      "inline-flag": 14,
+      "stateful": 30
+    },
+    "regex_sites": 58,
+    "regex_sites_per_file": {
+      "bin/composer-post-install.sh": 11,
+      "bin/fpm-init.sh": 1,
+      "bin/fpm-liveness.sh": 1,
+      "bin/fpm-readiness.sh": 1,
+      "bin/local-key-gen-functions.sh": 1,
+      "cdn/server.js": 3,
+      "deploy/config/init/s3-push-start.sh": 3,
+      "public/app/themes/clarity/ctgen.js": 12,
+      "public/app/themes/clarity/genreg.js": 1,
+      "public/app/themes/clarity/inc/admin/js/colour-contrast-checker.js": 1,
+      "public/app/themes/clarity/inc/admin/js/force-title.js": 1,
+      "public/app/themes/clarity/src/globals/js/ajax-templating.js": 1,
+      "public/app/themes/clarity/src/vendors/magnific-popup.js": 10,
+      "public/app/themes/clarity/src/vendors/respond.min.js": 11
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 58 regex sites (auto-NO-GO bar 200); dialects [ecma:40, posix-shell:18]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

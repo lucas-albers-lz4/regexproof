@@ -1,0 +1,56 @@
+{
+  "candidate_url": "https://github.com/basecamp/cli",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 12 sites < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "cli",
+  "corpus_pin": "8703be65d98f915efc400fe8d0aae7d982ef1e44",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "posix-class": 5
+    },
+    "dialect": {
+      "posix-shell": 9,
+      "re2": 3
+    },
+    "flags": {
+      "i": 3
+    },
+    "pin": "8703be65d98f915efc400fe8d0aae7d982ef1e44",
+    "predicted_buckets": {
+      "inline-flag": 3,
+      "posix-class": 5
+    },
+    "regex_sites": 12,
+    "regex_sites_per_file": {
+      "credstore/probe_darwin.go": 1,
+      "profile/profile.go": 1,
+      "scripts/sync-skills.sh": 1,
+      "seed/.claude-plugin/hooks/post-commit-check.sh": 5,
+      "seed/scripts/publish-aur.sh": 2,
+      "seed/scripts/sync-skills.sh": 1,
+      "surface/snapshot.go": 1
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 12 regex sites (auto-NO-GO bar 200); dialects [posix-shell:9, re2:3]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

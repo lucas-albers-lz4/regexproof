@@ -1,0 +1,76 @@
+{
+  "candidate_url": "https://github.com/agdsn/pycroft",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 44 sites < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "pycroft",
+  "corpus_pin": "d0cc2c77baf6de8b71ff17b739c8f42ab7a9cd08",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "lookaround": 3
+    },
+    "dialect": {
+      "ecma": 13,
+      "posix-shell": 2,
+      "py_re": 29
+    },
+    "flags": {
+      "g": 3,
+      "i": 8,
+      "x": 3
+    },
+    "pin": "d0cc2c77baf6de8b71ff17b739c8f42ab7a9cd08",
+    "predicted_buckets": {
+      "inline-flag": 11,
+      "lookaround": 3,
+      "stateful": 3
+    },
+    "regex_sites": 44,
+    "regex_sites_per_file": {
+      "bundle.ts": 4,
+      "helpers/docker_cache.sh": 1,
+      "helpers/registry.sh": 1,
+      "pycroft/helpers/net.py": 4,
+      "pycroft/lib/facilities.py": 1,
+      "pycroft/lib/search.py": 2,
+      "pycroft/lib/user/member_request.py": 1,
+      "pycroft/lib/user/user_id.py": 2,
+      "pycroft/model/base.py": 2,
+      "pycroft/model/user.py": 3,
+      "scripts/render_mypy_results.py": 1,
+      "tests/frontend/assertions.py": 1,
+      "tests/frontend/test_infrastructure.py": 2,
+      "tests/frontend/user/test_logs.py": 1,
+      "tests/lib/test_host.py": 1,
+      "tests/lib/user/assertions.py": 1,
+      "tests/lib/user/test_address_change.py": 1,
+      "tests/table/test_bootstrap_table.py": 2,
+      "web/blueprints/helpers/host.py": 1,
+      "web/blueprints/host/__init__.py": 1,
+      "web/blueprints/user/__init__.py": 2,
+      "web/resources/js/mac-address-input.js": 2,
+      "web/resources/js/table.js": 7
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 44 regex sites (auto-NO-GO bar 200); dialects [ecma:13, posix-shell:2, py_re:29]; boundary=unknown.",
+  "schema_version": "1"
+}

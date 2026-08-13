@@ -1,0 +1,94 @@
+{
+  "candidate_url": "https://github.com/MarcBernaldo/Artifact-Engine",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 176 sites < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "Artifact-Engine",
+  "corpus_pin": "2f14eaf43ad3e934db1eebf1da2b00ccaaa4733d",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "(?i)": 4,
+      "lookaround": 3
+    },
+    "dialect": {
+      "py_re": 136,
+      "yara": 40
+    },
+    "flags": {
+      "i": 55,
+      "s": 2
+    },
+    "pin": "2f14eaf43ad3e934db1eebf1da2b00ccaaa4733d",
+    "predicted_buckets": {
+      "inline-flag": 61,
+      "lookaround": 3
+    },
+    "regex_sites": 176,
+    "regex_sites_per_file": {
+      "src/artifact_engine/cli.py": 1,
+      "src/artifact_engine/core/consolidate.py": 3,
+      "src/artifact_engine/core/detector.py": 3,
+      "src/artifact_engine/core/downloader.py": 2,
+      "src/artifact_engine/core/extractor.py": 4,
+      "src/artifact_engine/core/lateral.py": 11,
+      "src/artifact_engine/core/runner.py": 2,
+      "src/artifact_engine/core/sigma_engine.py": 1,
+      "src/artifact_engine/data/assets/yara/malware_misc.yar": 11,
+      "src/artifact_engine/data/assets/yara/reverse_shells.yar": 13,
+      "src/artifact_engine/data/assets/yara/webshells.yar": 16,
+      "src/artifact_engine/handlers/_indicators.py": 3,
+      "src/artifact_engine/handlers/_lincommon.py": 1,
+      "src/artifact_engine/handlers/_webcommon.py": 4,
+      "src/artifact_engine/handlers/_webrules.py": 8,
+      "src/artifact_engine/handlers/_xml.py": 1,
+      "src/artifact_engine/handlers/lin_anomalies.py": 1,
+      "src/artifact_engine/handlers/lin_auth.py": 9,
+      "src/artifact_engine/handlers/lin_cron_log.py": 4,
+      "src/artifact_engine/handlers/lin_ebpf.py": 3,
+      "src/artifact_engine/handlers/lin_fortigate.py": 4,
+      "src/artifact_engine/handlers/lin_gtfobins.py": 2,
+      "src/artifact_engine/handlers/lin_logins.py": 1,
+      "src/artifact_engine/handlers/lin_machineinfo.py": 2,
+      "src/artifact_engine/handlers/lin_netconfig.py": 4,
+      "src/artifact_engine/handlers/lin_network.py": 1,
+      "src/artifact_engine/handlers/lin_persistence.py": 7,
+      "src/artifact_engine/handlers/lin_pkg_history.py": 4,
+      "src/artifact_engine/handlers/lin_proc_anomalies.py": 2,
+      "src/artifact_engine/handlers/lin_sigma.py": 6,
+      "src/artifact_engine/handlers/lin_sudo.py": 2,
+      "src/artifact_engine/handlers/lin_suid.py": 1,
+      "src/artifact_engine/handlers/lin_web_metrics.py": 1,
+      "src/artifact_engine/handlers/lin_webshells.py": 8,
+      "src/artifact_engine/handlers/lin_yara.py": 1,
+      "src/artifact_engine/handlers/win_bits.py": 6,
+      "src/artifact_engine/handlers/win_consolehost.py": 6,
+      "src/artifact_engine/handlers/win_explorer_input.py": 1,
+      "src/artifact_engine/handlers/win_liveresponse_velociraptor.py": 1,
+      "src/artifact_engine/handlers/win_rdp_mru.py": 1,
+      "src/artifact_engine/handlers/win_sysvol.py": 4,
+      "src/artifact_engine/handlers/win_timeline.py": 1,
+      "src/artifact_engine/handlers/win_wmi.py": 9
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 176 regex sites (auto-NO-GO bar 200); dialects [py_re:136, yara:40]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

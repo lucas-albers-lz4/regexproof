@@ -1,0 +1,87 @@
+{
+  "candidate_url": "https://github.com/InquisiMind/digital-life",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 149 sites < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "digital-life",
+  "corpus_pin": "77eb991718164bbcf1ec2a0b9663111c7063d91b",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "posix-class": 18
+    },
+    "dialect": {
+      "ecma": 1,
+      "posix-shell": 69,
+      "py_re": 79
+    },
+    "flags": {
+      "i": 7,
+      "m": 3
+    },
+    "pin": "77eb991718164bbcf1ec2a0b9663111c7063d91b",
+    "predicted_buckets": {
+      "inline-flag": 7,
+      "m-flag": 3,
+      "posix-class": 18
+    },
+    "regex_sites": 149,
+    "regex_sites_per_file": {
+      ".specify/extensions/git/scripts/bash/auto-commit.sh": 15,
+      ".specify/extensions/git/scripts/bash/create-new-feature.sh": 22,
+      ".specify/extensions/git/scripts/bash/git-common.sh": 2,
+      ".specify/extensions/git/scripts/bash/initialize-repo.sh": 2,
+      ".specify/scripts/bash/common.sh": 9,
+      ".specify/scripts/bash/create-new-feature.sh": 19,
+      "application/api/system_routes.py": 1,
+      "application/console/monitor.py": 7,
+      "domain/lifecycle/heartbeat.py": 1,
+      "domain/lifecycle/scheduler.py": 1,
+      "domain/memory/memory/consciousness/__init__.py": 3,
+      "domain/memory/memory/consciousness/runtime.py": 2,
+      "domain/memory/memory/recall/unified/fts.py": 2,
+      "domain/memory/memory/recall/unified/scene_weights.py": 3,
+      "domain/memory/memory/summaries/__init__.py": 5,
+      "domain/memory/memory/summaries/consolidation_runtime.py": 4,
+      "domain/orchestration/intake/models.py": 2,
+      "domain/orchestration/intake/task_complexity.py": 1,
+      "domain/todos/execution_context.py": 2,
+      "infrastructure/ai/agent.py": 2,
+      "infrastructure/ai/config.py": 1,
+      "infrastructure/config/__init__.py": 1,
+      "interfaces/skills/__init__.py": 1,
+      "interfaces/social/feishu_docs.py": 1,
+      "interfaces/tools/action_tools.py": 1,
+      "interfaces/tools/code_execution_tool.py": 1,
+      "interfaces/tools/sense_tools.py": 1,
+      "interfaces/tools/terminal_tool.py": 1,
+      "interfaces/web/employee-console/src/api/client.js": 1,
+      "scripts/eval_digest_quality.py": 2,
+      "scripts/memory_audit.py": 18,
+      "scripts/migrate_legacy_md_to_modern_store.py": 10,
+      "scripts/migrate_timestamps_to_utc.py": 3,
+      "scripts/migrate_work_md_to_todos.py": 1,
+      "scripts/quant/etf_price.py": 1
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 149 regex sites (auto-NO-GO bar 200); dialects [ecma:1, posix-shell:69, py_re:79]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

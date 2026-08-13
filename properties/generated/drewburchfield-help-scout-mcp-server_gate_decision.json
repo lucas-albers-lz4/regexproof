@@ -1,0 +1,93 @@
+{
+  "candidate_url": "https://github.com/drewburchfield/help-scout-mcp-server",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 146 sites < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "help-scout-mcp-server",
+  "corpus_pin": "56c3434ef0798243022bf84cd872dcc9a5c47dbe",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "lookaround": 1
+    },
+    "dialect": {
+      "ecma": 130,
+      "posix-shell": 16
+    },
+    "flags": {
+      "g": 17,
+      "i": 11
+    },
+    "pin": "56c3434ef0798243022bf84cd872dcc9a5c47dbe",
+    "predicted_buckets": {
+      "inline-flag": 11,
+      "lookaround": 1,
+      "stateful": 17
+    },
+    "regex_sites": 146,
+    "regex_sites_per_file": {
+      "evals/run-claude-tool-surface-discriminator.mjs": 1,
+      "evals/run-tool-surface-discriminator.mjs": 6,
+      "evals/tool-surface-prototype.mjs": 1,
+      "scripts/build-mcpb.js": 1,
+      "scripts/bump-version.cjs": 4,
+      "scripts/check-conversations.ts": 1,
+      "scripts/debug-api.ts": 1,
+      "scripts/generate-synthetic-data.ts": 5,
+      "scripts/import-conversations.ts": 3,
+      "scripts/live-api-test.ts": 3,
+      "scripts/mcpb-smoke.mjs": 1,
+      "scripts/prepare.cjs": 2,
+      "scripts/verify-credentials.ts": 1,
+      "scripts/version-audit.sh": 16,
+      "src/__tests__/authentication.test.ts": 5,
+      "src/__tests__/config.test.ts": 3,
+      "src/__tests__/dogfood-fixtures.test.ts": 2,
+      "src/__tests__/logger.test.ts": 1,
+      "src/__tests__/mcpb-validation.test.ts": 3,
+      "src/__tests__/prompts.test.ts": 1,
+      "src/__tests__/v1.6-edge-cases.test.ts": 4,
+      "src/cli.ts": 3,
+      "src/index.ts": 2,
+      "src/prompts/index.ts": 1,
+      "src/resources/index.ts": 2,
+      "src/schema/types.ts": 26,
+      "src/tools/gateway.ts": 1,
+      "src/tools/index.ts": 11,
+      "src/tools/writes.ts": 3,
+      "src/utils/api-constraints.ts": 6,
+      "src/utils/helpscout-docs-client.ts": 1,
+      "tests/api-contract.ts": 1,
+      "tests/audit-dogfood-account.ts": 2,
+      "tests/integration-workflows.ts": 2,
+      "tests/mcp-client-dogfood.ts": 4,
+      "tests/seed-docs-data.ts": 2,
+      "tests/seed-integration-data.ts": 4,
+      "tests/seed-org-customers.ts": 3,
+      "tests/seed-test-data.ts": 3,
+      "tests/test-all-tools-edge-cases.ts": 1,
+      "tests/test-docker-ci.cjs": 1,
+      "tests/test-docker.cjs": 2
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 146 regex sites (auto-NO-GO bar 200); dialects [ecma:130, posix-shell:16]; boundary=unknown.",
+  "schema_version": "1"
+}
