@@ -41,7 +41,14 @@ def load_probe_draft(path: Path | str) -> dict[str, Any]:
 
 
 def _probe_subset(probe: dict[str, Any]) -> dict[str, Any]:
-    """Gate-decision probe object (schema-required keys + useful extras)."""
+    """Gate-decision probe object (schema-required keys + useful extras).
+
+    E3: carries the dual-pin set so gate evidence can cite the probed pin
+    and stale-pin detection is preserved through authoring. ``pin`` retains
+    its prior meaning (the SHA walked / corpus_pin); ``pin_probed`` is the
+    default-branch HEAD resolved at clone time; ``pin_mined`` is the SHA the
+    ledger assigned (optional).
+    """
     out: dict[str, Any] = {
         "regex_sites": int(probe.get("regex_sites") or 0),
         "dialect": dict(probe.get("dialect") or {}),
@@ -54,6 +61,10 @@ def _probe_subset(probe: dict[str, Any]) -> dict[str, Any]:
         out["security_boundary"] = probe["security_boundary"]
     if "pin" in probe:
         out["pin"] = probe["pin"]
+    if "pin_probed" in probe:
+        out["pin_probed"] = probe["pin_probed"]
+    if "pin_mined" in probe and probe["pin_mined"] is not None:
+        out["pin_mined"] = probe["pin_mined"]
     if "construct_counts" in probe:
         out["construct_counts"] = dict(probe["construct_counts"])
     return out

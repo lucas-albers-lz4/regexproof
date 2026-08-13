@@ -123,12 +123,13 @@ jobs:
       - name: Build go-re2 helper
         working-directory: helpers/go-re2
         run: go build -o go-re2 .
-      - name: Install YARA + PCRE2 helpers (Wave 2 mirror-fidelity)
+      - name: Install YARA + PCRE2 + busybox (Wave 2 + E2 mirror-fidelity)
         run: |
           sudo apt-get update
-          sudo apt-get install -y yara pcre2-utils
+          sudo apt-get install -y yara pcre2-utils busybox
           yara -v
           pcre2grep --version | head -1
+          busybox sed --help | head -1
       - name: Install package
         run: pip install -e ".[dev]"
       - name: Assert toolchain pins (golden)
@@ -166,6 +167,72 @@ jobs:
           pytest -q tests/test_batch.py
       - name: Two-run batch reproducibility
         run: python scripts/ci-batch-repro.py
+      - name: D5 compiler-feature-yield artifact (regenerated, #429)
+        # The artifact decides the next compiler wave — it is observational
+        # only and must regenerate deterministically in the golden job.
+        run: python scripts/triage-feature-yield.py
+
+  compiler-diff-fuzz:
+    # E1 (#429): PRs touching regexproof/compiler/** run the EXPANDED
+    # mirror-fidelity + differential-fuzz surfaces (higher --runs). The
+    # concrete filter is declared in the paths step below; a docs-only PR
+    # does not run the expanded job. Push-triggered runs already exercise
+    # the stock surfaces in the proof job.
+    name: Compiler diff-fuzz (expanded, E1 #429)
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - id: paths
+        name: Detect regexproof/compiler/** changes
+        run: |
+          if git diff --name-only "${{ github.event.pull_request.base.sha }}"...HEAD \
+            | grep -q '^regexproof/compiler/'; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          fi
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "1.22"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install JS helper deps
+        if: steps.paths.outputs.changed == 'true'
+        run: npm install --prefix helpers/ecma
+      - name: Build go-re2 helper
+        if: steps.paths.outputs.changed == 'true'
+        working-directory: helpers/go-re2
+        run: go build -o go-re2 .
+      - name: Install YARA + PCRE2 + busybox
+        if: steps.paths.outputs.changed == 'true'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y yara pcre2-utils busybox
+      - name: Install package
+        if: steps.paths.outputs.changed == 'true'
+        run: pip install -e ".[dev]"
+      - name: Mirror-fidelity gate (expanded runs)
+        if: steps.paths.outputs.changed == 'true'
+        run: python scripts/mirror-fidelity-gate.py --runs 400 --seed 42
+      - name: Differential-fuzz (expanded runs)
+        if: steps.paths.outputs.changed == 'true'
+        run: |
+          python scripts/differential-fuzz.py \
+            --mirror-expr "Concat(Union(Range('a','z'),Range('0','9'),Re('.'),Re('_'),Re('-')),Star(Union(Range('a','z'),Range('0','9'),Re('.'),Re('_'),Re('-'))))" \
+            --alphabet "abc123._-" --mutations ' ;="`$|&' --runs 300 --seed 42 \
+            --real-argv grep -qE '^[a-z0-9._-]+$'
+          python scripts/differential-fuzz.py \
+            --mirror-expr "Concat(Range('a','z'),Star(Union(Range('a','z'),Range('0','9'))))" \
+            --alphabet "abc012" --mutations ';|&`' --runs 300 --seed 42 \
+            --real-argv pcre2grep -q '^[a-z][a-z0-9]*$'
 
   noodler:
     # Quoted: unquoted YAML treats `#220)` as a comment and truncates the

@@ -84,22 +84,38 @@ def main(argv: list[str] | None = None) -> int:
                 ap.error("--pin is required when target is a URL")
             base = args.clone_root or Path(tempfile.mkdtemp(prefix="regexproof-probe-"))
             clone_dir = base / "repo"
-            pin = partial_clone(
+            result = partial_clone(
                 target, dest=clone_dir, pin=args.pin, max_disk_mb=args.max_disk_mb
             )
             root = clone_dir
             cand_url = args.url or target
+            # E3 stale-pin detection: pin_mined is the SHA from the ledger/CLI;
+            # pin_probed is the default-branch HEAD captured at clone time.
+            # If they differ, the mined pin is stale (branch moved since mining).
+            pin_mined = args.pin
+            pin_probed = result.default_head
+            pin_walked = result.pin
+            if pin_probed != pin_walked:
+                print(
+                    f"warning: stale mined pin — default-branch HEAD "
+                    f"({pin_probed[:12]}) differs from walked SHA ({pin_walked[:12]})",
+                    file=sys.stderr,
+                )
         else:
             root = Path(target).expanduser().resolve()
             if not root.is_dir():
                 print(f"error: not a directory: {root}", file=sys.stderr)
                 return 2
-            pin = args.pin or "local"
+            pin_walked = args.pin or "local"
+            pin_mined = args.pin
+            pin_probed = pin_walked
             cand_url = args.url or f"file://{root}"
 
         draft = build_draft(
             root,
-            pin=pin,
+            pin=pin_walked,
+            pin_mined=pin_mined,
+            pin_probed=pin_probed,
             repo_name=args.repo_name or _repo_name_from_target(target),
             candidate_url=cand_url,
         )

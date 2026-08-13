@@ -1,9 +1,8 @@
-"""P1 walker / draft / clone tests (A3–A7)."""
+"""P1 walker / draft / clone tests (A3-A7)."""
 
 from __future__ import annotations
 
 import json
-import subprocess
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -11,6 +10,7 @@ import pytest
 
 from regexproof.admission.clone import (
     CloneError,
+    CloneResult,
     cleanup_clone,
     partial_clone,
     validate_clone_url,
@@ -115,14 +115,32 @@ def test_build_draft_flagged_not_schema_valid():
     assert draft["draft"] is True
     assert draft["fields_remaining"] == FIELDS_REMAINING
     assert draft["probe"]["pin"] == "abc123"
+    assert draft["probe"]["pin_probed"] == "abc123"
+    assert draft["probe"]["pin_mined"] is None
     assert draft["probe"]["security_boundary"] in {
         "deterministic-true",
         "deterministic-false",
         "unknown",
     }
+    assert draft["corpus_pin"] == "abc123"
+    assert draft["pin_probed"] == "abc123"
+    assert draft["pin_mined"] is None
     schema = gate_decision_schema()
     with pytest.raises(Exception):
         __import__("jsonschema").validate(instance=draft, schema=schema)
+
+
+def test_build_draft_records_dual_pins():
+    """E3: build_draft carries pin_mined and pin_probed through both levels."""
+    root = FIXTURES / "ecma_noise"
+    draft = build_draft(
+        root, pin="walked", pin_mined="mined", pin_probed="probed", repo_name="x"
+    )
+    assert draft["probe"]["pin"] == "walked"
+    assert draft["probe"]["pin_mined"] == "mined"
+    assert draft["probe"]["pin_probed"] == "probed"
+    assert draft["pin_mined"] == "mined"
+    assert draft["pin_probed"] == "probed"
 
 
 def test_draft_byte_identical_two_runs():
@@ -148,18 +166,45 @@ def test_partial_clone_passes_filter_blob_none(tmp_path: Path):
             return SimpleNamespace(returncode=0, stdout="abc\n", stderr="")
         return SimpleNamespace(returncode=0, stdout="", stderr="")
 
-    pin = partial_clone(
+    result = partial_clone(
         "https://github.com/owner/repo.git",
         dest=tmp_path / "repo",
         pin="abc",
         run=fake_run,
     )
-    assert pin == "abc"
+    assert result.pin == "abc"
+    assert result.default_head == "abc"
     assert any("--filter=blob:none" in c for c in calls)
     assert not any("--single-branch" in c for c in calls)
     assert any("fetch" in c and "abc" in c for c in calls)
     cleanup_clone(tmp_path / "repo")
     assert not (tmp_path / "repo").exists()
+
+
+def test_partial_clone_stale_pin_when_default_moves(tmp_path: Path):
+    """E3: default-branch HEAD differs from the mined pin."""
+    def fake_run(argv, **kwargs):
+        if argv[:2] == ["git", "clone"]:
+            dest = Path(argv[-1])
+            dest.mkdir(parents=True)
+            return SimpleNamespace(returncode=0, stdout="", stderr="")
+        if "rev-parse" in argv:
+            return SimpleNamespace(returncode=0, stdout="deadbeef\n", stderr="")
+        if "fetch" in argv or "checkout" in argv:
+            return SimpleNamespace(returncode=0, stdout="", stderr="")
+        return SimpleNamespace(returncode=0, stdout="", stderr="")
+
+    result = partial_clone(
+        "https://github.com/owner/repo.git",
+        dest=tmp_path / "repo",
+        pin="abc",  # mined pin
+        run=fake_run,
+    )
+    assert isinstance(result, CloneResult)
+    assert result.pin == "abc"
+    assert result.default_head == "deadbeef"
+    assert result.pin != result.default_head
+    cleanup_clone(tmp_path / "repo")
 
 
 def test_partial_clone_rejects_batch_corpora(tmp_path: Path):
@@ -196,6 +241,30 @@ def test_cli_local_path(tmp_path: Path):
     data = json.loads(out.read_text(encoding="utf-8"))
     assert data["draft"] is True
     assert data["probe"]["regex_sites"] == 2
+
+
+def test_cli_local_path_records_dual_pins(tmp_path: Path):
+    """E3: local-path CLI records pin_mined (input) and pin_probed (= pin)."""
+    import importlib.util
+
+    out = tmp_path / "dual.json"
+    root = FIXTURES / "ecma_noise"
+    spec = importlib.util.spec_from_file_location(
+        "probe_cli_dual", ROOT / "scripts" / "probe-corpus-admission.py"
+    )
+    mod = importlib.util.module_from_spec(spec)
+    assert spec.loader is not None
+    spec.loader.exec_module(mod)
+    rc = mod.main(
+        [str(root), "--pin", "localpin", "-o", str(out), "--repo-name", "ecma_noise"]
+    )
+    assert rc == 0
+    data = json.loads(out.read_text(encoding="utf-8"))
+    assert data["probe"]["pin"] == "localpin"
+    assert data["probe"]["pin_probed"] == "localpin"
+    assert data["probe"]["pin_mined"] == "localpin"
+    assert data["pin_probed"] == "localpin"
+    assert data["pin_mined"] == "localpin"
 
 
 def test_boundary_path_sample_skips_git(tmp_path: Path):
