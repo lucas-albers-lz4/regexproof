@@ -41,9 +41,9 @@ If unsure, treat as non-trivial.
    - `Read Python matrix`
    - `Noodler backend (pinned asset + pre-flight, #220)`
    Assert those names are present *and* successful before merge.
-2. Ensure the PR head branch is checked out locally.
-3. Run Bugbot via the `review-bugbot` skill / `bugbot` subagent on **branch changes** (merge-base vs default base, usually `main`).
-4. If Bugbot reports findings: **fix them** (or explicitly document why a finding is a false positive), push, re-run Bugbot once after substantive fixes.
+   The Noodler job `name` in `.github/workflows/ci.yml` must be YAML-quoted;
+   an unquoted `#220` becomes a comment and truncates the check context so
+   branch protection never matches even when the job passed.
 5. Only then merge (`gh pr merge` with the repo’s usual strategy). Do not merge non-trivial PRs with unresolved Bugbot findings.
 
 ## Do not
