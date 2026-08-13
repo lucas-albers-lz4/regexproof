@@ -190,6 +190,35 @@ def reject_shell_subprocess_usage(paths: Sequence[Path] | None = None) -> list[s
     return violations
 
 
+_SUBPROCESS_METHODS = frozenset({"run", "Popen", "call", "check_call", "check_output"})
+
+
+def _subprocess_aliases(tree: ast.AST) -> tuple[set[str], set[str]]:
+    """Return (module aliases, imported method names) for subprocess."""
+    aliases: set[str] = set()
+    imported: set[str] = set()
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Import):
+            for alias in node.names:
+                if alias.name == "subprocess":
+                    aliases.add(alias.asname or "subprocess")
+        elif isinstance(node, ast.ImportFrom) and node.module == "subprocess":
+            for alias in node.names:
+                if alias.name in _SUBPROCESS_METHODS:
+                    imported.add(alias.asname or alias.name)
+    return aliases, imported
+
+
+def _timeout_is_explicit_and_enabled(call: ast.Call) -> bool:
+    for kw in call.keywords:
+        if kw.arg != "timeout":
+            continue
+        if isinstance(kw.value, ast.Constant) and kw.value.value is None:
+            return False
+        return True
+    return False
+
+
 def reject_untimed_subprocess_usage(paths: Sequence[Path] | None = None) -> list[str]:
     """Static check: fail if subprocess calls omit an explicit timeout=.
 
@@ -217,21 +246,24 @@ def reject_untimed_subprocess_usage(paths: Sequence[Path] | None = None) -> list
             except SyntaxError as exc:
                 violations.append(f"{file}: syntax error: {exc}")
                 continue
+            aliases, imported = _subprocess_aliases(tree)
             for node in ast.walk(tree):
                 if not isinstance(node, ast.Call):
                     continue
                 func = node.func
-                if not (
+                name = None
+                if (
                     isinstance(func, ast.Attribute)
                     and isinstance(func.value, ast.Name)
-                    and func.value.id == "subprocess"
-                    and func.attr
-                    in {"run", "Popen", "call", "check_call", "check_output"}
+                    and func.value.id in aliases
+                    and func.attr in _SUBPROCESS_METHODS
                 ):
+                    name = func.attr
+                elif isinstance(func, ast.Name) and func.id in imported:
+                    name = func.id
+                if name is None:
                     continue
-                name = func.attr
-                kw_names = {k.arg for k in node.keywords}
-                if "timeout" not in kw_names:
+                if not _timeout_is_explicit_and_enabled(node):
                     violations.append(
                         f"{file}:{node.lineno}: subprocess.{name}(...) missing timeout="
                     )

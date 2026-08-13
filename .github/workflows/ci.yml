@@ -223,7 +223,7 @@ jobs:
         with:
           node-version: "22"
       - name: Install JS ReDoS helpers (pinned)
-        run: npm ci --prefix helpers/redos || npm install --prefix helpers/redos
+        run: npm ci --prefix helpers/redos
       - name: Create isolated redos-env
         run: |
           python -m venv redos-env

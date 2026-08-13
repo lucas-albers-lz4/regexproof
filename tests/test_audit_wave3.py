@@ -178,6 +178,21 @@ def test_perl_fail_closed_when_helper_unavailable(monkeypatch):
     assert cr.unencodable_reason == "helper-unavailable"
 
 
+def test_reject_untimed_catches_timeout_none_and_aliases(tmp_path):
+    """#366: timeout=None and from-import/alias forms must not bypass the AST ban."""
+    bad = tmp_path / "bad.py"
+    bad.write_text(
+        "import subprocess as sp\n"
+        "from subprocess import run\n"
+        "sp.run(['true'], timeout=None)\n"
+        "run(['true'])\n",
+        encoding="utf-8",
+    )
+    hits = reject_untimed_subprocess_usage([bad])
+    assert len(hits) == 2, hits
+    assert any("timeout" in h for h in hits)
+
+
 def test_go_re2_env_must_stay_under_helpers(monkeypatch, tmp_path):
     from regexproof.compiler import re2 as re2_mod
 
