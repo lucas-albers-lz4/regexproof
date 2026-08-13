@@ -8,6 +8,7 @@ __pycache__/
 .eggs/
 dist/
 build/
+.cache/
 helpers/ecma/node_modules/
 helpers/redos/node_modules/
 helpers/go-re2/go-re2

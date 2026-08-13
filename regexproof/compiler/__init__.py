@@ -2,12 +2,48 @@
 
 from __future__ import annotations
 
+import hashlib
+import re
+from pathlib import Path
+from typing import Any
+
 from regexproof.compiler.base import CompileResult, Unencodable
 from regexproof.compiler.caret_in_x import try_compile_caret_in_x
 from regexproof.compiler.py_re import compile_py_re
 from regexproof.compiler.trailing_alt_dollar import try_compile_trailing_alt_dollar
 
-__all__ = ["CompileResult", "Unencodable", "compile_pattern", "compile_py_re"]
+def compiler_source_fingerprint() -> str:
+    """Hash compiler sources, including comments, for cache invalidation."""
+    base = Path(__file__).resolve().parent
+    digest = hashlib.sha256()
+    for source in sorted(base.glob("*.py")):
+        contents = source.read_text(encoding="utf-8")
+        if source.resolve() == Path(__file__).resolve():
+            # The generated assignment cannot be part of its own digest.
+            contents = re.sub(
+                r"(?m)^COMPILER_VERSION\s*=.*$",
+                "COMPILER_VERSION = <generated>",
+                contents,
+            )
+        digest.update(str(source.name).encode("utf-8"))
+        digest.update(b"\0")
+        digest.update(contents.encode("utf-8"))
+        digest.update(b"\0")
+    return digest.hexdigest()
+
+
+# This is deliberately derived from source contents rather than a hand-edited
+# label: a code or comment change in any compiler file changes the cache key.
+COMPILER_VERSION = compiler_source_fingerprint()
+
+__all__ = [
+    "COMPILER_VERSION",
+    "CompileResult",
+    "Unencodable",
+    "compile_pattern",
+    "compile_py_re",
+    "compiler_source_fingerprint",
+]
 
 
 def _compile_dialect(
@@ -83,6 +119,9 @@ def compile_pattern(
     max_length: int = 256,
     domain: str = "ascii",
     shell_flags: dict | None = None,
+    cache: Any | None = None,
+    cache_dir: str | None = None,
+    cache_stats: dict[str, int] | None = None,
 ):
     """Dispatch to a dialect compiler. Never use z3.Re(pattern_string).
 
@@ -96,6 +135,12 @@ def compile_pattern(
     """
     import z3
 
+    cache_key = None
+    if cache is None and cache_dir is not None:
+        from regexproof.compiler.cache import MirrorCache
+
+        cache = MirrorCache(cache_dir)
+
     def compile_bare(pat: str, fl: str, dia: str, ck: str) -> CompileResult:
         return _compile_dialect(
             pat, fl, dia, ck, max_length=max_length, domain=domain
@@ -108,6 +153,46 @@ def compile_pattern(
             sf = shell_flags or {}
             pattern = normalize_shell(pattern, sf.get("syntax", "bre"))
 
+        if cache is not None:
+            from regexproof.compiler.cache import mirror_cache_key
+
+            cache_key = mirror_cache_key(
+                pattern,
+                flags,
+                dialect,
+                call_kind,
+                domain,
+                shell_flags,
+                COMPILER_VERSION,
+                z3.get_version_string(),
+            )
+            artifact = cache.get(cache_key)
+            if artifact is not None:
+                if cache_stats is not None:
+                    cache_stats["hits"] = cache_stats.get("hits", 0) + 1
+                return CompileResult(
+                    mirror=artifact.mirror,
+                    unencodable_reason=None,
+                    dialect=dialect,
+                    call_kind=call_kind,
+                    flags=flags,
+                    pattern=pattern,
+                    declared_domain=domain,
+                    meta=artifact.metadata,
+                )
+            if cache_stats is not None:
+                cache_stats["misses"] = cache_stats.get("misses", 0) + 1
+
+        def finish(result: CompileResult) -> CompileResult:
+            if cache is not None and cache_key is not None and result.encodable:
+                try:
+                    cache.put(cache_key, result.mirror, result.meta)
+                except (OSError, TypeError, ValueError):
+                    # Caching is an optimization; a full or unavailable cache
+                    # must not change the compiler's fail-closed result.
+                    pass
+            return result
+
         # Caret-in-X is more specific than A1B; try it first (#103).
         caret = try_compile_caret_in_x(
             pattern,
@@ -118,7 +203,7 @@ def compile_pattern(
             compile_bare=compile_bare,
         )
         if caret is not None:
-            return caret
+            return finish(caret)
         special = try_compile_trailing_alt_dollar(
             pattern,
             flags,
@@ -128,14 +213,16 @@ def compile_pattern(
             compile_bare=compile_bare,
         )
         if special is not None:
-            return special
-        return _compile_dialect(
-            pattern,
-            flags,
-            dialect,
-            call_kind,
-            max_length=max_length,
-            domain=domain,
+            return finish(special)
+        return finish(
+            _compile_dialect(
+                pattern,
+                flags,
+                dialect,
+                call_kind,
+                max_length=max_length,
+                domain=domain,
+            )
         )
     except Unencodable as exc:
         return CompileResult(

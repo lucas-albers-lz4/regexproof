@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import multiprocessing
 import platform
 import sys
 import time
@@ -20,7 +21,7 @@ from regexproof.batch.budgets import (  # noqa: F401
     check_budget_mem,
     check_budget_patterns,
 )
-from regexproof.batch.compile_records import compile_records
+from regexproof.batch.compile_records import DEFAULT_WORKER_COUNT, compile_records
 from regexproof.batch.disclose import (
     assert_no_auto_publication,
     tag_disclosure,
@@ -154,6 +155,10 @@ def resolve_corpus_path(corpus: str, meta: dict[str, Any]) -> dict[str, Any]:
 def extract_and_compile_corpus(
     corpus: str,
     meta: dict[str, Any],
+    *,
+    jobs: int | None = None,
+    cache_dir: Path | str | None = None,
+    cache_stats: dict[str, Any] | None = None,
 ) -> tuple[list[dict[str, Any]], list[tuple[dict[str, Any], Any, dict[str, Any] | None]]]:
     """Extract + compile with budget gate (#196). Gates before writes.
 
@@ -177,6 +182,9 @@ def extract_and_compile_corpus(
             corpus_slug=corpus,
             budget=budget,
             wall_t0=wall_t0,
+            jobs=jobs,
+            cache_dir=cache_dir,
+            cache_stats=cache_stats,
         )
     except BudgetBreached as exc:
         raise SystemExit(
@@ -199,6 +207,8 @@ def run_corpus(
     emit_planned: bool = True,
     synthesize: bool = False,
     synth_diff_fuzz_sample: int | None = None,
+    jobs: int | None = None,
+    cache_dir: Path | str | None = None,
 ) -> dict[str, Any]:
     meta = CORPUS_MANIFESTS[corpus]
     if meta.get("corpus_type") == "inventory_only":
@@ -220,6 +230,8 @@ def run_corpus(
             "encodable": report.get("extracted"),
             "decision": "inventory_only",
             "detail": report,
+            "cache": {"hits": 0, "misses": 0, "entries": 0, "hit_rate": 0.0},
+            "cache_hit_rate": 0.0,
         }
         atomic_write_text(
             out_dir / f"{corpus}_batch_summary.json",
@@ -228,7 +240,14 @@ def run_corpus(
         return summary
     meta = resolve_corpus_path(corpus, meta)
     inventory = load_inventory(meta["corpus_type"])
-    records, compiled = extract_and_compile_corpus(corpus, meta)
+    cache_stats: dict[str, Any] = {}
+    records, compiled = extract_and_compile_corpus(
+        corpus,
+        meta,
+        jobs=jobs,
+        cache_dir=cache_dir,
+        cache_stats=cache_stats,
+    )
 
     rows = [pair[0] for pair in compiled]
     synthesis = None
@@ -373,6 +392,13 @@ def run_corpus(
         "redos_incomplete": redos_incomplete,
         "complete_run": not redos_incomplete,
         "address_space_cap": _budgets.LAST_ADDRESS_SPACE_CAP_APPLIED,
+        "cache": {
+            "hits": int(cache_stats.get("hits", 0)),
+            "misses": int(cache_stats.get("misses", 0)),
+            "entries": int(cache_stats.get("entries", 0)),
+            "hit_rate": float(cache_stats.get("hit_rate", 0.0)),
+        },
+        "cache_hit_rate": float(cache_stats.get("hit_rate", 0.0)),
     }
     if synthesis is not None:
         summary["synthesis"] = synthesis.stats
@@ -653,6 +679,8 @@ def run_batch(
     emit_planned: bool = True,
     synthesize: bool = False,
     synth_diff_fuzz_sample: int | None = None,
+    jobs: int | None = None,
+    cache_dir: Path | str | None = None,
 ) -> dict[str, Any]:
     cov = check_corpus_coverage()
     if cov:
@@ -679,6 +707,13 @@ def run_batch(
             emit_planned=emit_planned,
             synthesize=synthesize,
             synth_diff_fuzz_sample=synth_diff_fuzz_sample,
+            jobs=jobs,
+            cache_dir=cache_dir,
+        )
+        cache = summaries[name].get("cache") or {}
+        print(
+            f"{name}: cache hit rate {float(cache.get('hit_rate', 0.0)):.1%} "
+            f"({cache.get('hits', 0)}/{cache.get('entries', 0)})"
         )
         # Pair-at-scale: reuse Phase-3 discovery when catalog exists
         if name == "gitleaks":
@@ -720,6 +755,15 @@ def run_batch(
             if k != "records"  # keep batch_summary compact; full report on disk
         },
     }
+    total_hits = sum(
+        int((summary.get("cache") or {}).get("hits", 0))
+        for summary in summaries.values()
+    )
+    total_entries = sum(
+        int((summary.get("cache") or {}).get("entries", 0))
+        for summary in summaries.values()
+    )
+    batch["cache_hit_rate"] = total_hits / total_entries if total_entries else 0.0
     atomic_write_text(
         out_dir / "batch_pair_counts.json",
         json.dumps(pair_counts, indent=2, sort_keys=True) + "\n",
@@ -762,6 +806,18 @@ def main(argv: list[str] | None = None) -> int:
         help="seeded differential-fuzz samples per wide/shape-2 site",
     )
     ap.add_argument(
+        "--jobs",
+        type=int,
+        default=DEFAULT_WORKER_COUNT,
+        help=f"compile worker processes (default: {DEFAULT_WORKER_COUNT}, max: 8)",
+    )
+    ap.add_argument(
+        "--cache-dir",
+        type=Path,
+        default=None,
+        help="mirror cache directory (default: .cache/mirrors)",
+    )
+    ap.add_argument(
         "--redos-timeout-s",
         type=float,
         default=None,
@@ -797,6 +853,12 @@ def main(argv: list[str] | None = None) -> int:
         help="mutually exclusive legacy flag (rejected)",
     )
     args = ap.parse_args(argv)
+    try:
+        multiprocessing.set_start_method("spawn")
+    except RuntimeError:
+        # Embedders/tests may have selected a context already.  The compile
+        # path still requests an explicit spawn context for every pool.
+        pass
     assert_z3_pinned()
     if args.json_legacy:
         print("error: --json-legacy is mutually exclusive with batch NDJSON", file=sys.stderr)
@@ -809,6 +871,9 @@ def main(argv: list[str] | None = None) -> int:
         return 2
     if args.synth_diff_fuzz_sample is not None and args.synth_diff_fuzz_sample < 0:
         print("error: --synth-diff-fuzz-sample must be non-negative", file=sys.stderr)
+        return 2
+    if args.jobs < 1:
+        print("error: --jobs must be at least 1", file=sys.stderr)
         return 2
     if args.corpus == "all":
         # coreruleset is opt-in: its corpus is an external pinned clone, not
@@ -826,6 +891,8 @@ def main(argv: list[str] | None = None) -> int:
         emit_planned=not args.no_planned,
         synthesize=args.synthesize,
         synth_diff_fuzz_sample=args.synth_diff_fuzz_sample,
+        jobs=args.jobs,
+        cache_dir=args.cache_dir,
     )
     print("batch ok:", ", ".join(corpora))
     return 0
