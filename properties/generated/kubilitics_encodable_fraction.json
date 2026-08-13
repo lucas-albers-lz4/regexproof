@@ -1,0 +1,45 @@
+{
+  "budget": {
+    "max_disk_mb": 1000,
+    "max_mem_mb": 2048,
+    "max_patterns": 5000,
+    "max_wall_s": 600,
+    "redos_wall_s": 120
+  },
+  "budget_breaches": null,
+  "commit": "788d4d0760dfaec214bd1fd4b363391ac6c5a7a7",
+  "compiler_fingerprint": "71d2ce23b4cd",
+  "complete_run": true,
+  "corpus_pin": "788d4d0760dfaec214bd1fd4b363391ac6c5a7a7",
+  "decision": "go",
+  "decision_rule": "go iff encodable/sample_size >= 0.3",
+  "dialect": "ecma",
+  "encodable": 505,
+  "engine_versions": {
+    "python": "3.13.5",
+    "z3": "5.0.0"
+  },
+  "extractor_schema_version": "2",
+  "fraction": 0.8907,
+  "go_no_go_threshold": 0.3,
+  "id_formula": "v2-domain-optional-ascii-default",
+  "inventory_path": "properties/generated/kubilitics-inventory.ndjson",
+  "path": "batch/corpora/kubilitics/rules",
+  "pilot": "kubilitics",
+  "reasons": {
+    "composite-pattern": 16,
+    "internal-anchor": 1,
+    "m-flag": 1,
+    "ok": 505,
+    "per-alternative-anchor": 1,
+    "stateful": 24,
+    "unclosed-group": 1,
+    "unsupported-syntax": 7,
+    "v-flag": 11
+  },
+  "sample_size": 567,
+  "schema_version": "1",
+  "scope": "full_corpus",
+  "unclassified_parse_errors": 0,
+  "wall_s": 39.935
+}

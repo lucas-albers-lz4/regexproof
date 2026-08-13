@@ -1,0 +1,14 @@
+{
+  "schema_version": "1",
+  "corpus": "kubilitics",
+  "corpus_pin": "788d4d0760dfaec214bd1fd4b363391ac6c5a7a7",
+  "candidate_url": "https://github.com/kubilitics/kubilitics",
+  "smith_decision": "go",
+  "supersedes": null,
+  "reason": "K8s observability suite (ecma top-60 first-party allowlist): 505/567 = 0.8907 encodable (complete_run, parse-error=0, budget clean). Strong fraction (frontend code well-formed). Non-security - public-first. GO admit confirmed.",
+  "regex_sites": 567,
+  "sites_by_bucket": {
+    "ecma allowlist (60 files, 567 sites measured; 505 encodable)": 567
+  },
+  "additional_surface_outside_probe_scope": {"first-party beyond top-60": 361}
+}

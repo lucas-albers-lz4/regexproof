@@ -1,0 +1,14 @@
+{
+  "schema_version": "1",
+  "corpus": "three-ui",
+  "corpus_pin": "c21b982a9f1583a44a5d9d15df403964d8c8aa0b",
+  "candidate_url": "https://github.com/nirholas/three-ui",
+  "smith_decision": "go",
+  "supersedes": null,
+  "reason": "three.ws chat UI sibling (ecma top-60 first-party allowlist): 463/800 = 0.5787 encodable (complete_run=True after max_disk_mb 500->1000 budget fix, parse-error=0). 260 findings + 337 triage. Non-security app - public-first. GO admit confirmed.",
+  "regex_sites": 800,
+  "sites_by_bucket": {
+    "ecma allowlist (60 files, 800 sites measured; 463 encodable)": 800
+  },
+  "additional_surface_outside_probe_scope": {"first-party beyond top-60": 496}
+}
