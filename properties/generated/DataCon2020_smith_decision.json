@@ -1,0 +1,14 @@
+{
+  "schema_version": "1",
+  "corpus": "DataCon2020",
+  "corpus_pin": "b22446263c872a651a1cba781c1f3d892c552af8",
+  "candidate_url": "https://github.com/yuriufo/DataCon2020",
+  "smith_decision": "no-go",
+  "supersedes": "go admit (#333)",
+  "reason": "MEASURED NO-GO (fraction gate): 90/1,285 = 0.0700 encodable - the LOWEST fraction in the matrix, far below the 0.30 gate (complete_run, parse-error=0, budget clean). The competition winner's detection rules (rule20.yar 1,068 sites) are written for YARA-engine consumption: obfuscation-heavy conditions, fullword boundaries, and engine-specific constructs that the compile path rejects. Security tool, real rules, but not encodable - honest measurement over superseding.",
+  "regex_sites": 1285,
+  "sites_by_bucket": {
+    "yara (4 files, 1,285 sites measured; 90 encodable 0.0700)": 1285
+  },
+  "additional_surface_outside_probe_scope": {}
+}

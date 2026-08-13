@@ -2430,6 +2430,29 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
             "max_disk_mb": 500,
         },
     },
+    "DataCon2020": {
+        "corpus_type": "rule_corpus",
+        # Materialize: ln -sfn /tmp/datacon-check/rules batch/corpora/DataCon2020/rules
+        # Malware-analysis competition winner's yara pack (4 files:
+        # rule20/black_rules/crypto_signatures/packer). 1,293 probe sites.
+        # GO admit (#333) - security tool.
+        "path": ROOT / "batch" / "corpora" / "DataCon2020" / "rules",
+        "glob": "**/*.yar,**/*.yara,**/*.rules",
+        "dialect": "yara",
+        "extractor": "yara",
+        "repo": "yuriufo/DataCon2020",
+        "security_tool": True,
+        "lift_inline": False,
+        "corpus_pin": "b22446263c872a651a1cba781c1f3d892c552af8",
+        "commit": "b22446263c872a651a1cba781c1f3d892c552af8",
+        "budget": {
+            "max_patterns": 5000,
+            "max_wall_s": 600,
+            "redos_wall_s": 120,
+            "max_mem_mb": 2048,
+            "max_disk_mb": 500,
+        },
+    },
     "bike4mind": {
         "corpus_type": "rule_corpus",
         # Materialize: ln -sfn /tmp/b4m-check batch/corpora/bike4mind/rules

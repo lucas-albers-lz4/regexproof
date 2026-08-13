@@ -45,6 +45,7 @@ SECURITY_TOOL_CORPORA = frozenset(
         "detekt",
         "100DaysOfYARA",
         "mcp-for-splunk",
+        "DataCon2020",
         "snyk-ls",
         "forge-cli",
         "canvas-drop",
