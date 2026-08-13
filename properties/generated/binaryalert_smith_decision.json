@@ -1,0 +1,14 @@
+{
+  "schema_version": "1",
+  "corpus": "binaryalert",
+  "corpus_pin": "a9c0f06affc35e1f8e45bb77f835b92350c68a0b",
+  "candidate_url": "https://github.com/airbnb/binaryalert",
+  "smith_decision": "go",
+  "supersedes": "triage-trial (#303)",
+  "reason": "GRADUATED from triage-trial: 592/911 = 0.6498 encodable (complete_run, parse-error=0, budget clean) - in the yara-family norm (0.58-0.70). Airbnb binary-alerting service with 81 yara files (malware/ransomware/hacktool families). 911 sites near the 1000 scale bar; security tool - SECURITY_TOOL_CORPORA private_first. GO admit confirmed.",
+  "regex_sites": 911,
+  "sites_by_bucket": {
+    "yara (81 files, 911 sites measured; 592 encodable)": 911
+  },
+  "additional_surface_outside_probe_scope": {}
+}

@@ -1161,6 +1161,98 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
             "max_disk_mb": 500,
         },
     },
+    "binaryalert": {
+        "corpus_type": "rule_corpus",
+        # Materialize: ln -sfn /tmp/t-binaryalert/rules batch/corpora/binaryalert/rules
+        # Airbnb binary-alerting service yara pack (81 files: malware/
+        # ransomware/hacktool families). 911 probe sites. Triage-trial
+        # (#303) - security tool, measures for admission.
+        "path": ROOT / "batch" / "corpora" / "binaryalert" / "rules",
+        "glob": "**/*.yar,**/*.yara",
+        "dialect": "yara",
+        "extractor": "yara",
+        "repo": "airbnb/binaryalert",
+        "security_tool": True,
+        "lift_inline": False,
+        "corpus_pin": "a9c0f06affc35e1f8e45bb77f835b92350c68a0b",
+        "commit": "a9c0f06affc35e1f8e45bb77f835b92350c68a0b",
+        "budget": {
+            "max_patterns": 5000,
+            "max_wall_s": 600,
+            "redos_wall_s": 120,
+            "max_mem_mb": 2048,
+            "max_disk_mb": 500,
+        },
+    },
+    "pm_shredder": {
+        "corpus_type": "rule_corpus",
+        # Materialize: ln -sfn /tmp/t-pm_shredder batch/corpora/pm_shredder/rules
+        # x41x41x90 yara pack (6 files: zeus/spyeye/magic/email). 834 probe
+        # sites. Triage-trial (#350) - security tool.
+        "path": ROOT / "batch" / "corpora" / "pm_shredder" / "rules",
+        "glob": "**/*.yar,**/*.yara",
+        "dialect": "yara",
+        "extractor": "yara",
+        "repo": "x41x41x90/pm_shredder",
+        "security_tool": True,
+        "lift_inline": False,
+        "corpus_pin": "7fa83b2250a434bfe153a67eb52e015558e9409a",
+        "commit": "7fa83b2250a434bfe153a67eb52e015558e9409a",
+        "budget": {
+            "max_patterns": 5000,
+            "max_wall_s": 600,
+            "redos_wall_s": 120,
+            "max_mem_mb": 2048,
+            "max_disk_mb": 500,
+        },
+    },
+    "mole": {
+        "corpus_type": "rule_corpus",
+        # Materialize: ln -sfn /tmp/t-mole batch/corpora/mole/rules
+        # mole-ids network IDS yara pack (15 files: OT protocols - modbus/
+        # Siemens-S7/OPC-UA/MQTT - NOVEL industrial-protocol family not
+        # covered by admitted corpora). 256 probe sites. Triage-trial
+        # (#323) - security tool.
+        "path": ROOT / "batch" / "corpora" / "mole" / "rules",
+        "glob": "**/*.yar,**/*.yara",
+        "dialect": "yara",
+        "extractor": "yara",
+        "repo": "mole-ids/mole",
+        "security_tool": True,
+        "lift_inline": False,
+        "corpus_pin": "eb5356d56e914552d6b1c8dc822f19bd6f0e5774",
+        "commit": "eb5356d56e914552d6b1c8dc822f19bd6f0e5774",
+        "budget": {
+            "max_patterns": 5000,
+            "max_wall_s": 600,
+            "redos_wall_s": 120,
+            "max_mem_mb": 2048,
+            "max_disk_mb": 500,
+        },
+    },
+    "detekt": {
+        "corpus_type": "rule_corpus",
+        # Materialize: ln -sfn /tmp/t-detekt batch/corpora/detekt/rules
+        # eReader spyware-detection yara pack (9 files: RAT/spyware
+        # families - njrat/gh0st/finfisher/darkcomet). 245 yara probe
+        # sites. Triage-trial (#340) - security tool.
+        "path": ROOT / "batch" / "corpora" / "detekt" / "rules",
+        "glob": "**/*.yar,**/*.yara",
+        "dialect": "yara",
+        "extractor": "yara",
+        "repo": "eReader/detekt",
+        "security_tool": True,
+        "lift_inline": False,
+        "corpus_pin": "14aea88a5ff4cb2840d3712dbd8a85078cd03b28",
+        "commit": "14aea88a5ff4cb2840d3712dbd8a85078cd03b28",
+        "budget": {
+            "max_patterns": 5000,
+            "max_wall_s": 600,
+            "redos_wall_s": 120,
+            "max_mem_mb": 2048,
+            "max_disk_mb": 500,
+        },
+    },
     "bike4mind": {
         "corpus_type": "rule_corpus",
         # Materialize: ln -sfn /tmp/b4m-check batch/corpora/bike4mind/rules

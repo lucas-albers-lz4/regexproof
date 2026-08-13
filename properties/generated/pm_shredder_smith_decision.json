@@ -1,0 +1,14 @@
+{
+  "schema_version": "1",
+  "corpus": "pm_shredder",
+  "corpus_pin": "7fa83b2250a434bfe153a67eb52e015558e9409a",
+  "candidate_url": "https://github.com/x41x41x90/pm_shredder",
+  "smith_decision": "go",
+  "supersedes": "triage-trial (#350)",
+  "reason": "GRADUATED from triage-trial: 834/834 = 1.0000 encodable (complete_run, parse-error=0, budget clean) - FIRST PERFECT FRACTION IN THE MATRIX. The 6-file pack (zeus/spyeye/magic/email_contents) is small but every site compiles. 4 findings. Security tool - SECURITY_TOOL_CORPORA private_first. GO admit confirmed.",
+  "regex_sites": 834,
+  "sites_by_bucket": {
+    "yara (6 files, 834 sites measured; 834 encodable 1.0000)": 834
+  },
+  "additional_surface_outside_probe_scope": {}
+}

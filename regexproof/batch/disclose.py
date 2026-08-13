@@ -41,6 +41,10 @@ SECURITY_TOOL_CORPORA = frozenset(
         "sec_check",
         "Antivirus",
         "patrolaroid",
+        "binaryalert",
+        "detekt",
+        "mole",
+        "pm_shredder",
     }
 )
 

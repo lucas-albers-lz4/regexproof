@@ -116,23 +116,23 @@
     "wall_s": 21.527
   },
   "corpora": {
-    "python_3_8_2": {
+    "detekt": {
       "address_space_cap": true,
       "complete_run": true,
-      "corpus": "python_3_8_2",
+      "corpus": "detekt",
       "corpus_type": "rule_corpus",
-      "encodable": 501,
+      "encodable": 165,
       "engine": {
         "python": "3.13.5"
       },
-      "extracted": 975,
-      "findings": 135,
+      "extracted": 245,
+      "findings": 10,
       "inventory_questions": 4,
-      "join_regex_ids": 132,
+      "join_regex_ids": 10,
       "redos_findings": 0,
       "redos_incomplete": false,
       "schema_version": "1",
-      "triage": 474
+      "triage": 80
     }
   },
   "pair_counts": {
@@ -143,7 +143,7 @@
       "note": "fraction gate go; CRS rule-derived adapter is Phase-2 rule_diff",
       "scope": "full_corpus"
     },
-    "python_3_8_2": {
+    "detekt": {
       "admitted": 0,
       "dropped": 0,
       "note": "no independent-spec catalog"

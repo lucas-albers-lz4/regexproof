@@ -1,0 +1,14 @@
+{
+  "schema_version": "1",
+  "corpus": "mole",
+  "corpus_pin": "eb5356d56e914552d6b1c8dc822f19bd6f0e5774",
+  "candidate_url": "https://github.com/mole-ids/mole",
+  "smith_decision": "go",
+  "supersedes": "triage-trial (#323)",
+  "reason": "GRADUATED from triage-trial: 67/68 = 0.9853 encodable (complete_run, parse-error=0, budget clean). NOVEL OT-protocol NIDS rules (modbus/Siemens-S7/OPC-UA/MQTT/SLMP) - the industrial-protocol family is NOT covered by any admitted corpus (novel new-surface value). 4 findings + 1 triage. Security tool - SECURITY_TOOL_CORPORA private_first. GO admit confirmed.",
+  "regex_sites": 68,
+  "sites_by_bucket": {
+    "yara OT-protocol rules (15 files, 68 sites measured; 67 encodable)": 68
+  },
+  "additional_surface_outside_probe_scope": {}
+}

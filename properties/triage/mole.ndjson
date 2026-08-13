@@ -1,0 +1,1 @@
+{"call_kind": "search", "dialect": "yara", "pattern": "[\\S\\s]{3}(\\x01|\\x02|\\x03|\\x04|\\x07|\\x0B|\\x0C|\\x11|\\x14|\\x17|\\x18|\\x2B)", "reason_kind": "unencodable", "regex_id": "47020d976c5de7b785b769cf6695fdec", "schema_version": "1", "site": "batch/corpora/mole/rules/rules/modbus.yar:274:4", "unencodable_reason": "negated-shorthand"}
