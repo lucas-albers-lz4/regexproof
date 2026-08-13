@@ -25,6 +25,7 @@ Weighting (admission-status weight):
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import subprocess
 import sys
@@ -49,22 +50,21 @@ ADMISSION_WEIGHTS = {
 DEFAULT_WEIGHT = 1
 
 
-def _pinned_head() -> str:
-    """Return the git HEAD SHA for provenance (read-only; fail closed on error)."""
-    try:
-        out = subprocess.run(
-            ["git", "rev-parse", "HEAD"],
-            capture_output=True,
-            text=True,
-            cwd=str(ROOT),
-            timeout=10,
-            check=False,
-        )
-        if out.returncode == 0 and out.stdout.strip():
-            return out.stdout.strip()
-    except (OSError, subprocess.TimeoutExpired):
-        pass
-    return "unknown"
+def _triage_inputs_hash(triage_files: list[Path]) -> str:
+    """Content hash of the sorted triage NDJSON inputs (stable provenance).
+
+    NOT the repo HEAD: the artifact is regenerated in CI where HEAD differs
+    from the committing HEAD, and a self-referential pinned_head made the D5
+    drift check fail on every commit (luna gate 1 re-review). The content
+    hash is stable across clones and commits unless the triage corpus itself
+    changes.
+    """
+    h = hashlib.sha256()
+    for f in sorted(triage_files):
+        h.update(f.name.encode("utf-8"))
+        h.update(b"\0")
+        h.update(f.read_bytes())
+    return h.hexdigest()[:16]
 
 
 def _load_gate_decisions() -> dict[str, str]:
@@ -178,7 +178,7 @@ def aggregate(triage_files: list[Path] | None = None) -> dict:
 
     provenance = {
         "input_file_count": len(triage_files),
-        "pinned_head": _pinned_head(),
+        "triage_inputs_hash": _triage_inputs_hash(triage_files),
         "gate_decision_count": len(gate_decisions),
     }
 
@@ -201,7 +201,7 @@ def render_md(data: dict) -> str:
         "# Compiler feature-yield artifact (D5)",
         "",
         f"<!-- provenance: {prov['input_file_count']} triage files, "
-        f"pinned HEAD {prov['pinned_head'][:12]}, "
+        f"inputs {prov['triage_inputs_hash'][:12]}, "
         f"{prov['gate_decision_count']} gate decisions -->",
         "",
         "Sites unlocked per missing compiler feature, aggregated across",
@@ -209,7 +209,7 @@ def render_md(data: dict) -> str:
         "(GO=3, triage-trial=2, no-go=1). Sorted by weighted unlock value.",
         "",
         f"- Input files: {prov['input_file_count']}",
-        f"- Pinned HEAD: `{prov['pinned_head']}`",
+        f"- Triage inputs hash: `{prov['triage_inputs_hash']}`",
         f"- Gate decisions: {prov['gate_decision_count']}",
         f"- Total unencodable rows: {data['total_rows']}",
         f"- Total weighted sites: {data['total_weighted']}",

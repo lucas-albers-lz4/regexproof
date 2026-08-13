@@ -90,7 +90,7 @@
   "provenance": {
     "gate_decision_count": 818,
     "input_file_count": 71,
-    "pinned_head": "5499f65ab2f9b9cd2d5c92b4a471ae0cb6cb15fc"
+    "triage_inputs_hash": "7668b83f39740f0b"
   },
   "rows": [
     {
