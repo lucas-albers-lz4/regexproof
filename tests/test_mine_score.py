@@ -9,7 +9,7 @@ from datetime import date
 from pathlib import Path
 
 from regexproof.mine.ledger import empty_ledger, save_ledger
-from regexproof.mine.score import SCORE_VERSION, candidate_score, rank_candidates
+from regexproof.mine.score import SCORE_VERSION, _QUERY_FAMILY, _query_family, candidate_score, rank_candidates
 from regexproof.mine.search import SEARCH_QUERIES, SearchRunResult
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -215,3 +215,32 @@ def test_rank_cli_skip_gated(tmp_path: Path, capsys):
     lines = [ln for ln in capsys.readouterr().out.splitlines() if ln.strip()]
     assert len(lines) == 1
     assert json.loads(lines[0])["url"].endswith("/fresh-mine")
+
+
+def test_every_search_query_has_family():
+    """Fail-closed: any SEARCH_QUERIES addition must carry a family mapping."""
+    assert len(_QUERY_FAMILY) == len(SEARCH_QUERIES)
+    for q in SEARCH_QUERIES:
+        assert q in _QUERY_FAMILY, f"query missing family entry: {q}"
+        assert _query_family(q) == _QUERY_FAMILY[q]
+
+
+def test_new_query_families_are_classified():
+    """The 2026-08-13 expanded queries resolve to the right families."""
+    families = {q: f for q, f in zip(SEARCH_QUERIES, [_QUERY_FAMILY[q] for q in SEARCH_QUERIES])}
+    # security expansion
+    assert families[SEARCH_QUERIES[10]] == "security"  # .gitleaks.toml
+    assert families[SEARCH_QUERIES[11]] == "security"  # .trufflehog
+    assert families[SEARCH_QUERIES[12]] == "security"  # secretlintrc
+    # rules expansion (semgrep.yml + yara conventions)
+    assert families[SEARCH_QUERIES[13]] == "rules"     # semgrep.yml/yaml
+    assert families[SEARCH_QUERIES[15]] == "rules"     # index.yar
+    assert families[SEARCH_QUERIES[16]] == "rules"     # path:signatures extension:yar
+    assert families[SEARCH_QUERIES[17]] == "rules"     # rules.yar path:rules
+    # validators expansion
+    assert families[SEARCH_QUERIES[18]] == "validators"
+    # testdata expansion (go)
+    assert families[SEARCH_QUERIES[19]] == "testdata"
+    # fuzzy fallback agrees with exact map
+    for q in SEARCH_QUERIES:
+        assert _query_family(q) == _QUERY_FAMILY[q]
