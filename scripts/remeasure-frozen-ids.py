@@ -60,20 +60,21 @@ def measure(corpus: str) -> tuple[list[dict], dict]:
     compiled = compile_records(
         records, lift_inline=bool(meta.get("lift_inline")), corpus_slug=corpus
     )
-    enc = sum(1 for c in compiled if c.get("encodable"))
-    n = len(compiled) or 1
+    rows = [pair[0] for pair in compiled]
+    enc = sum(1 for c in rows if c.get("encodable"))
+    n = len(rows) or 1
     summary = {
         "corpus": corpus,
         "corpus_pin": meta.get("corpus_pin"),
-        "sample_size": len(compiled),
+        "sample_size": len(rows),
         "encodable": enc,
         "fraction": round(enc / n, 4),
-        "reasons": dict(Counter((c.get("compile_reason") or "ok") for c in compiled)),
+        "reasons": dict(Counter((c.get("compile_reason") or "ok") for c in rows)),
         "compiler_fingerprint": _compiler_fingerprint(),
         "z3_version": getattr(z3, "get_version_string", lambda: "?")(),
         "python": platform.python_version(),
     }
-    return compiled, summary
+    return rows, summary
 
 
 def main() -> int:
@@ -91,19 +92,19 @@ def main() -> int:
         raise SystemExit(f"unknown corpus: {args.corpus}")
 
     t0 = time.perf_counter()
-    compiled, summary = measure(args.corpus)
+    rows, summary = measure(args.corpus)
     summary["wall_s"] = round(time.perf_counter() - t0, 3)
     OUT.mkdir(parents=True, exist_ok=True)
 
     inv_path = OUT / f"{args.corpus}-inventory.ndjson"
     with inv_path.open("w", encoding="utf-8") as fh:
-        for c in compiled:
+        for c in rows:
             fh.write(json.dumps(c, sort_keys=True) + "\n")
 
     if args.write_baseline:
         base = args.baseline or (OUT / f"{args.corpus}-frozen-ids.ndjson")
         with base.open("w", encoding="utf-8") as fh:
-            for c in compiled:
+            for c in rows:
                 fh.write(
                     json.dumps(
                         {
@@ -116,7 +117,7 @@ def main() -> int:
                     )
                     + "\n"
                 )
-        print(f"wrote baseline {base} ({len(compiled)} ids)")
+        print(f"wrote baseline {base} ({len(rows)} ids)")
         return 0
 
     baseline = args.baseline or (OUT / f"{args.corpus}-frozen-ids.ndjson")
@@ -125,9 +126,9 @@ def main() -> int:
             f"missing baseline {baseline}; run with --write-baseline first"
         )
     frozen = _load_ids(baseline)
-    by_id = {c["regex_id"]: c for c in compiled}
+    by_id = {c["regex_id"]: c for c in rows}
     missing = [i for i in frozen if i not in by_id]
-    extra = [c["regex_id"] for c in compiled if c["regex_id"] not in set(frozen)]
+    extra = [c["regex_id"] for c in rows if c["regex_id"] not in set(frozen)]
     flipped_to_enc: list[str] = []
     flipped_to_unenc: list[str] = []
     base_rows = {}
@@ -151,7 +152,7 @@ def main() -> int:
         "corpus": args.corpus,
         "baseline": str(baseline),
         "frozen_ids": len(frozen),
-        "current_ids": len(compiled),
+        "current_ids": len(rows),
         "missing_from_current": missing,
         "extra_in_current": extra,
         "flipped_unencodable_to_encodable": flipped_to_enc,

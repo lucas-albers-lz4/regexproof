@@ -317,6 +317,7 @@ records = runner._extract("test_sample", meta)
 compiled = runner._compile_all(
     records, lift_inline=False, corpus_slug="test_sample"
 )
+compiled = [pair[0] for pair in compiled]
 
 import platform
 import z3

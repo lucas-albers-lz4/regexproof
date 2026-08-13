@@ -26,7 +26,14 @@ from typing import Any
 
 from z3 import Concat, Re, Star, Union
 
-from regexproof.compiler.base import CompileResult, Unencodable, any_char, opt
+from regexproof.compiler.base import (
+    CompileResult,
+    Unencodable,
+    any_char,
+    composite_meta,
+    opt,
+    wrap_kind_for_call,
+)
 from regexproof.compiler.lower import ranges_excluding
 
 A1B_SUFFIX_BOUND = 128
@@ -161,6 +168,15 @@ def try_compile_trailing_alt_dollar(
             # (?:R|$) under search/exec: empty-at-EOS → universal language.
             if call_kind in ("search", "exec", "substitution"):
                 mirror: Any = Star(any_char())
+                meta = composite_meta(
+                    leading_caret=False,
+                    # C1 fold (luna re-gate 3): source-derived — the
+                    # `(?:R|$)` shape carries the trailing $ alternative.
+                    trailing_dollar=True,
+                    word_boundary_wrap=False,
+                    wrap_kind="search",
+                    mirror_exact=True,
+                )
                 return CompileResult(
                     mirror=mirror,
                     unencodable_reason=None,
@@ -169,6 +185,7 @@ def try_compile_trailing_alt_dollar(
                     flags=flags,
                     pattern=pattern,
                     declared_domain=domain,
+                    meta=meta,
                 )
             # match/fullmatch: R | ε
             if split["r_alt"]:
@@ -180,8 +197,23 @@ def try_compile_trailing_alt_dollar(
                     if call_kind == "fullmatch"
                     else Concat(opt(r_cr.mirror), Star(any_char()))
                 )
+                mirror_exact = bool(r_cr.mirror_exact)
             else:
                 body = Re("")
+                mirror_exact = True
+            # C1 fold (luna re-gate): propagate the R subcompile's
+            # word-boundary wrap instead of hardcoding False; a wrapped child
+            # makes the composite search-shaped (lower.py convention).
+            wb = bool(r_cr.word_boundary_wrap) if split["r_alt"] else False
+            meta = composite_meta(
+                leading_caret=False,
+                # C1 fold (luna re-gate 3): source-derived — the `(?:X|$)`
+                # shape carries the trailing $ alternative.
+                trailing_dollar=True,
+                word_boundary_wrap=wb,
+                wrap_kind="search" if wb else wrap_kind_for_call(call_kind),
+                mirror_exact=mirror_exact,
+            )
             return CompileResult(
                 mirror=body,
                 unencodable_reason=None,
@@ -190,6 +222,7 @@ def try_compile_trailing_alt_dollar(
                 flags=flags,
                 pattern=pattern,
                 declared_domain=domain,
+                meta=meta,
             )
 
         x_bare = split["x_bare"]
@@ -209,6 +242,21 @@ def try_compile_trailing_alt_dollar(
             suffix_m = wb_leading_suffix_mirror(inner_cr.mirror)
             # xr_cr.mirror already search-shaped for WordBounded; do not re-wrap.
             mirror = Union(xr_cr.mirror, suffix_m)
+            # C1 fold (luna re-gate 6): the flag must reflect the ACTUAL
+            # compiled shape — a mixed xr (\bfoo|bar(?:x) lowers with
+            # word_boundary_wrap=False, so hardcoding True misreports it.
+            # wrap_kind stays "search": the suffix branch is boundary-shaped,
+            # so the union is never whole-string regardless.
+            wb = bool(xr_cr.word_boundary_wrap)
+            meta = composite_meta(
+                leading_caret=False,
+                # C1 fold (luna re-gate 3): source-derived — trailing $ alt.
+                trailing_dollar=True,
+                word_boundary_wrap=wb,
+                wrap_kind="search",
+                mirror_exact=bool(xr_cr.mirror_exact)
+                and bool(inner_cr.mirror_exact),
+            )
             return CompileResult(
                 mirror=mirror,
                 unencodable_reason=None,
@@ -217,16 +265,19 @@ def try_compile_trailing_alt_dollar(
                 flags=flags,
                 pattern=pattern,
                 declared_domain=domain,
+                meta=meta,
             )
 
         x_cr = compile_bare(x_bare, flags, dialect, "fullmatch")
         if not x_cr.encodable:
             return _fail(x_cr.unencodable_reason or "per-alternative-anchor")
+        sub_metas = [x_cr.meta or {}]
         if split["r_alt"]:
             r_cr = compile_bare(split["r_alt"], flags, dialect, "fullmatch")
             if not r_cr.encodable:
                 return _fail(r_cr.unencodable_reason or "per-alternative-anchor")
             xr_body = Concat(x_cr.mirror, r_cr.mirror)
+            sub_metas.append(r_cr.meta or {})
         else:
             xr_body = x_cr.mirror
 
@@ -245,6 +296,21 @@ def try_compile_trailing_alt_dollar(
         else:
             return None
 
+        # C1 (issue #426): synthesize the metadata contract this fast path
+        # bypasses ``lower()``'s ``_meta`` dict — X is anchor-free (no
+        # leading_caret) and the union is never the bare body. Any \b
+        # sub-mirror stays word-boundary-wrapped (C1 fold, luna re-gate 2),
+        # which makes the composite search-shaped.
+        wb = any(bool(m.get("word_boundary_wrap")) for m in sub_metas)
+        meta = composite_meta(
+            leading_caret=False,
+            # C1 fold (luna re-gate 3): source-derived — the `(?:X|$)` shape
+            # carries the trailing $ alternative.
+            trailing_dollar=True,
+            word_boundary_wrap=wb,
+            wrap_kind="search" if wb else wrap_kind_for_call(call_kind),
+            mirror_exact=all(bool(m.get("mirror_exact")) for m in sub_metas),
+        )
         return CompileResult(
             mirror=mirror,
             unencodable_reason=None,
@@ -253,6 +319,7 @@ def try_compile_trailing_alt_dollar(
             flags=flags,
             pattern=pattern,
             declared_domain=domain,
+            meta=meta,
         )
     except Unencodable as exc:
         return _fail(exc.reason)

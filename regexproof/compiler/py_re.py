@@ -21,10 +21,12 @@ from z3 import Concat, Range, Re, Star, Union
 from regexproof.compiler.base import (
     CompileResult,
     Unencodable,
+    add_compiler_meta,
     any_char,
     python_trailing_dollar,
     repeat_z3,
     wrap_call_kind,
+    wrap_kind_for_call,
 )
 from regexproof.compiler.fold import python_fold_closure
 
@@ -96,6 +98,14 @@ def compile_py_re(
             # search with ^ : no leading Star(any)
             pass
         mirror = _apply_wrappers(body, call_kind, meta)
+        # C1 (issue #426): derived wrapper metadata — must agree with what
+        # `_apply_wrappers` actually returned (bare body == whole-string).
+        meta["fullmatch_shaped"] = mirror is body
+        meta["wrap_kind"] = wrap_kind_for_call(call_kind)
+        # Unicode-default \w/\d/\s are expanded "lightly" (py_re.py _word/
+        # _digit/_space) — the mirror is not a faithful encoding of the
+        # engine language there, so mirror_exact is False (fail-closed).
+        add_compiler_meta(meta, mirror_exact=not ctx.light_unicode_expansion)
         domain = "ascii" if ascii_only else "unicode"
         return CompileResult(
             mirror=mirror,
@@ -105,6 +115,7 @@ def compile_py_re(
             flags=flags,
             pattern=pattern,
             declared_domain=domain,
+            meta=meta,
         )
     except Unencodable as exc:
         return CompileResult(
@@ -134,6 +145,9 @@ class _Ctx:
         self.ignorecase = ignorecase
         self.dotall = dotall
         self.call_kind = call_kind
+        # Set when a unicode-default \w/\d/\s is expanded "lightly" — the
+        # mirror is then not a faithful encoding of the engine language.
+        self.light_unicode_expansion = False
 
 
 def _apply_wrappers(body, call_kind: str, meta: dict):
@@ -169,6 +183,7 @@ def _translate(pattern: sre_parse.SubPattern, ctx: _Ctx):
         "leading_caret": False,
         "trailing_dollar": False,
         "has_internal_anchor": False,
+        "word_boundary_wrap": False,  # py_re \b is Unencodable — never set
     }
     items = list(pattern)
     for idx, (op, av) in enumerate(items):
@@ -252,6 +267,13 @@ def _translate(pattern: sre_parse.SubPattern, ctx: _Ctx):
             sub_body, sub_meta = _translate(sub, child_ctx)
             if sub_meta.get("has_internal_anchor"):
                 meta["has_internal_anchor"] = True
+            # C1 (issue #426): a Unicode-default \w/\d/\s shorthand inside a
+            # scoped-flag group sets the CHILD context's expansion flag — the
+            # root mirror_exact check reads the root ctx, so propagate the
+            # child's flag upward or a nested (?i:\w) / (\d) wrongly reports
+            # mirror_exact=True.
+            if child_ctx.light_unicode_expansion:
+                ctx.light_unicode_expansion = True
             parts.append(sub_body)
         elif op is sc.MAX_REPEAT or op is sc.MIN_REPEAT:
             # greedy/non-greedy — same language
@@ -311,6 +333,11 @@ def _not_literal(ch: str, ctx: _Ctx):
 
 
 def _dot(ctx: _Ctx):
+    # C1 fold (luna re-gate 3): unicode `.` mirrors (dotall AllChar or the
+    # BMP-bounded line-terminator exclusion) are approximations of the
+    # engine's dot — fail closed on exactness.
+    if not ctx.ascii_only:
+        ctx.light_unicode_expansion = True
     if ctx.dotall:
         return any_char()
     # Alphabet minus line terminators — for membership we use Union of
@@ -381,6 +408,16 @@ def _in_class(items, ctx: _Ctx):
                     forbidden.update(ord(c) for c in chars if len(c) == 1)
             elif op is sc.CATEGORY:
                 forbidden |= _category_codes(av, ctx)
+                # C1 fold (luna re-gate): a negated Unicode shorthand
+                # ([^\d] / [^\s] / [^\w]) excludes only the approximate
+                # subset, so the complement mirror is not a faithful
+                # encoding — mirror_exact must be False.
+                if not ctx.ascii_only and av in (
+                    sc.CATEGORY_DIGIT,
+                    sc.CATEGORY_SPACE,
+                    sc.CATEGORY_WORD,
+                ):
+                    ctx.light_unicode_expansion = True
             else:
                 raise Unencodable(f"class-op:{op}")
             continue
@@ -396,6 +433,11 @@ def _in_class(items, ctx: _Ctx):
     if negate:
         if not saw_member:
             raise Unencodable("empty-class")
+        # C1 fold (luna re-gate 3): a unicode negated class excludes only the
+        # BMP subset of the forbidden chars — the complement mirror is
+        # approximate, so mirror_exact must be False.
+        if not ctx.ascii_only:
+            ctx.light_unicode_expansion = True
         hi = 127 if ctx.ascii_only else 0xFFFF
         return ranges_excluding(forbidden, hi=hi)
     if not options:
@@ -464,6 +506,7 @@ def _category(av, ctx: _Ctx):
 def _digit(ctx: _Ctx):
     if ctx.ascii_only:
         return Range("0", "9")
+    ctx.light_unicode_expansion = True
     # Unicode decimal digits — include ASCII + a distinguishing probe char.
     # Full Nd category is large; encode ASCII + common extras and document
     # that golden probes cover \\u0660.
@@ -473,6 +516,7 @@ def _digit(ctx: _Ctx):
 def _space(ctx: _Ctx):
     if ctx.ascii_only:
         return Union(*[Re(c) for c in " \t\n\r\f\v"])
+    ctx.light_unicode_expansion = True
     # Unicode whitespace incl NBSP
     return Union(*[Re(c) for c in " \t\n\r\f\v\u00a0\u3000"])
 
@@ -480,6 +524,7 @@ def _space(ctx: _Ctx):
 def _word(ctx: _Ctx):
     if ctx.ascii_only:
         return Union(Range("a", "z"), Range("A", "Z"), Range("0", "9"), Re("_"))
+    ctx.light_unicode_expansion = True
     # Unicode word — ASCII + note; full \\w is huge. Include ASCII alnum + _
     # and rely on ascii flag for precise; for unicode default, expand lightly.
     base = Union(Range("a", "z"), Range("A", "Z"), Range("0", "9"), Re("_"))

@@ -87,6 +87,7 @@ def test_batch_backref_row_not_abort():
     }
     rows = compile_records([rec], lift_inline=False, corpus_slug="dogfood_shell")
     assert len(rows) == 1
+    rows = [pair[0] for pair in rows]
     assert rows[0]["encodable"] is False
     assert rows[0]["compile_reason"] == "backref"
 
