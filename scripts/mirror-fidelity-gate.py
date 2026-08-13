@@ -636,9 +636,9 @@ def main(argv: list[str] | None = None) -> int:
                     corpus_slug="gitleaks",
                 )
                 rows = [
-                    c
+                    c[0]
                     for c in compiled
-                    if c.get("encodable") and not c.get("selector")
+                    if c[0].get("encodable") and not c[0].get("selector")
                 ][: args.max_per_corpus]
             for rec in rows:
                 results.append(

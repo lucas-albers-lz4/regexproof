@@ -10,7 +10,11 @@ from pathlib import Path
 
 from z3 import Range, Re, Union
 
-from regexproof.compiler.base import CompileResult, Unencodable
+from regexproof.compiler.base import (
+    CompileResult,
+    Unencodable,
+    add_compiler_meta,
+)
 from regexproof.compiler.fold import python_fold_closure
 from regexproof.compiler.lower import lower, space_codes_from_chars
 from regexproof.compiler.perl_strip import strip_perl_transparent
@@ -191,7 +195,7 @@ def compile_perl(
         fold = fold_fn if "i" in flags else None
         # ``s`` (dotall): ``.`` matches newline — empty terminator set.
         terminators = frozenset() if "s" in flags else PERL_TERMINATORS
-        mirror, _meta = lower(
+        mirror, meta = lower(
             ast,
             fold=fold,
             case_fold=fold_fn,
@@ -204,6 +208,7 @@ def compile_perl(
             allow_ascii_word_boundary=True,
             space_codes=space_codes_from_chars(_PERL_SPACE_CHARS),
         )
+        add_compiler_meta(meta, mirror_exact=True)
         return CompileResult(
             mirror=mirror,
             unencodable_reason=None,
@@ -212,6 +217,7 @@ def compile_perl(
             flags=flags,
             pattern=pattern,
             declared_domain="ascii",
+            meta=meta,
         )
     except Unencodable as exc:
         return CompileResult(

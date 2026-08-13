@@ -11,6 +11,7 @@ from regexproof.compiler.base import (
     any_char,
     python_trailing_dollar,
     repeat_z3,
+    wrap_kind_for_call,
 )
 from regexproof.compiler import simple_parse as sp
 
@@ -83,8 +84,17 @@ def lower(
         body = python_trailing_dollar(body)
     if meta.get("word_boundary_wrap"):
         # WordBounded lowering already applied search-shaped edge constraints.
+        # The returned body IS the mirror but it is NOT a whole-string
+        # language — derived flags must reflect the WordBounded shape.
+        meta["fullmatch_shaped"] = False
+        meta["wrap_kind"] = "search"
         return body, meta
-    return _wrap(body, call_kind, meta), meta
+    mirror = _wrap(body, call_kind, meta)
+    # C1 (issue #426): derived wrapper metadata — must agree with what
+    # `_wrap` actually returned (bare body == whole-string language).
+    meta["fullmatch_shaped"] = mirror is body
+    meta["wrap_kind"] = wrap_kind_for_call(call_kind)
+    return mirror, meta
 
 
 def _wrap(body, call_kind, meta):

@@ -21,10 +21,12 @@ from z3 import Concat, Range, Re, Star, Union
 from regexproof.compiler.base import (
     CompileResult,
     Unencodable,
+    add_compiler_meta,
     any_char,
     python_trailing_dollar,
     repeat_z3,
     wrap_call_kind,
+    wrap_kind_for_call,
 )
 from regexproof.compiler.fold import python_fold_closure
 
@@ -96,6 +98,14 @@ def compile_py_re(
             # search with ^ : no leading Star(any)
             pass
         mirror = _apply_wrappers(body, call_kind, meta)
+        # C1 (issue #426): derived wrapper metadata — must agree with what
+        # `_apply_wrappers` actually returned (bare body == whole-string).
+        meta["fullmatch_shaped"] = mirror is body
+        meta["wrap_kind"] = wrap_kind_for_call(call_kind)
+        # Unicode-default \w/\d/\s are expanded "lightly" (py_re.py _word/
+        # _digit/_space) — the mirror is not a faithful encoding of the
+        # engine language there, so mirror_exact is False (fail-closed).
+        add_compiler_meta(meta, mirror_exact=not ctx.light_unicode_expansion)
         domain = "ascii" if ascii_only else "unicode"
         return CompileResult(
             mirror=mirror,
@@ -105,6 +115,7 @@ def compile_py_re(
             flags=flags,
             pattern=pattern,
             declared_domain=domain,
+            meta=meta,
         )
     except Unencodable as exc:
         return CompileResult(
@@ -134,6 +145,9 @@ class _Ctx:
         self.ignorecase = ignorecase
         self.dotall = dotall
         self.call_kind = call_kind
+        # Set when a unicode-default \w/\d/\s is expanded "lightly" — the
+        # mirror is then not a faithful encoding of the engine language.
+        self.light_unicode_expansion = False
 
 
 def _apply_wrappers(body, call_kind: str, meta: dict):
@@ -169,6 +183,7 @@ def _translate(pattern: sre_parse.SubPattern, ctx: _Ctx):
         "leading_caret": False,
         "trailing_dollar": False,
         "has_internal_anchor": False,
+        "word_boundary_wrap": False,  # py_re \b is Unencodable — never set
     }
     items = list(pattern)
     for idx, (op, av) in enumerate(items):
@@ -464,6 +479,7 @@ def _category(av, ctx: _Ctx):
 def _digit(ctx: _Ctx):
     if ctx.ascii_only:
         return Range("0", "9")
+    ctx.light_unicode_expansion = True
     # Unicode decimal digits — include ASCII + a distinguishing probe char.
     # Full Nd category is large; encode ASCII + common extras and document
     # that golden probes cover \\u0660.
@@ -473,6 +489,7 @@ def _digit(ctx: _Ctx):
 def _space(ctx: _Ctx):
     if ctx.ascii_only:
         return Union(*[Re(c) for c in " \t\n\r\f\v"])
+    ctx.light_unicode_expansion = True
     # Unicode whitespace incl NBSP
     return Union(*[Re(c) for c in " \t\n\r\f\v\u00a0\u3000"])
 
@@ -480,6 +497,7 @@ def _space(ctx: _Ctx):
 def _word(ctx: _Ctx):
     if ctx.ascii_only:
         return Union(Range("a", "z"), Range("A", "Z"), Range("0", "9"), Re("_"))
+    ctx.light_unicode_expansion = True
     # Unicode word — ASCII + note; full \\w is huge. Include ASCII alnum + _
     # and rely on ascii flag for precise; for unicode default, expand lightly.
     base = Union(Range("a", "z"), Range("A", "Z"), Range("0", "9"), Re("_"))

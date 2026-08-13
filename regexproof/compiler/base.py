@@ -39,10 +39,119 @@ class CompileResult:
     flags: str
     pattern: str
     declared_domain: str  # "ascii" | "unicode"
+    # C1 (issue #426): lowering metadata contract consumed by the P3 synthesis
+    # stage. None == metadata absent -> synthesis skips the result fail-closed,
+    # never assumes eligibility. Every successful compile path populates it.
+    meta: dict[str, Any] | None = None
 
     @property
     def encodable(self) -> bool:
         return self.mirror is not None and self.unencodable_reason is None
+
+    def _meta_key(self, key: str) -> Any:
+        """Read a ``_meta``-derived key; None when the metadata is absent.
+
+        ``None`` is the distinct fail-closed marker for absent metadata —
+        distinguishable from ``False``, so P3 can skip the compile result
+        instead of assuming it eligible.
+        """
+        if self.meta is None:
+            return None
+        return self.meta.get(key)
+
+    @property
+    def leading_caret(self) -> bool | None:
+        """Source pattern is top-level ``^``-anchored (no leading Star(any))."""
+        return self._meta_key("leading_caret")
+
+    @property
+    def trailing_dollar(self) -> bool | None:
+        """Source pattern is top-level ``$``-anchored (no trailing Star(any))."""
+        return self._meta_key("trailing_dollar")
+
+    @property
+    def has_internal_anchor(self) -> bool | None:
+        """Source pattern carried a non-edge ``^``/``$`` (rejected by compile)."""
+        return self._meta_key("has_internal_anchor")
+
+    @property
+    def word_boundary_wrap(self) -> bool | None:
+        """Mirror is a WordBounded ``(^|\\W)…(\\W|$)`` language (no re-wrap)."""
+        return self._meta_key("word_boundary_wrap")
+
+    @property
+    def fullmatch_shaped(self) -> bool | None:
+        """Mirror is the bare lowered body — a whole-string language."""
+        return self._meta_key("fullmatch_shaped")
+
+    @property
+    def wrap_kind(self) -> str | None:
+        """Wrapper shape actually applied: ``fullmatch`` | ``match`` | ``search``."""
+        return self._meta_key("wrap_kind")
+
+    @property
+    def alphabet_certified(self) -> bool | None:
+        """Set by P3's B3 certification; unset (None) until then."""
+        return self._meta_key("alphabet_certified")
+
+    @property
+    def mirror_exact(self) -> bool | None:
+        """Exact-mirror marker: faithful engine-language encoding (True) vs.
+        unicode-default ``\\w``/``\\d``/``\\s`` expansions (False)."""
+        return self._meta_key("mirror_exact")
+
+
+def wrap_kind_for_call(call_kind: str) -> str:
+    """Normalized wrapper shape for a call_kind: ``fullmatch`` | ``match`` | ``search``.
+
+    ``exec`` and ``substitution`` share the search wrapper shape in both
+    ``lower._wrap`` and ``wrap_call_kind`` — this is the shape that was
+    actually applied, not the raw call_kind string.
+    """
+    if call_kind == "fullmatch":
+        return "fullmatch"
+    if call_kind == "match":
+        return "match"
+    return "search"
+
+
+def add_compiler_meta(meta: dict, *, mirror_exact: bool) -> dict:
+    """Tag a lowered ``_meta`` dict with the compiler-owned C1 flags.
+
+    ``mirror_exact`` is the exact-mirror marker (True when the lowering is a
+    faithful encoding of the engine language; False for the ``\\w``/``\\d``/
+    ``\\s`` unicode-default expansions). ``alphabet_certified`` is deliberately
+    left unset (None) — P3's B3 certification owns it.
+    """
+    meta["mirror_exact"] = bool(mirror_exact)
+    meta["alphabet_certified"] = None
+    return meta
+
+
+def composite_meta(
+    *,
+    leading_caret: bool,
+    trailing_dollar: bool,
+    word_boundary_wrap: bool,
+    wrap_kind: str,
+    mirror_exact: bool,
+) -> dict:
+    """Synthesize the C1 metadata contract for composite fast-path lowerings.
+
+    The ``caret_in_x`` / ``trailing_alt_dollar`` hooks bypass ``lower()``'s
+    ``_meta`` dict; they build Union/composite mirrors that are never the bare
+    lowered body, so ``fullmatch_shaped`` is always False for them.
+    """
+    return {
+        "leading_caret": bool(leading_caret),
+        "trailing_dollar": bool(trailing_dollar),
+        "has_internal_anchor": False,
+        "word_boundary_wrap": bool(word_boundary_wrap),
+        "fullmatch_shaped": False,
+        "wrap_kind": wrap_kind,
+        "alphabet_certified": None,
+        "mirror_exact": bool(mirror_exact),
+    }
 
 
 def any_char():
@@ -193,7 +302,7 @@ def compile_dialect_template(
             )
         )
         terminators = spec.terminators or frozenset(["\n"])
-        mirror, _meta = lower(
+        mirror, meta = lower(
             ast,
             fold=fold,
             case_fold=case_fold,
@@ -206,6 +315,9 @@ def compile_dialect_template(
             allow_ascii_word_boundary=spec.allow_ascii_word_boundary,
             space_codes=space_codes_from_chars(spec.space_chars),
         )
+        # C1 (issue #426): template dialects lower over an ASCII-exact
+        # word/digit/space closure — mirror_exact True for the ascii domain.
+        add_compiler_meta(meta, mirror_exact=(spec.declared_domain == "ascii"))
         return CompileResult(
             mirror=mirror,
             unencodable_reason=None,
@@ -214,6 +326,7 @@ def compile_dialect_template(
             flags=flags,
             pattern=pattern,
             declared_domain=spec.declared_domain,
+            meta=meta,
         )
     except Unencodable as exc:
         return CompileResult(

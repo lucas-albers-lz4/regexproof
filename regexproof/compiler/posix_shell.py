@@ -190,4 +190,5 @@ def compile_posix_shell(
         flags=flags,
         pattern=pattern,
         declared_domain=result.declared_domain,
+        meta=result.meta,
     )

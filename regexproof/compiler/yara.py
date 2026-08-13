@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from regexproof.compiler.base import CompileResult, Unencodable
+from regexproof.compiler.base import CompileResult, Unencodable, add_compiler_meta, composite_meta
 
 
 def compile_yara(
@@ -59,6 +59,7 @@ def _compile_ascii(
             flags=flags,
             pattern=pattern,
             declared_domain="ascii",
+            meta=result.meta,
         )
     except Exception as exc:
         return CompileResult(
@@ -92,6 +93,16 @@ def _compile_wide(
             wide_pattern = "".join(c + "\x00" for c in unescaped)
             import z3
             mirror = z3.Re(z3.StringVal(wide_pattern))
+            meta = composite_meta(
+                leading_caret=False,
+                trailing_dollar=False,
+                word_boundary_wrap=False,
+                wrap_kind="fullmatch",
+                mirror_exact=True,
+            )
+            # Wide literal mirror is an exact-string (whole-string) language —
+            # override the composite default (Union mirrors are never bare).
+            meta["fullmatch_shaped"] = True
             return CompileResult(
                 mirror=mirror,
                 unencodable_reason=None,
@@ -100,6 +111,7 @@ def _compile_wide(
                 flags=flags,
                 pattern=pattern,
                 declared_domain="wide",
+                meta=meta,
             )
         return CompileResult(
             mirror=None,
