@@ -62,9 +62,10 @@ first; it is faster than reading the call site.
 | GitHub search backoff | `regexproof/mine/search.py` | 429 retry — `search_code()` only, *not* `enrich_repo()` |
 
 **Known asymmetries** (each is a real gap, each already has an issue — do not
-re-file): ledger writes are atomic but batch NDJSON writes are not;
-`search_code` retries but `enrich_repo` does not. (Batch extraction size cap
-landed with #175 — no longer asymmetric vs admission walk.) Measure scripts
+re-file): ledger writes are atomic but batch NDJSON writes are not.
+`search_code` **and** `enrich_repo` / `resolve_default_pin` retry 429
+(`regexproof/mine/search.py`). (Batch extraction size cap landed with #175 —
+no longer asymmetric vs admission walk.) Measure scripts
 share `compiler_fingerprint` via `batch/measure.py` (#197 partial); 
 `measure-corpus-fraction.py` still uses a historical `simple_parse.py` sha1
 for its `compiler_fingerprint` field so committed fraction artifacts stay
@@ -83,7 +84,7 @@ reopened, argue against the recorded rationale explicitly.
 | Floating action tags (`@v5`, `@v6`, `@v2`) not SHA-pinned | **won't fix** | Deliberate major-tag pinning, fleet standard. Code-scanning alert 6, dismissed 2026-08-09 |
 | `new RegExp(pattern, flags)` from argv in `helpers/ecma/match.mjs` | **not a boundary** | Operator-supplied CLI args to a ground-truth replay harness. Comment at `match.mjs` (CodeQL alert 5 dismissed won't-fix) |
 | `eval()` on `--mirror-expr` | **not a boundary** | Same reasoning; 9-symbol namespace (`differential-fuzz.py`); `eval(..., {"__builtins__": {}}, MIRROR_NS)` — operator trust boundary, documented in-file |
-| daily-mine commits after mine exit 1 | **deliberate** | Preserves partial progress; comment at `daily-mine.yml:76`. Hardening tracked in #173, but the behavior is intentional |
+| daily-mine commits after mine exit 1 | **fixed** | Commit step is `if: steps.mine.outcome == 'success'` (`daily-mine.yml`). The old "commit partial progress" behaviour is gone. |
 | Dependabot version updates disabled repo-wide | **deliberate** | `open-pull-requests-limit: 0` + ignore-all; security updates come from the repo-level setting instead |
 | ReDoS analysis via Z3 | **out of scope** | Complexity analysis of the engine, not language membership — see `AGENTS.md` and `docs/REDOS.md` |
 
@@ -237,6 +238,7 @@ This playbook is only useful if citations stay true. Maintenance rule:
 | Wave 3 | Hang / fail-open / DoS | #171 timeouts; #172 `helper_gate_missing`; #175 size cap; #176/#177 hardening + CodeQL dismiss — #208 |
 | Wave 4 | Reliability | #187 atomic writes; #188 silent-failure counters; #189 test gates; #190 `assert_z3_pinned`; #191 CI timeouts/concurrency + 429 retry — #209 |
 | Waves 5–7 | Fowler refactors + types | #192 harness package; #193 public batch API; #194/`#197` pilot_runner + measure; #198 dialect template; #195 extractor registry (partial); #196 `run_corpus` steps; #199 StrEnums; #201 spike/bootstrap thin — closes #202 |
+| 2026-08-12 | Dual-model self-audit (Opus 5 × Grok 4.6) | #360 proof-gate CI overlay; #361/#363 PCRE/Perl helper fail-closed; #362 unicode-prop reject; #364 required-check names; #365 extract read cap; #366 AST timeout=None + npm ci. Tracking #367 |
 
 Findings from the 2026-08 wave, for orientation on what this repo's issues
 actually look like: #169 CI gate cannot fail · #170 symlink read from cloned
