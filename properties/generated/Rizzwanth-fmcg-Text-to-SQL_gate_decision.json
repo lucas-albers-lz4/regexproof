@@ -1,0 +1,47 @@
+{
+  "candidate_url": "https://github.com/Rizzwanth/fmcg-Text-to-SQL",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 4 py_re < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "fmcg-Text-to-SQL",
+  "corpus_pin": "04c8e2de1fd1d12737b3fee108021a3d13c33460",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "py_re": 4
+    },
+    "flags": {
+      "i": 3
+    },
+    "pin": "04c8e2de1fd1d12737b3fee108021a3d13c33460",
+    "predicted_buckets": {
+      "inline-flag": 3
+    },
+    "regex_sites": 4,
+    "regex_sites_per_file": {
+      "src/db.py": 2,
+      "src/validator.py": 2
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 4 regex sites (auto-NO-GO bar 200); dialects [py_re:4]; boundary=unknown.",
+  "schema_version": "1"
+}

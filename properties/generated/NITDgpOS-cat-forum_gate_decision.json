@@ -1,0 +1,47 @@
+{
+  "candidate_url": "https://github.com/NITDgpOS/cat-forum",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 9 ecma < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "cat-forum",
+  "corpus_pin": "6480195a3ae673c0f6f2d4a335afbb664b3e401d",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 9
+    },
+    "flags": {
+      "g": 1
+    },
+    "pin": "6480195a3ae673c0f6f2d4a335afbb664b3e401d",
+    "predicted_buckets": {
+      "stateful": 1
+    },
+    "regex_sites": 9,
+    "regex_sites_per_file": {
+      "app/assets/javascripts/jquery.infinitescroll.min.js": 8,
+      "app/assets/javascripts/masonry.pkgd.min.js": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 9 regex sites (auto-NO-GO bar 200); dialects [ecma:9]; boundary=unknown.",
+  "schema_version": "1"
+}

@@ -1,0 +1,53 @@
+{
+  "candidate_url": "https://github.com/KevinAdkins/BudgetBite",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 35 sites < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "BudgetBite",
+  "corpus_pin": "cbd1926fa337b950c4d592e751c2e7388f7a4bfb",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 2,
+      "posix-shell": 1,
+      "py_re": 32
+    },
+    "flags": {
+      "i": 13
+    },
+    "pin": "cbd1926fa337b950c4d592e751c2e7388f7a4bfb",
+    "predicted_buckets": {
+      "inline-flag": 13
+    },
+    "regex_sites": 35,
+    "regex_sites_per_file": {
+      "backend/kroger_pricing.py": 2,
+      "demo.sh": 1,
+      "frontend/app/(tabs)/camera.tsx": 2,
+      "src/pricing.py": 23,
+      "src/validator.py": 5,
+      "tests/batch_extract_ground_truth.py": 2
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 35 regex sites (auto-NO-GO bar 200); dialects [ecma:2, posix-shell:1, py_re:32]; boundary=unknown.",
+  "schema_version": "1"
+}

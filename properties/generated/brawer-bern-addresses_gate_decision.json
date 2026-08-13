@@ -1,0 +1,54 @@
+{
+  "candidate_url": "https://github.com/brawer/bern-addresses",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 34 py_re < 1000 (address DB).",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "bern-addresses",
+  "corpus_pin": "fad202cfcd34300f98af3538624a0ca4fcca4dbb",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "py_re": 34
+    },
+    "flags": {},
+    "pin": "fad202cfcd34300f98af3538624a0ca4fcca4dbb",
+    "predicted_buckets": {},
+    "regex_sites": 34,
+    "regex_sites_per_file": {
+      "src/check_reviewed.py": 1,
+      "src/cleanup/apply_replacement.py": 1,
+      "src/cleanup/fix_page_columns.py": 1,
+      "src/cleanup/sanitize.py": 1,
+      "src/convert_hocr_to_plaintext.py": 4,
+      "src/detect_page_columns.py": 1,
+      "src/download_gwr_addresses.py": 2,
+      "src/import_reviewed.py": 3,
+      "src/scorer.py": 4,
+      "src/split.py": 8,
+      "src/split_1822.py": 3,
+      "src/utils.py": 2,
+      "src/validator.py": 3
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 34 regex sites (auto-NO-GO bar 200); dialects [py_re:34]; boundary=unknown.",
+  "schema_version": "1"
+}

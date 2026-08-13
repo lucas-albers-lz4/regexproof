@@ -1,0 +1,54 @@
+{
+  "candidate_url": "https://github.com/MSFT-AI-BUILD-INTERNAL/aibuild-ontology-llmkgcreation",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 12 py_re, deterministic-false.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "aibuild-ontology-llmkgcreation",
+  "corpus_pin": "599ad44b86c9bf700f9d2280723ef8f8dfc1f205",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "py_re": 12
+    },
+    "flags": {
+      "i": 2,
+      "s": 2
+    },
+    "pin": "599ad44b86c9bf700f9d2280723ef8f8dfc1f205",
+    "predicted_buckets": {
+      "inline-flag": 4
+    },
+    "regex_sites": 12,
+    "regex_sites_per_file": {
+      "examples/automatic-KG-creation-with-LLM/Code/kg_cq_evaluation.py": 3,
+      "examples/automatic-KG-creation-with-LLM/Code/kg_similarity.py": 1,
+      "examples/automatic-KG-creation-with-LLM/Code/kg_stats.py": 1,
+      "examples/automatic-KG-creation-with-LLM/Code/mixtral/helper_functions.py": 1,
+      "examples/ontogenia/code-thematic-cqs.py": 2,
+      "src/evaluator.py": 2,
+      "src/validator.py": 1,
+      "src/webapp/main.py": 1
+    },
+    "security_boundary": "deterministic-false"
+  },
+  "rationale": "Below admission scale: 12 regex sites (auto-NO-GO bar 200); dialects [py_re:12]; boundary=deterministic-false.",
+  "schema_version": "1"
+}

@@ -1,0 +1,42 @@
+{
+  "candidate_url": "https://github.com/aurc/loggo",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 2 re2 < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "loggo",
+  "corpus_pin": "d62493c42b3620e7ea6ce6a5ae0779d3a99824a4",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "re2": 2
+    },
+    "flags": {},
+    "pin": "d62493c42b3620e7ea6ce6a5ae0779d3a99824a4",
+    "predicted_buckets": {},
+    "regex_sites": 2,
+    "regex_sites_per_file": {
+      "internal/reader/gcp_reader.go": 2
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 2 regex sites (auto-NO-GO bar 200); dialects [re2:2]; boundary=unknown.",
+  "schema_version": "1"
+}

@@ -1,0 +1,52 @@
+{
+  "candidate_url": "https://github.com/kleer001/houdini_remote_render",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 10 sites < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "houdini_remote_render",
+  "corpus_pin": "ffc4239f359bbaec1fe0cfd0d17040c53fb38193",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "posix-shell": 1,
+      "py_re": 9
+    },
+    "flags": {
+      "i": 1
+    },
+    "pin": "ffc4239f359bbaec1fe0cfd0d17040c53fb38193",
+    "predicted_buckets": {
+      "inline-flag": 1
+    },
+    "regex_sites": 10,
+    "regex_sites_per_file": {
+      "src/dependency_resolver.py": 4,
+      "src/hda_scripts/PythonModule.py": 2,
+      "src/mantra_texture_gatherer.py": 1,
+      "src/mantra_validator.py": 1,
+      "src/scripts/bootstrap.sh": 1,
+      "src/validator.py": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 10 regex sites (auto-NO-GO bar 200); dialects [posix-shell:1, py_re:9]; boundary=unknown.",
+  "schema_version": "1"
+}

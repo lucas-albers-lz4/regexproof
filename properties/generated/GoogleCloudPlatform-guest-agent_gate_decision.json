@@ -1,0 +1,45 @@
+{
+  "candidate_url": "https://github.com/GoogleCloudPlatform/guest-agent",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 6 sites < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "guest-agent",
+  "corpus_pin": "4a52a456dbaeeb61867c733a9770d153f493cd8c",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "posix-shell": 4,
+      "re2": 2
+    },
+    "flags": {},
+    "pin": "4a52a456dbaeeb61867c733a9770d153f493cd8c",
+    "predicted_buckets": {},
+    "regex_sites": 6,
+    "regex_sites_per_file": {
+      "google_guest_agent/ps/ps_linux.go": 1,
+      "packaging/genlicense.sh": 4,
+      "utils/ssh.go": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 6 regex sites (auto-NO-GO bar 200); dialects [posix-shell:4, re2:2]; boundary=unknown.",
+  "schema_version": "1"
+}

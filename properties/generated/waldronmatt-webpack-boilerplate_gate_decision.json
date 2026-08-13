@@ -1,0 +1,47 @@
+{
+  "candidate_url": "https://github.com/waldronmatt/webpack-boilerplate",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 6 sites (boilerplate).",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "webpack-boilerplate",
+  "corpus_pin": "c823bec9b4de100695bd1cb97adb9fd4619ddb6b",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 6
+    },
+    "flags": {
+      "i": 1
+    },
+    "pin": "c823bec9b4de100695bd1cb97adb9fd4619ddb6b",
+    "predicted_buckets": {
+      "inline-flag": 1
+    },
+    "regex_sites": 6,
+    "regex_sites_per_file": {
+      "config/webpack.dev.js": 1,
+      "config/webpack.prod.js": 5
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 6 regex sites (auto-NO-GO bar 200); dialects [ecma:6]; boundary=unknown.",
+  "schema_version": "1"
+}

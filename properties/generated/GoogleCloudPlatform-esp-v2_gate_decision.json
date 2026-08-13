@@ -1,0 +1,58 @@
+{
+  "candidate_url": "https://github.com/GoogleCloudPlatform/esp-v2",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 29 sites < 1000 (ESP proxy).",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "esp-v2",
+  "corpus_pin": "f619c528031334123d800bd2a5a8bac878776283",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "posix-shell": 23,
+      "py_re": 4,
+      "re2": 2
+    },
+    "flags": {},
+    "pin": "f619c528031334123d800bd2a5a8bac878776283",
+    "predicted_buckets": {},
+    "regex_sites": 29,
+    "regex_sites_per_file": {
+      "api/scripts/update_version.sh": 3,
+      "scripts/all-utilities.sh": 2,
+      "scripts/cloud-build-docker.sh": 3,
+      "scripts/release/release-changelog.sh": 1,
+      "scripts/release/release-publish.sh": 1,
+      "src/go/util/httptest_util.go": 1,
+      "tests/e2e/client/h2load_runner.py": 4,
+      "tests/e2e/scripts/cloud-run/deploy.sh": 2,
+      "tests/e2e/scripts/gen-auth-token.sh": 2,
+      "tests/e2e/scripts/gke/deploy.sh": 2,
+      "tests/e2e/scripts/prow-utilities.sh": 1,
+      "tests/endpoints/grpc_echo/linux-build-grpc-docker.sh": 1,
+      "tests/integration_test/grpc_ministress_test/grpc_ministress_test.go": 1,
+      "third_party/tools/coverage/gen_coverage.sh": 2,
+      "third_party/tools/spelling/check_spelling.sh": 3
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 29 regex sites (auto-NO-GO bar 200); dialects [posix-shell:23, py_re:4, re2:2]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

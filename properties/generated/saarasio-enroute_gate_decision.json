@@ -1,0 +1,45 @@
+{
+  "candidate_url": "https://github.com/saarasio/enroute",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 3 sites < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "enroute",
+  "corpus_pin": "3f746fe37b6c1af27d09dd13690ca544e90be16d",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "posix-shell": 1,
+      "re2": 2
+    },
+    "flags": {},
+    "pin": "3f746fe37b6c1af27d09dd13690ca544e90be16d",
+    "predicted_buckets": {},
+    "regex_sites": 3,
+    "regex_sites_per_file": {
+      "enroute-dp/internal/dag/conditions.go": 1,
+      "enroutectl/openapi/openapi.go": 1,
+      "packaging/enroute-cp/run_pg_prep.sh": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 3 regex sites (auto-NO-GO bar 200); dialects [posix-shell:1, re2:2]; boundary=unknown.",
+  "schema_version": "1"
+}

@@ -1,0 +1,42 @@
+{
+  "schema_version": "1",
+  "candidate_url": "https://github.com/joaomessiah/archroen",
+  "conditions": [
+    {
+      "id": "new-surface",
+      "met": false,
+      "evidence": "No probe evidence - clone exceeds max_disk_mb=500 (1.29GB) and re-probe not warranted for scale check."
+    },
+    {
+      "id": "security-boundary",
+      "met": false,
+      "evidence": "Probe unavailable at gate budget."
+    },
+    {
+      "id": "large-under-saturated",
+      "met": false,
+      "evidence": "No site count (clone disk budget)."
+    }
+  ],
+  "corpus": "joaomessiah-archroen",
+  "corpus_pin": "",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "regex_sites": 0,
+    "dialect": {},
+    "flags": {},
+    "construct_counts": {},
+    "predicted_buckets": {},
+    "security_boundary": "unknown",
+    "pin": "",
+    "extractor_errors": 0,
+    "regex_sites_per_file": {}
+  },
+  "rationale": "Clone exceeds 500MB disk budget (1.29GB); archroen is a game project \u2014 no security/scale claim warranting 2000MB re-probe. No admission condition met.",
+  "related": {
+    "probe_failure": "clone exceeds max_disk_mb=500"
+  }
+}

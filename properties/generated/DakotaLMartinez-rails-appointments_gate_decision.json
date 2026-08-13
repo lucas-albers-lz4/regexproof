@@ -1,0 +1,42 @@
+{
+  "candidate_url": "https://github.com/DakotaLMartinez/rails-appointments",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 2 ecma < 1000 (tutorial).",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "rails-appointments",
+  "corpus_pin": "19b8e0adc6dcb06a1e151c5dfcf774788d004e38",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 2
+    },
+    "flags": {},
+    "pin": "19b8e0adc6dcb06a1e151c5dfcf774788d004e38",
+    "predicted_buckets": {},
+    "regex_sites": 2,
+    "regex_sites_per_file": {
+      "app/assets/javascripts/bootstrap-datepicker.js": 2
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 2 regex sites (auto-NO-GO bar 200); dialects [ecma:2]; boundary=unknown.",
+  "schema_version": "1"
+}

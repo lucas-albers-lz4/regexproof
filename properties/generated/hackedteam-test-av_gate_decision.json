@@ -1,0 +1,61 @@
+{
+  "candidate_url": "https://github.com/hackedteam/test-av",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 157 sites (131 ecma/16 yara) < 1000 — test-av sample tool.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "test-av",
+  "corpus_pin": "2cbbf94f086ff9037f8c479a7c3417abbadac083",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "backref": 3,
+      "lookaround": 16
+    },
+    "dialect": {
+      "ecma": 131,
+      "py_re": 10,
+      "yara": 16
+    },
+    "flags": {
+      "g": 24,
+      "i": 24,
+      "m": 1,
+      "x": 1
+    },
+    "pin": "2cbbf94f086ff9037f8c479a7c3417abbadac083",
+    "predicted_buckets": {
+      "backref": 3,
+      "inline-flag": 25,
+      "lookaround": 16,
+      "m-flag": 1,
+      "stateful": 24
+    },
+    "regex_sites": 157,
+    "regex_sites_per_file": {
+      "data/html/js/bootstrap.min.js": 12,
+      "data/html/js/jquery.min.js": 119,
+      "data/yara/embedded.yar": 16,
+      "lib/bottle.py": 10
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 157 regex sites (auto-NO-GO bar 200); dialects [ecma:131, py_re:10, yara:16]; boundary=unknown.",
+  "schema_version": "1"
+}

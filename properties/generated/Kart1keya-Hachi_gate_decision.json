@@ -1,0 +1,59 @@
+{
+  "candidate_url": "https://github.com/Kart1keya/Hachi",
+  "conditions": [
+    {
+      "evidence": "Yara dialect covered; corpus novelty is pack content (large novel pattern sets).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe deterministic-true; malware analysis / ATT&CK mapping tool. MITRE ATT&CK behavior mapper. 3,089 sites (3,087 yara). 1,154 patterns, 28% overlap, 828 novel. Security tool. GO 2+3.",
+      "id": "security-boundary",
+      "met": true
+    },
+    {
+      "evidence": "Yara sites >= 1000, under-saturated. MITRE ATT&CK behavior mapper. 3,089 sites (3,087 yara). 1,154 patterns, 28% overlap, 828 novel. Security tool. GO 2+3.",
+      "id": "large-under-saturated",
+      "met": true
+    }
+  ],
+  "corpus": "Hachi",
+  "corpus_pin": "73e083e22f020ffa18ca5f09321ea19c4f7c4da4",
+  "decision": "go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "py_re": 2,
+      "yara": 3087
+    },
+    "flags": {
+      "W": 62,
+      "i": 2446
+    },
+    "pin": "73e083e22f020ffa18ca5f09321ea19c4f7c4da4",
+    "predicted_buckets": {
+      "inline-flag": 2446
+    },
+    "regex_sites": 3089,
+    "regex_sites_per_file": {
+      "utils/graphity/graphity.py": 2,
+      "yara_sigs/file/compiler.yar": 57,
+      "yara_sigs/file/crypto.yar": 54,
+      "yara_sigs/file/packer.yar": 22,
+      "yara_sigs/mitre/api_based.yar": 67,
+      "yara_sigs/mitre/techniques.yar": 1025,
+      "yara_sigs/strings/anti_xx.yar": 808,
+      "yara_sigs/strings/base64.yar": 1,
+      "yara_sigs/strings/crypto.yar": 54,
+      "yara_sigs/strings/ip.yar": 2,
+      "yara_sigs/strings/suspicious.yar": 993,
+      "yara_sigs/strings/url.yar": 4
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Security-boundary corpus (boundary=deterministic-true) with findings-triage potential; 3089 sites across [py_re:2, yara:3087].",
+  "schema_version": "1"
+}

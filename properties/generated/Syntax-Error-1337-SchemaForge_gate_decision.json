@@ -1,0 +1,46 @@
+{
+  "candidate_url": "https://github.com/Syntax-Error-1337/SchemaForge",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 7 py_re < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "SchemaForge",
+  "corpus_pin": "e847fee405862e781dd37d96beae24f571e5ee0d",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "py_re": 7
+    },
+    "flags": {
+      "i": 2
+    },
+    "pin": "e847fee405862e781dd37d96beae24f571e5ee0d",
+    "predicted_buckets": {
+      "inline-flag": 2
+    },
+    "regex_sites": 7,
+    "regex_sites_per_file": {
+      "src/schema_reader/utils.py": 7
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 7 regex sites (auto-NO-GO bar 200); dialects [py_re:7]; boundary=unknown.",
+  "schema_version": "1"
+}

@@ -1,0 +1,65 @@
+{
+  "candidate_url": "https://github.com/kevthehermit/Maildb",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 190 sites (162 ecma) < 1000 — mail DB tool.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "Maildb",
+  "corpus_pin": "5f828eb22e259ee42f76b1ed5d7fcb46dd3eef35",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "backref": 1,
+      "lookaround": 7
+    },
+    "dialect": {
+      "ecma": 162,
+      "py_re": 24,
+      "yara": 4
+    },
+    "flags": {
+      "g": 41,
+      "i": 25,
+      "m": 2
+    },
+    "pin": "5f828eb22e259ee42f76b1ed5d7fcb46dd3eef35",
+    "predicted_buckets": {
+      "backref": 1,
+      "inline-flag": 25,
+      "lookaround": 7,
+      "m-flag": 2,
+      "stateful": 41
+    },
+    "regex_sites": 190,
+    "regex_sites_per_file": {
+      "bs4/dammit.py": 5,
+      "bs4/element.py": 4,
+      "bs4/tests/test_tree.py": 9,
+      "core/parse.py": 6,
+      "web/static/js/decode.js": 4,
+      "web/static/js/highcharts-convert.js": 2,
+      "web/static/js/highcharts.js": 45,
+      "web/static/js/jquery.min.js": 111,
+      "yara/email.yar": 4
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 190 regex sites (auto-NO-GO bar 200); dialects [ecma:162, py_re:24, yara:4]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

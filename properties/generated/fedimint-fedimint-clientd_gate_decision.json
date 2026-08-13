@@ -1,0 +1,43 @@
+{
+  "candidate_url": "https://github.com/fedimint/fedimint-clientd",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 5 shell < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "fedimint-clientd",
+  "corpus_pin": "f2710e066fc8587166558c5c36b75f8550aaa44d",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "posix-shell": 5
+    },
+    "flags": {},
+    "pin": "f2710e066fc8587166558c5c36b75f8550aaa44d",
+    "predicted_buckets": {},
+    "regex_sites": 5,
+    "regex_sites_per_file": {
+      "misc/git-hooks/commit-msg": 1,
+      "misc/git-hooks/pre-commit": 4
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 5 regex sites (auto-NO-GO bar 200); dialects [posix-shell:5]; boundary=unknown.",
+  "schema_version": "1"
+}

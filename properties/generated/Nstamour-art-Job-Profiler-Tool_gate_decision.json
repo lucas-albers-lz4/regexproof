@@ -1,0 +1,50 @@
+{
+  "candidate_url": "https://github.com/Nstamour-art/Job-Profiler-Tool",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 14 py_re < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "Job-Profiler-Tool",
+  "corpus_pin": "d2fdcccf7a0d7633e8931d0a29228e4353a8b82e",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "py_re": 14
+    },
+    "flags": {
+      "i": 4
+    },
+    "pin": "d2fdcccf7a0d7633e8931d0a29228e4353a8b82e",
+    "predicted_buckets": {
+      "inline-flag": 4
+    },
+    "regex_sites": 14,
+    "regex_sites_per_file": {
+      "src/document.py": 1,
+      "src/memory.py": 1,
+      "src/pipeline.py": 3,
+      "src/scraper.py": 3,
+      "src/validator.py": 6
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 14 regex sites (auto-NO-GO bar 200); dialects [py_re:14]; boundary=unknown.",
+  "schema_version": "1"
+}

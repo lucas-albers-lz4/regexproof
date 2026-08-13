@@ -1,0 +1,46 @@
+{
+  "candidate_url": "https://github.com/UFSC/moodle-tcc",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 1 site (Moodle TCC).",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "moodle-tcc",
+  "corpus_pin": "76971bdc33a88f119fa6584ec4da924e68ac8f90",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "posix-shell": 1
+    },
+    "flags": {
+      "i": 1
+    },
+    "pin": "76971bdc33a88f119fa6584ec4da924e68ac8f90",
+    "predicted_buckets": {
+      "inline-flag": 1
+    },
+    "regex_sites": 1,
+    "regex_sites_per_file": {
+      "latex/latex-docker-installed.sh": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 1 regex sites (auto-NO-GO bar 200); dialects [posix-shell:1]; boundary=unknown.",
+  "schema_version": "1"
+}
