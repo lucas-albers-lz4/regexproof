@@ -21,7 +21,6 @@ from typing import Any
 import z3
 from z3 import Contains, InRe, Length, Plus, Re, Solver, Star, String, StringVal, Union
 
-from regexproof.batch.evidence import check_guard_coverage
 from regexproof.compiler import CompileResult
 from regexproof.compiler.simple_parse import (
     Alt,
