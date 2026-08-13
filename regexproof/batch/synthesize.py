@@ -13,17 +13,10 @@ import itertools
 import platform
 import random
 import re
-import sys
 from collections.abc import Iterable
 from dataclasses import dataclass
 from pathlib import PurePath
 from typing import Any
-
-# P3 (luna re-gate 2): the widened shape-1 guard unions a certified class
-# with a bad char and queries InRe over it — a 128-char class (isAscii
-# [\x00-\x7F]) builds a deeply nested z3 expression whose ctypes
-# conversion blows the default recursion limit during the solver call.
-sys.setrecursionlimit(20000)
 
 import z3
 from z3 import Contains, InRe, Length, Plus, Re, Solver, Star, String, StringVal, Union
@@ -211,8 +204,10 @@ def _parse_for_certification(pattern: str) -> Any | None:
         # as literal 'u' sequences. With the dialect-blind default, the
         # Gurmukhi class [\u0A00-\u0A7F] parsed as [u0A00-u0A7F] — the range
         # 0->u (0x30-0x75) contains ';', producing a wrong SAT verdict that
-        # the witness replay then (correctly) rejected.
-        return parse_pattern(pattern, unicode_escapes=True)
+        # that the witness replay then (correctly) rejected.
+        # Braced escapes are allowed: the compiler already rejected
+        # non-u/v-mode braced forms, so only u/v-mode patterns reach here.
+        return parse_pattern(pattern, unicode_escapes=True, allow_braced=True)
     except Exception:
         return None
 
@@ -731,14 +726,23 @@ def _expression_alphabet(
 
 
 def _fuzz_witnesses(
-    regex_id: str, alphabet: set[str], bad_chars: Iterable[str], sample: int
+    regex_id: str,
+    alphabet: set[str],
+    bad_chars: Iterable[str],
+    sample: int,
+    *,
+    wide: bool = False,
 ) -> list[str]:
     dangerous = sorted(set(bad_chars), key=ord)
     base = sorted(alphabet, key=ord)
     all_chars = list(dict.fromkeys(base + dangerous))
     if not all_chars:
         all_chars = ["a"]
-    if len(all_chars) <= EXHAUSTIVE_ALPHABET_CAP:
+    # P3 fold (luna re-gate 3): a WIDE mirror (large range) whose sampled
+    # alphabet happens to be small must still take the seeded wide path —
+    # the exhaustive path would otherwise explode over a wide language's
+    # representatives.
+    if not wide and len(all_chars) <= EXHAUSTIVE_ALPHABET_CAP:
         witnesses = [""]
         for length in range(1, 4):
             witnesses.extend(
@@ -778,16 +782,18 @@ def _diff_fuzz_site(
     shape: int,
     certification: AlphabetCertification | None,
 ) -> int:
-    alphabet, _wide = _expression_alphabet(mirror)
-    witnesses = _fuzz_witnesses(str(row["regex_id"]), alphabet, bad_chars, sample)
+    alphabet, wide = _expression_alphabet(mirror)
+    witnesses = _fuzz_witnesses(
+        str(row["regex_id"]), alphabet, bad_chars, sample, wide=wide
+    )
     if shape == 1 and certification is not None and certification.charclass is not None:
-        member = {
-            char: _certified_contains(certification, char)
-            for char in set(alphabet) | set(bad_chars)
-        }
+        # P3 fold (luna re-gate 3): compute membership DIRECTLY per witness
+        # char — the sampled-alphabet dict missed chars the wide fuzz path
+        # introduces (e.g. the 'a' splice anchor), defaulting them to False
+        # and manufacturing mirror=False/engine=True disagreements.
         expected = [
             (
-                all(member.get(char, False) for char in witness)
+                all(_certified_contains(certification, char) for char in witness)
                 if witness
                 else certification.repeat_kind == "star"
             )

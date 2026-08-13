@@ -17,7 +17,7 @@
   "synthesis": {
     "diff_fuzz_disagreements": 0,
     "diff_fuzz_sites": 87,
-    "diff_fuzz_witnesses": 509916,
+    "diff_fuzz_witnesses": 2292,
     "encodable_sites": 123,
     "mutation_guard_rows": 644,
     "pre_measure": {
