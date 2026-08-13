@@ -1,0 +1,45 @@
+{
+  "budget": {
+    "max_disk_mb": 500,
+    "max_mem_mb": 2048,
+    "max_patterns": 5000,
+    "max_wall_s": 600,
+    "redos_wall_s": 120
+  },
+  "budget_breaches": null,
+  "commit": "3eda2a06b917e0ed9bbf83658e68643e249c646e",
+  "compiler_fingerprint": "71d2ce23b4cd",
+  "complete_run": true,
+  "corpus_pin": "3eda2a06b917e0ed9bbf83658e68643e249c646e",
+  "decision": "go",
+  "decision_rule": "go iff encodable/sample_size >= 0.3",
+  "dialect": "ecma",
+  "encodable": 1344,
+  "engine_versions": {
+    "python": "3.13.5",
+    "z3": "5.0.0"
+  },
+  "extractor_schema_version": "2",
+  "fraction": 0.6754,
+  "go_no_go_threshold": 0.3,
+  "id_formula": "v2-domain-optional-ascii-default",
+  "inventory_path": "properties/generated/sonash-v0-inventory.ndjson",
+  "path": "batch/corpora/sonash-v0/rules",
+  "pilot": "sonash-v0",
+  "reasons": {
+    "composite-pattern": 32,
+    "lookaround": 20,
+    "m-flag": 19,
+    "negated-shorthand": 7,
+    "ok": 1344,
+    "per-alternative-anchor": 100,
+    "stateful": 459,
+    "u-flag": 2,
+    "word-boundary": 7
+  },
+  "sample_size": 1990,
+  "schema_version": "1",
+  "scope": "full_corpus",
+  "unclassified_parse_errors": 0,
+  "wall_s": 119.898
+}

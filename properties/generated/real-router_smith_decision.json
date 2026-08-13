@@ -1,0 +1,14 @@
+{
+  "schema_version": "1",
+  "corpus": "real-router",
+  "corpus_pin": "55aa7ef43a9c129beba90823cd8a4db10bb01211",
+  "candidate_url": "https://github.com/greydragon888/real-router",
+  "smith_decision": "go",
+  "supersedes": null,
+  "reason": "Router framework monorepo (ecma top-60 first-party allowlist): 1,225/1,249 = 0.9808 encodable (complete_run, parse-error=0, budget clean). Near-perfect fraction (packages/ + examples/ code is well-formed). Non-security framework - public-first. GO admit confirmed.",
+  "regex_sites": 1249,
+  "sites_by_bucket": {
+    "ecma allowlist (60 files, 1,249 sites measured; 1,225 encodable)": 1249
+  },
+  "additional_surface_outside_probe_scope": {"first-party beyond top-60": 633}
+}

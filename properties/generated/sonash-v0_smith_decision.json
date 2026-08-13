@@ -1,0 +1,14 @@
+{
+  "schema_version": "1",
+  "corpus": "sonash-v0",
+  "corpus_pin": "3eda2a06b917e0ed9bbf83658e68643e249c646e",
+  "candidate_url": "https://github.com/jasonmichaelbell78-creator/sonash-v0",
+  "smith_decision": "go",
+  "supersedes": null,
+  "reason": "Sobriety journal app monorepo (ecma top-60 first-party allowlist): 1,344/1,990 = 0.6754 encodable (complete_run, parse-error=0, budget clean). 481 findings + 646 triage - HIGHEST findings yield in the matrix (beats mycelium 269). Non-security app - public-first. GO admit confirmed.",
+  "regex_sites": 1990,
+  "sites_by_bucket": {
+    "ecma allowlist (60 files, 1,990 sites measured; 1,344 encodable)": 1990
+  },
+  "additional_surface_outside_probe_scope": {"first-party beyond top-60": 1112}
+}
