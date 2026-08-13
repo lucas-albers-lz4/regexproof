@@ -305,6 +305,14 @@ def test_audit_requeue_archives_gate_and_new_decision_applies(tmp_path: Path):
         ),
         encoding="utf-8",
     )
+    # Diagnostic preconditions (CI-only divergence hunt — the sync returned 0
+    # on the runner while passing locally):
+    assert sorted(p.name for p in gen.glob("*_gate_decision.json")) == [
+        "recovered_gate_decision.json"
+    ]
+    led2 = load_ledger(ledger_path)
+    assert mod.find_candidate(led2, "https://github.com/acme/recovered") is not None
+    assert led2["candidates"][0]["status"] == "queued"
     assert mod.sync_gate_decisions(ledger_path, gen) == 1
     assert load_ledger(ledger_path)["candidates"][0]["status"] == "gated:go"
 
