@@ -1,0 +1,61 @@
+{
+  "candidate_url": "https://github.com/Dingent/Dingent",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 30 sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "Dingent",
+  "corpus_pin": "05ffb7b0e88acb005521219773ad6fc60094f417",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "lookaround": 1
+    },
+    "dialect": {
+      "ecma": 28,
+      "py_re": 2
+    },
+    "flags": {
+      "g": 3,
+      "i": 5
+    },
+    "pin": "05ffb7b0e88acb005521219773ad6fc60094f417",
+    "predicted_buckets": {
+      "inline-flag": 5,
+      "lookaround": 1,
+      "stateful": 3
+    },
+    "regex_sites": 30,
+    "regex_sites_per_file": {
+      "src/dingent/cli/cli.py": 1,
+      "src/dingent/core/utils.py": 1,
+      "ui/e2e/tool-call-activity-rendering.spec.ts": 6,
+      "ui/src/components/CopilotChatActivityList.integration.test.tsx": 9,
+      "ui/src/components/common/create-workspace-dialog.tsx": 3,
+      "ui/src/components/layout/workspace-switcher.tsx": 1,
+      "ui/src/components/tool-call-rendering.test.tsx": 5,
+      "ui/src/components/utils.ts": 2,
+      "ui/src/features/chat/shared/ThinkingAssistantMessage.tsx": 1,
+      "ui/src/lib/api/server.ts": 1
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 30 regex sites (auto-NO-GO bar 200); dialects [ecma:28, py_re:2]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

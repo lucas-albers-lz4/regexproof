@@ -1,0 +1,67 @@
+{
+  "candidate_url": "https://github.com/alexfazio/plankton",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 176 sites, security-adjacent but below scale.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "plankton",
+  "corpus_pin": "085d6727f0fd4b5d2c8b64b090d89b5c798f7b39",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "posix-class": 71
+    },
+    "dialect": {
+      "posix-shell": 174,
+      "py_re": 2
+    },
+    "flags": {
+      "i": 4
+    },
+    "pin": "085d6727f0fd4b5d2c8b64b090d89b5c798f7b39",
+    "predicted_buckets": {
+      "inline-flag": 4,
+      "posix-class": 71
+    },
+    "regex_sites": 176,
+    "regex_sites_per_file": {
+      ".claude/hooks/enforce_package_managers.sh": 57,
+      ".claude/hooks/multi_linter.sh": 32,
+      ".claude/hooks/test/swap_settings.sh": 1,
+      ".claude/hooks/test/test_empirical_p0.sh": 4,
+      ".claude/hooks/test/test_empirical_p3_p4.sh": 5,
+      ".claude/hooks/test/test_pr2_regressions.sh": 2,
+      ".claude/hooks/test/test_production_path.sh": 1,
+      ".claude/hooks/test/test_security_exclusions_compat.sh": 1,
+      ".claude/hooks/test/test_step0_reproduction.sh": 1,
+      ".claude/hooks/test/test_subprocess_settings.sh": 3,
+      ".claude/hooks/test/verify_feedback_loop.sh": 1,
+      ".claude/hooks/test_hook.sh": 51,
+      "benchmark/swebench/prereqs.py": 1,
+      "docs/tests/test_reference_accuracy.sh": 2,
+      "scripts/check_commit_message_no_ai_attribution.sh": 1,
+      "scripts/pre_commit_plankton_strict.sh": 1,
+      "scripts/setup.py": 1,
+      "tests/stress/run_stress_tests.sh": 11
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 176 regex sites (auto-NO-GO bar 200); dialects [posix-shell:174, py_re:2]; boundary=unknown.",
+  "schema_version": "1"
+}

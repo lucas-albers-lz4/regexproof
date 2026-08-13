@@ -1,0 +1,61 @@
+{
+  "candidate_url": "https://github.com/parallel-web/parallel-cookbook",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 27 sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "parallel-cookbook",
+  "corpus_pin": "a1a1a6ae81bcab54f6dc91dd3ede7eb579c07dbb",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 14,
+      "py_re": 13
+    },
+    "flags": {
+      "i": 3,
+      "s": 1
+    },
+    "pin": "a1a1a6ae81bcab54f6dc91dd3ede7eb579c07dbb",
+    "predicted_buckets": {
+      "inline-flag": 4
+    },
+    "regex_sites": 27,
+    "regex_sites_per_file": {
+      "python-recipes/market-analysis-demo/app.py": 2,
+      "python-recipes/market-analysis-demo/static/js/app.js": 1,
+      "python-recipes/parallel-investor-signals/monitor/common.py": 3,
+      "python-recipes/parallel-investor-signals/project/backend/investor_core.py": 3,
+      "python-recipes/parallel-investor-signals/project/backend/models.py": 2,
+      "python-recipes/parallel-investor-signals/project/backend/parallel_client.py": 3,
+      "python-recipes/parallel-investor-signals/project/src/components/BulkPanel.tsx": 1,
+      "python-recipes/parallel-investor-signals/project/src/lib/cache.test.ts": 3,
+      "python-recipes/parallel-investor-signals/project/src/lib/format.ts": 1,
+      "typescript-recipes/parallel-daily-insights/worker.ts": 1,
+      "typescript-recipes/parallel-fact-checker-cerebras/worker.ts": 1,
+      "typescript-recipes/parallel-supabase-enrichment/supabase/functions/enrich-company/index.ts": 1,
+      "typescript-recipes/parallel-vendor-intelligence/src/schema.ts": 4,
+      "typescript-recipes/parallel-vendor-intelligence/src/vendor-config.ts": 1
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 27 regex sites (auto-NO-GO bar 200); dialects [ecma:14, py_re:13]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

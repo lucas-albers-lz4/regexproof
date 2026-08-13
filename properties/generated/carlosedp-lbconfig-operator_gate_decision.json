@@ -1,0 +1,49 @@
+{
+  "candidate_url": "https://github.com/carlosedp/lbconfig-operator",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 28 shell sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "lbconfig-operator",
+  "corpus_pin": "8802e2382b2e8a7353f114ca4b07bfa71303cb5e",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "posix-shell": 28
+    },
+    "flags": {
+      "i": 2
+    },
+    "pin": "8802e2382b2e8a7353f114ca4b07bfa71303cb5e",
+    "predicted_buckets": {
+      "inline-flag": 2
+    },
+    "regex_sites": 28,
+    "regex_sites_per_file": {
+      "hack/check_versions.sh": 20,
+      "hack/e2e-tests.sh": 5,
+      "hack/install_operator-sdk.sh": 2,
+      "hack/setup-kind-registry.sh": 1
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 28 regex sites (auto-NO-GO bar 200); dialects [posix-shell:28]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

@@ -1,0 +1,56 @@
+{
+  "candidate_url": "https://github.com/FauvidoTechnologies/open-atlas",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. OSINT atlas. Re-probe at 2000MB: only 16 first-party sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "open-atlas",
+  "corpus_pin": "df996f91b2db83b384a1b8a5498347d9f0ad2c5a",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "py_re": 16
+    },
+    "flags": {
+      "i": 1,
+      "s": 1
+    },
+    "pin": "df996f91b2db83b384a1b8a5498347d9f0ad2c5a",
+    "predicted_buckets": {
+      "inline-flag": 2
+    },
+    "regex_sites": 16,
+    "regex_sites_per_file": {
+      "oatlas/tools/email_checker/validate_emails.py": 1,
+      "oatlas/tools/github_apis/trufflehog/__init__.py": 1,
+      "oatlas/tools/github_apis/trufflehog/models.py": 2,
+      "oatlas/tools/image_analysis/information_extraction.py": 2,
+      "oatlas/tools/nettacker/core/lib/base.py": 2,
+      "oatlas/tools/nettacker/core/lib/http.py": 2,
+      "oatlas/tools/nettacker/core/lib/socket.py": 1,
+      "oatlas/tools/nettacker/core/utils/common.py": 1,
+      "oatlas/tools/reverse_instagram_lookup/instagram_lookup_engine.py": 1,
+      "oatlas/tools/reverse_instagram_lookup/utils/test_extraction.py": 3
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 16 regex sites (auto-NO-GO bar 200); dialects [py_re:16]; boundary=unknown.",
+  "schema_version": "1"
+}

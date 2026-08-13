@@ -1,0 +1,66 @@
+{
+  "candidate_url": "https://github.com/mlibrary/heliotrope",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 201 ecma < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "heliotrope",
+  "corpus_pin": "6afc6ba4e984ba4005936214510135afbf1f9375",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "backref": 1,
+      "lookaround": 6
+    },
+    "dialect": {
+      "ecma": 200,
+      "posix-shell": 1
+    },
+    "flags": {
+      "g": 47,
+      "i": 54,
+      "m": 1,
+      "u": 4
+    },
+    "pin": "6afc6ba4e984ba4005936214510135afbf1f9375",
+    "predicted_buckets": {
+      "backref": 1,
+      "inline-flag": 54,
+      "lookaround": 6,
+      "m-flag": 1,
+      "stateful": 47,
+      "u-flag": 4
+    },
+    "regex_sites": 201,
+    "regex_sites_per_file": {
+      "app/assets/javascripts/application/facet_focus_restore.js": 2,
+      "app/assets/javascripts/application/resource_results_refocus.js": 3,
+      "app/assets/javascripts/short_monograph_description.js": 1,
+      "config/webpack/environment.js": 1,
+      "fulcrum/js/jquery.js": 73,
+      "fulcrum/js/materialize.js": 79,
+      "fulcrum/mozilla-pdf-viewer/web/debugger.js": 2,
+      "fulcrum/mozilla-pdf-viewer/web/viewer.js": 39,
+      "vagrant_scripts/mysql.sh": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 201 regex sites (auto-NO-GO bar 200); dialects [ecma:200, posix-shell:1]; boundary=unknown.",
+  "schema_version": "1"
+}

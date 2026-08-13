@@ -1,0 +1,99 @@
+{
+  "candidate_url": "https://github.com/hardisgroupcom/vscode-sfdx-hardis",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 250 ecma < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "vscode-sfdx-hardis",
+  "corpus_pin": "8f3488b2cdb77b756ebf8a18006b7ebb757265b6",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "lookaround": 2
+    },
+    "dialect": {
+      "ecma": 250
+    },
+    "flags": {
+      "g": 118,
+      "i": 40,
+      "m": 8
+    },
+    "pin": "8f3488b2cdb77b756ebf8a18006b7ebb757265b6",
+    "predicted_buckets": {
+      "inline-flag": 40,
+      "lookaround": 2,
+      "m-flag": 8,
+      "stateful": 118
+    },
+    "regex_sites": 250,
+    "regex_sites_per_file": {
+      "src/command-runner.ts": 8,
+      "src/commands/packageXml.ts": 4,
+      "src/commands/showDataWorkbench.ts": 1,
+      "src/commands/showMetadataRetriever.ts": 17,
+      "src/commands/showPipeline.ts": 2,
+      "src/hardis-colors.ts": 6,
+      "src/hardis-debugger.ts": 2,
+      "src/hardis-plugins-provider.ts": 9,
+      "src/hardis-status-provider.ts": 2,
+      "src/hardis-websocket-server.ts": 2,
+      "src/i18n/i18n.ts": 1,
+      "src/pipeline-data-provider.ts": 4,
+      "src/utils.ts": 16,
+      "src/utils/extensionConfigUtils.ts": 2,
+      "src/utils/gitMergeDriverUtils.ts": 4,
+      "src/utils/gitProviders/gitProvider.ts": 10,
+      "src/utils/gitProviders/gitProviderAzure.ts": 3,
+      "src/utils/gitProviders/gitProviderBitbucket.ts": 1,
+      "src/utils/gitProviders/gitProviderGitea.ts": 1,
+      "src/utils/gitProviders/gitProviderGitlab.ts": 3,
+      "src/utils/monitoringConfigUtils.ts": 1,
+      "src/utils/orgConfigUtils.ts": 3,
+      "src/utils/pipeline/branchStrategyMermaidBuilder.ts": 14,
+      "src/utils/prePostCommandsUtils.ts": 4,
+      "src/utils/projectUtils.ts": 1,
+      "src/utils/providerCredentials.ts": 1,
+      "src/utils/setupUtils.ts": 8,
+      "src/utils/stringUtils.ts": 2,
+      "src/utils/ticketProviders/ticketProvider.ts": 2,
+      "src/utils/ticketProviders/ticketProviderAzure.ts": 4,
+      "src/utils/ticketProviders/ticketProviderGeneric.ts": 5,
+      "src/utils/ticketProviders/ticketProviderJira.ts": 7,
+      "src/webviews/lwc-ui-panel.ts": 2,
+      "src/webviews/lwc-ui/index.js": 2,
+      "src/webviews/lwc-ui/modules/s/commandExecution/commandExecution.js": 41,
+      "src/webviews/lwc-ui/modules/s/dataWorkbench/dataWorkbench.js": 2,
+      "src/webviews/lwc-ui/modules/s/documentationConfig/documentationConfig.js": 2,
+      "src/webviews/lwc-ui/modules/s/filesWorkbench/filesWorkbench.js": 1,
+      "src/webviews/lwc-ui/modules/s/metadataRetriever/metadataRetriever.js": 4,
+      "src/webviews/lwc-ui/modules/s/monitoringConfig/monitoringConfig.js": 4,
+      "src/webviews/lwc-ui/modules/s/orgManager/orgManager.js": 7,
+      "src/webviews/lwc-ui/modules/s/orgMonitoring/orgMonitoring.js": 1,
+      "src/webviews/lwc-ui/modules/s/pipeline/pipeline.js": 12,
+      "src/webviews/lwc-ui/modules/s/pipelineConfig/pipelineConfig.js": 1,
+      "src/webviews/lwc-ui/modules/s/promptInput/promptInput.js": 11,
+      "src/webviews/lwc-ui/modules/s/sharedMixin/sharedMixin.js": 1,
+      "webpack.common.js": 9
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 250 regex sites (auto-NO-GO bar 200); dialects [ecma:250]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

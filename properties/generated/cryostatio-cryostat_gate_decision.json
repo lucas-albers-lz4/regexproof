@@ -1,0 +1,52 @@
+{
+  "candidate_url": "https://github.com/cryostatio/cryostat",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 33 sites (java deferred).",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "cryostat",
+  "corpus_pin": "17ca85eb411407bac5ba6ed3b4bc1a721e0d8f2b",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "java": 9,
+      "posix-shell": 24
+    },
+    "flags": {},
+    "pin": "17ca85eb411407bac5ba6ed3b4bc1a721e0d8f2b",
+    "predicted_buckets": {},
+    "regex_sites": 33,
+    "regex_sites_per_file": {
+      "check-hibernate-version.sh": 3,
+      "parse-test-results.bash": 18,
+      "smoketest.bash": 3,
+      "src/main/java/io/cryostat/diagnostic/UnifiedLogs.java": 1,
+      "src/main/java/io/cryostat/discovery/CustomDiscovery.java": 1,
+      "src/main/java/io/cryostat/graphql/matchers/LabelSelectorMatcher.java": 3,
+      "src/main/java/io/cryostat/recordings/RecordingHelper.java": 1,
+      "src/main/java/io/cryostat/recordings/RecordingOptions.java": 1,
+      "src/main/java/io/cryostat/util/SemVer.java": 1,
+      "src/test/java/io/cryostat/ApiListingTest.java": 1
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 33 regex sites (auto-NO-GO bar 200); dialects [java:9, posix-shell:24]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

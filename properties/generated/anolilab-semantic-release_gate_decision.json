@@ -1,0 +1,58 @@
+{
+  "candidate_url": "https://github.com/anolilab/semantic-release",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 28 ecma sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "semantic-release",
+  "corpus_pin": "bf03b5eac4cf5dbd45531c18817e606b14171ba4",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 28
+    },
+    "flags": {
+      "g": 11,
+      "i": 2,
+      "u": 11
+    },
+    "pin": "bf03b5eac4cf5dbd45531c18817e606b14171ba4",
+    "predicted_buckets": {
+      "inline-flag": 2,
+      "stateful": 11,
+      "u-flag": 11
+    },
+    "regex_sites": 28,
+    "regex_sites_per_file": {
+      "packages/multi-semantic-release/__tests__/multi-semantic-release.test.ts": 7,
+      "packages/multi-semantic-release/src/create-inline-plugin-creator.ts": 1,
+      "packages/multi-semantic-release/src/update-deps.ts": 2,
+      "packages/multi-semantic-release/src/utils/detect-catalog-changes.ts": 1,
+      "packages/multi-semantic-release/src/utils/normalize-repository-url.ts": 1,
+      "packages/multi-semantic-release/src/utils/validate.ts": 2,
+      "plopfile.js": 1,
+      "scripts/generate-package-og-images.js": 10,
+      "scripts/list-packages.js": 3
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 28 regex sites (auto-NO-GO bar 200); dialects [ecma:28]; boundary=unknown.",
+  "schema_version": "1"
+}

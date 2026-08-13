@@ -1,0 +1,70 @@
+{
+  "candidate_url": "https://github.com/iscale-llc/iscale-facebook-ad-builder",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 36 sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "iscale-facebook-ad-builder",
+  "corpus_pin": "832acd005f02b61c7d13920f1e29e8c307ac4598",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 25,
+      "posix-shell": 7,
+      "py_re": 4
+    },
+    "flags": {
+      "d": 9,
+      "g": 1,
+      "i": 14,
+      "s": 2,
+      "v": 9
+    },
+    "pin": "832acd005f02b61c7d13920f1e29e8c307ac4598",
+    "predicted_buckets": {
+      "inline-flag": 16,
+      "stateful": 1,
+      "v-flag": 9
+    },
+    "regex_sites": 36,
+    "regex_sites_per_file": {
+      "backend/app/main.py": 1,
+      "backend/app/services/brand_scraper.py": 2,
+      "backend/app/services/scraper.py": 1,
+      "frontend/src/components/AdCard.jsx": 4,
+      "frontend/src/components/AdCreativeStep.jsx": 1,
+      "frontend/src/components/BulkAdCreation.jsx": 6,
+      "frontend/src/components/ImageTemplateSelector.jsx": 2,
+      "frontend/src/components/NanoBananaGenerationStep.jsx": 1,
+      "frontend/src/pages/AdRemix.jsx": 3,
+      "frontend/src/pages/BrandScrapes.jsx": 2,
+      "frontend/src/pages/Settings.jsx": 2,
+      "frontend/src/pages/WinningAds.jsx": 3,
+      "frontend/src/utils/validation.js": 1,
+      "frontend/tests/agent-browser/smoke-auth.sh": 1,
+      "frontend/tests/agent-browser/smoke-brand-scrapes.sh": 2,
+      "frontend/tests/agent-browser/smoke-login.sh": 3,
+      "setup.sh": 1
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 36 regex sites (auto-NO-GO bar 200); dialects [ecma:25, posix-shell:7, py_re:4]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

@@ -1,0 +1,72 @@
+{
+  "candidate_url": "https://github.com/calculist/calculist-web",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 70 sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "calculist-web",
+  "corpus_pin": "6ee92d2e4da0525eb120e2223086bf84571fda72",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 70
+    },
+    "flags": {
+      "g": 34,
+      "i": 2,
+      "m": 1
+    },
+    "pin": "6ee92d2e4da0525eb120e2223086bf84571fda72",
+    "predicted_buckets": {
+      "inline-flag": 2,
+      "m-flag": 1,
+      "stateful": 34
+    },
+    "regex_sites": 70,
+    "regex_sites_per_file": {
+      "app/javascript/client/init.ts": 1,
+      "app/javascript/client/services/emojiHelper.ts": 1,
+      "app/javascript/client/services/searchQueryParser.ts": 1,
+      "app/javascript/client/services/slashElementsHelper.ts": 10,
+      "app/javascript/client/services/urlFinder.ts": 5,
+      "app/javascript/client/services/userAgentHelper.ts": 1,
+      "app/javascript/client/ui/faviconHelper.ts": 3,
+      "app/javascript/shared/Item/computeItemValue.ts": 4,
+      "app/javascript/shared/Item/item.executeCommand.ts": 2,
+      "app/javascript/shared/Item/item.render.ts": 1,
+      "app/javascript/shared/Item/item.showLinkButtons.ts": 4,
+      "app/javascript/shared/Item/item.valueOf.ts": 2,
+      "app/javascript/shared/Item/parseItemText.ts": 6,
+      "app/javascript/shared/Item/replaceTeX.ts": 1,
+      "app/javascript/shared/Item/varExists.ts": 2,
+      "app/javascript/shared/commands/commands.ts": 3,
+      "app/javascript/shared/utility/getNewGuid.ts": 1,
+      "app/javascript/shared/utility/keyToVarName.ts": 1,
+      "app/javascript/shared/utility/removeHTML.ts": 1,
+      "app/javascript/shared/utility/wordWrap.ts": 1,
+      "scripts/convert-to-esm.js": 17,
+      "spec/javascripts/edgeCases.test.js": 1,
+      "spec/javascripts/itemOperations.test.js": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 70 regex sites (auto-NO-GO bar 200); dialects [ecma:70]; boundary=unknown.",
+  "schema_version": "1"
+}

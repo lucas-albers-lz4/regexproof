@@ -1,0 +1,58 @@
+{
+  "candidate_url": "https://github.com/FlorianBruniaux/cc-copilot-bridge",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 77 shell sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "cc-copilot-bridge",
+  "corpus_pin": "0d242812c561ad0ee69431c4e01bfba9523b8fe4",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "posix-shell": 77
+    },
+    "flags": {
+      "i": 14
+    },
+    "pin": "0d242812c561ad0ee69431c4e01bfba9523b8fe4",
+    "predicted_buckets": {
+      "inline-flag": 14
+    },
+    "regex_sites": 77,
+    "regex_sites_per_file": {
+      "claude-switch": 2,
+      "install.sh": 1,
+      "scripts/analyze-copilot-logs.sh": 17,
+      "scripts/launch-responses-fork.sh": 2,
+      "scripts/launch-unified-fork.sh": 3,
+      "scripts/mcp-check.sh": 2,
+      "scripts/security/audit-daily.sh": 3,
+      "scripts/security/audit-weekly.sh": 15,
+      "scripts/security/compliance-check.sh": 7,
+      "scripts/security/network-monitor.sh": 6,
+      "scripts/test-gemini.sh": 12,
+      "scripts/test-install.sh": 6,
+      "scripts/test-responses-api.sh": 1
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 77 regex sites (auto-NO-GO bar 200); dialects [posix-shell:77]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

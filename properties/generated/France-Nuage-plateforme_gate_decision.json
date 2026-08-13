@@ -1,0 +1,58 @@
+{
+  "candidate_url": "https://github.com/France-Nuage/plateforme",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 22 sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "plateforme",
+  "corpus_pin": "6c14292d43e0aebf03c1d06dc648ba447c39e82d",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 9,
+      "posix-shell": 13
+    },
+    "flags": {
+      "g": 2,
+      "i": 6
+    },
+    "pin": "6c14292d43e0aebf03c1d06dc648ba447c39e82d",
+    "predicted_buckets": {
+      "inline-flag": 6,
+      "stateful": 2
+    },
+    "regex_sites": 22,
+    "regex_sites_per_file": {
+      "console/src/components/cluster-labels-editor.tsx": 1,
+      "console/src/components/kubernetes-labels-picker.tsx": 1,
+      "console/src/middlewares/rpc.ts": 1,
+      "generate-certs.sh": 2,
+      "infrastructure/scripts/disk-image-sync/bash-script-to-cron-on-proxmox-to-downloads-images.sh": 11,
+      "node-sdk/src/fixtures/organization.ts": 2,
+      "node-sdk/src/generated/rpc/google/protobuf/duration.ts": 1,
+      "node-sdk/src/generated/rpc/google/protobuf/timestamp.ts": 1,
+      "system-tests/tests/pages/base.page.ts": 1,
+      "system-tests/tests/pages/managed-service-detail.page.ts": 1
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 22 regex sites (auto-NO-GO bar 200); dialects [ecma:9, posix-shell:13]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

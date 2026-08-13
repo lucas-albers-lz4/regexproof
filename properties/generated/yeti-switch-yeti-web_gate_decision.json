@@ -1,0 +1,57 @@
+{
+  "candidate_url": "https://github.com/yeti-switch/yeti-web",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 79 sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "yeti-web",
+  "corpus_pin": "70fead84a1a56d94b425c557c6e6f994ef8287be",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "backref": 1,
+      "lookaround": 10
+    },
+    "dialect": {
+      "ecma": 78,
+      "posix-shell": 1
+    },
+    "flags": {
+      "g": 20,
+      "i": 12,
+      "m": 5
+    },
+    "pin": "70fead84a1a56d94b425c557c6e6f994ef8287be",
+    "predicted_buckets": {
+      "backref": 1,
+      "inline-flag": 12,
+      "lookaround": 10,
+      "m-flag": 5,
+      "stateful": 20
+    },
+    "regex_sites": 79,
+    "regex_sites_per_file": {
+      "ci/gen_version.sh": 1,
+      "public/javascripts/apitome/application.js": 78
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 79 regex sites (auto-NO-GO bar 200); dialects [ecma:78, posix-shell:1]; boundary=unknown.",
+  "schema_version": "1"
+}

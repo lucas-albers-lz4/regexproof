@@ -1,0 +1,84 @@
+{
+  "candidate_url": "https://github.com/YourGPT/copilot-sdk",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 134 sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "copilot-sdk",
+  "corpus_pin": "70606f261cddcf455d1f7674f5b4ee1bc5b7039c",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 126,
+      "posix-shell": 8
+    },
+    "flags": {
+      "g": 59,
+      "i": 24,
+      "m": 1
+    },
+    "pin": "70606f261cddcf455d1f7674f5b4ee1bc5b7039c",
+    "predicted_buckets": {
+      "inline-flag": 24,
+      "m-flag": 1,
+      "stateful": 59
+    },
+    "regex_sites": 134,
+    "regex_sites_per_file": {
+      "apps/docs/app/llms-full.txt/route.ts": 4,
+      "apps/docs/components/architecture-diagram.tsx": 1,
+      "examples/editor-demo/app/components/ContentPreview.tsx": 5,
+      "examples/editor-demo/app/components/PublishForm.tsx": 2,
+      "examples/editor-demo/app/page.tsx": 16,
+      "examples/experimental/app/test-express-demo/page.tsx": 1,
+      "examples/express-demo/src/index.ts": 1,
+      "examples/fallback-demo/src/index.ts": 2,
+      "examples/headless-slack-demo/src/components/Message.tsx": 3,
+      "examples/mcp-demo/app/api/mcp/route.ts": 4,
+      "examples/mcp-demo/app/components/mcp-sidebar.tsx": 1,
+      "examples/shopping-demo/app/components/CheckoutForm.tsx": 4,
+      "examples/skills-demo/src/App.tsx": 10,
+      "examples/support-tickets-demo/app/components/tool-cards/callback-scheduled-card.tsx": 1,
+      "examples/togetherai-demo/test-rest.sh": 4,
+      "packages/copilot-sdk/src/chat/classes/AbstractChat.ts": 1,
+      "packages/copilot-sdk/src/chat/optimizations.ts": 5,
+      "packages/copilot-sdk/src/core/tools/intentDetector.ts": 3,
+      "packages/copilot-sdk/src/experimental/renderers/HtmlRenderer.tsx": 3,
+      "packages/copilot-sdk/src/mcp/tools/MCPToolAdapter.ts": 2,
+      "packages/copilot-sdk/src/react/hooks/useCapabilities.ts": 1,
+      "packages/copilot-sdk/src/react/hooks/useToolExecutor.ts": 1,
+      "packages/copilot-sdk/src/skill-system/frontmatter.ts": 3,
+      "packages/copilot-sdk/src/ui/components/composed/chat/default-message.tsx": 2,
+      "packages/copilot-sdk/src/ui/components/ui/follow-up.tsx": 2,
+      "packages/copilot-sdk/src/ui/components/ui/tool-steps.tsx": 2,
+      "packages/create-ai-copilot/src/prompts.ts": 1,
+      "packages/create-ai-copilot/src/scaffolder.ts": 9,
+      "packages/llm-sdk/src/fallback/chain.ts": 25,
+      "packages/llm-sdk/src/server/tool-selection.ts": 7,
+      "packages/llm-sdk/src/yourgpt/index.ts": 2,
+      "scripts/check-dependency-age.mjs": 2,
+      "scripts/publish-beta.sh": 3,
+      "scripts/publish.sh": 1
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 134 regex sites (auto-NO-GO bar 200); dialects [ecma:126, posix-shell:8]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

@@ -1,0 +1,51 @@
+{
+  "candidate_url": "https://github.com/wayofdev/next-starter-tpl",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 6 sites (template).",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "next-starter-tpl",
+  "corpus_pin": "73a43db7904273a5d126d539fbb4a74b2948d7ae",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 6
+    },
+    "flags": {
+      "g": 1,
+      "i": 2
+    },
+    "pin": "73a43db7904273a5d126d539fbb4a74b2948d7ae",
+    "predicted_buckets": {
+      "inline-flag": 2,
+      "stateful": 1
+    },
+    "regex_sites": 6,
+    "regex_sites_per_file": {
+      "apps/storybook/.storybook/preview.ts": 2,
+      "apps/web/next.config.mjs": 2,
+      "cache.config.js": 1,
+      "packages/ui/src/base/dropdown/__tests__/Dropdown.test.tsx": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 6 regex sites (auto-NO-GO bar 200); dialects [ecma:6]; boundary=unknown.",
+  "schema_version": "1"
+}
