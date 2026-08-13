@@ -19,6 +19,9 @@ from typing import Any
 from regexproof.extractors.go_regexp import extract_go_regexp
 from regexproof.extractors.record import make_record
 
+# Keep in sync with regexproof.batch.manifests.MAX_FILE_BYTES (#175/#365).
+_DEFAULT_MAX_FILE_BYTES = 2_000_000
+
 # Upstream pin: 9 ``*_test.go`` files under ``src/regexp`` (incl. syntax/).
 EXPECTED_GO_REGEXP_TEST_FILES = 9
 
@@ -252,6 +255,7 @@ def extract_go_regexp_tests_tree(
     file_prefix: str = "src/regexp",
     expected_files: int | None = EXPECTED_GO_REGEXP_TEST_FILES,
     dialect: str = "re2",
+    max_file_bytes: int = _DEFAULT_MAX_FILE_BYTES,
 ) -> tuple[list[dict[str, Any]], dict[str, Any]]:
     """Walk ``src/regexp/**/*_test.go``; fail-closed when count mismatches."""
     root = Path(root)
@@ -261,12 +265,16 @@ def extract_go_regexp_tests_tree(
     out: list[dict[str, Any]] = []
     per_file: dict[str, int] = {}
     rels: list[str] = []
+    skipped_oversized = 0
     for fp in files:
         try:
             rel = f"{file_prefix}/{fp.relative_to(root).as_posix()}"
         except ValueError:
             rel = str(fp)
         rels.append(rel)
+        if fp.stat().st_size > max_file_bytes:
+            skipped_oversized += 1
+            continue
         src = fp.read_text(encoding="utf-8", errors="replace")
         recs = extract_go_regexp_tests(src, repo=repo, file=rel, dialect=dialect)
         per_file[rel] = len(recs)
@@ -278,5 +286,6 @@ def extract_go_regexp_tests_tree(
         "records": len(out),
         "per_file_records": per_file,
         "files": rels,
+        "skipped_oversized": skipped_oversized,
     }
     return out, stats

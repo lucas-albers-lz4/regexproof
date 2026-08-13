@@ -13,6 +13,8 @@ from regexproof.extractors.js_babel import extract_js_precise
 
 # Upstream pin: 91 ``regexp*.js`` files under ``test/mjsunit`` (recursive).
 EXPECTED_V8_MJSUNIT_FILES = 91
+# Keep in sync with regexproof.batch.manifests.MAX_FILE_BYTES (#175/#365).
+_DEFAULT_MAX_FILE_BYTES = 2_000_000
 
 
 def extract_v8_mjsunit(
@@ -31,6 +33,7 @@ def extract_v8_mjsunit_tree(
     repo: str = "v8/v8",
     file_prefix: str = "test/mjsunit",
     expected_files: int | None = EXPECTED_V8_MJSUNIT_FILES,
+    max_file_bytes: int = _DEFAULT_MAX_FILE_BYTES,
 ) -> tuple[list[dict[str, Any]], dict[str, Any]]:
     """Walk ``regexp*.js`` under mjsunit; gate on expected count."""
     root = Path(root)
@@ -40,12 +43,16 @@ def extract_v8_mjsunit_tree(
     out: list[dict[str, Any]] = []
     per_file: dict[str, int] = {}
     rels: list[str] = []
+    skipped_oversized = 0
     for fp in files:
         try:
             rel = f"{file_prefix}/{fp.relative_to(root).as_posix()}"
         except ValueError:
             rel = str(fp)
         rels.append(rel)
+        if fp.stat().st_size > max_file_bytes:
+            skipped_oversized += 1
+            continue
         src = fp.read_text(encoding="utf-8", errors="replace")
         recs = extract_v8_mjsunit(src, repo=repo, file=rel)
         per_file[rel] = len(recs)
@@ -57,5 +64,6 @@ def extract_v8_mjsunit_tree(
         "records": len(out),
         "per_file_records": per_file,
         "files": rels,
+        "skipped_oversized": skipped_oversized,
     }
     return out, stats

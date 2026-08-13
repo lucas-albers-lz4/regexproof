@@ -47,11 +47,12 @@ from regexproof.extractors.yara import extract_yara
 
 
 def _read_capped(path: Path, meta: dict[str, Any] | None = None) -> str | None:
-    """Read *path* if it is within ``MAX_FILE_BYTES``; else skip (#365 / #175)."""
-    try:
-        size = path.stat().st_size
-    except OSError:
-        return None
+    """Read *path* if it is within ``MAX_FILE_BYTES``; else skip (#365 / #175).
+
+    Oversized → ``None`` (and optional ``meta["skipped_oversized"]`` bump).
+    Missing/unreadable paths raise ``OSError`` — do not conflate with skip.
+    """
+    size = path.stat().st_size
     if size > MAX_FILE_BYTES:
         if meta is not None:
             meta["skipped_oversized"] = int(meta.get("skipped_oversized") or 0) + 1
@@ -375,6 +376,10 @@ def extract_corpus(corpus: str, meta: dict[str, Any]) -> list[dict[str, Any]]:
                 repo=meta["repo"],
                 expected_files=expected,
             )
+            if stats.get("skipped_oversized"):
+                meta["skipped_oversized"] = int(meta.get("skipped_oversized") or 0) + int(
+                    stats["skipped_oversized"]
+                )
             if expected is not None and not stats["files_ok"]:
                 raise SystemExit(
                     f"HARD ERROR: test262 expected {expected} files, "
@@ -401,6 +406,10 @@ def extract_corpus(corpus: str, meta: dict[str, Any]) -> list[dict[str, Any]]:
                 dialect=meta["dialect"],
             )
             meta["_extract_stats"] = stats
+            if stats.get("skipped_oversized"):
+                meta["skipped_oversized"] = int(meta.get("skipped_oversized") or 0) + int(
+                    stats["skipped_oversized"]
+                )
             if expected is not None and not stats["files_ok"]:
                 raise SystemExit(
                     f"HARD ERROR: perl_tre expected {expected} files, "
@@ -427,6 +436,10 @@ def extract_corpus(corpus: str, meta: dict[str, Any]) -> list[dict[str, Any]]:
                 dialect=meta["dialect"],
             )
             meta["_extract_stats"] = stats
+            if stats.get("skipped_oversized"):
+                meta["skipped_oversized"] = int(meta.get("skipped_oversized") or 0) + int(
+                    stats["skipped_oversized"]
+                )
             if expected is not None and not stats["files_ok"]:
                 raise SystemExit(
                     f"HARD ERROR: go_regexp_tests expected {expected} files, "
@@ -452,6 +465,10 @@ def extract_corpus(corpus: str, meta: dict[str, Any]) -> list[dict[str, Any]]:
                 expected_files=expected,
             )
             meta["_extract_stats"] = stats
+            if stats.get("skipped_oversized"):
+                meta["skipped_oversized"] = int(meta.get("skipped_oversized") or 0) + int(
+                    stats["skipped_oversized"]
+                )
             if expected is not None and not stats["files_ok"]:
                 raise SystemExit(
                     f"HARD ERROR: v8_mjsunit expected {expected} files, "
@@ -546,6 +563,10 @@ def extract_glob(
                 skipped_oversized += 1
                 continue
         except OSError:
+            # Glob discovery: match admission walker (#175) — skip
+            # transient/unreadable matches. Named-file paths already
+            # fail-closed above via the missing-file gate; single-file
+            # extractors use `_read_capped`, which re-raises OSError.
             continue
         # Prefer the unresolved path under ROOT so symlink materializations
         # (plugins/ → /tmp/…) keep stable repo-relative sites / regex_ids.
