@@ -209,6 +209,10 @@ def main(argv: list[str] | None = None) -> int:
     )
     if synced:
         print(json.dumps({"kind": "gate_sync", "synced": synced}))
+        # Reload ledger from disk so the final save below carries the
+        # gated:* statuses applied by sync_gate_decisions (not the stale
+        # pre-sync in-memory object).
+        ledger = load_ledger(ledger_path)
 
     try:
         result = run_search(_http_session())

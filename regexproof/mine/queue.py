@@ -38,7 +38,11 @@ def daily_mine_cap() -> int:
 
 
 def empty_queue() -> dict[str, Any]:
-    return {"schema_version": "1", "items": []}
+    return {
+        "schema_version": "1",
+        "capacity_source": QUEUE_CAPACITY_SOURCE,
+        "items": [],
+    }
 
 
 def load_queue(path: Path | str | None = None) -> dict[str, Any]:

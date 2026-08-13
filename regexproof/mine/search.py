@@ -213,6 +213,7 @@ def run_search(
     result = SearchRunResult()
     hdrs = headers or github_headers()
     seen_repos: set[str] = set()
+    rate_limited = False
     for query in queries or SEARCH_QUERIES:
         if result.queries_run >= query_budget:
             result.capped = True
@@ -230,6 +231,7 @@ def run_search(
             except RateLimitError as e:
                 result.errors.append(str(e))
                 result.capped = True
+                rate_limited = True
                 break
             except RuntimeError as e:
                 result.errors.append(str(e))
@@ -257,6 +259,7 @@ def run_search(
                 except RateLimitError as e:
                     result.errors.append(f"enrich rate-limited: {full_name}: {e}")
                     result.capped = True
+                    rate_limited = True
                     break
                 if not meta:
                     result.errors.append(f"enrich failed: {full_name}")
@@ -276,6 +279,7 @@ def run_search(
                 except RateLimitError as e:
                     result.errors.append(f"pin rate-limited: {full_name}: {e}")
                     result.capped = True
+                    rate_limited = True
                     break
                 if not pin:
                     result.errors.append(f"pin resolve failed: {full_name}")
@@ -292,4 +296,6 @@ def run_search(
                     "capped": hit_cap,
                 }
                 result.candidates.append(entry)
+        if rate_limited:
+            break
     return result

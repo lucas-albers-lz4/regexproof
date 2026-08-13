@@ -300,11 +300,14 @@ def test_rank_cli_skips_gated_status_rows(tmp_path: Path, capsys):
     ]
     save_ledger(ledger_path, ledger)
     mod = _load_rank_cli()
-    # Default: skip gated:* status rows
+    # Use --status "" to include ALL statuses — this proves skip-gated
+    # actually filters gated:* rows, not the status filter.
     rc = mod.main(
         [
             "--ledger",
             str(ledger_path),
+            "--status",
+            "",
             "--limit",
             "10",
         ]

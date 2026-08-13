@@ -62,8 +62,8 @@ runs (`cancel-in-progress: false`).
   `DAILY_MINE_CAP=10`, a rich search day will fill the ledger slice and park
   the rest in `mine-queue.json` (cap 100). Cron drains by **score-v1** (highest
   first) on later UTC days; use `daily_mine_cap=80` to flush faster. When the
-  queue is already full, new overflow is still **dropped** (no mid-queue
-  replace in v1).
+  queue is already full, a newcomer replaces the lowest-scored item **only if
+  it outscores it** (max 10 replacements per run, logged).
 
 ## Score-v1 allocator (#148)
 
@@ -90,11 +90,11 @@ Operator terms (mine / queue drain / rank / probe / gate / Smith):
 
 ```bash
 # Top N mined ledger rows for hand probe → author-gate
+# (gated:* rows are skipped by default)
 python scripts/rank-mine-candidates.py --limit 10
 
-# After a wave has gate decisions on disk, skip those URLs so rank
-# returns the next drain (not the previous batch still status=mined):
-python scripts/rank-mine-candidates.py --skip-gated --limit 10
+# Include gated rows (e.g. to review gate decisions)
+python scripts/rank-mine-candidates.py --no-skip-gated --limit 10
 ```
 
 Each stdout line is NDJSON: `url`, `score`, `score_version`, `breakdown`, plus

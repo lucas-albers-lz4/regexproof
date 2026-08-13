@@ -128,3 +128,50 @@ def test_transition_rejects_illegal_and_missing(tmp_path: Path):
             "https://github.com/example/corpus",
             to="auto-filed",
         )
+
+
+def test_sync_through_api_persists_gated_status(tmp_path: Path):
+    """sync_gate_decisions applies transitions; final persisted state shows gated:*."""
+    import importlib.util
+
+    spec = importlib.util.spec_from_file_location(
+        "mine_cli", ROOT / "scripts" / "mine-corpus-candidates.py"
+    )
+    mod = importlib.util.module_from_spec(spec)
+    assert spec.loader is not None
+    spec.loader.exec_module(mod)
+
+    ledger_path = tmp_path / "candidate-ledger.json"
+    gen = tmp_path / "generated"
+    gen.mkdir()
+
+    ledger = empty_ledger()
+    ledger["candidates"].append(
+        _sample_candidate(
+            url="https://github.com/acme/target-repo",
+            status="mined",
+        )
+    )
+    save_ledger(ledger_path, ledger)
+
+    # Write a gate decision file
+    (gen / "target-repo_gate_decision.json").write_text(
+        json.dumps(
+            {
+                "schema_version": "1",
+                "corpus": "target-repo",
+                "candidate_url": "https://github.com/acme/target-repo",
+                "decision": "no-go",
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    synced = mod.sync_gate_decisions(ledger_path, gen)
+    assert synced == 1
+
+    # The FINAL persisted state must carry gated:no-go
+    final = load_ledger(ledger_path)
+    cand = final["candidates"][0]
+    assert cand["status"] == "gated:no-go"
+    assert cand["audit"]["transitions"][-1]["to"] == "gated:no-go"
