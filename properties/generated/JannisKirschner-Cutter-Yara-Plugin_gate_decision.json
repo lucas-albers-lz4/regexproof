@@ -1,0 +1,51 @@
+{
+  "candidate_url": "https://github.com/JannisKirschner/Cutter-Yara-Plugin",
+  "conditions": [
+    {
+      "evidence": "No novel surface — classic YARA-Rules/rules layout (Packers/, Crypto/, _index.yar); 42% pattern overlap with admitted yara_rules inventory.",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Security tool (Cutter RE plugin yara rules) but vendored subset of admitted pack — superseding class.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "176 sites below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "Cutter-Yara-Plugin",
+  "corpus_pin": "d03bf57c8258055b6f6f9e389b7c29a17041d4ac",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "yara": 176
+    },
+    "flags": {
+      "W": 43,
+      "i": 81
+    },
+    "pin": "d03bf57c8258055b6f6f9e389b7c29a17041d4ac",
+    "predicted_buckets": {
+      "inline-flag": 81
+    },
+    "regex_sites": 176,
+    "regex_sites_per_file": {
+      "rules/Crypto/crypto_signatures.yar": 54,
+      "rules/Packers/JJencode.yar": 1,
+      "rules/Packers/Javascript_exploit_and_obfuscation.yar": 42,
+      "rules/Packers/packer.yar": 22,
+      "rules/Packers/packer_compiler_signatures.yar": 57
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 176 regex sites (auto-NO-GO bar 200); dialects [yara:176]; boundary=deterministic-true.",
+  "schema_version": "1"
+}
