@@ -91,8 +91,12 @@ def lower(
         return body, meta
     mirror = _wrap(body, call_kind, meta)
     # C1 (issue #426): derived wrapper metadata — must agree with what
-    # `_wrap` actually returned (bare body == whole-string language).
-    meta["fullmatch_shaped"] = mirror is body
+    # `_wrap` actually returned (bare body == whole-string language). A
+    # mixed \b alternation is never whole-string even under a fullmatch wrap
+    # (luna re-gate 7).
+    meta["fullmatch_shaped"] = (mirror is body) and not meta.get(
+        "mixed_boundary_alternation"
+    )
     meta["wrap_kind"] = wrap_kind_for_call(call_kind)
     return mirror, meta
 
@@ -207,6 +211,16 @@ def _lower_alt(
         alts.append(lowered)
     if wrapped and wrapped == len(alts):
         meta["word_boundary_wrap"] = True
+    elif wrapped:
+        # C1 fold (luna re-gate 7): MIXED alternation — a \b-wrapped
+        # (search-shaped) branch inside the union means the mirror can accept
+        # strings a whole-string fullmatch rejects (e.g. "x foo y" via the
+        # WordBounded branch) — fail closed on the shape and the exactness.
+        meta["mixed_boundary_alternation"] = True
+    if wrapped:
+        # ANY \b-wrapped branch makes the union language differ from the real
+        # fullmatch language — the mirror is never exact.
+        meta["mirror_exact"] = False
     return Union(*alts) if len(alts) > 1 else alts[0]
 
 def _lower_node(

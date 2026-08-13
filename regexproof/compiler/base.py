@@ -317,7 +317,13 @@ def compile_dialect_template(
         )
         # C1 (issue #426): template dialects lower over an ASCII-exact
         # word/digit/space closure — mirror_exact True for the ascii domain.
-        add_compiler_meta(meta, mirror_exact=(spec.declared_domain == "ascii"))
+        # (luna re-gate 7): AND with a lowering-level verdict (mixed \b
+        # alternations set False).
+        add_compiler_meta(
+            meta,
+            mirror_exact=(spec.declared_domain == "ascii")
+            and bool(meta.get("mirror_exact", True)),
+        )
         return CompileResult(
             mirror=mirror,
             unencodable_reason=None,

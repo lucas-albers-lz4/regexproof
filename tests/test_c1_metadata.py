@@ -385,3 +385,22 @@ def test_wb_suffix_branch_reflects_actual_xr_shape():
     cr2 = compile_pattern(r"\bfoo|\bbar(?:x|$)", "", "pcre", "search")
     if cr2.encodable:
         assert cr2.word_boundary_wrap is True, cr2.word_boundary_wrap
+
+
+def test_mixed_alternation_fullmatch_fails_closed():
+    # C1 fold (luna re-gate 7): \bfoo|bar under fullmatch — the WordBounded
+    # branch is search-shaped (accepts "x foo y"), so the mirror over-accepts:
+    # fullmatch_shaped must be False AND mirror_exact False (the union
+    # language differs from the real fullmatch language).
+    cr = compile_pattern(r"\bfoo|bar", "", "pcre", "fullmatch")
+    assert cr.encodable, cr.unencodable_reason
+    assert cr.fullmatch_shaped is False
+    assert cr.mirror_exact is False
+    # all-wrapped case: never whole-string, never exact
+    cr2 = compile_pattern(r"\bfoo|\bbar", "", "pcre", "fullmatch")
+    assert cr2.fullmatch_shaped is False
+    assert cr2.mirror_exact is False
+    # plain alternation stays exact + whole-string
+    cr3 = compile_pattern(r"foo|bar", "", "pcre", "fullmatch")
+    assert cr3.fullmatch_shaped is True
+    assert cr3.mirror_exact is True

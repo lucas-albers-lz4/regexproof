@@ -113,7 +113,9 @@ def compile_ecma(
             allow_ascii_word_boundary=True,
             space_codes=space_codes_from_chars(_ECMA_SPACE_CHARS),
         )
-        add_compiler_meta(meta, mirror_exact=True)
+        # C1 (luna re-gate 7): respect a lowering-level mirror_exact verdict
+        # (mixed \b alternations set False) — the entry defaults True.
+        add_compiler_meta(meta, mirror_exact=bool(meta.get("mirror_exact", True)))
         return CompileResult(
             mirror=mirror,
             unencodable_reason=None,
