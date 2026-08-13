@@ -92,3 +92,30 @@ def test_schema_kinds_are_additive_and_version_stays_one():
         },
         schema,
     )
+
+
+def test_missing_guard_fails_the_coverage_floor():
+    """P4 (luna gate 1): a real synthesized property without its matching
+    guard must fail the 100% coverage floor — the primary red path of the
+    gate."""
+    errors = check_guard_coverage([_property()])
+    assert any("missing mutation guard" in e for e in errors), errors
+    try:
+        enforce_evidence_gates([_property()])
+    except SystemExit as exc:
+        assert "missing mutation guard" in str(exc)
+    else:
+        raise AssertionError("enforce_evidence_gates did not fail without a guard")
+
+
+def test_synthesized_planned_row_is_excluded_by_status():
+    """P4 (luna gate 1): a row marked synthesized=True but result=planned is
+    excluded by the result!=planned branch — the explicit status exclusion,
+    not only the synthesized-marker exclusion."""
+    # Only a planned row: no coverage claim -> no errors.
+    planned = _property(result="planned", synthesized=True)
+    assert check_guard_coverage([planned]) == []
+    # A real property + a planned guard for the same key: the planned guard
+    # must NOT count, so the floor still fails.
+    errors = check_guard_coverage([_property(), _guard(result="planned", synthesized=True)])
+    assert any("missing mutation guard" in e for e in errors), errors
