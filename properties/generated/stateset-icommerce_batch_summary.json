@@ -1,0 +1,18 @@
+{
+  "address_space_cap": true,
+  "complete_run": true,
+  "corpus": "stateset-icommerce",
+  "corpus_type": "rule_corpus",
+  "encodable": 288,
+  "engine": {
+    "python": "3.13.5"
+  },
+  "extracted": 409,
+  "findings": 104,
+  "inventory_questions": 4,
+  "join_regex_ids": 104,
+  "redos_findings": 0,
+  "redos_incomplete": false,
+  "schema_version": "1",
+  "triage": 121
+}

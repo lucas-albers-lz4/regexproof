@@ -1,0 +1,15 @@
+{
+  "schema_version": "1",
+  "corpus": "exchange-api",
+  "corpus_pin": "dfaabdccf3eda5e0bee4d7b95e90c3f52001b70e",
+  "candidate_url": "https://github.com/open-horizon/exchange-api",
+  "smith_decision": "no-go",
+  "supersedes": "go admit (#308)",
+  "reason": "SUPERSEDING NO-GO (typenix/tarcoin precedent): 1,305 of 1,309 probe sites are VENDORED swagger-ui bundles (src/main/resources/swagger/swagger-ui-bundle.js 555, es-bundle 555, es-bundle-core 78, swagger-ui.js 74, standalone-preset 43). Real first-party surface is 4 shell sites (src/test/bash/scale). The scale-3 GO was met on vendored third-party bundle numbers - the same class as every vendored JS bundle (already covered). No novel surface.",
+  "regex_sites": 1309,
+  "sites_by_bucket": {
+    "vendored swagger-ui bundles (5 files)": 1305,
+    "first-party shell (4 files)": 4
+  },
+  "additional_surface_outside_probe_scope": {}
+}

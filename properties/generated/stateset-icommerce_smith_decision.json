@@ -1,0 +1,14 @@
+{
+  "schema_version": "1",
+  "corpus": "stateset-icommerce",
+  "corpus_pin": "06a61c4fa83b902f9f436daa29289323011d99cd",
+  "candidate_url": "https://github.com/stateset/stateset-icommerce",
+  "smith_decision": "go",
+  "supersedes": null,
+  "reason": "Commerce platform (ecma top-60 first-party allowlist): 288/409 = 0.7042 encodable (complete_run, parse-error=0, budget clean). 104 findings + 121 triage. First-party surface is cli/src + admin (suggestions.js 85 sites). Non-security - public-first. GO admit confirmed.",
+  "regex_sites": 409,
+  "sites_by_bucket": {
+    "ecma allowlist (60 files, 409 sites measured; 288 encodable)": 409
+  },
+  "additional_surface_outside_probe_scope": {"first-party beyond top-60": 178}
+}

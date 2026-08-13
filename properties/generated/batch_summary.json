@@ -116,23 +116,23 @@
     "wall_s": 21.527
   },
   "corpora": {
-    "kubilitics": {
+    "stateset-icommerce": {
       "address_space_cap": true,
       "complete_run": true,
-      "corpus": "kubilitics",
+      "corpus": "stateset-icommerce",
       "corpus_type": "rule_corpus",
-      "encodable": 505,
+      "encodable": 288,
       "engine": {
         "python": "3.13.5"
       },
-      "extracted": 567,
-      "findings": 28,
+      "extracted": 409,
+      "findings": 104,
       "inventory_questions": 4,
-      "join_regex_ids": 28,
+      "join_regex_ids": 104,
       "redos_findings": 0,
       "redos_incomplete": false,
       "schema_version": "1",
-      "triage": 62
+      "triage": 121
     }
   },
   "pair_counts": {
@@ -143,7 +143,7 @@
       "note": "fraction gate go; CRS rule-derived adapter is Phase-2 rule_diff",
       "scope": "full_corpus"
     },
-    "kubilitics": {
+    "stateset-icommerce": {
       "admitted": 0,
       "dropped": 0,
       "note": "no independent-spec catalog"
