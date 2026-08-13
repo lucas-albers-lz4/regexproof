@@ -97,9 +97,10 @@ def remeasure(
         corpus_slug=corpus,
     )
     wall = time.perf_counter() - t0
+    rows = [pair[0] for pair in compiled]
 
     frozen_enc = {r.get("regex_id"): bool(r.get("encodable")) for r in frozen}
-    now_enc = {c.get("regex_id"): bool(c.get("encodable")) for c in compiled}
+    now_enc = {c.get("regex_id"): bool(c.get("encodable")) for c in rows}
     ids = [r.get("regex_id") for r in frozen if r.get("regex_id")]
     flips = [
         rid
@@ -115,7 +116,7 @@ def remeasure(
     baseline_fraction = round(baseline_encodable / baseline_n, 4)
 
     def _samples(rids: list[str]) -> list[dict]:
-        by_id = {c.get("regex_id"): c for c in compiled}
+        by_id = {c.get("regex_id"): c for c in rows}
         out = []
         for rid in rids[:FLIP_SAMPLE_CAP]:
             c = by_id.get(rid, {})
@@ -130,9 +131,9 @@ def remeasure(
             )
         return out
 
-    reasons = Counter((c.get("compile_reason") or "ok") for c in compiled)
-    enc = sum(1 for c in compiled if c.get("encodable"))
-    n = len(compiled) or 1
+    reasons = Counter((c.get("compile_reason") or "ok") for c in rows)
+    enc = sum(1 for c in rows if c.get("encodable"))
+    n = len(rows) or 1
     fraction = enc / n
     decision = "go" if fraction >= 0.30 else "no-go"
     unclassified = reasons.get("parse-error", 0)
@@ -154,7 +155,7 @@ def remeasure(
         "commit": meta.get("commit"),
         "compiler_fingerprint": _compiler_fingerprint(),
         "dialect": meta.get("dialect"),
-        "sample_size": len(compiled),
+        "sample_size": len(rows),
         "encodable": enc,
         "fraction": round(fraction, 4),
         "go_no_go_threshold": 0.3,
@@ -211,7 +212,7 @@ def remeasure(
         else f" (frozen {baseline_fraction})"
     )
     print(
-        f"{corpus}: {enc}/{len(compiled)} = {fraction:.4f}{prior_frac} "
+        f"{corpus}: {enc}/{len(rows)} = {fraction:.4f}{prior_frac} "
         f"decision={decision} {flips_summary} parse-error={unclassified} "
         f"wall={wall:.1f}s{' [dry-run]' if dry_run else ''}"
     )

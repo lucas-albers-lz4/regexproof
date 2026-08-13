@@ -109,7 +109,9 @@ def main(argv: list[str] | None = None) -> int:
     meta["path"] = args.rules
     records = extract_corpus("coreruleset", meta)
     compiled = compile_records(records, lift_inline=True, corpus_slug="coreruleset")
-    rx_only = [c for c in compiled if not c.get("selector")]
+    rows = [pair[0] for pair in compiled]
+    compiled.clear()  # C1 fold (luna re-gate 5): release the Z3 ASTs
+    rx_only = [c for c in rows if not c.get("selector")]
 
     reasons = Counter((c.get("compile_reason") or "ok") for c in rx_only)
     triage_rows = []
@@ -156,7 +158,7 @@ def main(argv: list[str] | None = None) -> int:
 
     redos_rows = []
     if args.with_redos and not args.skip_redos:
-        for rec in compiled:
+        for rec in rows:
             if not rec.get("encodable"):
                 continue
             for f in analyze_record(rec, triage=False):

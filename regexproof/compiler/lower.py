@@ -11,6 +11,7 @@ from regexproof.compiler.base import (
     any_char,
     python_trailing_dollar,
     repeat_z3,
+    wrap_kind_for_call,
 )
 from regexproof.compiler import simple_parse as sp
 
@@ -83,8 +84,21 @@ def lower(
         body = python_trailing_dollar(body)
     if meta.get("word_boundary_wrap"):
         # WordBounded lowering already applied search-shaped edge constraints.
+        # The returned body IS the mirror but it is NOT a whole-string
+        # language — derived flags must reflect the WordBounded shape.
+        meta["fullmatch_shaped"] = False
+        meta["wrap_kind"] = "search"
         return body, meta
-    return _wrap(body, call_kind, meta), meta
+    mirror = _wrap(body, call_kind, meta)
+    # C1 (issue #426): derived wrapper metadata — must agree with what
+    # `_wrap` actually returned (bare body == whole-string language). A
+    # mixed \b alternation is never whole-string even under a fullmatch wrap
+    # (luna re-gate 7).
+    meta["fullmatch_shaped"] = (mirror is body) and not meta.get(
+        "mixed_boundary_alternation"
+    )
+    meta["wrap_kind"] = wrap_kind_for_call(call_kind)
+    return mirror, meta
 
 
 def _wrap(body, call_kind, meta):
@@ -161,6 +175,7 @@ def _lower_alt(
     # Per-alternative anchors must not hoist onto the whole Union
     # (false-UNSAT under search: ^a|b vs ^(a|b)). Reject like py_re.
     alts = []
+    wrapped = 0
     for it in node.items:
         alt_meta = {
             "leading_caret": False,
@@ -184,9 +199,35 @@ def _lower_alt(
         )
         if alt_meta.get("has_internal_anchor"):
             meta["has_internal_anchor"] = True
+        # C1 fold (luna re-gate 8): a NESTED mixed alternation (foo|(?:\bbar|baz))
+        # marks the branch-local meta (shared down through the group) — read
+        # its verdicts upward. Only word_boundary_wrap was propagated before.
+        if alt_meta.get("mixed_boundary_alternation"):
+            meta["mixed_boundary_alternation"] = True
+        if alt_meta.get("mirror_exact") is False:
+            meta["mirror_exact"] = False
+        # C1 fold (luna re-gate 4): propagate word_boundary_wrap ONLY when
+        # ALL branches are \b-wrapped. A mixed alternation (\bfoo|bar) must
+        # keep the normal outer wrap — the plain branch needs the search
+        # padding; the all-wrapped case skips it because each WordBounded
+        # branch is already search-shaped.
+        if alt_meta.get("word_boundary_wrap"):
+            wrapped += 1
         if alt_meta.get("leading_caret") or alt_meta.get("trailing_dollar"):
             raise Unencodable("per-alternative-anchor")
         alts.append(lowered)
+    if wrapped and wrapped == len(alts):
+        meta["word_boundary_wrap"] = True
+    elif wrapped:
+        # C1 fold (luna re-gate 7): MIXED alternation — a \b-wrapped
+        # (search-shaped) branch inside the union means the mirror can accept
+        # strings a whole-string fullmatch rejects (e.g. "x foo y" via the
+        # WordBounded branch) — fail closed on the shape and the exactness.
+        meta["mixed_boundary_alternation"] = True
+    if wrapped:
+        # ANY \b-wrapped branch makes the union language differ from the real
+        # fullmatch language — the mirror is never exact.
+        meta["mirror_exact"] = False
     return Union(*alts) if len(alts) > 1 else alts[0]
 
 def _lower_node(

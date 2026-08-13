@@ -26,7 +26,15 @@ def compile_records(
     corpus_slug: str,
     budget: dict[str, Any] | None = None,
     wall_t0: float | None = None,
-) -> list[dict[str, Any]]:
+) -> list[tuple[dict[str, Any], Any, dict[str, Any] | None]]:
+    """Public compile_records API — pattern → ``(row, mirror, meta)`` (#193, C1).
+
+    NDJSON rows stay lean (no Z3 AST in the row dicts); the mirror and its
+    lowering metadata travel in-process as a ``(row, mirror, meta)`` triple so
+    the P3 synthesis stage can consume them. A row whose compile failed or was
+    rejected carries ``(row, None, None)`` — mirror is None and metadata is
+    absent, so synthesis skips it fail-closed (never assumed eligible).
+    """
     budget = budget or {}
     check_budget_patterns(records, budget, corpus_slug)
     max_wall = budget.get("max_wall_s")
@@ -39,7 +47,7 @@ def compile_records(
         from regexproof.batch import budgets as _budgets
 
         _budgets.LAST_ADDRESS_SPACE_CAP_APPLIED = None
-    out = []
+    out: list[tuple[dict[str, Any], Any, dict[str, Any] | None]] = []
     for rec in records:
         pattern = rec["pattern"]
         flags = rec.get("flags") or ""
@@ -47,26 +55,34 @@ def compile_records(
             pattern, flags = normalize_inline_flags(pattern, flags)
         if rec.get("unencodable_reason"):
             out.append(
-                {
-                    **rec,
-                    "encodable": False,
-                    "compile_reason": rec["unencodable_reason"],
-                    "corpus": corpus_slug,
-                    "corpus_slug": corpus_slug,
-                }
+                (
+                    {
+                        **rec,
+                        "encodable": False,
+                        "compile_reason": rec["unencodable_reason"],
+                        "corpus": corpus_slug,
+                        "corpus_slug": corpus_slug,
+                    },
+                    None,
+                    None,
+                )
             )
             continue
         # ModSecurity !@rx / selectors: never silent-positive (fix-wave #72).
         if rec.get("negated") and should_reject_negated(rec.get("dialect") or ""):
             out.append(
-                {
-                    **rec,
-                    "encodable": False,
-                    "compile_reason": NEGATED_UNSUPPORTED_REASON,
-                    "unencodable_reason": NEGATED_UNSUPPORTED_REASON,
-                    "corpus": corpus_slug,
-                    "corpus_slug": corpus_slug,
-                }
+                (
+                    {
+                        **rec,
+                        "encodable": False,
+                        "compile_reason": NEGATED_UNSUPPORTED_REASON,
+                        "unencodable_reason": NEGATED_UNSUPPORTED_REASON,
+                        "corpus": corpus_slug,
+                        "corpus_slug": corpus_slug,
+                    },
+                    None,
+                    None,
+                )
             )
             continue
         try:
@@ -97,7 +113,7 @@ def compile_records(
         # Surface compile timeouts for triage kind=timeout (fix-wave #71).
         if cr.unencodable_reason == "timeout":
             row["result"] = "timeout"
-        out.append(row)
+        out.append((row, cr.mirror, cr.meta))
 
         if max_wall and (time.monotonic() - t0) > max_wall:
             raise BudgetBreached(corpus_slug, "max_wall_s", max_wall, time.monotonic() - t0)

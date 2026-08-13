@@ -21,7 +21,13 @@ from typing import Any
 
 from z3 import Concat, Re, Star, Union
 
-from regexproof.compiler.base import CompileResult, Unencodable, any_char
+from regexproof.compiler.base import (
+    CompileResult,
+    Unencodable,
+    any_char,
+    composite_meta,
+    wrap_kind_for_call,
+)
 from regexproof.compiler.trailing_alt_dollar import (
     _unescaped_at,
     _x_has_top_level_anchor,
@@ -96,6 +102,21 @@ def try_compile_caret_in_x(
                 mirror = Union(r_body, empty)
             else:
                 return None
+            # C1 fold (luna re-gate): a \b-containing R subcompile stays
+            # word-boundary-wrapped — propagate, never hardcode False.
+            # A boundary-wrapped child makes the composite search-shaped
+            # (matches lower.py's convention), so wrap_kind normalizes.
+            wb = bool(r_cr.word_boundary_wrap) if split["r_alt"] else False
+            meta = composite_meta(
+                leading_caret=True,
+                # C1 fold (luna re-gate 3): trailing_dollar is source-derived
+                # (lower.py sets it from the $ node) — the fast-path shape
+                # `^(?:X|$)` has the trailing $ alternative by construction.
+                trailing_dollar=True,
+                word_boundary_wrap=wb,
+                wrap_kind="search" if wb else wrap_kind_for_call(call_kind),
+                mirror_exact=bool(r_cr.mirror_exact) if split["r_alt"] else True,
+            )
             return CompileResult(
                 mirror=mirror,
                 unencodable_reason=None,
@@ -104,16 +125,19 @@ def try_compile_caret_in_x(
                 flags=flags,
                 pattern=pattern,
                 declared_domain=domain,
+                meta=meta,
             )
 
         x_cr = compile_bare(x_inner, flags, dialect, "fullmatch")
         if not x_cr.encodable:
             return _fail(x_cr.unencodable_reason or "per-alternative-anchor")
+        sub_metas = [x_cr.meta or {}]
         if split["r_alt"]:
             r_cr = compile_bare(split["r_alt"], flags, dialect, "fullmatch")
             if not r_cr.encodable:
                 return _fail(r_cr.unencodable_reason or "per-alternative-anchor")
             xr_body = Concat(x_cr.mirror, r_cr.mirror)
+            sub_metas.append(r_cr.meta or {})
         else:
             xr_body = x_cr.mirror
 
@@ -129,6 +153,20 @@ def try_compile_caret_in_x(
         else:
             return None
 
+        # C1 (issue #426): synthesize the metadata contract this fast path
+        # bypasses ``lower()``'s ``_meta`` dict — leading ^ is structural, the
+        # union is never the bare body, and any ``\b`` sub-mirror stays
+        # word-boundary-wrapped (no second wrap applied).
+        wb = any(m.get("word_boundary_wrap") for m in sub_metas)
+        meta = composite_meta(
+            leading_caret=True,
+            # C1 fold (luna re-gate 3): source-derived — the `^(?:X|$)` shape
+            # carries the trailing $ alternative.
+            trailing_dollar=True,
+            word_boundary_wrap=wb,
+            wrap_kind="search" if wb else wrap_kind_for_call(call_kind),
+            mirror_exact=all(bool(m.get("mirror_exact")) for m in sub_metas),
+        )
         return CompileResult(
             mirror=mirror,
             unencodable_reason=None,
@@ -137,6 +175,7 @@ def try_compile_caret_in_x(
             flags=flags,
             pattern=pattern,
             declared_domain=domain,
+            meta=meta,
         )
     except Unencodable as exc:
         return _fail(exc.reason)

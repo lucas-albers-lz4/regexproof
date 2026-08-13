@@ -225,15 +225,19 @@ def measure(corpus: str, *, assert_determinism: bool = False) -> dict:
             corpus_slug=corpus,
             budget=budget,
         )
-        a = [c.get("regex_id") for c in compiled]
-        b = [c.get("regex_id") for c in again]
+        a = [c[0].get("regex_id") for c in compiled]
+        b = [c[0].get("regex_id") for c in again]
         if a != b:
             raise SystemExit("FAIL: non-deterministic extraction (regex_id order)")
+        # C1 fold (luna re-gate 4): release the Z3 ASTs of both runs.
+        again.clear()
 
     wall = time.perf_counter() - t0
-    reasons = Counter((c.get("compile_reason") or "ok") for c in compiled)
-    enc = sum(1 for c in compiled if c.get("encodable"))
-    n = len(compiled) or 1
+    rows = [pair[0] for pair in compiled]
+    compiled.clear()  # C1 fold: discard mirrors, keep the lean rows
+    reasons = Counter((c.get("compile_reason") or "ok") for c in rows)
+    enc = sum(1 for c in rows if c.get("encodable"))
+    n = len(rows) or 1
     fraction = enc / n
     decision = "go" if fraction >= 0.30 else "no-go"
     unclassified = reasons.get("parse-error", 0)
@@ -241,7 +245,7 @@ def measure(corpus: str, *, assert_determinism: bool = False) -> dict:
     breaches = _check_budgets(
         budget,
         corpus=corpus,
-        n_patterns=len(compiled),
+        n_patterns=len(rows),
         wall_s=wall,
         path=path,
     )
@@ -251,7 +255,7 @@ def measure(corpus: str, *, assert_determinism: bool = False) -> dict:
     inv_path = OUT / f"{corpus}-inventory.ndjson"
     OUT.mkdir(parents=True, exist_ok=True)
     with inv_path.open("w", encoding="utf-8") as fh:
-        for c in compiled:
+        for c in rows:
             fh.write(
                 json.dumps(
                     {
@@ -284,7 +288,7 @@ def measure(corpus: str, *, assert_determinism: bool = False) -> dict:
         "commit": meta.get("commit"),
         "compiler_fingerprint": compiler_commit,
         "dialect": meta.get("dialect"),
-        "sample_size": len(compiled),
+        "sample_size": len(rows),
         "encodable": enc,
         "fraction": round(fraction, 4),
         "go_no_go_threshold": 0.3,
@@ -322,7 +326,7 @@ def measure(corpus: str, *, assert_determinism: bool = False) -> dict:
     out_path = OUT / f"{corpus}_encodable_fraction.json"
     out_path.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     print(
-        f"{corpus}: {enc}/{len(compiled)} = {fraction:.4f} decision={decision} "
+        f"{corpus}: {enc}/{len(rows)} = {fraction:.4f} decision={decision} "
         f"parse-error={unclassified} complete_run={complete_run} → {out_path.relative_to(ROOT)}"
     )
     if breaches:

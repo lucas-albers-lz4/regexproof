@@ -63,6 +63,25 @@ _apply_address_space_cap = apply_address_space_cap
 _LAST_ADDRESS_SPACE_CAP_APPLIED = None  # compat; prefer _budgets.LAST_ADDRESS_SPACE_CAP_APPLIED
 
 
+def _discard_streamed_mirrors(
+    compiled: list[tuple[dict[str, Any], Any, dict[str, Any] | None]],
+) -> None:
+    """C1 interim mirror-discard (issue #426 / wave C1).
+
+    ``compile_records`` now returns/streams ``(row, mirror, meta)`` triples
+    in-process for the P3 synthesis stage. Until synthesis lands, discard the
+    mirror explicitly so the interim release keeps pre-P2 output exactly — the
+    discard path is part of P2, never a silent pass-through that could later
+    make synthesis no-op without anyone noticing.
+    """
+    for _row, _mirror, _meta in compiled:
+        _ = _mirror
+    # C1 fold (luna re-gate 3): the discard must actually release the Z3 ASTs
+    # (and the triple list) — callers extract rows first, then discard, so
+    # clearing here is safe and reclaims RSS.
+    compiled.clear()
+
+
 def resolve_corpus_path(corpus: str, meta: dict[str, Any]) -> dict[str, Any]:
     """Apply sample fallback / measure_scope path policy before extract (#196)."""
     meta = dict(meta)
@@ -134,8 +153,13 @@ def resolve_corpus_path(corpus: str, meta: dict[str, Any]) -> dict[str, Any]:
 def extract_and_compile_corpus(
     corpus: str,
     meta: dict[str, Any],
-) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
-    """Extract + compile with budget gate (#196). Gates before writes."""
+) -> tuple[list[dict[str, Any]], list[tuple[dict[str, Any], Any, dict[str, Any] | None]]]:
+    """Extract + compile with budget gate (#196). Gates before writes.
+
+    ``compiled`` is the ``(row, mirror, meta)`` stream from ``compile_records``
+    (C1) — rows stay lean; the mirror/metadata travel in-process for the P3
+    synthesis stage.
+    """
     _validate_expected_roots(corpus, meta)
     budget = meta.get("budget") or {}
     wall_t0 = time.monotonic()
@@ -203,7 +227,12 @@ def run_corpus(
     inventory = load_inventory(meta["corpus_type"])
     records, compiled = extract_and_compile_corpus(corpus, meta)
 
-    triage = triage_records_from_compiled(compiled)
+    # C1 (issue #426): rows stay lean (no AST); the streamed mirrors/metadata
+    # are discarded explicitly in the interim until P3 synthesis lands.
+    rows = [pair[0] for pair in compiled]
+    _discard_streamed_mirrors(compiled)
+
+    triage = triage_records_from_compiled(rows)
     write_triage_ndjson(out_dir.parent / "triage" / f"{corpus}.ndjson", triage)
 
     findings: list[dict[str, Any]] = []
@@ -225,8 +254,8 @@ def run_corpus(
                 }
             )
 
-    findings.extend(detect_usage_mismatches(compiled))
-    findings.extend(detect_intent_mismatches(compiled))
+    findings.extend(detect_usage_mismatches(rows))
+    findings.extend(detect_intent_mismatches(rows))
 
     redos_findings: list[dict[str, Any]] = []
     redos_incomplete = False
@@ -237,7 +266,7 @@ def run_corpus(
         if budget_s is None:
             budget_s = (meta.get("budget") or {}).get("redos_wall_s", 120)
         t0 = time.monotonic()
-        for rec in compiled:
+        for rec in rows:
             if not rec.get("encodable"):
                 continue
             if budget_s is not None and (time.monotonic() - t0) >= float(budget_s):
@@ -316,7 +345,7 @@ def run_corpus(
         "corpus": corpus,
         "corpus_type": meta["corpus_type"],
         "extracted": len(records),
-        "encodable": sum(1 for c in compiled if c.get("encodable")),
+        "encodable": sum(1 for c in rows if c.get("encodable")),
         "triage": len(triage),
         "findings": len(findings),
         "inventory_questions": len(inventory["questions"]),
@@ -426,8 +455,10 @@ def measure_coreruleset_full(out_dir: Path) -> dict[str, Any] | None:
         records, lift_inline=True, corpus_slug="coreruleset",
         budget=CORPUS_MANIFESTS.get("coreruleset", {}).get("budget"),
     )
-    rx_only = [c for c in compiled if not c.get("selector")]
-    selectors = [c for c in compiled if c.get("selector")]
+    rows = [pair[0] for pair in compiled]
+    _discard_streamed_mirrors(compiled)
+    rx_only = [c for c in rows if not c.get("selector")]
+    selectors = [c for c in rows if c.get("selector")]
     rx_enc = [c for c in rx_only if c.get("encodable")]
     n = len(rx_only) or 1
     fraction = len(rx_enc) / n
@@ -456,7 +487,7 @@ def measure_coreruleset_full(out_dir: Path) -> dict[str, Any] | None:
                 },
                 sort_keys=True,
             )
-            for c in compiled
+            for c in rows
         ),
     )
 
@@ -481,7 +512,7 @@ def measure_coreruleset_full(out_dir: Path) -> dict[str, Any] | None:
             "encodable": sum(1 for c in selectors if c.get("encodable")),
         },
         "operators": dict(op_counts),
-        "extracted_total": len(compiled),
+        "extracted_total": len(rows),
         "inventory_path": str(inv_path),
         "engine_versions": {
             "python": _platform.python_version(),
@@ -500,7 +531,7 @@ def measure_coreruleset_full(out_dir: Path) -> dict[str, Any] | None:
                 "flags": c.get("flags") or "",
                 "selector": bool(c.get("selector")),
             }
-            for c in compiled
+            for c in rows
         ],
     }
     atomic_write_text(
