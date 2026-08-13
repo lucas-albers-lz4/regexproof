@@ -17,6 +17,9 @@ timeout = 20
 
 cache = true
 max_cache_age = "1d"
+# Do not persist failures (404 / HTTP/2 / 5xx) across runs — only successful
+# probes are reusable (#377 Bugbot: stale failure entries blocking merges).
+cache_exclude_status = "400.."
 
 exclude = [
     '^https://dl\.acm\.org/.*',
