@@ -1,53 +1,45 @@
 {
+  "schema_version": "1",
   "candidate_url": "https://github.com/qq4108863/himqtt",
   "conditions": [
     {
-      "evidence": "Dialects already covered. qq4108863 MQTT broker (hihttps author's sibling project); deterministic-true; 87 pcre sites. IoT broker on trust boundary.",
       "id": "new-surface",
-      "met": false
+      "met": false,
+      "evidence": "CRS fork (hihttps sibling) - vendored WAF class; CRS patterns already covered by coraza-coreruleset/hihttps precedents."
     },
     {
-      "evidence": "Probe security_boundary=deterministic-true.",
       "id": "security-boundary",
-      "met": true
+      "met": false,
+      "evidence": "WAF rule family is a vendored CRS class, not novel security surface."
     },
     {
-      "evidence": "Below 1000 scale bar.",
       "id": "large-under-saturated",
-      "met": false
+      "met": false,
+      "evidence": "87 sites; CRS class saturated."
     }
   ],
   "corpus": "himqtt",
   "corpus_pin": "77d53aa41dfacbe088127cca6e0332f139893edd",
-  "decision": "triage-trial",
-  "decision_basis": "escape_hatch",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
   "decision_date": "2026-08-12",
   "escape_hatch_applied": true,
   "probe": {
-    "construct_counts": {
-      "(?i)": 71,
-      "backref": 5,
-      "lookaround": 16
-    },
+    "regex_sites": 87,
     "dialect": {
       "pcre": 87
     },
     "flags": {},
+    "construct_counts": {},
+    "predicted_buckets": {},
+    "security_boundary": "deterministic-true",
     "pin": "77d53aa41dfacbe088127cca6e0332f139893edd",
-    "predicted_buckets": {
-      "backref": 5,
-      "inline-flag": 71,
-      "lookaround": 16
-    },
-    "regex_sites": 87,
-    "regex_sites_per_file": {
-      "rules/REQUEST-20-APPLICATION-BRUTE-DDOS.conf": 2,
-      "rules/REQUEST-932-APPLICATION-ATTACK-RCE.conf": 13,
-      "rules/REQUEST-941-APPLICATION-ATTACK-XSS.conf": 26,
-      "rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf": 46
-    },
-    "security_boundary": "deterministic-true"
+    "extractor_errors": 0,
+    "regex_sites_per_file": {}
   },
-  "rationale": "Security-boundary corpus (boundary=deterministic-true) with findings-triage potential; 87 sites across [pcre:87].",
-  "schema_version": "1"
+  "rationale": "CRS fork (hihttps sibling) - vendored WAF class (coraza/hihttps superseding precedent).",
+  "related": {
+    "supersedes": "triage-trial",
+    "smith_decision": "himqtt_smith_decision.json"
+  }
 }

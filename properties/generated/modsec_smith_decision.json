@@ -1,0 +1,14 @@
+{
+  "schema_version": "1",
+  "corpus": "modsec",
+  "corpus_pin": "500c111dbfffec4ee11c629b102f4ac04d09ac3a",
+  "candidate_url": "https://github.com/SEC642/modsec",
+  "smith_decision": "no-go",
+  "supersedes": "triage-trial (#322)",
+  "reason": "SUPERSEDING NO-GO (coraza/hihttps precedent): full CRS fork - modsecurity_crs_* file naming (honeypot-sensor/slr_rules/regression-tests dirs, 5,982 SecRule lines). The SEC642 course fork of OWASP CRS. Vendored WAF rule family already covered (coraza-coreruleset + hihttps superseded). 318 pcre sites are CRS-derived, not novel.",
+  "regex_sites": 318,
+  "sites_by_bucket": {
+    "CRS fork pcre rules (5,982 SecRule lines, 318 sites)": 318
+  },
+  "additional_surface_outside_probe_scope": {}
+}

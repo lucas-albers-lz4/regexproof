@@ -1,51 +1,45 @@
 {
+  "schema_version": "1",
   "candidate_url": "https://github.com/SEC642/modsec",
   "conditions": [
     {
-      "evidence": "Dialects already covered. SEC642 modsec bypass practice app; 318 pcre sites; security tool (deterministic-true).",
       "id": "new-surface",
-      "met": false
+      "met": false,
+      "evidence": "CRS fork - vendored WAF class; CRS patterns already covered by coraza-coreruleset/hihttps precedents."
     },
     {
-      "evidence": "Probe security_boundary=deterministic-true.",
       "id": "security-boundary",
-      "met": true
+      "met": false,
+      "evidence": "WAF rule family is a vendored CRS class, not novel security surface."
     },
     {
-      "evidence": "Below 1000 scale bar.",
       "id": "large-under-saturated",
-      "met": false
+      "met": false,
+      "evidence": "318 sites; CRS class saturated."
     }
   ],
   "corpus": "modsec",
   "corpus_pin": "500c111dbfffec4ee11c629b102f4ac04d09ac3a",
-  "decision": "triage-trial",
-  "decision_basis": "escape_hatch",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
   "decision_date": "2026-08-12",
   "escape_hatch_applied": true,
   "probe": {
-    "construct_counts": {
-      "(?i)": 2,
-      "lookaround": 3
-    },
+    "regex_sites": 318,
     "dialect": {
       "pcre": 318
     },
     "flags": {},
+    "construct_counts": {},
+    "predicted_buckets": {},
+    "security_boundary": "deterministic-true",
     "pin": "500c111dbfffec4ee11c629b102f4ac04d09ac3a",
-    "predicted_buckets": {
-      "inline-flag": 2,
-      "lookaround": 3
-    },
-    "regex_sites": 318,
-    "regex_sites_per_file": {
-      "rules/base_rules/modsecurity_crs_40_generic_attacks.conf": 30,
-      "rules/base_rules/modsecurity_crs_41_sql_injection_attacks.conf": 74,
-      "rules/base_rules/modsecurity_crs_41_xss_attacks.conf": 208,
-      "rules/optional_rules/modsecurity_crs_55_application_defects.conf": 6
-    },
-    "security_boundary": "deterministic-true"
+    "extractor_errors": 0,
+    "regex_sites_per_file": {}
   },
-  "rationale": "Security-boundary corpus (boundary=deterministic-true) with findings-triage potential; 318 sites across [pcre:318].",
-  "schema_version": "1"
+  "rationale": "CRS fork - vendored WAF class (coraza/hihttps superseding precedent).",
+  "related": {
+    "supersedes": "triage-trial",
+    "smith_decision": "modsec_smith_decision.json"
+  }
 }

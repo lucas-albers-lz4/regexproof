@@ -1,0 +1,14 @@
+{
+  "schema_version": "1",
+  "corpus": "himqtt",
+  "corpus_pin": "77d53aa41dfacbe088127cca6e0332f139893edd",
+  "candidate_url": "https://github.com/qq4108863/himqtt",
+  "smith_decision": "no-go",
+  "supersedes": "triage-trial (#297)",
+  "reason": "SUPERSEDING NO-GO (coraza/hihttps precedent): CRS fork by the SAME author as hihttps (qq4108863) - REQUEST-942-SQLI/941-XSS/932-RCE conf files (4 SecRule-bearing files, 121 SecRule lines). Direct sibling of the already-superseded hihttps (#262). 87 pcre sites are CRS-derived WAF patterns, not novel surface.",
+  "regex_sites": 87,
+  "sites_by_bucket": {
+    "CRS fork pcre rules (4 conf files, 87 sites)": 87
+  },
+  "additional_surface_outside_probe_scope": {}
+}
