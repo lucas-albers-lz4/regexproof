@@ -331,8 +331,10 @@ def test_audit_requeue_archives_gate_and_new_decision_applies(tmp_path: Path):
     # Decisive spy: does the sync's loop even reach set_status?
     calls: list[tuple] = []
     fc_calls: list[str] = []
+    led_views: list[dict] = []
     orig_ss = mod.set_status
     orig_fc = mod.find_candidate
+    orig_ll = mod.load_ledger
 
     def _spy(*a, **k):
         calls.append((a, k))
@@ -342,13 +344,20 @@ def test_audit_requeue_archives_gate_and_new_decision_applies(tmp_path: Path):
         fc_calls.append(str(url))
         return orig_fc(led, url)
 
+    def _ll_spy(path):
+        led = orig_ll(path)
+        led_views.append(led)
+        return led
+
     mod.set_status = _spy
     mod.find_candidate = _fc_spy
+    mod.load_ledger = _ll_spy
     try:
         result = mod.sync_gate_decisions(ledger_path, gen)
     finally:
         mod.set_status = orig_ss
         mod.find_candidate = orig_fc
+        mod.load_ledger = orig_ll
     assert fc_calls == ["https://github.com/acme/recovered"], fc_calls
     assert calls, f"sync never reached set_status; result={result} fc={fc_calls}"
     assert result == 1, f"sync returned {result} after {len(calls)} set_status calls"
