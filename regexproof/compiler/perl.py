@@ -175,15 +175,14 @@ def compile_perl(
             ureason = gate.get("unencodable_reason")
             if ureason == "timeout":
                 raise Unencodable("timeout")
-            # Only hard-reject on real parse failures; helper absence is optional.
-            if ureason not in (
-                None,
+            if ureason in (
                 "perl-helper-unavailable",
                 "perl-version-mismatch",
-            ):
-                if ureason == "parse-error":
-                    ureason = _classify_perl_helper_error(str(gate.get("error") or ""))
-                raise Unencodable(ureason or "malformed-pattern")
+            ) or gate.get("helper") == "none":
+                raise Unencodable("helper-unavailable")
+            if ureason == "parse-error":
+                ureason = _classify_perl_helper_error(str(gate.get("error") or ""))
+            raise Unencodable(ureason or "malformed-pattern")
         ast = parse_pattern(rewritten)
         fold_fn = lambda ch: python_fold_closure(ch, ascii_only=True)
         fold = fold_fn if "i" in flags else None

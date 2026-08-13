@@ -81,7 +81,12 @@ def parse(pattern: str) -> int:
         except Exception as exc:  # noqa: BLE001
             print(
                 json.dumps(
-                    {"ok": False, "unencodable_reason": "parse-error", "error": str(exc)}
+                    {
+                        "ok": False,
+                        "unencodable_reason": "parse-error",
+                        "error": str(exc),
+                        "helper": "pcre2-bindings",
+                    }
                 )
             )
             return 1
@@ -105,6 +110,7 @@ def parse(pattern: str) -> int:
                     "ok": False,
                     "unencodable_reason": "parse-error",
                     "error": proc.stderr.strip() or "pcre2grep reject",
+                    "helper": "pcre2grep",
                 }
             )
         )
