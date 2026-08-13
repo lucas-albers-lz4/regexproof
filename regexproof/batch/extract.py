@@ -558,8 +558,15 @@ def extract_glob(
         if file_filter is not None and not file_filter(fp):
             continue
         seen.add(fp)
-        if fp.stat().st_size > MAX_FILE_BYTES:
-            skipped_oversized += 1
+        try:
+            if fp.stat().st_size > MAX_FILE_BYTES:
+                skipped_oversized += 1
+                continue
+        except OSError:
+            # Glob discovery: match admission walker (#175) — skip
+            # transient/unreadable matches. Named-file paths already
+            # fail-closed above via the missing-file gate; single-file
+            # extractors use `_read_capped`, which re-raises OSError.
             continue
         # Prefer the unresolved path under ROOT so symlink materializations
         # (plugins/ → /tmp/…) keep stable repo-relative sites / regex_ids.
