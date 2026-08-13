@@ -116,37 +116,37 @@
     "wall_s": 21.527
   },
   "corpora": {
-    "stateset-icommerce": {
+    "OctopusBeak": {
       "address_space_cap": true,
       "complete_run": true,
-      "corpus": "stateset-icommerce",
+      "corpus": "OctopusBeak",
       "corpus_type": "rule_corpus",
-      "encodable": 288,
+      "encodable": 847,
       "engine": {
         "python": "3.13.5"
       },
-      "extracted": 409,
-      "findings": 104,
+      "extracted": 1144,
+      "findings": 102,
       "inventory_questions": 4,
-      "join_regex_ids": 104,
+      "join_regex_ids": 102,
       "redos_findings": 0,
       "redos_incomplete": false,
       "schema_version": "1",
-      "triage": 121
+      "triage": 297
     }
   },
   "pair_counts": {
+    "OctopusBeak": {
+      "admitted": 0,
+      "dropped": 0,
+      "note": "no independent-spec catalog"
+    },
     "coreruleset": {
       "admitted": 0,
       "dropped": 0,
       "fraction": 0.6908,
       "note": "fraction gate go; CRS rule-derived adapter is Phase-2 rule_diff",
       "scope": "full_corpus"
-    },
-    "stateset-icommerce": {
-      "admitted": 0,
-      "dropped": 0,
-      "note": "no independent-spec catalog"
     }
   },
   "schema_version": "1"

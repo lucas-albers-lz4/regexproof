@@ -1,0 +1,14 @@
+{
+  "schema_version": "1",
+  "corpus": "OctopusBeak",
+  "corpus_pin": "fbde2b23cefb5d6a423576c63256e07e18c49218",
+  "candidate_url": "https://github.com/WangWilly/OctopusBeak",
+  "smith_decision": "go",
+  "supersedes": null,
+  "reason": "Banking-data app (ecma top-60 first-party allowlist): 847/1,144 = 0.7404 encodable (complete_run, parse-error=0, budget clean). 102 findings + 297 triage. Banking-data boundary - SECURITY_TOOL_CORPORA private_first. GO admit confirmed.",
+  "regex_sites": 1144,
+  "sites_by_bucket": {
+    "ecma allowlist (60 files, 1,144 sites measured; 847 encodable)": 1144
+  },
+  "additional_surface_outside_probe_scope": {"first-party beyond top-60": 58}
+}

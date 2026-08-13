@@ -1,0 +1,16 @@
+{
+  "schema_version": "1",
+  "corpus": "rastrea2r-server",
+  "corpus_pin": "3e4d26d06d02a32f309afaac1bdf82cada149c2a",
+  "candidate_url": "https://github.com/rastrea2r/rastrea2r-server",
+  "smith_decision": "no-go",
+  "supersedes": "triage-trial (#354)",
+  "reason": "SUPERSEDING NO-GO (exchange-api/typenix precedent): 107 of 121 probe sites are VENDORED docs-coverage jquery bundles (docs/source/coverage/jquery.min.js 85, jquery.tablesorter.min.js 18). 12 sites are a single rules/example.yara. Real first-party surface is 4 sites (setup.py, src/rastrea2r_server/__init__.py). IR tool class already covered by admitted security corpora. No novel encodable surface.",
+  "regex_sites": 121,
+  "sites_by_bucket": {
+    "vendored docs-coverage jquery bundles (4 files)": 107,
+    "rules/example.yara": 12,
+    "first-party app code (2 files)": 2
+  },
+  "additional_surface_outside_probe_scope": {}
+}

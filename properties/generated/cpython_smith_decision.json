@@ -1,0 +1,14 @@
+{
+  "schema_version": "1",
+  "corpus": "cpython",
+  "corpus_pin": "a487e12da470edf59e6bc96166d2178dad54dd85",
+  "candidate_url": "https://github.com/ColdGrub1384/cpython",
+  "smith_decision": "go",
+  "supersedes": null,
+  "reason": "CPython fork (ColdGrub1384; py_re .py-only top-60 allowlist): 500/965 = 0.5181 encodable (complete_run, parse-error=0, budget clean). 138 findings + 465 triage. Non-security (interpreter fork) - public-first. GO admit confirmed.",
+  "regex_sites": 965,
+  "sites_by_bucket": {
+    "py_re allowlist (60 files, 965 sites measured; 500 encodable)": 965
+  },
+  "additional_surface_outside_probe_scope": {"first-party beyond top-60": 234}
+}
