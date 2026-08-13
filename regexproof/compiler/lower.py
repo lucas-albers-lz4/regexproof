@@ -199,6 +199,13 @@ def _lower_alt(
         )
         if alt_meta.get("has_internal_anchor"):
             meta["has_internal_anchor"] = True
+        # C1 fold (luna re-gate 8): a NESTED mixed alternation (foo|(?:\bbar|baz))
+        # marks the branch-local meta (shared down through the group) — read
+        # its verdicts upward. Only word_boundary_wrap was propagated before.
+        if alt_meta.get("mixed_boundary_alternation"):
+            meta["mixed_boundary_alternation"] = True
+        if alt_meta.get("mirror_exact") is False:
+            meta["mirror_exact"] = False
         # C1 fold (luna re-gate 4): propagate word_boundary_wrap ONLY when
         # ALL branches are \b-wrapped. A mixed alternation (\bfoo|bar) must
         # keep the normal outer wrap — the plain branch needs the search

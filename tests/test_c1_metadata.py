@@ -404,3 +404,13 @@ def test_mixed_alternation_fullmatch_fails_closed():
     cr3 = compile_pattern(r"foo|bar", "", "pcre", "fullmatch")
     assert cr3.fullmatch_shaped is True
     assert cr3.mirror_exact is True
+
+
+def test_nested_mixed_alternation_propagates_verdicts():
+    # C1 fold (luna re-gate 8): foo|(?:\bbar|baz) — the INNER alternation is
+    # mixed (WordBounded branch); its verdicts must reach the outer result or
+    # the mirror over-accepts under fullmatch with fullmatch_shaped=True.
+    cr = compile_pattern(r"foo|(?:\bbar|baz)", "", "pcre", "fullmatch")
+    assert cr.encodable, cr.unencodable_reason
+    assert cr.fullmatch_shaped is False, cr.fullmatch_shaped
+    assert cr.mirror_exact is False, cr.mirror_exact
