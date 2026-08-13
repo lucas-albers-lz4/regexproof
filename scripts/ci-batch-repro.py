@@ -29,11 +29,18 @@ COMPARE_SUFFIXES = (".ndjson", ".json", ".md", ".sha256")
 
 def _fingerprint(out_dir: Path) -> dict[str, str]:
     digests = {}
-    for path in sorted(out_dir.rglob("*")):
-        if path.is_file() and path.suffix in COMPARE_SUFFIXES:
-            digests[str(path.relative_to(out_dir))] = hashlib.sha256(
-                path.read_bytes()
-            ).hexdigest()
+    roots = [out_dir]
+    # Close-out gate (M3): the batch writes triage NDJSON to
+    # out_dir.parent/triage — it is a committed artifact too.
+    triage = out_dir.parent / "triage"
+    if triage.is_dir():
+        roots.append(triage)
+    for root in roots:
+        for path in sorted(root.rglob("*")):
+            if path.is_file() and path.suffix in COMPARE_SUFFIXES:
+                digests[str(path.relative_to(root))] = hashlib.sha256(
+                    path.read_bytes()
+                ).hexdigest()
     return digests
 
 

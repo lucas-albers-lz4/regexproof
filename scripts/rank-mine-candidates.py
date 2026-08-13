@@ -41,6 +41,13 @@ def _http_session():
     return requests.Session()
 
 
+def _int_map(value):
+    """Normalize a mapping to str->int (the P6 build's probe shape)."""
+    if not isinstance(value, dict):
+        return {}
+    return {str(k): int(v) for k, v in value.items() if isinstance(v, (int, float))}
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument(
@@ -157,15 +164,28 @@ def main(argv: list[str] | None = None) -> int:
             dec = decisions_by_url.get(normalize_repo_url(str(url)))
             if dec is not None:
                 probe = dec.get("probe") if isinstance(dec.get("probe"), dict) else {}
-                c["probe"] = probe
+                # Close-out gate: normalize the decision probe to the FIT's
+                # shape (the P6 build writes dialect_counts; the raw decision
+                # stores dialect) — otherwise probe_dialect_count_log stays
+                # zero at runtime and diverges from the fitted vector.
+                c["probe"] = {
+                    "regex_sites": int(probe.get("regex_sites") or 0),
+                    "dialect_counts": _int_map(probe.get("dialect")),
+                    "security_boundary": str(
+                        probe.get("security_boundary") or "unknown"
+                    ),
+                    "predicted_buckets": _int_map(probe.get("predicted_buckets")),
+                }
                 dec_pin = str(
                     probe.get("pin_probed")
                     or dec.get("corpus_pin")
                     or probe.get("pin")
                     or ""
                 )
-                if dec_pin:
-                    c["pin_probed"] = dec_pin
+                # Close-out gate (M2, E3): the decision-time pin is
+                # AUTHORITATIVE — always set it (empty included) so a stale
+                # ledger mined pin can never probe the wrong commit.
+                c["pin_probed"] = dec_pin
         pool.append(c)
     tree_features = {}
     if args.allocator == "score-v2" and pool:
