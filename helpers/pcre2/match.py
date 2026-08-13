@@ -6,6 +6,11 @@ Never falls back to Python `re` (wrong engine = broken ground-truth gate).
 Usage:
   match.py parse <pattern>
   match.py match <pattern> <flags>   # stdin → exit 0 on match
+
+Exit codes for `match` (helper contract shared with the other match helpers):
+  0 = accepted, 1 = rejected (no match), 2 = engine/compile error (invalid
+  pattern), 3 = helper unavailable (neither pcre2 bindings nor pcre2grep).
+  A compile failure is never misreported as a rejection (finding 5).
 """
 
 from __future__ import annotations
@@ -144,9 +149,13 @@ def match(pattern: str, flags: str, data: str) -> int:
             compiled = pcre2.compile(pattern.encode(), options=opts)
             return 0 if compiled.search(data.encode()) else 1
         except Exception:  # noqa: BLE001
-            return 2
+            return 2  # compile/engine error — not a rejection
     if _has_pcre2grep():
-        argv = ["pcre2grep", "-q"]
+        # -M (multiline): match against the WHOLE stdin as one subject, not
+        # line-by-line — otherwise `\z`/`$` anchors are per-line and a trailing
+        # newline is invisible (fullmatch on "a\n" would be misreported as
+        # accepted; the absolute-end `\z` wrap needs whole-subject matching).
+        argv = ["pcre2grep", "-q", "-M"]
         if "i" in flags:
             argv.append("-i")
         argv.extend(["--", pattern])
@@ -159,9 +168,12 @@ def match(pattern: str, flags: str, data: str) -> int:
             check=False,
             timeout=HELPER_TIMEOUT_S,
         )
-        return 0 if proc.returncode == 0 else 1
+        # pcre2grep: 0 = match, 1 = no match, 2 = error (e.g. bad pattern).
+        if proc.returncode in (0, 1):
+            return proc.returncode
+        return 2  # compile/scan error — not a rejection
     print("FATAL: no pcre2 bindings and no pcre2grep — refusing Python re fallback", file=sys.stderr)
-    return 2
+    return 3  # helper unavailable — distinct from compile error
 
 
 if __name__ == "__main__":

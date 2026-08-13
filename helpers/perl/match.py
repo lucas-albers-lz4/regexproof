@@ -6,8 +6,9 @@ Usage:
   match.py parse <pattern>
   match.py match <pattern> <flags>   # stdin → exit 0 on match
 
-Exit 0 = ok/match; 1 = parse fail / no-match; 2 = perl unavailable / version
-mismatch; 3 = pattern compile failure at match time.
+Exit 0 = ok/match; 1 = no-match; 2 = pattern compile failure at match time;
+3 = perl unavailable / version mismatch (helper contract — a compile failure
+is never misreported as a rejection, finding 5).
 """
 
 from __future__ import annotations
@@ -229,7 +230,7 @@ def match(pattern: str, flags: str, data: str) -> int:
     bin_ = _perl_bin()
     if not bin_:
         print("FATAL: perl missing — refusing Python re fallback", file=sys.stderr)
-        return 2
+        return 3
     ver = _perl_version_string(bin_)
     if ver is None or not _version_ok(ver):
         print(
@@ -237,7 +238,7 @@ def match(pattern: str, flags: str, data: str) -> int:
             f"(prefix {PERL_VERSION_PREFIX}) — refusing Python re fallback",
             file=sys.stderr,
         )
-        return 2
+        return 3
     pat_path = _write_pat_file(pattern)
     try:
         prefix = _flag_prefix(flags)
@@ -249,7 +250,7 @@ my $flag_prefix = $ARGV[1] // '';
 my ($re, $err) = compile_re($pat, $flag_prefix);
 if ($err || !defined $re) {
   print STDERR $err // 'compile failed';
-  exit 3;
+  exit 2;
 }
 local $/; my $s = <STDIN>;
 $s = '' unless defined $s;
@@ -266,9 +267,9 @@ exit($s =~ /$re/ ? 0 : 1);
         )
     finally:
         pat_path.unlink(missing_ok=True)
-    if proc.returncode in (0, 1, 3):
+    if proc.returncode in (0, 1, 2):
         return proc.returncode
-    return 2
+    return 3
 
 
 def main() -> int:

@@ -98,8 +98,8 @@ def test_perl_helper_preserves_dollar_and_at():
     assert a.returncode == 0, a.stderr
 
 
-def test_perl_match_compile_fail_exit_3():
-    """Compile failures must be exit 3 (not 2 / helper-unavailable)."""
+def test_perl_match_compile_fail_exit_2():
+    """Compile failures must be exit 2 (not 3 / helper-unavailable)."""
     proc = subprocess.run(
         [sys.executable, str(HELPER), "match", "(", ""],
         input="x",
@@ -108,7 +108,7 @@ def test_perl_match_compile_fail_exit_3():
         text=True,
         check=False,
     )
-    assert proc.returncode == 3, proc.stderr
+    assert proc.returncode == 2, proc.stderr
 
 
 def test_regex_id_formula_version_gate():

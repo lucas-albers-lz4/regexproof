@@ -14,6 +14,16 @@ the canonical fuzz-helper transports (``regexproof/fuzz/adapters.py``:
 ``timeout`` and ``engine-error`` outcomes those bool helpers collapse, so a
 timeout is never misreported as a rejection.
 
+Helper exit-code contract (all ``helpers/*/match.*`` subprocess dialects,
+single-witness and batch modes)::
+
+    0 = accepted (match found)
+    1 = rejected (no match)
+    2 = engine/compile error (invalid pattern, runtime engine error)
+    3 = helper unavailable (missing binary / bindings / version pin)
+
+So a compile failure is never misreported as a rejection (finding 5).
+
 Result vocabulary (``ReplayResult.verdict``):
   accepted | rejected | engine-error | timeout | no-adapter |
   refused-no-callback
@@ -26,16 +36,34 @@ Result vocabulary (``ReplayResult.verdict``):
   - no-adapter            → ``no-adapter`` (dialect has no helper today;
     selection-time skipping + ``synth_skipped_no_gt_adapter`` is P3/B-side)
   - refused-no-callback   → ``refused-no-callback`` (a helper that returned
-    no callback — a HARD FAILURE under --require-ground-truth)
+    no callback — a HARD FAILURE under --require-ground-truth; raise it via
+    ``require_replayable``)
 
 ``substitution`` call_kind has no adapter mode in v1 (counted as
 ``synth_skipped_substitution_call_kind`` by P3); the adapter marks it
-``no-adapter``.
+``no-adapter``. ``classify_replayability`` is the selection-time classifier
+P3's selector consumes (posix-shell / yara fullmatch+match →
+``skipped_no_gt_adapter``, substitution → ``skipped_substitution``).
+
+Batch framing protocol (``replay_batch``; B6 diff-fuzz contract): ONE helper
+subprocess per batch. Witnesses are written to the helper's stdin as a single
+byte stream — each witness is escaped byte-wise (0x00 → ``\\0``, ``\\`` →
+``\\\\``), escaped segments are joined with a raw NUL (0x00) and the stream is
+terminated by a final NUL. Because escaped segments contain no raw NUL, NUL is
+an unambiguous witness delimiter and witnesses containing NUL round-trip
+exactly. The helper emits one per-witness verdict channel line on stdout::
+
+    <index>:<verdict>     verdict ∈ {0 = rejected, 1 = accepted}
+
+and exits 0 on success or 2 on a compile/engine error. v1 lands the real
+framing for two dialects: ``ecma`` (``helpers/ecma/match.mjs batch``) and
+``py_re`` (``helpers/python/match.py batch``). The remaining subprocess
+dialects run one argv session per witness via ``replay`` (identical per-witness
+semantics; single-session framing is the designed protocol for all dialects).
 """
 
 from __future__ import annotations
 
-import re as _re
 import subprocess
 import sys
 import tempfile
@@ -48,9 +76,15 @@ from regexproof.compiler.re2 import replay_argv as _re2_replay_argv
 _ROOT = Path(__file__).resolve().parents[2]
 
 _ECMA_MATCH = _ROOT / "helpers" / "ecma" / "match.mjs"
+_PY_MATCH = _ROOT / "helpers" / "python" / "match.py"
 _PCRE2_MATCH = _ROOT / "helpers" / "pcre2" / "match.py"
 _PERL_MATCH = _ROOT / "helpers" / "perl" / "match.py"
 _YARA_MATCH = _ROOT / "helpers" / "yara" / "match.py"
+
+# Helper exit-code contract (documented above): 2 = engine/compile error,
+# 3 = helper unavailable.
+_COMPILE_ERROR_RC = frozenset({2})
+_UNAVAILABLE_RC = frozenset({3})
 
 _SUBSTITUTION_NOTE = (
     "substitution call_kind has no adapter mode in v1 — P3 counts these as "
@@ -59,6 +93,10 @@ _SUBSTITUTION_NOTE = (
 _POSIX_SHELL_NOTE = (
     "posix-shell has no ground-truth helper today — P3 counts these as "
     "synth_skipped_no_gt_adapter"
+)
+_YARA_WRAP_NOTE = (
+    "yara replay is substring-search only; fullmatch/match wrap is not "
+    "supported in v1 — P3 counts these as synth_skipped_no_gt_adapter"
 )
 
 
@@ -71,6 +109,20 @@ class ReplayVerdict(StrEnum):
     TIMEOUT = "timeout"
     NO_ADAPTER = "no-adapter"
     REFUSED_NO_CALLBACK = "refused-no-callback"
+
+
+class Replayability(StrEnum):
+    """Selection-time classification of a site under --require-ground-truth.
+
+    P3's selector calls :func:`classify_replayability` BEFORE selecting a site
+    for replay: ``replayable`` sites are selected, the two ``skipped_*``
+    values are counted (``synth_skipped_no_gt_adapter`` /
+    ``synth_skipped_substitution_call_kind``) and never silently dropped.
+    """
+
+    REPLAYABLE = "replayable"
+    SKIPPED_NO_GT_ADAPTER = "skipped_no_gt_adapter"
+    SKIPPED_SUBSTITUTION = "skipped_substitution"
 
 
 @dataclass(frozen=True)
@@ -123,69 +175,167 @@ def status_for_claim(result: ReplayResult, model_claims_accept: bool) -> str:
     return "failed"
 
 
+class RefusedNoCallbackError(RuntimeError):
+    """A selected site's ``replay`` returned no callback.
+
+    Raised by :func:`require_replayable` — the HARD-FAIL seam under
+    --require-ground-truth. A site that passed selection
+    (``classify_replayability == replayable``) must produce a definitive
+    engine verdict; a handler that declined to call back means the
+    ground-truth gate cannot run and CI must fail rather than silently skip.
+    """
+
+
+def classify_replayability(dialect: str, call_kind: str) -> Replayability:
+    """Classify a site for selection: replayable or a counted skip.
+
+    - posix-shell          → ``skipped_no_gt_adapter`` (no helper today)
+    - substitution         → ``skipped_substitution`` (no v1 adapter mode)
+    - yara fullmatch/match → ``skipped_no_gt_adapter`` (substring-only helper)
+    - unknown dialect      → ``skipped_no_gt_adapter``
+    - otherwise            → ``replayable``
+    """
+    if call_kind == "substitution":
+        return Replayability.SKIPPED_SUBSTITUTION
+    if dialect == "posix-shell":
+        return Replayability.SKIPPED_NO_GT_ADAPTER
+    if dialect == "yara" and call_kind in ("fullmatch", "match"):
+        return Replayability.SKIPPED_NO_GT_ADAPTER
+    if dialect not in _DISPATCH:
+        return Replayability.SKIPPED_NO_GT_ADAPTER
+    return Replayability.REPLAYABLE
+
+
+def skip_reason(dialect: str, call_kind: str) -> str | None:
+    """Human-readable note for a skipped site; None when replayable."""
+    if classify_replayability(dialect, call_kind) is Replayability.REPLAYABLE:
+        return None
+    if call_kind == "substitution":
+        return _SUBSTITUTION_NOTE
+    if dialect == "posix-shell":
+        return _POSIX_SHELL_NOTE
+    if dialect == "yara" and call_kind in ("fullmatch", "match"):
+        return _YARA_WRAP_NOTE
+    return f"no ground-truth adapter for dialect {dialect!r}"
+
+
+def require_replayable(result_or_verdict) -> None:
+    """Hard-fail seam: raise :class:`RefusedNoCallbackError` when a selected
+    site's replay returned ``refused-no-callback``.
+
+    Accepts a ``ReplayResult`` or a bare ``ReplayVerdict``. Other verdicts
+    (accepted/rejected/engine-error/timeout/no-adapter) pass — engine-error
+    and timeout surface as ``failed`` ground truth, and no-adapter is handled
+    at selection time by :func:`classify_replayability`.
+    """
+    verdict = (
+        result_or_verdict.verdict
+        if isinstance(result_or_verdict, ReplayResult)
+        else result_or_verdict
+    )
+    if verdict is ReplayVerdict.REFUSED_NO_CALLBACK:
+        raise RefusedNoCallbackError(
+            "a selected site's replay returned no callback (refused-no-callback) — "
+            "hard failure under --require-ground-truth"
+        )
+
+
 # ---------------------------------------------------------------------------
 # call_kind wrap semantics (docs/SEMANTICS.md): the engine helpers are bare
 # search runners, so the adapter emulates fullmatch / match by wrapping the
-# pattern string. py_re honors call_kind in-process instead.
+# pattern string. py_re honors call_kind in a timed subprocess instead.
 # ---------------------------------------------------------------------------
-def _wrap_pattern(pattern: str, call_kind: str) -> str:
+def _subprocess_wrap(pattern: str, call_kind: str) -> str:
+    """Wrap for the non-ECMA subprocess dialects (bare search runners).
+
+    fullmatch uses ``\\z`` (absolute end): ``$`` matches before a trailing
+    line terminator in Perl/PCRE/RE2, so a ``$``-wrapped fullmatch wrongly
+    accepted ``a\\n`` while Python fullmatch rejects it. ``\\z`` is the
+    absolute-end anchor for perl/pcre/re2.
+    """
     if call_kind == "fullmatch":
-        return f"^(?:{pattern})$"
+        return f"^(?:{pattern})\\z"
     if call_kind == "match":
         return f"^(?:{pattern})"
     # search / exec: membership is a bare search
     return pattern
 
 
-# ---------------------------------------------------------------------------
-# py_re — in-process `re`, call_kind honored directly
-# ---------------------------------------------------------------------------
-_PY_RE_FLAG_MAP = {
-    "i": _re.IGNORECASE,
-    "m": _re.MULTILINE,
-    "s": _re.DOTALL,
-    "x": _re.VERBOSE,
-    "a": _re.ASCII,
-    "u": _re.UNICODE,
-}
+# ECMA fullmatch sentinel, written as the 6-char ASCII escape ``\u0000`` in the
+# pattern SOURCE (argv cannot carry a raw NUL byte). JS ``new RegExp`` parses
+# the escape back into the NUL character; the witness gets a raw NUL appended
+# on stdin. The sentinel forces end-of-input ("$" would match before a trailing
+# line terminator, and the sentinel does not match "." / "$" constructs).
+_ECMA_SENTINEL = "\\u0000"
 
 
-def _py_re_flags(flags: str) -> int | None:
-    bits = 0
-    for ch in flags or "":
-        if ch not in _PY_RE_FLAG_MAP:
-            return None
-        bits |= _PY_RE_FLAG_MAP[ch]
-    return bits
+def _ecma_materialize(pattern: str, call_kind: str, witnesses):
+    """Return ``(wrapped_pattern, payloads)`` for the ECMA helper.
 
-
-def _py_re_match(rx, call_kind: str, witness: str) -> bool:
-    # exec maps to search for membership (SEMANTICS.md).
+    ECMA has no absolute-end anchor; fullmatch is encoded with a NUL sentinel:
+    the pattern is wrapped as ``^(?:pattern)\\u0000`` and each witness gets a
+    trailing NUL appended, forcing end-of-input. Verified against ``a\\n`` and
+    ``a\\n\\u0000`` witnesses.
+    """
     if call_kind == "fullmatch":
-        return rx.fullmatch(witness) is not None
-    if call_kind == "match":
-        return rx.match(witness) is not None
-    return rx.search(witness) is not None
+        return f"^(?:{pattern}){_ECMA_SENTINEL}", [w + "\x00" for w in witnesses]
+    return _subprocess_wrap(pattern, call_kind), list(witnesses)
 
 
-def _py_re_replay(pattern, flags, call_kind, witness, *, timeout_s: float):
-    fbits = _py_re_flags(flags)
-    if fbits is None:
-        return ReplayResult(
-            ReplayVerdict.ENGINE_ERROR, f"unknown py_re flag in {flags!r}"
-        )
-    try:
-        rx = _re.compile(pattern, fbits)
-    except _re.error as exc:
-        return ReplayResult(ReplayVerdict.ENGINE_ERROR, f"re.compile: {exc}")
-    try:
-        return ReplayResult(
-            ReplayVerdict.ACCEPTED
-            if _py_re_match(rx, call_kind, witness)
-            else ReplayVerdict.REJECTED
-        )
-    except _re.error as exc:  # e.g. catastrophic backtracking raised
-        return ReplayResult(ReplayVerdict.ENGINE_ERROR, str(exc))
+# ---------------------------------------------------------------------------
+# Batch framing — one helper subprocess per batch (single-session stdin,
+# per-witness verdict channel on stdout, NUL-safe round-trip).
+# ---------------------------------------------------------------------------
+def _encode_witness(witness: str) -> bytes:
+    """Escape one witness for NUL-delimited framing (0x00 → `\\0`, `\\` → `\\\\`).
+
+    Escaped segments contain no raw NUL, so NUL is an unambiguous delimiter
+    and witnesses carrying NUL round-trip exactly.
+    """
+    out = bytearray()
+    for byte in witness.encode("utf-8"):
+        if byte == 0x00:
+            out += b"\\0"
+        elif byte == 0x5C:
+            out += b"\\\\"
+        else:
+            out.append(byte)
+    return bytes(out)
+
+
+def _frame_witnesses(witnesses) -> bytes:
+    """NUL-delimited single-session stdin stream for a batch of witnesses."""
+    return b"\x00".join(_encode_witness(w) for w in witnesses) + b"\x00"
+
+
+def _parse_batch_lines(stdout: str, n: int) -> list[ReplayVerdict] | None:
+    """Parse the per-witness verdict channel (``<index>:<verdict>``, 0/1).
+
+    Returns the verdicts in witness order, or None if the channel is
+    malformed or missing any witness.
+    """
+    verdicts: dict[int, ReplayVerdict] = {}
+    for line in stdout.splitlines():
+        line = line.strip()
+        if not line:
+            continue
+        idx_s, sep, verdict = line.partition(":")
+        if not sep or not idx_s.isdigit():
+            return None
+        if verdict == "1":
+            verdicts[int(idx_s)] = ReplayVerdict.ACCEPTED
+        elif verdict == "0":
+            verdicts[int(idx_s)] = ReplayVerdict.REJECTED
+        else:
+            return None
+    if len(verdicts) != n or any(i not in verdicts for i in range(n)):
+        return None
+    return [verdicts[i] for i in range(n)]
+
+
+def _broadcast(result: ReplayResult, n: int) -> list[ReplayResult]:
+    """Replicate one ReplayResult across all witnesses of a failed batch."""
+    return [ReplayResult(result.verdict, result.detail) for _ in range(n)]
 
 
 # ---------------------------------------------------------------------------
@@ -221,6 +371,12 @@ def _rc_result(
     unavailable: frozenset[int] = frozenset(),
     label: str = "helper",
 ) -> ReplayResult:
+    """Map a helper exit code onto the verdict vocabulary.
+
+    Exit-code contract: 0 = accepted, 1 = rejected, 2 = engine/compile error,
+    3 = helper unavailable. ``compile_error`` / ``unavailable`` let dialects
+    opt out of the contract where a helper predates it.
+    """
     if proc.returncode == 0:
         return ReplayResult(ReplayVerdict.ACCEPTED)
     if proc.returncode == 1:
@@ -237,26 +393,62 @@ def _rc_result(
 
 
 # ---------------------------------------------------------------------------
+# py_re — timed `python -c`-style runner (helpers/python/match.py). Routed
+# through a subprocess so `timeout_s` is ALWAYS honored: a catastrophic
+# pattern can never block the gate in-process (finding 3). call_kind is
+# honored by the runner directly (re.fullmatch/match/search) — no wrapping.
+# ---------------------------------------------------------------------------
+def _py_re_rc_result(proc, *, label: str = "py_re/match.py") -> ReplayResult:
+    out = (proc.stdout or b"").decode("utf-8", "replace").strip()
+    err = (proc.stderr or b"").decode("utf-8", "replace").strip()
+    if proc.returncode == 0 and out == "accepted":
+        return ReplayResult(ReplayVerdict.ACCEPTED)
+    if proc.returncode == 1 and out == "rejected":
+        return ReplayResult(ReplayVerdict.REJECTED)
+    if proc.returncode in (0, 1):
+        return ReplayResult(ReplayVerdict.ENGINE_ERROR, f"bad verdict {out!r}")
+    if proc.returncode == 2:
+        return ReplayResult(ReplayVerdict.ENGINE_ERROR, err or f"{label} engine error")
+    return ReplayResult(
+        ReplayVerdict.ENGINE_ERROR, f"{label} exit {proc.returncode}: {err}"
+    )
+
+
+def _py_re_replay(pattern, flags, call_kind, witness, *, timeout_s: float):
+    proc = _subprocess_verdict(
+        [sys.executable, str(_PY_MATCH), "match", call_kind, pattern, flags or ""],
+        data=witness.encode("utf-8"),
+        text=False,
+        timeout_s=timeout_s,
+    )
+    if isinstance(proc, ReplayResult):
+        return proc
+    return _py_re_rc_result(proc)
+
+
+# ---------------------------------------------------------------------------
 # ecma — helpers/ecma/match.mjs is a bare .test() runner
 # ---------------------------------------------------------------------------
 def _ecma_replay(pattern, flags, call_kind, witness, *, timeout_s: float):
-    wrapped = _wrap_pattern(pattern, call_kind)
+    wrapped, payloads = _ecma_materialize(pattern, call_kind, [witness])
     proc = _subprocess_verdict(
         ["node", str(_ECMA_MATCH), wrapped, flags or ""],
-        data=witness,
+        data=payloads[0],
         text=True,
         timeout_s=timeout_s,
     )
     if isinstance(proc, ReplayResult):
         return proc
-    return _rc_result(proc, compile_error=frozenset({2}), label="ecma/match.mjs")
+    return _rc_result(
+        proc, compile_error=_COMPILE_ERROR_RC, label="ecma/match.mjs"
+    )
 
 
 # ---------------------------------------------------------------------------
 # re2 — helpers/go-re2 (compiler.re2.replay_argv), MatchString = search
 # ---------------------------------------------------------------------------
 def _re2_replay(pattern, flags, call_kind, witness, *, timeout_s: float):
-    wrapped = _wrap_pattern(pattern, call_kind)
+    wrapped = _subprocess_wrap(pattern, call_kind)
     try:
         argv = _re2_replay_argv(wrapped, flags or "")
     except RuntimeError as exc:
@@ -264,14 +456,14 @@ def _re2_replay(pattern, flags, call_kind, witness, *, timeout_s: float):
     proc = _subprocess_verdict(argv, data=witness, text=True, timeout_s=timeout_s)
     if isinstance(proc, ReplayResult):
         return proc
-    return _rc_result(proc, compile_error=frozenset({2}), label="go-re2")
+    return _rc_result(proc, compile_error=_COMPILE_ERROR_RC, label="go-re2")
 
 
 # ---------------------------------------------------------------------------
 # pcre / perl — helpers/*/match.py, stdin search runners
 # ---------------------------------------------------------------------------
 def _pcre_replay(pattern, flags, call_kind, witness, *, timeout_s: float):
-    wrapped = _wrap_pattern(pattern, call_kind)
+    wrapped = _subprocess_wrap(pattern, call_kind)
     proc = _subprocess_verdict(
         [sys.executable, str(_PCRE2_MATCH), "match", wrapped, flags or ""],
         data=witness,
@@ -280,11 +472,16 @@ def _pcre_replay(pattern, flags, call_kind, witness, *, timeout_s: float):
     )
     if isinstance(proc, ReplayResult):
         return proc
-    return _rc_result(proc, unavailable=frozenset({2}), label="pcre2/match.py")
+    return _rc_result(
+        proc,
+        compile_error=_COMPILE_ERROR_RC,
+        unavailable=_UNAVAILABLE_RC,
+        label="pcre2/match.py",
+    )
 
 
 def _perl_replay(pattern, flags, call_kind, witness, *, timeout_s: float):
-    wrapped = _wrap_pattern(pattern, call_kind)
+    wrapped = _subprocess_wrap(pattern, call_kind)
     proc = _subprocess_verdict(
         [sys.executable, str(_PERL_MATCH), "match", wrapped, flags or ""],
         data=witness,
@@ -295,8 +492,8 @@ def _perl_replay(pattern, flags, call_kind, witness, *, timeout_s: float):
         return proc
     return _rc_result(
         proc,
-        compile_error=frozenset({3}),
-        unavailable=frozenset({2}),
+        compile_error=_COMPILE_ERROR_RC,
+        unavailable=_UNAVAILABLE_RC,
         label="perl/match.py",
     )
 
@@ -304,7 +501,7 @@ def _perl_replay(pattern, flags, call_kind, witness, *, timeout_s: float):
 # ---------------------------------------------------------------------------
 # yara — helpers/yara/match.py, temp-file replay (NUL-safe). YARA regex
 # strings are substring-search only; fullmatch/match wrap is not expressible
-# in v1 → no-adapter for those call_kinds.
+# in v1 → no-adapter for those call_kinds (see classify_replayability).
 # ---------------------------------------------------------------------------
 def _yara_rule_src(pattern: str, flags: str) -> str:
     mods = []
@@ -320,8 +517,7 @@ def _yara_replay(pattern, flags, call_kind, witness, *, timeout_s: float):
     if call_kind not in ("search", "exec"):
         return ReplayResult(
             ReplayVerdict.NO_ADAPTER,
-            "yara replay is substring-search only; fullmatch/match wrap is "
-            "not supported in v1",
+            _YARA_WRAP_NOTE,
         )
     if not _YARA_MATCH.is_file():
         return ReplayResult(ReplayVerdict.ENGINE_ERROR, "yara helper missing")
@@ -339,7 +535,12 @@ def _yara_replay(pattern, flags, call_kind, witness, *, timeout_s: float):
         )
     if isinstance(proc, ReplayResult):
         return proc
-    return _rc_result(proc, unavailable=frozenset({2}), label="yara/match.py")
+    return _rc_result(
+        proc,
+        compile_error=_COMPILE_ERROR_RC,
+        unavailable=_UNAVAILABLE_RC,
+        label="yara/match.py",
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -379,7 +580,7 @@ def replay(
     Returns a ``ReplayResult`` (accepted/rejected/engine-error/timeout/
     no-adapter/refused-no-callback). A dialect handler returning no callback
     surfaces as ``refused-no-callback`` — a HARD FAILURE under
-    --require-ground-truth.
+    --require-ground-truth (see :func:`require_replayable`).
     """
     if call_kind == "substitution":
         return ReplayResult(ReplayVerdict.NO_ADAPTER, _SUBSTITUTION_NOTE)
@@ -418,16 +619,16 @@ def replay_batch(
 ) -> list[ReplayResult]:
     """Run the real engine over many witnesses; results align with input.
 
-    Batch framing (B6 diff-fuzz contract): witnesses are NUL-delimited on a
-    single stdin session and the helper emits one ``<index>:<verdict>`` token
-    per line on stdout. v1 implements the framing semantics in-process for
-    ``py_re`` — compile the pattern once and loop (the reference framing:
-    multi-witness, per-witness verdict channel, NUL-safe). Subprocess
-    dialects run one full argv session per witness via ``replay``; the
-    NUL-delimited single-session stdin transport is the designed protocol and
-    is dispatched to when a framing-aware helper mode exists (B6).
+    Batch framing (B6 diff-fuzz contract): witnesses are NUL-escaped and
+    NUL-delimited on a SINGLE stdin session and the helper emits one
+    ``<index>:<verdict>`` token per line on stdout. v1 lands the real
+    single-session framing for ``ecma`` and ``py_re``; the other subprocess
+    dialects run one argv session per witness via ``replay`` (identical
+    per-witness semantics). NUL witnesses round-trip exactly in every mode.
     """
     witnesses = list(witnesses)
+    if not witnesses:
+        return []
     if call_kind == "substitution":
         return [ReplayResult(ReplayVerdict.NO_ADAPTER, _SUBSTITUTION_NOTE) for _ in witnesses]
     if dialect == "posix-shell":
@@ -443,39 +644,63 @@ def replay_batch(
         return _replay_batch_py_re(
             pattern, flags, call_kind, witnesses, timeout_s=timeout_s
         )
+    if dialect == "ecma":
+        return _ecma_replay_batch(
+            pattern, flags, call_kind, witnesses, timeout_s=timeout_s
+        )
     return [
         replay(pattern, flags, dialect, call_kind, w, timeout_s=timeout_s) for w in witnesses
     ]
 
 
 def _replay_batch_py_re(pattern, flags, call_kind, witnesses, *, timeout_s: float):
-    """py_re batch framing reference: compile once, per-witness verdicts.
-
-    NUL-safe (Python strings carry NUL); in-process, so ``timeout_s`` bounds
-    each subprocess session, not the in-process match (callers must bound
-    pattern/witness against in-process ReDoS).
-    """
-    fbits = _py_re_flags(flags)
-    if fbits is None:
-        return [
-            ReplayResult(ReplayVerdict.ENGINE_ERROR, f"unknown py_re flag in {flags!r}")
-            for _ in witnesses
-        ]
-    try:
-        rx = _re.compile(pattern, fbits)
-    except _re.error as exc:
-        return [
-            ReplayResult(ReplayVerdict.ENGINE_ERROR, f"re.compile: {exc}")
-            for _ in witnesses
-        ]
-    out: list[ReplayResult] = []
-    for w in witnesses:
-        try:
-            accepted = _py_re_match(rx, call_kind, w)
-        except _re.error as exc:
-            out.append(ReplayResult(ReplayVerdict.ENGINE_ERROR, str(exc)))
-            continue
-        out.append(
-            ReplayResult(ReplayVerdict.ACCEPTED if accepted else ReplayVerdict.REJECTED)
+    """py_re batch framing: one timed subprocess, NUL-framed stdin, verdicts
+    on stdout. ``timeout_s`` bounds the whole session (the timeout contract
+    wins over the plan's "in-process" wording — see finding 3)."""
+    proc = _subprocess_verdict(
+        [sys.executable, str(_PY_MATCH), "batch", call_kind, pattern, flags or ""],
+        data=_frame_witnesses(witnesses),
+        text=False,
+        timeout_s=timeout_s,
+    )
+    if isinstance(proc, ReplayResult):
+        return _broadcast(proc, len(witnesses))
+    if proc.returncode != 0:
+        return _broadcast(_py_re_rc_result(proc), len(witnesses))
+    parsed = _parse_batch_lines(
+        (proc.stdout or b"").decode("utf-8", "replace"), len(witnesses)
+    )
+    if parsed is None:
+        return _broadcast(
+            ReplayResult(ReplayVerdict.ENGINE_ERROR, "malformed batch verdict channel"),
+            len(witnesses),
         )
-    return out
+    return [ReplayResult(v) for v in parsed]
+
+
+def _ecma_replay_batch(pattern, flags, call_kind, witnesses, *, timeout_s: float):
+    """ecma batch framing: one node subprocess, NUL-framed stdin, verdicts on
+    stdout (helpers/ecma/match.mjs batch)."""
+    wrapped, payloads = _ecma_materialize(pattern, call_kind, witnesses)
+    proc = _subprocess_verdict(
+        ["node", str(_ECMA_MATCH), "batch", wrapped, flags or ""],
+        data=_frame_witnesses(payloads),
+        text=False,
+        timeout_s=timeout_s,
+    )
+    if isinstance(proc, ReplayResult):
+        return _broadcast(proc, len(witnesses))
+    if proc.returncode != 0:
+        return _broadcast(
+            _rc_result(proc, compile_error=_COMPILE_ERROR_RC, label="ecma/match.mjs"),
+            len(witnesses),
+        )
+    parsed = _parse_batch_lines(
+        (proc.stdout or b"").decode("utf-8", "replace"), len(witnesses)
+    )
+    if parsed is None:
+        return _broadcast(
+            ReplayResult(ReplayVerdict.ENGINE_ERROR, "malformed batch verdict channel"),
+            len(witnesses),
+        )
+    return [ReplayResult(v) for v in parsed]

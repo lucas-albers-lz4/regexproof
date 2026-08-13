@@ -161,7 +161,18 @@ def p3():
     v = String("v")
     first_quote = IndexOf(v, StringVal('"'), 0)
     capture = SubString(v, 0, first_quote)
-    return [first_quote > 0, capture != v], Contains(v, StringVal('\\"'))
+    # v is the JSON-escaped value the escaper feeds the rpcd sed fallback, so
+    # its alphabet is the escaper's output token vocabulary (ESCAPE_SAFE chars
+    # plus the ESCAPE_ESC tokens `\\` `\"` `\t` `\r` `\n`) — constrain v to it
+    # so the declared `input_domain="ascii"` is faithful (was: an unconstrained
+    # string, an unsupported boundary assumption). The ESCAPE_ESC `\"` token is
+    # backslash + raw quote, so the bug-repro semantics (first_quote > 0,
+    # capture != v, v contains `\"`) are preserved.
+    return [
+        InRe(v, Star(ESCAPE_TOKENS)),
+        first_quote > 0,
+        capture != v,
+    ], Contains(v, StringVal('\\"'))
 
 
 ESCAPE_SAFE = Union(Range("\x20", "\x21"), Range("\x23", "\x5b"), Range("\x5d", "\x7e"))
