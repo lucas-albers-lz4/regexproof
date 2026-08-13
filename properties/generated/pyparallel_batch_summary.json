@@ -1,0 +1,18 @@
+{
+  "address_space_cap": true,
+  "complete_run": true,
+  "corpus": "pyparallel",
+  "corpus_type": "rule_corpus",
+  "encodable": 580,
+  "engine": {
+    "python": "3.13.5"
+  },
+  "extracted": 1027,
+  "findings": 173,
+  "inventory_questions": 4,
+  "join_regex_ids": 172,
+  "redos_findings": 0,
+  "redos_incomplete": false,
+  "schema_version": "1",
+  "triage": 447
+}

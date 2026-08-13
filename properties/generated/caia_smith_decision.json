@@ -1,0 +1,15 @@
+{
+  "schema_version": "1",
+  "corpus": "caia",
+  "corpus_pin": "95e3ba012416cfd7c92c6689ba9fc399e06cbc20",
+  "candidate_url": "https://github.com/prakashgbid/caia",
+  "smith_decision": "go",
+  "supersedes": null,
+  "reason": "AI-agent monorepo (ecma top-60 first-party allowlist): 439/702 = 0.6254 encodable (complete_run, parse-error=0, budget clean). 1,439 first-party ecma sites across 426 files is a real surface (packages/ monorepo). Boundary label deterministic-true was a classifier false positive (AI app, not security) - public-first. GO admit confirmed.",
+  "regex_sites": 702,
+  "sites_by_bucket": {
+    "ecma allowlist (60 files, 702 sites measured; 439 encodable)": 702,
+    "additional first-party ecma beyond top-60 (366 files, ~737 sites)": 737
+  },
+  "additional_surface_outside_probe_scope": {}
+}

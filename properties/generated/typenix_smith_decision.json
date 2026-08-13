@@ -1,0 +1,15 @@
+{
+  "schema_version": "1",
+  "corpus": "typenix",
+  "corpus_pin": "13550ee05461121a74a6467aefc479a62026cdfc",
+  "candidate_url": "https://github.com/ryanrasti/typenix",
+  "smith_decision": "no-go",
+  "supersedes": "go admit (#320)",
+  "reason": "SUPERSEDING NO-GO (tarcoin precedent): scale-based GO (5,207 sites) inflated by testdata/ - 5,126 sites in testdata (TypeScript compiler test baselines, 12,423 .js files - the v8/test262 class already admitted via typescript-go). Real first-party ecma surface is 19-80 sites. No novel encodable surface; scale condition 3 was met on inflated numbers.",
+  "regex_sites": 5207,
+  "sites_by_bucket": {
+    "testdata/ TS baselines (12,423 js files)": 5126,
+    "internal + _packages + root first-party": 81
+  },
+  "additional_surface_outside_probe_scope": {}
+}

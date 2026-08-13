@@ -1,0 +1,14 @@
+{
+  "schema_version": "1",
+  "corpus": "pyparallel",
+  "corpus_pin": "5e0b13026072ba0de7dcc86d254e8b357ca3e9db",
+  "candidate_url": "https://github.com/pyparallel/pyparallel",
+  "smith_decision": "go",
+  "supersedes": null,
+  "reason": "Python fork (py_re .py-only top-60 allowlist): 580/1,027 = 0.5648 encodable (complete_run, parse-error=0, budget clean). 173 findings + 447 triage - strong py yield. Non-security (interpreter) - public-first. GO admit confirmed.",
+  "regex_sites": 1027,
+  "sites_by_bucket": {
+    "py_re allowlist (60 files, 1,027 sites measured; 580 encodable)": 1027
+  },
+  "additional_surface_outside_probe_scope": {"ecma": 62}
+}

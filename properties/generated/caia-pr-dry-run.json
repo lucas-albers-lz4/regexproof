@@ -1,0 +1,9 @@
+{
+  "action": "dry_run",
+  "approved": false,
+  "finding_count": 124,
+  "private_first_count": 0,
+  "publish": false,
+  "schema_version": "1",
+  "would_open_public_upstream_issue": false
+}
