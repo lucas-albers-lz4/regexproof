@@ -176,9 +176,11 @@ def compile_pattern(
                     unencodable_reason=None,
                     dialect=dialect,
                     call_kind=call_kind,
-                    flags=flags,
+                    flags=str(artifact.metadata.get("_normalized_flags", flags)),
                     pattern=pattern,
-                    declared_domain=domain,
+                    declared_domain=str(
+                        artifact.metadata.get("_declared_domain", domain)
+                    ),
                     meta=artifact.metadata,
                 )
             if cache_stats is not None:
@@ -187,7 +189,13 @@ def compile_pattern(
         def finish(result: CompileResult) -> CompileResult:
             if cache is not None and cache_key is not None and result.encodable:
                 try:
-                    cache.put(cache_key, result.mirror, result.meta)
+                    # Re-gate 4: store the NORMALIZED flags + derived domain so
+                    # a cache hit returns the same CompileResult metadata as a
+                    # fresh compile (the hit path reads them back below).
+                    meta = dict(result.meta or {})
+                    meta["_normalized_flags"] = result.flags
+                    meta["_declared_domain"] = result.declared_domain
+                    cache.put(cache_key, result.mirror, meta)
                 except (OSError, TypeError, ValueError):
                     # Caching is an optimization; a full or unavailable cache
                     # must not change the compiler's fail-closed result.

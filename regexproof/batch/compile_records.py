@@ -228,7 +228,14 @@ def compile_records(
                 max(0.0, max_wall - (time.monotonic() - t0)) if max_wall else None
             )
             for future in as_completed(futures, timeout=remaining):
-                _row, _script, _meta, _hit = future.result()
+                try:
+                    _row, _script, _meta, _hit = future.result()
+                except BaseException:
+                    # Re-gate 4: an exceptional worker exit is a breach too —
+                    # the finally must hard-kill the pool instead of waiting
+                    # for the remaining workers.
+                    breached = True
+                    raise
                 serialized.append((future_index[id(future)], _row, _script, _meta, _hit))
                 # The parent owns the wall-clock gate.  Check between worker
                 # result batches rather than trusting child-local clocks.
