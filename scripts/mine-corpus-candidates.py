@@ -138,25 +138,6 @@ def assimilate(
     return accepted
 
 
-def _is_audit_requeued(cand: dict) -> bool:
-    """True when the audit trail shows a deliberate audit-failure requeue.
-
-    The sampler re-queues a candidate whose gate decision proved to be a
-    false positive (reason ``audit-sampler-fail``) AFTER it was gated. The
-    sync must NOT reapply the old decision file to such a candidate, or the
-    recovery is silently undone (P7 fold, luna re-gate 4).
-    """
-    transitions = (cand.get("audit") or {}).get("transitions") or []
-    saw_gated = False
-    for t in transitions:
-        to = t.get("to", "")
-        if to.startswith("gated:"):
-            saw_gated = True
-        elif saw_gated and to == "queued" and t.get("reason") == "audit-sampler-fail":
-            return True
-    return False
-
-
 def sync_gate_decisions(
     ledger_path: Path,
     generated_dir: Path,
@@ -183,10 +164,6 @@ def sync_gate_decisions(
             continue
         cand = find_candidate(ledger, url)
         if cand is None:
-            continue
-        if _is_audit_requeued(cand):
-            # Deliberate audit-failure requeue — the old decision file must
-            # not be reapplied (the recovery would be undone).
             continue
         current = cand.get("status")
         if current and current.startswith("gated:"):

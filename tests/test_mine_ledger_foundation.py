@@ -305,70 +305,7 @@ def test_audit_requeue_archives_gate_and_new_decision_applies(tmp_path: Path):
         ),
         encoding="utf-8",
     )
-    # Diagnostic preconditions (CI-only divergence hunt — the sync returned 0
-    # on the runner while passing locally):
-    assert sorted(p.name for p in gen.glob("*_gate_decision.json")) == [
-        "recovered_gate_decision.json"
-    ]
-    led2 = load_ledger(ledger_path)
-    assert mod.find_candidate(led2, "https://github.com/acme/recovered") is not None
-    assert led2["candidates"][0]["status"] == "queued"
-    # Surface the swallowed TransitionError (CI-only divergence):
-    try:
-        mod.set_status(
-            ledger_path, "https://github.com/acme/recovered", decision="go",
-            reason="diag",
-        )
-    except Exception as exc:  # noqa: BLE001
-        raise AssertionError(f"set_status raised in CI: {exc!r}") from exc
-    # Revert the diagnostic transition so the sync still sees "queued".
-    from regexproof.mine.transition import transition_candidate
-
-    transition_candidate(
-        ledger_path, "https://github.com/acme/recovered", to="queued",
-        reason="diag-revert",
-    )
-    # Decisive spy: does the sync's loop even reach set_status?
-    calls: list[tuple] = []
-    fc_calls: list[str] = []
-    led_views: list[dict] = []
-    orig_ss = mod.set_status
-    orig_fc = mod.find_candidate
-    orig_ll = mod.load_ledger
-
-    def _spy(*a, **k):
-        calls.append((a, k))
-        return orig_ss(*a, **k)
-
-    def _fc_spy(led, url):
-        r = orig_fc(led, url)
-        fc_calls.append(f"{url}->{r.get('status') if r else None}")
-        return r
-
-    def _ll_spy(path):
-        led = orig_ll(path)
-        led_views.append(led)
-        return led
-
-    mod.set_status = _spy
-    mod.find_candidate = _fc_spy
-    mod.load_ledger = _ll_spy
-    try:
-        result = mod.sync_gate_decisions(ledger_path, gen)
-    finally:
-        mod.set_status = orig_ss
-        mod.find_candidate = orig_fc
-        mod.load_ledger = orig_ll
-    assert fc_calls == ["https://github.com/acme/recovered->queued"], fc_calls
-    _led_status = (
-        led_views[0]["candidates"][0].get("status") if led_views else None
-    )
-    _led_audit = led_views[0]["candidates"][0].get("audit") if led_views else None
-    assert calls, (
-        f"sync never reached set_status; result={result} fc={fc_calls} "
-        f"led_status={_led_status} audit={_led_audit}"
-    )
-    assert result == 1, f"sync returned {result} after {len(calls)} set_status calls"
+    assert mod.sync_gate_decisions(ledger_path, gen) == 1
     assert load_ledger(ledger_path)["candidates"][0]["status"] == "gated:go"
 
 
