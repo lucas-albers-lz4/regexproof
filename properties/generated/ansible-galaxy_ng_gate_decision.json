@@ -1,0 +1,63 @@
+{
+  "candidate_url": "https://github.com/ansible/galaxy_ng",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. Ansible content server. 27 sites < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "galaxy_ng",
+  "corpus_pin": "b70cf11ec018abf89e61f7ea46486b6310529ca1",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "posix-shell": 5,
+      "py_re": 21,
+      "re2": 1
+    },
+    "flags": {
+      "a": 1,
+      "i": 1,
+      "x": 1
+    },
+    "pin": "b70cf11ec018abf89e61f7ea46486b6310529ca1",
+    "predicted_buckets": {
+      "inline-flag": 2
+    },
+    "regex_sites": 27,
+    "regex_sites_per_file": {
+      ".ci/scripts/get_dab_for_pr.py": 1,
+      ".github/scripts/compare_openapi_specs.sh": 4,
+      "dev/ephemeral/patch_ephemeral.sh": 1,
+      "galaxy_ng/app/api/ui/v1/serializers/execution_environment.py": 1,
+      "galaxy_ng/app/api/utils.py": 2,
+      "galaxy_ng/app/api/v3/serializers/namespace.py": 1,
+      "galaxy_ng/app/dynaconf_hooks.py": 1,
+      "galaxy_ng/app/utils/apispec/id_fix.py": 6,
+      "galaxy_ng/app/utils/namespaces.py": 1,
+      "galaxy_ng/tests/integration/api/test_artifact_upload.py": 4,
+      "galaxy_ng/tests/integration/community/test_role_import_exceptions.py": 1,
+      "galaxy_ng/tests/integration/utils/client_ansible_galaxy_cli.py": 2,
+      "galaxy_ng/tests/integration/utils/client_ui.py": 1,
+      "profiles/insights/proxy/main.go": 1
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 27 regex sites (auto-NO-GO bar 200); dialects [posix-shell:5, py_re:21, re2:1]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

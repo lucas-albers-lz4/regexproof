@@ -1,0 +1,56 @@
+{
+  "candidate_url": "https://github.com/onflow/cadence",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. Cadence language. 50 sites < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "cadence",
+  "corpus_pin": "4537e4548f2e0f5def83c2692852c4dd188506ed",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "lookaround": 1
+    },
+    "dialect": {
+      "ecma": 41,
+      "posix-shell": 4,
+      "re2": 5
+    },
+    "flags": {},
+    "pin": "4537e4548f2e0f5def83c2692852c4dd188506ed",
+    "predicted_buckets": {
+      "lookaround": 1
+    },
+    "regex_sites": 50,
+    "regex_sites_per_file": {
+      "bump-version.sh": 3,
+      "check-headers.sh": 1,
+      "docs/lint.js": 3,
+      "old_parser/docstring.go": 2,
+      "parser/docstring.go": 2,
+      "sema/check_path_expression.go": 1,
+      "tools/ast-explorer/src/cadence.ts": 31,
+      "tools/ast-explorer/webpack.config.js": 3,
+      "tools/update/main.ts": 4
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 50 regex sites (auto-NO-GO bar 200); dialects [ecma:41, posix-shell:4, re2:5]; boundary=unknown.",
+  "schema_version": "1"
+}

@@ -1,0 +1,42 @@
+{
+  "schema_version": "1",
+  "candidate_url": "https://github.com/HydraDragonAntivirus/HydraDragonAntivirus",
+  "conditions": [
+    {
+      "id": "new-surface",
+      "met": false,
+      "evidence": "No probe evidence - clone failed before extraction (promisor remote sha1)."
+    },
+    {
+      "id": "security-boundary",
+      "met": false,
+      "evidence": "Probe unavailable; description says Windows AV tool but unprobeable at gate budget."
+    },
+    {
+      "id": "large-under-saturated",
+      "met": false,
+      "evidence": "No site count (clone checkout failure)."
+    }
+  ],
+  "corpus": "HydraDragonAntivirus-HydraDragonAntivirus",
+  "corpus_pin": "",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "regex_sites": 0,
+    "dialect": {},
+    "flags": {},
+    "construct_counts": {},
+    "predicted_buckets": {},
+    "security_boundary": "unknown",
+    "pin": "",
+    "extractor_errors": 0,
+    "regex_sites_per_file": {}
+  },
+  "rationale": "Clone checkout fails repeatedly (promisor remote sha1 bebd6ff1). Unprobeable at gate budget. No admission condition met.",
+  "related": {
+    "probe_failure": "git clone/checkout error"
+  }
+}

@@ -1,0 +1,113 @@
+{
+  "candidate_url": "https://github.com/drevops/vortex",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 102 sites < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "vortex",
+  "corpus_pin": "7b6cdaf782942d4ea94fea1290ee0db2816cbc81",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "posix-class": 4
+    },
+    "dialect": {
+      "ecma": 17,
+      "posix-shell": 85
+    },
+    "flags": {
+      "g": 6,
+      "i": 1,
+      "s": 2
+    },
+    "pin": "7b6cdaf782942d4ea94fea1290ee0db2816cbc81",
+    "predicted_buckets": {
+      "inline-flag": 3,
+      "posix-class": 4,
+      "stateful": 6
+    },
+    "regex_sites": 102,
+    "regex_sites_per_file": {
+      ".circleci/post-coverage-comment.sh": 1,
+      ".vortex/docs/.utils/svg-term-render.js": 1,
+      ".vortex/docs/content/contributing/maintenance/script-boilerplate.sh": 1,
+      ".vortex/docs/src/components/VerticalTabs/VerticalTabs.js": 4,
+      ".vortex/docs/src/pages/index.js": 3,
+      ".vortex/docs/src/theme/prism-include-languages.ts": 2,
+      ".vortex/docs/tests/unit/Card/Card.test.js": 1,
+      ".vortex/docs/tests/unit/VerticalTabs/VerticalTabs.test.js": 3,
+      ".vortex/docs/tests/unit/lint-globs.test.js": 3,
+      ".vortex/installer/tests/Fixtures/handler_process/_baseline/scripts/vortex-tooling.sh": 1,
+      ".vortex/installer/tests/Fixtures/handler_process/ciprovider_circleci/.circleci/post-coverage-comment.sh": 1,
+      ".vortex/installer/tests/Fixtures/handler_process/code_coverage_provider_codecov_circleci/.circleci/post-coverage-comment.sh": 1,
+      ".vortex/installer/tests/Fixtures/handler_process/deploy_types_all_circleci/.circleci/post-coverage-comment.sh": 1,
+      ".vortex/installer/tests/Fixtures/handler_process/deploy_types_none_circleci/.circleci/post-coverage-comment.sh": 1,
+      ".vortex/installer/tests/Fixtures/handler_process/deps_updates_provider_ci_circleci/.circleci/post-coverage-comment.sh": 1,
+      ".vortex/installer/tests/Fixtures/handler_process/migration_disabled_circleci/.circleci/post-coverage-comment.sh": 1,
+      ".vortex/installer/tests/Fixtures/handler_process/migration_enabled/scripts/provision-20-migration.sh": 1,
+      ".vortex/installer/tests/Fixtures/handler_process/migration_enabled_circleci/.circleci/post-coverage-comment.sh": 1,
+      ".vortex/installer/tests/Fixtures/handler_process/migration_enabled_circleci/scripts/provision-20-migration.sh": 1,
+      ".vortex/installer/tests/Fixtures/handler_process/migration_enabled_lagoon/scripts/provision-20-migration.sh": 1,
+      ".vortex/installer/tests/Fixtures/handler_process/migration_fetch_source_acquia/scripts/provision-20-migration.sh": 1,
+      ".vortex/installer/tests/Fixtures/handler_process/migration_fetch_source_container_registry/scripts/provision-20-migration.sh": 1,
+      ".vortex/installer/tests/Fixtures/handler_process/migration_fetch_source_ftp/scripts/provision-20-migration.sh": 1,
+      ".vortex/installer/tests/Fixtures/handler_process/migration_fetch_source_lagoon/scripts/provision-20-migration.sh": 1,
+      ".vortex/installer/tests/Fixtures/handler_process/migration_fetch_source_s3/scripts/provision-20-migration.sh": 1,
+      ".vortex/installer/tests/Fixtures/handler_process/migration_fetch_source_url/scripts/provision-20-migration.sh": 1,
+      ".vortex/installer/tests/Fixtures/handler_process/timezone_circleci/.circleci/post-coverage-comment.sh": 1,
+      ".vortex/installer/tests/Fixtures/handler_process/tools_groups_no_be_lint_circleci/.circleci/post-coverage-comment.sh": 1,
+      ".vortex/installer/tests/Fixtures/handler_process/tools_groups_no_be_tests_circleci/.circleci/post-coverage-comment.sh": 1,
+      ".vortex/installer/tests/Fixtures/handler_process/tools_groups_no_fe_lint_circleci/.circleci/post-coverage-comment.sh": 1,
+      ".vortex/installer/tests/Fixtures/handler_process/tools_groups_no_fe_lint_no_theme_circleci/.circleci/post-coverage-comment.sh": 1,
+      ".vortex/installer/tests/Fixtures/handler_process/tools_no_behat_circleci/.circleci/post-coverage-comment.sh": 1,
+      ".vortex/installer/tests/Fixtures/handler_process/tools_no_dclint_circleci/.circleci/post-coverage-comment.sh": 1,
+      ".vortex/installer/tests/Fixtures/handler_process/tools_no_docker_linters_circleci/.circleci/post-coverage-comment.sh": 1,
+      ".vortex/installer/tests/Fixtures/handler_process/tools_no_eslint_circleci/.circleci/post-coverage-comment.sh": 1,
+      ".vortex/installer/tests/Fixtures/handler_process/tools_no_hadolint_circleci/.circleci/post-coverage-comment.sh": 1,
+      ".vortex/installer/tests/Fixtures/handler_process/tools_no_jest_circleci/.circleci/post-coverage-comment.sh": 1,
+      ".vortex/installer/tests/Fixtures/handler_process/tools_no_phpcs_circleci/.circleci/post-coverage-comment.sh": 1,
+      ".vortex/installer/tests/Fixtures/handler_process/tools_no_phpstan_circleci/.circleci/post-coverage-comment.sh": 1,
+      ".vortex/installer/tests/Fixtures/handler_process/tools_no_phpunit_circleci/.circleci/post-coverage-comment.sh": 1,
+      ".vortex/installer/tests/Fixtures/handler_process/tools_no_rector_circleci/.circleci/post-coverage-comment.sh": 1,
+      ".vortex/installer/tests/Fixtures/handler_process/tools_no_stylelint_circleci/.circleci/post-coverage-comment.sh": 1,
+      ".vortex/installer/tests/Fixtures/handler_process/tools_no_twig_circleci/.circleci/post-coverage-comment.sh": 1,
+      ".vortex/tooling/playground/try-notify-github-cleanup.sh": 3,
+      ".vortex/tooling/src/vortex-deploy": 1,
+      ".vortex/tooling/src/vortex-deploy-lagoon": 2,
+      ".vortex/tooling/src/vortex-doctor": 10,
+      ".vortex/tooling/src/vortex-fetch-db-acquia": 6,
+      ".vortex/tooling/src/vortex-fetch-db-s3": 5,
+      ".vortex/tooling/src/vortex-login-container-registry": 1,
+      ".vortex/tooling/src/vortex-notify-diffy": 1,
+      ".vortex/tooling/src/vortex-notify-jira": 1,
+      ".vortex/tooling/src/vortex-notify-newrelic": 1,
+      ".vortex/tooling/src/vortex-notify-slack": 1,
+      ".vortex/tooling/src/vortex-notify-webhook": 2,
+      ".vortex/tooling/src/vortex-provision": 2,
+      ".vortex/tooling/src/vortex-push-db-s3": 7,
+      ".vortex/tooling/src/vortex-setup-ssh": 3,
+      ".vortex/tooling/src/vortex-task-custom-lagoon": 1,
+      "scripts/provision-20-migration.sh": 1,
+      "scripts/vortex-tooling.sh": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 102 regex sites (auto-NO-GO bar 200); dialects [ecma:17, posix-shell:85]; boundary=unknown.",
+  "schema_version": "1"
+}

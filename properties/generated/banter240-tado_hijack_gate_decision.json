@@ -1,0 +1,51 @@
+{
+  "candidate_url": "https://github.com/banter240/tado_hijack",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 14 py_re, small smart-home project.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "tado_hijack",
+  "corpus_pin": "dee33dc1ed0948d4fd09915397edb20eac23b9b0",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "lookaround": 1
+    },
+    "dialect": {
+      "py_re": 14
+    },
+    "flags": {
+      "i": 9
+    },
+    "pin": "dee33dc1ed0948d4fd09915397edb20eac23b9b0",
+    "predicted_buckets": {
+      "inline-flag": 9,
+      "lookaround": 1
+    },
+    "regex_sites": 14,
+    "regex_sites_per_file": {
+      "custom_components/tado_hijack/diagnostics.py": 1,
+      "custom_components/tado_hijack/helpers/logging_utils.py": 11,
+      "custom_components/tado_hijack/helpers/parsers.py": 2
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 14 regex sites (auto-NO-GO bar 200); dialects [py_re:14]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

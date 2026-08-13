@@ -1,0 +1,52 @@
+{
+  "candidate_url": "https://github.com/netobserv/netobserv-ebpf-agent",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. eBPF observability agent. 54 sites < 1000; not a regex security tool.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "netobserv-ebpf-agent",
+  "corpus_pin": "c2182ff520997aa2bab490617074c1699fa077e8",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "posix-shell": 49,
+      "re2": 5
+    },
+    "flags": {
+      "i": 11
+    },
+    "pin": "c2182ff520997aa2bab490617074c1699fa077e8",
+    "predicted_buckets": {
+      "inline-flag": 11
+    },
+    "regex_sites": 54,
+    "regex_sites_per_file": {
+      "examples/test-ssl-host.sh": 42,
+      "pkg/agent/ip_test.go": 1,
+      "pkg/ifaces/filter.go": 1,
+      "pkg/kernel/kernel_utils.go": 2,
+      "pkg/maps/maps_test.go": 1,
+      "scripts/deploy-agent.sh": 7
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 54 regex sites (auto-NO-GO bar 200); dialects [posix-shell:49, re2:5]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

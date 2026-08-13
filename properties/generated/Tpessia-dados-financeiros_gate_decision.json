@@ -1,0 +1,56 @@
+{
+  "candidate_url": "https://github.com/Tpessia/dados-financeiros",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 29 ecma, deterministic-false.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "dados-financeiros",
+  "corpus_pin": "43079dba4755fd0ccfed7c07a25a63587079d67b",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 29
+    },
+    "flags": {
+      "g": 6,
+      "m": 1
+    },
+    "pin": "43079dba4755fd0ccfed7c07a25a63587079d67b",
+    "predicted_buckets": {
+      "m-flag": 1,
+      "stateful": 6
+    },
+    "regex_sites": 29,
+    "regex_sites_per_file": {
+      "api/src/@utils/data/date.ts": 2,
+      "api/src/@utils/data/random.ts": 2,
+      "api/src/core/services/config.service.ts": 5,
+      "api/src/gov-bond/services/gov-bond-day-last-td.service.ts": 8,
+      "api/src/gov-bond/services/gov-bond-day-sisweb.service.ts": 7,
+      "api/src/gov-bond/services/gov-bond-day-transparente.service.ts": 1,
+      "api/src/public/assets/swagger.js": 2,
+      "api/src/search/services/search.service.ts": 1,
+      "api/test/health.controller.spec.ts": 1
+    },
+    "security_boundary": "deterministic-false"
+  },
+  "rationale": "Below admission scale: 29 regex sites (auto-NO-GO bar 200); dialects [ecma:29]; boundary=deterministic-false.",
+  "schema_version": "1"
+}

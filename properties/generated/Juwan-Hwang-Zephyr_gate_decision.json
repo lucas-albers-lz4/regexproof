@@ -1,0 +1,84 @@
+{
+  "candidate_url": "https://github.com/Juwan-Hwang/Zephyr",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 289 ecma sites < 1000, boundary unknown.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "Zephyr",
+  "corpus_pin": "49c8f78b058fa5a7290e00d0a47fac97edd2a53d",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "lookaround": 8,
+      "posix-class": 1
+    },
+    "dialect": {
+      "ecma": 288,
+      "posix-shell": 1
+    },
+    "flags": {
+      "g": 74,
+      "i": 52,
+      "m": 10,
+      "u": 1
+    },
+    "pin": "49c8f78b058fa5a7290e00d0a47fac97edd2a53d",
+    "predicted_buckets": {
+      "inline-flag": 52,
+      "lookaround": 8,
+      "m-flag": 10,
+      "posix-class": 1,
+      "stateful": 74,
+      "u-flag": 1
+    },
+    "regex_sites": 289,
+    "regex_sites_per_file": {
+      "apps/desktop/src/cm6.bundle.js": 98,
+      "apps/desktop/src/i18n.js": 1,
+      "apps/desktop/src/integration.test.js": 2,
+      "apps/desktop/src/js-yaml.min.js": 22,
+      "apps/desktop/src/modules/connections.js": 1,
+      "apps/desktop/src/ui/advanced.js": 2,
+      "apps/desktop/src/ui/console-home.js": 2,
+      "apps/desktop/src/ui/dns-shared.js": 7,
+      "apps/desktop/src/ui/editor/prism-completion.js": 3,
+      "apps/desktop/src/ui/editor/prism-highlight.js": 1,
+      "apps/desktop/src/ui/global-shortcut.js": 9,
+      "apps/desktop/src/ui/logs.js": 5,
+      "apps/desktop/src/ui/plugins.js": 9,
+      "apps/desktop/src/ui/proxy-groups.js": 2,
+      "apps/desktop/src/ui/rule-library.js": 1,
+      "apps/desktop/src/ui/settings.js": 1,
+      "apps/desktop/src/ui/settings/subscriptions.js": 26,
+      "apps/desktop/src/ui/settings/tunnels.js": 4,
+      "apps/desktop/src/utils/color.js": 1,
+      "apps/desktop/src/utils/dom-id.js": 3,
+      "apps/desktop/src/utils/dom-id.test.js": 11,
+      "apps/desktop/src/utils/markdown.js": 23,
+      "apps/desktop/src/utils/sanitize.js": 8,
+      "apps/desktop/src/utils/version-utils.js": 3,
+      "packages/scripts/check-i18n.js": 7,
+      "packages/tokens/config.js": 36,
+      "scripts/linuxdeploy-plugin-gtk.sh": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 289 regex sites (auto-NO-GO bar 200); dialects [ecma:288, posix-shell:1]; boundary=unknown.",
+  "schema_version": "1"
+}

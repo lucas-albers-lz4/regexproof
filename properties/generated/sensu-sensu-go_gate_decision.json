@@ -1,0 +1,51 @@
+{
+  "candidate_url": "https://github.com/sensu/sensu-go",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 12 re2 sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "sensu-go",
+  "corpus_pin": "80e82590ece98a4bc780de04882a6f754ad12abc",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "re2": 12
+    },
+    "flags": {},
+    "pin": "80e82590ece98a4bc780de04882a6f754ad12abc",
+    "predicted_buckets": {},
+    "regex_sites": 12,
+    "regex_sites_per_file": {
+      "agent/transformers/nagios.go": 1,
+      "backend/apid/middlewares/refresh_token.go": 1,
+      "cli/commands/timeutil/time.go": 3,
+      "cli/resource/parse.go": 1,
+      "cli/resource/resolve.go": 1,
+      "graphql/generator/field.go": 1,
+      "scripts/check_protoc/main.go": 1,
+      "scripts/gen_gqltype/main.go": 1,
+      "scripts/generate_type/generate_type.go": 1,
+      "util/environment/environment.go": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 12 regex sites (auto-NO-GO bar 200); dialects [re2:12]; boundary=unknown.",
+  "schema_version": "1"
+}

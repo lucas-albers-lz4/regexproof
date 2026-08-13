@@ -1,0 +1,52 @@
+{
+  "candidate_url": "https://github.com/horizontalsystems/unstoppable-wallet-android",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 15 sites, wallet app.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "unstoppable-wallet-android",
+  "corpus_pin": "8c871e1666e9baddafeeb8e240f0a27d19832e92",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "lookaround": 3
+    },
+    "dialect": {
+      "posix-shell": 8,
+      "py_re": 7
+    },
+    "flags": {
+      "s": 3
+    },
+    "pin": "8c871e1666e9baddafeeb8e240f0a27d19832e92",
+    "predicted_buckets": {
+      "inline-flag": 3,
+      "lookaround": 3
+    },
+    "regex_sites": 15,
+    "regex_sites_per_file": {
+      ".github/scripts/translate_strings.py": 7,
+      "docker/test.sh": 6,
+      "gradlew": 2
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 15 regex sites (auto-NO-GO bar 200); dialects [posix-shell:8, py_re:7]; boundary=unknown.",
+  "schema_version": "1"
+}

@@ -1,0 +1,57 @@
+{
+  "candidate_url": "https://github.com/basecamp/fizzy-cli",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. Basecamp CLI. 17 sites < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "fizzy-cli",
+  "corpus_pin": "6850a7565036a8f46b3b5b568fd444d3bc03cba6",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "(?m)": 1,
+      "(?s)": 1
+    },
+    "dialect": {
+      "posix-shell": 7,
+      "re2": 10
+    },
+    "flags": {
+      "i": 1
+    },
+    "pin": "6850a7565036a8f46b3b5b568fd444d3bc03cba6",
+    "predicted_buckets": {
+      "inline-flag": 2,
+      "m-flag": 1
+    },
+    "regex_sites": 17,
+    "regex_sites_per_file": {
+      "internal/client/client.go": 1,
+      "internal/commands/attachment.go": 4,
+      "internal/commands/markdown.go": 3,
+      "internal/commands/profile_state.go": 1,
+      "internal/commands/update.go": 1,
+      "scripts/install.sh": 3,
+      "scripts/release.sh": 4
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 17 regex sites (auto-NO-GO bar 200); dialects [posix-shell:7, re2:10]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

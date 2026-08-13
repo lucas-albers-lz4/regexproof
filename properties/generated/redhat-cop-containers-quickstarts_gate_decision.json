@@ -1,0 +1,54 @@
+{
+  "candidate_url": "https://github.com/redhat-cop/containers-quickstarts",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 25 shell sites < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "containers-quickstarts",
+  "corpus_pin": "4c95aad5888c7e52f5b5d79aedd1cbab83016ece",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "posix-class": 1
+    },
+    "dialect": {
+      "posix-shell": 25
+    },
+    "flags": {},
+    "pin": "4c95aad5888c7e52f5b5d79aedd1cbab83016ece",
+    "predicted_buckets": {
+      "posix-class": 1
+    },
+    "regex_sites": 25,
+    "regex_sites_per_file": {
+      "_test/setup.sh": 2,
+      "build-s2i-python-kopf/s2i/run": 1,
+      "deprecated/s2i-java/run-java.sh": 3,
+      "deprecated/s2i-java/s2i/assemble": 5,
+      "deprecated/zookeeper/zkGenConfig.sh": 1,
+      "rabbitmq/docker-entrypoint.sh": 4,
+      "sonarqube/plugins.sh": 7,
+      "sonarqube/run.sh": 1,
+      "ubi7-gitlab-runner/entrypoint": 1
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 25 regex sites (auto-NO-GO bar 200); dialects [posix-shell:25]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

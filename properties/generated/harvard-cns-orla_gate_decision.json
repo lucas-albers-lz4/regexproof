@@ -1,0 +1,47 @@
+{
+  "candidate_url": "https://github.com/harvard-cns/orla",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 2 py_re sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "orla",
+  "corpus_pin": "17ceff1c24e4d17c8edc0274c8886d3b80435fa1",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "py_re": 2
+    },
+    "flags": {
+      "m": 1
+    },
+    "pin": "17ceff1c24e4d17c8edc0274c8886d3b80435fa1",
+    "predicted_buckets": {
+      "m-flag": 1
+    },
+    "regex_sites": 2,
+    "regex_sites_per_file": {
+      "examples/energy-pricing/spatial-shifting/experiment.py": 1,
+      "examples/hotpotqa-distractor/run.py": 1
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 2 regex sites (auto-NO-GO bar 200); dialects [py_re:2]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

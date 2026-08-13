@@ -1,0 +1,64 @@
+{
+  "candidate_url": "https://github.com/expertiza/expertiza",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. Education app. 29 sites < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "expertiza",
+  "corpus_pin": "b68bb8f640ac9593985b5e2f4b72853a4bb8a055",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "backref": 1
+    },
+    "dialect": {
+      "ecma": 22,
+      "posix-shell": 7
+    },
+    "flags": {
+      "g": 4,
+      "i": 4,
+      "u": 2
+    },
+    "pin": "b68bb8f640ac9593985b5e2f4b72853a4bb8a055",
+    "predicted_buckets": {
+      "backref": 1,
+      "inline-flag": 4,
+      "stateful": 4,
+      "u-flag": 2
+    },
+    "regex_sites": 29,
+    "regex_sites_per_file": {
+      "app/assets/javascripts/actionmenu.js": 1,
+      "app/assets/javascripts/ajaxtabs.js": 6,
+      "app/assets/javascripts/application.js": 4,
+      "app/assets/javascripts/datetimepicker.js": 4,
+      "app/assets/javascripts/suckerfish.js": 1,
+      "app/assets/javascripts/superfish.js": 3,
+      "app/assets/javascripts/view_team_in_grades.js": 2,
+      "devops/docker/setup_linux.sh": 3,
+      "devops/docker/setup_mac.sh": 3,
+      "hooks/pre-commit": 1,
+      "public/javascripts/autocomplete-rails.js": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 29 regex sites (auto-NO-GO bar 200); dialects [ecma:22, posix-shell:7]; boundary=unknown.",
+  "schema_version": "1"
+}

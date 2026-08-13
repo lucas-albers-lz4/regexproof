@@ -1,0 +1,78 @@
+{
+  "candidate_url": "https://github.com/senyo888/humidity-intelligence",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. Home-assistant humidity component. 186 sites; boundary classifier false positive (custom_components).",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "humidity-intelligence",
+  "corpus_pin": "1e8d6480d8e1184850c76417a43e7743bcc200b2",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "(?i)": 3,
+      "lookaround": 6
+    },
+    "dialect": {
+      "ecma": 114,
+      "py_re": 72
+    },
+    "flags": {
+      "g": 3,
+      "i": 35,
+      "m": 4,
+      "u": 1
+    },
+    "pin": "1e8d6480d8e1184850c76417a43e7743bcc200b2",
+    "predicted_buckets": {
+      "inline-flag": 38,
+      "lookaround": 6,
+      "m-flag": 4,
+      "stateful": 3,
+      "u-flag": 1
+    },
+    "regex_sites": 186,
+    "regex_sites_per_file": {
+      "custom_components/humidity_intelligence/helpers/cleanup.py": 1,
+      "custom_components/humidity_intelligence/helpers/diagnostics_redaction.py": 3,
+      "custom_components/humidity_intelligence/helpers/level_labels.py": 2,
+      "custom_components/humidity_intelligence/helpers/local_versions.py": 1,
+      "custom_components/humidity_intelligence/helpers/parsing.py": 1,
+      "custom_components/humidity_intelligence/helpers/reason_presentation.py": 4,
+      "custom_components/humidity_intelligence/helpers/report_exports.py": 2,
+      "custom_components/humidity_intelligence/sensors/slope.py": 1,
+      "custom_components/humidity_intelligence/services.py": 6,
+      "custom_components/humidity_intelligence/ui/register.py": 9,
+      "scripts/build_hi_inspector.py": 1,
+      "scripts/check_version_governance.py": 2,
+      "scripts/generate_hi_inspector_fixtures.py": 1,
+      "scripts/issue_triage.py": 29,
+      "site/inspector/parser.mjs": 32,
+      "tests 2/hi_runtime_fixtures.py": 2,
+      "tests 2/test_hi_inspector.mjs": 17,
+      "tests 2/test_pages_site.py": 4,
+      "tests 2/test_reason_card_renderer.mjs": 33,
+      "tests 2/test_slope_sanity.py": 2,
+      "tests 2/test_stability_badge_renderer.mjs": 32,
+      "tests 2/test_workflows.py": 1
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 186 regex sites (auto-NO-GO bar 200); dialects [ecma:114, py_re:72]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

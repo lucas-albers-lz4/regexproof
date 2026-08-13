@@ -1,0 +1,68 @@
+{
+  "candidate_url": "https://github.com/fedimint/fedimint",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. Fedimint. 94 sites < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "fedimint",
+  "corpus_pin": "5242f22969886f0e64162ea82ccefef2be260a76",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "lookaround": 3,
+      "posix-class": 1
+    },
+    "dialect": {
+      "ecma": 59,
+      "posix-shell": 35
+    },
+    "flags": {
+      "g": 8,
+      "i": 24
+    },
+    "pin": "5242f22969886f0e64162ea82ccefef2be260a76",
+    "predicted_buckets": {
+      "inline-flag": 24,
+      "lookaround": 3,
+      "posix-class": 1,
+      "stateful": 8
+    },
+    "regex_sites": 94,
+    "regex_sites_per_file": {
+      ".config/flakebox/bin/flakebox-in-each-cargo-workspace": 1,
+      "fedimint-ui-common/assets/bootstrap.bundle.min.js": 19,
+      "fedimint-ui-common/assets/chart.umd.min.js": 5,
+      "fedimint-ui-common/assets/html5-qrcode.min.js": 3,
+      "fedimint-ui-common/assets/htmx.org-2.0.4.min.js": 32,
+      "misc/git-hooks/commit-msg": 1,
+      "misc/git-hooks/pre-commit": 14,
+      "nix/bin/cargo-with-memlimit.sh": 1,
+      "nix/check-forbidden-deps.sh": 10,
+      "scripts/_common.sh": 1,
+      "scripts/bench-compilation.sh": 2,
+      "scripts/ci/check-crate-ownership.sh": 1,
+      "scripts/dev/build-docs.sh": 1,
+      "scripts/dev/change-docker-tags.sh": 1,
+      "scripts/dev/run-test/fm-run-test": 2
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 94 regex sites (auto-NO-GO bar 200); dialects [ecma:59, posix-shell:35]; boundary=unknown.",
+  "schema_version": "1"
+}

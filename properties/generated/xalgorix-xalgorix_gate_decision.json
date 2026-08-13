@@ -1,0 +1,96 @@
+{
+  "candidate_url": "https://github.com/xalgorix/xalgorix",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 203 sites < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "xalgorix",
+  "corpus_pin": "381d85ad0607d89bc9bc4a06ce76dbeafe0a6a1d",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "(?i)": 16,
+      "(?m)": 3,
+      "(?s)": 19,
+      "posix-class": 1
+    },
+    "dialect": {
+      "ecma": 125,
+      "posix-shell": 13,
+      "re2": 65
+    },
+    "flags": {
+      "g": 41,
+      "i": 11
+    },
+    "pin": "381d85ad0607d89bc9bc4a06ce76dbeafe0a6a1d",
+    "predicted_buckets": {
+      "inline-flag": 46,
+      "m-flag": 3,
+      "posix-class": 1,
+      "stateful": 41
+    },
+    "regex_sites": 203,
+    "regex_sites_per_file": {
+      "install.sh": 2,
+      "internal/agent/agent.go": 1,
+      "internal/agent/agent_ratepolicy.go": 4,
+      "internal/agent/hooks.go": 1,
+      "internal/attacksurface/attacksurface.go": 1,
+      "internal/auth/store.go": 1,
+      "internal/config/envfile.go": 1,
+      "internal/llm/parser.go": 23,
+      "internal/reporting/cover_test.go": 3,
+      "internal/reporting/recon.go": 3,
+      "internal/tools/agentmail/agentmail.go": 2,
+      "internal/tools/browser/browser.go": 2,
+      "internal/tools/browser/extension/content.js": 3,
+      "internal/tools/pageagent/scripts/discovery.js": 1,
+      "internal/tools/reporting/reporting.go": 1,
+      "internal/tools/terminal/terminal.go": 6,
+      "internal/web/data_dirs.go": 1,
+      "internal/web/notify.go": 3,
+      "internal/web/orchestrator.go": 1,
+      "internal/web/report.go": 3,
+      "internal/web/scan_session.go": 1,
+      "internal/web/scheduler.go": 1,
+      "internal/web/schedules.go": 1,
+      "internal/web/server.go": 1,
+      "internal/web/settings_env.go": 1,
+      "internal/web/static/assets/app-mb9SGN7E.js": 85,
+      "internal/web/uploads.go": 2,
+      "internal/web/uploads_source.go": 1,
+      "redeploy.sh": 6,
+      "release.sh": 5,
+      "webui/mock-backend.mjs": 7,
+      "webui/src/components/legacy-import-banner.tsx": 1,
+      "webui/src/components/markdown.tsx": 12,
+      "webui/src/components/new-scan-dialog.tsx": 1,
+      "webui/src/lib/feed-export.ts": 4,
+      "webui/src/pages/backend-unreachable.tsx": 1,
+      "webui/src/pages/new-scan.tsx": 3,
+      "webui/src/pages/schedules.tsx": 2,
+      "webui/src/pages/settings/oauth-modal.tsx": 4,
+      "webui/vite.config.ts": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 203 regex sites (auto-NO-GO bar 200); dialects [ecma:125, posix-shell:13, re2:65]; boundary=unknown.",
+  "schema_version": "1"
+}

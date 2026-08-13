@@ -1,0 +1,46 @@
+{
+  "candidate_url": "https://github.com/Yamato-Security/hayabusa-rules",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. Curated Sigma-format Windows event rules (4,967 YAML) — only 5 |re| regex fields; string-match format, not a regex corpus (SigmaHQ class).",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "hayabusa-rules",
+  "corpus_pin": "be4ff15987f19e6287695718d8c8c64255e96054",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "py_re": 2
+    },
+    "flags": {
+      "s": 1
+    },
+    "pin": "be4ff15987f19e6287695718d8c8c64255e96054",
+    "predicted_buckets": {
+      "inline-flag": 1
+    },
+    "regex_sites": 2,
+    "regex_sites_per_file": {
+      "scripts/supported_modifiers_check/supported-modifier.py": 2
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 2 regex sites (auto-NO-GO bar 200); dialects [py_re:2]; boundary=unknown.",
+  "schema_version": "1"
+}

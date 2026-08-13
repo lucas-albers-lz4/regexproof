@@ -1,0 +1,104 @@
+{
+  "candidate_url": "https://github.com/h0tak88r/AutoAR",
+  "conditions": [
+    {
+      "evidence": "Covered dialects (ecma); no new construct class.",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe deterministic-true, verified security tool (bug-bounty ASM). Automated security recon/ASM tool for bug bounty. 1,114 sites (1,078 ecma), 938 first-party (vendored jspdf excluded). Security tool + scale. GO 2+3.",
+      "id": "security-boundary",
+      "met": true
+    },
+    {
+      "evidence": "First-party >= 1000 sites, ecma under-saturated.Automated security recon/ASM tool for bug bounty. 1,114 sites (1,078 ecma), 938 first-party (vendored jspdf excluded). Security tool + scale. GO 2+3.",
+      "id": "large-under-saturated",
+      "met": true
+    }
+  ],
+  "corpus": "AutoAR",
+  "corpus_pin": "01cd447ad3b1acfed7e0680596c2c74458a4cf06",
+  "decision": "go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "(?i)": 6,
+      "(?s)": 3,
+      "backref": 8,
+      "lookaround": 16
+    },
+    "dialect": {
+      "ecma": 1078,
+      "posix-shell": 3,
+      "re2": 33
+    },
+    "flags": {
+      "g": 723,
+      "i": 346
+    },
+    "pin": "01cd447ad3b1acfed7e0680596c2c74458a4cf06",
+    "predicted_buckets": {
+      "backref": 8,
+      "inline-flag": 355,
+      "lookaround": 16,
+      "stateful": 723
+    },
+    "regex_sites": 1114,
+    "regex_sites_per_file": {
+      "internal/api/ui/adbauditor/js/adb-core.js": 1,
+      "internal/api/ui/adbauditor/js/app.js": 25,
+      "internal/api/ui/adbauditor/js/security-auditor.js": 54,
+      "internal/api/ui/apkauditor/lib/jspdf.umd.min.js": 64,
+      "internal/api/ui/apkauditor/lib/jszip.min.js": 1,
+      "internal/api/ui/apkauditor/src/core/engine.js": 372,
+      "internal/api/ui/apkauditor/src/core/entropy.js": 35,
+      "internal/api/ui/apkauditor/src/core/export.js": 5,
+      "internal/api/ui/apkauditor/src/core/pdf.js": 2,
+      "internal/api/ui/apkauditor/src/main.js": 11,
+      "internal/api/ui/ipaauditor/ipa-analyzer.js": 229,
+      "internal/api/ui/ipaauditor/lib/jspdf.umd.min.js": 55,
+      "internal/api/ui/ipaauditor/lib/jszip.min.js": 1,
+      "internal/api/ui/ipaauditor/lib/plist.min.js": 55,
+      "internal/api/ui/pages/html-escape.js": 8,
+      "internal/api/ui/pages/keyhacks.js": 20,
+      "internal/api/ui/pages/launcher.js": 10,
+      "internal/api/ui/pages/module-registry.js": 15,
+      "internal/api/ui/pages/ops-tools.js": 1,
+      "internal/api/ui/pages/program-lookup.js": 1,
+      "internal/api/ui/pages/programs.js": 5,
+      "internal/api/ui/pages/r2-prefixes.js": 4,
+      "internal/api/ui/pages/r2.js": 2,
+      "internal/api/ui/pages/report-templates.js": 1,
+      "internal/api/ui/pages/result-tables.js": 1,
+      "internal/api/ui/pages/router-core.js": 1,
+      "internal/api/ui/pages/router-navigation.js": 1,
+      "internal/api/ui/pages/scan-common.js": 8,
+      "internal/api/ui/pages/scan-detail-manifest.js": 14,
+      "internal/api/ui/pages/scan-detail.js": 42,
+      "internal/api/ui/pages/scan-results-core.js": 5,
+      "internal/api/ui/pages/scans-page.js": 5,
+      "internal/api/ui/pages/targets.js": 5,
+      "internal/api/ui/securitylab/takeover-reference.js": 8,
+      "internal/scanner/gospider/spider.go": 1,
+      "internal/scanner/jsendpoints/jsendpoints.go": 6,
+      "internal/scanner/monitorsuggest/suggest.go": 5,
+      "internal/scanner/nuclei/nuclei.go": 1,
+      "internal/scanner/sqlmap/sqlmap.go": 1,
+      "internal/scanner/wp-confusion/confusion.go": 2,
+      "internal/tools/gf/gf_test.go": 9,
+      "internal/tools/jsfinder/jsfinder.go": 1,
+      "internal/tools/misconfigmapper/misconfigmapper.go": 1,
+      "internal/utils/pattern_matcher_test.go": 4,
+      "internal/utils/phase_logs.go": 1,
+      "internal/version/version_test.go": 1,
+      "scripts/tag-release.sh": 3,
+      "tests/ui/scan-results.test.js": 11
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Security-boundary corpus (boundary=deterministic-true) with findings-triage potential; 1114 sites across [ecma:1078, posix-shell:3, re2:33].",
+  "schema_version": "1"
+}
