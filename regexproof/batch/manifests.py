@@ -3067,6 +3067,9 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "repo": "validatorjs/validator.js",
         "security_tool": False,
         "lift_inline": False,
+        "synth_max_sites": 200,
+        "synth_len_bound": 16,
+        "synth_diff_fuzz_sample": 5,
         "budget": {"redos_wall_s": 120},
     },
     "detect-secrets": {
@@ -4032,5 +4035,4 @@ WAVE_CORPORA = frozenset({
     "Antivirus",
     "patrolaroid",
 })
-
 

@@ -190,6 +190,8 @@ def _parse_escape(s: str, i: int):
         return Lit("\r"), i + 2
     if e == "x":
         return _parse_hex_escape(s, i)
+    if e == "u":
+        return _parse_unicode_escape(s, i)
     if e in r"\\.^$*+?()[]{}|":
         return Lit(e), i + 2
     return Lit(e), i + 2
@@ -213,6 +215,23 @@ def _parse_hex_escape(s: str, i: int):
         return Lit(chr(code)), j + 1
     if i + 3 < len(s) and all(c in "0123456789abcdefABCDEF" for c in s[i + 2 : i + 4]):
         return Lit(chr(int(s[i + 2 : i + 4], 16))), i + 4
+    raise Unencodable("bad-range")
+
+
+def _parse_unicode_escape(s: str, i: int):
+    """Parse the fixed-width / braced Unicode escape used by ECMAScript."""
+    if i + 2 < len(s) and s[i + 2] == "{":
+        j = s.find("}", i + 3)
+        if j < 0 or not s[i + 3 : j] or any(
+            c not in "0123456789abcdefABCDEF" for c in s[i + 3 : j]
+        ):
+            raise Unencodable("bad-range")
+        code = int(s[i + 3 : j], 16)
+        if code > 0x10FFFF:
+            raise Unencodable("bad-range")
+        return Lit(chr(code)), j + 1
+    if i + 5 < len(s) and all(c in "0123456789abcdefABCDEF" for c in s[i + 2 : i + 6]):
+        return Lit(chr(int(s[i + 2 : i + 6], 16))), i + 6
     raise Unencodable("bad-range")
 
 

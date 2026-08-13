@@ -6,7 +6,7 @@
     "note": "fraction gate go; CRS rule-derived adapter is Phase-2 rule_diff",
     "scope": "full_corpus"
   },
-  "remotepower": {
+  "validatorjs": {
     "admitted": 0,
     "dropped": 0,
     "note": "no independent-spec catalog"

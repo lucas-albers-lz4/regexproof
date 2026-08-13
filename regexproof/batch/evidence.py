@@ -9,7 +9,9 @@ SATISH_RESULTS = frozenset({"sat", "finding", "vulnerable"})
 GT_OK = frozenset({"reproduced", "mutation-guard-sat-expected"})
 # Classification / ReDoS kinds are not Z3 verdicts — absence of ground_truth_status
 # is honest (see docs/REPORTING.md). Z3-side kinds need GT under the flag.
-Z3_VERDICT_KINDS = frozenset({"property", "rule_diff", "counterexample_finder", "bug_demo"})
+Z3_VERDICT_KINDS = frozenset(
+    {"property", "rule_diff", "counterexample_finder", "bug_demo", "mutation_guard"}
+)
 
 
 def evidence_gate_errors(
@@ -32,6 +34,18 @@ def evidence_gate_errors(
         result = str(f.get("result") or "").lower()
         if kind in Z3_VERDICT_KINDS and result in TIMEOUT_RESULTS:
             errors.append(f"{rid}: result={result} (TIMEOUT/unknown = not proven)")
+            continue
+        if kind == "mutation_guard" and result != "sat":
+            errors.append(f"{rid}: mutation_guard result={result!r}, expected 'sat'")
+            continue
+        if (
+            kind == "mutation_guard"
+            and f.get("ground_truth_status") != "mutation-guard-sat-expected"
+        ):
+            errors.append(
+                f"{rid}: mutation_guard ground_truth_status must be "
+                "'mutation-guard-sat-expected'"
+            )
             continue
         if fail_planned and result == "planned":
             qid = (f.get("detail") or {}).get("question_id") or rid

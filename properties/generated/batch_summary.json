@@ -116,23 +116,65 @@
     "wall_s": 21.527
   },
   "corpora": {
-    "remotepower": {
-      "address_space_cap": true,
+    "validatorjs": {
+      "address_space_cap": null,
       "complete_run": true,
-      "corpus": "remotepower",
-      "corpus_type": "rule_corpus",
-      "encodable": 156,
+      "corpus": "validatorjs",
+      "corpus_type": "validator",
+      "encodable": 123,
       "engine": {
         "python": "3.13.5"
       },
-      "extracted": 282,
-      "findings": 56,
+      "extracted": 212,
+      "findings": 1274,
       "inventory_questions": 4,
-      "join_regex_ids": 56,
+      "join_regex_ids": 126,
       "redos_findings": 0,
       "redos_incomplete": false,
       "schema_version": "1",
-      "triage": 126
+      "synthesis": {
+        "diff_fuzz_disagreements": 0,
+        "diff_fuzz_sites": 82,
+        "diff_fuzz_witnesses": 6539,
+        "encodable_sites": 123,
+        "mutation_guard_rows": 573,
+        "pre_measure": {
+          "encodable_sites": 123,
+          "selected_fullmatch_shaped_encodable_replay_supported": 82,
+          "selected_sites": 95,
+          "shape1_certification_count_over_all_encodable_sites": 90,
+          "shape1_certification_count_selected": 80
+        },
+        "selected_sites": 95,
+        "selected_sites_after_cap": 95,
+        "selector_outcomes": {
+          "v-shape1-injection-chars": {
+            "rejected-by-selector": 119,
+            "selected": 81,
+            "unsupported-selector": 0
+          },
+          "v-shape2-whitelist-space": {
+            "rejected-by-selector": 186,
+            "selected": 14,
+            "unsupported-selector": 0
+          }
+        },
+        "shape1_certification_count": 90,
+        "skip_buckets": {
+          "synth_skipped_approximate_mirror": 0,
+          "synth_skipped_no_gt_adapter": 0,
+          "synth_skipped_substitution_call_kind": 0,
+          "synth_skipped_unanchored_search": 4
+        },
+        "skip_reasons": {
+          "synth_skipped_unanchored_search": 4
+        },
+        "synth_diff_fuzz_sample": 5,
+        "synth_len_bound": 16,
+        "synth_max_sites": 200,
+        "synthesized_property_rows": 573
+      },
+      "triage": 89
     }
   },
   "pair_counts": {
@@ -143,7 +185,7 @@
       "note": "fraction gate go; CRS rule-derived adapter is Phase-2 rule_diff",
       "scope": "full_corpus"
     },
-    "remotepower": {
+    "validatorjs": {
       "admitted": 0,
       "dropped": 0,
       "note": "no independent-spec catalog"
