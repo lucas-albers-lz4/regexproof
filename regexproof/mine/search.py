@@ -31,13 +31,13 @@ SEARCH_QUERIES: list[str] = [
     "filename:.trufflehog.yml OR filename:.trufflehog.toml OR filename:trufflehog.yml",
     "filename:secretlintrc.json OR filename:.secretlintrc",
     "filename:semgrep.yml OR filename:semgrep.yaml",
-    "path:config filename:secrets.yml OR filename:secrets.yaml",
+    "path:config filename:secrets.yml OR path:config filename:secrets.yaml",
     # rule sets (yara pack conventions — curated packs = highest-value class)
     "filename:index.yar",
     "path:signatures extension:yar",
     "filename:rules.yar path:rules",
     # validators (python validator class)
-    "filename:validator.py OR filename:validators.py path:src",
+    "filename:validator.py path:src OR filename:validators.py path:src",
     # testdata (go regex test surface — new dialect for go_regexp/re2)
     "filename:regex_test.go OR filename:regexp_test.go",
 ]

@@ -232,6 +232,7 @@ def test_new_query_families_are_classified():
     assert families[SEARCH_QUERIES[10]] == "security"  # .gitleaks.toml
     assert families[SEARCH_QUERIES[11]] == "security"  # .trufflehog
     assert families[SEARCH_QUERIES[12]] == "security"  # secretlintrc
+    assert families[SEARCH_QUERIES[14]] == "security"  # secrets.yml/yaml
     # rules expansion (semgrep.yml + yara conventions)
     assert families[SEARCH_QUERIES[13]] == "rules"     # semgrep.yml/yaml
     assert families[SEARCH_QUERIES[15]] == "rules"     # index.yar
@@ -244,3 +245,20 @@ def test_new_query_families_are_classified():
     # fuzzy fallback agrees with exact map
     for q in SEARCH_QUERIES:
         assert _query_family(q) == _QUERY_FAMILY[q]
+
+
+def test_fuzzy_fallback_classifies_drifted_queries():
+    """Strings NOT in the exact map must still classify via the fuzzy fallback."""
+    drifted = [
+        ("filename:gitleaks.toml", "security"),            # dropped the OR branch
+        ("path:config filename:trufflehog.yml", "security"),
+        ("filename:secretlintrc", "security"),             # dropped extension
+        ("filename:secrets.yml", "security"),              # dropped path:config
+        ("filename:index.yar", "rules"),                   # yara index convention
+        ("filename:rules.yar", "rules"),
+        ("filename:regexp_test.go", "testdata"),
+        ("filename:regex_test.go", "testdata"),
+        ("filename:validator.py", "validators"),
+    ]
+    for q, expected in drifted:
+        assert _query_family(q) == expected, f"drifted {q!r} -> {_query_family(q)}, want {expected}"
