@@ -51,7 +51,7 @@ def test_committed_scaffold_shape():
     }
     for cand in data["candidates"]:
         assert required.issubset(cand.keys())
-        assert cand["status"] in {"mined", "queued"}
+        assert cand["status"] in {"mined", "queued", "gated:go", "gated:no-go", "gated:triage-trial"}
         assert isinstance(cand["url"], str) and cand["url"]
         assert isinstance(cand["stars"], int)
 
