@@ -71,12 +71,14 @@ jobs:
       - name: Named mutation-coverage gate
         run: python scripts/z3-verify.py --check-mutation-coverage
       - name: Run the 4 canonical property shapes
-        run: python scripts/z3-property-template.py
+        run: python scripts/z3-property-template.py --fail-on-property-failure
       - name: Run the property suite with mutation guards
         # TIMEOUT (unknown) is a hard failure by design — the harness exits 1.
         # --require-ground-truth: SAT witnesses must replay against the real
-        # implementation (sed/escaper mirrors) or the run fails.
-        run: python scripts/z3-verify.py --all --require-ground-truth
+        # implementation (sed/escaper mirrors) or ok=False.
+        # --fail-on-property-failure (#360): ok=False is exit 1 so a violated
+        # property cannot ship green. Default CLI stays the §10 recorder.
+        run: python scripts/z3-verify.py --all --require-ground-truth --fail-on-property-failure
       - name: Named property subset (P1-P4 + one rule_diff family)
         run: |
           python scripts/ci-run-property-subset.py

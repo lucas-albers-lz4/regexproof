@@ -27,6 +27,7 @@ def main(argv=None):
     as_json_legacy = "--json-legacy" in args
     check_cov_only = "--check-mutation-coverage" in args
     skip_gates = "--skip-registration-gate" in args
+    fail_on_property_failure = "--fail-on-property-failure" in args
     if as_json and as_json_legacy:
         print(
             "error: --json and --json-legacy are mutually exclusive",
@@ -44,6 +45,7 @@ def main(argv=None):
             "--json-legacy",
             "--check-mutation-coverage",
             "--skip-registration-gate",
+            "--fail-on-property-failure",
         )
     ]
     if check_cov_only:
@@ -135,9 +137,15 @@ def main(argv=None):
     # coverage/domain gate failure; 2 = DISAGREEMENT HARD FAIL (D15 — distinct
     # from not-proven so triage tooling can filter; the per-record
     # `disagreement` field is the machine filter).
+    # --fail-on-property-failure (#360): CI merge-gate overlay. Folds ok=False
+    # into exit 1 so a violated property cannot ship green. Default CLI stays §10.
     if any(r.get("disagreement") for r in results):
         return 2
-    return 1 if (not_proven_count or coverage_fail or domain_fail) else 0
+    if not_proven_count or coverage_fail or domain_fail:
+        return 1
+    if fail_on_property_failure and failures:
+        return 1
+    return 0
 
 
 if __name__ == "__main__":

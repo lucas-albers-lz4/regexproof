@@ -10,12 +10,14 @@ spike). Copy and adapt:
   Shape 5: rule_diff gap — InRe(s,R2) ∧ Not(InRe(s,R1)) (complement-free)
 
 Run: python3 scripts/z3-property-template.py
+     python3 scripts/z3-property-template.py --fail-on-property-failure  # CI
 Read docs/TRAPS.md before changing anything.
 
-TIMEOUT (not-proven) is the only hard-failure exit (1, per #186 and the design's
+TIMEOUT (not-proven) is a hard-failure exit (1, per #186 and the design's
 §10 operator contract). A FAILED check RECORDS its verdict — the finding is the
-deliverable and is visible in the output; the exit stays 0. A harness that cannot
-fail proves nothing — see docs/SECURITY-AUDIT.md and issue #169.
+deliverable and is visible in the output; the default exit stays 0. Pass
+`--fail-on-property-failure` in CI so a violated shape cannot ship green (#360).
+A harness that cannot fail proves nothing — see docs/SECURITY-AUDIT.md and issue #169.
 """
 
 from __future__ import annotations
@@ -66,6 +68,7 @@ def check(name, constraints, bad, expect_unsat=True, timeout_ms=30000):
 
 
 def main() -> int:
+    fail_on_property_failure = "--fail-on-property-failure" in sys.argv
     # ---------- Shape 1: alphabet-disjointness containment ----------
     # "Accepted strings contain no injection char" = forbidden char not in alphabet.
     # Instant and length-independent — do NOT length-slice containment properties.
@@ -171,6 +174,13 @@ def main() -> int:
         # 0 = result recorded; the failure is in the records, not the exit)
         print(f"RECORDED: {_failures} property failure(s) (findings, exit 0)",
               file=sys.stderr)
+        if fail_on_property_failure:
+            print(
+                "FAIL: --fail-on-property-failure (#360) — violated shape "
+                "cannot ship green",
+                file=sys.stderr,
+            )
+            return 1
     return 0
 
 

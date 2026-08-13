@@ -238,8 +238,6 @@ def run_one(name, entry, require_ground_truth=False):
     result["ok"] = (r == unsat) == entry["expect_unsat"]
     result.setdefault("state", "stock")  # §10 state; fallback markers survive
     tag = "UNSAT (property HOLDS)" if r == unsat else "SAT (counterexample)"
-    print(f"[{'PASS' if result['ok'] else 'FAIL'}] {name}: {tag}  [{result['wall_ms']:.1f}ms]")
-    print(f"    domain: {entry['domain']}")
     if r == sat:
         m = s.model()
         witness = {}
@@ -253,34 +251,45 @@ def run_one(name, entry, require_ground_truth=False):
             except Exception:
                 pass
             witness[d.name()] = val
-            print(f"    witness: {d.name()} = {val!r}")
         result["witness"] = witness
         # Note: engine_versions is always populated above; the meaningful
         # --require-ground-truth gate is the callback check below (fix-wave #71).
+        # Flip ok *before* printing PASS/FAIL so --require-ground-truth cannot
+        # leave a PASS line on a refused/failed replay (#360).
         gt = entry.get("ground_truth")
         if entry["kind"] == PropertyKind.MUTATION_GUARD.value:
             result["ground_truth"] = "mutation-guard-sat-expected"
-            print("    mutation guard: SAT expected (harness-sensitivity probe, not a finding)")
         elif gt is not None:
             reproduced = bool(gt(witness))
             result["ground_truth"] = "reproduced" if reproduced else "failed"
-            print(f"    ground-truth: {'REPRODUCED' if reproduced else 'FAILED TO REPRODUCE'}")
             if not reproduced:
-                print(
-                    "    WARNING: SAT witness did not reproduce against the real "
-                    "implementation — do NOT report this as a vulnerability.",
-                    file=sys.stderr,
-                )
                 result["ok"] = False
         elif require_ground_truth:
             result["ground_truth"] = "refused-no-callback"
-            print(
-                "    ERROR: SAT witness has no ground_truth callback, but "
-                "--require-ground-truth is set — refusing to report an "
-                "unverified counterexample.",
-                file=sys.stderr,
-            )
             result["ok"] = False
+    print(f"[{'PASS' if result['ok'] else 'FAIL'}] {name}: {tag}  [{result['wall_ms']:.1f}ms]")
+    print(f"    domain: {entry['domain']}")
+    if result.get("witness"):
+        for wname, wval in result["witness"].items():
+            print(f"    witness: {wname} = {wval!r}")
+    if result.get("ground_truth") == "mutation-guard-sat-expected":
+        print("    mutation guard: SAT expected (harness-sensitivity probe, not a finding)")
+    elif result.get("ground_truth") == "reproduced":
+        print("    ground-truth: REPRODUCED")
+    elif result.get("ground_truth") == "failed":
+        print("    ground-truth: FAILED TO REPRODUCE")
+        print(
+            "    WARNING: SAT witness did not reproduce against the real "
+            "implementation — do NOT report this as a vulnerability.",
+            file=sys.stderr,
+        )
+    elif result.get("ground_truth") == "refused-no-callback":
+        print(
+            "    ERROR: SAT witness has no ground_truth callback, but "
+            "--require-ground-truth is set — refusing to report an "
+            "unverified counterexample.",
+            file=sys.stderr,
+        )
     return result
 
 # ---------------------------------------------------------------------------
