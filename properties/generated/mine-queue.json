@@ -1,4 +1,665 @@
 {
-  "items": [],
+  "items": [
+    {
+      "capped": true,
+      "default_branch": "develop",
+      "pin": "c7c5027088585a275634b3329b0f735244d44550",
+      "pushed_date": "2019-06-11",
+      "queued_at": "2026-08-13",
+      "source_query": "path:config filename:secrets.yml OR path:config filename:secrets.yaml",
+      "stars": 3,
+      "url": "https://github.com/awesome-academy/FAA"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "97a6433334f9ce54e47d654d11a25fcf05f9fa48",
+      "pushed_date": "2017-02-12",
+      "queued_at": "2026-08-13",
+      "source_query": "path:config filename:secrets.yml OR path:config filename:secrets.yaml",
+      "stars": 3,
+      "url": "https://github.com/bromine0x23/Shining-Co-Wechat"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "ec6c44733d03d84c2ab812ecff64e41b1626bac8",
+      "pushed_date": "2024-07-25",
+      "queued_at": "2026-08-13",
+      "source_query": "filename:regex_test.go OR filename:regexp_test.go",
+      "stars": 1330,
+      "url": "https://github.com/loggie-io/loggie"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "cd7a0ff2a7a826a6623de476ead33b915c208b46",
+      "pushed_date": "2026-08-10",
+      "queued_at": "2026-08-13",
+      "source_query": "filename:regex_test.go OR filename:regexp_test.go",
+      "stars": 73,
+      "url": "https://github.com/praetorian-inc/hadrian"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "b9999779a37decd3c591793bc9c640e83b777fc8",
+      "pushed_date": "2016-11-18",
+      "queued_at": "2026-08-13",
+      "source_query": "path:config filename:secrets.yml OR path:config filename:secrets.yaml",
+      "stars": 3,
+      "url": "https://github.com/thefrontiergroup/rails-template"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "9be5f42dc65ea47b04cc067bc06511713230f840",
+      "pushed_date": "2026-07-13",
+      "queued_at": "2026-08-13",
+      "source_query": "filename:regex_test.go OR filename:regexp_test.go",
+      "stars": 48,
+      "url": "https://github.com/1set/starlet"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "1836e37e525e99ac4e0d59f3d19167938fb2246e",
+      "pushed_date": "2026-06-26",
+      "queued_at": "2026-08-13",
+      "source_query": "filename:regex_test.go OR filename:regexp_test.go",
+      "stars": 43,
+      "url": "https://github.com/CGI-FR/PIMO"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "d27e2f00d3da3f79aea48180814aeae1673763a4",
+      "pushed_date": "2018-02-27",
+      "queued_at": "2026-08-13",
+      "source_query": "path:config filename:secrets.yml OR path:config filename:secrets.yaml",
+      "stars": 2,
+      "url": "https://github.com/Ruby-IF081/heroes_team_app"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "8470ebfadda39ae16013f005e98e5644148f236c",
+      "pushed_date": "2015-07-27",
+      "queued_at": "2026-08-13",
+      "source_query": "path:signatures extension:yar",
+      "stars": 12,
+      "url": "https://github.com/bstelte/thurstan"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "be43222568327779086e0c2496bfb3769762fc74",
+      "pushed_date": "2017-08-01",
+      "queued_at": "2026-08-13",
+      "source_query": "path:config filename:secrets.yml OR path:config filename:secrets.yaml",
+      "stars": 2,
+      "url": "https://github.com/cooltribes/alumnet-ui"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "7f22f56458f1e1c57b5603ff7495b47d6bd7c63f",
+      "pushed_date": "2021-07-16",
+      "queued_at": "2026-08-13",
+      "source_query": "path:config filename:secrets.yml OR path:config filename:secrets.yaml",
+      "stars": 2,
+      "url": "https://github.com/curationexperts/goldenseal"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "057e2c3231f46eb0bed098ffecfb219820c4b343",
+      "pushed_date": "2026-08-12",
+      "queued_at": "2026-08-13",
+      "source_query": "filename:regex_test.go OR filename:regexp_test.go",
+      "stars": 49,
+      "url": "https://github.com/grafana/mimir-prometheus"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "d720b896901b75dd4becceb44bf859535d6864eb",
+      "pushed_date": "2026-08-13",
+      "queued_at": "2026-08-13",
+      "source_query": "filename:regex_test.go OR filename:regexp_test.go",
+      "stars": 55,
+      "url": "https://github.com/lestrrat-go/helium"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "becc863b65db2afa94a20f028a9397646692a700",
+      "pushed_date": "2023-01-11",
+      "queued_at": "2026-08-13",
+      "source_query": "filename:semgrep.yml OR filename:semgrep.yaml",
+      "stars": 7,
+      "url": "https://github.com/DeYoungTech/terraform-provider-awslightsail"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "b944f7b9d852c1d1fa81480eb937d1fe5445ef38",
+      "pushed_date": "2022-09-11",
+      "queued_at": "2026-08-13",
+      "source_query": "filename:index.yar",
+      "stars": 8,
+      "url": "https://github.com/cleverparrot95/P-EDR-Arch"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "814ef1cfd21c067b4a66dc4833c7fca694779eb9",
+      "pushed_date": "2013-10-06",
+      "queued_at": "2026-08-13",
+      "source_query": "filename:index.yar",
+      "stars": 8,
+      "url": "https://github.com/paralax/HorribleCanoe"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "e3f3ff1fc28c86ffade22a2b6464111db208de7a",
+      "pushed_date": "2026-07-08",
+      "queued_at": "2026-08-13",
+      "source_query": "filename:regex_test.go OR filename:regexp_test.go",
+      "stars": 26,
+      "url": "https://github.com/benpate/sherlock"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "45eaad75f0c64edf3a9d33fd8710f16f8994e346",
+      "pushed_date": "2026-07-24",
+      "queued_at": "2026-08-13",
+      "source_query": "filename:regex_test.go OR filename:regexp_test.go",
+      "stars": 24,
+      "url": "https://github.com/kcp-dev/api-syncagent"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "45458f6712b170921ec9ff10ff43876e72fe201b",
+      "pushed_date": "2025-02-21",
+      "queued_at": "2026-08-13",
+      "source_query": "filename:regex_test.go OR filename:regexp_test.go",
+      "stars": 431,
+      "url": "https://github.com/sjzar/ips"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "995a7c963236b59c246c1b3e6033f49190113ace",
+      "pushed_date": "2026-08-12",
+      "queued_at": "2026-08-13",
+      "source_query": "filename:regex_test.go OR filename:regexp_test.go",
+      "stars": 17,
+      "url": "https://github.com/GoogleCloudPlatform/google-guest-agent"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "146cefc43cc6458a7800527116e354025d5b44b1",
+      "pushed_date": "2025-03-28",
+      "queued_at": "2026-08-13",
+      "source_query": "filename:validator.py path:src OR filename:validators.py path:src",
+      "stars": 4,
+      "url": "https://github.com/droneslab/YOCOv2"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "b5986ffad13191d8c2c12df42bbd847d625be722",
+      "pushed_date": "2026-07-26",
+      "queued_at": "2026-08-13",
+      "source_query": "filename:regex_test.go OR filename:regexp_test.go",
+      "stars": 19,
+      "url": "https://github.com/qida/gohp"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "3cb0c90f34638b7271741722078ed9d630de0e0f",
+      "pushed_date": "2024-07-11",
+      "queued_at": "2026-08-13",
+      "source_query": "filename:validator.py path:src OR filename:validators.py path:src",
+      "stars": 4,
+      "url": "https://github.com/unconst/gradient"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "77a52d4359d3556e9258e4da39bfd2fd776ff70f",
+      "pushed_date": "2018-08-17",
+      "queued_at": "2026-08-13",
+      "source_query": "filename:validator.py path:src OR filename:validators.py path:src",
+      "stars": 13,
+      "url": "https://github.com/broadinstitute/widdler"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "cb66676580b077f271099610844c38316f70a983",
+      "pushed_date": "2026-03-31",
+      "queued_at": "2026-08-13",
+      "source_query": "filename:regex_test.go OR filename:regexp_test.go",
+      "stars": 16,
+      "url": "https://github.com/create-flow-ai/openGyver"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "ab0ecdd709abd7e42d368771f1c7b13550391504",
+      "pushed_date": "2023-10-03",
+      "queued_at": "2026-08-13",
+      "source_query": "filename:validator.py path:src OR filename:validators.py path:src",
+      "stars": 3,
+      "url": "https://github.com/mwalasz/Facedetector"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "7fbf78d758d4bb394c1a6016061e79fc097caa4a",
+      "pushed_date": "2025-02-14",
+      "queued_at": "2026-08-13",
+      "source_query": "filename:validator.py path:src OR filename:validators.py path:src",
+      "stars": 3,
+      "url": "https://github.com/neuronlogic/NASChain"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "a770a25438bb82a34a72343a6ac293391b941264",
+      "pushed_date": "2025-01-15",
+      "queued_at": "2026-08-13",
+      "source_query": "filename:validator.py path:src OR filename:validators.py path:src",
+      "stars": 2,
+      "url": "https://github.com/Pranavh-2004/ResumeBuilder"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "af63d2747ad8a22c8cfdee48621b80dbc64a5bb1",
+      "pushed_date": "2026-06-07",
+      "queued_at": "2026-08-13",
+      "source_query": "filename:regex_test.go OR filename:regexp_test.go",
+      "stars": 9,
+      "url": "https://github.com/buildkite/conditional"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "72563bc7ca83379764991f8ba333bc2e5c21a2d1",
+      "pushed_date": "2026-06-10",
+      "queued_at": "2026-08-13",
+      "source_query": "filename:regex_test.go OR filename:regexp_test.go",
+      "stars": 11,
+      "url": "https://github.com/dolthub/go-icu-regex"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "42f2e34fdcaf21da348ee59b7ea85285ec2d250e",
+      "pushed_date": "2026-08-10",
+      "queued_at": "2026-08-13",
+      "source_query": "filename:regex_test.go OR filename:regexp_test.go",
+      "stars": 11,
+      "url": "https://github.com/egeozcan/mahresources"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "17abf231a0f6db96cb602ef9a0b57cd07a39d031",
+      "pushed_date": "2026-08-12",
+      "queued_at": "2026-08-13",
+      "source_query": "filename:regex_test.go OR filename:regexp_test.go",
+      "stars": 12,
+      "url": "https://github.com/mgomes/vibescript"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "16880c65af7225cc9182d5ba383bf5c4ed71af76",
+      "pushed_date": "2019-11-12",
+      "queued_at": "2026-08-13",
+      "source_query": "filename:regex_test.go OR filename:regexp_test.go",
+      "stars": 896,
+      "url": "https://github.com/mingrammer/commonregex"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "f0331129affd1584054c34d9a096bd06ef58d375",
+      "pushed_date": "2023-09-22",
+      "queued_at": "2026-08-13",
+      "source_query": "filename:validator.py path:src OR filename:validators.py path:src",
+      "stars": 2,
+      "url": "https://github.com/rdomenzain/kafka-ease"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "0c0bbecaf94bbddec424583aebffeb7456c0565a",
+      "pushed_date": "2026-06-26",
+      "queued_at": "2026-08-13",
+      "source_query": "filename:regex_test.go OR filename:regexp_test.go",
+      "stars": 8,
+      "url": "https://github.com/chrfrantz/IG-Parser"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "d222ec25808b3e8f1722fab435ff2ee0ba15d260",
+      "pushed_date": "2019-01-05",
+      "queued_at": "2026-08-13",
+      "source_query": "filename:validator.py path:src OR filename:validators.py path:src",
+      "stars": 8,
+      "url": "https://github.com/omkar-hardwell/flask-crud-api"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "f66d82cb684f02ff72600f07b4f3423716bc671f",
+      "pushed_date": "2020-11-03",
+      "queued_at": "2026-08-13",
+      "source_query": "filename:validator.py path:src OR filename:validators.py path:src",
+      "stars": 5,
+      "url": "https://github.com/aig-upf/sltp"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "abd0418dd6c7952bc327f5f2ec44072fa787bba5",
+      "pushed_date": "2023-02-25",
+      "queued_at": "2026-08-13",
+      "source_query": "filename:regex_test.go OR filename:regexp_test.go",
+      "stars": 515,
+      "url": "https://github.com/couchbase/vellum"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "8e5abb0d47bc78ca993d179694108c01a4be825d",
+      "pushed_date": "2026-02-23",
+      "queued_at": "2026-08-13",
+      "source_query": "filename:regex_test.go OR filename:regexp_test.go",
+      "stars": 5,
+      "url": "https://github.com/launix-de/go-packrat"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "b6105d50c1a7a6f45b3fcd679452db27631c5cdc",
+      "pushed_date": "2025-12-05",
+      "queued_at": "2026-08-13",
+      "source_query": "filename:regex_test.go OR filename:regexp_test.go",
+      "stars": 6,
+      "url": "https://github.com/roverdotcom/checkbridge"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "857446b9713f72be1969e627afb4cee05a0959f2",
+      "pushed_date": "2017-08-24",
+      "queued_at": "2026-08-13",
+      "source_query": "filename:validator.py path:src OR filename:validators.py path:src",
+      "stars": 6,
+      "url": "https://github.com/rtrlib/rbv"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "1e3cccd1958bd6311bafd7206516b84b8d032ce3",
+      "pushed_date": "2026-02-19",
+      "queued_at": "2026-08-13",
+      "source_query": "filename:regex_test.go OR filename:regexp_test.go",
+      "stars": 5,
+      "url": "https://github.com/vogo/vogo"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "69a82337c90008cc32248ec6e2600d9e2d6c0592",
+      "pushed_date": "2021-09-15",
+      "queued_at": "2026-08-13",
+      "source_query": "filename:validator.py path:src OR filename:validators.py path:src",
+      "stars": 4,
+      "url": "https://github.com/IshanManchanda/Keepyr"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "871299d2a940fe58f26c35b592bf4402de66bb37",
+      "pushed_date": "2019-05-06",
+      "queued_at": "2026-08-13",
+      "source_query": "filename:validator.py path:src OR filename:validators.py path:src",
+      "stars": 4,
+      "url": "https://github.com/noahcoomer/BlockchainPKI"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "6d5361e124cf0b70425da81b324b2740fabf2f44",
+      "pushed_date": "2026-07-29",
+      "queued_at": "2026-08-13",
+      "source_query": "filename:regex_test.go OR filename:regexp_test.go",
+      "stars": 3,
+      "url": "https://github.com/ogulcanaydogan/Prompt-Injection-Firewall"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "10921f8850df67c797cf174b42fbc5dcec257251",
+      "pushed_date": "2019-05-16",
+      "queued_at": "2026-08-13",
+      "source_query": "filename:validator.py path:src OR filename:validators.py path:src",
+      "stars": 2,
+      "url": "https://github.com/Haus4/studienarbeit-stau"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "916cc142c344937c01c5459270a64cb133f95c08",
+      "pushed_date": "2023-02-25",
+      "queued_at": "2026-08-13",
+      "source_query": "filename:regex_test.go OR filename:regexp_test.go",
+      "stars": 223,
+      "url": "https://github.com/dappledger/AnnChain"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "28ea1ffd102c4ebd5574f3be2fddc2720b24bf98",
+      "pushed_date": "2022-10-15",
+      "queued_at": "2026-08-13",
+      "source_query": "filename:validator.py path:src OR filename:validators.py path:src",
+      "stars": 2,
+      "url": "https://github.com/fdemchenko/equations-solver"
+    },
+    {
+      "capped": true,
+      "default_branch": "develop",
+      "pin": "557d83d6b1a432a6f0369ab5fc359d264b113f80",
+      "pushed_date": "2019-08-20",
+      "queued_at": "2026-08-13",
+      "source_query": "filename:validator.py path:src OR filename:validators.py path:src",
+      "stars": 2,
+      "url": "https://github.com/ifedchankau/trading-risk-manager"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "b8a584eac413ac85bd363154c69036cddc328477",
+      "pushed_date": "2016-12-05",
+      "queued_at": "2026-08-13",
+      "source_query": "filename:validator.py path:src OR filename:validators.py path:src",
+      "stars": 2,
+      "url": "https://github.com/rtrlib/rpki-read"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "0e6baecebbf8a24a6590d3fc8232165008d6e5d8",
+      "pushed_date": "2018-01-28",
+      "queued_at": "2026-08-13",
+      "source_query": "filename:regex_test.go OR filename:regexp_test.go",
+      "stars": 209,
+      "url": "https://github.com/savaki/jq"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "f43938bf3a35d84c58530aaf2f00559edcaaba14",
+      "pushed_date": "2021-12-30",
+      "queued_at": "2026-08-13",
+      "source_query": "filename:validator.py path:src OR filename:validators.py path:src",
+      "stars": 2,
+      "url": "https://github.com/ucoProject/UCO-Utility-Pre-0.7.0-Validator"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "d6162687e6ab75e2822c7107d2104fde57a02a65",
+      "pushed_date": "2024-03-05",
+      "queued_at": "2026-08-13",
+      "source_query": "filename:regex_test.go OR filename:regexp_test.go",
+      "stars": 29,
+      "url": "https://github.com/ExpediaGroup/vsync"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "954ec363b8e3746093e04f795749315da16038b4",
+      "pushed_date": "2022-01-04",
+      "queued_at": "2026-08-13",
+      "source_query": "filename:regex_test.go OR filename:regexp_test.go",
+      "stars": 100,
+      "url": "https://github.com/bramp/antlr4-grammars"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "6a20a75cd98fc0a06c350108a8adf7f93a56df62",
+      "pushed_date": "2021-05-16",
+      "queued_at": "2026-08-13",
+      "source_query": "filename:regex_test.go OR filename:regexp_test.go",
+      "stars": 124,
+      "url": "https://github.com/storyicon/graphquery"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "282493799a89978eb7ea640f28314863c3669b1a",
+      "pushed_date": "2022-12-02",
+      "queued_at": "2026-08-13",
+      "source_query": "filename:regex_test.go OR filename:regexp_test.go",
+      "stars": 95,
+      "url": "https://github.com/Golangltd/leafltd"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "6c7ef329210dd915653f88fec8cff8d3218c1835",
+      "pushed_date": "2022-12-23",
+      "queued_at": "2026-08-13",
+      "source_query": "filename:regex_test.go OR filename:regexp_test.go",
+      "stars": 75,
+      "url": "https://github.com/dongchany/alloydb"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "307ff1f8b4d8db2ec753d612c2d0ae69ff45bb14",
+      "pushed_date": "2019-12-04",
+      "queued_at": "2026-08-13",
+      "source_query": "filename:regex_test.go OR filename:regexp_test.go",
+      "stars": 75,
+      "url": "https://github.com/flysnow-org/soha"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "4cef5a4fb45fb2ddfe42e72e8cc49465bcbec147",
+      "pushed_date": "2024-08-05",
+      "queued_at": "2026-08-13",
+      "source_query": "filename:regex_test.go OR filename:regexp_test.go",
+      "stars": 17,
+      "url": "https://github.com/gontainer/gontainer"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "83b79fc82c80f3b72de95d29ce90e4c254290fe6",
+      "pushed_date": "2017-01-27",
+      "queued_at": "2026-08-13",
+      "source_query": "filename:regex_test.go OR filename:regexp_test.go",
+      "stars": 46,
+      "url": "https://github.com/coralproject/shelf"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "5236e1525299b507521ea9f9d8b91a7525062e3e",
+      "pushed_date": "2025-07-02",
+      "queued_at": "2026-08-13",
+      "source_query": "filename:regex_test.go OR filename:regexp_test.go",
+      "stars": 11,
+      "url": "https://github.com/oracle-devrel/oke-credential-provider-for-ocir"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "141901ea67cd4769c6800aa7bfdfc558fa22bda5",
+      "pushed_date": "2015-07-20",
+      "queued_at": "2026-08-13",
+      "source_query": "filename:regex_test.go OR filename:regexp_test.go",
+      "stars": 38,
+      "url": "https://github.com/jacobsa/oglematchers"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "cd1806a22352bbc454ef5746d716154b16bf05bc",
+      "pushed_date": "2021-11-15",
+      "queued_at": "2026-08-13",
+      "source_query": "filename:regex_test.go OR filename:regexp_test.go",
+      "stars": 14,
+      "url": "https://github.com/CloudWise-OpenSource/CW-Zabbix"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "60edcbec6fb25bca580113b8d1dc460444ab9b07",
+      "pushed_date": "2024-04-04",
+      "queued_at": "2026-08-13",
+      "source_query": "filename:regex_test.go OR filename:regexp_test.go",
+      "stars": 3,
+      "url": "https://github.com/cristalhq/bson"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "14b2ab8863e375d2b862b3dbaf51d7dbe142c70a",
+      "pushed_date": "2016-01-20",
+      "queued_at": "2026-08-13",
+      "source_query": "filename:regex_test.go OR filename:regexp_test.go",
+      "stars": 15,
+      "url": "https://github.com/zach-klippenstein/go-typedregexp"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "ee803e1e1c636f505531ac3f76e26b807a081e3c",
+      "pushed_date": "2022-08-06",
+      "queued_at": "2026-08-13",
+      "source_query": "filename:semgrep.yml OR filename:semgrep.yaml",
+      "stars": 45,
+      "url": "https://github.com/bgoonz/awesome-4-new-developers"
+    }
+  ],
   "schema_version": "1"
 }
