@@ -1,0 +1,48 @@
+{
+  "budget": {
+    "max_disk_mb": 500,
+    "max_mem_mb": 2048,
+    "max_patterns": 5000,
+    "max_wall_s": 600,
+    "redos_wall_s": 120
+  },
+  "budget_breaches": null,
+  "commit": "74de1d9d45b17c602040cbde82e2d7623a2d379d",
+  "compiler_fingerprint": "71d2ce23b4cd",
+  "complete_run": true,
+  "corpus_pin": "74de1d9d45b17c602040cbde82e2d7623a2d379d",
+  "decision": "go",
+  "decision_rule": "go iff encodable/sample_size >= 0.3",
+  "dialect": "ecma",
+  "encodable": 298,
+  "engine_versions": {
+    "python": "3.13.5",
+    "z3": "5.0.0"
+  },
+  "extractor_schema_version": "2",
+  "fraction": 0.768,
+  "go_no_go_threshold": 0.3,
+  "id_formula": "v2-domain-optional-ascii-default",
+  "inventory_path": "properties/generated/weissman-cybersecurity-inventory.ndjson",
+  "path": "batch/corpora/weissman-cybersecurity/rules",
+  "pilot": "weissman-cybersecurity",
+  "reasons": {
+    "backref": 1,
+    "bad-range": 4,
+    "composite-pattern": 2,
+    "internal-anchor": 3,
+    "lookaround": 7,
+    "negated-shorthand": 13,
+    "ok": 298,
+    "per-alternative-anchor": 6,
+    "stateful": 40,
+    "unsupported-syntax": 3,
+    "v-flag": 3,
+    "word-boundary": 8
+  },
+  "sample_size": 388,
+  "schema_version": "1",
+  "scope": "full_corpus",
+  "unclassified_parse_errors": 0,
+  "wall_s": 26.416
+}

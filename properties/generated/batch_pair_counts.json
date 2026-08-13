@@ -1,14 +1,14 @@
 {
-  "100DaysOfYARA": {
-    "admitted": 0,
-    "dropped": 0,
-    "note": "no independent-spec catalog"
-  },
   "coreruleset": {
     "admitted": 0,
     "dropped": 0,
     "fraction": 0.6908,
     "note": "fraction gate go; CRS rule-derived adapter is Phase-2 rule_diff",
     "scope": "full_corpus"
+  },
+  "mcp-for-splunk": {
+    "admitted": 0,
+    "dropped": 0,
+    "note": "no independent-spec catalog"
   }
 }

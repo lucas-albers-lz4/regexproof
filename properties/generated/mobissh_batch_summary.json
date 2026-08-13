@@ -1,0 +1,18 @@
+{
+  "address_space_cap": true,
+  "complete_run": true,
+  "corpus": "mobissh",
+  "corpus_type": "rule_corpus",
+  "encodable": 62,
+  "engine": {
+    "python": "3.13.5"
+  },
+  "extracted": 104,
+  "findings": 29,
+  "inventory_questions": 4,
+  "join_regex_ids": 29,
+  "redos_findings": 0,
+  "redos_incomplete": false,
+  "schema_version": "1",
+  "triage": 42
+}

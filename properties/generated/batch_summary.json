@@ -116,19 +116,19 @@
     "wall_s": 21.527
   },
   "corpora": {
-    "100DaysOfYARA": {
+    "mcp-for-splunk": {
       "address_space_cap": true,
       "complete_run": true,
-      "corpus": "100DaysOfYARA",
+      "corpus": "mcp-for-splunk",
       "corpus_type": "rule_corpus",
-      "encodable": 98,
+      "encodable": 42,
       "engine": {
         "python": "3.13.5"
       },
-      "extracted": 100,
-      "findings": 5,
+      "extracted": 44,
+      "findings": 23,
       "inventory_questions": 4,
-      "join_regex_ids": 5,
+      "join_regex_ids": 23,
       "redos_findings": 0,
       "redos_incomplete": false,
       "schema_version": "1",
@@ -136,17 +136,17 @@
     }
   },
   "pair_counts": {
-    "100DaysOfYARA": {
-      "admitted": 0,
-      "dropped": 0,
-      "note": "no independent-spec catalog"
-    },
     "coreruleset": {
       "admitted": 0,
       "dropped": 0,
       "fraction": 0.6908,
       "note": "fraction gate go; CRS rule-derived adapter is Phase-2 rule_diff",
       "scope": "full_corpus"
+    },
+    "mcp-for-splunk": {
+      "admitted": 0,
+      "dropped": 0,
+      "note": "no independent-spec catalog"
     }
   },
   "schema_version": "1"

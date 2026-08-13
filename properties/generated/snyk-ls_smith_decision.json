@@ -1,0 +1,14 @@
+{
+  "schema_version": "1",
+  "corpus": "snyk-ls",
+  "corpus_pin": "68dc3ee1a1d3cc31820daa762475292675464799",
+  "candidate_url": "https://github.com/snyk/snyk-ls",
+  "smith_decision": "go",
+  "supersedes": "triage-trial (#281)",
+  "reason": "GRADUATED from triage-trial: 21/35 = 0.6000 encodable (complete_run, parse-error=0, budget clean). Snyk SAST language server (go re2 surface, 13 files). Security tool (SAST) - SECURITY_TOOL_CORPORA private_first. Small but real surface. GO admit confirmed.",
+  "regex_sites": 35,
+  "sites_by_bucket": {
+    "go re2 (13 files, 35 sites measured; 21 encodable)": 35
+  },
+  "additional_surface_outside_probe_scope": {"ecma": 79}
+}

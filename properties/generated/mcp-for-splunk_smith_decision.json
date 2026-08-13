@@ -1,0 +1,14 @@
+{
+  "schema_version": "1",
+  "corpus": "mcp-for-splunk",
+  "corpus_pin": "697f92649f5f1c9f77958d874e5ce2de1b43bd90",
+  "candidate_url": "https://github.com/deslicer/mcp-for-splunk",
+  "smith_decision": "go",
+  "supersedes": "triage-trial (#298)",
+  "reason": "GRADUATED from triage-trial: 42/44 = 0.9545 encodable (complete_run, parse-error=0, budget clean). Splunk MCP server (posix-shell surface) - consistent with the shell family's high encodability (claude-code-plugins 0.8132, mycelium 0.8105, anax 0.7990). Security tool - SECURITY_TOOL_CORPORA private_first. GO admit confirmed.",
+  "regex_sites": 44,
+  "sites_by_bucket": {
+    "posix-shell (44 sites measured; 42 encodable)": 44
+  },
+  "additional_surface_outside_probe_scope": {"py_re": 24}
+}

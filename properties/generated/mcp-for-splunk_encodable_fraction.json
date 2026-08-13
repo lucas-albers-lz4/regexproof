@@ -1,0 +1,38 @@
+{
+  "budget": {
+    "max_disk_mb": 500,
+    "max_mem_mb": 2048,
+    "max_patterns": 5000,
+    "max_wall_s": 600,
+    "redos_wall_s": 120
+  },
+  "budget_breaches": null,
+  "commit": "697f92649f5f1c9f77958d874e5ce2de1b43bd90",
+  "compiler_fingerprint": "71d2ce23b4cd",
+  "complete_run": true,
+  "corpus_pin": "697f92649f5f1c9f77958d874e5ce2de1b43bd90",
+  "decision": "go",
+  "decision_rule": "go iff encodable/sample_size >= 0.3",
+  "dialect": "posix-shell",
+  "encodable": 42,
+  "engine_versions": {
+    "python": "3.13.5",
+    "z3": "5.0.0"
+  },
+  "extractor_schema_version": "2",
+  "fraction": 0.9545,
+  "go_no_go_threshold": 0.3,
+  "id_formula": "v2-domain-optional-ascii-default",
+  "inventory_path": "properties/generated/mcp-for-splunk-inventory.ndjson",
+  "path": "batch/corpora/mcp-for-splunk/rules",
+  "pilot": "mcp-for-splunk",
+  "reasons": {
+    "internal-anchor": 2,
+    "ok": 42
+  },
+  "sample_size": 44,
+  "schema_version": "1",
+  "scope": "full_corpus",
+  "unclassified_parse_errors": 0,
+  "wall_s": 7.565
+}

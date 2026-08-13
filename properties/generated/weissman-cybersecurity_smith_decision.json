@@ -1,0 +1,14 @@
+{
+  "schema_version": "1",
+  "corpus": "weissman-cybersecurity",
+  "corpus_pin": "74de1d9d45b17c602040cbde82e2d7623a2d379d",
+  "candidate_url": "https://github.com/israel12132/weissman-cybersecurity",
+  "smith_decision": "go",
+  "supersedes": "triage-trial (#310)",
+  "reason": "GRADUATED from triage-trial: 298/388 = 0.7680 encodable (complete_run, parse-error=0, budget clean). Security dashboard frontend (ecma top-60 allowlist). Strong fraction. Security tool - SECURITY_TOOL_CORPORA private_first. GO admit confirmed.",
+  "regex_sites": 388,
+  "sites_by_bucket": {
+    "ecma allowlist (60 files, 388 sites measured; 298 encodable)": 388
+  },
+  "additional_surface_outside_probe_scope": {"posix-shell": 113, "py_re": 31}
+}

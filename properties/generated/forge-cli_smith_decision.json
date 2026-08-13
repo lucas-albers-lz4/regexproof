@@ -1,0 +1,14 @@
+{
+  "schema_version": "1",
+  "corpus": "forge-cli",
+  "corpus_pin": "efcf8e4c0087def553a737dc1c4eebda5d8a90cd",
+  "candidate_url": "https://github.com/Agenticstiger/forge-cli",
+  "smith_decision": "go",
+  "supersedes": "triage-trial (#296)",
+  "reason": "GRADUATED from triage-trial: 171/314 = 0.5446 encodable (complete_run, parse-error=0, budget clean). CLI tool (py_re .py-only top-60 allowlist). The admission-time 42 extractor_errors were outside the top-60 files - clean in-measure. GO admit confirmed.",
+  "regex_sites": 314,
+  "sites_by_bucket": {
+    "py_re allowlist (60 files, 314 sites measured; 171 encodable)": 314
+  },
+  "additional_surface_outside_probe_scope": {"posix-shell": 11}
+}

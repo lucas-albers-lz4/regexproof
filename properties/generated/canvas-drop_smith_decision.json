@@ -1,0 +1,14 @@
+{
+  "schema_version": "1",
+  "corpus": "canvas-drop",
+  "corpus_pin": "ef9baeb3743426c58853e58fbad820e69e459144",
+  "candidate_url": "https://github.com/markpasternak/canvas-drop",
+  "smith_decision": "go",
+  "supersedes": "triage-trial (#290)",
+  "reason": "GRADUATED from triage-trial: 42/76 = 0.5526 encodable (complete_run, parse-error=0, budget clean). Auth/identity app (ecma top-60 allowlist). Security boundary (identity handling). GO admit confirmed.",
+  "regex_sites": 76,
+  "sites_by_bucket": {
+    "ecma allowlist (top-60 files, 76 sites measured; 42 encodable)": 76
+  },
+  "additional_surface_outside_probe_scope": {"posix-shell": 7}
+}

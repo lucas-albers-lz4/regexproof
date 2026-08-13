@@ -1,0 +1,45 @@
+{
+  "budget": {
+    "max_disk_mb": 500,
+    "max_mem_mb": 2048,
+    "max_patterns": 5000,
+    "max_wall_s": 900,
+    "redos_wall_s": 180
+  },
+  "budget_breaches": null,
+  "commit": "efcf8e4c0087def553a737dc1c4eebda5d8a90cd",
+  "compiler_fingerprint": "71d2ce23b4cd",
+  "complete_run": true,
+  "corpus_pin": "efcf8e4c0087def553a737dc1c4eebda5d8a90cd",
+  "decision": "go",
+  "decision_rule": "go iff encodable/sample_size >= 0.3",
+  "dialect": "py_re",
+  "encodable": 171,
+  "engine_versions": {
+    "python": "3.13.5",
+    "z3": "5.0.0"
+  },
+  "extractor_schema_version": "2",
+  "fraction": 0.5446,
+  "go_no_go_threshold": 0.3,
+  "id_formula": "v2-domain-optional-ascii-default",
+  "inventory_path": "properties/generated/forge-cli-inventory.ndjson",
+  "path": "batch/corpora/forge-cli/rules",
+  "pilot": "forge-cli",
+  "reasons": {
+    "composite-pattern": 8,
+    "lookaround": 1,
+    "m-flag": 7,
+    "negated-shorthand": 2,
+    "ok": 171,
+    "pattern-too-long": 2,
+    "per-alternative-anchor": 19,
+    "unicode-not-literal": 51,
+    "word-boundary": 53
+  },
+  "sample_size": 314,
+  "schema_version": "1",
+  "scope": "full_corpus",
+  "unclassified_parse_errors": 0,
+  "wall_s": 0.941
+}

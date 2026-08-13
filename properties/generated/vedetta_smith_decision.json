@@ -1,0 +1,15 @@
+{
+  "schema_version": "1",
+  "corpus": "vedetta",
+  "corpus_pin": "cec6a1caef7a576c036e6d07eabd482fe0a6b059",
+  "candidate_url": "https://github.com/MahdiHedhli/vedetta",
+  "smith_decision": "no-go",
+  "supersedes": "triage-trial (#289)",
+  "reason": "MEASURED NO-GO (fraction gate): Go re2 surface 26/103 = 0.2524 below the 0.30 gate (complete_run, parse-error=0, budget clean). The SIEM's hostname-fingerprinting regexes are RE2-heavy (anchors/Go constructs) that the compile path rejects. py_re measure (0.3333, 2 files) was thin and misleading - the Go side is the real surface. Honest measurement beats superseding here: corpus is real but not encodable enough.",
+  "regex_sites": 103,
+  "sites_by_bucket": {
+    "go re2 (14 files, 103 sites measured; 26 encodable 0.2524)": 103,
+    "py_re (2 files, 138 sites; 46 encodable 0.3333 - thin, superseded by go measure)": 138
+  },
+  "additional_surface_outside_probe_scope": {"posix-shell": 79, "ecma": 76}
+}

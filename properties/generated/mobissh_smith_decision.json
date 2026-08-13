@@ -1,0 +1,14 @@
+{
+  "schema_version": "1",
+  "corpus": "mobissh",
+  "corpus_pin": "ced24fa12d650e2aa6ea44a4e0a7f52bec548409",
+  "candidate_url": "https://github.com/flavordrake/mobissh",
+  "smith_decision": "go",
+  "supersedes": "triage-trial (#311)",
+  "reason": "GRADUATED from triage-trial: 62/104 = 0.5962 encodable (complete_run, parse-error=0, budget clean). SSH fleet-management tool (ecma top-60 allowlist). Security-adjacent boundary. GO admit confirmed.",
+  "regex_sites": 104,
+  "sites_by_bucket": {
+    "ecma allowlist (top-60 files, 104 sites measured; 62 encodable)": 104
+  },
+  "additional_surface_outside_probe_scope": {"posix-shell": 174, "py_re": 2}
+}

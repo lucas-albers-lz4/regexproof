@@ -1,0 +1,38 @@
+{
+  "budget": {
+    "max_disk_mb": 500,
+    "max_mem_mb": 2048,
+    "max_patterns": 5000,
+    "max_wall_s": 600,
+    "redos_wall_s": 120
+  },
+  "budget_breaches": null,
+  "commit": "68dc3ee1a1d3cc31820daa762475292675464799",
+  "compiler_fingerprint": "71d2ce23b4cd",
+  "complete_run": true,
+  "corpus_pin": "68dc3ee1a1d3cc31820daa762475292675464799",
+  "decision": "go",
+  "decision_rule": "go iff encodable/sample_size >= 0.3",
+  "dialect": "re2",
+  "encodable": 21,
+  "engine_versions": {
+    "python": "3.13.5",
+    "z3": "5.0.0"
+  },
+  "extractor_schema_version": "2",
+  "fraction": 0.6,
+  "go_no_go_threshold": 0.3,
+  "id_formula": "v2-domain-optional-ascii-default",
+  "inventory_path": "properties/generated/snyk-ls-inventory.ndjson",
+  "path": "batch/corpora/snyk-ls/rules",
+  "pilot": "snyk-ls",
+  "reasons": {
+    "inline-flag": 14,
+    "ok": 21
+  },
+  "sample_size": 35,
+  "schema_version": "1",
+  "scope": "full_corpus",
+  "unclassified_parse_errors": 0,
+  "wall_s": 0.175
+}
