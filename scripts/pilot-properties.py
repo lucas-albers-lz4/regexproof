@@ -48,6 +48,7 @@ def _load_harness():
 harness = _load_harness()
 prop = harness.prop
 REGISTRY = harness.REGISTRY
+check_domain_coverage = harness.check_domain_coverage
 
 ASCII_RE = r"^[\x00-\x7F]+$"
 PORT_RE = r"^[0-9]+$"
@@ -225,12 +226,21 @@ def gl_mutated():
     return [InRe(s, Star(any_c)), Length(s) <= 40], Contains(s, " ")
 
 
-def main() -> int:
-    require_gt = "--require-ground-truth" in sys.argv
+def main(argv: list[str] | None = None) -> int:
+    args = list(sys.argv[1:] if argv is None else argv)
+    require_gt = "--require-ground-truth" in args
+    require_domain = "--require-domain" in args
     pilot_names = [
         n for n, e in REGISTRY.items() if e["family"].startswith(("VJS", "GL"))
     ]
     failures = 0
+    # P1 (#425): --require-domain must hard-fail on a pilot property (or any
+    # registered property) that declares no input_domain. Checked BEFORE the
+    # solve loop so the gate fires fast and independently of solver results.
+    if check_domain_coverage(require=require_domain):
+        print("FAIL --require-domain: a registered property declares no input_domain",
+              file=sys.stderr)
+        return 1
     results = []
     for n in sorted(pilot_names):
         res = harness.run_one(n, REGISTRY[n], require_ground_truth=require_gt)

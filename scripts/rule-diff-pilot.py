@@ -232,6 +232,15 @@ def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--require-ground-truth", action="store_true")
     ap.add_argument(
+        "--require-domain",
+        action="store_true",
+        help="accepted for CLI parity with the proof job. INERT for this "
+        "pilot: check_domain_coverage covers kind=property and "
+        "counterexample_finder only, and this registry is rule_diff gaps + "
+        "mutation guards — see the check_domain_coverage(require=...) call "
+        "in main().",
+    )
+    ap.add_argument(
         "--family",
         default=None,
         help="Run only this admitted-pair family (Phase 6 subset)",
@@ -311,6 +320,17 @@ def main(argv: list[str] | None = None) -> int:
     cov = harness.check_mutation_coverage()
     if cov:
         print("FAIL mutation coverage:", cov)
+        return 1
+
+    # P1 (#425): --require-domain is accepted for CLI parity with the proof
+    # job, but the check is INERT here — check_domain_coverage covers
+    # kind=property and counterexample_finder only, and this registry holds
+    # rule_diff gaps + mutation guards (nothing to check). Wired anyway so a
+    # future property-kind addition to this pilot cannot silently skip the
+    # domain gate.
+    if harness.check_domain_coverage(require=args.require_domain):
+        print("FAIL --require-domain: a registered property declares no input_domain",
+              file=sys.stderr)
         return 1
 
     results = []
