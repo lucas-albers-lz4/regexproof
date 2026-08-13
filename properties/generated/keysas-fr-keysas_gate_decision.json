@@ -1,0 +1,46 @@
+{
+  "candidate_url": "https://github.com/keysas-fr/keysas",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 1 yara site — keyset tool, no real surface.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "keysas",
+  "corpus_pin": "a7e30f14b80bdeed43b292ec7a893b8a59f3c154",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "yara": 1
+    },
+    "flags": {
+      "i": 1
+    },
+    "pin": "a7e30f14b80bdeed43b292ec7a893b8a59f3c154",
+    "predicted_buckets": {
+      "inline-flag": 1
+    },
+    "regex_sites": 1,
+    "regex_sites_per_file": {
+      "keysas-core/yara/index.yar": 1
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 1 regex sites (auto-NO-GO bar 200); dialects [yara:1]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

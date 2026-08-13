@@ -1,0 +1,117 @@
+{
+  "candidate_url": "https://github.com/CypherBoxLLC/Cypher-Box",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 136 sites, security-adjacent but below scale.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "Cypher-Box",
+  "corpus_pin": "13eb465722851ccf5f9598af79c72e173e70bac5",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "lookaround": 7,
+      "posix-class": 1
+    },
+    "dialect": {
+      "ecma": 108,
+      "posix-shell": 28
+    },
+    "flags": {
+      "g": 35,
+      "i": 20,
+      "m": 1
+    },
+    "pin": "13eb465722851ccf5f9598af79c72e173e70bac5",
+    "predicted_buckets": {
+      "inline-flag": 20,
+      "lookaround": 7,
+      "m-flag": 1,
+      "posix-class": 1,
+      "stateful": 35
+    },
+    "regex_sites": 136,
+    "regex_sites_per_file": {
+      "App.js": 1,
+      "BlueComponents.js": 1,
+      "appcenter-post-build.sh": 1,
+      "blue_modules/analytics.js": 2,
+      "class/deeplink-schema-match.js": 2,
+      "class/lnurl.js": 4,
+      "class/multisig-cosigner.js": 1,
+      "class/wallet-import.js": 1,
+      "class/wallets/abstract-hd-wallet.ts": 3,
+      "class/wallets/abstract-wallet.ts": 2,
+      "class/wallets/hd-aezeed-wallet.js": 2,
+      "class/wallets/multisig-hd-wallet.js": 3,
+      "class/wallets/slip39-wallets.js": 2,
+      "components/AmountInput.js": 6,
+      "components/QRCodeComponent.tsx": 1,
+      "components/TransactionListItem.js": 1,
+      "loc/index.ts": 2,
+      "metro.config.js": 3,
+      "models/fiatUnit.ts": 1,
+      "screen/send/details.js": 4,
+      "screen/wallets/details.js": 1,
+      "screen/wallets/import.js": 1,
+      "screen/wallets/pleaseBackup.tsx": 1,
+      "scripts/bark/_restore.cjs": 1,
+      "scripts/build-release-apk.sh": 1,
+      "scripts/current-branch.sh": 1,
+      "scripts/fix-compile-sdk.sh": 15,
+      "scripts/release-notes.sh": 9,
+      "src/component-library/Input/index.tsx": 1,
+      "src/components/PrivateKeyGenerater/index.tsx": 1,
+      "src/components/StrikeView/index.tsx": 1,
+      "src/components/StrikeWallet/index.tsx": 2,
+      "src/helpers/bbqrHelper.ts": 1,
+      "src/helpers/bitcoinUnits.ts": 1,
+      "src/helpers/regex.ts": 2,
+      "src/screens/Account/ArkSeedPhraseScreen/index.tsx": 2,
+      "src/screens/Account/RecoverArkScreen/index.tsx": 5,
+      "src/screens/Ark/ArkStuckCapsuleScreen/index.tsx": 1,
+      "src/screens/Ark/ArkTransactionDetailsScreen/index.tsx": 1,
+      "src/screens/ColdStorage/index.tsx": 3,
+      "src/screens/ConnectColdStorage/index.tsx": 3,
+      "src/screens/PurchaseVault/index.tsx": 1,
+      "src/screens/ReviewPayment/index.tsx": 4,
+      "src/screens/SavingVaultIntroNew/index.tsx": 1,
+      "src/screens/Strike/CheckingAccountNew/ArkCapsules.tsx": 1,
+      "src/screens/Strike/CheckingAccountNew/Settings.tsx": 6,
+      "src/screens/SwapAmount/index.tsx": 1,
+      "src/screens/WithdrawToSavingsVault/index.tsx": 1,
+      "src/services/ark/backup.ts": 1,
+      "src/services/ark/chainTip.ts": 1,
+      "src/services/ark/googleDrive.ts": 1,
+      "src/services/ark/lightning.ts": 2,
+      "src/services/ark/recover.ts": 1,
+      "src/services/ark/restore.ts": 1,
+      "src/services/ark/send.ts": 4,
+      "src/services/ark/sync.ts": 1,
+      "src/services/ark/walletHandle.ts": 1,
+      "src/services/lightningSwap/providers/coinos.ts": 2,
+      "tests/e2e/detox-build-release-apk.sh": 1,
+      "tests/unit/lightning-ldk-wallet.test.js": 1,
+      "tests/unit/lnurlPayValidation.test.ts": 6,
+      "tests/unit/storageServiceFailure.test.ts": 1
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 136 regex sites (auto-NO-GO bar 200); dialects [ecma:108, posix-shell:28]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

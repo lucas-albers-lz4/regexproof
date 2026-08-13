@@ -1,0 +1,62 @@
+{
+  "candidate_url": "https://github.com/Sustainable-Solutions-Lab/GLADE",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 55 sites, deterministic-false.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "GLADE",
+  "corpus_pin": "89d0502e22ed0cd4263019726d1ab5f3d47e33d4",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 31,
+      "posix-shell": 3,
+      "py_re": 21
+    },
+    "flags": {
+      "g": 7,
+      "i": 1
+    },
+    "pin": "89d0502e22ed0cd4263019726d1ab5f3d47e33d4",
+    "predicted_buckets": {
+      "inline-flag": 1,
+      "stateful": 7
+    },
+    "regex_sites": 55,
+    "regex_sites_per_file": {
+      "docs/_static/carbon-dial/lib/d3.min.js": 31,
+      "notebooks/sensitivity_utils.py": 2,
+      "tests/test_solve_rule_params.py": 1,
+      "tools/hooks/check-furo-rst": 2,
+      "tools/smk": 1,
+      "tools/snakemake-logger-plugin-compact/snakemake_logger_plugin_compact/__init__.py": 1,
+      "workflow/scripts/analysis/extract_ghg_attribution.py": 1,
+      "workflow/scripts/analysis/extract_statistics.py": 1,
+      "workflow/scripts/gbd2019_rr_appendix.py": 1,
+      "workflow/scripts/prepare_life_table.py": 1,
+      "workflow/scripts/prepare_nhanes_dietary_intake.py": 11,
+      "workflow/scripts/solve_model/sensitivity.py": 1,
+      "workflow/validation/diet_basis.py": 1
+    },
+    "security_boundary": "deterministic-false"
+  },
+  "rationale": "Below admission scale: 55 regex sites (auto-NO-GO bar 200); dialects [ecma:31, posix-shell:3, py_re:21]; boundary=deterministic-false.",
+  "schema_version": "1"
+}

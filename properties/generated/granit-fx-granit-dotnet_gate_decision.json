@@ -1,0 +1,57 @@
+{
+  "candidate_url": "https://github.com/granit-fx/granit-dotnet",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 22 sites < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "granit-dotnet",
+  "corpus_pin": "13a0c7bef22ab39e4b77f16f82ba8de1e8e357bc",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "posix-shell": 7,
+      "py_re": 15
+    },
+    "flags": {
+      "i": 2,
+      "m": 3,
+      "s": 1
+    },
+    "pin": "13a0c7bef22ab39e4b77f16f82ba8de1e8e357bc",
+    "predicted_buckets": {
+      "inline-flag": 3,
+      "m-flag": 3
+    },
+    "regex_sites": 22,
+    "regex_sites_per_file": {
+      ".husky/commit-msg": 2,
+      ".husky/pre-commit": 4,
+      ".husky/pre-push": 1,
+      "scripts/_domain_map.py": 1,
+      "scripts/_slnx_utils.py": 2,
+      "scripts/find-unreferenced-public-api.py": 1,
+      "scripts/generate-code-index.py": 8,
+      "scripts/translate-templates.py": 3
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 22 regex sites (auto-NO-GO bar 200); dialects [posix-shell:7, py_re:15]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

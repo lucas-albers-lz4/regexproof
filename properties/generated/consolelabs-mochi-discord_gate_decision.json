@@ -1,0 +1,69 @@
+{
+  "candidate_url": "https://github.com/consolelabs/mochi-discord",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 34 sites < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "mochi-discord",
+  "corpus_pin": "b7bb293b0016a46d55ab40fdf431aa6f3acc4f64",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "lookaround": 1
+    },
+    "dialect": {
+      "ecma": 32,
+      "posix-shell": 2
+    },
+    "flags": {
+      "g": 14,
+      "i": 12,
+      "m": 1
+    },
+    "pin": "b7bb293b0016a46d55ab40fdf431aa6f3acc4f64",
+    "predicted_buckets": {
+      "inline-flag": 12,
+      "lookaround": 1,
+      "m-flag": 1,
+      "stateful": 14
+    },
+    "regex_sites": 34,
+    "regex_sites_per_file": {
+      ".husky/pre-commit": 1,
+      ".husky/prepare-commit-msg": 1,
+      "src/commands/feedback/index/slash.ts": 1,
+      "src/commands/inbox/index/processor.ts": 1,
+      "src/commands/pay/me/processor.ts": 4,
+      "src/commands/proposal/processor.ts": 1,
+      "src/commands/role/reaction/remove/processor.ts": 2,
+      "src/commands/tip/index.ts": 1,
+      "src/commands/tip/index/processor.ts": 1,
+      "src/commands/tip/mail/processor.ts": 1,
+      "src/index.ts": 1,
+      "src/ui/canvas/calculator.ts": 1,
+      "src/utils/commands.ts": 2,
+      "src/utils/common.ts": 4,
+      "src/utils/constants.ts": 8,
+      "src/utils/tip-bot.ts": 4
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 34 regex sites (auto-NO-GO bar 200); dialects [ecma:32, posix-shell:2]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

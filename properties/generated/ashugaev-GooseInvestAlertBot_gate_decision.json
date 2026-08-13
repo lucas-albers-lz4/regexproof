@@ -1,0 +1,67 @@
+{
+  "candidate_url": "https://github.com/ashugaev/GooseInvestAlertBot",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 33 sites < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "GooseInvestAlertBot",
+  "corpus_pin": "59b0b6d22c61afa9e2dd12e3f3afa504ee7903d1",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "lookaround": 7
+    },
+    "dialect": {
+      "ecma": 33
+    },
+    "flags": {
+      "g": 5,
+      "i": 1
+    },
+    "pin": "59b0b6d22c61afa9e2dd12e3f3afa504ee7903d1",
+    "predicted_buckets": {
+      "inline-flag": 1,
+      "lookaround": 7,
+      "stateful": 5
+    },
+    "regex_sites": 33,
+    "regex_sites_per_file": {
+      "migrations/migrations/20220202075757-delete_currency_from_crypto_tiker.js": 1,
+      "migrations/migrations/20240721115307-bybit_ids.js": 1,
+      "migrations/migrations/20240721115730-bybit_ids_shifts.js": 1,
+      "src/app.ts": 1,
+      "src/commands/admin/admin.ts": 1,
+      "src/commands/alert/alert.ts": 4,
+      "src/commands/alert/scenes/alertAddMessageScene.ts": 1,
+      "src/commands/broadcast/broadcast.utils.ts": 3,
+      "src/commands/list/list.ts": 1,
+      "src/commands/price.ts": 1,
+      "src/commands/remove/remove.ts": 1,
+      "src/commands/stat/stat.scenes.ts": 3,
+      "src/commands/stat/stat.ts": 1,
+      "src/helpers/getPricesFromString.ts": 10,
+      "src/helpers/retry.ts": 1,
+      "src/helpers/triggerActionRegexp.ts": 1,
+      "src/scenes/wrappers/waitMessageStep.ts": 1
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 33 regex sites (auto-NO-GO bar 200); dialects [ecma:33]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

@@ -1,0 +1,51 @@
+{
+  "candidate_url": "https://github.com/cyberark/conjur-authn-k8s-client",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 35 shell < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "conjur-authn-k8s-client",
+  "corpus_pin": "487e9772ef0fc6df463a2b808aa9f59099e63d56",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "posix-shell": 35
+    },
+    "flags": {},
+    "pin": "487e9772ef0fc6df463a2b808aa9f59099e63d56",
+    "predicted_buckets": {},
+    "regex_sites": 35,
+    "regex_sites_per_file": {
+      "bin/build_utils": 3,
+      "bin/test-workflow/2_admin_load_conjur_policies.sh": 17,
+      "bin/test-workflow/7_app_deploy.sh": 1,
+      "bin/test-workflow/conjur_outside_k8s_vars.sh": 2,
+      "bin/test-workflow/utils.sh": 6,
+      "bin/validate-helm": 1,
+      "helm/common/utils.sh": 2,
+      "helm/conjur-config-cluster-prep/bin/get-conjur-cert.sh": 1,
+      "helm/conjur-config-cluster-prep/test-helm": 1,
+      "helm/conjur-config-namespace-prep/test-helm": 1
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 35 regex sites (auto-NO-GO bar 200); dialects [posix-shell:35]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

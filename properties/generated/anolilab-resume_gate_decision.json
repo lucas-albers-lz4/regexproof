@@ -1,0 +1,47 @@
+{
+  "candidate_url": "https://github.com/anolilab/resume",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 2 sites (resume template).",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "resume",
+  "corpus_pin": "3ebb18a59cc60ecb573b5e3ea2bae53bba213a6d",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 2
+    },
+    "flags": {
+      "g": 2
+    },
+    "pin": "3ebb18a59cc60ecb573b5e3ea2bae53bba213a6d",
+    "predicted_buckets": {
+      "stateful": 2
+    },
+    "regex_sites": 2,
+    "regex_sites_per_file": {
+      "src/html-to-pdf.ts": 1,
+      "vite.config.ts": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 2 regex sites (auto-NO-GO bar 200); dialects [ecma:2]; boundary=unknown.",
+  "schema_version": "1"
+}

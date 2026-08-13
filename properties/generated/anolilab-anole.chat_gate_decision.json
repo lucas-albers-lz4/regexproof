@@ -1,0 +1,70 @@
+{
+  "candidate_url": "https://github.com/anolilab/anole.chat",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 25 sites < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "anole.chat",
+  "corpus_pin": "63cf70acf1b467d07e1f9c9ac8a23095184377a5",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "lookaround": 1
+    },
+    "dialect": {
+      "ecma": 25
+    },
+    "flags": {
+      "g": 2,
+      "i": 1,
+      "s": 1,
+      "u": 1
+    },
+    "pin": "63cf70acf1b467d07e1f9c9ac8a23095184377a5",
+    "predicted_buckets": {
+      "inline-flag": 2,
+      "lookaround": 1,
+      "stateful": 2,
+      "u-flag": 1
+    },
+    "regex_sites": 25,
+    "regex_sites_per_file": {
+      "app/src/components/assistant-ui/mermaid-diagram.tsx": 1,
+      "app/src/components/assistant-ui/thread.tsx": 1,
+      "app/src/components/error-boundary.tsx": 2,
+      "app/src/components/file-upload.tsx": 1,
+      "app/src/features/auth/components/otp.tsx": 1,
+      "app/src/features/auth/components/two-factor.tsx": 1,
+      "app/src/routes/(auth)/accept-invitation/$invitationId/index.tsx": 1,
+      "app/src/routes/dashboard/settings/-components/admin.tsx": 1,
+      "app/src/routes/dashboard/settings/-components/organization-card.tsx": 1,
+      "app/vite.config.ts": 1,
+      "packages/ai-agent/src/client/index.test.ts": 2,
+      "packages/ai-agent/src/client/streaming.ts": 1,
+      "packages/ai-agent/src/mapping.test.ts": 1,
+      "packages/ai-agent/src/mapping.ts": 1,
+      "scripts/env-helper.js": 2,
+      "scripts/generate-encryption-key.js": 4,
+      "scripts/sync-env-to-convex.js": 3
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 25 regex sites (auto-NO-GO bar 200); dialects [ecma:25]; boundary=unknown.",
+  "schema_version": "1"
+}

@@ -1,0 +1,52 @@
+{
+  "candidate_url": "https://github.com/opendatahub-io/data-science-pipelines-operator",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 12 shell < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "data-science-pipelines-operator",
+  "corpus_pin": "b141ccfee1b4ed08b549bd1b76b0c6ede500c5ff",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "posix-class": 9
+    },
+    "dialect": {
+      "posix-shell": 12
+    },
+    "flags": {
+      "i": 1
+    },
+    "pin": "b141ccfee1b4ed08b549bd1b76b0c6ede500c5ff",
+    "predicted_buckets": {
+      "inline-flag": 1,
+      "posix-class": 9
+    },
+    "regex_sites": 12,
+    "regex_sites_per_file": {
+      ".github/scripts/release_trigger/upload-data.sh": 2,
+      ".github/scripts/tests/run_dsp_mlflow_tests.sh": 1,
+      ".github/scripts/tests/tests.sh": 1,
+      ".github/scripts/verify-go-version-consistency.sh": 8
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 12 regex sites (auto-NO-GO bar 200); dialects [posix-shell:12]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

@@ -1,0 +1,64 @@
+{
+  "candidate_url": "https://github.com/cristianzsh/triager",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 41 sites < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "triager",
+  "corpus_pin": "dce691a76de1ba01768c53520b7ab637e3febbf9",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "lookaround": 4
+    },
+    "dialect": {
+      "ecma": 11,
+      "posix-shell": 1,
+      "py_re": 29
+    },
+    "flags": {
+      "g": 4,
+      "i": 2
+    },
+    "pin": "dce691a76de1ba01768c53520b7ab637e3febbf9",
+    "predicted_buckets": {
+      "inline-flag": 2,
+      "lookaround": 4,
+      "stateful": 4
+    },
+    "regex_sites": 41,
+    "regex_sites_per_file": {
+      "tools/PyWMIPersistenceFinder.py": 5,
+      "tools/chainsaw/sigma/tests/check-baseline-local.sh": 1,
+      "tools/chainsaw/sigma/tests/test_rules.py": 3,
+      "triager.py": 7,
+      "web/backend/app/core/config_validate.py": 1,
+      "web/backend/app/core/query_lang.py": 2,
+      "web/backend/app/core/timeline_heuristics.py": 2,
+      "web/backend/app/services/case_db.py": 2,
+      "web/backend/app/services/csv_importer.py": 1,
+      "web/backend/app/services/report.py": 5,
+      "web/backend/app/services/triager_runner.py": 1,
+      "web/frontend/app.js": 11
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 41 regex sites (auto-NO-GO bar 200); dialects [ecma:11, posix-shell:1, py_re:29]; boundary=unknown.",
+  "schema_version": "1"
+}

@@ -1,0 +1,102 @@
+{
+  "candidate_url": "https://github.com/yangzhuxinyzx/auto-openclaw",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 112 ecma < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "auto-openclaw",
+  "corpus_pin": "cf20833328baee752b9ca2cf6176ae0e2d98eeb1",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "lookaround": 7
+    },
+    "dialect": {
+      "ecma": 112
+    },
+    "flags": {
+      "g": 37,
+      "i": 3,
+      "m": 1,
+      "u": 1
+    },
+    "pin": "cf20833328baee752b9ca2cf6176ae0e2d98eeb1",
+    "predicted_buckets": {
+      "inline-flag": 3,
+      "lookaround": 7,
+      "m-flag": 1,
+      "stateful": 37,
+      "u-flag": 1
+    },
+    "regex_sites": 112,
+    "regex_sites_per_file": {
+      "apps/ui-tars/forge.config.ts": 1,
+      "apps/ui-tars/src/main/agent/operator.ts": 2,
+      "apps/ui-tars/src/main/electron-updater/GitHubProvider.ts": 3,
+      "apps/ui-tars/src/main/logger.ts": 1,
+      "apps/ui-tars/src/main/remote/operators.ts": 3,
+      "apps/ui-tars/src/main/remote/proxyClient.ts": 1,
+      "apps/ui-tars/src/main/remote/subscriptionClient.ts": 2,
+      "apps/ui-tars/src/main/utils/updateApp.ts": 1,
+      "apps/ui-tars/src/renderer/src/components/RunMessages/Messages.tsx": 1,
+      "packages/agent-infra/browser-use/assets/buildDomTree.js": 1,
+      "packages/agent-infra/browser-use/src/agent/agents/base.ts": 2,
+      "packages/agent-infra/browser-use/src/dom/views.ts": 7,
+      "packages/agent-infra/create-new-mcp/index.js": 1,
+      "packages/agent-infra/create-new-mcp/src/index.ts": 9,
+      "packages/agent-infra/create-new-mcp/template-default/src/index.ts": 1,
+      "packages/agent-infra/mcp-client/src/index.ts": 4,
+      "packages/agent-infra/mcp-client/test/index.test.ts": 2,
+      "packages/agent-infra/mcp-servers/browser/rslib.config.ts": 3,
+      "packages/agent-infra/mcp-servers/browser/scripts/update-readme.ts": 1,
+      "packages/agent-infra/mcp-servers/browser/src/index.ts": 1,
+      "packages/agent-infra/mcp-servers/browser/src/utils/utils.ts": 2,
+      "packages/agent-infra/mcp-servers/browser/tests/index.cjs": 1,
+      "packages/agent-infra/mcp-servers/browser/tests/index.ts": 1,
+      "packages/agent-infra/mcp-servers/browser/tests/resources/resources.test.ts": 1,
+      "packages/agent-infra/mcp-servers/browser/tests/server-in-memory.test.ts": 2,
+      "packages/agent-infra/mcp-servers/browser/tests/tools/action.test.ts": 3,
+      "packages/agent-infra/mcp-servers/commands/src/index.ts": 1,
+      "packages/agent-infra/mcp-servers/filesystem/src/index.ts": 1,
+      "packages/agent-infra/mcp-servers/filesystem/src/utils.ts": 4,
+      "packages/agent-infra/mcp-servers/search/src/index.ts": 1,
+      "packages/agent-infra/search/browser-search/examples/benchmark.ts": 1,
+      "packages/agent-infra/search/browser-search/src/engines/baidu-engine.ts": 1,
+      "packages/agent-infra/search/browser-search/src/engines/bing-engine.ts": 1,
+      "packages/agent-infra/search/browser-search/src/engines/google-engine.ts": 1,
+      "packages/agent-infra/search/browser-search/src/engines/sogou-engine.ts": 1,
+      "packages/common/electron-build/src/hooks/postMake.ts": 2,
+      "packages/ui-tars/action-parser/src/actionParser.ts": 20,
+      "packages/ui-tars/action-parser/test/index.bench.ts": 1,
+      "packages/ui-tars/cli/bin/index.js": 1,
+      "packages/ui-tars/cli/src/cli/start.ts": 1,
+      "packages/ui-tars/operators/adb/src/index.ts": 1,
+      "packages/ui-tars/operators/browser-operator/src/browser-operator.ts": 6,
+      "packages/ui-tars/operators/nut-js/src/index.ts": 3,
+      "packages/ui-tars/sdk/src/utils.ts": 2,
+      "packages/ui-tars/visualizer/scripts/building-utils.ts": 1,
+      "packages/ui-tars/visualizer/src/component/detail-panel.tsx": 1,
+      "packages/ui-tars/visualizer/src/component/store.tsx": 3,
+      "packages/ui-tars/visualizer/src/utils.ts": 1
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 112 regex sites (auto-NO-GO bar 200); dialects [ecma:112]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

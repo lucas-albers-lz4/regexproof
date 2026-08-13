@@ -1,0 +1,85 @@
+{
+  "candidate_url": "https://github.com/Nick2bad4u/UserStyles",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 488 ecma < 1000 (userstyles).",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "UserStyles",
+  "corpus_pin": "712d10f78c1498dad2e9d47d51b8f5fe46c7269b",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "backref": 1,
+      "lookaround": 14
+    },
+    "dialect": {
+      "ecma": 488
+    },
+    "flags": {
+      "g": 83,
+      "i": 57,
+      "m": 27,
+      "u": 62
+    },
+    "pin": "712d10f78c1498dad2e9d47d51b8f5fe46c7269b",
+    "predicted_buckets": {
+      "backref": 1,
+      "inline-flag": 57,
+      "lookaround": 14,
+      "m-flag": 27,
+      "stateful": 83,
+      "u-flag": 62
+    },
+    "regex_sites": 488,
+    "regex_sites_per_file": {
+      ".codex/skills/userstyles-publishing/scripts/inspect-artifact.mjs": 7,
+      "AutoMergeDependabotPRs.user.js": 4,
+      "EnhanceYouTubeProfilePictures.user.js": 7,
+      "EnlargeYouTubeChatProfilePictures.user.js": 5,
+      "EnlargeYouTubeCommentSectionProfilePictures.user.js": 5,
+      "GarminAutoPaste.user.js": 5,
+      "GarminAutoSignIn.user.js": 12,
+      "GoogleAutoClickFirstAccountSignIn.user.js": 2,
+      "HideChineseUserstyles.user.js": 1,
+      "HideNon-EnglishUserstyles.user.js": 1,
+      "KudoAll-Strava-Garmin.user.js": 2,
+      "Material-Icons-for-Development-Websites.user.js": 11,
+      "MaterialIcons-local-files.user.js": 2,
+      "MergeDependabotPRs.user.js": 3,
+      "NPM-Bundlephobia-Package-Size.user.js": 4,
+      "NPM-Package-Mirror-Menu.user.js": 5,
+      "NPM-Package-and-Search-Enhancer.user.js": 76,
+      "OSRSWikiAuto-Categorizer-SlowMode.user.js": 2,
+      "OSRSWikiAuto-Categorizer.user.js": 2,
+      "SuperchargedLocalDirectoryWebUI.user.js": 301,
+      "UserstyleWorld-SyncStyles.user.js": 5,
+      "__tests__/autoMergeDependabotPRs.test.cjs": 2,
+      "__tests__/helpers/npmPackageAndSearchEnhancer.harness.cjs": 5,
+      "__tests__/materialIconsDevelopmentWebsites.test.cjs": 1,
+      "__tests__/npmPackageAndSearchEnhancer.test.cjs": 13,
+      "scripts/generate-material-icons-development-websites.mjs": 1,
+      "scripts/sync-npm-enhancer-integrations.mjs": 1,
+      "src/utils/colorUtils.cjs": 1,
+      "strava-balance/buffer-5.6.1/index.js": 2
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 488 regex sites (auto-NO-GO bar 200); dialects [ecma:488]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

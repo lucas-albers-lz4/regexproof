@@ -1,0 +1,79 @@
+{
+  "candidate_url": "https://github.com/Phantomojo/GhostWire-secure-mesh-communication",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 106 sites < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "GhostWire-secure-mesh-communication",
+  "corpus_pin": "5bd144497fb67299c628de570486b908de3fe4b0",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 37,
+      "posix-shell": 69
+    },
+    "flags": {
+      "g": 24,
+      "i": 15,
+      "m": 7,
+      "u": 12,
+      "v": 1
+    },
+    "pin": "5bd144497fb67299c628de570486b908de3fe4b0",
+    "predicted_buckets": {
+      "inline-flag": 15,
+      "m-flag": 7,
+      "stateful": 24,
+      "u-flag": 12,
+      "v-flag": 1
+    },
+    "regex_sites": 106,
+    "regex_sites_per_file": {
+      "launch-kit/demo-multihop.sh": 1,
+      "launch-kit/demo-pipeline.sh": 3,
+      "launch-kit/demo-raw.sh": 4,
+      "scripts/android_debug_logs.sh": 6,
+      "scripts/deploy/deploy-to-android.sh": 1,
+      "scripts/ghostwire.sh": 1,
+      "scripts/ghostwire_omega_audit.sh": 6,
+      "scripts/ghostwire_ultimate_audit.sh": 7,
+      "scripts/install.sh": 2,
+      "scripts/install_hostname.sh": 2,
+      "scripts/launch-ghostwire-working.sh": 1,
+      "scripts/quick_start.sh": 10,
+      "scripts/setup-tailscale.sh": 1,
+      "scripts/test/test-api-newman.sh": 2,
+      "scripts/test/test-backend-cli.sh": 6,
+      "scripts/test/test-backend.sh": 6,
+      "scripts/test/test-first-ping.sh": 5,
+      "scripts/transcribe.sh": 2,
+      "scripts/uninstall.sh": 1,
+      "src-tauri/gen/android/app/src/main/assets/assets/index-c0xSxWIZ.js": 20,
+      "src-tauri/gen/android/gradlew": 2,
+      "website-next/src/app/api/newsletter/route.ts": 1,
+      "website-next/src/components/site/github-doc-modal.tsx": 14,
+      "website-next/src/components/site/sections/architecture-section.tsx": 1,
+      "website-next/src/components/site/sections/how-it-works-section.tsx": 1
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 106 regex sites (auto-NO-GO bar 200); dialects [ecma:37, posix-shell:69]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

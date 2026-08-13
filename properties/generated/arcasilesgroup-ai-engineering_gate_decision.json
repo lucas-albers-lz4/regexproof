@@ -1,0 +1,68 @@
+{
+  "candidate_url": "https://github.com/arcasilesgroup/ai-engineering",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 34 sites < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "ai-engineering",
+  "corpus_pin": "226cf58f78e370d50e0ecc522891d9393bb87546",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "posix-shell": 2,
+      "py_re": 32
+    },
+    "flags": {
+      "i": 2,
+      "m": 12
+    },
+    "pin": "226cf58f78e370d50e0ecc522891d9393bb87546",
+    "predicted_buckets": {
+      "inline-flag": 2,
+      "m-flag": 12
+    },
+    "regex_sites": 34,
+    "regex_sites_per_file": {
+      "git-hooks/commit-msg": 2,
+      "hooks/chain.py": 1,
+      "hooks/injection_guard.py": 1,
+      "hooks/no_verify_guard.py": 2,
+      "hooks/self_protect.py": 2,
+      "migrations/0.13..1.0/unvendor.py": 2,
+      "src/ai_engineering/accept.py": 1,
+      "src/ai_engineering/audit.py": 1,
+      "src/ai_engineering/decide.py": 3,
+      "src/ai_engineering/doctor.py": 2,
+      "src/ai_engineering/spec.py": 3,
+      "src/ai_engineering/text.py": 1,
+      "src/ai_engineering/update.py": 1,
+      "tests/anti_theatre.py": 1,
+      "tests/stats.py": 2,
+      "tests/test_install.py": 1,
+      "tests/test_mut_init.py": 2,
+      "tests/test_mut_wiring.py": 4,
+      "tests/test_record.py": 1,
+      "tests/test_ui.py": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 34 regex sites (auto-NO-GO bar 200); dialects [posix-shell:2, py_re:32]; boundary=unknown.",
+  "schema_version": "1"
+}

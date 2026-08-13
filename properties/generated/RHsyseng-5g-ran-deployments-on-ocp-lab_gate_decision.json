@@ -1,0 +1,48 @@
+{
+  "candidate_url": "https://github.com/RHsyseng/5g-ran-deployments-on-ocp-lab",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 4 sites, lab deployment docs.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "5g-ran-deployments-on-ocp-lab",
+  "corpus_pin": "4259044417665f6e1de5eef0176a59c86cb1b1bf",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 2,
+      "posix-shell": 2
+    },
+    "flags": {
+      "g": 2
+    },
+    "pin": "4259044417665f6e1de5eef0176a59c86cb1b1bf",
+    "predicted_buckets": {
+      "stateful": 2
+    },
+    "regex_sites": 4,
+    "regex_sites_per_file": {
+      "lab-materials/lab-env-data/hypervisor/forcedns": 2,
+      "lib/tab-block.js": 2
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 4 regex sites (auto-NO-GO bar 200); dialects [ecma:2, posix-shell:2]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

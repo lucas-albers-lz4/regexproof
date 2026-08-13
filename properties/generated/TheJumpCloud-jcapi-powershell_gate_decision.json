@@ -1,0 +1,38 @@
+{
+  "candidate_url": "https://github.com/TheJumpCloud/jcapi-powershell",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 0 regex sites (PowerShell module).",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "jcapi-powershell",
+  "corpus_pin": "3d8201b2dafcbf8f0366e7a531a803da46d25533",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {},
+    "flags": {},
+    "pin": "3d8201b2dafcbf8f0366e7a531a803da46d25533",
+    "predicted_buckets": {},
+    "regex_sites": 0,
+    "regex_sites_per_file": {},
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 0 regex sites (auto-NO-GO bar 200); dialects [none]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

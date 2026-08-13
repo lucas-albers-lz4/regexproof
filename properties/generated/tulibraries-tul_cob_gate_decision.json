@@ -1,0 +1,56 @@
+{
+  "candidate_url": "https://github.com/tulibraries/tul_cob",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 16 sites < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "tul_cob",
+  "corpus_pin": "e1db60facc882f302a2c74c733256d895a59b8e7",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 15,
+      "posix-shell": 1
+    },
+    "flags": {
+      "g": 2,
+      "i": 1
+    },
+    "pin": "e1db60facc882f302a2c74c733256d895a59b8e7",
+    "predicted_buckets": {
+      "inline-flag": 1,
+      "stateful": 2
+    },
+    "regex_sites": 16,
+    "regex_sites_per_file": {
+      ".github/scripts/update-airflow.sh": 1,
+      "app/javascript/blacklight_range_limit_vendor/flot/jquery.canvaswrapper.js": 1,
+      "app/javascript/blacklight_range_limit_vendor/flot/jquery.colorhelpers.js": 6,
+      "app/javascript/blacklight_range_limit_vendor/flot/jquery.flot.browser.js": 3,
+      "app/javascript/blacklight_range_limit_vendor/flot/jquery.flot.js": 1,
+      "app/javascript/controllers/explanation_controller.js": 1,
+      "app/javascript/legacy/alma_integration.js": 2,
+      "app/javascript/local_blacklight_range_limit/range_limit_shared.js": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 16 regex sites (auto-NO-GO bar 200); dialects [ecma:15, posix-shell:1]; boundary=unknown.",
+  "schema_version": "1"
+}

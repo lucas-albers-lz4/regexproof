@@ -1,0 +1,62 @@
+{
+  "candidate_url": "https://github.com/orange-cloudfoundry/statusetat",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 592 sites < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "statusetat",
+  "corpus_pin": "1dc99c402c933ebf5c78397e14b546170a771842",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "backref": 1,
+      "lookaround": 2
+    },
+    "dialect": {
+      "ecma": 587,
+      "re2": 5
+    },
+    "flags": {
+      "g": 93,
+      "i": 205,
+      "m": 1
+    },
+    "pin": "1dc99c402c933ebf5c78397e14b546170a771842",
+    "predicted_buckets": {
+      "backref": 1,
+      "inline-flag": 205,
+      "lookaround": 2,
+      "m-flag": 1,
+      "stateful": 93
+    },
+    "regex_sites": 592,
+    "regex_sites_per_file": {
+      "extemplate/template.go": 1,
+      "markdown/emoji.go": 1,
+      "serves/minify.go": 3,
+      "serves/website/assets/js/jquery.js": 79,
+      "serves/website/assets/js/materialize.js": 29,
+      "serves/website/assets/js/moment-timezone.js": 5,
+      "serves/website/assets/js/moment.min.js": 474
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 592 regex sites (auto-NO-GO bar 200); dialects [ecma:587, re2:5]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

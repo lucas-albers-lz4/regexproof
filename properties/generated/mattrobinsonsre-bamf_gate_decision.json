@@ -1,0 +1,75 @@
+{
+  "candidate_url": "https://github.com/mattrobinsonsre/bamf",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 51 sites < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "bamf",
+  "corpus_pin": "394513bdfb30d8472303697dd0ead824c273e7f8",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "(?i)": 1,
+      "posix-class": 13
+    },
+    "dialect": {
+      "ecma": 14,
+      "posix-shell": 29,
+      "py_re": 7,
+      "re2": 1
+    },
+    "flags": {
+      "g": 4,
+      "i": 4
+    },
+    "pin": "394513bdfb30d8472303697dd0ead824c273e7f8",
+    "predicted_buckets": {
+      "inline-flag": 5,
+      "posix-class": 13,
+      "stateful": 4
+    },
+    "regex_sites": 51,
+    "regex_sites_per_file": {
+      "pkg/bridge/webterm/contract_test.go": 1,
+      "scripts/build.sh": 5,
+      "scripts/content-hygiene.sh": 2,
+      "scripts/docs-xref.sh": 4,
+      "scripts/lib/scan_configmap_secrets.py": 3,
+      "scripts/pentest.sh": 2,
+      "scripts/security-scan.sh": 1,
+      "scripts/smoke/lib.sh": 2,
+      "scripts/smoke/run.sh": 1,
+      "scripts/smoke/seed-fixture.sh": 1,
+      "scripts/smoke/smoke-cert-issue.sh": 8,
+      "scripts/smoke/smoke-tunnel.sh": 1,
+      "scripts/tunnel-e2e.sh": 2,
+      "services/bamf/api/models/common.py": 1,
+      "services/bamf/api/routers/connect.py": 1,
+      "services/tests/test_api/test_websocket.py": 1,
+      "services/tests/test_redis_keys.py": 1,
+      "web/e2e/auth.spec.ts": 3,
+      "web/e2e/helpers.ts": 7,
+      "web/e2e/rbac.spec.ts": 1,
+      "web/src/app/login/page.tsx": 3
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 51 regex sites (auto-NO-GO bar 200); dialects [ecma:14, posix-shell:29, py_re:7, re2:1]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

@@ -1,0 +1,42 @@
+{
+  "candidate_url": "https://github.com/DelineaXPM/dsv-k8s",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 5 re2 < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "dsv-k8s",
+  "corpus_pin": "86bfd49799fe18bd5745d195a52c525926e5857a",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "re2": 5
+    },
+    "flags": {},
+    "pin": "86bfd49799fe18bd5745d195a52c525926e5857a",
+    "predicted_buckets": {},
+    "regex_sites": 5,
+    "regex_sites_per_file": {
+      "magefiles/helm/helm.mage.go": 5
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 5 regex sites (auto-NO-GO bar 200); dialects [re2:5]; boundary=deterministic-true.",
+  "schema_version": "1"
+}
