@@ -92,17 +92,34 @@ def _compile_wide(
             unescaped = _unescape_literal(pattern)
             wide_pattern = "".join(c + "\x00" for c in unescaped)
             import z3
-            mirror = z3.Re(z3.StringVal(wide_pattern))
+
+            literal = z3.Re(z3.StringVal(wide_pattern))
+            if call_kind == "fullmatch":
+                mirror = literal
+                wrap_kind = "fullmatch"
+                fullmatch_shaped = True
+            else:
+                # C1 fold (luna re-gate): extracted YARA records use
+                # call_kind=search and wide matching is substring-based —
+                # the mirror must be the search shape, not an exact string.
+                _seq = z3.StringSort()
+                _rseq = z3.ReSort(_seq)
+                star = z3.Star(z3.AllChar(_rseq))
+                mirror = z3.Concat(star, z3.Concat(literal, star))
+                wrap_kind = "search"
+                fullmatch_shaped = False
+            # Wide nocase is not modeled — fail closed on the exactness flag.
+            nocase = "i" in flags
             meta = composite_meta(
                 leading_caret=False,
-                trailing_dollar=False,
+                trailing_dollar=(call_kind == "fullmatch"),
                 word_boundary_wrap=False,
-                wrap_kind="fullmatch",
-                mirror_exact=True,
+                wrap_kind=wrap_kind,
+                mirror_exact=not nocase,
             )
             # Wide literal mirror is an exact-string (whole-string) language —
             # override the composite default (Union mirrors are never bare).
-            meta["fullmatch_shaped"] = True
+            meta["fullmatch_shaped"] = fullmatch_shaped
             return CompileResult(
                 mirror=mirror,
                 unencodable_reason=None,

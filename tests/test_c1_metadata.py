@@ -258,3 +258,36 @@ def test_fast_path_plain_alt_no_wrap():
     cr = compile_pattern(r"^(?:foo|$)", "", "pcre", "search")
     assert cr.encodable
     assert cr.word_boundary_wrap is False
+
+
+def test_fast_path_wrap_kind_normalizes_to_search_when_wb():
+    # C1 fold (luna re-gate 3): a boundary-wrapped child makes the composite
+    # search-shaped — wrap_kind must normalize to search, never fullmatch.
+    for pat, call_kind in [(r"(?:\bfoo|$)", "fullmatch"), (r"^(?:\bfoo|$)", "search")]:
+        cr = compile_pattern(pat, "", "pcre", call_kind)
+        assert cr.encodable
+        assert cr.word_boundary_wrap is True
+        assert cr.wrap_kind == "search", (pat, cr.wrap_kind)
+
+
+def test_py_re_negated_unicode_shorthand_not_exact():
+    # C1 fold (luna re-gate 3): [^\d]/[^\s] unicode mirrors exclude only the
+    # approximate subset — mirror_exact must be False.
+    for pat in (r"[^\d]", r"[^\s]"):
+        cr = compile_pattern(pat, "", "py_re", "search")
+        assert cr.encodable, (pat, cr.unencodable_reason)
+        assert cr.mirror_exact is False, pat
+
+
+def test_yara_wide_search_shape_and_nocase_fail_closed():
+    # C1 fold (luna re-gate 3): wide literals under search are substring
+    # matches (search-shaped mirror); wide nocase is not modeled -> fail closed.
+    cr = compile_pattern("abc", "", "yara", "search", domain="wide")
+    assert cr.encodable
+    assert cr.wrap_kind == "search"
+    assert cr.fullmatch_shaped is False
+    assert cr.mirror_exact is True
+    cr2 = compile_pattern("abc", "", "yara", "fullmatch", domain="wide")
+    assert cr2.fullmatch_shaped is True
+    cr3 = compile_pattern("abc", "i", "yara", "search", domain="wide")
+    assert cr3.mirror_exact is False

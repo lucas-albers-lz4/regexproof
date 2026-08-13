@@ -403,6 +403,16 @@ def _in_class(items, ctx: _Ctx):
                     forbidden.update(ord(c) for c in chars if len(c) == 1)
             elif op is sc.CATEGORY:
                 forbidden |= _category_codes(av, ctx)
+                # C1 fold (luna re-gate): a negated Unicode shorthand
+                # ([^\d] / [^\s] / [^\w]) excludes only the approximate
+                # subset, so the complement mirror is not a faithful
+                # encoding — mirror_exact must be False.
+                if not ctx.ascii_only and av in (
+                    sc.CATEGORY_DIGIT,
+                    sc.CATEGORY_SPACE,
+                    sc.CATEGORY_WORD,
+                ):
+                    ctx.light_unicode_expansion = True
             else:
                 raise Unencodable(f"class-op:{op}")
             continue
