@@ -267,6 +267,13 @@ def _translate(pattern: sre_parse.SubPattern, ctx: _Ctx):
             sub_body, sub_meta = _translate(sub, child_ctx)
             if sub_meta.get("has_internal_anchor"):
                 meta["has_internal_anchor"] = True
+            # C1 (issue #426): a Unicode-default \w/\d/\s shorthand inside a
+            # scoped-flag group sets the CHILD context's expansion flag — the
+            # root mirror_exact check reads the root ctx, so propagate the
+            # child's flag upward or a nested (?i:\w) / (\d) wrongly reports
+            # mirror_exact=True.
+            if child_ctx.light_unicode_expansion:
+                ctx.light_unicode_expansion = True
             parts.append(sub_body)
         elif op is sc.MAX_REPEAT or op is sc.MIN_REPEAT:
             # greedy/non-greedy — same language

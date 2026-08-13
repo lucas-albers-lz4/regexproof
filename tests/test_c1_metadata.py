@@ -197,3 +197,39 @@ def test_discard_streamed_mirrors_runs():
     rec = _valid({"pattern": "^abc$", "dialect": "re2", "call_kind": "fullmatch"})
     stream = compile_records([rec], lift_inline=False, corpus_slug="meta-test")
     _discard_streamed_mirrors(stream)
+
+
+def test_py_re_nested_scoped_shorthand_not_exact():
+    # C1 fold (luna re-gate): a Unicode-default shorthand inside a scoped-flag
+    # group or a plain group sets the CHILD context's expansion flag; the root
+    # mirror_exact check must see it (propagated upward), or (?i:\w) / (\d)
+    # wrongly report mirror_exact=True.
+    for pat in (r"(?i:\w)", r"(\d)", r"(\w+)", r"x(\d)+y"):
+        cr = compile_pattern(pat, "", "py_re", "search")
+        assert cr.encodable, (pat, cr.unencodable_reason)
+        assert cr.mirror_exact is False, pat
+
+
+def test_alphabet_certified_stays_unset_on_success():
+    # C1 contract: alphabet_certified is set by P3's certification only —
+    # a successful compile must leave it unset (fail-closed default).
+    cr = compile_pattern(r"^[A-Z0-9]+$", "", "py_re", "fullmatch")
+    assert cr.encodable
+    assert cr.alphabet_certified is None
+
+
+def test_mirror_discard_path_releases_stream():
+    # The interim discard path must consume the triple stream without
+    # affecting row content (rows stay lean, output byte-identical).
+    from regexproof.batch.compile_records import compile_records
+    recs = [
+        {"repo": "a/b", "file": "f.js", "line": 1, "pattern": r"^[a-z]+$",
+         "flags": "", "dialect": "py_re", "call_kind": "fullmatch",
+         "site": "pkg/f.js", "id": "x1"},
+    ]
+    rows = compile_records(recs, lift_inline=False, corpus_slug="validatorjs")
+    for row, mirror, meta in rows:
+        assert isinstance(row, dict)
+        assert "mirror" not in row  # lean rows — no AST in records
+        if mirror is not None:
+            assert meta is not None
