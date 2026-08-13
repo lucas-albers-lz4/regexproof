@@ -35,6 +35,30 @@ from regexproof.mine.search import AuthError, SearchRunResult, run_search
 from regexproof.mine.transition import TransitionError, set_status
 
 
+_ENRICH_FIELDS = ("fork", "size", "language", "archived")
+
+
+def _ledger_entry(source: dict[str, Any], *, now_iso: str, capped: bool = False) -> dict[str, Any]:
+    entry = {
+        "url": source.get("url"),
+        "default_branch": source.get("default_branch") or "main",
+        "pin": source.get("pin") or "",
+        "pushed_date": source.get("pushed_date") or "",
+        "stars": int(source.get("stars") or 0),
+        "source_query": source.get("source_query") or "",
+        "first_seen": now_iso,
+        "status": "mined",
+    }
+    for field in _ENRICH_FIELDS:
+        if field in source:
+            entry[field] = source[field]
+    if "pin_probed" in source:
+        entry["pin_probed"] = source["pin_probed"]
+    if capped:
+        entry["capped"] = True
+    return entry
+
+
 def _http_session():
     try:
         import requests
@@ -74,18 +98,11 @@ def assimilate(
             continue
         if find_candidate(ledger, url):
             continue
-        entry = {
-            "url": url,
-            "default_branch": item.get("default_branch") or "main",
-            "pin": item.get("pin") or "",
-            "pushed_date": item.get("pushed_date") or "",
-            "stars": int(item.get("stars") or 0),
-            "source_query": item.get("source_query") or "",
-            "first_seen": now_iso,
-            "status": "mined",
-        }
-        if item.get("capped"):
-            entry["capped"] = True
+        entry = _ledger_entry(
+            {**item, "url": url},
+            now_iso=now_iso,
+            capped=bool(item.get("capped")),
+        )
         ledger["candidates"].append(entry)
         accepted.append(entry)
         room -= 1
@@ -101,16 +118,7 @@ def assimilate(
         if find_candidate(ledger, url):
             continue
         if room > 0:
-            entry = {
-                "url": url,
-                "default_branch": cand.get("default_branch") or "main",
-                "pin": cand.get("pin") or "",
-                "pushed_date": cand.get("pushed_date") or "",
-                "stars": int(cand.get("stars") or 0),
-                "source_query": cand.get("source_query") or "",
-                "first_seen": now_iso,
-                "status": "mined",
-            }
+            entry = _ledger_entry(cand, now_iso=now_iso)
             # Cap flag is search-run provenance only — never stamp overflow drains.
             if cand.get("capped") or search_result.capped:
                 entry["capped"] = True

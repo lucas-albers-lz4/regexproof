@@ -299,6 +299,15 @@ def run_search(
                     "stars": stars,
                     "source_query": query,
                     "capped": hit_cap,
+                    # E3 distinguishes the current default-branch head used
+                    # for probing from the historical mined pin.  At mine
+                    # time the resolved head is both values; later rank-time
+                    # probes must use pin_probed when it is present.
+                    "pin_probed": pin,
+                    "fork": meta.get("fork") if "fork" in meta else None,
+                    "size": meta.get("size") if "size" in meta else None,
+                    "language": meta.get("language") if "language" in meta else None,
+                    "archived": meta.get("archived") if "archived" in meta else None,
                 }
                 result.candidates.append(entry)
             if rate_limited:
