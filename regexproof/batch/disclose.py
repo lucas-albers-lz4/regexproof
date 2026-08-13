@@ -58,6 +58,7 @@ SECURITY_TOOL_CORPORA = frozenset(
         "XPR-dump",
         "mole",
         "pm_shredder",
+        "vedetta",
     }
 )
 

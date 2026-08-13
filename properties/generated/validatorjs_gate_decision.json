@@ -1,57 +1,50 @@
 {
-  "candidate_url": "https://github.com/mikeerickson/validatorjs",
-  "conditions": [
-    {
-      "evidence": "No extractable novel surface (dialects already admitted).",
-      "id": "new-surface",
-      "met": false
-    },
-    {
-      "evidence": "Probe security_boundary unknown or false positive. DUPLICATE of already-admitted validatorjs corpus (same repo mikeerickson/validatorjs; admitted manifest is the 7-file pilot subset).",
-      "id": "security-boundary",
-      "met": false
-    },
-    {
-      "evidence": "Below 1000 scale bar (or unprobeable at gate budget).",
-      "id": "large-under-saturated",
-      "met": false
-    }
-  ],
-  "corpus": "validatorjs",
-  "corpus_pin": "46928d706054b94821680c089de8b2a185830429",
-  "decision": "no-go",
-  "decision_basis": "admission_conditions",
-  "decision_date": "2026-08-12",
-  "escape_hatch_applied": false,
-  "probe": {
-    "construct_counts": {},
-    "dialect": {
-      "ecma": 29
-    },
-    "flags": {
-      "g": 5,
-      "i": 2
-    },
-    "pin": "46928d706054b94821680c089de8b2a185830429",
-    "predicted_buckets": {
-      "inline-flag": 2,
-      "stateful": 5
-    },
-    "regex_sites": 29,
-    "regex_sites_per_file": {
-      "scripts/todo.js": 1,
-      "spec/attribute-formatter.js": 1,
-      "spec/custom-messages.js": 2,
-      "spec/error-messages.js": 2,
-      "spec/implicit-rule.js": 2,
-      "spec/register.js": 2,
-      "src/attributes.js": 2,
-      "src/messages.js": 1,
-      "src/rules.js": 14,
-      "src/validator.js": 2
-    },
-    "security_boundary": "unknown"
+ "schema_version": "1",
+ "corpus": "validatorjs",
+ "candidate_url": "https://github.com/validatorjs/validator.js",
+ "corpus_pin": null,
+ "decision": "go",
+ "decision_date": "2026-08-09",
+ "probe": {
+  "regex_sites": 212,
+  "dialect": {
+   "ecma": 212
   },
-  "rationale": "Below admission scale: 29 regex sites (auto-NO-GO bar 200); dialects [ecma:29]; boundary=unknown.",
-  "schema_version": "1"
+  "flags": {},
+  "predicted_buckets": {
+   "bad-range": 1,
+   "composite-pattern": 3,
+   "m-flag": 2,
+   "pattern-too-long": 9,
+   "u-flag": 1,
+   "unclosed-group": 13,
+   "unsupported-syntax": 20
+  },
+  "predicted_rejects_pct": null
+ },
+ "conditions": [
+  {
+   "id": "new-surface",
+   "met": false,
+   "evidence": "Backfilled for a pre-gate corpus; admission predates the gate."
+  },
+  {
+   "id": "security-boundary",
+   "met": false,
+   "evidence": "Not a security boundary."
+  },
+  {
+   "id": "large-under-saturated",
+   "met": false,
+   "evidence": "212 sites."
+  }
+ ],
+ "escape_hatch_applied": false,
+ "rationale": "Grandfathered: pre-gate corpus already admitted and running in CI; fraction 0.7689 (163/212) passes the >=0.30 fraction gate. 0/3 admission conditions met because the corpus predates the gate.",
+ "related": {
+  "backfilled": true,
+  "source": "cross_corpus_matrix.json + phase3_decision_matrix.json",
+  "repo": "validatorjs/validator.js"
+ },
+ "decision_basis": "grandfathered"
 }

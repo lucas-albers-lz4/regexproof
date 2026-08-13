@@ -1642,7 +1642,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "dialect": "py_re",
         "extractor": "python_dir",
         "repo": "TODO",
-        "security_tool": False,
+        "security_tool": True,
         "lift_inline": False,
         "corpus_pin": "efcf8e4c0087def553a737dc1c4eebda5d8a90cd",
         "commit": "efcf8e4c0087def553a737dc1c4eebda5d8a90cd",
