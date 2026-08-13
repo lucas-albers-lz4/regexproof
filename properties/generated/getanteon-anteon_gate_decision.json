@@ -1,0 +1,46 @@
+{
+  "candidate_url": "https://github.com/getanteon/anteon",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 7 sites < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "anteon",
+  "corpus_pin": "5cf7df3c6b71cf72fb6c54aa16de2d147468d2e4",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "posix-shell": 6,
+      "re2": 1
+    },
+    "flags": {},
+    "pin": "5cf7df3c6b71cf72fb6c54aa16de2d147468d2e4",
+    "predicted_buckets": {},
+    "regex_sites": 7,
+    "regex_sites_per_file": {
+      "ddosify_engine/core/engine_test.go": 1,
+      "ddosify_engine/scripts/install.sh": 2,
+      "ddosify_engine/scripts/testing/benchstat.sh": 3,
+      "selfhosted/install.sh": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 7 regex sites (auto-NO-GO bar 200); dialects [posix-shell:6, re2:1]; boundary=unknown.",
+  "schema_version": "1"
+}

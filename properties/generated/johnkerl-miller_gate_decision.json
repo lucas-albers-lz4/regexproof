@@ -1,0 +1,61 @@
+{
+  "candidate_url": "https://github.com/johnkerl/miller",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 37 sites < 1000 (CSV tool).",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "miller",
+  "corpus_pin": "753e938eb54e8d7167354de4d6ca93fee7d80b24",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "posix-shell": 16,
+      "py_re": 6,
+      "re2": 15
+    },
+    "flags": {},
+    "pin": "753e938eb54e8d7167354de4d6ca93fee7d80b24",
+    "predicted_buckets": {},
+    "regex_sites": 37,
+    "regex_sites_per_file": {
+      "docs/build-epub.sh": 2,
+      "docs/src/genmds": 3,
+      "docs/src/mk-func-h2s.sh": 2,
+      "docs/src/polyglot-dkvp-io/dkvp_io.py": 2,
+      "docs/src/polyglot-dkvp-io/example.py": 3,
+      "pkg/auxents/unhex.go": 1,
+      "pkg/bifs/datetime.go": 1,
+      "pkg/bifs/strings.go": 2,
+      "pkg/climain/mlrcli_mlrrc.go": 1,
+      "pkg/climain/mlrcli_shebang.go": 1,
+      "pkg/dsl/cst/builtin_function_manager.go": 1,
+      "pkg/input/record_reader_markdown.go": 1,
+      "pkg/input/record_reader_pprint.go": 2,
+      "pkg/lib/getoptify.go": 3,
+      "pkg/lib/regex.go": 2,
+      "python/sketch.py": 1,
+      "scripts/perf/multilanguage-timings/original/mkplots.sh": 1,
+      "tools/release.sh": 8
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 37 regex sites (auto-NO-GO bar 200); dialects [posix-shell:16, py_re:6, re2:15]; boundary=unknown.",
+  "schema_version": "1"
+}

@@ -1,0 +1,79 @@
+{
+  "candidate_url": "https://github.com/git-town/git-town",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 52 sites < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "git-town",
+  "corpus_pin": "8c5aa8834c22db5beb0ddb16fe5aa224bdd1bccf",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "(?m)": 1,
+      "backref": 1
+    },
+    "dialect": {
+      "ecma": 11,
+      "posix-shell": 12,
+      "re2": 29
+    },
+    "flags": {
+      "g": 4,
+      "i": 1,
+      "m": 1
+    },
+    "pin": "8c5aa8834c22db5beb0ddb16fe5aa224bdd1bccf",
+    "predicted_buckets": {
+      "backref": 1,
+      "inline-flag": 1,
+      "m-flag": 2,
+      "stateful": 4
+    },
+    "regex_sites": 52,
+    "regex_sites_per_file": {
+      "internal/cli/flags/type.go": 1,
+      "internal/cli/format/indent.go": 1,
+      "internal/cli/print/logger.go": 1,
+      "internal/config/configdomain/display_types.go": 1,
+      "internal/config/configdomain/user_config_dir.go": 2,
+      "internal/forge/gh/connector.go": 2,
+      "internal/forge/glab/parser.go": 1,
+      "internal/git/commands.go": 2,
+      "internal/git/giturl/git_url.go": 5,
+      "internal/gohacks/stringslice/replace_regex_test.go": 2,
+      "internal/test/cucumber/golden.go": 3,
+      "internal/test/handlebars/expand.go": 1,
+      "text-runner/lib/help_output.ts": 4,
+      "text-runner/lib/summary_section.ts": 4,
+      "tools/ensure_no_files_with_dashes.sh": 10,
+      "tools/format_self/format_self.go": 1,
+      "tools/generate_opcodes_all.sh": 2,
+      "tools/lint_steps/stepdef_formatting.go": 1,
+      "tools/lint_steps/stepdef_sorting.go": 1,
+      "tools/lint_steps/stepdef_usage.go": 1,
+      "tools/mdbook_preprocessor/mdbook_preprocessor.js": 2,
+      "tools/mdbook_preprocessor/util.js": 1,
+      "tools/messy_output/main.go": 1,
+      "tools/print_config_exhaustive/lint.go": 2
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 52 regex sites (auto-NO-GO bar 200); dialects [ecma:11, posix-shell:12, re2:29]; boundary=unknown.",
+  "schema_version": "1"
+}

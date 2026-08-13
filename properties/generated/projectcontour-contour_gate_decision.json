@@ -1,0 +1,60 @@
+{
+  "candidate_url": "https://github.com/projectcontour/contour",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 24 sites < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "contour",
+  "corpus_pin": "169dde04620fa7b0fc05c971c89bea0343f92043",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "posix-shell": 12,
+      "re2": 12
+    },
+    "flags": {},
+    "pin": "169dde04620fa7b0fc05c971c89bea0343f92043",
+    "predicted_buckets": {},
+    "regex_sites": 24,
+    "regex_sites_per_file": {
+      "apis/projectcontour/v1alpha1/accesslog.go": 1,
+      "hack/actions/bump-envoy-version/main.go": 2,
+      "hack/actions/bump-go-version/main.go": 3,
+      "hack/actions/check-uncommitted-codegen.sh": 1,
+      "hack/generate-crd-yaml.sh": 1,
+      "hack/kind-dev-cluster.sh": 1,
+      "hack/release/make-release-tag.sh": 1,
+      "internal/dag/conditions.go": 1,
+      "internal/dag/policy.go": 2,
+      "internal/debug/dot_test.go": 2,
+      "internal/timeout/validation_test.go": 1,
+      "test/scripts/get-contour-upgrade-from-version.sh": 2,
+      "test/scripts/install-contour-working.sh": 1,
+      "test/scripts/install-provisioner-working.sh": 1,
+      "test/scripts/kind-load-contour-image.sh": 1,
+      "test/scripts/make-kind-cluster.sh": 1,
+      "test/scripts/run-gateway-conformance.sh": 1,
+      "test/scripts/run-ingress-conformance.sh": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 24 regex sites (auto-NO-GO bar 200); dialects [posix-shell:12, re2:12]; boundary=unknown.",
+  "schema_version": "1"
+}

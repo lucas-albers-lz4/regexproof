@@ -1,0 +1,78 @@
+{
+  "candidate_url": "https://github.com/redpanda-data/connect",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 54 sites < 1000 (Go connector).",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "connect",
+  "corpus_pin": "b037c44f283105e823fccfc0fe1fe76588a2ccfe",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "(?i)": 17
+    },
+    "dialect": {
+      "posix-shell": 7,
+      "py_re": 1,
+      "re2": 46
+    },
+    "flags": {},
+    "pin": "b037c44f283105e823fccfc0fe1fe76588a2ccfe",
+    "predicted_buckets": {
+      "inline-flag": 17
+    },
+    "regex_sites": 54,
+    "regex_sites_per_file": {
+      ".claude-plugin/plugins/redpanda-connect/skills/bloblang-authoring/resources/scripts/rpk-version.sh": 1,
+      ".claude-plugin/plugins/redpanda-connect/skills/component-search/resources/scripts/rpk-version.sh": 1,
+      "cmd/tools/integration_test_registry/main.go": 1,
+      "internal/impl/awk/processor.go": 1,
+      "internal/impl/aws/sns/output.go": 1,
+      "internal/impl/aws/sqs/output.go": 1,
+      "internal/impl/doris/output_stream_load.go": 1,
+      "internal/impl/gcp/enterprise/bigquery/cdc.go": 1,
+      "internal/impl/gcp/enterprise/integration_spanner_cdc_test.go": 1,
+      "internal/impl/iceberg/type_resolver.go": 2,
+      "internal/impl/mongodb/integration_test.go": 1,
+      "internal/impl/mssqlserver/checkpoint_cache.go": 1,
+      "internal/impl/mysql/schema.go": 1,
+      "internal/impl/oracledb/checkpoint_cache.go": 1,
+      "internal/impl/oracledb/logminer/sqlredo/lob_parser.go": 8,
+      "internal/impl/oracledb/logminer/sqlredo/valueconverter.go": 7,
+      "internal/impl/oracledb/multitenancy.go": 1,
+      "internal/impl/oracledb/schema.go": 1,
+      "internal/impl/postgresql/pglogicalstream/connection.go": 1,
+      "internal/impl/redpanda/migrator/migrator_groups_integration_test.go": 4,
+      "internal/impl/redpanda/migrator/migrator_schema_registry_integration_test.go": 5,
+      "internal/impl/salesforce/app/setup.sh": 1,
+      "internal/impl/salesforce/salesforcehttp/client.go": 2,
+      "internal/impl/snowflake/schema_evolution.go": 1,
+      "internal/impl/timeplus/driver/driver.go": 2,
+      "internal/plugins/cdctest/cdc_conformance_test.go": 1,
+      "resources/plugin_uploader/plugin_uploader.py": 1,
+      "resources/scripts/install": 1,
+      "resources/scripts/push_pkg_to_cloudsmith.sh": 1,
+      "resources/scripts/push_pkg_to_gcp_ar.sh": 1,
+      "resources/scripts/tag_bundles.sh": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 54 regex sites (auto-NO-GO bar 200); dialects [posix-shell:7, py_re:1, re2:46]; boundary=unknown.",
+  "schema_version": "1"
+}

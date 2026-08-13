@@ -1,0 +1,51 @@
+{
+  "candidate_url": "https://github.com/alphagov/govuk-mobile-backend",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 9 ecma < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "govuk-mobile-backend",
+  "corpus_pin": "a86f6bed9f82c3808ad9c7f9d4a46882cb19257c",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 9
+    },
+    "flags": {
+      "g": 3
+    },
+    "pin": "a86f6bed9f82c3808ad9c7f9d4a46882cb19257c",
+    "predicted_buckets": {
+      "stateful": 3
+    },
+    "regex_sites": 9,
+    "regex_sites_per_file": {
+      "libs/http-utils/src/send/http-with-retry.unit.test.ts": 2,
+      "services/auth/linking-verification/app.ts": 3,
+      "services/auth/proxy/firebaseJwt.ts": 1,
+      "services/auth/proxy/sanitize-headers.ts": 1,
+      "services/auth/proxy/tests/unit/handler.unit.test.ts": 1,
+      "services/auth/tests/unit/waf-logging-data-protection.unit.test.ts": 1
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 9 regex sites (auto-NO-GO bar 200); dialects [ecma:9]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

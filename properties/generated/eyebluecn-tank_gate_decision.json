@@ -1,0 +1,44 @@
+{
+  "candidate_url": "https://github.com/eyebluecn/tank",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 5 re2 < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "tank",
+  "corpus_pin": "8b8265d77f56d7f11f0cea0f8c906e0367f21488",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "re2": 5
+    },
+    "flags": {},
+    "pin": "8b8265d77f56d7f11f0cea0f8c906e0367f21488",
+    "predicted_buckets": {},
+    "regex_sites": 5,
+    "regex_sites_per_file": {
+      "code/rest/alien_controller.go": 2,
+      "code/tool/webdav/prop_test.go": 1,
+      "code/tool/webdav/webdav_test.go": 2
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 5 regex sites (auto-NO-GO bar 200); dialects [re2:5]; boundary=unknown.",
+  "schema_version": "1"
+}

@@ -1,0 +1,85 @@
+{
+  "candidate_url": "https://github.com/Organization5762/heart",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 54 sites < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "heart",
+  "corpus_pin": "7dbce76ee5899fa70dbef1497c52adae850a3307",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 21,
+      "posix-shell": 20,
+      "py_re": 13
+    },
+    "flags": {
+      "g": 4,
+      "i": 11,
+      "m": 2,
+      "s": 2
+    },
+    "pin": "7dbce76ee5899fa70dbef1497c52adae850a3307",
+    "predicted_buckets": {
+      "inline-flag": 13,
+      "m-flag": 2,
+      "stateful": 4
+    },
+    "regex_sites": 54,
+    "regex_sites_per_file": {
+      "drivers/totem/bootstrap-supervisord.sh": 2,
+      "drivers/totem/start-heart.sh": 1,
+      "drivers/totem/vibe-cycle.sh": 1,
+      "experimental/beats/.storybook/preview.tsx": 2,
+      "experimental/beats/src/components/phone-control-panel.tsx": 1,
+      "experimental/beats/src/components/ui/peripherals/generic_sensor.tsx": 2,
+      "experimental/beats/src/components/ui/peripherals/rotary_button.tsx": 1,
+      "experimental/beats/src/features/stream-console/terminal-commands.ts": 3,
+      "experimental/beats/src/layouts/base-layout.tsx": 1,
+      "experimental/beats/src/tests/unit/actions/peripherals/event_list.test.tsx": 6,
+      "experimental/beats/src/tests/unit/components/generic_sensor.test.ts": 1,
+      "experimental/beats/src/tests/unit/components/stream-navigation-panel.test.tsx": 3,
+      "experimental/beats/src/tests/unit/components/stream.test.tsx": 1,
+      "packages/heart-device-manager/src/heart_device_manager/install_rgb_matrix.sh": 1,
+      "rp1/linux/files/tools/testing/selftests/drivers/rp1-pio/rp1_hub75_deploy_module.sh": 3,
+      "rp1/linux/files/tools/testing/selftests/drivers/rp1-pio/rp1_hub75_run_candidate.sh": 1,
+      "scripts/build_package.sh": 1,
+      "scripts/check_harness.sh": 3,
+      "scripts/pair_tetris_controllers.sh": 2,
+      "scripts/rp1_hub75_reproduce_totem_blue.sh": 2,
+      "scripts/setup_tetris_vnc_autostart.sh": 1,
+      "scripts/show_build_profile.sh": 1,
+      "scripts/uwb/run.py": 1,
+      "src/heart/peripheral/flowtoy.py": 1,
+      "src/heart/renderers/controller_pairing/renderer.py": 2,
+      "src/heart/testing/state_similarity.py": 1,
+      "src/heart/testing/state_similarity_review.py": 1,
+      "src/heart/utilities/env/system.py": 1,
+      "src/heart/utilities/hub75_lab/experiments.py": 1,
+      "src/heart/utilities/logging_control.py": 1,
+      "sync.sh": 1,
+      "tests/test_rp1_hub75_regular_contract.py": 2,
+      "tests/utilities/test_hub75_lab.py": 2
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 54 regex sites (auto-NO-GO bar 200); dialects [ecma:21, posix-shell:20, py_re:13]; boundary=unknown.",
+  "schema_version": "1"
+}

@@ -1,0 +1,52 @@
+{
+  "candidate_url": "https://github.com/CompLin/nheengatu",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 28 sites after 2000MB re-probe — NLP toolkit, < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "nheengatu",
+  "corpus_pin": "f9d9764424f7dc503662a77ff68389e1ce234963",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "py_re": 28
+    },
+    "flags": {
+      "x": 1
+    },
+    "pin": "f9d9764424f7dc503662a77ff68389e1ce234963",
+    "predicted_buckets": {
+      "inline-flag": 1
+    },
+    "regex_sites": 28,
+    "regex_sites_per_file": {
+      "src/AnnotateConllu.py": 21,
+      "src/BuildDictionary.py": 2,
+      "src/Metadata.py": 1,
+      "src/ParseGoldTokResults.py": 1,
+      "src/ParseRawTextResults.py": 1,
+      "src/deprel_confusion.py": 1,
+      "src/parser_diagnostics.py": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 28 regex sites (auto-NO-GO bar 200); dialects [py_re:28]; boundary=unknown.",
+  "schema_version": "1"
+}

@@ -1,0 +1,117 @@
+{
+  "candidate_url": "https://github.com/fderuiter/QRCraftly",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 476 ecma (QR web app) < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "QRCraftly",
+  "corpus_pin": "7f9d08a3685de2c6e7168aaad80046f4d9d0dcc9",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "backref": 1,
+      "lookaround": 1
+    },
+    "dialect": {
+      "ecma": 476
+    },
+    "flags": {
+      "g": 83,
+      "i": 288,
+      "m": 3,
+      "s": 1
+    },
+    "pin": "7f9d08a3685de2c6e7168aaad80046f4d9d0dcc9",
+    "predicted_buckets": {
+      "backref": 1,
+      "inline-flag": 289,
+      "lookaround": 1,
+      "m-flag": 3,
+      "stateful": 83
+    },
+    "regex_sites": 476,
+    "regex_sites_per_file": {
+      "e2e/focus-navigation.spec.ts": 1,
+      "e2e/location-input.spec.ts": 2,
+      "e2e/social-export-templates.spec.ts": 103,
+      "e2e/worker-recovery.spec.ts": 1,
+      "scripts/audit_markdown.js": 7,
+      "scripts/bundle_ast_audit.js": 1,
+      "scripts/compile_docs_manifest.js": 3,
+      "scripts/contrast_check.js": 1,
+      "scripts/csp_hash_injector.js": 9,
+      "scripts/dependency_compliance.js": 4,
+      "scripts/generate_sw.cjs": 1,
+      "scripts/git_lineage_auditor.js": 8,
+      "scripts/secret-scanner.js": 13,
+      "scripts/sort_tailwind_classes.js": 5,
+      "scripts/static-path-tracker.js": 2,
+      "scripts/validate_ui_catalog.js": 16,
+      "src/components/InputPanel.test.tsx": 6,
+      "src/components/QRScanner.test.tsx": 20,
+      "src/components/QRScanner.tsx": 5,
+      "src/components/QRTool.tsx": 20,
+      "src/components/QRTool_Footer.test.tsx": 5,
+      "src/components/StyleControls.test.tsx": 9,
+      "src/components/StyleControlsContrast.test.tsx": 3,
+      "src/components/StyleControls_Accessibility.test.tsx": 3,
+      "src/components/StyleControls_Layout.test.tsx": 21,
+      "src/components/StyleControls_Patterns_Colors.test.tsx": 8,
+      "src/components/inputs/LocationInput.test.tsx": 26,
+      "src/components/inputs/MeetingInput.test.tsx": 5,
+      "src/components/style-controls/LayoutControls.test.tsx": 12,
+      "src/components/ui/ColorInput.test.tsx": 7,
+      "src/components/ui/RangeInput.test.tsx": 2,
+      "src/components/ui/ToggleSwitch.test.tsx": 4,
+      "src/components/ui/styles.ts": 2,
+      "src/engine/StreamLookahead.ts": 4,
+      "src/engine/ValidationEngine.ts": 5,
+      "src/hooks/useDynamicFocus.ts": 3,
+      "src/hooks/useQRDownload.test.ts": 2,
+      "src/layouts/LayoutDefault.test.tsx": 3,
+      "src/pages/_error/Page.test.tsx": 6,
+      "src/pages/about/Page.test.tsx": 6,
+      "src/pages/file-transfer/Page.test.tsx": 12,
+      "src/pages/file-transfer/receive/+Page.tsx": 1,
+      "src/pages/file-transfer/receive/Page.test.tsx": 11,
+      "src/pages/security/+Page.tsx": 4,
+      "src/pages/security/Page.test.tsx": 2,
+      "src/utils/colorUtils.ts": 2,
+      "src/utils/demuxerWorker.ts": 1,
+      "src/utils/meetingParsers.ts": 5,
+      "src/utils/metadataEngine.ts": 5,
+      "src/utils/qr-generators/event.ts": 5,
+      "src/utils/qr-generators/rfcHelper.ts": 14,
+      "src/utils/qr-generators/sms.ts": 3,
+      "src/utils/qr-generators/wifi.ts": 3,
+      "src/utils/qrHelpers_SadPaths.test.ts": 1,
+      "src/utils/security.ts": 13,
+      "src/utils/svgContext.test.ts": 2,
+      "src/utils/svgContext.ts": 8,
+      "src/utils/url.ts": 7,
+      "tests/A11yHelpersAndPanelSweep.test.tsx": 3,
+      "tests/StructuralIsolation.test.tsx": 4,
+      "tests/csp_hash_injector.test.ts": 5,
+      "tests/tiered_ownership_and_duplication.test.ts": 1
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 476 regex sites (auto-NO-GO bar 200); dialects [ecma:476]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

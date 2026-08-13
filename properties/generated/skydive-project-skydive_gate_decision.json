@@ -1,0 +1,79 @@
+{
+  "candidate_url": "https://github.com/skydive-project/skydive",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 87 sites < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "skydive",
+  "corpus_pin": "a4452f21475423ba507db191901357fec8ac98fe",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "lookaround": 3,
+      "posix-class": 1
+    },
+    "dialect": {
+      "ecma": 62,
+      "posix-shell": 17,
+      "py_re": 1,
+      "re2": 7
+    },
+    "flags": {
+      "g": 28,
+      "i": 7,
+      "m": 1
+    },
+    "pin": "a4452f21475423ba507db191901357fec8ac98fe",
+    "predicted_buckets": {
+      "inline-flag": 7,
+      "lookaround": 3,
+      "m-flag": 1,
+      "posix-class": 1,
+      "stateful": 28
+    },
+    "regex_sites": 87,
+    "regex_sites_per_file": {
+      "contrib/ansible/roles/skydive_common/library/yedit.py": 1,
+      "contrib/snort/snortSkydive.go": 2,
+      "contrib/vagrant/setup-common.sh": 1,
+      "coverage.sh": 4,
+      "graffiti/js/pure-uuid.js": 1,
+      "scripts/ci/devstack/run-devstack.sh": 1,
+      "scripts/ci/kolla/run-kolla.sh": 2,
+      "scripts/ci/ovnkube-setup.sh": 2,
+      "scripts/ci/run-cdd-overview-tests.sh": 1,
+      "scripts/ci/run-ovnk8s-tests.sh": 1,
+      "scripts/ci/run-tests-utils.sh": 1,
+      "scripts/ci/run-unit-tests.sh": 1,
+      "scripts/scale.sh": 3,
+      "statics/ui/js/app.js": 2,
+      "statics/ui/js/bundle.js": 50,
+      "statics/ui/js/components/flow-table.js": 1,
+      "statics/ui/js/components/rule-detail.js": 1,
+      "statics/ui/js/components/topology.js": 5,
+      "statics/ui/js/components/workflow.js": 2,
+      "topology/probes/neutron/neutron.go": 2,
+      "topology/probes/opencontrail/routing_table.go": 1,
+      "topology/probes/ovsdb/ofctl.go": 2
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 87 regex sites (auto-NO-GO bar 200); dialects [ecma:62, posix-shell:17, py_re:1, re2:7]; boundary=unknown.",
+  "schema_version": "1"
+}

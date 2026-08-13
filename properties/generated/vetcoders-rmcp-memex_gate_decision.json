@@ -1,0 +1,48 @@
+{
+  "candidate_url": "https://github.com/vetcoders/rmcp-memex",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 11 shell < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "rmcp-memex",
+  "corpus_pin": "2fd25928b3b92442bd5c2dad701c707eb0baa400",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "posix-shell": 11
+    },
+    "flags": {},
+    "pin": "2fd25928b3b92442bd5c2dad701c707eb0baa400",
+    "predicted_buckets": {},
+    "regex_sites": 11,
+    "regex_sites_per_file": {
+      "ai-hooks/memex-context.sh": 2,
+      "ai-hooks/memex-startup.sh": 1,
+      "install.sh": 3,
+      "scripts/build-release-bundle.sh": 1,
+      "scripts/reindex-memories.sh": 2,
+      "scripts/release-local.sh": 1,
+      "tools/githooks/pre-commit": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 11 regex sites (auto-NO-GO bar 200); dialects [posix-shell:11]; boundary=unknown.",
+  "schema_version": "1"
+}

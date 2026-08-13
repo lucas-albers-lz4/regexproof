@@ -1,0 +1,83 @@
+{
+  "candidate_url": "https://github.com/taubyte/tau",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 57 sites < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "tau",
+  "corpus_pin": "f65f9a4f25d64889a40d0f8401b00fc5a4506566",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 16,
+      "posix-shell": 1,
+      "py_re": 2,
+      "re2": 38
+    },
+    "flags": {
+      "g": 1
+    },
+    "pin": "f65f9a4f25d64889a40d0f8401b00fc5a4506566",
+    "predicted_buckets": {
+      "stateful": 1
+    },
+    "regex_sites": 57,
+    "regex_sites_per_file": {
+      "dream/fixtures/compile.go": 1,
+      "pkg/cli/flags/bool.go": 1,
+      "pkg/http-auto/methods_test.go": 3,
+      "pkg/schema/common/time.go": 1,
+      "pkg/specs/domain/validate_test.go": 1,
+      "pkg/specs/extract/extract.go": 1,
+      "pkg/spore-drive/clients/js/src/drive.test.ts": 1,
+      "pkg/spore-drive/clients/py/example/progress.py": 1,
+      "pkg/spore-drive/drive/displace.go": 1,
+      "pkg/spore-drive/proto/fix_python_imports.py": 1,
+      "pkg/taucorder/clients/js/src/Taucorder.test.ts": 8,
+      "pkg/tcc/clients/js/src/fs.ts": 1,
+      "pkg/tcc/clients/js/src/tcc.test.ts": 3,
+      "pkg/tcc/engine/validators.go": 1,
+      "pkg/tcc/internal/parity/config-compiler/e2e_test.go": 1,
+      "pkg/tcc/internal/parity/schema/common/time.go": 1,
+      "pkg/tcc/internal/parity/specs/extract/extract.go": 1,
+      "pkg/tcc/interp/compile_test.go": 1,
+      "pkg/yaseer/root.go": 2,
+      "services/auth/acme/store/store.go": 1,
+      "services/auth/repositories/repositories.go": 1,
+      "services/common/httpsvc/httpsvc_test.go": 4,
+      "services/monkey/fixtures/compile/function.go": 1,
+      "services/monkey/tests/job_test.go": 1,
+      "services/substrate/components/database/tests/all_test.go": 1,
+      "services/substrate/components/storage/tests/all_test.go": 1,
+      "services/substrate/migration/tests/migration_test.go": 1,
+      "tools/coverage-gate.sh": 1,
+      "tools/dream/cli/inject/fixture.go": 1,
+      "tools/dream/npm/index.js": 1,
+      "tools/tau/flags/bool.go": 1,
+      "tools/tau/npm/index.js": 1,
+      "tools/tau/tcc/form.go": 1,
+      "tools/taucorder/npm/index.js": 1,
+      "utils/tcc/validations_test.go": 8
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 57 regex sites (auto-NO-GO bar 200); dialects [ecma:16, posix-shell:1, py_re:2, re2:38]; boundary=unknown.",
+  "schema_version": "1"
+}

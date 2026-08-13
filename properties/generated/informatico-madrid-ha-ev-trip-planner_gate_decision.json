@@ -1,0 +1,88 @@
+{
+  "candidate_url": "https://github.com/informatico-madrid/ha-ev-trip-planner",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 211 sites < 1000 (HA trip planner).",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "ha-ev-trip-planner",
+  "corpus_pin": "8b56b9f475623144b1fc5e580b9c89a79ccecaa5",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "posix-class": 4
+    },
+    "dialect": {
+      "ecma": 84,
+      "posix-shell": 96,
+      "py_re": 31
+    },
+    "flags": {
+      "g": 20,
+      "i": 62,
+      "s": 1
+    },
+    "pin": "8b56b9f475623144b1fc5e580b9c89a79ccecaa5",
+    "predicted_buckets": {
+      "inline-flag": 63,
+      "posix-class": 4,
+      "stateful": 20
+    },
+    "regex_sites": 211,
+    "regex_sites_per_file": {
+      ".agents/skills/homeassistant-config/scripts/find_duplicates.py": 1,
+      ".agents/skills/homeassistant-config/scripts/lovelace_validator.py": 1,
+      ".agents/skills/homeassistant-config/scripts/validate_yaml.py": 3,
+      ".agents/skills/homeassistant-ops/scripts/ha_ops.js": 44,
+      ".agents/skills/quality-gate/scripts/mutation_analyzer.py": 2,
+      ".claude/skills/quality-gate/scripts/mutation_analyzer.py": 7,
+      ".ralph/claude_logs_monitor.sh": 1,
+      ".ralph/ralph-loop.sh": 28,
+      ".ralph/recipes/ralph-loop.sh": 15,
+      ".ralph/scripts/count_completed.py": 1,
+      ".ralph/scripts/count_tasks.py": 6,
+      ".ralph/scripts/deploy_and_verify.sh": 1,
+      ".ralph/scripts/merge_state.py": 1,
+      ".ralph/scripts/monitor_claude_logs.sh": 2,
+      ".ralph/scripts/start_test_ha.sh": 3,
+      ".ralph/scripts/validate_volume.sh": 5,
+      ".ralph/scripts/validate_worktree_volume.sh": 5,
+      ".ralph/scripts/wait_for_ha.sh": 1,
+      ".specify/scripts/bash/common.sh": 1,
+      ".specify/scripts/bash/create-new-feature.sh": 14,
+      ".specify/scripts/bash/update-agent-context.sh": 16,
+      "_bmad/core/skills/bmad-distillator/scripts/analyze_sources.py": 3,
+      "auth.setup.ts": 1,
+      "custom_components/ev_trip_planner/frontend/lit-bundle.js": 7,
+      "custom_components/ev_trip_planner/frontend/panel.js": 8,
+      "scripts/check_unregistered_survivors.py": 1,
+      "scripts/extract_report.js": 1,
+      "scripts/run-e2e-soc.sh": 2,
+      "scripts/run-e2e.sh": 2,
+      "tests/e2e-dynamic-soc/test-dynamic-soc-capping.spec.ts": 1,
+      "tests/e2e-dynamic-soc/trips-helpers.ts": 1,
+      "tests/e2e/emhass-sensor-updates.spec.ts": 16,
+      "tests/e2e/panel-emhass-sensor-entity-id.spec.ts": 4,
+      "tests/e2e/trips-helpers.ts": 1,
+      "tests/unit/test_panel_entity_id.py": 5
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 211 regex sites (auto-NO-GO bar 200); dialects [ecma:84, posix-shell:96, py_re:31]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

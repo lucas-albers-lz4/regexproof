@@ -1,0 +1,43 @@
+{
+  "candidate_url": "https://github.com/scarowar/terraform-branch-deploy",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 2 py_re < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "terraform-branch-deploy",
+  "corpus_pin": "47e7ef15a646b1796042bb24ce6199d7750eb3a7",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "py_re": 2
+    },
+    "flags": {},
+    "pin": "47e7ef15a646b1796042bb24ce6199d7750eb3a7",
+    "predicted_buckets": {},
+    "regex_sites": 2,
+    "regex_sites_per_file": {
+      "src/tf_branch_deploy/artifacts.py": 1,
+      "tests/contract/test_workflow_security_contract.py": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 2 regex sites (auto-NO-GO bar 200); dialects [py_re:2]; boundary=unknown.",
+  "schema_version": "1"
+}

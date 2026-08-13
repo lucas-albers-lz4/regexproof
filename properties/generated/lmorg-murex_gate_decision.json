@@ -1,0 +1,84 @@
+{
+  "candidate_url": "https://github.com/lmorg/murex",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 75 re2 < 1000 (shell).",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "murex",
+  "corpus_pin": "8678ad89405c2bdd2a92b203f026bc3d46abc88f",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "(?i)": 5
+    },
+    "dialect": {
+      "posix-shell": 3,
+      "re2": 72
+    },
+    "flags": {},
+    "pin": "8678ad89405c2bdd2a92b203f026bc3d46abc88f",
+    "predicted_buckets": {
+      "inline-flag": 5
+    },
+    "regex_sites": 75,
+    "regex_sites_per_file": {
+      "app/app_test.go": 1,
+      "builtins/core/httpclient/client.go": 1,
+      "builtins/core/mkarray/array_num.go": 1,
+      "builtins/core/mkarray/case.go": 5,
+      "builtins/core/mkarray/range.go": 3,
+      "builtins/core/modules/git.go": 1,
+      "builtins/core/open/open.go": 1,
+      "builtins/core/processes/bgfg_unix.go": 1,
+      "builtins/core/ranges/ranges.go": 1,
+      "builtins/core/structs/alias.go": 1,
+      "builtins/core/tabulate/tabulate.go": 3,
+      "builtins/core/typemgmt/let_deprecated.go": 4,
+      "builtins/core/typemgmt/variables.go": 1,
+      "builtins/events/cmd.go": 1,
+      "builtins/optional/select/sqlite3.go": 5,
+      "builtins/pipes/mail/utils.go": 1,
+      "builtins/types/generic/generic.go": 1,
+      "lang/define_index_tables.go": 4,
+      "lang/define_mime.go": 1,
+      "lang/expressions/parse_vars_exec_test.go": 1,
+      "lang/trace_enabled.go": 1,
+      "lang/types/convert_float2string_test.go": 1,
+      "shell/history/vars.go": 6,
+      "shell/macro_vars.go": 1,
+      "shell/preview_file.go": 1,
+      "shell/tab.go": 2,
+      "shell/variables/expand.go": 2,
+      "test/ci-website.sh": 1,
+      "test/pre-commit": 2,
+      "utils/ansi/ansi.go": 1,
+      "utils/docgen/api/functions.go": 2,
+      "utils/docgen/main_test.go": 1,
+      "utils/man/descriptions_posix.go": 4,
+      "utils/man/man_unix.go": 8,
+      "utils/parser/parser.go": 1,
+      "utils/path_windows.go": 1,
+      "utils/spellcheck/spellcheck.go": 1,
+      "utils/url.go": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 75 regex sites (auto-NO-GO bar 200); dialects [posix-shell:3, re2:72]; boundary=unknown.",
+  "schema_version": "1"
+}

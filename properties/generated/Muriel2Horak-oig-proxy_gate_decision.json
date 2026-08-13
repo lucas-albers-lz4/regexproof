@@ -1,0 +1,68 @@
+{
+  "candidate_url": "https://github.com/Muriel2Horak/oig-proxy",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 58 sites < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "oig-proxy",
+  "corpus_pin": "1589c734e2697190b66336747875976ffdf647c2",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "posix-shell": 6,
+      "py_re": 52
+    },
+    "flags": {
+      "i": 1,
+      "s": 2
+    },
+    "pin": "1589c734e2697190b66336747875976ffdf647c2",
+    "predicted_buckets": {
+      "inline-flag": 3
+    },
+    "regex_sites": 58,
+    "regex_sites_per_file": {
+      ".github/scripts/run_sonar.sh": 1,
+      "addon/oig-proxy/mqtt/client.py": 2,
+      "addon/oig-proxy/protocol/crc.py": 1,
+      "addon/oig-proxy/protocol/frame.py": 4,
+      "addon/oig-proxy/protocol/parser.py": 4,
+      "addon/oig-proxy/telemetry/collector.py": 1,
+      "addon/oig-proxy/telemetry/settings_audit.py": 1,
+      "addon/oig-proxy/twin/ack_parser.py": 6,
+      "deploy_to_haos.sh": 1,
+      "testing/comparison_suite.py": 4,
+      "testing/mock_cloud_server.py": 3,
+      "testing/poc_ip_ban_probe.py": 1,
+      "testing/replay_session_file.py": 1,
+      "testing/test_boiler_manual.py": 3,
+      "testing/test_mitm_replay.py": 8,
+      "testing/test_mode_sequence.py": 3,
+      "testing/test_online_mode.sh": 2,
+      "testing/test_proxy_simulation.py": 4,
+      "testing/test_replay_mode.sh": 2,
+      "testing/test_replay_setting.py": 3,
+      "tests/v2/test_local_ack.py": 3
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 58 regex sites (auto-NO-GO bar 200); dialects [posix-shell:6, py_re:52]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

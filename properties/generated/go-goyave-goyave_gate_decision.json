@@ -1,0 +1,49 @@
+{
+  "candidate_url": "https://github.com/go-goyave/goyave",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 23 re2, deterministic-false (framework).",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "goyave",
+  "corpus_pin": "f3ae5f272a5ac3911ed1faaed42307aec72cf752",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "re2": 23
+    },
+    "flags": {},
+    "pin": "f3ae5f272a5ac3911ed1faaed42307aec72cf752",
+    "predicted_buckets": {},
+    "regex_sites": 23,
+    "regex_sites_per_file": {
+      "database/log.go": 1,
+      "response_test.go": 1,
+      "util/errors/error_test.go": 8,
+      "util/httputil/httputil.go": 1,
+      "validation/alpha.go": 3,
+      "validation/digit.go": 1,
+      "validation/regex_test.go": 5,
+      "websocket/websocket_test.go": 3
+    },
+    "security_boundary": "deterministic-false"
+  },
+  "rationale": "Below admission scale: 23 regex sites (auto-NO-GO bar 200); dialects [re2:23]; boundary=deterministic-false.",
+  "schema_version": "1"
+}

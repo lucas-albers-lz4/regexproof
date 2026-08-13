@@ -1,0 +1,42 @@
+{
+  "candidate_url": "https://github.com/spf13/afero",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 4 re2 < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "afero",
+  "corpus_pin": "768f1fb0e5535b77d90e44c531aacd652aabd96a",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "re2": 4
+    },
+    "flags": {},
+    "pin": "768f1fb0e5535b77d90e44c531aacd652aabd96a",
+    "predicted_buckets": {},
+    "regex_sites": 4,
+    "regex_sites_per_file": {
+      "ro_regexp_test.go": 4
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 4 regex sites (auto-NO-GO bar 200); dialects [re2:4]; boundary=unknown.",
+  "schema_version": "1"
+}

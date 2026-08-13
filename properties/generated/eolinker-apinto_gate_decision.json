@@ -1,0 +1,50 @@
+{
+  "candidate_url": "https://github.com/eolinker/apinto",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 11 re2 < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "apinto",
+  "corpus_pin": "294d72e7d95d523d4073ddafbe240bb3e91dfcee",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "re2": 11
+    },
+    "flags": {},
+    "pin": "294d72e7d95d523d4073ddafbe240bb3e91dfcee",
+    "predicted_buckets": {},
+    "regex_sites": 11,
+    "regex_sites_per_file": {
+      "drivers/plugins/response-rewrite_v2/match.go": 1,
+      "drivers/plugins/response-rewrite_v2/rewrite_test.go": 1,
+      "drivers/strategy/data-mask-strategy/mask/inner/bank-card.go": 1,
+      "drivers/strategy/data-mask-strategy/mask/inner/id-card.go": 1,
+      "drivers/strategy/data-mask-strategy/mask/inner/inner.go": 2,
+      "drivers/strategy/data-mask-strategy/mask/inner/phone.go": 2,
+      "strategy/checker.go": 1,
+      "utils/function.go": 1,
+      "utils/json_path.go": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 11 regex sites (auto-NO-GO bar 200); dialects [re2:11]; boundary=unknown.",
+  "schema_version": "1"
+}

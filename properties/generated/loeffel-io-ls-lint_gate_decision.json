@@ -1,0 +1,42 @@
+{
+  "candidate_url": "https://github.com/loeffel-io/ls-lint",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 1 ecma < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "ls-lint",
+  "corpus_pin": "bf316273fc386ba5219c8a30c5ea2652b8f4c127",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 1
+    },
+    "flags": {},
+    "pin": "bf316273fc386ba5219c8a30c5ea2652b8f4c127",
+    "predicted_buckets": {},
+    "regex_sites": 1,
+    "regex_sites_per_file": {
+      "deployments/npm/bin/cli.js": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 1 regex sites (auto-NO-GO bar 200); dialects [ecma:1]; boundary=unknown.",
+  "schema_version": "1"
+}

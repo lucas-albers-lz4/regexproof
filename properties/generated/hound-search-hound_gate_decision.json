@@ -1,0 +1,65 @@
+{
+  "candidate_url": "https://github.com/hound-search/hound",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 85 sites < 1000 (code search).",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "hound",
+  "corpus_pin": "f4bb7588857b855b8d151d35e6a270e2915a1215",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "lookaround": 2
+    },
+    "dialect": {
+      "ecma": 77,
+      "posix-shell": 7,
+      "re2": 1
+    },
+    "flags": {
+      "d": 1,
+      "g": 22,
+      "i": 2,
+      "v": 1
+    },
+    "pin": "f4bb7588857b855b8d151d35e6a270e2915a1215",
+    "predicted_buckets": {
+      "inline-flag": 2,
+      "lookaround": 2,
+      "stateful": 22,
+      "v-flag": 1
+    },
+    "regex_sites": 85,
+    "regex_sites_per_file": {
+      "codesearch/lib/buildall": 3,
+      "codesearch/lib/uploadall": 4,
+      "ui/assets/js/JSXTransformer-0.12.2.js": 49,
+      "ui/assets/js/common.js": 6,
+      "ui/assets/js/common.test.js": 1,
+      "ui/assets/js/excluded_files.js": 1,
+      "ui/assets/js/hound.js": 3,
+      "ui/assets/js/react-0.12.2.min.js": 15,
+      "vcs/git.go": 1,
+      "webpack.config.js": 2
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 85 regex sites (auto-NO-GO bar 200); dialects [ecma:77, posix-shell:7, re2:1]; boundary=unknown.",
+  "schema_version": "1"
+}
