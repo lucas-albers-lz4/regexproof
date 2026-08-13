@@ -256,7 +256,9 @@ def probe_tree(
     if not isinstance(body, dict):
         return _incomplete(probed_pin, "invalid-json"), True
     if cache is not None:
-        cache.put(slug, probed_pin, body)
+        # Summarized features, not the raw tree body — the raw recursive
+        # trees made the cache hundreds of MB (P6 luna gate 1 fold).
+        cache.put(slug, probed_pin, summarize_tree(body, slug, probed_pin).as_dict())
     return summarize_tree(body, slug, probed_pin).as_dict(), True
 
 
@@ -267,27 +269,30 @@ def materialize_tree_features(
     budget: int = DEFAULT_TREE_PROBE_BUDGET,
     cache: TreeCache | None = None,
     headers: dict[str, str] | None = None,
-) -> tuple[dict[str, dict[str, Any]], int]:
+) -> tuple[dict[tuple[str, str], dict[str, Any]], int]:
     """Probe candidates in deterministic order until the API budget is spent.
 
     The mined ``pin`` is never used as a fallback.  Rows without the E3
     ``pin_probed`` value are explicitly incomplete rather than accidentally
     probing a stale commit.
     """
-    features: dict[str, dict[str, Any]] = {}
+    features: dict[tuple[str, str], dict[str, Any]] = {}
     calls = 0
     remaining = max(0, int(budget))
     for candidate in candidates:
         url = str(candidate.get("url") or "")
-        key = normalize_repo_url(url) if url else url
-        slug = _repo_slug(url)
         probed_pin = str(candidate.get("pin_probed") or "")
+        key = (normalize_repo_url(url), probed_pin) if url else (url, probed_pin)
+        slug = _repo_slug(url)
         if not probed_pin:
             features[key] = _incomplete("", "missing-probed-pin")
             continue
         cached_body = cache.get(slug, probed_pin) if cache is not None else None
         if cached_body is not None:
-            features[key] = summarize_tree(cached_body, slug, probed_pin).as_dict()
+            # P6 (luna gate 1 fold): the cache stores SUMMARIZED features —
+            # the raw recursive-tree bodies made the cache hundreds of MB and
+            # OOM-killed the materialization.
+            features[key] = cached_body
             continue
         if session is None or remaining <= 0:
             features[key] = _incomplete(probed_pin, "budget-exhausted")

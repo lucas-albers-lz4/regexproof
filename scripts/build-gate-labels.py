@@ -25,7 +25,7 @@ if str(ROOT) not in sys.path:
 from regexproof.admission.serialize import dumps_pinned
 from regexproof.io_atomic import atomic_write_text
 from regexproof.mine.exclusions import normalize_repo_url
-from regexproof.mine.ledger import ENRICH_FIELDS, load_ledger
+from regexproof.mine.ledger import ENRICH_FIELDS, load_ledger, save_ledger
 from regexproof.mine.search import AuthError, RateLimitError, enrich_repo, github_headers
 from regexproof.mine.tree import (
     DEFAULT_TREE_PROBE_BUDGET,
@@ -202,7 +202,6 @@ def build_gate_labels(
     ledger_path: Path | str,
     generated_dir: Path | str,
     output_path: Path | str,
-    pinned_head: str | None = None,
     session: Any | None = None,
     backfill: bool = False,
     enrich_budget: int = 0,
@@ -225,6 +224,10 @@ def build_gate_labels(
             budget=enrich_budget,
             headers=headers,
         )
+        # Persist the materialized enrich fields back into the ledger file —
+        # the artifact's ledger view joins the FILE, so an in-memory-only
+        # backfill would be lost on the next run (P6 luna gate 1 fold).
+        save_ledger(ledger_file, ledger)
 
     tree_features: dict[str, dict[str, Any]] = {}
     if backfill and session is not None and tree_probe_budget > 0:
@@ -253,7 +256,7 @@ def build_gate_labels(
         _row(
             candidate,
             decision,
-            tree_feature=tree_features.get(normalize_repo_url(str(candidate.get("url") or ""))),
+            tree_feature=_tree_feature_for(tree_features, candidate, decision),
         )
         for candidate, decision, _meta in records
     ]
@@ -269,7 +272,7 @@ def build_gate_labels(
             "input_file_count": len(decision_paths),
             "gate_decision_count": len(decision_paths),
             "linked_row_count": len(rows),
-            "inputs_hash": _inputs_hash(decision_paths),
+            "inputs_hash": _inputs_hash(decision_paths, ledger_file),
         },
         "rows": rows,
     }
@@ -278,7 +281,7 @@ def build_gate_labels(
 
 
 
-def _inputs_hash(decision_paths: list[Path]) -> str:
+def _inputs_hash(decision_paths: list[Path], ledger_file: Path | None = None) -> str:
     """Content hash over the sorted decision files — stable provenance.
 
     D5 lesson (#437): the committing git HEAD drifts on every commit and
@@ -286,10 +289,39 @@ def _inputs_hash(decision_paths: list[Path]) -> str:
     across clones/commits unless the inputs themselves change.
     """
     h = hashlib.sha256()
+    if ledger_file is not None and ledger_file.exists():
+        h.update(b"ledger:")
+        h.update(ledger_file.name.encode("utf-8"))
+        h.update(ledger_file.read_bytes())
     for p in sorted(decision_paths):
+        h.update(b"decision:")
         h.update(p.name.encode("utf-8"))
         h.update(p.read_bytes())
     return h.hexdigest()
+
+
+
+
+def _tree_feature_for(
+    tree_features: dict[tuple[str, str], dict[str, Any]],
+    candidate: dict[str, Any],
+    decision: dict[str, Any],
+) -> dict[str, Any] | None:
+    """Pin-aware tree-feature lookup.
+
+    P6 (luna gate 1): tree features are cached per (slug, probed_pin); the
+    row lookup must use the row's OWN probed pin — a URL with duplicate
+    decisions at different pins must not inherit a sibling's probe result.
+    """
+    url = str(candidate.get("url") or "")
+    probe = decision.get("probe") if isinstance(decision.get("probe"), dict) else {}
+    probed_pin = str(
+        probe.get("pin_probed")
+        or decision.get("corpus_pin")
+        or probe.get("pin")
+        or ""
+    )
+    return tree_features.get((normalize_repo_url(url), probed_pin)) if url else None
 
 
 def _http_session() -> Any:
@@ -316,11 +348,6 @@ def main(argv: list[str] | None = None) -> int:
         "--output",
         type=Path,
         default=ROOT / "properties" / "generated" / "gate-labels.json",
-    )
-    ap.add_argument(
-        "--pinned-head",
-        default=None,
-        help="Override provenance pin (otherwise GITHUB_SHA or local HEAD metadata).",
     )
     ap.add_argument(
         "--backfill",
@@ -355,7 +382,6 @@ def main(argv: list[str] | None = None) -> int:
         ledger_path=args.ledger.expanduser().resolve(),
         generated_dir=args.generated.expanduser().resolve(),
         output_path=args.output.expanduser().resolve(),
-        pinned_head=args.pinned_head,
         session=session,
         backfill=args.backfill,
         enrich_budget=args.enrich_budget,

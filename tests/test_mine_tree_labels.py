@@ -80,11 +80,11 @@ def test_tree_probe_uses_probed_pin_and_budget(tmp_path: Path):
     assert session.urls == [
         "https://api.github.com/repos/acme/tool/git/trees/PROBED"
     ]
-    first = features["https://github.com/acme/tool"]
+    first = features[("https://github.com/acme/tool", "PROBED")]
     assert first["complete"] is True
     assert first["security_boundary"] == "deterministic-true"
     assert first["regex_file_type_counts"] == {".py": 1}
-    assert features["https://github.com/acme/other"]["reason"] == "budget-exhausted"
+    assert features[("https://github.com/acme/other", "PROBED2")]["reason"] == "budget-exhausted"
 
     cache.save()
     second_session = _Session([])
@@ -96,7 +96,7 @@ def test_tree_probe_uses_probed_pin_and_budget(tmp_path: Path):
     )
     assert cached_calls == 0
     assert second_session.urls == []
-    assert cached["https://github.com/acme/tool"]["complete"] is True
+    assert cached[("https://github.com/acme/tool", "PROBED")]["complete"] is True
 
 
 def test_truncated_tree_contributes_no_signal(tmp_path: Path):
@@ -107,7 +107,7 @@ def test_truncated_tree_contributes_no_signal(tmp_path: Path):
         budget=1,
         cache=TreeCache(tmp_path / "tree.json"),
     )
-    feature = features["https://github.com/acme/gitleaks"]
+    feature = features[("https://github.com/acme/gitleaks", "HEAD")]
     assert feature["complete"] is False
     assert feature["truncated"] is True
     assert feature["security_boundary"] == "unknown"
@@ -154,14 +154,12 @@ def test_gate_labels_join_is_deterministic_and_keeps_duplicate_decisions(tmp_pat
         ledger_path=ledger_path,
         generated_dir=generated,
         output_path=out,
-        pinned_head="head",
     )
     first_bytes = out.read_bytes()
     second = script.build_gate_labels(
         ledger_path=ledger_path,
         generated_dir=generated,
         output_path=out,
-        pinned_head="head",
     )
     assert first == second
     assert out.read_bytes() == first_bytes
