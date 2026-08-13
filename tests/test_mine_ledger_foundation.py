@@ -328,7 +328,20 @@ def test_audit_requeue_archives_gate_and_new_decision_applies(tmp_path: Path):
         ledger_path, "https://github.com/acme/recovered", to="queued",
         reason="diag-revert",
     )
-    assert mod.sync_gate_decisions(ledger_path, gen) == 1
+    # Decisive spy: does the sync's loop even reach set_status?
+    calls: list[tuple] = []
+    orig_ss = mod.set_status
+
+    def _spy(*a, **k):
+        calls.append((a, k))
+        return orig_ss(*a, **k)
+
+    mod.set_status = _spy
+    try:
+        assert mod.sync_gate_decisions(ledger_path, gen) == 1
+    finally:
+        mod.set_status = orig_ss
+    assert calls, "sync never reached set_status (bailed in the loop)"
     assert load_ledger(ledger_path)["candidates"][0]["status"] == "gated:go"
 
 
