@@ -14,6 +14,27 @@ live under `regexproof/schemas/`. Writers: `regexproof/batch/report.py`,
 | Reproducibility | Pinned toolchains (`ci/toolchain.toml`); batch two-run byte-identical gate (`scripts/ci-batch-repro.py`). |
 | Disclosure | Security-tool corpora → `private_first` — see [`SECURITY.md`](../SECURITY.md). |
 
+### Synthesis Evidence Gates
+
+The synthesis batch gate requires a 100% mutation-guard coverage floor over
+real synthesized property rows, keyed by `(family, bad_char)`. Inventory
+`planned` stubs and ordinary non-synthesized findings are excluded from both
+the numerator and denominator. A run with no real synthesized rows has no
+coverage claim; planned stubs cannot satisfy or inflate the floor.
+
+The synthesis wave uses these `ground_truth_status` values:
+
+| Value | Meaning |
+|---|---|
+| `reproduced` | A synthesized SAT property witness replayed successfully in the real engine. |
+| `mutation-guard-sat-expected` | A mutation guard produced the required SAT result for the widened mirror. |
+| `planned` | An inventory question was emitted as a planned stub and was not synthesized. |
+
+With `--require-ground-truth`, synthesized SAT properties require
+`reproduced`; mutation guards always require their exact special status and
+`expected_result: "sat"`. Any mutation-guard result other than `sat`, including
+`unsat`, `timeout`, or `unknown`, fails the batch gate.
+
 ## Harness NDJSON (`z3-verify.py --json`)
 
 One JSON object per line (NDJSON). Fields include:

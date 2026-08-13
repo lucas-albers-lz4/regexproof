@@ -21,6 +21,7 @@ from typing import Any
 import z3
 from z3 import Contains, InRe, Length, Plus, Re, Solver, Star, String, StringVal, Union
 
+from regexproof.batch.evidence import check_guard_coverage
 from regexproof.compiler import CompileResult
 from regexproof.compiler.simple_parse import (
     Alt,
@@ -41,7 +42,6 @@ from regexproof.groundtruth.adapters import (
     require_replayable,
     status_for_claim,
 )
-
 SYNTHESIZER_VERSION = "1"
 DEFAULT_SYNTH_MAX_SITES = 200
 DEFAULT_SYNTH_LEN_BOUND = 16
@@ -1132,40 +1132,3 @@ def synthesize_compiled(
     stats["diff_fuzz_witnesses"] = fuzz_witnesses
     stats["diff_fuzz_disagreements"] = 0
     return SynthesisResult(synth_findings, stats, executed_questions)
-
-
-def check_guard_coverage(findings: list[dict[str, Any]]) -> list[str]:
-    """Return guard-coverage violations for synthesized rows only."""
-    properties = {
-        (str(f.get("family")), str(f.get("bad_char")))
-        for f in findings
-        if f.get("kind") == "property" and f.get("synthesized")
-    }
-    guards = {
-        (str(f.get("family")), str(f.get("bad_char")))
-        for f in findings
-        if f.get("kind") == "mutation_guard" and f.get("synthesized")
-    }
-    errors = [
-        f"missing mutation guard for family={family} bad_char={bad_char!r}"
-        for family, bad_char in sorted(properties - guards)
-    ]
-    for finding in findings:
-        if finding.get("kind") != "mutation_guard" or not finding.get("synthesized"):
-            continue
-        if finding.get("result") != "sat":
-            errors.append(
-                f"mutation guard {finding.get('family')}/{finding.get('bad_char')!r} "
-                f"result={finding.get('result')!r}, expected 'sat'"
-            )
-        if finding.get("expected_result") != "sat":
-            errors.append(
-                f"mutation guard {finding.get('family')}/{finding.get('bad_char')!r} "
-                "missing expected_result='sat'"
-            )
-        if finding.get("ground_truth_status") != "mutation-guard-sat-expected":
-            errors.append(
-                f"mutation guard {finding.get('family')}/{finding.get('bad_char')!r} "
-                "has invalid ground_truth_status"
-            )
-    return errors
