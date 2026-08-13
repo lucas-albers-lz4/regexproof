@@ -1,0 +1,53 @@
+{
+  "candidate_url": "https://github.com/Wilooper/Lyrica",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 15 py_re < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "Lyrica",
+  "corpus_pin": "102f0fec9cb22a3bdd8526f102e37f197d8f073c",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "py_re": 15
+    },
+    "flags": {
+      "i": 4,
+      "s": 2
+    },
+    "pin": "102f0fec9cb22a3bdd8526f102e37f197d8f073c",
+    "predicted_buckets": {
+      "inline-flag": 6
+    },
+    "regex_sites": 15,
+    "regex_sites_per_file": {
+      "scripts/parse_flask_routes.py": 1,
+      "src/sentiment_analyzer.py": 1,
+      "src/sources/base_fetcher.py": 1,
+      "src/sources/genius_fetcher.py": 2,
+      "src/sources/lyricsfreek_fetcher.py": 3,
+      "src/sources/youtube_fetcher.py": 2,
+      "src/validator.py": 5
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 15 regex sites (auto-NO-GO bar 200); dialects [py_re:15]; boundary=unknown.",
+  "schema_version": "1"
+}

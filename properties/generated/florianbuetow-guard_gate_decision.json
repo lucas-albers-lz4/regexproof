@@ -1,0 +1,112 @@
+{
+  "candidate_url": "https://github.com/florianbuetow/guard",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 170 shell, deterministic-false.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "guard",
+  "corpus_pin": "79af250fa7692a319c171a3f5387636d58c30cab",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "posix-class": 39
+    },
+    "dialect": {
+      "posix-shell": 170
+    },
+    "flags": {
+      "i": 12
+    },
+    "pin": "79af250fa7692a319c171a3f5387636d58c30cab",
+    "predicted_buckets": {
+      "inline-flag": 12,
+      "posix-class": 39
+    },
+    "regex_sites": 170,
+    "regex_sites_per_file": {
+      "tests/helpers-cli.sh": 32,
+      "tests/helpers-tui.sh": 7,
+      "tests/run-cli-tests-sequential.sh": 3,
+      "tests/run-tui-tests-parallel.sh": 6,
+      "tests/run-tui-tests-sequential.sh": 4,
+      "tests/show-failing-tests.sh": 4,
+      "tests/test-bug-cli-output-001.sh": 2,
+      "tests/test-bug-cli-output-002.sh": 4,
+      "tests/test-bug-cli-output-003.sh": 1,
+      "tests/test-bug-guardfile-immutable-001.sh": 1,
+      "tests/test-bug-guardfile-immutable-009.sh": 1,
+      "tests/test-bug-permission-storage-001.sh": 4,
+      "tests/test-bug-tui-display-002.sh": 1,
+      "tests/test-bug-tui-display-003.sh": 1,
+      "tests/test-bug-tui-resize-001.sh": 2,
+      "tests/test-bug-tui-resize-002a.sh": 1,
+      "tests/test-bug-tui-resize-002c.sh": 1,
+      "tests/test-config-004.sh": 2,
+      "tests/test-config-005.sh": 2,
+      "tests/test-config-010.sh": 4,
+      "tests/test-config-011.sh": 4,
+      "tests/test-config-012.sh": 4,
+      "tests/test-config-013.sh": 4,
+      "tests/test-e2e-workflow-002.sh": 2,
+      "tests/test-guardignore-config-001.sh": 1,
+      "tests/test-guardignore-config-003.sh": 1,
+      "tests/test-guardignore-config-004.sh": 2,
+      "tests/test-guardignore-config-005.sh": 1,
+      "tests/test-guardignore-config-006.sh": 1,
+      "tests/test-init-prompts-001.sh": 1,
+      "tests/test-missing-file-warnings-001.sh": 2,
+      "tests/test-output-messages-001.sh": 1,
+      "tests/test-output-messages-002.sh": 4,
+      "tests/test-output-messages-003.sh": 4,
+      "tests/test-output-messages-004.sh": 3,
+      "tests/test-output-specs-001.sh": 4,
+      "tests/test-output-specs-002.sh": 2,
+      "tests/test-output-specs-003.sh": 1,
+      "tests/test-output-specs-004.sh": 1,
+      "tests/test-output-specs-005.sh": 1,
+      "tests/test-output-specs-006.sh": 2,
+      "tests/test-output-specs-007.sh": 2,
+      "tests/test-output-specs-008.sh": 2,
+      "tests/test-output-specs-009.sh": 1,
+      "tests/test-output-specs-010.sh": 1,
+      "tests/test-output-specs-011.sh": 1,
+      "tests/test-output-specs-012.sh": 2,
+      "tests/test-output-specs-013.sh": 1,
+      "tests/test-output-specs-014.sh": 2,
+      "tests/test-output-specs-015.sh": 2,
+      "tests/test-output-specs-016.sh": 3,
+      "tests/test-output-specs-017.sh": 3,
+      "tests/test-output-specs-018.sh": 4,
+      "tests/test-permission-failures-001.sh": 2,
+      "tests/test-permission-failures-002.sh": 2,
+      "tests/test-permission-failures-003.sh": 1,
+      "tests/test-show-commands-001.sh": 2,
+      "tests/test-tui-guardignore-005.sh": 1,
+      "tests/test-tui-search-018.sh": 2,
+      "tests/test-tui-search-019.sh": 1,
+      "tests/test-tui-toggle-error-display-001.sh": 1,
+      "tests/test-tui_color_guardignore-009.sh": 3,
+      "tests/test-update-003.sh": 1,
+      "tests/test-update-004.sh": 1
+    },
+    "security_boundary": "deterministic-false"
+  },
+  "rationale": "Below admission scale: 170 regex sites (auto-NO-GO bar 200); dialects [posix-shell:170]; boundary=deterministic-false.",
+  "schema_version": "1"
+}

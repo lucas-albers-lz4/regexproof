@@ -1,0 +1,62 @@
+{
+  "candidate_url": "https://github.com/joshuafuller/beacon",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 82 sites < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "beacon",
+  "corpus_pin": "24297ab4a45907e07910eea95e81292bbc97e24f",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "posix-class": 2
+    },
+    "dialect": {
+      "posix-shell": 75,
+      "py_re": 3,
+      "re2": 4
+    },
+    "flags": {
+      "i": 1
+    },
+    "pin": "24297ab4a45907e07910eea95e81292bbc97e24f",
+    "predicted_buckets": {
+      "inline-flag": 1,
+      "posix-class": 2
+    },
+    "regex_sites": 82,
+    "regex_sites_per_file": {
+      ".githooks/pre-commit": 3,
+      ".specify/scripts/bash/common.sh": 1,
+      ".specify/scripts/bash/create-new-feature.sh": 21,
+      ".specify/scripts/bash/update-agent-context.sh": 15,
+      "extract_rfc_requirements.py": 3,
+      "internal/responder/conflict.go": 1,
+      "responder/service.go": 3,
+      "scripts/check-rfc-compliance.sh": 12,
+      "scripts/compliance-badge.sh": 3,
+      "scripts/coverage-trend.sh": 1,
+      "scripts/generate-compliance-certificate.sh": 8,
+      "specs/007-interface-specific-addressing/LOCAL_VALIDATION_TEST.sh": 11
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 82 regex sites (auto-NO-GO bar 200); dialects [posix-shell:75, py_re:3, re2:4]; boundary=unknown.",
+  "schema_version": "1"
+}

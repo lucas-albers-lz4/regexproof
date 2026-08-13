@@ -1,0 +1,62 @@
+{
+  "candidate_url": "https://github.com/nexodus-io/nexodus",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 27 sites < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "nexodus",
+  "corpus_pin": "f9f79190e68851df5ad5b37a2eff6e137206784e",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "(?i)": 2
+    },
+    "dialect": {
+      "ecma": 5,
+      "posix-shell": 17,
+      "re2": 5
+    },
+    "flags": {
+      "i": 2
+    },
+    "pin": "f9f79190e68851df5ad5b37a2eff6e137206784e",
+    "predicted_buckets": {
+      "inline-flag": 4
+    },
+    "regex_sites": 27,
+    "regex_sites_per_file": {
+      "hack/e2e-scripts/scale/check-connectivity.sh": 2,
+      "hack/e2e-scripts/scale/check-errors.sh": 11,
+      "hack/e2e-scripts/scale/check-nexd-status.sh": 1,
+      "hack/nexctl-docs.sh": 1,
+      "hack/nexd-docs.sh": 1,
+      "hack/wait-for-cockroach-operator-ready.sh": 1,
+      "internal/client/client.go": 3,
+      "internal/nexodus/cert.go": 1,
+      "internal/nexodus/derper.go": 1,
+      "ui/src/App.test.tsx": 1,
+      "ui/src/common/IpHelpers.tsx": 2,
+      "ui/tests-examples/demo-todo-app.spec.ts": 1,
+      "ui/tests-examples/example.spec.ts": 1
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 27 regex sites (auto-NO-GO bar 200); dialects [ecma:5, posix-shell:17, re2:5]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

@@ -1,0 +1,59 @@
+{
+  "candidate_url": "https://github.com/U-Petrichor/TraceX",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 27 sites (re-probed at 2000MB) — attack-STIX analyzer, below scale.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "TraceX",
+  "corpus_pin": "99ad3be3ceb10d0cdf44750edcfc8b6d020110e7",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 7,
+      "posix-shell": 1,
+      "py_re": 19
+    },
+    "flags": {
+      "g": 3,
+      "i": 6
+    },
+    "pin": "99ad3be3ceb10d0cdf44750edcfc8b6d020110e7",
+    "predicted_buckets": {
+      "inline-flag": 6,
+      "stateful": 3
+    },
+    "regex_sites": 27,
+    "regex_sites_per_file": {
+      "analyzer/attack_analyzer/sigma_engine.py": 7,
+      "analyzer/graph_analyzer/atlas_mapper.py": 4,
+      "analyzer/graph_analyzer/enrichment.py": 3,
+      "attack-stix-data/util/generate-collection-index.py": 1,
+      "collector/host_collector/log_parser.py": 1,
+      "tools/attack_playbook.sh": 1,
+      "web/assets/app.js": 1,
+      "web/assets/apt.js": 3,
+      "web/assets/graph.js": 3,
+      "web/backend/main.py": 3
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 27 regex sites (auto-NO-GO bar 200); dialects [ecma:7, posix-shell:1, py_re:19]; boundary=unknown.",
+  "schema_version": "1"
+}

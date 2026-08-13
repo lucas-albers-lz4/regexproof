@@ -1,0 +1,59 @@
+{
+  "candidate_url": "https://github.com/AlbanAndrieu/nabla-hooks",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 37 sites < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "nabla-hooks",
+  "corpus_pin": "b7ff70c3f41a63ef9eebccb9065516a15d9d39e3",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "posix-shell": 9,
+      "py_re": 28
+    },
+    "flags": {
+      "m": 2,
+      "s": 2
+    },
+    "pin": "b7ff70c3f41a63ef9eebccb9065516a15d9d39e3",
+    "predicted_buckets": {
+      "inline-flag": 2,
+      "m-flag": 2
+    },
+    "regex_sites": 37,
+    "regex_sites_per_file": {
+      "hooks/_version.py": 6,
+      "hooks/get_jira/get_jira.py": 6,
+      "hooks/get_msg.py": 2,
+      "hooks/tests/pytest_test.py": 1,
+      "hooks/validate_jira.py": 1,
+      "pre_commit_hooks/git-branches-check.sh": 1,
+      "pre_commit_hooks/jira-check.sh": 4,
+      "scripts/run-python.sh": 2,
+      "tests/test_nabla_version.py": 4,
+      "trunk": 2,
+      "versioneer.py": 8
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 37 regex sites (auto-NO-GO bar 200); dialects [posix-shell:9, py_re:28]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

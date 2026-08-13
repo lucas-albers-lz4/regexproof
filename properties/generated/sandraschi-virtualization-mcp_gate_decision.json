@@ -1,0 +1,56 @@
+{
+  "candidate_url": "https://github.com/sandraschi/virtualization-mcp",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 22 py_re < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "virtualization-mcp",
+  "corpus_pin": "2f7b16b1146e5f9fda95f0991d15305d04ba0d33",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "py_re": 22
+    },
+    "flags": {
+      "i": 8,
+      "s": 3
+    },
+    "pin": "2f7b16b1146e5f9fda95f0991d15305d04ba0d33",
+    "predicted_buckets": {
+      "inline-flag": 11
+    },
+    "regex_sites": 22,
+    "regex_sites_per_file": {
+      "remove_description_params.py": 3,
+      "scripts/check_implementation_honesty.py": 8,
+      "scripts/cua-smoke.py": 1,
+      "src/virtualization_mcp/json_encoder.py": 1,
+      "src/virtualization_mcp/services/vm/network/utils.py": 2,
+      "src/virtualization_mcp/utils/helpers.py": 1,
+      "src/virtualization_mcp/vbox/compat_adapter.py": 1,
+      "src/virtualization_mcp/vbox/manager.py": 1,
+      "src/virtualization_mcp/vbox/vm_operations.py": 2,
+      "src/virtualization_mcp/vbox_compat.py": 2
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 22 regex sites (auto-NO-GO bar 200); dialects [py_re:22]; boundary=unknown.",
+  "schema_version": "1"
+}

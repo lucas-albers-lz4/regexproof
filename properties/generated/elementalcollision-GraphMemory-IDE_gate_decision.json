@@ -1,0 +1,78 @@
+{
+  "candidate_url": "https://github.com/elementalcollision/GraphMemory-IDE",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 85 sites < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "GraphMemory-IDE",
+  "corpus_pin": "9455c194e2588b262b174c42beb8034b5cb4804a",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 42,
+      "posix-shell": 25,
+      "py_re": 18
+    },
+    "flags": {
+      "g": 9,
+      "i": 27,
+      "s": 2
+    },
+    "pin": "9455c194e2588b262b174c42beb8034b5cb4804a",
+    "predicted_buckets": {
+      "inline-flag": 29,
+      "stateful": 9
+    },
+    "regex_sites": 85,
+    "regex_sites_per_file": {
+      "cli/index.mjs": 1,
+      "cli/index.test.mjs": 25,
+      "cli/update/container-updater.mjs": 4,
+      "cli/update/database-migrator.mjs": 3,
+      "cli/update/state-manager.mjs": 1,
+      "dashboard/components/visualization/widgets/MemoryInsightsWidget.tsx": 1,
+      "deploy/scripts/production_deploy.sh": 2,
+      "docker/production/scripts/backup/restore.sh": 1,
+      "ide-plugins/cursor/server.ts": 1,
+      "ide-plugins/shared/utils.ts": 5,
+      "ide-plugins/windsurf/server.ts": 1,
+      "monitoring/ai_detection/llm_monitor.py": 1,
+      "monitoring/incidents/security_monitoring.py": 1,
+      "monitoring/metrics/prometheus_middleware.py": 4,
+      "monitoring/resource-monitor.sh": 2,
+      "scripts/deploy-secure.sh": 1,
+      "scripts/deploy/migrate.sh": 5,
+      "scripts/deploy/production_readiness_check.sh": 6,
+      "scripts/security/environment_secrets_injector.py": 1,
+      "scripts/setup-mtls.sh": 3,
+      "scripts/validate-docs.sh": 5,
+      "server/collaboration/redis_tenant_manager.py": 1,
+      "server/dashboard/alert_correlator.py": 1,
+      "server/dashboard/error_handler.py": 3,
+      "server/dashboard/models/validation_models.py": 1,
+      "server/monitoring/alert_correlation_engine.py": 1,
+      "server/monitoring/metrics.py": 2,
+      "server/security/security_middleware.py": 2
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 85 regex sites (auto-NO-GO bar 200); dialects [ecma:42, posix-shell:25, py_re:18]; boundary=unknown.",
+  "schema_version": "1"
+}

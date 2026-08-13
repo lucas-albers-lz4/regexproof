@@ -1,0 +1,86 @@
+{
+  "candidate_url": "https://github.com/jamiemills/perplexity-cli",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 105 sites < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "perplexity-cli",
+  "corpus_pin": "eed5f81a6a955f83667f51793cdb42cef1da3e4e",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "lookaround": 6
+    },
+    "dialect": {
+      "ecma": 38,
+      "posix-shell": 1,
+      "py_re": 66
+    },
+    "flags": {
+      "g": 8,
+      "i": 9,
+      "m": 4,
+      "s": 1
+    },
+    "pin": "eed5f81a6a955f83667f51793cdb42cef1da3e4e",
+    "predicted_buckets": {
+      "inline-flag": 10,
+      "lookaround": 6,
+      "m-flag": 4,
+      "stateful": 8
+    },
+    "regex_sites": 105,
+    "regex_sites_per_file": {
+      ".opencode/plugins/post-push-ci-check.ts": 2,
+      ".opencode/plugins/pre-push-docs-check.ts": 1,
+      ".opencode/plugins/pxcli-quality.ts": 4,
+      ".opencode/plugins/quality-gate.ts": 28,
+      ".opencode/tests/quality-gate.test.ts": 3,
+      "scripts/_pep20_metrics.py": 1,
+      "scripts/_pep20_scoping.py": 1,
+      "scripts/check_analyser_contracts.py": 2,
+      "scripts/check_pep20.py": 1,
+      "scripts/check_suppression_reasons.py": 8,
+      "scripts/check_suppressions.py": 6,
+      "scripts/gitleaks_check.sh": 1,
+      "scripts/mutation_policy.py": 2,
+      "scripts/track_metrics.py": 1,
+      "scripts/validate_make_policy.py": 7,
+      "scripts/validate_workflow_policy.py": 2,
+      "src/perplexity_cli/formatting/base.py": 6,
+      "src/perplexity_cli/formatting/plain.py": 4,
+      "src/perplexity_cli/formatting/rich.py": 1,
+      "src/perplexity_cli/session_log.py": 1,
+      "src/perplexity_cli/threads/models.py": 1,
+      "src/perplexity_cli/utils/logging/impl.py": 1,
+      "tests/_fuzz_harnesses.py": 6,
+      "tests/test_api_version.py": 1,
+      "tests/test_lane_policy.py": 1,
+      "tests/test_property.py": 1,
+      "tests/test_property_policy.py": 1,
+      "tests/test_quality_gates_documentation.py": 6,
+      "tests/test_semgrep_policy.py": 2,
+      "tests/test_semgrep_wrapper.py": 1,
+      "tests/test_workflow_configuration.py": 2
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 105 regex sites (auto-NO-GO bar 200); dialects [ecma:38, posix-shell:1, py_re:66]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

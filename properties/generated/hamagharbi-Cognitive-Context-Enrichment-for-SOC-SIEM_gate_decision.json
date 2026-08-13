@@ -1,0 +1,59 @@
+{
+  "candidate_url": "https://github.com/hamagharbi/Cognitive-Context-Enrichment-for-SOC-SIEM",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 17 sites < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "Cognitive-Context-Enrichment-for-SOC-SIEM",
+  "corpus_pin": "791ec6d6e324d445ea6c1602a8de71163ea4730c",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 2,
+      "py_re": 15
+    },
+    "flags": {
+      "g": 1,
+      "i": 7
+    },
+    "pin": "791ec6d6e324d445ea6c1602a8de71163ea4730c",
+    "predicted_buckets": {
+      "inline-flag": 7,
+      "stateful": 1
+    },
+    "regex_sites": 17,
+    "regex_sites_per_file": {
+      "frontend/src/components/analysis/AnalysisView.tsx": 1,
+      "frontend/vite.config.ts": 1,
+      "intent_classifier/scripts/import_sigma_rules.py": 2,
+      "intent_classifier/src/engine.py": 1,
+      "log_ingestion/src/detectors/log_type_detector.py": 1,
+      "log_ingestion/src/normalizers/generic_syslog.py": 2,
+      "log_ingestion/src/normalizers/linux_auditd.py": 1,
+      "log_ingestion/src/normalizers/sysmon.py": 3,
+      "log_ingestion/src/normalizers/windows_eventlog.py": 3,
+      "log_ingestion/src/utils.py": 1,
+      "mitre_reasoner/src/utils.py": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 17 regex sites (auto-NO-GO bar 200); dialects [ecma:2, py_re:15]; boundary=unknown.",
+  "schema_version": "1"
+}

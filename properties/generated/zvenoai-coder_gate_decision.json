@@ -1,0 +1,56 @@
+{
+  "candidate_url": "https://github.com/zvenoai/coder",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 18 sites < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "coder",
+  "corpus_pin": "1e1cc926375fb908656f9cd55b03b752fa8243d1",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "py_re": 18
+    },
+    "flags": {
+      "i": 1,
+      "s": 2
+    },
+    "pin": "1e1cc926375fb908656f9cd55b03b752fa8243d1",
+    "predicted_buckets": {
+      "inline-flag": 3
+    },
+    "regex_sites": 18,
+    "regex_sites_per_file": {
+      "orchestrator/adr.py": 5,
+      "orchestrator/agent_runner.py": 1,
+      "orchestrator/dependency_manager.py": 1,
+      "orchestrator/post_merge_verifier.py": 1,
+      "orchestrator/pr_monitor.py": 1,
+      "orchestrator/pre_merge_reviewer.py": 1,
+      "orchestrator/preflight_checker.py": 2,
+      "orchestrator/sqlite_storage.py": 3,
+      "orchestrator/supervisor_tools.py": 1,
+      "tests/test_adr.py": 2
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 18 regex sites (auto-NO-GO bar 200); dialects [py_re:18]; boundary=unknown.",
+  "schema_version": "1"
+}

@@ -1,0 +1,49 @@
+{
+  "candidate_url": "https://github.com/goggles-dev/Goggles",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 45 shell < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "Goggles",
+  "corpus_pin": "487ff5be5757e7724639283cbd1980b4609f6299",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "posix-shell": 45
+    },
+    "flags": {},
+    "pin": "487ff5be5757e7724639283cbd1980b4609f6299",
+    "predicted_buckets": {},
+    "regex_sites": 45,
+    "regex_sites_per_file": {
+      "scripts/generate_shader_report.sh": 2,
+      "scripts/pre-commit-format.sh": 2,
+      "scripts/task/appimage_stage.sh": 1,
+      "scripts/task/build-all-presets.sh": 1,
+      "scripts/task/ci.sh": 1,
+      "scripts/task/shader-fetch.sh": 1,
+      "scripts/test-cli.sh": 31,
+      "scripts/test-start.sh": 6
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 45 regex sites (auto-NO-GO bar 200); dialects [posix-shell:45]; boundary=unknown.",
+  "schema_version": "1"
+}

@@ -1,0 +1,55 @@
+{
+  "candidate_url": "https://github.com/Typeform/ci-standard-checks",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 21 sites < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "ci-standard-checks",
+  "corpus_pin": "19131ee126b961baf0b3cf51ed073418044db122",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "lookaround": 4
+    },
+    "dialect": {
+      "ecma": 21
+    },
+    "flags": {
+      "g": 1,
+      "i": 2,
+      "m": 1
+    },
+    "pin": "19131ee126b961baf0b3cf51ed073418044db122",
+    "predicted_buckets": {
+      "inline-flag": 2,
+      "lookaround": 4,
+      "m-flag": 1,
+      "stateful": 1
+    },
+    "regex_sites": 21,
+    "regex_sites_per_file": {
+      "src/checks/piiDetection.ts": 8,
+      "src/checks/requiredTypeScript.test.ts": 10,
+      "src/checks/requiredTypeScript.ts": 3
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 21 regex sites (auto-NO-GO bar 200); dialects [ecma:21]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

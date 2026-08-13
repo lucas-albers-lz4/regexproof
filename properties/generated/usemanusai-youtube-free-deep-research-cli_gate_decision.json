@@ -1,0 +1,69 @@
+{
+  "candidate_url": "https://github.com/usemanusai/youtube-free-deep-research-cli",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 49 sites < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "youtube-free-deep-research-cli",
+  "corpus_pin": "1def9b792e9af777fefa886aca003ddb6048c4fa",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 22,
+      "posix-shell": 5,
+      "py_re": 22
+    },
+    "flags": {
+      "g": 2,
+      "i": 22,
+      "m": 1
+    },
+    "pin": "1def9b792e9af777fefa886aca003ddb6048c4fa",
+    "predicted_buckets": {
+      "inline-flag": 22,
+      "m-flag": 1,
+      "stateful": 2
+    },
+    "regex_sites": 49,
+    "regex_sites_per_file": {
+      "_redact_secrets.py": 1,
+      "dashboard/src/components/VoiceUpload.tsx": 1,
+      "jaegis-youtube-chat-mcp/scripts/publish-npm.js": 1,
+      "jaegis-youtube-chat-mcp/src/index.ts": 1,
+      "scripts/install_dependencies.sh": 2,
+      "scripts/setup_pypi_publishing.sh": 1,
+      "setup_n8n_integration.sh": 1,
+      "setup_python311_env.sh": 1,
+      "src/youtube_chat_cli/core/youtube_api.py": 2,
+      "src/youtube_chat_cli/services/transcription/processor.py": 2,
+      "src/youtube_chat_cli/utils/helpers.py": 5,
+      "youtube_chat_cli_main/api_server.py": 1,
+      "youtube_chat_cli_main/services/content_processor.py": 3,
+      "youtube_chat_cli_main/services/tts/engines/e2f5_tts.py": 1,
+      "youtube_chat_cli_main/services/web_scraper_service.py": 5,
+      "youtube_chat_cli_main/source_processor.py": 2,
+      "youtube_chat_cli_main/workspace-ae4a103b-351b-4c44-8352-ad192e1dfc24/src/app/api/terminal/convert/route.ts": 17,
+      "youtube_chat_cli_main/workspace-ae4a103b-351b-4c44-8352-ad192e1dfc24/src/components/system-status.tsx": 2
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 49 regex sites (auto-NO-GO bar 200); dialects [ecma:22, posix-shell:5, py_re:22]; boundary=unknown.",
+  "schema_version": "1"
+}

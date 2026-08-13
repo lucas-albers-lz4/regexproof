@@ -1,0 +1,70 @@
+{
+  "candidate_url": "https://github.com/airlinklabs/daemon",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 95 ecma < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "daemon",
+  "corpus_pin": "a1c2f3af1b221074a4e196b0e40b9ba1f01b1457",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 95
+    },
+    "flags": {
+      "g": 25,
+      "i": 10
+    },
+    "pin": "a1c2f3af1b221074a4e196b0e40b9ba1f01b1457",
+    "predicted_buckets": {
+      "inline-flag": 10,
+      "stateful": 25
+    },
+    "regex_sites": 95,
+    "regex_sites_per_file": {
+      "build.ts": 3,
+      "src/configure.ts": 2,
+      "src/handlers/configFiles.ts": 14,
+      "src/handlers/consoleCommand.ts": 2,
+      "src/handlers/docker.ts": 5,
+      "src/handlers/fs.ts": 2,
+      "src/handlers/logHistory.ts": 3,
+      "src/handlers/nativeSftp.ts": 4,
+      "src/handlers/radar/scan.ts": 1,
+      "src/handlers/radar/zip.ts": 1,
+      "src/logger.ts": 3,
+      "src/router.ts": 6,
+      "src/routes/filesystem.ts": 4,
+      "src/routes/instances.ts": 13,
+      "src/routes/radar.ts": 1,
+      "src/server.ts": 3,
+      "src/tui/stats.ts": 16,
+      "src/validation.ts": 4,
+      "src/ws/server.ts": 1,
+      "tests/docker/networkThrottle.test.ts": 1,
+      "tests/handlers/nativeSftp.test.ts": 4,
+      "tests/logArchives.test.ts": 1,
+      "tests/security/downloadTokens.test.ts": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 95 regex sites (auto-NO-GO bar 200); dialects [ecma:95]; boundary=unknown.",
+  "schema_version": "1"
+}

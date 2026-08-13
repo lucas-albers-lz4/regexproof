@@ -1,0 +1,58 @@
+{
+  "candidate_url": "https://github.com/cryptnox/cryptnox-cli",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 31 py_re < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "cryptnox-cli",
+  "corpus_pin": "0a0777e759935d7b19ded06428927f9490f7a384",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "lookaround": 1
+    },
+    "dialect": {
+      "py_re": 31
+    },
+    "flags": {
+      "i": 2
+    },
+    "pin": "0a0777e759935d7b19ded06428927f9490f7a384",
+    "predicted_buckets": {
+      "inline-flag": 2,
+      "lookaround": 1
+    },
+    "regex_sites": 31,
+    "regex_sites_per_file": {
+      "cryptnox_cli/command/eth.py": 4,
+      "cryptnox_cli/command/manufacturer_certificate.py": 1,
+      "cryptnox_cli/command/options/common.py": 1,
+      "cryptnox_cli/command/options/options.py": 3,
+      "cryptnox_cli/lib/cryptos/coins/base.py": 3,
+      "cryptnox_cli/lib/cryptos/main.py": 2,
+      "cryptnox_cli/lib/cryptos/transaction.py": 11,
+      "cryptnox_cli/main.py": 1,
+      "cryptnox_cli/wallet/btc.py": 3,
+      "cryptnox_cli/wallet/validators.py": 2
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 31 regex sites (auto-NO-GO bar 200); dialects [py_re:31]; boundary=unknown.",
+  "schema_version": "1"
+}

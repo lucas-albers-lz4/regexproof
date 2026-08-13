@@ -1,0 +1,88 @@
+{
+  "candidate_url": "https://github.com/aws-samples/sample-bedrock-ops-lens",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 135 sites < 1000 (AWS sample).",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "sample-bedrock-ops-lens",
+  "corpus_pin": "7c9bd935f98066d18da5b47eb048a28ac6adb8c1",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 120,
+      "posix-shell": 5,
+      "py_re": 10
+    },
+    "flags": {
+      "d": 1,
+      "g": 16,
+      "i": 29,
+      "s": 2
+    },
+    "pin": "7c9bd935f98066d18da5b47eb048a28ac6adb8c1",
+    "predicted_buckets": {
+      "inline-flag": 31,
+      "stateful": 16
+    },
+    "regex_sites": 135,
+    "regex_sites_per_file": {
+      "backend/app/burndown.py": 1,
+      "backend/app/routers/notifications.py": 1,
+      "backend/app/routers/ops_review.py": 5,
+      "db/validate.py": 1,
+      "deploy.sh": 4,
+      "frontend/src/App.jsx": 1,
+      "frontend/src/components/AttributeFilters.jsx": 4,
+      "frontend/src/components/Common.jsx": 2,
+      "frontend/src/components/Mermaid.js": 4,
+      "frontend/src/components/PaginatedTable.jsx": 5,
+      "frontend/src/components/SectionInfo.jsx": 6,
+      "frontend/src/components/TagFilters.jsx": 4,
+      "frontend/src/tabs/AgentsTab.jsx": 3,
+      "frontend/src/tabs/ByUserTab.jsx": 10,
+      "frontend/src/tabs/CostTab.jsx": 9,
+      "frontend/src/tabs/LatencyTab.jsx": 8,
+      "frontend/src/tabs/ModelInsightsTab.jsx": 1,
+      "frontend/src/tabs/ModelLifecycleTab.jsx": 1,
+      "frontend/src/tabs/OpsInsightsTab.jsx": 6,
+      "frontend/src/tabs/OverviewTab.jsx": 8,
+      "frontend/src/tabs/QuotaDrillDownTab.jsx": 2,
+      "frontend/src/tabs/QuotasTab.jsx": 3,
+      "frontend/src/tabs/WorkloadsTab.jsx": 10,
+      "frontend/src/views/AuthApp.jsx": 2,
+      "frontend/tests/cloudscape-auth.spec.js": 2,
+      "frontend/tests/dashboard.spec.js": 5,
+      "frontend/tests/deployed-ab.spec.js": 6,
+      "frontend/tests/deployed-smoke.spec.js": 6,
+      "frontend/tests/deployed-wl-mantle.spec.js": 4,
+      "frontend/tests/filters-collapsed.spec.js": 2,
+      "frontend/tests/latency-data.spec.js": 1,
+      "frontend/tests/mantle-selective.spec.js": 2,
+      "frontend/tests/mantle-switcher.spec.js": 2,
+      "frontend/tests/workloads.spec.js": 1,
+      "ingestion/cw_agentcore.py": 1,
+      "ingestion/quotas.py": 1,
+      "setup-pipeline.sh": 1
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 135 regex sites (auto-NO-GO bar 200); dialects [ecma:120, posix-shell:5, py_re:10]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

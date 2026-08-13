@@ -1,0 +1,84 @@
+{
+  "candidate_url": "https://github.com/peiman/ckeletin-go",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 124 sites < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, tests/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "ckeletin-go",
+  "corpus_pin": "a438b2d87082411e8cb3e6d50b4727af8845965e",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "(?s)": 1,
+      "posix-class": 15
+    },
+    "dialect": {
+      "posix-shell": 109,
+      "re2": 15
+    },
+    "flags": {
+      "i": 7
+    },
+    "pin": "a438b2d87082411e8cb3e6d50b4727af8845965e",
+    "predicted_buckets": {
+      "inline-flag": 8,
+      "posix-class": 15
+    },
+    "regex_sites": 124,
+    "regex_sites_per_file": {
+      ".ckeletin/pkg/logger/sanitize.go": 1,
+      ".ckeletin/scripts/check-commit-msg.sh": 1,
+      ".ckeletin/scripts/check-constants.sh": 1,
+      ".ckeletin/scripts/check-coverage-patch.sh": 20,
+      ".ckeletin/scripts/check-coverage-project.sh": 1,
+      ".ckeletin/scripts/check-defaults.sh": 3,
+      ".ckeletin/scripts/check-deps.sh": 1,
+      ".ckeletin/scripts/check-go-version.sh": 3,
+      ".ckeletin/scripts/check-release-drift.sh": 3,
+      ".ckeletin/scripts/check-sbom-vulns.sh": 7,
+      ".ckeletin/scripts/check-secrets.sh": 1,
+      ".ckeletin/scripts/check-vuln-fast.sh": 1,
+      ".ckeletin/scripts/conform.sh": 3,
+      ".ckeletin/scripts/generate-attribution.sh": 1,
+      ".ckeletin/scripts/generate-sbom.sh": 1,
+      ".ckeletin/scripts/install_tools.sh": 3,
+      ".ckeletin/scripts/lib/anchor.sh": 1,
+      ".ckeletin/scripts/migrate-post-update.sh": 8,
+      ".ckeletin/scripts/summarize-check-results.sh": 3,
+      ".ckeletin/scripts/validate-architecture.sh": 10,
+      ".ckeletin/scripts/validate-command-patterns.sh": 14,
+      ".ckeletin/scripts/validate-config-consumption.sh": 2,
+      ".ckeletin/scripts/validate-dev-build-tags.sh": 1,
+      ".ckeletin/scripts/validate-hook-forwardings.sh": 3,
+      ".ckeletin/scripts/validate-output-patterns.sh": 2,
+      ".ckeletin/scripts/validate-package-organization.sh": 3,
+      ".ckeletin/scripts/validate-security-patterns.sh": 7,
+      ".ckeletin/scripts/validate-task-naming.sh": 5,
+      "cmd/root.go": 2,
+      "internal/dev/doctor.go": 1,
+      "test/integration/binary_name_glue_test.go": 1,
+      "test/integration/output_normalizer.go": 5,
+      "test/integration/scaffold_init_test.go": 4,
+      "test/integration/test_env_prelude_test.go": 1
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 124 regex sites (auto-NO-GO bar 200); dialects [posix-shell:109, re2:15]; boundary=deterministic-true.",
+  "schema_version": "1"
+}
