@@ -192,6 +192,7 @@ def test_main_sequence_reload_after_sync_prevents_stale_save(tmp_path: Path):
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)
     sync_gate_decisions = mod.sync_gate_decisions
+    sync_and_reload = mod.sync_and_reload
 
     ledger_path = tmp_path / "candidate-ledger.json"
     gen = tmp_path / "generated"
@@ -225,9 +226,9 @@ def test_main_sequence_reload_after_sync_prevents_stale_save(tmp_path: Path):
     stale = load_ledger(ledger_path)
     assert stale["candidates"][0]["status"] != "gated:no-go"
 
-    # FIXED sequence: load -> sync -> RELOAD from disk -> save (the fold).
-    sync_gate_decisions(ledger_path, gen)
-    fresh = load_ledger(ledger_path)
+    # FIXED path: the shared helper main() uses — sync + RELOAD from disk.
+    synced, fresh = sync_and_reload(ledger_path, gen)
+    assert synced == 1
     save_ledger(ledger_path, fresh)
     final = load_ledger(ledger_path)
     assert final["candidates"][0]["status"] == "gated:no-go"

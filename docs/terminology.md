@@ -67,7 +67,7 @@ with rationale and evidence. Decisions live as
 `properties/generated/<slug>_gate_decision.json`. Auto-NO-GO may apply for
 some shapes; GO / triage usually need a human. Ledger rows can remain
 `status=mined` even after a gate file exists — use gate files (and
-`rank` (gated rows skipped by default)) as the operator source of truth for “already decided.”
+`rank` (gated rows skipped by default) as the operator source of truth for “already decided.”
 
 ### Smith
 

@@ -179,6 +179,22 @@ def sync_gate_decisions(
     return synced
 
 
+def sync_and_reload(
+    ledger_path: Path,
+    generated_dir: Path,
+    *,
+    dry_run: bool = False,
+) -> tuple[int, dict]:
+    """Sync gate decisions into the ledger and return (synced, fresh_ledger).
+
+    The ledger is RELOADED from disk after the sync so callers never save a
+    stale pre-sync in-memory object over the applied transitions (P7 fold —
+    main() uses this; the regression test calls it directly).
+    """
+    synced = sync_gate_decisions(ledger_path, generated_dir, dry_run=dry_run)
+    return synced, load_ledger(ledger_path)
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--dry-run", action="store_true", help="Print candidates; no writes")
@@ -202,17 +218,13 @@ def main(argv: list[str] | None = None) -> int:
     queue = load_queue(queue_path)
     admitted = load_admitted_urls(args.generated.expanduser().resolve())
 
-    synced = sync_gate_decisions(
+    synced, ledger = sync_and_reload(
         ledger_path,
         args.generated.expanduser().resolve(),
         dry_run=args.dry_run,
     )
     if synced:
         print(json.dumps({"kind": "gate_sync", "synced": synced}))
-        # Reload ledger from disk so the final save below carries the
-        # gated:* statuses applied by sync_gate_decisions (not the stale
-        # pre-sync in-memory object).
-        ledger = load_ledger(ledger_path)
 
     try:
         result = run_search(_http_session())

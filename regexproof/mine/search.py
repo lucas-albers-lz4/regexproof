@@ -215,6 +215,8 @@ def run_search(
     seen_repos: set[str] = set()
     rate_limited = False
     for query in queries or SEARCH_QUERIES:
+        if rate_limited:  # P7 fold: a rate limit aborts ALL further queries
+            break
         if result.queries_run >= query_budget:
             result.capped = True
             break
@@ -266,6 +268,10 @@ def run_search(
                     continue
                 stars = int(meta.get("stargazers_count") or repo.get("stargazers_count") or 0)
                 if stars < min_stars:
+                    continue
+                # D4 (P7): code search cannot filter stars — drop fork:true
+                # results below 50 stars as a post-filter on the enrich object.
+                if bool(meta.get("fork")) and stars < 50:
                     continue
                 default_branch = str(meta.get("default_branch") or "main")
                 try:

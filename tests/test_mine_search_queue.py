@@ -693,3 +693,49 @@ def test_queue_schema_has_capacity_source():
     q = empty_queue()
     assert "capacity_source" in q
     assert q["capacity_source"] == QUEUE_CAPACITY_SOURCE
+
+
+def test_run_search_fork_below_50_stars_dropped():
+    """D4 (P7 fold): fork:true repos below 50 stars are dropped as a
+    post-filter on the enrich object (code search cannot filter stars)."""
+    page1_items = {
+        "items": [
+            {
+                "repository": {
+                    "full_name": "acme/forked-lib",
+                    "stargazers_count": 20,
+                }
+            },
+            {
+                "repository": {
+                    "full_name": "acme/original-lib",
+                    "stargazers_count": 300,
+                }
+            },
+            {
+                "repository": {
+                    "full_name": "acme/big-fork",
+                    "stargazers_count": 120,
+                }
+            },
+        ]
+    }
+    session = FakeSession(
+        responses=[
+            FakeResp(200, page1_items),
+            # forked-lib enrich (fork, 20 stars) -> dropped before pin
+            FakeResp(200, {"fork": True, "stargazers_count": 20, "default_branch": "main"}),
+            # original-lib enrich + pin
+            FakeResp(200, {"fork": False, "stargazers_count": 300, "default_branch": "main"}),
+            FakeResp(200, {"sha": "bbb"}),
+            # big-fork enrich (fork, 120 stars >= 50) + pin
+            FakeResp(200, {"fork": True, "stargazers_count": 120, "default_branch": "main"}),
+            FakeResp(200, {"sha": "ccc"}),
+        ]
+    )
+    result = run_search(session, queries=["q1"], sleep_fn=lambda _s: None)
+    urls = [c["url"] for c in result.candidates]
+    assert len(urls) == 2
+    assert any("original-lib" in u for u in urls)
+    assert any("big-fork" in u for u in urls)
+    assert not any("forked-lib" in u for u in urls)
