@@ -1,0 +1,49 @@
+{
+  "candidate_url": "https://github.com/RedHatInsights/insights-client",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 8 sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, docs/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "insights-client",
+  "corpus_pin": "db64b40294bd1bc79d037a30db421935204a4a09",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "posix-shell": 1,
+      "py_re": 7
+    },
+    "flags": {
+      "m": 1
+    },
+    "pin": "db64b40294bd1bc79d037a30db421935204a4a09",
+    "predicted_buckets": {
+      "m-flag": 1
+    },
+    "regex_sites": 8,
+    "regex_sites_per_file": {
+      "integration-tests/selinux.py": 6,
+      "integration-tests/test_selinux.py": 1,
+      "systemtest/tests/integration/test.sh": 1
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 8 regex sites (auto-NO-GO bar 200); dialects [posix-shell:1, py_re:7]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

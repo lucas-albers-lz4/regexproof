@@ -1,0 +1,82 @@
+{
+  "candidate_url": "https://github.com/StanfordCDT/pb",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 503 ecma < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, docs/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "pb",
+  "corpus_pin": "8a11e5f9e17d86b2cc9701286f447ab86d21ef6c",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "lookaround": 6
+    },
+    "dialect": {
+      "ecma": 503
+    },
+    "flags": {
+      "d": 6,
+      "g": 124,
+      "i": 80,
+      "m": 7,
+      "u": 1,
+      "v": 6
+    },
+    "pin": "8a11e5f9e17d86b2cc9701286f447ab86d21ef6c",
+    "predicted_buckets": {
+      "inline-flag": 80,
+      "lookaround": 6,
+      "m-flag": 7,
+      "stateful": 124,
+      "u-flag": 1,
+      "v-flag": 6
+    },
+    "regex_sites": 503,
+    "regex_sites_per_file": {
+      "app/assets/javascripts/components/config_editor.jsx": 33,
+      "app/assets/javascripts/components/date_input.jsx": 2,
+      "app/assets/javascripts/components/daypicker.min.js": 2,
+      "public/js/bootstrap.min.js": 13,
+      "public/js/d3.min.js": 27,
+      "public/js/html5shiv.min.js": 3,
+      "public/js/jquery-ui.min.js": 12,
+      "public/js/jquery.magnific-popup.min.js": 10,
+      "public/js/jquery.tablesorter.min.js": 18,
+      "public/js/js-yaml-customized.min.js": 17,
+      "public/js/popper.min.js": 7,
+      "public/js/respond.min.js": 8,
+      "public/js/syntaxhighlighter/shBrushYaml.js": 8,
+      "public/js/syntaxhighlighter/shCore.js": 2,
+      "public/js/tinymce/plugins/autolink/plugin.min.js": 3,
+      "public/js/tinymce/plugins/autosave/plugin.min.js": 6,
+      "public/js/tinymce/plugins/image/plugin.min.js": 7,
+      "public/js/tinymce/plugins/imagetools/plugin.min.js": 4,
+      "public/js/tinymce/plugins/link/plugin.min.js": 8,
+      "public/js/tinymce/plugins/lists/plugin.min.js": 5,
+      "public/js/tinymce/plugins/media/plugin.min.js": 11,
+      "public/js/tinymce/plugins/tabfocus/plugin.min.js": 1,
+      "public/js/tinymce/themes/mobile/theme.min.js": 23,
+      "public/js/tinymce/themes/modern/theme.min.js": 39,
+      "public/js/tinymce/tinymce.min.js": 234
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 503 regex sites (auto-NO-GO bar 200); dialects [ecma:503]; boundary=unknown.",
+  "schema_version": "1"
+}

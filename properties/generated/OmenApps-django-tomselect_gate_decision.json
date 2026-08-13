@@ -1,0 +1,66 @@
+{
+  "candidate_url": "https://github.com/OmenApps/django-tomselect",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 143 sites < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, docs/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "django-tomselect",
+  "corpus_pin": "00f4c7c1ad96f5e9eee1cf64b12b93a085bd8362",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "backref": 2
+    },
+    "dialect": {
+      "ecma": 133,
+      "py_re": 10
+    },
+    "flags": {
+      "g": 73,
+      "i": 4,
+      "s": 1,
+      "u": 2
+    },
+    "pin": "00f4c7c1ad96f5e9eee1cf64b12b93a085bd8362",
+    "predicted_buckets": {
+      "backref": 2,
+      "inline-flag": 5,
+      "stateful": 73,
+      "u-flag": 2
+    },
+    "regex_sites": 143,
+    "regex_sites_per_file": {
+      "client/plugins/token/index.js": 7,
+      "client/plugins/token/parser.js": 2,
+      "example_project/test_token_field.py": 3,
+      "example_project/test_widgets_requests_features.py": 1,
+      "noxfile.py": 2,
+      "src/django_tomselect/query.py": 1,
+      "src/django_tomselect/static/django_tomselect/js/django-tomselect.js": 36,
+      "src/django_tomselect/static/django_tomselect/js/django-tomselect.min.js": 36,
+      "src/django_tomselect/utils.py": 2,
+      "src/django_tomselect/widgets.py": 1,
+      "tests/js/helpers/harness.js": 51,
+      "tests/js/regression/token-xss-safety.test.js": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 143 regex sites (auto-NO-GO bar 200); dialects [ecma:133, py_re:10]; boundary=unknown.",
+  "schema_version": "1"
+}

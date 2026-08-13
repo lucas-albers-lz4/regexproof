@@ -1,0 +1,114 @@
+{
+  "candidate_url": "https://github.com/wso2/carbon-apimgt",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 1,765 sites but 98% vendored docs (apidocs jquery bundles, api-docs) — honest first-party 30 sites. Vendored-docs inflation class (rastrea2r precedent).",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, docs/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "carbon-apimgt",
+  "corpus_pin": "c402f1dcc16b5e3facac0fea605d0fb7b073de40",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "(?m)": 1,
+      "backref": 37,
+      "lookaround": 224
+    },
+    "dialect": {
+      "ecma": 1735,
+      "java": 29,
+      "posix-shell": 1
+    },
+    "flags": {
+      "g": 395,
+      "i": 195,
+      "m": 50
+    },
+    "pin": "c402f1dcc16b5e3facac0fea605d0fb7b073de40",
+    "predicted_buckets": {
+      "backref": 37,
+      "inline-flag": 195,
+      "lookaround": 224,
+      "m-flag": 51,
+      "stateful": 395
+    },
+    "regex_sites": 1765,
+    "regex_sites_per_file": {
+      "components/apimgt/org.wso2.carbon.apimgt.api/src/main/java/org/wso2/carbon/apimgt/api/APIDefinition.java": 1,
+      "components/apimgt/org.wso2.carbon.apimgt.gateway/src/main/java/org/wso2/carbon/apimgt/gateway/listeners/JMSMessageListener.java": 4,
+      "components/apimgt/org.wso2.carbon.apimgt.gateway/src/main/java/org/wso2/carbon/apimgt/gateway/mediators/McpMediator.java": 1,
+      "components/apimgt/org.wso2.carbon.apimgt.gateway/src/main/java/org/wso2/carbon/apimgt/gateway/utils/GatewayUtils.java": 2,
+      "components/apimgt/org.wso2.carbon.apimgt.governance.impl/src/main/java/org/wso2/carbon/apimgt/governance/impl/PolicyManager.java": 1,
+      "components/apimgt/org.wso2.carbon.apimgt.governance.impl/src/main/java/org/wso2/carbon/apimgt/governance/impl/RulesetManager.java": 1,
+      "components/apimgt/org.wso2.carbon.apimgt.impl/src/main/java/org/wso2/carbon/apimgt/impl/APIProviderImpl.java": 1,
+      "components/apimgt/org.wso2.carbon.apimgt.impl/src/main/java/org/wso2/carbon/apimgt/impl/utils/APIUtil.java": 5,
+      "components/apimgt/org.wso2.carbon.apimgt.impl/src/main/java/org/wso2/carbon/apimgt/impl/utils/AWSUtil.java": 1,
+      "components/apimgt/org.wso2.carbon.apimgt.impl/src/main/java/org/wso2/carbon/apimgt/impl/utils/GatewayManagementUtils.java": 1,
+      "components/apimgt/org.wso2.carbon.apimgt.impl/src/main/java/org/wso2/carbon/apimgt/impl/utils/PlatformGatewayAPIYamlConverter.java": 1,
+      "components/apimgt/org.wso2.carbon.apimgt.impl/src/main/java/org/wso2/carbon/apimgt/impl/wsdl/SequenceGenerator.java": 1,
+      "components/apimgt/org.wso2.carbon.apimgt.rest.api.admin.v1/src/main/java/org/wso2/carbon/apimgt/rest/api/admin/v1/impl/ApiCategoriesApiServiceImpl.java": 1,
+      "components/apimgt/org.wso2.carbon.apimgt.rest.api.admin.v1/src/main/java/org/wso2/carbon/apimgt/rest/api/admin/v1/impl/GatewaysApiServiceImpl.java": 1,
+      "components/apimgt/org.wso2.carbon.apimgt.rest.api.admin.v1/src/main/java/org/wso2/carbon/apimgt/rest/api/admin/v1/utils/RestApiAdminUtils.java": 1,
+      "components/apimgt/org.wso2.carbon.apimgt.rest.api.common/src/main/java/org/wso2/carbon/apimgt/rest/api/common/RestApiCommonUtil.java": 1,
+      "components/apimgt/org.wso2.carbon.apimgt.rest.api.common/src/main/java/org/wso2/carbon/apimgt/rest/api/common/RestApiConstants.java": 1,
+      "components/apimgt/org.wso2.carbon.apimgt.rest.api.publisher.v1/src/main/java/org/wso2/carbon/apimgt/rest/api/publisher/v1/impl/McpServersApiServiceImpl.java": 1,
+      "components/apimgt/org.wso2.carbon.apimgt.rest.api.util/src/main/java/org/wso2/carbon/apimgt/rest/api/util/RestApiConstants.java": 1,
+      "components/apimgt/org.wso2.carbon.apimgt.spec.parser/src/main/java/org/wso2/carbon/apimgt/spec/parser/definitions/APISpecParserConstants.java": 1,
+      "components/encryption/org.wso2.carbon.apimgt.encryption.key.generator/src/test/java/org/wso2/carbon/apimgt/encryption/key/generator/EncryptionKeyGeneratorTest.java": 1,
+      "docs/apidocs/gateway/v1/assets/js/bootstrap.js": 14,
+      "docs/apidocs/gateway/v1/assets/js/bootstrap.min.js": 20,
+      "docs/apidocs/gateway/v1/assets/js/highlight.pack.js": 35,
+      "docs/apidocs/gateway/v1/assets/js/jquery-1.8.3.min.js": 111,
+      "docs/apidocs/gateway/v1/assets/js/jquery-2.2.0.min.js": 72,
+      "docs/apidocs/gateway/v1/assets/js/main.js": 3,
+      "docs/apidocs/gateway/v1/assets/js/marked.min.js": 92,
+      "features/apimgt/org.wso2.carbon.apimgt.core.feature/src/main/resources/config/wso2server.sh": 1,
+      "features/apimgt/org.wso2.carbon.apimgt.rest.api.admin.feature/src/main/resources/api-docs/docs/assets/js/bootstrap.js": 14,
+      "features/apimgt/org.wso2.carbon.apimgt.rest.api.admin.feature/src/main/resources/api-docs/docs/assets/js/bootstrap.min.js": 20,
+      "features/apimgt/org.wso2.carbon.apimgt.rest.api.admin.feature/src/main/resources/api-docs/docs/assets/js/highlight.pack.js": 35,
+      "features/apimgt/org.wso2.carbon.apimgt.rest.api.admin.feature/src/main/resources/api-docs/docs/assets/js/jquery-1.8.3.min.js": 111,
+      "features/apimgt/org.wso2.carbon.apimgt.rest.api.admin.feature/src/main/resources/api-docs/docs/assets/js/jquery-2.2.0.min.js": 72,
+      "features/apimgt/org.wso2.carbon.apimgt.rest.api.admin.feature/src/main/resources/api-docs/docs/assets/js/main.js": 3,
+      "features/apimgt/org.wso2.carbon.apimgt.rest.api.admin.feature/src/main/resources/api-docs/docs/assets/js/marked.min.js": 92,
+      "features/apimgt/org.wso2.carbon.apimgt.rest.api.gateway.feature/src/main/resources/api-docs/docs/assets/js/bootstrap.js": 14,
+      "features/apimgt/org.wso2.carbon.apimgt.rest.api.gateway.feature/src/main/resources/api-docs/docs/assets/js/bootstrap.min.js": 20,
+      "features/apimgt/org.wso2.carbon.apimgt.rest.api.gateway.feature/src/main/resources/api-docs/docs/assets/js/highlight.pack.js": 35,
+      "features/apimgt/org.wso2.carbon.apimgt.rest.api.gateway.feature/src/main/resources/api-docs/docs/assets/js/jquery-1.8.3.min.js": 111,
+      "features/apimgt/org.wso2.carbon.apimgt.rest.api.gateway.feature/src/main/resources/api-docs/docs/assets/js/jquery-2.2.0.min.js": 72,
+      "features/apimgt/org.wso2.carbon.apimgt.rest.api.gateway.feature/src/main/resources/api-docs/docs/assets/js/main.js": 3,
+      "features/apimgt/org.wso2.carbon.apimgt.rest.api.gateway.feature/src/main/resources/api-docs/docs/assets/js/marked.min.js": 92,
+      "features/apimgt/org.wso2.carbon.apimgt.rest.api.publisher.feature/src/main/resources/api-docs/docs/assets/js/bootstrap.js": 14,
+      "features/apimgt/org.wso2.carbon.apimgt.rest.api.publisher.feature/src/main/resources/api-docs/docs/assets/js/bootstrap.min.js": 20,
+      "features/apimgt/org.wso2.carbon.apimgt.rest.api.publisher.feature/src/main/resources/api-docs/docs/assets/js/highlight.pack.js": 35,
+      "features/apimgt/org.wso2.carbon.apimgt.rest.api.publisher.feature/src/main/resources/api-docs/docs/assets/js/jquery-1.8.3.min.js": 111,
+      "features/apimgt/org.wso2.carbon.apimgt.rest.api.publisher.feature/src/main/resources/api-docs/docs/assets/js/jquery-2.2.0.min.js": 72,
+      "features/apimgt/org.wso2.carbon.apimgt.rest.api.publisher.feature/src/main/resources/api-docs/docs/assets/js/main.js": 3,
+      "features/apimgt/org.wso2.carbon.apimgt.rest.api.publisher.feature/src/main/resources/api-docs/docs/assets/js/marked.min.js": 92,
+      "features/apimgt/org.wso2.carbon.apimgt.rest.api.store.feature/src/main/resources/api-docs/docs/assets/js/bootstrap.js": 14,
+      "features/apimgt/org.wso2.carbon.apimgt.rest.api.store.feature/src/main/resources/api-docs/docs/assets/js/bootstrap.min.js": 20,
+      "features/apimgt/org.wso2.carbon.apimgt.rest.api.store.feature/src/main/resources/api-docs/docs/assets/js/highlight.pack.js": 35,
+      "features/apimgt/org.wso2.carbon.apimgt.rest.api.store.feature/src/main/resources/api-docs/docs/assets/js/jquery-1.8.3.min.js": 111,
+      "features/apimgt/org.wso2.carbon.apimgt.rest.api.store.feature/src/main/resources/api-docs/docs/assets/js/jquery-2.2.0.min.js": 72,
+      "features/apimgt/org.wso2.carbon.apimgt.rest.api.store.feature/src/main/resources/api-docs/docs/assets/js/main.js": 3,
+      "features/apimgt/org.wso2.carbon.apimgt.rest.api.store.feature/src/main/resources/api-docs/docs/assets/js/marked.min.js": 92
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 1765 regex sites (auto-NO-GO bar 200); dialects [ecma:1735, java:29, posix-shell:1]; boundary=unknown.",
+  "schema_version": "1"
+}

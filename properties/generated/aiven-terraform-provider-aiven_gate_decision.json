@@ -1,0 +1,106 @@
+{
+  "candidate_url": "https://github.com/aiven/terraform-provider-aiven",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 103 re2 < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, docs/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "terraform-provider-aiven",
+  "corpus_pin": "7fd54b6e6ad1af3c8a3c4ad95bc6e48496d776a4",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "(?i)": 1,
+      "(?m)": 2,
+      "(?s)": 4
+    },
+    "dialect": {
+      "ecma": 1,
+      "re2": 102
+    },
+    "flags": {
+      "m": 1
+    },
+    "pin": "7fd54b6e6ad1af3c8a3c4ad95bc6e48496d776a4",
+    "predicted_buckets": {
+      "inline-flag": 5,
+      "m-flag": 3
+    },
+    "regex_sites": 103,
+    "regex_sites_per_file": {
+      "commitlint.config.mjs": 1,
+      "generators/changelog/formatter.go": 8,
+      "generators/changelog/text.go": 2,
+      "generators/plugin/main.go": 3,
+      "generators/plugin/utils.go": 3,
+      "generators/plugin/validators.go": 1,
+      "generators/userconfig/main.go": 4,
+      "generators/userconfig/models.go": 1,
+      "internal/acctest/password_rotation.go": 2,
+      "internal/acctest/template/builder.go": 1,
+      "internal/plugin/service/kafka/acl/acl_test.go": 2,
+      "internal/plugin/service/kafka/acl/zz_datasource.go": 1,
+      "internal/plugin/service/kafka/acl/zz_resource.go": 1,
+      "internal/plugin/service/kafka/mirrormakerreplicationflow/mirrormakerreplicationflow_test.go": 1,
+      "internal/plugin/service/kafka/topic/topic_test.go": 5,
+      "internal/plugin/service/kafkaschema/registryacl/registryacl_test.go": 1,
+      "internal/plugin/service/organization/applicationuser/application_user_test.go": 1,
+      "internal/plugin/service/organization/permission/permission_test.go": 1,
+      "internal/plugin/service/organization/project/project_test.go": 2,
+      "internal/plugin/service/organization/userlist/userlist_test.go": 4,
+      "internal/plugin/service/valkey/user/zz_datasource.go": 1,
+      "internal/plugin/service/valkey/user/zz_resource.go": 1,
+      "internal/plugin/service/vpc/organizationvpc/organizationvpc_acc_test.go": 1,
+      "internal/plugin/service/vpc/projectvpc/projectvpc_acc_test.go": 2,
+      "internal/plugin/service/vpc/projectvpc/projectvpc_datasource_test.go": 3,
+      "internal/schemautil/common.go": 4,
+      "internal/schemautil/service.go": 1,
+      "internal/schemautil/userconfig/stateupgrader/v0/serviceintegration/service_integration.go": 1,
+      "internal/sdkprovider/provider/provider.go": 2,
+      "internal/sdkprovider/service/clickhouse/clickhouse_grant.go": 1,
+      "internal/sdkprovider/service/clickhouse/clickhouse_grant_test.go": 1,
+      "internal/sdkprovider/service/clickhouse/clickhouse_test.go": 1,
+      "internal/sdkprovider/service/dragonfly/dragonfly_test.go": 1,
+      "internal/sdkprovider/service/flink/flink_test.go": 1,
+      "internal/sdkprovider/service/grafana/grafana_test.go": 1,
+      "internal/sdkprovider/service/kafka/kafka_connector_test.go": 1,
+      "internal/sdkprovider/service/kafka/kafka_quota_test.go": 1,
+      "internal/sdkprovider/service/kafka/kafka_test.go": 1,
+      "internal/sdkprovider/service/kafkaschema/kafka_schema.go": 1,
+      "internal/sdkprovider/service/kafkaschema/kafka_schema_test.go": 3,
+      "internal/sdkprovider/service/mysql/mysql_test.go": 2,
+      "internal/sdkprovider/service/opensearch/opensearch_test.go": 1,
+      "internal/sdkprovider/service/pg/pg_test.go": 11,
+      "internal/sdkprovider/service/project/project.go": 1,
+      "internal/sdkprovider/service/project/project_test.go": 2,
+      "internal/sdkprovider/service/servicecomponent/service_component_data_source_test.go": 1,
+      "internal/sdkprovider/service/serviceintegration/service_integration_test.go": 1,
+      "internal/sdkprovider/service/thanos/thanos_test.go": 1,
+      "internal/sdkprovider/service/valkey/valkey_test.go": 1,
+      "internal/sdkprovider/service/vpc/aws_org_vpc_peering_connection_test.go": 1,
+      "internal/sdkprovider/service/vpc/azure_org_vpc_peering_connection_test.go": 1,
+      "internal/sdkprovider/service/vpc/gcp_org_vpc_peering_connection_test.go": 1,
+      "internal/sdkprovider/userconfig/converters/utils_test.go": 2,
+      "internal/sdkprovider/userconfig/diff/diff.go": 2,
+      "tools/changelog/changelog.go": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 103 regex sites (auto-NO-GO bar 200); dialects [ecma:1, re2:102]; boundary=unknown.",
+  "schema_version": "1"
+}

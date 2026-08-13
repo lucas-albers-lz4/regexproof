@@ -1,0 +1,81 @@
+{
+  "candidate_url": "https://github.com/roelfdiedericks/goclaw",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 72 sites < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, docs/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "goclaw",
+  "corpus_pin": "6a7ccdb86585fc6b92ff0ef166005b32f21c2192",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "(?i)": 3,
+      "(?m)": 3,
+      "(?s)": 3
+    },
+    "dialect": {
+      "ecma": 13,
+      "posix-shell": 12,
+      "py_re": 6,
+      "re2": 41
+    },
+    "flags": {
+      "g": 8,
+      "i": 4,
+      "s": 1
+    },
+    "pin": "6a7ccdb86585fc6b92ff0ef166005b32f21c2192",
+    "predicted_buckets": {
+      "inline-flag": 11,
+      "m-flag": 3,
+      "stateful": 8
+    },
+    "regex_sites": 72,
+    "regex_sites_per_file": {
+      "cmd/manifestgen/main.go": 1,
+      "installer/install.sh": 10,
+      "internal/channels/http/html/js/chat.js": 5,
+      "internal/channels/http/html/js/goclaw-common.js": 4,
+      "internal/channels/whatsapp/format.go": 6,
+      "internal/config/envexpand.go": 1,
+      "internal/gateway/gateway.go": 1,
+      "internal/llm/anthropic.go": 1,
+      "internal/llm/errors.go": 3,
+      "internal/media/refs.go": 1,
+      "internal/media/store.go": 1,
+      "internal/release/release.go": 3,
+      "internal/sandbox/parity_harness_darwin_test.go": 1,
+      "internal/sandbox/sandbox.go": 1,
+      "internal/setup/templates.go": 1,
+      "internal/setup/web/static/editor.js": 4,
+      "internal/skills/auditor.go": 15,
+      "internal/skills/catalog/openai-image-gen/scripts/gen.py": 2,
+      "internal/skills/catalog/skill-creator/scripts/init_skill.py": 2,
+      "internal/skills/catalog/skill-creator/scripts/quick_validate.py": 2,
+      "internal/skills/catalog/tmux/scripts/wait-for-text.sh": 2,
+      "internal/skills/parser.go": 1,
+      "internal/tools/document_extract/tool.go": 2,
+      "internal/transcript/filter.go": 1,
+      "internal/user/config.go": 1
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 72 regex sites (auto-NO-GO bar 200); dialects [ecma:13, posix-shell:12, py_re:6, re2:41]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

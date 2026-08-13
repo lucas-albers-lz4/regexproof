@@ -1,0 +1,91 @@
+{
+  "candidate_url": "https://github.com/artivisi/balaka",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 212 sites (146 java deferred).",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, docs/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "balaka",
+  "corpus_pin": "f9eea0af7aaaa8e554b17fc81100f47d18c49a1c",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "lookaround": 1
+    },
+    "dialect": {
+      "ecma": 65,
+      "java": 146,
+      "posix-shell": 1
+    },
+    "flags": {
+      "g": 17,
+      "i": 14
+    },
+    "pin": "f9eea0af7aaaa8e554b17fc81100f47d18c49a1c",
+    "predicted_buckets": {
+      "inline-flag": 14,
+      "lookaround": 1,
+      "stateful": 17
+    },
+    "regex_sites": 212,
+    "regex_sites_per_file": {
+      "setup-ubuntu.sh": 1,
+      "src/main/java/com/artivisi/accountingfinance/controller/SettingsController.java": 1,
+      "src/main/java/com/artivisi/accountingfinance/security/PasswordValidator.java": 4,
+      "src/main/java/com/artivisi/accountingfinance/security/RateLimitFilter.java": 2,
+      "src/main/java/com/artivisi/accountingfinance/service/ReceiptParserService.java": 1,
+      "src/main/java/com/artivisi/accountingfinance/service/SecurityAuditService.java": 1,
+      "src/main/resources/static/js/alpine-components.js": 7,
+      "src/main/resources/static/js/alpine-csp-3.15.12.min.js": 26,
+      "src/main/resources/static/js/htmx-2.0.10.min.js": 32,
+      "src/test/java/com/artivisi/accountingfinance/functional/AmortizationControllerFunctionalTest.java": 14,
+      "src/test/java/com/artivisi/accountingfinance/functional/BillOfMaterialControllerFunctionalTest.java": 16,
+      "src/test/java/com/artivisi/accountingfinance/functional/ClientControllerFunctionalTest.java": 1,
+      "src/test/java/com/artivisi/accountingfinance/functional/DataExportControllerFunctionalTest.java": 2,
+      "src/test/java/com/artivisi/accountingfinance/functional/DataImportControllerFunctionalTest.java": 1,
+      "src/test/java/com/artivisi/accountingfinance/functional/DataSubjectControllerFunctionalTest.java": 3,
+      "src/test/java/com/artivisi/accountingfinance/functional/DeviceTokenManagementTest.java": 1,
+      "src/test/java/com/artivisi/accountingfinance/functional/DocumentControllerFunctionalTest.java": 3,
+      "src/test/java/com/artivisi/accountingfinance/functional/DraftTransactionControllerFunctionalTest.java": 4,
+      "src/test/java/com/artivisi/accountingfinance/functional/EmployeeControllerFunctionalTest.java": 4,
+      "src/test/java/com/artivisi/accountingfinance/functional/FiscalPeriodControllerFunctionalTest.java": 1,
+      "src/test/java/com/artivisi/accountingfinance/functional/FixedAssetControllerFunctionalTest.java": 5,
+      "src/test/java/com/artivisi/accountingfinance/functional/InventoryTransactionControllerFunctionalTest.java": 2,
+      "src/test/java/com/artivisi/accountingfinance/functional/InvoiceControllerFunctionalTest.java": 10,
+      "src/test/java/com/artivisi/accountingfinance/functional/JournalEntryControllerFunctionalTest.java": 1,
+      "src/test/java/com/artivisi/accountingfinance/functional/JournalTemplateControllerFunctionalTest.java": 7,
+      "src/test/java/com/artivisi/accountingfinance/functional/ProductControllerFunctionalTest.java": 1,
+      "src/test/java/com/artivisi/accountingfinance/functional/ProductionOrderControllerFunctionalTest.java": 16,
+      "src/test/java/com/artivisi/accountingfinance/functional/ProjectControllerFunctionalTest.java": 9,
+      "src/test/java/com/artivisi/accountingfinance/functional/SalaryComponentControllerFunctionalTest.java": 4,
+      "src/test/java/com/artivisi/accountingfinance/functional/SettingsControllerFunctionalTest.java": 2,
+      "src/test/java/com/artivisi/accountingfinance/functional/TaxCalendarControllerFunctionalTest.java": 3,
+      "src/test/java/com/artivisi/accountingfinance/functional/TransactionTagAssignmentTest.java": 2,
+      "src/test/java/com/artivisi/accountingfinance/functional/UserControllerFunctionalTest.java": 5,
+      "src/test/java/com/artivisi/accountingfinance/functional/page/TransactionFormPage.java": 2,
+      "src/test/java/com/artivisi/accountingfinance/functional/service/ServiceAmortizationTest.java": 8,
+      "src/test/java/com/artivisi/accountingfinance/functional/service/ServiceMilestonePaymentTermTest.java": 6,
+      "src/test/java/com/artivisi/accountingfinance/functional/service/ServicePayrollComprehensiveTest.java": 1,
+      "src/test/java/com/artivisi/accountingfinance/functional/service/ServiceSettingsComprehensiveTest.java": 1,
+      "src/test/java/com/artivisi/accountingfinance/security/ZapDastTestBase.java": 2
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 212 regex sites (auto-NO-GO bar 200); dialects [ecma:65, java:146, posix-shell:1]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

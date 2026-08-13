@@ -1,0 +1,51 @@
+{
+  "candidate_url": "https://github.com/redhat-developer/quarkus-ls",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 11 java sites (extractor deferred #150).",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, docs/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "quarkus-ls",
+  "corpus_pin": "25107ee05d1cfa65d1efd6e2a65defcd8c10e3fb",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "lookaround": 2
+    },
+    "dialect": {
+      "java": 11
+    },
+    "flags": {},
+    "pin": "25107ee05d1cfa65d1efd6e2a65defcd8c10e3fb",
+    "predicted_buckets": {
+      "lookaround": 2
+    },
+    "regex_sites": 11,
+    "regex_sites_per_file": {
+      "quarkus.jdt.ext/com.redhat.microprofile.jdt.quarkus/src/main/java/com/redhat/microprofile/jdt/internal/quarkus/providers/QuarkusConfigSourceProvider.java": 1,
+      "quarkus.jdt.ext/com.redhat.microprofile.jdt.quarkus/src/main/java/com/redhat/microprofile/jdt/internal/quarkus/scheduler/SchedulerUtils.java": 3,
+      "quarkus.jdt.ext/com.redhat.microprofile.jdt.quarkus/src/main/java/com/redhat/microprofile/jdt/internal/quarkus/scheduler/properties/QuarkusScheduledPropertiesProvider.java": 1,
+      "qute.jdt/com.redhat.qute.jdt.test/src/main/java/com/redhat/qute/jdt/template/TemplateGenerateMissingJavaMemberTest.java": 1,
+      "qute.jdt/com.redhat.qute.jdt/src/main/java/com/redhat/qute/jdt/internal/template/TemplateGenerateMissingJavaMember.java": 1,
+      "qute.ls/com.redhat.qute.ls/src/main/java/com/redhat/qute/parser/template/LiteralSupport.java": 4
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 11 regex sites (auto-NO-GO bar 200); dialects [java:11]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

@@ -1,0 +1,62 @@
+{
+  "candidate_url": "https://github.com/pppp606/ink-chart",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 88 ecma < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, docs/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "ink-chart",
+  "corpus_pin": "3853f9d63febdf8bba129729a2b53e53e0281d7c",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 88
+    },
+    "flags": {
+      "g": 4,
+      "i": 31,
+      "m": 2
+    },
+    "pin": "3853f9d63febdf8bba129729a2b53e53e0281d7c",
+    "predicted_buckets": {
+      "inline-flag": 31,
+      "m-flag": 2,
+      "stateful": 4
+    },
+    "regex_sites": 88,
+    "regex_sites_per_file": {
+      "__tests__/e2e/sparkline.e2e.test.tsx": 3,
+      "__tests__/helpers/frameUtils.ts": 4,
+      "__tests__/helpers/stripAnsi.ts": 1,
+      "__tests__/oidc-validation.test.ts": 1,
+      "__tests__/package-security.test.ts": 7,
+      "__tests__/provenance-badge.test.ts": 1,
+      "__tests__/security-scanning.test.ts": 17,
+      "__tests__/workflow-protection.test.ts": 40,
+      "bin/demo-dynamic.tsx": 1,
+      "bin/demo.tsx": 4,
+      "scripts/validate-permissions.js": 4,
+      "scripts/validate-sha-pinning.js": 3,
+      "src/core/ansi.ts": 2
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 88 regex sites (auto-NO-GO bar 200); dialects [ecma:88]; boundary=unknown.",
+  "schema_version": "1"
+}

@@ -1,0 +1,50 @@
+{
+  "candidate_url": "https://github.com/geminishkv/course_labs",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 9 sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, docs/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "course_labs",
+  "corpus_pin": "c8e42eec725eacc58795d433b3db9abeac2ca79c",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "posix-shell": 4,
+      "py_re": 5
+    },
+    "flags": {
+      "i": 1,
+      "s": 1
+    },
+    "pin": "c8e42eec725eacc58795d433b3db9abeac2ca79c",
+    "predicted_buckets": {
+      "inline-flag": 2
+    },
+    "regex_sites": 9,
+    "regex_sites_per_file": {
+      "hooks.py": 5,
+      "labs/basic/lab03/lab03_commands.sh": 2,
+      "labs/basic/lab06/audit.sh": 2
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 9 regex sites (auto-NO-GO bar 200); dialects [posix-shell:4, py_re:5]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

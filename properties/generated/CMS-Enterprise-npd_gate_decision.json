@@ -1,0 +1,85 @@
+{
+  "candidate_url": "https://github.com/CMS-Enterprise/npd",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 208 ecma < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, docs/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "npd",
+  "corpus_pin": "e58ee427e702bd2f9b6b533bcc52359b046ad9d0",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "lookaround": 3
+    },
+    "dialect": {
+      "ecma": 207,
+      "py_re": 1
+    },
+    "flags": {
+      "g": 5,
+      "i": 142
+    },
+    "pin": "e58ee427e702bd2f9b6b533bcc52359b046ad9d0",
+    "predicted_buckets": {
+      "inline-flag": 142,
+      "lookaround": 3,
+      "stateful": 5
+    },
+    "regex_sites": 208,
+    "regex_sites_per_file": {
+      "backend/npdfhir/filters/filter_utils.py": 1,
+      "frontend/src/components/UnifiedSearchForm.test.tsx": 16,
+      "frontend/src/components/detailSections/SectionWithContentOrFallback.tsx": 2,
+      "frontend/src/components/forms/feedback/FeedbackForm.test.tsx": 2,
+      "frontend/src/components/forms/feedback/FeedbackForm.tsx": 2,
+      "frontend/src/components/markdown/SluggedHeading.tsx": 1,
+      "frontend/src/components/markdown/slug.ts": 1,
+      "frontend/src/pages/About/About.test.tsx": 1,
+      "frontend/src/pages/Developers/Developers.test.tsx": 5,
+      "frontend/src/pages/Organization/Organization.test.tsx": 3,
+      "frontend/src/pages/Organization/OrganizationSearch.test.tsx": 6,
+      "frontend/src/pages/Practitioner/Practitioner.test.tsx": 6,
+      "frontend/src/pages/Practitioner/PractitionerSearch.test.tsx": 6,
+      "frontend/src/pages/Providers/Providers.test.tsx": 3,
+      "frontend/src/pages/Search/Search.test.tsx": 2,
+      "frontend/src/pages/Search/UnifiedSearch.test.tsx": 7,
+      "frontend/src/state/api.ts": 2,
+      "frontend/src/state/requests/organizations.ts": 1,
+      "frontend/src/state/requests/practitioners.ts": 1,
+      "frontend/src/state/requests/searchAdapters.ts": 2,
+      "frontend/tests/mockGlobalFetch.ts": 1,
+      "frontend/vite.config.ts": 1,
+      "playwright/playwright.config.ts": 1,
+      "playwright/tests/local/documentation/redoc.spec.ts": 9,
+      "playwright/tests/local/landing.spec.ts": 1,
+      "playwright/tests/local/organizations/organizations.spec.ts": 22,
+      "playwright/tests/local/practitioners/practitioners.spec.ts": 25,
+      "playwright/tests/local/search/organization-search.spec.ts": 4,
+      "playwright/tests/local/search/practitioner-search.spec.ts": 8,
+      "playwright/tests/local/user-journeys/landing-navigation.spec.ts": 8,
+      "playwright/tests/local/user-journeys/organization-journey.spec.ts": 12,
+      "playwright/tests/local/user-journeys/practitioner-journey.spec.ts": 20,
+      "playwright/tests/local/user-journeys/unified-search-journey.spec.ts": 25,
+      "silo_site/static/app.js": 1
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 208 regex sites (auto-NO-GO bar 200); dialects [ecma:207, py_re:1]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

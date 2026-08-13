@@ -1,0 +1,58 @@
+{
+  "candidate_url": "https://github.com/dannytsang/homeassistant-config",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 24 sites, personal HA config.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, docs/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "homeassistant-config",
+  "corpus_pin": "c6049707cf39659b77687e0d47d1d45c62071eb3",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 2,
+      "posix-shell": 3,
+      "py_re": 19
+    },
+    "flags": {
+      "g": 2,
+      "i": 1
+    },
+    "pin": "c6049707cf39659b77687e0d47d1d45c62071eb3",
+    "predicted_buckets": {
+      "inline-flag": 1,
+      "stateful": 2
+    },
+    "regex_sites": 24,
+    "regex_sites_per_file": {
+      ".github/scripts/prepare-config-for-ci.sh": 3,
+      "custom_components/alexa_media/alexa_entity.py": 1,
+      "custom_components/alexa_media/diagnostics.py": 1,
+      "custom_components/alexa_media/media_player.py": 2,
+      "custom_components/llmvision/__init__.py": 2,
+      "custom_components/llmvision/config_flow.py": 5,
+      "custom_components/llmvision/providers.py": 4,
+      "custom_components/llmvision/timeline.py": 4,
+      "custom_components/openid/authorize.js": 2
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 24 regex sites (auto-NO-GO bar 200); dialects [ecma:2, posix-shell:3, py_re:19]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

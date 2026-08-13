@@ -1,0 +1,59 @@
+{
+  "candidate_url": "https://github.com/wyeworks/nucore-open",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 16 sites.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, docs/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "nucore-open",
+  "corpus_pin": "1fbe1a9f7e1c3766896399cfa4f356312ed2e0af",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "posix-class": 1
+    },
+    "dialect": {
+      "ecma": 9,
+      "posix-shell": 7
+    },
+    "flags": {
+      "g": 1
+    },
+    "pin": "1fbe1a9f7e1c3766896399cfa4f356312ed2e0af",
+    "predicted_buckets": {
+      "posix-class": 1,
+      "stateful": 1
+    },
+    "regex_sites": 16,
+    "regex_sites_per_file": {
+      "app/javascript/app/cart.js": 1,
+      "app/javascript/app/manage_orders.js": 1,
+      "app/javascript/reservations.js": 1,
+      "app/javascript/timeline.js": 1,
+      "bin/latest_from_open": 1,
+      "bin/merge_describer": 5,
+      "db/generate_drops.sh": 1,
+      "spec/javascripts/app/cart_spec.js": 2,
+      "spec/javascripts/app/datepicker_validate_spec.js": 2,
+      "spec/javascripts/helpers/jasmine-jquery.js": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 16 regex sites (auto-NO-GO bar 200); dialects [ecma:9, posix-shell:7]; boundary=unknown.",
+  "schema_version": "1"
+}

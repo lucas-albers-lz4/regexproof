@@ -1,0 +1,79 @@
+{
+  "candidate_url": "https://github.com/juspay/airborne",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 64 sites < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, docs/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "airborne",
+  "corpus_pin": "a706e7f981228f22c050d79b7890a44bbe59bbdd",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "posix-class": 2
+    },
+    "dialect": {
+      "ecma": 42,
+      "posix-shell": 22
+    },
+    "flags": {
+      "g": 22,
+      "i": 1,
+      "m": 2,
+      "s": 1
+    },
+    "pin": "a706e7f981228f22c050d79b7890a44bbe59bbdd",
+    "predicted_buckets": {
+      "inline-flag": 2,
+      "m-flag": 2,
+      "posix-class": 2,
+      "stateful": 22
+    },
+    "regex_sites": 64,
+    "regex_sites_per_file": {
+      "airborne-core-cli/action.js": 2,
+      "airborne-core-cli/bin.js": 1,
+      "airborne-core-cli/index.js": 6,
+      "airborne-react-native/babel.config.js": 2,
+      "airborne_cli/src/index.js": 1,
+      "airborne_cli/src/utils/common.js": 8,
+      "airborne_dashboard/app/dashboard/[orgId]/[appId]/dimensions/page.tsx": 1,
+      "airborne_dashboard/app/dashboard/[orgId]/[appId]/packages/page.tsx": 1,
+      "airborne_dashboard/app/dashboard/[orgId]/[appId]/token/page.tsx": 1,
+      "airborne_dashboard/components/file-creation-modal.tsx": 1,
+      "airborne_dashboard/components/releaseViews/CreateReleaseView.tsx": 1,
+      "airborne_dashboard/components/releaseViews/DeleteReleaseView.tsx": 1,
+      "airborne_dashboard/components/releaseViews/EditReleaseView.tsx": 1,
+      "airborne_dashboard/components/remote-config/components/add-field-form.tsx": 3,
+      "airborne_dashboard/components/remote-config/utils/helpers.ts": 4,
+      "airborne_dashboard/components/shared-layout.tsx": 1,
+      "airborne_dashboard/components/user-management.tsx": 2,
+      "airborne_dashboard/lib/name-validation.ts": 1,
+      "airborne_dashboard/lib/oidc-providers.tsx": 1,
+      "airborne_dashboard/lib/utils.ts": 1,
+      "airborne_dashboard/next.config.mjs": 2,
+      "airborne_server/scripts/encrypt-envs.sh": 4,
+      "airborne_server/scripts/init-keycloak.sh": 3,
+      "airborne_server/scripts/init-localstack.sh": 10,
+      "airborne_server/scripts/init-superposition.sh": 5
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 64 regex sites (auto-NO-GO bar 200); dialects [ecma:42, posix-shell:22]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

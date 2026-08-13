@@ -1,0 +1,65 @@
+{
+  "candidate_url": "https://github.com/sabha-co/sabha",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 23 sites < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, docs/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "sabha",
+  "corpus_pin": "f8a56927e191714a97dd46a382acd87cc562e7fb",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 21,
+      "posix-shell": 2
+    },
+    "flags": {
+      "g": 7,
+      "i": 2,
+      "u": 2
+    },
+    "pin": "f8a56927e191714a97dd46a382acd87cc562e7fb",
+    "predicted_buckets": {
+      "inline-flag": 2,
+      "stateful": 7,
+      "u-flag": 2
+    },
+    "regex_sites": 23,
+    "regex_sites_per_file": {
+      "app/javascript/controllers/composer_controller.js": 1,
+      "app/javascript/controllers/debounce_updates_controller.js": 1,
+      "app/javascript/controllers/name_field_controller.js": 1,
+      "app/javascript/controllers/notifications_controller.js": 2,
+      "app/javascript/lib/autocomplete/autocomplete_handler.js": 1,
+      "app/javascript/lib/autocomplete/constants.js": 1,
+      "app/javascript/lib/autocomplete/helpers.js": 2,
+      "app/javascript/lib/autocomplete/mentions_autocomplete_handler.js": 1,
+      "app/javascript/lib/autocomplete/suggestion_controller.js": 2,
+      "app/javascript/lib/autocomplete/utils.js": 4,
+      "app/javascript/lib/rich_text/unfurl/lib/paste.js": 1,
+      "app/javascript/models/client_message.js": 3,
+      "bin/dev": 1,
+      "bin/setup": 1,
+      "test/performance/chatter.js": 1
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 23 regex sites (auto-NO-GO bar 200); dialects [ecma:21, posix-shell:2]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

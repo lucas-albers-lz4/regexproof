@@ -1,0 +1,68 @@
+{
+  "candidate_url": "https://github.com/hawtio/hawtio-online",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 93 sites < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, docs/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "hawtio-online",
+  "corpus_pin": "f3e161d3e44ccfe16feed0abcbd95d87d4fc3010",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 88,
+      "posix-shell": 5
+    },
+    "flags": {
+      "g": 7,
+      "i": 6,
+      "m": 1
+    },
+    "pin": "f3e161d3e44ccfe16feed0abcbd95d87d4fc3010",
+    "predicted_buckets": {
+      "inline-flag": 6,
+      "m-flag": 1,
+      "stateful": 7
+    },
+    "regex_sites": 93,
+    "regex_sites_per_file": {
+      ".yarn/plugins/@yarnpkg/plugin-licenses.cjs": 6,
+      "docker/nginx.sh": 1,
+      "packages/gateway/gateway.sh": 4,
+      "packages/gateway/src/jolokia-agent/jolokia-agent.ts": 2,
+      "packages/gateway/src/jolokia-agent/rbac.test.ts": 1,
+      "packages/gateway/src/jolokia-agent/rbac.ts": 5,
+      "packages/gateway/src/master-guard/master-guard.ts": 8,
+      "packages/gateway/src/utils.ts": 3,
+      "packages/gateway/webpack.config.prod.js": 5,
+      "packages/kubernetes-api-app/webpack.config.js": 9,
+      "packages/kubernetes-api/src/utils/strings.ts": 8,
+      "packages/kubernetes-api/src/utils/urls.ts": 2,
+      "packages/management-api-app/webpack.config.js": 10,
+      "packages/oauth-app/webpack.config.js": 9,
+      "packages/oauth/src/utils/strings.ts": 8,
+      "packages/oauth/src/utils/urls.ts": 2,
+      "packages/online-shell/src/discover/DiscoverPodItem.tsx": 1,
+      "packages/online-shell/webpack.config.common.js": 9
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 93 regex sites (auto-NO-GO bar 200); dialects [ecma:88, posix-shell:5]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

@@ -1,0 +1,57 @@
+{
+  "candidate_url": "https://github.com/open-edge-platform/orch-ci",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 30 shell < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, docs/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "orch-ci",
+  "corpus_pin": "b9d94768d2db3e1250a0416c8878c4c8086d27b9",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "posix-class": 2
+    },
+    "dialect": {
+      "posix-shell": 30
+    },
+    "flags": {
+      "i": 1
+    },
+    "pin": "b9d94768d2db3e1250a0416c8878c4c8086d27b9",
+    "predicted_buckets": {
+      "inline-flag": 1,
+      "posix-class": 2
+    },
+    "regex_sites": 30,
+    "regex_sites_per_file": {
+      "scripts/custom-version-tag.sh": 1,
+      "scripts/helm-appversion-check.sh": 2,
+      "scripts/helm-version-check.sh": 5,
+      "scripts/push_oci_packages.sh": 6,
+      "scripts/tagging-lib.sh": 10,
+      "scripts/version-check-dp-packages.sh": 1,
+      "scripts/version-check.sh": 3,
+      "scripts/version-tag-param.sh": 1,
+      "scripts/version-tag.sh": 1
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 30 regex sites (auto-NO-GO bar 200); dialects [posix-shell:30]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

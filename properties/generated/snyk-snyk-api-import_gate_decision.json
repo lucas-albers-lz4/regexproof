@@ -1,0 +1,72 @@
+{
+  "candidate_url": "https://github.com/snyk/snyk-api-import",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 45 ecma — API automation tool, not a regex corpus.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, docs/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "snyk-api-import",
+  "corpus_pin": "49676af629e6cf6bdc6c7da67b6a2ade6f975278",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 45
+    },
+    "flags": {
+      "g": 13,
+      "i": 1
+    },
+    "pin": "49676af629e6cf6bdc6c7da67b6a2ade6f975278",
+    "predicted_buckets": {
+      "inline-flag": 1,
+      "stateful": 13
+    },
+    "regex_sites": 45,
+    "regex_sites_per_file": {
+      "scripts/build.js": 3,
+      "src/index.ts": 1,
+      "src/lib/find-files.ts": 1,
+      "src/lib/get-logging-path.ts": 1,
+      "src/lib/git-clone.ts": 2,
+      "src/lib/source-handlers/github-cloud-app/get-github-app-token.ts": 1,
+      "src/lib/source-handlers/github-cloud-app/is-configured.ts": 2,
+      "src/scripts/sync/clone-and-analyze.ts": 2,
+      "test/lib/request-with-rate-limit.test.ts": 2,
+      "test/lib/source-handlers/azure/azure.test.ts": 2,
+      "test/lib/source-handlers/bitbucket-cloud-app/get-bitbucket-app-token.test.ts": 2,
+      "test/lib/source-handlers/bitbucket-cloud/sync-client.auth.spec.ts": 1,
+      "test/lib/source-handlers/bitbucket-server/sync-client.401.spec.ts": 1,
+      "test/snyk-request-manager.mock.ts": 3,
+      "test/system/help.test.ts": 1,
+      "test/system/import.test.ts": 1,
+      "test/system/import:data.test.ts": 4,
+      "test/system/list:imported.test.ts": 4,
+      "test/system/orgs:create.test.ts": 1,
+      "test/system/orgs:data/bitbucket.test.ts": 1,
+      "test/system/orgs:data/errors.test.ts": 1,
+      "test/system/orgs:data/generic.test.ts": 5,
+      "test/system/orgs:data/github.test.ts": 1,
+      "test/system/orgs:data/gitlab.test.ts": 1,
+      "test/system/sync.test.ts": 1
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 45 regex sites (auto-NO-GO bar 200); dialects [ecma:45]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

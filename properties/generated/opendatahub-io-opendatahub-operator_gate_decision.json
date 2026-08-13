@@ -1,0 +1,107 @@
+{
+  "candidate_url": "https://github.com/opendatahub-io/opendatahub-operator",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 141 sites < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, docs/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "opendatahub-operator",
+  "corpus_pin": "11f97051c76e18bc6303b2ca52ce0fe7f12de8b3",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "(?i)": 12,
+      "(?m)": 1,
+      "posix-class": 12
+    },
+    "dialect": {
+      "ecma": 3,
+      "posix-shell": 91,
+      "py_re": 21,
+      "re2": 26
+    },
+    "flags": {
+      "g": 1,
+      "i": 11,
+      "m": 1,
+      "s": 2
+    },
+    "pin": "11f97051c76e18bc6303b2ca52ce0fe7f12de8b3",
+    "predicted_buckets": {
+      "inline-flag": 25,
+      "m-flag": 2,
+      "posix-class": 12,
+      "stateful": 1
+    },
+    "regex_sites": 141,
+    "regex_sites_per_file": {
+      ".github/scripts/apply-operator-images.sh": 1,
+      ".github/scripts/calculate-previous-version.sh": 1,
+      ".github/scripts/create-community-pr.sh": 1,
+      ".github/scripts/create-security-advisory.js": 1,
+      ".github/scripts/e2e-failure-triage/triage.py": 9,
+      ".github/scripts/get-component-release-notes.js": 2,
+      ".github/scripts/prepare-community-bundle.sh": 3,
+      ".github/scripts/update-versions.sh": 4,
+      ".github/scripts/validate-community-bundle.sh": 1,
+      ".github/scripts/validate-related-images.sh": 34,
+      "cmd/component-codegen/cmd/generator/update_project_file.go": 1,
+      "cmd/manifest-tools/pkg/config/config.go": 1,
+      "cmd/manifest-tools/pkg/downloader/downloader.go": 2,
+      "cmd/manifest-tools/pkg/updater/tags.go": 3,
+      "cmd/mcp-server/eval/generate-dataset.sh": 1,
+      "cmd/mcp-server/eval/judges/common.py": 1,
+      "cmd/mcp-server/eval/judges/hallucination.py": 3,
+      "cmd/mcp-server/eval/judges/quality_scoring.py": 3,
+      "cmd/mcp-server/eval/judges/remediation_actionable.py": 1,
+      "cmd/mcp-server/eval/judges/root_cause_match.py": 1,
+      "cmd/mcp-server/eval/run-eval.sh": 4,
+      "cmd/mcp-server/eval/scripts/anonymize-outputs.py": 1,
+      "cmd/mcp-server/eval/scripts/inject-failure.sh": 2,
+      "cmd/mcp-server/eval/scripts/score-results.py": 2,
+      "cmd/mcp-server/eval/scripts/teardown-failure.sh": 2,
+      "cmd/mcp-server/oneshot.go": 6,
+      "cmd/mcp-server/scenarios/component-misconfiguration-setup.sh": 1,
+      "cmd/mcp-server/scenarios/component-misconfiguration-teardown.sh": 1,
+      "cmd/mcp-server/scenarios/dashboard-sidecar-imagepull-setup.sh": 1,
+      "cmd/mcp-server/scenarios/healthy-dependency-info-warnings-setup.sh": 1,
+      "cmd/mcp-server/scenarios/healthy-imagestream-warnings-setup.sh": 2,
+      "cmd/mcp-server/scenarios/healthy-stale-events-setup.sh": 2,
+      "cmd/mcp-server/scenarios/invalid-cli-flag-setup.sh": 2,
+      "cmd/mcp-server/scenarios/missing-crd-crashloop-setup.sh": 2,
+      "cmd/mcp-server/scenarios/multi-operator-oom-setup.sh": 1,
+      "cmd/mcp-server/scenarios/node-pressure-teardown.sh": 2,
+      "cmd/mcp-server/scenarios/oom-plus-wrong-tag-setup.sh": 2,
+      "cmd/mcp-server/scenarios/panic-crash-setup.sh": 2,
+      "cmd/mcp-server/scenarios/partial-failure-teardown.sh": 2,
+      "cmd/mcp-server/scenarios/rbac-blocks-reconciliation-setup.sh": 1,
+      "cmd/mcp-server/scenarios/resource-exhaustion-teardown.sh": 1,
+      "cmd/mcp-server/scenarios/serviceaccount-deleted-setup.sh": 2,
+      "cmd/mcp-server/scenarios/sidecar-crash-setup.sh": 2,
+      "cmd/mcp-server/scenarios/wrong-image-tag-setup.sh": 2,
+      "hack/update-catalog-template.sh": 2,
+      "hack/update-cloudmanager-rbac.sh": 1,
+      "hack/update-rhai-images.sh": 5,
+      "internal/controller/services/monitoring/monitoring_controller_support.go": 7,
+      "tests/e2e/debug_utils_test.go": 6
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 141 regex sites (auto-NO-GO bar 200); dialects [ecma:3, posix-shell:91, py_re:21, re2:26]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

@@ -1,0 +1,38 @@
+{
+  "candidate_url": "https://github.com/Sabin-Rana/enterprise-aws-3tier-architecture",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 0 regex sites (Terraform templates).",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, docs/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "enterprise-aws-3tier-architecture",
+  "corpus_pin": "2025e28693eaf497c37dbf1ac0af835378dae19a",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {},
+    "flags": {},
+    "pin": "2025e28693eaf497c37dbf1ac0af835378dae19a",
+    "predicted_buckets": {},
+    "regex_sites": 0,
+    "regex_sites_per_file": {},
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 0 regex sites (auto-NO-GO bar 200); dialects [none]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

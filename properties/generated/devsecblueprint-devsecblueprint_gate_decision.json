@@ -1,0 +1,106 @@
+{
+  "candidate_url": "https://github.com/devsecblueprint/devsecblueprint",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. DevSecOps learning materials. 417 sites < 1000; not a tool.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, docs/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "devsecblueprint",
+  "corpus_pin": "7871843c59c20e3f4f15ad832b5fd88ac51f52c0",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "lookaround": 9
+    },
+    "dialect": {
+      "ecma": 413,
+      "py_re": 4
+    },
+    "flags": {
+      "g": 43,
+      "i": 253,
+      "m": 20,
+      "s": 2
+    },
+    "pin": "7871843c59c20e3f4f15ad832b5fd88ac51f52c0",
+    "predicted_buckets": {
+      "inline-flag": 255,
+      "lookaround": 9,
+      "m-flag": 20,
+      "stateful": 43
+    },
+    "regex_sites": 417,
+    "regex_sites_per_file": {
+      "backend/app/routers/contact.py": 1,
+      "backend/app/routers/content.py": 1,
+      "backend/app/routers/progress.py": 1,
+      "frontend/__tests__/AchievementsPanel.test.tsx": 2,
+      "frontend/__tests__/ActivityTimeline.test.tsx": 7,
+      "frontend/__tests__/CapstoneSubmissionForm.test.tsx": 51,
+      "frontend/__tests__/DashboardHeader.test.tsx": 6,
+      "frontend/__tests__/ErrorBoundary.test.tsx": 4,
+      "frontend/__tests__/LearningSummaryGrid.test.tsx": 3,
+      "frontend/__tests__/ModuleQuiz.test.tsx": 34,
+      "frontend/__tests__/ModuleQuizWrapper.test.tsx": 2,
+      "frontend/__tests__/Navbar.navigation.test.tsx": 17,
+      "frontend/__tests__/READMERenderer.test.tsx": 16,
+      "frontend/__tests__/SuccessStoryModal.accessibility.test.tsx": 11,
+      "frontend/__tests__/SuccessStoryModal.api.test.tsx": 12,
+      "frontend/__tests__/SuccessStoryModal.bugfix.test.tsx": 41,
+      "frontend/__tests__/SuccessStoryModal.validation.test.tsx": 41,
+      "frontend/__tests__/WalkthroughCard.test.tsx": 2,
+      "frontend/__tests__/WalkthroughLink.test.tsx": 1,
+      "frontend/__tests__/accessibility-validation.test.tsx": 41,
+      "frontend/__tests__/admin/ModuleHealth.test.tsx": 7,
+      "frontend/__tests__/admin/UserList.test.tsx": 1,
+      "frontend/__tests__/curriculum-integration.test.tsx": 8,
+      "frontend/__tests__/curriculum/CurriculumStages.test.tsx": 3,
+      "frontend/__tests__/curriculum/StageSection.integration.test.tsx": 1,
+      "frontend/__tests__/generate-content-registry.test.ts": 11,
+      "frontend/app/settings/connected-accounts/page.tsx": 1,
+      "frontend/components/BroadcastModal.tsx": 1,
+      "frontend/components/FileBrowser.tsx": 1,
+      "frontend/components/MarkdownRenderer.tsx": 4,
+      "frontend/components/ModuleQuiz.tsx": 1,
+      "frontend/components/READMERenderer.tsx": 5,
+      "frontend/components/admin/AdminUserDiscordPanel.tsx": 2,
+      "frontend/components/admin/CapstoneSubmissions.tsx": 2,
+      "frontend/components/faq/AnswerContent.tsx": 2,
+      "frontend/components/layout/Navbar.tsx": 1,
+      "frontend/components/ui/ContactForm.tsx": 1,
+      "frontend/components/ui/QuickLinkCard.tsx": 1,
+      "frontend/components/ui/SponsorshipInquiryForm.tsx": 1,
+      "frontend/lib/api.ts": 1,
+      "frontend/lib/hooks/useAuth.tsx": 1,
+      "frontend/lib/hooks/useRecentActivities.ts": 3,
+      "frontend/lib/utils/quizParser.ts": 9,
+      "frontend/lib/validation.ts": 5,
+      "frontend/scripts/compare-registries.ts": 1,
+      "frontend/scripts/compare-walkthrough-registries.ts": 1,
+      "frontend/scripts/copy-walkthrough-images.ts": 1,
+      "frontend/scripts/generate-content-registry.ts": 39,
+      "frontend/scripts/generate-pages.ts": 5,
+      "frontend/scripts/generate-walkthrough-pages.ts": 1,
+      "frontend/scripts/generate-walkthroughs-data.ts": 1,
+      "tasks.py": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 417 regex sites (auto-NO-GO bar 200); dialects [ecma:413, py_re:4]; boundary=unknown.",
+  "schema_version": "1"
+}

@@ -1,0 +1,83 @@
+{
+  "candidate_url": "https://github.com/lethevimlet/sshift",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 167 ecma < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party, docs/vendored excluded).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "sshift",
+  "corpus_pin": "07301246b07c1a3f57ae372ce84026c0b558806d",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "lookaround": 3
+    },
+    "dialect": {
+      "ecma": 162,
+      "posix-shell": 5
+    },
+    "flags": {
+      "g": 60,
+      "i": 19,
+      "m": 3,
+      "u": 1
+    },
+    "pin": "07301246b07c1a3f57ae372ce84026c0b558806d",
+    "predicted_buckets": {
+      "inline-flag": 19,
+      "lookaround": 3,
+      "m-flag": 3,
+      "stateful": 60,
+      "u-flag": 1
+    },
+    "regex_sites": 167,
+    "regex_sites_per_file": {
+      "plugins/claude-attention/index.js": 9,
+      "plugins/opencode-attention/index.js": 9,
+      "src/server/endpoints/rest/system.js": 1,
+      "src/server/index.js": 3,
+      "src/server/plugins/plugin-manager.js": 7,
+      "src/server/utils/key-converter.js": 7,
+      "src/tests/browser/repro-interlace.js": 1,
+      "src/tests/integration/frontend.test.js": 3,
+      "src/tests/unit/bugfixes-v1.4.10.test.js": 1,
+      "src/tests/unit/clipboard-streaming.test.js": 9,
+      "src/tests/unit/flush-chunks.test.js": 1,
+      "src/tests/unit/layout-refit.test.js": 7,
+      "src/tests/unit/server-robustness.test.js": 3,
+      "src/tests/unit/tabs-handling.test.js": 3,
+      "src/tests/unit/terminal-color-override.test.js": 2,
+      "src/webapp/js/app.js": 10,
+      "src/webapp/js/mobile-terminal.js": 4,
+      "src/webapp/libs/lucide/lucide.min.js": 1,
+      "src/webapp/libs/xterm/xterm-addon-image.js": 3,
+      "src/webapp/libs/xterm/xterm-addon-search.js": 2,
+      "src/webapp/libs/xterm/xterm-addon-serialize-worker.js": 2,
+      "src/webapp/libs/xterm/xterm-addon-serialize.js": 2,
+      "src/webapp/libs/xterm/xterm-addon-unicode11.js": 2,
+      "src/webapp/libs/xterm/xterm-addon-web-links.js": 2,
+      "src/webapp/libs/xterm/xterm-addon-webgl.js": 26,
+      "src/webapp/libs/xterm/xterm-headless.js": 9,
+      "src/webapp/libs/xterm/xterm.js": 33,
+      "sshift-install.sh": 5
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 167 regex sites (auto-NO-GO bar 200); dialects [ecma:162, posix-shell:5]; boundary=deterministic-true.",
+  "schema_version": "1"
+}
