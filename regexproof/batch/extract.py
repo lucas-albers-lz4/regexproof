@@ -45,6 +45,24 @@ from regexproof.extractors.v8_mjsunit import (
 )
 from regexproof.extractors.yara import extract_yara
 
+
+def _read_capped(path: Path, meta: dict[str, Any] | None = None) -> str | None:
+    """Read *path* if it is within ``MAX_FILE_BYTES``; else skip (#365 / #175)."""
+    try:
+        size = path.stat().st_size
+    except OSError:
+        return None
+    if size > MAX_FILE_BYTES:
+        if meta is not None:
+            meta["skipped_oversized"] = int(meta.get("skipped_oversized") or 0) + 1
+        print(
+            f"warning: skipped oversized file {path} (>{MAX_FILE_BYTES} bytes)",
+            file=sys.stderr,
+        )
+        return None
+    return path.read_text(encoding="utf-8", errors="replace")
+
+
 def validate_expected_roots(corpus: str, meta: dict[str, Any]) -> None:
     """Fail closed when expected corpus path/glob would produce zero files."""
     path: Path = meta["path"]
@@ -107,7 +125,9 @@ def extract_corpus(corpus: str, meta: dict[str, Any]) -> list[dict[str, Any]]:
             extract_fn=lambda src, rel: fn(src, rel, meta),
         )
     if meta["extractor"] == "rule_file":
-        source = path.read_text(encoding="utf-8")
+        source = _read_capped(path, meta)
+        if source is None:
+            return []
         rel = str(path.relative_to(ROOT))
         return extract_rule_file(
             source, repo=meta["repo"], file=rel, dialect=meta["dialect"]
@@ -120,9 +140,12 @@ def extract_corpus(corpus: str, meta: dict[str, Any]) -> list[dict[str, Any]]:
                 rel = str(fp.resolve().relative_to(root_resolved))
             except ValueError:
                 rel = str(fp)
+            text = _read_capped(fp, meta)
+            if text is None:
+                continue
             out.extend(
                 extract_modsec(
-                    fp.read_text(encoding="utf-8", errors="replace"),
+                    text,
                     repo=meta["repo"],
                     file=rel,
                 )
@@ -133,7 +156,10 @@ def extract_corpus(corpus: str, meta: dict[str, Any]) -> list[dict[str, Any]]:
         for name in meta.get("files") or sorted(p.name for p in path.glob("*.js")):
             fp = path / name
             rel = str(fp.relative_to(ROOT))
-            out.extend(extract_js(fp.read_text(encoding="utf-8"), repo=meta["repo"], file=rel))
+            text = _read_capped(fp, meta)
+            if text is None:
+                continue
+            out.extend(extract_js(text, repo=meta["repo"], file=rel))
         return out
     if meta["extractor"] == "js_precise_dir":
         # Wave ecma path: Babel/comment-aware extract_js_precise (not legacy extract_js).
@@ -143,20 +169,27 @@ def extract_corpus(corpus: str, meta: dict[str, Any]) -> list[dict[str, Any]]:
             if not fp.is_file():
                 raise SystemExit(f"HARD ERROR: missing js_precise_dir file: {fp}")
             rel = str(fp.relative_to(ROOT))
+            text = _read_capped(fp, meta)
+            if text is None:
+                continue
             out.extend(
                 extract_js_precise(
-                    fp.read_text(encoding="utf-8", errors="replace"),
+                    text,
                     repo=meta["repo"],
                     file=rel,
                 )
             )
         return out
     if meta["extractor"] == "js":
-        source = path.read_text(encoding="utf-8")
+        source = _read_capped(path, meta)
+        if source is None:
+            return []
         rel = str(path.relative_to(ROOT))
         return extract_js(source, repo=meta["repo"], file=rel)
     if meta["extractor"] == "python":
-        source = path.read_text(encoding="utf-8")
+        source = _read_capped(path, meta)
+        if source is None:
+            return []
         rel = str(path.relative_to(ROOT))
         return extract_python(source, repo=meta["repo"], file=rel)
     if meta["extractor"] == "python_dir":
@@ -199,7 +232,9 @@ def extract_corpus(corpus: str, meta: dict[str, Any]) -> list[dict[str, Any]]:
         )
     if meta["extractor"] == "re2_testdata":
         if path.is_file():
-            source = path.read_text(encoding="utf-8", errors="replace")
+            source = _read_capped(path, meta)
+            if source is None:
+                return []
             try:
                 rel = str(path.resolve().relative_to(ROOT.resolve()))
             except ValueError:
@@ -233,7 +268,10 @@ def extract_corpus(corpus: str, meta: dict[str, Any]) -> list[dict[str, Any]]:
                         rel = str(fp.resolve().relative_to(ROOT.resolve()))
                     except ValueError:
                         rel = str(fp)
-                    sources[fp.name] = fp.read_text(encoding="utf-8", errors="replace")
+                    text = _read_capped(fp, meta)
+                    if text is None:
+                        continue
+                    sources[fp.name] = text
             if sources:
                 try:
                     base = str(path.resolve().relative_to(ROOT.resolve()))
@@ -243,7 +281,9 @@ def extract_corpus(corpus: str, meta: dict[str, Any]) -> list[dict[str, Any]]:
                     sources, repo=meta["repo"], base_path=base,
                 )
         if path.is_file():
-            source = path.read_text(encoding="utf-8", errors="replace")
+            source = _read_capped(path, meta)
+            if source is None:
+                return []
             try:
                 rel = str(path.resolve().relative_to(ROOT.resolve()))
             except ValueError:

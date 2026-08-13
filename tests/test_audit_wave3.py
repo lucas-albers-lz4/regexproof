@@ -64,6 +64,20 @@ def test_ecma_timeout_maps_to_unencodable(monkeypatch):
     assert cr.unencodable_reason == "timeout"
 
 
+def test_read_capped_skips_oversized(tmp_path):
+    """#365: non-glob extract paths must honor MAX_FILE_BYTES."""
+    from regexproof.batch.extract import MAX_FILE_BYTES, _read_capped
+
+    small = tmp_path / "ok.yml"
+    small.write_text("id: x\nregex: a+\n", encoding="utf-8")
+    big = tmp_path / "huge.yml"
+    big.write_bytes(b"x" * (MAX_FILE_BYTES + 1))
+    meta: dict = {}
+    assert _read_capped(small, meta) is not None
+    assert _read_capped(big, meta) is None
+    assert meta["skipped_oversized"] == 1
+
+
 def test_extract_glob_skips_oversized(tmp_path):
     from regexproof.batch.runner import _MAX_FILE_BYTES, _extract_glob
 
