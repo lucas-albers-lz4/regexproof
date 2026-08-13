@@ -341,8 +341,9 @@ def test_audit_requeue_archives_gate_and_new_decision_applies(tmp_path: Path):
         return orig_ss(*a, **k)
 
     def _fc_spy(led, url):
-        fc_calls.append(str(url))
-        return orig_fc(led, url)
+        r = orig_fc(led, url)
+        fc_calls.append(f"{url}->{r.get('status') if r else None}")
+        return r
 
     def _ll_spy(path):
         led = orig_ll(path)
@@ -358,8 +359,15 @@ def test_audit_requeue_archives_gate_and_new_decision_applies(tmp_path: Path):
         mod.set_status = orig_ss
         mod.find_candidate = orig_fc
         mod.load_ledger = orig_ll
-    assert fc_calls == ["https://github.com/acme/recovered"], fc_calls
-    assert calls, f"sync never reached set_status; result={result} fc={fc_calls}"
+    assert fc_calls == ["https://github.com/acme/recovered->queued"], fc_calls
+    _led_status = (
+        led_views[0]["candidates"][0].get("status") if led_views else None
+    )
+    _led_audit = led_views[0]["candidates"][0].get("audit") if led_views else None
+    assert calls, (
+        f"sync never reached set_status; result={result} fc={fc_calls} "
+        f"led_status={_led_status} audit={_led_audit}"
+    )
     assert result == 1, f"sync returned {result} after {len(calls)} set_status calls"
     assert load_ledger(ledger_path)["candidates"][0]["status"] == "gated:go"
 
