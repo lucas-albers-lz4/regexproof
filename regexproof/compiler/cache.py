@@ -165,12 +165,19 @@ class MirrorCache:
             # Minor (luna gate 1): metadata SIDECAR (the plan's "metadata
             # sidecars") — the .meta.json sibling is the authoritative source
             # when present; the comment-embedded copy is the legacy fallback.
+            # Re-gate 3: the sidecar's own digest must match the key-bound
+            # digest — a swapped sidecar (valid artifact from another key)
+            # would otherwise smuggle different shape/mirror flags.
             sidecar = self.path_for(key).with_suffix(".smt2.meta.json")
             if sidecar.is_file():
                 try:
-                    metadata = json.loads(sidecar.read_text(encoding="utf-8"))
-                    if not isinstance(metadata, dict):
+                    side_meta = json.loads(sidecar.read_text(encoding="utf-8"))
+                    if not isinstance(side_meta, dict):
                         return None
+                    side_digest = side_meta.get("_script_sha256")
+                    if not side_digest or side_digest != actual:
+                        return None
+                    metadata = side_meta
                 except (OSError, json.JSONDecodeError):
                     return None
             return MirrorArtifact(mirror, metadata, script)

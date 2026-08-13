@@ -248,6 +248,16 @@ def compile_records(
                 corpus_slug, "max_wall_s", max_wall, time.monotonic() - t0
             )
         finally:
+            if breached:
+                # Re-gate 3: shutdown(wait=False) leaves RUNNING workers
+                # alive and interpreter exit can still join them — the wall
+                # budget would be advisory.  Terminate the pool's processes
+                # so a hung compile cannot outlive max_wall_s.
+                try:
+                    for process in list(executor._processes.values()):
+                        process.terminate()
+                except (AttributeError, OSError):
+                    pass
             executor.shutdown(wait=not breached, cancel_futures=breached)
 
     if cache_stats is not None:
