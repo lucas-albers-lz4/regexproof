@@ -116,23 +116,59 @@
     "wall_s": 21.527
   },
   "corpora": {
-    "remotepower": {
-      "address_space_cap": true,
+    "detect-secrets": {
+      "address_space_cap": null,
       "complete_run": true,
-      "corpus": "remotepower",
+      "corpus": "detect-secrets",
       "corpus_type": "rule_corpus",
-      "encodable": 156,
+      "encodable": 19,
       "engine": {
         "python": "3.13.5"
       },
-      "extracted": 282,
-      "findings": 56,
+      "extracted": 51,
+      "findings": 4,
       "inventory_questions": 4,
-      "join_regex_ids": 56,
+      "join_regex_ids": 4,
       "redos_findings": 0,
       "redos_incomplete": false,
       "schema_version": "1",
-      "triage": 126
+      "triage": 32
+    },
+    "gitleaks": {
+      "address_space_cap": null,
+      "complete_run": true,
+      "corpus": "gitleaks",
+      "corpus_type": "rule_corpus",
+      "encodable": 181,
+      "engine": {
+        "python": "3.13.5"
+      },
+      "extracted": 221,
+      "findings": 4,
+      "inventory_questions": 4,
+      "join_regex_ids": 4,
+      "redos_findings": 0,
+      "redos_incomplete": false,
+      "schema_version": "1",
+      "triage": 40
+    },
+    "validatorjs": {
+      "address_space_cap": null,
+      "complete_run": true,
+      "corpus": "validatorjs",
+      "corpus_type": "validator",
+      "encodable": 123,
+      "engine": {
+        "python": "3.13.5"
+      },
+      "extracted": 212,
+      "findings": 130,
+      "inventory_questions": 4,
+      "join_regex_ids": 128,
+      "redos_findings": 0,
+      "redos_incomplete": false,
+      "schema_version": "1",
+      "triage": 89
     }
   },
   "pair_counts": {
@@ -143,7 +179,16 @@
       "note": "fraction gate go; CRS rule-derived adapter is Phase-2 rule_diff",
       "scope": "full_corpus"
     },
-    "remotepower": {
+    "detect-secrets": {
+      "admitted": 0,
+      "dropped": 0,
+      "note": "no independent-spec catalog"
+    },
+    "gitleaks": {
+      "admitted": 22,
+      "dropped": 1
+    },
+    "validatorjs": {
       "admitted": 0,
       "dropped": 0,
       "note": "no independent-spec catalog"

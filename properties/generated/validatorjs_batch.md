@@ -1,17 +1,24 @@
 ---
 schema_version: "1"
 corpus: validatorjs
-findings: 106
+findings: 130
 ---
 
 # validatorjs batch findings
 
 ## usage_mismatch:0269fe932102e462305123a278fe322f:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/alpha.js:6:11`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: 0269fe932102e462305123a278fe322f
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:6:11"
+```
 
 ### Pattern
 
@@ -35,10 +42,17 @@ None
 
 ## usage_mismatch:06e47fe50b20faf7e748009fac5df2bd:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/alpha.js:7:11`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: 06e47fe50b20faf7e748009fac5df2bd
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:7:11"
+```
 
 ### Pattern
 
@@ -60,12 +74,57 @@ null
 
 None
 
+## intent_mismatch:07c04531689079ce1918bca261e9c8fc:email
+
+```yaml
+regex_id: 07c04531689079ce1918bca261e9c8fc
+schema_version: "1"
+kind: intent_mismatch
+corpus: validatorjs
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/isEmail.js:48:5"
+```
+
+### Pattern
+
+` must to be enclosed in double-quotes, otherwise it's not a valid display name
+    if (display_name_without_quotes === display_name) {
+      return false;
+    }
+
+    `
+
+### Context
+
+```json
+{"admitted_char": "' '", "keyword": "email", "reason": "name/comment claims validation but pattern admits excluded char"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
 ## usage_mismatch:0cc3488f18e94c3d1e520bda88d67843:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/isURL.js:54:21`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: 0cc3488f18e94c3d1e520bda88d67843
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/isURL.js:54:21"
+```
 
 ### Pattern
 
@@ -89,10 +148,17 @@ None
 
 ## usage_mismatch:12ac565232cb25e57503a9e7b7385603:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/isURL.js:126:33`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: 12ac565232cb25e57503a9e7b7385603
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/isURL.js:126:33"
+```
 
 ### Pattern
 
@@ -116,10 +182,17 @@ None
 
 ## usage_mismatch:1346a9baf845d2d5dcb02f8a34552f15:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/isEmail.js:27:26`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: 1346a9baf845d2d5dcb02f8a34552f15
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/isEmail.js:27:26"
+```
 
 ### Pattern
 
@@ -141,12 +214,90 @@ null
 
 None
 
+## intent_mismatch:1672cdadbd9e9ea59bd33c1986f9cd7a:email
+
+```yaml
+regex_id: 1672cdadbd9e9ea59bd33c1986f9cd7a
+schema_version: "1"
+kind: intent_mismatch
+corpus: validatorjs
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/isEmail.js:34:78"
+```
+
+### Pattern
+
+`rfc2822#appendix-A.1.2
+ * @param {String} display_name
+ *`
+
+### Context
+
+```json
+{"admitted_char": "' '", "keyword": "email", "reason": "name/comment claims validation but pattern admits excluded char"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## intent_mismatch:19703bfe7b336f5bf9105a6e3512d85a:email
+
+```yaml
+regex_id: 19703bfe7b336f5bf9105a6e3512d85a
+schema_version: "1"
+kind: intent_mismatch
+corpus: validatorjs
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/isEmail.js:117:5"
+```
+
+### Pattern
+
+`
+    user = user.toLowerCase();
+
+    `
+
+### Context
+
+```json
+{"admitted_char": "' '", "keyword": "email", "reason": "name/comment claims validation but pattern admits excluded char"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
 ## usage_mismatch:19cb57a873f9d7db5a4c737825833d1d:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/alpha.js:46:11`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: 19cb57a873f9d7db5a4c737825833d1d
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:46:11"
+```
 
 ### Pattern
 
@@ -170,10 +321,17 @@ None
 
 ## usage_mismatch:1d69e165321abe5ae03655d483a1a874:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/alpha.js:61:11`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: 1d69e165321abe5ae03655d483a1a874
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:61:11"
+```
 
 ### Pattern
 
@@ -197,10 +355,16 @@ None
 
 ## intent_mismatch:1db736d8ac342ed602b49b6c59cc46da:email
 
-- result: `finding`
-- site: `pilots/validatorjs/src/isEmail.js:28:28`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: 1db736d8ac342ed602b49b6c59cc46da
+schema_version: "1"
+kind: intent_mismatch
+corpus: validatorjs
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/isEmail.js:28:28"
+```
 
 ### Pattern
 
@@ -224,10 +388,17 @@ None
 
 ## usage_mismatch:1db736d8ac342ed602b49b6c59cc46da:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/isEmail.js:28:28`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: 1db736d8ac342ed602b49b6c59cc46da
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/isEmail.js:28:28"
+```
 
 ### Pattern
 
@@ -251,10 +422,17 @@ None
 
 ## usage_mismatch:1ee44915d4bfa3e3c2dcd8cd3dbb2003:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/alpha.js:77:11`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: 1ee44915d4bfa3e3c2dcd8cd3dbb2003
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:77:11"
+```
 
 ### Pattern
 
@@ -278,10 +456,17 @@ None
 
 ## usage_mismatch:1fb00f796ba6271f604e96b44d305cd6:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/alpha.js:70:11`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: 1fb00f796ba6271f604e96b44d305cd6
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:70:11"
+```
 
 ### Pattern
 
@@ -305,10 +490,17 @@ None
 
 ## usage_mismatch:2265f96ca0b748a126c4b9266515a51a:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/alpha.js:41:11`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: 2265f96ca0b748a126c4b9266515a51a
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:41:11"
+```
 
 ### Pattern
 
@@ -330,12 +522,53 @@ null
 
 None
 
+## intent_mismatch:239ee9065b3ba19d77f5312dbfa898f9:email
+
+```yaml
+regex_id: 239ee9065b3ba19d77f5312dbfa898f9
+schema_version: "1"
+kind: intent_mismatch
+corpus: validatorjs
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/isEmail.js:22:36"
+```
+
+### Pattern
+
+`
+const splitNameAddress = `
+
+### Context
+
+```json
+{"admitted_char": "' '", "keyword": "email", "reason": "name/comment claims validation but pattern admits excluded char"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
 ## usage_mismatch:2585d6feb44242a7c8512e7e9cb14537:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/alpha.js:66:11`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: 2585d6feb44242a7c8512e7e9cb14537
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:66:11"
+```
 
 ### Pattern
 
@@ -359,10 +592,17 @@ None
 
 ## usage_mismatch:26d8c95e8fa49488084cd5055ac8b84d:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/alpha.js:90:11`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: 26d8c95e8fa49488084cd5055ac8b84d
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:90:11"
+```
 
 ### Pattern
 
@@ -386,10 +626,17 @@ None
 
 ## usage_mismatch:29ec67c724dcdf37f280cbd954cde4c0:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/alpha.js:60:11`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: 29ec67c724dcdf37f280cbd954cde4c0
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:60:11"
+```
 
 ### Pattern
 
@@ -413,10 +660,17 @@ None
 
 ## usage_mismatch:2a791d3a2165ca4eb7d598ac4ee151a7:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/alpha.js:67:11`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: 2a791d3a2165ca4eb7d598ac4ee151a7
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:67:11"
+```
 
 ### Pattern
 
@@ -438,12 +692,53 @@ null
 
 None
 
+## intent_mismatch:2ecea00553577bc5326b9ced2cb5ea32:email
+
+```yaml
+regex_id: 2ecea00553577bc5326b9ced2cb5ea32
+schema_version: "1"
+kind: intent_mismatch
+corpus: validatorjs
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/isEmail.js:73:7"
+```
+
+### Pattern
+
+` Remove display name and angle brackets to get email address
+      `
+
+### Context
+
+```json
+{"admitted_char": "' '", "keyword": "email", "reason": "name/comment claims validation but pattern admits excluded char"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
 ## usage_mismatch:2f94c689b7a35ee61bf56153868b3d33:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/alpha.js:82:6`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: 2f94c689b7a35ee61bf56153868b3d33
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:82:6"
+```
 
 ### Pattern
 
@@ -467,10 +762,17 @@ None
 
 ## usage_mismatch:345b2e9551b666f7b87d787c0af5d70f:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/alpha.js:2:11`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: 345b2e9551b666f7b87d787c0af5d70f
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:2:11"
+```
 
 ### Pattern
 
@@ -494,10 +796,17 @@ None
 
 ## usage_mismatch:36530b606bbe2896496ac9207f7a1878:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/alpha.js:52:11`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: 36530b606bbe2896496ac9207f7a1878
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:52:11"
+```
 
 ### Pattern
 
@@ -521,10 +830,17 @@ None
 
 ## usage_mismatch:369ee60ca5c667bdb6084685d16160fb:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/alpha.js:24:11`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: 369ee60ca5c667bdb6084685d16160fb
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:24:11"
+```
 
 ### Pattern
 
@@ -548,10 +864,17 @@ None
 
 ## usage_mismatch:375ce793e74ece61ed38e4d873eacfd6:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/alpha.js:73:17`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: 375ce793e74ece61ed38e4d873eacfd6
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:73:17"
+```
 
 ### Pattern
 
@@ -573,12 +896,87 @@ null
 
 None
 
+## intent_mismatch:38c1142a152e11bcf8a25af56c0fbb05:email
+
+```yaml
+regex_id: 38c1142a152e11bcf8a25af56c0fbb05
+schema_version: "1"
+kind: intent_mismatch
+corpus: validatorjs
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/isEmail.js:33:0"
+```
+
+### Pattern
+
+`**
+ * Validate display name according to the RFC2822: https:`
+
+### Context
+
+```json
+{"admitted_char": "' '", "keyword": "email", "reason": "name/comment claims validation but pattern admits excluded char"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## intent_mismatch:3dc1e295d55fa4daa88722a0cf0c57b9:email
+
+```yaml
+regex_id: 3dc1e295d55fa4daa88722a0cf0c57b9
+schema_version: "1"
+kind: intent_mismatch
+corpus: validatorjs
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/isEmail.js:77:7"
+```
+
+### Pattern
+
+` sometimes need to trim the last space to get the display name
+      `
+
+### Context
+
+```json
+{"admitted_char": "' '", "keyword": "email", "reason": "name/comment claims validation but pattern admits excluded char"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
 ## usage_mismatch:3ebdbf5c5aee972e2fcdcf99fe95a3aa:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/alpha.js:88:11`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: 3ebdbf5c5aee972e2fcdcf99fe95a3aa
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:88:11"
+```
 
 ### Pattern
 
@@ -602,10 +1000,17 @@ None
 
 ## usage_mismatch:4060a437bd4022234f4f0fbaf9688da4:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/alpha.js:36:6`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: 4060a437bd4022234f4f0fbaf9688da4
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:36:6"
+```
 
 ### Pattern
 
@@ -629,10 +1034,17 @@ None
 
 ## usage_mismatch:434ea64c07743dc7ebc5ea579f7f4c66:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/alpha.js:37:6`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: 434ea64c07743dc7ebc5ea579f7f4c66
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:37:6"
+```
 
 ### Pattern
 
@@ -656,10 +1068,17 @@ None
 
 ## usage_mismatch:47ba68b2e8f0814aacc5d3e723e0c0b3:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/alpha.js:85:6`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: 47ba68b2e8f0814aacc5d3e723e0c0b3
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:85:6"
+```
 
 ### Pattern
 
@@ -683,10 +1102,17 @@ None
 
 ## usage_mismatch:4b49c8f6e094fbde31b8887038454605:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/alpha.js:76:11`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: 4b49c8f6e094fbde31b8887038454605
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:76:11"
+```
 
 ### Pattern
 
@@ -710,10 +1136,17 @@ None
 
 ## usage_mismatch:4bb2e58a76195915cc602bb537a884d7:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/alpha.js:33:11`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: 4bb2e58a76195915cc602bb537a884d7
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:33:11"
+```
 
 ### Pattern
 
@@ -735,12 +1168,57 @@ null
 
 None
 
+## intent_mismatch:502a7d940d97491dffc68a6d88c59df9:email
+
+```yaml
+regex_id: 502a7d940d97491dffc68a6d88c59df9
+schema_version: "1"
+kind: intent_mismatch
+corpus: validatorjs
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/isEmail.js:39:3"
+```
+
+### Pattern
+
+` display name with only spaces is not valid
+  if (!display_name_without_quotes.trim()) {
+    return false;
+  }
+
+  `
+
+### Context
+
+```json
+{"admitted_char": "' '", "keyword": "email", "reason": "name/comment claims validation but pattern admits excluded char"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
 ## usage_mismatch:50e0bb5bb55c1764db545c56bb5156e5:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/alpha.js:16:11`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: 50e0bb5bb55c1764db545c56bb5156e5
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:16:11"
+```
 
 ### Pattern
 
@@ -764,10 +1242,17 @@ None
 
 ## usage_mismatch:53c49069f45be2003090a22b9654022e:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/alpha.js:22:11`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: 53c49069f45be2003090a22b9654022e
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:22:11"
+```
 
 ### Pattern
 
@@ -789,12 +1274,52 @@ null
 
 None
 
+## intent_mismatch:55ad496614a18fffbefb72ba01874a02:email
+
+```yaml
+regex_id: 55ad496614a18fffbefb72ba01874a02
+schema_version: "1"
+kind: intent_mismatch
+corpus: validatorjs
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/isEmail.js:31:0"
+```
+
+### Pattern
+
+`* eslint-enable no-control-regex *`
+
+### Context
+
+```json
+{"admitted_char": "' '", "keyword": "email", "reason": "name/comment claims validation but pattern admits excluded char"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
 ## usage_mismatch:579fc4b3d00e645bf819a0f59e99b278:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/alpha.js:29:11`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: 579fc4b3d00e645bf819a0f59e99b278
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:29:11"
+```
 
 ### Pattern
 
@@ -818,10 +1343,17 @@ None
 
 ## usage_mismatch:5f555d940b63928ed06e2948353b86e3:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/alpha.js:65:11`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: 5f555d940b63928ed06e2948353b86e3
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:65:11"
+```
 
 ### Pattern
 
@@ -845,10 +1377,17 @@ None
 
 ## usage_mismatch:6414feac6740bbd2b084e7bb50e00040:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/alpha.js:47:11`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: 6414feac6740bbd2b084e7bb50e00040
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:47:11"
+```
 
 ### Pattern
 
@@ -872,10 +1411,17 @@ None
 
 ## usage_mismatch:656b251274803d30ba08e316fecdf81f:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/alpha.js:84:6`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: 656b251274803d30ba08e316fecdf81f
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:84:6"
+```
 
 ### Pattern
 
@@ -899,10 +1445,17 @@ None
 
 ## usage_mismatch:6678d054899b7ffc4ad7b673e6e90403:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/alpha.js:23:11`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: 6678d054899b7ffc4ad7b673e6e90403
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:23:11"
+```
 
 ### Pattern
 
@@ -926,10 +1479,17 @@ None
 
 ## usage_mismatch:66a0b3ea9fde7213d0adeda7acbcae59:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/alpha.js:39:11`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: 66a0b3ea9fde7213d0adeda7acbcae59
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:39:11"
+```
 
 ### Pattern
 
@@ -951,12 +1511,53 @@ null
 
 None
 
+## intent_mismatch:66c0baaa86f2757d2e23834a077e8018:email
+
+```yaml
+regex_id: 66c0baaa86f2757d2e23834a077e8018
+schema_version: "1"
+kind: intent_mismatch
+corpus: validatorjs
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/isEmail.js:74:7"
+```
+
+### Pattern
+
+` Can be done in the regex but will introduce a ReDOS (See  #1597 for more info)
+      str = str.replace(display_name, '').replace(`
+
+### Context
+
+```json
+{"admitted_char": "' '", "keyword": "email", "reason": "name/comment claims validation but pattern admits excluded char"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
 ## usage_mismatch:673a7f9545d608198a038053af478fd8:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/alpha.js:38:6`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: 673a7f9545d608198a038053af478fd8
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:38:6"
+```
 
 ### Pattern
 
@@ -980,10 +1581,17 @@ None
 
 ## usage_mismatch:6aa8674f0f9dfc52e34bdcd8dfa6e6b2:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/alpha.js:53:11`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: 6aa8674f0f9dfc52e34bdcd8dfa6e6b2
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:53:11"
+```
 
 ### Pattern
 
@@ -1007,10 +1615,17 @@ None
 
 ## usage_mismatch:6f9e3d7ec412de462619f463436d0b1b:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/alpha.js:10:11`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: 6f9e3d7ec412de462619f463436d0b1b
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:10:11"
+```
 
 ### Pattern
 
@@ -1034,10 +1649,17 @@ None
 
 ## usage_mismatch:72844b5abe60c45885969f4008dfbb59:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/alpha.js:51:11`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: 72844b5abe60c45885969f4008dfbb59
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:51:11"
+```
 
 ### Pattern
 
@@ -1061,10 +1683,17 @@ None
 
 ## usage_mismatch:72af04d05ce826215a3f03a21d7f4581:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/isAscii.js:4:14`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: 72af04d05ce826215a3f03a21d7f4581
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/isAscii.js:4:14"
+```
 
 ### Pattern
 
@@ -1088,10 +1717,17 @@ None
 
 ## usage_mismatch:744be5bd65819d246fc99b72f096f61d:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/alpha.js:15:11`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: 744be5bd65819d246fc99b72f096f61d
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:15:11"
+```
 
 ### Pattern
 
@@ -1115,10 +1751,17 @@ None
 
 ## usage_mismatch:749194df806690460689178c915daba2:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/alpha.js:9:11`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: 749194df806690460689178c915daba2
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:9:11"
+```
 
 ### Pattern
 
@@ -1140,12 +1783,53 @@ null
 
 None
 
+## intent_mismatch:75f617b0566336acf0ff2a8f1e61ba5b:email
+
+```yaml
+regex_id: 75f617b0566336acf0ff2a8f1e61ba5b
+schema_version: "1"
+kind: intent_mismatch
+corpus: validatorjs
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/isEmail.js:23:55"
+```
+
+### Pattern
+
+`i;
+const emailUserPart = `
+
+### Context
+
+```json
+{"admitted_char": "' '", "keyword": "email", "reason": "name/comment claims validation but pattern admits excluded char"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
 ## usage_mismatch:766a5c8f4bf1bd143d5549708dc2df55:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/alpha.js:31:11`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: 766a5c8f4bf1bd143d5549708dc2df55
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:31:11"
+```
 
 ### Pattern
 
@@ -1169,10 +1853,17 @@ None
 
 ## usage_mismatch:7b20a0245d108947f52f8727c1992235:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/alpha.js:58:11`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: 7b20a0245d108947f52f8727c1992235
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:58:11"
+```
 
 ### Pattern
 
@@ -1194,12 +1885,83 @@ null
 
 None
 
+## intent_mismatch:7c8920f580e6b802a6b631b640352f38:email
+
+```yaml
+regex_id: 7c8920f580e6b802a6b631b640352f38
+schema_version: "1"
+kind: intent_mismatch
+corpus: validatorjs
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/isEmail.js:80:7"
+```
+
+### Pattern
+
+` the display name is `myname` instead of `myname `, so need to trim the last space
+      if (display_name.endsWith(' ')) {
+        display_name = display_name.slice(0, -1);
+      }
+
+      if (!validateDisplayName(display_name)) {
+        return false;
+      }
+    } else if (options.require_display_name) {
+      return false;
+    }
+  }
+  if (!options.ignore_max_length && str.length > defaultMaxEmailLength) {
+    return false;
+  }
+
+  const parts = str.split('@');
+  const domain = parts.pop();
+  const lower_domain = domain.toLowerCase();
+
+  if (options.host_blacklist.length > 0 && checkHost(lower_domain, options.host_blacklist)) {
+    return false;
+  }
+
+  if (options.host_whitelist.length > 0 && !checkHost(lower_domain, options.host_whitelist)) {
+    return false;
+  }
+
+  let user = parts.join('@');
+
+  if (options.domain_specific_validation && (lower_domain === 'gmail.com' || lower_domain === 'googlemail.com')) {
+    `
+
+### Context
+
+```json
+{"admitted_char": "' '", "keyword": "email", "reason": "name/comment claims validation but pattern admits excluded char"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
 ## usage_mismatch:7c9faf0e3da9609fc5f31f03b2ef4e7d:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/isURL.js:241:9`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: 7c9faf0e3da9609fc5f31f03b2ef4e7d
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/isURL.js:241:9"
+```
 
 ### Pattern
 
@@ -1223,10 +1985,17 @@ None
 
 ## usage_mismatch:810b8b7c9590b1030a01bccf83133e14:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/alpha.js:78:11`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: 810b8b7c9590b1030a01bccf83133e14
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:78:11"
+```
 
 ### Pattern
 
@@ -1250,10 +2019,17 @@ None
 
 ## usage_mismatch:821c3c55f4e9a55115432b8718bbf967:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/alpha.js:18:11`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: 821c3c55f4e9a55115432b8718bbf967
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:18:11"
+```
 
 ### Pattern
 
@@ -1277,10 +2053,17 @@ None
 
 ## usage_mismatch:82775c0974e9ecb06d87184210120646:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/alpha.js:91:11`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: 82775c0974e9ecb06d87184210120646
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:91:11"
+```
 
 ### Pattern
 
@@ -1304,10 +2087,17 @@ None
 
 ## usage_mismatch:83acc5390f4da3d21735da28519f7502:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/alpha.js:21:11`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: 83acc5390f4da3d21735da28519f7502
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:21:11"
+```
 
 ### Pattern
 
@@ -1331,10 +2121,16 @@ None
 
 ## intent_mismatch:840a7452b2ed02a43f3e6f61f409b82c:email
 
-- result: `finding`
-- site: `pilots/validatorjs/src/isEmail.js:26:24`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: 840a7452b2ed02a43f3e6f61f409b82c
+schema_version: "1"
+kind: intent_mismatch
+corpus: validatorjs
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/isEmail.js:26:24"
+```
 
 ### Pattern
 
@@ -1358,10 +2154,17 @@ None
 
 ## usage_mismatch:840a7452b2ed02a43f3e6f61f409b82c:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/isEmail.js:26:24`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: 840a7452b2ed02a43f3e6f61f409b82c
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/isEmail.js:26:24"
+```
 
 ### Pattern
 
@@ -1383,12 +2186,53 @@ null
 
 None
 
+## intent_mismatch:84b77400410e4a63f7ea67bc0def4169:email
+
+```yaml
+regex_id: 84b77400410e4a63f7ea67bc0def4169
+schema_version: "1"
+kind: intent_mismatch
+corpus: validatorjs
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/isEmail.js:47:5"
+```
+
+### Pattern
+
+` if contains illegal characters,
+    `
+
+### Context
+
+```json
+{"admitted_char": "' '", "keyword": "email", "reason": "name/comment claims validation but pattern admits excluded char"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
 ## usage_mismatch:85bb6157aa857528ff11b65078708a0f:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/alpha.js:40:11`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: 85bb6157aa857528ff11b65078708a0f
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:40:11"
+```
 
 ### Pattern
 
@@ -1412,10 +2256,17 @@ None
 
 ## usage_mismatch:860d15a11c0f5e2d7cb35d24979c63db:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/isEmail.js:25:22`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: 860d15a11c0f5e2d7cb35d24979c63db
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/isEmail.js:25:22"
+```
 
 ### Pattern
 
@@ -1439,10 +2290,17 @@ None
 
 ## usage_mismatch:87ff7f94641f3f9b619e39cd99a554f9:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/alpha.js:71:11`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: 87ff7f94641f3f9b619e39cd99a554f9
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:71:11"
+```
 
 ### Pattern
 
@@ -1466,10 +2324,17 @@ None
 
 ## usage_mismatch:88d6a76df68541b2965a341365c9f9f6:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/alpha.js:26:11`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: 88d6a76df68541b2965a341365c9f9f6
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:26:11"
+```
 
 ### Pattern
 
@@ -1493,10 +2358,17 @@ None
 
 ## usage_mismatch:8f29da4cad44e03debc8719de1a2335a:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/alpha.js:42:11`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: 8f29da4cad44e03debc8719de1a2335a
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:42:11"
+```
 
 ### Pattern
 
@@ -1520,10 +2392,17 @@ None
 
 ## usage_mismatch:915d795d72d9c792455394e3c4aeab76:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/alpha.js:57:11`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: 915d795d72d9c792455394e3c4aeab76
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:57:11"
+```
 
 ### Pattern
 
@@ -1547,10 +2426,17 @@ None
 
 ## usage_mismatch:967328585a1cd093dcfbbeafec7bad82:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/alpha.js:3:11`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: 967328585a1cd093dcfbbeafec7bad82
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:3:11"
+```
 
 ### Pattern
 
@@ -1574,10 +2460,17 @@ None
 
 ## usage_mismatch:96bbcf281074ab04576ebe08c136b664:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/alpha.js:83:6`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: 96bbcf281074ab04576ebe08c136b664
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:83:6"
+```
 
 ### Pattern
 
@@ -1601,10 +2494,17 @@ None
 
 ## usage_mismatch:97d8bce14dccd63d9e69a508532999cf:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/alpha.js:87:11`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: 97d8bce14dccd63d9e69a508532999cf
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:87:11"
+```
 
 ### Pattern
 
@@ -1626,12 +2526,100 @@ null
 
 None
 
+## intent_mismatch:98a2eaa77ac773bbf6a67d964005430d:email
+
+```yaml
+regex_id: 98a2eaa77ac773bbf6a67d964005430d
+schema_version: "1"
+kind: intent_mismatch
+corpus: validatorjs
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/isEmail.js:7:25"
+```
+
+### Pattern
+
+`merge';
+
+const default_email_options = {
+  allow_display_name: false,
+  allow_underscores: false,
+  require_display_name: false,
+  allow_utf8_local_part: true,
+  require_tld: true,
+  blacklisted_chars: '',
+  ignore_max_length: false,
+  host_blacklist: [],
+  host_whitelist: [],
+};
+
+`
+
+### Context
+
+```json
+{"admitted_char": "' '", "keyword": "email", "reason": "name/comment claims validation but pattern admits excluded char"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## intent_mismatch:9db69e112d3a641a6539ff585c667b25:email
+
+```yaml
+regex_id: 9db69e112d3a641a6539ff585c667b25
+schema_version: "1"
+kind: intent_mismatch
+corpus: validatorjs
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/isEmail.js:4:27"
+```
+
+### Pattern
+
+`isByteLength';
+import isFQDN from '.`
+
+### Context
+
+```json
+{"admitted_char": "' '", "keyword": "email", "reason": "name/comment claims validation but pattern admits excluded char"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
 ## usage_mismatch:a2916255594260438b96073530048de2:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/alpha.js:20:11`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: a2916255594260438b96073530048de2
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:20:11"
+```
 
 ### Pattern
 
@@ -1655,10 +2643,17 @@ None
 
 ## usage_mismatch:a310b7ce02549c71fec7f7dbe0716eca:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/alpha.js:27:11`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: a310b7ce02549c71fec7f7dbe0716eca
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:27:11"
+```
 
 ### Pattern
 
@@ -1682,10 +2677,17 @@ None
 
 ## usage_mismatch:a36c6a57fd269bf9fa53c80e57269d49:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/alpha.js:43:11`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: a36c6a57fd269bf9fa53c80e57269d49
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:43:11"
+```
 
 ### Pattern
 
@@ -1709,10 +2711,17 @@ None
 
 ## usage_mismatch:a3d3b4865681d9d241f725ac38e4c9cc:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/alpha.js:45:11`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: a3d3b4865681d9d241f725ac38e4c9cc
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:45:11"
+```
 
 ### Pattern
 
@@ -1736,10 +2745,17 @@ None
 
 ## usage_mismatch:a4256cc1216985eed8b3343a0ff3cb2c:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/alpha.js:12:11`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: a4256cc1216985eed8b3343a0ff3cb2c
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:12:11"
+```
 
 ### Pattern
 
@@ -1761,12 +2777,53 @@ null
 
 None
 
+## intent_mismatch:a440e0f68908d6f58ca74b4a951ba823:email
+
+```yaml
+regex_id: a440e0f68908d6f58ca74b4a951ba823
+schema_version: "1"
+kind: intent_mismatch
+corpus: validatorjs
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/isEmail.js:78:7"
+```
+
+### Pattern
+
+` because there may be a space between display name and email address
+      `
+
+### Context
+
+```json
+{"admitted_char": "' '", "keyword": "email", "reason": "name/comment claims validation but pattern admits excluded char"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
 ## usage_mismatch:a916a1ba4d37a1e8d2a687e993118408:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/alpha.js:89:11`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: a916a1ba4d37a1e8d2a687e993118408
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:89:11"
+```
 
 ### Pattern
 
@@ -1788,12 +2845,53 @@ null
 
 None
 
+## intent_mismatch:a9c2e03ef73182cfa5994ee62947de38:email
+
+```yaml
+regex_id: a9c2e03ef73182cfa5994ee62947de38
+schema_version: "1"
+kind: intent_mismatch
+corpus: validatorjs
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/isEmail.js:79:7"
+```
+
+### Pattern
+
+` eg. myname <address@gmail.com>
+      `
+
+### Context
+
+```json
+{"admitted_char": "' '", "keyword": "email", "reason": "name/comment claims validation but pattern admits excluded char"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
 ## usage_mismatch:ac1543fa2d92d64cf07f3cd27bb23470:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/alpha.js:62:11`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: ac1543fa2d92d64cf07f3cd27bb23470
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:62:11"
+```
 
 ### Pattern
 
@@ -1817,10 +2915,17 @@ None
 
 ## usage_mismatch:b2512fce227383b38cb4eb68ae67a136:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/alpha.js:17:11`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: b2512fce227383b38cb4eb68ae67a136
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:17:11"
+```
 
 ### Pattern
 
@@ -1844,10 +2949,17 @@ None
 
 ## usage_mismatch:b51c2e4cfebe6cc8ccee6b01e98ef042:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/alpha.js:59:11`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: b51c2e4cfebe6cc8ccee6b01e98ef042
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:59:11"
+```
 
 ### Pattern
 
@@ -1871,10 +2983,17 @@ None
 
 ## usage_mismatch:b9444708b03283a6b0b564b051f6ad32:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/alpha.js:93:11`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: b9444708b03283a6b0b564b051f6ad32
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:93:11"
+```
 
 ### Pattern
 
@@ -1898,10 +3017,17 @@ None
 
 ## usage_mismatch:bd687b825924cdabd6a7ea8de68609e2:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/alpha.js:34:6`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: bd687b825924cdabd6a7ea8de68609e2
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:34:6"
+```
 
 ### Pattern
 
@@ -1925,10 +3051,17 @@ None
 
 ## usage_mismatch:c00e45965d1642ef882ac19ba20f8c4c:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/alpha.js:28:11`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: c00e45965d1642ef882ac19ba20f8c4c
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:28:11"
+```
 
 ### Pattern
 
@@ -1952,10 +3085,17 @@ None
 
 ## usage_mismatch:c14252a1bbbd87a8c8e8a9d37e2e881c:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/alpha.js:35:6`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: c14252a1bbbd87a8c8e8a9d37e2e881c
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:35:6"
+```
 
 ### Pattern
 
@@ -1979,10 +3119,17 @@ None
 
 ## usage_mismatch:c217150e3852ffd4308582734333323f:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/alpha.js:19:11`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: c217150e3852ffd4308582734333323f
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:19:11"
+```
 
 ### Pattern
 
@@ -2006,10 +3153,17 @@ None
 
 ## usage_mismatch:c26143d5cd40e52923049cecaf5cdb40:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/alpha.js:32:11`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: c26143d5cd40e52923049cecaf5cdb40
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:32:11"
+```
 
 ### Pattern
 
@@ -2033,10 +3187,17 @@ None
 
 ## usage_mismatch:c52151d9129002def52afbcd06448954:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/alpha.js:75:11`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: c52151d9129002def52afbcd06448954
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:75:11"
+```
 
 ### Pattern
 
@@ -2060,10 +3221,17 @@ None
 
 ## usage_mismatch:c5abebab5cb480988c0d47628c999a91:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/alpha.js:86:6`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: c5abebab5cb480988c0d47628c999a91
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:86:6"
+```
 
 ### Pattern
 
@@ -2087,10 +3255,17 @@ None
 
 ## usage_mismatch:c5f8f956f3611e9b58b7213af9bf36ab:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/alpha.js:5:11`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: c5f8f956f3611e9b58b7213af9bf36ab
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:5:11"
+```
 
 ### Pattern
 
@@ -2114,10 +3289,17 @@ None
 
 ## usage_mismatch:cc0230d473dcfb3d8e5d846078951d42:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/alpha.js:25:17`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: cc0230d473dcfb3d8e5d846078951d42
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:25:17"
+```
 
 ### Pattern
 
@@ -2141,10 +3323,17 @@ None
 
 ## usage_mismatch:cf2db4155ad1aa9bf082bc6929827046:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/alpha.js:79:11`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: cf2db4155ad1aa9bf082bc6929827046
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:79:11"
+```
 
 ### Pattern
 
@@ -2166,12 +3355,89 @@ null
 
 None
 
+## intent_mismatch:d1669b17feefd908dd50609cf958d83c:email
+
+```yaml
+regex_id: d1669b17feefd908dd50609cf958d83c
+schema_version: "1"
+kind: intent_mismatch
+corpus: validatorjs
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/isEmail.js:123:5"
+```
+
+### Pattern
+
+` Dots are not included in gmail length restriction
+    if (!isByteLength(username.replace(`
+
+### Context
+
+```json
+{"admitted_char": "' '", "keyword": "email", "reason": "name/comment claims validation but pattern admits excluded char"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## intent_mismatch:d173aa56538360e377bd77169f4d5e2c:email
+
+```yaml
+regex_id: d173aa56538360e377bd77169f4d5e2c
+schema_version: "1"
+kind: intent_mismatch
+corpus: validatorjs
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/isEmail.js:120:5"
+```
+
+### Pattern
+
+` Removing sub-address from username before gmail validation
+    const username = user.split('+')[0];
+
+    `
+
+### Context
+
+```json
+{"admitted_char": "' '", "keyword": "email", "reason": "name/comment claims validation but pattern admits excluded char"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
 ## usage_mismatch:d4a9c88413f46c7b4c929e7b3f1a7b58:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/alpha.js:95:11`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: d4a9c88413f46c7b4c929e7b3f1a7b58
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:95:11"
+```
 
 ### Pattern
 
@@ -2195,10 +3461,17 @@ None
 
 ## usage_mismatch:d557a08422e5bce2d636957820d87963:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/alpha.js:69:11`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: d557a08422e5bce2d636957820d87963
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:69:11"
+```
 
 ### Pattern
 
@@ -2220,12 +3493,52 @@ null
 
 None
 
+## intent_mismatch:d59534827f207d566fc8fc477b6702a6:email
+
+```yaml
+regex_id: d59534827f207d566fc8fc477b6702a6
+schema_version: "1"
+kind: intent_mismatch
+corpus: validatorjs
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/isEmail.js:30:0"
+```
+
+### Pattern
+
+`* eslint-enable max-len *`
+
+### Context
+
+```json
+{"admitted_char": "' '", "keyword": "email", "reason": "name/comment claims validation but pattern admits excluded char"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
 ## usage_mismatch:d7bd2b6bd00720421d9777cb39c22dce:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/alpha.js:68:11`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: d7bd2b6bd00720421d9777cb39c22dce
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:68:11"
+```
 
 ### Pattern
 
@@ -2249,10 +3562,17 @@ None
 
 ## usage_mismatch:d7fe8d625e2c0fba5f23705e79fdfcfb:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/alpha.js:13:11`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: d7fe8d625e2c0fba5f23705e79fdfcfb
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:13:11"
+```
 
 ### Pattern
 
@@ -2276,10 +3596,17 @@ None
 
 ## usage_mismatch:dc717c37ced360bbb056eef7777056b4:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/alpha.js:55:11`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: dc717c37ced360bbb056eef7777056b4
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:55:11"
+```
 
 ### Pattern
 
@@ -2303,10 +3630,17 @@ None
 
 ## usage_mismatch:e20210c2217e3c0fb45d9c1f3b257994:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/alpha.js:8:11`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: e20210c2217e3c0fb45d9c1f3b257994
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:8:11"
+```
 
 ### Pattern
 
@@ -2328,12 +3662,88 @@ null
 
 None
 
+## intent_mismatch:e2fa6b970a7dd22e2868971696ac676e:email
+
+```yaml
+regex_id: e2fa6b970a7dd22e2868971696ac676e
+schema_version: "1"
+kind: intent_mismatch
+corpus: validatorjs
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/isEmail.js:44:3"
+```
+
+### Pattern
+
+` check whether display name contains illegal character
+  const contains_illegal = `
+
+### Context
+
+```json
+{"admitted_char": "' '", "keyword": "email", "reason": "name/comment claims validation but pattern admits excluded char"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## intent_mismatch:e49359b269f8bbcb5a8ec8330c17292c:email
+
+```yaml
+regex_id: e49359b269f8bbcb5a8ec8330c17292c
+schema_version: "1"
+kind: intent_mismatch
+corpus: validatorjs
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/isEmail.js:45:36"
+```
+
+### Pattern
+
+`.test(display_name_without_quotes);
+  if (contains_illegal) {
+    `
+
+### Context
+
+```json
+{"admitted_char": "' '", "keyword": "email", "reason": "name/comment claims validation but pattern admits excluded char"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
 ## usage_mismatch:e526b783ed78f18c5a4d1156b72fd3b5:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/alpha.js:72:11`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: e526b783ed78f18c5a4d1156b72fd3b5
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:72:11"
+```
 
 ### Pattern
 
@@ -2357,10 +3767,17 @@ None
 
 ## usage_mismatch:e5a3a761e328f30e619146cca2fbdd89:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/alpha.js:64:11`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: e5a3a761e328f30e619146cca2fbdd89
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:64:11"
+```
 
 ### Pattern
 
@@ -2384,10 +3801,17 @@ None
 
 ## usage_mismatch:e608f223f30834b72c2a211cec20017c:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/alpha.js:81:11`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: e608f223f30834b72c2a211cec20017c
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:81:11"
+```
 
 ### Pattern
 
@@ -2411,10 +3835,17 @@ None
 
 ## usage_mismatch:e6700f7a5c0b379b735010566de43380:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/alpha.js:74:11`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: e6700f7a5c0b379b735010566de43380
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:74:11"
+```
 
 ### Pattern
 
@@ -2438,10 +3869,17 @@ None
 
 ## usage_mismatch:e8e7784ea8a94af7de766ab8655315b4:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/alpha.js:92:11`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: e8e7784ea8a94af7de766ab8655315b4
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:92:11"
+```
 
 ### Pattern
 
@@ -2465,10 +3903,17 @@ None
 
 ## usage_mismatch:e975ad919801eb3f88e778b606d58d74:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/alpha.js:30:11`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: e975ad919801eb3f88e778b606d58d74
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:30:11"
+```
 
 ### Pattern
 
@@ -2492,10 +3937,17 @@ None
 
 ## usage_mismatch:eadec792a051633827b7b60a95acc243:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/alpha.js:80:11`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: eadec792a051633827b7b60a95acc243
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:80:11"
+```
 
 ### Pattern
 
@@ -2519,10 +3971,17 @@ None
 
 ## usage_mismatch:ebe7c4b41f675ba2179bba3c48612691:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/alpha.js:14:11`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: ebe7c4b41f675ba2179bba3c48612691
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:14:11"
+```
 
 ### Pattern
 
@@ -2546,10 +4005,17 @@ None
 
 ## usage_mismatch:ec761e48727e9653f74a3793a9861ab4:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/alpha.js:56:11`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: ec761e48727e9653f74a3793a9861ab4
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:56:11"
+```
 
 ### Pattern
 
@@ -2571,12 +4037,88 @@ null
 
 None
 
+## intent_mismatch:f10eb01dcfa7422224f1d0130a9abaa9:email
+
+```yaml
+regex_id: f10eb01dcfa7422224f1d0130a9abaa9
+schema_version: "1"
+kind: intent_mismatch
+corpus: validatorjs
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/isEmail.js:6:19"
+```
+
+### Pattern
+
+`isIP';
+import merge from '.`
+
+### Context
+
+```json
+{"admitted_char": "' '", "keyword": "email", "reason": "name/comment claims validation but pattern admits excluded char"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## intent_mismatch:f1b39cce5ee9fe073c5ebe6215c4e162:email
+
+```yaml
+regex_id: f1b39cce5ee9fe073c5ebe6215c4e162
+schema_version: "1"
+kind: intent_mismatch
+corpus: validatorjs
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/isEmail.js:75:58"
+```
+
+### Pattern
+
+`g, '');
+
+      `
+
+### Context
+
+```json
+{"admitted_char": "' '", "keyword": "email", "reason": "name/comment claims validation but pattern admits excluded char"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
 ## usage_mismatch:f506330f9f0970543a309069a0c0bc39:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/isEmail.js:24:44`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: f506330f9f0970543a309069a0c0bc39
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/isEmail.js:24:44"
+```
 
 ### Pattern
 
@@ -2600,10 +4142,17 @@ None
 
 ## usage_mismatch:f7ce3c4a405dbc65f933168be88a8279:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/alpha.js:94:11`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: f7ce3c4a405dbc65f933168be88a8279
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:94:11"
+```
 
 ### Pattern
 
@@ -2627,10 +4176,17 @@ None
 
 ## usage_mismatch:f82a5cf824aece5c04cfe39446fe9fe2:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/alpha.js:11:11`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: f82a5cf824aece5c04cfe39446fe9fe2
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:11:11"
+```
 
 ### Pattern
 
@@ -2654,10 +4210,17 @@ None
 
 ## usage_mismatch:fc8436a91c12381285726d12670c1c55:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/alpha.js:54:11`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: fc8436a91c12381285726d12670c1c55
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:54:11"
+```
 
 ### Pattern
 
@@ -2681,10 +4244,17 @@ None
 
 ## usage_mismatch:fc97803916db29f52899f39c73c4b2c1:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/alpha.js:4:11`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: fc97803916db29f52899f39c73c4b2c1
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:4:11"
+```
 
 ### Pattern
 
@@ -2708,10 +4278,17 @@ None
 
 ## usage_mismatch:fcbe7cb1ec6174ed1230a33ab10bde48:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/alpha.js:44:11`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: fcbe7cb1ec6174ed1230a33ab10bde48
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:44:11"
+```
 
 ### Pattern
 
@@ -2735,10 +4312,17 @@ None
 
 ## usage_mismatch:fe0bebba65f84199e57d14bfd87ed621:search
 
-- result: `finding`
-- site: `pilots/validatorjs/src/alpha.js:63:11`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: fe0bebba65f84199e57d14bfd87ed621
+schema_version: "1"
+kind: usage_mismatch
+corpus: validatorjs
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:63:11"
+```
 
 ### Pattern
 
@@ -2762,10 +4346,16 @@ None
 
 ## property:inventory:v-shape1-injection-chars:v-shape1-injection-chars
 
-- result: `planned`
-- site: `inventory:v-shape1-injection-chars`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: "inventory:v-shape1-injection-chars"
+schema_version: "1"
+kind: property
+corpus: validatorjs
+shape: 1
+result: planned
+disclosure: null
+site: "inventory:v-shape1-injection-chars"
+```
 
 ### Pattern
 
@@ -2789,10 +4379,16 @@ None
 
 ## property:inventory:v-shape2-whitelist-space:v-shape2-whitelist-space
 
-- result: `planned`
-- site: `inventory:v-shape2-whitelist-space`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: "inventory:v-shape2-whitelist-space"
+schema_version: "1"
+kind: property
+corpus: validatorjs
+shape: 2
+result: planned
+disclosure: null
+site: "inventory:v-shape2-whitelist-space"
+```
 
 ### Pattern
 
@@ -2816,10 +4412,16 @@ None
 
 ## property:inventory:v-shape3-prefix-vs-full:v-shape3-prefix-vs-full
 
-- result: `planned`
-- site: `inventory:v-shape3-prefix-vs-full`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: "inventory:v-shape3-prefix-vs-full"
+schema_version: "1"
+kind: property
+corpus: validatorjs
+shape: 3
+result: planned
+disclosure: null
+site: "inventory:v-shape3-prefix-vs-full"
+```
 
 ### Pattern
 
@@ -2843,10 +4445,16 @@ None
 
 ## property:inventory:v-shape4-escape-image:v-shape4-escape-image
 
-- result: `planned`
-- site: `inventory:v-shape4-escape-image`
-- ground_truth_status: `None`
-- disclosure: `None`
+```yaml
+regex_id: "inventory:v-shape4-escape-image"
+schema_version: "1"
+kind: property
+corpus: validatorjs
+shape: 4
+result: planned
+disclosure: null
+site: "inventory:v-shape4-escape-image"
+```
 
 ### Pattern
 

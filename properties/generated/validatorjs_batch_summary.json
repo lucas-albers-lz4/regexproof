@@ -1,14 +1,18 @@
 {
+  "address_space_cap": null,
+  "complete_run": true,
   "corpus": "validatorjs",
   "corpus_type": "validator",
-  "encodable": 145,
+  "encodable": 123,
   "engine": {
-    "python": "3.14.6"
+    "python": "3.13.5"
   },
   "extracted": 212,
-  "findings": 106,
+  "findings": 130,
   "inventory_questions": 4,
-  "join_regex_ids": 104,
+  "join_regex_ids": 128,
+  "redos_findings": 0,
+  "redos_incomplete": false,
   "schema_version": "1",
-  "triage": 67
+  "triage": 89
 }

@@ -152,6 +152,25 @@ def assert_job(job: str, cfg: dict) -> list[str]:
                         )
                     else:
                         print(f"perl: ok ({out})")
+        busybox_cfg = cfg.get("busybox") or {}
+        if busybox_cfg.get("status") == "required":
+            # E2 (luna gate 1): the [busybox] pin must actually be checked —
+            # the golden job installs busybox for the busybox-sed replay.
+            try:
+                # No-arg banner: some busybox builds lack the --version applet
+                # (Debian: rc 127), so read the version from the banner line.
+                out = subprocess.check_output(
+                    ["busybox"], text=True, shell=False
+                ).strip().splitlines()[0]
+            except (OSError, subprocess.CalledProcessError):
+                errors.append("busybox required but not available")
+            else:
+                prefix = busybox_cfg.get("version_prefix") or ""
+                ver = out.replace("BusyBox v", "").split(" ")[0].lstrip("v")
+                if prefix and not ver.startswith(prefix.rstrip(".")):
+                    errors.append(f"busybox {out!r} missing prefix {prefix!r}")
+                else:
+                    print(f"busybox: ok ({out})")
     elif job == "redos":
         if mm != py["redos"]:
             errors.append(f"python {mm} != redos pin {py['redos']}")

@@ -35,6 +35,13 @@ status = "required"
 version_prefix = "5."
 helper = "helpers/perl/match.py"
 
+[busybox]
+# E2: golden job (busybox-sed replay) installs busybox to verify sed-fallback
+# fidelity against both GNU sed and BusyBox sed.
+status = "required"
+version_prefix = "1."
+helper = "busybox"
+
 [redos]
 # helpers/redos/package.json + requirements-redos.txt
 recheck = "4.5.0"
