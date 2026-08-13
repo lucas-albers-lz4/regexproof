@@ -1,0 +1,14 @@
+{
+  "schema_version": "1",
+  "corpus": "remotepower",
+  "corpus_pin": "4bbe6925652c03b02329c5fb15d34df96faf994c",
+  "candidate_url": "https://github.com/tyxak/remotepower",
+  "smith_decision": "go",
+  "supersedes": "triage-trial (#279)",
+  "reason": "GRADUATED from triage-trial: 156/282 = 0.5532 encodable (complete_run, parse-error=0, budget clean). Remote power-management app (py_re .py-only top-60 allowlist; 34 files, 282 sites). 56 findings + 126 triage. Non-security - public-first. GO admit confirmed.",
+  "regex_sites": 282,
+  "sites_by_bucket": {
+    "py_re allowlist (34 files, 282 sites measured; 156 encodable)": 282
+  },
+  "additional_surface_outside_probe_scope": {"ecma": 243, "posix-shell": 64}
+}

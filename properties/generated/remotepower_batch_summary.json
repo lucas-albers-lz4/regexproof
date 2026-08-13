@@ -1,0 +1,18 @@
+{
+  "address_space_cap": true,
+  "complete_run": true,
+  "corpus": "remotepower",
+  "corpus_type": "rule_corpus",
+  "encodable": 156,
+  "engine": {
+    "python": "3.13.5"
+  },
+  "extracted": 282,
+  "findings": 56,
+  "inventory_questions": 4,
+  "join_regex_ids": 56,
+  "redos_findings": 0,
+  "redos_incomplete": false,
+  "schema_version": "1",
+  "triage": 126
+}

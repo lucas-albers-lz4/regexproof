@@ -116,37 +116,37 @@
     "wall_s": 21.527
   },
   "corpora": {
-    "OctopusBeak": {
+    "remotepower": {
       "address_space_cap": true,
       "complete_run": true,
-      "corpus": "OctopusBeak",
+      "corpus": "remotepower",
       "corpus_type": "rule_corpus",
-      "encodable": 847,
+      "encodable": 156,
       "engine": {
         "python": "3.13.5"
       },
-      "extracted": 1144,
-      "findings": 102,
+      "extracted": 282,
+      "findings": 56,
       "inventory_questions": 4,
-      "join_regex_ids": 102,
+      "join_regex_ids": 56,
       "redos_findings": 0,
       "redos_incomplete": false,
       "schema_version": "1",
-      "triage": 297
+      "triage": 126
     }
   },
   "pair_counts": {
-    "OctopusBeak": {
-      "admitted": 0,
-      "dropped": 0,
-      "note": "no independent-spec catalog"
-    },
     "coreruleset": {
       "admitted": 0,
       "dropped": 0,
       "fraction": 0.6908,
       "note": "fraction gate go; CRS rule-derived adapter is Phase-2 rule_diff",
       "scope": "full_corpus"
+    },
+    "remotepower": {
+      "admitted": 0,
+      "dropped": 0,
+      "note": "no independent-spec catalog"
     }
   },
   "schema_version": "1"
