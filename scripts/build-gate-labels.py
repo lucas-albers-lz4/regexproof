@@ -13,7 +13,6 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
-import os
 import sys
 from pathlib import Path
 from typing import Any
@@ -43,56 +42,6 @@ def _read_json(path: Path) -> dict[str, Any] | None:
     except (OSError, json.JSONDecodeError):
         return None
     return value if isinstance(value, dict) else None
-
-
-def _repository_head(root: Path) -> str:
-    """Read the repository HEAD without invoking git.
-
-    CI may provide ``GITHUB_SHA``; local generation resolves the worktree's
-    ``.git`` metadata directly so provenance is still a full pinned SHA and
-    generation remains deterministic.
-    """
-    for name in ("REGEXPROOF_PINNED_HEAD", "GITHUB_SHA"):
-        value = os.environ.get(name, "").strip()
-        if value:
-            return value
-
-    git_path = root / ".git"
-    if git_path.is_file():
-        try:
-            marker, raw = git_path.read_text(encoding="utf-8").split(":", 1)
-        except (OSError, ValueError):
-            return "unknown"
-        if marker.strip() != "gitdir":
-            return "unknown"
-        git_path = Path(raw.strip())
-        if not git_path.is_absolute():
-            git_path = (root / git_path).resolve()
-    if not git_path.is_dir():
-        return "unknown"
-    try:
-        head = (git_path / "HEAD").read_text(encoding="utf-8").strip()
-    except OSError:
-        return "unknown"
-    if not head.startswith("ref:"):
-        return head or "unknown"
-    ref = head.split(None, 1)[1]
-    try:
-        value = (git_path / ref).read_text(encoding="utf-8").strip()
-    except OSError:
-        value = ""
-    if value:
-        return value
-    try:
-        packed = (git_path / "packed-refs").read_text(encoding="utf-8").splitlines()
-    except OSError:
-        return "unknown"
-    for line in packed:
-        if line and not line.startswith("#") and not line.startswith("^"):
-            sha, packed_ref = line.split(" ", 1)
-            if packed_ref == ref:
-                return sha
-    return "unknown"
 
 
 def _repo_slug(url: str) -> str:
@@ -210,6 +159,8 @@ def build_gate_labels(
     headers: dict[str, str] | None = None,
 ) -> dict[str, Any]:
     """Join inputs and atomically write the P6 artifact, returning its object."""
+    if tree_cache_path is None:
+        tree_cache_path = ROOT / "properties" / "generated" / "mine-tree-features.json"
     ledger_file = Path(ledger_path)
     generated = Path(generated_dir)
     output = Path(output_path)
@@ -230,8 +181,12 @@ def build_gate_labels(
         save_ledger(ledger_file, ledger)
 
     tree_features: dict[str, dict[str, Any]] = {}
-    if backfill and session is not None and tree_probe_budget > 0:
-        cache = TreeCache(tree_cache_path)
+    cache = TreeCache(tree_cache_path) if tree_cache_path is not None else None
+    if cache is not None:
+        # Always join the tracked tree-features file (offline regeneration);
+        # --backfill extends it with fresh probes. Offline, the budget is 0:
+        # cached rows carry features, uncached rows degrade to
+        # budget-exhausted incomplete (never a silent negative).
         probe_candidates = []
         for candidate, decision, _meta in records:
             probe = decision.get("probe") if isinstance(decision.get("probe"), dict) else {}
@@ -245,9 +200,9 @@ def build_gate_labels(
             )
             probe_candidates.append({"url": candidate.get("url"), "pin_probed": probed_pin})
         tree_features, _calls = materialize_tree_features(
-            session,
+            session if backfill else None,
             probe_candidates,
-            budget=tree_probe_budget,
+            budget=tree_probe_budget if backfill else 0,
             cache=cache,
             headers=headers,
         )
@@ -272,7 +227,7 @@ def build_gate_labels(
             "input_file_count": len(decision_paths),
             "gate_decision_count": len(decision_paths),
             "linked_row_count": len(rows),
-            "inputs_hash": _inputs_hash(decision_paths, ledger_file),
+            "inputs_hash": _inputs_hash(decision_paths, ledger_file, Path(tree_cache_path)),
         },
         "rows": rows,
     }
@@ -281,7 +236,11 @@ def build_gate_labels(
 
 
 
-def _inputs_hash(decision_paths: list[Path], ledger_file: Path | None = None) -> str:
+def _inputs_hash(
+    decision_paths: list[Path],
+    ledger_file: Path | None = None,
+    tree_features_file: Path | None = None,
+) -> str:
     """Content hash over the sorted decision files — stable provenance.
 
     D5 lesson (#437): the committing git HEAD drifts on every commit and
@@ -293,6 +252,10 @@ def _inputs_hash(decision_paths: list[Path], ledger_file: Path | None = None) ->
         h.update(b"ledger:")
         h.update(ledger_file.name.encode("utf-8"))
         h.update(ledger_file.read_bytes())
+    if tree_features_file is not None and tree_features_file.exists():
+        h.update(b"tree-features:")
+        h.update(tree_features_file.name.encode("utf-8"))
+        h.update(tree_features_file.read_bytes())
     for p in sorted(decision_paths):
         h.update(b"decision:")
         h.update(p.name.encode("utf-8"))
@@ -372,8 +335,9 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument(
         "--tree-cache",
         type=Path,
-        default=None,
-        help="Tree cache path; defaults to .cache/regexproof/mine-tree.json.",
+        default=ROOT / "properties" / "generated" / "mine-tree-features.json",
+        help="Tree features file; defaults to the tracked "
+        "properties/generated/mine-tree-features.json.",
     )
     args = ap.parse_args(argv)
 

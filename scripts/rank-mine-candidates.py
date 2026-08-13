@@ -22,7 +22,6 @@ from regexproof.mine.exclusions import load_admitted_urls, normalize_repo_url
 from regexproof.mine.ledger import load_ledger
 from regexproof.mine.score import SCORE_VERSION, candidate_score, rank_candidates
 from regexproof.mine.tree import (
-    DEFAULT_TREE_PROBE_BUDGET,
     TreeCache,
     materialize_tree_features,
 )
@@ -77,7 +76,7 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument(
         "--tree-probe-budget",
         type=int,
-        default=DEFAULT_TREE_PROBE_BUDGET,
+        default=0,
         help=(
             "Max uncached GitHub tree calls. Cached responses do not consume "
             "the budget; 0 degrades to score-v1 metadata-only ranking."
@@ -149,7 +148,7 @@ def main(argv: list[str] | None = None) -> int:
                 "language": cand.get("language"),
                 "archived": cand.get("archived"),
                 "tree_probe": tree_features.get(
-                    normalize_repo_url(str(cand.get("url") or ""))
+                    (normalize_repo_url(str(cand.get("url") or "")), str(cand.get("pin_probed") or ""))
                 ),
             },
         }

@@ -26,6 +26,17 @@ from regexproof.mine.search import (
 # Match the mine's query budget: rank-time probing is bounded by default, and
 # callers can pass zero to explicitly select the v1 degradation path.
 DEFAULT_TREE_PROBE_BUDGET = 30
+
+# Secondary-rate 429 retries for the tree API (P6 luna gate 2).
+_RATE_RETRY_ATTEMPTS = 3
+
+
+def _sleep_backoff(attempt: int) -> None:
+    """Exponential backoff with jitter, mirroring search.py's policy."""
+    import random
+    import time
+
+    time.sleep(min(60, 2 ** attempt) + random.uniform(0, 1))
 DEFAULT_TREE_CACHE_PATH = (
     Path(__file__).resolve().parents[2] / ".cache" / "regexproof" / "mine-tree.json"
 )
@@ -238,7 +249,9 @@ def probe_tree(
     if cache is not None:
         cached = cache.get(slug, probed_pin)
         if cached is not None:
-            return summarize_tree(cached, slug, probed_pin).as_dict(), False
+            # The cache stores SUMMARIZED features (P6 luna gate 1 fold);
+            # re-summarizing a summary would fabricate a zero-path result.
+            return cached, False
 
     response = session.get(
         f"https://api.github.com/repos/{slug}/git/trees/{probed_pin}",
@@ -249,6 +262,11 @@ def probe_tree(
     if response.status_code == 401:
         raise AuthError("GitHub tree API returned 401")
     if response.status_code == 429:
+        raise RateLimitError(response.text[:200])
+    if response.status_code == 403 and "rate limit" in response.text.lower():
+        # Primary-rate exhaustion is transient, not a verdict — retryable
+        # like a 429 (P6 luna gate 2: fresh regenerations must reproduce
+        # the committed features instead of degrading them to http-403).
         raise RateLimitError(response.text[:200])
     if response.status_code != 200:
         return _incomplete(probed_pin, f"http-{response.status_code}"), True
@@ -301,7 +319,24 @@ def materialize_tree_features(
             result, called = probe_tree(
                 session, slug, probed_pin, cache=cache, headers=headers
             )
-        except (AuthError, RateLimitError, OSError, ValueError) as exc:
+        except RateLimitError:
+            # Secondary-rate pacing: a 429 is transient, not a verdict.
+            # Retry with the standard backoff so a fresh regeneration
+            # reproduces the committed features instead of degrading them
+            # (P6 luna gate 2). The budget is consumed once per candidate.
+            result = _incomplete(probed_pin, "rate-limited")
+            for attempt in range(_RATE_RETRY_ATTEMPTS):
+                _sleep_backoff(attempt)
+                try:
+                    retried, _called = probe_tree(
+                        session, slug, probed_pin, cache=cache, headers=headers
+                    )
+                except (AuthError, RateLimitError, OSError, ValueError):
+                    continue
+                result = retried
+                break
+            called = True
+        except (AuthError, OSError, ValueError) as exc:
             result = _incomplete(probed_pin, type(exc).__name__)
             called = True
         if called:
