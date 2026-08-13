@@ -55,6 +55,19 @@ def _repo_name_from_target(target: str) -> str:
     return name or "unknown"
 
 
+def _check_stale_pin(pin_mined: str | None, pin_probed: str | None) -> str | None:
+    """E3: return a stale-pin error message when the ledger pin differs from
+    the clone-time default-branch HEAD (None when pins agree or are absent).
+    """
+    if pin_mined and pin_probed and pin_mined != pin_probed:
+        return (
+            f"error: stale mined pin — default-branch HEAD "
+            f"({pin_probed[:12]}) differs from mined pin "
+            f"({pin_mined[:12]}); pass --allow-stale-pin to override"
+        )
+    return None
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("target", help="Local path or git URL")
@@ -73,6 +86,14 @@ def main(argv: list[str] | None = None) -> int:
         type=int,
         default=500,
         help="Abort if clone exceeds this size after walk materializes blobs",
+    )
+    ap.add_argument(
+        "--allow-stale-pin",
+        action="store_true",
+        help=(
+            "E3: permit pin_mined != pin_probed (default: hard-fail on a "
+            "stale mined pin)"
+        ),
     )
     args = ap.parse_args(argv)
 
@@ -95,12 +116,16 @@ def main(argv: list[str] | None = None) -> int:
             pin_mined = args.pin
             pin_probed = result.default_head
             pin_walked = result.pin
-            if pin_probed != pin_walked:
-                print(
-                    f"warning: stale mined pin — default-branch HEAD "
-                    f"({pin_probed[:12]}) differs from walked SHA ({pin_walked[:12]})",
-                    file=sys.stderr,
-                )
+            # E3 (luna gate 1): the stale check compares pin_mined (ledger)
+            # against pin_probed (clone-time default-branch HEAD). The old
+            # pin_probed != pin_walked comparison pitted two probe-internal
+            # values that always agree — a no-op gate. A stale mined pin is
+            # a hard failure unless --allow-stale-pin.
+            stale_err = _check_stale_pin(pin_mined, pin_probed)
+            if stale_err:
+                print(stale_err, file=sys.stderr)
+                if not args.allow_stale_pin:
+                    return 2
         else:
             root = Path(target).expanduser().resolve()
             if not root.is_dir():

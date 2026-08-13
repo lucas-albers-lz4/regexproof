@@ -63,7 +63,10 @@ def _probe_subset(probe: dict[str, Any]) -> dict[str, Any]:
         out["pin"] = probe["pin"]
     if "pin_probed" in probe:
         out["pin_probed"] = probe["pin_probed"]
-    if "pin_mined" in probe and probe["pin_mined"] is not None:
+    # E3 (luna gate 1): preserve pin_mined even when None — a null mined pin
+    # (local-dir probe) must stay visible so artifacts consistently cite the
+    # probe's pins; dropping the key made the pair inconsistent.
+    if "pin_mined" in probe:
         out["pin_mined"] = probe["pin_mined"]
     if "construct_counts" in probe:
         out["construct_counts"] = dict(probe["construct_counts"])

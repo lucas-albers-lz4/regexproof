@@ -2,11 +2,14 @@
 
 from __future__ import annotations
 
+import importlib.util
 import json
 from pathlib import Path
 from types import SimpleNamespace
 
 import pytest
+
+ROOT = Path(__file__).resolve().parents[1]
 
 from regexproof.admission.clone import (
     CloneError,
@@ -401,3 +404,20 @@ def test_walk_repo_initd_component_not_substring(tmp_path):
     res = walk_repo(tmp_path)
     assert res["regex_sites"] == 0
     assert "posix-shell" not in res["dialect"]
+
+
+def test_stale_pin_check_fails_closed():
+    """E3 (luna gate 1): the mined pin must be compared against the probed
+    pin, and a mismatch must FAIL (the old code only warned on a comparison
+    between two probe-internal values that always agree — a no-op gate)."""
+    spec = importlib.util.spec_from_file_location(
+        "probe_cli", ROOT / "scripts" / "probe-corpus-admission.py"
+    )
+    assert spec is not None and spec.loader is not None
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+
+    assert mod._check_stale_pin("aaa111", "bbb222") is not None  # stale -> error
+    assert mod._check_stale_pin("aaa111", "aaa111") is None      # agree -> ok
+    assert mod._check_stale_pin(None, "bbb222") is None          # no mined pin
+    assert mod._check_stale_pin("aaa111", None) is None          # no probed pin

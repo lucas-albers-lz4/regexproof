@@ -171,6 +171,16 @@ jobs:
         # The artifact decides the next compiler wave — it is observational
         # only and must regenerate deterministically in the golden job.
         run: python scripts/triage-feature-yield.py
+      - name: D5 artifact drift check (#429, luna gate 1)
+        # Stale committed artifacts must fail CI, not pass silently.
+        run: |
+          git diff --exit-code -- \
+            properties/generated/compiler-feature-yield.json \
+            properties/generated/compiler-feature-yield.md
+      - name: E2 busybox-sed dual-engine replay enforced (#429, luna gate 1)
+        # Both engine verdicts must be recorded and agree; a busybox absence
+        # or a GNU/busybox divergence is a hard failure.
+        run: python scripts/ci-check-busybox-sed.py
 
   compiler-diff-fuzz:
     # E1 (#429): PRs touching regexproof/compiler/** run the EXPANDED

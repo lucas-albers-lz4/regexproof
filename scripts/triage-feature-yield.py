@@ -109,6 +109,8 @@ def aggregate(triage_files: list[Path] | None = None) -> dict:
     weighted: dict[str, float] = defaultdict(float)
     # unencodable_reason -> raw site count
     raw_count: Counter[str] = Counter()
+    # rows with no unencodable_reason — reported separately, not as features
+    unknown_rows = 0
     # unencodable_reason -> per-corpus weighted counts
     per_corpus: dict[str, dict[str, float]] = defaultdict(
         lambda: defaultdict(float)
@@ -134,6 +136,12 @@ def aggregate(triage_files: list[Path] | None = None) -> dict:
             decision = _corpus_admission(rec, filename_corpus, gate_decisions)
             weight = ADMISSION_WEIGHTS.get(decision, DEFAULT_WEIGHT)
 
+            if reason == "(unknown)":
+                # Rows with no unencodable_reason are not a compiler feature —
+                # report them separately instead of ranking "(unknown)" as an
+                # unlockable feature (luna gate 1).
+                unknown_rows += 1
+                continue
             weighted[reason] += weight
             raw_count[reason] += 1
             per_corpus[reason][decision] += weight
@@ -179,6 +187,7 @@ def aggregate(triage_files: list[Path] | None = None) -> dict:
         "provenance": provenance,
         "weights": ADMISSION_WEIGHTS,
         "total_rows": sum(raw_count.values()),
+        "unknown_reason_rows": unknown_rows,
         "total_weighted": round(sum(weighted.values()), 2),
         "rows": rows,
         "corpus_summary": corpus_summary,

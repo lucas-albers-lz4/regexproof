@@ -1,16 +1,16 @@
 # Compiler feature-yield artifact (D5)
 
-<!-- provenance: 71 triage files, pinned HEAD 6027261d370b, 818 gate decisions -->
+<!-- provenance: 71 triage files, pinned HEAD 5499f65ab2f9, 818 gate decisions -->
 
 Sites unlocked per missing compiler feature, aggregated across
 `properties/triage/*.ndjson` and weighted by corpus admission status
 (GO=3, triage-trial=2, no-go=1). Sorted by weighted unlock value.
 
 - Input files: 71
-- Pinned HEAD: `6027261d370b75982a1200c814ccbbe848be412d`
+- Pinned HEAD: `5499f65ab2f9b9cd2d5c92b4a471ae0cb6cb15fc`
 - Gate decisions: 818
-- Total unencodable rows: 46489
-- Total weighted sites: 136653.0
+- Total unencodable rows: 46476
+- Total weighted sites: 136614.0
 
 | # | unencodable_reason | sites | weighted | per-corpus (decision:weighted) | top dialects |
 |---|---|---|---|---|---|
@@ -42,18 +42,17 @@ Sites unlocked per missing compiler feature, aggregated across
 | 26 | `unsupported-syntax` | 23 | 65.0 | go:57.0, triage-trial:8.0 | ecma:12, posix-shell:11 |
 | 27 | `repeat-count` | 15 | 45.0 | go:45.0 | yara:15 |
 | 28 | `unclosed-group` | 14 | 42.0 | go:42.0 | ecma:8, posix-shell:6 |
-| 29 | `(unknown)` | 13 | 39.0 | go:39.0 | (unknown):13 |
-| 30 | `empty-class` | 12 | 36.0 | go:36.0 | ecma:5, posix-shell:4, yara:3 |
-| 31 | `unclosed-class` | 12 | 36.0 | go:36.0 | posix-shell:12 |
-| 32 | `unsupported:FAILURE` | 7 | 21.0 | go:21.0 | py_re:7 |
-| 33 | `unsupported-modifier:xor` | 6 | 18.0 | go:18.0 | yara:6 |
-| 34 | `unsupported-modifier:base64,base64wide` | 2 | 4.0 | triage-trial:4.0 | yara:2 |
-| 35 | `gnu-word-boundary` | 1 | 3.0 | go:3.0 | posix-shell:1 |
+| 29 | `empty-class` | 12 | 36.0 | go:36.0 | ecma:5, posix-shell:4, yara:3 |
+| 30 | `unclosed-class` | 12 | 36.0 | go:36.0 | posix-shell:12 |
+| 31 | `unsupported:FAILURE` | 7 | 21.0 | go:21.0 | py_re:7 |
+| 32 | `unsupported-modifier:xor` | 6 | 18.0 | go:18.0 | yara:6 |
+| 33 | `unsupported-modifier:base64,base64wide` | 2 | 4.0 | triage-trial:4.0 | yara:2 |
+| 34 | `gnu-word-boundary` | 1 | 3.0 | go:3.0 | posix-shell:1 |
 
 ## Corpus admission weighting
 
 | decision | weight | rows | weighted sites |
 |---|---|---|---|
-| go | 3 | 44140 | 132420.0 |
+| go | 3 | 44127 | 132381.0 |
 | no-go | 1 | 465 | 465.0 |
 | triage-trial | 2 | 1884 | 3768.0 |

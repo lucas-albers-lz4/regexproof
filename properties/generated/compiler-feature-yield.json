@@ -2,7 +2,6 @@
   "corpus_summary": {
     "go": {
       "reasons": {
-        "(unknown)": 13,
         "backref": 348,
         "bad-range": 22,
         "composite-pattern": 3632,
@@ -37,8 +36,8 @@
         "wide-non-literal": 600,
         "word-boundary": 957
       },
-      "rows": 44140,
-      "sites_weighted": 132420.0
+      "rows": 44127,
+      "sites_weighted": 132381.0
     },
     "no-go": {
       "reasons": {
@@ -91,7 +90,7 @@
   "provenance": {
     "gate_decision_count": 818,
     "input_file_count": 71,
-    "pinned_head": "6027261d370b75982a1200c814ccbbe848be412d"
+    "pinned_head": "5499f65ab2f9b9cd2d5c92b4a471ae0cb6cb15fc"
   },
   "rows": [
     {
@@ -587,20 +586,6 @@
     },
     {
       "per_corpus": {
-        "go": 39.0
-      },
-      "per_corpus_raw": {
-        "go": 13
-      },
-      "per_dialect": {
-        "(unknown)": 13
-      },
-      "sites_unlocked": 13,
-      "sites_weighted": 39.0,
-      "unencodable_reason": "(unknown)"
-    },
-    {
-      "per_corpus": {
         "go": 36.0
       },
       "per_corpus_raw": {
@@ -687,8 +672,9 @@
     }
   ],
   "schema_version": "1",
-  "total_rows": 46489,
-  "total_weighted": 136653.0,
+  "total_rows": 46476,
+  "total_weighted": 136614.0,
+  "unknown_reason_rows": 13,
   "weights": {
     "go": 3,
     "no-go": 1,
