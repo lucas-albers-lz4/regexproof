@@ -116,7 +116,9 @@ def test_caret_in_x_synthesizes_contract():
     cr = compile_pattern("^0+(?:&|$)", "", "pcre", "search")
     assert cr.encodable
     assert cr.leading_caret is True
-    assert cr.trailing_dollar is False
+    # Source-derived (C1 fold, luna re-gate 3): the `^(?:X|$)` shape carries
+    # the trailing $ alternative by construction.
+    assert cr.trailing_dollar is True
     assert cr.has_internal_anchor is False
     assert cr.word_boundary_wrap is False
     # Union composite — never the bare body.
@@ -137,14 +139,18 @@ def test_caret_in_x_empty_x_branch():
     cr = compile_pattern("^(?:;|$)", "", "pcre", "search")
     assert cr.encodable
     assert cr.leading_caret is True
-    assert cr.trailing_dollar is False
+    # Source-derived (C1 fold, luna re-gate 3): the `^(?:X|$)` shape carries
+    # the trailing $ alternative.
+    assert cr.trailing_dollar is True
 
 
 def test_trailing_alt_dollar_synthesizes_contract():
     cr = compile_pattern("foo(?:bar|$)", "", "re2", "search")
     assert cr.encodable
     assert cr.leading_caret is False
-    assert cr.trailing_dollar is False
+    # Source-derived (C1 fold, luna re-gate 3): the `(?:X|$)` shape carries
+    # the trailing $ alternative.
+    assert cr.trailing_dollar is True
     assert cr.has_internal_anchor is False
     assert cr.fullmatch_shaped is False
     assert cr.wrap_kind == "search"
@@ -291,3 +297,34 @@ def test_yara_wide_search_shape_and_nocase_fail_closed():
     assert cr2.fullmatch_shaped is True
     cr3 = compile_pattern("abc", "i", "yara", "search", domain="wide")
     assert cr3.mirror_exact is False
+
+
+def test_alternation_propagates_word_boundary_wrap():
+    # C1 fold (luna re-gate 3): \bfoo|\bbar — a \b-wrapped alternative makes
+    # the whole mirror search-shaped; fullmatch_shaped must be False.
+    cr = compile_pattern(r"\bfoo|\bbar", "", "pcre", "fullmatch")
+    assert cr.encodable, cr.unencodable_reason
+    assert cr.word_boundary_wrap is True
+    assert cr.fullmatch_shaped is False
+
+
+def test_py_re_unicode_dot_and_negated_class_not_exact():
+    # C1 fold (luna re-gate 3): unicode `.` and negated classes are BMP-bounded
+    # approximations — mirror_exact must be False.
+    for pat in (r"a.b", r"[^a]", r"^[^x]+$"):
+        cr = compile_pattern(pat, "", "py_re", "search")
+        if not cr.encodable:
+            continue  # some negated forms are rejected outright — fine
+        assert cr.mirror_exact is False, pat
+
+
+def test_fast_path_trailing_dollar_source_derived():
+    # C1 fold (luna re-gate 3): trailing_dollar comes from the source $ alt,
+    # not the call_kind wrap.
+    for pat, call_kind in [(r"^(?:abc|$)", "search"), (r"(?:abc|$)", "fullmatch")]:
+        cr = compile_pattern(pat, "", "pcre", call_kind)
+        assert cr.encodable
+        assert cr.trailing_dollar is True, (pat, cr.trailing_dollar)
+    # yara wide literal has no $ in source -> False even under fullmatch
+    cr = compile_pattern("abc", "", "yara", "fullmatch", domain="wide")
+    assert cr.trailing_dollar is False

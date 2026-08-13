@@ -76,6 +76,10 @@ def _discard_streamed_mirrors(
     """
     for _row, _mirror, _meta in compiled:
         _ = _mirror
+    # C1 fold (luna re-gate 3): the discard must actually release the Z3 ASTs
+    # (and the triple list) — callers extract rows first, then discard, so
+    # clearing here is safe and reclaims RSS.
+    compiled.clear()
 
 
 def resolve_corpus_path(corpus: str, meta: dict[str, Any]) -> dict[str, Any]:

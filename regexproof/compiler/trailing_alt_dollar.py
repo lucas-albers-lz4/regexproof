@@ -170,7 +170,9 @@ def try_compile_trailing_alt_dollar(
                 mirror: Any = Star(any_char())
                 meta = composite_meta(
                     leading_caret=False,
-                    trailing_dollar=False,
+                    # C1 fold (luna re-gate 3): source-derived — the
+                    # `(?:R|$)` shape carries the trailing $ alternative.
+                    trailing_dollar=True,
                     word_boundary_wrap=False,
                     wrap_kind="search",
                     mirror_exact=True,
@@ -205,7 +207,9 @@ def try_compile_trailing_alt_dollar(
             wb = bool(r_cr.word_boundary_wrap) if split["r_alt"] else False
             meta = composite_meta(
                 leading_caret=False,
-                trailing_dollar=(call_kind == "fullmatch"),
+                # C1 fold (luna re-gate 3): source-derived — the `(?:X|$)`
+                # shape carries the trailing $ alternative.
+                trailing_dollar=True,
                 word_boundary_wrap=wb,
                 wrap_kind="search" if wb else wrap_kind_for_call(call_kind),
                 mirror_exact=mirror_exact,
@@ -240,7 +244,8 @@ def try_compile_trailing_alt_dollar(
             mirror = Union(xr_cr.mirror, suffix_m)
             meta = composite_meta(
                 leading_caret=False,
-                trailing_dollar=False,
+                # C1 fold (luna re-gate 3): source-derived — trailing $ alt.
+                trailing_dollar=True,
                 word_boundary_wrap=True,
                 wrap_kind="search",
                 mirror_exact=bool(xr_cr.mirror_exact)
@@ -293,7 +298,9 @@ def try_compile_trailing_alt_dollar(
         wb = any(bool(m.get("word_boundary_wrap")) for m in sub_metas)
         meta = composite_meta(
             leading_caret=False,
-            trailing_dollar=(call_kind == "fullmatch"),
+            # C1 fold (luna re-gate 3): source-derived — the `(?:X|$)` shape
+            # carries the trailing $ alternative.
+            trailing_dollar=True,
             word_boundary_wrap=wb,
             wrap_kind="search" if wb else wrap_kind_for_call(call_kind),
             mirror_exact=all(bool(m.get("mirror_exact")) for m in sub_metas),

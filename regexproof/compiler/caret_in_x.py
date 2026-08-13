@@ -109,7 +109,10 @@ def try_compile_caret_in_x(
             wb = bool(r_cr.word_boundary_wrap) if split["r_alt"] else False
             meta = composite_meta(
                 leading_caret=True,
-                trailing_dollar=(call_kind == "fullmatch"),
+                # C1 fold (luna re-gate 3): trailing_dollar is source-derived
+                # (lower.py sets it from the $ node) — the fast-path shape
+                # `^(?:X|$)` has the trailing $ alternative by construction.
+                trailing_dollar=True,
                 word_boundary_wrap=wb,
                 wrap_kind="search" if wb else wrap_kind_for_call(call_kind),
                 mirror_exact=bool(r_cr.mirror_exact) if split["r_alt"] else True,
@@ -157,7 +160,9 @@ def try_compile_caret_in_x(
         wb = any(m.get("word_boundary_wrap") for m in sub_metas)
         meta = composite_meta(
             leading_caret=True,
-            trailing_dollar=(call_kind == "fullmatch"),
+            # C1 fold (luna re-gate 3): source-derived — the `^(?:X|$)` shape
+            # carries the trailing $ alternative.
+            trailing_dollar=True,
             word_boundary_wrap=wb,
             wrap_kind="search" if wb else wrap_kind_for_call(call_kind),
             mirror_exact=all(bool(m.get("mirror_exact")) for m in sub_metas),

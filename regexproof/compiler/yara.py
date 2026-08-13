@@ -112,7 +112,10 @@ def _compile_wide(
             nocase = "i" in flags
             meta = composite_meta(
                 leading_caret=False,
-                trailing_dollar=(call_kind == "fullmatch"),
+                # C1 fold (luna re-gate 3): source-derived — a wide literal has
+                # no $ alternative, so trailing_dollar is False even under a
+                # fullmatch wrap (the whole-string shape comes from the wrap).
+                trailing_dollar=False,
                 word_boundary_wrap=False,
                 wrap_kind=wrap_kind,
                 mirror_exact=not nocase,

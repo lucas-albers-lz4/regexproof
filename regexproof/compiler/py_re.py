@@ -333,6 +333,11 @@ def _not_literal(ch: str, ctx: _Ctx):
 
 
 def _dot(ctx: _Ctx):
+    # C1 fold (luna re-gate 3): unicode `.` mirrors (dotall AllChar or the
+    # BMP-bounded line-terminator exclusion) are approximations of the
+    # engine's dot — fail closed on exactness.
+    if not ctx.ascii_only:
+        ctx.light_unicode_expansion = True
     if ctx.dotall:
         return any_char()
     # Alphabet minus line terminators — for membership we use Union of
@@ -428,6 +433,11 @@ def _in_class(items, ctx: _Ctx):
     if negate:
         if not saw_member:
             raise Unencodable("empty-class")
+        # C1 fold (luna re-gate 3): a unicode negated class excludes only the
+        # BMP subset of the forbidden chars — the complement mirror is
+        # approximate, so mirror_exact must be False.
+        if not ctx.ascii_only:
+            ctx.light_unicode_expansion = True
         hi = 127 if ctx.ascii_only else 0xFFFF
         return ranges_excluding(forbidden, hi=hi)
     if not options:
