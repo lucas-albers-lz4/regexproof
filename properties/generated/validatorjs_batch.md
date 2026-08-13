@@ -1,7 +1,7 @@
 ---
 schema_version: "1"
 corpus: validatorjs
-findings: 1274
+findings: 1416
 ---
 
 # validatorjs batch findings
@@ -1232,6 +1232,486 @@ null
 
 None
 
+## mutation_guard:0cc3488f18e94c3d1e520bda88d67843:v-shape2-whitelist-space
+
+```yaml
+regex_id: 0cc3488f18e94c3d1e520bda88d67843
+schema_version: "1"
+kind: mutation_guard
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: sat
+family: "synth:validatorjs:0cc3488f18e94c3d1e520bda88d67843"
+domain: ascii
+wall_ms: 0
+ground_truth_status: mutation-guard-sat-expected
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/isURL.js:54:21"
+```
+
+### Pattern
+
+`^\[([^\]]+)\](?::([0-9]+))?$`
+
+### Context
+
+```json
+{"bad_char": "\t", "mutation": "union bad_char into mirror", "question_id": "v-shape2-whitelist-space"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+mutation-guard-sat-expected
+
+## mutation_guard:0cc3488f18e94c3d1e520bda88d67843:v-shape2-whitelist-space
+
+```yaml
+regex_id: 0cc3488f18e94c3d1e520bda88d67843
+schema_version: "1"
+kind: mutation_guard
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: sat
+family: "synth:validatorjs:0cc3488f18e94c3d1e520bda88d67843"
+domain: ascii
+wall_ms: 0
+ground_truth_status: mutation-guard-sat-expected
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/isURL.js:54:21"
+```
+
+### Pattern
+
+`^\[([^\]]+)\](?::([0-9]+))?$`
+
+### Context
+
+```json
+{"bad_char": "\n", "mutation": "union bad_char into mirror", "question_id": "v-shape2-whitelist-space"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+mutation-guard-sat-expected
+
+## mutation_guard:0cc3488f18e94c3d1e520bda88d67843:v-shape2-whitelist-space
+
+```yaml
+regex_id: 0cc3488f18e94c3d1e520bda88d67843
+schema_version: "1"
+kind: mutation_guard
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: sat
+family: "synth:validatorjs:0cc3488f18e94c3d1e520bda88d67843"
+domain: ascii
+wall_ms: 0
+ground_truth_status: mutation-guard-sat-expected
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/isURL.js:54:21"
+```
+
+### Pattern
+
+`^\[([^\]]+)\](?::([0-9]+))?$`
+
+### Context
+
+```json
+{"bad_char": "\r", "mutation": "union bad_char into mirror", "question_id": "v-shape2-whitelist-space"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+mutation-guard-sat-expected
+
+## mutation_guard:0cc3488f18e94c3d1e520bda88d67843:v-shape2-whitelist-space
+
+```yaml
+regex_id: 0cc3488f18e94c3d1e520bda88d67843
+schema_version: "1"
+kind: mutation_guard
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: sat
+family: "synth:validatorjs:0cc3488f18e94c3d1e520bda88d67843"
+domain: ascii
+wall_ms: 0
+ground_truth_status: mutation-guard-sat-expected
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/isURL.js:54:21"
+```
+
+### Pattern
+
+`^\[([^\]]+)\](?::([0-9]+))?$`
+
+### Context
+
+```json
+{"bad_char": " ", "mutation": "union bad_char into mirror", "question_id": "v-shape2-whitelist-space"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+mutation-guard-sat-expected
+
+## mutation_guard:0cc3488f18e94c3d1e520bda88d67843:v-shape2-whitelist-space
+
+```yaml
+regex_id: 0cc3488f18e94c3d1e520bda88d67843
+schema_version: "1"
+kind: mutation_guard
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: sat
+family: "synth:validatorjs:0cc3488f18e94c3d1e520bda88d67843"
+domain: ascii
+wall_ms: 0
+ground_truth_status: mutation-guard-sat-expected
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/isURL.js:54:21"
+```
+
+### Pattern
+
+`^\[([^\]]+)\](?::([0-9]+))?$`
+
+### Context
+
+```json
+{"bad_char": "/", "mutation": "union bad_char into mirror", "question_id": "v-shape2-whitelist-space"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+mutation-guard-sat-expected
+
+## mutation_guard:0cc3488f18e94c3d1e520bda88d67843:v-shape2-whitelist-space
+
+```yaml
+regex_id: 0cc3488f18e94c3d1e520bda88d67843
+schema_version: "1"
+kind: mutation_guard
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: sat
+family: "synth:validatorjs:0cc3488f18e94c3d1e520bda88d67843"
+domain: ascii
+wall_ms: 0
+ground_truth_status: mutation-guard-sat-expected
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/isURL.js:54:21"
+```
+
+### Pattern
+
+`^\[([^\]]+)\](?::([0-9]+))?$`
+
+### Context
+
+```json
+{"bad_char": "@", "mutation": "union bad_char into mirror", "question_id": "v-shape2-whitelist-space"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+mutation-guard-sat-expected
+
+## property:0cc3488f18e94c3d1e520bda88d67843:v-shape2-whitelist-space
+
+```yaml
+regex_id: 0cc3488f18e94c3d1e520bda88d67843
+schema_version: "1"
+kind: property
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: sat
+family: "synth:validatorjs:0cc3488f18e94c3d1e520bda88d67843"
+domain: ascii
+wall_ms: 0
+ground_truth_status: reproduced
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/isURL.js:54:21"
+```
+
+### Pattern
+
+`^\[([^\]]+)\](?::([0-9]+))?$`
+
+### Context
+
+```json
+{"bad_char": "\t", "domain_note": "len<=16", "question_id": "v-shape2-whitelist-space", "threat": "Whitelisted string of bounded length contains forbidden separator"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+reproduced
+
+## property:0cc3488f18e94c3d1e520bda88d67843:v-shape2-whitelist-space
+
+```yaml
+regex_id: 0cc3488f18e94c3d1e520bda88d67843
+schema_version: "1"
+kind: property
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: sat
+family: "synth:validatorjs:0cc3488f18e94c3d1e520bda88d67843"
+domain: ascii
+wall_ms: 0
+ground_truth_status: reproduced
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/isURL.js:54:21"
+```
+
+### Pattern
+
+`^\[([^\]]+)\](?::([0-9]+))?$`
+
+### Context
+
+```json
+{"bad_char": "\n", "domain_note": "len<=16", "question_id": "v-shape2-whitelist-space", "threat": "Whitelisted string of bounded length contains forbidden separator"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+reproduced
+
+## property:0cc3488f18e94c3d1e520bda88d67843:v-shape2-whitelist-space
+
+```yaml
+regex_id: 0cc3488f18e94c3d1e520bda88d67843
+schema_version: "1"
+kind: property
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: sat
+family: "synth:validatorjs:0cc3488f18e94c3d1e520bda88d67843"
+domain: ascii
+wall_ms: 0
+ground_truth_status: reproduced
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/isURL.js:54:21"
+```
+
+### Pattern
+
+`^\[([^\]]+)\](?::([0-9]+))?$`
+
+### Context
+
+```json
+{"bad_char": "\r", "domain_note": "len<=16", "question_id": "v-shape2-whitelist-space", "threat": "Whitelisted string of bounded length contains forbidden separator"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+reproduced
+
+## property:0cc3488f18e94c3d1e520bda88d67843:v-shape2-whitelist-space
+
+```yaml
+regex_id: 0cc3488f18e94c3d1e520bda88d67843
+schema_version: "1"
+kind: property
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: sat
+family: "synth:validatorjs:0cc3488f18e94c3d1e520bda88d67843"
+domain: ascii
+wall_ms: 0
+ground_truth_status: reproduced
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/isURL.js:54:21"
+```
+
+### Pattern
+
+`^\[([^\]]+)\](?::([0-9]+))?$`
+
+### Context
+
+```json
+{"bad_char": " ", "domain_note": "len<=16", "question_id": "v-shape2-whitelist-space", "threat": "Whitelisted string of bounded length contains forbidden separator"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+reproduced
+
+## property:0cc3488f18e94c3d1e520bda88d67843:v-shape2-whitelist-space
+
+```yaml
+regex_id: 0cc3488f18e94c3d1e520bda88d67843
+schema_version: "1"
+kind: property
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: sat
+family: "synth:validatorjs:0cc3488f18e94c3d1e520bda88d67843"
+domain: ascii
+wall_ms: 0
+ground_truth_status: reproduced
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/isURL.js:54:21"
+```
+
+### Pattern
+
+`^\[([^\]]+)\](?::([0-9]+))?$`
+
+### Context
+
+```json
+{"bad_char": "/", "domain_note": "len<=16", "question_id": "v-shape2-whitelist-space", "threat": "Whitelisted string of bounded length contains forbidden separator"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+reproduced
+
+## property:0cc3488f18e94c3d1e520bda88d67843:v-shape2-whitelist-space
+
+```yaml
+regex_id: 0cc3488f18e94c3d1e520bda88d67843
+schema_version: "1"
+kind: property
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: sat
+family: "synth:validatorjs:0cc3488f18e94c3d1e520bda88d67843"
+domain: ascii
+wall_ms: 0
+ground_truth_status: reproduced
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/isURL.js:54:21"
+```
+
+### Pattern
+
+`^\[([^\]]+)\](?::([0-9]+))?$`
+
+### Context
+
+```json
+{"bad_char": "@", "domain_note": "len<=16", "question_id": "v-shape2-whitelist-space", "threat": "Whitelisted string of bounded length contains forbidden separator"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+reproduced
+
 ## usage_mismatch:0cc3488f18e94c3d1e520bda88d67843:search
 
 ```yaml
@@ -1266,6 +1746,486 @@ null
 
 None
 
+## mutation_guard:12ac565232cb25e57503a9e7b7385603:v-shape2-whitelist-space
+
+```yaml
+regex_id: 12ac565232cb25e57503a9e7b7385603
+schema_version: "1"
+kind: mutation_guard
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: sat
+family: "synth:validatorjs:12ac565232cb25e57503a9e7b7385603"
+domain: ascii
+wall_ms: 0
+ground_truth_status: mutation-guard-sat-expected
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/isURL.js:126:33"
+```
+
+### Pattern
+
+`^[a-zA-Z0-9\-_.%:]*$`
+
+### Context
+
+```json
+{"bad_char": "\t", "mutation": "union bad_char into mirror", "question_id": "v-shape2-whitelist-space"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+mutation-guard-sat-expected
+
+## mutation_guard:12ac565232cb25e57503a9e7b7385603:v-shape2-whitelist-space
+
+```yaml
+regex_id: 12ac565232cb25e57503a9e7b7385603
+schema_version: "1"
+kind: mutation_guard
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: sat
+family: "synth:validatorjs:12ac565232cb25e57503a9e7b7385603"
+domain: ascii
+wall_ms: 0
+ground_truth_status: mutation-guard-sat-expected
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/isURL.js:126:33"
+```
+
+### Pattern
+
+`^[a-zA-Z0-9\-_.%:]*$`
+
+### Context
+
+```json
+{"bad_char": "\n", "mutation": "union bad_char into mirror", "question_id": "v-shape2-whitelist-space"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+mutation-guard-sat-expected
+
+## mutation_guard:12ac565232cb25e57503a9e7b7385603:v-shape2-whitelist-space
+
+```yaml
+regex_id: 12ac565232cb25e57503a9e7b7385603
+schema_version: "1"
+kind: mutation_guard
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: sat
+family: "synth:validatorjs:12ac565232cb25e57503a9e7b7385603"
+domain: ascii
+wall_ms: 0
+ground_truth_status: mutation-guard-sat-expected
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/isURL.js:126:33"
+```
+
+### Pattern
+
+`^[a-zA-Z0-9\-_.%:]*$`
+
+### Context
+
+```json
+{"bad_char": "\r", "mutation": "union bad_char into mirror", "question_id": "v-shape2-whitelist-space"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+mutation-guard-sat-expected
+
+## mutation_guard:12ac565232cb25e57503a9e7b7385603:v-shape2-whitelist-space
+
+```yaml
+regex_id: 12ac565232cb25e57503a9e7b7385603
+schema_version: "1"
+kind: mutation_guard
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: sat
+family: "synth:validatorjs:12ac565232cb25e57503a9e7b7385603"
+domain: ascii
+wall_ms: 0
+ground_truth_status: mutation-guard-sat-expected
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/isURL.js:126:33"
+```
+
+### Pattern
+
+`^[a-zA-Z0-9\-_.%:]*$`
+
+### Context
+
+```json
+{"bad_char": " ", "mutation": "union bad_char into mirror", "question_id": "v-shape2-whitelist-space"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+mutation-guard-sat-expected
+
+## mutation_guard:12ac565232cb25e57503a9e7b7385603:v-shape2-whitelist-space
+
+```yaml
+regex_id: 12ac565232cb25e57503a9e7b7385603
+schema_version: "1"
+kind: mutation_guard
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: sat
+family: "synth:validatorjs:12ac565232cb25e57503a9e7b7385603"
+domain: ascii
+wall_ms: 0
+ground_truth_status: mutation-guard-sat-expected
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/isURL.js:126:33"
+```
+
+### Pattern
+
+`^[a-zA-Z0-9\-_.%:]*$`
+
+### Context
+
+```json
+{"bad_char": "/", "mutation": "union bad_char into mirror", "question_id": "v-shape2-whitelist-space"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+mutation-guard-sat-expected
+
+## mutation_guard:12ac565232cb25e57503a9e7b7385603:v-shape2-whitelist-space
+
+```yaml
+regex_id: 12ac565232cb25e57503a9e7b7385603
+schema_version: "1"
+kind: mutation_guard
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: sat
+family: "synth:validatorjs:12ac565232cb25e57503a9e7b7385603"
+domain: ascii
+wall_ms: 0
+ground_truth_status: mutation-guard-sat-expected
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/isURL.js:126:33"
+```
+
+### Pattern
+
+`^[a-zA-Z0-9\-_.%:]*$`
+
+### Context
+
+```json
+{"bad_char": "@", "mutation": "union bad_char into mirror", "question_id": "v-shape2-whitelist-space"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+mutation-guard-sat-expected
+
+## property:12ac565232cb25e57503a9e7b7385603:v-shape2-whitelist-space
+
+```yaml
+regex_id: 12ac565232cb25e57503a9e7b7385603
+schema_version: "1"
+kind: property
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: unsat
+family: "synth:validatorjs:12ac565232cb25e57503a9e7b7385603"
+domain: ascii
+wall_ms: 0
+ground_truth_status: null
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/isURL.js:126:33"
+```
+
+### Pattern
+
+`^[a-zA-Z0-9\-_.%:]*$`
+
+### Context
+
+```json
+{"bad_char": "\t", "domain_note": "len<=16", "question_id": "v-shape2-whitelist-space", "threat": "Whitelisted string of bounded length contains forbidden separator"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## property:12ac565232cb25e57503a9e7b7385603:v-shape2-whitelist-space
+
+```yaml
+regex_id: 12ac565232cb25e57503a9e7b7385603
+schema_version: "1"
+kind: property
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: unsat
+family: "synth:validatorjs:12ac565232cb25e57503a9e7b7385603"
+domain: ascii
+wall_ms: 0
+ground_truth_status: null
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/isURL.js:126:33"
+```
+
+### Pattern
+
+`^[a-zA-Z0-9\-_.%:]*$`
+
+### Context
+
+```json
+{"bad_char": "\n", "domain_note": "len<=16", "question_id": "v-shape2-whitelist-space", "threat": "Whitelisted string of bounded length contains forbidden separator"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## property:12ac565232cb25e57503a9e7b7385603:v-shape2-whitelist-space
+
+```yaml
+regex_id: 12ac565232cb25e57503a9e7b7385603
+schema_version: "1"
+kind: property
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: unsat
+family: "synth:validatorjs:12ac565232cb25e57503a9e7b7385603"
+domain: ascii
+wall_ms: 0
+ground_truth_status: null
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/isURL.js:126:33"
+```
+
+### Pattern
+
+`^[a-zA-Z0-9\-_.%:]*$`
+
+### Context
+
+```json
+{"bad_char": "\r", "domain_note": "len<=16", "question_id": "v-shape2-whitelist-space", "threat": "Whitelisted string of bounded length contains forbidden separator"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## property:12ac565232cb25e57503a9e7b7385603:v-shape2-whitelist-space
+
+```yaml
+regex_id: 12ac565232cb25e57503a9e7b7385603
+schema_version: "1"
+kind: property
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: unsat
+family: "synth:validatorjs:12ac565232cb25e57503a9e7b7385603"
+domain: ascii
+wall_ms: 0
+ground_truth_status: null
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/isURL.js:126:33"
+```
+
+### Pattern
+
+`^[a-zA-Z0-9\-_.%:]*$`
+
+### Context
+
+```json
+{"bad_char": " ", "domain_note": "len<=16", "question_id": "v-shape2-whitelist-space", "threat": "Whitelisted string of bounded length contains forbidden separator"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## property:12ac565232cb25e57503a9e7b7385603:v-shape2-whitelist-space
+
+```yaml
+regex_id: 12ac565232cb25e57503a9e7b7385603
+schema_version: "1"
+kind: property
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: unsat
+family: "synth:validatorjs:12ac565232cb25e57503a9e7b7385603"
+domain: ascii
+wall_ms: 0
+ground_truth_status: null
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/isURL.js:126:33"
+```
+
+### Pattern
+
+`^[a-zA-Z0-9\-_.%:]*$`
+
+### Context
+
+```json
+{"bad_char": "/", "domain_note": "len<=16", "question_id": "v-shape2-whitelist-space", "threat": "Whitelisted string of bounded length contains forbidden separator"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## property:12ac565232cb25e57503a9e7b7385603:v-shape2-whitelist-space
+
+```yaml
+regex_id: 12ac565232cb25e57503a9e7b7385603
+schema_version: "1"
+kind: property
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: unsat
+family: "synth:validatorjs:12ac565232cb25e57503a9e7b7385603"
+domain: ascii
+wall_ms: 0
+ground_truth_status: null
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/isURL.js:126:33"
+```
+
+### Pattern
+
+`^[a-zA-Z0-9\-_.%:]*$`
+
+### Context
+
+```json
+{"bad_char": "@", "domain_note": "len<=16", "question_id": "v-shape2-whitelist-space", "threat": "Whitelisted string of bounded length contains forbidden separator"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
 ## usage_mismatch:12ac565232cb25e57503a9e7b7385603:search
 
 ```yaml
@@ -1288,6 +2248,486 @@ site: "pilots/validatorjs/src/isURL.js:126:33"
 
 ```json
 {"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## mutation_guard:1346a9baf845d2d5dcb02f8a34552f15:v-shape2-whitelist-space
+
+```yaml
+regex_id: 1346a9baf845d2d5dcb02f8a34552f15
+schema_version: "1"
+kind: mutation_guard
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: sat
+family: "synth:validatorjs:1346a9baf845d2d5dcb02f8a34552f15"
+domain: ascii
+wall_ms: 0
+ground_truth_status: mutation-guard-sat-expected
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/isEmail.js:27:26"
+```
+
+### Pattern
+
+`^[a-z\d!#\$%&'\*\+\-\/=\?\^_`{\|}~\u00A1-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+$`
+
+### Context
+
+```json
+{"bad_char": "\t", "mutation": "union bad_char into mirror", "question_id": "v-shape2-whitelist-space"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+mutation-guard-sat-expected
+
+## mutation_guard:1346a9baf845d2d5dcb02f8a34552f15:v-shape2-whitelist-space
+
+```yaml
+regex_id: 1346a9baf845d2d5dcb02f8a34552f15
+schema_version: "1"
+kind: mutation_guard
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: sat
+family: "synth:validatorjs:1346a9baf845d2d5dcb02f8a34552f15"
+domain: ascii
+wall_ms: 0
+ground_truth_status: mutation-guard-sat-expected
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/isEmail.js:27:26"
+```
+
+### Pattern
+
+`^[a-z\d!#\$%&'\*\+\-\/=\?\^_`{\|}~\u00A1-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+$`
+
+### Context
+
+```json
+{"bad_char": "\n", "mutation": "union bad_char into mirror", "question_id": "v-shape2-whitelist-space"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+mutation-guard-sat-expected
+
+## mutation_guard:1346a9baf845d2d5dcb02f8a34552f15:v-shape2-whitelist-space
+
+```yaml
+regex_id: 1346a9baf845d2d5dcb02f8a34552f15
+schema_version: "1"
+kind: mutation_guard
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: sat
+family: "synth:validatorjs:1346a9baf845d2d5dcb02f8a34552f15"
+domain: ascii
+wall_ms: 0
+ground_truth_status: mutation-guard-sat-expected
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/isEmail.js:27:26"
+```
+
+### Pattern
+
+`^[a-z\d!#\$%&'\*\+\-\/=\?\^_`{\|}~\u00A1-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+$`
+
+### Context
+
+```json
+{"bad_char": "\r", "mutation": "union bad_char into mirror", "question_id": "v-shape2-whitelist-space"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+mutation-guard-sat-expected
+
+## mutation_guard:1346a9baf845d2d5dcb02f8a34552f15:v-shape2-whitelist-space
+
+```yaml
+regex_id: 1346a9baf845d2d5dcb02f8a34552f15
+schema_version: "1"
+kind: mutation_guard
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: sat
+family: "synth:validatorjs:1346a9baf845d2d5dcb02f8a34552f15"
+domain: ascii
+wall_ms: 0
+ground_truth_status: mutation-guard-sat-expected
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/isEmail.js:27:26"
+```
+
+### Pattern
+
+`^[a-z\d!#\$%&'\*\+\-\/=\?\^_`{\|}~\u00A1-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+$`
+
+### Context
+
+```json
+{"bad_char": " ", "mutation": "union bad_char into mirror", "question_id": "v-shape2-whitelist-space"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+mutation-guard-sat-expected
+
+## mutation_guard:1346a9baf845d2d5dcb02f8a34552f15:v-shape2-whitelist-space
+
+```yaml
+regex_id: 1346a9baf845d2d5dcb02f8a34552f15
+schema_version: "1"
+kind: mutation_guard
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: sat
+family: "synth:validatorjs:1346a9baf845d2d5dcb02f8a34552f15"
+domain: ascii
+wall_ms: 0
+ground_truth_status: mutation-guard-sat-expected
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/isEmail.js:27:26"
+```
+
+### Pattern
+
+`^[a-z\d!#\$%&'\*\+\-\/=\?\^_`{\|}~\u00A1-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+$`
+
+### Context
+
+```json
+{"bad_char": "/", "mutation": "union bad_char into mirror", "question_id": "v-shape2-whitelist-space"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+mutation-guard-sat-expected
+
+## mutation_guard:1346a9baf845d2d5dcb02f8a34552f15:v-shape2-whitelist-space
+
+```yaml
+regex_id: 1346a9baf845d2d5dcb02f8a34552f15
+schema_version: "1"
+kind: mutation_guard
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: sat
+family: "synth:validatorjs:1346a9baf845d2d5dcb02f8a34552f15"
+domain: ascii
+wall_ms: 0
+ground_truth_status: mutation-guard-sat-expected
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/isEmail.js:27:26"
+```
+
+### Pattern
+
+`^[a-z\d!#\$%&'\*\+\-\/=\?\^_`{\|}~\u00A1-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+$`
+
+### Context
+
+```json
+{"bad_char": "@", "mutation": "union bad_char into mirror", "question_id": "v-shape2-whitelist-space"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+mutation-guard-sat-expected
+
+## property:1346a9baf845d2d5dcb02f8a34552f15:v-shape2-whitelist-space
+
+```yaml
+regex_id: 1346a9baf845d2d5dcb02f8a34552f15
+schema_version: "1"
+kind: property
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: unsat
+family: "synth:validatorjs:1346a9baf845d2d5dcb02f8a34552f15"
+domain: ascii
+wall_ms: 0
+ground_truth_status: null
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/isEmail.js:27:26"
+```
+
+### Pattern
+
+`^[a-z\d!#\$%&'\*\+\-\/=\?\^_`{\|}~\u00A1-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+$`
+
+### Context
+
+```json
+{"bad_char": "\t", "domain_note": "len<=16", "question_id": "v-shape2-whitelist-space", "threat": "Whitelisted string of bounded length contains forbidden separator"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## property:1346a9baf845d2d5dcb02f8a34552f15:v-shape2-whitelist-space
+
+```yaml
+regex_id: 1346a9baf845d2d5dcb02f8a34552f15
+schema_version: "1"
+kind: property
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: unsat
+family: "synth:validatorjs:1346a9baf845d2d5dcb02f8a34552f15"
+domain: ascii
+wall_ms: 0
+ground_truth_status: null
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/isEmail.js:27:26"
+```
+
+### Pattern
+
+`^[a-z\d!#\$%&'\*\+\-\/=\?\^_`{\|}~\u00A1-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+$`
+
+### Context
+
+```json
+{"bad_char": "\n", "domain_note": "len<=16", "question_id": "v-shape2-whitelist-space", "threat": "Whitelisted string of bounded length contains forbidden separator"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## property:1346a9baf845d2d5dcb02f8a34552f15:v-shape2-whitelist-space
+
+```yaml
+regex_id: 1346a9baf845d2d5dcb02f8a34552f15
+schema_version: "1"
+kind: property
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: unsat
+family: "synth:validatorjs:1346a9baf845d2d5dcb02f8a34552f15"
+domain: ascii
+wall_ms: 0
+ground_truth_status: null
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/isEmail.js:27:26"
+```
+
+### Pattern
+
+`^[a-z\d!#\$%&'\*\+\-\/=\?\^_`{\|}~\u00A1-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+$`
+
+### Context
+
+```json
+{"bad_char": "\r", "domain_note": "len<=16", "question_id": "v-shape2-whitelist-space", "threat": "Whitelisted string of bounded length contains forbidden separator"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## property:1346a9baf845d2d5dcb02f8a34552f15:v-shape2-whitelist-space
+
+```yaml
+regex_id: 1346a9baf845d2d5dcb02f8a34552f15
+schema_version: "1"
+kind: property
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: unsat
+family: "synth:validatorjs:1346a9baf845d2d5dcb02f8a34552f15"
+domain: ascii
+wall_ms: 0
+ground_truth_status: null
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/isEmail.js:27:26"
+```
+
+### Pattern
+
+`^[a-z\d!#\$%&'\*\+\-\/=\?\^_`{\|}~\u00A1-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+$`
+
+### Context
+
+```json
+{"bad_char": " ", "domain_note": "len<=16", "question_id": "v-shape2-whitelist-space", "threat": "Whitelisted string of bounded length contains forbidden separator"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## property:1346a9baf845d2d5dcb02f8a34552f15:v-shape2-whitelist-space
+
+```yaml
+regex_id: 1346a9baf845d2d5dcb02f8a34552f15
+schema_version: "1"
+kind: property
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: sat
+family: "synth:validatorjs:1346a9baf845d2d5dcb02f8a34552f15"
+domain: ascii
+wall_ms: 0
+ground_truth_status: reproduced
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/isEmail.js:27:26"
+```
+
+### Pattern
+
+`^[a-z\d!#\$%&'\*\+\-\/=\?\^_`{\|}~\u00A1-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+$`
+
+### Context
+
+```json
+{"bad_char": "/", "domain_note": "len<=16", "question_id": "v-shape2-whitelist-space", "threat": "Whitelisted string of bounded length contains forbidden separator"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+reproduced
+
+## property:1346a9baf845d2d5dcb02f8a34552f15:v-shape2-whitelist-space
+
+```yaml
+regex_id: 1346a9baf845d2d5dcb02f8a34552f15
+schema_version: "1"
+kind: property
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: unsat
+family: "synth:validatorjs:1346a9baf845d2d5dcb02f8a34552f15"
+domain: ascii
+wall_ms: 0
+ground_truth_status: null
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/isEmail.js:27:26"
+```
+
+### Pattern
+
+`^[a-z\d!#\$%&'\*\+\-\/=\?\^_`{\|}~\u00A1-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+$`
+
+### Context
+
+```json
+{"bad_char": "@", "domain_note": "len<=16", "question_id": "v-shape2-whitelist-space", "threat": "Whitelisted string of bounded length contains forbidden separator"}
 ```
 
 ### Witness
@@ -2625,6 +4065,486 @@ null
 ### Ground-truth
 
 None
+
+## mutation_guard:1db736d8ac342ed602b49b6c59cc46da:v-shape2-whitelist-space
+
+```yaml
+regex_id: 1db736d8ac342ed602b49b6c59cc46da
+schema_version: "1"
+kind: mutation_guard
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: sat
+family: "synth:validatorjs:1db736d8ac342ed602b49b6c59cc46da"
+domain: ascii
+wall_ms: 0
+ground_truth_status: mutation-guard-sat-expected
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/isEmail.js:28:28"
+```
+
+### Pattern
+
+`^([\s\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|(\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*$`
+
+### Context
+
+```json
+{"bad_char": "\t", "mutation": "union bad_char into mirror", "question_id": "v-shape2-whitelist-space"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+mutation-guard-sat-expected
+
+## mutation_guard:1db736d8ac342ed602b49b6c59cc46da:v-shape2-whitelist-space
+
+```yaml
+regex_id: 1db736d8ac342ed602b49b6c59cc46da
+schema_version: "1"
+kind: mutation_guard
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: sat
+family: "synth:validatorjs:1db736d8ac342ed602b49b6c59cc46da"
+domain: ascii
+wall_ms: 0
+ground_truth_status: mutation-guard-sat-expected
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/isEmail.js:28:28"
+```
+
+### Pattern
+
+`^([\s\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|(\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*$`
+
+### Context
+
+```json
+{"bad_char": "\n", "mutation": "union bad_char into mirror", "question_id": "v-shape2-whitelist-space"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+mutation-guard-sat-expected
+
+## mutation_guard:1db736d8ac342ed602b49b6c59cc46da:v-shape2-whitelist-space
+
+```yaml
+regex_id: 1db736d8ac342ed602b49b6c59cc46da
+schema_version: "1"
+kind: mutation_guard
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: sat
+family: "synth:validatorjs:1db736d8ac342ed602b49b6c59cc46da"
+domain: ascii
+wall_ms: 0
+ground_truth_status: mutation-guard-sat-expected
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/isEmail.js:28:28"
+```
+
+### Pattern
+
+`^([\s\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|(\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*$`
+
+### Context
+
+```json
+{"bad_char": "\r", "mutation": "union bad_char into mirror", "question_id": "v-shape2-whitelist-space"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+mutation-guard-sat-expected
+
+## mutation_guard:1db736d8ac342ed602b49b6c59cc46da:v-shape2-whitelist-space
+
+```yaml
+regex_id: 1db736d8ac342ed602b49b6c59cc46da
+schema_version: "1"
+kind: mutation_guard
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: sat
+family: "synth:validatorjs:1db736d8ac342ed602b49b6c59cc46da"
+domain: ascii
+wall_ms: 0
+ground_truth_status: mutation-guard-sat-expected
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/isEmail.js:28:28"
+```
+
+### Pattern
+
+`^([\s\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|(\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*$`
+
+### Context
+
+```json
+{"bad_char": " ", "mutation": "union bad_char into mirror", "question_id": "v-shape2-whitelist-space"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+mutation-guard-sat-expected
+
+## mutation_guard:1db736d8ac342ed602b49b6c59cc46da:v-shape2-whitelist-space
+
+```yaml
+regex_id: 1db736d8ac342ed602b49b6c59cc46da
+schema_version: "1"
+kind: mutation_guard
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: sat
+family: "synth:validatorjs:1db736d8ac342ed602b49b6c59cc46da"
+domain: ascii
+wall_ms: 0
+ground_truth_status: mutation-guard-sat-expected
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/isEmail.js:28:28"
+```
+
+### Pattern
+
+`^([\s\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|(\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*$`
+
+### Context
+
+```json
+{"bad_char": "/", "mutation": "union bad_char into mirror", "question_id": "v-shape2-whitelist-space"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+mutation-guard-sat-expected
+
+## mutation_guard:1db736d8ac342ed602b49b6c59cc46da:v-shape2-whitelist-space
+
+```yaml
+regex_id: 1db736d8ac342ed602b49b6c59cc46da
+schema_version: "1"
+kind: mutation_guard
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: sat
+family: "synth:validatorjs:1db736d8ac342ed602b49b6c59cc46da"
+domain: ascii
+wall_ms: 0
+ground_truth_status: mutation-guard-sat-expected
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/isEmail.js:28:28"
+```
+
+### Pattern
+
+`^([\s\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|(\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*$`
+
+### Context
+
+```json
+{"bad_char": "@", "mutation": "union bad_char into mirror", "question_id": "v-shape2-whitelist-space"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+mutation-guard-sat-expected
+
+## property:1db736d8ac342ed602b49b6c59cc46da:v-shape2-whitelist-space
+
+```yaml
+regex_id: 1db736d8ac342ed602b49b6c59cc46da
+schema_version: "1"
+kind: property
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: sat
+family: "synth:validatorjs:1db736d8ac342ed602b49b6c59cc46da"
+domain: ascii
+wall_ms: 0
+ground_truth_status: reproduced
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/isEmail.js:28:28"
+```
+
+### Pattern
+
+`^([\s\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|(\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*$`
+
+### Context
+
+```json
+{"bad_char": "\t", "domain_note": "len<=16", "question_id": "v-shape2-whitelist-space", "threat": "Whitelisted string of bounded length contains forbidden separator"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+reproduced
+
+## property:1db736d8ac342ed602b49b6c59cc46da:v-shape2-whitelist-space
+
+```yaml
+regex_id: 1db736d8ac342ed602b49b6c59cc46da
+schema_version: "1"
+kind: property
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: sat
+family: "synth:validatorjs:1db736d8ac342ed602b49b6c59cc46da"
+domain: ascii
+wall_ms: 0
+ground_truth_status: reproduced
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/isEmail.js:28:28"
+```
+
+### Pattern
+
+`^([\s\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|(\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*$`
+
+### Context
+
+```json
+{"bad_char": "\n", "domain_note": "len<=16", "question_id": "v-shape2-whitelist-space", "threat": "Whitelisted string of bounded length contains forbidden separator"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+reproduced
+
+## property:1db736d8ac342ed602b49b6c59cc46da:v-shape2-whitelist-space
+
+```yaml
+regex_id: 1db736d8ac342ed602b49b6c59cc46da
+schema_version: "1"
+kind: property
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: sat
+family: "synth:validatorjs:1db736d8ac342ed602b49b6c59cc46da"
+domain: ascii
+wall_ms: 0
+ground_truth_status: reproduced
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/isEmail.js:28:28"
+```
+
+### Pattern
+
+`^([\s\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|(\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*$`
+
+### Context
+
+```json
+{"bad_char": "\r", "domain_note": "len<=16", "question_id": "v-shape2-whitelist-space", "threat": "Whitelisted string of bounded length contains forbidden separator"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+reproduced
+
+## property:1db736d8ac342ed602b49b6c59cc46da:v-shape2-whitelist-space
+
+```yaml
+regex_id: 1db736d8ac342ed602b49b6c59cc46da
+schema_version: "1"
+kind: property
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: sat
+family: "synth:validatorjs:1db736d8ac342ed602b49b6c59cc46da"
+domain: ascii
+wall_ms: 0
+ground_truth_status: reproduced
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/isEmail.js:28:28"
+```
+
+### Pattern
+
+`^([\s\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|(\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*$`
+
+### Context
+
+```json
+{"bad_char": " ", "domain_note": "len<=16", "question_id": "v-shape2-whitelist-space", "threat": "Whitelisted string of bounded length contains forbidden separator"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+reproduced
+
+## property:1db736d8ac342ed602b49b6c59cc46da:v-shape2-whitelist-space
+
+```yaml
+regex_id: 1db736d8ac342ed602b49b6c59cc46da
+schema_version: "1"
+kind: property
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: sat
+family: "synth:validatorjs:1db736d8ac342ed602b49b6c59cc46da"
+domain: ascii
+wall_ms: 0
+ground_truth_status: reproduced
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/isEmail.js:28:28"
+```
+
+### Pattern
+
+`^([\s\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|(\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*$`
+
+### Context
+
+```json
+{"bad_char": "/", "domain_note": "len<=16", "question_id": "v-shape2-whitelist-space", "threat": "Whitelisted string of bounded length contains forbidden separator"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+reproduced
+
+## property:1db736d8ac342ed602b49b6c59cc46da:v-shape2-whitelist-space
+
+```yaml
+regex_id: 1db736d8ac342ed602b49b6c59cc46da
+schema_version: "1"
+kind: property
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: sat
+family: "synth:validatorjs:1db736d8ac342ed602b49b6c59cc46da"
+domain: ascii
+wall_ms: 0
+ground_truth_status: reproduced
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/isEmail.js:28:28"
+```
+
+### Pattern
+
+`^([\s\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|(\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*$`
+
+### Context
+
+```json
+{"bad_char": "@", "domain_note": "len<=16", "question_id": "v-shape2-whitelist-space", "threat": "Whitelisted string of bounded length contains forbidden separator"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+reproduced
 
 ## usage_mismatch:1db736d8ac342ed602b49b6c59cc46da:search
 
@@ -17717,6 +19637,566 @@ null
 
 None
 
+## mutation_guard:66a0b3ea9fde7213d0adeda7acbcae59:v-shape1-injection-chars
+
+```yaml
+regex_id: 66a0b3ea9fde7213d0adeda7acbcae59
+schema_version: "1"
+kind: mutation_guard
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: sat
+family: "synth:validatorjs:66a0b3ea9fde7213d0adeda7acbcae59"
+domain: ascii
+wall_ms: 0
+ground_truth_status: mutation-guard-sat-expected
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:39:11"
+```
+
+### Pattern
+
+`^[\u0900-\u0961]+[\u0972-\u097F]*$`
+
+### Context
+
+```json
+{"bad_char": "\u0000", "mutation": "union bad_char into mirror", "question_id": "v-shape1-injection-chars"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+mutation-guard-sat-expected
+
+## mutation_guard:66a0b3ea9fde7213d0adeda7acbcae59:v-shape1-injection-chars
+
+```yaml
+regex_id: 66a0b3ea9fde7213d0adeda7acbcae59
+schema_version: "1"
+kind: mutation_guard
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: sat
+family: "synth:validatorjs:66a0b3ea9fde7213d0adeda7acbcae59"
+domain: ascii
+wall_ms: 0
+ground_truth_status: mutation-guard-sat-expected
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:39:11"
+```
+
+### Pattern
+
+`^[\u0900-\u0961]+[\u0972-\u097F]*$`
+
+### Context
+
+```json
+{"bad_char": "\n", "mutation": "union bad_char into mirror", "question_id": "v-shape1-injection-chars"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+mutation-guard-sat-expected
+
+## mutation_guard:66a0b3ea9fde7213d0adeda7acbcae59:v-shape1-injection-chars
+
+```yaml
+regex_id: 66a0b3ea9fde7213d0adeda7acbcae59
+schema_version: "1"
+kind: mutation_guard
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: sat
+family: "synth:validatorjs:66a0b3ea9fde7213d0adeda7acbcae59"
+domain: ascii
+wall_ms: 0
+ground_truth_status: mutation-guard-sat-expected
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:39:11"
+```
+
+### Pattern
+
+`^[\u0900-\u0961]+[\u0972-\u097F]*$`
+
+### Context
+
+```json
+{"bad_char": "$", "mutation": "union bad_char into mirror", "question_id": "v-shape1-injection-chars"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+mutation-guard-sat-expected
+
+## mutation_guard:66a0b3ea9fde7213d0adeda7acbcae59:v-shape1-injection-chars
+
+```yaml
+regex_id: 66a0b3ea9fde7213d0adeda7acbcae59
+schema_version: "1"
+kind: mutation_guard
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: sat
+family: "synth:validatorjs:66a0b3ea9fde7213d0adeda7acbcae59"
+domain: ascii
+wall_ms: 0
+ground_truth_status: mutation-guard-sat-expected
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:39:11"
+```
+
+### Pattern
+
+`^[\u0900-\u0961]+[\u0972-\u097F]*$`
+
+### Context
+
+```json
+{"bad_char": "&", "mutation": "union bad_char into mirror", "question_id": "v-shape1-injection-chars"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+mutation-guard-sat-expected
+
+## mutation_guard:66a0b3ea9fde7213d0adeda7acbcae59:v-shape1-injection-chars
+
+```yaml
+regex_id: 66a0b3ea9fde7213d0adeda7acbcae59
+schema_version: "1"
+kind: mutation_guard
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: sat
+family: "synth:validatorjs:66a0b3ea9fde7213d0adeda7acbcae59"
+domain: ascii
+wall_ms: 0
+ground_truth_status: mutation-guard-sat-expected
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:39:11"
+```
+
+### Pattern
+
+`^[\u0900-\u0961]+[\u0972-\u097F]*$`
+
+### Context
+
+```json
+{"bad_char": ";", "mutation": "union bad_char into mirror", "question_id": "v-shape1-injection-chars"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+mutation-guard-sat-expected
+
+## mutation_guard:66a0b3ea9fde7213d0adeda7acbcae59:v-shape1-injection-chars
+
+```yaml
+regex_id: 66a0b3ea9fde7213d0adeda7acbcae59
+schema_version: "1"
+kind: mutation_guard
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: sat
+family: "synth:validatorjs:66a0b3ea9fde7213d0adeda7acbcae59"
+domain: ascii
+wall_ms: 0
+ground_truth_status: mutation-guard-sat-expected
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:39:11"
+```
+
+### Pattern
+
+`^[\u0900-\u0961]+[\u0972-\u097F]*$`
+
+### Context
+
+```json
+{"bad_char": "`", "mutation": "union bad_char into mirror", "question_id": "v-shape1-injection-chars"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+mutation-guard-sat-expected
+
+## mutation_guard:66a0b3ea9fde7213d0adeda7acbcae59:v-shape1-injection-chars
+
+```yaml
+regex_id: 66a0b3ea9fde7213d0adeda7acbcae59
+schema_version: "1"
+kind: mutation_guard
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: sat
+family: "synth:validatorjs:66a0b3ea9fde7213d0adeda7acbcae59"
+domain: ascii
+wall_ms: 0
+ground_truth_status: mutation-guard-sat-expected
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:39:11"
+```
+
+### Pattern
+
+`^[\u0900-\u0961]+[\u0972-\u097F]*$`
+
+### Context
+
+```json
+{"bad_char": "|", "mutation": "union bad_char into mirror", "question_id": "v-shape1-injection-chars"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+mutation-guard-sat-expected
+
+## property:66a0b3ea9fde7213d0adeda7acbcae59:v-shape1-injection-chars
+
+```yaml
+regex_id: 66a0b3ea9fde7213d0adeda7acbcae59
+schema_version: "1"
+kind: property
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: unsat
+family: "synth:validatorjs:66a0b3ea9fde7213d0adeda7acbcae59"
+domain: ascii
+wall_ms: 0
+ground_truth_status: null
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:39:11"
+```
+
+### Pattern
+
+`^[\u0900-\u0961]+[\u0972-\u097F]*$`
+
+### Context
+
+```json
+{"bad_char": "\u0000", "domain_note": "len<=16", "question_id": "v-shape1-injection-chars", "threat": "Validator alphabet admits shell/HTML injection characters"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## property:66a0b3ea9fde7213d0adeda7acbcae59:v-shape1-injection-chars
+
+```yaml
+regex_id: 66a0b3ea9fde7213d0adeda7acbcae59
+schema_version: "1"
+kind: property
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: unsat
+family: "synth:validatorjs:66a0b3ea9fde7213d0adeda7acbcae59"
+domain: ascii
+wall_ms: 0
+ground_truth_status: null
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:39:11"
+```
+
+### Pattern
+
+`^[\u0900-\u0961]+[\u0972-\u097F]*$`
+
+### Context
+
+```json
+{"bad_char": "\n", "domain_note": "len<=16", "question_id": "v-shape1-injection-chars", "threat": "Validator alphabet admits shell/HTML injection characters"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## property:66a0b3ea9fde7213d0adeda7acbcae59:v-shape1-injection-chars
+
+```yaml
+regex_id: 66a0b3ea9fde7213d0adeda7acbcae59
+schema_version: "1"
+kind: property
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: unsat
+family: "synth:validatorjs:66a0b3ea9fde7213d0adeda7acbcae59"
+domain: ascii
+wall_ms: 0
+ground_truth_status: null
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:39:11"
+```
+
+### Pattern
+
+`^[\u0900-\u0961]+[\u0972-\u097F]*$`
+
+### Context
+
+```json
+{"bad_char": "$", "domain_note": "len<=16", "question_id": "v-shape1-injection-chars", "threat": "Validator alphabet admits shell/HTML injection characters"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## property:66a0b3ea9fde7213d0adeda7acbcae59:v-shape1-injection-chars
+
+```yaml
+regex_id: 66a0b3ea9fde7213d0adeda7acbcae59
+schema_version: "1"
+kind: property
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: unsat
+family: "synth:validatorjs:66a0b3ea9fde7213d0adeda7acbcae59"
+domain: ascii
+wall_ms: 0
+ground_truth_status: null
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:39:11"
+```
+
+### Pattern
+
+`^[\u0900-\u0961]+[\u0972-\u097F]*$`
+
+### Context
+
+```json
+{"bad_char": "&", "domain_note": "len<=16", "question_id": "v-shape1-injection-chars", "threat": "Validator alphabet admits shell/HTML injection characters"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## property:66a0b3ea9fde7213d0adeda7acbcae59:v-shape1-injection-chars
+
+```yaml
+regex_id: 66a0b3ea9fde7213d0adeda7acbcae59
+schema_version: "1"
+kind: property
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: unsat
+family: "synth:validatorjs:66a0b3ea9fde7213d0adeda7acbcae59"
+domain: ascii
+wall_ms: 0
+ground_truth_status: null
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:39:11"
+```
+
+### Pattern
+
+`^[\u0900-\u0961]+[\u0972-\u097F]*$`
+
+### Context
+
+```json
+{"bad_char": ";", "domain_note": "len<=16", "question_id": "v-shape1-injection-chars", "threat": "Validator alphabet admits shell/HTML injection characters"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## property:66a0b3ea9fde7213d0adeda7acbcae59:v-shape1-injection-chars
+
+```yaml
+regex_id: 66a0b3ea9fde7213d0adeda7acbcae59
+schema_version: "1"
+kind: property
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: unsat
+family: "synth:validatorjs:66a0b3ea9fde7213d0adeda7acbcae59"
+domain: ascii
+wall_ms: 0
+ground_truth_status: null
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:39:11"
+```
+
+### Pattern
+
+`^[\u0900-\u0961]+[\u0972-\u097F]*$`
+
+### Context
+
+```json
+{"bad_char": "`", "domain_note": "len<=16", "question_id": "v-shape1-injection-chars", "threat": "Validator alphabet admits shell/HTML injection characters"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## property:66a0b3ea9fde7213d0adeda7acbcae59:v-shape1-injection-chars
+
+```yaml
+regex_id: 66a0b3ea9fde7213d0adeda7acbcae59
+schema_version: "1"
+kind: property
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: unsat
+family: "synth:validatorjs:66a0b3ea9fde7213d0adeda7acbcae59"
+domain: ascii
+wall_ms: 0
+ground_truth_status: null
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:39:11"
+```
+
+### Pattern
+
+`^[\u0900-\u0961]+[\u0972-\u097F]*$`
+
+### Context
+
+```json
+{"bad_char": "|", "domain_note": "len<=16", "question_id": "v-shape1-injection-chars", "threat": "Validator alphabet admits shell/HTML injection characters"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
 ## usage_mismatch:66a0b3ea9fde7213d0adeda7acbcae59:search
 
 ```yaml
@@ -20160,6 +22640,566 @@ null
 ### Ground-truth
 
 None
+
+## mutation_guard:72af04d05ce826215a3f03a21d7f4581:v-shape1-injection-chars
+
+```yaml
+regex_id: 72af04d05ce826215a3f03a21d7f4581
+schema_version: "1"
+kind: mutation_guard
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 1
+result: sat
+family: "synth:validatorjs:72af04d05ce826215a3f03a21d7f4581"
+domain: ascii
+wall_ms: 0
+ground_truth_status: mutation-guard-sat-expected
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/isAscii.js:4:14"
+```
+
+### Pattern
+
+`^[\x00-\x7F]+$`
+
+### Context
+
+```json
+{"bad_char": "\u0000", "mutation": "union bad_char into mirror", "question_id": "v-shape1-injection-chars"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+mutation-guard-sat-expected
+
+## mutation_guard:72af04d05ce826215a3f03a21d7f4581:v-shape1-injection-chars
+
+```yaml
+regex_id: 72af04d05ce826215a3f03a21d7f4581
+schema_version: "1"
+kind: mutation_guard
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 1
+result: sat
+family: "synth:validatorjs:72af04d05ce826215a3f03a21d7f4581"
+domain: ascii
+wall_ms: 0
+ground_truth_status: mutation-guard-sat-expected
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/isAscii.js:4:14"
+```
+
+### Pattern
+
+`^[\x00-\x7F]+$`
+
+### Context
+
+```json
+{"bad_char": "\n", "mutation": "union bad_char into mirror", "question_id": "v-shape1-injection-chars"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+mutation-guard-sat-expected
+
+## mutation_guard:72af04d05ce826215a3f03a21d7f4581:v-shape1-injection-chars
+
+```yaml
+regex_id: 72af04d05ce826215a3f03a21d7f4581
+schema_version: "1"
+kind: mutation_guard
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 1
+result: sat
+family: "synth:validatorjs:72af04d05ce826215a3f03a21d7f4581"
+domain: ascii
+wall_ms: 0
+ground_truth_status: mutation-guard-sat-expected
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/isAscii.js:4:14"
+```
+
+### Pattern
+
+`^[\x00-\x7F]+$`
+
+### Context
+
+```json
+{"bad_char": "$", "mutation": "union bad_char into mirror", "question_id": "v-shape1-injection-chars"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+mutation-guard-sat-expected
+
+## mutation_guard:72af04d05ce826215a3f03a21d7f4581:v-shape1-injection-chars
+
+```yaml
+regex_id: 72af04d05ce826215a3f03a21d7f4581
+schema_version: "1"
+kind: mutation_guard
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 1
+result: sat
+family: "synth:validatorjs:72af04d05ce826215a3f03a21d7f4581"
+domain: ascii
+wall_ms: 0
+ground_truth_status: mutation-guard-sat-expected
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/isAscii.js:4:14"
+```
+
+### Pattern
+
+`^[\x00-\x7F]+$`
+
+### Context
+
+```json
+{"bad_char": "&", "mutation": "union bad_char into mirror", "question_id": "v-shape1-injection-chars"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+mutation-guard-sat-expected
+
+## mutation_guard:72af04d05ce826215a3f03a21d7f4581:v-shape1-injection-chars
+
+```yaml
+regex_id: 72af04d05ce826215a3f03a21d7f4581
+schema_version: "1"
+kind: mutation_guard
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 1
+result: sat
+family: "synth:validatorjs:72af04d05ce826215a3f03a21d7f4581"
+domain: ascii
+wall_ms: 0
+ground_truth_status: mutation-guard-sat-expected
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/isAscii.js:4:14"
+```
+
+### Pattern
+
+`^[\x00-\x7F]+$`
+
+### Context
+
+```json
+{"bad_char": ";", "mutation": "union bad_char into mirror", "question_id": "v-shape1-injection-chars"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+mutation-guard-sat-expected
+
+## mutation_guard:72af04d05ce826215a3f03a21d7f4581:v-shape1-injection-chars
+
+```yaml
+regex_id: 72af04d05ce826215a3f03a21d7f4581
+schema_version: "1"
+kind: mutation_guard
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 1
+result: sat
+family: "synth:validatorjs:72af04d05ce826215a3f03a21d7f4581"
+domain: ascii
+wall_ms: 0
+ground_truth_status: mutation-guard-sat-expected
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/isAscii.js:4:14"
+```
+
+### Pattern
+
+`^[\x00-\x7F]+$`
+
+### Context
+
+```json
+{"bad_char": "`", "mutation": "union bad_char into mirror", "question_id": "v-shape1-injection-chars"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+mutation-guard-sat-expected
+
+## mutation_guard:72af04d05ce826215a3f03a21d7f4581:v-shape1-injection-chars
+
+```yaml
+regex_id: 72af04d05ce826215a3f03a21d7f4581
+schema_version: "1"
+kind: mutation_guard
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 1
+result: sat
+family: "synth:validatorjs:72af04d05ce826215a3f03a21d7f4581"
+domain: ascii
+wall_ms: 0
+ground_truth_status: mutation-guard-sat-expected
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/isAscii.js:4:14"
+```
+
+### Pattern
+
+`^[\x00-\x7F]+$`
+
+### Context
+
+```json
+{"bad_char": "|", "mutation": "union bad_char into mirror", "question_id": "v-shape1-injection-chars"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+mutation-guard-sat-expected
+
+## property:72af04d05ce826215a3f03a21d7f4581:v-shape1-injection-chars
+
+```yaml
+regex_id: 72af04d05ce826215a3f03a21d7f4581
+schema_version: "1"
+kind: property
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 1
+result: sat
+family: "synth:validatorjs:72af04d05ce826215a3f03a21d7f4581"
+domain: ascii
+wall_ms: 0
+ground_truth_status: reproduced
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/isAscii.js:4:14"
+```
+
+### Pattern
+
+`^[\x00-\x7F]+$`
+
+### Context
+
+```json
+{"bad_char": "\u0000", "domain_note": "all-lengths", "question_id": "v-shape1-injection-chars", "threat": "Validator alphabet admits shell/HTML injection characters"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+reproduced
+
+## property:72af04d05ce826215a3f03a21d7f4581:v-shape1-injection-chars
+
+```yaml
+regex_id: 72af04d05ce826215a3f03a21d7f4581
+schema_version: "1"
+kind: property
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 1
+result: sat
+family: "synth:validatorjs:72af04d05ce826215a3f03a21d7f4581"
+domain: ascii
+wall_ms: 0
+ground_truth_status: reproduced
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/isAscii.js:4:14"
+```
+
+### Pattern
+
+`^[\x00-\x7F]+$`
+
+### Context
+
+```json
+{"bad_char": "\n", "domain_note": "all-lengths", "question_id": "v-shape1-injection-chars", "threat": "Validator alphabet admits shell/HTML injection characters"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+reproduced
+
+## property:72af04d05ce826215a3f03a21d7f4581:v-shape1-injection-chars
+
+```yaml
+regex_id: 72af04d05ce826215a3f03a21d7f4581
+schema_version: "1"
+kind: property
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 1
+result: sat
+family: "synth:validatorjs:72af04d05ce826215a3f03a21d7f4581"
+domain: ascii
+wall_ms: 0
+ground_truth_status: reproduced
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/isAscii.js:4:14"
+```
+
+### Pattern
+
+`^[\x00-\x7F]+$`
+
+### Context
+
+```json
+{"bad_char": "$", "domain_note": "all-lengths", "question_id": "v-shape1-injection-chars", "threat": "Validator alphabet admits shell/HTML injection characters"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+reproduced
+
+## property:72af04d05ce826215a3f03a21d7f4581:v-shape1-injection-chars
+
+```yaml
+regex_id: 72af04d05ce826215a3f03a21d7f4581
+schema_version: "1"
+kind: property
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 1
+result: sat
+family: "synth:validatorjs:72af04d05ce826215a3f03a21d7f4581"
+domain: ascii
+wall_ms: 0
+ground_truth_status: reproduced
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/isAscii.js:4:14"
+```
+
+### Pattern
+
+`^[\x00-\x7F]+$`
+
+### Context
+
+```json
+{"bad_char": "&", "domain_note": "all-lengths", "question_id": "v-shape1-injection-chars", "threat": "Validator alphabet admits shell/HTML injection characters"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+reproduced
+
+## property:72af04d05ce826215a3f03a21d7f4581:v-shape1-injection-chars
+
+```yaml
+regex_id: 72af04d05ce826215a3f03a21d7f4581
+schema_version: "1"
+kind: property
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 1
+result: sat
+family: "synth:validatorjs:72af04d05ce826215a3f03a21d7f4581"
+domain: ascii
+wall_ms: 0
+ground_truth_status: reproduced
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/isAscii.js:4:14"
+```
+
+### Pattern
+
+`^[\x00-\x7F]+$`
+
+### Context
+
+```json
+{"bad_char": ";", "domain_note": "all-lengths", "question_id": "v-shape1-injection-chars", "threat": "Validator alphabet admits shell/HTML injection characters"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+reproduced
+
+## property:72af04d05ce826215a3f03a21d7f4581:v-shape1-injection-chars
+
+```yaml
+regex_id: 72af04d05ce826215a3f03a21d7f4581
+schema_version: "1"
+kind: property
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 1
+result: sat
+family: "synth:validatorjs:72af04d05ce826215a3f03a21d7f4581"
+domain: ascii
+wall_ms: 0
+ground_truth_status: reproduced
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/isAscii.js:4:14"
+```
+
+### Pattern
+
+`^[\x00-\x7F]+$`
+
+### Context
+
+```json
+{"bad_char": "`", "domain_note": "all-lengths", "question_id": "v-shape1-injection-chars", "threat": "Validator alphabet admits shell/HTML injection characters"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+reproduced
+
+## property:72af04d05ce826215a3f03a21d7f4581:v-shape1-injection-chars
+
+```yaml
+regex_id: 72af04d05ce826215a3f03a21d7f4581
+schema_version: "1"
+kind: property
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 1
+result: sat
+family: "synth:validatorjs:72af04d05ce826215a3f03a21d7f4581"
+domain: ascii
+wall_ms: 0
+ground_truth_status: reproduced
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/isAscii.js:4:14"
+```
+
+### Pattern
+
+`^[\x00-\x7F]+$`
+
+### Context
+
+```json
+{"bad_char": "|", "domain_note": "all-lengths", "question_id": "v-shape1-injection-chars", "threat": "Validator alphabet admits shell/HTML injection characters"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+reproduced
 
 ## usage_mismatch:72af04d05ce826215a3f03a21d7f4581:search
 
@@ -25592,6 +28632,486 @@ null
 
 None
 
+## mutation_guard:840a7452b2ed02a43f3e6f61f409b82c:v-shape2-whitelist-space
+
+```yaml
+regex_id: 840a7452b2ed02a43f3e6f61f409b82c
+schema_version: "1"
+kind: mutation_guard
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: sat
+family: "synth:validatorjs:840a7452b2ed02a43f3e6f61f409b82c"
+domain: ascii
+wall_ms: 0
+ground_truth_status: mutation-guard-sat-expected
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/isEmail.js:26:24"
+```
+
+### Pattern
+
+`^([\s\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e]|(\\[\x01-\x09\x0b\x0c\x0d-\x7f]))*$`
+
+### Context
+
+```json
+{"bad_char": "\t", "mutation": "union bad_char into mirror", "question_id": "v-shape2-whitelist-space"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+mutation-guard-sat-expected
+
+## mutation_guard:840a7452b2ed02a43f3e6f61f409b82c:v-shape2-whitelist-space
+
+```yaml
+regex_id: 840a7452b2ed02a43f3e6f61f409b82c
+schema_version: "1"
+kind: mutation_guard
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: sat
+family: "synth:validatorjs:840a7452b2ed02a43f3e6f61f409b82c"
+domain: ascii
+wall_ms: 0
+ground_truth_status: mutation-guard-sat-expected
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/isEmail.js:26:24"
+```
+
+### Pattern
+
+`^([\s\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e]|(\\[\x01-\x09\x0b\x0c\x0d-\x7f]))*$`
+
+### Context
+
+```json
+{"bad_char": "\n", "mutation": "union bad_char into mirror", "question_id": "v-shape2-whitelist-space"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+mutation-guard-sat-expected
+
+## mutation_guard:840a7452b2ed02a43f3e6f61f409b82c:v-shape2-whitelist-space
+
+```yaml
+regex_id: 840a7452b2ed02a43f3e6f61f409b82c
+schema_version: "1"
+kind: mutation_guard
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: sat
+family: "synth:validatorjs:840a7452b2ed02a43f3e6f61f409b82c"
+domain: ascii
+wall_ms: 0
+ground_truth_status: mutation-guard-sat-expected
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/isEmail.js:26:24"
+```
+
+### Pattern
+
+`^([\s\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e]|(\\[\x01-\x09\x0b\x0c\x0d-\x7f]))*$`
+
+### Context
+
+```json
+{"bad_char": "\r", "mutation": "union bad_char into mirror", "question_id": "v-shape2-whitelist-space"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+mutation-guard-sat-expected
+
+## mutation_guard:840a7452b2ed02a43f3e6f61f409b82c:v-shape2-whitelist-space
+
+```yaml
+regex_id: 840a7452b2ed02a43f3e6f61f409b82c
+schema_version: "1"
+kind: mutation_guard
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: sat
+family: "synth:validatorjs:840a7452b2ed02a43f3e6f61f409b82c"
+domain: ascii
+wall_ms: 0
+ground_truth_status: mutation-guard-sat-expected
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/isEmail.js:26:24"
+```
+
+### Pattern
+
+`^([\s\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e]|(\\[\x01-\x09\x0b\x0c\x0d-\x7f]))*$`
+
+### Context
+
+```json
+{"bad_char": " ", "mutation": "union bad_char into mirror", "question_id": "v-shape2-whitelist-space"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+mutation-guard-sat-expected
+
+## mutation_guard:840a7452b2ed02a43f3e6f61f409b82c:v-shape2-whitelist-space
+
+```yaml
+regex_id: 840a7452b2ed02a43f3e6f61f409b82c
+schema_version: "1"
+kind: mutation_guard
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: sat
+family: "synth:validatorjs:840a7452b2ed02a43f3e6f61f409b82c"
+domain: ascii
+wall_ms: 0
+ground_truth_status: mutation-guard-sat-expected
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/isEmail.js:26:24"
+```
+
+### Pattern
+
+`^([\s\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e]|(\\[\x01-\x09\x0b\x0c\x0d-\x7f]))*$`
+
+### Context
+
+```json
+{"bad_char": "/", "mutation": "union bad_char into mirror", "question_id": "v-shape2-whitelist-space"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+mutation-guard-sat-expected
+
+## mutation_guard:840a7452b2ed02a43f3e6f61f409b82c:v-shape2-whitelist-space
+
+```yaml
+regex_id: 840a7452b2ed02a43f3e6f61f409b82c
+schema_version: "1"
+kind: mutation_guard
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: sat
+family: "synth:validatorjs:840a7452b2ed02a43f3e6f61f409b82c"
+domain: ascii
+wall_ms: 0
+ground_truth_status: mutation-guard-sat-expected
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/isEmail.js:26:24"
+```
+
+### Pattern
+
+`^([\s\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e]|(\\[\x01-\x09\x0b\x0c\x0d-\x7f]))*$`
+
+### Context
+
+```json
+{"bad_char": "@", "mutation": "union bad_char into mirror", "question_id": "v-shape2-whitelist-space"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+mutation-guard-sat-expected
+
+## property:840a7452b2ed02a43f3e6f61f409b82c:v-shape2-whitelist-space
+
+```yaml
+regex_id: 840a7452b2ed02a43f3e6f61f409b82c
+schema_version: "1"
+kind: property
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: sat
+family: "synth:validatorjs:840a7452b2ed02a43f3e6f61f409b82c"
+domain: ascii
+wall_ms: 0
+ground_truth_status: reproduced
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/isEmail.js:26:24"
+```
+
+### Pattern
+
+`^([\s\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e]|(\\[\x01-\x09\x0b\x0c\x0d-\x7f]))*$`
+
+### Context
+
+```json
+{"bad_char": "\t", "domain_note": "len<=16", "question_id": "v-shape2-whitelist-space", "threat": "Whitelisted string of bounded length contains forbidden separator"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+reproduced
+
+## property:840a7452b2ed02a43f3e6f61f409b82c:v-shape2-whitelist-space
+
+```yaml
+regex_id: 840a7452b2ed02a43f3e6f61f409b82c
+schema_version: "1"
+kind: property
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: sat
+family: "synth:validatorjs:840a7452b2ed02a43f3e6f61f409b82c"
+domain: ascii
+wall_ms: 0
+ground_truth_status: reproduced
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/isEmail.js:26:24"
+```
+
+### Pattern
+
+`^([\s\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e]|(\\[\x01-\x09\x0b\x0c\x0d-\x7f]))*$`
+
+### Context
+
+```json
+{"bad_char": "\n", "domain_note": "len<=16", "question_id": "v-shape2-whitelist-space", "threat": "Whitelisted string of bounded length contains forbidden separator"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+reproduced
+
+## property:840a7452b2ed02a43f3e6f61f409b82c:v-shape2-whitelist-space
+
+```yaml
+regex_id: 840a7452b2ed02a43f3e6f61f409b82c
+schema_version: "1"
+kind: property
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: sat
+family: "synth:validatorjs:840a7452b2ed02a43f3e6f61f409b82c"
+domain: ascii
+wall_ms: 0
+ground_truth_status: reproduced
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/isEmail.js:26:24"
+```
+
+### Pattern
+
+`^([\s\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e]|(\\[\x01-\x09\x0b\x0c\x0d-\x7f]))*$`
+
+### Context
+
+```json
+{"bad_char": "\r", "domain_note": "len<=16", "question_id": "v-shape2-whitelist-space", "threat": "Whitelisted string of bounded length contains forbidden separator"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+reproduced
+
+## property:840a7452b2ed02a43f3e6f61f409b82c:v-shape2-whitelist-space
+
+```yaml
+regex_id: 840a7452b2ed02a43f3e6f61f409b82c
+schema_version: "1"
+kind: property
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: sat
+family: "synth:validatorjs:840a7452b2ed02a43f3e6f61f409b82c"
+domain: ascii
+wall_ms: 0
+ground_truth_status: reproduced
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/isEmail.js:26:24"
+```
+
+### Pattern
+
+`^([\s\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e]|(\\[\x01-\x09\x0b\x0c\x0d-\x7f]))*$`
+
+### Context
+
+```json
+{"bad_char": " ", "domain_note": "len<=16", "question_id": "v-shape2-whitelist-space", "threat": "Whitelisted string of bounded length contains forbidden separator"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+reproduced
+
+## property:840a7452b2ed02a43f3e6f61f409b82c:v-shape2-whitelist-space
+
+```yaml
+regex_id: 840a7452b2ed02a43f3e6f61f409b82c
+schema_version: "1"
+kind: property
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: sat
+family: "synth:validatorjs:840a7452b2ed02a43f3e6f61f409b82c"
+domain: ascii
+wall_ms: 0
+ground_truth_status: reproduced
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/isEmail.js:26:24"
+```
+
+### Pattern
+
+`^([\s\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e]|(\\[\x01-\x09\x0b\x0c\x0d-\x7f]))*$`
+
+### Context
+
+```json
+{"bad_char": "/", "domain_note": "len<=16", "question_id": "v-shape2-whitelist-space", "threat": "Whitelisted string of bounded length contains forbidden separator"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+reproduced
+
+## property:840a7452b2ed02a43f3e6f61f409b82c:v-shape2-whitelist-space
+
+```yaml
+regex_id: 840a7452b2ed02a43f3e6f61f409b82c
+schema_version: "1"
+kind: property
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: sat
+family: "synth:validatorjs:840a7452b2ed02a43f3e6f61f409b82c"
+domain: ascii
+wall_ms: 0
+ground_truth_status: reproduced
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/isEmail.js:26:24"
+```
+
+### Pattern
+
+`^([\s\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e]|(\\[\x01-\x09\x0b\x0c\x0d-\x7f]))*$`
+
+### Context
+
+```json
+{"bad_char": "@", "domain_note": "len<=16", "question_id": "v-shape2-whitelist-space", "threat": "Whitelisted string of bounded length contains forbidden separator"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+reproduced
+
 ## usage_mismatch:840a7452b2ed02a43f3e6f61f409b82c:search
 
 ```yaml
@@ -26242,6 +29762,486 @@ site: "pilots/validatorjs/src/alpha.js:40:11"
 
 ```json
 {"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## mutation_guard:860d15a11c0f5e2d7cb35d24979c63db:v-shape2-whitelist-space
+
+```yaml
+regex_id: 860d15a11c0f5e2d7cb35d24979c63db
+schema_version: "1"
+kind: mutation_guard
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: sat
+family: "synth:validatorjs:860d15a11c0f5e2d7cb35d24979c63db"
+domain: ascii
+wall_ms: 0
+ground_truth_status: mutation-guard-sat-expected
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/isEmail.js:25:22"
+```
+
+### Pattern
+
+`^[a-z\d]+$`
+
+### Context
+
+```json
+{"bad_char": "\t", "mutation": "union bad_char into mirror", "question_id": "v-shape2-whitelist-space"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+mutation-guard-sat-expected
+
+## mutation_guard:860d15a11c0f5e2d7cb35d24979c63db:v-shape2-whitelist-space
+
+```yaml
+regex_id: 860d15a11c0f5e2d7cb35d24979c63db
+schema_version: "1"
+kind: mutation_guard
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: sat
+family: "synth:validatorjs:860d15a11c0f5e2d7cb35d24979c63db"
+domain: ascii
+wall_ms: 0
+ground_truth_status: mutation-guard-sat-expected
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/isEmail.js:25:22"
+```
+
+### Pattern
+
+`^[a-z\d]+$`
+
+### Context
+
+```json
+{"bad_char": "\n", "mutation": "union bad_char into mirror", "question_id": "v-shape2-whitelist-space"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+mutation-guard-sat-expected
+
+## mutation_guard:860d15a11c0f5e2d7cb35d24979c63db:v-shape2-whitelist-space
+
+```yaml
+regex_id: 860d15a11c0f5e2d7cb35d24979c63db
+schema_version: "1"
+kind: mutation_guard
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: sat
+family: "synth:validatorjs:860d15a11c0f5e2d7cb35d24979c63db"
+domain: ascii
+wall_ms: 0
+ground_truth_status: mutation-guard-sat-expected
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/isEmail.js:25:22"
+```
+
+### Pattern
+
+`^[a-z\d]+$`
+
+### Context
+
+```json
+{"bad_char": "\r", "mutation": "union bad_char into mirror", "question_id": "v-shape2-whitelist-space"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+mutation-guard-sat-expected
+
+## mutation_guard:860d15a11c0f5e2d7cb35d24979c63db:v-shape2-whitelist-space
+
+```yaml
+regex_id: 860d15a11c0f5e2d7cb35d24979c63db
+schema_version: "1"
+kind: mutation_guard
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: sat
+family: "synth:validatorjs:860d15a11c0f5e2d7cb35d24979c63db"
+domain: ascii
+wall_ms: 0
+ground_truth_status: mutation-guard-sat-expected
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/isEmail.js:25:22"
+```
+
+### Pattern
+
+`^[a-z\d]+$`
+
+### Context
+
+```json
+{"bad_char": " ", "mutation": "union bad_char into mirror", "question_id": "v-shape2-whitelist-space"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+mutation-guard-sat-expected
+
+## mutation_guard:860d15a11c0f5e2d7cb35d24979c63db:v-shape2-whitelist-space
+
+```yaml
+regex_id: 860d15a11c0f5e2d7cb35d24979c63db
+schema_version: "1"
+kind: mutation_guard
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: sat
+family: "synth:validatorjs:860d15a11c0f5e2d7cb35d24979c63db"
+domain: ascii
+wall_ms: 0
+ground_truth_status: mutation-guard-sat-expected
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/isEmail.js:25:22"
+```
+
+### Pattern
+
+`^[a-z\d]+$`
+
+### Context
+
+```json
+{"bad_char": "/", "mutation": "union bad_char into mirror", "question_id": "v-shape2-whitelist-space"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+mutation-guard-sat-expected
+
+## mutation_guard:860d15a11c0f5e2d7cb35d24979c63db:v-shape2-whitelist-space
+
+```yaml
+regex_id: 860d15a11c0f5e2d7cb35d24979c63db
+schema_version: "1"
+kind: mutation_guard
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: sat
+family: "synth:validatorjs:860d15a11c0f5e2d7cb35d24979c63db"
+domain: ascii
+wall_ms: 0
+ground_truth_status: mutation-guard-sat-expected
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/isEmail.js:25:22"
+```
+
+### Pattern
+
+`^[a-z\d]+$`
+
+### Context
+
+```json
+{"bad_char": "@", "mutation": "union bad_char into mirror", "question_id": "v-shape2-whitelist-space"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+mutation-guard-sat-expected
+
+## property:860d15a11c0f5e2d7cb35d24979c63db:v-shape2-whitelist-space
+
+```yaml
+regex_id: 860d15a11c0f5e2d7cb35d24979c63db
+schema_version: "1"
+kind: property
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: unsat
+family: "synth:validatorjs:860d15a11c0f5e2d7cb35d24979c63db"
+domain: ascii
+wall_ms: 0
+ground_truth_status: null
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/isEmail.js:25:22"
+```
+
+### Pattern
+
+`^[a-z\d]+$`
+
+### Context
+
+```json
+{"bad_char": "\t", "domain_note": "len<=16", "question_id": "v-shape2-whitelist-space", "threat": "Whitelisted string of bounded length contains forbidden separator"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## property:860d15a11c0f5e2d7cb35d24979c63db:v-shape2-whitelist-space
+
+```yaml
+regex_id: 860d15a11c0f5e2d7cb35d24979c63db
+schema_version: "1"
+kind: property
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: unsat
+family: "synth:validatorjs:860d15a11c0f5e2d7cb35d24979c63db"
+domain: ascii
+wall_ms: 0
+ground_truth_status: null
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/isEmail.js:25:22"
+```
+
+### Pattern
+
+`^[a-z\d]+$`
+
+### Context
+
+```json
+{"bad_char": "\n", "domain_note": "len<=16", "question_id": "v-shape2-whitelist-space", "threat": "Whitelisted string of bounded length contains forbidden separator"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## property:860d15a11c0f5e2d7cb35d24979c63db:v-shape2-whitelist-space
+
+```yaml
+regex_id: 860d15a11c0f5e2d7cb35d24979c63db
+schema_version: "1"
+kind: property
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: unsat
+family: "synth:validatorjs:860d15a11c0f5e2d7cb35d24979c63db"
+domain: ascii
+wall_ms: 0
+ground_truth_status: null
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/isEmail.js:25:22"
+```
+
+### Pattern
+
+`^[a-z\d]+$`
+
+### Context
+
+```json
+{"bad_char": "\r", "domain_note": "len<=16", "question_id": "v-shape2-whitelist-space", "threat": "Whitelisted string of bounded length contains forbidden separator"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## property:860d15a11c0f5e2d7cb35d24979c63db:v-shape2-whitelist-space
+
+```yaml
+regex_id: 860d15a11c0f5e2d7cb35d24979c63db
+schema_version: "1"
+kind: property
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: unsat
+family: "synth:validatorjs:860d15a11c0f5e2d7cb35d24979c63db"
+domain: ascii
+wall_ms: 0
+ground_truth_status: null
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/isEmail.js:25:22"
+```
+
+### Pattern
+
+`^[a-z\d]+$`
+
+### Context
+
+```json
+{"bad_char": " ", "domain_note": "len<=16", "question_id": "v-shape2-whitelist-space", "threat": "Whitelisted string of bounded length contains forbidden separator"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## property:860d15a11c0f5e2d7cb35d24979c63db:v-shape2-whitelist-space
+
+```yaml
+regex_id: 860d15a11c0f5e2d7cb35d24979c63db
+schema_version: "1"
+kind: property
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: unsat
+family: "synth:validatorjs:860d15a11c0f5e2d7cb35d24979c63db"
+domain: ascii
+wall_ms: 0
+ground_truth_status: null
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/isEmail.js:25:22"
+```
+
+### Pattern
+
+`^[a-z\d]+$`
+
+### Context
+
+```json
+{"bad_char": "/", "domain_note": "len<=16", "question_id": "v-shape2-whitelist-space", "threat": "Whitelisted string of bounded length contains forbidden separator"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## property:860d15a11c0f5e2d7cb35d24979c63db:v-shape2-whitelist-space
+
+```yaml
+regex_id: 860d15a11c0f5e2d7cb35d24979c63db
+schema_version: "1"
+kind: property
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: unsat
+family: "synth:validatorjs:860d15a11c0f5e2d7cb35d24979c63db"
+domain: ascii
+wall_ms: 0
+ground_truth_status: null
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/isEmail.js:25:22"
+```
+
+### Pattern
+
+`^[a-z\d]+$`
+
+### Context
+
+```json
+{"bad_char": "@", "domain_note": "len<=16", "question_id": "v-shape2-whitelist-space", "threat": "Whitelisted string of bounded length contains forbidden separator"}
 ```
 
 ### Witness
@@ -29840,6 +33840,566 @@ site: "pilots/validatorjs/src/alpha.js:83:6"
 
 ```json
 {"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## mutation_guard:97d8bce14dccd63d9e69a508532999cf:v-shape1-injection-chars
+
+```yaml
+regex_id: 97d8bce14dccd63d9e69a508532999cf
+schema_version: "1"
+kind: mutation_guard
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: sat
+family: "synth:validatorjs:97d8bce14dccd63d9e69a508532999cf"
+domain: ascii
+wall_ms: 0
+ground_truth_status: mutation-guard-sat-expected
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:87:11"
+```
+
+### Pattern
+
+`^[\u0900-\u0963]+[\u0966-\u097F]*$`
+
+### Context
+
+```json
+{"bad_char": "\u0000", "mutation": "union bad_char into mirror", "question_id": "v-shape1-injection-chars"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+mutation-guard-sat-expected
+
+## mutation_guard:97d8bce14dccd63d9e69a508532999cf:v-shape1-injection-chars
+
+```yaml
+regex_id: 97d8bce14dccd63d9e69a508532999cf
+schema_version: "1"
+kind: mutation_guard
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: sat
+family: "synth:validatorjs:97d8bce14dccd63d9e69a508532999cf"
+domain: ascii
+wall_ms: 0
+ground_truth_status: mutation-guard-sat-expected
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:87:11"
+```
+
+### Pattern
+
+`^[\u0900-\u0963]+[\u0966-\u097F]*$`
+
+### Context
+
+```json
+{"bad_char": "\n", "mutation": "union bad_char into mirror", "question_id": "v-shape1-injection-chars"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+mutation-guard-sat-expected
+
+## mutation_guard:97d8bce14dccd63d9e69a508532999cf:v-shape1-injection-chars
+
+```yaml
+regex_id: 97d8bce14dccd63d9e69a508532999cf
+schema_version: "1"
+kind: mutation_guard
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: sat
+family: "synth:validatorjs:97d8bce14dccd63d9e69a508532999cf"
+domain: ascii
+wall_ms: 0
+ground_truth_status: mutation-guard-sat-expected
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:87:11"
+```
+
+### Pattern
+
+`^[\u0900-\u0963]+[\u0966-\u097F]*$`
+
+### Context
+
+```json
+{"bad_char": "$", "mutation": "union bad_char into mirror", "question_id": "v-shape1-injection-chars"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+mutation-guard-sat-expected
+
+## mutation_guard:97d8bce14dccd63d9e69a508532999cf:v-shape1-injection-chars
+
+```yaml
+regex_id: 97d8bce14dccd63d9e69a508532999cf
+schema_version: "1"
+kind: mutation_guard
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: sat
+family: "synth:validatorjs:97d8bce14dccd63d9e69a508532999cf"
+domain: ascii
+wall_ms: 0
+ground_truth_status: mutation-guard-sat-expected
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:87:11"
+```
+
+### Pattern
+
+`^[\u0900-\u0963]+[\u0966-\u097F]*$`
+
+### Context
+
+```json
+{"bad_char": "&", "mutation": "union bad_char into mirror", "question_id": "v-shape1-injection-chars"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+mutation-guard-sat-expected
+
+## mutation_guard:97d8bce14dccd63d9e69a508532999cf:v-shape1-injection-chars
+
+```yaml
+regex_id: 97d8bce14dccd63d9e69a508532999cf
+schema_version: "1"
+kind: mutation_guard
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: sat
+family: "synth:validatorjs:97d8bce14dccd63d9e69a508532999cf"
+domain: ascii
+wall_ms: 0
+ground_truth_status: mutation-guard-sat-expected
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:87:11"
+```
+
+### Pattern
+
+`^[\u0900-\u0963]+[\u0966-\u097F]*$`
+
+### Context
+
+```json
+{"bad_char": ";", "mutation": "union bad_char into mirror", "question_id": "v-shape1-injection-chars"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+mutation-guard-sat-expected
+
+## mutation_guard:97d8bce14dccd63d9e69a508532999cf:v-shape1-injection-chars
+
+```yaml
+regex_id: 97d8bce14dccd63d9e69a508532999cf
+schema_version: "1"
+kind: mutation_guard
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: sat
+family: "synth:validatorjs:97d8bce14dccd63d9e69a508532999cf"
+domain: ascii
+wall_ms: 0
+ground_truth_status: mutation-guard-sat-expected
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:87:11"
+```
+
+### Pattern
+
+`^[\u0900-\u0963]+[\u0966-\u097F]*$`
+
+### Context
+
+```json
+{"bad_char": "`", "mutation": "union bad_char into mirror", "question_id": "v-shape1-injection-chars"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+mutation-guard-sat-expected
+
+## mutation_guard:97d8bce14dccd63d9e69a508532999cf:v-shape1-injection-chars
+
+```yaml
+regex_id: 97d8bce14dccd63d9e69a508532999cf
+schema_version: "1"
+kind: mutation_guard
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: sat
+family: "synth:validatorjs:97d8bce14dccd63d9e69a508532999cf"
+domain: ascii
+wall_ms: 0
+ground_truth_status: mutation-guard-sat-expected
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:87:11"
+```
+
+### Pattern
+
+`^[\u0900-\u0963]+[\u0966-\u097F]*$`
+
+### Context
+
+```json
+{"bad_char": "|", "mutation": "union bad_char into mirror", "question_id": "v-shape1-injection-chars"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+mutation-guard-sat-expected
+
+## property:97d8bce14dccd63d9e69a508532999cf:v-shape1-injection-chars
+
+```yaml
+regex_id: 97d8bce14dccd63d9e69a508532999cf
+schema_version: "1"
+kind: property
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: unsat
+family: "synth:validatorjs:97d8bce14dccd63d9e69a508532999cf"
+domain: ascii
+wall_ms: 0
+ground_truth_status: null
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:87:11"
+```
+
+### Pattern
+
+`^[\u0900-\u0963]+[\u0966-\u097F]*$`
+
+### Context
+
+```json
+{"bad_char": "\u0000", "domain_note": "len<=16", "question_id": "v-shape1-injection-chars", "threat": "Validator alphabet admits shell/HTML injection characters"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## property:97d8bce14dccd63d9e69a508532999cf:v-shape1-injection-chars
+
+```yaml
+regex_id: 97d8bce14dccd63d9e69a508532999cf
+schema_version: "1"
+kind: property
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: unsat
+family: "synth:validatorjs:97d8bce14dccd63d9e69a508532999cf"
+domain: ascii
+wall_ms: 0
+ground_truth_status: null
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:87:11"
+```
+
+### Pattern
+
+`^[\u0900-\u0963]+[\u0966-\u097F]*$`
+
+### Context
+
+```json
+{"bad_char": "\n", "domain_note": "len<=16", "question_id": "v-shape1-injection-chars", "threat": "Validator alphabet admits shell/HTML injection characters"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## property:97d8bce14dccd63d9e69a508532999cf:v-shape1-injection-chars
+
+```yaml
+regex_id: 97d8bce14dccd63d9e69a508532999cf
+schema_version: "1"
+kind: property
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: unsat
+family: "synth:validatorjs:97d8bce14dccd63d9e69a508532999cf"
+domain: ascii
+wall_ms: 0
+ground_truth_status: null
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:87:11"
+```
+
+### Pattern
+
+`^[\u0900-\u0963]+[\u0966-\u097F]*$`
+
+### Context
+
+```json
+{"bad_char": "$", "domain_note": "len<=16", "question_id": "v-shape1-injection-chars", "threat": "Validator alphabet admits shell/HTML injection characters"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## property:97d8bce14dccd63d9e69a508532999cf:v-shape1-injection-chars
+
+```yaml
+regex_id: 97d8bce14dccd63d9e69a508532999cf
+schema_version: "1"
+kind: property
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: unsat
+family: "synth:validatorjs:97d8bce14dccd63d9e69a508532999cf"
+domain: ascii
+wall_ms: 0
+ground_truth_status: null
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:87:11"
+```
+
+### Pattern
+
+`^[\u0900-\u0963]+[\u0966-\u097F]*$`
+
+### Context
+
+```json
+{"bad_char": "&", "domain_note": "len<=16", "question_id": "v-shape1-injection-chars", "threat": "Validator alphabet admits shell/HTML injection characters"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## property:97d8bce14dccd63d9e69a508532999cf:v-shape1-injection-chars
+
+```yaml
+regex_id: 97d8bce14dccd63d9e69a508532999cf
+schema_version: "1"
+kind: property
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: unsat
+family: "synth:validatorjs:97d8bce14dccd63d9e69a508532999cf"
+domain: ascii
+wall_ms: 0
+ground_truth_status: null
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:87:11"
+```
+
+### Pattern
+
+`^[\u0900-\u0963]+[\u0966-\u097F]*$`
+
+### Context
+
+```json
+{"bad_char": ";", "domain_note": "len<=16", "question_id": "v-shape1-injection-chars", "threat": "Validator alphabet admits shell/HTML injection characters"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## property:97d8bce14dccd63d9e69a508532999cf:v-shape1-injection-chars
+
+```yaml
+regex_id: 97d8bce14dccd63d9e69a508532999cf
+schema_version: "1"
+kind: property
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: unsat
+family: "synth:validatorjs:97d8bce14dccd63d9e69a508532999cf"
+domain: ascii
+wall_ms: 0
+ground_truth_status: null
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:87:11"
+```
+
+### Pattern
+
+`^[\u0900-\u0963]+[\u0966-\u097F]*$`
+
+### Context
+
+```json
+{"bad_char": "`", "domain_note": "len<=16", "question_id": "v-shape1-injection-chars", "threat": "Validator alphabet admits shell/HTML injection characters"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## property:97d8bce14dccd63d9e69a508532999cf:v-shape1-injection-chars
+
+```yaml
+regex_id: 97d8bce14dccd63d9e69a508532999cf
+schema_version: "1"
+kind: property
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 2
+result: unsat
+family: "synth:validatorjs:97d8bce14dccd63d9e69a508532999cf"
+domain: ascii
+wall_ms: 0
+ground_truth_status: null
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:87:11"
+```
+
+### Pattern
+
+`^[\u0900-\u0963]+[\u0966-\u097F]*$`
+
+### Context
+
+```json
+{"bad_char": "|", "domain_note": "len<=16", "question_id": "v-shape1-injection-chars", "threat": "Validator alphabet admits shell/HTML injection characters"}
 ```
 
 ### Witness
@@ -38351,6 +42911,566 @@ null
 
 None
 
+## mutation_guard:c26143d5cd40e52923049cecaf5cdb40:v-shape1-injection-chars
+
+```yaml
+regex_id: c26143d5cd40e52923049cecaf5cdb40
+schema_version: "1"
+kind: mutation_guard
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 1
+result: sat
+family: "synth:validatorjs:c26143d5cd40e52923049cecaf5cdb40"
+domain: ascii
+wall_ms: 0
+ground_truth_status: mutation-guard-sat-expected
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:32:11"
+```
+
+### Pattern
+
+`^[ㄱ-ㅎㅏ-ㅣ가-힣]*$`
+
+### Context
+
+```json
+{"bad_char": "\u0000", "mutation": "union bad_char into mirror", "question_id": "v-shape1-injection-chars"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+mutation-guard-sat-expected
+
+## mutation_guard:c26143d5cd40e52923049cecaf5cdb40:v-shape1-injection-chars
+
+```yaml
+regex_id: c26143d5cd40e52923049cecaf5cdb40
+schema_version: "1"
+kind: mutation_guard
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 1
+result: sat
+family: "synth:validatorjs:c26143d5cd40e52923049cecaf5cdb40"
+domain: ascii
+wall_ms: 0
+ground_truth_status: mutation-guard-sat-expected
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:32:11"
+```
+
+### Pattern
+
+`^[ㄱ-ㅎㅏ-ㅣ가-힣]*$`
+
+### Context
+
+```json
+{"bad_char": "\n", "mutation": "union bad_char into mirror", "question_id": "v-shape1-injection-chars"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+mutation-guard-sat-expected
+
+## mutation_guard:c26143d5cd40e52923049cecaf5cdb40:v-shape1-injection-chars
+
+```yaml
+regex_id: c26143d5cd40e52923049cecaf5cdb40
+schema_version: "1"
+kind: mutation_guard
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 1
+result: sat
+family: "synth:validatorjs:c26143d5cd40e52923049cecaf5cdb40"
+domain: ascii
+wall_ms: 0
+ground_truth_status: mutation-guard-sat-expected
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:32:11"
+```
+
+### Pattern
+
+`^[ㄱ-ㅎㅏ-ㅣ가-힣]*$`
+
+### Context
+
+```json
+{"bad_char": "$", "mutation": "union bad_char into mirror", "question_id": "v-shape1-injection-chars"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+mutation-guard-sat-expected
+
+## mutation_guard:c26143d5cd40e52923049cecaf5cdb40:v-shape1-injection-chars
+
+```yaml
+regex_id: c26143d5cd40e52923049cecaf5cdb40
+schema_version: "1"
+kind: mutation_guard
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 1
+result: sat
+family: "synth:validatorjs:c26143d5cd40e52923049cecaf5cdb40"
+domain: ascii
+wall_ms: 0
+ground_truth_status: mutation-guard-sat-expected
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:32:11"
+```
+
+### Pattern
+
+`^[ㄱ-ㅎㅏ-ㅣ가-힣]*$`
+
+### Context
+
+```json
+{"bad_char": "&", "mutation": "union bad_char into mirror", "question_id": "v-shape1-injection-chars"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+mutation-guard-sat-expected
+
+## mutation_guard:c26143d5cd40e52923049cecaf5cdb40:v-shape1-injection-chars
+
+```yaml
+regex_id: c26143d5cd40e52923049cecaf5cdb40
+schema_version: "1"
+kind: mutation_guard
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 1
+result: sat
+family: "synth:validatorjs:c26143d5cd40e52923049cecaf5cdb40"
+domain: ascii
+wall_ms: 0
+ground_truth_status: mutation-guard-sat-expected
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:32:11"
+```
+
+### Pattern
+
+`^[ㄱ-ㅎㅏ-ㅣ가-힣]*$`
+
+### Context
+
+```json
+{"bad_char": ";", "mutation": "union bad_char into mirror", "question_id": "v-shape1-injection-chars"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+mutation-guard-sat-expected
+
+## mutation_guard:c26143d5cd40e52923049cecaf5cdb40:v-shape1-injection-chars
+
+```yaml
+regex_id: c26143d5cd40e52923049cecaf5cdb40
+schema_version: "1"
+kind: mutation_guard
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 1
+result: sat
+family: "synth:validatorjs:c26143d5cd40e52923049cecaf5cdb40"
+domain: ascii
+wall_ms: 0
+ground_truth_status: mutation-guard-sat-expected
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:32:11"
+```
+
+### Pattern
+
+`^[ㄱ-ㅎㅏ-ㅣ가-힣]*$`
+
+### Context
+
+```json
+{"bad_char": "`", "mutation": "union bad_char into mirror", "question_id": "v-shape1-injection-chars"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+mutation-guard-sat-expected
+
+## mutation_guard:c26143d5cd40e52923049cecaf5cdb40:v-shape1-injection-chars
+
+```yaml
+regex_id: c26143d5cd40e52923049cecaf5cdb40
+schema_version: "1"
+kind: mutation_guard
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 1
+result: sat
+family: "synth:validatorjs:c26143d5cd40e52923049cecaf5cdb40"
+domain: ascii
+wall_ms: 0
+ground_truth_status: mutation-guard-sat-expected
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:32:11"
+```
+
+### Pattern
+
+`^[ㄱ-ㅎㅏ-ㅣ가-힣]*$`
+
+### Context
+
+```json
+{"bad_char": "|", "mutation": "union bad_char into mirror", "question_id": "v-shape1-injection-chars"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+mutation-guard-sat-expected
+
+## property:c26143d5cd40e52923049cecaf5cdb40:v-shape1-injection-chars
+
+```yaml
+regex_id: c26143d5cd40e52923049cecaf5cdb40
+schema_version: "1"
+kind: property
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 1
+result: unsat
+family: "synth:validatorjs:c26143d5cd40e52923049cecaf5cdb40"
+domain: ascii
+wall_ms: 0
+ground_truth_status: null
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:32:11"
+```
+
+### Pattern
+
+`^[ㄱ-ㅎㅏ-ㅣ가-힣]*$`
+
+### Context
+
+```json
+{"bad_char": "\u0000", "domain_note": "all-lengths", "question_id": "v-shape1-injection-chars", "threat": "Validator alphabet admits shell/HTML injection characters"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## property:c26143d5cd40e52923049cecaf5cdb40:v-shape1-injection-chars
+
+```yaml
+regex_id: c26143d5cd40e52923049cecaf5cdb40
+schema_version: "1"
+kind: property
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 1
+result: unsat
+family: "synth:validatorjs:c26143d5cd40e52923049cecaf5cdb40"
+domain: ascii
+wall_ms: 0
+ground_truth_status: null
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:32:11"
+```
+
+### Pattern
+
+`^[ㄱ-ㅎㅏ-ㅣ가-힣]*$`
+
+### Context
+
+```json
+{"bad_char": "\n", "domain_note": "all-lengths", "question_id": "v-shape1-injection-chars", "threat": "Validator alphabet admits shell/HTML injection characters"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## property:c26143d5cd40e52923049cecaf5cdb40:v-shape1-injection-chars
+
+```yaml
+regex_id: c26143d5cd40e52923049cecaf5cdb40
+schema_version: "1"
+kind: property
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 1
+result: unsat
+family: "synth:validatorjs:c26143d5cd40e52923049cecaf5cdb40"
+domain: ascii
+wall_ms: 0
+ground_truth_status: null
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:32:11"
+```
+
+### Pattern
+
+`^[ㄱ-ㅎㅏ-ㅣ가-힣]*$`
+
+### Context
+
+```json
+{"bad_char": "$", "domain_note": "all-lengths", "question_id": "v-shape1-injection-chars", "threat": "Validator alphabet admits shell/HTML injection characters"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## property:c26143d5cd40e52923049cecaf5cdb40:v-shape1-injection-chars
+
+```yaml
+regex_id: c26143d5cd40e52923049cecaf5cdb40
+schema_version: "1"
+kind: property
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 1
+result: unsat
+family: "synth:validatorjs:c26143d5cd40e52923049cecaf5cdb40"
+domain: ascii
+wall_ms: 0
+ground_truth_status: null
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:32:11"
+```
+
+### Pattern
+
+`^[ㄱ-ㅎㅏ-ㅣ가-힣]*$`
+
+### Context
+
+```json
+{"bad_char": "&", "domain_note": "all-lengths", "question_id": "v-shape1-injection-chars", "threat": "Validator alphabet admits shell/HTML injection characters"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## property:c26143d5cd40e52923049cecaf5cdb40:v-shape1-injection-chars
+
+```yaml
+regex_id: c26143d5cd40e52923049cecaf5cdb40
+schema_version: "1"
+kind: property
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 1
+result: unsat
+family: "synth:validatorjs:c26143d5cd40e52923049cecaf5cdb40"
+domain: ascii
+wall_ms: 0
+ground_truth_status: null
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:32:11"
+```
+
+### Pattern
+
+`^[ㄱ-ㅎㅏ-ㅣ가-힣]*$`
+
+### Context
+
+```json
+{"bad_char": ";", "domain_note": "all-lengths", "question_id": "v-shape1-injection-chars", "threat": "Validator alphabet admits shell/HTML injection characters"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## property:c26143d5cd40e52923049cecaf5cdb40:v-shape1-injection-chars
+
+```yaml
+regex_id: c26143d5cd40e52923049cecaf5cdb40
+schema_version: "1"
+kind: property
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 1
+result: unsat
+family: "synth:validatorjs:c26143d5cd40e52923049cecaf5cdb40"
+domain: ascii
+wall_ms: 0
+ground_truth_status: null
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:32:11"
+```
+
+### Pattern
+
+`^[ㄱ-ㅎㅏ-ㅣ가-힣]*$`
+
+### Context
+
+```json
+{"bad_char": "`", "domain_note": "all-lengths", "question_id": "v-shape1-injection-chars", "threat": "Validator alphabet admits shell/HTML injection characters"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## property:c26143d5cd40e52923049cecaf5cdb40:v-shape1-injection-chars
+
+```yaml
+regex_id: c26143d5cd40e52923049cecaf5cdb40
+schema_version: "1"
+kind: property
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 1
+result: unsat
+family: "synth:validatorjs:c26143d5cd40e52923049cecaf5cdb40"
+domain: ascii
+wall_ms: 0
+ground_truth_status: null
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:32:11"
+```
+
+### Pattern
+
+`^[ㄱ-ㅎㅏ-ㅣ가-힣]*$`
+
+### Context
+
+```json
+{"bad_char": "|", "domain_note": "all-lengths", "question_id": "v-shape1-injection-chars", "threat": "Validator alphabet admits shell/HTML injection characters"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
 ## usage_mismatch:c26143d5cd40e52923049cecaf5cdb40:search
 
 ```yaml
@@ -40749,6 +45869,566 @@ site: "pilots/validatorjs/src/alpha.js:25:17"
 
 ```json
 {"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## mutation_guard:cf2db4155ad1aa9bf082bc6929827046:v-shape1-injection-chars
+
+```yaml
+regex_id: cf2db4155ad1aa9bf082bc6929827046
+schema_version: "1"
+kind: mutation_guard
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 1
+result: sat
+family: "synth:validatorjs:cf2db4155ad1aa9bf082bc6929827046"
+domain: ascii
+wall_ms: 0
+ground_truth_status: mutation-guard-sat-expected
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:79:11"
+```
+
+### Pattern
+
+`^[0-9ㄱ-ㅎㅏ-ㅣ가-힣]*$`
+
+### Context
+
+```json
+{"bad_char": "\u0000", "mutation": "union bad_char into mirror", "question_id": "v-shape1-injection-chars"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+mutation-guard-sat-expected
+
+## mutation_guard:cf2db4155ad1aa9bf082bc6929827046:v-shape1-injection-chars
+
+```yaml
+regex_id: cf2db4155ad1aa9bf082bc6929827046
+schema_version: "1"
+kind: mutation_guard
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 1
+result: sat
+family: "synth:validatorjs:cf2db4155ad1aa9bf082bc6929827046"
+domain: ascii
+wall_ms: 0
+ground_truth_status: mutation-guard-sat-expected
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:79:11"
+```
+
+### Pattern
+
+`^[0-9ㄱ-ㅎㅏ-ㅣ가-힣]*$`
+
+### Context
+
+```json
+{"bad_char": "\n", "mutation": "union bad_char into mirror", "question_id": "v-shape1-injection-chars"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+mutation-guard-sat-expected
+
+## mutation_guard:cf2db4155ad1aa9bf082bc6929827046:v-shape1-injection-chars
+
+```yaml
+regex_id: cf2db4155ad1aa9bf082bc6929827046
+schema_version: "1"
+kind: mutation_guard
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 1
+result: sat
+family: "synth:validatorjs:cf2db4155ad1aa9bf082bc6929827046"
+domain: ascii
+wall_ms: 0
+ground_truth_status: mutation-guard-sat-expected
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:79:11"
+```
+
+### Pattern
+
+`^[0-9ㄱ-ㅎㅏ-ㅣ가-힣]*$`
+
+### Context
+
+```json
+{"bad_char": "$", "mutation": "union bad_char into mirror", "question_id": "v-shape1-injection-chars"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+mutation-guard-sat-expected
+
+## mutation_guard:cf2db4155ad1aa9bf082bc6929827046:v-shape1-injection-chars
+
+```yaml
+regex_id: cf2db4155ad1aa9bf082bc6929827046
+schema_version: "1"
+kind: mutation_guard
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 1
+result: sat
+family: "synth:validatorjs:cf2db4155ad1aa9bf082bc6929827046"
+domain: ascii
+wall_ms: 0
+ground_truth_status: mutation-guard-sat-expected
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:79:11"
+```
+
+### Pattern
+
+`^[0-9ㄱ-ㅎㅏ-ㅣ가-힣]*$`
+
+### Context
+
+```json
+{"bad_char": "&", "mutation": "union bad_char into mirror", "question_id": "v-shape1-injection-chars"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+mutation-guard-sat-expected
+
+## mutation_guard:cf2db4155ad1aa9bf082bc6929827046:v-shape1-injection-chars
+
+```yaml
+regex_id: cf2db4155ad1aa9bf082bc6929827046
+schema_version: "1"
+kind: mutation_guard
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 1
+result: sat
+family: "synth:validatorjs:cf2db4155ad1aa9bf082bc6929827046"
+domain: ascii
+wall_ms: 0
+ground_truth_status: mutation-guard-sat-expected
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:79:11"
+```
+
+### Pattern
+
+`^[0-9ㄱ-ㅎㅏ-ㅣ가-힣]*$`
+
+### Context
+
+```json
+{"bad_char": ";", "mutation": "union bad_char into mirror", "question_id": "v-shape1-injection-chars"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+mutation-guard-sat-expected
+
+## mutation_guard:cf2db4155ad1aa9bf082bc6929827046:v-shape1-injection-chars
+
+```yaml
+regex_id: cf2db4155ad1aa9bf082bc6929827046
+schema_version: "1"
+kind: mutation_guard
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 1
+result: sat
+family: "synth:validatorjs:cf2db4155ad1aa9bf082bc6929827046"
+domain: ascii
+wall_ms: 0
+ground_truth_status: mutation-guard-sat-expected
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:79:11"
+```
+
+### Pattern
+
+`^[0-9ㄱ-ㅎㅏ-ㅣ가-힣]*$`
+
+### Context
+
+```json
+{"bad_char": "`", "mutation": "union bad_char into mirror", "question_id": "v-shape1-injection-chars"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+mutation-guard-sat-expected
+
+## mutation_guard:cf2db4155ad1aa9bf082bc6929827046:v-shape1-injection-chars
+
+```yaml
+regex_id: cf2db4155ad1aa9bf082bc6929827046
+schema_version: "1"
+kind: mutation_guard
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 1
+result: sat
+family: "synth:validatorjs:cf2db4155ad1aa9bf082bc6929827046"
+domain: ascii
+wall_ms: 0
+ground_truth_status: mutation-guard-sat-expected
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:79:11"
+```
+
+### Pattern
+
+`^[0-9ㄱ-ㅎㅏ-ㅣ가-힣]*$`
+
+### Context
+
+```json
+{"bad_char": "|", "mutation": "union bad_char into mirror", "question_id": "v-shape1-injection-chars"}
+```
+
+### Witness
+
+```json
+"<redacted>"
+```
+
+### Ground-truth
+
+mutation-guard-sat-expected
+
+## property:cf2db4155ad1aa9bf082bc6929827046:v-shape1-injection-chars
+
+```yaml
+regex_id: cf2db4155ad1aa9bf082bc6929827046
+schema_version: "1"
+kind: property
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 1
+result: unsat
+family: "synth:validatorjs:cf2db4155ad1aa9bf082bc6929827046"
+domain: ascii
+wall_ms: 0
+ground_truth_status: null
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:79:11"
+```
+
+### Pattern
+
+`^[0-9ㄱ-ㅎㅏ-ㅣ가-힣]*$`
+
+### Context
+
+```json
+{"bad_char": "\u0000", "domain_note": "all-lengths", "question_id": "v-shape1-injection-chars", "threat": "Validator alphabet admits shell/HTML injection characters"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## property:cf2db4155ad1aa9bf082bc6929827046:v-shape1-injection-chars
+
+```yaml
+regex_id: cf2db4155ad1aa9bf082bc6929827046
+schema_version: "1"
+kind: property
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 1
+result: unsat
+family: "synth:validatorjs:cf2db4155ad1aa9bf082bc6929827046"
+domain: ascii
+wall_ms: 0
+ground_truth_status: null
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:79:11"
+```
+
+### Pattern
+
+`^[0-9ㄱ-ㅎㅏ-ㅣ가-힣]*$`
+
+### Context
+
+```json
+{"bad_char": "\n", "domain_note": "all-lengths", "question_id": "v-shape1-injection-chars", "threat": "Validator alphabet admits shell/HTML injection characters"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## property:cf2db4155ad1aa9bf082bc6929827046:v-shape1-injection-chars
+
+```yaml
+regex_id: cf2db4155ad1aa9bf082bc6929827046
+schema_version: "1"
+kind: property
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 1
+result: unsat
+family: "synth:validatorjs:cf2db4155ad1aa9bf082bc6929827046"
+domain: ascii
+wall_ms: 0
+ground_truth_status: null
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:79:11"
+```
+
+### Pattern
+
+`^[0-9ㄱ-ㅎㅏ-ㅣ가-힣]*$`
+
+### Context
+
+```json
+{"bad_char": "$", "domain_note": "all-lengths", "question_id": "v-shape1-injection-chars", "threat": "Validator alphabet admits shell/HTML injection characters"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## property:cf2db4155ad1aa9bf082bc6929827046:v-shape1-injection-chars
+
+```yaml
+regex_id: cf2db4155ad1aa9bf082bc6929827046
+schema_version: "1"
+kind: property
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 1
+result: unsat
+family: "synth:validatorjs:cf2db4155ad1aa9bf082bc6929827046"
+domain: ascii
+wall_ms: 0
+ground_truth_status: null
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:79:11"
+```
+
+### Pattern
+
+`^[0-9ㄱ-ㅎㅏ-ㅣ가-힣]*$`
+
+### Context
+
+```json
+{"bad_char": "&", "domain_note": "all-lengths", "question_id": "v-shape1-injection-chars", "threat": "Validator alphabet admits shell/HTML injection characters"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## property:cf2db4155ad1aa9bf082bc6929827046:v-shape1-injection-chars
+
+```yaml
+regex_id: cf2db4155ad1aa9bf082bc6929827046
+schema_version: "1"
+kind: property
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 1
+result: unsat
+family: "synth:validatorjs:cf2db4155ad1aa9bf082bc6929827046"
+domain: ascii
+wall_ms: 0
+ground_truth_status: null
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:79:11"
+```
+
+### Pattern
+
+`^[0-9ㄱ-ㅎㅏ-ㅣ가-힣]*$`
+
+### Context
+
+```json
+{"bad_char": ";", "domain_note": "all-lengths", "question_id": "v-shape1-injection-chars", "threat": "Validator alphabet admits shell/HTML injection characters"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## property:cf2db4155ad1aa9bf082bc6929827046:v-shape1-injection-chars
+
+```yaml
+regex_id: cf2db4155ad1aa9bf082bc6929827046
+schema_version: "1"
+kind: property
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 1
+result: unsat
+family: "synth:validatorjs:cf2db4155ad1aa9bf082bc6929827046"
+domain: ascii
+wall_ms: 0
+ground_truth_status: null
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:79:11"
+```
+
+### Pattern
+
+`^[0-9ㄱ-ㅎㅏ-ㅣ가-힣]*$`
+
+### Context
+
+```json
+{"bad_char": "`", "domain_note": "all-lengths", "question_id": "v-shape1-injection-chars", "threat": "Validator alphabet admits shell/HTML injection characters"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## property:cf2db4155ad1aa9bf082bc6929827046:v-shape1-injection-chars
+
+```yaml
+regex_id: cf2db4155ad1aa9bf082bc6929827046
+schema_version: "1"
+kind: property
+corpus: validatorjs
+dialect: ecma
+call_kind: search
+shape: 1
+result: unsat
+family: "synth:validatorjs:cf2db4155ad1aa9bf082bc6929827046"
+domain: ascii
+wall_ms: 0
+ground_truth_status: null
+engine_versions: {"python": "3.13.5", "z3": "5.0.0"}
+disclosure: null
+site: "pilots/validatorjs/src/alpha.js:79:11"
+```
+
+### Pattern
+
+`^[0-9ㄱ-ㅎㅏ-ㅣ가-힣]*$`
+
+### Context
+
+```json
+{"bad_char": "|", "domain_note": "all-lengths", "question_id": "v-shape1-injection-chars", "threat": "Validator alphabet admits shell/HTML injection characters"}
 ```
 
 ### Witness

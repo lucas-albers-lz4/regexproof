@@ -8,7 +8,7 @@
     "python": "3.13.5"
   },
   "extracted": 212,
-  "findings": 1274,
+  "findings": 1416,
   "inventory_questions": 4,
   "join_regex_ids": 126,
   "redos_findings": 0,
@@ -16,28 +16,28 @@
   "schema_version": "1",
   "synthesis": {
     "diff_fuzz_disagreements": 0,
-    "diff_fuzz_sites": 82,
-    "diff_fuzz_witnesses": 6539,
+    "diff_fuzz_sites": 87,
+    "diff_fuzz_witnesses": 509916,
     "encodable_sites": 123,
-    "mutation_guard_rows": 573,
+    "mutation_guard_rows": 644,
     "pre_measure": {
       "encodable_sites": 123,
-      "selected_fullmatch_shaped_encodable_replay_supported": 82,
-      "selected_sites": 95,
+      "selected_fullmatch_shaped_encodable_replay_supported": 93,
+      "selected_sites": 200,
       "shape1_certification_count_over_all_encodable_sites": 90,
-      "shape1_certification_count_selected": 80
+      "shape1_certification_count_selected": 84
     },
-    "selected_sites": 95,
-    "selected_sites_after_cap": 95,
+    "selected_sites": 200,
+    "selected_sites_after_cap": 200,
     "selector_outcomes": {
       "v-shape1-injection-chars": {
-        "rejected-by-selector": 119,
-        "selected": 81,
+        "rejected-by-selector": 97,
+        "selected": 103,
         "unsupported-selector": 0
       },
       "v-shape2-whitelist-space": {
-        "rejected-by-selector": 186,
-        "selected": 14,
+        "rejected-by-selector": 97,
+        "selected": 103,
         "unsupported-selector": 0
       }
     },
@@ -45,16 +45,17 @@
     "skip_buckets": {
       "synth_skipped_approximate_mirror": 0,
       "synth_skipped_no_gt_adapter": 0,
-      "synth_skipped_substitution_call_kind": 0,
-      "synth_skipped_unanchored_search": 4
+      "synth_skipped_substitution_call_kind": 7,
+      "synth_skipped_unanchored_search": 25,
+      "synth_skipped_witness_replay": 0
     },
     "skip_reasons": {
-      "synth_skipped_unanchored_search": 4
+      "synth_skipped_unanchored_search": 25
     },
     "synth_diff_fuzz_sample": 5,
     "synth_len_bound": 16,
     "synth_max_sites": 200,
-    "synthesized_property_rows": 573
+    "synthesized_property_rows": 644
   },
   "triage": 89
 }

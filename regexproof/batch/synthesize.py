@@ -13,10 +13,17 @@ import itertools
 import platform
 import random
 import re
+import sys
 from collections.abc import Iterable
 from dataclasses import dataclass
 from pathlib import PurePath
 from typing import Any
+
+# P3 (luna re-gate 2): the widened shape-1 guard unions a certified class
+# with a bad char and queries InRe over it — a 128-char class (isAscii
+# [\x00-\x7F]) builds a deeply nested z3 expression whose ctypes
+# conversion blows the default recursion limit during the solver call.
+sys.setrecursionlimit(20000)
 
 import z3
 from z3 import Contains, InRe, Length, Plus, Re, Solver, Star, String, StringVal, Union
@@ -34,6 +41,7 @@ from regexproof.compiler.simple_parse import (
 )
 from regexproof.groundtruth.adapters import (
     Replayability,
+    ReplayVerdict,
     classify_replayability,
     replay,
     replay_batch,
@@ -54,6 +62,7 @@ SKIP_BUCKETS = (
     "synth_skipped_unanchored_search",
     "synth_skipped_substitution_call_kind",
     "synth_skipped_approximate_mirror",
+    "synth_skipped_witness_replay",
 )
 
 
@@ -276,8 +285,11 @@ def selector_matches(row: dict[str, Any], selector: dict[str, Any] | None) -> bo
     if dialects and row.get("dialect") not in dialects:
         return False
     path = str(row.get("file") or row.get("site") or "")
+    # P3 fold (luna re-gate 2): the validator.js family is camelCase
+    # (isAscii.js, isFQDN.js) — globs match case-insensitively.
+    path_l = path.lower()
     path_hits = any(
-        fnmatch.fnmatchcase(path, glob) or PurePath(path).match(glob)
+        fnmatch.fnmatchcase(path_l, glob.lower()) or PurePath(path).match(glob)
         for glob in selector.get("file_globs") or []
     )
     context = " ".join(
@@ -287,10 +299,14 @@ def selector_matches(row: dict[str, Any], selector: dict[str, Any] | None) -> bo
         re.search(regex, context) is not None
         for regex in selector.get("context_regex") or []
     )
-    return not (
-        (selector.get("file_globs") and not path_hits)
-        or (selector.get("context_regex") and not context_hits)
-    )
+    # P3 fold (luna re-gate 2): file_globs and context_regex are
+    # ALTERNATIVES (OR) — the previous code ANDed them, so isAscii.js
+    # (glob `**/*ascii*` missed the camelCase name) was silently excluded
+    # even when the context regex matched, and its NUL-accepting class was
+    # never synthesized.
+    if not selector.get("file_globs") and not selector.get("context_regex"):
+        return True
+    return path_hits or context_hits
 
 
 def _solver_check(formula: Any, *, want_model: bool = False) -> tuple[str, Any | None]:
@@ -417,46 +433,66 @@ def _regex_alphabet_contains(regex: Any, value: str) -> bool | None:
     an unknown node), so the caller must retain the solver query.  Ranges are
     checked symbolically instead of expanded, which matters for Unicode
     validator classes.
+
+    Iterative walk with a depth cap: a pathological expression (a deep or
+    self-referential union tree) must not blow the Python stack — beyond
+    the cap we return ``None`` (fail closed to the solver query).
     """
-    if regex is None or not hasattr(regex, "decl"):
-        return None
-    kind = regex.decl().kind()
-    if kind == z3.Z3_OP_RE_RANGE:
-        lo = _decode_z3_string(regex.arg(0).as_string())
-        hi = _decode_z3_string(regex.arg(1).as_string())
-        return len(lo) == len(hi) == len(value) == 1 and ord(lo) <= ord(value) <= ord(hi)
-    if kind in (z3.Z3_OP_SEQ_TO_RE, z3.Z3_OP_SEQ_UNIT):
-        return value in _decode_z3_string(regex.arg(0).as_string())
-    if kind in (z3.Z3_OP_RE_EMPTY_SET, z3.Z3_OP_SEQ_EMPTY):
-        return False
-    if kind in (
-        z3.Z3_OP_RE_UNION,
-        z3.Z3_OP_RE_CONCAT,
-        z3.Z3_OP_RE_STAR,
-        z3.Z3_OP_RE_PLUS,
-        z3.Z3_OP_RE_OPTION,
-        z3.Z3_OP_RE_LOOP,
-    ):
-        children = (
-            [regex.arg(0)]
-            if kind in (
+
+    # P3 (luna re-gate 2): the recursive version overflowed the stack on a
+    # 20k-deep union tree (RecursionError surfaced through z3's ctypes arg
+    # conversion). The iterative walk is bounded; the solver remains the
+    # final authority for anything the walk cannot decide exactly.
+    _MAX_WALK_DEPTH = 4096
+    stack: list[tuple[Any, int]] = [(regex, 0)]
+    unknown = False
+    while stack:
+        node, depth = stack.pop()
+        if node is None or not hasattr(node, "decl"):
+            unknown = True
+            continue
+        if depth > _MAX_WALK_DEPTH:
+            unknown = True
+            continue
+        kind = node.decl().kind()
+        if kind == z3.Z3_OP_RE_RANGE:
+            lo = _decode_z3_string(node.arg(0).as_string())
+            hi = _decode_z3_string(node.arg(1).as_string())
+            if len(lo) == len(hi) == len(value) == 1 and ord(lo) <= ord(value) <= ord(hi):
+                return True
+            continue
+        if kind in (z3.Z3_OP_SEQ_TO_RE, z3.Z3_OP_SEQ_UNIT):
+            if value in _decode_z3_string(node.arg(0).as_string()):
+                return True
+            continue
+        if kind in (z3.Z3_OP_RE_EMPTY_SET, z3.Z3_OP_SEQ_EMPTY):
+            continue
+        if kind in (
+            z3.Z3_OP_RE_UNION,
+            z3.Z3_OP_RE_CONCAT,
+            z3.Z3_OP_RE_STAR,
+            z3.Z3_OP_RE_PLUS,
+            z3.Z3_OP_RE_OPTION,
+            z3.Z3_OP_RE_LOOP,
+        ):
+            unary = kind in (
                 z3.Z3_OP_RE_STAR,
                 z3.Z3_OP_RE_PLUS,
                 z3.Z3_OP_RE_OPTION,
                 z3.Z3_OP_RE_LOOP,
             )
-            else [regex.arg(index) for index in range(regex.num_args())]
-        )
-        unknown = False
-        for child in children:
-            result = _regex_alphabet_contains(child, value)
-            if result is True:
-                return True
-            unknown |= result is None
-        return None if unknown else False
-    if kind in (z3.Z3_OP_RE_FULL_SET, z3.Z3_OP_RE_FULL_CHAR_SET, z3.Z3_OP_RE_OF_PRED):
-        return None
-    return None
+            if unary:
+                stack.append((node.arg(0), depth + 1))
+            else:
+                for index in range(node.num_args()):
+                    stack.append((node.arg(index), depth + 1))
+            continue
+        if kind in (z3.Z3_OP_RE_FULL_SET, z3.Z3_OP_RE_FULL_CHAR_SET, z3.Z3_OP_RE_OF_PRED):
+            unknown = True
+            continue
+        # Unrecognized node kind: fail closed (solver query decides).
+        unknown = True
+    return None if unknown else False
 
 
 def _shape2_query(
@@ -951,10 +987,25 @@ def synthesize_compiled(
                     require_replayable(gt_result)
                     gt_status = status_for_claim(gt_result, True)
                     if gt_status != "reproduced":
-                        raise SynthesisError(
-                            f"SAT witness failed replay for {regex_id}/{qid}/{bad_char!r}: "
-                            f"{gt_result.verdict.value}"
-                        )
+                        if gt_result.verdict is ReplayVerdict.REJECTED:
+                            # SEMANTIC disagreement: the real engine rejects
+                            # the witness the mirror claims to accept — the
+                            # certification/query is wrong. Never skip this
+                            # class; it is a soundness violation.
+                            raise SynthesisError(
+                                f"SAT witness failed replay for {regex_id}/{qid}/{bad_char!r}: "
+                                f"{gt_result.verdict.value}"
+                            )
+                        # INFRA limitation (engine-error/timeout/no-adapter):
+                        # the witness cannot be transported or evaluated (e.g.
+                        # a NUL byte breaks the P1 NUL-framed batch protocol).
+                        # The SAT claim is unverifiable — drop the row
+                        # fail-closed and count it; do not crash the run.
+                        bucket = "synth_skipped_witness_replay"
+                        if (regex_id, bucket) not in counted_skips:
+                            stats["skip_buckets"][bucket] += 1
+                            counted_skips.add((regex_id, bucket))
+                        continue
                 property_rows.append(
                     _property_row(
                         corpus=corpus,
