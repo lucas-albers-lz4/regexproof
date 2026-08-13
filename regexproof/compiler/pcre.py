@@ -17,7 +17,7 @@ from regexproof.compiler.base import (
 )
 from regexproof.compiler.fold import python_fold_closure
 from regexproof.compiler.pcre_strip import strip_language_transparent
-from regexproof.compiler.reject_markers import PCRE_REJECT_MARKERS
+from regexproof.compiler.reject_markers import PCRE_REJECT_MARKERS, unicode_prop_unencodable
 
 HELPER = Path(__file__).resolve().parents[2] / "helpers" / "pcre2" / "match.py"
 DEFAULT_MAX_LENGTH = 256
@@ -27,6 +27,9 @@ _PCRE_SPACE_CHARS = " \t\n\r\f\v"
 
 
 def _local_reject(pattern: str) -> str | None:
+    prop = unicode_prop_unencodable(pattern)
+    if prop:
+        return prop
     for marker, reason in PCRE_REJECT_MARKERS:
         if marker in pattern:
             return reason

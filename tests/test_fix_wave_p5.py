@@ -22,6 +22,30 @@ def test_pcre_helper_shares_reject_markers():
     assert _local_reject(r"(?=x)") == "lookaround"
 
 
+def test_unicode_prop_rejected_on_pcre_re2_perl():
+    """#362: real \\p{}/\\P{} must not silently literalize in RE2/PCRE mirrors."""
+    from regexproof.compiler.reject_markers import unicode_prop_unencodable
+
+    assert unicode_prop_unencodable(r"\p{L}") == "unicode-prop"
+    assert unicode_prop_unencodable(r"\P{N}") == "unicode-prop"
+    assert unicode_prop_unencodable(r"\pL") == "unicode-prop"
+    assert unicode_prop_unencodable(r"\\p{L}") is None  # escaped literal
+    assert compile_pattern(r"^\p{L}+$", "", "pcre", "fullmatch").unencodable_reason == (
+        "unicode-prop"
+    )
+    assert compile_pattern(r"^\p{L}+$", "", "re2", "fullmatch").unencodable_reason == (
+        "unicode-prop"
+    )
+    assert compile_pattern(r"^\p{L}+$", "", "perl", "fullmatch").unencodable_reason == (
+        "unicode-prop"
+    )
+    # ECMA without u is a real identity-escape; still encodable.
+    assert compile_pattern(r"^\p{L}+$", "", "ecma", "fullmatch").encodable
+    # Escaped literal still encodes on PCRE/RE2.
+    assert compile_pattern(r"^\\\\p{L}$", "", "pcre", "fullmatch").encodable
+    assert compile_pattern(r"^\\\\p{L}$", "", "re2", "fullmatch").encodable
+
+
 def test_p1_p2_goldens_still_green():
     """Hardening: Phase 1–2 probes must remain encodable/rejected as locked."""
     assert compile_pattern("x{1}", "", "ecma", "fullmatch").encodable

@@ -14,7 +14,7 @@ from regexproof.compiler.base import CompileResult, Unencodable
 from regexproof.compiler.fold import python_fold_closure
 from regexproof.compiler.lower import lower, space_codes_from_chars
 from regexproof.compiler.perl_strip import strip_perl_transparent
-from regexproof.compiler.reject_markers import PERL_REJECT_MARKERS
+from regexproof.compiler.reject_markers import PERL_REJECT_MARKERS, unicode_prop_unencodable
 from regexproof.compiler.simple_parse import parse_pattern
 
 HELPER = Path(__file__).resolve().parents[2] / "helpers" / "perl" / "match.py"
@@ -37,6 +37,9 @@ _POSIX_CLASS_REWRITES: tuple[tuple[str, str], ...] = (
 
 
 def _local_reject(pattern: str) -> str | None:
+    prop = unicode_prop_unencodable(pattern)
+    if prop:
+        return prop
     for marker, reason in PERL_REJECT_MARKERS:
         if marker in pattern:
             return reason
