@@ -152,7 +152,7 @@ in the harness output so a reader knows exactly what was proven.
   (independent-spec R1, admitted_pairs≥20, timeout gate)
 - `python -m regexproof.batch` — Phase 5 batch (inventory, triage NDJSON, intent-vs-actual,
   scanner NDJSON/MD, ReDoS join optional, PR dry-run / disclosure gate)
-- `scripts/z3-verify.py --all` — harness skeleton run: P1 injection chars,
+- `scripts/z3-verify.py --all --require-ground-truth --fail-on-property-failure` — harness skeleton run (CI overlay #360): P1 injection chars,
   P2 actor whitelist, P3 sed-capture counterexample (SAT + witness), P4
   per-token escape image + the NUL-passthrough bug demo, and the
   `P1-mutated-star` mutation guard

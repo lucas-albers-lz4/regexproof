@@ -254,6 +254,78 @@ def test_z3_property_template_forced_fail_records_exit_zero(tmp_path: Path):
     assert "[FAIL]" in proc.stdout or "FAIL:" in proc.stderr
 
 
+def test_z3_property_template_forced_fail_exits_one_with_flag(tmp_path: Path):
+    """#360: CI overlay --fail-on-property-failure turns a recorded FAIL into exit 1."""
+    src = (ROOT / "scripts" / "z3-property-template.py").read_text(encoding="utf-8")
+    mutated = src.replace(
+        'InRe(s5, r1) & Not(InRe(s5, r1)),\n        expect_unsat=True,',
+        'InRe(s5, r1) & Not(InRe(s5, r1)),\n        expect_unsat=False,',
+        1,
+    )
+    assert mutated != src
+    path = tmp_path / "z3-property-template-mutated.py"
+    path.write_text(mutated, encoding="utf-8")
+    proc = subprocess.run(
+        [sys.executable, str(path), "--fail-on-property-failure"],
+        cwd=ROOT,
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    assert proc.returncode == 1, proc.stdout + proc.stderr
+    assert "[FAIL]" in proc.stdout or "FAIL:" in proc.stderr
+
+
+def test_cli_fail_on_property_failure_exits_one():
+    """#360: default CLI stays §10 (exit 0); --fail-on-property-failure exits 1."""
+    from z3 import Contains, InRe, Range, Star, String, StringVal
+
+    from regexproof.harness import core
+    from regexproof.harness.cli import main
+
+    def _fn():
+        u = String("u")
+        return [InRe(u, Star(Range("a", "z")))], Contains(u, StringVal("x"))
+
+    entry = {
+        "fn": _fn,
+        "domain": "t",
+        "expect_unsat": True,
+        "timeout_ms": 30000,
+        "ground_truth": None,
+        "kind": "property",
+        "family": "t-360",
+        "input_domain": "ascii",
+        "call_kind": None,
+        "backend": "seq",
+    }
+    core.REGISTRY["t-360-fail"] = dict(entry)
+    core.REGISTRY["t-360-mut"] = {
+        **entry,
+        "kind": "mutation_guard",
+        "expect_unsat": False,
+    }
+    try:
+        assert main(["t-360-fail"]) == 0
+        assert main(["t-360-fail", "--fail-on-property-failure"]) == 1
+        assert main(["--require-ground-truth", "--fail-on-property-failure", "t-360-fail"]) == 1
+    finally:
+        core.REGISTRY.pop("t-360-fail", None)
+        core.REGISTRY.pop("t-360-mut", None)
+
+
+def test_proof_job_wires_fail_on_property_failure():
+    """#360: the required proof job must pass the CI overlay, not the recorder default."""
+    yml = (ROOT / ".github" / "workflows" / "ci.yml").read_text(encoding="utf-8")
+    assert "z3-property-template.py --fail-on-property-failure" in yml
+    assert (
+        "z3-verify.py --all --require-ground-truth --fail-on-property-failure"
+        in yml
+    )
+    subset = (ROOT / "scripts" / "ci-run-property-subset.py").read_text(encoding="utf-8")
+    assert "--fail-on-property-failure" in subset
+
+
 def test_timeout_gate_zero_and_allowlist():
     from regexproof.rule_diff.timeout_gate import fail_message, timeout_gate
 

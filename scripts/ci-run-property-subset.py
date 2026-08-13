@@ -47,6 +47,7 @@ def main(argv: list[str] | None = None) -> int:
         sys.executable,
         str(ROOT / "scripts" / "z3-verify.py"),
         "--require-ground-truth",
+        "--fail-on-property-failure",
         *names,
     ]
     r1 = subprocess.run(cmd, cwd=ROOT, shell=False, check=False)

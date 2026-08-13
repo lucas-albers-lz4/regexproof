@@ -62,7 +62,8 @@ def test_boundary_divergences_documented():
 def test_full_suite_green():
     proc = subprocess.run(
         [sys.executable, str(ROOT / "scripts" / "z3-verify.py"), "--all",
-         "--require-ground-truth"],
+         "--require-ground-truth", "--fail-on-property-failure"],
         cwd=ROOT, check=False, capture_output=True, text=True, timeout=600,
     )
     assert proc.returncode == 0, proc.stdout + proc.stderr
+    assert "[FAIL]" not in proc.stdout

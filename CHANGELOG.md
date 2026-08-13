@@ -4,6 +4,14 @@ All entries below cover the initial development cycle plus the 2026-08-08
 dogfooding/corpus/fix waves. No release tags exist yet. This changelog groups
 the work by phase; dates are merge dates.
 
+## Dual-model audit wave (2026-08-12)
+
+- **#360**: `--fail-on-property-failure` CI overlay on the harness CLI and
+  `z3-property-template.py`. Default exit stays the §10 recorder (FAIL is a
+  recorded finding, exit 0). The required proof job now passes the flag so a
+  violated property cannot ship green. PASS/FAIL is printed after ground-truth
+  so `--require-ground-truth` cannot leave a PASS line on a refused replay.
+
 ## Harness backends wave (2026-08-11)
 
 Design #213 closed at the APPROVE boundary (rev 7, U9 DROP; supersession notes
