@@ -319,11 +319,28 @@ def test_proof_job_wires_fail_on_property_failure():
     yml = (ROOT / ".github" / "workflows" / "ci.yml").read_text(encoding="utf-8")
     assert "z3-property-template.py --fail-on-property-failure" in yml
     assert (
-        "z3-verify.py --all --require-ground-truth --fail-on-property-failure"
+        "z3-verify.py --all --require-ground-truth --require-domain "
+        "--fail-on-property-failure"
         in yml
     )
     subset = (ROOT / "scripts" / "ci-run-property-subset.py").read_text(encoding="utf-8")
     assert "--fail-on-property-failure" in subset
+
+
+def test_p1_verified_default_flags_wired():
+    """P1 (#425): both enforcement flags land in the named invocations."""
+    yml = (ROOT / ".github" / "workflows" / "ci.yml").read_text(encoding="utf-8")
+    assert (
+        "python scripts/z3-verify.py --all --require-ground-truth --require-domain "
+        "--fail-on-property-failure"
+        in yml
+    )
+    assert "python scripts/pilot-properties.py --require-ground-truth --require-domain" in yml
+    assert (
+        "python scripts/rule-diff-pilot.py --require-ground-truth --require-domain"
+        in yml
+    )
+    assert "python -m regexproof.batch --corpus all --require-ground-truth" in yml
 
 
 def test_timeout_gate_zero_and_allowlist():

@@ -132,6 +132,10 @@ ACTOR_CLS = Union(
     "char (proven for len <= 16; slice 17-64 for full coverage)",
     expect_unsat=True,
     family="P2",
+    # The actor travels as a shell command-line token (git identity rendered
+    # into an audit/shell line) — an ASCII, NUL-free alphabet. The whitelist
+    # classes are explicit ASCII ranges, so "ascii" is the faithful domain.
+    input_domain="ascii",
 )
 def p2():
     a = String("a")
@@ -149,12 +153,26 @@ def p2():
     ground_truth=p3_ground_truth,
     kind="counterexample_finder",
     family="P3",
+    # v is a shell metacharacter/token alphabet value fed to sed on stdin
+    # (POSIX shell strings, ASCII, NUL-free) — the declared boundary domain.
+    input_domain="ascii",
 )
 def p3():
     v = String("v")
     first_quote = IndexOf(v, StringVal('"'), 0)
     capture = SubString(v, 0, first_quote)
-    return [first_quote > 0, capture != v], Contains(v, StringVal('\\"'))
+    # v is the JSON-escaped value the escaper feeds the rpcd sed fallback, so
+    # its alphabet is the escaper's output token vocabulary (ESCAPE_SAFE chars
+    # plus the ESCAPE_ESC tokens `\\` `\"` `\t` `\r` `\n`) — constrain v to it
+    # so the declared `input_domain="ascii"` is faithful (was: an unconstrained
+    # string, an unsupported boundary assumption). The ESCAPE_ESC `\"` token is
+    # backslash + raw quote, so the bug-repro semantics (first_quote > 0,
+    # capture != v, v contains `\"`) are preserved.
+    return [
+        InRe(v, Star(ESCAPE_TOKENS)),
+        first_quote > 0,
+        capture != v,
+    ], Contains(v, StringVal('\\"'))
 
 
 ESCAPE_SAFE = Union(Range("\x20", "\x21"), Range("\x23", "\x5b"), Range("\x5d", "\x7e"))
@@ -170,19 +188,33 @@ ESCAPE_TOKENS = Union(ESCAPE_SAFE, ESCAPE_ESC)
     "Contains-vs-Star-image TIMES OUT even per-token (measured 30s); "
     "alphabet disjointness is the equivalent instant form (0.4ms).",
     expect_unsat=True,
+    # The escaper runs over a shell metacharacter/token alphabet (POSIX shell
+    # strings exclude NUL) — ASCII domain; the P4-nul bug demo shows why the
+    # NUL exclusion is load-bearing.
+    input_domain="ascii",
 )
 def p4_tab():
     w = String("w")
     return [InRe(w, ESCAPE_TOKENS), Length(w) == 1], w == StringVal("\t")
 
 
-@prop("P4-escape-image-newline", "same token alphabet contains no raw newline", expect_unsat=True)
+@prop(
+    "P4-escape-image-newline",
+    "same token alphabet contains no raw newline",
+    expect_unsat=True,
+    input_domain="ascii",
+)
 def p4_nl():
     w = String("w")
     return [InRe(w, ESCAPE_TOKENS), Length(w) == 1], w == StringVal("\n")
 
 
-@prop("P4-escape-image-del", "same token alphabet contains no raw DEL (0x7f)", expect_unsat=True)
+@prop(
+    "P4-escape-image-del",
+    "same token alphabet contains no raw DEL (0x7f)",
+    expect_unsat=True,
+    input_domain="ascii",
+)
 def p4_del():
     w = String("w")
     return [InRe(w, ESCAPE_TOKENS), Length(w) == 1], w == StringVal("\x7f")

@@ -72,8 +72,8 @@ def real_accepts_perl(
 ) -> bool:
     """Replay via ``helpers/perl/match.py`` (system perl; no Python re).
 
-    Exit codes from the helper: 0 match, 1 no-match, 2 unavailable/version,
-    3 pattern compile failure. Compile failures raise (not treated as
+    Exit codes from the helper: 0 match, 1 no-match, 2 pattern compile
+    failure, 3 unavailable/version. Compile failures raise (not treated as
     helper-unavailable).
     """
     root = Path(__file__).resolve().parents[2]
@@ -91,11 +91,11 @@ def real_accepts_perl(
     except subprocess.TimeoutExpired:
         return False
     if proc.returncode == 2:
-        raise RuntimeError("perl-helper-unavailable")
-    if proc.returncode == 3:
         raise RuntimeError(
             f"perl-pattern-compile-failed: {(proc.stderr or '').strip()}"
         )
+    if proc.returncode == 3:
+        raise RuntimeError("perl-helper-unavailable")
     return proc.returncode == 0
 
 
@@ -125,6 +125,8 @@ def real_accepts_yara(
         except subprocess.TimeoutExpired:
             return False
         if proc.returncode == 2:
+            raise RuntimeError("yara-rule-compile-failed")
+        if proc.returncode == 3:
             raise RuntimeError("yara-helper-unavailable")
         return proc.returncode == 0
 

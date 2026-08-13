@@ -76,9 +76,11 @@ jobs:
         # TIMEOUT (unknown) is a hard failure by design — the harness exits 1.
         # --require-ground-truth: SAT witnesses must replay against the real
         # implementation (sed/escaper mirrors) or ok=False.
+        # --require-domain (P1, #425): every property/counterexample_finder
+        # must declare input_domain or the gate hard-fails (VF-006 / TRAPS #17).
         # --fail-on-property-failure (#360): ok=False is exit 1 so a violated
         # property cannot ship green. Default CLI stays the §10 recorder.
-        run: python scripts/z3-verify.py --all --require-ground-truth --fail-on-property-failure
+        run: python scripts/z3-verify.py --all --require-ground-truth --require-domain --fail-on-property-failure
       - name: Named property subset (P1-P4 + one rule_diff family)
         run: |
           python scripts/ci-run-property-subset.py
@@ -142,9 +144,13 @@ jobs:
       - name: Phase 2 pilots (extract → fraction → properties)
         run: |
           python scripts/pilot-run.py
-          python scripts/pilot-properties.py --require-ground-truth
+          python scripts/pilot-properties.py --require-ground-truth --require-domain
       - name: Phase 3 shape-5 rule_diff (gitleaks encodable subset)
-        run: python scripts/rule-diff-pilot.py --require-ground-truth
+        # --require-domain is accepted for CLI parity with the proof job; the
+        # check is INERT here — check_domain_coverage covers kind=property and
+        # counterexample_finder only, and this pilot's registry is rule_diff
+        # gaps + mutation guards (see scripts/rule-diff-pilot.py).
+        run: python scripts/rule-diff-pilot.py --require-ground-truth --require-domain
       - name: Materialize detect-secrets corpus pin (v1.5.0)
         run: |
           git clone --depth 1 --branch v1.5.0 \
@@ -154,7 +160,9 @@ jobs:
             batch/corpora/detect-secrets/plugins
       - name: Phase 5 batch mode
         run: |
-          python -m regexproof.batch --corpus all
+          # --require-ground-truth (P1, #425): SAT-ish Z3-verdict findings must
+          # carry ground_truth_status=reproduced or the evidence gate fails.
+          python -m regexproof.batch --corpus all --require-ground-truth
           pytest -q tests/test_batch.py
       - name: Two-run batch reproducibility
         run: python scripts/ci-batch-repro.py

@@ -6,7 +6,9 @@ Usage:
   python helpers/yara/match.py match <rule.yar> <sample>
   python helpers/yara/match.py version
 
-Exit 0 = ok/match; 1 = compile fail / no-match; 2 = yara unavailable.
+Exit 0 = ok/match; 1 = no-match; 2 = compile/scan error (invalid rule);
+3 = yara unavailable (helper contract — a compile failure is never
+misreported as a rejection, finding 5).
 """
 
 from __future__ import annotations
@@ -72,16 +74,19 @@ def compile_rule(rule_path: Path) -> int:
 def match_rule(rule_path: Path, sample_path: Path) -> int:
     bin_ = _yara_bin()
     if not bin_:
-        return 2
+        return 3  # helper unavailable — distinct from compile error
     proc = subprocess.run(
         [bin_, str(rule_path), str(sample_path)],
         capture_output=True,
         check=False,
         timeout=HELPER_TIMEOUT_S,
     )
+    if proc.returncode != 0:
+        # yara exits 1 on scan errors (e.g. the rule failed to compile) —
+        # a compile failure is an engine-error, not a no-match.
+        return 2
     # yara prints rule names on match; exit 0 always if scan succeeds.
-    # Treat any stdout line as a match.
-    matched = bool((proc.stdout or b"").strip()) and proc.returncode == 0
+    matched = bool((proc.stdout or b"").strip())
     return 0 if matched else 1
 
 
