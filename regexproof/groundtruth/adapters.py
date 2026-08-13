@@ -44,6 +44,11 @@ Result vocabulary (``ReplayResult.verdict``):
 ``no-adapter``. ``classify_replayability`` is the selection-time classifier
 P3's selector consumes (posix-shell / yara fullmatch+match →
 ``skipped_no_gt_adapter``, substitution → ``skipped_substitution``).
+Production wiring: the P3 synthesis selector (B2/B7) calls
+``classify_replayability`` / ``skip_reason`` at selection time to count skip
+buckets and enforces the ``refused-no-callback`` hard-fail via
+``require_replayable`` under ``--require-ground-truth`` — no selector exists
+before P3 (P3 depends-on P1); the APIs + tests are this phase's deliverable.
 
 Batch framing protocol (``replay_batch``; B6 diff-fuzz contract): ONE helper
 subprocess per batch. Witnesses are written to the helper's stdin as a single
@@ -278,7 +283,12 @@ def _ecma_materialize(pattern: str, call_kind: str, witnesses):
     ``a\\n\\u0000`` witnesses.
     """
     if call_kind == "fullmatch":
-        return f"^(?:{pattern}){_ECMA_SENTINEL}", [w + "\x00" for w in witnesses]
+        # The appended NUL sentinel + "$" forces absolute end-of-input: a
+        # witness that already ends in NUL leaves a trailing NUL after the
+        # sentinel match, so "$" cannot match there (no line terminator), and
+        # the payload always ends in the sentinel NUL, so "$" is never a
+        # trailing-newline match.
+        return f"^(?:{pattern}){_ECMA_SENTINEL}$", [w + "\x00" for w in witnesses]
     return _subprocess_wrap(pattern, call_kind), list(witnesses)
 
 
@@ -322,10 +332,13 @@ def _parse_batch_lines(stdout: str, n: int) -> list[ReplayVerdict] | None:
         idx_s, sep, verdict = line.partition(":")
         if not sep or not idx_s.isdigit():
             return None
+        idx = int(idx_s)
+        if idx in verdicts:  # duplicate index — malformed channel
+            return None
         if verdict == "1":
-            verdicts[int(idx_s)] = ReplayVerdict.ACCEPTED
+            verdicts[idx] = ReplayVerdict.ACCEPTED
         elif verdict == "0":
-            verdicts[int(idx_s)] = ReplayVerdict.REJECTED
+            verdicts[idx] = ReplayVerdict.REJECTED
         else:
             return None
     if len(verdicts) != n or any(i not in verdicts for i in range(n)):
@@ -658,7 +671,7 @@ def _replay_batch_py_re(pattern, flags, call_kind, witnesses, *, timeout_s: floa
     on stdout. ``timeout_s`` bounds the whole session (the timeout contract
     wins over the plan's "in-process" wording — see finding 3)."""
     proc = _subprocess_verdict(
-        [sys.executable, str(_PY_MATCH), "batch", call_kind, pattern, flags or ""],
+        [sys.executable, str(_PY_MATCH), "--batch", call_kind, pattern, flags or ""],
         data=_frame_witnesses(witnesses),
         text=False,
         timeout_s=timeout_s,
@@ -683,7 +696,7 @@ def _ecma_replay_batch(pattern, flags, call_kind, witnesses, *, timeout_s: float
     stdout (helpers/ecma/match.mjs batch)."""
     wrapped, payloads = _ecma_materialize(pattern, call_kind, witnesses)
     proc = _subprocess_verdict(
-        ["node", str(_ECMA_MATCH), "batch", wrapped, flags or ""],
+        ["node", str(_ECMA_MATCH), "--batch", wrapped, flags or ""],
         data=_frame_witnesses(payloads),
         text=False,
         timeout_s=timeout_s,

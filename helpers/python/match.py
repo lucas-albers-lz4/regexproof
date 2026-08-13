@@ -122,7 +122,7 @@ def cmd_batch(call_kind: str, pattern: str, flags: str) -> int:
 
 
 def main(argv) -> int:
-    if len(argv) < 3 or argv[0] not in ("match", "batch"):
+    if len(argv) < 3 or argv[0] not in ("match", "--batch"):
         print(
             "usage: match.py match|batch <call_kind> <pattern> [flags]",
             file=sys.stderr,

@@ -391,3 +391,36 @@ def test_timeout_outcome_distinct():
     )
     assert isinstance(res, adapters.ReplayResult)
     assert res.verdict is ReplayVerdict.TIMEOUT
+
+
+# ---------------------------------------------------------------------------
+# re-review folds (luna re-gate) — sentinel $ anchor, --batch flag form,
+# duplicate-index malformed channel
+# ---------------------------------------------------------------------------
+@pytest.mark.skipif(not _node_available(), reason="node not available")
+def test_ecma_fullmatch_rejects_trailing_nul():
+    """A witness already ending in NUL must NOT satisfy ecma fullmatch.
+
+    The sentinel is appended to the witness; the '$' anchor after the sentinel
+    makes the match absolute-end, so a witness whose own trailing NUL is
+    consumed as the sentinel leaves an unmatched trailing NUL and fails.
+    """
+    r = replay("a", "", "ecma", "fullmatch", "a\x00")
+    assert r.verdict == ReplayVerdict.REJECTED
+    r2 = replay("a", "", "ecma", "fullmatch", "a")
+    assert r2.verdict == ReplayVerdict.ACCEPTED
+
+
+@pytest.mark.skipif(not _node_available(), reason="node not available")
+def test_ecma_pattern_named_batch_search():
+    """A pattern literally named 'batch' must not trip batch-mode dispatch."""
+    r = replay("batch", "", "ecma", "search", "x")
+    assert r.verdict == ReplayVerdict.REJECTED
+    r2 = replay("batch", "", "ecma", "search", "batch")
+    assert r2.verdict == ReplayVerdict.ACCEPTED
+
+
+def test_parse_batch_lines_duplicate_index_malformed():
+    """A verdict channel with a duplicate index is malformed, not tolerated."""
+    assert adapters._parse_batch_lines("0:1\n0:1\n", 1) is None
+    assert adapters._parse_batch_lines("0:1\n1:0\n", 2) is not None

@@ -1,10 +1,11 @@
 #!/usr/bin/env node
-/** Replay: node match.mjs [batch] <pattern> <flags> — reads stdin.
+/** Replay: node match.mjs [--batch] <pattern> <flags> — reads stdin.
  *
  * Single mode (default): stdin is ONE witness (raw bytes); exit 0 on test().
- * Batch mode: `node match.mjs batch <pattern> <flags>` — stdin is the
+ * Batch mode: `node match.mjs --batch <pattern> <flags>` — stdin is the
  * NUL-framed batch stream; emits one `<index>:<verdict>` line per witness on
- * stdout (0 = rejected, 1 = accepted).
+ * stdout (0 = rejected, 1 = accepted). The `--batch` flag form (not a
+ * positional `batch`) keeps a pattern literally named "batch" unambiguous.
  *
  * Exit codes (helper contract): 0 = accepted, 1 = rejected, 2 = compile /
  * engine error. Batch framing: each witness is escaped byte-wise (0x00 →
@@ -12,9 +13,8 @@
  * round-trip exactly across the NUL delimiter.
  * // pattern/flags are operator-supplied CLI args to this ground-truth replay
  * // harness (differential fuzzing); not an untrusted-input boundary. */
-const patternArg = process.argv[2] ?? "";
-const batch = patternArg === "batch";
-const pattern = batch ? process.argv[3] ?? "" : patternArg;
+const batch = process.argv[2] === "--batch";
+const pattern = batch ? process.argv[3] ?? "" : process.argv[2] ?? "";
 const flags = batch ? process.argv[4] ?? "" : process.argv[3] ?? "";
 let re;
 try {
