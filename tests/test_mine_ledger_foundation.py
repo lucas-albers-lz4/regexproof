@@ -330,23 +330,28 @@ def test_audit_requeue_archives_gate_and_new_decision_applies(tmp_path: Path):
     )
     # Decisive spy: does the sync's loop even reach set_status?
     calls: list[tuple] = []
+    fc_calls: list[str] = []
     orig_ss = mod.set_status
+    orig_fc = mod.find_candidate
 
     def _spy(*a, **k):
         calls.append((a, k))
-        try:
-            return orig_ss(*a, **k)
-        except Exception as exc:  # noqa: BLE001
-            raise AssertionError(
-                f"sync's set_status raised: {exc!r} args={a} kwargs={k}"
-            ) from exc
+        return orig_ss(*a, **k)
+
+    def _fc_spy(led, url):
+        fc_calls.append(str(url))
+        return orig_fc(led, url)
 
     mod.set_status = _spy
+    mod.find_candidate = _fc_spy
     try:
-        assert mod.sync_gate_decisions(ledger_path, gen) == 1
+        result = mod.sync_gate_decisions(ledger_path, gen)
     finally:
         mod.set_status = orig_ss
-    assert calls, "sync never reached set_status (bailed in the loop)"
+        mod.find_candidate = orig_fc
+    assert fc_calls == ["https://github.com/acme/recovered"], fc_calls
+    assert calls, f"sync never reached set_status; result={result} fc={fc_calls}"
+    assert result == 1, f"sync returned {result} after {len(calls)} set_status calls"
     assert load_ledger(ledger_path)["candidates"][0]["status"] == "gated:go"
 
 
