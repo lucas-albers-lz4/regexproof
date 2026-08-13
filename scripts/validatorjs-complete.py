@@ -64,6 +64,8 @@ def main(argv: list[str] | None = None) -> int:
     verified_domain = meta.get("verified_domain") or str(meta["path"])
     records = extract_corpus("validatorjs", meta)
     compiled = compile_records(records, lift_inline=False, corpus_slug="validatorjs")
+    recs = [pair[0] for pair in compiled]
+    compiled.clear()  # C1 fold (luna re-gate 6): release the Z3 ASTs
 
     # Crash-regression: {1} must compile after lower.py fix
     crash = compile_pattern("x{1}", "", "ecma", "fullmatch")
@@ -174,7 +176,7 @@ def main(argv: list[str] | None = None) -> int:
 
     # Domain validation: any \\p{...} in verified subset must not silently be ascii
     domain_errors = []
-    for rec in compiled:
+    for rec in recs:
         pat = rec.get("pattern") or ""
         if "\\p{" in pat:
             cr = compile_pattern(pat, rec.get("flags") or "", "ecma", "search")
@@ -244,7 +246,7 @@ def main(argv: list[str] | None = None) -> int:
         "pilot": "validatorjs-complete",
         "verified_domain": verified_domain,
         "extracted": len(records),
-        "encodable": sum(1 for c in compiled if c.get("encodable")),
+        "encodable": sum(1 for c in recs if c.get("encodable")),
         "rows": rows,
         "executed_questions": sorted(executed),
         "deferred_questions": ["v-shape4-escape-image"],

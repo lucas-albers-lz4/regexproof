@@ -6,6 +6,7 @@ Importing this module registers properties into ``regexproof.harness.core.REGIST
 from __future__ import annotations
 
 import re
+import shutil
 import subprocess
 
 from z3 import (
@@ -51,7 +52,7 @@ INJECTION_CHARS = [
 ]
 
 
-def _sed_capture(stream: str) -> str:
+def _sed_capture(stream: str, engine: str = "gnu") -> str:
     """Real sed fallback: capture `[^\"]*` (prefix before first quote).
 
     Mirrors the rpcd json_get fallback shape. Used as ground truth for P3 —
@@ -59,10 +60,20 @@ def _sed_capture(stream: str) -> str:
 
     Stream is fed on stdin (not as a path). Timeout only — non-zero exit is
     tolerated the same way the historical filename form was (empty capture).
+
+    ``engine`` selects GNU (``"gnu"``, default) or busybox (``"busybox"``)
+    via ``busybox sed``. Both engines run in the golden job (E2) so a
+    divergence is visible, not silently collapsed.
     """
+    if engine == "busybox":
+        if not shutil.which("busybox"):
+            raise RuntimeError("busybox-sed unavailable")
+        argv = ["busybox", "sed", "-n", r's/^.*"\([^"]*\)".*$/\1/p']
+    else:
+        argv = ["sed", "-n", r's/^.*"\([^"]*\)".*$/\1/p']
     try:
         proc = subprocess.run(
-            ["sed", "-n", r's/^.*"\([^"]*\)".*$/\1/p'],
+            argv,
             input=stream,
             capture_output=True,
             text=True,
@@ -70,7 +81,7 @@ def _sed_capture(stream: str) -> str:
             check=False,
         )
     except subprocess.TimeoutExpired as exc:
-        raise RuntimeError("sed replay timed out") from exc
+        raise RuntimeError(f"{engine}-sed replay timed out") from exc
     return proc.stdout.rstrip("\n")
 
 
@@ -82,7 +93,6 @@ def p3_ground_truth(witness: dict) -> bool:
     the real sed fallback and check the capture is a strict prefix (i.e.
     truncation happened at the escaped quote)."""
     v = witness["v"]  # raw string (as_string-extracted)
-    # Build a stream shaped like the rpcd JSON the sed fallback sees.
     stream = f'{{"password":"{v}"}}'
     try:
         capture = _sed_capture(stream)
@@ -91,6 +101,52 @@ def p3_ground_truth(witness: dict) -> bool:
     # Truncation means the capture stopped at the first unescaped quote:
     # capture is a strict prefix of v (v contains an escaped quote).
     return capture != v and v.startswith(capture)
+
+
+# E2: busybox-sed replay variant. The golden job records BOTH engine verdicts
+# (GNU + busybox) so a divergence between the two real engines is visible in
+# the ground-truth output, not silently collapsed.
+SED_VERDICT_LOG: dict[str, dict[str, bool]] = {}
+"""Per-property record of both sed engine verdicts (E2). Populated by
+``p3_ground_truth_dual`` — tests/asserts inspect this to confirm both
+engines ran and agree."""
+
+
+def p3_ground_truth_dual(witness: dict) -> bool:
+    """Replay the P3 SAT witness against BOTH GNU sed and busybox sed.
+
+    Records both engine verdicts in ``SED_VERDICT_LOG`` (keyed by property
+    name) so the golden job's ground-truth output reflects both engines
+    (GNU + busybox). Returns True only when BOTH engines reproduce the
+    truncation the Z3 witness claims (a divergence between the two real
+    engines is a finding, not a silent collapse).
+
+    If busybox is unavailable, the GNU verdict alone determines the result
+    (the property still runs — busybox absence is recorded as ``gnu_only``).
+    """
+    v = witness["v"]
+    stream = f'{{"password":"{v}"}}'
+    verdicts: dict[str, bool] = {}
+    all_reproduced = True
+
+    for engine in ("gnu", "busybox"):
+        try:
+            capture = _sed_capture(stream, engine=engine)
+        except RuntimeError as exc:
+            if "busybox" in str(exc):
+                verdicts["busybox"] = False
+                verdicts["busybox_absent"] = True
+                continue
+            verdicts[engine] = False
+            all_reproduced = False
+            continue
+        reproduced = capture != v and v.startswith(capture)
+        verdicts[engine] = reproduced
+        if not reproduced:
+            all_reproduced = False
+
+    SED_VERDICT_LOG["P3-sed-busybox-truncation"] = verdicts
+    return all_reproduced
 
 
 def _p1(ch):
@@ -309,6 +365,33 @@ def p3_mutated():
     first_quote = IndexOf(v, StringVal('"'), 0)
     correct_capture = SubString(v, 0, Length(v))  # whole value, no truncation
     return [first_quote > 0, correct_capture != v], Contains(v, StringVal('\\"'))
+
+
+# E2: busybox-sed replay variant. Same Z3 witness as P3-sed-capture-truncation
+# but the ground-truth callback runs BOTH GNU sed and busybox sed and records
+# both engine verdicts (SED_VERDICT_LOG). A divergence between the two real
+# engines is a finding, not a silent collapse.
+@prop(
+    "P3-sed-busybox-truncation",
+    "E2: exists v: v contains an escaped quote AND the sed-style capture "
+    '[^"]* (prefix before first quote) differs from v — replayed against '
+    "BOTH GNU sed and busybox sed; both engine verdicts recorded",
+    expect_unsat=False,
+    ground_truth=p3_ground_truth_dual,
+    kind="counterexample_finder",
+    family="P3",
+    # Same ASCII, NUL-free boundary domain as P3-sed-capture-truncation.
+    input_domain="ascii",
+)
+def p3_busybox():
+    v = String("v")
+    first_quote = IndexOf(v, StringVal('"'), 0)
+    capture = SubString(v, 0, first_quote)
+    return [
+        InRe(v, Star(ESCAPE_TOKENS)),
+        first_quote > 0,
+        capture != v,
+    ], Contains(v, StringVal('\\"'))
 
 
 # P4 guard: weaken the escape alphabet to admit a raw tab. The P4 property

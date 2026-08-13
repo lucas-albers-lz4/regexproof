@@ -161,7 +161,8 @@ def main(argv: list[str]) -> int:
                     corpus_slug=name,
                     budget=meta.get("budget") or {},
                 )
-                enc = sum(1 for c in compiled if c.get("encodable"))
+                # compile_records now returns (row, mirror, meta) triples.
+                enc = sum(1 for c, _m, _meta in compiled if c.get("encodable"))
                 print(
                     f"DONE {name} limited {enc}/{len(compiled)} "
                     f"wall={time.time() - t0:.1f}s rss_mb={_rss_mb()}",
@@ -176,6 +177,9 @@ def main(argv: list[str]) -> int:
                         "wall_s": round(time.time() - t0, 1),
                     }
                 )
+                # C1 fold (luna re-gate 4): release the Z3 ASTs — the measure
+                # loop holds every corpus's mirrors otherwise.
+                compiled.clear()
                 continue
 
             report = mcf.measure(name, assert_determinism=False)

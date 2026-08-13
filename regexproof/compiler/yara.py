@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from regexproof.compiler.base import CompileResult, Unencodable
+from regexproof.compiler.base import CompileResult, Unencodable, add_compiler_meta, composite_meta
 
 
 def compile_yara(
@@ -59,6 +59,7 @@ def _compile_ascii(
             flags=flags,
             pattern=pattern,
             declared_domain="ascii",
+            meta=result.meta,
         )
     except Exception as exc:
         return CompileResult(
@@ -91,7 +92,46 @@ def _compile_wide(
             unescaped = _unescape_literal(pattern)
             wide_pattern = "".join(c + "\x00" for c in unescaped)
             import z3
-            mirror = z3.Re(z3.StringVal(wide_pattern))
+
+            literal = z3.Re(z3.StringVal(wide_pattern))
+            if call_kind == "fullmatch":
+                mirror = literal
+                wrap_kind = "fullmatch"
+                fullmatch_shaped = True
+            elif call_kind == "match":
+                # C1 fold (luna re-gate 5): a match call is PREFIX-anchored —
+                # literal followed by anything — not the search shape.
+                _seq = z3.StringSort()
+                _rseq = z3.ReSort(_seq)
+                star = z3.Star(z3.AllChar(_rseq))
+                mirror = z3.Concat(literal, star)
+                wrap_kind = "match"
+                fullmatch_shaped = False
+            else:
+                # C1 fold (luna re-gate): extracted YARA records use
+                # call_kind=search and wide matching is substring-based —
+                # the mirror must be the search shape, not an exact string.
+                _seq = z3.StringSort()
+                _rseq = z3.ReSort(_seq)
+                star = z3.Star(z3.AllChar(_rseq))
+                mirror = z3.Concat(star, z3.Concat(literal, star))
+                wrap_kind = "search"
+                fullmatch_shaped = False
+            # Wide nocase is not modeled — fail closed on the exactness flag.
+            nocase = "i" in flags
+            meta = composite_meta(
+                leading_caret=False,
+                # C1 fold (luna re-gate 3): source-derived — a wide literal has
+                # no $ alternative, so trailing_dollar is False even under a
+                # fullmatch wrap (the whole-string shape comes from the wrap).
+                trailing_dollar=False,
+                word_boundary_wrap=False,
+                wrap_kind=wrap_kind,
+                mirror_exact=not nocase,
+            )
+            # Wide literal mirror is an exact-string (whole-string) language —
+            # override the composite default (Union mirrors are never bare).
+            meta["fullmatch_shaped"] = fullmatch_shaped
             return CompileResult(
                 mirror=mirror,
                 unencodable_reason=None,
@@ -100,6 +140,7 @@ def _compile_wide(
                 flags=flags,
                 pattern=pattern,
                 declared_domain="wide",
+                meta=meta,
             )
         return CompileResult(
             mirror=None,

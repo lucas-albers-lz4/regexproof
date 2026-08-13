@@ -8,7 +8,12 @@ from pathlib import Path
 
 from z3 import Range, Re, Union
 
-from regexproof.compiler.base import CompileResult, Unencodable, helper_gate_missing
+from regexproof.compiler.base import (
+    CompileResult,
+    Unencodable,
+    add_compiler_meta,
+    helper_gate_missing,
+)
 from regexproof.compiler.fold import js_nonsu_fold_closure
 from regexproof.compiler.lower import lower, space_codes_from_chars
 from regexproof.compiler.pcre_strip import strip_language_transparent
@@ -95,7 +100,7 @@ def compile_ecma(
         _raise_from_gate(gate)
         ignorecase = "i" in flags
         fold = js_nonsu_fold_closure if ignorecase else None
-        mirror, _meta = lower(
+        mirror, meta = lower(
             ast,
             fold=fold,
             case_fold=js_nonsu_fold_closure,
@@ -108,6 +113,9 @@ def compile_ecma(
             allow_ascii_word_boundary=True,
             space_codes=space_codes_from_chars(_ECMA_SPACE_CHARS),
         )
+        # C1 (luna re-gate 7): respect a lowering-level mirror_exact verdict
+        # (mixed \b alternations set False) — the entry defaults True.
+        add_compiler_meta(meta, mirror_exact=bool(meta.get("mirror_exact", True)))
         return CompileResult(
             mirror=mirror,
             unencodable_reason=None,
@@ -116,6 +124,7 @@ def compile_ecma(
             flags=flags,
             pattern=pattern,
             declared_domain="ascii",
+            meta=meta,
         )
     except Unencodable as exc:
         return CompileResult(

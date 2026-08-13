@@ -50,6 +50,7 @@ def test_compile_all_rejects_negated_records():
         },
     ]
     compiled = _compile_all(records, lift_inline=False, corpus_slug="coreruleset")
+    compiled = [pair[0] for pair in compiled]
     by_id = {r["regex_id"]: r for r in compiled}
     assert by_id["n" * 32]["encodable"] is False
     assert by_id["n" * 32]["compile_reason"] == NEGATED_UNSUPPORTED_REASON

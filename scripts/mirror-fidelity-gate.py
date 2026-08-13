@@ -190,6 +190,29 @@ def _sample_from_inventory(path: Path, *, dialect: str, limit: int) -> list[dict
     return rows
 
 
+_PCRE_BACKEND_IS_GREP: bool | None = None
+
+
+def _pcre_backend_is_grep() -> bool:
+    """True when the pcre real helper falls back to pcre2grep.
+
+    Line-oriented pcre2grep cannot express empty-input matching (empty stdin =
+    zero lines — every pattern is rejected). Detected via the ``^$`` sentinel:
+    only a raw-subject engine (pcre2 bindings) accepts the empty string. CI
+    installs pcre2-utils (pcre2grep) without the bindings, so this matters for
+    gate parity (E1 #429 fold; pre-existing coreruleset "" mismatch on main).
+    """
+    global _PCRE_BACKEND_IS_GREP
+    if _PCRE_BACKEND_IS_GREP is None:
+        try:
+            argv = pcre_mod.replay_argv("^$", "")
+            proc = subprocess.run(argv, input="", capture_output=True, timeout=10)
+            _PCRE_BACKEND_IS_GREP = proc.returncode != 0
+        except Exception:  # noqa: BLE001
+            _PCRE_BACKEND_IS_GREP = True  # fail closed: treat as line-oriented
+    return _PCRE_BACKEND_IS_GREP
+
+
 def _fuzz_one(rec: dict, *, runs: int, seed: int) -> dict:
     pattern = rec["pattern"]
     flags = rec.get("flags") or ""
@@ -227,7 +250,13 @@ def _fuzz_one(rec: dict, *, runs: int, seed: int) -> dict:
     for _ in range(runs):
         n = rng.randint(0, 6)
         probes.append("".join(rng.choice(alphabet) for _ in range(n)))
+    line_oriented = dialect == "pcre" and _pcre_backend_is_grep()
     for s in probes:
+        if s == "" and line_oriented:
+            # Empty stdin = ZERO lines for the pcre2grep fallback, so it can
+            # never express "the empty string matches". The mirror's ""
+            # behavior is covered by the mutation alphabet instead (E1 #429).
+            continue
         m = _mirror_accepts(cr.mirror, s)
         if m is None:
             mismatches.append({"input": s, "reason": "mirror_timeout"})
@@ -636,10 +665,12 @@ def main(argv: list[str] | None = None) -> int:
                     corpus_slug="gitleaks",
                 )
                 rows = [
-                    c
+                    c[0]
                     for c in compiled
-                    if c.get("encodable") and not c.get("selector")
+                    if c[0].get("encodable") and not c[0].get("selector")
                 ][: args.max_per_corpus]
+                # C1 fold (luna re-gate 6): release the Z3 ASTs before fuzzing.
+                compiled.clear()
             for rec in rows:
                 results.append(
                     {

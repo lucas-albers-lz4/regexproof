@@ -114,7 +114,7 @@
       "capped": true,
       "default_branch": "main",
       "pin": "057e2c3231f46eb0bed098ffecfb219820c4b343",
-      "pushed_date": "2026-08-12",
+      "pushed_date": "2026-08-13",
       "queued_at": "2026-08-13",
       "source_query": "filename:regex_test.go OR filename:regexp_test.go",
       "stars": 49,
@@ -467,7 +467,7 @@
       "pushed_date": "2023-02-25",
       "queued_at": "2026-08-13",
       "source_query": "filename:regex_test.go OR filename:regexp_test.go",
-      "stars": 223,
+      "stars": 222,
       "url": "https://github.com/dappledger/AnnChain"
     },
     {
@@ -537,7 +537,7 @@
       "pushed_date": "2022-01-04",
       "queued_at": "2026-08-13",
       "source_query": "filename:regex_test.go OR filename:regexp_test.go",
-      "stars": 100,
+      "stars": 99,
       "url": "https://github.com/bramp/antlr4-grammars"
     },
     {
@@ -659,6 +659,346 @@
       "source_query": "filename:semgrep.yml OR filename:semgrep.yaml",
       "stars": 45,
       "url": "https://github.com/bgoonz/awesome-4-new-developers"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "ef41369156bd4998a707ab1078c61dfc97410a7d",
+      "pushed_date": "2026-08-13",
+      "queued_at": "2026-08-13",
+      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
+      "stars": 18119,
+      "url": "https://github.com/NVIDIA-NeMo/Speech"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "4b74d493f4c8dc6b4dac7e0f9cfe7abc4770fcdf",
+      "pushed_date": "2026-08-13",
+      "queued_at": "2026-08-13",
+      "source_query": "filename:.gitleaks.toml",
+      "stars": 5006,
+      "url": "https://github.com/clidey/whodb"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "3d80c27ec32e18fc92113d00407214064b53dc5c",
+      "pushed_date": "2026-08-12",
+      "queued_at": "2026-08-13",
+      "source_query": "path:config filename:secrets.yml OR path:config filename:secrets.yaml",
+      "stars": 1544,
+      "url": "https://github.com/consuldemocracy/consuldemocracy"
+    },
+    {
+      "capped": true,
+      "default_branch": "develop",
+      "pin": "f2d016e0abf5da19f01abe3ca9c33166b5c65004",
+      "pushed_date": "2026-08-13",
+      "queued_at": "2026-08-13",
+      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
+      "stars": 19036,
+      "url": "https://github.com/elizaOS/eliza"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "976ec789d2886a86de109c044d089d68e96c9a35",
+      "pushed_date": "2026-08-13",
+      "queued_at": "2026-08-13",
+      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
+      "stars": 153170,
+      "url": "https://github.com/langflow-ai/langflow"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "353c81a6ef996b4b52eff555560efd2ac86922bf",
+      "pushed_date": "2026-08-13",
+      "queued_at": "2026-08-13",
+      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
+      "stars": 4979,
+      "url": "https://github.com/maziyarpanahi/openmed"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "5cc10199d896b3d12a68b6ca40e75dca5ae97afd",
+      "pushed_date": "2026-08-13",
+      "queued_at": "2026-08-13",
+      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
+      "stars": 1338,
+      "url": "https://github.com/microsoft/hve-core"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "769a6c88b16ccdc3239a14fcbaf9ef2c44d183a8",
+      "pushed_date": "2026-08-13",
+      "queued_at": "2026-08-13",
+      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
+      "stars": 2628,
+      "url": "https://github.com/tradermonty/claude-trading-skills"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "47947a1b1f93647eaf66963cc05ca2dfb1b65243",
+      "pushed_date": "2026-08-13",
+      "queued_at": "2026-08-13",
+      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
+      "stars": 1202,
+      "url": "https://github.com/ROCm/TheRock"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "a872efcb365ae87ea61b7c920e93c6b6f95de6e8",
+      "pushed_date": "2026-08-10",
+      "queued_at": "2026-08-13",
+      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
+      "stars": 1004,
+      "url": "https://github.com/msitarzewski/brew-browser"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "3cb887bc02e3fd12c0b65cdee162fa0745238c75",
+      "pushed_date": "2026-08-13",
+      "queued_at": "2026-08-13",
+      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
+      "stars": 1068,
+      "url": "https://github.com/openSUSE/open-build-service"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "0a66c65ae3c8cc934e6ae8be86d31a21ed4899ae",
+      "pushed_date": "2026-08-12",
+      "queued_at": "2026-08-13",
+      "source_query": "filename:.gitleaks.toml",
+      "stars": 841,
+      "url": "https://github.com/NVIDIA-BioNeMo/bionemo-recipes"
+    },
+    {
+      "capped": true,
+      "default_branch": "staging",
+      "pin": "107b390a33802e4f191b42a8068e38d2ff7941de",
+      "pushed_date": "2026-08-13",
+      "queued_at": "2026-08-13",
+      "source_query": "path:config filename:secrets.yml OR path:config filename:secrets.yaml",
+      "stars": 896,
+      "url": "https://github.com/code-dot-org/code-dot-org"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "1c57bb1f19ee993b922682901881b821002ed8d6",
+      "pushed_date": "2026-08-13",
+      "queued_at": "2026-08-13",
+      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
+      "stars": 958,
+      "url": "https://github.com/superdoc/docx-editor"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "2dba215dcc91df83e85e9f9d285f20d8bb699488",
+      "pushed_date": "2026-08-13",
+      "queued_at": "2026-08-13",
+      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
+      "stars": 710,
+      "url": "https://github.com/Pinvou/pinvou-agent"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "22363b2f13ef93ef02b1077e91f54afa4d239ac7",
+      "pushed_date": "2026-08-13",
+      "queued_at": "2026-08-13",
+      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
+      "stars": 603,
+      "url": "https://github.com/tufantunc/ssh-mcp"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "fb1a358fa4a2d85a87ab94410f50e6eede8181c6",
+      "pushed_date": "2026-08-13",
+      "queued_at": "2026-08-13",
+      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
+      "stars": 492,
+      "url": "https://github.com/itbench-hub/ITBench"
+    },
+    {
+      "capped": true,
+      "default_branch": "develop",
+      "pin": "41f8afbdd2143577c9705a96a451c9c9ec18530a",
+      "pushed_date": "2026-08-12",
+      "queued_at": "2026-08-13",
+      "source_query": "filename:semgrep.yml OR filename:semgrep.yaml",
+      "stars": 10537,
+      "url": "https://github.com/Activiti/Activiti"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "cec788786627337583cdafddbe1902863f874383",
+      "pushed_date": "2026-08-12",
+      "queued_at": "2026-08-13",
+      "source_query": "path:config filename:secrets.yml OR path:config filename:secrets.yaml",
+      "stars": 343,
+      "url": "https://github.com/o19s/quepid"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "eec1c51bad6b09855111cb23a8484d5d272e222f",
+      "pushed_date": "2026-08-12",
+      "queued_at": "2026-08-13",
+      "source_query": "filename:semgrep.yml OR filename:semgrep.yaml",
+      "stars": 2934,
+      "url": "https://github.com/opengrep/opengrep"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "7744a51ba95a7a897f560672c882d3532c38e216",
+      "pushed_date": "2026-08-13",
+      "queued_at": "2026-08-13",
+      "source_query": "filename:.gitleaks.toml",
+      "stars": 368,
+      "url": "https://github.com/superdesigndev/treg"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "70ee2ef13df0f015f5731d456e2289df638bd715",
+      "pushed_date": "2026-08-13",
+      "queued_at": "2026-08-13",
+      "source_query": "filename:.gitleaks.toml",
+      "stars": 237,
+      "url": "https://github.com/Evokoa/pgContext"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "edb8773b3b97781060ac80a2e75a66246c1ca9ba",
+      "pushed_date": "2026-06-25",
+      "queued_at": "2026-08-13",
+      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
+      "stars": 257,
+      "url": "https://github.com/IBM/ibmdotcom-tutorials"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "4487c0ee24933cbd24d4649bb9126aa13b96a5bb",
+      "pushed_date": "2026-08-13",
+      "queued_at": "2026-08-13",
+      "source_query": "filename:.gitleaks.toml",
+      "stars": 188,
+      "url": "https://github.com/ctrl-gaurav/effGen"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "67499b289a9e375a24ca04ac0baf764847e65f2a",
+      "pushed_date": "2026-08-13",
+      "queued_at": "2026-08-13",
+      "source_query": "filename:semgrep.yml OR filename:semgrep.yaml",
+      "stars": 998,
+      "url": "https://github.com/frappe/frappe-ui"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "bfca612f46728f69ce93b2d0ef82a08bbc69e1d1",
+      "pushed_date": "2026-07-19",
+      "queued_at": "2026-08-13",
+      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
+      "stars": 206,
+      "url": "https://github.com/thomasxm/CrowdSentinels-AI-MCP"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "39ad8d60aa2f7af0a465d58c5e87dcc509602df5",
+      "pushed_date": "2025-12-04",
+      "queued_at": "2026-08-13",
+      "source_query": "filename:.gitleaks.toml",
+      "stars": 200,
+      "url": "https://github.com/zeitgeistpm/zeitgeist"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "5514f2049e2c2954725163174a5e976793b17b20",
+      "pushed_date": "2026-08-13",
+      "queued_at": "2026-08-13",
+      "source_query": "filename:.gitleaks.toml",
+      "stars": 154,
+      "url": "https://github.com/AMD-AGI/GEAK"
+    },
+    {
+      "capped": true,
+      "default_branch": "master",
+      "pin": "39386bc13ddbc01eb8bb705471733204a107be65",
+      "pushed_date": "2026-08-12",
+      "queued_at": "2026-08-13",
+      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
+      "stars": 175,
+      "url": "https://github.com/IBM/watsonx-ai-samples"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "3fc63e61f06f14a641c259a1946f977990c1387b",
+      "pushed_date": "2026-08-13",
+      "queued_at": "2026-08-13",
+      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
+      "stars": 150,
+      "url": "https://github.com/libredb/libredb-studio"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "4d2a82602fc3428814817ae77f41fdc79f62fcad",
+      "pushed_date": "2026-08-13",
+      "queued_at": "2026-08-13",
+      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
+      "stars": 132,
+      "url": "https://github.com/MakerViking/sindricad"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "86cbbbb1d65eeca88ce2f820dd958301625e394c",
+      "pushed_date": "2026-08-11",
+      "queued_at": "2026-08-13",
+      "source_query": "filename:.gitleaks.toml",
+      "stars": 123,
+      "url": "https://github.com/MattDevy/pi-extensions"
+    },
+    {
+      "capped": true,
+      "default_branch": "develop",
+      "pin": "f631e0f51f8c4d4467e21b346fb184efd9438fe0",
+      "pushed_date": "2026-08-13",
+      "queued_at": "2026-08-13",
+      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
+      "stars": 111,
+      "url": "https://github.com/ffroliva/gflow-cli"
+    },
+    {
+      "capped": true,
+      "default_branch": "main",
+      "pin": "b9b02510cb36a7b94db6982e5f2ab724584703b5",
+      "pushed_date": "2026-08-13",
+      "queued_at": "2026-08-13",
+      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
+      "stars": 110,
+      "url": "https://github.com/ivan-pinatti/docker-torrent-box-with-vpn"
     }
   ],
   "schema_version": "1",

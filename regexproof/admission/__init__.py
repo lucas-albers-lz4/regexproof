@@ -4,17 +4,19 @@ from __future__ import annotations
 
 from regexproof.admission.author import author_auto, author_human, emit_decision_text
 from regexproof.admission.auto_nogo import auto_nogo_eligible
-from regexproof.admission.llm_draft import author_llm_draft
 from regexproof.admission.boundary import classify_boundary
+from regexproof.admission.clone import CloneResult, cleanup_clone, partial_clone
 from regexproof.admission.constructs import accumulate_constructs, count_constructs
 from regexproof.admission.dialect_aliases import normalize_dialect_counts
 from regexproof.admission.draft import FIELDS_REMAINING, build_draft, emit_draft_text
+from regexproof.admission.llm_draft import author_llm_draft
 from regexproof.admission.serialize import dumps_pinned
 from regexproof.admission.vocabulary import load_vocabulary, predict_buckets
 from regexproof.admission.walk import walk_repo
 
 __all__ = [
     "FIELDS_REMAINING",
+    "CloneResult",
     "accumulate_constructs",
     "author_auto",
     "author_human",
@@ -22,12 +24,14 @@ __all__ = [
     "auto_nogo_eligible",
     "build_draft",
     "classify_boundary",
+    "cleanup_clone",
     "count_constructs",
     "dumps_pinned",
     "emit_decision_text",
     "emit_draft_text",
     "load_vocabulary",
     "normalize_dialect_counts",
+    "partial_clone",
     "predict_buckets",
     "walk_repo",
 ]

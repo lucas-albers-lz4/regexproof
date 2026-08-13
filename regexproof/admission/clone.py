@@ -6,6 +6,7 @@ import os
 import shutil
 import subprocess
 from collections.abc import Callable, Sequence
+from dataclasses import dataclass
 from pathlib import Path
 from urllib.parse import urlparse
 
@@ -18,6 +19,20 @@ _DEFAULT_CLONE_TIMEOUT_SEC = 300
 
 class CloneError(RuntimeError):
     """Probe clone failed."""
+
+
+@dataclass(frozen=True)
+class CloneResult:
+    """Outcome of a partial clone (E3 — stale-pin detection).
+
+    ``pin`` is the SHA actually checked out for the walk (the requested pin
+    if one was given, or HEAD otherwise). ``default_head`` is the
+    default-branch HEAD captured *before* checkout — this is the SHA the
+    probe resolved, used as ``pin_probed`` so a stale mined pin is detected.
+    """
+
+    pin: str
+    default_head: str
 
 
 def validate_clone_url(url: str) -> None:
@@ -79,8 +94,8 @@ def partial_clone(
     pin: str | None = None,
     max_disk_mb: int | None = 500,
     run: RunFn | None = None,
-) -> str:
-    """Clone *url* with ``--filter=blob:none`` into *dest*; return resolved pin.
+) -> CloneResult:
+    """Clone *url* with ``--filter=blob:none`` into *dest*; return resolved pins.
 
     *dest* must not live under ``batch/corpora/``. Cleanup is the caller's
     responsibility (see :func:`cleanup_clone`).
@@ -88,6 +103,11 @@ def partial_clone(
     Note: with ``blob:none``, the on-disk check here only sees tree metadata.
     Callers that walk/read files should re-check via :func:`enforce_disk_budget`
     after materialization.
+
+    Returns a :class:`CloneResult` carrying both ``pin`` (the SHA checked out
+    for the walk) and ``default_head`` (the default-branch HEAD at clone time,
+    captured *before* ``git checkout --detach <pin>`` — this is ``pin_probed``
+    for E3 stale-pin detection).
     """
     validate_clone_url(url)
     run_fn = run or _default_run
@@ -116,6 +136,14 @@ def partial_clone(
             f"git clone failed ({proc.returncode}): {proc.stderr or proc.stdout}"
         )
 
+    # Capture the default-branch HEAD BEFORE any checkout — this is pin_probed.
+    head_rev = run_fn(["git", "-C", str(dest), "rev-parse", "HEAD"])
+    if head_rev.returncode != 0:
+        raise CloneError(
+            f"rev-parse HEAD failed: {head_rev.stderr or head_rev.stdout}"
+        )
+    default_head = (head_rev.stdout or "").strip()
+
     if pin:
         # Fetch the pin explicitly — default-branch-only clones miss other SHAs.
         fetch = run_fn(
@@ -130,10 +158,7 @@ def partial_clone(
             raise CloneError(f"git checkout {pin} failed: {co.stderr or co.stdout}")
         resolved = pin
     else:
-        rev = run_fn(["git", "-C", str(dest), "rev-parse", "HEAD"])
-        if rev.returncode != 0:
-            raise CloneError(f"rev-parse failed: {rev.stderr or rev.stdout}")
-        resolved = (rev.stdout or "").strip()
+        resolved = default_head
 
     if max_disk_mb is not None:
         # Pre-walk soft check (often undercounts with blob:none).
@@ -143,7 +168,7 @@ def partial_clone(
             shutil.rmtree(dest, ignore_errors=True)
             raise
 
-    return resolved
+    return CloneResult(pin=resolved, default_head=default_head)
 
 
 def cleanup_clone(path: Path | str) -> None:
