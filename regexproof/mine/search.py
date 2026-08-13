@@ -301,6 +301,12 @@ def run_search(
                     "capped": hit_cap,
                 }
                 result.candidates.append(entry)
+            if rate_limited:
+                # P7 fold (luna re-gate 7): an enrich/pin rate limit must stop
+                # the PAGE loop immediately — the item-loop break alone would
+                # let the next page's search_code fire (the outer check at the
+                # query-loop level is too late).
+                break
         if rate_limited:
             break
     return result

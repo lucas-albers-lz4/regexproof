@@ -768,3 +768,35 @@ def test_query_budget_counts_queries_not_pages():
     assert result.capped is True
     search_calls = [c for c in session.calls if "search/code" in c]
     assert len(search_calls) == 4  # q1 p1+p2, q2 p1+p2 — q3 never searched
+
+
+def test_enrich_rate_limit_aborts_page_loop_without_extra_search():
+    """P7 (luna re-gate 7): an enrich-repo rate limit must abort the run
+    WITHOUT requesting the next search page. The item-loop break falls
+    through to `if rate_limited: break` inside the page loop (search.py:304),
+    so only ONE search_code call may ever fire."""
+    page_items = {
+        "items": [
+            {"repository": {"full_name": "acme/tool0", "stargazers_count": 5,
+                            "html_url": "https://github.com/acme/tool0"}},
+            {"repository": {"full_name": "acme/tool1", "stargazers_count": 5,
+                            "html_url": "https://github.com/acme/tool1"}},
+        ]
+    }
+    session = FakeSession(
+        responses=[
+            FakeResp(200, page_items),          # q1 p1 search
+            # enrich: 5x 429 exhausts the retry cap -> RateLimitError
+            FakeResp(429, {}),
+            FakeResp(429, {}),
+            FakeResp(429, {}),
+            FakeResp(429, {}),
+            FakeResp(429, {}),
+        ]
+    )
+    result = run_search(session, queries=["q1"], query_budget=10,
+                        max_pages=3, sleep_fn=lambda _s: None)
+    assert result.capped is True
+    assert any("enrich rate-limited" in e for e in result.errors), result.errors
+    search_calls = [c for c in session.calls if "search/code" in c]
+    assert len(search_calls) == 1  # no page-2 search after the rate limit
