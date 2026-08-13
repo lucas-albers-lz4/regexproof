@@ -177,6 +177,9 @@ def main(argv: list[str]) -> int:
                         "wall_s": round(time.time() - t0, 1),
                     }
                 )
+                # C1 fold (luna re-gate 4): release the Z3 ASTs — the measure
+                # loop holds every corpus's mirrors otherwise.
+                compiled.clear()
                 continue
 
             report = mcf.measure(name, assert_determinism=False)

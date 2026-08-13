@@ -171,6 +171,7 @@ def _lower_alt(
     # Per-alternative anchors must not hoist onto the whole Union
     # (false-UNSAT under search: ^a|b vs ^(a|b)). Reject like py_re.
     alts = []
+    wrapped = 0
     for it in node.items:
         alt_meta = {
             "leading_caret": False,
@@ -194,14 +195,18 @@ def _lower_alt(
         )
         if alt_meta.get("has_internal_anchor"):
             meta["has_internal_anchor"] = True
-        # C1 fold (luna re-gate 3): a \b-wrapped alternative stays
-        # word-boundary-wrapped — propagate, or \bfoo|\bbar wrongly reports
-        # fullmatch_shaped=True while its branches are search-shaped.
+        # C1 fold (luna re-gate 4): propagate word_boundary_wrap ONLY when
+        # ALL branches are \b-wrapped. A mixed alternation (\bfoo|bar) must
+        # keep the normal outer wrap — the plain branch needs the search
+        # padding; the all-wrapped case skips it because each WordBounded
+        # branch is already search-shaped.
         if alt_meta.get("word_boundary_wrap"):
-            meta["word_boundary_wrap"] = True
+            wrapped += 1
         if alt_meta.get("leading_caret") or alt_meta.get("trailing_dollar"):
             raise Unencodable("per-alternative-anchor")
         alts.append(lowered)
+    if wrapped and wrapped == len(alts):
+        meta["word_boundary_wrap"] = True
     return Union(*alts) if len(alts) > 1 else alts[0]
 
 def _lower_node(

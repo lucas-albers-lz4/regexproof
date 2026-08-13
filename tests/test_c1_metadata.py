@@ -202,7 +202,11 @@ def test_compile_records_failed_row_pairs_none():
 def test_discard_streamed_mirrors_runs():
     rec = _valid({"pattern": "^abc$", "dialect": "re2", "call_kind": "fullmatch"})
     stream = compile_records([rec], lift_inline=False, corpus_slug="meta-test")
+    assert len(stream) >= 1
     _discard_streamed_mirrors(stream)
+    # C1 fold (luna re-gate 4): the discard must actually release the
+    # triples — a no-op discard fails this assertion.
+    assert stream == []
 
 
 def test_py_re_nested_scoped_shorthand_not_exact():
@@ -239,6 +243,9 @@ def test_mirror_discard_path_releases_stream():
         assert "mirror" not in row  # lean rows — no AST in records
         if mirror is not None:
             assert meta is not None
+    # C1 fold (luna re-gate 4): the discard clears the list (no-op guard).
+    _discard_streamed_mirrors(rows)
+    assert rows == []
 
 
 def test_fast_path_propagates_word_boundary_wrap():
@@ -328,3 +335,16 @@ def test_fast_path_trailing_dollar_source_derived():
     # yara wide literal has no $ in source -> False even under fullmatch
     cr = compile_pattern("abc", "", "yara", "fullmatch", domain="wide")
     assert cr.trailing_dollar is False
+
+
+def test_mixed_alternation_keeps_normal_wrap():
+    # C1 fold (luna re-gate 4): \bfoo|bar is MIXED — the plain bar branch
+    # needs the search padding. wb must NOT propagate (only the all-wrapped
+    # case skips the outer wrap); fullmatch keeps the whole-string shape.
+    cr = compile_pattern(r"\bfoo|bar", "", "pcre", "search")
+    assert cr.encodable, cr.unencodable_reason
+    assert cr.word_boundary_wrap is False
+    assert cr.fullmatch_shaped is False  # padded search mirror
+    cr2 = compile_pattern(r"\bfoo|\bbar", "", "pcre", "search")
+    assert cr2.word_boundary_wrap is True
+    assert cr2.fullmatch_shaped is False

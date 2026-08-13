@@ -229,9 +229,12 @@ def measure(corpus: str, *, assert_determinism: bool = False) -> dict:
         b = [c[0].get("regex_id") for c in again]
         if a != b:
             raise SystemExit("FAIL: non-deterministic extraction (regex_id order)")
+        # C1 fold (luna re-gate 4): release the Z3 ASTs of both runs.
+        again.clear()
 
     wall = time.perf_counter() - t0
     rows = [pair[0] for pair in compiled]
+    compiled.clear()  # C1 fold: discard mirrors, keep the lean rows
     reasons = Counter((c.get("compile_reason") or "ok") for c in rows)
     enc = sum(1 for c in rows if c.get("encodable"))
     n = len(rows) or 1
