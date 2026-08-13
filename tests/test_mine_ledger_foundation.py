@@ -322,7 +322,9 @@ def test_audit_requeue_archives_gate_and_new_decision_applies(tmp_path: Path):
     except Exception as exc:  # noqa: BLE001
         raise AssertionError(f"set_status raised in CI: {exc!r}") from exc
     # Revert the diagnostic transition so the sync still sees "queued".
-    mod.transition_candidate(
+    from regexproof.mine.transition import transition_candidate
+
+    transition_candidate(
         ledger_path, "https://github.com/acme/recovered", to="queued",
         reason="diag-revert",
     )
