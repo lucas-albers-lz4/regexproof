@@ -128,7 +128,8 @@ def enqueue(
             if eu and normalize_repo_url(str(eu)) == target:
                 for key in (
                     "pin", "stars", "pushed_date", "source_query",
-                    "default_branch", "capped",
+                    "default_branch", "capped", "pin_probed",
+                    "fork", "size", "language", "archived",
                 ):
                     if key in item:
                         existing[key] = item[key]

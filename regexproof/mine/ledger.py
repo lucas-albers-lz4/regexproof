@@ -1,4 +1,9 @@
-"""Candidate ledger v1 — atomic load/save (umbrella C1 / P2 B0)."""
+"""Candidate ledger v1 — atomic load/save (umbrella C1 / P2 B0).
+
+Rows written by the mine may carry additive repository metadata.  The loader
+intentionally does not require those fields so ledgers produced before the
+metadata enrichment remain valid.
+"""
 
 from __future__ import annotations
 
@@ -20,6 +25,11 @@ CANDIDATE_FIELDS = (
     "first_seen",
     "status",
 )
+
+# Optional fields populated by the GitHub repository enrichment call.  Keep
+# this separate from CANDIDATE_FIELDS: old rows are valid without them.
+ENRICH_FIELDS = ("fork", "size", "language", "archived")
+OPTIONAL_CANDIDATE_FIELDS = (*ENRICH_FIELDS, "pin_probed")
 
 # Injectable crash hook for mid-write tests: called after temp write, before replace.
 _crash_before_replace: Callable[[], None] | None = None
