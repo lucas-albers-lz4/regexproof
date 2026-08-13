@@ -1,0 +1,61 @@
+{
+  "candidate_url": "https://github.com/nriley/jython",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted: py_re/ecma/posix-shell).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. nriley/jython fork of classic Jython; 29 sites below scale.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "jython",
+  "corpus_pin": "b5f87d963384b62cb43bf56f90d0b6297af30b65",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "lookaround": 1
+    },
+    "dialect": {
+      "java": 5,
+      "posix-shell": 9,
+      "py_re": 15
+    },
+    "flags": {
+      "i": 2
+    },
+    "pin": "b5f87d963384b62cb43bf56f90d0b6297af30b65",
+    "predicted_buckets": {
+      "inline-flag": 2,
+      "lookaround": 1
+    },
+    "regex_sites": 29,
+    "regex_sites_per_file": {
+      "Lib/posixpath.py": 1,
+      "Lib/test/junit_xml.py": 1,
+      "Lib/test/test_javashell.py": 1,
+      "Lib/test/test_re_jy.py": 4,
+      "Lib/xml/Uri.py": 3,
+      "bugtests/test327.py": 3,
+      "bugtests/test362.py": 2,
+      "src/org/python/core/io/TextIOWrapper.java": 1,
+      "src/org/python/modules/binascii.java": 3,
+      "src/org/python/util/PyServlet.java": 1,
+      "tests/shell/test-jython.sh": 9
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 29 regex sites (auto-NO-GO bar 200); dialects [java:5, posix-shell:9, py_re:15]; boundary=unknown.",
+  "schema_version": "1"
+}

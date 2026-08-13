@@ -1,0 +1,48 @@
+{
+  "candidate_url": "https://github.com/aralejs/validator",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted: py_re/ecma/posix-shell).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. aralejs form validator widget; 17 ecma sites below scale.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "validator",
+  "corpus_pin": "722645bceeac4fe60cf881a8e42f057facef2afb",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 17
+    },
+    "flags": {
+      "g": 2
+    },
+    "pin": "722645bceeac4fe60cf881a8e42f057facef2afb",
+    "predicted_buckets": {
+      "stateful": 2
+    },
+    "regex_sites": 17,
+    "regex_sites_per_file": {
+      "src/core.js": 2,
+      "src/rule.js": 12,
+      "src/utils.js": 3
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 17 regex sites (auto-NO-GO bar 200); dialects [ecma:17]; boundary=unknown.",
+  "schema_version": "1"
+}

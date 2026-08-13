@@ -1,0 +1,64 @@
+{
+  "candidate_url": "https://github.com/currentsuspect/Aestra",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted: py_re/ecma/posix-shell).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. currentsuspect C++ DAW; 46 sites (27 shell/16 py/3 ecma). Boundary classifier FALSE POSITIVE (labs/security/ run_eval.sh paths) — audio workstation, not a security tool.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "Aestra",
+  "corpus_pin": "ce5523a5bea95b75510ced6c31d42f5fef05d227",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "posix-class": 10
+    },
+    "dialect": {
+      "ecma": 3,
+      "posix-shell": 27,
+      "py_re": 16
+    },
+    "flags": {
+      "i": 5
+    },
+    "pin": "ce5523a5bea95b75510ced6c31d42f5fef05d227",
+    "predicted_buckets": {
+      "inline-flag": 5,
+      "posix-class": 10
+    },
+    "regex_sites": 46,
+    "regex_sites_per_file": {
+      "labs/math/run_eval.sh": 1,
+      "labs/resampler/run_eval.sh": 4,
+      "labs/security/run_eval.sh": 7,
+      "scripts/audit_codebase.py": 2,
+      "scripts/audit_issues.py": 2,
+      "scripts/audit_pr_traceability.py": 1,
+      "scripts/check_platform_leaks.py": 1,
+      "scripts/ci/check-decision-citation.sh": 11,
+      "scripts/ci/classify-changes.sh": 2,
+      "scripts/rename_codebase.py": 7,
+      "scripts/rt_safety_audit.sh": 2,
+      "scripts/update_cmake_filenames.py": 3,
+      "workers/license-signing/src/accountStore.ts": 1,
+      "workers/license-signing/test/storage.test.ts": 2
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 46 regex sites (auto-NO-GO bar 200); dialects [ecma:3, posix-shell:27, py_re:16]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

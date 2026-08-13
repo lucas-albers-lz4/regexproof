@@ -1,0 +1,42 @@
+{
+  "candidate_url": "https://github.com/thecybermafia/orgleaks",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted: py_re/ecma/posix-shell).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. thecybermafia orgleaks (gitleaks-for-org tool); 4 shell sites. Same family as wgpsec/orgleaks already superseded no-go (4-site tool, below proof floor).",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "orgleaks",
+  "corpus_pin": "eca55a2093cc5d1759f6e430b201412683a9c69c",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "posix-shell": 4
+    },
+    "flags": {},
+    "pin": "eca55a2093cc5d1759f6e430b201412683a9c69c",
+    "predicted_buckets": {},
+    "regex_sites": 4,
+    "regex_sites_per_file": {
+      "orgleaks.sh": 4
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 4 regex sites (auto-NO-GO bar 200); dialects [posix-shell:4]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

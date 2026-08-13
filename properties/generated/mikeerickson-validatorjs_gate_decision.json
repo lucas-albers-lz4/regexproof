@@ -1,0 +1,57 @@
+{
+  "candidate_url": "https://github.com/mikeerickson/validatorjs",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted: py_re/ecma/posix-shell).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. mikeerickson/validatorjs; 29 ecma sites below scale. Same family as admitted validatorjs (validatorjs/validator.js).",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "validatorjs",
+  "corpus_pin": "46928d706054b94821680c089de8b2a185830429",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 29
+    },
+    "flags": {
+      "g": 5,
+      "i": 2
+    },
+    "pin": "46928d706054b94821680c089de8b2a185830429",
+    "predicted_buckets": {
+      "inline-flag": 2,
+      "stateful": 5
+    },
+    "regex_sites": 29,
+    "regex_sites_per_file": {
+      "scripts/todo.js": 1,
+      "spec/attribute-formatter.js": 1,
+      "spec/custom-messages.js": 2,
+      "spec/error-messages.js": 2,
+      "spec/implicit-rule.js": 2,
+      "spec/register.js": 2,
+      "src/attributes.js": 2,
+      "src/messages.js": 1,
+      "src/rules.js": 14,
+      "src/validator.js": 2
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 29 regex sites (auto-NO-GO bar 200); dialects [ecma:29]; boundary=unknown.",
+  "schema_version": "1"
+}

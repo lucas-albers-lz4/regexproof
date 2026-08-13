@@ -1,0 +1,42 @@
+{
+ "schema_version": "1",
+ "candidate_url": "https://github.com/swenson/python-xr",
+ "conditions": [
+  {
+   "id": "new-surface",
+   "met": false,
+   "evidence": "No probe evidence - clone failed before extraction; Python source cross-reference tool, no novel dialect claim."
+  },
+  {
+   "id": "security-boundary",
+   "met": false,
+   "evidence": "Probe security_boundary unknown; not a security tool by description (Python source cross-reference)."
+  },
+  {
+   "id": "large-under-saturated",
+   "met": false,
+   "evidence": "Below 1000 scale bar; no surface measured (clone checkout failure)."
+  }
+ ],
+ "corpus": "python-xr",
+ "corpus_pin": "58108f90c30e89cd8350ce743251e251b7b7261d",
+ "decision": "no-go",
+ "decision_basis": "admission_conditions",
+ "decision_date": "2026-08-13",
+ "escape_hatch_applied": false,
+ "probe": {
+  "regex_sites": 0,
+  "dialect": {},
+  "flags": {},
+  "construct_counts": {},
+  "predicted_buckets": {},
+  "security_boundary": "unknown",
+  "pin": "58108f90c30e89cd8350ce743251e251b7b7261d",
+  "extractor_errors": 0,
+  "regex_sites_per_file": {}
+ },
+ "rationale": "Clone checkout fails repeatedly (unable to checkout working tree) - unprobeable at gate budget. No admission condition met.",
+ "related": {
+  "probe_failure": "git clone/checkout error"
+ }
+}

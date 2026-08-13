@@ -1,0 +1,48 @@
+{
+  "candidate_url": "https://github.com/beeblebrox3/validator",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted: py_re/ecma/posix-shell).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. simple validation tool; 14 ecma sites, below any proof floor.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "validator",
+  "corpus_pin": "79ad04b73b28b895f75de3ede9eff11de04f5bd1",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 14
+    },
+    "flags": {
+      "g": 4,
+      "i": 5
+    },
+    "pin": "79ad04b73b28b895f75de3ede9eff11de04f5bd1",
+    "predicted_buckets": {
+      "inline-flag": 5,
+      "stateful": 4
+    },
+    "regex_sites": 14,
+    "regex_sites_per_file": {
+      "src/validator.js": 14
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 14 regex sites (auto-NO-GO bar 200); dialects [ecma:14]; boundary=unknown.",
+  "schema_version": "1"
+}
