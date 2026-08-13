@@ -78,6 +78,34 @@ def test_read_capped_skips_oversized(tmp_path):
     assert meta["skipped_oversized"] == 1
 
 
+def test_read_capped_raises_on_missing(tmp_path):
+    """#365 follow-up: missing/unreadable must not look like an oversize skip."""
+    from regexproof.batch.extract import _read_capped
+
+    missing = tmp_path / "gone.yml"
+    meta: dict = {}
+    try:
+        _read_capped(missing, meta)
+        raise AssertionError("expected FileNotFoundError")
+    except FileNotFoundError:
+        pass
+    assert meta.get("skipped_oversized") in (None, 0)
+
+
+def test_test262_tree_skips_oversized(tmp_path):
+    from regexproof.extractors.test262 import extract_test262_tree
+
+    ok = tmp_path / "a.js"
+    ok.write_text("var re = /abc/;\n", encoding="utf-8")
+    big = tmp_path / "huge.js"
+    big.write_bytes(b"x" * 2_000_001)
+    _recs, stats = extract_test262_tree(
+        tmp_path, expected_files=None, max_file_bytes=2_000_000
+    )
+    assert stats["skipped_oversized"] == 1
+    assert stats["files_seen"] == 2
+
+
 def test_extract_glob_skips_oversized(tmp_path):
     from regexproof.batch.runner import _MAX_FILE_BYTES, _extract_glob
 

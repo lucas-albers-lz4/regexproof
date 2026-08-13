@@ -19,6 +19,8 @@ from regexproof.extractors.record import make_record
 
 # Upstream pin file count: 80 ``*.t`` + ``re_tests``.
 EXPECTED_PERL_RE_FILES = 81
+# Keep in sync with regexproof.batch.manifests.MAX_FILE_BYTES (#175/#365).
+_DEFAULT_MAX_FILE_BYTES = 2_000_000
 
 _CLOSE = {"{": "}", "(": ")", "[": "]", "<": ">"}
 
@@ -315,6 +317,7 @@ def extract_perl_re_tree(
     file_prefix: str = "t/re",
     expected_files: int | None = EXPECTED_PERL_RE_FILES,
     dialect: str = "perl",
+    max_file_bytes: int = _DEFAULT_MAX_FILE_BYTES,
 ) -> tuple[list[dict[str, Any]], dict[str, Any]]:
     """Walk ``t/re`` extracting ``*.t`` + ``re_tests``; gate on expected count."""
     root = Path(root)
@@ -334,8 +337,12 @@ def extract_perl_re_tree(
         ordered.append(fp)
     out: list[dict[str, Any]] = []
     per_file: dict[str, int] = {}
+    skipped_oversized = 0
     for fp in ordered:
         rel = f"{file_prefix}/{fp.name}"
+        if fp.stat().st_size > max_file_bytes:
+            skipped_oversized += 1
+            continue
         src = fp.read_text(encoding="utf-8", errors="replace")
         recs = extract_perl_re_file(src, repo=repo, file=rel, dialect=dialect)
         per_file[rel] = len(recs)
@@ -347,5 +354,6 @@ def extract_perl_re_tree(
         "records": len(out),
         "per_file_records": per_file,
         "files": [f"{file_prefix}/{fp.name}" for fp in ordered],
+        "skipped_oversized": skipped_oversized,
     }
     return out, stats
