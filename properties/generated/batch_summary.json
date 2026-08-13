@@ -116,23 +116,23 @@
     "wall_s": 21.527
   },
   "corpora": {
-    "mcp-for-splunk": {
+    "json-editor": {
       "address_space_cap": true,
       "complete_run": true,
-      "corpus": "mcp-for-splunk",
-      "corpus_type": "rule_corpus",
-      "encodable": 42,
+      "corpus": "json-editor",
+      "corpus_type": "validator",
+      "encodable": 6,
       "engine": {
         "python": "3.13.5"
       },
-      "extracted": 44,
-      "findings": 23,
+      "extracted": 13,
+      "findings": 10,
       "inventory_questions": 4,
-      "join_regex_ids": 23,
+      "join_regex_ids": 10,
       "redos_findings": 0,
       "redos_incomplete": false,
       "schema_version": "1",
-      "triage": 2
+      "triage": 7
     }
   },
   "pair_counts": {
@@ -143,7 +143,7 @@
       "note": "fraction gate go; CRS rule-derived adapter is Phase-2 rule_diff",
       "scope": "full_corpus"
     },
-    "mcp-for-splunk": {
+    "json-editor": {
       "admitted": 0,
       "dropped": 0,
       "note": "no independent-spec catalog"

@@ -1,0 +1,18 @@
+{
+  "address_space_cap": true,
+  "complete_run": true,
+  "corpus": "json-editor",
+  "corpus_type": "validator",
+  "encodable": 6,
+  "engine": {
+    "python": "3.13.5"
+  },
+  "extracted": 13,
+  "findings": 10,
+  "inventory_questions": 4,
+  "join_regex_ids": 10,
+  "redos_findings": 0,
+  "redos_incomplete": false,
+  "schema_version": "1",
+  "triage": 7
+}

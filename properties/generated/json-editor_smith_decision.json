@@ -1,0 +1,14 @@
+{
+  "schema_version": "1",
+  "corpus": "json-editor",
+  "corpus_pin": "b31ddabecf4ed3209d37a2f5b29956120cd8f9ce",
+  "candidate_url": "https://github.com/json-editor/json-editor",
+  "smith_decision": "go",
+  "supersedes": "triage-trial (#282)",
+  "reason": "GRADUATED from triage-trial: 6/13 = 0.4615 encodable (complete_run, parse-error=0, budget clean). JSON-schema form editor (validator class). Small measured surface (top-60 ecma allowlist captured 13 sites - the repo's regexes are concentrated in validation helpers). Validator-class corpus; usable fraction. GO admit confirmed.",
+  "regex_sites": 13,
+  "sites_by_bucket": {
+    "ecma allowlist (13 sites measured; 6 encodable)": 13
+  },
+  "additional_surface_outside_probe_scope": {}
+}
