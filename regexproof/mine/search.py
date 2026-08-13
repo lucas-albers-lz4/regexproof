@@ -46,6 +46,7 @@ DEFAULT_QUERY_BUDGET = 30
 DEFAULT_RETRY_CAP = 5
 SEARCH_CAP_THRESHOLD = 950
 MIN_STARS = 2
+MAX_SEARCH_PAGES = 3
 
 
 class HttpResponse(Protocol):
@@ -199,82 +200,113 @@ def run_search(
     queries: list[str] | None = None,
     query_budget: int = DEFAULT_QUERY_BUDGET,
     min_stars: int = MIN_STARS,
+    max_pages: int = MAX_SEARCH_PAGES,
     headers: dict[str, str] | None = None,
     sleep_fn: Callable[[float], None] = time.sleep,
 ) -> SearchRunResult:
-    """Execute curated queries until budget exhaustion; return candidates + capped flag."""
+    """Execute curated queries until budget exhaustion; return candidates + capped flag.
+
+    Paginates up to *max_pages* pages per query (default 3). Star filtering
+    is a post-filter on the enriched repo object — code search cannot filter
+    by stars.
+    """
     result = SearchRunResult()
     hdrs = headers or github_headers()
     seen_repos: set[str] = set()
+    rate_limited = False
     for query in queries or SEARCH_QUERIES:
+        if rate_limited:  # P7 fold: a rate limit aborts ALL further queries
+            break
         if result.queries_run >= query_budget:
             result.capped = True
             break
-        try:
-            body, hit_cap = search_code(
-                session, query, headers=hdrs, sleep_fn=sleep_fn
-            )
-        except AuthError:
-            raise
-        except RateLimitError as e:
-            result.errors.append(str(e))
-            result.capped = True
-            break
-        except RuntimeError as e:
-            result.errors.append(str(e))
-            result.queries_run += 1
-            continue
-
+        # P7 fold (luna re-gate 4): the budget counts QUERIES, not pages —
+        # queries_run increments once per query; pages are bounded by
+        # max_pages inside the loop.
         result.queries_run += 1
-        if hit_cap:
-            result.capped = True
+        for page in range(1, max_pages + 1):
+            try:
+                body, hit_cap = search_code(
+                    session, query, page=page, headers=hdrs, sleep_fn=sleep_fn
+                )
+            except AuthError:
+                raise
+            except RateLimitError as e:
+                result.errors.append(str(e))
+                result.capped = True
+                rate_limited = True
+                break
+            except RuntimeError as e:
+                result.errors.append(str(e))
+                break
 
-        for item in body.get("items") or []:
-            repo = item.get("repository") or {}
-            full_name = repo.get("full_name") or ""
-            if not full_name or full_name in seen_repos:
-                continue
-            seen_repos.add(full_name)
-            try:
-                meta = enrich_repo(
-                    session, full_name, headers=hdrs, sleep_fn=sleep_fn
-                )
-            except RateLimitError as e:
-                result.errors.append(f"enrich rate-limited: {full_name}: {e}")
+            if hit_cap:
                 result.capped = True
+
+            items = body.get("items") or []
+            if not items:
                 break
-            if not meta:
-                result.errors.append(f"enrich failed: {full_name}")
-                continue
-            stars = int(meta.get("stargazers_count") or repo.get("stargazers_count") or 0)
-            if stars < min_stars:
-                continue
-            default_branch = str(meta.get("default_branch") or "main")
-            try:
-                pin = resolve_default_pin(
-                    session,
-                    full_name,
-                    default_branch,
-                    headers=hdrs,
-                    sleep_fn=sleep_fn,
-                )
-            except RateLimitError as e:
-                result.errors.append(f"pin rate-limited: {full_name}: {e}")
-                result.capped = True
+
+            for item in items:
+                repo = item.get("repository") or {}
+                full_name = repo.get("full_name") or ""
+                if not full_name or full_name in seen_repos:
+                    continue
+                seen_repos.add(full_name)
+                try:
+                    meta = enrich_repo(
+                        session, full_name, headers=hdrs, sleep_fn=sleep_fn
+                    )
+                except RateLimitError as e:
+                    result.errors.append(f"enrich rate-limited: {full_name}: {e}")
+                    result.capped = True
+                    rate_limited = True
+                    break
+                if not meta:
+                    result.errors.append(f"enrich failed: {full_name}")
+                    continue
+                stars = int(meta.get("stargazers_count") or repo.get("stargazers_count") or 0)
+                if stars < min_stars:
+                    continue
+                # D4 (P7): code search cannot filter stars — drop fork:true
+                # results below 50 stars as a post-filter on the enrich object.
+                if bool(meta.get("fork")) and stars < 50:
+                    continue
+                default_branch = str(meta.get("default_branch") or "main")
+                try:
+                    pin = resolve_default_pin(
+                        session,
+                        full_name,
+                        default_branch,
+                        headers=hdrs,
+                        sleep_fn=sleep_fn,
+                    )
+                except RateLimitError as e:
+                    result.errors.append(f"pin rate-limited: {full_name}: {e}")
+                    result.capped = True
+                    rate_limited = True
+                    break
+                if not pin:
+                    result.errors.append(f"pin resolve failed: {full_name}")
+                    continue
+                pushed = str(meta.get("pushed_at") or "")[:10]
+                html = str(meta.get("html_url") or f"https://github.com/{full_name}")
+                entry = {
+                    "url": html,
+                    "default_branch": default_branch,
+                    "pin": pin,
+                    "pushed_date": pushed,
+                    "stars": stars,
+                    "source_query": query,
+                    "capped": hit_cap,
+                }
+                result.candidates.append(entry)
+            if rate_limited:
+                # P7 fold (luna re-gate 7): an enrich/pin rate limit must stop
+                # the PAGE loop immediately — the item-loop break alone would
+                # let the next page's search_code fire (the outer check at the
+                # query-loop level is too late).
                 break
-            if not pin:
-                result.errors.append(f"pin resolve failed: {full_name}")
-                continue
-            pushed = str(meta.get("pushed_at") or "")[:10]
-            html = str(meta.get("html_url") or f"https://github.com/{full_name}")
-            entry = {
-                "url": html,
-                "default_branch": default_branch,
-                "pin": pin,
-                "pushed_date": pushed,
-                "stars": stars,
-                "source_query": query,
-                "capped": hit_cap,
-            }
-            result.candidates.append(entry)
+        if rate_limited:
+            break
     return result

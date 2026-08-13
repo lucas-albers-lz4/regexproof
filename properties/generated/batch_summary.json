@@ -116,6 +116,42 @@
     "wall_s": 21.527
   },
   "corpora": {
+    "detect-secrets": {
+      "address_space_cap": null,
+      "complete_run": true,
+      "corpus": "detect-secrets",
+      "corpus_type": "rule_corpus",
+      "encodable": 19,
+      "engine": {
+        "python": "3.13.5"
+      },
+      "extracted": 51,
+      "findings": 4,
+      "inventory_questions": 4,
+      "join_regex_ids": 4,
+      "redos_findings": 0,
+      "redos_incomplete": false,
+      "schema_version": "1",
+      "triage": 32
+    },
+    "gitleaks": {
+      "address_space_cap": null,
+      "complete_run": true,
+      "corpus": "gitleaks",
+      "corpus_type": "rule_corpus",
+      "encodable": 181,
+      "engine": {
+        "python": "3.13.5"
+      },
+      "extracted": 221,
+      "findings": 4,
+      "inventory_questions": 4,
+      "join_regex_ids": 4,
+      "redos_findings": 0,
+      "redos_incomplete": false,
+      "schema_version": "1",
+      "triage": 40
+    },
     "validatorjs": {
       "address_space_cap": null,
       "complete_run": true,
@@ -126,55 +162,12 @@
         "python": "3.13.5"
       },
       "extracted": 212,
-      "findings": 1416,
+      "findings": 130,
       "inventory_questions": 4,
-      "join_regex_ids": 126,
+      "join_regex_ids": 128,
       "redos_findings": 0,
       "redos_incomplete": false,
       "schema_version": "1",
-      "synthesis": {
-        "diff_fuzz_disagreements": 0,
-        "diff_fuzz_sites": 87,
-        "diff_fuzz_witnesses": 2292,
-        "encodable_sites": 123,
-        "mutation_guard_rows": 644,
-        "pre_measure": {
-          "encodable_sites": 123,
-          "selected_fullmatch_shaped_encodable_replay_supported": 93,
-          "selected_sites": 200,
-          "shape1_certification_count_over_all_encodable_sites": 90,
-          "shape1_certification_count_selected": 84
-        },
-        "selected_sites": 200,
-        "selected_sites_after_cap": 200,
-        "selector_outcomes": {
-          "v-shape1-injection-chars": {
-            "rejected-by-selector": 97,
-            "selected": 103,
-            "unsupported-selector": 0
-          },
-          "v-shape2-whitelist-space": {
-            "rejected-by-selector": 97,
-            "selected": 103,
-            "unsupported-selector": 0
-          }
-        },
-        "shape1_certification_count": 90,
-        "skip_buckets": {
-          "synth_skipped_approximate_mirror": 0,
-          "synth_skipped_no_gt_adapter": 0,
-          "synth_skipped_substitution_call_kind": 7,
-          "synth_skipped_unanchored_search": 25,
-          "synth_skipped_witness_replay": 0
-        },
-        "skip_reasons": {
-          "synth_skipped_unanchored_search": 25
-        },
-        "synth_diff_fuzz_sample": 5,
-        "synth_len_bound": 16,
-        "synth_max_sites": 200,
-        "synthesized_property_rows": 644
-      },
       "triage": 89
     }
   },
@@ -185,6 +178,15 @@
       "fraction": 0.6908,
       "note": "fraction gate go; CRS rule-derived adapter is Phase-2 rule_diff",
       "scope": "full_corpus"
+    },
+    "detect-secrets": {
+      "admitted": 0,
+      "dropped": 0,
+      "note": "no independent-spec catalog"
+    },
+    "gitleaks": {
+      "admitted": 22,
+      "dropped": 1
     },
     "validatorjs": {
       "admitted": 0,

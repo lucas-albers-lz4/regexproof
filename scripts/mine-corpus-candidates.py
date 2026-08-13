@@ -22,6 +22,7 @@ if str(ROOT) not in sys.path:
 from regexproof.mine.exclusions import is_excluded, load_admitted_urls
 from regexproof.mine.ledger import empty_ledger, find_candidate, load_ledger, save_ledger
 from regexproof.mine.queue import (
+    MAX_REPLACEMENTS_PER_RUN,
     daily_mine_cap,
     drain,
     enqueue,
@@ -31,6 +32,7 @@ from regexproof.mine.queue import (
 )
 from regexproof.mine.score import SCORE_VERSION, rank_candidates
 from regexproof.mine.search import AuthError, SearchRunResult, run_search
+from regexproof.mine.transition import TransitionError, set_status
 
 
 def _http_session():
@@ -89,6 +91,8 @@ def assimilate(
         room -= 1
 
     queue_dropped = 0
+    queue_replaced = 0
+    replacements_left = [MAX_REPLACEMENTS_PER_RUN]
     ranked_hits = rank_candidates(list(search_result.candidates))
     for cand in ranked_hits:
         url = cand["url"]
@@ -114,17 +118,81 @@ def assimilate(
             accepted.append(entry)
             room -= 1
         else:
-            status = enqueue(queue, cand)
+            status = enqueue(queue, cand, replacements_left=replacements_left)
             if status == "full":
                 queue_dropped += 1
+            elif status == "replaced":
+                queue_replaced += 1
 
     if queue_dropped:
         print(
             f"warning: mine-queue full; dropped {queue_dropped} overflow candidate(s)",
             file=sys.stderr,
         )
+    if queue_replaced:
+        print(
+            f"info: mine-queue replacement; {queue_replaced} lower-scored item(s) evicted",
+            file=sys.stderr,
+        )
 
     return accepted
+
+
+def sync_gate_decisions(
+    ledger_path: Path,
+    generated_dir: Path,
+    *,
+    dry_run: bool = False,
+) -> int:
+    """Scan ``*_gate_decision.json`` and transition ledger rows via the P2 API.
+
+    Returns the number of status transitions applied.  Read-only join —
+    no GitHub API calls, no raw JSON writes.
+    """
+    if not ledger_path.is_file():
+        return 0
+    ledger = load_ledger(ledger_path)
+    synced = 0
+    for p in sorted(generated_dir.glob("*_gate_decision.json")):
+        try:
+            data = json.loads(p.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            continue
+        decision = data.get("decision")
+        url = data.get("candidate_url")
+        if not decision or not url:
+            continue
+        cand = find_candidate(ledger, url)
+        if cand is None:
+            continue
+        current = cand.get("status")
+        if current and current.startswith("gated:"):
+            continue
+        if dry_run:
+            synced += 1
+            continue
+        try:
+            set_status(ledger_path, url, decision=decision, reason=f"sync:{p.stem}")
+            synced += 1
+        except TransitionError:
+            continue
+    return synced
+
+
+def sync_and_reload(
+    ledger_path: Path,
+    generated_dir: Path,
+    *,
+    dry_run: bool = False,
+) -> tuple[int, dict]:
+    """Sync gate decisions into the ledger and return (synced, fresh_ledger).
+
+    The ledger is RELOADED from disk after the sync so callers never save a
+    stale pre-sync in-memory object over the applied transitions (P7 fold —
+    main() uses this; the regression test calls it directly).
+    """
+    synced = sync_gate_decisions(ledger_path, generated_dir, dry_run=dry_run)
+    return synced, load_ledger(ledger_path)
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -149,6 +217,14 @@ def main(argv: list[str] | None = None) -> int:
     ledger = load_ledger(ledger_path) if ledger_path.exists() else empty_ledger()
     queue = load_queue(queue_path)
     admitted = load_admitted_urls(args.generated.expanduser().resolve())
+
+    synced, ledger = sync_and_reload(
+        ledger_path,
+        args.generated.expanduser().resolve(),
+        dry_run=args.dry_run,
+    )
+    if synced:
+        print(json.dumps({"kind": "gate_sync", "synced": synced}))
 
     try:
         result = run_search(_http_session())
