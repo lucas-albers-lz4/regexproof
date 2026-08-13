@@ -1,0 +1,83 @@
+{
+  "candidate_url": "https://github.com/deckhouse/prompp",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 80 sites < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "prompp",
+  "corpus_pin": "47a7fd11ec4ee10f2d7a1e014bbd253cfe35d99a",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "(?i)": 2
+    },
+    "dialect": {
+      "ecma": 55,
+      "posix-shell": 2,
+      "re2": 23
+    },
+    "flags": {
+      "g": 2,
+      "s": 1
+    },
+    "pin": "47a7fd11ec4ee10f2d7a1e014bbd253cfe35d99a",
+    "predicted_buckets": {
+      "inline-flag": 3,
+      "stateful": 2
+    },
+    "regex_sites": 80,
+    "regex_sites_per_file": {
+      "cmd/prometheus/main.go": 1,
+      "cmd/prompptool/persisthead.go": 1,
+      "config/config.go": 1,
+      "config/config_test.go": 1,
+      "discovery/file/file.go": 1,
+      "discovery/http/http.go": 1,
+      "discovery/puppetdb/puppetdb.go": 1,
+      "model/labels/regexp_test.go": 1,
+      "model/relabel/relabel.go": 1,
+      "pp/go/cppbridge/prometheus_relabeler.go": 1,
+      "promql/promqltest/test.go": 4,
+      "promql/query_logger_test.go": 1,
+      "promql/test.go": 3,
+      "scripts/list-test-packages.sh": 1,
+      "tsdb/index/postings_test.go": 1,
+      "util/documentcli/documentcli.go": 1,
+      "util/httputil/cors_test.go": 1,
+      "util/strutil/strconv.go": 1,
+      "web/api/v1/errors_test.go": 1,
+      "web/ui/module/codemirror-promql/src/complete/hybrid.test.ts": 36,
+      "web/ui/module/codemirror-promql/src/complete/hybrid.ts": 2,
+      "web/ui/module/lezer-promql/generate-types.sh": 1,
+      "web/ui/module/lezer-promql/rollup.config.js": 1,
+      "web/ui/module/lezer-promql/test/promql.test.js": 2,
+      "web/ui/react-app/src/pages/alerts/AlertContents.tsx": 1,
+      "web/ui/react-app/src/pages/graph/ExpressionInput.tsx": 1,
+      "web/ui/react-app/src/pages/graph/Panel.tsx": 3,
+      "web/ui/react-app/src/pages/graph/SeriesName.tsx": 1,
+      "web/ui/react-app/src/pages/rules/RulesContent.tsx": 1,
+      "web/ui/react-app/src/pages/serviceDiscovery/Services.tsx": 3,
+      "web/ui/react-app/src/pages/targets/ScrapePoolList.tsx": 1,
+      "web/ui/react-app/src/utils/index.ts": 3
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 80 regex sites (auto-NO-GO bar 200); dialects [ecma:55, posix-shell:2, re2:23]; boundary=unknown.",
+  "schema_version": "1"
+}

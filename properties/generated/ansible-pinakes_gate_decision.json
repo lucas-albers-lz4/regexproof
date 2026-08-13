@@ -1,0 +1,47 @@
+{
+  "candidate_url": "https://github.com/ansible/pinakes",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 7 sites < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "pinakes",
+  "corpus_pin": "122fc3184b0c6b6745de220bbd42e632531ec93b",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "posix-shell": 1,
+      "py_re": 6
+    },
+    "flags": {},
+    "pin": "122fc3184b0c6b6745de220bbd42e632531ec93b",
+    "predicted_buckets": {},
+    "regex_sites": 7,
+    "regex_sites_per_file": {
+      "pinakes/main/analytics/tests/test_analytics_collectors.py": 1,
+      "pinakes/main/catalog/services/name.py": 2,
+      "pinakes/main/catalog/services/sanitize_parameters.py": 2,
+      "pinakes/main/inventory/task_utils/service_offering_import.py": 1,
+      "tools/minikube/scripts/start_pods.sh": 1
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 7 regex sites (auto-NO-GO bar 200); dialects [posix-shell:1, py_re:6]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

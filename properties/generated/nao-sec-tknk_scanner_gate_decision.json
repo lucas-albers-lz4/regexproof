@@ -1,0 +1,45 @@
+{
+  "candidate_url": "https://github.com/nao-sec/tknk_scanner",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 5 sites < 1000 (scanner stub).",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "tknk_scanner",
+  "corpus_pin": "8459a88ecdc76656c6a5bc1af14a5cd1298d72e5",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 2,
+      "py_re": 3
+    },
+    "flags": {},
+    "pin": "8459a88ecdc76656c6a5bc1af14a5cd1298d72e5",
+    "predicted_buckets": {},
+    "regex_sites": 5,
+    "regex_sites_per_file": {
+      "frontend/nuxt.config.js": 2,
+      "read_avclass_report.py": 1,
+      "tknk.py": 2
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 5 regex sites (auto-NO-GO bar 200); dialects [ecma:2, py_re:3]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

@@ -1,0 +1,81 @@
+{
+  "candidate_url": "https://github.com/xiaolinpeter/rasa2.0_nlu",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 174 sites < 1000 (NLU).",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "rasa2.0_nlu",
+  "corpus_pin": "4c5f64c69fc25e9dabacce5a49445f6cb2946801",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "lookaround": 1
+    },
+    "dialect": {
+      "ecma": 132,
+      "posix-shell": 6,
+      "py_re": 36
+    },
+    "flags": {
+      "g": 110,
+      "i": 4,
+      "m": 1,
+      "s": 2
+    },
+    "pin": "4c5f64c69fc25e9dabacce5a49445f6cb2946801",
+    "predicted_buckets": {
+      "inline-flag": 6,
+      "lookaround": 1,
+      "m-flag": 1,
+      "stateful": 110
+    },
+    "regex_sites": 174,
+    "regex_sites_per_file": {
+      "docs/plugins/included_source.js": 1,
+      "docs/plugins/program_output.js": 5,
+      "docs/static/js/rasa-chatblock.min.js": 125,
+      "docs/themes/theme-custom/theme/Playground/index.jsx": 1,
+      "rasa/core/channels/slack.py": 1,
+      "rasa/core/nlg/interpolator.py": 1,
+      "rasa/core/utils.py": 1,
+      "rasa/nlu/classifiers/keyword_intent_classifier.py": 2,
+      "rasa/nlu/featurizers/sparse_featurizer/count_vectors_featurizer.py": 1,
+      "rasa/nlu/tokenizers/tokenizer.py": 1,
+      "rasa/nlu/tokenizers/whitespace_tokenizer.py": 1,
+      "rasa/nlu/utils/__init__.py": 1,
+      "rasa/shared/core/events.py": 1,
+      "rasa/shared/core/training_data/story_reader/markdown_story_reader.py": 7,
+      "rasa/shared/nlu/interpreter.py": 1,
+      "rasa/shared/nlu/training_data/entities_parser.py": 2,
+      "rasa/shared/nlu/training_data/formats/markdown.py": 7,
+      "rasa/shared/nlu/training_data/formats/markdown_nlg.py": 2,
+      "rasa/shared/nlu/training_data/util.py": 2,
+      "rasa/shared/utils/io.py": 1,
+      "scripts/ping_slack_about_package_release.sh": 1,
+      "scripts/publish_gh_release_notes.py": 1,
+      "scripts/push_docs_to_branch.sh": 5,
+      "scripts/release.py": 1,
+      "tests/docs/test_docs_training_data.py": 1,
+      "tests/docs/test_docs_use_base_url.py": 1
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 174 regex sites (auto-NO-GO bar 200); dialects [ecma:132, posix-shell:6, py_re:36]; boundary=deterministic-true.",
+  "schema_version": "1"
+}

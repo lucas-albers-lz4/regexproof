@@ -1,0 +1,43 @@
+{
+  "candidate_url": "https://github.com/apache/pulsar-client-go",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 3 re2 < 1000 (client).",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "pulsar-client-go",
+  "corpus_pin": "b47b690105f5063acf1200c58af8697ffcacf444",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "re2": 3
+    },
+    "flags": {},
+    "pin": "b47b690105f5063acf1200c58af8697ffcacf444",
+    "predicted_buckets": {},
+    "regex_sites": 3,
+    "regex_sites_per_file": {
+      "pulsar/consumer_regex_test.go": 2,
+      "pulsaradmin/pkg/utils/namespace_name.go": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 3 regex sites (auto-NO-GO bar 200); dialects [re2:3]; boundary=unknown.",
+  "schema_version": "1"
+}

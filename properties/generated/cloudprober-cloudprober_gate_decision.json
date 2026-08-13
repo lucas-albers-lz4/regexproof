@@ -1,0 +1,77 @@
+{
+  "candidate_url": "https://github.com/cloudprober/cloudprober",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 136 sites < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "cloudprober",
+  "corpus_pin": "d34b547f8846391a5358e729a04f7ae244e3616d",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "(?m)": 1,
+      "backref": 1,
+      "lookaround": 2
+    },
+    "dialect": {
+      "ecma": 119,
+      "posix-shell": 2,
+      "re2": 15
+    },
+    "flags": {
+      "g": 23,
+      "i": 14,
+      "m": 1
+    },
+    "pin": "d34b547f8846391a5358e729a04f7ae244e3616d",
+    "predicted_buckets": {
+      "backref": 1,
+      "inline-flag": 14,
+      "lookaround": 2,
+      "m-flag": 2,
+      "stateful": 23
+    },
+    "regex_sites": 136,
+    "regex_sites_per_file": {
+      "common/metadata/metadata_test.go": 1,
+      "config/config.go": 2,
+      "docs/static/configdoc.js": 2,
+      "internal/surfacers/probestatus/static/c3.min.js": 7,
+      "internal/surfacers/probestatus/static/d3.v5.min.js": 30,
+      "internal/surfacers/probestatus/static/jquery-3.6.0.min.js": 77,
+      "internal/surfacers/probestatus/static/probestatus.js": 1,
+      "internal/validators/http/http_test.go": 2,
+      "logger/logger_test.go": 1,
+      "probes/browser/artifacts/web/dirs.go": 1,
+      "probes/browser/browser.go": 1,
+      "probes/browser/tests/demo-todo-app.spec.ts": 1,
+      "probes/browser/tests/test.spec.ts": 1,
+      "probes/external/external.go": 1,
+      "probes/options/labels.go": 1,
+      "surfacers/options/options.go": 1,
+      "surfacers/options/options_test.go": 3,
+      "tools/gen_config_docs.sh": 1,
+      "tools/gen_pb_go.sh": 1,
+      "web/resources/header_test.go": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 136 regex sites (auto-NO-GO bar 200); dialects [ecma:119, posix-shell:2, re2:15]; boundary=unknown.",
+  "schema_version": "1"
+}

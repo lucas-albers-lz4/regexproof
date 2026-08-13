@@ -1,0 +1,52 @@
+{
+  "candidate_url": "https://github.com/TACC/benchpro",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 32 shell < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "benchpro",
+  "corpus_pin": "0a4e5cddc63168c1a7b494c8586cf82305bab0c0",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "posix-shell": 30,
+      "py_re": 2
+    },
+    "flags": {},
+    "pin": "0a4e5cddc63168c1a7b494c8586cf82305bab0c0",
+    "predicted_buckets": {},
+    "regex_sites": 32,
+    "regex_sites_per_file": {
+      "INSTALL": 11,
+      "benchpro/resources/dev/debug.sh": 4,
+      "benchpro/resources/dev/sanitize.sh": 4,
+      "benchpro/resources/scripts/results/read_hpl_flops.sh": 1,
+      "benchpro/resources/scripts/results/read_quant_timing.sh": 1,
+      "dev/find_and_replace.sh": 6,
+      "dev/prolog.sh": 1,
+      "dev/version.sh": 2,
+      "src/library/expr_handler.py": 1,
+      "src/library/template_handler.py": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 32 regex sites (auto-NO-GO bar 200); dialects [posix-shell:30, py_re:2]; boundary=unknown.",
+  "schema_version": "1"
+}

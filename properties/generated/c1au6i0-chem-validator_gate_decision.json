@@ -1,0 +1,42 @@
+{
+  "candidate_url": "https://github.com/c1au6i0/chem-validator",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 3 py_re < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "chem-validator",
+  "corpus_pin": "3f53b0fe05eb6e4bec1f4c60d7f1ada8fe37555f",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "py_re": 3
+    },
+    "flags": {},
+    "pin": "3f53b0fe05eb6e4bec1f4c60d7f1ada8fe37555f",
+    "predicted_buckets": {},
+    "regex_sites": 3,
+    "regex_sites_per_file": {
+      "src/validator.py": 3
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 3 regex sites (auto-NO-GO bar 200); dialects [py_re:3]; boundary=unknown.",
+  "schema_version": "1"
+}

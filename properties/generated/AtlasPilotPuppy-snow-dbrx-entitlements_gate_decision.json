@@ -1,0 +1,50 @@
+{
+  "candidate_url": "https://github.com/AtlasPilotPuppy/snow-dbrx-entitlements",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 41 py_re < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "snow-dbrx-entitlements",
+  "corpus_pin": "1ed02f73fd23c660ae9a53fab2ff00c99b98b656",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "py_re": 41
+    },
+    "flags": {
+      "i": 39,
+      "s": 5
+    },
+    "pin": "1ed02f73fd23c660ae9a53fab2ff00c99b98b656",
+    "predicted_buckets": {
+      "inline-flag": 44
+    },
+    "regex_sites": 41,
+    "regex_sites_per_file": {
+      "src/policy_translator.py": 33,
+      "src/snowflake_extractor.py": 2,
+      "src/sql_generator.py": 5,
+      "src/translator.py": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 41 regex sites (auto-NO-GO bar 200); dialects [py_re:41]; boundary=unknown.",
+  "schema_version": "1"
+}

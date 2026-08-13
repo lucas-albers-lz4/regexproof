@@ -1,0 +1,62 @@
+{
+  "candidate_url": "https://github.com/cuckoosandbox/dragon",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 208 sites (73 yara) < 1000 — Cuckoo fork, below scale.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "dragon",
+  "corpus_pin": "4af6d6bbd71354355dc00f8abb52ae69d134d770",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "backref": 3,
+      "lookaround": 13
+    },
+    "dialect": {
+      "ecma": 133,
+      "py_re": 2,
+      "yara": 73
+    },
+    "flags": {
+      "g": 24,
+      "i": 73,
+      "m": 2
+    },
+    "pin": "4af6d6bbd71354355dc00f8abb52ae69d134d770",
+    "predicted_buckets": {
+      "backref": 3,
+      "inline-flag": 73,
+      "lookaround": 13,
+      "m-flag": 2,
+      "stateful": 24
+    },
+    "regex_sites": 208,
+    "regex_sites_per_file": {
+      "data/html/js/bootstrap.min.js": 14,
+      "data/html/js/jquery.min.js": 119,
+      "data/yara/embedded.yar": 16,
+      "data/yara/vmdetect.yar": 57,
+      "lib/dragon/common/abstracts.py": 1,
+      "modules/machinemanagers/virtualbox.py": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 208 regex sites (auto-NO-GO bar 200); dialects [ecma:133, py_re:2, yara:73]; boundary=unknown.",
+  "schema_version": "1"
+}

@@ -1,0 +1,99 @@
+{
+  "candidate_url": "https://github.com/igal/openproposals",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 556 ecma < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "openproposals",
+  "corpus_pin": "ddd95cbdfb4021b93590f9b99b040cb5d22cd3ec",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "backref": 25,
+      "lookaround": 28
+    },
+    "dialect": {
+      "ecma": 555,
+      "py_re": 1
+    },
+    "flags": {
+      "g": 219,
+      "i": 148
+    },
+    "pin": "ddd95cbdfb4021b93590f9b99b040cb5d22cd3ec",
+    "predicted_buckets": {
+      "backref": 25,
+      "inline-flag": 148,
+      "lookaround": 28,
+      "stateful": 219
+    },
+    "regex_sites": 556,
+    "regex_sites_per_file": {
+      "public/fckeditor/_samples/html/sample14.config.js": 4,
+      "public/fckeditor/editor/_source/classes/fckdomrangeiterator.js": 1,
+      "public/fckeditor/editor/_source/classes/fckeditingarea.js": 1,
+      "public/fckeditor/editor/_source/classes/fckenterkey.js": 2,
+      "public/fckeditor/editor/_source/classes/fckstyle.js": 14,
+      "public/fckeditor/editor/_source/commandclasses/fckindentcommands.js": 1,
+      "public/fckeditor/editor/_source/commandclasses/fckjustifycommands.js": 3,
+      "public/fckeditor/editor/_source/commandclasses/fcklistcommands.js": 2,
+      "public/fckeditor/editor/_source/commandclasses/fckshowblocks.js": 2,
+      "public/fckeditor/editor/_source/commandclasses/fcktablecommand.js": 1,
+      "public/fckeditor/editor/_source/fckjscoreextensions.js": 5,
+      "public/fckeditor/editor/_source/fckscriptloader.js": 1,
+      "public/fckeditor/editor/_source/internals/fck.js": 3,
+      "public/fckeditor/editor/_source/internals/fck_ie.js": 1,
+      "public/fckeditor/editor/_source/internals/fckbrowserinfo.js": 5,
+      "public/fckeditor/editor/_source/internals/fckcodeformatter.js": 11,
+      "public/fckeditor/editor/_source/internals/fckcommands.js": 1,
+      "public/fckeditor/editor/_source/internals/fckconfig.js": 8,
+      "public/fckeditor/editor/_source/internals/fckdocumentprocessor.js": 1,
+      "public/fckeditor/editor/_source/internals/fckregexlib.js": 33,
+      "public/fckeditor/editor/_source/internals/fckstyles.js": 3,
+      "public/fckeditor/editor/_source/internals/fcktoolbaritems.js": 1,
+      "public/fckeditor/editor/_source/internals/fcktoolbarset.js": 3,
+      "public/fckeditor/editor/_source/internals/fcktools.js": 11,
+      "public/fckeditor/editor/_source/internals/fckxhtml.js": 5,
+      "public/fckeditor/editor/_source/internals/fckxhtmlentities.js": 1,
+      "public/fckeditor/editor/dialog/common/fck_dialog_common.js": 2,
+      "public/fckeditor/editor/dialog/fck_flash/fck_flash.js": 2,
+      "public/fckeditor/editor/dialog/fck_image/fck_image.js": 3,
+      "public/fckeditor/editor/dialog/fck_link/fck_link.js": 14,
+      "public/fckeditor/editor/dialog/fck_select/fck_select.js": 6,
+      "public/fckeditor/editor/dialog/fck_spellerpages/spellerpages/spellChecker.js": 1,
+      "public/fckeditor/editor/dialog/fck_spellerpages/spellerpages/wordWindow.js": 1,
+      "public/fckeditor/editor/filemanager/browser/default/js/common.js": 1,
+      "public/fckeditor/editor/js/fckadobeair.js": 2,
+      "public/fckeditor/editor/js/fckeditorcode_gecko.js": 110,
+      "public/fckeditor/editor/js/fckeditorcode_ie.js": 116,
+      "public/fckeditor/editor/plugins/bbcode/fckplugin.js": 17,
+      "public/fckeditor/editor/plugins/placeholder/fckplugin.js": 5,
+      "public/fckeditor/fckeditor.js": 8,
+      "public/fckeditor/fckeditor.py": 1,
+      "public/javascripts/controls.js": 4,
+      "public/javascripts/dragdrop.js": 1,
+      "public/javascripts/effects.js": 4,
+      "public/javascripts/jquery-1.2.6.min.js": 68,
+      "public/javascripts/prototype.js": 66
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 556 regex sites (auto-NO-GO bar 200); dialects [ecma:555, py_re:1]; boundary=unknown.",
+  "schema_version": "1"
+}

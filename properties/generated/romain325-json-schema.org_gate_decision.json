@@ -1,0 +1,42 @@
+{
+  "candidate_url": "https://github.com/romain325/json-schema.org",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 2 py_re < 1000 (schema site).",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "json-schema.org",
+  "corpus_pin": "ea81a13d01160e14f9423b09e7565fd366ed5300",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "py_re": 2
+    },
+    "flags": {},
+    "pin": "ea81a13d01160e14f9423b09e7565fd366ed5300",
+    "predicted_buckets": {},
+    "regex_sites": 2,
+    "regex_sites_per_file": {
+      "src/parser.py": 2
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 2 regex sites (auto-NO-GO bar 200); dialects [py_re:2]; boundary=unknown.",
+  "schema_version": "1"
+}

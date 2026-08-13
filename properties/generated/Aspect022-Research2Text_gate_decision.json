@@ -1,0 +1,62 @@
+{
+  "candidate_url": "https://github.com/Aspect022/Research2Text",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 33 py_re < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "Research2Text",
+  "corpus_pin": "3ebe2dd05e74e835df787127a10547fc3ffb09f3",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "lookaround": 4
+    },
+    "dialect": {
+      "py_re": 33
+    },
+    "flags": {
+      "i": 12,
+      "s": 7
+    },
+    "pin": "3ebe2dd05e74e835df787127a10547fc3ffb09f3",
+    "predicted_buckets": {
+      "inline-flag": 19,
+      "lookaround": 4
+    },
+    "regex_sites": 33,
+    "regex_sites_per_file": {
+      "NewResearcher/research_crew/tools/pdf_extractor.py": 1,
+      "NewResearcher/research_crew/tools/web_parser.py": 3,
+      "NewResearcher/research_crew/utils/text_chunker.py": 1,
+      "src/agents/ingest_agent.py": 1,
+      "src/agents/method_extractor_agent.py": 2,
+      "src/chunking/token_chunker.py": 1,
+      "src/conformal/evaluate.py": 3,
+      "src/method_extractor.py": 4,
+      "src/rules/rule_loader.py": 13,
+      "src/search/academic_search.py": 1,
+      "src/utils.py": 1,
+      "src/validation/source_validator.py": 1,
+      "test_everything.py": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 33 regex sites (auto-NO-GO bar 200); dialects [py_re:33]; boundary=unknown.",
+  "schema_version": "1"
+}

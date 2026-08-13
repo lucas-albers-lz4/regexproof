@@ -1,0 +1,49 @@
+{
+  "candidate_url": "https://github.com/Issei-177013/Cloudflare-Utils",
+  "conditions": [
+    {
+      "evidence": "No extractable novel surface (dialects already admitted).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe security_boundary unknown or classifier false positive. 11 sites < 1000.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "Below 1000 scale bar (first-party).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "Cloudflare-Utils",
+  "corpus_pin": "31fb62690bc326b03ab40d2616cef4c3c045ac01",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "posix-shell": 7,
+      "py_re": 4
+    },
+    "flags": {
+      "i": 1
+    },
+    "pin": "31fb62690bc326b03ab40d2616cef4c3c045ac01",
+    "predicted_buckets": {
+      "inline-flag": 1
+    },
+    "regex_sites": 11,
+    "regex_sites_per_file": {
+      "install.sh": 1,
+      "src/validator.py": 4,
+      "tag.sh": 6
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 11 regex sites (auto-NO-GO bar 200); dialects [posix-shell:7, py_re:4]; boundary=unknown.",
+  "schema_version": "1"
+}
