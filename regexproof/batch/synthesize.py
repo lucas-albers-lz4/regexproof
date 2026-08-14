@@ -55,11 +55,33 @@ SKIP_BUCKETS = (
     "synth_skipped_substitution_call_kind",
     "synth_skipped_approximate_mirror",
     "synth_skipped_witness_replay",
+    # #423 Luna follow-up: selected sites that never reached a query, plus
+    # pre-measure AST parse failures (those still may emit shape-2 rows).
+    "synth_skipped_unencodable",
+    "synth_skipped_missing_compile",
+    "synth_skipped_certification_parse",
 )
 
 
 class SynthesisError(RuntimeError):
     """A synthesis gate failed and the batch must fail closed."""
+
+
+def _record_skip(
+    stats: dict[str, Any],
+    counted_skips: set[tuple[str, str]],
+    regex_id: str,
+    bucket: str,
+) -> None:
+    """Count a named skip once per (site, bucket). Unknown buckets fail closed."""
+    key = (regex_id, bucket)
+    if key in counted_skips:
+        return
+    counted_skips.add(key)
+    stats["skip_reasons"][bucket] = int(stats["skip_reasons"].get(bucket, 0)) + 1
+    if bucket not in stats["skip_buckets"]:
+        raise SynthesisError(f"unregistered skip bucket: {bucket}")
+    stats["skip_buckets"][bucket] += 1
 
 
 @dataclass(frozen=True)
@@ -893,6 +915,8 @@ def synthesize_compiled(
         "encodable_sites": sum(1 for row, _mirror, _meta in compiled if row.get("encodable")),
     }
     stats["shape1_certification_count"] = 0
+    stats["shape1_certification_parse_failures"] = 0
+    counted_skips: set[tuple[str, str]] = set()
     for row, mirror, meta in compiled:
         if not row.get("encodable") or mirror is None:
             continue
@@ -900,6 +924,13 @@ def synthesize_compiled(
             continue
         ast = _parse_for_certification(str(row.get("pattern") or ""))
         if ast is None:
+            stats["shape1_certification_parse_failures"] += 1
+            _record_skip(
+                stats,
+                counted_skips,
+                str(row.get("regex_id") or ""),
+                "synth_skipped_certification_parse",
+            )
             continue
         if _certify_alphabet_union(ast, mirror) is not None:
             stats["shape1_certification_count"] += 1
@@ -911,7 +942,6 @@ def synthesize_compiled(
         tuple[dict[str, Any], Any, int, AlphabetCertification | None, str],
     ] = {}
     executed_questions: set[str] = set()
-    counted_skips: set[tuple[str, str]] = set()
     premeasure_sites: set[str] = set()
     premeasure_certified: set[str] = set()
 
@@ -923,24 +953,22 @@ def synthesize_compiled(
             regex_id = str(row.get("regex_id") or "")
             mirror_meta = item_by_id.get(regex_id)
             if mirror_meta is None:
+                _record_skip(stats, counted_skips, regex_id, "synth_skipped_missing_compile")
                 continue
             _row, mirror, meta = mirror_meta
             replayability = classify_replayability(
                 str(row.get("dialect") or ""), str(row.get("call_kind") or "")
             )
             if replayability is Replayability.SKIPPED_NO_GT_ADAPTER:
-                bucket = "synth_skipped_no_gt_adapter"
-                if (regex_id, bucket) not in counted_skips:
-                    stats["skip_buckets"][bucket] += 1
-                    counted_skips.add((regex_id, bucket))
+                _record_skip(stats, counted_skips, regex_id, "synth_skipped_no_gt_adapter")
                 continue
             if replayability is Replayability.SKIPPED_SUBSTITUTION:
-                bucket = "synth_skipped_substitution_call_kind"
-                if (regex_id, bucket) not in counted_skips:
-                    stats["skip_buckets"][bucket] += 1
-                    counted_skips.add((regex_id, bucket))
+                _record_skip(
+                    stats, counted_skips, regex_id, "synth_skipped_substitution_call_kind"
+                )
                 continue
             if not row.get("encodable") or mirror is None or meta is None:
+                _record_skip(stats, counted_skips, regex_id, "synth_skipped_unencodable")
                 continue
             cr = _compile_view(row, mirror, meta)
             skip = _eligibility(cr)
@@ -951,10 +979,9 @@ def synthesize_compiled(
                 continue
             premeasure_sites.add(regex_id)
             if cr.mirror_exact is not True:
-                bucket = "synth_skipped_approximate_mirror"
-                if (regex_id, bucket) not in counted_skips:
-                    stats["skip_buckets"][bucket] += 1
-                    counted_skips.add((regex_id, bucket))
+                _record_skip(
+                    stats, counted_skips, regex_id, "synth_skipped_approximate_mirror"
+                )
                 continue
             ast = _parse_for_certification(str(row.get("pattern") or ""))
             certification = _certify_alphabet_union(ast, mirror) if ast is not None else None
@@ -1006,10 +1033,12 @@ def synthesize_compiled(
                         # a NUL byte breaks the P1 NUL-framed batch protocol).
                         # The SAT claim is unverifiable — drop the row
                         # fail-closed and count it; do not crash the run.
-                        bucket = "synth_skipped_witness_replay"
-                        if (regex_id, bucket) not in counted_skips:
-                            stats["skip_buckets"][bucket] += 1
-                            counted_skips.add((regex_id, bucket))
+                        _record_skip(
+                            stats,
+                            counted_skips,
+                            regex_id,
+                            "synth_skipped_witness_replay",
+                        )
                         continue
                 property_rows.append(
                     _property_row(
@@ -1076,6 +1105,7 @@ def synthesize_compiled(
         "selected_fullmatch_shaped_encodable_replay_supported": len(premeasure_sites),
         "shape1_certification_count_over_all_encodable_sites": stats["shape1_certification_count"],
         "shape1_certification_count_selected": len(premeasure_certified),
+        "shape1_certification_parse_failures": stats["shape1_certification_parse_failures"],
         "encodable_sites": stats["encodable_sites"],
     }
 
