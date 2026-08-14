@@ -13,7 +13,6 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
-import subprocess
 import sys
 from pathlib import Path
 from typing import Any
@@ -25,6 +24,7 @@ if str(ROOT) not in sys.path:
 from regexproof.admission.serialize import dumps_pinned
 from regexproof.io_atomic import atomic_write_text
 from regexproof.mine.exclusions import normalize_repo_url
+from regexproof.mine.gate_files import git_ls_decision_paths, list_gate_decision_paths
 from regexproof.mine.ledger import ENRICH_FIELDS, load_ledger, save_ledger
 from regexproof.mine.search import AuthError, RateLimitError, enrich_repo, github_headers
 from regexproof.mine.tree import (
@@ -33,7 +33,6 @@ from regexproof.mine.tree import (
     materialize_tree_features,
 )
 
-DECISION_GLOB = "*_gate_decision.json"
 ARTIFACT_SCHEMA_VERSION = "1"
 
 
@@ -93,40 +92,11 @@ def _row(
 
 
 def _git_ls_decision_paths(directory: Path) -> list[Path] | None:
-    """List tracked ``*_gate_decision.json`` paths (APFS-safe).
-
-    Filesystem ``glob`` on a case-insensitive volume collapses
-    ``Validator_gate_decision.json`` and ``validator_gate_decision.json``
-    to one inode. ``git ls-files`` still sees both; CI (Linux) already
-    does. Fall back to glob when ``directory`` is outside this repo
-    (unit tests use ``tmp_path``).
-    """
-    try:
-        rel = directory.resolve().relative_to(ROOT.resolve())
-    except ValueError:
-        return None
-    spec = DECISION_GLOB if rel.as_posix() == "." else f"{rel.as_posix()}/{DECISION_GLOB}"
-    try:
-        proc = subprocess.run(
-            ["git", "-C", str(ROOT), "ls-files", "-z", "--", spec],
-            check=False,
-            capture_output=True,
-        )
-    except OSError:
-        return None
-    if proc.returncode != 0 or not proc.stdout:
-        return None
-    paths = [ROOT / name.decode() for name in proc.stdout.split(b"\0") if name]
-    if not paths:
-        return None
-    return sorted(paths, key=lambda path: path.name)
+    return git_ls_decision_paths(directory, repo_root=ROOT)
 
 
 def _decision_paths(directory: Path) -> list[Path]:
-    tracked = _git_ls_decision_paths(directory)
-    if tracked is not None:
-        return tracked
-    return sorted(directory.glob(DECISION_GLOB), key=lambda path: path.name)
+    return list_gate_decision_paths(directory, repo_root=ROOT)
 
 
 def _linked_records(

@@ -177,7 +177,15 @@ def test_gate_labels_join_is_deterministic_and_dedupes_duplicate_urls(tmp_path: 
     assert after_ledger["provenance"]["inputs_hash"] != first["provenance"]["inputs_hash"]
 
 
-def test_decision_paths_uses_git_ls_files_for_repo_generated_dir():
+def test_list_gate_decision_paths_falls_back_to_glob_outside_repo(tmp_path: Path):
+    from regexproof.mine.gate_files import git_ls_decision_paths, list_gate_decision_paths
+
+    generated = tmp_path / "generated"
+    generated.mkdir()
+    (generated / "acme_gate_decision.json").write_text("{}", encoding="utf-8")
+    assert git_ls_decision_paths(generated) is None
+    paths = list_gate_decision_paths(generated)
+    assert [p.name for p in paths] == ["acme_gate_decision.json"]
     script = _load_labels_script()
     generated = ROOT / "properties" / "generated"
     tracked = script._git_ls_decision_paths(generated)

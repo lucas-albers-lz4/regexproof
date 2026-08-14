@@ -61,9 +61,10 @@ runs (`cancel-in-progress: false`).
 
 - Job steps all green; “Fail job on mine soft failure” skipped.
 - Step summary shows accepted / ledger / queue / capped.
-- If ledger, queue, or `gate-labels.json` changed: a bot commit
-  `chore(mine): daily candidate ledger + queue` on `main` (labels are
-  regenerated offline with `build-gate-labels.py`, no `--backfill`).
+- If ledger or queue changed: bot commit(s)
+  `chore(mine): daily candidate ledger + queue` and, when P8 `inputs_hash`
+  moved, `chore(mine): regen gate-labels after ledger`. Labels regenerate
+  **after** `git pull --rebase` so they match concurrent gate files on `main`.
 - Day cap filled + overflow queued is **normal**, not a failure. With default
   `DAILY_MINE_CAP=10`, a rich search day will fill the ledger slice and park
   the rest in `mine-queue.json` (cap 100). Cron drains by **score-v1** (highest
