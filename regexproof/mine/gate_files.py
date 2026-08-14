@@ -51,12 +51,22 @@ def list_gate_decision_paths(
     return sorted(directory.glob(DECISION_GLOB), key=lambda path: path.name)
 
 
+def _repo_relpath(path: Path, root: Path) -> str | None:
+    """Relative git path without ``Path.resolve()`` (APFS folds case twins)."""
+    raw = Path(path)
+    try:
+        if raw.is_absolute():
+            return raw.relative_to(root).as_posix()
+        return raw.as_posix()
+    except ValueError:
+        return None
+
+
 def read_repo_bytes(path: Path, *, repo_root: Path | None = None) -> bytes:
     """Read *path* via git when tracked so APFS case twins stay distinct."""
     root = (repo_root or REPO_ROOT).resolve()
-    try:
-        rel = path.resolve().relative_to(root).as_posix()
-    except ValueError:
+    rel = _repo_relpath(path, root)
+    if rel is None:
         return Path(path).read_bytes()
     for spec in (f"HEAD:{rel}", f":{rel}"):
         proc = subprocess.run(

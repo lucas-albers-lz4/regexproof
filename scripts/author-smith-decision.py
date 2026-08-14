@@ -26,14 +26,26 @@ except ImportError:  # pragma: no cover
     jsonschema = None  # type: ignore[assignment]
 
 
-def _sites_by_bucket(gate: dict, fraction: dict) -> dict[str, int]:
+def _sites_by_bucket(gate: dict, fraction: dict) -> tuple[dict[str, int], dict[str, int]]:
+    """Smith buckets follow the measured fraction; extra probe dialects are out of scope."""
+    dialect_name = str(fraction.get("dialect") or "")
+    n = int(fraction.get("sample_size") or 0)
+    buckets: dict[str, int] = {}
+    if dialect_name:
+        buckets[dialect_name] = n
+    extra: dict[str, int] = {}
     probe = gate.get("probe") if isinstance(gate.get("probe"), dict) else {}
     dialect = probe.get("dialect") if isinstance(probe.get("dialect"), dict) else {}
-    if dialect:
-        return {str(k): int(v) for k, v in dialect.items()}
-    dialect_name = str(fraction.get("dialect") or "unknown")
-    n = int(fraction.get("sample_size") or 0)
-    return {dialect_name: n}
+    for key, value in dialect.items():
+        name = str(key)
+        count = int(value)
+        if name == dialect_name:
+            continue
+        extra[name] = count
+    if not buckets and dialect:
+        buckets = {str(k): int(v) for k, v in dialect.items()}
+        extra = {}
+    return buckets, extra
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -81,6 +93,7 @@ def main(argv: list[str] | None = None) -> int:
     except ValueError as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 2
+    buckets, extra = _sites_by_bucket(gate, fraction)
     record = {
         "schema_version": "1",
         "corpus": corpus,
@@ -90,8 +103,8 @@ def main(argv: list[str] | None = None) -> int:
         "supersedes": gate.get("decision"),
         "reason": args.reason,
         "regex_sites": int(fraction.get("sample_size") or 0),
-        "sites_by_bucket": _sites_by_bucket(gate, fraction),
-        "additional_surface_outside_probe_scope": {},
+        "sites_by_bucket": buckets,
+        "additional_surface_outside_probe_scope": extra,
     }
     if jsonschema is None:
         print("error: jsonschema is required", file=sys.stderr)

@@ -99,7 +99,58 @@ def test_author_smith_decision_requires_flag(tmp_path: Path):
     jsonschema.validate(instance=rec, schema=smith_decision_schema())
     assert rec["smith_decision"] == "no-go"
     assert rec["regex_sites"] == 10
+    assert rec["sites_by_bucket"] == {"py_re": 10}
+    assert rec["additional_surface_outside_probe_scope"] == {}
     assert "WAVE_CORPORA" in proc.stderr
+
+
+def test_author_smith_buckets_follow_fraction_not_full_probe(tmp_path: Path):
+    gate = {
+        "schema_version": "1",
+        "corpus": "example",
+        "candidate_url": "https://github.com/acme/example",
+        "corpus_pin": "abc",
+        "decision": "go",
+        "probe": {"regex_sites": 20, "dialect": {"yara": 15, "posix-shell": 5}},
+    }
+    frac = {
+        "schema_version": "1",
+        "pilot": "example",
+        "sample_size": 15,
+        "encodable": 14,
+        "fraction": 0.933,
+        "dialect": "yara",
+        "corpus_pin": "abc",
+    }
+    gpath = tmp_path / "example_gate_decision.json"
+    fpath = tmp_path / "example_encodable_fraction.json"
+    gpath.write_text(json.dumps(gate), encoding="utf-8")
+    fpath.write_text(json.dumps(frac), encoding="utf-8")
+    out = tmp_path / "example_smith_decision.json"
+    proc = subprocess.run(
+        [
+            sys.executable,
+            str(AUTHOR),
+            "--gate",
+            str(gpath),
+            "--fraction",
+            str(fpath),
+            "--decision",
+            "go",
+            "--reason",
+            "yara-only measure",
+            "-o",
+            str(out),
+            "--allow-outside-generated",
+        ],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    assert proc.returncode == 0, proc.stderr
+    rec = json.loads(out.read_text(encoding="utf-8"))
+    assert rec["sites_by_bucket"] == {"yara": 15}
+    assert rec["additional_surface_outside_probe_scope"] == {"posix-shell": 5}
 
 
 def test_author_smith_decision_missing_decision_exits(tmp_path: Path):

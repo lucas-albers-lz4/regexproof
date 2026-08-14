@@ -1,16 +1,17 @@
 {
-  "additional_surface_outside_probe_scope": {},
-  "candidate_url": "https://github.com/nheijmans/malzoo",
+  "schema_version": "1",
   "corpus": "malzoo",
   "corpus_pin": "de1b93347a9783e3d2ec7b5297306bf66c9fbaa1",
+  "candidate_url": "https://github.com/nheijmans/malzoo",
+  "smith_decision": "go",
+  "supersedes": "go",
   "reason": "1214/1230 = 0.9870 encodable on data/yara_rules (tests excluded). Pack novelty vs admitted yara_rules per gate; complete_run true.",
   "regex_sites": 1230,
-  "schema_version": "1",
   "sites_by_bucket": {
-    "posix-shell": 5,
-    "py_re": 1,
     "yara": 1230
   },
-  "smith_decision": "go",
-  "supersedes": "go"
+  "additional_surface_outside_probe_scope": {
+    "posix-shell": 5,
+    "py_re": 1
+  }
 }
