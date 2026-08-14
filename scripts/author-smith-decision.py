@@ -48,6 +48,11 @@ def main(argv: list[str] | None = None) -> int:
     )
     ap.add_argument("--reason", required=True)
     ap.add_argument("-o", "--output", type=Path)
+    ap.add_argument(
+        "--allow-outside-generated",
+        action="store_true",
+        help="Permit --output outside properties/generated (default: refuse)",
+    )
     args = ap.parse_args(argv)
     gate = load_json(args.gate)
     fraction = load_json(args.fraction)
@@ -77,14 +82,14 @@ def main(argv: list[str] | None = None) -> int:
         return 2
     jsonschema.validate(instance=record, schema=smith_decision_schema())
     generated = (ROOT / "properties" / "generated").resolve()
-    if args.output:
-        out = args.output
-    else:
-        out = generated / f"{corpus}_smith_decision.json"
-        resolved = out.resolve()
-        if generated not in resolved.parents and resolved.parent != generated:
-            print(f"error: output escapes properties/generated: {resolved}", file=sys.stderr)
-            return 2
+    out = (args.output or (generated / f"{corpus}_smith_decision.json")).resolve()
+    if not args.allow_outside_generated and not out.is_relative_to(generated):
+        print(
+            f"error: output {out} is outside properties/generated; "
+            "pass --allow-outside-generated to override",
+            file=sys.stderr,
+        )
+        return 2
     atomic_write_text(out, dumps_pinned(record))
     print(out)
     print(wave_checklist(corpus), file=sys.stderr)

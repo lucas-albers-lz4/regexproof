@@ -84,6 +84,7 @@ def test_author_smith_decision_requires_flag(tmp_path: Path):
             "human said no-go despite high fraction",
             "-o",
             str(out),
+            "--allow-outside-generated",
         ],
         check=False,
         capture_output=True,
