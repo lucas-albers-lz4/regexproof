@@ -15,7 +15,7 @@ ln -sfn /tmp/llm-honeypot-intelligence/rules/yara batch/corpora/llm-honeypot-int
 test "$(git -C /tmp/llm-honeypot-intelligence rev-parse HEAD)" = "$PIN"
 ```
 
-Gate: `properties/generated/Leviticus-Triage-llm-honeypot-intelligence_gate_decision.json` (`triage-trial`).
+Gate: `properties/generated/llm-honeypot-intelligence_gate_decision.json` (also `Leviticus-Triage-llm-honeypot-intelligence_gate_decision.json`; `triage-trial`).
 Security-tool: `private_first` via `SECURITY_TOOL_CORPORA`.
 
 ## Measure / batch

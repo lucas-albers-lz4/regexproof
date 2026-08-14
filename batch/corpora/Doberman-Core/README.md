@@ -15,7 +15,7 @@ ln -sfn /tmp/Doberman-Core batch/corpora/Doberman-Core/rules
 test "$(git -C /tmp/Doberman-Core rev-parse HEAD)" = "$PIN"
 ```
 
-Gate: `properties/generated/fu351-Doberman-Core_gate_decision.json` (`triage-trial`).
+Gate: `properties/generated/Doberman-Core_gate_decision.json` (also `fu351-Doberman-Core_gate_decision.json`; `triage-trial`).
 Security-tool: `private_first` via `SECURITY_TOOL_CORPORA`.
 
 ## Measure / batch

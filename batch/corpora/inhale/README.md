@@ -14,7 +14,7 @@ ln -sfn /tmp/inhale/YaraRules batch/corpora/inhale/rules
 test "$(git -C /tmp/inhale rev-parse HEAD)" = "$PIN"
 ```
 
-Gate: `properties/generated/netspooky-inhale_gate_decision.json` (`triage-trial`).
+Gate: `properties/generated/inhale_gate_decision.json` (also `netspooky-inhale_gate_decision.json`; `triage-trial`).
 Security-tool: `private_first` via `SECURITY_TOOL_CORPORA`.
 
 ## Measure / batch

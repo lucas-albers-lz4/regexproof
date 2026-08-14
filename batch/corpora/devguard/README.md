@@ -15,7 +15,7 @@ ln -sfn /tmp/devguard batch/corpora/devguard/rules
 test "$(git -C /tmp/devguard rev-parse HEAD)" = "$PIN"
 ```
 
-Gate: `properties/generated/l3montree-dev-devguard_gate_decision.json` (`triage-trial`).
+Gate: `properties/generated/devguard_gate_decision.json` (also `l3montree-dev-devguard_gate_decision.json`; `triage-trial`).
 Security-tool: `private_first` via `SECURITY_TOOL_CORPORA`.
 
 ## Measure / batch

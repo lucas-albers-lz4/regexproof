@@ -1,9 +1,9 @@
 # titus corpus
 
-Pinned praetorian-inc/titus secret-scanner validators (Go re2) for Smith
-triage-trial keep (see `sweep/accuracy-flywheel/TRIAGE-TRIAL-REVIEW.md`).
-Allowlist is `pkg/types/rule.go` plus first-party `pkg/validator/*.go`
-(no tests, no vcrtest).
+Pinned praetorian-inc/titus secret-scanner validators (Go re2). Smith
+**NO-GO** this wave: 15/57 = 0.2632 encodable (below 0.30). Manifest kept
+for the allowlist; **not** in `WAVE_CORPORA`. See
+`properties/generated/titus_smith_decision.json`.
 
 ## Materialize
 
@@ -16,12 +16,13 @@ ln -sfn /tmp/titus batch/corpora/titus/rules
 test "$(git -C /tmp/titus rev-parse HEAD)" = "$PIN"
 ```
 
-Gate: `properties/generated/praetorian-inc-titus_gate_decision.json` (`triage-trial`).
+Gate: `properties/generated/titus_gate_decision.json` (also `praetorian-inc-titus_gate_decision.json`; `triage-trial`).
 Security-tool: `private_first` via `SECURITY_TOOL_CORPORA`.
 
-## Measure / batch
+## Measure
 
 ```bash
 python scripts/measure-corpus-fraction.py --corpus titus --assert-determinism
-python -m regexproof.batch --corpus titus
 ```
+
+Do not `python -m regexproof.batch --corpus titus` until a future Smith GO.
