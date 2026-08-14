@@ -9,7 +9,7 @@
       "holdout_auc_ge_0_70": true,
       "mean_gap_beats_v1_baseline_informational": true
     },
-    "holdout_auc": 0.9751712328767124,
+    "holdout_auc": 0.9755993150684932,
     "label_set": "gate-labels.json",
     "positive_mapping": "go-only",
     "recomputed_v1_baseline_auc": 0.5333904109589042,
@@ -19,9 +19,9 @@
     "sanity": {
       "passed": true,
       "scores": [
-        -0.3347967369333693,
-        -0.9349277442522976,
-        -1.433563694531745
+        -0.03160915753283999,
+        -0.6402322759694454,
+        -1.138859825116324
       ],
       "v1_scores": [
         101.0,
@@ -39,9 +39,9 @@
         "deterministic-false"
       ]
     },
-    "score_v2_mean_gap": 4.520696478336112,
-    "v1_feature_ablation_auc": 0.6282106164383562,
-    "v1_feature_ablation_mean_gap": 0.502088612833546
+    "score_v2_mean_gap": 4.5138463632272074,
+    "v1_feature_ablation_auc": 0.6735873287671232,
+    "v1_feature_ablation_mean_gap": 0.5093296397474643
   },
   "feature_names": [
     "boundary_true",
@@ -91,15 +91,15 @@
     "probe_bucket_count_log"
   ],
   "feature_set": "v2",
-  "holdout_auc": 0.9751712328767124,
+  "holdout_auc": 0.9755993150684932,
   "holdout_auc_bootstrap_95": [
-    0.945124716553288,
-    0.9971830985915493
+    0.9462599854756718,
+    0.9963133640552996
   ],
   "holdout_negative_count": 146,
   "holdout_positive_count": 16,
-  "intercept": -1.3762377271716422,
-  "n": 813,
+  "intercept": -1.4070042531112423,
+  "n": 810,
   "schema_version": "1",
   "training": {
     "dev_n": 162,
@@ -118,75 +118,75 @@
     "holdout_n": 162,
     "mapping_decision": {
       "go-only": {
-        "dev_auc": 0.9772819472616633,
+        "dev_auc": 0.9748478701825558,
         "dev_negative_count": 145,
         "dev_positive_count": 17,
         "positive_labels": [
           "go"
         ],
-        "train_positive_count": 32
+        "train_positive_count": 31
       },
       "go-or-triage-trial": {
-        "dev_auc": 0.9686085972850679,
+        "dev_auc": 0.9657805429864253,
         "dev_negative_count": 136,
         "dev_positive_count": 26,
         "positive_labels": [
           "go",
           "triage-trial"
         ],
-        "train_positive_count": 57
+        "train_positive_count": 56
       }
     },
-    "n": 813,
+    "n": 810,
     "positive_mapping": "go-only",
     "seed": 432,
-    "train_n": 489
+    "train_n": 486
   },
   "weights": {
-    "boundary_false": -0.4986359502794473,
-    "boundary_true": 0.4149576457788544,
-    "capped": -1.2761972108663628,
+    "boundary_false": -0.49862754914687857,
+    "boundary_true": 0.4197044794506306,
+    "capped": -1.3231843788891893,
     "enrich_archived": 0.0,
-    "enrich_archived_missing": -0.19298780653658484,
+    "enrich_archived_missing": -0.17307367131516754,
     "enrich_fork": 0.0,
-    "enrich_fork_missing": -0.19298780653658484,
-    "enrich_language_c_cpp": 0.1792051861240703,
-    "enrich_language_csharp": -0.09045624173448888,
-    "enrich_language_go": -0.3583901211620897,
-    "enrich_language_java": 0.3727706659974515,
-    "enrich_language_javascript": -0.34883670456000904,
-    "enrich_language_missing": -0.01812296600943886,
-    "enrich_language_other": 0.32792944944795704,
-    "enrich_language_php": -0.04007389443441481,
-    "enrich_language_python": -0.9183575664021996,
-    "enrich_language_ruby": -0.43303565352167184,
-    "enrich_language_rust": 0.14960562995128546,
-    "enrich_language_shell": 0.28562262986158393,
-    "enrich_language_typescript": -0.4962773208976477,
-    "enrich_size_log": -0.20180895004419458,
-    "enrich_size_missing": -0.19298780653658484,
+    "enrich_fork_missing": -0.17307367131516754,
+    "enrich_language_c_cpp": 0.18484019294659648,
+    "enrich_language_csharp": -0.09166528452084945,
+    "enrich_language_go": -0.3722722117433413,
+    "enrich_language_java": 0.375975812088051,
+    "enrich_language_javascript": -0.34634938744982224,
+    "enrich_language_missing": -0.25238336693811886,
+    "enrich_language_other": 0.2338712475556579,
+    "enrich_language_php": -0.04091399401572573,
+    "enrich_language_python": -0.8434715581783988,
+    "enrich_language_ruby": -0.43177891180154604,
+    "enrich_language_rust": 0.15700876789039167,
+    "enrich_language_shell": 0.2876303280978399,
+    "enrich_language_typescript": -0.5137433470489925,
+    "enrich_size_log": -0.042898527452636157,
+    "enrich_size_missing": -0.17307367131516754,
     "family_other": 0.0,
-    "family_rules": -0.019544729733250044,
-    "family_security": -0.5008795703478728,
-    "family_testdata": -0.28810396816616973,
-    "family_validators": -0.5617656730828825,
-    "probe_boundary_false": -0.1585503482086654,
-    "probe_boundary_true": -0.0028992069772429767,
-    "probe_bucket_count_log": 2.8756938921969226,
-    "probe_dialect_count_log": 2.625378047586311,
-    "probe_regex_sites_log": 2.6112021665395546,
-    "recency_points": -0.8861633445421617,
-    "stars_points": -0.2713294656514501,
+    "family_rules": -0.0038684412909576185,
+    "family_security": -0.4829986252490469,
+    "family_testdata": -0.35950414005621284,
+    "family_validators": -0.5544971395839252,
+    "probe_boundary_false": -0.16164079877499046,
+    "probe_boundary_true": 0.02075442709727442,
+    "probe_bucket_count_log": 2.8740460773741336,
+    "probe_dialect_count_log": 2.630296845739188,
+    "probe_regex_sites_log": 2.6157227832962175,
+    "recency_points": -0.8679865701093858,
+    "stars_points": -0.23644006450960114,
     "tree_boundary_false": 0.0,
-    "tree_boundary_true": 0.44144942367721995,
-    "tree_complete": -1.2193972739835413,
-    "tree_config": -0.0022978228566167226,
-    "tree_incomplete": -0.1508966673466411,
-    "tree_javascript": 0.2998577580163411,
-    "tree_path_log": -0.09005569450943221,
-    "tree_python": 0.6312777675294041,
-    "tree_regex_files_log": 0.27963442043997244,
-    "tree_shell": 0.33283401164842386,
-    "tree_yara": 0.793123232091368
+    "tree_boundary_true": 0.43288905791655363,
+    "tree_complete": -1.2538997116107464,
+    "tree_config": -0.02943698801329081,
+    "tree_incomplete": -0.1469686345694006,
+    "tree_javascript": 0.2763655615003116,
+    "tree_path_log": -0.12983063439880851,
+    "tree_python": 0.563430366025736,
+    "tree_regex_files_log": 0.2412982455061822,
+    "tree_shell": 0.326323134340085,
+    "tree_yara": 0.8344905291965659
   }
 }

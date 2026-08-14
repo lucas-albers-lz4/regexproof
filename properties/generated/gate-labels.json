@@ -1,9 +1,9 @@
 {
   "provenance": {
-    "gate_decision_count": 835,
-    "input_file_count": 835,
-    "inputs_hash": "6139fbdffe17dc45b21dbc8eeea7cad38f20f42a0d298df36063d34673cdd0e2",
-    "linked_row_count": 813,
+    "gate_decision_count": 840,
+    "input_file_count": 840,
+    "inputs_hash": "833c1d5dcf3d79d081f5810cdd0aebc226b6d138fe067121c91d67bc1df047a3",
+    "linked_row_count": 810,
     "schema_version": "1"
   },
   "rows": [
@@ -1635,56 +1635,6 @@
         }
       },
       "url": "https://github.com/CircleOfNice/CoreWorker"
-    },
-    {
-      "decision_date": "2026-08-12",
-      "label": "go",
-      "ledger": {
-        "archived": false,
-        "capped": true,
-        "fork": false,
-        "language": null,
-        "pushed_date": "2019-10-19",
-        "size": 0,
-        "source_query": "filename:re_tests OR filename:test_re.py path:Lib/test",
-        "stars": 2
-      },
-      "probe": {
-        "dialect_counts": {
-          "ecma": 1,
-          "posix-shell": 10,
-          "py_re": 1188
-        },
-        "predicted_buckets": {
-          "backref": 30,
-          "inline-flag": 214,
-          "lookaround": 71,
-          "m-flag": 54,
-          "stateful": 1
-        },
-        "regex_sites": 1199,
-        "security_boundary": "unknown",
-        "tree_probe": {
-          "complete": true,
-          "path_count": 4311,
-          "probed_pin": "a487e12da470edf59e6bc96166d2178dad54dd85",
-          "regex_file_type_counts": {
-            ".c": 317,
-            ".cfg": 1,
-            ".conf": 2,
-            ".cpp": 5,
-            ".h": 374,
-            ".ini": 1,
-            ".js": 3,
-            ".py": 1889,
-            ".sh": 3,
-            ".yml": 8
-          },
-          "security_boundary": "unknown",
-          "truncated": false
-        }
-      },
-      "url": "https://github.com/ColdGrub1384/cpython"
     },
     {
       "decision_date": "2026-08-12",
@@ -13483,51 +13433,6 @@
       "url": "https://github.com/coapp-packages/python"
     },
     {
-      "decision_date": "2026-08-12",
-      "label": "no-go",
-      "ledger": {
-        "archived": false,
-        "capped": true,
-        "fork": false,
-        "language": "Python",
-        "pushed_date": "2013-09-02",
-        "size": 104,
-        "source_query": "filename:re_tests OR filename:test_re.py path:Lib/test",
-        "stars": 3
-      },
-      "probe": {
-        "dialect_counts": {
-          "posix-shell": 35,
-          "py_re": 789
-        },
-        "predicted_buckets": {
-          "backref": 18,
-          "inline-flag": 102,
-          "lookaround": 39,
-          "m-flag": 43
-        },
-        "regex_sites": 824,
-        "security_boundary": "unknown",
-        "tree_probe": {
-          "complete": true,
-          "path_count": 3740,
-          "probed_pin": "75067eda21400e173db0827011b99d3598c66d8d",
-          "regex_file_type_counts": {
-            ".c": 448,
-            ".cc": 2,
-            ".cfg": 1,
-            ".h": 238,
-            ".ini": 1,
-            ".py": 1539,
-            ".sh": 3
-          },
-          "security_boundary": "unknown",
-          "truncated": false
-        }
-      },
-      "url": "https://github.com/coapp-packages/python"
-    },
-    {
       "decision_date": "2026-08-13",
       "label": "no-go",
       "ledger": {
@@ -19665,50 +19570,6 @@
           "probed_pin": "",
           "reason": "missing-probed-pin",
           "regex_file_type_counts": {},
-          "security_boundary": "unknown",
-          "truncated": false
-        }
-      },
-      "url": "https://github.com/int3/jython"
-    },
-    {
-      "decision_date": "2026-08-12",
-      "label": "no-go",
-      "ledger": {
-        "archived": false,
-        "capped": true,
-        "fork": false,
-        "language": "Python",
-        "pushed_date": "2012-06-19",
-        "size": 141196,
-        "source_query": "filename:re_tests OR filename:test_re.py path:Lib/test",
-        "stars": 5
-      },
-      "probe": {
-        "dialect_counts": {
-          "java": 10,
-          "posix-shell": 9,
-          "py_re": 146
-        },
-        "predicted_buckets": {
-          "backref": 3,
-          "inline-flag": 29,
-          "lookaround": 19,
-          "m-flag": 5
-        },
-        "regex_sites": 165,
-        "security_boundary": "unknown",
-        "tree_probe": {
-          "complete": true,
-          "path_count": 4103,
-          "probed_pin": "d6db3fcf6198bb9a8f26feff0084beefb25141b2",
-          "regex_file_type_counts": {
-            ".c": 1,
-            ".h": 1,
-            ".java": 918,
-            ".py": 2239,
-            ".sh": 2
-          },
           "security_boundary": "unknown",
           "truncated": false
         }
