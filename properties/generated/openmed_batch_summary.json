@@ -1,0 +1,25 @@
+{
+  "address_space_cap": false,
+  "cache": {
+    "entries": 179,
+    "hit_rate": 0.8435754189944135,
+    "hits": 151,
+    "misses": 28
+  },
+  "cache_hit_rate": 0.8435754189944135,
+  "complete_run": true,
+  "corpus": "openmed",
+  "corpus_type": "rule_corpus",
+  "encodable": 151,
+  "engine": {
+    "python": "3.13.15"
+  },
+  "extracted": 179,
+  "findings": 21,
+  "inventory_questions": 4,
+  "join_regex_ids": 21,
+  "redos_findings": 0,
+  "redos_incomplete": false,
+  "schema_version": "1",
+  "triage": 28
+}

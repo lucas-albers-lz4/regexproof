@@ -62,6 +62,9 @@ def _rss_mb() -> int:
     try:
         import resource
         usage = resource.getrusage(resource.RUSAGE_SELF)
+        # Linux ru_maxrss is KiB; macOS ru_maxrss is bytes.
+        if sys.platform == "darwin":
+            return int(usage.ru_maxrss / (1024 * 1024))
         return int(usage.ru_maxrss / 1024)
     except Exception:  # noqa: BLE001
         return 0
