@@ -403,3 +403,80 @@ def test_extract_corpus_routes_shell_posix_through_registry(tmp_path):
     assert len(recs) == 2
     assert all(r["dialect"] == "posix-shell" for r in recs)
     assert {r["pattern"] for r in recs} == {"syn_flood", "^[0-9]+$"}
+
+
+def _assert_extract_corpus_matches_registry(root, *, name: str, dialect: str, repo: str):
+    """extract_corpus must equal EXTRACTORS[name] via extract_glob (#452)."""
+    from regexproof.batch.extract import extract_corpus, extract_glob
+    from regexproof.batch.extractor_registry import EXTRACTORS, registry_glob
+
+    meta = {
+        "path": root,
+        "extractor": name,
+        "repo": repo,
+        "dialect": dialect,
+    }
+    via_corpus = extract_corpus("fixture", dict(meta))
+    fn = EXTRACTORS[name]
+    via_registry = extract_glob(
+        root,
+        dict(meta),
+        glob=registry_glob(name, meta),
+        extract_fn=lambda src, rel: fn(src, rel, meta),
+    )
+    assert via_corpus == via_registry
+    assert via_corpus, f"{name}: empty extract — fixture produced no records"
+
+
+def test_extract_corpus_routes_semgrep_yaml_through_registry(tmp_path):
+    """#452: semgrep_yaml glob dispatch equals EXTRACTORS['semgrep_yaml']."""
+    root = tmp_path / "rules"
+    (root / "nested").mkdir(parents=True)
+    (root / "a.yaml").write_text(
+        "rules:\n  - id: y\n    patterns:\n      - pattern-regex: (?i)select\\b\n",
+        encoding="utf-8",
+    )
+    (root / "nested" / "b.yml").write_text(
+        'rules:\n  - id: m\n    metavariable-regex:\n      $KEY: "[A-Za-z0-9_]{8,}"\n',
+        encoding="utf-8",
+    )
+    (root / "skip.txt").write_text("pattern-regex: ignored\n", encoding="utf-8")
+    _assert_extract_corpus_matches_registry(
+        root, name="semgrep_yaml", dialect="py_re", repo="semgrep/semgrep-rules"
+    )
+
+
+def test_extract_corpus_routes_python_dir_through_registry(tmp_path):
+    """#452: python_dir glob dispatch equals EXTRACTORS['python_dir']."""
+    root = tmp_path / "plugins"
+    (root / "sub").mkdir(parents=True)
+    (root / "a.py").write_text("import re\nP = re.compile(r'abc')\n", encoding="utf-8")
+    (root / "sub" / "b.py").write_text("import re\nre.search(r'def', s)\n", encoding="utf-8")
+    (root / "skip.txt").write_text("re.compile(r'nope')\n", encoding="utf-8")
+    _assert_extract_corpus_matches_registry(
+        root, name="python_dir", dialect="py_re", repo="test/detect-secrets"
+    )
+
+
+def test_extract_corpus_re2_testdata_file_not_glob_only(tmp_path):
+    """re2_testdata stays in EXTRACTORS but must keep file-or-dir dispatch.
+
+    glob-only extract_glob returns [] for a file path; a file witness must
+    still extract (#452).
+    """
+    from regexproof.batch.extract import extract_corpus
+    from regexproof.batch.extractor_registry import EXTRACTORS
+
+    assert "re2_testdata" in EXTRACTORS
+    fp = tmp_path / "one.txt"
+    fp.write_text("E\t[a-z]+\thello\t(0,5)\n", encoding="utf-8")
+    meta = {
+        "path": fp,
+        "extractor": "re2_testdata",
+        "repo": "google/re2",
+        "dialect": "re2",
+    }
+    recs = extract_corpus("re2_testdata", meta)
+    assert recs
+    assert recs[0]["pattern"] == "[a-z]+"
+

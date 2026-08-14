@@ -2,6 +2,8 @@
 
 Partial migration: glob-style extractors dispatch through this map; complex
 tree walkers remain inline in ``extract_corpus`` so regex_ids stay frozen.
+``re2_testdata`` is registered for reuse but ``extract_corpus`` keeps
+file-or-dir dispatch (not the glob-only whitelist).
 """
 
 from __future__ import annotations
@@ -19,6 +21,7 @@ from regexproof.extractors.noseyparker import extract_noseyparker
 from regexproof.extractors.pcre2_testdata import extract_pcre2_testdata
 from regexproof.extractors.python_ast import extract_python
 from regexproof.extractors.re2_testdata import extract_re2_testdata
+from regexproof.extractors.semgrep_yaml import extract_semgrep_yaml
 from regexproof.extractors.shell_posix import extract_shell_posix
 from regexproof.extractors.shhgit import extract_shhgit
 from regexproof.extractors.spamassassin import extract_spamassassin
@@ -43,6 +46,7 @@ EXTRACTOR_GLOBS: dict[str, str] = {
     "dompurify": "src/*.ts",
     "isemail": "*.js",
     "email_addresses": "*.js",
+    "semgrep_yaml": "**/*.yml,**/*.yaml",
 }
 
 
@@ -71,6 +75,7 @@ EXTRACTORS: dict[str, ExtractorFn] = {
     "dompurify": _with_dialect(extract_dompurify, dialect_kw=False),
     "isemail": _with_dialect(extract_isemail, dialect_kw=False),
     "email_addresses": _with_dialect(extract_email_addresses, dialect_kw=False),
+    "semgrep_yaml": _with_dialect(extract_semgrep_yaml),
 }
 
 
