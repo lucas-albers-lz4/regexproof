@@ -4147,7 +4147,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
             "max_mem_mb": 1024,
             "max_disk_mb": 200,
         },
-    },,
+    },
     "openmed": {
         "corpus_type": "rule_corpus",
         # Materialize: ln -sfn /tmp/openmed batch/corpora/openmed/rules
