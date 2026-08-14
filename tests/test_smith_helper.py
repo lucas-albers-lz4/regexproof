@@ -8,6 +8,7 @@ import sys
 from pathlib import Path
 
 import jsonschema
+import pytest
 
 from regexproof.batch.runner import AGGREGATE_ARTIFACTS, run_batch
 from regexproof.batch.smith_support import clone_dest, inflation_hits, wave_checklist
@@ -119,7 +120,23 @@ def test_author_smith_decision_missing_decision_exits(tmp_path: Path):
     assert proc.returncode != 0
 
 
-def test_wave_checklist_mentions_no_ci_clone():
+def test_safe_corpus_slug_rejects_traversal():
+    from regexproof.batch.smith_support import safe_corpus_slug
+
+    with pytest.raises(ValueError):
+        safe_corpus_slug("../x")
+    with pytest.raises(ValueError):
+        safe_corpus_slug("a/b")
+    assert safe_corpus_slug("openmed") == "openmed"
+
+
+def test_guess_extractor_uses_highest_count_dialect():
+    from regexproof.batch.smith_support import guess_extractor
+
+    extractor, glob, dialect = guess_extractor({"ecma": 67, "py_re": 1287})
+    assert dialect == "py_re"
+    assert extractor == "python_dir"
+    assert glob
     text = wave_checklist("openmed")
     assert "WAVE_CORPORA" in text
     assert "detect-secrets" in text

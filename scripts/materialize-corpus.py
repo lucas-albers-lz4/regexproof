@@ -3,7 +3,7 @@
 
 Usage:
   python scripts/materialize-corpus.py --gate properties/generated/openmed_gate_decision.json
-  python scripts/materialize-corpus.py --corpus openmed --allow-inflation
+  python scripts/materialize-corpus.py --corpus openmed
 """
 
 from __future__ import annotations
@@ -21,7 +21,10 @@ from regexproof.batch.smith_support import (  # noqa: E402
     clone_dest,
     inflation_hits,
     load_json,
+    safe_corpus_slug,
 )
+
+CORPORA_ROOT = (ROOT / "batch" / "corpora").resolve()
 
 
 def _from_gate(path: Path) -> tuple[str, str, str, dict]:
@@ -31,19 +34,54 @@ def _from_gate(path: Path) -> tuple[str, str, str, dict]:
     pin = str(gate.get("corpus_pin") or "")
     if not corpus or not url:
         raise SystemExit(f"error: {path} missing corpus or candidate_url")
-    return corpus, url, pin, gate
+    return safe_corpus_slug(corpus), url, pin, gate
 
 
 def _from_manifest(name: str) -> tuple[str, str, str, dict]:
-    meta = CORPUS_MANIFESTS.get(name)
+    slug = safe_corpus_slug(name)
+    meta = CORPUS_MANIFESTS.get(slug)
     if meta is None:
-        raise SystemExit(f"error: corpus {name!r} not in CORPUS_MANIFESTS")
+        raise SystemExit(f"error: corpus {slug!r} not in CORPUS_MANIFESTS")
     repo = str(meta.get("repo") or "")
     pin = str(meta.get("corpus_pin") or meta.get("commit") or "")
     if not repo:
-        raise SystemExit(f"error: manifest {name!r} has no repo")
+        raise SystemExit(f"error: manifest {slug!r} has no repo")
     url = repo if repo.startswith("https://") else f"https://github.com/{repo}"
-    return name, url, pin, {}
+    return slug, url, pin, {}
+
+
+def _require_allowlist_if_inflated(gate: dict, allowlist_file: Path | None) -> int:
+    probe = gate.get("probe") if isinstance(gate.get("probe"), dict) else {}
+    per_file = probe.get("regex_sites_per_file") if isinstance(probe, dict) else None
+    if not isinstance(per_file, dict):
+        return 0
+    hits = inflation_hits(per_file)
+    if not hits:
+        return 0
+    if allowlist_file is None or not allowlist_file.is_file():
+        print(
+            "error: probe paths look like locale/vendor/testdata inflation "
+            f"({hits[0]}). Pass --allowlist-file with a non-empty files list "
+            "(tarcoin lesson).",
+            file=sys.stderr,
+        )
+        return 2
+    lines = [
+        ln.strip()
+        for ln in allowlist_file.read_text(encoding="utf-8").splitlines()
+        if ln.strip() and not ln.strip().startswith("#")
+    ]
+    if not lines:
+        print("error: --allowlist-file is empty", file=sys.stderr)
+        return 2
+    return 0
+
+
+def _corpus_link_dir(corpus: str) -> Path:
+    link_dir = (CORPORA_ROOT / corpus).resolve()
+    if link_dir != CORPORA_ROOT and CORPORA_ROOT not in link_dir.parents:
+        raise SystemExit(f"error: link dir escapes batch/corpora: {link_dir}")
+    return link_dir
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -51,9 +89,9 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--gate", type=Path, help="admission gate JSON")
     ap.add_argument("--corpus", help="CORPUS_MANIFESTS key")
     ap.add_argument(
-        "--allow-inflation",
-        action="store_true",
-        help="clone even if probe files look like locale/vendor/testdata",
+        "--allowlist-file",
+        type=Path,
+        help="non-empty files allowlist required when probe looks inflated",
     )
     ap.add_argument("--link-name", default="rules", help="symlink name under batch/corpora/<slug>/")
     args = ap.parse_args(argv)
@@ -62,18 +100,9 @@ def main(argv: list[str] | None = None) -> int:
         return 2
     if args.gate:
         corpus, url, pin, gate = _from_gate(args.gate)
-        probe = gate.get("probe") if isinstance(gate.get("probe"), dict) else {}
-        per_file = probe.get("regex_sites_per_file") if isinstance(probe, dict) else None
-        if isinstance(per_file, dict) and not args.allow_inflation:
-            hits = inflation_hits(per_file)
-            if hits:
-                print(
-                    "error: probe paths look like locale/vendor/testdata inflation "
-                    f"({hits[0]}). Paste a files allowlist; rerun with "
-                    "--allow-inflation only after that (tarcoin lesson).",
-                    file=sys.stderr,
-                )
-                return 2
+        inflated = _require_allowlist_if_inflated(gate, args.allowlist_file)
+        if inflated:
+            return inflated
     else:
         corpus, url, pin, _gate = _from_manifest(args.corpus)
 
@@ -83,9 +112,15 @@ def main(argv: list[str] | None = None) -> int:
     except CloneError as exc:
         print(f"error: clone failed: {exc}", file=sys.stderr)
         return 1
-    link_dir = ROOT / "batch" / "corpora" / corpus
+    except ValueError as exc:
+        print(f"error: {exc}", file=sys.stderr)
+        return 2
+    link_dir = _corpus_link_dir(corpus)
     link_dir.mkdir(parents=True, exist_ok=True)
-    link = link_dir / args.link_name
+    link = (link_dir / args.link_name).resolve()
+    if CORPORA_ROOT not in link.parents and link.parent != CORPORA_ROOT:
+        print(f"error: link escapes batch/corpora: {link}", file=sys.stderr)
+        return 2
     if link.is_symlink() or link.exists():
         link.unlink()
     link.symlink_to(dest)

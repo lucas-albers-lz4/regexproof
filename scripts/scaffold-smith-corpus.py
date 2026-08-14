@@ -19,6 +19,7 @@ from regexproof.batch.smith_support import (  # noqa: E402
     guess_extractor,
     load_json,
     owner_slug_from_url,
+    safe_corpus_slug,
     wave_checklist,
 )
 
@@ -29,17 +30,27 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--force", action="store_true", help="overwrite existing README")
     args = ap.parse_args(argv)
     gate = load_json(args.gate)
-    corpus = str(gate.get("corpus") or "")
+    raw_corpus = str(gate.get("corpus") or "")
     url = str(gate.get("candidate_url") or "")
     pin = str(gate.get("corpus_pin") or "")
-    if not corpus or not url:
+    if not raw_corpus or not url:
         print("error: gate missing corpus or candidate_url", file=sys.stderr)
+        return 2
+    try:
+        corpus = safe_corpus_slug(raw_corpus)
+    except ValueError as exc:
+        print(f"error: {exc}", file=sys.stderr)
         return 2
     owner, repo = owner_slug_from_url(url)
     probe = gate.get("probe") if isinstance(gate.get("probe"), dict) else {}
     dialect = probe.get("dialect") if isinstance(probe.get("dialect"), dict) else {}
-    extractor, glob = guess_extractor(dialect if isinstance(dialect, dict) else {})
+    extractor, glob, dialect = guess_extractor(dialect if isinstance(dialect, dict) else {})
     dest_dir = ROOT / "batch" / "corpora" / corpus
+    dest_dir = dest_dir.resolve()
+    corpora_root = (ROOT / "batch" / "corpora").resolve()
+    if corpora_root not in dest_dir.parents:
+        print("error: corpus dir escapes batch/corpora", file=sys.stderr)
+        return 2
     dest_dir.mkdir(parents=True, exist_ok=True)
     readme = dest_dir / "README.md"
     body = (
@@ -76,7 +87,7 @@ def main(argv: list[str] | None = None) -> int:
             "path": f"batch/corpora/{corpus}/rules",
             "files": [],
             "glob": glob,
-            "dialect": next(iter(dialect), "py_re") if dialect else "py_re",
+            "dialect": dialect,
             "extractor": extractor,
             "repo": f"{owner}/{repo}",
             "security_tool": False,

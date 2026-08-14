@@ -3,11 +3,18 @@
 from __future__ import annotations
 
 import json
+import re
 from pathlib import Path
 from typing import Any
 from urllib.parse import urlparse
 
-ROOT = Path(__file__).resolve().parents[2]
+_SLUG = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$")
+
+
+def safe_corpus_slug(name: str) -> str:
+    if ".." in name or "/" in name or "\\" in name or not _SLUG.fullmatch(name):
+        raise ValueError(f"unsafe corpus slug {name!r}")
+    return name
 
 INFLATION_DIR_NAMES = frozenset(
     {
@@ -55,10 +62,11 @@ def owner_slug_from_url(url: str) -> tuple[str, str]:
 
 def clone_dest(url: str, corpus: str) -> Path:
     """Unique /tmp path so APFS does not collide yara-rules vs yara_rules."""
+    slug = safe_corpus_slug(corpus)
     owner, repo = owner_slug_from_url(url)
     safe_owner = owner.lower()
     safe_repo = repo.replace("/", "-")
-    return Path("/tmp") / f"{safe_owner}-{safe_repo}-{corpus}"
+    return Path("/tmp") / f"{safe_owner}-{safe_repo}-{slug}"
 
 
 def inflation_hits(sites_per_file: dict[str, Any]) -> list[str]:
@@ -70,11 +78,12 @@ def inflation_hits(sites_per_file: dict[str, Any]) -> list[str]:
     return hits
 
 
-def guess_extractor(dialect_counts: dict[str, Any]) -> tuple[str, str]:
+def guess_extractor(dialect_counts: dict[str, Any]) -> tuple[str, str, str]:
     if not dialect_counts:
-        return "python_dir", "**/*.py"
+        return "python_dir", "**/*.py", "py_re"
     top = max(dialect_counts, key=lambda k: int(dialect_counts.get(k) or 0))
-    return DIALECT_TO_EXTRACTOR.get(str(top), ("python_dir", "**/*.py"))
+    extractor, glob = DIALECT_TO_EXTRACTOR.get(str(top), ("python_dir", "**/*.py"))
+    return extractor, glob, str(top)
 
 
 def wave_checklist(corpus: str) -> str:

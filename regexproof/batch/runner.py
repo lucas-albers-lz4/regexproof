@@ -702,7 +702,7 @@ def run_batch(
     out_dir.mkdir(parents=True, exist_ok=True)
     (ROOT / "properties" / "triage").mkdir(parents=True, exist_ok=True)
     if write_pilot_aggregate is None:
-        write_pilot_aggregate = corpora == PILOT_CORPORA
+        write_pilot_aggregate = set(corpora) == set(PILOT_CORPORA)
 
     summaries = {}
     pair_counts = {}
