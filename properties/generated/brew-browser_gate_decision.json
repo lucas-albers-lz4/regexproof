@@ -1,0 +1,63 @@
+{
+  "candidate_url": "https://github.com/msitarzewski/brew-browser",
+  "conditions": [
+    {
+      "evidence": "Predicted buckets present (2) but not treated as novel surface.",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Security-boundary condition not asserted met.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "21 sites < 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "brew-browser",
+  "corpus_pin": "a872efcb365ae87ea61b7c920e93c6b6f95de6e8",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-14",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 18,
+      "posix-shell": 2,
+      "py_re": 1
+    },
+    "flags": {
+      "g": 1,
+      "i": 5
+    },
+    "pin": "a872efcb365ae87ea61b7c920e93c6b6f95de6e8",
+    "pin_mined": "a872efcb365ae87ea61b7c920e93c6b6f95de6e8",
+    "pin_probed": "a872efcb365ae87ea61b7c920e93c6b6f95de6e8",
+    "predicted_buckets": {
+      "inline-flag": 5,
+      "stateful": 1
+    },
+    "regex_sites": 21,
+    "regex_sites_per_file": {
+      "native/build-app.sh": 1,
+      "native/release.sh": 1,
+      "scripts/validate-recipes.mjs": 5,
+      "src/lib/stores/github.svelte.ts": 1,
+      "src/lib/stores/vulnerabilities.svelte.ts": 1,
+      "src/lib/util/platform.ts": 2,
+      "src/lib/util/recentChanges.ts": 2,
+      "src/lib/util/recovery.ts": 3,
+      "tools/pipeline/render_served.py": 1,
+      "tools/trending-collector/collect.js": 1,
+      "tools/trending-collector/lib/common.js": 2,
+      "tools/trending-collector/seed.js": 1
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Below admission scale: 21 regex sites (auto-NO-GO bar 200); dialects [ecma:18, posix-shell:2, py_re:1]; boundary=deterministic-true.",
+  "schema_version": "1"
+}
