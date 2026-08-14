@@ -154,14 +154,17 @@ jobs:
             echo "No ledger/queue changes to commit."
           else
             git commit -m "chore(mine): daily candidate ledger + queue"
-            git pull --rebase --autostash origin "${GITHUB_REF_NAME}"
-            # Regen labels on the post-rebase tree so inputs_hash matches
-            # concurrent gate files. Offline join only — no --backfill,
-            # no fit-score-v2 (job is Python 3.13; Golden pins 3.12 ULP).
-            python scripts/build-gate-labels.py
-            git add properties/generated/gate-labels.json
-            if ! git diff --staged --quiet; then
-              git commit -m "chore(mine): regen gate-labels after ledger"
-            fi
+          fi
+          git pull --rebase --autostash origin "${GITHUB_REF_NAME}"
+          # Always regen labels on the post-rebase tree (self-heal if
+          # gate files moved without a ledger write). Offline join only.
+          python scripts/build-gate-labels.py
+          git add properties/generated/gate-labels.json
+          if ! git diff --staged --quiet; then
+            git commit -m "chore(mine): regen gate-labels after ledger"
+          fi
+          if [ -n "$(git log --oneline "origin/${GITHUB_REF_NAME}..HEAD")" ]; then
             git push
+          else
+            echo "No mine commits to push."
           fi
