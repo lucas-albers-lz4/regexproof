@@ -1,0 +1,25 @@
+{
+  "address_space_cap": false,
+  "cache": {
+    "entries": 9,
+    "hit_rate": 1.0,
+    "hits": 9,
+    "misses": 0
+  },
+  "cache_hit_rate": 1.0,
+  "complete_run": true,
+  "corpus": "devguard",
+  "corpus_type": "rule_corpus",
+  "encodable": 9,
+  "engine": {
+    "python": "3.13.15"
+  },
+  "extracted": 9,
+  "findings": 13,
+  "inventory_questions": 4,
+  "join_regex_ids": 13,
+  "redos_findings": 0,
+  "redos_incomplete": false,
+  "schema_version": "1",
+  "triage": 0
+}

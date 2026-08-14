@@ -60,6 +60,11 @@ SECURITY_TOOL_CORPORA = frozenset(
         "mole",
         "pm_shredder",
         "vedetta",
+        "inhale",
+        "llm-honeypot-intelligence",
+        "titus",
+        "Doberman-Core",
+        "devguard",
     }
 )
 

@@ -114,7 +114,7 @@ def test_truncated_tree_contributes_no_signal(tmp_path: Path):
     assert feature["regex_file_type_counts"] == {}
 
 
-def test_gate_labels_join_is_deterministic_and_keeps_duplicate_decisions(tmp_path: Path):
+def test_gate_labels_join_is_deterministic_and_dedupes_duplicate_urls(tmp_path: Path):
     script = _load_labels_script()
     generated = tmp_path / "generated"
     generated.mkdir()
@@ -163,7 +163,7 @@ def test_gate_labels_join_is_deterministic_and_keeps_duplicate_decisions(tmp_pat
     )
     assert first == second
     assert out.read_bytes() == first_bytes
-    assert len(first["rows"]) == 2
+    assert len(first["rows"]) == 1
     assert first["provenance"]["input_file_count"] == 2
 
 

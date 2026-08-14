@@ -1,0 +1,94 @@
+{
+  "candidate_url": "https://github.com/praetorian-inc/titus",
+  "conditions": [
+    {
+      "evidence": "Covered dialects (go/re2); no new construct class.",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe deterministic-true; high-performance SECRETS SCANNER (praetorian) with 487 detection rules. Escape hatch for security tool below scale.",
+      "id": "security-boundary",
+      "met": true
+    },
+    {
+      "evidence": "118 sites below 1000 — escape hatch applied.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "titus",
+  "corpus_pin": "57b733f5ed04a59b03514f229c3052ace7473d50",
+  "decision": "triage-trial",
+  "decision_basis": "escape_hatch",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": true,
+  "probe": {
+    "construct_counts": {
+      "(?i)": 59,
+      "(?s)": 1
+    },
+    "dialect": {
+      "ecma": 8,
+      "java": 1,
+      "posix-shell": 13,
+      "re2": 96
+    },
+    "flags": {
+      "g": 2
+    },
+    "pin": "57b733f5ed04a59b03514f229c3052ace7473d50",
+    "predicted_buckets": {
+      "inline-flag": 60,
+      "stateful": 2
+    },
+    "regex_sites": 118,
+    "regex_sites_per_file": {
+      "burp/src/main/java/com/praetorian/titus/burp/FastPathFilter.java": 1,
+      "cmd/titus-migrate-scores/apply.go": 3,
+      "extension/content/content.js": 3,
+      "extension/dashboard/dashboard.js": 2,
+      "extension/storage/db.js": 3,
+      "pkg/accessibility/accessibility.go": 3,
+      "pkg/enum/confluence.go": 2,
+      "pkg/enum/jira.go": 2,
+      "pkg/enum/sharepoint.go": 2,
+      "pkg/matcher/extended.go": 1,
+      "pkg/matcher/vectorscan.go": 1,
+      "pkg/rule/microsoft_teams_test.go": 4,
+      "pkg/scoring/atlassian.go": 7,
+      "pkg/scoring/aws.go": 3,
+      "pkg/scoring/azure.go": 2,
+      "pkg/scoring/condition_test.go": 1,
+      "pkg/scoring/engine_test.go": 1,
+      "pkg/scoring/github.go": 1,
+      "pkg/scoring/gitlab.go": 2,
+      "pkg/scoring/mongodb.go": 3,
+      "pkg/scoring/pubnub.go": 1,
+      "pkg/types/rule.go": 1,
+      "pkg/validator/amplitude.go": 4,
+      "pkg/validator/atlassian.go": 7,
+      "pkg/validator/aws.go": 4,
+      "pkg/validator/branchio.go": 3,
+      "pkg/validator/browserstack.go": 1,
+      "pkg/validator/confluent.go": 3,
+      "pkg/validator/cypress.go": 3,
+      "pkg/validator/helpscout.go": 5,
+      "pkg/validator/keenio.go": 4,
+      "pkg/validator/mattermost.go": 1,
+      "pkg/validator/pubnub.go": 1,
+      "pkg/validator/saucelabs.go": 1,
+      "pkg/validator/shopify.go": 1,
+      "pkg/validator/truenas.go": 5,
+      "pkg/validator/twilio.go": 6,
+      "pkg/validator/wpengine.go": 2,
+      "pkg/validator/zendesk.go": 5,
+      "scripts/integration-test.sh": 6,
+      "scripts/scan-fixtures.sh": 1,
+      "scripts/static-binary-test.sh": 6
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Security-boundary corpus (boundary=deterministic-true) with findings-triage potential; 118 sites across [ecma:8, java:1, posix-shell:13, re2:96].",
+  "schema_version": "1"
+}

@@ -1,0 +1,14 @@
+{
+  "schema_version": "1",
+  "corpus": "titus",
+  "corpus_pin": "57b733f5ed04a59b03514f229c3052ace7473d50",
+  "candidate_url": "https://github.com/praetorian-inc/titus",
+  "smith_decision": "no-go",
+  "supersedes": "triage-trial",
+  "reason": "Smith measure NO-GO: 15/57 = 0.2632 encodable on first-party pkg/validator + pkg/types/rule.go (below 0.30). Stays triage-trial; not added to WAVE_CORPORA.",
+  "regex_sites": 57,
+  "sites_by_bucket": {
+    "re2": 57
+  },
+  "additional_surface_outside_probe_scope": {}
+}

@@ -104,6 +104,7 @@ def _linked_records(
             by_url.setdefault(normalize_repo_url(str(candidate["url"])), candidate)
 
     records: list[tuple[dict[str, Any], dict[str, Any], dict[str, Any]]] = []
+    seen_urls: set[str] = set()
     for path in decision_paths:
         decision = _read_json(path)
         if decision is None:
@@ -112,9 +113,15 @@ def _linked_records(
         label = decision.get("decision")
         if not url or label not in {"go", "triage-trial", "no-go"}:
             continue
-        candidate = by_url.get(normalize_repo_url(str(url)))
+        nurl = normalize_repo_url(str(url))
+        if nurl in seen_urls:
+            # Owner-prefix and manifest-slug copies of the same decision
+            # must not double-weight the P8 fit (one row per URL).
+            continue
+        candidate = by_url.get(nurl)
         if candidate is None:
             continue
+        seen_urls.add(nurl)
         records.append((candidate, decision, {"path": path.name}))
     return records
 
