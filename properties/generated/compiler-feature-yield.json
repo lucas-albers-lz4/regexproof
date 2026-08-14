@@ -2,24 +2,24 @@
   "corpus_summary": {
     "go": {
       "reasons": {
-        "backref": 348,
+        "backref": 352,
         "bad-range": 23,
-        "composite-pattern": 3635,
+        "composite-pattern": 3648,
         "empty-class": 12,
         "fullword-boundary": 31291,
         "gnu-extension": 48,
         "gnu-word-boundary": 1,
         "inline-flag": 91,
         "internal-anchor": 281,
-        "lookaround": 669,
+        "lookaround": 671,
         "m-flag": 397,
         "multi-match": 391,
         "negated-class": 40,
-        "negated-shorthand": 365,
+        "negated-shorthand": 368,
         "parse-error": 109,
         "parse-error:PatternError": 58,
         "pattern-too-long": 269,
-        "per-alternative-anchor": 304,
+        "per-alternative-anchor": 305,
         "repeat-count": 15,
         "stateful": 1998,
         "u-flag": 956,
@@ -34,10 +34,10 @@
         "unsupported:POSSESSIVE_REPEAT": 466,
         "v-flag": 90,
         "wide-non-literal": 600,
-        "word-boundary": 957
+        "word-boundary": 962
       },
-      "rows": 44216,
-      "sites_weighted": 132648.0
+      "rows": 44244,
+      "sites_weighted": 132732.0
     },
     "no-go": {
       "reasons": {
@@ -88,9 +88,9 @@
     }
   },
   "provenance": {
-    "gate_decision_count": 825,
-    "input_file_count": 71,
-    "triage_inputs_hash": "5f1c04e7976a7337"
+    "gate_decision_count": 824,
+    "input_file_count": 72,
+    "triage_inputs_hash": "da749cb60b78af36"
   },
   "rows": [
     {
@@ -111,21 +111,21 @@
     },
     {
       "per_corpus": {
-        "go": 10905.0,
+        "go": 10944.0,
         "no-go": 261.0,
         "triage-trial": 126.0
       },
       "per_corpus_raw": {
-        "go": 3635,
+        "go": 3648,
         "no-go": 261,
         "triage-trial": 63
       },
       "per_dialect": {
         "ecma": 135,
-        "py_re": 3824
+        "py_re": 3837
       },
-      "sites_unlocked": 3959,
-      "sites_weighted": 11292.0,
+      "sites_unlocked": 3972,
+      "sites_weighted": 11331.0,
       "unencodable_reason": "composite-pattern"
     },
     {
@@ -146,24 +146,24 @@
     },
     {
       "per_corpus": {
-        "go": 2871.0,
+        "go": 2886.0,
         "no-go": 22.0,
         "triage-trial": 282.0
       },
       "per_corpus_raw": {
-        "go": 957,
+        "go": 962,
         "no-go": 22,
         "triage-trial": 141
       },
       "per_dialect": {
         "ecma": 76,
         "pcre": 21,
-        "py_re": 1016,
+        "py_re": 1021,
         "re2": 6,
         "yara": 1
       },
-      "sites_unlocked": 1120,
-      "sites_weighted": 3175.0,
+      "sites_unlocked": 1125,
+      "sites_weighted": 3190.0,
       "unencodable_reason": "word-boundary"
     },
     {
@@ -184,21 +184,21 @@
     },
     {
       "per_corpus": {
-        "go": 2007.0,
+        "go": 2013.0,
         "no-go": 49.0,
         "triage-trial": 46.0
       },
       "per_corpus_raw": {
-        "go": 669,
+        "go": 671,
         "no-go": 49,
         "triage-trial": 23
       },
       "per_dialect": {
         "ecma": 78,
-        "py_re": 663
+        "py_re": 665
       },
-      "sites_unlocked": 741,
-      "sites_weighted": 2102.0,
+      "sites_unlocked": 743,
+      "sites_weighted": 2108.0,
       "unencodable_reason": "lookaround"
     },
     {
@@ -270,65 +270,65 @@
     },
     {
       "per_corpus": {
-        "go": 1095.0,
+        "go": 1104.0,
         "no-go": 16.0,
         "triage-trial": 78.0
       },
       "per_corpus_raw": {
-        "go": 365,
+        "go": 368,
         "no-go": 16,
         "triage-trial": 39
       },
       "per_dialect": {
         "ecma": 175,
-        "py_re": 242,
+        "py_re": 245,
         "re2": 2,
         "yara": 1
       },
-      "sites_unlocked": 420,
-      "sites_weighted": 1189.0,
+      "sites_unlocked": 423,
+      "sites_weighted": 1198.0,
       "unencodable_reason": "negated-shorthand"
     },
     {
       "per_corpus": {
-        "go": 1044.0,
+        "go": 1056.0,
         "no-go": 25.0,
         "triage-trial": 6.0
       },
       "per_corpus_raw": {
-        "go": 348,
+        "go": 352,
         "no-go": 25,
         "triage-trial": 3
       },
       "per_dialect": {
         "ecma": 31,
         "posix-shell": 1,
-        "py_re": 344
+        "py_re": 348
       },
-      "sites_unlocked": 376,
-      "sites_weighted": 1075.0,
+      "sites_unlocked": 380,
+      "sites_weighted": 1087.0,
       "unencodable_reason": "backref"
     },
     {
       "per_corpus": {
-        "go": 912.0,
+        "go": 915.0,
         "no-go": 3.0,
         "triage-trial": 90.0
       },
       "per_corpus_raw": {
-        "go": 304,
+        "go": 305,
         "no-go": 3,
         "triage-trial": 45
       },
       "per_dialect": {
         "ecma": 187,
         "posix-shell": 91,
-        "py_re": 69,
+        "py_re": 70,
         "re2": 3,
         "yara": 2
       },
-      "sites_unlocked": 352,
-      "sites_weighted": 1005.0,
+      "sites_unlocked": 353,
+      "sites_weighted": 1008.0,
       "unencodable_reason": "per-alternative-anchor"
     },
     {
@@ -672,8 +672,8 @@
     }
   ],
   "schema_version": "1",
-  "total_rows": 46565,
-  "total_weighted": 136881.0,
+  "total_rows": 46593,
+  "total_weighted": 136965.0,
   "unknown_reason_rows": 8,
   "weights": {
     "go": 3,

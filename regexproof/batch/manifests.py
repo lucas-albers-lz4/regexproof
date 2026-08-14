@@ -4006,6 +4006,42 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
             "max_disk_mb": 200,
         },
     },
+    "openmed": {
+        "corpus_type": "rule_corpus",
+        # Materialize: ln -sfn /tmp/openmed batch/corpora/openmed/rules
+        # First-party clinical PII/PHI + re-identification regexes. No tests.
+        "path": ROOT / "batch" / "corpora" / "openmed" / "rules",
+        "files": [
+            "openmed/core/pii.py",
+            "openmed/core/pii_i18n.py",
+            "openmed/core/pii_entity_merger.py",
+            "openmed/core/anonymizer/engine.py",
+            "openmed/core/anonymizer/format_preserve.py",
+            "openmed/core/anonymizer/locales.py",
+            "openmed/core/anonymizer/providers/clinical_ids.py",
+            "openmed/core/anonymizer/providers/registry_ids.py",
+            "openmed/core/anonymizer/providers/script_names.py",
+            "openmed/core/anonymizer/registry.py",
+            "openmed/core/custom_recognizer.py",
+            "openmed/core/clinical_protect.py",
+            "openmed/core/date_shift.py",
+            "openmed/risk/reid.py",
+        ],
+        "dialect": "py_re",
+        "extractor": "python_dir",
+        "repo": "maziyarpanahi/openmed",
+        "security_tool": False,
+        "lift_inline": False,
+        "corpus_pin": "353c81a6ef996b4b52eff555560efd2ac86922bf",
+        "commit": "353c81a6ef996b4b52eff555560efd2ac86922bf",
+        "budget": {
+            "max_patterns": 5000,
+            "max_wall_s": 600,
+            "redos_wall_s": 120,
+            "max_mem_mb": 1024,
+            "max_disk_mb": 200,
+        },
+    },
 }
 
 WAVE_CORPORA = frozenset({
@@ -4034,5 +4070,6 @@ WAVE_CORPORA = frozenset({
     "sec_check",
     "Antivirus",
     "patrolaroid",
+    "openmed",
 })
 
