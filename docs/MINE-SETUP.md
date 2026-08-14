@@ -151,5 +151,7 @@ Stdout ends with a `{"kind": "mine_run_summary", ...}` line (includes
 
 ## Non-goals (this job)
 
-Smith extract/compile automation (#149) and native Java dialect (#150) remain
-follow-ons. Score-v1 does not auto-GO or file issues.
+Smith extract/compile is a **local helper** (#149), not this mine job:
+`scripts/materialize-corpus.py`, `scripts/author-smith-decision.py`. Native
+Java dialect (#150) remains a follow-on. Score-v1 does not auto-GO or file
+issues.

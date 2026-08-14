@@ -57,6 +57,13 @@ from regexproof.z3_pin import assert_z3_pinned
 _MAX_FILE_BYTES = MAX_FILE_BYTES
 _extract = extract_corpus
 _extract_glob = extract_glob
+
+PILOT_CORPORA = ["gitleaks", "validatorjs", "detect-secrets"]
+AGGREGATE_ARTIFACTS = (
+    "batch_summary.json",
+    "batch_pair_counts.json",
+    "batch_repro.sha256",
+)
 _compile_all = compile_records
 _validate_expected_roots = validate_expected_roots
 _check_budget_patterns = check_budget_patterns
@@ -681,6 +688,7 @@ def run_batch(
     synth_diff_fuzz_sample: int | None = None,
     jobs: int | None = None,
     cache_dir: Path | str | None = None,
+    write_pilot_aggregate: bool | None = None,
 ) -> dict[str, Any]:
     cov = check_corpus_coverage()
     if cov:
@@ -693,6 +701,13 @@ def run_batch(
 
     out_dir.mkdir(parents=True, exist_ok=True)
     (ROOT / "properties" / "triage").mkdir(parents=True, exist_ok=True)
+    if write_pilot_aggregate is None:
+        write_pilot_aggregate = set(corpora) == set(PILOT_CORPORA)
+    if write_pilot_aggregate and set(corpora) != set(PILOT_CORPORA):
+        raise SystemExit(
+            "error: write_pilot_aggregate requires exactly the three "
+            f"pilot corpora {PILOT_CORPORA}"
+        )
 
     summaries = {}
     pair_counts = {}
@@ -729,7 +744,15 @@ def run_batch(
         else:
             pair_counts[name] = {"admitted": 0, "dropped": 0, "note": "no independent-spec catalog"}
 
-    crs = measure_coreruleset(out_dir)
+    if write_pilot_aggregate or "coreruleset" in corpora:
+        crs = measure_coreruleset(out_dir)
+    else:
+        crs = {
+            "decision": "skipped",
+            "fraction": None,
+            "scope": "not-measured",
+            "note": "single-corpus Smith run; pass write_pilot_aggregate to measure CRS",
+        }
     if crs["decision"] == "go":
         pair_counts["coreruleset"] = {
             "admitted": 0,
@@ -764,6 +787,8 @@ def run_batch(
         for summary in summaries.values()
     )
     batch["cache_hit_rate"] = total_hits / total_entries if total_entries else 0.0
+    if not write_pilot_aggregate:
+        return batch
     atomic_write_text(
         out_dir / "batch_pair_counts.json",
         json.dumps(pair_counts, indent=2, sort_keys=True) + "\n",
@@ -793,6 +818,12 @@ def main(argv: list[str] | None = None) -> int:
         help="gitleaks|validatorjs|detect-secrets|coreruleset|all",
     )
     ap.add_argument("--out", type=Path, default=ROOT / "properties" / "generated")
+    ap.add_argument(
+        "--write-pilot-aggregate",
+        action="store_true",
+        help="write batch_summary.json / pair counts / repro sha "
+        "(implied for --corpus all; omit on single-corpus Smith runs)",
+    )
     ap.add_argument("--with-redos", action="store_true")
     ap.add_argument(
         "--synthesize",
@@ -893,6 +924,9 @@ def main(argv: list[str] | None = None) -> int:
         synth_diff_fuzz_sample=args.synth_diff_fuzz_sample,
         jobs=args.jobs,
         cache_dir=args.cache_dir,
+        write_pilot_aggregate=(
+            True if args.corpus == "all" else args.write_pilot_aggregate
+        ),
     )
     print("batch ok:", ", ".join(corpora))
     return 0
