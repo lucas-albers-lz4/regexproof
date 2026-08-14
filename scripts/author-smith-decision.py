@@ -56,7 +56,15 @@ def main(argv: list[str] | None = None) -> int:
     args = ap.parse_args(argv)
     gate = load_json(args.gate)
     fraction = load_json(args.fraction)
-    corpus = str(gate.get("corpus") or fraction.get("pilot") or "")
+    gate_corpus = str(gate.get("corpus") or "")
+    frac_pilot = str(fraction.get("pilot") or "")
+    if gate_corpus and frac_pilot and gate_corpus != frac_pilot:
+        print(
+            f"error: gate corpus {gate_corpus!r} != fraction pilot {frac_pilot!r}",
+            file=sys.stderr,
+        )
+        return 2
+    corpus = gate_corpus or frac_pilot
     if not corpus:
         print("error: gate/fraction missing corpus", file=sys.stderr)
         return 2

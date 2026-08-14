@@ -115,6 +115,11 @@ def main(argv: list[str] | None = None) -> int:
             return inflated
     else:
         corpus, url, pin, _gate = _from_manifest(args.corpus)
+        gate_path = ROOT / "properties" / "generated" / f"{corpus}_gate_decision.json"
+        if gate_path.is_file():
+            inflated = _require_allowlist_if_inflated(load_json(gate_path), args.allowlist_file)
+            if inflated:
+                return inflated
 
     dest = clone_dest(url, corpus)
     try:
