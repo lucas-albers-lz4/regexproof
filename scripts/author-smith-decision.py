@@ -16,7 +16,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 from regexproof.admission.serialize import dumps_pinned  # noqa: E402
-from regexproof.batch.smith_support import load_json, wave_checklist  # noqa: E402
+from regexproof.batch.smith_support import load_json, safe_corpus_slug, wave_checklist  # noqa: E402
 from regexproof.io_atomic import atomic_write_text  # noqa: E402
 from regexproof.schemas import smith_decision_schema  # noqa: E402
 
@@ -55,6 +55,11 @@ def main(argv: list[str] | None = None) -> int:
     if not corpus:
         print("error: gate/fraction missing corpus", file=sys.stderr)
         return 2
+    try:
+        corpus = safe_corpus_slug(corpus)
+    except ValueError as exc:
+        print(f"error: {exc}", file=sys.stderr)
+        return 2
     record = {
         "schema_version": "1",
         "corpus": corpus,
@@ -71,7 +76,15 @@ def main(argv: list[str] | None = None) -> int:
         print("error: jsonschema is required", file=sys.stderr)
         return 2
     jsonschema.validate(instance=record, schema=smith_decision_schema())
-    out = args.output or (ROOT / "properties" / "generated" / f"{corpus}_smith_decision.json")
+    generated = (ROOT / "properties" / "generated").resolve()
+    if args.output:
+        out = args.output
+    else:
+        out = generated / f"{corpus}_smith_decision.json"
+        resolved = out.resolve()
+        if generated not in resolved.parents and resolved.parent != generated:
+            print(f"error: output escapes properties/generated: {resolved}", file=sys.stderr)
+            return 2
     atomic_write_text(out, dumps_pinned(record))
     print(out)
     print(wave_checklist(corpus), file=sys.stderr)

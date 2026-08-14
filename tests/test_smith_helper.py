@@ -137,6 +137,8 @@ def test_guess_extractor_uses_highest_count_dialect():
     assert dialect == "py_re"
     assert extractor == "python_dir"
     assert glob
+    with pytest.raises(ValueError, match="no extractor mapping"):
+        guess_extractor({"unknown-dialect": 3})
     text = wave_checklist("openmed")
     assert "WAVE_CORPORA" in text
     assert "detect-secrets" in text

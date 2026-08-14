@@ -74,6 +74,16 @@ def _require_allowlist_if_inflated(gate: dict, allowlist_file: Path | None) -> i
     if not lines:
         print("error: --allowlist-file is empty", file=sys.stderr)
         return 2
+    for line in lines:
+        norm = line.replace("\\", "/")
+        if norm.startswith("/") or ".." in Path(norm).parts:
+            print(f"error: allowlist path not a relative file: {line!r}", file=sys.stderr)
+            return 2
+    print(
+        "allowlist accepted for clone; paste these paths into CORPUS_MANIFESTS "
+        f"files= for {gate.get('corpus')} (not auto-applied).",
+        file=sys.stderr,
+    )
     return 0
 
 
@@ -115,12 +125,12 @@ def main(argv: list[str] | None = None) -> int:
     except ValueError as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 2
+    if "/" in args.link_name or "\\" in args.link_name or args.link_name in {".", ".."}:
+        print("error: --link-name must be a single path segment", file=sys.stderr)
+        return 2
     link_dir = _corpus_link_dir(corpus)
     link_dir.mkdir(parents=True, exist_ok=True)
-    link = (link_dir / args.link_name).resolve()
-    if CORPORA_ROOT not in link.parents and link.parent != CORPORA_ROOT:
-        print(f"error: link escapes batch/corpora: {link}", file=sys.stderr)
-        return 2
+    link = link_dir / args.link_name
     if link.is_symlink() or link.exists():
         link.unlink()
     link.symlink_to(dest)

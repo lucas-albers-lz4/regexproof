@@ -44,7 +44,13 @@ def main(argv: list[str] | None = None) -> int:
     owner, repo = owner_slug_from_url(url)
     probe = gate.get("probe") if isinstance(gate.get("probe"), dict) else {}
     dialect = probe.get("dialect") if isinstance(probe.get("dialect"), dict) else {}
-    extractor, glob, dialect = guess_extractor(dialect if isinstance(dialect, dict) else {})
+    try:
+        extractor, glob, dialect = guess_extractor(
+            dialect if isinstance(dialect, dict) else {}
+        )
+    except ValueError as exc:
+        print(f"error: {exc}", file=sys.stderr)
+        return 2
     dest_dir = ROOT / "batch" / "corpora" / corpus
     dest_dir = dest_dir.resolve()
     corpora_root = (ROOT / "batch" / "corpora").resolve()

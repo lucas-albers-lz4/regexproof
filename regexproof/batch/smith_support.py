@@ -82,7 +82,10 @@ def guess_extractor(dialect_counts: dict[str, Any]) -> tuple[str, str, str]:
     if not dialect_counts:
         return "python_dir", "**/*.py", "py_re"
     top = max(dialect_counts, key=lambda k: int(dialect_counts.get(k) or 0))
-    extractor, glob = DIALECT_TO_EXTRACTOR.get(str(top), ("python_dir", "**/*.py"))
+    mapped = DIALECT_TO_EXTRACTOR.get(str(top))
+    if mapped is None:
+        raise ValueError(f"no extractor mapping for dialect {top!r}")
+    extractor, glob = mapped
     return extractor, glob, str(top)
 
 
