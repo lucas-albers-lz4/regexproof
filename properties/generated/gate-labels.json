@@ -1,9 +1,9 @@
 {
   "provenance": {
-    "gate_decision_count": 834,
-    "input_file_count": 834,
-    "inputs_hash": "d88175bfcfca12e4efd870d667bc3bbe094d28d4c6eef45ad0b7d2a696b30857",
-    "linked_row_count": 812,
+    "gate_decision_count": 835,
+    "input_file_count": 835,
+    "inputs_hash": "6139fbdffe17dc45b21dbc8eeea7cad38f20f42a0d298df36063d34673cdd0e2",
+    "linked_row_count": 813,
     "schema_version": "1"
   },
   "rows": [
@@ -8830,6 +8830,43 @@
         }
       },
       "url": "https://github.com/Zephyr3311/Go-Typescript"
+    },
+    {
+      "decision_date": "2026-08-12",
+      "label": "no-go",
+      "ledger": {
+        "archived": false,
+        "capped": true,
+        "fork": false,
+        "language": "JavaScript",
+        "pushed_date": "2023-01-07",
+        "size": 801,
+        "source_query": "filename:validator.js path:src OR filename:validators.py",
+        "stars": 2
+      },
+      "probe": {
+        "dialect_counts": {
+          "ecma": 6
+        },
+        "predicted_buckets": {
+          "inline-flag": 3,
+          "lookaround": 3
+        },
+        "regex_sites": 6,
+        "security_boundary": "unknown",
+        "tree_probe": {
+          "complete": true,
+          "path_count": 19,
+          "probed_pin": "9ce8a5ebea0608e919dcc066836b44d9c228baf7",
+          "regex_file_type_counts": {
+            ".js": 5,
+            ".json": 2
+          },
+          "security_boundary": "unknown",
+          "truncated": false
+        }
+      },
+      "url": "https://github.com/Zveromag/validator"
     },
     {
       "decision_date": "2026-08-13",
