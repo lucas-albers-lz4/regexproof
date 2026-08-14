@@ -58,13 +58,21 @@ def main(argv: list[str] | None = None) -> int:
     fraction = load_json(args.fraction)
     gate_corpus = str(gate.get("corpus") or "")
     frac_pilot = str(fraction.get("pilot") or "")
-    if gate_corpus and frac_pilot and gate_corpus != frac_pilot:
+    frac_corpus = str(fraction.get("corpus") or "")
+    if frac_pilot and frac_corpus and frac_pilot != frac_corpus:
         print(
-            f"error: gate corpus {gate_corpus!r} != fraction pilot {frac_pilot!r}",
+            f"error: fraction pilot {frac_pilot!r} != corpus {frac_corpus!r}",
             file=sys.stderr,
         )
         return 2
-    corpus = gate_corpus or frac_pilot
+    frac_name = frac_pilot or frac_corpus
+    if gate_corpus and frac_name and gate_corpus != frac_name:
+        print(
+            f"error: gate corpus {gate_corpus!r} != fraction {frac_name!r}",
+            file=sys.stderr,
+        )
+        return 2
+    corpus = gate_corpus or frac_name
     if not corpus:
         print("error: gate/fraction missing corpus", file=sys.stderr)
         return 2
