@@ -1,0 +1,25 @@
+{
+  "address_space_cap": false,
+  "cache": {
+    "entries": 69,
+    "hit_rate": 0.5797101449275363,
+    "hits": 40,
+    "misses": 29
+  },
+  "cache_hit_rate": 0.5797101449275363,
+  "complete_run": true,
+  "corpus": "Doberman-Core",
+  "corpus_type": "rule_corpus",
+  "encodable": 40,
+  "engine": {
+    "python": "3.13.15"
+  },
+  "extracted": 69,
+  "findings": 11,
+  "inventory_questions": 4,
+  "join_regex_ids": 11,
+  "redos_findings": 0,
+  "redos_incomplete": false,
+  "schema_version": "1",
+  "triage": 29
+}

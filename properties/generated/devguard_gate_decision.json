@@ -1,0 +1,76 @@
+{
+  "candidate_url": "https://github.com/l3montree-dev/devguard",
+  "conditions": [
+    {
+      "evidence": "Covered dialect (re2); no new construct class.",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe deterministic-true; supply-chain security tool (attestation-based compliance). Escape hatch for security tool below scale.",
+      "id": "security-boundary",
+      "met": true
+    },
+    {
+      "evidence": "50 sites (47 re2) below 1000 — escape hatch applied.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "devguard",
+  "corpus_pin": "00c7f6fc3fb20b1656827f8a8e85e603c7f4a77d",
+  "decision": "triage-trial",
+  "decision_basis": "escape_hatch",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": true,
+  "probe": {
+    "construct_counts": {
+      "(?i)": 4,
+      "(?m)": 3,
+      "(?s)": 1
+    },
+    "dialect": {
+      "posix-shell": 3,
+      "re2": 47
+    },
+    "flags": {},
+    "pin": "00c7f6fc3fb20b1656827f8a8e85e603c7f4a77d",
+    "predicted_buckets": {
+      "inline-flag": 5,
+      "m-flag": 3
+    },
+    "regex_sites": 50,
+    "regex_sites_per_file": {
+      "cmd/devguard-cli/commands/alias_mapping.go": 2,
+      "cmd/devguard-maint/commands/docs.go": 3,
+      "cmd/devguard-maint/commands/logs.go": 2,
+      "cmd/devguard-maint/commands/release_helm.go": 3,
+      "cmd/devguard-maint/commands/release_web.go": 1,
+      "cmd/devguard-maint/internal/common.go": 2,
+      "cmd/devguard-scanner/commands/discover_baseimage-attestations.go": 1,
+      "cmd/devguard-scanner/commands/intoto/intoto.go": 2,
+      "cmd/devguard-scanner/scanner/obfuscate.go": 1,
+      "compliance/oscal_insert.go": 1,
+      "compliance/rego.go": 2,
+      "controllers/dependencyfirewall/golang.go": 2,
+      "controllers/dependencyfirewall/npm.go": 1,
+      "controllers/dependencyfirewall/oci.go": 4,
+      "controllers/dependencyfirewall/python.go": 2,
+      "fixedversion/debian_resolver.go": 1,
+      "normalize/semver.go": 1,
+      "normalize/version.go": 1,
+      "router/router_test.go": 1,
+      "services/intoto_service.go": 1,
+      "shared/context_utils.go": 2,
+      "shared/context_utils_test.go": 2,
+      "test-helm-chart-minikube.sh": 3,
+      "tests/db_query_counter.go": 1,
+      "transformer/compliance_posture_transformer.go": 1,
+      "utils/common.go": 6,
+      "vexrules/env.go": 1
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Security-boundary corpus (boundary=deterministic-true) with findings-triage potential; 50 sites across [posix-shell:3, re2:47].",
+  "schema_version": "1"
+}

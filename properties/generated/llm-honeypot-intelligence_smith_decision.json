@@ -1,0 +1,14 @@
+{
+  "schema_version": "1",
+  "corpus": "llm-honeypot-intelligence",
+  "corpus_pin": "65624396e263074bb8cb2e049f9a9ec6215ea5c1",
+  "candidate_url": "https://github.com/Leviticus-Triage/llm-honeypot-intelligence",
+  "smith_decision": "go",
+  "supersedes": "triage-trial",
+  "reason": "GRADUATED from triage-trial: 68/68 = 1.0000 encodable on live rules/yara (archive snapshots excluded). Security tool — SECURITY_TOOL_CORPORA private_first.",
+  "regex_sites": 68,
+  "sites_by_bucket": {
+    "yara": 68
+  },
+  "additional_surface_outside_probe_scope": {}
+}

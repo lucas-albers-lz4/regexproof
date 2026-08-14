@@ -1,0 +1,14 @@
+{
+  "schema_version": "1",
+  "corpus": "inhale",
+  "corpus_pin": "889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8",
+  "candidate_url": "https://github.com/netspooky/inhale",
+  "smith_decision": "go",
+  "supersedes": "triage-trial",
+  "reason": "GRADUATED from triage-trial: 306/372 = 0.8226 encodable (parse-error=0). netspooky inhale YARA pack (YaraRules/). Security tool — SECURITY_TOOL_CORPORA private_first.",
+  "regex_sites": 372,
+  "sites_by_bucket": {
+    "yara": 372
+  },
+  "additional_surface_outside_probe_scope": {}
+}

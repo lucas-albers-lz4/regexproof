@@ -1,0 +1,66 @@
+{
+  "candidate_url": "https://github.com/netspooky/inhale",
+  "conditions": [
+    {
+      "evidence": "Yara dialect covered; no new construct class.",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe deterministic-true; malware analysis and classification tool with YaraRules/. Escape hatch for security tool below scale.",
+      "id": "security-boundary",
+      "met": true
+    },
+    {
+      "evidence": "375 yara sites below 1000 — escape hatch applied.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "inhale",
+  "corpus_pin": "889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8",
+  "decision": "triage-trial",
+  "decision_basis": "escape_hatch",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": true,
+  "probe": {
+    "construct_counts": {
+      "backref": 5
+    },
+    "dialect": {
+      "py_re": 3,
+      "yara": 372
+    },
+    "flags": {
+      "W": 66,
+      "i": 281
+    },
+    "pin": "889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8",
+    "predicted_buckets": {
+      "backref": 5,
+      "inline-flag": 281
+    },
+    "regex_sites": 375,
+    "regex_sites_per_file": {
+      "YaraRules/CryptoExchangeApi.yar": 154,
+      "YaraRules/api_keys.yar": 18,
+      "YaraRules/aws.yar": 7,
+      "YaraRules/base64.yar": 22,
+      "YaraRules/blacklist.yar": 8,
+      "YaraRules/certificates.yar": 13,
+      "YaraRules/core_keywords.yar": 25,
+      "YaraRules/database.yar": 15,
+      "YaraRules/email_filter.yar": 1,
+      "YaraRules/general.yar": 5,
+      "YaraRules/hak5.yar": 14,
+      "YaraRules/inhale.yar": 20,
+      "YaraRules/password_leak.yar": 2,
+      "YaraRules/powershell.yar": 28,
+      "YaraRules/test_rules.yar": 40,
+      "iModules/rDownload.py": 3
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Security-boundary corpus (boundary=deterministic-true) with findings-triage potential; 375 sites across [py_re:3, yara:372].",
+  "schema_version": "1"
+}

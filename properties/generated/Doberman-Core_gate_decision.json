@@ -1,0 +1,69 @@
+{
+  "candidate_url": "https://github.com/fu351/Doberman-Core",
+  "conditions": [
+    {
+      "evidence": "Covered dialect (py_re); no new construct class.",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe deterministic-true; AI-agent security framework (guardrails, prompt-injection defense). Escape hatch for security tool below scale.",
+      "id": "security-boundary",
+      "met": true
+    },
+    {
+      "evidence": "108 py_re sites below 1000 — escape hatch applied.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "Doberman-Core",
+  "corpus_pin": "53ae43c5298a2426c6696147fdd75e2a4aef10e2",
+  "decision": "triage-trial",
+  "decision_basis": "escape_hatch",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": true,
+  "probe": {
+    "construct_counts": {
+      "(?i)": 15,
+      "(?m)": 1,
+      "(?x)": 3,
+      "lookaround": 5
+    },
+    "dialect": {
+      "py_re": 108
+    },
+    "flags": {
+      "i": 23,
+      "m": 2,
+      "x": 1
+    },
+    "pin": "53ae43c5298a2426c6696147fdd75e2a4aef10e2",
+    "predicted_buckets": {
+      "inline-flag": 42,
+      "lookaround": 5,
+      "m-flag": 3
+    },
+    "regex_sites": 108,
+    "regex_sites_per_file": {
+      "scripts/check_markdown_links.py": 10,
+      "src/doberman/cli/doctor.py": 1,
+      "src/doberman/engine/rules/commands.py": 12,
+      "src/doberman/engine/rules/secrets.py": 32,
+      "src/doberman/hosthooks/codex.py": 2,
+      "src/doberman/policy/drift.py": 1,
+      "src/doberman/proxy/normalize.py": 7,
+      "src/doberman/subjective/infer.py": 13,
+      "src/doberman/turngate/heuristics.py": 6,
+      "src/doberman/turngate/normalize.py": 6,
+      "src/doberman/turngate/signatures.py": 13,
+      "tests/integration/test_interception_log.py": 1,
+      "tests/unit/test_cli_help.py": 1,
+      "tests/unit/test_reason_codes_documented.py": 2,
+      "tests/unit/test_render.py": 1
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Security-boundary corpus (boundary=deterministic-true) with findings-triage potential; 108 sites across [py_re:108].",
+  "schema_version": "1"
+}
