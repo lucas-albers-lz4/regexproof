@@ -112,6 +112,21 @@ def test_selected_unencodable_is_counted_once():
     assert result.stats["skip_reasons"]["synth_skipped_unencodable"] == 1
 
 
+def test_unanchored_search_is_counted_once():
+    row = _row("a+")
+    compiled = compile_pattern(row["pattern"], "", "ecma", "search")
+    questions = [_question(), {**_question(), "id": "fixture-shape1-b"}]
+    result = synthesize_compiled(
+        "fixture",
+        [(row, compiled.mirror, compiled.meta)],
+        {"questions": questions},
+        {"synth_max_sites": 1, "synth_diff_fuzz_sample": 0},
+    )
+    assert result.findings == []
+    assert result.stats["skip_buckets"]["synth_skipped_unanchored_search"] == 1
+    assert result.stats["skip_reasons"]["synth_skipped_unanchored_search"] == 1
+
+
 def test_missing_compile_lookup_is_counted(monkeypatch):
     row = _row("^a+$")
     row["encodable"] = False

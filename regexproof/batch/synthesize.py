@@ -973,9 +973,10 @@ def synthesize_compiled(
             cr = _compile_view(row, mirror, meta)
             skip = _eligibility(cr)
             if skip is not None:
-                stats["skip_reasons"][skip] = int(stats["skip_reasons"].get(skip, 0)) + 1
                 if skip == "synth_skipped_unanchored_search":
-                    stats["skip_buckets"][skip] += 1
+                    _record_skip(stats, counted_skips, regex_id, skip)
+                else:
+                    stats["skip_reasons"][skip] = int(stats["skip_reasons"].get(skip, 0)) + 1
                 continue
             premeasure_sites.add(regex_id)
             if cr.mirror_exact is not True:
