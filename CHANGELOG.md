@@ -4,6 +4,41 @@ All entries below cover the initial development cycle plus the 2026-08-08
 dogfooding/corpus/fix waves. No release tags exist yet. This changelog groups
 the work by phase; dates are merge dates.
 
+## Accuracy flywheel (2026-08-13)
+
+Implementation of [#424](https://github.com/lucas-albers-lz4/regexproof/issues/424)
+(design [#423](https://github.com/lucas-albers-lz4/regexproof/issues/423)):
+
+- **P2 (#426 / #436)**: C1 mirror + shape metadata on `CompileResult` (`leading_caret`,
+  `trailing_dollar`, word-boundary wrap, alphabet certification). Compile records
+  stream `(row, mirror, meta)` triples; unused mirrors are discarded until
+  synthesis.
+- **P3 (#427 / #438)**: property synthesizer behind `--synthesize` (off by default).
+  Exact-mirror certification, SAT mutation guards, skip buckets, ground-truth
+  replay via `regexproof.groundtruth.adapters`.
+- **P4 (#428 / #439)**: batch-mode gate enforcement for synthesis (coverage floor,
+  planned-status exclusion).
+- **P5 (#429 / #437)**: compiler feature-yield artifact, E1 compiler diff-fuzz job,
+  E2/E3 hardening, D5 provenance.
+- **P6 (#430 / #440)**: materialized `gate-labels.json`, tree-probe tier,
+  ledger-hash provenance, rank CLI keys.
+- **P7 (#431 / #435)**: ledger `gated:*` status closes the mine loop; skip-gated
+  default; search/queue sync.
+- **P8 (#432 / #441)**: score-v2 fit + allocator (pure-Python deterministic model,
+  pinned weights JSON, CPython 3.12 float pin).
+- **P9 (#433 / #442)**: on-disk SMT-LIB mirror cache + bounded parallel compile
+  (`ProcessPoolExecutor`, digest-verified entries, worker hard-kill).
+- **Close-out (#443)**: probe dialect normalization, authoritative decision-pin,
+  triage fingerprints namespaced by generated vs triage root.
+
+## Smith extract/compile/fraction helpers (2026-08-14)
+
+- **#149 / #450**: local Smith helpers (`regexproof.batch.smith_support`,
+  `scripts/scaffold-smith-corpus.py`) — slug-safe paths, inflation-path
+  allowlist, dialect/extractor guess, confine `-o` like author-gate. Not an
+  auto-GO path. Pilot aggregate / `batch_repro.sha256` write gated so a
+  single-corpus run cannot clobber all-corpus fingerprints.
+
 ## Dual-model audit wave (2026-08-12)
 
 - **#377**: Harden required `Link check` — `lychee.toml` caps concurrency /
