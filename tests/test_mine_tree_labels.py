@@ -165,6 +165,27 @@ def test_gate_labels_join_is_deterministic_and_dedupes_duplicate_urls(tmp_path: 
     assert out.read_bytes() == first_bytes
     assert len(first["rows"]) == 1
     assert first["provenance"]["input_file_count"] == 2
+    ledger_path.write_text(
+        ledger_path.read_text(encoding="utf-8").replace('"stars": 3', '"stars": 4'),
+        encoding="utf-8",
+    )
+    after_ledger = script.build_gate_labels(
+        ledger_path=ledger_path,
+        generated_dir=generated,
+        output_path=out,
+    )
+    assert after_ledger["provenance"]["inputs_hash"] != first["provenance"]["inputs_hash"]
+
+
+def test_decision_paths_uses_git_ls_files_for_repo_generated_dir():
+    script = _load_labels_script()
+    generated = ROOT / "properties" / "generated"
+    tracked = script._git_ls_decision_paths(generated)
+    assert tracked is not None
+    assert tracked == script._decision_paths(generated)
+    assert any(path.name.endswith("_gate_decision.json") for path in tracked)
+    tmp_only = generated.parent.parent / "no-such-generated-for-labels-test"
+    assert script._git_ls_decision_paths(tmp_only) is None
 
 
 def test_assimilate_persists_enrichment_fields():

@@ -3,9 +3,14 @@
 Scheduled GitHub Actions job that runs
 [`scripts/mine-corpus-candidates.py`](../scripts/mine-corpus-candidates.py),
 then commit-backs
-[`properties/generated/candidate-ledger.json`](../properties/generated/candidate-ledger.json)
-and [`properties/generated/mine-queue.json`](../properties/generated/mine-queue.json)
-to `main`. Pattern matches sre-ai-llm-work `daily-scan.yml` (one scanner, no
+[`properties/generated/candidate-ledger.json`](../properties/generated/candidate-ledger.json),
+[`properties/generated/mine-queue.json`](../properties/generated/mine-queue.json),
+and a regenerated
+[`properties/generated/gate-labels.json`](../properties/generated/gate-labels.json)
+to `main`. Golden P8 hashes **ledger bytes** into `inputs_hash`; a ledger
+push without labels fails `git diff --exit-code` on that artifact. The job
+does **not** run `fit-score-v2.py` (Python 3.13 vs Golden's 3.12 weight pin).
+Pattern matches sre-ai-llm-work `daily-scan.yml` (one scanner, no
 issue filing).
 
 **Status (2026-08-09):** live. First `workflow_dispatch` succeeded with
@@ -56,8 +61,9 @@ runs (`cancel-in-progress: false`).
 
 - Job steps all green; “Fail job on mine soft failure” skipped.
 - Step summary shows accepted / ledger / queue / capped.
-- If ledger or queue changed: a bot commit
-  `chore(mine): daily candidate ledger + queue` on `main`.
+- If ledger, queue, or `gate-labels.json` changed: a bot commit
+  `chore(mine): daily candidate ledger + queue` on `main` (labels are
+  regenerated offline with `build-gate-labels.py`, no `--backfill`).
 - Day cap filled + overflow queued is **normal**, not a failure. With default
   `DAILY_MINE_CAP=10`, a rich search day will fill the ledger slice and park
   the rest in `mine-queue.json` (cap 100). Cron drains by **score-v1** (highest
@@ -88,7 +94,8 @@ fraction, compile likelihood.
 Score-v2 is an explicit comparison allocator; score-v1 remains the production
 default. It is a pure-Python deterministic fit over the committed
 `properties/generated/gate-labels.json` artifact. Refit manually when the gate
-decision count grows by about 20%; the daily mine job does not refit weights.
+decision count grows by about 20%; the daily mine job regenerates **labels**
+(so Golden P8 `inputs_hash` matches the new ledger) but does not refit weights.
 
 ```bash
 python scripts/fit-score-v2.py
@@ -138,6 +145,7 @@ Stdout ends with a `{"kind": "mine_run_summary", ...}` line (includes
 | Accepted 0 but queue growing | Day cap already filled (`DAILY_MINE_CAP`) | Wait for UTC day roll or dispatch with higher cap |
 | Queue at 100 / “mine-queue full” warnings | Overflow cap hit | Raise `daily_mine_cap` temporarily or wait for scored daily drain |
 | Rebase/push conflict on commit-back | Concurrent human push to ledger files | Re-run workflow; concurrency prevents two mine jobs overlapping |
+| Golden P8 `gate-labels.json` `inputs_hash` drift after a mine push | Ledger committed without regenerating labels | Job now commits labels; locally `python scripts/build-gate-labels.py` (do not refit score-v2 here) |
 
 ## Non-goals (this job)
 

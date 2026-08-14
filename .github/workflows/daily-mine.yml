@@ -146,12 +146,19 @@ jobs:
                   sys.exit(1)
           print("ledger/queue JSON schema ok")
           PY
+          # Golden P8 hashes ledger bytes into gate-labels provenance.
+          # Commit the regenerated artifact with the ledger or the next
+          # verify run fails git diff --exit-code. Offline join only —
+          # do not --backfill and do not fit-score-v2 (job is Python 3.13;
+          # Golden pins 3.12 ULP weights).
+          python scripts/build-gate-labels.py
           git config user.name "regexproof-bot"
           git config user.email "regexproof-bot@users.noreply.github.com"
           git add properties/generated/candidate-ledger.json \
-                  properties/generated/mine-queue.json || true
+                  properties/generated/mine-queue.json \
+                  properties/generated/gate-labels.json || true
           if git diff --staged --quiet; then
-            echo "No ledger/queue changes to commit."
+            echo "No ledger/queue/label changes to commit."
           else
             git commit -m "chore(mine): daily candidate ledger + queue"
             git pull --rebase --autostash origin "${GITHUB_REF_NAME}"
