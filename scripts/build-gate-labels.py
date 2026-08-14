@@ -24,6 +24,7 @@ if str(ROOT) not in sys.path:
 from regexproof.admission.serialize import dumps_pinned
 from regexproof.io_atomic import atomic_write_text
 from regexproof.mine.exclusions import normalize_repo_url
+from regexproof.mine.gate_files import git_ls_decision_paths, list_gate_decision_paths
 from regexproof.mine.ledger import ENRICH_FIELDS, load_ledger, save_ledger
 from regexproof.mine.search import AuthError, RateLimitError, enrich_repo, github_headers
 from regexproof.mine.tree import (
@@ -32,7 +33,6 @@ from regexproof.mine.tree import (
     materialize_tree_features,
 )
 
-DECISION_GLOB = "*_gate_decision.json"
 ARTIFACT_SCHEMA_VERSION = "1"
 
 
@@ -91,8 +91,12 @@ def _row(
     }
 
 
+def _git_ls_decision_paths(directory: Path) -> list[Path] | None:
+    return git_ls_decision_paths(directory, repo_root=ROOT)
+
+
 def _decision_paths(directory: Path) -> list[Path]:
-    return sorted(directory.glob(DECISION_GLOB), key=lambda path: path.name)
+    return list_gate_decision_paths(directory, repo_root=ROOT)
 
 
 def _linked_records(

@@ -20,6 +20,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from regexproof.mine.exclusions import is_excluded, load_admitted_urls
+from regexproof.mine.gate_files import list_gate_decision_paths
 from regexproof.mine.ledger import empty_ledger, find_candidate, load_ledger, save_ledger
 from regexproof.mine.queue import (
     MAX_REPLACEMENTS_PER_RUN,
@@ -161,7 +162,7 @@ def sync_gate_decisions(
         return 0
     ledger = load_ledger(ledger_path)
     synced = 0
-    for p in sorted(generated_dir.glob("*_gate_decision.json")):
+    for p in list_gate_decision_paths(generated_dir, repo_root=ROOT):
         try:
             data = json.loads(p.read_text(encoding="utf-8"))
         except (OSError, json.JSONDecodeError):
