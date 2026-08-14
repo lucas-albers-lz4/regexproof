@@ -18,9 +18,9 @@ from typing import Any, Mapping, Sequence
 from regexproof.admission.boundary import BoundarySignals, classify_boundary
 from regexproof.mine.exclusions import normalize_repo_url
 
-# Importing score is safe here: score imports this module lazily from its
-# score-v2 path, avoiding a module-level cycle.
-from regexproof.mine.score import (  # noqa: E402
+# Feature helpers live in features.py so v1/v2 do not import each other's
+# private score helpers. score.py still lazy-imports this module for v2.
+from regexproof.mine.features import (
     _query_family,
     _recency_points,
     _repo_slug,
