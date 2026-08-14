@@ -173,3 +173,27 @@ def test_run_batch_single_corpus_skips_pilot_aggregate(tmp_path: Path, monkeypat
     for name in AGGREGATE_ARTIFACTS:
         assert not (out / name).exists()
     assert (out / "detect-secrets.ndjson").is_file()
+
+
+def test_write_pilot_aggregate_rejects_single_corpus(tmp_path: Path, monkeypatch):
+    from regexproof.batch import runner as runner_mod
+
+    committed = (
+        runner_mod.ROOT / "properties" / "generated" / "detect-secrets_gate_decision.json"
+    )
+    out = tmp_path / "generated"
+    out.mkdir()
+    (out / committed.name).write_bytes(committed.read_bytes())
+    scratch = tmp_path / "plugins"
+    scratch.mkdir()
+    (scratch / "rules.py").write_text(
+        "SECRET = re.compile(r'[A-Z0-9]{20}')\n", encoding="utf-8"
+    )
+    monkeypatch.setitem(runner_mod.CORPUS_MANIFESTS["detect-secrets"], "path", scratch)
+    with pytest.raises(SystemExit, match="write_pilot_aggregate"):
+        run_batch(
+            ["detect-secrets"],
+            out_dir=out,
+            with_redos=False,
+            write_pilot_aggregate=True,
+        )

@@ -136,7 +136,15 @@ def main(argv: list[str] | None = None) -> int:
     link_dir = _corpus_link_dir(corpus)
     link_dir.mkdir(parents=True, exist_ok=True)
     link = link_dir / args.link_name
-    if link.is_symlink() or link.exists():
+    if link.is_symlink():
+        link.unlink()
+    elif link.is_dir():
+        print(
+            f"error: {link} is a directory, not a symlink; refuse to rmtree",
+            file=sys.stderr,
+        )
+        return 2
+    elif link.exists():
         link.unlink()
     link.symlink_to(dest)
     print(f"materialized {corpus} pin={result.pin} dest={dest} link={link}")

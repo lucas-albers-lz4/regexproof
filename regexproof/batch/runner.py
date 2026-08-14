@@ -703,6 +703,11 @@ def run_batch(
     (ROOT / "properties" / "triage").mkdir(parents=True, exist_ok=True)
     if write_pilot_aggregate is None:
         write_pilot_aggregate = set(corpora) == set(PILOT_CORPORA)
+    if write_pilot_aggregate and set(corpora) != set(PILOT_CORPORA):
+        raise SystemExit(
+            "error: write_pilot_aggregate requires exactly the three "
+            f"pilot corpora {PILOT_CORPORA}"
+        )
 
     summaries = {}
     pair_counts = {}
