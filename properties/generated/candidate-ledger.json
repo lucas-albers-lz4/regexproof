@@ -18565,6 +18565,14 @@
       "url": "https://github.com/NVIDIA-NeMo/Speech"
     },
     {
+      "audit": {
+        "transitions": [
+          {
+            "reason": "sync:whodb_gate_decision",
+            "to": "gated:no-go"
+          }
+        ]
+      },
       "capped": true,
       "default_branch": "main",
       "first_seen": "2026-08-14T02:52:16Z",
@@ -18572,10 +18580,18 @@
       "pushed_date": "2026-08-13",
       "source_query": "filename:.gitleaks.toml",
       "stars": 5006,
-      "status": "mined",
+      "status": "gated:no-go",
       "url": "https://github.com/clidey/whodb"
     },
     {
+      "audit": {
+        "transitions": [
+          {
+            "reason": "sync:consuldemocracy_gate_decision",
+            "to": "gated:no-go"
+          }
+        ]
+      },
       "capped": true,
       "default_branch": "master",
       "first_seen": "2026-08-14T02:52:16Z",
@@ -18583,7 +18599,7 @@
       "pushed_date": "2026-08-12",
       "source_query": "path:config filename:secrets.yml OR path:config filename:secrets.yaml",
       "stars": 1544,
-      "status": "mined",
+      "status": "gated:no-go",
       "url": "https://github.com/consuldemocracy/consuldemocracy"
     },
     {
@@ -18609,6 +18625,14 @@
       "url": "https://github.com/langflow-ai/langflow"
     },
     {
+      "audit": {
+        "transitions": [
+          {
+            "reason": "sync:openmed_gate_decision",
+            "to": "gated:go"
+          }
+        ]
+      },
       "capped": true,
       "default_branch": "master",
       "first_seen": "2026-08-14T02:52:16Z",
@@ -18616,10 +18640,18 @@
       "pushed_date": "2026-08-13",
       "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
       "stars": 4979,
-      "status": "mined",
+      "status": "gated:go",
       "url": "https://github.com/maziyarpanahi/openmed"
     },
     {
+      "audit": {
+        "transitions": [
+          {
+            "reason": "sync:hve-core_gate_decision",
+            "to": "gated:no-go"
+          }
+        ]
+      },
       "capped": true,
       "default_branch": "main",
       "first_seen": "2026-08-14T02:52:16Z",
@@ -18627,10 +18659,18 @@
       "pushed_date": "2026-08-13",
       "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
       "stars": 1338,
-      "status": "mined",
+      "status": "gated:no-go",
       "url": "https://github.com/microsoft/hve-core"
     },
     {
+      "audit": {
+        "transitions": [
+          {
+            "reason": "sync:claude-trading-skills_gate_decision",
+            "to": "gated:no-go"
+          }
+        ]
+      },
       "capped": true,
       "default_branch": "main",
       "first_seen": "2026-08-14T02:52:16Z",
@@ -18638,10 +18678,18 @@
       "pushed_date": "2026-08-13",
       "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
       "stars": 2628,
-      "status": "mined",
+      "status": "gated:no-go",
       "url": "https://github.com/tradermonty/claude-trading-skills"
     },
     {
+      "audit": {
+        "transitions": [
+          {
+            "reason": "sync:TheRock_gate_decision",
+            "to": "gated:no-go"
+          }
+        ]
+      },
       "capped": true,
       "default_branch": "main",
       "first_seen": "2026-08-14T02:52:16Z",
@@ -18649,10 +18697,18 @@
       "pushed_date": "2026-08-13",
       "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
       "stars": 1202,
-      "status": "mined",
+      "status": "gated:no-go",
       "url": "https://github.com/ROCm/TheRock"
     },
     {
+      "audit": {
+        "transitions": [
+          {
+            "reason": "sync:brew-browser_gate_decision",
+            "to": "gated:no-go"
+          }
+        ]
+      },
       "capped": true,
       "default_branch": "main",
       "first_seen": "2026-08-14T02:52:16Z",
@@ -18660,7 +18716,7 @@
       "pushed_date": "2026-08-10",
       "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
       "stars": 1004,
-      "status": "mined",
+      "status": "gated:no-go",
       "url": "https://github.com/msitarzewski/brew-browser"
     },
     {
