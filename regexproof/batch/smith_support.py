@@ -70,10 +70,17 @@ def clone_dest(url: str, corpus: str) -> Path:
 
 
 def inflation_hits(sites_per_file: dict[str, Any]) -> list[str]:
+    """Flag locale/vendor/testdata paths, including nested (tarcoin qt/locale)."""
+    nested_skip = {"test", "tests"}
     hits: list[str] = []
     for rel in sites_per_file:
-        top = str(rel).replace("\\", "/").split("/", 1)[0].lower()
-        if top in INFLATION_DIR_NAMES:
+        parts = [p.lower() for p in str(rel).replace("\\", "/").split("/") if p]
+        if not parts:
+            continue
+        if parts[0] in INFLATION_DIR_NAMES:
+            hits.append(str(rel))
+            continue
+        if any(p in INFLATION_DIR_NAMES and p not in nested_skip for p in parts[1:]):
             hits.append(str(rel))
     return hits
 

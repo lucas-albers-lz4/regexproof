@@ -41,10 +41,14 @@ def test_inflation_hits_locale_and_vendor():
             "src/app.js": 2,
             "locale/en.ts": 40,
             "vendor/jquery.js": 9,
+            "blockchain_core/qt/locale/bitcoin_en.ts": 1113,
+            "src/tests/unit.py": 1,
         }
     )
-    assert any("locale" in h for h in hits)
+    assert any("locale/en.ts" in h for h in hits)
     assert any("vendor" in h for h in hits)
+    assert any("qt/locale" in h for h in hits)
+    assert not any("src/tests/unit.py" == h for h in hits)
 
 
 def test_author_smith_decision_requires_flag(tmp_path: Path):
