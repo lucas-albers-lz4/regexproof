@@ -10,22 +10,10 @@ import json
 from pathlib import Path
 from typing import Any
 
-from regexproof.batch.compile_records import compile_records
 from regexproof.batch.manifests import CORPUS_MANIFESTS, ROOT
 from regexproof.compiler import compile_pattern
 from regexproof.extractors.modsec import count_operators, extract_modsec
 from regexproof.io_atomic import atomic_write_lines, atomic_write_text
-
-_compile_all = compile_records
-
-
-def _discard_streamed_mirrors(
-    compiled: list[tuple[dict[str, Any], Any, dict[str, Any] | None]],
-) -> None:
-    """Same discard as ``runner._discard_streamed_mirrors`` (C1)."""
-    for _row, _mirror, _meta in compiled:
-        _ = _mirror
-    compiled.clear()
 
 
 def measure_coreruleset_sample(
@@ -108,6 +96,10 @@ def measure_coreruleset_full(out_dir: Path) -> dict[str, Any] | None:
         op_counts.update(count_operators(src))
         rel = str(fp.relative_to(ROOT))
         records.extend(extract_modsec(src, repo="coreruleset/coreruleset", file=rel))
+
+    # Call-time lookup so scripts/measure-p5-guarded.py patching
+    # runner._compile_all still reaches CRS full measure (luna #454).
+    from regexproof.batch.runner import _compile_all, _discard_streamed_mirrors
 
     compiled = _compile_all(
         records, lift_inline=True, corpus_slug="coreruleset",
