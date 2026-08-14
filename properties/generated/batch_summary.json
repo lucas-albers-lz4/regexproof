@@ -1,5 +1,4 @@
 {
-  "cache_hit_rate": 1.0,
   "coreruleset": {
     "budget": {
       "redos_wall_s": 180
@@ -117,30 +116,162 @@
     "wall_s": 21.527
   },
   "corpora": {
-    "devguard": {
-      "address_space_cap": false,
-      "cache": {
-        "entries": 9,
-        "hit_rate": 1.0,
-        "hits": 9,
-        "misses": 0
-      },
-      "cache_hit_rate": 1.0,
+    "detect-secrets": {
+      "address_space_cap": null,
       "complete_run": true,
-      "corpus": "devguard",
+      "corpus": "detect-secrets",
       "corpus_type": "rule_corpus",
-      "encodable": 9,
+      "encodable": 19,
       "engine": {
-        "python": "3.13.15"
+        "python": "3.13.5"
       },
-      "extracted": 9,
-      "findings": 13,
+      "extracted": 51,
+      "findings": 4,
       "inventory_questions": 4,
-      "join_regex_ids": 13,
+      "join_regex_ids": 4,
       "redos_findings": 0,
       "redos_incomplete": false,
       "schema_version": "1",
-      "triage": 0
+      "synthesis": {
+        "diff_fuzz_disagreements": 0,
+        "diff_fuzz_sites": 0,
+        "diff_fuzz_witnesses": 0,
+        "encodable_sites": 19,
+        "mutation_guard_rows": 0,
+        "pre_measure": {
+          "encodable_sites": 19,
+          "selected_fullmatch_shaped_encodable_replay_supported": 0,
+          "selected_sites": 0,
+          "shape1_certification_count_over_all_encodable_sites": 0,
+          "shape1_certification_count_selected": 0
+        },
+        "selected_sites": 0,
+        "selected_sites_after_cap": 0,
+        "selector_outcomes": {},
+        "shape1_certification_count": 0,
+        "skip_buckets": {
+          "synth_skipped_approximate_mirror": 0,
+          "synth_skipped_no_gt_adapter": 0,
+          "synth_skipped_substitution_call_kind": 0,
+          "synth_skipped_unanchored_search": 0,
+          "synth_skipped_witness_replay": 0
+        },
+        "skip_reasons": {},
+        "synth_diff_fuzz_sample": 5,
+        "synth_len_bound": 16,
+        "synth_max_sites": 200,
+        "synthesized_property_rows": 0
+      },
+      "triage": 32
+    },
+    "gitleaks": {
+      "address_space_cap": null,
+      "complete_run": true,
+      "corpus": "gitleaks",
+      "corpus_type": "rule_corpus",
+      "encodable": 181,
+      "engine": {
+        "python": "3.13.5"
+      },
+      "extracted": 221,
+      "findings": 4,
+      "inventory_questions": 4,
+      "join_regex_ids": 4,
+      "redos_findings": 0,
+      "redos_incomplete": false,
+      "schema_version": "1",
+      "synthesis": {
+        "diff_fuzz_disagreements": 0,
+        "diff_fuzz_sites": 0,
+        "diff_fuzz_witnesses": 0,
+        "encodable_sites": 181,
+        "mutation_guard_rows": 0,
+        "pre_measure": {
+          "encodable_sites": 181,
+          "selected_fullmatch_shaped_encodable_replay_supported": 0,
+          "selected_sites": 0,
+          "shape1_certification_count_over_all_encodable_sites": 0,
+          "shape1_certification_count_selected": 0
+        },
+        "selected_sites": 0,
+        "selected_sites_after_cap": 0,
+        "selector_outcomes": {},
+        "shape1_certification_count": 0,
+        "skip_buckets": {
+          "synth_skipped_approximate_mirror": 0,
+          "synth_skipped_no_gt_adapter": 0,
+          "synth_skipped_substitution_call_kind": 0,
+          "synth_skipped_unanchored_search": 0,
+          "synth_skipped_witness_replay": 0
+        },
+        "skip_reasons": {},
+        "synth_diff_fuzz_sample": 5,
+        "synth_len_bound": 16,
+        "synth_max_sites": 200,
+        "synthesized_property_rows": 0
+      },
+      "triage": 40
+    },
+    "validatorjs": {
+      "address_space_cap": null,
+      "complete_run": true,
+      "corpus": "validatorjs",
+      "corpus_type": "validator",
+      "encodable": 123,
+      "engine": {
+        "python": "3.13.5"
+      },
+      "extracted": 212,
+      "findings": 1416,
+      "inventory_questions": 4,
+      "join_regex_ids": 126,
+      "redos_findings": 0,
+      "redos_incomplete": false,
+      "schema_version": "1",
+      "synthesis": {
+        "diff_fuzz_disagreements": 0,
+        "diff_fuzz_sites": 87,
+        "diff_fuzz_witnesses": 2292,
+        "encodable_sites": 123,
+        "mutation_guard_rows": 644,
+        "pre_measure": {
+          "encodable_sites": 123,
+          "selected_fullmatch_shaped_encodable_replay_supported": 93,
+          "selected_sites": 200,
+          "shape1_certification_count_over_all_encodable_sites": 90,
+          "shape1_certification_count_selected": 84
+        },
+        "selected_sites": 200,
+        "selected_sites_after_cap": 200,
+        "selector_outcomes": {
+          "v-shape1-injection-chars": {
+            "rejected-by-selector": 97,
+            "selected": 103,
+            "unsupported-selector": 0
+          },
+          "v-shape2-whitelist-space": {
+            "rejected-by-selector": 97,
+            "selected": 103,
+            "unsupported-selector": 0
+          }
+        },
+        "shape1_certification_count": 90,
+        "skip_buckets": {
+          "synth_skipped_approximate_mirror": 0,
+          "synth_skipped_no_gt_adapter": 0,
+          "synth_skipped_substitution_call_kind": 7,
+          "synth_skipped_unanchored_search": 25,
+          "synth_skipped_witness_replay": 0
+        },
+        "skip_reasons": {
+          "synth_skipped_unanchored_search": 25
+        },
+        "synth_diff_fuzz_sample": 5,
+        "synth_len_bound": 16,
+        "synth_max_sites": 200,
+        "synthesized_property_rows": 644
+      },
+      "triage": 89
     }
   },
   "pair_counts": {
@@ -151,7 +282,16 @@
       "note": "fraction gate go; CRS rule-derived adapter is Phase-2 rule_diff",
       "scope": "full_corpus"
     },
-    "devguard": {
+    "detect-secrets": {
+      "admitted": 0,
+      "dropped": 0,
+      "note": "no independent-spec catalog"
+    },
+    "gitleaks": {
+      "admitted": 22,
+      "dropped": 1
+    },
+    "validatorjs": {
       "admitted": 0,
       "dropped": 0,
       "note": "no independent-spec catalog"
