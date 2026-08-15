@@ -1,0 +1,81 @@
+{
+  "candidate_url": "https://github.com/openSUSE/open-build-service",
+  "conditions": [
+    {
+      "evidence": "Predicted buckets present (7) but not treated as novel surface.",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Security-boundary condition not asserted met.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "1402 sites meet scale bar but under-saturation / findings path not asserted.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "open-build-service",
+  "corpus_pin": "3cb887bc02e3fd12c0b65cdee162fa0745238c75",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-15",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "backref": 22,
+      "lookaround": 128,
+      "posix-class": 6
+    },
+    "dialect": {
+      "ecma": 1386,
+      "posix-shell": 16
+    },
+    "flags": {
+      "g": 432,
+      "i": 185,
+      "m": 18,
+      "u": 2
+    },
+    "pin": "3cb887bc02e3fd12c0b65cdee162fa0745238c75",
+    "pin_mined": "3cb887bc02e3fd12c0b65cdee162fa0745238c75",
+    "pin_probed": "ddb616c3a7aa277503f17ec4216c3546d42b24e1",
+    "predicted_buckets": {
+      "backref": 22,
+      "inline-flag": 185,
+      "lookaround": 128,
+      "m-flag": 18,
+      "posix-class": 6,
+      "stateful": 432,
+      "u-flag": 2
+    },
+    "regex_sites": 1402,
+    "regex_sites_per_file": {
+      "contrib/start_development_backend": 3,
+      "contrib/start_development_worker": 3,
+      "src/api/app/assets/javascripts/webui/autocomplete.js": 2,
+      "src/api/app/assets/javascripts/webui/cm2/mode/baselibsconf.js": 15,
+      "src/api/app/assets/javascripts/webui/cm2/mode/dockerfile.js": 8,
+      "src/api/app/assets/javascripts/webui/cm2/mode/prjconf.js": 14,
+      "src/api/app/assets/javascripts/webui/cm2/mode/simple.js": 4,
+      "src/api/app/assets/javascripts/webui/comment.js": 2,
+      "src/api/app/assets/javascripts/webui/kiwi_editor.js": 3,
+      "src/api/app/assets/javascripts/webui/nav_tabs.js": 1,
+      "src/api/app/assets/javascripts/webui/patchinfo.js": 1,
+      "src/api/app/assets/javascripts/webui/project_monitor.js": 1,
+      "src/api/public/apidocs/oauth2-redirect.js": 1,
+      "src/api/public/apidocs/swagger-ui-bundle.js": 563,
+      "src/api/public/apidocs/swagger-ui-es-bundle-core.js": 81,
+      "src/api/public/apidocs/swagger-ui-es-bundle.js": 563,
+      "src/api/public/apidocs/swagger-ui-standalone-preset.js": 51,
+      "src/api/public/apidocs/swagger-ui.js": 76,
+      "src/api/test/fixtures/backend/services/download_files": 4,
+      "src/api/test/fixtures/backend/services/set_version": 6
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "openSUSE Open Build Service. Probe 1402 sites dominated by vendored swagger-ui-bundle.js (not first-party validators). Mined for gitleaks.toml. No findings path. No admission condition met.",
+  "schema_version": "1"
+}

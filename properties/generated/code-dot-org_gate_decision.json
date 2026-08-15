@@ -1,0 +1,43 @@
+{
+  "candidate_url": "https://github.com/code-dot-org/code-dot-org",
+  "conditions": [
+    {
+      "evidence": "No probe evidence - clone timed out before extraction.",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe unavailable; not determined a security regex tool.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "No site count (clone timeout).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "code-dot-org",
+  "corpus_pin": "107b390a33802e4f191b42a8068e38d2ff7941de",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-15",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {},
+    "flags": {},
+    "pin": "107b390a33802e4f191b42a8068e38d2ff7941de",
+    "pin_mined": "107b390a33802e4f191b42a8068e38d2ff7941de",
+    "pin_probed": "",
+    "predicted_buckets": {},
+    "regex_sites": 0,
+    "regex_sites_per_file": {},
+    "security_boundary": "unknown"
+  },
+  "rationale": "Clone timed out after 300s (blob:none git clone of code-dot-org/code-dot-org). Unprobeable at gate budget. Mined for secrets.yml; no admission condition met.",
+  "related": {
+    "probe_failure": "git clone TimeoutExpired 300s"
+  },
+  "schema_version": "1"
+}

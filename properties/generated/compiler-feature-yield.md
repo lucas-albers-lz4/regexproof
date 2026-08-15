@@ -1,6 +1,6 @@
 # Compiler feature-yield artifact (D5)
 
-<!-- provenance: 76 triage files, inputs ab87c527e59b, 825 gate decisions -->
+<!-- provenance: 76 triage files, inputs ab87c527e59b, 834 gate decisions -->
 
 Sites unlocked per missing compiler feature, aggregated across
 `properties/triage/*.ndjson` and weighted by corpus admission status
@@ -8,7 +8,7 @@ Sites unlocked per missing compiler feature, aggregated across
 
 - Input files: 76
 - Triage inputs hash: `ab87c527e59b0b69`
-- Gate decisions: 825
+- Gate decisions: 834
 - Total unencodable rows: 46688
 - Total weighted sites: 137155.0
 

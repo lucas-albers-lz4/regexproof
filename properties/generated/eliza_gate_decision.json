@@ -1,0 +1,43 @@
+{
+  "candidate_url": "https://github.com/elizaOS/eliza",
+  "conditions": [
+    {
+      "evidence": "No probe evidence - clone timed out before extraction.",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe unavailable; not determined a security regex tool.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "No site count (clone timeout).",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "eliza",
+  "corpus_pin": "f2d016e0abf5da19f01abe3ca9c33166b5c65004",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-15",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {},
+    "flags": {},
+    "pin": "f2d016e0abf5da19f01abe3ca9c33166b5c65004",
+    "pin_mined": "f2d016e0abf5da19f01abe3ca9c33166b5c65004",
+    "pin_probed": "",
+    "predicted_buckets": {},
+    "regex_sites": 0,
+    "regex_sites_per_file": {},
+    "security_boundary": "unknown"
+  },
+  "rationale": "Clone timed out after 300s (blob:none git clone of elizaOS/eliza). Unprobeable at gate budget. Mined for gitleaks.toml; no admission condition met.",
+  "related": {
+    "probe_failure": "git clone TimeoutExpired 300s"
+  },
+  "schema_version": "1"
+}
