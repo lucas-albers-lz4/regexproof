@@ -2,8 +2,8 @@
   "provenance": {
     "gate_decision_count": 850,
     "input_file_count": 850,
-    "inputs_hash": "3eb6aa1837f5e28ad8e5596920b22dfa7cc7dcf572bb64c061e1310288759773",
-    "linked_row_count": 819,
+    "inputs_hash": "e10256dbb8f9ccf21e4447b75efca8922054d7a0f802d5fbc24f43272788df99",
+    "linked_row_count": 820,
     "schema_version": "1"
   },
   "rows": [
@@ -27934,6 +27934,46 @@
         }
       },
       "url": "https://github.com/redpersongpt/oudenOS"
+    },
+    {
+      "decision_date": "2026-08-12",
+      "label": "no-go",
+      "ledger": {
+        "archived": false,
+        "capped": true,
+        "fork": false,
+        "language": "JavaScript",
+        "pushed_date": "2024-03-10",
+        "size": 1000,
+        "source_query": "filename:validator.js path:src OR filename:validators.py",
+        "stars": 45
+      },
+      "probe": {
+        "dialect_counts": {
+          "ecma": 10
+        },
+        "predicted_buckets": {
+          "inline-flag": 6,
+          "lookaround": 1,
+          "stateful": 1,
+          "u-flag": 1
+        },
+        "regex_sites": 10,
+        "security_boundary": "unknown",
+        "tree_probe": {
+          "complete": true,
+          "path_count": 16,
+          "probed_pin": "39fb907db86eed8947212dc58f50741ce2b12479",
+          "regex_file_type_counts": {
+            ".js": 5,
+            ".json": 1,
+            ".yml": 1
+          },
+          "security_boundary": "unknown",
+          "truncated": false
+        }
+      },
+      "url": "https://github.com/repocrypts/Validator"
     },
     {
       "decision_date": "2026-08-13",
