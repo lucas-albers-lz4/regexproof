@@ -1,0 +1,92 @@
+{
+  "candidate_url": "https://github.com/tufantunc/ssh-mcp",
+  "conditions": [
+    {
+      "evidence": "Predicted buckets present (3) but not treated as novel surface.",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Security-boundary condition not asserted met.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "136 sites < 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "ssh-mcp",
+  "corpus_pin": "22363b2f13ef93ef02b1077e91f54afa4d239ac7",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-15",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "lookaround": 1
+    },
+    "dialect": {
+      "ecma": 130,
+      "posix-shell": 6
+    },
+    "flags": {
+      "g": 10,
+      "i": 17,
+      "s": 2
+    },
+    "pin": "22363b2f13ef93ef02b1077e91f54afa4d239ac7",
+    "pin_mined": "22363b2f13ef93ef02b1077e91f54afa4d239ac7",
+    "pin_probed": "849fda41e0b08e2833a85dbccb9fde509790a71d",
+    "predicted_buckets": {
+      "inline-flag": 19,
+      "lookaround": 1,
+      "stateful": 10
+    },
+    "regex_sites": 136,
+    "regex_sites_per_file": {
+      "docker/bastion-init.sh": 2,
+      "docker/test-server-init.sh": 4,
+      "src/config/credential-resolver.ts": 2,
+      "src/guard/redactor.ts": 9,
+      "src/guard/sanitizer.ts": 2,
+      "src/index.ts": 1,
+      "src/policy/classifier.ts": 19,
+      "src/policy/engine.ts": 3,
+      "src/ssh/session.ts": 2,
+      "test/e2e/tools.e2e.test.ts": 1,
+      "test/integration/background-session.test.ts": 2,
+      "test/integration/cancellation.test.ts": 1,
+      "test/integration/concurrent-sessions.test.ts": 1,
+      "test/integration/host-key.test.ts": 1,
+      "test/integration/multi-host.test.ts": 1,
+      "test/integration/proxy-jump.test.ts": 1,
+      "test/integration/shell-compat.test.ts": 1,
+      "test/integration/ssh-session.test.ts": 1,
+      "test/integration/ssh-sftp.test.ts": 1,
+      "test/integration/tty-and-passphrase.test.ts": 2,
+      "test/integration/windows-compat.test.ts": 1,
+      "test/legacy/sudo-exec.test.ts": 1,
+      "test/property/sanitizer.property.test.ts": 2,
+      "test/unit/cli-group.test.ts": 2,
+      "test/unit/cli-migration.test.ts": 5,
+      "test/unit/config/credential-resolver.test.ts": 1,
+      "test/unit/config/loader.test.ts": 10,
+      "test/unit/config/max-chars.test.ts": 5,
+      "test/unit/guard/elicitation.test.ts": 8,
+      "test/unit/guard/shell-quote.test.ts": 2,
+      "test/unit/policy/engine.test.ts": 13,
+      "test/unit/policy/opa.test.ts": 1,
+      "test/unit/policy/policy-config.test.ts": 13,
+      "test/unit/ssh/algorithms.test.ts": 3,
+      "test/unit/ssh/host-key.test.ts": 4,
+      "test/unit/ssh/session-output.test.ts": 1,
+      "test/unit/tools/registry.test.ts": 3,
+      "test/unit/transport/http.test.ts": 4
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "SSH MCP with a small first-party guard (classifier/redactor/sanitizer). Probe 136 sites, mostly unit tests; production sanitizer surface is a handful of files. Below pack scale and no novel dialect. Mined for gitleaks.toml. No admission condition met.",
+  "schema_version": "1"
+}

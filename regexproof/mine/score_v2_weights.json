@@ -9,19 +9,19 @@
       "holdout_auc_ge_0_70": true,
       "mean_gap_beats_v1_baseline_informational": true
     },
-    "holdout_auc": 0.9755993150684932,
+    "holdout_auc": 0.9586148648648649,
     "label_set": "gate-labels.json",
     "positive_mapping": "go-only",
-    "recomputed_v1_baseline_auc": 0.5333904109589042,
-    "recomputed_v1_baseline_mean_gap": 1.6001712328767113,
+    "recomputed_v1_baseline_auc": 0.48944256756756754,
+    "recomputed_v1_baseline_mean_gap": 1.4543918918918948,
     "same_holdout_label_set": true,
     "same_positive_class_definition": true,
     "sanity": {
       "passed": true,
       "scores": [
-        -0.03160915753283994,
-        -0.6402322759694454,
-        -1.138859825116324
+        -0.2069987202328705,
+        -0.8970386471305283,
+        -1.395682896317307
       ],
       "v1_scores": [
         101.0,
@@ -39,9 +39,9 @@
         "deterministic-false"
       ]
     },
-    "score_v2_mean_gap": 4.5138463632272074,
-    "v1_feature_ablation_auc": 0.6735873287671232,
-    "v1_feature_ablation_mean_gap": 0.5093296397474643
+    "score_v2_mean_gap": 4.585881831847602,
+    "v1_feature_ablation_auc": 0.7056587837837838,
+    "v1_feature_ablation_mean_gap": 0.8623127617656464
   },
   "feature_names": [
     "boundary_true",
@@ -91,18 +91,18 @@
     "probe_bucket_count_log"
   ],
   "feature_set": "v2",
-  "holdout_auc": 0.9755993150684932,
+  "holdout_auc": 0.9586148648648649,
   "holdout_auc_bootstrap_95": [
-    0.9462599854756718,
-    0.9963133640552996
+    0.9204761904761904,
+    0.9866666666666667
   ],
-  "holdout_negative_count": 146,
+  "holdout_negative_count": 148,
   "holdout_positive_count": 16,
-  "intercept": -1.4070042531112423,
-  "n": 810,
+  "intercept": -1.4677442935639646,
+  "n": 820,
   "schema_version": "1",
   "training": {
-    "dev_n": 162,
+    "dev_n": 164,
     "feature_set_frozen": true,
     "fit_date": "2026-08-13",
     "fitter": {
@@ -115,78 +115,78 @@
     },
     "grouped_by": "normalized_url",
     "holdout_evaluated_once": true,
-    "holdout_n": 162,
+    "holdout_n": 164,
     "mapping_decision": {
       "go-only": {
-        "dev_auc": 0.9748478701825558,
+        "dev_auc": 0.9705989110707804,
         "dev_negative_count": 145,
-        "dev_positive_count": 17,
+        "dev_positive_count": 19,
         "positive_labels": [
           "go"
         ],
-        "train_positive_count": 31
+        "train_positive_count": 29
       },
       "go-or-triage-trial": {
-        "dev_auc": 0.9657805429864253,
-        "dev_negative_count": 136,
-        "dev_positive_count": 26,
+        "dev_auc": 0.9504469987228608,
+        "dev_negative_count": 135,
+        "dev_positive_count": 29,
         "positive_labels": [
           "go",
           "triage-trial"
         ],
-        "train_positive_count": 56
+        "train_positive_count": 50
       }
     },
-    "n": 810,
+    "n": 820,
     "positive_mapping": "go-only",
     "seed": 432,
-    "train_n": 486
+    "train_n": 492
   },
   "weights": {
-    "boundary_false": -0.49862754914687857,
-    "boundary_true": 0.4197044794506306,
-    "capped": -1.3231843788891895,
+    "boundary_false": -0.49864424918677863,
+    "boundary_true": 0.5187767140802273,
+    "capped": -1.7122231190491803,
     "enrich_archived": 0.0,
-    "enrich_archived_missing": -0.17307367131516752,
+    "enrich_archived_missing": 0.0009511589248605452,
     "enrich_fork": 0.0,
-    "enrich_fork_missing": -0.17307367131516752,
-    "enrich_language_c_cpp": 0.1848401929465965,
-    "enrich_language_csharp": -0.09166528452084945,
-    "enrich_language_go": -0.37227221174334124,
-    "enrich_language_java": 0.3759758120880511,
-    "enrich_language_javascript": -0.3463493874498223,
-    "enrich_language_missing": -0.25238336693811886,
-    "enrich_language_other": 0.23387124755565794,
-    "enrich_language_php": -0.04091399401572573,
-    "enrich_language_python": -0.8434715581783989,
-    "enrich_language_ruby": -0.431778911801546,
-    "enrich_language_rust": 0.15700876789039167,
-    "enrich_language_shell": 0.28763032809784,
-    "enrich_language_typescript": -0.5137433470489925,
-    "enrich_size_log": -0.0428985274526362,
-    "enrich_size_missing": -0.17307367131516752,
+    "enrich_fork_missing": 0.0009511589248605452,
+    "enrich_language_c_cpp": 0.09960605980165385,
+    "enrich_language_csharp": -0.0578931888996367,
+    "enrich_language_go": -0.8607473522588667,
+    "enrich_language_java": 0.526245680420462,
+    "enrich_language_javascript": -0.48625473302763716,
+    "enrich_language_missing": -0.10274677689031225,
+    "enrich_language_other": 0.5337379388808186,
+    "enrich_language_php": -0.04156167453412697,
+    "enrich_language_python": -0.5261720051086378,
+    "enrich_language_ruby": -0.39774101674577284,
+    "enrich_language_rust": -0.12707949269030058,
+    "enrich_language_shell": 0.2738773257701863,
+    "enrich_language_typescript": -0.3973386686723089,
+    "enrich_size_log": -0.09973210752555817,
+    "enrich_size_missing": 0.0009511589248605452,
     "family_other": 0.0,
-    "family_rules": -0.0038684412909576332,
-    "family_security": -0.4829986252490469,
-    "family_testdata": -0.35950414005621284,
-    "family_validators": -0.5544971395839252,
-    "probe_boundary_false": -0.16164079877499044,
-    "probe_boundary_true": 0.020754427097274392,
-    "probe_bucket_count_log": 2.8740460773741336,
-    "probe_dialect_count_log": 2.630296845739188,
-    "probe_regex_sites_log": 2.6157227832962175,
-    "recency_points": -0.8679865701093861,
-    "stars_points": -0.2364400645096011,
+    "family_rules": 0.19043444178639313,
+    "family_security": -0.3649513201073,
+    "family_testdata": -0.3242602782844705,
+    "family_validators": -0.9625439704587918,
+    "probe_boundary_false": -0.24686093726223754,
+    "probe_boundary_true": -0.014305641633353721,
+    "probe_bucket_count_log": 2.3980277596415385,
+    "probe_dialect_count_log": 2.522999803650653,
+    "probe_regex_sites_log": 2.515890126813614,
+    "recency_points": -0.873277768893116,
+    "stars_points": 0.05406196274216804,
     "tree_boundary_false": 0.0,
-    "tree_boundary_true": 0.43288905791655374,
-    "tree_complete": -1.2538997116107462,
-    "tree_config": -0.02943698801329077,
-    "tree_incomplete": -0.14696863456940062,
-    "tree_javascript": 0.27636556150031166,
-    "tree_path_log": -0.12983063439880854,
-    "tree_python": 0.563430366025736,
-    "tree_regex_files_log": 0.24129824550618223,
-    "tree_shell": 0.3263231343400851,
-    "tree_yara": 0.834490529196566
+    "tree_boundary_true": 0.5745553414753206,
+    "tree_complete": -1.3884957423489652,
+    "tree_config": 0.08468785224444372,
+    "tree_incomplete": -0.07282538471520257,
+    "tree_javascript": 0.6793545732491147,
+    "tree_path_log": 0.0033859916563617064,
+    "tree_python": 1.090395262348295,
+    "tree_regex_files_log": 0.4139523591949975,
+    "tree_shell": 0.6320523025560656,
+    "tree_yara": 0.629721979490344
   }
 }
