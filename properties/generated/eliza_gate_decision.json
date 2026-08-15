@@ -18,7 +18,7 @@
     }
   ],
   "corpus": "eliza",
-  "corpus_pin": "f2d016e0abf5da19f01abe3ca9c33166b5c65004",
+  "corpus_pin": "",
   "decision": "no-go",
   "decision_basis": "admission_conditions",
   "decision_date": "2026-08-15",
@@ -27,7 +27,7 @@
     "construct_counts": {},
     "dialect": {},
     "flags": {},
-    "pin": "f2d016e0abf5da19f01abe3ca9c33166b5c65004",
+    "pin": "",
     "pin_mined": "f2d016e0abf5da19f01abe3ca9c33166b5c65004",
     "pin_probed": "",
     "predicted_buckets": {},

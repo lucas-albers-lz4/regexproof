@@ -18,7 +18,7 @@
     }
   ],
   "corpus": "code-dot-org",
-  "corpus_pin": "107b390a33802e4f191b42a8068e38d2ff7941de",
+  "corpus_pin": "",
   "decision": "no-go",
   "decision_basis": "admission_conditions",
   "decision_date": "2026-08-15",
@@ -27,7 +27,7 @@
     "construct_counts": {},
     "dialect": {},
     "flags": {},
-    "pin": "107b390a33802e4f191b42a8068e38d2ff7941de",
+    "pin": "",
     "pin_mined": "107b390a33802e4f191b42a8068e38d2ff7941de",
     "pin_probed": "",
     "predicted_buckets": {},
