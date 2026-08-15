@@ -27,6 +27,7 @@ def test_is_scanner_ndjson_skips_inventory_frozen_and_triage():
     assert cl.is_scanner_ndjson(Path("gitleaks.ndjson"))
     assert not cl.is_scanner_ndjson(Path("gitleaks-inventory.ndjson"))
     assert not cl.is_scanner_ndjson(Path("gitleaks-frozen-ids.ndjson"))
+    assert cl.is_scanner_ndjson(Path("triager.ndjson"))
     assert not cl.is_scanner_ndjson(Path("hippo_java_triage.ndjson"))
     assert not cl.is_scanner_ndjson(Path("java-html-sanitizer_triage.ndjson"))
     assert not cl.is_scanner_ndjson(Path("gitleaks.json"))

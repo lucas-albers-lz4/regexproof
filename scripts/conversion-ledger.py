@@ -66,12 +66,19 @@ def _load_security_tool_corpora() -> frozenset[str]:
 
 
 def is_scanner_ndjson(path: Path) -> bool:
-    """True for batch scanner ``<corpus>.ndjson``, not inventories/probes/triage."""
+    """True for batch scanner ``<corpus>.ndjson``, not inventories/probes/triage.
+
+    Java sidecar probes are ``*_triage.ndjson`` / ``*-triage.ndjson``. Do not
+    treat the substring ``triage`` as a ban — a corpus named ``triager`` is a
+    valid scanner file.
+    """
     name = path.name
     if not name.endswith(".ndjson"):
         return False
     stem = name[: -len(".ndjson")]
-    return not ("-inventory" in stem or "frozen-ids" in stem or "triage" in stem)
+    if "-inventory" in stem or "frozen-ids" in stem:
+        return False
+    return not stem.endswith(("_triage", "-triage"))
 
 
 def is_planned(rec: dict[str, Any]) -> bool:
