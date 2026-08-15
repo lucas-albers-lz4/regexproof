@@ -180,6 +180,16 @@ jobs:
           git diff --exit-code -- \
             properties/generated/compiler-feature-yield.json \
             properties/generated/compiler-feature-yield.md
+      - name: Conversion ledger (regenerated)
+        # Product funnel: sites → properties asked → SAT → GT → upstream.
+        # Orthogonal to D5 (compiler coverage). Observational; must regenerate
+        # after batch so scanner NDJSON identity matches the committed ledger.
+        run: python scripts/conversion-ledger.py
+      - name: Conversion ledger drift check
+        run: |
+          git diff --exit-code -- \
+            properties/generated/conversion-ledger.json \
+            properties/generated/conversion-ledger.md
       - name: E2 busybox-sed dual-engine replay enforced (#429, luna gate 1)
         # Both engine verdicts must be recorded and agree; a busybox absence
         # or a GNU/busybox divergence is a hard failure.

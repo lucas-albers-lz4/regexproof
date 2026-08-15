@@ -1,0 +1,143 @@
+{
+  "by_corpus": [
+    {
+      "corpus": "validatorjs",
+      "properties_asked": 644,
+      "properties_sat": 28,
+      "properties_unsat": 616,
+      "sat_ground_truthed": 28,
+      "sat_unique_sites": 7,
+      "scanner_rows": 1416,
+      "security_tool": false
+    }
+  ],
+  "funnel": {
+    "accepted_upstream": 1,
+    "batch_summaries": 75,
+    "batch_summary_findings": 7117,
+    "batch_triage_rows": 46688,
+    "classification_rows": 5539,
+    "disclosed_private_first": 686,
+    "disclosed_public_ok": 0,
+    "existence_proofs": 2,
+    "false_positives_filed": 1,
+    "mutation_guards": 644,
+    "other_rows": 0,
+    "planned_stubs": 290,
+    "pr_dry_run_findings": 7117,
+    "pr_dry_run_private_first": 810,
+    "pr_dry_runs": 75,
+    "properties_asked": 644,
+    "properties_sat": 28,
+    "properties_sat_synthesized": 28,
+    "properties_unsat": 616,
+    "redos_rows": 0,
+    "rule_diff_report_sat": 17,
+    "rule_diff_report_sat_gt": 17,
+    "sat_ground_truthed": 28,
+    "sat_unique_sites": 7,
+    "scanner_ndjson_files": 75,
+    "scanner_rows": 7117,
+    "scanner_rule_diff_sat": 0,
+    "sites_encodable": 76955,
+    "sites_extracted": 123643,
+    "third_party_public": 0,
+    "would_open_public_upstream": 0
+  },
+  "measure": "conversion_ledger",
+  "notes": [
+    "Heap's-law / singleton novelty saturates compiler coverage, not this ledger.",
+    "docs/verified-findings.jsonl VF-* rows are toolkit traps, not vulnerability counts.",
+    "Classification rows (usage/intent/triage kinds) are not security bugs.",
+    "Mutation guards prove harness sensitivity; they are not product findings.",
+    "SAT + ground-truth is a candidate finding; accepted_upstream is the last mile.",
+    "would_open_public_upstream must stay 0 without a human approval file (SECURITY.md)."
+  ],
+  "rates": {
+    "accepted_per_extracted": 8e-06,
+    "accepted_per_gt": 0.035714,
+    "encodable_fraction": 0.622397,
+    "gt_per_sat": 1.0,
+    "property_asked_per_encodable": 0.008369,
+    "sat_per_property_asked": 0.043478
+  },
+  "rule_diff_reports": {
+    "crs_cross_engine_rule_diff_report.json": {
+      "mutation_guards": 0,
+      "rows": 8,
+      "rule_diff_sat": 5,
+      "rule_diff_sat_gt": 5,
+      "rule_diff_unsat": 3
+    },
+    "crs_rule_diff_report.json": {
+      "mutation_guards": 0,
+      "rows": 8,
+      "rule_diff_sat": 8,
+      "rule_diff_sat_gt": 8,
+      "rule_diff_unsat": 0
+    },
+    "gitleaks_rule_diff_report.json": {
+      "mutation_guards": 66,
+      "rows": 88,
+      "rule_diff_sat": 4,
+      "rule_diff_sat_gt": 4,
+      "rule_diff_unsat": 18
+    }
+  },
+  "schema_version": "1",
+  "security_tool_split": {
+    "properties_asked_in_tools": 0,
+    "properties_asked_not_tools": 644,
+    "properties_sat_in_tools": 0,
+    "properties_sat_not_tools": 28
+  },
+  "upstream": {
+    "accepted_upstream": 1,
+    "existence_proofs": 2,
+    "false_positive": 1,
+    "filed_plan": 1,
+    "fixed_upstream": 1,
+    "language_membership": 4,
+    "out_of_scope_redos": 1,
+    "private_first": 1,
+    "rows": 5,
+    "third_party_public": 0
+  },
+  "upstream_rows": [
+    {
+      "corpus": "usrmanage",
+      "id": "CU-001",
+      "kind": "counterexample_finder",
+      "language_membership": true,
+      "status": "fixed_upstream"
+    },
+    {
+      "corpus": "fwlive",
+      "id": "CU-002",
+      "kind": "property",
+      "language_membership": true,
+      "status": "filed_plan"
+    },
+    {
+      "corpus": "happycow",
+      "id": "CU-003",
+      "kind": "usage_mismatch",
+      "language_membership": true,
+      "status": "false_positive"
+    },
+    {
+      "corpus": "happycow",
+      "id": "CU-004",
+      "kind": "redos",
+      "language_membership": false,
+      "status": "out_of_scope_redos"
+    },
+    {
+      "corpus": "coreruleset",
+      "id": "CU-005",
+      "kind": "rule_diff",
+      "language_membership": true,
+      "status": "private_first"
+    }
+  ]
+}

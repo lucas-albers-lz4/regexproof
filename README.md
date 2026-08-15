@@ -71,9 +71,10 @@ stage, read `docs/REDOS.md` first.
 | `docs/DYNAMIC.md` | Dynamic compiles (`re.compile` from variables): classify, bound, prove or file | 
 | `docs/LOOKBEHIND_REWRITE.md` | Variable-width lookbehind → string-ops rewrite (the `(?<=^)` + MULTILINE case) |
 | `docs/REPORTING.md` | Scanner NDJSON / triage / batch MD field contracts |
-| `docs/why.md` | Why this project exists: the problem, the approach, and progress |
+| `docs/why.md` | Why this project exists: two machines + conversion, Heap's law vs product yield |
+| `docs/conversion-upstream.jsonl` | Curated last-mile conversion events (filed / fixed / false positive / private_first) |
 | `docs/examples/shape5-rule_diff.md` | Shape-5 `rule_diff` kind/family/mutation guards |
-| `docs/verified-findings.jsonl` | Machine-readable verified implementation findings |
+| `docs/verified-findings.jsonl` | Machine-readable verified implementation findings (toolkit traps, not vuln counts) |
 | `docs/REDOS.md` | ReDoS (complexity) tooling — complements, not replaces, the SMT approach |
 | `docs/RESEARCH.md` | Deep-research findings: papers, tools, ecosystem, with sources |
 | `docs/PILOT.md` | Dogfooding report: usrmanage, fwlive, happycow trial runs + lessons |
@@ -87,12 +88,13 @@ stage, read `docs/REDOS.md` first.
 | `scripts/differential-fuzz.py` | Fuzz a Z3 mirror against a real engine via `--real-argv` (no `shell=True`) |
 | `scripts/rule-diff-pilot.py` | Phase-3 shape-5 `rule_diff` pilot on the gitleaks encodable subset |
 | `scripts/batch-scan.py` | Phase-5 batch scan driver: inventory → triage → NDJSON/MD reports |
+| `scripts/conversion-ledger.py` | Product funnel: sites → properties asked → SAT → GT → accepted upstream |
 | `scripts/ci-assert-toolchain.py` | CI gate: assert pinned toolchain versions before runs |
 | `scripts/ci-run-property-subset.py` | CI gate: run the measured-stable property subset |
 | `scripts/ground-truth-b.py` | Batch ground-truth replay helper (real engines on witnesses) |
 | `properties/usrmanage-p1-p6.md` | Worked property suite (P1–P6) from the usrmanage case study |
 | `properties/fwlive-classifier.md` | Worked regex inventory of the fwlive LuCI log classifier + lookahead blocker |
-| `properties/generated/` | Batch outputs: scanner NDJSON, `*_batch.md` reports, PR dry-runs (regenerated) |
+| `properties/generated/` | Batch outputs: scanner NDJSON, `*_batch.md` reports, PR dry-runs, conversion ledger (regenerated) |
 | `properties/triage/` | Triage NDJSON for unencodable / TIMEOUT / ambiguous compile items |
 | `ci/python-matrix.toml` | Supported Python minors for golden-suite re-run (non-empty enforced in CI) |
 | `ci/toolchain.toml` | Pinned toolchain versions for reproducible batch runs |

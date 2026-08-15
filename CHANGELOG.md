@@ -4,6 +4,17 @@ All entries below cover the initial development cycle plus the 2026-08-08
 dogfooding/corpus/fix waves. No release tags exist yet. This changelog groups
 the work by phase; dates are merge dates.
 
+## Conversion ledger (2026-08-15)
+
+- Added `scripts/conversion-ledger.py` and
+  `properties/generated/conversion-ledger.{json,md}`: the product funnel
+  (sites → properties asked → SAT → ground-truth → accepted upstream).
+  Heap's-law novelty saturates compiler coverage; this ledger saturates the
+  claim that we find real security problems. Curated last mile:
+  `docs/conversion-upstream.jsonl`. Golden CI regenerates and drift-checks
+  the artifact. `docs/why.md` records the two-machines model and the first
+  freeze (1 accepted upstream, 0 third-party public).
+
 ## Accuracy flywheel (2026-08-13)
 
 Implementation of [#424](https://github.com/lucas-albers-lz4/regexproof/issues/424)

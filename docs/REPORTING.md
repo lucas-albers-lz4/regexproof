@@ -114,3 +114,24 @@ triage should route these per `scripts/crs-redos-dialect.py` `ROUTING` (and
 corpus equivalents).
 
 Human-mergable: one JSON object per line, stable key order (`sort_keys`).
+
+## Conversion ledger
+
+Writer: `scripts/conversion-ledger.py`. Artifacts:
+`properties/generated/conversion-ledger.{json,md}`. Curated last mile:
+[`docs/conversion-upstream.jsonl`](conversion-upstream.jsonl).
+
+This is the product funnel (sites → properties asked → SAT → ground-truthed →
+disclosed → accepted upstream). It is orthogonal to compiler-feature-yield
+(which ranks encode-path work) and to `docs/verified-findings.jsonl` (toolkit
+traps). Heap's-law novelty saturates coverage; this ledger saturates conversion.
+
+Golden CI regenerates the artifact after batch and `git diff --exit-code`s it.
+`would_open_public_upstream` must stay 0 without a human approval file
+([SECURITY.md](../SECURITY.md)). TIMEOUT / `unknown` is not a pass.
+
+Scanner product kinds counted as "properties asked": `property`,
+`counterexample_finder`, `bug_demo`, `rule_diff` with `result` other than
+`planned`. SAT-ish results: `sat` and `gap`. Ground-truth pass:
+`reproduced` and `PASS`. `mutation_guard` and `usage_mismatch` /
+`intent_mismatch` / `triage` are excluded from the product numerator.
