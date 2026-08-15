@@ -23,10 +23,12 @@ def _load():
 cl = _load()
 
 
-def test_is_scanner_ndjson_skips_inventory_and_frozen():
+def test_is_scanner_ndjson_skips_inventory_frozen_and_triage():
     assert cl.is_scanner_ndjson(Path("gitleaks.ndjson"))
     assert not cl.is_scanner_ndjson(Path("gitleaks-inventory.ndjson"))
     assert not cl.is_scanner_ndjson(Path("gitleaks-frozen-ids.ndjson"))
+    assert not cl.is_scanner_ndjson(Path("hippo_java_triage.ndjson"))
+    assert not cl.is_scanner_ndjson(Path("java-html-sanitizer_triage.ndjson"))
     assert not cl.is_scanner_ndjson(Path("gitleaks.json"))
 
 
@@ -140,6 +142,11 @@ def test_aggregate_fixture_tree(tmp_path: Path):
     }
     (gen / "demo.ndjson").write_text(json.dumps(finding) + "\n", encoding="utf-8")
     (gen / "demo-inventory.ndjson").write_text("{}\n", encoding="utf-8")
+    (gen / "demo_java_triage.ndjson").write_text(
+        json.dumps({"kind": "triage", "corpus": "demo", "regex_id": "t" * 32, "result": "ok"})
+        + "\n",
+        encoding="utf-8",
+    )
     (gen / "demo-pr-dry-run.json").write_text(
         json.dumps(
             {
@@ -173,6 +180,9 @@ def test_aggregate_fixture_tree(tmp_path: Path):
     )
     f = data["funnel"]
     assert f["sites_extracted"] == 10
+    assert f["scanner_rows"] == 1
+    assert f["classification_rows"] == 0
+    assert f["rule_diff_report_sat"] == 0
     assert f["sites_encodable"] == 4
     assert f["properties_asked"] == 1
     assert f["properties_sat"] == 1
@@ -186,7 +196,68 @@ def test_aggregate_fixture_tree(tmp_path: Path):
     assert "accepted upstream" in md
 
 
-def test_committed_upstream_ids_unique_and_cu_prefixed():
+def test_sidecar_findings_ndjson_ignored_rule_diff_report_counted(tmp_path: Path):
+    gen = tmp_path / "generated"
+    gen.mkdir()
+    (gen / "demo_batch_summary.json").write_text(
+        json.dumps({"corpus": "demo", "extracted": 3, "encodable": 3, "findings": 0, "triage": 0})
+        + "\n",
+        encoding="utf-8",
+    )
+    (gen / "demo.ndjson").write_text("", encoding="utf-8")
+    (gen / "crs_cross_engine_findings.ndjson").write_text(
+        json.dumps(
+            {
+                "kind": "rule_diff",
+                "result": "gap",
+                "corpus": "coreruleset",
+                "regex_id": "x",
+                "site": "s:1:0",
+                "ground_truth_status": "PASS",
+            }
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    (gen / "crs_cross_engine_rule_diff_report.json").write_text(
+        json.dumps(
+            {
+                "results": [
+                    {
+                        "kind": "rule_diff",
+                        "result": "sat",
+                        "ground_truth_status": "PASS",
+                    }
+                ]
+            }
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    upstream = tmp_path / "upstream.jsonl"
+    upstream.write_text(
+        json.dumps(
+            {
+                "id": "CU-001",
+                "corpus": "demo",
+                "status": "private_first",
+                "kind": "rule_diff",
+                "language_membership": True,
+            }
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    data = cl.aggregate(
+        gen_dir=gen, upstream_path=upstream, security_tools=frozenset()
+    )
+    f = data["funnel"]
+    assert f["properties_asked"] == 0
+    assert f["properties_sat"] == 0
+    assert f["rule_diff_report_sat"] == 1
+    assert f["rule_diff_report_sat_gt"] == 1
+    assert f["existence_proofs"] == 1
+
     rows = cl.load_upstream()
     ids = [r["id"] for r in rows]
     assert ids
@@ -212,6 +283,8 @@ def test_ci_golden_regenerates_and_drift_checks_ledger():
     assert f["properties_sat"] >= f["sat_ground_truthed"]
     assert f["would_open_public_upstream"] == 0
     assert f["third_party_public"] == 0
+    assert f["scanner_rows"] == f["batch_summary_findings"]
+    assert "crs_cross_engine_rule_diff_report.json" in data["rule_diff_reports"]
     assert data["upstream"]["false_positive"] >= 1
     why = (ROOT / "docs" / "why.md").read_text(encoding="utf-8")
     assert "conversion-ledger.md" in why

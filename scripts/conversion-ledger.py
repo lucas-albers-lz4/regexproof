@@ -9,8 +9,7 @@ Input:
   properties/generated/*_batch_summary.json
   properties/generated/<corpus>.ndjson          (scanner findings)
   properties/generated/*-pr-dry-run.json
-  properties/generated/crs_rule_diff_report.json
-  properties/generated/gitleaks_rule_diff_report.json
+  properties/generated/*_rule_diff_report.json
   docs/conversion-upstream.jsonl                (human-curated last mile)
 Output:
   properties/generated/conversion-ledger.{json,md}
@@ -52,10 +51,7 @@ REDOS_KINDS = frozenset({"redos"})
 SAT_RESULTS = frozenset({"sat", "gap"})
 UNSAT_RESULTS = frozenset({"unsat"})
 GT_PASS = frozenset({"reproduced", "PASS"})
-RULE_DIFF_REPORTS = (
-    "crs_rule_diff_report.json",
-    "gitleaks_rule_diff_report.json",
-)
+RULE_DIFF_REPORT_GLOB = "*_rule_diff_report.json"
 
 
 def _load_security_tool_corpora() -> frozenset[str]:
@@ -70,10 +66,12 @@ def _load_security_tool_corpora() -> frozenset[str]:
 
 
 def is_scanner_ndjson(path: Path) -> bool:
+    """True for batch scanner ``<corpus>.ndjson``, not inventories/probes/triage."""
     name = path.name
     if not name.endswith(".ndjson"):
         return False
-    return "-inventory" not in name and "frozen-ids" not in name
+    stem = name[: -len(".ndjson")]
+    return not ("-inventory" in stem or "frozen-ids" in stem or "triage" in stem)
 
 
 def is_planned(rec: dict[str, Any]) -> bool:
@@ -88,7 +86,19 @@ def is_product_sat(rec: dict[str, Any]) -> bool:
 
 
 def is_ground_truthed(rec: dict[str, Any]) -> bool:
-    return rec.get("ground_truth_status") in GT_PASS
+    if rec.get("ground_truth_status") in GT_PASS:
+        return True
+    gt = rec.get("ground_truth")
+    if not isinstance(gt, dict):
+        return False
+    if gt.get("status") in GT_PASS:
+        return True
+    engines = [
+        v
+        for v in gt.values()
+        if isinstance(v, dict) and "status" in v and "replay" in v
+    ]
+    return bool(engines) and all(e.get("status") in GT_PASS for e in engines)
 
 
 def _ratio(num: int, den: int) -> float | None:
@@ -121,7 +131,25 @@ def load_upstream(path: Path | None = None) -> list[dict[str, Any]]:
 
 
 def scanner_ndjson_files(gen_dir: Path) -> list[Path]:
-    return [p for p in sorted(gen_dir.glob("*.ndjson")) if is_scanner_ndjson(p)]
+    """Batch scanner NDJSON: ``<corpus>.ndjson`` with a matching batch summary.
+
+    Excludes inventories, frozen-id snapshots, Java-triage probes, and
+    sidecar finding dumps (``crs_cross_engine_findings.ndjson``) whose SAT
+    rows are counted from ``*_rule_diff_report.json`` instead.
+    """
+    summaries = {
+        p.name[: -len("_batch_summary.json")]
+        for p in gen_dir.glob("*_batch_summary.json")
+        if p.name != "batch_summary.json"
+    }
+    out: list[Path] = []
+    for path in sorted(gen_dir.glob("*.ndjson")):
+        if not is_scanner_ndjson(path):
+            continue
+        stem = path.name[: -len(".ndjson")]
+        if stem in summaries:
+            out.append(path)
+    return out
 
 
 def classify_scanner_rows(
@@ -305,12 +333,9 @@ def aggregate(
     rule_diff: dict[str, dict[str, int]] = {}
     rd_sat = 0
     rd_sat_gt = 0
-    for name in RULE_DIFF_REPORTS:
-        path = gen / name
-        if not path.is_file():
-            continue
+    for path in sorted(gen.glob(RULE_DIFF_REPORT_GLOB)):
         summary = _summarize_rule_diff_report(path)
-        rule_diff[name] = summary
+        rule_diff[path.name] = summary
         rd_sat += summary["rule_diff_sat"]
         rd_sat_gt += summary["rule_diff_sat_gt"]
 
@@ -405,7 +430,7 @@ def aggregate(
         "notes": [
             "Heap's-law / singleton novelty saturates compiler coverage, not this ledger.",
             "docs/verified-findings.jsonl VF-* rows are toolkit traps, not vulnerability counts.",
-            "Classification rows (usage_mismatch / intent_mismatch) are not security bugs.",
+            "Classification rows (usage/intent/triage kinds) are not security bugs.",
             "Mutation guards prove harness sensitivity; they are not product findings.",
             "SAT + ground-truth is a candidate finding; accepted_upstream is the last mile.",
             "would_open_public_upstream must stay 0 without a human approval file (SECURITY.md).",
@@ -462,14 +487,14 @@ def render_md(data: dict[str, Any]) -> str:
         f"| sites encodable | {n(f['sites_encodable'])} |",
         f"| scanner NDJSON rows | {n(f['scanner_rows'])} |",
         f"| planned inventory stubs | {n(f['planned_stubs'])} |",
-        f"| classification rows (usage/intent/triage) | {n(f['classification_rows'])} |",
+        f"| classification rows (usage/intent/triage kinds) | {n(f['classification_rows'])} |",
         f"| mutation guards (hygiene) | {n(f['mutation_guards'])} |",
         f"| properties asked (non-planned product kinds) | {n(f['properties_asked'])} |",
         f"| properties UNSAT (holds in declared domain) | {n(f['properties_unsat'])} |",
         f"| properties SAT | {n(f['properties_sat'])} |",
         f"| SAT unique sites | {n(f['sat_unique_sites'])} |",
         f"| SAT ground-truthed (`reproduced` / `PASS`) | {n(f['sat_ground_truthed'])} |",
-        f"| rule_diff report SAT (CRS + gitleaks pilots) | {n(f['rule_diff_report_sat'])} |",
+        f"| rule_diff report SAT (dedicated pilots) | {n(f['rule_diff_report_sat'])} |",
         f"| rule_diff report SAT + ground-truth | {n(f['rule_diff_report_sat_gt'])} |",
         f"| disclosed `private_first` | {n(f['disclosed_private_first'])} |",
         f"| disclosed `public_ok` | {n(f['disclosed_public_ok'])} |",
