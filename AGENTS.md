@@ -164,6 +164,11 @@ in the harness output so a reader knows exactly what was proven.
 - `docs/final-report.md` — corpus-wave (#51–#57) fraction table + gap closure
 - `docs/verified-findings.jsonl` — machine-readable implementation findings
   keyed into TRAPS/BACKENDS/SEMANTICS
+- `scripts/conversion-ledger.py` — product funnel (sites → properties asked →
+  SAT → ground-truth → accepted upstream). Artifact:
+  `properties/generated/conversion-ledger.md`. Curated last mile:
+  `docs/conversion-upstream.jsonl`. Heap's-law novelty saturates the compiler;
+  this ledger saturates the claim that we find real bugs.
 
 ## Auditing regexproof itself
 
