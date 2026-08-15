@@ -2,7 +2,7 @@
   "provenance": {
     "gate_decision_count": 850,
     "input_file_count": 850,
-    "inputs_hash": "e10256dbb8f9ccf21e4447b75efca8922054d7a0f802d5fbc24f43272788df99",
+    "inputs_hash": "76dfec1875b62de0f953789d30f253f6a2d756d363d97e65d60818281fcdb8fb",
     "linked_row_count": 820,
     "schema_version": "1"
   },
@@ -13571,8 +13571,8 @@
         "tree_probe": {
           "complete": false,
           "path_count": 0,
-          "probed_pin": "107b390a33802e4f191b42a8068e38d2ff7941de",
-          "reason": "budget-exhausted",
+          "probed_pin": "",
+          "reason": "missing-probed-pin",
           "regex_file_type_counts": {},
           "security_boundary": "unknown",
           "truncated": false
@@ -15899,8 +15899,8 @@
         "tree_probe": {
           "complete": false,
           "path_count": 0,
-          "probed_pin": "f2d016e0abf5da19f01abe3ca9c33166b5c65004",
-          "reason": "budget-exhausted",
+          "probed_pin": "",
+          "reason": "missing-probed-pin",
           "regex_file_type_counts": {},
           "security_boundary": "unknown",
           "truncated": false
