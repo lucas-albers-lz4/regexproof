@@ -89,3 +89,33 @@ def test_sat_fullmatch_only_when_pad_gate_rejects(monkeypatch):
     assert len(rows) == 1
     assert rows[0]["result"] == "sat_fullmatch_only"
     assert rows[0]["search_pad_gate"] is False
+
+
+def test_compile_bound_is_pattern_length_not_witness_max_len():
+    long_a = "a" * 20
+    pair = _toy_pair("long-pat", long_a, long_a + "|b")
+    assert pair["max_len"] == 4
+    rows = run_batch_shape5_pairs([pair], timeout_ms=8000)
+    assert len(rows) == 1
+    assert rows[0]["result"] != "skipped_unencodable"
+    assert rows[0]["result"] == "sat"
+
+
+def test_timeout_gate_fails_batch(tmp_path, monkeypatch):
+    import pytest
+
+    from regexproof.batch.runner import _run_and_record_shape5
+
+    monkeypatch.setattr(
+        "regexproof.rule_diff.batch_shape5.run_batch_shape5_pairs",
+        lambda pairs, timeout_ms=30000: [{"pair_id": "hung", "result": "timeout"}],
+    )
+    with pytest.raises(SystemExit, match="timeout gate"):
+        _run_and_record_shape5(
+            "gitleaks",
+            [_toy_pair("hung", "a", "a|b")],
+            tmp_path,
+            admitted=1,
+            dropped=0,
+            note="test",
+        )

@@ -17,6 +17,8 @@ from regexproof.rule_diff.encode import shape5_constraints
 from regexproof.rule_diff.search_replay import gate_sat_witness
 
 SCALE_PROVENANCE = frozenset({"version_diff", "cross_engine"})
+# compile_pattern(max_length=) caps *pattern text*, not witness length.
+_PATTERN_CHAR_CAP = 256
 
 
 def provenance_token(pair: dict[str, Any]) -> str:
@@ -97,19 +99,21 @@ def _solve_one(pair: dict[str, Any], *, timeout_ms: int) -> dict[str, Any]:
         "witness": None,
         "result": None,
     }
+    r1_pat = str(r1.get("pattern") or "")
+    r2_pat = str(r2.get("pattern") or "")
     r1_c = compile_pattern(
-        str(r1.get("pattern") or ""),
+        r1_pat,
         str(r1.get("flags") or ""),
         str(r1.get("dialect") or "py_re"),
         "fullmatch",
-        max_length=max_len,
+        max_length=max(_PATTERN_CHAR_CAP, len(r1_pat)),
     )
     r2_c = compile_pattern(
-        str(r2.get("pattern") or ""),
+        r2_pat,
         str(r2.get("flags") or ""),
         str(r2.get("dialect") or r1.get("dialect") or "py_re"),
         "fullmatch",
-        max_length=max_len,
+        max_length=max(_PATTERN_CHAR_CAP, len(r2_pat)),
     )
     if not r1_c.encodable or not r2_c.encodable:
         rec["result"] = "skipped_unencodable"

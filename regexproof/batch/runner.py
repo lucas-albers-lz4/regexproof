@@ -110,10 +110,14 @@ def _run_and_record_shape5(
         run_batch_shape5_pairs,
         summarize_shape5_rows,
     )
+    from regexproof.rule_diff.timeout_gate import fail_message, timeout_gate
 
     batch_pairs = filter_batch_pairs(pairs)
     rows = run_batch_shape5_pairs(batch_pairs)
     summary = summarize_shape5_rows(rows)
+    gate_ok, n_timeout, rate, bad = timeout_gate(rows, name_key="pair_id")
+    summary["timeout_gate_ok"] = gate_ok
+    summary["timeout_rate"] = rate
     atomic_write_text(
         out_dir / f"{corpus}_batch_shape5.json",
         json.dumps(
@@ -128,6 +132,8 @@ def _run_and_record_shape5(
         )
         + "\n",
     )
+    if not gate_ok:
+        raise SystemExit(fail_message(bad, n_timeout))
     return {
         "admitted": admitted,
         "dropped": dropped,
