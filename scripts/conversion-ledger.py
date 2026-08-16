@@ -173,14 +173,18 @@ def classify_scanner_rows(
             "other_rows": 0,
             "properties_asked": 0,
             "properties_asked_synthesized": 0,
+            "properties_asked_distinct": 0,
             "properties_unsat": 0,
             "properties_sat": 0,
             "properties_sat_synthesized": 0,
+            "properties_sat_distinct": 0,
             "scanner_rule_diff_sat": 0,
             "sat_ground_truthed": 0,
         }
     )
     sat_sites: set[tuple[str, str, str]] = set()
+    asked_pairs: set[tuple[str, str]] = set()
+    sat_pairs: set[tuple[str, str]] = set()
     for rec in rows:
         counts["scanner_rows"] += 1
         kind = rec.get("kind") or ""
@@ -199,12 +203,15 @@ def classify_scanner_rows(
             continue
         if kind in PRODUCT_KINDS:
             counts["properties_asked"] += 1
+            pair = (str(rec.get("site") or ""), str(rec.get("question_id") or ""))
+            asked_pairs.add(pair)
             if rec.get("synthesized"):
                 counts["properties_asked_synthesized"] += 1
             if result in UNSAT_RESULTS:
                 counts["properties_unsat"] += 1
             elif result in SAT_RESULTS:
                 counts["properties_sat"] += 1
+                sat_pairs.add(pair)
                 if kind == "rule_diff":
                     counts["scanner_rule_diff_sat"] += 1
                 if rec.get("synthesized"):
@@ -221,6 +228,8 @@ def classify_scanner_rows(
             continue
         counts["other_rows"] += 1
     counts["sat_unique_sites"] = len(sat_sites)
+    counts["properties_asked_distinct"] = len(asked_pairs)
+    counts["properties_sat_distinct"] = len(sat_pairs)
     return dict(counts)
 
 
@@ -389,9 +398,11 @@ def aggregate(
         "other_rows": classified.get("other_rows", 0),
         "properties_asked": asked,
         "properties_asked_synthesized": classified.get("properties_asked_synthesized", 0),
+        "properties_asked_distinct": classified.get("properties_asked_distinct", 0),
         "properties_unsat": classified.get("properties_unsat", 0),
         "properties_sat": sat,
         "properties_sat_synthesized": classified.get("properties_sat_synthesized", 0),
+        "properties_sat_distinct": classified.get("properties_sat_distinct", 0),
         "sat_unique_sites": classified.get("sat_unique_sites", 0),
         "sat_ground_truthed": gt,
         "scanner_rule_diff_sat": classified.get("scanner_rule_diff_sat", 0),
@@ -504,8 +515,10 @@ def render_md(data: dict[str, Any]) -> str:
         f"| classification rows (usage/intent/triage kinds) | {n(f['classification_rows'])} |",
         f"| mutation guards (hygiene) | {n(f['mutation_guards'])} |",
         f"| properties asked (non-planned product kinds) | {n(f['properties_asked'])} |",
+        f"| properties asked distinct `(site, question_id)` | {n(f['properties_asked_distinct'])} |",
         f"| properties UNSAT (holds in declared domain) | {n(f['properties_unsat'])} |",
         f"| properties SAT | {n(f['properties_sat'])} |",
+        f"| properties SAT distinct `(site, question_id)` | {n(f['properties_sat_distinct'])} |",
         f"| SAT unique sites | {n(f['sat_unique_sites'])} |",
         f"| SAT ground-truthed (`reproduced` / `PASS`) | {n(f['sat_ground_truthed'])} |",
         f"| rule_diff report SAT (dedicated pilots) | {n(f['rule_diff_report_sat'])} |",
@@ -559,6 +572,22 @@ def render_md(data: dict[str, Any]) -> str:
             f"{row['sat_unique_sites']} |"
         )
     lines.append("")
+    lines.extend(
+        [
+            "## Denominator notes",
+            "",
+            "`crs-inventory.ndjson` is the @rx-only CRS measure (346 rows) from "
+            "`regexproof.batch.crs_measure`; it is **not** the batch corpus. "
+            "`coreruleset-inventory.ndjson` + `coreruleset_batch_summary.json` "
+            "are the batch extractor (338 extracted). Do not glob `crs-inventory` "
+            "into the conversion ledger sample.",
+            "",
+            "Synthesis considers at most `synth_max_sites` (default 200, sort by "
+            "`regex_id`) per corpus. validator.js is the only corpus with "
+            "properties asked; its batch summary already records `synth_max_sites`.",
+            "",
+        ]
+    )
     return "\n".join(lines)
 
 
