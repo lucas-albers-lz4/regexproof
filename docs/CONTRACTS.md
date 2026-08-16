@@ -58,7 +58,10 @@ engines.
 
 - **#481** Forks: `regexproof.admission.forks` NO-GOs a clone when `fork: true`
   and the parent is already GO, or when the repo is a CPython/interpreter
-  duplicate class. Mine search drops those candidates at enrich time.
+  duplicate class. Mine search drops those candidates at enrich time (the
+  enrich object has `fork` / `parent`). Human GO/triage-trial without enrich
+  metadata still catches CPython-named URLs; other forks are the mine-search
+  gate, not a second GitHub API call in `author_human`.
 - **#492** Quote encodable fraction from `*_encodable_fraction.json` **with
   and without YARA**. Live `yara_split` on the conversion ledger.
 - **#482 / #483** Bias-audit and rejected-tail risk (study design): freeze a
