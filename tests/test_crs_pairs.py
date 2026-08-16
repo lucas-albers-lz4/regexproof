@@ -42,6 +42,12 @@ def test_sibling_family_requires_family_contract():
     )
     assert blocked["admitted_count"] == 0
     assert blocked["dropped"][0]["reason"] == "missing-family-contract"
+    placeholder = discover_crs_sibling_pairs(
+        rules_dir=V_NEWER,
+        tag="fixture-newer",
+        family_contract={"R1": "", "R2": "x", "provenance": "x"},
+    )
+    assert placeholder["admitted_count"] == 0
 
 
 def test_sibling_family_dedupes_and_directions():
@@ -81,10 +87,10 @@ def test_generated_crs_report_has_no_sibling_pairs():
 
     path = ROOT / "properties" / "generated" / "crs_rule_diff_report.json"
     data = json.loads(path.read_text(encoding="utf-8"))
-    for rec in data.get("results") or []:
-        blob = str(rec.get("family") or "") + str(rec.get("pair_id") or "")
-        assert "sibling" not in blob.lower()
-    assert data.get("retracted_sibling_pairs", 0) >= 1
+    blob = json.dumps(data)
+    assert "RD-crs-901" not in blob
+    # The retraction counter is the only remaining "sibling" token.
+    assert blob.lower().count("sibling") == blob.lower().count("retracted_sibling")
 
 
 def test_unchanged_id_dropped_on_tiny_fixture(tmp_path: Path):

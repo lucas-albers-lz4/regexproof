@@ -7,8 +7,8 @@ CRS adapter (documented): R1 for same-ID adjacent-tag pairs is intentionally
 (gitleaks). Integrity for CRS is:
 
 - same-ID pairs: R1.rule_id == R2.rule_id, R1 from older tag, R2 from newer
-- sibling-family: shared family prefix (first 3 digits), distinct rule IDs,
-  both from the same tag, R1/R2 ordered by rule_id ascending
+- sibling-family: only with an explicit ``family_contract`` (R1, R2,
+  provenance). Default discovery does not admit sibling pairs (#469).
 
 Unchanged same-ID patterns are skipped (vacuous). Direction is always
 ``r2_minus_r1`` (shape-5: R2 accepts something R1 misses).
@@ -185,6 +185,12 @@ def discover_crs_version_pairs(
     }
 
 
+def _valid_family_contract(family_contract: object) -> bool:
+    if not isinstance(family_contract, dict):
+        return False
+    return all(str(family_contract.get(key) or "").strip() for key in ("R1", "R2", "provenance"))
+
+
 def discover_crs_sibling_pairs(
     *,
     rules_dir: Path,
@@ -208,7 +214,7 @@ def discover_crs_sibling_pairs(
         "admitted_count": 0,
         "dropped_count": 0,
     }
-    if not family_contract:
+    if not _valid_family_contract(family_contract):
         empty["dropped"] = [
             {
                 "reason": "missing-family-contract",
