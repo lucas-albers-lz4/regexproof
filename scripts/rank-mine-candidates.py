@@ -186,6 +186,14 @@ def main(argv: list[str] | None = None) -> int:
                 # AUTHORITATIVE — always set it (empty included) so a stale
                 # ledger mined pin can never probe the wrong commit.
                 c["pin_probed"] = dec_pin
+            elif not str(c.get("pin_probed") or ""):
+                # Ungated ledger rows store the mined SHA as `pin`. Copy it
+                # so score-v2 tree join is not `missing-probed-pin` (#490).
+                # This is ranking-only; admission E3 still refuses mined-pin
+                # fallback when probing for a gate decision.
+                mined = str(c.get("pin") or "")
+                if mined:
+                    c["pin_probed"] = mined
         pool.append(c)
     tree_features = {}
     if args.allocator == "score-v2" and pool:

@@ -11,12 +11,13 @@ from pathlib import Path
 from regexproof.mine.ledger import empty_ledger, save_ledger
 from regexproof.mine.score import (
     SCORE_VERSION,
+    SCORE_V2_WEIGHTS_PATH,
     _QUERY_FAMILY,
     _query_family,
     candidate_score,
     rank_candidates,
 )
-from regexproof.mine.score_v2 import auc, grouped_split, sanity_check_v1_boundary
+from regexproof.mine.score_v2 import auc, grouped_split, load_weights, sanity_check_v1_boundary
 from regexproof.mine.search import SEARCH_QUERIES, SearchRunResult
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -433,6 +434,16 @@ def test_rank_cli_score_v2_tags_allocator(tmp_path: Path, capsys):
     row = json.loads(capsys.readouterr().out)
     assert row["allocator"] == "score-v2"
     assert row["score_version"] == "v2"
+    probe = (row.get("features") or {}).get("tree_probe") or {}
+    assert probe.get("reason") != "missing-probed-pin"
+
+
+def test_score_v2_weights_name_label_reproduction():
+    art = load_weights(SCORE_V2_WEIGHTS_PATH)
+    assert art["default_allocator"] == "score-v1"
+    assert art["holdout_positive_count"] == 16
+    assert "label_reproduction_auc" in art
+    assert art["label_reproduction_auc"] == art["holdout_auc"]
 
 
 def test_score_v2_tree_lookup_is_pin_aware():
