@@ -2,7 +2,11 @@
 
 from __future__ import annotations
 
-from regexproof.rule_diff.batch_shape5 import admit_shape5_for_batch, filter_batch_pairs
+from regexproof.rule_diff.batch_shape5 import (
+    admit_shape5_for_batch,
+    filter_batch_pairs,
+    run_batch_shape5_pairs,
+)
 from regexproof.rule_diff.search_replay import search_pad_confirms_gap
 
 
@@ -42,3 +46,46 @@ def test_filter_drops_gitleaks_independent_spec():
 def test_search_pad_confirms_unanchored_gap():
     assert search_pad_confirms_gap(r"^keep-alive", r"keep-alive", "keep-alive")
     assert not search_pad_confirms_gap(r"keep-alive", r"keep-alive", "keep-alive")
+
+
+def _toy_pair(pair_id: str, r1: str, r2: str, *, pair_kind: str = "version_diff") -> dict:
+    return {
+        "pair_id": pair_id,
+        "pair_kind": pair_kind,
+        "provenance": pair_kind,
+        "family_contract": {"R1": r1, "R2": r2, "provenance": pair_kind},
+        "max_len": 4,
+        "r1": {"pattern": r1, "flags": "", "dialect": "py_re"},
+        "r2": {"pattern": r2, "flags": "", "dialect": "py_re"},
+    }
+
+
+def test_run_executes_sat_gate_and_skips_independent_spec():
+    rows = run_batch_shape5_pairs(
+        [
+            _toy_pair("toy-sat", "a", "a|b"),
+            _toy_pair("toy-unsat", "a|b", "a"),
+            {
+                **_toy_pair("toy-gitleaks", "a", "a|b", pair_kind="independent-spec"),
+                "provenance": "independent-spec",
+            },
+        ],
+        timeout_ms=8000,
+    )
+    assert {r["pair_id"] for r in rows} == {"toy-sat", "toy-unsat"}
+    by_id = {r["pair_id"]: r for r in rows}
+    assert by_id["toy-sat"]["result"] == "sat"
+    assert by_id["toy-sat"]["search_pad_gate"] is True
+    assert by_id["toy-sat"]["witness"]["s"]
+    assert by_id["toy-unsat"]["result"] == "unsat"
+
+
+def test_sat_fullmatch_only_when_pad_gate_rejects(monkeypatch):
+    monkeypatch.setattr(
+        "regexproof.rule_diff.batch_shape5.gate_sat_witness",
+        lambda pair, witness: False,
+    )
+    rows = run_batch_shape5_pairs([_toy_pair("toy-fm", "a", "a|b")], timeout_ms=8000)
+    assert len(rows) == 1
+    assert rows[0]["result"] == "sat_fullmatch_only"
+    assert rows[0]["search_pad_gate"] is False
