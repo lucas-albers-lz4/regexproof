@@ -65,7 +65,7 @@ Schema: `regexproof/schemas/scanner_finding.schema.json`.
 | `shape` | 1–5 or null |
 | `ground_truth_status` | Replay status. Present on Z3-verdict findings (`property`, `counterexample_finder`, `bug_demo`, `mutation_guard`, `rule_diff`); mutation guards require the exact `mutation-guard-sat-expected` value. Omitted on classification findings (`usage_mismatch`, `intent_mismatch`, `triage`, `redos`) — absence means "not a Z3 verdict", never a silent `N/A` |
 | `ground_truth` | Optional **per-engine** evidence object for cross-engine `rule_diff` (e.g. `{pcre2: {status, version, cmd, matched, replay}, go_re2: {...}, status}`). A single `ground_truth_status` alone is not sufficient to claim dual-engine ground truth. |
-| `disclosure` | `private_first` \| `public_ok` \| null. On corpora in `SECURITY_TOOL_CORPORA`, `tag_disclosure()` defaults to `private_first` for **every** kind unless listed in `DISCLOSURE_EXEMPT_KINDS` (empty; fail-closed for new kinds). |
+| `disclosure` | `private_first` \| `public_ok` \| null. **null** means the corpus is not in `SECURITY_TOOL_CORPORA` and no approval file listed this `regex_id`. On security-tool corpora, `tag_disclosure()` defaults to `private_first` for every kind unless listed in `DISCLOSURE_EXEMPT_KINDS` (empty; fail-closed). `public_ok` is set **only** by `apply_approval()` from `--approval-path` (JSON `{"regex_ids": [...]}`) on ground-truthed (`reproduced`/`PASS`) findings. `assert_no_auto_publication()` still forbids `publish` without `approved`. |
 | `witness` | Redacted when committed |
 | `detail` | Kind-specific object |
 
