@@ -291,6 +291,16 @@ def test_ci_golden_regenerates_and_drift_checks_ledger():
     assert f["scanner_rows"] == f["batch_summary_findings"]
     assert "crs_cross_engine_rule_diff_report.json" in data["rule_diff_reports"]
     assert data["upstream"]["false_positive"] >= 1
+    assert "pipeline_accepted_per_gt" in data["rates"]
+    assert "properties_asked_synthesized" in f
     why = (ROOT / "docs" / "why.md").read_text(encoding="utf-8")
+    reporting = (ROOT / "docs" / "REPORTING.md").read_text(encoding="utf-8")
+    agents = (ROOT / "AGENTS.md").read_text(encoding="utf-8")
+    readme = (ROOT / "README.md").read_text(encoding="utf-8")
+    banned = "accepted upstream / SAT ground-truthed = 0.0357"
+    assert banned not in why
+    assert banned not in reporting
+    assert "Property-contract precondition" in agents
+    assert "2/10" in readme
     assert "conversion-ledger.md" in why
     assert "Two machines" in why

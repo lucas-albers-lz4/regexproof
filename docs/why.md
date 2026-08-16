@@ -6,6 +6,14 @@
 
 **regexproof is a Z3-based verification toolkit.** It turns "I think this regex is safe" into "no string in the declared domain can violate this property — machine-checked." It is a playbook and an installable toolkit that coding agents can consume directly (Hermes, Claude Code, Codex). It also comes with a corpus-scale measurement pipeline. That pipeline quantifies how much of the real-world regex surface the toolkit can prove.
 
+Keep three claims separate — they do not share evidence:
+
+1. **The Z3 mirror is sound** on the encoded fragment (traps, mutation guards, differential fuzz, ground-truth). Well evidenced.
+2. **The compiler covers a measured fraction** of admitted regex sites. Real, but a convenience sample with duplicated forks.
+3. **This finds real bugs in other people's code.** Not demonstrated: 0 third-party public accepted. Phase 0 search-semantics replay of ten SAT-looking rows left **2/10 filing candidates** (CRS 942220 version-diff, cross-engine 920210); the rest are spec-gap or collapse under search.
+
+A property without a contract (guarantee, input source, trust, declared domain) is not claim (3), even if the solver returns UNSAT.
+
 **The core capability is relational, not syntactic.** regexproof does not "verify a regex" in the abstract. It verifies that two symbolic descriptions of the allowed/denied input space relate in a specified way: equivalence, containment, or non-overlap. Each property in the 5-shape taxonomy is such a relation. Regex is the first domain where that description space is expressible in string theory.
 
 ## The problem it solves

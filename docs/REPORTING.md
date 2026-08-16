@@ -143,3 +143,16 @@ Scanner product kinds counted as "properties asked": `property`,
 `planned`. SAT-ish results: `sat` and `gap`. Ground-truth pass:
 `reproduced` and `PASS`. `mutation_guard` and `usage_mismatch` /
 `intent_mismatch` / `triage` are excluded from the product numerator.
+
+Ledger JSON (`schema_version: "1"`) field groups:
+
+| Group | Fields |
+|---|---|
+| funnel | `sites_extracted`, `sites_encodable`, `scanner_rows`, `planned_stubs`, `classification_rows`, `properties_asked`, `properties_asked_synthesized`, `properties_sat`, `properties_sat_synthesized`, `sat_unique_sites`, `sat_ground_truthed`, `rule_diff_report_sat`, `disclosed_private_first`, `pr_dry_run_private_first`, `accepted_upstream`, `existence_proofs`, `third_party_public`, … |
+| rates | `encodable_fraction`, `pipeline_accepted_per_gt`, `pipeline_accepted_per_extracted` (aliases `accepted_per_gt` / `accepted_per_extracted` for one release). These pipeline rates include own-code usrmanage; they are **not** a wild-bug conversion rate. |
+| security_tool_split | asked/SAT in vs not in `SECURITY_TOOL_CORPORA` |
+| upstream | curated `docs/conversion-upstream.jsonl` status counts |
+
+Do not quote a frozen pipeline-accepted / SAT-GT ratio from an old ledger as
+the product yield. Re-read the regenerated artifact; third-party public
+accepted is the conversion claim, and it is 0.

@@ -32,6 +32,20 @@ Do NOT use Z3 for:
   config-supplied pattern is a finding, not a proof.
 - Cosmetic/internal patterns with no untrusted input — skip them; low value.
 
+## Property-contract precondition
+
+Do not count an UNSAT (or a synthesized SAT) as a **product** result unless
+the site has a contract: the guarantee you actually care about, the input
+source and trust class, and a declared domain (`docs/why.md`). Untargeted
+shape-1/2 synthesis ("does this class contain a space?") is compiler smoke.
+Shape-5 `rule_diff` still needs an independent spec or a
+`version_diff` / `cross_engine` pair with a `family_contract` — sibling-family
+pairing is not a contract.
+
+Phase 0 search-semantics inventory of the ten SAT candidates that looked like
+third-party findings: **2 remain filing candidates** (CRS 942220 version-diff,
+cross-engine 920210). The other eight are spec-gap or collapse under search.
+
 ## The 5-step workflow (follow in order)
 
 ### 1. Inventory the regex surface
@@ -51,6 +65,13 @@ From `scripts/z3-property-template.py`, the canonical shapes:
 | 3. Counterexample finder | "is there a value where capture ≠ true value?" | string ops: `IndexOf`/`SubString` | SAT + witness = the bug repro — cheapest, most valuable |
 | 4. Per-token image | "escape output has no raw control chars" | one token per tiny solver query | monolithic image-regex TIMEOUTs — decompose |
 | 5. Rule diff (`rule_diff`) | "does R2 accept anything R1 misses?" | `InRe(s, R2) ∧ Not(InRe(s, R1))` (no regex Complement) | SAT = gap; UNSAT = no gap in bound; TIMEOUT ≠ pass |
+
+**Property-contract precondition.** A counted or reportable result (UNSAT
+"holds" or SAT "finding") requires an explicit contract: the site, the
+guarantee asked, input source and trust, declared domain, and how the
+question was chosen (`human` / later `version_diff` / `cross_engine`).
+Synthesized shape-1/2 rows without that contract are measurement of the
+synthesizer, not product conversion. See `docs/why.md`.
 
 Shape-5 registry/`kind`/`family`/mutation-guard contract:
 [`docs/examples/shape5-rule_diff.md`](docs/examples/shape5-rule_diff.md).
