@@ -16,6 +16,9 @@ helpers/go-re2/go-re2.exe
 redos-env/
 batch/corpora/coreruleset/rules
 
+# Unredacted SAT witnesses (search-semantics replay; never commit)
+properties/generated/.search-replay-private.json
+
 # Admission probe drafts (authoring inputs; promote via gate_decision only)
 properties/generated/*_probe_draft.json
 
