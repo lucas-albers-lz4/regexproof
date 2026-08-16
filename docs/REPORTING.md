@@ -156,3 +156,12 @@ Ledger JSON (`schema_version: "1"`) field groups:
 Do not quote a frozen pipeline-accepted / SAT-GT ratio from an old ledger as
 the product yield. Re-read the regenerated artifact; third-party public
 accepted is the conversion claim, and it is 0.
+
+`properties_asked` / `properties_sat` are raw scanner rows. Distinct
+`(site, question_id)` counts are `properties_asked_distinct` /
+`properties_sat_distinct` (#480). Synthesis is capped at `synth_max_sites`
+(default 200, first `regex_id` after sort) — recorded on the batch summary
+`synthesis` object.
+
+`crs-inventory.ndjson` is the CRS `@rx` measure, not the `coreruleset` batch
+inventory. Site-count deltas between those two files are expected (#493).
