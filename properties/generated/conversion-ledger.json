@@ -33,8 +33,8 @@
     "properties_sat_synthesized": 28,
     "properties_unsat": 616,
     "redos_rows": 0,
-    "rule_diff_report_sat": 17,
-    "rule_diff_report_sat_gt": 17,
+    "rule_diff_report_sat": 10,
+    "rule_diff_report_sat_gt": 10,
     "sat_ground_truthed": 28,
     "sat_unique_sites": 7,
     "scanner_ndjson_files": 75,
@@ -74,9 +74,9 @@
     },
     "crs_rule_diff_report.json": {
       "mutation_guards": 0,
-      "rows": 8,
-      "rule_diff_sat": 8,
-      "rule_diff_sat_gt": 8,
+      "rows": 1,
+      "rule_diff_sat": 1,
+      "rule_diff_sat_gt": 1,
       "rule_diff_unsat": 0
     },
     "gitleaks_rule_diff_report.json": {

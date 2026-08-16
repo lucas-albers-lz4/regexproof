@@ -1,5 +1,5 @@
 {
-  "admitted_pairs": 8,
+  "admitted_pairs": 1,
   "corpus": "coreruleset",
   "engine_versions": {
     "pcre2_helper": "/home/lalbers/gitroot/regexproof/helpers/pcre2/match.py",
@@ -26,120 +26,9 @@
       "witness": {
         "s": "JSon.1e309\n"
       }
-    },
-    {
-      "classification": "gap",
-      "declared_domain": "ascii",
-      "family": "RD-crs-901-901340-901410-sibling",
-      "ground_truth_status": "PASS",
-      "kind": "rule_diff",
-      "pair_id": "RD-crs-901-901340-901410-sibling",
-      "regex_id": "RD-crs-901-901340-901410-sibling-gap",
-      "result": "sat",
-      "schema_version": "1",
-      "shape": 5,
-      "wall_ms": 4.0,
-      "witness": {
-        "s": "21"
-      }
-    },
-    {
-      "classification": "gap",
-      "declared_domain": "ascii",
-      "family": "RD-crs-920-920121-920160-sibling",
-      "ground_truth_status": "PASS",
-      "kind": "rule_diff",
-      "pair_id": "RD-crs-920-920121-920160-sibling",
-      "regex_id": "RD-crs-920-920121-920160-sibling-gap",
-      "result": "sat",
-      "schema_version": "1",
-      "shape": 5,
-      "wall_ms": 1.9,
-      "witness": {
-        "s": "2"
-      }
-    },
-    {
-      "classification": "gap",
-      "declared_domain": "ascii",
-      "family": "RD-crs-920-920160-920170-sibling",
-      "ground_truth_status": "PASS",
-      "kind": "rule_diff",
-      "pair_id": "RD-crs-920-920160-920170-sibling",
-      "regex_id": "RD-crs-920-920160-920170-sibling-gap",
-      "result": "sat",
-      "schema_version": "1",
-      "shape": 5,
-      "wall_ms": 2.3,
-      "witness": {
-        "s": "GET\n"
-      }
-    },
-    {
-      "classification": "gap",
-      "declared_domain": "ascii",
-      "family": "RD-crs-920-920171-920190-sibling",
-      "ground_truth_status": "PASS",
-      "kind": "rule_diff",
-      "pair_id": "RD-crs-920-920171-920190-sibling",
-      "regex_id": "RD-crs-920-920171-920190-sibling-gap",
-      "result": "sat",
-      "schema_version": "1",
-      "shape": 5,
-      "wall_ms": 3.9,
-      "witness": {
-        "s": "8-0"
-      }
-    },
-    {
-      "classification": "gap",
-      "declared_domain": "ascii",
-      "family": "RD-crs-920-920190-920200-sibling",
-      "ground_truth_status": "PASS",
-      "kind": "rule_diff",
-      "pair_id": "RD-crs-920-920190-920200-sibling",
-      "regex_id": "RD-crs-920-920190-920200-sibling-gap",
-      "result": "sat",
-      "schema_version": "1",
-      "shape": 5,
-      "wall_ms": 442.7,
-      "witness": {
-        "s": "bytes=--94----"
-      }
-    },
-    {
-      "classification": "gap",
-      "declared_domain": "ascii",
-      "family": "RD-crs-920-920200-920230-sibling",
-      "ground_truth_status": "PASS",
-      "kind": "rule_diff",
-      "pair_id": "RD-crs-920-920200-920230-sibling",
-      "regex_id": "RD-crs-920-920200-920230-sibling-gap",
-      "result": "sat",
-      "schema_version": "1",
-      "shape": 5,
-      "wall_ms": 6.8,
-      "witness": {
-        "s": "%aB"
-      }
-    },
-    {
-      "classification": "gap",
-      "declared_domain": "ascii",
-      "family": "RD-crs-920-920230-920260-sibling",
-      "ground_truth_status": "PASS",
-      "kind": "rule_diff",
-      "pair_id": "RD-crs-920-920230-920260-sibling",
-      "regex_id": "RD-crs-920-920230-920260-sibling-gap",
-      "result": "sat",
-      "schema_version": "1",
-      "shape": 5,
-      "wall_ms": 16.6,
-      "witness": {
-        "s": "%ufF70"
-      }
     }
   ],
+  "retracted_sibling_pairs": 7,
   "rows": [
     {
       "classification": "gap",

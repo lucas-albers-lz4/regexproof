@@ -19,8 +19,8 @@ Heap's-law / singleton novelty saturates **compiler coverage**. This artifact sa
 | properties SAT | 28 |
 | SAT unique sites | 7 |
 | SAT ground-truthed (`reproduced` / `PASS`) | 28 |
-| rule_diff report SAT (dedicated pilots) | 17 |
-| rule_diff report SAT + ground-truth | 17 |
+| rule_diff report SAT (dedicated pilots) | 10 |
+| rule_diff report SAT + ground-truth | 10 |
 | disclosed `private_first` (scanner product+classification, skip planned) | 686 |
 | disclosed `public_ok` | 0 |
 | dry-run `private_first` (includes planned stubs) | 810 |

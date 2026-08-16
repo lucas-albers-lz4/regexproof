@@ -191,8 +191,33 @@ def discover_crs_sibling_pairs(
     tag: str = "v4.28.0",
     max_len: int = DEFAULT_MAX_LEN,
     max_pairs_per_family: int = 8,
+    family_contract: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
-    """Sibling rules within a family (e.g. 942xxx); R1=lower id, R2=higher id."""
+    """Sibling rules within a family (e.g. 942xxx); R1=lower id, R2=higher id.
+
+    Requires an explicit ``family_contract`` (same field as the CRS
+    cross-engine report). Without it, nothing is admitted — sibling SAT is
+    not a version-diff or engine-parity theorem (#469).
+    """
+    empty = {
+        "schema_version": ADMITTED_SCHEMA_VERSION,
+        "pair_kind": "sibling_family",
+        "tag": tag,
+        "admitted": [],
+        "dropped": [],
+        "admitted_count": 0,
+        "dropped_count": 0,
+    }
+    if not family_contract:
+        empty["dropped"] = [
+            {
+                "reason": "missing-family-contract",
+                "pair_kind": "sibling_family",
+            }
+        ]
+        empty["dropped_count"] = 1
+        return empty
+    empty["family_contract"] = family_contract
     by_id = _load_rules(rules_dir, tag=tag)
     families: dict[str, list[str]] = {}
     for rid in by_id:
@@ -273,6 +298,7 @@ def discover_crs_sibling_pairs(
         "schema_version": ADMITTED_SCHEMA_VERSION,
         "pair_kind": "sibling_family",
         "tag": tag,
+        "family_contract": family_contract,
         "admitted": admitted,
         "dropped": dropped,
         "admitted_count": len(admitted),
@@ -288,7 +314,7 @@ def discover_crs_pairs(
     newer_tag: str = "v4.28.0",
     max_len: int = DEFAULT_MAX_LEN,
 ) -> dict[str, Any]:
-    """Combine version-diff + sibling-family; dedupe by family name."""
+    """Version-diff pairs only. Sibling-family pairing is not a theorem (#469)."""
     ver = discover_crs_version_pairs(
         older_rules=older_rules,
         newer_rules=newer_rules,
@@ -296,21 +322,15 @@ def discover_crs_pairs(
         newer_tag=newer_tag,
         max_len=max_len,
     )
-    sib = discover_crs_sibling_pairs(
-        rules_dir=newer_rules, tag=newer_tag, max_len=max_len
-    )
-    by_family: dict[str, dict[str, Any]] = {}
-    for p in ver["admitted"] + sib["admitted"]:
-        by_family[p["family"]] = p
-    admitted = sorted(by_family.values(), key=lambda p: p["pair_id"])
+    admitted = sorted(ver["admitted"], key=lambda p: p["pair_id"])
     return {
         "schema_version": ADMITTED_SCHEMA_VERSION,
         "older_tag": older_tag,
         "newer_tag": newer_tag,
         "admitted": admitted,
-        "dropped": ver["dropped"] + sib["dropped"],
+        "dropped": ver["dropped"],
         "admitted_count": len(admitted),
-        "dropped_count": len(ver["dropped"]) + len(sib["dropped"]),
+        "dropped_count": len(ver["dropped"]),
         "version_diff_admitted": ver["admitted_count"],
-        "sibling_admitted": sib["admitted_count"],
+        "sibling_admitted": 0,
     }
