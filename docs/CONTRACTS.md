@@ -23,8 +23,10 @@ Sibling-family pairing is not a provenance (#469).
 
 ## Harness (#476)
 
-UNSAT without contract + declared domain is not reportable product. Mutation
-guards remain hygiene.
+UNSAT without contract + declared domain is not reportable product
+(`product: false` on the harness NDJSON record). `--require-contract` makes
+that a hard failure. Mutation guards remain hygiene. Registry P1–P6 carry
+human contracts so their UNSAT stays countable.
 
 ## Synthesis (#479)
 
@@ -45,23 +47,30 @@ contract. Do not ship “does this miss a space?”.
 ## Shape 5 in batch (#477)
 
 Admit only `version_diff` / `cross_engine` pairs that already have
-`family_contract`. SAT must pass the search/pad matrix
-(`regexproof.rule_diff.search_replay` when present). Keep fullmatch solve.
-Do not flip `solver_call_kind` to search (VF-007).
+`family_contract` (`regexproof.rule_diff.batch_shape5`). SAT must pass the
+search/pad matrix (`regexproof.rule_diff.search_replay`). Keep fullmatch
+solve. Do not flip `solver_call_kind` to search (VF-007). Sibling-family
+pairs are not admitted.
 
 ## Measurement notes (#481–#495)
 
-- **#481** Forks: gate decisions already carry `candidate_url`. Treat
-  CPython-family clones as duplicates at admission when `fork: true` and
-  the parent is already GO. Do not count 13× CPython as 13 corpora of novel
-  surface.
-- **#492** YARA `fullword-boundary` is ~68% of unencodable. Quote encodable
-  fraction with and without YARA corpora.
-- **#482 / #483** Bias-audit and rejected-tail risk are study design: freeze
-  a labeled holdout, then measure. Not a regex change.
-- **#491** Extractor recall needs an independently labeled sample (not the
-  implementer).
-- **#485** Independent annotator for gate labels. Live allocator stays
-  score-v1. Do not turn on score-v2.
-- **#495** Z3 vs DFA: add a `docs/why.md` paragraph per shape after a
-  no-timeout DFA-product benchmark on the regular fragment. Not a Z3 rip-out.
+- **#481** Forks: `regexproof.admission.forks` NO-GOs a clone when `fork: true`
+  and the parent is already GO, or when the repo is a CPython/interpreter
+  duplicate class. Mine search drops those candidates at enrich time.
+- **#492** Quote encodable fraction from `*_encodable_fraction.json` **with
+  and without YARA**. Live `yara_split` on the conversion ledger.
+- **#482 / #483** Bias-audit and rejected-tail risk (study design): freeze a
+  labeled holdout of N≥100 gate decisions drawn before seeing score-v2
+  weights. Labels: `should_admit` / `should_reject` / `uncertain`. Then
+  measure (a) score-v1 vs human on that freeze, (b) among NO-GO rows,
+  P(security-boundary regex | rejected) vs P(same | admitted). Do not retune
+  weights on the freeze.
+- **#491** Extractor recall: independently labeled sample of 50 files per
+  dialect (not the implementer). Gold: span of each regex literal. Composer
+  computes precision/recall; Grok or Luna labels if Grok fitted the extractor.
+- **#485** Independent annotator for gate labels. Composer builds a
+  blind-label harness (hide score, show probe only) and Cohen’s κ. Live
+  allocator stays **score-v1**. Do not turn on score-v2.
+- **#495** Z3 vs DFA: on the regular fragment, shape-1/2/5 are DFA-product
+  decidable with no length bound and no `not_proven`. Until that benchmark
+  ships, keep Z3. Outcome is a paragraph per shape in `docs/why.md`.

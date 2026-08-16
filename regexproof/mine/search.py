@@ -6,6 +6,7 @@ import os
 import random
 import time
 from dataclasses import dataclass, field
+from pathlib import Path
 from typing import Any, Callable, Protocol
 
 # Curated query families — shard with repeated filename:/path: (no repo qualifiers).
@@ -219,10 +220,20 @@ def run_search(
     is a post-filter on the enriched repo object — code search cannot filter
     by stars.
     """
+    from regexproof.admission.forks import (
+        fork_duplicate_reason,
+        load_go_repo_names,
+        parent_full_name,
+    )
+
     result = SearchRunResult()
     hdrs = headers or github_headers()
     seen_repos: set[str] = set()
     rate_limited = False
+    go_repos: set[str] = set()
+    generated = Path(__file__).resolve().parents[2] / "properties" / "generated"
+    if generated.is_dir():
+        go_repos = load_go_repo_names(generated)
     for query in queries or SEARCH_QUERIES:
         if rate_limited:  # P7 fold: a rate limit aborts ALL further queries
             break
@@ -281,6 +292,8 @@ def run_search(
                 # results below 50 stars as a post-filter on the enrich object.
                 if bool(meta.get("fork")) and stars < 50:
                     continue
+                if fork_duplicate_reason(meta, go_repos=go_repos):
+                    continue
                 default_branch = str(meta.get("default_branch") or "main")
                 try:
                     pin = resolve_default_pin(
@@ -314,6 +327,7 @@ def run_search(
                     # probes must use pin_probed when it is present.
                     "pin_probed": pin,
                     "fork": meta.get("fork") if "fork" in meta else None,
+                    "parent_full_name": parent_full_name(meta) or None,
                     "size": meta.get("size") if "size" in meta else None,
                     "language": meta.get("language") if "language" in meta else None,
                     "archived": meta.get("archived") if "archived" in meta else None,

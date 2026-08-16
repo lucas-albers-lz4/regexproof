@@ -71,7 +71,7 @@ Headline counts (re-verify from the artifact before quoting):
 |---|---|
 | sites extracted / encodable | 123,643 / 76,955 (fraction 0.622) |
 | scanner rows | 7,117 — of which 5,539 are classification (`usage_mismatch` / `intent_mismatch`), not security bugs |
-| properties asked | 644 (616 UNSAT / 28 SAT; all 28 SAT ground-truthed; 7 unique sites) |
+| properties asked | 0 product (644 synthesized validator.js shape-1/2, counted separately) |
 | rule_diff report SAT + GT (CRS version-diff, CRS cross-engine, gitleaks) | 17 |
 | accepted upstream (`fixed_upstream`) | 1 (usrmanage P3, own code, later fixed) |
 | existence proofs | 2 (that one + CRS 942220 `private_first`) |
@@ -100,7 +100,19 @@ The next measurement that speaks to the end result is conversion yield on alread
 
 **8. Backend research, delivered.** The Noodler escalation + cvc5 cross-check wave (#212/#213, phases #216–#221) is implemented and merged (PRs #222–#237). It verified verdict parity on 11 registry queries and 0 ECMA-pilot divergences on 5,622 decided comparisons. The U9 decision dropped `re.from_ecma2020` from harness scope. Lookaheads compile away to exact regular mirrors (13/13 equivalence measured) instead. Java dialect graduation (#150) is the next corpus frontier.
 
-**9. Conversion ledger (product measure).** Heap's-law ingest saturates the compiler. The conversion ledger saturates the claim "we find real security problems." First freeze: 123,643 extracted sites → 644 properties asked → 28 SAT (all ground-truthed) → 1 accepted upstream, 0 third-party public. Script: `scripts/conversion-ledger.py`.
+**9. Conversion ledger (product measure).** Heap's-law ingest saturates the compiler. The conversion ledger saturates the claim "we find real security problems." Untargeted synthesized shape-1/2 rows are not `properties_asked`. Script: `scripts/conversion-ledger.py`.
+
+## Z3 vs DFA (#495)
+
+On the **regular fragment** the compiler already admits, the three productive shapes are language-theoretic:
+
+| Shape | Relation | DFA product | Why Z3 is still used |
+|---|---|---|---|
+| 1 Alphabet disjointness | ∃c ∈ L(class) ∧ c = bad | emptiness of intersection | Same decision; Z3 is the existing harness |
+| 2 Whitelist exclusion | L(wl) ∩ len[a,b] ⊈ ¬Contains(X) | product + length track | Length bound is load-bearing in Z3; a DFA needs no bound if the property is a regular constraint |
+| 5 Rule diff | L(R2) \ L(R1) ≠ ∅ | product + complement of R1 | No `Complement()` in the Z3 encoding (trap); DFA complement is exact |
+
+A DFA-product benchmark with **no length bound** and **no `not_proven`** is the missing measurement. Until it exists, keep the Z3 harness. TIMEOUT is not a DFA result. This is not a rip-out.
 
 ## Where it stands
 

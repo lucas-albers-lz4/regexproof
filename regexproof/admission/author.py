@@ -8,6 +8,7 @@ from pathlib import Path
 from typing import Any, Callable
 
 from regexproof.admission.auto_nogo import AutoNoGoError, require_auto_nogo
+from regexproof.admission.forks import fork_duplicate_reason, load_go_repo_names
 from regexproof.admission.serialize import dumps_pinned
 from regexproof.admission.templates import (
     AUTO_ALLOWED_TEMPLATES,
@@ -230,9 +231,27 @@ def author_auto(
     *,
     decision_date: date | None = None,
     clock: Clock | None = None,
+    generated_dir: Path | None = None,
 ) -> dict[str, Any]:
-    """Auto-NO-GO path: restricted class only; always below-scale."""
+    """Auto-NO-GO path: restricted class, plus duplicate-fork NO-GO (#481)."""
     probe = dict(draft.get("probe") or {})
+    gen = generated_dir or (Path(__file__).resolve().parents[2] / "properties" / "generated")
+    go_repos = load_go_repo_names(gen) if gen.is_dir() else set()
+    dup = fork_duplicate_reason(probe, go_repos=go_repos)
+    if dup:
+        rationale = f"Duplicate-class fork at admission: {dup}."
+        conditions = build_conditions(probe, met=set())
+        return assemble_decision(
+            draft,
+            decision="no-go",
+            rationale=rationale,
+            conditions=conditions,
+            decision_basis="admission_conditions",
+            escape_hatch_applied=False,
+            related=None,
+            decision_date=decision_date,
+            clock=clock,
+        )
     require_auto_nogo(probe)
     # Guard: never emit go/triage-trial or repo-moved on auto path.
     rationale = render_rationale("below-scale", probe=probe)

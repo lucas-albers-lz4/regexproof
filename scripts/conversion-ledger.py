@@ -305,6 +305,69 @@ def _upstream_counts(rows: list[dict[str, Any]]) -> dict[str, int]:
     }
 
 
+
+def _is_yara_fraction(data: dict[str, Any], stem: str) -> bool:
+    dialect = str(data.get("dialect") or "")
+    if dialect == "yara":
+        return True
+    name = str(data.get("pilot") or data.get("corpus") or stem).lower()
+    return "yara" in name
+
+
+def yara_encodable_split(gen: Path) -> dict[str, Any]:
+    """Encodable fraction with and without YARA corpora (#492)."""
+    all_n = 0
+    all_ok = 0
+    yara_n = 0
+    yara_ok = 0
+    all_unenc_reasons: Counter[str] = Counter()
+    yara_unenc_reasons: Counter[str] = Counter()
+    for path in sorted(gen.glob("*_encodable_fraction.json")):
+        data = _read_json(path)
+        n = int(data.get("sample_size") or 0)
+        ok = int(data.get("encodable") or 0)
+        if n <= 0:
+            continue
+        reasons = data.get("reasons") or {}
+        unenc: Counter[str] = Counter()
+        for key, val in reasons.items():
+            if key == "ok":
+                continue
+            unenc[str(key)] += int(val or 0)
+        all_n += n
+        all_ok += ok
+        all_unenc_reasons.update(unenc)
+        stem = path.name.replace("_encodable_fraction.json", "")
+        if _is_yara_fraction(data, stem):
+            yara_n += n
+            yara_ok += ok
+            yara_unenc_reasons.update(unenc)
+    all_unenc = all_n - all_ok
+    yara_unenc = yara_n - yara_ok
+    non_yara_n = all_n - yara_n
+    non_yara_ok = all_ok - yara_ok
+    fw_all = int(all_unenc_reasons.get("fullword-boundary") or 0)
+    fw_yara = int(yara_unenc_reasons.get("fullword-boundary") or 0)
+    return {
+        "fraction_all_n": all_n,
+        "fraction_all_encodable": all_ok,
+        "fraction_yara_n": yara_n,
+        "fraction_yara_encodable": yara_ok,
+        "fraction_excluding_yara_n": non_yara_n,
+        "fraction_excluding_yara_encodable": non_yara_ok,
+        "unencodable_all": all_unenc,
+        "unencodable_yara": yara_unenc,
+        "fullword_boundary_all": fw_all,
+        "fullword_boundary_yara": fw_yara,
+        "encodable_fraction_all": _ratio(all_ok, all_n),
+        "encodable_fraction_excluding_yara": _ratio(non_yara_ok, non_yara_n),
+        "encodable_fraction_yara": _ratio(yara_ok, yara_n),
+        "yara_share_of_unencodable": _ratio(yara_unenc, all_unenc),
+        "fullword_share_of_unencodable": _ratio(fw_all, all_unenc),
+        "fullword_share_of_yara_unencodable": _ratio(fw_yara, yara_unenc),
+    }
+
+
 def aggregate(
     *,
     gen_dir: Path | None = None,
@@ -341,6 +404,7 @@ def aggregate(
 
     classified = classify_scanner_rows(all_rows)
     private, public_ok = _count_disclosure(all_rows)
+    yara = yara_encodable_split(gen)
 
     dry_runs = 0
     dry_findings = 0
@@ -373,6 +437,8 @@ def aggregate(
     asked_not_tools = 0
     for rec in all_rows:
         if is_planned(rec) or rec.get("kind") not in PRODUCT_KINDS:
+            continue
+        if rec.get("synthesized"):
             continue
         in_tool = rec.get("corpus") in tools
         if in_tool:
@@ -434,6 +500,11 @@ def aggregate(
         # Aliases kept one release so older quotes fail the new names first.
         "accepted_per_gt": _ratio(up["accepted_upstream"], gt),
         "accepted_per_extracted": _ratio(up["accepted_upstream"], extracted),
+        "encodable_fraction_all_inventories": yara["encodable_fraction_all"],
+        "encodable_fraction_excluding_yara": yara["encodable_fraction_excluding_yara"],
+        "encodable_fraction_yara": yara["encodable_fraction_yara"],
+        "yara_share_of_unencodable": yara["yara_share_of_unencodable"],
+        "fullword_share_of_unencodable": yara["fullword_share_of_unencodable"],
     }
     by_corpus = []
     for corpus in sorted(per_corpus):
@@ -474,6 +545,7 @@ def aggregate(
             "properties_sat_not_tools": sat_not_tools,
         },
         "rule_diff_reports": rule_diff,
+        "yara_split": yara,
         "upstream": up,
         "upstream_rows": [
             {k: r[k] for k in ("id", "corpus", "status", "kind", "language_membership") if k in r}
@@ -547,6 +619,9 @@ def render_md(data: dict[str, Any]) -> str:
         f"| ground-truthed / SAT | {pct(r['gt_per_sat'])} |",
         f"| pipeline accepted (incl. own-code) / SAT GT | {pct(r['pipeline_accepted_per_gt'])} |",
         f"| pipeline accepted / extracted | {pct(r['pipeline_accepted_per_extracted'])} |",
+        f"| encodable / extracted excluding YARA inventories | {pct(r['encodable_fraction_excluding_yara'])} |",
+        f"| YARA share of inventory unencodable | {pct(r['yara_share_of_unencodable'])} |",
+        f"| `fullword-boundary` share of inventory unencodable | {pct(r['fullword_share_of_unencodable'])} |",
         "",
         "## Security-tool split (scanner product kinds)",
         "",

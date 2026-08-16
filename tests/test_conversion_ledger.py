@@ -196,6 +196,8 @@ def test_aggregate_fixture_tree(tmp_path: Path):
     md = cl.render_md(data)
     assert "sites extracted" in md
     assert "accepted upstream" in md
+    assert "yara_split" in data
+    assert "encodable_fraction_excluding_yara" in data["rates"]
 
 
 def test_sidecar_findings_ndjson_ignored_rule_diff_report_counted(tmp_path: Path):
@@ -297,6 +299,8 @@ def test_ci_golden_regenerates_and_drift_checks_ledger():
     assert f["properties_asked_distinct"] <= f["properties_asked"]
     assert f["properties_sat_distinct"] <= f["properties_sat"]
     assert f["properties_asked_synthesized"] >= 1
+    assert "yara_split" in data
+    assert "encodable_fraction_excluding_yara" in data["rates"]
     assert (ROOT / "properties" / "generated" / "validatorjs-inventory.ndjson").is_file()
     manifests = (ROOT / "regexproof" / "batch" / "manifests.py").read_text(encoding="utf-8")
     assert '"repo": "TODO"' not in manifests

@@ -24,6 +24,7 @@ from z3 import (
     unsat,
 )
 
+from regexproof.harness.contract import product_reportable
 from regexproof.kinds import (
     KINDS_NEEDING_MUTATION_GUARD,
     PropertyKind,
@@ -110,6 +111,7 @@ def prop(
     search_wrapped=False,
     pattern=None,
     pattern_flags="",
+    contract=None,
 ):
     """Decorator: register a property. The wrapped function returns the
     constraint list; the harness adds `bad` and checks satisfiability.
@@ -149,6 +151,8 @@ def prop(
     `pattern` / `pattern_flags`: the SOURCE pattern text + flags, declared
     when the property participates in the registration gates (\p gate +
     D7 structural checks). None = no source pattern declared (gate skipped).
+    `contract`: optional property-contract object (#476). UNSAT/SAT is not
+    counted as product without contract + declared domain.
     """
     assert callable(ground_truth) or ground_truth is None, "ground_truth must be callable"
     if input_domain is not None:
@@ -174,6 +178,7 @@ def prop(
             "search_wrapped": search_wrapped,
             "pattern": pattern,
             "pattern_flags": pattern_flags,
+            "contract": contract,
         }
         return fn
 
@@ -204,6 +209,7 @@ def run_one(name, entry, require_ground_truth=False):
         "engine_versions": engines,
         "not_proven": False,  # True iff TIMEOUT — surfaced as "not proven"
         "backend": entry.get("backend", "seq"),  # "seq" | "noodler" (additive, Phase 2)
+        "product": product_reportable(entry),
     }
     constraints, bad = entry["fn"]()
     if entry.get("backend") == "noodler":
@@ -275,6 +281,8 @@ def run_one(name, entry, require_ground_truth=False):
             result["ok"] = False
     print(f"[{'PASS' if result['ok'] else 'FAIL'}] {name}: {tag}  [{result['wall_ms']:.1f}ms]")
     print(f"    domain: {entry['domain']}")
+    if r == unsat and entry.get("kind") == PropertyKind.PROPERTY.value and not result["product"]:
+        print("    product: not counted (missing contract + declared domain)")
     if result.get("witness"):
         for wname, wval in result["witness"].items():
             print(f"    witness: {wname} = {wval!r}")
@@ -522,6 +530,31 @@ def check_mutation_coverage():
         print(
             "WARNING: families with properties but NO mutation guard: "
             f"{', '.join(missing)} — a vacuous encoding would pass silently.",
+            file=sys.stderr,
+        )
+        return 1
+    return 0
+
+
+def check_contract_coverage(require=False):
+    """UNSAT is not product without contract + domain (#476)."""
+    if not require:
+        return 0
+    missing = sorted(
+        n
+        for n, e in REGISTRY.items()
+        if e["kind"] in (
+            PropertyKind.PROPERTY.value,
+            PropertyKind.COUNTEREXAMPLE_FINDER.value,
+            PropertyKind.BUG_DEMO.value,
+            PropertyKind.RULE_DIFF.value,
+        )
+        and not product_reportable(e)
+    )
+    if missing:
+        print(
+            "FAIL: --require-contract, but these properties are not product-"
+            f"reportable (need contract + declared domain): {', '.join(missing)}.",
             file=sys.stderr,
         )
         return 1
