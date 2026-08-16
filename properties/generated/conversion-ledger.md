@@ -63,4 +63,4 @@ Source: [`docs/conversion-upstream.jsonl`](../../docs/conversion-upstream.jsonl)
 
 `crs-inventory.ndjson` is the @rx-only CRS measure (346 rows) from `regexproof.batch.crs_measure`; it is **not** the batch corpus. `coreruleset-inventory.ndjson` + `coreruleset_batch_summary.json` are the batch extractor (338 extracted). Do not glob `crs-inventory` into the conversion ledger sample.
 
-Synthesis considers at most `synth_max_sites` (default 200, sort by `regex_id`) per corpus. validator.js is the only corpus with properties asked; its batch summary already records `synth_max_sites`.
+Synthesis considers at most `synth_max_sites` (default 200, sort by `regex_id`) per corpus. Corpora with properties asked are listed in the table above; their batch summaries record `synth_max_sites`.
