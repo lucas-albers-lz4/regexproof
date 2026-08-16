@@ -276,12 +276,14 @@ def test_pr_dry_run_no_auto_publish(tmp_path: Path):
 
 def test_tag_disclosure_fail_closed_unknown_kind():
     tagged = tag_disclosure(
-        [{"kind": "counterexample_finder", "regex_id": "x"}],
+        [{"kind": "future_kind_not_in_schema", "regex_id": "x"}],
         corpus="gitleaks",
     )
     assert tagged[0]["disclosure"] == "private_first"
     tagged_redos = tag_disclosure([{"kind": "redos"}], corpus="coreruleset")
     assert tagged_redos[0]["disclosure"] == "private_first"
+    tagged_missing = tag_disclosure([{}], corpus="gitleaks")
+    assert tagged_missing[0]["disclosure"] == "private_first"
     tagged_other = tag_disclosure([{"kind": "property"}], corpus="validatorjs")
     assert "disclosure" not in tagged_other[0]
 
