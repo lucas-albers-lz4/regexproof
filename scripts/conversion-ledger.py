@@ -203,7 +203,10 @@ def classify_scanner_rows(
             continue
         if kind in PRODUCT_KINDS:
             counts["properties_asked"] += 1
-            pair = (str(rec.get("site") or ""), str(rec.get("question_id") or ""))
+            qid = rec.get("question_id")
+            if not qid and isinstance(rec.get("detail"), dict):
+                qid = rec["detail"].get("question_id")
+            pair = (str(rec.get("site") or ""), str(qid or ""))
             asked_pairs.add(pair)
             if rec.get("synthesized"):
                 counts["properties_asked_synthesized"] += 1
@@ -583,8 +586,8 @@ def render_md(data: dict[str, Any]) -> str:
             "into the conversion ledger sample.",
             "",
             "Synthesis considers at most `synth_max_sites` (default 200, sort by "
-            "`regex_id`) per corpus. validator.js is the only corpus with "
-            "properties asked; its batch summary already records `synth_max_sites`.",
+            "`regex_id`) per corpus. Corpora with properties asked are listed "
+            "in the table above; their batch summaries record `synth_max_sites`.",
             "",
         ]
     )
