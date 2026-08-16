@@ -28,6 +28,7 @@ sys.path.insert(0, str(ROOT))
 
 import jsonschema  # noqa: E402
 
+from regexproof.batch.report import redact_witness  # noqa: E402
 from regexproof.compiler.pcre import replay_argv  # noqa: E402
 from regexproof.rule_diff.crs_pairs import discover_crs_pairs  # noqa: E402
 from regexproof.rule_diff.pairs import _min_literal_span, write_jsonl  # noqa: E402
@@ -212,7 +213,7 @@ def main(argv: list[str] | None = None) -> int:
                 "kind": entry.get("kind"),
                 "result": res.get("result"),
                 "ok": res.get("ok"),
-                "witness": res.get("witness"),
+                "witness": redact_witness(res.get("witness"), min_len=1),
                 "ground_truth_status": res.get("ground_truth_status"),
                 "wall_ms": res.get("wall_ms"),
                 "domain": entry.get("domain"),

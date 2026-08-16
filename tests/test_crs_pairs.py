@@ -97,6 +97,22 @@ def test_generated_crs_report_has_no_sibling_pairs():
     )
 
 
+def test_crs_report_witnesses_are_redacted():
+    import json
+
+    path = ROOT / "properties" / "generated" / "crs_rule_diff_report.json"
+    blob = path.read_text(encoding="utf-8")
+    assert "JSon" not in blob
+    assert "1E309" not in blob
+    data = json.loads(blob)
+    for rec in data.get("results") or []:
+        w = rec.get("witness")
+        if isinstance(w, dict):
+            for v in w.values():
+                if isinstance(v, str):
+                    assert v.startswith("<redacted")
+
+
 def test_unchanged_id_dropped_on_tiny_fixture(tmp_path: Path):
     older = tmp_path / "old"
     newer = tmp_path / "new"
