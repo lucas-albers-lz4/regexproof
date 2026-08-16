@@ -29,7 +29,7 @@ Heap's-law / singleton novelty saturates **compiler coverage**. This artifact sa
 | dry-run would open public upstream | 0 |
 | accepted upstream (curated `fixed_upstream`) | 1 |
 | existence proofs (`fixed_upstream` + `private_first`) | 2 |
-| filed false positives | 1 |
+| filed false positives | 6 |
 | third-party public accepted | 0 |
 
 ## Rates
@@ -49,7 +49,7 @@ Asked in tools: 0. Asked elsewhere: 644. SAT in tools: 0. SAT elsewhere: 28.
 
 ## Upstream (curated)
 
-Rows: 5. Language-membership: 4. fixed_upstream: 1. filed_plan: 1. false_positive: 1. out_of_scope_redos: 1. private_first: 1.
+Rows: 10. Language-membership: 9. fixed_upstream: 1. filed_plan: 1. false_positive: 6. out_of_scope_redos: 1. private_first: 1.
 
 Source: [`docs/conversion-upstream.jsonl`](../../docs/conversion-upstream.jsonl).
 

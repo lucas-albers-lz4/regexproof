@@ -20,7 +20,7 @@
     "disclosed_private_first": 686,
     "disclosed_public_ok": 0,
     "existence_proofs": 2,
-    "false_positives_filed": 1,
+    "false_positives_filed": 6,
     "mutation_guards": 644,
     "other_rows": 0,
     "planned_stubs": 290,
@@ -99,13 +99,13 @@
   "upstream": {
     "accepted_upstream": 1,
     "existence_proofs": 2,
-    "false_positive": 1,
+    "false_positive": 6,
     "filed_plan": 1,
     "fixed_upstream": 1,
-    "language_membership": 4,
+    "language_membership": 9,
     "out_of_scope_redos": 1,
     "private_first": 1,
-    "rows": 5,
+    "rows": 10,
     "third_party_public": 0
   },
   "upstream_rows": [
@@ -143,6 +143,41 @@
       "kind": "rule_diff",
       "language_membership": true,
       "status": "private_first"
+    },
+    {
+      "corpus": "gitleaks",
+      "id": "CU-006",
+      "kind": "rule_diff",
+      "language_membership": true,
+      "status": "false_positive"
+    },
+    {
+      "corpus": "gitleaks",
+      "id": "CU-007",
+      "kind": "rule_diff",
+      "language_membership": true,
+      "status": "false_positive"
+    },
+    {
+      "corpus": "gitleaks",
+      "id": "CU-008",
+      "kind": "rule_diff",
+      "language_membership": true,
+      "status": "false_positive"
+    },
+    {
+      "corpus": "gitleaks",
+      "id": "CU-009",
+      "kind": "rule_diff",
+      "language_membership": true,
+      "status": "false_positive"
+    },
+    {
+      "corpus": "coreruleset",
+      "id": "CU-010",
+      "kind": "rule_diff",
+      "language_membership": true,
+      "status": "false_positive"
     }
   ]
 }
