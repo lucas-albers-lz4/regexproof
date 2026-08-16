@@ -95,6 +95,54 @@ def _discard_streamed_mirrors(
     compiled.clear()
 
 
+def _run_and_record_shape5(
+    corpus: str,
+    pairs: list[dict[str, Any]],
+    out_dir: Path,
+    *,
+    admitted: int,
+    dropped: int,
+    note: str,
+) -> dict[str, Any]:
+    """Filter, solve, pad-gate, and write ``{corpus}_batch_shape5.json``."""
+    from regexproof.rule_diff.batch_shape5 import (
+        filter_batch_pairs,
+        run_batch_shape5_pairs,
+        summarize_shape5_rows,
+    )
+    from regexproof.rule_diff.timeout_gate import fail_message, timeout_gate
+
+    batch_pairs = filter_batch_pairs(pairs)
+    rows = run_batch_shape5_pairs(batch_pairs)
+    summary = summarize_shape5_rows(rows)
+    gate_ok, n_timeout, rate, bad = timeout_gate(rows, name_key="pair_id")
+    summary["timeout_gate_ok"] = gate_ok
+    summary["timeout_rate"] = rate
+    atomic_write_text(
+        out_dir / f"{corpus}_batch_shape5.json",
+        json.dumps(
+            {
+                "schema_version": "1",
+                "corpus": corpus,
+                "rows": rows,
+                "summary": summary,
+            },
+            indent=2,
+            sort_keys=True,
+        )
+        + "\n",
+    )
+    if not gate_ok:
+        raise SystemExit(fail_message(bad, n_timeout))
+    return {
+        "admitted": admitted,
+        "dropped": dropped,
+        "batch_shape5": len(batch_pairs),
+        **summary,
+        "note": note,
+    }
+
+
 def resolve_corpus_path(corpus: str, meta: dict[str, Any]) -> dict[str, Any]:
     """Apply sample fallback / measure_scope path policy before extract (#196)."""
     meta = dict(meta)
@@ -542,24 +590,31 @@ def run_batch(
         )
         # Pair-at-scale: reuse Phase-3 discovery when catalog exists
         if name == "gitleaks":
-            from regexproof.rule_diff.batch_shape5 import filter_batch_pairs
             from regexproof.rule_diff.pairs import discover_pairs
 
             specs = ROOT / "pilots" / "gitleaks" / "canonical_specs" / "catalog.json"
             toml = ROOT / "pilots" / "gitleaks" / "config" / "gitleaks.toml"
             d = discover_pairs(toml_path=toml, specs_path=specs)
-            batch_pairs = filter_batch_pairs(d["admitted_pairs"])
-            pair_counts[name] = {
-                "admitted": d["admitted_count"],
-                "dropped": d["dropped_count"],
-                "batch_shape5": len(batch_pairs),
-                "note": (
-                    "batch shape-5 admits only version_diff/cross_engine "
-                    "pairs with family_contract (#477)"
+            pair_counts[name] = _run_and_record_shape5(
+                name,
+                d["admitted_pairs"],
+                out_dir,
+                admitted=d["admitted_count"],
+                dropped=d["dropped_count"],
+                note=(
+                    "independent-spec gitleaks pairs are not version_diff/"
+                    "cross_engine; batch executes 0 unless family_contract "
+                    "is present (#477)"
                 ),
-            }
+            )
         else:
-            pair_counts[name] = {"admitted": 0, "dropped": 0, "note": "no independent-spec catalog"}
+            pair_counts[name] = {
+                "admitted": 0,
+                "dropped": 0,
+                "batch_shape5": 0,
+                "executed": 0,
+                "note": "no independent-spec catalog",
+            }
 
     if write_pilot_aggregate or "coreruleset" in corpora:
         crs = measure_coreruleset(out_dir)
@@ -574,13 +629,21 @@ def run_batch(
         pair_counts["coreruleset"] = {
             "admitted": 0,
             "dropped": 0,
-            "note": "fraction gate go; CRS rule-derived adapter is Phase-2 rule_diff",
+            "batch_shape5": 0,
+            "executed": 0,
+            "note": (
+                "fraction gate go; version_diff family_contract is stamped "
+                "at CRS discovery. Batch shape-5 execute needs older+newer "
+                "rule trees in-checkout (not present here)."
+            ),
             "scope": crs.get("scope"),
             "fraction": crs.get("fraction"),
         }
     else:
         pair_counts["coreruleset"] = {
             "admitted": 0,
+            "batch_shape5": 0,
+            "executed": 0,
             "note": f"excluded decision={crs['decision']} fraction={crs['fraction']}",
             "scope": crs.get("scope"),
         }

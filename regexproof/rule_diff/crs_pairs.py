@@ -93,7 +93,7 @@ def _make_pair(
     max_len: int,
     provenance: dict[str, Any],
 ) -> dict[str, Any]:
-    return {
+    out = {
         "schema_version": ADMITTED_SCHEMA_VERSION,
         "pair_id": pair_id,
         "direction": "r2_minus_r1",
@@ -111,6 +111,14 @@ def _make_pair(
         "adapter_note": provenance.get("adapter_note"),
         "direction_label": provenance.get("direction_label"),
     }
+    if pair_kind in ("version_diff", "cross_engine"):
+        out["family_contract"] = {
+            "R1": r1.get("pattern") or "",
+            "R2": r2.get("pattern") or "",
+            "provenance": pair_kind,
+        }
+        out["provenance"] = {**provenance, "kind": pair_kind}
+    return out
 
 
 def discover_crs_version_pairs(

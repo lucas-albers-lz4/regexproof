@@ -6,6 +6,7 @@ from pathlib import Path
 
 import jsonschema
 
+from regexproof.rule_diff.batch_shape5 import admit_shape5_for_batch
 from regexproof.rule_diff.crs_pairs import (
     discover_crs_pairs,
     discover_crs_sibling_pairs,
@@ -34,6 +35,8 @@ def test_version_diff_admits_changed_encodable_pairs():
         jsonschema.validate(p, admitted_pair_schema())
         assert p["direction"] == "r2_minus_r1"
         assert p["provenance"]["adapter"] == "crs_rule_derived_r1"
+        assert p["family_contract"]["provenance"] == "version_diff"
+        assert admit_shape5_for_batch(p) is True
 
 
 def test_sibling_family_requires_family_contract():
