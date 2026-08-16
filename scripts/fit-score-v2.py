@@ -76,7 +76,8 @@ def main(argv: list[str] | None = None) -> int:
     print(json.dumps(format_report(artifact), sort_keys=True, ensure_ascii=False))
     gate = artifact.get("evaluation", {}).get("gate", {})
     if args.fail_on_gate and not (
-        gate.get("holdout_auc_ge_0_70") and gate.get("ablation_beats_v1_features")
+        (gate.get("label_reproduction_auc_ge_0_70") or gate.get("holdout_auc_ge_0_70"))
+        and gate.get("ablation_beats_v1_features")
     ):
         return 1
     return 0

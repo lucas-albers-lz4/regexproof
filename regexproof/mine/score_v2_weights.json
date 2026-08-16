@@ -7,9 +7,11 @@
       "ablation_beats_v1_features": true,
       "default_allocator_flip_allowed": true,
       "holdout_auc_ge_0_70": true,
+      "label_reproduction_auc_ge_0_70": true,
       "mean_gap_beats_v1_baseline_informational": true
     },
     "holdout_auc": 0.9586148648648649,
+    "label_reproduction_auc": 0.9586148648648649,
     "label_set": "gate-labels.json",
     "positive_mapping": "go-only",
     "recomputed_v1_baseline_auc": 0.48944256756756754,
@@ -99,6 +101,7 @@
   "holdout_negative_count": 148,
   "holdout_positive_count": 16,
   "intercept": -1.4677442935639646,
+  "label_reproduction_auc": 0.9586148648648649,
   "n": 820,
   "schema_version": "1",
   "training": {

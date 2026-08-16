@@ -91,13 +91,29 @@ fraction, compile likelihood.
 
 `mine_run_summary` includes `"allocator": "score-v1"`.
 
-### Score-v2 allocator (#432)
+**Live allocator is score-v1.** Do not treat score-v2 metrics as evidence
+about what gets scanned. The production score's load-bearing boundary term is
+`classify_boundary` on the repo name (about +50 of ~101 points). Score-v2 is
+opt-in (`--allocator score-v2`) and is **not** rolled out even when
+`default_allocator_flip_allowed` is true in the weight artifact (#490).
 
-Score-v2 is an explicit comparison allocator; score-v1 remains the production
-default. It is a pure-Python deterministic fit over the committed
-`properties/generated/gate-labels.json` artifact. Refit manually when the gate
-decision count grows by about 20%; the daily mine job regenerates **labels**
-(so Golden P8 `inputs_hash` matches the new ledger) but does not refit weights.
+### Score-v2 allocator (#432) — comparison only
+
+Score-v2 is an explicit comparison allocator. It is a pure-Python
+deterministic fit over the committed `properties/generated/gate-labels.json`
+artifact. There is **no external validation set**. The number formerly named
+`holdout_auc` is **label-reproduction AUC**: how well the fit reproduces our
+own GO labels (`positive_mapping: go-only`), with `holdout_positive_count`
+(16 on the 2026-08-13 fit) sitting next to it so the CI width is readable.
+It is not gate accuracy on unseen repos (#484).
+
+Refit manually when the gate decision count grows by about 20%; the daily
+mine job regenerates **labels** (so Golden P8 `inputs_hash` matches the new
+ledger) but does not refit weights.
+
+Ungated ledger rows store the mined SHA as `pin`. Rank `--allocator score-v2`
+copies that into `pin_probed` so tree join is not `missing-probed-pin`.
+Admission E3 still refuses mined-pin fallback when writing a gate decision.
 
 ```bash
 python scripts/fit-score-v2.py
@@ -105,9 +121,9 @@ python scripts/rank-mine-candidates.py --allocator score-v2 --limit 10
 ```
 
 The fit output records the grouped split, dev-only positive-class decision,
-holdout AUC and interval, v1-feature ablation, and the informational gap
-comparison. Runtime scores are recomputed and never persisted. Each rank line
-tags both `allocator` and `score_version`.
+label-reproduction AUC and interval, v1-feature ablation, and the
+informational gap comparison. Runtime scores are recomputed and never
+persisted. Each rank line tags both `allocator` and `score_version`.
 
 Operator terms (mine / queue drain / rank / probe / gate / Smith):
 [`docs/terminology.md`](terminology.md).
