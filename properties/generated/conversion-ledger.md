@@ -14,13 +14,13 @@ Heap's-law / singleton novelty saturates **compiler coverage**. This artifact sa
 | planned inventory stubs | 290 |
 | classification rows (usage/intent/triage kinds) | 5,539 |
 | mutation guards (hygiene) | 644 |
-| properties asked (non-planned product kinds) | 644 |
-| properties asked distinct `(site, question_id)` | 93 |
-| properties UNSAT (holds in declared domain) | 616 |
-| properties SAT | 28 |
-| properties SAT distinct `(site, question_id)` | 7 |
-| SAT unique sites | 7 |
-| SAT ground-truthed (`reproduced` / `PASS`) | 28 |
+| properties asked (non-planned product kinds) | 0 |
+| properties asked distinct `(site, question_id)` | 0 |
+| properties UNSAT (holds in declared domain) | 0 |
+| properties SAT | 0 |
+| properties SAT distinct `(site, question_id)` | 0 |
+| SAT unique sites | 0 |
+| SAT ground-truthed (`reproduced` / `PASS`) | 0 |
 | rule_diff report SAT (dedicated pilots) | 10 |
 | rule_diff report SAT + ground-truth | 10 |
 | disclosed `private_first` (scanner product+classification, skip planned) | 686 |
@@ -37,15 +37,18 @@ Heap's-law / singleton novelty saturates **compiler coverage**. This artifact sa
 | rate | value |
 |---|---|
 | encodable / extracted | 0.6224 |
-| properties asked / encodable | 0.0084 |
-| SAT / properties asked | 0.0435 |
-| ground-truthed / SAT | 1.0000 |
-| pipeline accepted (incl. own-code) / SAT GT | 0.0357 |
+| properties asked / encodable | 0.0000 |
+| SAT / properties asked | n/a |
+| ground-truthed / SAT | n/a |
+| pipeline accepted (incl. own-code) / SAT GT | n/a |
 | pipeline accepted / extracted | 8.00e-06 |
+| encodable / extracted excluding YARA inventories | 0.6174 |
+| YARA share of inventory unencodable | 0.6529 |
+| `fullword-boundary` share of inventory unencodable | 0.6352 |
 
 ## Security-tool split (scanner product kinds)
 
-Asked in tools: 0. Asked elsewhere: 644. SAT in tools: 0. SAT elsewhere: 28.
+Asked in tools: 0. Asked elsewhere: 0. SAT in tools: 0. SAT elsewhere: 0.
 
 ## Upstream (curated)
 
@@ -57,7 +60,6 @@ Source: [`docs/conversion-upstream.jsonl`](../../docs/conversion-upstream.jsonl)
 
 | corpus | security tool | asked | unsat | sat | sat GT | unique SAT sites |
 |---|---|---|---|---|---|---|
-| validatorjs | false | 644 | 616 | 28 | 28 | 7 |
 
 ## Denominator notes
 

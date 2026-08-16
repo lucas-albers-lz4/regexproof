@@ -36,7 +36,8 @@ Do NOT use Z3 for:
 
 Do not count an UNSAT (or a synthesized SAT) as a **product** result unless
 the site has a contract: the guarantee you actually care about, the input
-source and trust class, and a declared domain (`docs/why.md`). Untargeted
+source and trust class, declared domain, and provenance
+([`docs/CONTRACTS.md`](docs/CONTRACTS.md)). Untargeted
 shape-1/2 synthesis ("does this class contain a space?") is compiler smoke.
 Shape-5 `rule_diff` still needs an independent spec or a
 `version_diff` / `cross_engine` pair with a `family_contract` — sibling-family

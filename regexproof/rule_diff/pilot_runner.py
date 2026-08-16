@@ -94,6 +94,31 @@ def register_shape5_pair(
 
     input_domain = pair.get("declared_domain") or "ascii"
     call_kind = pair.get("call_kind") or "search"
+    raw_prov = pair.get("provenance")
+    if isinstance(raw_prov, dict):
+        prov_token = str(
+            raw_prov.get("kind") or raw_prov.get("provenance") or pair.get("pair_kind") or ""
+        )
+    else:
+        prov_token = str(raw_prov or pair.get("pair_kind") or "")
+    if prov_token not in {"version_diff", "cross_engine"}:
+        prov_token = ""
+    gap_contract = None
+    if prov_token:
+        gap_contract = {
+            "schema_version": "1",
+            "site": str(r2.get("site") or family),
+            "guarantee": "R2 accepts a string R1 misses (shape-5)",
+            "input_source": "rule-corpus",
+            "trust": "config",
+            "declared_domain": domain,
+            "provenance": prov_token,
+            "family_contract": pair.get("family_contract") or {
+                "R1": r1.get("pattern"),
+                "R2": r2.get("pattern"),
+                "provenance": prov_token,
+            },
+        }
 
     @prop(
         f"{family}-gap",
@@ -105,6 +130,7 @@ def register_shape5_pair(
         family=family,
         input_domain=input_domain,
         call_kind=call_kind,
+        contract=gap_contract,
     )
     def _gap():
         constraints, bad, _s = shape5_constraints(

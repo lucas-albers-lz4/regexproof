@@ -1,16 +1,5 @@
 {
-  "by_corpus": [
-    {
-      "corpus": "validatorjs",
-      "properties_asked": 644,
-      "properties_sat": 28,
-      "properties_unsat": 616,
-      "sat_ground_truthed": 28,
-      "sat_unique_sites": 7,
-      "scanner_rows": 1416,
-      "security_tool": false
-    }
-  ],
+  "by_corpus": [],
   "funnel": {
     "accepted_upstream": 1,
     "batch_summaries": 75,
@@ -27,18 +16,18 @@
     "pr_dry_run_findings": 7117,
     "pr_dry_run_private_first": 810,
     "pr_dry_runs": 75,
-    "properties_asked": 644,
-    "properties_asked_distinct": 93,
+    "properties_asked": 0,
+    "properties_asked_distinct": 0,
     "properties_asked_synthesized": 644,
-    "properties_sat": 28,
-    "properties_sat_distinct": 7,
+    "properties_sat": 0,
+    "properties_sat_distinct": 0,
     "properties_sat_synthesized": 28,
-    "properties_unsat": 616,
+    "properties_unsat": 0,
     "redos_rows": 0,
     "rule_diff_report_sat": 10,
     "rule_diff_report_sat_gt": 10,
-    "sat_ground_truthed": 28,
-    "sat_unique_sites": 7,
+    "sat_ground_truthed": 0,
+    "sat_unique_sites": 0,
     "scanner_ndjson_files": 75,
     "scanner_rows": 7117,
     "scanner_rule_diff_sat": 0,
@@ -58,13 +47,18 @@
   ],
   "rates": {
     "accepted_per_extracted": 8e-06,
-    "accepted_per_gt": 0.035714,
+    "accepted_per_gt": null,
     "encodable_fraction": 0.622397,
-    "gt_per_sat": 1.0,
+    "encodable_fraction_all_inventories": 0.625163,
+    "encodable_fraction_excluding_yara": 0.617355,
+    "encodable_fraction_yara": 0.629186,
+    "fullword_share_of_unencodable": 0.635175,
+    "gt_per_sat": null,
     "pipeline_accepted_per_extracted": 8e-06,
-    "pipeline_accepted_per_gt": 0.035714,
-    "property_asked_per_encodable": 0.008369,
-    "sat_per_property_asked": 0.043478
+    "pipeline_accepted_per_gt": null,
+    "property_asked_per_encodable": 0.0,
+    "sat_per_property_asked": null,
+    "yara_share_of_unencodable": 0.652913
   },
   "rule_diff_reports": {
     "crs_cross_engine_rule_diff_report.json": {
@@ -92,9 +86,9 @@
   "schema_version": "1",
   "security_tool_split": {
     "properties_asked_in_tools": 0,
-    "properties_asked_not_tools": 644,
+    "properties_asked_not_tools": 0,
     "properties_sat_in_tools": 0,
-    "properties_sat_not_tools": 28
+    "properties_sat_not_tools": 0
   },
   "upstream": {
     "accepted_upstream": 1,
@@ -179,5 +173,23 @@
       "language_membership": true,
       "status": "false_positive"
     }
-  ]
+  ],
+  "yara_split": {
+    "encodable_fraction_all": 0.625163,
+    "encodable_fraction_excluding_yara": 0.617355,
+    "encodable_fraction_yara": 0.629186,
+    "fraction_all_encodable": 102303,
+    "fraction_all_n": 163642,
+    "fraction_excluding_yara_encodable": 34349,
+    "fraction_excluding_yara_n": 55639,
+    "fraction_yara_encodable": 67954,
+    "fraction_yara_n": 108003,
+    "fullword_boundary_all": 38961,
+    "fullword_boundary_yara": 38961,
+    "fullword_share_of_unencodable": 0.635175,
+    "fullword_share_of_yara_unencodable": 0.972833,
+    "unencodable_all": 61339,
+    "unencodable_yara": 40049,
+    "yara_share_of_unencodable": 0.652913
+  }
 }

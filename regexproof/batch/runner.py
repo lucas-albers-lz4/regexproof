@@ -542,14 +542,21 @@ def run_batch(
         )
         # Pair-at-scale: reuse Phase-3 discovery when catalog exists
         if name == "gitleaks":
+            from regexproof.rule_diff.batch_shape5 import filter_batch_pairs
             from regexproof.rule_diff.pairs import discover_pairs
 
             specs = ROOT / "pilots" / "gitleaks" / "canonical_specs" / "catalog.json"
             toml = ROOT / "pilots" / "gitleaks" / "config" / "gitleaks.toml"
             d = discover_pairs(toml_path=toml, specs_path=specs)
+            batch_pairs = filter_batch_pairs(d["admitted_pairs"])
             pair_counts[name] = {
                 "admitted": d["admitted_count"],
                 "dropped": d["dropped_count"],
+                "batch_shape5": len(batch_pairs),
+                "note": (
+                    "batch shape-5 admits only version_diff/cross_engine "
+                    "pairs with family_contract (#477)"
+                ),
             }
         else:
             pair_counts[name] = {"admitted": 0, "dropped": 0, "note": "no independent-spec catalog"}
