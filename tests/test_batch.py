@@ -7,7 +7,11 @@ from pathlib import Path
 
 import jsonschema
 
-from regexproof.batch.disclose import assert_no_auto_publication, write_pr_dry_run
+from regexproof.batch.disclose import (
+    assert_no_auto_publication,
+    tag_disclosure,
+    write_pr_dry_run,
+)
 from regexproof.batch.intent import detect_intent_mismatches, detect_usage_mismatches
 from regexproof.batch.inventory import check_corpus_coverage, load_inventory
 from regexproof.batch.report import redact_witness
@@ -268,6 +272,20 @@ def test_pr_dry_run_no_auto_publish(tmp_path: Path):
     assert_no_auto_publication(art)
     assert art["publish"] is False
     assert art["would_open_public_upstream_issue"] is False
+
+
+def test_tag_disclosure_fail_closed_unknown_kind():
+    tagged = tag_disclosure(
+        [{"kind": "future_kind_not_in_schema", "regex_id": "x"}],
+        corpus="gitleaks",
+    )
+    assert tagged[0]["disclosure"] == "private_first"
+    tagged_redos = tag_disclosure([{"kind": "redos"}], corpus="coreruleset")
+    assert tagged_redos[0]["disclosure"] == "private_first"
+    tagged_missing = tag_disclosure([{}], corpus="gitleaks")
+    assert tagged_missing[0]["disclosure"] == "private_first"
+    tagged_other = tag_disclosure([{"kind": "property"}], corpus="validatorjs")
+    assert "disclosure" not in tagged_other[0]
 
 
 def test_shell_posix_batch_includes_extensionless_shebang(tmp_path):
