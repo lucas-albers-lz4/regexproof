@@ -284,6 +284,10 @@ def test_ci_golden_regenerates_and_drift_checks_ledger():
     assert f["properties_sat"] >= f["sat_ground_truthed"]
     assert f["would_open_public_upstream"] == 0
     assert f["third_party_public"] == 0
+    assert f["pr_dry_run_private_first"] >= f["disclosed_private_first"]
+    # Dry-run includes security-tool planned stubs; the NDJSON counter skips them.
+    delta = f["pr_dry_run_private_first"] - f["disclosed_private_first"]
+    assert 0 < delta <= f["planned_stubs"]
     assert f["scanner_rows"] == f["batch_summary_findings"]
     assert "crs_cross_engine_rule_diff_report.json" in data["rule_diff_reports"]
     assert data["upstream"]["false_positive"] >= 1

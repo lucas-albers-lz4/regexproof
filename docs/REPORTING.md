@@ -65,7 +65,7 @@ Schema: `regexproof/schemas/scanner_finding.schema.json`.
 | `shape` | 1–5 or null |
 | `ground_truth_status` | Replay status. Present on Z3-verdict findings (`property`, `counterexample_finder`, `bug_demo`, `mutation_guard`, `rule_diff`); mutation guards require the exact `mutation-guard-sat-expected` value. Omitted on classification findings (`usage_mismatch`, `intent_mismatch`, `triage`, `redos`) — absence means "not a Z3 verdict", never a silent `N/A` |
 | `ground_truth` | Optional **per-engine** evidence object for cross-engine `rule_diff` (e.g. `{pcre2: {status, version, cmd, matched, replay}, go_re2: {...}, status}`). A single `ground_truth_status` alone is not sufficient to claim dual-engine ground truth. |
-| `disclosure` | `private_first` \| `public_ok` \| null |
+| `disclosure` | `private_first` \| `public_ok` \| null. On corpora in `SECURITY_TOOL_CORPORA`, `tag_disclosure()` defaults to `private_first` for **every** kind unless listed in `DISCLOSURE_EXEMPT_KINDS` (empty; fail-closed for new kinds). |
 | `witness` | Redacted when committed |
 | `detail` | Kind-specific object |
 
@@ -129,6 +129,14 @@ traps). Heap's-law novelty saturates coverage; this ledger saturates conversion.
 Golden CI regenerates the artifact after batch and `git diff --exit-code`s it.
 `would_open_public_upstream` must stay 0 without a human approval file
 ([SECURITY.md](../SECURITY.md)). TIMEOUT / `unknown` is not a pass.
+
+Two `private_first` counters exist and must not be mixed (#486):
+
+- `disclosed_private_first` — scanner NDJSON product+classification kinds,
+  **skipping** planned inventory stubs (`is_planned`).
+- `pr_dry_run_private_first` — summed from `*-pr-dry-run.json`, **including**
+  planned stubs that `tag_disclosure()` marked private. The typical delta is
+  31 security-tool corpora × 4 stub questions = 124.
 
 Scanner product kinds counted as "properties asked": `property`,
 `counterexample_finder`, `bug_demo`, `rule_diff` with `result` other than
