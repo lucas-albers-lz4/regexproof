@@ -10,7 +10,7 @@ Keep three claims separate — they do not share evidence:
 
 1. **The Z3 mirror is sound** on the encoded fragment (traps, mutation guards, differential fuzz, ground-truth). Well evidenced.
 2. **The compiler covers a measured fraction** of admitted regex sites. Real, but a convenience sample with duplicated forks.
-3. **This finds real bugs in other people's code.** Not demonstrated: 0 third-party public accepted. Phase 0 search-semantics replay of ten SAT-looking rows left **0/10 filings**: both survivors are documented `wont_file` (CRS 942220 is an already-shipped coverage widening; cross-engine 920210 is Connection-header `\s`/`\b` trivia with no backend reach). The rest are spec-gap or collapse under search.
+3. **This finds real bugs in other people's code.** Not demonstrated: 0 third-party public accepted. Phase 0 search-semantics replay of ten SAT-looking rows left **0/10 public filings**: CRS 942220 stays `private_first` (do not post until disclosure plumbing is on `main`); cross-engine 920210 is `wont_file` (Connection-header `\b` trivia, no demonstrated backend reach). The rest are spec-gap or collapse under search.
 
 A property without a contract (guarantee, input source, trust, declared domain) is not claim (3), even if the solver returns UNSAT.
 
