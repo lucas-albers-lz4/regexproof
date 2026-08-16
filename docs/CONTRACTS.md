@@ -50,7 +50,9 @@ Admit only `version_diff` / `cross_engine` pairs that already have
 `family_contract` (`regexproof.rule_diff.batch_shape5`). SAT must pass the
 search/pad matrix (`regexproof.rule_diff.search_replay`). Keep fullmatch
 solve. Do not flip `solver_call_kind` to search (VF-007). Sibling-family
-pairs are not admitted.
+pairs are not admitted. The pad matrix uses Python `re.search` as a
+necessary filter, not PCRE2/RE2 fidelity; filing still replays the real
+engines.
 
 ## Measurement notes (#481–#495)
 

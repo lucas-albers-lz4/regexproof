@@ -8,7 +8,10 @@ from pathlib import Path
 from typing import Any, Callable
 
 from regexproof.admission.auto_nogo import AutoNoGoError, require_auto_nogo
-from regexproof.admission.forks import fork_duplicate_reason, load_go_repo_names
+from regexproof.admission.forks import (
+    fork_duplicate_reason,
+    load_go_repo_names,
+)
 from regexproof.admission.serialize import dumps_pinned
 from regexproof.admission.templates import (
     AUTO_ALLOWED_TEMPLATES,
@@ -25,6 +28,21 @@ Clock = Callable[[], date]
 
 class AuthorError(ValueError):
     """Invalid human/auto authoring inputs."""
+
+
+def _draft_fork_meta(draft: dict[str, Any]) -> dict[str, Any]:
+    probe = dict(draft.get("probe") or {})
+    return {
+        **probe,
+        "url": draft.get("candidate_url") or probe.get("url"),
+        "candidate_url": draft.get("candidate_url"),
+        "full_name": probe.get("full_name")
+        or draft.get("full_name")
+        or draft.get("candidate_url"),
+        "fork": probe.get("fork") if "fork" in probe else draft.get("fork"),
+        "parent": probe.get("parent") or draft.get("parent"),
+        "parent_full_name": probe.get("parent_full_name") or draft.get("parent_full_name"),
+    }
 
 
 def default_clock() -> date:
@@ -200,6 +218,12 @@ def author_human(
         raise AuthorError(f"unknown condition id(s): {sorted(unknown)}")
 
     probe = dict(draft.get("probe") or {})
+    if decision == "go":
+        gen = Path(__file__).resolve().parents[2] / "properties" / "generated"
+        go_repos = load_go_repo_names(gen) if gen.is_dir() else set()
+        dup = fork_duplicate_reason(_draft_fork_meta(draft), go_repos=go_repos)
+        if dup:
+            raise AuthorError(f"refusing GO for duplicate-class fork: {dup}")
     if template:
         if template not in TEMPLATE_NAMES:
             raise TemplateError(f"unknown rationale template: {template!r}")
@@ -237,17 +261,7 @@ def author_auto(
     probe = dict(draft.get("probe") or {})
     gen = generated_dir or (Path(__file__).resolve().parents[2] / "properties" / "generated")
     go_repos = load_go_repo_names(gen) if gen.is_dir() else set()
-    meta = {
-        **probe,
-        "url": draft.get("candidate_url") or probe.get("url"),
-        "candidate_url": draft.get("candidate_url"),
-        "full_name": probe.get("full_name")
-        or draft.get("full_name")
-        or draft.get("candidate_url"),
-        "fork": probe.get("fork") if "fork" in probe else draft.get("fork"),
-        "parent": probe.get("parent") or draft.get("parent"),
-        "parent_full_name": probe.get("parent_full_name") or draft.get("parent_full_name"),
-    }
+    meta = _draft_fork_meta(draft)
     dup = fork_duplicate_reason(meta, go_repos=go_repos)
     if dup:
         rationale = f"Duplicate-class fork at admission: {dup}."

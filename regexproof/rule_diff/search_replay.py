@@ -30,6 +30,11 @@ def _flags_int(flags: str) -> int:
 
 
 def real_search(pattern: str, flags: str, text: str) -> bool:
+    """Python ``re.search`` pad filter (VF-007).
+
+    This is a necessary SAT filter on the regular fragment, not
+    dialect-faithful PCRE2/RE2 replay. Filing still needs the real engines.
+    """
     try:
         return re.search(pattern, text, _flags_int(flags)) is not None
     except re.error:
