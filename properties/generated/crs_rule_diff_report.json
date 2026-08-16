@@ -24,7 +24,7 @@
       "shape": 5,
       "wall_ms": 77.7,
       "witness": {
-        "s": "JSon.1e309\n"
+        "s": "<redacted len=11>"
       }
     }
   ],
@@ -46,7 +46,7 @@
       "result": "sat",
       "wall_ms": 77.7,
       "witness": {
-        "s": "JSon.1e309\n"
+        "s": "<redacted len=11>"
       }
     },
     {
@@ -82,7 +82,7 @@
       "result": "sat",
       "wall_ms": 6.8,
       "witness": {
-        "s": "1E309"
+        "s": "<redacted len=5>"
       }
     },
     {
