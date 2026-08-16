@@ -66,13 +66,6 @@ From `scripts/z3-property-template.py`, the canonical shapes:
 | 4. Per-token image | "escape output has no raw control chars" | one token per tiny solver query | monolithic image-regex TIMEOUTs — decompose |
 | 5. Rule diff (`rule_diff`) | "does R2 accept anything R1 misses?" | `InRe(s, R2) ∧ Not(InRe(s, R1))` (no regex Complement) | SAT = gap; UNSAT = no gap in bound; TIMEOUT ≠ pass |
 
-**Property-contract precondition.** A counted or reportable result (UNSAT
-"holds" or SAT "finding") requires an explicit contract: the site, the
-guarantee asked, input source and trust, declared domain, and how the
-question was chosen (`human` / later `version_diff` / `cross_engine`).
-Synthesized shape-1/2 rows without that contract are measurement of the
-synthesizer, not product conversion. See `docs/why.md`.
-
 Shape-5 registry/`kind`/`family`/mutation-guard contract:
 [`docs/examples/shape5-rule_diff.md`](docs/examples/shape5-rule_diff.md).
 Dialect/`call_kind`/fold tables: [`docs/SEMANTICS.md`](docs/SEMANTICS.md).
