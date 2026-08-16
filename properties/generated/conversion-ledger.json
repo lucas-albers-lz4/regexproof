@@ -19,8 +19,8 @@
     "classification_rows": 5539,
     "disclosed_private_first": 686,
     "disclosed_public_ok": 0,
-    "existence_proofs": 2,
-    "false_positives_filed": 6,
+    "existence_proofs": 1,
+    "false_positives_filed": 7,
     "mutation_guards": 644,
     "other_rows": 0,
     "planned_stubs": 290,
@@ -98,13 +98,13 @@
   },
   "upstream": {
     "accepted_upstream": 1,
-    "existence_proofs": 2,
-    "false_positive": 6,
+    "existence_proofs": 1,
+    "false_positive": 7,
     "filed_plan": 1,
     "fixed_upstream": 1,
     "language_membership": 9,
     "out_of_scope_redos": 1,
-    "private_first": 1,
+    "private_first": 0,
     "rows": 10,
     "third_party_public": 0
   },
@@ -142,7 +142,7 @@
       "id": "CU-005",
       "kind": "rule_diff",
       "language_membership": true,
-      "status": "private_first"
+      "status": "false_positive"
     },
     {
       "corpus": "gitleaks",

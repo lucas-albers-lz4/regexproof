@@ -10,7 +10,7 @@ Keep three claims separate — they do not share evidence:
 
 1. **The Z3 mirror is sound** on the encoded fragment (traps, mutation guards, differential fuzz, ground-truth). Well evidenced.
 2. **The compiler covers a measured fraction** of admitted regex sites. Real, but a convenience sample with duplicated forks.
-3. **This finds real bugs in other people's code.** Not demonstrated: 0 third-party public accepted. Phase 0 search-semantics replay of ten SAT-looking rows left **2/10 filing candidates** (CRS 942220 version-diff, cross-engine 920210); the rest are spec-gap or collapse under search.
+3. **This finds real bugs in other people's code.** Not demonstrated: 0 third-party public accepted. Phase 0 search-semantics replay of ten SAT-looking rows left **0/10 filings**: both survivors are documented `wont_file` (CRS 942220 is an already-shipped coverage widening; cross-engine 920210 is Connection-header `\s`/`\b` trivia with no backend reach). The rest are spec-gap or collapse under search.
 
 A property without a contract (guarantee, input source, trust, declared domain) is not claim (3), even if the solver returns UNSAT.
 
@@ -52,7 +52,7 @@ The claim that still needs proof is a different quantity:
 
 Encodable fraction is tracked. Boundary classification is gated, and it already false-positives. Ground-truth on witnesses is enforced. What was missing as a ledger is conversion: sites → properties written → SAT → reproduced → disclosed → accepted upstream.
 
-One filed issue is an existence proof, not a rate. The cleanest existence proofs so far are also the weakest for "in the wild": usrmanage #6 and fwlive #120 are own code; CRS rule_diff gaps (for example `942220` / `JSon.1e309`) are real, machine-checked, and stuck behind `private_first` because they are security-tool findings. The method works. It has not yet shown how often this class appears in other people's validators, sanitizers, and parsers.
+One filed issue is an existence proof, not a rate. The cleanest existence proofs so far are also the weakest for "in the wild": usrmanage #6 and fwlive #120 are own code. CRS 942220 (`JSon.1e309`) is a real, machine-checked version-diff SAT that turned out to be CRS's own already-shipped ARGS_NAMES coverage fix — recorded `wont_file`, not a third-party hole. The method works. It has not yet shown how often this class appears in other people's validators, sanitizers, and parsers.
 
 Two independent parameters:
 
@@ -74,7 +74,7 @@ Headline counts (re-verify from the artifact before quoting):
 | properties asked | 644 (616 UNSAT / 28 SAT; all 28 SAT ground-truthed; 7 unique sites) |
 | rule_diff report SAT + GT (CRS version-diff, CRS cross-engine, gitleaks) | 17 |
 | accepted upstream (`fixed_upstream`) | 1 (usrmanage P3, own code, later fixed) |
-| existence proofs | 2 (that one + CRS 942220 `private_first`) |
+| existence proofs | 1 (usrmanage P3 own-code `fixed_upstream`; CRS 942220 is `wont_file`) |
 | filed false positives | 1 (happycow interpolated `re.search`, already `re.escape`'d) |
 | third-party public accepted | 0 |
 
