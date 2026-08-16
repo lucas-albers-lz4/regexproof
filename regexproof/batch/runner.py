@@ -28,6 +28,7 @@ from regexproof.batch.crs_measure import (  # noqa: F401
     measure_coreruleset_sample,
 )
 from regexproof.batch.disclose import (
+    apply_approval,
     assert_no_auto_publication,
     tag_disclosure,
     write_pr_dry_run,
@@ -371,6 +372,7 @@ def run_corpus(
     joined = join_findings(z3_side, redos_findings)
 
     findings = tag_disclosure(findings, corpus=corpus)
+    findings = apply_approval(findings, approval_path=approval_path)
     enforce_evidence_gates(
         findings,
         require_ground_truth=require_ground_truth,
@@ -495,6 +497,7 @@ def run_batch(
     jobs: int | None = None,
     cache_dir: Path | str | None = None,
     write_pilot_aggregate: bool | None = None,
+    approval_path: Path | None = None,
 ) -> dict[str, Any]:
     cov = check_corpus_coverage()
     if cov:
@@ -530,6 +533,7 @@ def run_batch(
             synth_diff_fuzz_sample=synth_diff_fuzz_sample,
             jobs=jobs,
             cache_dir=cache_dir,
+            approval_path=approval_path,
         )
         cache = summaries[name].get("cache") or {}
         print(
@@ -692,6 +696,13 @@ def main(argv: list[str] | None = None) -> int:
         help="omit inventory planned stubs from findings",
     )
     ap.add_argument(
+        "--approval-path",
+        type=Path,
+        default=None,
+        help="JSON file listing regex_ids allowed to become disclosure=public_ok "
+        "(ground-truthed findings only). Never auto-publishes.",
+    )
+    ap.add_argument(
         "--json-legacy",
         action="store_true",
         help="mutually exclusive legacy flag (rejected)",
@@ -740,6 +751,7 @@ def main(argv: list[str] | None = None) -> int:
         write_pilot_aggregate=(
             True if args.corpus == "all" else args.write_pilot_aggregate
         ),
+        approval_path=args.approval_path,
     )
     print("batch ok:", ", ".join(corpora))
     return 0
