@@ -8,12 +8,13 @@ triples with lean NDJSON rows (no AST in rows).
 
 from __future__ import annotations
 
+import pytest
 import z3
 
 from regexproof.batch.compile_records import compile_records
 from regexproof.batch.runner import _discard_streamed_mirrors
 from regexproof.compiler import compile_pattern
-from tests.toolchain import perl_pin_ok
+from tests.toolchain import in_ci, perl_pin_ok
 
 
 def test_anchors_surface_in_meta_fullmatch():
@@ -83,15 +84,20 @@ def test_word_boundary_absent_for_plain_pattern():
 
 
 def test_mirror_exact_ascii_domain_templates():
-    dialects = ["re2", "ecma", "pcre"]
-    ok, _ = perl_pin_ok()
-    if ok:
-        dialects.append("perl")
-    for dialect in dialects:
+    for dialect in ("re2", "ecma", "pcre"):
         cr = compile_pattern(r"\w+", "", dialect, "search")
         assert cr.encodable, (dialect, cr.unencodable_reason)
         assert cr.declared_domain == "ascii"
         assert cr.mirror_exact is True, dialect
+    ok, msg = perl_pin_ok()
+    if not ok:
+        if in_ci():
+            pytest.fail(msg)
+        return
+    cr = compile_pattern(r"\w+", "", "perl", "search")
+    assert cr.encodable, ("perl", cr.unencodable_reason)
+    assert cr.declared_domain == "ascii"
+    assert cr.mirror_exact is True
 
 
 def test_py_re_ascii_flag_mirror_exact():

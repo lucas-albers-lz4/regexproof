@@ -39,7 +39,7 @@ from regexproof.groundtruth.adapters import (
     skip_reason,
     status_for_claim,
 )
-from tests.toolchain import perl_pin_ok
+from tests.toolchain import require_perl_pin, require_yara
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -58,15 +58,6 @@ def _pcre2_available() -> bool:
     if importlib.util.find_spec("pcre2") is not None:
         return True
     return shutil.which("pcre2grep") is not None
-
-
-def _perl_available() -> bool:
-    ok, _ = perl_pin_ok()
-    return ok
-
-
-def _yara_available() -> bool:
-    return shutil.which("yara") is not None
 
 
 @pytest.mark.parametrize(
@@ -116,16 +107,16 @@ def test_pcre_fullmatch_wrap():
     assert replay("abc", "", "pcre", "fullmatch", "xabc").verdict is ReplayVerdict.REJECTED
 
 
-@pytest.mark.skipif(not _perl_available(), reason="perl not available")
 def test_perl_search_and_fullmatch():
+    require_perl_pin()
     assert replay("a+", "", "perl", "search", "aaa").verdict is ReplayVerdict.ACCEPTED
     assert replay("a+", "", "perl", "search", "bbb").verdict is ReplayVerdict.REJECTED
     assert replay("abc", "", "perl", "fullmatch", "abc").verdict is ReplayVerdict.ACCEPTED
     assert replay("abc", "", "perl", "fullmatch", "xabc").verdict is ReplayVerdict.REJECTED
 
 
-@pytest.mark.skipif(not _yara_available(), reason="yara not available")
 def test_yara_substring_only():
+    require_yara()
     assert replay("abc", "", "yara", "search", "xxabcxx").verdict is ReplayVerdict.ACCEPTED
     assert replay("abc", "", "yara", "search", "xxabxx").verdict is ReplayVerdict.REJECTED
     assert replay("abc", "i", "yara", "search", "xxABCxx").verdict is ReplayVerdict.ACCEPTED
@@ -216,14 +207,16 @@ def test_batch_ecma_compile_error_broadcast():
         ("ecma", lambda: not _node_available()),
         ("re2", lambda: not _go_re2_available()),
         ("pcre", lambda: not _pcre2_available()),
-        ("perl", lambda: not _perl_available()),
+        ("perl", lambda: False),
     ],
 )
 def test_fullmatch_rejects_trailing_newline(dialect, skip):
     """$ matches before a trailing line terminator in Perl/PCRE/ECMA/RE2 — the
     absolute-end wrap (\\z / NUL sentinel) must reject the same 'a\\n' Python
     fullmatch rejects, and accept a pattern that legitimately matches 'a\\n'."""
-    if skip():
+    if dialect == "perl":
+        require_perl_pin()
+    elif skip():
         pytest.skip(f"{dialect} helper not available")
     assert replay("a", "", dialect, "fullmatch", "a\n").verdict is ReplayVerdict.REJECTED
     assert replay("a\n", "", dialect, "fullmatch", "a\n").verdict is ReplayVerdict.ACCEPTED
@@ -254,12 +247,16 @@ def test_py_re_fullmatch_rejects_trailing_newline():
         ("ecma", lambda: not _node_available()),
         ("re2", lambda: not _go_re2_available()),
         ("pcre", lambda: not _pcre2_available()),
-        ("perl", lambda: not _perl_available()),
-        ("yara", lambda: not _yara_available()),
+        ("perl", lambda: False),
+        ("yara", lambda: False),
     ],
 )
 def test_invalid_pattern_is_engine_error_not_rejected(dialect, skip):
-    if skip():
+    if dialect == "perl":
+        require_perl_pin()
+    elif dialect == "yara":
+        require_yara()
+    elif skip():
         pytest.skip(f"{dialect} helper not available")
     r = replay("(", "", dialect, "search", "x")
     assert r.verdict is ReplayVerdict.ENGINE_ERROR, r

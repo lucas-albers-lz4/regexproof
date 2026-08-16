@@ -19,23 +19,23 @@ import pytest
 ROOT = Path(__file__).resolve().parents[1]
 
 PERL_PIN_HINT = (
-    "perl helper pin 5.38.2 missing (install perl@5.38 so "
-    "`python helpers/perl/match.py version` returns ok; "
+    "perl helper pin missing (need Perl 5.38.x so "
+    "`python3 helpers/perl/match.py version` returns ok; "
     "CI still hard-fails on pin drift)"
 )
 RECHECK_HINT = (
-    "recheck helper missing (cd helpers/redos && npm install; "
+    "recheck helper missing (`cd helpers/redos && npm install`; "
     "CI still hard-fails)"
 )
 YARA_HINT = (
-    "yara helper missing (install yara / yara-python so "
-    "`python helpers/yara/match.py version` returns ok; "
-    "CI still hard-fails)"
+    "yara CLI missing (`brew install yara` so "
+    "`python3 helpers/yara/match.py version` returns ok; "
+    "CI still hard-fails). The yara *Python* package is not sufficient."
 )
 
 
 def in_ci() -> bool:
-    return os.environ.get("GITHUB_ACTIONS") == "true"
+    return os.environ.get("GITHUB_ACTIONS") == "true" or os.environ.get("CI") == "true"
 
 
 def _fail_or_skip(message: str) -> None:
