@@ -90,7 +90,11 @@ def test_generated_crs_report_has_no_sibling_pairs():
     blob = json.dumps(data)
     assert "RD-crs-901" not in blob
     # The retraction counter is the only remaining "sibling" token.
-    assert blob.lower().count("sibling") == blob.lower().count("retracted_sibling")
+    assert data.get("retracted_sibling_pairs", 0) >= 1
+    assert data.get("sat_gaps") == sum(
+        1 for r in data.get("results") or []
+        if r.get("kind") == "rule_diff" and r.get("result") == "sat"
+    )
 
 
 def test_unchanged_id_dropped_on_tiny_fixture(tmp_path: Path):

@@ -103,7 +103,7 @@
       "witness": null
     }
   ],
-  "sat_gaps": 8,
+  "sat_gaps": 1,
   "schema_version": "1",
   "timeout_rate": 0.0,
   "timeouts": 0
