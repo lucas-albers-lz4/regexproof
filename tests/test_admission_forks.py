@@ -60,7 +60,16 @@ def test_normalize_github_repo():
     assert normalize_github_repo("https://github.com/Python/CPython") == "python/cpython"
 
 
-def test_author_human_refuses_go_on_cpython_fork():
+def test_author_human_refuses_admit_on_cpython_fork():
+    draft = _draft_with(regex_sites=50, security_boundary="deterministic-true")
+    draft["candidate_url"] = "https://github.com/zrsx/cpython"
+    with pytest.raises(AuthorError, match="duplicate-class fork"):
+        author_human(
+            draft,
+            decision="triage-trial",
+            rationale="escape hatch should not admit duplicate forks",
+            decision_date=date(2026, 8, 15),
+        )
     draft = _draft_with(regex_sites=50, security_boundary="deterministic-false")
     draft["candidate_url"] = "https://github.com/zrsx/cpython"
     draft["probe"]["predicted_buckets"] = {"posix-class": 1}
