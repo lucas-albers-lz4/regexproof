@@ -293,6 +293,12 @@ def test_ci_golden_regenerates_and_drift_checks_ledger():
     assert data["upstream"]["false_positive"] >= 1
     assert "pipeline_accepted_per_gt" in data["rates"]
     assert "properties_asked_synthesized" in f
+    assert f["properties_asked_distinct"] <= f["properties_asked"]
+    assert f["properties_sat_distinct"] <= f["properties_sat"]
+    assert f["properties_asked_distinct"] >= 1
+    assert (ROOT / "properties" / "generated" / "validatorjs-inventory.ndjson").is_file()
+    manifests = (ROOT / "regexproof" / "batch" / "manifests.py").read_text(encoding="utf-8")
+    assert '"repo": "TODO"' not in manifests
     why = (ROOT / "docs" / "why.md").read_text(encoding="utf-8")
     reporting = (ROOT / "docs" / "REPORTING.md").read_text(encoding="utf-8")
     agents = (ROOT / "AGENTS.md").read_text(encoding="utf-8")
