@@ -172,6 +172,7 @@ def classify_scanner_rows(
             "redos_rows": 0,
             "other_rows": 0,
             "properties_asked": 0,
+            "properties_asked_synthesized": 0,
             "properties_unsat": 0,
             "properties_sat": 0,
             "properties_sat_synthesized": 0,
@@ -198,6 +199,8 @@ def classify_scanner_rows(
             continue
         if kind in PRODUCT_KINDS:
             counts["properties_asked"] += 1
+            if rec.get("synthesized"):
+                counts["properties_asked_synthesized"] += 1
             if result in UNSAT_RESULTS:
                 counts["properties_unsat"] += 1
             elif result in SAT_RESULTS:
@@ -385,6 +388,7 @@ def aggregate(
         "redos_rows": classified.get("redos_rows", 0),
         "other_rows": classified.get("other_rows", 0),
         "properties_asked": asked,
+        "properties_asked_synthesized": classified.get("properties_asked_synthesized", 0),
         "properties_unsat": classified.get("properties_unsat", 0),
         "properties_sat": sat,
         "properties_sat_synthesized": classified.get("properties_sat_synthesized", 0),
@@ -409,6 +413,9 @@ def aggregate(
         "property_asked_per_encodable": _ratio(asked, encodable),
         "sat_per_property_asked": _ratio(sat, asked),
         "gt_per_sat": _ratio(gt, sat),
+        "pipeline_accepted_per_gt": _ratio(up["accepted_upstream"], gt),
+        "pipeline_accepted_per_extracted": _ratio(up["accepted_upstream"], extracted),
+        # Aliases kept one release so older quotes fail the new names first.
         "accepted_per_gt": _ratio(up["accepted_upstream"], gt),
         "accepted_per_extracted": _ratio(up["accepted_upstream"], extracted),
     }
@@ -503,8 +510,9 @@ def render_md(data: dict[str, Any]) -> str:
         f"| SAT ground-truthed (`reproduced` / `PASS`) | {n(f['sat_ground_truthed'])} |",
         f"| rule_diff report SAT (dedicated pilots) | {n(f['rule_diff_report_sat'])} |",
         f"| rule_diff report SAT + ground-truth | {n(f['rule_diff_report_sat_gt'])} |",
-        f"| disclosed `private_first` | {n(f['disclosed_private_first'])} |",
+        f"| disclosed `private_first` (scanner product+classification, skip planned) | {n(f['disclosed_private_first'])} |",
         f"| disclosed `public_ok` | {n(f['disclosed_public_ok'])} |",
+        f"| dry-run `private_first` (includes planned stubs) | {n(f['pr_dry_run_private_first'])} |",
         f"| dry-run would open public upstream | {n(f['would_open_public_upstream'])} |",
         f"| accepted upstream (curated `fixed_upstream`) | {n(f['accepted_upstream'])} |",
         f"| existence proofs (`fixed_upstream` + `private_first`) | {n(f['existence_proofs'])} |",
@@ -519,8 +527,8 @@ def render_md(data: dict[str, Any]) -> str:
         f"| properties asked / encodable | {pct(r['property_asked_per_encodable'])} |",
         f"| SAT / properties asked | {pct(r['sat_per_property_asked'])} |",
         f"| ground-truthed / SAT | {pct(r['gt_per_sat'])} |",
-        f"| accepted upstream / SAT ground-truthed | {pct(r['accepted_per_gt'])} |",
-        f"| accepted upstream / extracted | {pct(r['accepted_per_extracted'])} |",
+        f"| pipeline accepted (incl. own-code) / SAT GT | {pct(r['pipeline_accepted_per_gt'])} |",
+        f"| pipeline accepted / extracted | {pct(r['pipeline_accepted_per_extracted'])} |",
         "",
         "## Security-tool split (scanner product kinds)",
         "",

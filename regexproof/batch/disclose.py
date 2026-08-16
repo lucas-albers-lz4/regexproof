@@ -68,18 +68,19 @@ SECURITY_TOOL_CORPORA = frozenset(
     }
 )
 
+# Empty on purpose: a new finding kind on a security-tool corpus is
+# private_first unless explicitly exempted here with a stated reason (#494).
+DISCLOSURE_EXEMPT_KINDS: frozenset[str] = frozenset()
+
 
 def tag_disclosure(findings: list[dict[str, Any]], *, corpus: str) -> list[dict[str, Any]]:
     out = []
     for f in findings:
         rec = dict(f)
-        if corpus in SECURITY_TOOL_CORPORA and rec.get("kind") in (
-            "rule_diff",
-            "property",
-            "usage_mismatch",
-            "intent_mismatch",
-        ):
-            rec["disclosure"] = "private_first"
+        if corpus in SECURITY_TOOL_CORPORA:
+            kind = rec.get("kind")
+            if kind not in DISCLOSURE_EXEMPT_KINDS:
+                rec["disclosure"] = "private_first"
         out.append(rec)
     return out
 

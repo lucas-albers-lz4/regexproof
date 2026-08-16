@@ -21,8 +21,9 @@ Heap's-law / singleton novelty saturates **compiler coverage**. This artifact sa
 | SAT ground-truthed (`reproduced` / `PASS`) | 28 |
 | rule_diff report SAT (dedicated pilots) | 17 |
 | rule_diff report SAT + ground-truth | 17 |
-| disclosed `private_first` | 686 |
+| disclosed `private_first` (scanner product+classification, skip planned) | 686 |
 | disclosed `public_ok` | 0 |
+| dry-run `private_first` (includes planned stubs) | 810 |
 | dry-run would open public upstream | 0 |
 | accepted upstream (curated `fixed_upstream`) | 1 |
 | existence proofs (`fixed_upstream` + `private_first`) | 2 |
@@ -37,8 +38,8 @@ Heap's-law / singleton novelty saturates **compiler coverage**. This artifact sa
 | properties asked / encodable | 0.0084 |
 | SAT / properties asked | 0.0435 |
 | ground-truthed / SAT | 1.0000 |
-| accepted upstream / SAT ground-truthed | 0.0357 |
-| accepted upstream / extracted | 8.00e-06 |
+| pipeline accepted (incl. own-code) / SAT GT | 0.0357 |
+| pipeline accepted / extracted | 8.00e-06 |
 
 ## Security-tool split (scanner product kinds)
 

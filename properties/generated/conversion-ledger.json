@@ -28,6 +28,7 @@
     "pr_dry_run_private_first": 810,
     "pr_dry_runs": 75,
     "properties_asked": 644,
+    "properties_asked_synthesized": 644,
     "properties_sat": 28,
     "properties_sat_synthesized": 28,
     "properties_unsat": 616,
@@ -58,6 +59,8 @@
     "accepted_per_gt": 0.035714,
     "encodable_fraction": 0.622397,
     "gt_per_sat": 1.0,
+    "pipeline_accepted_per_extracted": 8e-06,
+    "pipeline_accepted_per_gt": 0.035714,
     "property_asked_per_encodable": 0.008369,
     "sat_per_property_asked": 0.043478
   },

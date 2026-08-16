@@ -65,7 +65,7 @@ Schema: `regexproof/schemas/scanner_finding.schema.json`.
 | `shape` | 1–5 or null |
 | `ground_truth_status` | Replay status. Present on Z3-verdict findings (`property`, `counterexample_finder`, `bug_demo`, `mutation_guard`, `rule_diff`); mutation guards require the exact `mutation-guard-sat-expected` value. Omitted on classification findings (`usage_mismatch`, `intent_mismatch`, `triage`, `redos`) — absence means "not a Z3 verdict", never a silent `N/A` |
 | `ground_truth` | Optional **per-engine** evidence object for cross-engine `rule_diff` (e.g. `{pcre2: {status, version, cmd, matched, replay}, go_re2: {...}, status}`). A single `ground_truth_status` alone is not sufficient to claim dual-engine ground truth. |
-| `disclosure` | `private_first` \| `public_ok` \| null |
+| `disclosure` | `private_first` \| `public_ok` \| null. On corpora in `SECURITY_TOOL_CORPORA`, `tag_disclosure()` defaults to `private_first` for **every** kind unless listed in `DISCLOSURE_EXEMPT_KINDS` (empty; fail-closed for new kinds). |
 | `witness` | Redacted when committed |
 | `detail` | Kind-specific object |
 
@@ -130,8 +130,29 @@ Golden CI regenerates the artifact after batch and `git diff --exit-code`s it.
 `would_open_public_upstream` must stay 0 without a human approval file
 ([SECURITY.md](../SECURITY.md)). TIMEOUT / `unknown` is not a pass.
 
+Two `private_first` counters exist and must not be mixed (#486):
+
+- `disclosed_private_first` — scanner NDJSON product+classification kinds,
+  **skipping** planned inventory stubs (`is_planned`).
+- `pr_dry_run_private_first` — summed from `*-pr-dry-run.json`, **including**
+  planned stubs that `tag_disclosure()` marked private. The typical delta is
+  31 security-tool corpora × 4 stub questions = 124.
+
 Scanner product kinds counted as "properties asked": `property`,
 `counterexample_finder`, `bug_demo`, `rule_diff` with `result` other than
 `planned`. SAT-ish results: `sat` and `gap`. Ground-truth pass:
 `reproduced` and `PASS`. `mutation_guard` and `usage_mismatch` /
 `intent_mismatch` / `triage` are excluded from the product numerator.
+
+Ledger JSON (`schema_version: "1"`) field groups:
+
+| Group | Fields |
+|---|---|
+| funnel | `sites_extracted`, `sites_encodable`, `scanner_rows`, `planned_stubs`, `classification_rows`, `properties_asked`, `properties_asked_synthesized`, `properties_sat`, `properties_sat_synthesized`, `sat_unique_sites`, `sat_ground_truthed`, `rule_diff_report_sat`, `disclosed_private_first`, `pr_dry_run_private_first`, `accepted_upstream`, `existence_proofs`, `third_party_public`, … |
+| rates | `encodable_fraction`, `pipeline_accepted_per_gt`, `pipeline_accepted_per_extracted` (aliases `accepted_per_gt` / `accepted_per_extracted` for one release). These pipeline rates include own-code usrmanage; they are **not** a wild-bug conversion rate. |
+| security_tool_split | asked/SAT in vs not in `SECURITY_TOOL_CORPORA` |
+| upstream | curated `docs/conversion-upstream.jsonl` status counts |
+
+Do not quote a frozen pipeline-accepted / SAT-GT ratio from an old ledger as
+the product yield. Re-read the regenerated artifact; third-party public
+accepted is the conversion claim, and it is 0.
