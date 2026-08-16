@@ -28,9 +28,9 @@ import pytest
 from regexproof.groundtruth import adapters
 from regexproof.groundtruth.adapters import (
     RefusedNoCallbackError,
+    Replayability,
     ReplayResult,
     ReplayVerdict,
-    Replayability,
     classify_replayability,
     has_adapter,
     replay,
@@ -39,6 +39,7 @@ from regexproof.groundtruth.adapters import (
     skip_reason,
     status_for_claim,
 )
+from tests.toolchain import perl_pin_ok
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -60,7 +61,8 @@ def _pcre2_available() -> bool:
 
 
 def _perl_available() -> bool:
-    return shutil.which("perl") is not None
+    ok, _ = perl_pin_ok()
+    return ok
 
 
 def _yara_available() -> bool:

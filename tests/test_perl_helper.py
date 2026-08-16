@@ -7,8 +7,17 @@ import subprocess
 import sys
 from pathlib import Path
 
+import pytest
+
+from tests.toolchain import require_perl_pin
+
 ROOT = Path(__file__).resolve().parents[1]
 HELPER = ROOT / "helpers" / "perl" / "match.py"
+
+
+@pytest.fixture(autouse=True)
+def _perl_pin():
+    require_perl_pin()
 
 
 def test_perl_helper_version():

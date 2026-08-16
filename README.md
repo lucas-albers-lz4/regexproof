@@ -54,6 +54,22 @@ Expected: all shapes PASS (UNSAT where property holds, SAT with a witness for
 the counterexample finder — the sed-truncation bug repro). If you run the ReDoS
 stage, read `docs/REDOS.md` first.
 
+Pinned helpers (Perl 5.38.2, `recheck`, YARA) are **hard failures in CI**.
+Locally, tests that need them skip and name the missing install:
+
+```bash
+# Perl pin (helpers/perl/match.py version → ok, 5.38.x)
+# macOS: brew install perl@5.38 && export PATH="$(brew --prefix perl@5.38)/bin:$PATH"
+
+# ReDoS recheck (helpers/redos/recheck.cjs)
+cd helpers/redos && npm install && cd ../..
+
+# YARA CLI used by helpers/yara/match.py
+brew install yara
+```
+
+`GITHUB_ACTIONS=true` keeps the skip path closed so CI still fails on toolchain drift.
+
 ## Layout
 
 | Path | Role |

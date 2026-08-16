@@ -9,6 +9,12 @@ import pytest
 
 from regexproof.redos.runner import analyze_record
 from regexproof.regex_id import make_regex_id
+from tests.toolchain import require_recheck
+
+
+@pytest.fixture(autouse=True)
+def _recheck():
+    require_recheck()
 
 CORPUS = Path(__file__).resolve().parent / "fixtures" / "redos" / "corpus.json"
 
@@ -53,7 +59,7 @@ def test_smoke_fixture(corpus, fixture_id):
         hit = [f for f in findings if f["tool"] == tool]
         assert hit, f"missing tool {tool} in {[f['tool'] for f in findings]}"
         assert hit[0]["result"] == expect["result"], hit[0]
-        if "severity" in expect and expect["severity"]:
+        if expect.get("severity"):
             assert hit[0].get("severity") == expect["severity"]
         # Never silently safe on error paths
         assert hit[0]["result"] != "safe" or expect["result"] == "safe"
