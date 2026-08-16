@@ -28,3 +28,5 @@ def test_unsat_without_contract_is_not_product():
         "provenance": "human",
     }
     assert product_reportable(entry) is True
+    entry["contract"]["provenance"] = "agent_derived"
+    assert product_reportable(entry) is False

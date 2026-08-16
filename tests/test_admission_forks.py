@@ -45,5 +45,14 @@ def test_author_auto_nogo_duplicate_fork_even_when_large(tmp_path):
     _validate(dec)
 
 
+def test_author_auto_nogo_from_candidate_url_alone(tmp_path):
+    draft = _draft_with(regex_sites=5000, security_boundary="unknown")
+    draft["candidate_url"] = "https://github.com/zrsx/cpython"
+    dec = author_auto(draft, decision_date=date(2026, 8, 15), generated_dir=tmp_path)
+    assert dec["decision"] == "no-go"
+    assert "Duplicate-class fork" in dec["rationale"]
+    _validate(dec)
+
+
 def test_normalize_github_repo():
     assert normalize_github_repo("https://github.com/Python/CPython") == "python/cpython"

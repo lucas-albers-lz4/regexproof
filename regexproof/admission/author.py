@@ -237,7 +237,18 @@ def author_auto(
     probe = dict(draft.get("probe") or {})
     gen = generated_dir or (Path(__file__).resolve().parents[2] / "properties" / "generated")
     go_repos = load_go_repo_names(gen) if gen.is_dir() else set()
-    dup = fork_duplicate_reason(probe, go_repos=go_repos)
+    meta = {
+        **probe,
+        "url": draft.get("candidate_url") or probe.get("url"),
+        "candidate_url": draft.get("candidate_url"),
+        "full_name": probe.get("full_name")
+        or draft.get("full_name")
+        or draft.get("candidate_url"),
+        "fork": probe.get("fork") if "fork" in probe else draft.get("fork"),
+        "parent": probe.get("parent") or draft.get("parent"),
+        "parent_full_name": probe.get("parent_full_name") or draft.get("parent_full_name"),
+    }
+    dup = fork_duplicate_reason(meta, go_repos=go_repos)
     if dup:
         rationale = f"Duplicate-class fork at admission: {dup}."
         conditions = build_conditions(probe, met=set())

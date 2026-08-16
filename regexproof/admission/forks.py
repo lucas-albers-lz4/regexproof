@@ -54,19 +54,19 @@ def fork_duplicate_reason(
     go_repos: set[str],
 ) -> str | None:
     """Return a NO-GO reason if this candidate is a duplicate fork."""
-    if not meta.get("fork"):
+    self_name = normalize_github_repo(
+        str(meta.get("full_name") or meta.get("url") or meta.get("candidate_url") or "")
+    )
+    if self_name == "python/cpython":
         return None
     parent = parent_full_name(meta)
     parent_key = normalize_github_repo(parent) if parent else ""
-    self_name = normalize_github_repo(
-        str(meta.get("full_name") or meta.get("url") or "")
-    )
     if parent_key and parent_key in go_repos:
         return f"fork of already-GO parent {parent_key}"
     if parent_key in KNOWN_INTERPRETER_PARENTS:
         return f"interpreter fork of {parent_key} — duplicate class"
     if self_name.endswith("/cpython") or self_name.split("/")[-1] == "cpython":
-        if "python/cpython" in go_repos or parent_key == "python/cpython":
-            return "CPython fork — duplicate class"
         return "CPython-named fork — duplicate class"
+    if not meta.get("fork"):
+        return None
     return None

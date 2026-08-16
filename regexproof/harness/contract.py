@@ -18,7 +18,8 @@ _PRODUCT_KINDS = frozenset(
         PropertyKind.RULE_DIFF.value,
     }
 )
-_PROVENANCE = frozenset({"human", "version_diff", "cross_engine", "agent_derived"})
+# agent_derived is schema-valid but not product (smoke until a human adopts it).
+_PRODUCT_PROVENANCE = frozenset({"human", "version_diff", "cross_engine"})
 
 
 def product_reportable(entry: dict[str, Any]) -> bool:
@@ -34,4 +35,4 @@ def product_reportable(entry: dict[str, Any]) -> bool:
     guarantee = str(contract.get("guarantee") or "").strip()
     declared = str(contract.get("declared_domain") or domain).strip()
     provenance = str(contract.get("provenance") or "").strip()
-    return bool(guarantee and declared and provenance in _PROVENANCE)
+    return bool(guarantee and declared and provenance in _PRODUCT_PROVENANCE)
