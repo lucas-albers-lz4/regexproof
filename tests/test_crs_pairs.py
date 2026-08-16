@@ -36,9 +36,30 @@ def test_version_diff_admits_changed_encodable_pairs():
         assert p["provenance"]["adapter"] == "crs_rule_derived_r1"
 
 
+def test_sibling_family_requires_family_contract():
+    blocked = discover_crs_sibling_pairs(
+        rules_dir=V_NEWER, tag="fixture-newer", max_pairs_per_family=3
+    )
+    assert blocked["admitted_count"] == 0
+    assert blocked["dropped"][0]["reason"] == "missing-family-contract"
+    placeholder = discover_crs_sibling_pairs(
+        rules_dir=V_NEWER,
+        tag="fixture-newer",
+        family_contract={"R1": "", "R2": "x", "provenance": "x"},
+    )
+    assert placeholder["admitted_count"] == 0
+
+
 def test_sibling_family_dedupes_and_directions():
     report = discover_crs_sibling_pairs(
-        rules_dir=V_NEWER, tag="fixture-newer", max_pairs_per_family=3
+        rules_dir=V_NEWER,
+        tag="fixture-newer",
+        max_pairs_per_family=3,
+        family_contract={
+            "R1": "lower rule id in family",
+            "R2": "higher rule id in family",
+            "provenance": "fixture",
+        },
     )
     assert report["admitted_count"] >= 1
     seen = set()
@@ -58,6 +79,22 @@ def test_combined_discovery_counts():
     )
     assert report["version_diff_admitted"] >= 1
     assert report["admitted_count"] == len({p["family"] for p in report["admitted"]})
+    assert report["sibling_admitted"] == 0
+
+
+def test_generated_crs_report_has_no_sibling_pairs():
+    import json
+
+    path = ROOT / "properties" / "generated" / "crs_rule_diff_report.json"
+    data = json.loads(path.read_text(encoding="utf-8"))
+    blob = json.dumps(data)
+    assert "RD-crs-901" not in blob
+    # The retraction counter is the only remaining "sibling" token.
+    assert data.get("retracted_sibling_pairs", 0) >= 1
+    assert data.get("sat_gaps") == sum(
+        1 for r in data.get("results") or []
+        if r.get("kind") == "rule_diff" and r.get("result") == "sat"
+    )
 
 
 def test_unchanged_id_dropped_on_tiny_fixture(tmp_path: Path):
