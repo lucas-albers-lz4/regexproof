@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://regexproof.dev/schemas/property_contract/v1",
+  "title": "PropertyContract",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "site",
+    "guarantee",
+    "input_source",
+    "trust",
+    "declared_domain",
+    "provenance"
+  ],
+  "properties": {
+    "schema_version": { "type": "string", "const": "1" },
+    "site": { "type": "string", "minLength": 1 },
+    "guarantee": { "type": "string", "minLength": 1 },
+    "input_source": { "type": "string", "minLength": 1 },
+    "trust": {
+      "type": "string",
+      "enum": ["untrusted-input", "config", "internal"]
+    },
+    "declared_domain": { "type": "string", "minLength": 1 },
+    "provenance": {
+      "type": "string",
+      "enum": ["human", "version_diff", "cross_engine", "agent_derived"]
+    },
+    "family_contract": { "type": "object", "additionalProperties": true }
+  }
+}

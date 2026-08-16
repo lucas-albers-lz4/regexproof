@@ -89,6 +89,7 @@ on toolchain drift.
 | `docs/LOOKBEHIND_REWRITE.md` | Variable-width lookbehind → string-ops rewrite (the `(?<=^)` + MULTILINE case) |
 | `docs/REPORTING.md` | Scanner NDJSON / triage / batch MD field contracts |
 | `docs/why.md` | Three claims with different evidence: mirror soundness, encodable fraction, conversion (0 third-party public). Phase 0 inventory: 2/10 filing candidates |
+| `docs/CONTRACTS.md` | Property-contract object, provenance (`human` / `version_diff` / `cross_engine` / `agent_derived`), what batch may scale |
 | `docs/conversion-upstream.jsonl` | Curated last-mile conversion events (filed / fixed / false positive / private_first) |
 | `docs/examples/shape5-rule_diff.md` | Shape-5 `rule_diff` kind/family/mutation guards |
 | `docs/verified-findings.jsonl` | Machine-readable verified implementation findings (toolkit traps, not vuln counts) |

@@ -88,12 +88,13 @@ def test_classify_scanner_rows_funnel_buckets():
     assert c["planned_stubs"] == 1
     assert c["classification_rows"] == 1
     assert c["mutation_guards"] == 1
-    assert c["properties_asked"] == 3
-    assert c["properties_unsat"] == 1
-    assert c["properties_sat"] == 2
+    assert c["properties_asked"] == 1
+    assert c["properties_unsat"] == 0
+    assert c["properties_sat"] == 1
     assert c["scanner_rule_diff_sat"] == 1
-    assert c["sat_ground_truthed"] == 2
-    assert c["sat_unique_sites"] == 2
+    assert c["sat_ground_truthed"] == 1
+    assert c["sat_unique_sites"] == 1
+    assert c["properties_asked_synthesized"] == 2
     assert c["properties_sat_synthesized"] == 1
 
 
@@ -295,7 +296,7 @@ def test_ci_golden_regenerates_and_drift_checks_ledger():
     assert "properties_asked_synthesized" in f
     assert f["properties_asked_distinct"] <= f["properties_asked"]
     assert f["properties_sat_distinct"] <= f["properties_sat"]
-    assert f["properties_asked_distinct"] >= 1
+    assert f["properties_asked_synthesized"] >= 1
     assert (ROOT / "properties" / "generated" / "validatorjs-inventory.ndjson").is_file()
     manifests = (ROOT / "regexproof" / "batch" / "manifests.py").read_text(encoding="utf-8")
     assert '"repo": "TODO"' not in manifests

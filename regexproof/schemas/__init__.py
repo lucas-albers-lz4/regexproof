@@ -63,3 +63,7 @@ def gate_decision_schema() -> dict:
 
 def smith_decision_schema() -> dict:
     return load_schema("smith_decision.schema.json")
+
+
+def property_contract_schema() -> dict:
+    return load_schema("property_contract.schema.json")

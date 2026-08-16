@@ -202,14 +202,18 @@ def classify_scanner_rows(
             counts["redos_rows"] += 1
             continue
         if kind in PRODUCT_KINDS:
-            counts["properties_asked"] += 1
             qid = rec.get("question_id")
             if not qid and isinstance(rec.get("detail"), dict):
                 qid = rec["detail"].get("question_id")
             pair = (str(rec.get("site") or ""), str(qid or ""))
-            asked_pairs.add(pair)
             if rec.get("synthesized"):
+                # Untargeted shape-1/2 synthesis is compiler smoke, not product (#479).
                 counts["properties_asked_synthesized"] += 1
+                if result in SAT_RESULTS:
+                    counts["properties_sat_synthesized"] += 1
+                continue
+            counts["properties_asked"] += 1
+            asked_pairs.add(pair)
             if result in UNSAT_RESULTS:
                 counts["properties_unsat"] += 1
             elif result in SAT_RESULTS:
@@ -217,8 +221,6 @@ def classify_scanner_rows(
                 sat_pairs.add(pair)
                 if kind == "rule_diff":
                     counts["scanner_rule_diff_sat"] += 1
-                if rec.get("synthesized"):
-                    counts["properties_sat_synthesized"] += 1
                 sat_sites.add(
                     (
                         str(rec.get("corpus") or ""),
