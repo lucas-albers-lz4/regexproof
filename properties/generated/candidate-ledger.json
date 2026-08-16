@@ -18554,6 +18554,14 @@
       "url": "https://github.com/atomicjolt/adhesion"
     },
     {
+      "audit": {
+        "transitions": [
+          {
+            "reason": "sync:NVIDIA-NeMo-Speech_gate_decision",
+            "to": "gated:no-go"
+          }
+        ]
+      },
       "capped": true,
       "default_branch": "main",
       "first_seen": "2026-08-14T02:52:16Z",
@@ -18561,7 +18569,7 @@
       "pushed_date": "2026-08-13",
       "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
       "stars": 18119,
-      "status": "mined",
+      "status": "gated:no-go",
       "url": "https://github.com/NVIDIA-NeMo/Speech"
     },
     {
@@ -18603,6 +18611,14 @@
       "url": "https://github.com/consuldemocracy/consuldemocracy"
     },
     {
+      "audit": {
+        "transitions": [
+          {
+            "reason": "sync:eliza_gate_decision",
+            "to": "gated:no-go"
+          }
+        ]
+      },
       "capped": true,
       "default_branch": "develop",
       "first_seen": "2026-08-14T02:52:16Z",
@@ -18610,10 +18626,18 @@
       "pushed_date": "2026-08-13",
       "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
       "stars": 19036,
-      "status": "mined",
+      "status": "gated:no-go",
       "url": "https://github.com/elizaOS/eliza"
     },
     {
+      "audit": {
+        "transitions": [
+          {
+            "reason": "sync:langflow_gate_decision",
+            "to": "gated:no-go"
+          }
+        ]
+      },
       "capped": true,
       "default_branch": "main",
       "first_seen": "2026-08-14T02:52:16Z",
@@ -18621,7 +18645,7 @@
       "pushed_date": "2026-08-13",
       "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
       "stars": 153170,
-      "status": "mined",
+      "status": "gated:no-go",
       "url": "https://github.com/langflow-ai/langflow"
     },
     {
@@ -18720,6 +18744,14 @@
       "url": "https://github.com/msitarzewski/brew-browser"
     },
     {
+      "audit": {
+        "transitions": [
+          {
+            "reason": "sync:open-build-service_gate_decision",
+            "to": "gated:no-go"
+          }
+        ]
+      },
       "capped": true,
       "default_branch": "master",
       "first_seen": "2026-08-14T02:52:16Z",
@@ -18727,10 +18759,18 @@
       "pushed_date": "2026-08-13",
       "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
       "stars": 1068,
-      "status": "mined",
+      "status": "gated:no-go",
       "url": "https://github.com/openSUSE/open-build-service"
     },
     {
+      "audit": {
+        "transitions": [
+          {
+            "reason": "sync:bionemo-recipes_gate_decision",
+            "to": "gated:no-go"
+          }
+        ]
+      },
       "capped": true,
       "default_branch": "main",
       "first_seen": "2026-08-14T02:52:16Z",
@@ -18738,10 +18778,18 @@
       "pushed_date": "2026-08-12",
       "source_query": "filename:.gitleaks.toml",
       "stars": 841,
-      "status": "mined",
+      "status": "gated:no-go",
       "url": "https://github.com/NVIDIA-BioNeMo/bionemo-recipes"
     },
     {
+      "audit": {
+        "transitions": [
+          {
+            "reason": "sync:code-dot-org_gate_decision",
+            "to": "gated:no-go"
+          }
+        ]
+      },
       "capped": true,
       "default_branch": "staging",
       "first_seen": "2026-08-14T02:52:16Z",
@@ -18749,10 +18797,18 @@
       "pushed_date": "2026-08-13",
       "source_query": "path:config filename:secrets.yml OR path:config filename:secrets.yaml",
       "stars": 896,
-      "status": "mined",
+      "status": "gated:no-go",
       "url": "https://github.com/code-dot-org/code-dot-org"
     },
     {
+      "audit": {
+        "transitions": [
+          {
+            "reason": "sync:docx-editor_gate_decision",
+            "to": "gated:no-go"
+          }
+        ]
+      },
       "capped": true,
       "default_branch": "main",
       "first_seen": "2026-08-14T02:52:16Z",
@@ -18760,10 +18816,18 @@
       "pushed_date": "2026-08-13",
       "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
       "stars": 958,
-      "status": "mined",
+      "status": "gated:no-go",
       "url": "https://github.com/superdoc/docx-editor"
     },
     {
+      "audit": {
+        "transitions": [
+          {
+            "reason": "sync:pinvou-agent_gate_decision",
+            "to": "gated:no-go"
+          }
+        ]
+      },
       "capped": true,
       "default_branch": "main",
       "first_seen": "2026-08-14T02:52:16Z",
@@ -18771,10 +18835,18 @@
       "pushed_date": "2026-08-13",
       "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
       "stars": 710,
-      "status": "mined",
+      "status": "gated:no-go",
       "url": "https://github.com/Pinvou/pinvou-agent"
     },
     {
+      "audit": {
+        "transitions": [
+          {
+            "reason": "sync:ssh-mcp_gate_decision",
+            "to": "gated:no-go"
+          }
+        ]
+      },
       "capped": true,
       "default_branch": "main",
       "first_seen": "2026-08-14T02:52:16Z",
@@ -18782,10 +18854,18 @@
       "pushed_date": "2026-08-13",
       "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
       "stars": 603,
-      "status": "mined",
+      "status": "gated:no-go",
       "url": "https://github.com/tufantunc/ssh-mcp"
     },
     {
+      "audit": {
+        "transitions": [
+          {
+            "reason": "sync:ITBench_gate_decision",
+            "to": "gated:no-go"
+          }
+        ]
+      },
       "capped": true,
       "default_branch": "main",
       "first_seen": "2026-08-14T02:52:16Z",
@@ -18793,7 +18873,7 @@
       "pushed_date": "2026-08-13",
       "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
       "stars": 492,
-      "status": "mined",
+      "status": "gated:no-go",
       "url": "https://github.com/itbench-hub/ITBench"
     },
     {
@@ -19647,6 +19727,159 @@
       "stars": 5,
       "status": "mined",
       "url": "https://github.com/vulnerabivoro/filtered-yara-rules"
+    },
+    {
+      "archived": false,
+      "default_branch": "main",
+      "first_seen": "2026-08-16T13:20:31Z",
+      "fork": false,
+      "language": "Python",
+      "pin": "2411b022a75fb7f7561a1bb4166706da5e1b76de",
+      "pin_probed": "2411b022a75fb7f7561a1bb4166706da5e1b76de",
+      "pushed_date": "2026-05-26",
+      "size": 15871,
+      "source_query": "filename:.trufflehog.yml OR filename:.trufflehog.toml OR filename:trufflehog.yml",
+      "stars": 2783,
+      "status": "mined",
+      "url": "https://github.com/huggingface/nanotron"
+    },
+    {
+      "archived": false,
+      "default_branch": "main",
+      "first_seen": "2026-08-16T13:20:31Z",
+      "fork": false,
+      "language": "Rust",
+      "pin": "447890f84deab25794ccfdee2a877901b6893569",
+      "pin_probed": "447890f84deab25794ccfdee2a877901b6893569",
+      "pushed_date": "2026-08-13",
+      "size": 22157,
+      "source_query": "filename:.trufflehog.yml OR filename:.trufflehog.toml OR filename:trufflehog.yml",
+      "stars": 10968,
+      "status": "mined",
+      "url": "https://github.com/huggingface/tokenizers"
+    },
+    {
+      "archived": false,
+      "capped": true,
+      "default_branch": "master",
+      "first_seen": "2026-08-16T13:20:31Z",
+      "fork": false,
+      "language": "Shell",
+      "pin": "8413fb28375a312968379e6012fb9c2ecdcfedf5",
+      "pin_probed": "8413fb28375a312968379e6012fb9c2ecdcfedf5",
+      "pushed_date": "2017-04-20",
+      "size": 1989,
+      "source_query": "filename:index.yar",
+      "stars": 3,
+      "status": "mined",
+      "url": "https://github.com/livingtheaidream/yara_emerging"
+    },
+    {
+      "archived": false,
+      "default_branch": "master",
+      "first_seen": "2026-08-16T13:20:31Z",
+      "fork": false,
+      "language": "TypeScript",
+      "pin": "c2f349e0446c5841ea7bdbc164dcc95d3a447dac",
+      "pin_probed": "c2f349e0446c5841ea7bdbc164dcc95d3a447dac",
+      "pushed_date": "2026-08-13",
+      "size": 9236,
+      "source_query": "filename:.trufflehog.yml OR filename:.trufflehog.toml OR filename:trufflehog.yml",
+      "stars": 1116,
+      "status": "mined",
+      "url": "https://github.com/logchimp/logchimp"
+    },
+    {
+      "archived": false,
+      "capped": true,
+      "default_branch": "master",
+      "first_seen": "2026-08-16T13:20:31Z",
+      "fork": false,
+      "language": "Python",
+      "pin": "15885be964f0f6cc66e4443e40f5987e8a54e51e",
+      "pin_probed": "15885be964f0f6cc66e4443e40f5987e8a54e51e",
+      "pushed_date": "2018-08-27",
+      "size": 1485,
+      "source_query": "path:rules extension:yar OR extension:yara",
+      "stars": 2,
+      "status": "mined",
+      "url": "https://github.com/uppusaikiran/yara-finder"
+    },
+    {
+      "archived": false,
+      "default_branch": "main",
+      "first_seen": "2026-08-16T13:20:31Z",
+      "fork": false,
+      "language": "edn",
+      "pin": "8d96a93c37429a3d81c92f098dfdb05752b7337a",
+      "pin_probed": "8d96a93c37429a3d81c92f098dfdb05752b7337a",
+      "pushed_date": "2026-08-07",
+      "size": 654,
+      "source_query": "filename:secretlintrc.json OR filename:.secretlintrc",
+      "stars": 560,
+      "status": "mined",
+      "url": "https://github.com/practicalli/clojure-cli-config"
+    },
+    {
+      "archived": false,
+      "default_branch": "main",
+      "first_seen": "2026-08-16T13:20:31Z",
+      "fork": false,
+      "language": "TypeScript",
+      "pin": "f5a81893b812b6745b1f8b7fa3a55a714cb9d89b",
+      "pin_probed": "f5a81893b812b6745b1f8b7fa3a55a714cb9d89b",
+      "pushed_date": "2026-03-19",
+      "size": 18840,
+      "source_query": "filename:.trufflehog.yml OR filename:.trufflehog.toml OR filename:trufflehog.yml",
+      "stars": 198,
+      "status": "mined",
+      "url": "https://github.com/Uniswap/routing-api"
+    },
+    {
+      "archived": false,
+      "capped": true,
+      "default_branch": "main",
+      "first_seen": "2026-08-16T13:20:31Z",
+      "fork": false,
+      "language": "Python",
+      "pin": "c1385707b17a2c38bf5af450320c93435124c257",
+      "pin_probed": "c1385707b17a2c38bf5af450320c93435124c257",
+      "pushed_date": "2026-08-15",
+      "size": 119170,
+      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
+      "stars": 1903,
+      "status": "mined",
+      "url": "https://github.com/NVIDIA-NeMo/RL"
+    },
+    {
+      "archived": false,
+      "default_branch": "main",
+      "first_seen": "2026-08-16T13:20:31Z",
+      "fork": false,
+      "language": "Python",
+      "pin": "625b936550cb1bf6568ca5ecb99d272a49f433c1",
+      "pin_probed": "625b936550cb1bf6568ca5ecb99d272a49f433c1",
+      "pushed_date": "2025-12-09",
+      "size": 3008,
+      "source_query": "filename:.trufflehog.yml OR filename:.trufflehog.toml OR filename:trufflehog.yml",
+      "stars": 95,
+      "status": "mined",
+      "url": "https://github.com/Yanhui-Lee/IAD-R1"
+    },
+    {
+      "archived": false,
+      "default_branch": "master",
+      "first_seen": "2026-08-16T13:20:31Z",
+      "fork": false,
+      "language": "Java",
+      "pin": "727b4faa2b4f599540f4fda4b5442306286a3ac7",
+      "pin_probed": "727b4faa2b4f599540f4fda4b5442306286a3ac7",
+      "pushed_date": "2026-08-13",
+      "size": 23760,
+      "source_query": "filename:.trufflehog.yml OR filename:.trufflehog.toml OR filename:trufflehog.yml",
+      "stars": 73,
+      "status": "mined",
+      "url": "https://github.com/aliyun/alibabacloud-landing-zone"
     }
   ],
   "run": {
