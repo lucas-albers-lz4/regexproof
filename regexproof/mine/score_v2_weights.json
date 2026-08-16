@@ -102,7 +102,6 @@
   "holdout_positive_count": 16,
   "intercept": -1.4677442935639646,
   "label_reproduction_auc": 0.9586148648648649,
-  "label_reproduction_note": "Reproduces gate-labels.json (go-only positive class). Not external validation of the live score-v1 allocator.",
   "n": 820,
   "schema_version": "1",
   "training": {
