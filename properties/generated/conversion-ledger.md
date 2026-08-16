@@ -38,8 +38,8 @@ Heap's-law / singleton novelty saturates **compiler coverage**. This artifact sa
 | properties asked / encodable | 0.0084 |
 | SAT / properties asked | 0.0435 |
 | ground-truthed / SAT | 1.0000 |
-| accepted upstream / SAT ground-truthed | 0.0357 |
-| accepted upstream / extracted | 8.00e-06 |
+| pipeline accepted (incl. own-code) / SAT GT | 0.0357 |
+| pipeline accepted / extracted | 8.00e-06 |
 
 ## Security-tool split (scanner product kinds)
 

@@ -32,6 +32,20 @@ Do NOT use Z3 for:
   config-supplied pattern is a finding, not a proof.
 - Cosmetic/internal patterns with no untrusted input — skip them; low value.
 
+## Property-contract precondition
+
+Do not count an UNSAT (or a synthesized SAT) as a **product** result unless
+the site has a contract: the guarantee you actually care about, the input
+source and trust class, and a declared domain (`docs/why.md`). Untargeted
+shape-1/2 synthesis ("does this class contain a space?") is compiler smoke.
+Shape-5 `rule_diff` still needs an independent spec or a
+`version_diff` / `cross_engine` pair with a `family_contract` — sibling-family
+pairing is not a contract.
+
+Phase 0 search-semantics inventory of the ten SAT candidates that looked like
+third-party findings: **2 remain filing candidates** (CRS 942220 version-diff,
+cross-engine 920210). The other eight are spec-gap or collapse under search.
+
 ## The 5-step workflow (follow in order)
 
 ### 1. Inventory the regex surface
