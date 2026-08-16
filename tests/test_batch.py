@@ -288,6 +288,24 @@ def test_tag_disclosure_fail_closed_unknown_kind():
     assert "disclosure" not in tagged_other[0]
 
 
+def test_apply_approval_sets_public_ok_only_when_ground_truthed(tmp_path: Path):
+    from regexproof.batch.disclose import apply_approval
+
+    path = tmp_path / "ok.json"
+    path.write_text('{"regex_ids": ["abc"]}\n', encoding="utf-8")
+    rows = apply_approval(
+        [
+            {"regex_id": "abc", "ground_truth_status": "reproduced", "disclosure": "private_first"},
+            {"regex_id": "abc", "ground_truth_status": None, "disclosure": "private_first"},
+            {"regex_id": "zzz", "ground_truth_status": "PASS", "disclosure": "private_first"},
+        ],
+        approval_path=path,
+    )
+    assert rows[0]["disclosure"] == "public_ok"
+    assert rows[1]["disclosure"] == "private_first"
+    assert rows[2]["disclosure"] == "private_first"
+
+
 def test_shell_posix_batch_includes_extensionless_shebang(tmp_path):
     """luna #276 -r7 #3: the batch walk must include extensionless files
     with a recognized shell shebang (the admission walker counts them)."""
@@ -404,6 +422,14 @@ def test_json_legacy_rejected():
     from regexproof.batch.runner import main
 
     assert main(["--json-legacy"]) == 2
+
+
+def test_cli_exposes_approval_path():
+    from regexproof.batch import runner as runner_mod
+
+    src = Path(runner_mod.__file__).read_text(encoding="utf-8")
+    assert "--approval-path" in src
+    assert "approval_path=args.approval_path" in src
 
 
 def test_extract_corpus_routes_shell_posix_through_registry(tmp_path):
