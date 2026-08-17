@@ -10,6 +10,9 @@ the work by phase; dates are merge dates.
   conversion-wave SOP (rank 15 / write 5 human contracts per cluster) and
   the first OpenWrt packages application. Heap saturates the compiler; this
   SOP saturates `properties_asked`.
+- Registered `openwrt_packages` as a manifest corpus (not `WAVE_CORPORA`):
+  shebang-sniff regardless of suffix, runtime gate copy of the 2026-08-12
+  probe GO, batch + conversion-ledger regen.
 
 ## Conversion ledger (2026-08-15)
 

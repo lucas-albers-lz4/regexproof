@@ -6,7 +6,7 @@ import sys
 from pathlib import Path
 from typing import Any
 
-from regexproof.admission.walk import _SHELL_SHEBANGS
+from regexproof.admission.walk import _SHELL_SHEBANGS, _SKIP_DIR_NAMES
 from regexproof.batch.extractor_registry import (
     EXTRACTORS,
     registry_glob,
@@ -360,17 +360,26 @@ def extract_corpus(corpus: str, meta: dict[str, Any]) -> list[dict[str, Any]]:
 
 
 def _is_shell_script(fp: Path) -> bool:
-    """shell_posix batch file filter — mirrors the admission walker's
-    `_is_shell_context` EXACTLY (luna #276 -r8 finding: the first version
-    substring-matched `sh` and wrongly admitted `#!/usr/bin/zsh`):
-    init.d path segment, known suffix, or extensionless file whose first
-    line is in the walker's exact shebang allowlist."""
+    """shell_posix batch file filter — aligned with dogfood ``--dir``
+    ``_classify`` (scripts/dogfood-singleton-analysis.py): known suffix,
+    ``init.d/`` path segment, or first line in the walker's exact shebang
+    allowlist **regardless of suffix**.
+
+    Luna #276: the allowlist is exact ``_SHELL_SHEBANGS`` (never a ``sh``
+    substring), so ``#!/usr/bin/zsh`` stays rejected. Suffix-early-return
+    previously dropped OpenWrt ``.defaults`` / ``.uci`` / ``.dnsprefetch``
+    shebang files that ``--dir`` admits.
+
+    Path segments in the admission walker's ``_SKIP_DIR_NAMES`` (``.git``,
+    ``node_modules``, …) are refused so ``**/*`` does not admit clone-hook
+    sample scripts under ``.git/hooks/``.
+    """
+    if any(p in _SKIP_DIR_NAMES for p in fp.parts):
+        return False
     if fp.suffix in (".sh", ".bash", ".init"):
         return True
     if any(p == "init.d" for p in fp.parts):
         return True
-    if fp.suffix:
-        return False  # other extensions are not shell
     try:
         with fp.open("r", encoding="utf-8", errors="replace") as fh:
             first = fh.readline(80).strip()

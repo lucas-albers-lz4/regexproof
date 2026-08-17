@@ -1,0 +1,43 @@
+{
+  "budget": {
+    "max_disk_mb": 500,
+    "max_mem_mb": 2048,
+    "max_patterns": 5000,
+    "max_wall_s": 900,
+    "redos_wall_s": 180
+  },
+  "budget_breaches": null,
+  "commit": "e99adbc49f7a11d0377c8135fe706c7757b9e68c",
+  "compiler_fingerprint": "35ea1f238a9e",
+  "complete_run": true,
+  "corpus_pin": "e99adbc49f7a11d0377c8135fe706c7757b9e68c",
+  "decision": "go",
+  "decision_note": "8 unclassified parse-error rows \u2014 Phase 1 requires zero",
+  "decision_rule": "go iff encodable/sample_size >= 0.3",
+  "dialect": "posix-shell",
+  "encodable": 498,
+  "engine_versions": {
+    "python": "3.14.6",
+    "z3": "5.0.0"
+  },
+  "extractor_schema_version": "2",
+  "fraction": 0.7024,
+  "go_no_go_threshold": 0.3,
+  "id_formula": "v2-domain-optional-ascii-default",
+  "inventory_path": "properties/generated/openwrt_packages-inventory.ndjson",
+  "path": "batch/corpora/openwrt_packages/rules",
+  "pilot": "openwrt_packages",
+  "reasons": {
+    "empty-class": 1,
+    "gnu-extension": 25,
+    "internal-anchor": 168,
+    "ok": 498,
+    "parse-error": 8,
+    "per-alternative-anchor": 9
+  },
+  "sample_size": 709,
+  "schema_version": "1",
+  "scope": "full_corpus",
+  "unclassified_parse_errors": 8,
+  "wall_s": 28.508
+}

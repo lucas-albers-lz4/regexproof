@@ -1,0 +1,25 @@
+{
+  "address_space_cap": true,
+  "cache": {
+    "entries": 709,
+    "hit_rate": 0.7023977433004231,
+    "hits": 498,
+    "misses": 211
+  },
+  "cache_hit_rate": 0.7023977433004231,
+  "complete_run": true,
+  "corpus": "openwrt_packages",
+  "corpus_type": "rule_corpus",
+  "encodable": 498,
+  "engine": {
+    "python": "3.14.6"
+  },
+  "extracted": 709,
+  "findings": 139,
+  "inventory_questions": 4,
+  "join_regex_ids": 139,
+  "redos_findings": 0,
+  "redos_incomplete": false,
+  "schema_version": "1",
+  "triage": 211
+}
