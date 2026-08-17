@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 
 from regexproof.rule_diff.batch_shape5 import (
+    _PAD_GATE_MODEL_CAP,
     admit_shape5_for_batch,
     filter_batch_pairs,
     run_batch_shape5_pairs,
@@ -93,6 +94,10 @@ def test_sat_fullmatch_only_when_pad_gate_rejects(monkeypatch):
     assert rows[0]["result"] == "sat_fullmatch_only"
     assert rows[0]["search_pad_gate"] is False
     assert rows[0]["ground_truth_status"] == "fullmatch-only-not-search-gap"
+
+
+def test_pad_gate_model_cap_exceeds_five():
+    assert _PAD_GATE_MODEL_CAP > 5
 
 
 def test_compile_bound_is_pattern_length_not_witness_max_len():
