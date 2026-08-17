@@ -42,9 +42,9 @@ Heap's-law / singleton novelty saturates **compiler coverage**. This artifact sa
 | ground-truthed / SAT | 1.0000 |
 | pipeline accepted (incl. own-code) / SAT GT | 0.5000 |
 | pipeline accepted / extracted | 8.00e-06 |
-| encodable / extracted excluding YARA inventories | 0.6174 |
-| YARA share of inventory unencodable | 0.6530 |
-| `fullword-boundary` share of inventory unencodable | 0.6353 |
+| encodable / extracted excluding YARA inventories | 0.6117 |
+| YARA share of inventory unencodable | 0.6460 |
+| `fullword-boundary` share of inventory unencodable | 0.6285 |
 
 ## Security-tool split (scanner product kinds)
 
