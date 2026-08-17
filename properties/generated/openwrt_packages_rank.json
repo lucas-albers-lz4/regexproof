@@ -1,0 +1,2671 @@
+{
+  "corpus": "openwrt_packages",
+  "dropped": [
+    {
+      "pattern": "^$DRIVER_HOME_DEFAULT$",
+      "reason": "interpolated",
+      "site": "batch/corpora/openwrt_packages/rules/net/p910nd/files/p910nd.hotplug:169:5"
+    },
+    {
+      "pattern": "$2",
+      "reason": "unencodable:internal-anchor",
+      "site": "batch/corpora/openwrt_packages/rules/net/https-dns-proxy/test.sh:3:32"
+    },
+    {
+      "pattern": "$2",
+      "reason": "unencodable:internal-anchor",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/files/etc/init.d/pbr:998:38"
+    },
+    {
+      "pattern": "all_proxy",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/ddns-scripts/files/usr/lib/ddns/dynamic_dns_functions.sh:102:84"
+    },
+    {
+      "pattern": "update_dnsmasq_config",
+      "reason": "path-segment:tests|testdata|fixtures",
+      "site": "batch/corpora/openwrt_packages/rules/net/https-dns-proxy/tests/run_tests.sh:622:1"
+    },
+    {
+      "pattern": "^${gid}:${sid}\\b",
+      "reason": "interpolated",
+      "site": "batch/corpora/openwrt_packages/rules/net/snort3/files/snort-mgr:255:34"
+    },
+    {
+      "pattern": "='$INTERFACE'$",
+      "reason": "interpolated",
+      "site": "batch/corpora/openwrt_packages/rules/net/libreswan/files/etc/hotplug.d/iface/89-libreswan:7:21"
+    },
+    {
+      "pattern": "$2",
+      "reason": "unencodable:internal-anchor",
+      "site": "batch/corpora/openwrt_packages/rules/net/csshnpd/test.sh:3:16"
+    },
+    {
+      "pattern": "DOWN",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/switchdev-poller/files/switchdev-poller:140:34"
+    },
+    {
+      "pattern": "set $\\{i} \\{",
+      "reason": "unencodable:internal-anchor",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/files/etc/init.d/pbr:3255:42"
+    },
+    {
+      "pattern": "warningInterfaceRoutingUnknownGateway",
+      "reason": "path-segment:tests|testdata|fixtures",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/tests/06_network/01_gateway_discovery:157:23"
+    },
+    {
+      "pattern": "#.*",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/files/etc/init.d/pbr:479:18"
+    },
+    {
+      "pattern": "option force_ipv6_resolvers '1'",
+      "reason": "path-segment:tests|testdata|fixtures",
+      "site": "batch/corpora/openwrt_packages/rules/net/https-dns-proxy/tests/run_tests.sh:594:1"
+    },
+    {
+      "pattern": "workgroup",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/wsdd2/files/wsdd2.init:50:31"
+    },
+    {
+      "pattern": "$\\{value}",
+      "reason": "unencodable:internal-anchor",
+      "site": "batch/corpora/openwrt_packages/rules/net/adblock/files/95-adblock-housekeeping:43:52"
+    },
+    {
+      "pattern": "\"content\":\\s*\"[^\"]*",
+      "reason": "unencodable:gnu-extension",
+      "site": "batch/corpora/openwrt_packages/rules/net/ddns-scripts/files/usr/lib/ddns/update_cloudflare_com_v4.sh:245:9"
+    },
+    {
+      "pattern": "ietf-netconf ",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/sysrepo/files/libsysrepo.default:26:25"
+    },
+    {
+      "pattern": "ADS-B",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/utils/rtl-sdr/test.sh:12:23"
+    },
+    {
+      "pattern": "<resource_record>",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/ddns-scripts/files/usr/lib/ddns/update_namesilo_com_v1.sh:175:18"
+    },
+    {
+      "pattern": "\\|PORT\\|",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_packages/rules/net/ocserv/files/ocserv.init:89:1"
+    },
+    {
+      "pattern": "mwan3_policy_",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/mwan3/files/lib/mwan3/mwan3.sh:1198:75"
+    },
+    {
+      "pattern": "HWaddr",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/apfree-wifidog/files/wifidogx.init:25:42"
+    },
+    {
+      "pattern": "Support for plugins: present",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/dnscrypt-proxy/files/dnscrypt-proxy.init:27:63"
+    },
+    {
+      "pattern": "^$__opt$__sep.*$",
+      "reason": "interpolated",
+      "site": "batch/corpora/openwrt_packages/rules/net/uacme/files/dnsapi_helper.sh:1079:31"
+    },
+    {
+      "pattern": "POINTOPOINT",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/files/etc/init.d/pbr:271:63"
+    },
+    {
+      "pattern": "procd_trigger_wan6",
+      "reason": "path-segment:tests|testdata|fixtures",
+      "site": "batch/corpora/openwrt_packages/rules/net/https-dns-proxy/tests/run_tests.sh:600:1"
+    },
+    {
+      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_-]{0,61}[a-zA-Z0-9]$|^[a-zA-Z0-9]$",
+      "reason": "unencodable:per-alternative-anchor",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/files/etc/init.d/pbr:353:24"
+    },
+    {
+      "pattern": "use_http1",
+      "reason": "path-segment:tests|testdata|fixtures",
+      "site": "batch/corpora/openwrt_packages/rules/net/https-dns-proxy/tests/run_tests.sh:592:1"
+    },
+    {
+      "pattern": ":*/.*$",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_packages/rules/net/mwan3/files/lib/mwan3/common.sh:89:32"
+    },
+    {
+      "pattern": "$\\{value}",
+      "reason": "unencodable:internal-anchor",
+      "site": "batch/corpora/openwrt_packages/rules/net/adblock/files/95-adblock-housekeeping:72:56"
+    },
+    {
+      "pattern": "wan6_trigger",
+      "reason": "path-segment:tests|testdata|fixtures",
+      "site": "batch/corpora/openwrt_packages/rules/net/https-dns-proxy/tests/run_tests.sh:590:1"
+    },
+    {
+      "pattern": "$__DOMAIN_REGEX",
+      "reason": "interpolated:$ident",
+      "site": "batch/corpora/openwrt_packages/rules/net/ddns-scripts/files/usr/lib/ddns/update_porkbun_v3.sh:34:15"
+    },
+    {
+      "pattern": "_ITEM",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/privoxy/files/privoxy.init:36:20"
+    },
+    {
+      "pattern": "RTL2832",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/utils/rtl-sdr/test.sh:11:25"
+    },
+    {
+      "pattern": "GIF",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/multimedia/graphicsmagick/test.sh:48:33"
+    },
+    {
+      "pattern": "^fe80:.*router",
+      "reason": "path-segment:tests|testdata|fixtures",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/tests/06_network/01_gateway_discovery:45:67"
+    },
+    {
+      "pattern": "$2",
+      "reason": "unencodable:internal-anchor",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/files/etc/init.d/pbr:212:34"
+    },
+    {
+      "pattern": "RTL2832",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/utils/rtl-sdr/test.sh:10:21"
+    },
+    {
+      "pattern": "<type>_$\\{stype}._tcp</type>",
+      "reason": "unencodable:internal-anchor",
+      "site": "batch/corpora/openwrt_packages/rules/libs/avahi/test.sh:102:1"
+    },
+    {
+      "pattern": "\\[USERNAME\\]",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_packages/rules/net/ddns-scripts/files/usr/lib/ddns/dynamic_dns_functions.sh:841:29"
+    },
+    {
+      "pattern": "$PHP_MOD",
+      "reason": "interpolated:$ident",
+      "site": "batch/corpora/openwrt_packages/rules/lang/php8/test.sh:23:16"
+    },
+    {
+      "pattern": "$UPD_ANSWER",
+      "reason": "interpolated:$ident",
+      "site": "batch/corpora/openwrt_packages/rules/net/ddns-scripts/files/usr/lib/ddns/dynamic_dns_functions.sh:852:2"
+    },
+    {
+      "pattern": "<detail>",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/ddns-scripts/files/usr/lib/ddns/update_namesilo_com_v1.sh:137:34"
+    },
+    {
+      "pattern": "^http:",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_packages/rules/net/ddns-scripts/samples/update_sample.sh:30:46"
+    },
+    {
+      "pattern": "POINTOPOINT",
+      "reason": "path-segment:tests|testdata|fixtures",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/tests/06_network/01_gateway_discovery:32:64"
+    },
+    {
+      "pattern": "${pattern}",
+      "reason": "interpolated",
+      "site": "batch/corpora/openwrt_packages/rules/admin/syslog-ng/files/logread.sh:56:4"
+    },
+    {
+      "pattern": "$tid $\\{ipTablePrefix}_$\\{table_iface}",
+      "reason": "interpolated",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/files/etc/init.d/pbr:2313:8"
+    },
+    {
+      "pattern": "warningInterfaceRoutingUnknownGateway",
+      "reason": "path-segment:tests|testdata|fixtures",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/tests/06_network/01_gateway_discovery:319:23"
+    },
+    {
+      "pattern": "$\\{__SUBDOMAIN}\\.",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_packages/rules/net/ddns-scripts/files/usr/lib/ddns/update_one_com.sh:25:30"
+    },
+    {
+      "pattern": "dnsrecordupdated",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/ddns-scripts/files/usr/lib/ddns/update_blazingfast_io.sh:524:20"
+    },
+    {
+      "pattern": "POINTOPOINT",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/files/etc/init.d/pbr:2467:51"
+    },
+    {
+      "pattern": "$2",
+      "reason": "unencodable:internal-anchor",
+      "site": "batch/corpora/openwrt_packages/rules/utils/miniflux/test.sh:2:24"
+    },
+    {
+      "pattern": "$PKG_VERSION",
+      "reason": "interpolated:$ident",
+      "site": "batch/corpora/openwrt_packages/rules/net/ampr-ripd/test.sh:3:15"
+    },
+    {
+      "pattern": "chain $\\{nftPrefix}_$\\{i} \\{",
+      "reason": "unencodable:internal-anchor",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/files/etc/init.d/pbr:3245:42"
+    },
+    {
+      "pattern": "^nftset=/other\\.com/",
+      "reason": "path-segment:tests|testdata|fixtures",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/tests/08_dns/01_nftset_element:155:1"
+    },
+    {
+      "pattern": "53 5053",
+      "reason": "path-segment:tests|testdata|fixtures",
+      "site": "batch/corpora/openwrt_packages/rules/net/https-dns-proxy/tests/run_tests.sh:734:0"
+    },
+    {
+      "pattern": "$transplug",
+      "reason": "interpolated:$ident",
+      "site": "batch/corpora/openwrt_packages/rules/net/gnunet/files/gnunet.init:43:30"
+    },
+    {
+      "pattern": "\\-N mwan3_$\\{chain}_$\\{family}$",
+      "reason": "unencodable:internal-anchor",
+      "site": "batch/corpora/openwrt_packages/rules/net/mwan3/files/lib/mwan3/mwan3.sh:275:23"
+    },
+    {
+      "pattern": "PNG",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/multimedia/graphicsmagick/test.sh:60:31"
+    },
+    {
+      "pattern": "${o}",
+      "reason": "interpolated",
+      "site": "batch/corpora/openwrt_packages/rules/libs/nacl/do-openwrt:151:1"
+    },
+    {
+      "pattern": "^\\s*ssl_session_timeout\\s",
+      "reason": "unencodable:gnu-extension",
+      "site": "batch/corpora/openwrt_packages/rules/net/nginx-util/src/test-nginx-util-root.sh:133:21"
+    },
+    {
+      "pattern": "4#inet#fw4#pbr_policyA_4_dst_ip",
+      "reason": "path-segment:tests|testdata|fixtures",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/tests/08_dns/01_nftset_element:101:16"
+    },
+    {
+      "pattern": "^#$__opt$__sep.*$",
+      "reason": "interpolated",
+      "site": "batch/corpora/openwrt_packages/rules/net/uacme/files/dnsapi_helper.sh:1089:31"
+    },
+    {
+      "pattern": "\\..*",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_packages/rules/net/ksmbd-tools/files/ksmbd.init:53:13"
+    },
+    {
+      "pattern": "ietf-netconf-with-default ",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/sysrepo/files/libsysrepo.default:11:25"
+    },
+    {
+      "pattern": "t",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/kea/files/dhcp4.sh:1011:13"
+    },
+    {
+      "pattern": "friendlyname",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/sound/upmpdcli/test.sh:30:1"
+    },
+    {
+      "pattern": "^#$__opt$__sep",
+      "reason": "interpolated",
+      "site": "batch/corpora/openwrt_packages/rules/net/uacme/files/dnsapi_helper.sh:1081:7"
+    },
+    {
+      "pattern": "_LENGTH",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/privoxy/files/privoxy.init:34:20"
+    },
+    {
+      "pattern": "table inet https_dns_proxy_notrack",
+      "reason": "path-segment:tests|testdata|fixtures",
+      "site": "batch/corpora/openwrt_packages/rules/net/https-dns-proxy/tests/run_tests.sh:728:0"
+    },
+    {
+      "pattern": "<fault>",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/ddns-scripts/files/usr/lib/ddns/update_freedns_42_pl.sh:15:0"
+    },
+    {
+      "pattern": "PING",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/speedtest-netperf/files/speedtest-netperf.sh:66:50"
+    },
+    {
+      "pattern": "acme-staging",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/acme-acmesh/files/hook.sh:111:27"
+    },
+    {
+      "pattern": "^list[[:space:]]+([^[:space:]]+)[[:space:",
+      "reason": "path-segment:tests|testdata|fixtures",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/tests/lib/mocks/functions.sh:48:7"
+    },
+    {
+      "pattern": "$2.*SSL \\(OpenSSL\\)",
+      "reason": "unencodable:internal-anchor",
+      "site": "batch/corpora/openwrt_packages/rules/net/openvpn/test.sh:8:22"
+    },
+    {
+      "pattern": "$2",
+      "reason": "unencodable:internal-anchor",
+      "site": "batch/corpora/openwrt_packages/rules/net/nebula/test.sh:5:79"
+    },
+    {
+      "pattern": "$\\{ipTablePrefix}_",
+      "reason": "unencodable:internal-anchor",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/files/etc/init.d/pbr:422:45"
+    },
+    {
+      "pattern": "not responding",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/utils/librespeed-cli-rust/test.sh:48:0"
+    },
+    {
+      "pattern": "BEGIN CERTIFICATE",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/freeradius3/test.sh:100:2"
+    },
+    {
+      "pattern": "_ITEM.*",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_packages/rules/net/privoxy/files/privoxy.init:36:77"
+    },
+    {
+      "pattern": "\\[USERNAME\\]",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_packages/rules/net/ddns-scripts/files/usr/lib/ddns/update_no-ip_com.sh:42:25"
+    },
+    {
+      "pattern": "$CONFIG_SECTION",
+      "reason": "interpolated:$ident",
+      "site": "batch/corpora/openwrt_packages/rules/net/frp/files/frpc.init:25:3"
+    },
+    {
+      "pattern": "^option[[:space:]]+([^[:space:]]+)[[:space:]]+([^[:space:]]+)",
+      "reason": "path-segment:tests|testdata|fixtures",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/tests/lib/mocks/functions.sh:42:7"
+    },
+    {
+      "pattern": "$2",
+      "reason": "unencodable:internal-anchor",
+      "site": "batch/corpora/openwrt_packages/rules/net/hev-socks5-tproxy/test.sh:3:12"
+    },
+    {
+      "pattern": "# UCI_CONF_VERSION=.*",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_packages/rules/net/nginx/files/nginx.init:35:2"
+    },
+    {
+      "pattern": "$pattern",
+      "reason": "interpolated:$ident",
+      "site": "batch/corpora/openwrt_packages/rules/lang/golang/golang-build.sh:109:40"
+    },
+    {
+      "pattern": "$o",
+      "reason": "interpolated:$ident",
+      "site": "batch/corpora/openwrt_packages/rules/libs/nacl/do-openwrt:124:5"
+    },
+    {
+      "pattern": "name = ",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/snort3/files/snort-mgr:277:71"
+    },
+    {
+      "pattern": "^-A mwan3_rules.*-i $device",
+      "reason": "interpolated",
+      "site": "batch/corpora/openwrt_packages/rules/net/mwan3/files/lib/mwan3/mwan3.sh:943:11"
+    },
+    {
+      "pattern": "::",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/ddns-scripts/files/usr/lib/ddns/dynamic_dns_functions.sh:1196:17"
+    },
+    {
+      "pattern": "use_http1",
+      "reason": "path-segment:tests|testdata|fixtures",
+      "site": "batch/corpora/openwrt_packages/rules/net/https-dns-proxy/tests/run_tests.sh:630:1"
+    },
+    {
+      "pattern": "canonical name =",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/utils/cache-domains/files/test.sh:30:42"
+    },
+    {
+      "pattern": " src ",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/strongswan/files/ipsec.init:225:46"
+    },
+    {
+      "pattern": "^ *$if:",
+      "reason": "interpolated",
+      "site": "batch/corpora/openwrt_packages/rules/net/tayga/files/tayga.sh:5:17"
+    },
+    {
+      "pattern": "use_http1",
+      "reason": "path-segment:tests|testdata|fixtures",
+      "site": "batch/corpora/openwrt_packages/rules/net/https-dns-proxy/tests/run_tests.sh:632:1"
+    },
+    {
+      "pattern": "^#!/bin/sh",
+      "reason": "path-segment:tests|testdata|fixtures",
+      "site": "batch/corpora/openwrt_packages/rules/net/adblock-fast/tests/run_tests.sh:370:26"
+    },
+    {
+      "pattern": "^.* ",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_packages/rules/net/ddns-scripts/files/usr/lib/ddns/update_huaweicloud_com.sh:64:81"
+    },
+    {
+      "pattern": "$\\{value}",
+      "reason": "unencodable:internal-anchor",
+      "site": "batch/corpora/openwrt_packages/rules/net/adblock/files/95-adblock-housekeeping:77:51"
+    },
+    {
+      "pattern": "^raddbdir = $FR_ETC\\$",
+      "reason": "interpolated",
+      "site": "batch/corpora/openwrt_packages/rules/net/freeradius3/test.sh:18:1"
+    },
+    {
+      "pattern": "$RPC_PIPEFS_D",
+      "reason": "interpolated:$ident",
+      "site": "batch/corpora/openwrt_packages/rules/net/nfs-kernel-server/files/nfsd.v4.init:48:2"
+    },
+    {
+      "pattern": "mwan3_policy_",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/mwan3/files/lib/mwan3/mwan3.sh:1176:20"
+    },
+    {
+      "pattern": "$\\{object",
+      "reason": "unencodable:internal-anchor",
+      "site": "batch/corpora/openwrt_packages/rules/net/modemmanager/files/usr/sbin/ModemManager-monitor:57:1"
+    },
+    {
+      "pattern": "warningInterfaceRoutingUnknownGateway",
+      "reason": "path-segment:tests|testdata|fixtures",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/tests/06_network/01_gateway_discovery:339:23"
+    },
+    {
+      "pattern": "flags interval",
+      "reason": "path-segment:tests|testdata|fixtures",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/tests/04_config/01_load_config:43:24"
+    },
+    {
+      "pattern": "0 rows",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/libs/postgresql/files/postgresql.sh:65:62"
+    },
+    {
+      "pattern": "\\[USERNAME\\]",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_packages/rules/net/ddns-scripts/files/usr/lib/ddns/update_freedns_42_pl.sh:11:26"
+    },
+    {
+      "pattern": "debug_",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/privoxy/files/privoxy.init:31:38"
+    },
+    {
+      "pattern": "<resource_record>.*<host>$username</host>.*</resource_record>",
+      "reason": "interpolated",
+      "site": "batch/corpora/openwrt_packages/rules/net/ddns-scripts/files/usr/lib/ddns/update_namesilo_com_v1.sh:176:6"
+    },
+    {
+      "pattern": "8.8.8.8",
+      "reason": "path-segment:tests|testdata|fixtures",
+      "site": "batch/corpora/openwrt_packages/rules/net/https-dns-proxy/tests/run_tests.sh:454:14"
+    },
+    {
+      "pattern": "$\\{nowdow}",
+      "reason": "unencodable:internal-anchor",
+      "site": "batch/corpora/openwrt_packages/rules/net/wifischedule/net/usr/bin/wifi_schedule.sh:109:27"
+    },
+    {
+      "pattern": "(HTML|TITLE|H1|H2|by|^#)",
+      "reason": "unencodable:per-alternative-anchor",
+      "site": "batch/corpora/openwrt_packages/rules/net/apinger/files/graphs.sh:22:21"
+    },
+    {
+      "pattern": "BEGIN RSA PRIVATE KEY",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/uacme/files/dnsapi_helper.sh:527:5"
+    },
+    {
+      "pattern": "^http:",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_packages/rules/net/ddns-scripts/files/usr/lib/ddns/update_no-ip_com.sh:44:46"
+    },
+    {
+      "pattern": "\"Value\":\\s*\"[^\"]*",
+      "reason": "unencodable:gnu-extension",
+      "site": "batch/corpora/openwrt_packages/rules/net/ddns-scripts/files/usr/lib/ddns/update_dnspod_cn_v3.sh:319:9"
+    },
+    {
+      "pattern": "JPEG",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/multimedia/graphicsmagick/test.sh:17:33"
+    },
+    {
+      "pattern": "'PREROUTING'",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/files/etc/uci-defaults/90-pbr:17:0"
+    },
+    {
+      "pattern": ".devpath='$devpath'",
+      "reason": "interpolated",
+      "site": "batch/corpora/openwrt_packages/rules/net/bsbf-openwrt-resources/files/etc/hotplug.d/net/99-bsbf-autoconf-cellular:30:32"
+    },
+    {
+      "pattern": "procd_fw_src_interfaces",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/https-dns-proxy/files/etc/uci-defaults/50-https-dns-proxy-migrate-options.sh:6:0"
+    },
+    {
+      "pattern": "$\\{ipTablePrefix}_$\\{iface}\\$",
+      "reason": "unencodable:internal-anchor",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/files/etc/init.d/pbr:420:39"
+    },
+    {
+      "pattern": "'INPUT'",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/files/etc/uci-defaults/90-pbr:15:0"
+    },
+    {
+      "pattern": "wan6_trigger",
+      "reason": "path-segment:tests|testdata|fixtures",
+      "site": "batch/corpora/openwrt_packages/rules/net/https-dns-proxy/tests/run_tests.sh:625:1"
+    },
+    {
+      "pattern": "$\\{wwan} $\\{cdcwdm}",
+      "reason": "unencodable:internal-anchor",
+      "site": "batch/corpora/openwrt_packages/rules/net/modemmanager/files/usr/share/ModemManager/modemmanager.common:91:1"
+    },
+    {
+      "pattern": "^.*name=x27dnslistidx27 value=\"",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_packages/rules/net/ddns-scripts/files/usr/lib/ddns/update_cnkuai_cn.sh:75:59"
+    },
+    {
+      "pattern": "\\.([0-9]*)$",
+      "reason": "test-filename:test-version.sh",
+      "site": "batch/corpora/openwrt_packages/rules/multimedia/imagemagick/test-version.sh:8:52"
+    },
+    {
+      "pattern": "Usage:",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/utils/usbutils/test.sh:15:16"
+    },
+    {
+      "pattern": "-----BEGIN PRIVATE KEY-----\\s*",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_packages/rules/net/ddns-scripts/files/usr/lib/ddns/update_transip_nl.sh:42:8"
+    },
+    {
+      "pattern": "curl",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/files/etc/init.d/pbr:2850:5"
+    },
+    {
+      "pattern": "link:up",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/switchdev-poller/files/switchdev-poller:130:47"
+    },
+    {
+      "pattern": "127.0.0.1#5054",
+      "reason": "path-segment:tests|testdata|fixtures",
+      "site": "batch/corpora/openwrt_packages/rules/net/https-dns-proxy/tests/run_tests.sh:409:14"
+    },
+    {
+      "pattern": "procd_lan_device",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/files/etc/uci-defaults/90-pbr:22:0"
+    },
+    {
+      "pattern": "$(_regex ",
+      "reason": "unencodable:parse-error",
+      "site": "batch/corpora/openwrt_packages/rules/net/nginx-util/src/test-nginx-util-root.sh:129:21"
+    },
+    {
+      "pattern": "pbr",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/files/usr/share/pbr/pbr.user.dnsprefetch:20:43"
+    },
+    {
+      "pattern": " $first ",
+      "reason": "path-segment:tests|testdata|fixtures",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/tests/lib/mocks/jshn.sh:112:44"
+    },
+    {
+      "pattern": "option force_ipv6_resolvers",
+      "reason": "path-segment:tests|testdata|fixtures",
+      "site": "batch/corpora/openwrt_packages/rules/net/https-dns-proxy/tests/run_tests.sh:595:1"
+    },
+    {
+      "pattern": "null",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/sound/mpd/test.sh:9:17"
+    },
+    {
+      "pattern": "^nftset=/example\\.com/",
+      "reason": "path-segment:tests|testdata|fixtures",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/tests/08_dns/01_nftset_element:47:13"
+    },
+    {
+      "pattern": "^#!/bin/sh",
+      "reason": "path-segment:tests|testdata|fixtures",
+      "site": "batch/corpora/openwrt_packages/rules/net/https-dns-proxy/tests/run_tests.sh:816:26"
+    },
+    {
+      "pattern": "\\..*",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_packages/rules/net/wsdd2/files/wsdd2.init:8:11"
+    },
+    {
+      "pattern": "BMP",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/multimedia/imagemagick/test.sh:36:30"
+    },
+    {
+      "pattern": "POINTOPOINT",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/files/etc/init.d/pbr:2374:52"
+    },
+    {
+      "pattern": "^[[:blank:]]*(#|$)",
+      "reason": "unencodable:per-alternative-anchor",
+      "site": "batch/corpora/openwrt_packages/rules/net/frr/files/frrcommon.sh:357:1"
+    },
+    {
+      "pattern": "^nftset=/example\\.com/",
+      "reason": "path-segment:tests|testdata|fixtures",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/tests/08_dns/01_nftset_element:82:8"
+    },
+    {
+      "pattern": "^nftset=/${escaped_param}/.*#${safe_nftset6}(,| |$)",
+      "reason": "interpolated",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/files/etc/init.d/pbr:1147:28"
+    },
+    {
+      "pattern": "transport_name",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/open-iscsi/files/iscsi_discovery:163:62"
+    },
+    {
+      "pattern": "^$_sdkey *=.*$",
+      "reason": "interpolated",
+      "site": "batch/corpora/openwrt_packages/rules/net/uacme/files/dnsapi_helper.sh:1123:25"
+    },
+    {
+      "pattern": "pbr_policyA_4_dst_ip",
+      "reason": "path-segment:tests|testdata|fixtures",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/tests/08_dns/01_nftset_element:50:13"
+    },
+    {
+      "pattern": "name = ",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/snort3/files/snort-mgr:276:24"
+    },
+    {
+      "pattern": "<code>",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/ddns-scripts/files/usr/lib/ddns/update_namesilo_com_v1.sh:114:30"
+    },
+    {
+      "pattern": "$2",
+      "reason": "unencodable:internal-anchor",
+      "site": "batch/corpora/openwrt_packages/rules/net/tcpreplay/test.sh:9:30"
+    },
+    {
+      "pattern": "POINTOPOINT",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/files/etc/init.d/pbr:2348:52"
+    },
+    {
+      "pattern": "(^0|^10\\.|^100\\.6[4-9]\\.|^100\\.[7-9][0-9]\\.|^100\\.1[0-1][0-9]\\.|^100\\.12[0-7]\\.|^127|^169\\.254|^172\\.1[6-9]\\.|^172\\.2[0-9]\\.|^172\\.3[0-1]\\.|^192\\.168)",
+      "reason": "unencodable:per-alternative-anchor",
+      "site": "batch/corpora/openwrt_packages/rules/net/ddns-scripts/files/usr/lib/ddns/dynamic_dns_functions.sh:823:42"
+    },
+    {
+      "pattern": " on $CPATH ",
+      "reason": "interpolated",
+      "site": "batch/corpora/openwrt_packages/rules/net/ibrdtnd/files/mountcontainer.sh:32:19"
+    },
+    {
+      "pattern": "=service",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/ddns-scripts/files/usr/lib/ddns/dynamic_dns_updater.sh:179:58"
+    },
+    {
+      "pattern": "luci",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/ddns-scripts/files/usr/lib/ddns/dynamic_dns_functions.sh:83:36"
+    },
+    {
+      "pattern": "CONFIG_$1_auth_opt_",
+      "reason": "unencodable:internal-anchor",
+      "site": "batch/corpora/openwrt_packages/rules/net/mosquitto/files/etc/init.d/mosquitto:166:10"
+    },
+    {
+      "pattern": "$i",
+      "reason": "interpolated:$ident",
+      "site": "batch/corpora/openwrt_packages/rules/net/wg-installer/common/wg.sh:10:23"
+    },
+    {
+      "pattern": "POINTOPOINT",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/files/etc/init.d/pbr:2461:52"
+    },
+    {
+      "pattern": "[&",
+      "reason": "unencodable:parse-error",
+      "site": "batch/corpora/openwrt_packages/rules/net/nginx-util/src/test-nginx-util-root.sh:63:29"
+    },
+    {
+      "pattern": "^ *$if:",
+      "reason": "interpolated",
+      "site": "batch/corpora/openwrt_packages/rules/net/tayga/files/tayga.sh:15:17"
+    },
+    {
+      "pattern": "GIF",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/multimedia/imagemagick/test.sh:57:30"
+    },
+    {
+      "pattern": "4#inet#fw4#pbr_policyA_4_dst_ip",
+      "reason": "path-segment:tests|testdata|fixtures",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/tests/08_dns/01_nftset_element:32:1"
+    },
+    {
+      "pattern": "\\.",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_packages/rules/lang/python/python3-find-stdlib-depends.sh:197:42"
+    },
+    {
+      "pattern": "NFLOG",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/libreswan/files/etc/libreswan_firewall.sh:85:1"
+    },
+    {
+      "pattern": " $\\{feature} ",
+      "reason": "unencodable:internal-anchor",
+      "site": "batch/corpora/openwrt_packages/rules/net/netopeer2/files/netopeer2-server-setup.default:67:46"
+    },
+    {
+      "pattern": "$2",
+      "reason": "unencodable:internal-anchor",
+      "site": "batch/corpora/openwrt_packages/rules/libs/sx1302_hal/test.sh:6:19"
+    },
+    {
+      "pattern": "$o",
+      "reason": "interpolated:$ident",
+      "site": "batch/corpora/openwrt_packages/rules/libs/nacl/do-openwrt:146:5"
+    },
+    {
+      "pattern": "$2",
+      "reason": "unencodable:internal-anchor",
+      "site": "batch/corpora/openwrt_packages/rules/lang/php8/test.sh:11:16"
+    },
+    {
+      "pattern": "priority",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/ddns-scripts/files/usr/lib/ddns/update_one_com.sh:132:3"
+    },
+    {
+      "pattern": "# policyA",
+      "reason": "path-segment:tests|testdata|fixtures",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/tests/08_dns/01_nftset_element:35:1"
+    },
+    {
+      "pattern": "Last password change",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/utils/shadow/test.sh:62:18"
+    },
+    {
+      "pattern": "track",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/git-lfs/test.sh:12:26"
+    },
+    {
+      "pattern": "PNG",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/multimedia/imagemagick/test.sh:45:29"
+    },
+    {
+      "pattern": "${mac_filter}",
+      "reason": "interpolated",
+      "site": "batch/corpora/openwrt_packages/rules/net/wifischedule/net/usr/bin/wifi_schedule.sh:354:47"
+    },
+    {
+      "pattern": "$ver",
+      "reason": "interpolated:$ident",
+      "site": "batch/corpora/openwrt_packages/rules/utils/syncthing/test.sh:6:19"
+    },
+    {
+      "pattern": "policyB",
+      "reason": "path-segment:tests|testdata|fixtures",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/tests/08_dns/01_nftset_element:87:16"
+    },
+    {
+      "pattern": "\"records\":\\[[^]]+]",
+      "reason": "unencodable:empty-class",
+      "site": "batch/corpora/openwrt_packages/rules/net/ddns-scripts/files/usr/lib/ddns/update_huaweicloud_com.sh:137:38"
+    },
+    {
+      "pattern": "^.* ",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_packages/rules/net/ddns-scripts/files/usr/lib/ddns/update_route53_v1.sh:35:67"
+    },
+    {
+      "pattern": "^.* ",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_packages/rules/net/ddns-scripts/files/usr/lib/ddns/update_route53_v1.sh:42:86"
+    },
+    {
+      "pattern": "Usage: radtest",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/freeradius3/test.sh:72:16"
+    },
+    {
+      "pattern": "$2",
+      "reason": "unencodable:internal-anchor",
+      "site": "batch/corpora/openwrt_packages/rules/net/boinc/test.sh:5:30"
+    },
+    {
+      "pattern": "$\\{table_type} snort",
+      "reason": "unencodable:internal-anchor",
+      "site": "batch/corpora/openwrt_packages/rules/net/snort3/files/snort-mgr:51:20"
+    },
+    {
+      "pattern": "mwan3_rule_",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/mwan3/files/lib/mwan3/mwan3.sh:1205:103"
+    },
+    {
+      "pattern": "POINTOPOINT",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/files/etc/init.d/pbr:2435:52"
+    },
+    {
+      "pattern": "RTL2832",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/utils/rtl-sdr/test.sh:9:23"
+    },
+    {
+      "pattern": "^.* ",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_packages/rules/net/ddns-scripts/files/usr/lib/ddns/update_huaweicloud_com.sh:68:126"
+    },
+    {
+      "pattern": "$\\{value}",
+      "reason": "unencodable:internal-anchor",
+      "site": "batch/corpora/openwrt_packages/rules/net/adblock/files/95-adblock-housekeeping:28:52"
+    },
+    {
+      "pattern": ".device='$DEVICENAME'",
+      "reason": "interpolated",
+      "site": "batch/corpora/openwrt_packages/rules/net/bsbf-openwrt-resources/files/etc/hotplug.d/net/99-bsbf-autoconf-cellular:20:39"
+    },
+    {
+      "pattern": "\"\\$nft\" -f",
+      "reason": "interpolated",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/files/etc/init.d/pbr:334:61"
+    },
+    {
+      "pattern": "^.*name=x27domainidx27 value=\"",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_packages/rules/net/ddns-scripts/files/usr/lib/ddns/update_cnkuai_cn.sh:73:58"
+    },
+    {
+      "pattern": "$CONFIGURATION\\.(.*)=.*",
+      "reason": "interpolated",
+      "site": "batch/corpora/openwrt_packages/rules/net/dcwapd/files/dcwapd.init:19:36"
+    },
+    {
+      "pattern": "gray",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/multimedia/imagemagick/test.sh:40:38"
+    },
+    {
+      "pattern": "ip.table.*$1",
+      "reason": "unencodable:internal-anchor",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/files/etc/init.d/pbr:376:20"
+    },
+    {
+      "pattern": "^\\s*PCAP_INTF\\s\\+",
+      "reason": "unencodable:gnu-extension",
+      "site": "batch/corpora/openwrt_packages/rules/net/fwknop/files/fwknopd.init:131:21"
+    },
+    {
+      "pattern": "$2",
+      "reason": "unencodable:internal-anchor",
+      "site": "batch/corpora/openwrt_packages/rules/lang/php8/test.sh:8:16"
+    },
+    {
+      "pattern": "$\\{name},$\\{subsystem}",
+      "reason": "unencodable:internal-anchor",
+      "site": "batch/corpora/openwrt_packages/rules/net/modemmanager/files/usr/share/ModemManager/modemmanager.common:152:3"
+    },
+    {
+      "pattern": "RTL2832",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/utils/rtl-sdr/test.sh:8:22"
+    },
+    {
+      "pattern": "wan6_trigger",
+      "reason": "path-segment:tests|testdata|fixtures",
+      "site": "batch/corpora/openwrt_packages/rules/net/https-dns-proxy/tests/run_tests.sh:627:1"
+    },
+    {
+      "pattern": "6#inet#fw4#pbr_policyA_6_dst_ip",
+      "reason": "path-segment:tests|testdata|fixtures",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/tests/08_dns/01_nftset_element:104:16"
+    },
+    {
+      "pattern": "POINTOPOINT",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/files/etc/init.d/pbr:2354:51"
+    },
+    {
+      "pattern": "POINTOPOINT",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/files/etc/init.d/pbr:2441:51"
+    },
+    {
+      "pattern": "127.0.0.1#5053",
+      "reason": "path-segment:tests|testdata|fixtures",
+      "site": "batch/corpora/openwrt_packages/rules/net/https-dns-proxy/tests/run_tests.sh:366:14"
+    },
+    {
+      "pattern": "$2.*SSL \\(mbed TLS\\)",
+      "reason": "unencodable:internal-anchor",
+      "site": "batch/corpora/openwrt_packages/rules/net/openvpn/test.sh:5:22"
+    },
+    {
+      "pattern": "canonical name =",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/utils/cache-domains/files/test.sh:50:34"
+    },
+    {
+      "pattern": "..",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_packages/rules/net/etherwake/files/etherwake.init:129:29"
+    },
+    {
+      "pattern": "\\|NAME\\|",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_packages/rules/net/ksmbd-tools/files/ksmbd.init:60:1"
+    },
+    {
+      "pattern": "Content-Type: application/json",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/utils/ubnt-manager/files/ubnt-manager.sh:76:54"
+    },
+    {
+      "pattern": "\\[USERNAME\\]",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_packages/rules/net/ddns-scripts/files/usr/lib/ddns/update_no-ip_com.sh:25:25"
+    },
+    {
+      "pattern": "^$_sdkey *=",
+      "reason": "interpolated",
+      "site": "batch/corpora/openwrt_packages/rules/net/uacme/files/dnsapi_helper.sh:1135:14"
+    },
+    {
+      "pattern": " $varname ",
+      "reason": "interpolated",
+      "site": "batch/corpora/openwrt_packages/rules/net/uanytun/files/uanytun.init:14:32"
+    },
+    {
+      "pattern": "mpdhost",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/sound/upmpdcli/test.sh:32:1"
+    },
+    {
+      "pattern": "$__REGEX",
+      "reason": "interpolated:$ident",
+      "site": "batch/corpora/openwrt_packages/rules/net/ddns-scripts/files/usr/lib/ddns/dynamic_dns_functions.sh:1063:52"
+    },
+    {
+      "pattern": "_p",
+      "reason": "test-filename:test-version.sh",
+      "site": "batch/corpora/openwrt_packages/rules/net/openssh/test-version.sh:4:28"
+    },
+    {
+      "pattern": "^nftset=/example\\.com/",
+      "reason": "path-segment:tests|testdata|fixtures",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/tests/08_dns/01_nftset_element:65:8"
+    },
+    {
+      "pattern": "via",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/files/etc/init.d/pbr:269:73"
+    },
+    {
+      "pattern": "canonical name =",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/utils/cache-domains/files/test.sh:48:42"
+    },
+    {
+      "pattern": "option force_ip_family 'ipv6'",
+      "reason": "path-segment:tests|testdata|fixtures",
+      "site": "batch/corpora/openwrt_packages/rules/net/https-dns-proxy/tests/run_tests.sh:609:1"
+    },
+    {
+      "pattern": "\\bgid:${gid};",
+      "reason": "interpolated",
+      "site": "batch/corpora/openwrt_packages/rules/net/snort3/files/snort-mgr:247:41"
+    },
+    {
+      "pattern": "\\.0+",
+      "reason": "test-filename:test-version.sh",
+      "site": "batch/corpora/openwrt_packages/rules/multimedia/yt-dlp/test-version.sh:9:20"
+    },
+    {
+      "pattern": "scope link",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/wg-installer/common/wg.sh:30:49"
+    },
+    {
+      "pattern": "\".*$",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_packages/rules/net/ddns-scripts/files/usr/lib/ddns/update_cnkuai_cn.sh:73:104"
+    },
+    {
+      "pattern": "\\s.*$",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_packages/rules/net/netopeer2/files/netopeer2-server-setup.default:31:30"
+    },
+    {
+      "pattern": ".*<type>",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_packages/rules/net/ddns-scripts/files/usr/lib/ddns/update_namesilo_com_v1.sh:177:42"
+    },
+    {
+      "pattern": "$\\{nftPrefix}_",
+      "reason": "unencodable:internal-anchor",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/files/etc/init.d/pbr:434:79"
+    },
+    {
+      "pattern": "4#inet#fw4#pbr_policyA_4_dst_ip(,| |$)",
+      "reason": "path-segment:tests|testdata|fixtures",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/tests/08_dns/01_nftset_element:137:16"
+    },
+    {
+      "pattern": "use_ipv6_resolvers_only",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/https-dns-proxy/files/etc/uci-defaults/50-https-dns-proxy-migrate-options.sh:8:0"
+    },
+    {
+      "pattern": "8.8.8.8",
+      "reason": "path-segment:tests|testdata|fixtures",
+      "site": "batch/corpora/openwrt_packages/rules/net/https-dns-proxy/tests/run_tests.sh:447:14"
+    },
+    {
+      "pattern": "$2",
+      "reason": "unencodable:internal-anchor",
+      "site": "batch/corpora/openwrt_packages/rules/net/swgp-go/test.sh:4:24"
+    },
+    {
+      "pattern": "GNU Lesser General Public License",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/utils/librespeed-cli-rust/test.sh:14:27"
+    },
+    {
+      "pattern": "update_dnsmasq_config",
+      "reason": "path-segment:tests|testdata|fixtures",
+      "site": "batch/corpora/openwrt_packages/rules/net/https-dns-proxy/tests/run_tests.sh:589:1"
+    },
+    {
+      "pattern": "PNG",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/multimedia/imagemagick/test.sh:69:28"
+    },
+    {
+      "pattern": "^http:",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_packages/rules/net/ddns-scripts/files/usr/lib/ddns/dynamic_dns_functions.sh:844:48"
+    },
+    {
+      "pattern": "force_dns_src_interface",
+      "reason": "path-segment:tests|testdata|fixtures",
+      "site": "batch/corpora/openwrt_packages/rules/net/https-dns-proxy/tests/run_tests.sh:603:1"
+    },
+    {
+      "pattern": "$\\{value}",
+      "reason": "unencodable:internal-anchor",
+      "site": "batch/corpora/openwrt_packages/rules/net/adblock/files/95-adblock-housekeeping:67:55"
+    },
+    {
+      "pattern": "^$__opt$__sep",
+      "reason": "interpolated",
+      "site": "batch/corpora/openwrt_packages/rules/net/uacme/files/dnsapi_helper.sh:1095:13"
+    },
+    {
+      "pattern": "$2",
+      "reason": "unencodable:internal-anchor",
+      "site": "batch/corpora/openwrt_packages/rules/net/hev-socks5-server/test.sh:3:12"
+    },
+    {
+      "pattern": "name='wan'",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/bsbf-openwrt-resources/files/etc/hotplug.d/net/99-bsbf-autoconf-dhcp:35:33"
+    },
+    {
+      "pattern": "$onion",
+      "reason": "interpolated:$ident",
+      "site": "batch/corpora/openwrt_packages/rules/net/tor-hs/files/nextcloud-update.sh:16:72"
+    },
+    {
+      "pattern": "processort:",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/utils/apparmor/files/apparmor.sh:125:35"
+    },
+    {
+      "pattern": "mwan3_policy_",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/mwan3/files/lib/mwan3/mwan3.sh:1205:75"
+    },
+    {
+      "pattern": "\"Line\":\\s*\"[^\"]*",
+      "reason": "unencodable:gnu-extension",
+      "site": "batch/corpora/openwrt_packages/rules/net/ddns-scripts/files/usr/lib/ddns/update_dnspod_cn_v3.sh:318:12"
+    },
+    {
+      "pattern": "$2",
+      "reason": "unencodable:internal-anchor",
+      "site": "batch/corpora/openwrt_packages/rules/libs/sx1302_hal/test.sh:4:27"
+    },
+    {
+      "pattern": "\\s",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_packages/rules/net/pptpd/files/pptpd.init:57:27"
+    },
+    {
+      "pattern": "TESTDIR",
+      "reason": "path-segment:tests|testdata|fixtures",
+      "site": "batch/corpora/openwrt_packages/rules/net/adblock-fast/tests/run_tests.sh:37:1"
+    },
+    {
+      "pattern": "$DIR",
+      "reason": "interpolated:$ident",
+      "site": "batch/corpora/openwrt_packages/rules/net/ibrdtnd/files/systemcheck.sh:8:20"
+    },
+    {
+      "pattern": "^$lookup_host",
+      "reason": "interpolated",
+      "site": "batch/corpora/openwrt_packages/rules/net/ddns-scripts/files/usr/lib/ddns/dynamic_dns_functions.sh:1063:29"
+    },
+    {
+      "pattern": "$o",
+      "reason": "interpolated:$ident",
+      "site": "batch/corpora/openwrt_packages/rules/libs/nacl/do-openwrt:152:5"
+    },
+    {
+      "pattern": "$\\(mwan3_id2mask id MMX_MASK \\| awk '\\{ printf ",
+      "reason": "unencodable:internal-anchor",
+      "site": "batch/corpora/openwrt_packages/rules/net/mwan3/files/lib/mwan3/mwan3.sh:566:41"
+    },
+    {
+      "pattern": "^\\(\\s*db_path\\s*:\\s*\\).*\\$",
+      "reason": "unencodable:gnu-extension",
+      "site": "batch/corpora/openwrt_packages/rules/net/crowdsec/files/crowdsec.defaults:7:0"
+    },
+    {
+      "pattern": "libopenblas",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/libs/openblas/test.sh:5:31"
+    },
+    {
+      "pattern": "PNP",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/utils/hwdata/test.sh:14:2"
+    },
+    {
+      "pattern": "$PKG_VERSION",
+      "reason": "interpolated:$ident",
+      "site": "batch/corpora/openwrt_packages/rules/admin/nload/test.sh:3:11"
+    },
+    {
+      "pattern": "canonical name =",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/utils/cache-domains/files/test.sh:34:34"
+    },
+    {
+      "pattern": "$\\{ipTablePrefix}_$\\{table_iface}\\$",
+      "reason": "unencodable:internal-anchor",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/files/etc/init.d/pbr:2420:3"
+    },
+    {
+      "pattern": "PID|$PROG ",
+      "reason": "interpolated",
+      "site": "batch/corpora/openwrt_packages/rules/net/snort3/files/snort-mgr:295:16"
+    },
+    {
+      "pattern": "events \\{",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_packages/rules/net/nginx/files/nginx.init:41:3"
+    },
+    {
+      "pattern": "$2",
+      "reason": "unencodable:internal-anchor",
+      "site": "batch/corpora/openwrt_packages/rules/net/nebula/test.sh:4:54"
+    },
+    {
+      "pattern": "$2",
+      "reason": "unencodable:internal-anchor",
+      "site": "batch/corpora/openwrt_packages/rules/net/gnunet/test.sh:5:25"
+    },
+    {
+      "pattern": "<name>serial</name>",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/ddns-scripts/files/usr/lib/ddns/update_freedns_42_pl.sh:16:0"
+    },
+    {
+      "pattern": "RTL2832",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/utils/rtl-sdr/test.sh:13:24"
+    },
+    {
+      "pattern": "warningInterfaceRoutingUnknownGateway",
+      "reason": "path-segment:tests|testdata|fixtures",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/tests/06_network/01_gateway_discovery:198:23"
+    },
+    {
+      "pattern": "/testdata/",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/lang/golang/golang-build.sh:58:39"
+    },
+    {
+      "pattern": "$IPv4_REGEX",
+      "reason": "interpolated:$ident",
+      "site": "batch/corpora/openwrt_packages/rules/net/openfortivpn/files/openfortivpn.sh:56:23"
+    },
+    {
+      "pattern": "4#inet#fw4#pbr_policyA_4_dst_ip",
+      "reason": "path-segment:tests|testdata|fixtures",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/tests/08_dns/01_nftset_element:122:1"
+    },
+    {
+      "pattern": "^.* ",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_packages/rules/net/ddns-scripts/files/usr/lib/ddns/update_route53_v1.sh:28:47"
+    },
+    {
+      "pattern": "auto-merge",
+      "reason": "path-segment:tests|testdata|fixtures",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/tests/04_config/01_load_config:41:24"
+    },
+    {
+      "pattern": "canonical name =",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/utils/cache-domains/files/test.sh:51:34"
+    },
+    {
+      "pattern": "^(\\[\\s])*",
+      "reason": "unencodable:gnu-extension",
+      "site": "batch/corpora/openwrt_packages/rules/net/nginx-util/src/test-nginx-util-root.sh:75:25"
+    },
+    {
+      "pattern": "^-A $policy",
+      "reason": "interpolated",
+      "site": "batch/corpora/openwrt_packages/rules/net/mwan3/files/lib/mwan3/mwan3.sh:744:34"
+    },
+    {
+      "pattern": "sysrepo ",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/sysrepo/files/libsysrepo.default:21:25"
+    },
+    {
+      "pattern": "^\\w+\\s+pptp-server\\s+.+$",
+      "reason": "unencodable:gnu-extension",
+      "site": "batch/corpora/openwrt_packages/rules/net/pptpd/files/pptpd.init:65:1"
+    },
+    {
+      "pattern": "$3",
+      "reason": "unencodable:internal-anchor",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/files/etc/init.d/pbr:1080:3"
+    },
+    {
+      "pattern": "use_ipv6_resolvers_only",
+      "reason": "path-segment:tests|testdata|fixtures",
+      "site": "batch/corpora/openwrt_packages/rules/net/https-dns-proxy/tests/run_tests.sh:593:1"
+    },
+    {
+      "pattern": "\"Error\":",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/ddns-scripts/files/usr/lib/ddns/update_dnspod_cn_v3.sh:109:4"
+    },
+    {
+      "pattern": "dir /var/lib/redis",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/libs/redis/test.sh:31:1"
+    },
+    {
+      "pattern": "$1",
+      "reason": "unencodable:internal-anchor",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/files/etc/init.d/pbr:998:26"
+    },
+    {
+      "pattern": "nameserver",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/unbound/files/unbound.sh:198:21"
+    },
+    {
+      "pattern": "use-application-dns.net",
+      "reason": "path-segment:tests|testdata|fixtures",
+      "site": "batch/corpora/openwrt_packages/rules/net/https-dns-proxy/tests/run_tests.sh:671:24"
+    },
+    {
+      "pattern": "$protocol",
+      "reason": "interpolated:$ident",
+      "site": "batch/corpora/openwrt_packages/rules/net/yggdrasil/files/yggdrasil.sh:121:27"
+    },
+    {
+      "pattern": "procd_fw_src_interfaces",
+      "reason": "path-segment:tests|testdata|fixtures",
+      "site": "batch/corpora/openwrt_packages/rules/net/https-dns-proxy/tests/run_tests.sh:591:1"
+    },
+    {
+      "pattern": "$__DOMAIN_REGEX",
+      "reason": "interpolated:$ident",
+      "site": "batch/corpora/openwrt_packages/rules/net/ddns-scripts/files/usr/lib/ddns/update_porkbun_v3.sh:36:29"
+    },
+    {
+      "pattern": "eth0",
+      "reason": "path-segment:tests|testdata|fixtures",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/tests/06_network/01_gateway_discovery:159:23"
+    },
+    {
+      "pattern": "$\\{packageName}_",
+      "reason": "unencodable:internal-anchor",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/files/etc/init.d/pbr:3266:15"
+    },
+    {
+      "pattern": "JPEG",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/multimedia/imagemagick/test.sh:23:30"
+    },
+    {
+      "pattern": "/var/run/ubus.sock",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_packages/rules/net/nginx/files-luci-support/60_nginx-luci-support:20:1"
+    },
+    {
+      "pattern": "option force_ipv6_resolvers '1'",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/https-dns-proxy/files/etc/uci-defaults/50-https-dns-proxy-migrate-options.sh:9:0"
+    },
+    {
+      "pattern": "/use-application-dns.net/",
+      "reason": "path-segment:tests|testdata|fixtures",
+      "site": "batch/corpora/openwrt_packages/rules/net/https-dns-proxy/tests/run_tests.sh:364:14"
+    },
+    {
+      "pattern": "(^|\\.)xn--",
+      "reason": "unencodable:per-alternative-anchor",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/files/etc/init.d/pbr:355:148"
+    },
+    {
+      "pattern": "login:",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/crowdsec/files/crowdsec.defaults:14:3"
+    },
+    {
+      "pattern": ".* $mountpoint ",
+      "reason": "interpolated",
+      "site": "batch/corpora/openwrt_packages/rules/libs/postgresql/files/postgresql.init:39:4"
+    },
+    {
+      "pattern": "$\\{ipTablePrefix}_$\\{table_iface}",
+      "reason": "unencodable:internal-anchor",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/files/etc/init.d/pbr:2314:4"
+    },
+    {
+      "pattern": "$URL_PASS",
+      "reason": "interpolated:$ident",
+      "site": "batch/corpora/openwrt_packages/rules/net/ddns-scripts/files/usr/lib/ddns/dynamic_dns_functions.sh:217:6"
+    },
+    {
+      "pattern": "mdns name",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/wsdd2/files/wsdd2.init:46:33"
+    },
+    {
+      "pattern": "443 ssl",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/nginx-util/src/test-nginx-util-root.sh:512:0"
+    },
+    {
+      "pattern": "set",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/files/etc/init.d/pbr:434:66"
+    },
+    {
+      "pattern": "<td>$domain</td>",
+      "reason": "interpolated",
+      "site": "batch/corpora/openwrt_packages/rules/net/ddns-scripts/files/usr/lib/ddns/update_cnkuai_cn.sh:71:13"
+    },
+    {
+      "pattern": "AntiBlock $PKG_VERSION",
+      "reason": "interpolated",
+      "site": "batch/corpora/openwrt_packages/rules/net/antiblock/test.sh:3:12"
+    },
+    {
+      "pattern": "coreutils",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/snort3/files/snort-mgr:173:63"
+    },
+    {
+      "pattern": "NAS-IP-Address = $nas_ip",
+      "reason": "interpolated",
+      "site": "batch/corpora/openwrt_packages/rules/net/freeradius3/test.sh:88:1"
+    },
+    {
+      "pattern": "$2",
+      "reason": "unencodable:internal-anchor",
+      "site": "batch/corpora/openwrt_packages/rules/utils/smartmontools/test.sh:4:40"
+    },
+    {
+      "pattern": "$RPC_PIPEFS_D",
+      "reason": "interpolated:$ident",
+      "site": "batch/corpora/openwrt_packages/rules/net/nfs-kernel-server/files/nfsd.v4.init:18:1"
+    },
+    {
+      "pattern": "#.*",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_packages/rules/mail/bogofilter/files/postfix-bogofilter:6:38"
+    },
+    {
+      "pattern": "${ignore_stations_filter}",
+      "reason": "interpolated",
+      "site": "batch/corpora/openwrt_packages/rules/net/wifischedule/net/usr/bin/wifi_schedule.sh:358:51"
+    },
+    {
+      "pattern": "BEGIN EC PRIVATE KEY",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/uacme/files/dnsapi_helper.sh:536:5"
+    },
+    {
+      "pattern": "$\\{field} ",
+      "reason": "unencodable:internal-anchor",
+      "site": "batch/corpora/openwrt_packages/rules/net/modemmanager/files/usr/share/ModemManager/modemmanager.common:246:25"
+    },
+    {
+      "pattern": "Usage: $t",
+      "reason": "interpolated",
+      "site": "batch/corpora/openwrt_packages/rules/net/freeradius3/test.sh:64:26"
+    },
+    {
+      "pattern": "^$__opt$__sep",
+      "reason": "interpolated",
+      "site": "batch/corpora/openwrt_packages/rules/net/uacme/files/dnsapi_helper.sh:1070:5"
+    },
+    {
+      "pattern": "^$\\{acme_server:-$staging}$",
+      "reason": "interpolated",
+      "site": "batch/corpora/openwrt_packages/rules/net/uacme/files/hook.sh:71:4"
+    },
+    {
+      "pattern": "POINTOPOINT",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/files/etc/init.d/pbr:2380:51"
+    },
+    {
+      "pattern": "pull",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/git-lfs/test.sh:14:26"
+    },
+    {
+      "pattern": "$(_regex ",
+      "reason": "unencodable:parse-error",
+      "site": "batch/corpora/openwrt_packages/rules/net/nginx-util/src/test-nginx-util-root.sh:127:21"
+    },
+    {
+      "pattern": "^\\$INCLUDE[[:space:]][[:space:]]*(dictionary\\.[^[:space:]]*).*",
+      "reason": "interpolated",
+      "site": "batch/corpora/openwrt_packages/rules/net/freeradius3/test.sh:48:12"
+    },
+    {
+      "pattern": "\\s",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_packages/rules/net/ddns-scripts/files/usr/lib/ddns/update_aliyun_com.sh:74:116"
+    },
+    {
+      "pattern": "^option[[:space:]]+([^[:space:]]+)[[:space:",
+      "reason": "path-segment:tests|testdata|fixtures",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/tests/lib/mocks/functions.sh:38:7"
+    },
+    {
+      "pattern": "$2",
+      "reason": "unencodable:internal-anchor",
+      "site": "batch/corpora/openwrt_packages/rules/net/gsocket/test.sh:3:21"
+    },
+    {
+      "pattern": "TESTDIR",
+      "reason": "path-segment:tests|testdata|fixtures",
+      "site": "batch/corpora/openwrt_packages/rules/net/adblock-fast/tests/run_tests.sh:198:2"
+    },
+    {
+      "pattern": "chain $\\{i} \\{",
+      "reason": "unencodable:internal-anchor",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/files/etc/init.d/pbr:3250:42"
+    },
+    {
+      "pattern": "^\\(\\s*API_KEY\\s*=\\s*\\).*\\$",
+      "reason": "unencodable:gnu-extension",
+      "site": "batch/corpora/openwrt_packages/rules/lang/lua/lua-cs-bouncer/files/lua-cs-bouncer.defaults:8:1"
+    },
+    {
+      "pattern": "canonical name =",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/utils/cache-domains/files/test.sh:47:42"
+    },
+    {
+      "pattern": "\"Code\":\\s*\"[^\"]*",
+      "reason": "unencodable:gnu-extension",
+      "site": "batch/corpora/openwrt_packages/rules/net/ddns-scripts/files/usr/lib/ddns/update_dnspod_cn_v3.sh:78:13"
+    },
+    {
+      "pattern": "$1",
+      "reason": "unencodable:internal-anchor",
+      "site": "batch/corpora/openwrt_packages/rules/net/adblock-fast/files/etc/uci-defaults/90-adblock-fast:25:15"
+    },
+    {
+      "pattern": "force_ipv6_resolvers",
+      "reason": "path-segment:tests|testdata|fixtures",
+      "site": "batch/corpora/openwrt_packages/rules/net/https-dns-proxy/tests/run_tests.sh:612:1"
+    },
+    {
+      "pattern": "^MODE=netclient",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_packages/rules/net/nut/files/nut-server-config.sh.functions:165:3"
+    },
+    {
+      "pattern": "CONFIG_$1_auth_opt_",
+      "reason": "unencodable:internal-anchor",
+      "site": "batch/corpora/openwrt_packages/rules/net/mosquitto/files/etc/init.d/mosquitto:101:7"
+    },
+    {
+      "pattern": "^nftset=/$\\{escaped_param}/",
+      "reason": "unencodable:internal-anchor",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/files/etc/init.d/pbr:1153:4"
+    },
+    {
+      "pattern": "^$\\{tid}[[:space:]]",
+      "reason": "unencodable:internal-anchor",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/files/etc/init.d/pbr:3269:18"
+    },
+    {
+      "pattern": "$cert_path",
+      "reason": "interpolated:$ident",
+      "site": "batch/corpora/openwrt_packages/rules/net/adguardhome/files/adguardhome.defaults:74:51"
+    },
+    {
+      "pattern": "$\\{name},$\\{subsystem}",
+      "reason": "unencodable:internal-anchor",
+      "site": "batch/corpora/openwrt_packages/rules/net/modemmanager/files/usr/share/ModemManager/modemmanager.common:157:3"
+    },
+    {
+      "pattern": "pbr_policyB_4_dst_ip",
+      "reason": "path-segment:tests|testdata|fixtures",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/tests/08_dns/01_nftset_element:70:16"
+    },
+    {
+      "pattern": "TIFF",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/multimedia/graphicsmagick/test.sh:40:34"
+    },
+    {
+      "pattern": "scope link",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/bcp38/files/run.sh:37:45"
+    },
+    {
+      "pattern": "PNG",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/multimedia/graphicsmagick/test.sh:32:32"
+    },
+    {
+      "pattern": "^nftset=/example\\.com/",
+      "reason": "path-segment:tests|testdata|fixtures",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/tests/08_dns/01_nftset_element:62:13"
+    },
+    {
+      "pattern": "^$SANE_GROUP:",
+      "reason": "interpolated",
+      "site": "batch/corpora/openwrt_packages/rules/utils/sane-backends/files/saned.hotplug:6:0"
+    },
+    {
+      "pattern": "'OUTPUT'",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/files/etc/uci-defaults/90-pbr:16:0"
+    },
+    {
+      "pattern": "t.*$",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_packages/rules/lang/perl/files/perl-run_tests.sh:70:31"
+    },
+    {
+      "pattern": "$\\{sysfspath}",
+      "reason": "unencodable:internal-anchor",
+      "site": "batch/corpora/openwrt_packages/rules/net/modemmanager/files/usr/sbin/ModemManager-monitor:81:1"
+    },
+    {
+      "pattern": "$\\{value}",
+      "reason": "unencodable:internal-anchor",
+      "site": "batch/corpora/openwrt_packages/rules/net/adblock/files/95-adblock-housekeeping:38:52"
+    },
+    {
+      "pattern": "push",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/git-lfs/test.sh:13:26"
+    },
+    {
+      "pattern": "br-",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/dcwapd/files/dcwapd.init:80:23"
+    },
+    {
+      "pattern": "procd_wan_interface",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/files/etc/uci-defaults/90-pbr:23:0"
+    },
+    {
+      "pattern": "$IPv4_REGEX",
+      "reason": "interpolated:$ident",
+      "site": "batch/corpora/openwrt_packages/rules/net/mwan3/files/lib/mwan3/mwan3.sh:166:45"
+    },
+    {
+      "pattern": "delete table inet https_dns_proxy_notrack",
+      "reason": "path-segment:tests|testdata|fixtures",
+      "site": "batch/corpora/openwrt_packages/rules/net/https-dns-proxy/tests/run_tests.sh:760:0"
+    },
+    {
+      "pattern": "$2",
+      "reason": "unencodable:internal-anchor",
+      "site": "batch/corpora/openwrt_packages/rules/net/https-dns-proxy/test.sh:3:60"
+    },
+    {
+      "pattern": "utf-force",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/admin/btop/files/btop.uci:3:0"
+    },
+    {
+      "pattern": "mark.*",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_packages/rules/net/mwan3/files/lib/mwan3/mwan3.sh:1198:56"
+    },
+    {
+      "pattern": "fail2ban",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/fail2ban/test.sh:6:33"
+    },
+    {
+      "pattern": "$\\{value}",
+      "reason": "unencodable:internal-anchor",
+      "site": "batch/corpora/openwrt_packages/rules/net/adblock/files/95-adblock-housekeeping:23:48"
+    },
+    {
+      "pattern": "eth1",
+      "reason": "path-segment:tests|testdata|fixtures",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/tests/06_network/01_gateway_discovery:200:23"
+    },
+    {
+      "pattern": "$\\{ipTablePrefix}_.*",
+      "reason": "unencodable:internal-anchor",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/files/etc/init.d/pbr:1245:15"
+    },
+    {
+      "pattern": "\\..*",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_packages/rules/net/samba4/files/samba.init:29:13"
+    },
+    {
+      "pattern": "$private_key_path",
+      "reason": "interpolated:$ident",
+      "site": "batch/corpora/openwrt_packages/rules/net/adguardhome/files/adguardhome.defaults:87:51"
+    },
+    {
+      "pattern": "wan_mark",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/files/etc/uci-defaults/90-pbr:26:0"
+    },
+    {
+      "pattern": "\\\\n$",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_packages/rules/net/nginx-util/src/test-nginx-util-root.sh:59:51"
+    },
+    {
+      "pattern": "$\\{B64CONF_START}",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_packages/rules/net/uacme/files/dnsapi_helper.sh:1139:29"
+    },
+    {
+      "pattern": "\\[USERNAME\\]",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_packages/rules/net/ddns-scripts/samples/update_sample.sh:27:22"
+    },
+    {
+      "pattern": "procd_wan6_interface",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/files/etc/uci-defaults/90-pbr:24:0"
+    },
+    {
+      "pattern": "^\\\\n",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_packages/rules/net/nginx-util/src/test-nginx-util-root.sh:138:33"
+    },
+    {
+      "pattern": "0 rows",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/libs/postgresql/files/postgresql.sh:33:3"
+    },
+    {
+      "pattern": "avahi",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/libs/avahi/test.sh:122:1"
+    },
+    {
+      "pattern": "canonical name =",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/utils/cache-domains/files/test.sh:31:42"
+    },
+    {
+      "pattern": "\\[$section\\]",
+      "reason": "interpolated",
+      "site": "batch/corpora/openwrt_packages/rules/net/radicale3/files/radicale3.init:144:7"
+    },
+    {
+      "pattern": "option force_ipv6_resolvers",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/https-dns-proxy/files/etc/uci-defaults/50-https-dns-proxy-migrate-options.sh:10:0"
+    },
+    {
+      "pattern": "${o}",
+      "reason": "interpolated",
+      "site": "batch/corpora/openwrt_packages/rules/libs/nacl/do-openwrt:123:1"
+    },
+    {
+      "pattern": "name='wan'",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/bsbf-openwrt-resources/files/etc/hotplug.d/net/99-bsbf-autoconf-cellular:65:33"
+    },
+    {
+      "pattern": "Compile time options:",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/files/etc/init.d/pbr:490:71"
+    },
+    {
+      "pattern": "procd_lan_interface",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/files/etc/uci-defaults/90-pbr:21:0"
+    },
+    {
+      "pattern": "\"\\$nft\" list",
+      "reason": "interpolated",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/files/etc/init.d/pbr:334:30"
+    },
+    {
+      "pattern": "warningInterfaceRoutingUnknownGateway",
+      "reason": "path-segment:tests|testdata|fixtures",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/tests/06_network/01_gateway_discovery:386:23"
+    },
+    {
+      "pattern": "PNG",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/multimedia/graphicsmagick/test.sh:36:37"
+    },
+    {
+      "pattern": "$key",
+      "reason": "interpolated:$ident",
+      "site": "batch/corpora/openwrt_packages/rules/net/wg-installer/wg-server/lib/wg_functions.sh:9:11"
+    },
+    {
+      "pattern": "^readonly NOTRACK_NFT_FILE=.*",
+      "reason": "path-segment:tests|testdata|fixtures",
+      "site": "batch/corpora/openwrt_packages/rules/net/https-dns-proxy/tests/run_tests.sh:206:0"
+    },
+    {
+      "pattern": "$\\{2#*v}",
+      "reason": "unencodable:internal-anchor",
+      "site": "batch/corpora/openwrt_packages/rules/net/xray-core/test.sh:5:22"
+    },
+    {
+      "pattern": "$\\{value}",
+      "reason": "unencodable:internal-anchor",
+      "site": "batch/corpora/openwrt_packages/rules/net/adblock/files/95-adblock-housekeeping:33:52"
+    },
+    {
+      "pattern": "^-A mwan3_policy_$policy.*--comment .* [0-9]* [0-9]*",
+      "reason": "interpolated",
+      "site": "batch/corpora/openwrt_packages/rules/net/mwan3/files/lib/mwan3/mwan3.sh:655:20"
+    },
+    {
+      "pattern": "option force_ip_family",
+      "reason": "path-segment:tests|testdata|fixtures",
+      "site": "batch/corpora/openwrt_packages/rules/net/https-dns-proxy/tests/run_tests.sh:618:6"
+    },
+    {
+      "pattern": "127.0.0.1#5053",
+      "reason": "path-segment:tests|testdata|fixtures",
+      "site": "batch/corpora/openwrt_packages/rules/net/https-dns-proxy/tests/run_tests.sh:407:14"
+    },
+    {
+      "pattern": "utf-force",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/admin/btop/files/btop.uci:3:48"
+    },
+    {
+      "pattern": "^nftset=/example\\.com/",
+      "reason": "path-segment:tests|testdata|fixtures",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/tests/08_dns/01_nftset_element:152:1"
+    },
+    {
+      "pattern": "\"success\":\\s*true",
+      "reason": "unencodable:gnu-extension",
+      "site": "batch/corpora/openwrt_packages/rules/net/ddns-scripts/files/usr/lib/ddns/update_cloudflare_com_v4.sh:132:1"
+    },
+    {
+      "pattern": "$pattern",
+      "reason": "interpolated:$ident",
+      "site": "batch/corpora/openwrt_packages/rules/lang/golang/golang-build.sh:62:61"
+    },
+    {
+      "pattern": "^readonly ",
+      "reason": "path-segment:tests|testdata|fixtures",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/tests/lib/setup.sh:72:0"
+    },
+    {
+      "pattern": "^\\s*ssl_session_cache\\s",
+      "reason": "unencodable:gnu-extension",
+      "site": "batch/corpora/openwrt_packages/rules/net/nginx-util/src/test-nginx-util-root.sh:131:21"
+    },
+    {
+      "pattern": "$\\{B64CONF_END}",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_packages/rules/net/uacme/files/dnsapi_helper.sh:1139:58"
+    },
+    {
+      "pattern": "socket options",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/samba4/files/samba.init:56:17"
+    },
+    {
+      "pattern": "$2",
+      "reason": "unencodable:internal-anchor",
+      "site": "batch/corpora/openwrt_packages/rules/net/hev-socks5-tunnel/test.sh:3:12"
+    },
+    {
+      "pattern": "$2",
+      "reason": "unencodable:internal-anchor",
+      "site": "batch/corpora/openwrt_packages/rules/net/natmap/test.sh:3:12"
+    },
+    {
+      "pattern": "force_http1",
+      "reason": "path-segment:tests|testdata|fixtures",
+      "site": "batch/corpora/openwrt_packages/rules/net/https-dns-proxy/tests/run_tests.sh:606:1"
+    },
+    {
+      "pattern": "address ",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/ddns-scripts/files/usr/lib/ddns/dynamic_dns_functions.sh:1065:29"
+    },
+    {
+      "pattern": "^nftset=/example\\.com/",
+      "reason": "path-segment:tests|testdata|fixtures",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/tests/08_dns/01_nftset_element:29:13"
+    },
+    {
+      "pattern": "\\bsid:${sid};",
+      "reason": "interpolated",
+      "site": "batch/corpora/openwrt_packages/rules/net/snort3/files/snort-mgr:246:10"
+    },
+    {
+      "pattern": "'POSTROUTING'",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/files/etc/uci-defaults/90-pbr:18:0"
+    },
+    {
+      "pattern": "^config[[:space:",
+      "reason": "path-segment:tests|testdata|fixtures",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/tests/lib/mocks/functions.sh:32:5"
+    },
+    {
+      "pattern": "netbios name",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/wsdd2/files/wsdd2.init:41:31"
+    },
+    {
+      "pattern": "$\\{nftPrefix}_mark_",
+      "reason": "unencodable:internal-anchor",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/files/etc/init.d/pbr:484:69"
+    },
+    {
+      "pattern": "$applet",
+      "reason": "interpolated:$ident",
+      "site": "batch/corpora/openwrt_packages/rules/net/ripe-atlas/test.sh:38:24"
+    },
+    {
+      "pattern": ".* \\./",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_packages/rules/lang/ruby/ruby_missingfiles:50:70"
+    },
+    {
+      "pattern": "resolver_ipset",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/files/etc/uci-defaults/90-pbr:13:0"
+    },
+    {
+      "pattern": "^\\(\\s*data_dir\\s*:\\s*\\).*\\$",
+      "reason": "unencodable:gnu-extension",
+      "site": "batch/corpora/openwrt_packages/rules/net/crowdsec/files/crowdsec.defaults:5:0"
+    },
+    {
+      "pattern": "from",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/wg-installer/common/wg.sh:31:49"
+    },
+    {
+      "pattern": "'FORWARD'",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/files/etc/uci-defaults/90-pbr:14:0"
+    },
+    {
+      "pattern": "^$\\{1:--}",
+      "reason": "unencodable:internal-anchor",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/files/etc/init.d/pbr:385:26"
+    },
+    {
+      "pattern": "$__REGEX",
+      "reason": "interpolated:$ident",
+      "site": "batch/corpora/openwrt_packages/rules/net/ddns-scripts/files/usr/lib/ddns/dynamic_dns_functions.sh:1070:28"
+    },
+    {
+      "pattern": ".$",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_packages/rules/net/wg-installer/common/wg.sh:31:75"
+    },
+    {
+      "pattern": "runtime\\s*org.freedesktop.fwupd\\s*$2",
+      "reason": "unencodable:gnu-extension",
+      "site": "batch/corpora/openwrt_packages/rules/utils/fwupd/test.sh:4:43"
+    },
+    {
+      "pattern": "<port>$port</port>",
+      "reason": "interpolated",
+      "site": "batch/corpora/openwrt_packages/rules/libs/avahi/test.sh:106:1"
+    },
+    {
+      "pattern": "$IPv4_REGEX",
+      "reason": "interpolated:$ident",
+      "site": "batch/corpora/openwrt_packages/rules/net/mwan3/files/lib/mwan3/mwan3.sh:115:76"
+    },
+    {
+      "pattern": "type filter hook output priority raw",
+      "reason": "path-segment:tests|testdata|fixtures",
+      "site": "batch/corpora/openwrt_packages/rules/net/https-dns-proxy/tests/run_tests.sh:731:0"
+    },
+    {
+      "pattern": "events \\{",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_packages/rules/net/nginx/files/nginx.init:31:2"
+    },
+    {
+      "pattern": "^nftset=/example\\.com/",
+      "reason": "path-segment:tests|testdata|fixtures",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/tests/08_dns/01_nftset_element:135:8"
+    },
+    {
+      "pattern": "$2",
+      "reason": "unencodable:internal-anchor",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/test.sh:3:31"
+    },
+    {
+      "pattern": ".*action=\"",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_packages/rules/net/ddns-scripts/files/usr/lib/ddns/update_one_com.sh:36:3"
+    },
+    {
+      "pattern": ".metric='$metric'",
+      "reason": "interpolated",
+      "site": "batch/corpora/openwrt_packages/rules/net/bsbf-openwrt-resources/files/etc/hotplug.d/net/99-bsbf-autoconf-dhcp:21:23"
+    },
+    {
+      "pattern": "$IPv6_REGEX",
+      "reason": "interpolated:$ident",
+      "site": "batch/corpora/openwrt_packages/rules/net/mwan3/files/lib/mwan3/mwan3.sh:814:69"
+    },
+    {
+      "pattern": "\"rule_4\"",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/banip/files/95-banip-housekeeping:38:3"
+    },
+    {
+      "pattern": "RTL2832",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/utils/rtl-sdr/test.sh:7:19"
+    },
+    {
+      "pattern": "mwan3_rule_",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/mwan3/files/lib/mwan3/mwan3.sh:1198:103"
+    },
+    {
+      "pattern": ".*<record_id>",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_packages/rules/net/ddns-scripts/files/usr/lib/ddns/update_namesilo_com_v1.sh:179:30"
+    },
+    {
+      "pattern": "ietf-netconf-notifications ",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/sysrepo/files/libsysrepo.default:6:25"
+    },
+    {
+      "pattern": "option enabled '1'",
+      "reason": "path-segment:tests|testdata|fixtures",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/tests/04_config/02_disabled_service:9:1"
+    },
+    {
+      "pattern": "^nftset=/$\\{escaped_param}/",
+      "reason": "unencodable:internal-anchor",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/files/etc/init.d/pbr:1145:6"
+    },
+    {
+      "pattern": "^\\./",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_packages/rules/lang/ruby/ruby_missingfiles:45:18"
+    },
+    {
+      "pattern": "^list[[:space:]]+([^[:space:]]+)[[:space:]]+([^[:space:]]+)",
+      "reason": "path-segment:tests|testdata|fixtures",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/tests/lib/mocks/functions.sh:56:7"
+    },
+    {
+      "pattern": "$\\{RSYNC_DIR}",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_packages/rules/net/keepalived/files/usr/bin/keepalived-rsync-inotify:38:40"
+    },
+    {
+      "pattern": "mwan3_policy_",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/mwan3/files/lib/mwan3/mwan3.sh:1166:20"
+    },
+    {
+      "pattern": "pbr_policyA_6_dst_ip",
+      "reason": "path-segment:tests|testdata|fixtures",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/tests/08_dns/01_nftset_element:119:13"
+    },
+    {
+      "pattern": "^$mod",
+      "reason": "interpolated",
+      "site": "batch/corpora/openwrt_packages/rules/net/open-iscsi/files/iscsi_offload:206:9"
+    },
+    {
+      "pattern": "use_http1",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/https-dns-proxy/files/etc/uci-defaults/50-https-dns-proxy-migrate-options.sh:7:0"
+    },
+    {
+      "pattern": ".metric='$metric'",
+      "reason": "interpolated",
+      "site": "batch/corpora/openwrt_packages/rules/net/bsbf-openwrt-resources/files/etc/hotplug.d/net/99-bsbf-autoconf-cellular:43:23"
+    },
+    {
+      "pattern": "^port|^bind|^dir|^logfile|^daemonize|^maxmemory|^save|^appendonly|^appendfilename",
+      "reason": "unencodable:per-alternative-anchor",
+      "site": "batch/corpora/openwrt_packages/rules/libs/valkey/files/valkey.init:48:2"
+    },
+    {
+      "pattern": "$IPv6_REGEX",
+      "reason": "interpolated:$ident",
+      "site": "batch/corpora/openwrt_packages/rules/net/mwan3/files/lib/mwan3/mwan3.sh:196:63"
+    },
+    {
+      "pattern": "wwan$index",
+      "reason": "interpolated",
+      "site": "batch/corpora/openwrt_packages/rules/net/bsbf-openwrt-resources/files/etc/hotplug.d/net/99-bsbf-autoconf-cellular:53:28"
+    },
+    {
+      "pattern": "^$mod",
+      "reason": "interpolated",
+      "site": "batch/corpora/openwrt_packages/rules/net/open-iscsi/files/iscsi_offload:201:9"
+    },
+    {
+      "pattern": "\"Error\"",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/ddns-scripts/files/usr/lib/ddns/update_dnspod_cn_v3.sh:77:6"
+    },
+    {
+      "pattern": "MODE=netserver",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/nut/files/nut-monitor-config.sh.functions:373:5"
+    },
+    {
+      "pattern": "^config global_defs 'globals'$",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_packages/rules/net/keepalived/files/etc/uci-defaults/keepalived:8:1"
+    },
+    {
+      "pattern": "/64",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/wg-installer/common/wg.sh:30:88"
+    },
+    {
+      "pattern": "$2",
+      "reason": "unencodable:internal-anchor",
+      "site": "batch/corpora/openwrt_packages/rules/net/fsh/test.sh:3:12"
+    },
+    {
+      "pattern": "$IPv6_REGEX",
+      "reason": "interpolated:$ident",
+      "site": "batch/corpora/openwrt_packages/rules/net/mwan3/files/lib/mwan3/mwan3.sh:125:76"
+    },
+    {
+      "pattern": "track",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/git-lfs/test.sh:6:20"
+    },
+    {
+      "pattern": "pbr_policyA_4_dst_ip",
+      "reason": "path-segment:tests|testdata|fixtures",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/tests/08_dns/01_nftset_element:67:16"
+    },
+    {
+      "pattern": "$2",
+      "reason": "unencodable:internal-anchor",
+      "site": "batch/corpora/openwrt_packages/rules/net/adblock-fast/test.sh:3:32"
+    },
+    {
+      "pattern": "$pattern",
+      "reason": "path-segment:tests|testdata|fixtures",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/tests/run_tests.sh:27:48"
+    },
+    {
+      "pattern": "^$ssh_pubkey$",
+      "reason": "interpolated",
+      "site": "batch/corpora/openwrt_packages/rules/net/keepalived/files/usr/share/keepalived/scripts/rsync.sh:107:6"
+    },
+    {
+      "pattern": "$2",
+      "reason": "unencodable:internal-anchor",
+      "site": "batch/corpora/openwrt_packages/rules/net/https-dns-proxy/files/etc/init.d/https-dns-proxy:122:34"
+    },
+    {
+      "pattern": "eth0",
+      "reason": "path-segment:tests|testdata|fixtures",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/tests/06_network/01_gateway_discovery:341:23"
+    },
+    {
+      "pattern": "mark.*",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_packages/rules/net/mwan3/files/lib/mwan3/mwan3.sh:1205:56"
+    },
+    {
+      "pattern": "Login-form login autofill",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/ddns-scripts/files/usr/lib/ddns/update_one_com.sh:35:3"
+    },
+    {
+      "pattern": "ietf-origin ",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/sysrepo/files/libsysrepo.default:16:25"
+    },
+    {
+      "pattern": "$2",
+      "reason": "unencodable:internal-anchor",
+      "site": "batch/corpora/openwrt_packages/rules/utils/arp-whisper/test.sh:5:37"
+    },
+    {
+      "pattern": "$PATTERN",
+      "reason": "interpolated:$ident",
+      "site": "batch/corpora/openwrt_packages/rules/net/snort3/files/snort-mgr:205:8"
+    },
+    {
+      "pattern": "\\.([^.]*)$",
+      "reason": "test-filename:test-version.sh",
+      "site": "batch/corpora/openwrt_packages/rules/sound/squeezelite/test-version.sh:6:32"
+    },
+    {
+      "pattern": "^nftset=/example\\.com/",
+      "reason": "path-segment:tests|testdata|fixtures",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/tests/08_dns/01_nftset_element:99:8"
+    },
+    {
+      "pattern": "^$module ",
+      "reason": "interpolated",
+      "site": "batch/corpora/openwrt_packages/rules/net/sstp-client/files/lib/netifd/proto/sstp.sh:69:2"
+    },
+    {
+      "pattern": "$want",
+      "reason": "test-filename:test-version.sh",
+      "site": "batch/corpora/openwrt_packages/rules/net/openssh/test-version.sh:7:18"
+    },
+    {
+      "pattern": "POINTOPOINT",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/files/etc/init.d/pbr:298:63"
+    },
+    {
+      "pattern": "$\\{nftPrefix}_mark_",
+      "reason": "unencodable:internal-anchor",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/files/etc/init.d/pbr:433:86"
+    },
+    {
+      "pattern": "via",
+      "reason": "path-segment:tests|testdata|fixtures",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/tests/06_network/01_gateway_discovery:31:74"
+    },
+    {
+      "pattern": "\".*$",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_packages/rules/net/ddns-scripts/files/usr/lib/ddns/update_cnkuai_cn.sh:75:106"
+    },
+    {
+      "pattern": "$opi",
+      "reason": "interpolated:$ident",
+      "site": "batch/corpora/openwrt_packages/rules/libs/nacl/do-openwrt:154:38"
+    },
+    {
+      "pattern": "/mask.icloud.com/",
+      "reason": "path-segment:tests|testdata|fixtures",
+      "site": "batch/corpora/openwrt_packages/rules/net/https-dns-proxy/tests/run_tests.sh:362:14"
+    },
+    {
+      "pattern": "use-ipv4=yes",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/libs/avahi/test.sh:17:1"
+    },
+    {
+      "pattern": "${pattern}",
+      "reason": "interpolated",
+      "site": "batch/corpora/openwrt_packages/rules/admin/syslog-ng/files/logread.sh:66:27"
+    },
+    {
+      "pattern": "dnsmasq_config_update",
+      "reason": "path-segment:tests|testdata|fixtures",
+      "site": "batch/corpora/openwrt_packages/rules/net/https-dns-proxy/tests/run_tests.sh:597:1"
+    },
+    {
+      "pattern": "^\\s*#UCI_HTTP_CONFIG\\s*$",
+      "reason": "unencodable:gnu-extension",
+      "site": "batch/corpora/openwrt_packages/rules/net/nginx-util/src/test-nginx-util-root.sh:93:4"
+    },
+    {
+      "pattern": "option listen_addr",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/dnsproxy/files/dnsproxy.defaults:6:0"
+    },
+    {
+      "pattern": "wan6_trigger",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/https-dns-proxy/files/etc/uci-defaults/50-https-dns-proxy-migrate-options.sh:5:0"
+    },
+    {
+      "pattern": "$\\{i}",
+      "reason": "unencodable:internal-anchor",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/files/etc/init.d/pbr:1249:6"
+    },
+    {
+      "pattern": "wan_ip_rules_priority",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/files/etc/uci-defaults/90-pbr:25:0"
+    },
+    {
+      "pattern": "$(_regex ",
+      "reason": "unencodable:parse-error",
+      "site": "batch/corpora/openwrt_packages/rules/net/nginx-util/src/test-nginx-util-root.sh:139:25"
+    },
+    {
+      "pattern": "${o}",
+      "reason": "interpolated",
+      "site": "batch/corpora/openwrt_packages/rules/libs/nacl/do-openwrt:145:1"
+    },
+    {
+      "pattern": "zeoip$\\{name}",
+      "reason": "unencodable:internal-anchor",
+      "site": "batch/corpora/openwrt_packages/rules/net/eoip/files/eoip.init:80:29"
+    },
+    {
+      "pattern": "\"Code\":\\s*\"[^\"]*",
+      "reason": "unencodable:gnu-extension",
+      "site": "batch/corpora/openwrt_packages/rules/net/ddns-scripts/files/usr/lib/ddns/update_dnspod_cn_v3.sh:110:11"
+    },
+    {
+      "pattern": "$2",
+      "reason": "unencodable:internal-anchor",
+      "site": "batch/corpora/openwrt_packages/rules/lang/php8/test.sh:5:16"
+    },
+    {
+      "pattern": "readonly PKG_VERSION=",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/nebula/test.sh:5:15"
+    },
+    {
+      "pattern": "update_dnsmasq_config",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/https-dns-proxy/files/etc/uci-defaults/50-https-dns-proxy-migrate-options.sh:4:0"
+    },
+    {
+      "pattern": "\\.",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/files/etc/init.d/pbr:1140:42"
+    },
+    {
+      "pattern": "netserver",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/net/nut/files/nut-monitor-config.sh.functions:375:3"
+    },
+    {
+      "pattern": " .*",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_packages/rules/net/safe-search/files/safe-search-maintenance:12:42"
+    },
+    {
+      "pattern": "mask.icloud.com",
+      "reason": "path-segment:tests|testdata|fixtures",
+      "site": "batch/corpora/openwrt_packages/rules/net/https-dns-proxy/tests/run_tests.sh:669:24"
+    },
+    {
+      "pattern": "TIFF",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/multimedia/imagemagick/test.sh:49:31"
+    },
+    {
+      "pattern": "option ipv6_enabled '0'",
+      "reason": "path-segment:tests|testdata|fixtures",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/tests/04_config/03_config_ipv6:9:1"
+    },
+    {
+      "pattern": "^nftset=/${escaped_param}/.*#${safe_nftset4}(,| |$)",
+      "reason": "interpolated",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/files/etc/init.d/pbr:1144:3"
+    },
+    {
+      "pattern": "POINTOPOINT",
+      "reason": "path-segment:tests|testdata|fixtures",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/tests/06_network/01_gateway_discovery:46:64"
+    },
+    {
+      "pattern": "$__DOMAIN_REGEX",
+      "reason": "interpolated:$ident",
+      "site": "batch/corpora/openwrt_packages/rules/net/ddns-scripts/files/usr/lib/ddns/update_porkbun_v3.sh:35:26"
+    },
+    {
+      "pattern": "^nftset=/",
+      "reason": "path-segment:tests|testdata|fixtures",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/tests/08_dns/01_nftset_element:149:13"
+    },
+    {
+      "pattern": "<service-group>",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/libs/avahi/test.sh:101:1"
+    },
+    {
+      "pattern": "policyA",
+      "reason": "path-segment:tests|testdata|fixtures",
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/tests/08_dns/01_nftset_element:84:16"
+    },
+    {
+      "pattern": "\\|NAME\\|",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_packages/rules/net/samba4/files/samba.init:44:1"
+    },
+    {
+      "pattern": "\\s\\+",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_packages/rules/net/ddns-scripts/files/usr/lib/ddns/update_aliyun_com.sh:74:68"
+    },
+    {
+      "pattern": "canonical name =",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_packages/rules/utils/cache-domains/files/test.sh:33:34"
+    },
+    {
+      "pattern": "^\\s*#",
+      "reason": "unencodable:gnu-extension",
+      "site": "batch/corpora/openwrt_packages/rules/admin/rsyslog/files/20_rsyslog:3:0"
+    },
+    {
+      "pattern": "<meta name=\\",
+      "reason": "unencodable:parse-error",
+      "site": "batch/corpora/openwrt_packages/rules/net/ddns-scripts/files/usr/lib/ddns/update_one_com.sh:63:3"
+    },
+    {
+      "pattern": "^.* ",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_packages/rules/net/ddns-scripts/files/usr/lib/ddns/update_huaweicloud_com.sh:71:102"
+    },
+    {
+      "pattern": "TESTDIR",
+      "reason": "path-segment:tests|testdata|fixtures",
+      "site": "batch/corpora/openwrt_packages/rules/net/adblock-fast/tests/run_tests.sh:201:17"
+    },
+    {
+      "pattern": "^http:",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_packages/rules/net/ddns-scripts/files/usr/lib/ddns/update_no-ip_com.sh:27:46"
+    },
+    {
+      "pattern": "$name = (.*)",
+      "reason": "interpolated",
+      "site": "batch/corpora/openwrt_packages/rules/net/open-iscsi/files/iscsi_offload:109:48"
+    },
+    {
+      "pattern": "use_ipv6_resolvers_only",
+      "reason": "path-segment:tests|testdata|fixtures",
+      "site": "batch/corpora/openwrt_packages/rules/net/https-dns-proxy/tests/run_tests.sh:615:1"
+    },
+    {
+      "pattern": "^$name +\\|[^\\|]*\\| I",
+      "reason": "interpolated",
+      "site": "batch/corpora/openwrt_packages/rules/net/netopeer2/files/netopeer2-server-setup.default:85:40"
+    },
+    {
+      "pattern": "$op",
+      "reason": "interpolated:$ident",
+      "site": "batch/corpora/openwrt_packages/rules/libs/nacl/do-openwrt:126:34"
+    }
+  ],
+  "dropped_count": 499,
+  "input_rows": 709,
+  "keep": [
+    {
+      "call_kind": "substitution",
+      "encodable": true,
+      "file": "batch/corpora/openwrt_packages/rules/net/mwan3/files/etc/init.d/mwan3",
+      "pattern": ".*table ([0-9]+).*",
+      "regex_id": "6f1dc10603c04c5d6e26f2790c66fe38",
+      "score": 9,
+      "site": "batch/corpora/openwrt_packages/rules/net/mwan3/files/etc/init.d/mwan3:75:42"
+    },
+    {
+      "call_kind": "search",
+      "encodable": true,
+      "file": "batch/corpora/openwrt_packages/rules/net/mwan3/files/lib/mwan3/mwan3.sh",
+      "pattern": ".*--comment ([^ ]*) .*$",
+      "regex_id": "2f2b18924b895fcdc1a83e2738d38a77",
+      "score": 9,
+      "site": "batch/corpora/openwrt_packages/rules/net/mwan3/files/lib/mwan3/mwan3.sh:1157:68"
+    },
+    {
+      "call_kind": "substitution",
+      "encodable": true,
+      "file": "batch/corpora/openwrt_packages/rules/net/mwan3/files/lib/mwan3/mwan3.sh",
+      "pattern": ".*dev ([^ ]*).*",
+      "regex_id": "d5b3028c1190dd5cd9e6718b01bc14cc",
+      "score": 9,
+      "site": "batch/corpora/openwrt_packages/rules/net/mwan3/files/lib/mwan3/mwan3.sh:74:37"
+    },
+    {
+      "call_kind": "substitution",
+      "encodable": true,
+      "file": "batch/corpora/openwrt_packages/rules/net/pbr/files/etc/uci-defaults/90-pbr",
+      "pattern": "option wan_mark '0x(.*)'",
+      "regex_id": "f863d6db3dbd41345a1a689bd397ebc3",
+      "score": 8,
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/files/etc/uci-defaults/90-pbr:20:0"
+    },
+    {
+      "call_kind": "search",
+      "encodable": true,
+      "file": "batch/corpora/openwrt_packages/rules/net/strongswan/files/etc/uci-defaults/strongswan",
+      "pattern": "^[[:space:]]*option ignore_routing_tables",
+      "regex_id": "7d5e75204267d0074d4c05fb68007eb6",
+      "score": 8,
+      "site": "batch/corpora/openwrt_packages/rules/net/strongswan/files/etc/uci-defaults/strongswan:18:10"
+    },
+    {
+      "call_kind": "search",
+      "encodable": true,
+      "file": "batch/corpora/openwrt_packages/rules/net/banip/files/banip-functions.sh",
+      "pattern": "^([1-9][0-9]*(ms|s|m|h|d|w))+$",
+      "regex_id": "c9af0a54f5e8e5198ecb01888d4ee7a4",
+      "score": 7,
+      "site": "batch/corpora/openwrt_packages/rules/net/banip/files/banip-functions.sh:2643:38"
+    },
+    {
+      "call_kind": "substitution",
+      "encodable": true,
+      "file": "batch/corpora/openwrt_packages/rules/net/ddns-scripts/files/usr/lib/ddns/dynamic_dns_functions.sh",
+      "pattern": ":([0-9a-f]{3}):",
+      "regex_id": "1ce6927c898a9f0286fb55e7870c4d51",
+      "score": 7,
+      "site": "batch/corpora/openwrt_packages/rules/net/ddns-scripts/files/usr/lib/ddns/dynamic_dns_functions.sh:1181:27"
+    },
+    {
+      "call_kind": "substitution",
+      "encodable": true,
+      "file": "batch/corpora/openwrt_packages/rules/net/ddns-scripts/files/usr/lib/ddns/update_transip_nl.sh",
+      "pattern": "^.*\"token\" *: *\"([^\"]*)\".*$",
+      "regex_id": "c8a8b7206c6640790511cd3c11ff9532",
+      "score": 7,
+      "site": "batch/corpora/openwrt_packages/rules/net/ddns-scripts/files/usr/lib/ddns/update_transip_nl.sh:96:32"
+    },
+    {
+      "call_kind": "substitution",
+      "encodable": true,
+      "file": "batch/corpora/openwrt_packages/rules/net/https-dns-proxy/files/etc/init.d/https-dns-proxy",
+      "pattern": "x1b\\[[0-9;]*m",
+      "regex_id": "3b0b198a7f712116aa71a326946d6ee9",
+      "score": 7,
+      "site": "batch/corpora/openwrt_packages/rules/net/https-dns-proxy/files/etc/init.d/https-dns-proxy:113:30"
+    },
+    {
+      "call_kind": "search",
+      "encodable": true,
+      "file": "batch/corpora/openwrt_packages/rules/net/libreswan/files/etc/init.d/ipsec",
+      "pattern": "[\":/]",
+      "regex_id": "dc54cb17233e2ea530fd4abe5f6c6336",
+      "score": 7,
+      "site": "batch/corpora/openwrt_packages/rules/net/libreswan/files/etc/init.d/ipsec:265:47"
+    },
+    {
+      "call_kind": "search",
+      "encodable": true,
+      "file": "batch/corpora/openwrt_packages/rules/net/mwan3/files/etc/init.d/mwan3",
+      "pattern": "^[1-3][0-9]{3}:",
+      "regex_id": "96ce86b7c4a026168c4dd157a13e942c",
+      "score": 7,
+      "site": "batch/corpora/openwrt_packages/rules/net/mwan3/files/etc/init.d/mwan3:80:32"
+    },
+    {
+      "call_kind": "substitution",
+      "encodable": true,
+      "file": "batch/corpora/openwrt_packages/rules/net/pbr/files/etc/init.d/pbr",
+      "pattern": "[\\. ~`!@#$%^&*()+=,<>?;:/\\\\-]",
+      "regex_id": "60b666953497995dafa060535dd671cf",
+      "score": 7,
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/files/etc/init.d/pbr:213:41"
+    },
+    {
+      "call_kind": "substitution",
+      "encodable": true,
+      "file": "batch/corpora/openwrt_packages/rules/net/pbr/files/etc/init.d/pbr",
+      "pattern": "([a-fA-F0-9:]{2,}:){1,7}[a-fA-F0-9]{2,}",
+      "regex_id": "3db7ed85485387523e1a7f395962fdab",
+      "score": 7,
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/files/etc/init.d/pbr:3375:3"
+    },
+    {
+      "call_kind": "search",
+      "encodable": true,
+      "file": "batch/corpora/openwrt_packages/rules/net/pbr/files/etc/init.d/pbr",
+      "pattern": "^([a-zA-Z0-9]([a-zA-Z0-9_-]{0,61}[a-zA-Z0-9])?\\.)+[a-zA-Z]{2,}$",
+      "regex_id": "620b26f57679a69779f4f12ac2d0128d",
+      "score": 7,
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/files/etc/init.d/pbr:354:28"
+    },
+    {
+      "call_kind": "search",
+      "encodable": true,
+      "file": "batch/corpora/openwrt_packages/rules/net/pbr/files/etc/init.d/pbr",
+      "pattern": "^([a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\\.)+[a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?$",
+      "regex_id": "2e635c86496ec6e4259100391d37eff8",
+      "score": 7,
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/files/etc/init.d/pbr:355:28"
+    }
+  ],
+  "limit": 15,
+  "schema_version": "1",
+  "seeds": {
+    "ddns-private-ip": {
+      "reason": "unencodable:per-alternative-anchor",
+      "site": "batch/corpora/openwrt_packages/rules/net/ddns-scripts/files/usr/lib/ddns/dynamic_dns_functions.sh:823:42",
+      "status": "dropped"
+    },
+    "mwan3-dev-capture": {
+      "site": "batch/corpora/openwrt_packages/rules/net/mwan3/files/lib/mwan3/mwan3.sh:74:37",
+      "status": "kept"
+    },
+    "pbr-sanitizer": {
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/files/etc/init.d/pbr:213:41",
+      "status": "kept"
+    }
+  },
+  "survivor_count": 210,
+  "vocab": [
+    "init.d",
+    "uci",
+    "nft",
+    "iptables",
+    "firewall",
+    "passwd",
+    "ddns",
+    "mwan",
+    "banip",
+    "adblock",
+    "pbr",
+    "hotplug"
+  ]
+}

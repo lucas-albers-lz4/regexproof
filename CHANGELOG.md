@@ -13,6 +13,8 @@ the work by phase; dates are merge dates.
 - Registered `openwrt_packages` as a manifest corpus (not `WAVE_CORPORA`):
   shebang-sniff regardless of suffix, runtime gate copy of the 2026-08-12
   probe GO, batch + conversion-ledger regen.
+- Added `scripts/rank-conversion-candidates.py` and frozen
+  `openwrt_packages_rank.json` (top 15; tests/ density dropped before score).
 
 ## Conversion ledger (2026-08-15)
 
