@@ -6,7 +6,27 @@ for Smith after admission `malzoo_gate_decision.json`. YARA pack only
 
 ## Materialize
 
+Probe flags `tests/smoke_test.sh` as testdata inflation — materialize requires
+a non-empty allowlist of the intended YARA pack paths (acknowledgment only;
+manifest `glob` still scopes extract).
+
 ```bash
+cat > /tmp/malzoo-allowlist.txt <<'EOF'
+data/yara_rules/APT_NGO_wuaclt_PDF.yara
+data/yara_rules/MMC_d.yara
+data/yara_rules/XweberInstall.yara
+data/yara_rules/apt1.yara
+data/yara_rules/dridex.yar
+data/yara_rules/embedded.yara
+data/yara_rules/filetypes.yara
+data/yara_rules/hangover.yara
+data/yara_rules/kins.yara
+data/yara_rules/leverage.yar
+data/yara_rules/rats.yara
+data/yara_rules/themask.yara
+data/yara_rules/urausy_skypedat.yar
+data/yara_rules/vmdetect.yara
+EOF
 python scripts/materialize-corpus.py --gate properties/generated/malzoo_gate_decision.json \
   --allowlist-file /tmp/malzoo-allowlist.txt
 ln -sfn /tmp/nheijmans-malzoo-malzoo/data/yara_rules batch/corpora/malzoo/rules
