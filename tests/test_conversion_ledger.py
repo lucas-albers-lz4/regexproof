@@ -411,6 +411,8 @@ def test_conversion_ndjson_increments_asked_without_batch_summary(tmp_path: Path
     )
     assert data["funnel"]["properties_asked"] == 1
     assert data["funnel"]["properties_unsat"] == 1
+    assert data["funnel"]["scanner_rows"] == 0
+    assert data["funnel"]["batch_summary_findings"] == 0
 
 
 def test_conversion_agent_derived_and_incomplete_do_not_increment(tmp_path: Path):

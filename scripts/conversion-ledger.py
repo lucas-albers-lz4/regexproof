@@ -162,16 +162,25 @@ def counts_as_conversion_asked(rec: dict[str, Any]) -> bool:
     )
 
 
+# Conversion NDJSON joins asked/SAT/GT only. Do not merge scanner-inventory
+# counters — those must stay equal to batch_summary findings.
+_CONVERSION_FUNNEL_KEYS = (
+    "properties_asked",
+    "properties_asked_synthesized",
+    "properties_asked_distinct",
+    "properties_unsat",
+    "properties_sat",
+    "properties_sat_synthesized",
+    "properties_sat_distinct",
+    "sat_ground_truthed",
+    "sat_unique_sites",
+)
+
+
 def classify_conversion_rows(rows: list[dict[str, Any]]) -> dict[str, int]:
     """Funnel buckets for ``*_conversion.ndjson`` (product_reportable gate)."""
     counts: Counter[str] = Counter(
         {
-            "scanner_rows": 0,
-            "planned_stubs": 0,
-            "classification_rows": 0,
-            "mutation_guards": 0,
-            "redos_rows": 0,
-            "other_rows": 0,
             "properties_asked": 0,
             "properties_asked_synthesized": 0,
             "properties_asked_distinct": 0,
@@ -179,7 +188,6 @@ def classify_conversion_rows(rows: list[dict[str, Any]]) -> dict[str, int]:
             "properties_sat": 0,
             "properties_sat_synthesized": 0,
             "properties_sat_distinct": 0,
-            "scanner_rule_diff_sat": 0,
             "sat_ground_truthed": 0,
             "sat_unique_sites": 0,
         }
@@ -188,9 +196,7 @@ def classify_conversion_rows(rows: list[dict[str, Any]]) -> dict[str, int]:
     asked_pairs: set[tuple[str, str]] = set()
     sat_pairs: set[tuple[str, str]] = set()
     for rec in rows:
-        counts["scanner_rows"] += 1
         if not counts_as_conversion_asked(rec):
-            counts["other_rows"] += 1
             continue
         qid = rec.get("question_id") or rec.get("name") or ""
         pair = (str(rec.get("site") or ""), str(qid))
@@ -532,8 +538,8 @@ def aggregate(
 
     classified = classify_scanner_rows(all_rows)
     conv = classify_conversion_rows(conversion_rows)
-    for key, val in conv.items():
-        classified[key] = int(classified.get(key) or 0) + int(val)
+    for key in _CONVERSION_FUNNEL_KEYS:
+        classified[key] = int(classified.get(key) or 0) + int(conv.get(key) or 0)
     private, public_ok = _count_disclosure(all_rows + conversion_rows)
     yara = yara_encodable_split(gen)
 
@@ -685,8 +691,7 @@ def aggregate(
             {
                 "corpus": corpus,
                 "security_tool": corpus in tools,
-                "scanner_rows": int(c.get("scanner_rows") or 0)
-                + int(conv.get("scanner_rows") or 0),
+                "scanner_rows": int(c.get("scanner_rows") or 0),
                 "properties_asked": asked,
                 "properties_unsat": int(c.get("properties_unsat") or 0)
                 + int(conv.get("properties_unsat") or 0),

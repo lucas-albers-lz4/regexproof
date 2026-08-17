@@ -25,7 +25,7 @@
       "properties_unsat": 4,
       "sat_ground_truthed": 1,
       "sat_unique_sites": 1,
-      "scanner_rows": 144,
+      "scanner_rows": 139,
       "security_tool": false
     },
     {
@@ -70,7 +70,7 @@
     "sat_ground_truthed": 3,
     "sat_unique_sites": 1,
     "scanner_ndjson_files": 78,
-    "scanner_rows": 7265,
+    "scanner_rows": 7260,
     "scanner_rule_diff_sat": 0,
     "sites_encodable": 78816,
     "sites_extracted": 125715,
