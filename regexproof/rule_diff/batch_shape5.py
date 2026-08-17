@@ -9,7 +9,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from z3 import Solver, sat, unsat, unknown
+from z3 import Solver, StringVal, sat, unsat, unknown
 
 from regexproof.compiler import compile_pattern
 from regexproof.harness.core import z3_str
@@ -130,28 +130,46 @@ def _solve_one(pair: dict[str, Any], *, timeout_ms: int) -> dict[str, Any]:
     for constraint in constraints:
         solver.add(constraint)
     solver.add(bad)
-    verdict = solver.check()
-    if verdict == unknown:
-        rec["result"] = "timeout"
-        rec["not_proven"] = True
-        return rec
-    if verdict == unsat:
+    # Enumerate a few distinct models: Z3 witnesses are nondeterministic and
+    # Python re pad-gate can flip sat ↔ sat_fullmatch_only across 3.12/3.13
+    # (Golden conversion-ledger drift). Prefer any pad-confirmed search gap.
+    seen: set[str] = set()
+    best: dict[str, Any] | None = None
+    for _ in range(5):
+        verdict = solver.check()
+        if verdict == unknown:
+            if best is None:
+                rec["result"] = "timeout"
+                rec["not_proven"] = True
+                return rec
+            break
+        if verdict == unsat:
+            break
+        if verdict != sat:
+            if best is None:
+                rec["result"] = "skipped_unknown"
+                return rec
+            break
+        witness = z3_str(solver.model().eval(s, model_completion=True))
+        if witness in seen:
+            break
+        seen.add(witness)
+        gated = gate_sat_witness(pair, witness)
+        cand = {
+            "witness": {"s": witness},
+            "search_pad_gate": gated,
+            "result": "sat" if gated else "sat_fullmatch_only",
+            "ground_truth_status": (
+                "reproduced" if gated else "fullmatch-only-not-search-gap"
+            ),
+        }
+        if best is None or (gated and not best.get("search_pad_gate")):
+            best = cand
+        if gated:
+            break
+        solver.add(s != StringVal(witness))
+    if best is None:
         rec["result"] = "unsat"
         return rec
-    if verdict != sat:
-        rec["result"] = "skipped_unknown"
-        return rec
-    witness = z3_str(solver.model().eval(s, model_completion=True))
-    rec["witness"] = {"s": witness}
-    gated = gate_sat_witness(pair, witness)
-    rec["search_pad_gate"] = gated
-    if gated:
-        # Pad/search confirmation against the real Python re engine is the
-        # batch GT for a reportable search gap (VF-007). CRS pilot may still
-        # replay under PCRE for disclosure; conversion requires this stamp.
-        rec["result"] = "sat"
-        rec["ground_truth_status"] = "reproduced"
-    else:
-        rec["result"] = "sat_fullmatch_only"
-        rec["ground_truth_status"] = "fullmatch-only-not-search-gap"
+    rec.update(best)
     return rec
