@@ -71,6 +71,8 @@ def _run_sed(argv: list[str], stream: str) -> str:
         )
     except subprocess.TimeoutExpired as exc:
         raise RuntimeError("sed replay timed out") from exc
+    if proc.returncode != 0 and not proc.stdout:
+        raise RuntimeError(f"sed replay failed rc={proc.returncode}")
     return proc.stdout.rstrip("\n")
 
 
@@ -84,7 +86,11 @@ def _sed_engines(pattern: str, stream: str) -> dict[str, str | None]:
 
 
 def transip_ground_truth(witness: dict) -> bool:
-    """Replay the TransIP token capture on BusyBox sed. GNU is logged only."""
+    """Replay the TransIP token capture on BusyBox sed. GNU is logged only.
+
+    Returns False on busybox-absent / sed failure so ``run_one`` records
+    ``ground_truth=failed`` instead of aborting the suite.
+    """
     v = witness["v"]
     stream = '{"token" : "' + v + '"}'
     try:
@@ -95,9 +101,15 @@ def transip_ground_truth(witness: dict) -> bool:
             "gnu": False,
             "busybox": False,
         }
-        raise
-    gnu_ok = caps["gnu"] != v and v.startswith(caps["gnu"] or "")
-    bb_ok = caps["busybox"] != v and v.startswith(caps["busybox"] or "")
+        return False
+
+    def _trunc(capture: str | None) -> bool:
+        if capture is None:
+            return False
+        return capture != v and v.startswith(capture) and len(capture) < len(v)
+
+    gnu_ok = _trunc(caps["gnu"])
+    bb_ok = _trunc(caps["busybox"])
     OW_VERDICT_LOG["OW-packages-transip-token-truncation"] = {
         "gnu": gnu_ok,
         "busybox": bb_ok,

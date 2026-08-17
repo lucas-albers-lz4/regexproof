@@ -68,7 +68,7 @@
     "rule_diff_report_sat": 10,
     "rule_diff_report_sat_gt": 10,
     "sat_ground_truthed": 3,
-    "sat_unique_sites": 0,
+    "sat_unique_sites": 1,
     "scanner_ndjson_files": 78,
     "scanner_rows": 7265,
     "scanner_rule_diff_sat": 0,

@@ -151,11 +151,13 @@ def counts_as_conversion_asked(rec: dict[str, Any]) -> bool:
     if rec.get("synthesized"):
         return False
     contract = rec.get("contract")
+    if not isinstance(contract, dict) or str(contract.get("provenance") or "") != "human":
+        return False
     return product_reportable(
         {
             "kind": rec.get("kind"),
             "domain": rec.get("domain"),
-            "contract": contract if isinstance(contract, dict) else {},
+            "contract": contract,
         }
     )
 
@@ -182,6 +184,7 @@ def classify_conversion_rows(rows: list[dict[str, Any]]) -> dict[str, int]:
             "sat_unique_sites": 0,
         }
     )
+    sat_sites: set[tuple[str, str, str]] = set()
     asked_pairs: set[tuple[str, str]] = set()
     sat_pairs: set[tuple[str, str]] = set()
     for rec in rows:
@@ -199,8 +202,16 @@ def classify_conversion_rows(rows: list[dict[str, Any]]) -> dict[str, int]:
         elif result in SAT_RESULTS:
             counts["properties_sat"] += 1
             sat_pairs.add(pair)
+            sat_sites.add(
+                (
+                    str(rec.get("corpus") or ""),
+                    str(rec.get("regex_id") or ""),
+                    str(rec.get("site") or ""),
+                )
+            )
             if is_ground_truthed(rec):
                 counts["sat_ground_truthed"] += 1
+    counts["sat_unique_sites"] = len(sat_sites)
     counts["properties_asked_distinct"] = len(asked_pairs)
     counts["properties_sat_distinct"] = len(sat_pairs)
     return dict(counts)
@@ -507,14 +518,17 @@ def aggregate(
     all_rows: list[dict[str, Any]] = []
     conversion_rows: list[dict[str, Any]] = []
     per_corpus: dict[str, list[dict[str, Any]]] = defaultdict(list)
+    conversion_by_corpus: dict[str, list[dict[str, Any]]] = defaultdict(list)
     for path in scanner_files:
         rows = _iter_ndjson(path)
         if path.name.endswith("_conversion.ndjson"):
             conversion_rows.extend(rows)
+            for rec in rows:
+                conversion_by_corpus[str(rec.get("corpus") or path.stem)].append(rec)
         else:
             all_rows.extend(rows)
-        for rec in rows:
-            per_corpus[str(rec.get("corpus") or path.stem)].append(rec)
+            for rec in rows:
+                per_corpus[str(rec.get("corpus") or path.stem)].append(rec)
 
     classified = classify_scanner_rows(all_rows)
     conv = classify_conversion_rows(conversion_rows)
@@ -661,20 +675,27 @@ def aggregate(
         "fullword_share_of_unencodable": yara["fullword_share_of_unencodable"],
     }
     by_corpus = []
-    for corpus in sorted(per_corpus):
-        c = classify_scanner_rows(per_corpus[corpus])
-        if c.get("properties_asked", 0) == 0:
+    for corpus in sorted(set(per_corpus) | set(conversion_by_corpus)):
+        c = classify_scanner_rows(per_corpus.get(corpus) or [])
+        conv = classify_conversion_rows(conversion_by_corpus.get(corpus) or [])
+        asked = int(c.get("properties_asked") or 0) + int(conv.get("properties_asked") or 0)
+        if asked == 0:
             continue
         by_corpus.append(
             {
                 "corpus": corpus,
                 "security_tool": corpus in tools,
-                "scanner_rows": c.get("scanner_rows", 0),
-                "properties_asked": c.get("properties_asked", 0),
-                "properties_unsat": c.get("properties_unsat", 0),
-                "properties_sat": c.get("properties_sat", 0),
-                "sat_ground_truthed": c.get("sat_ground_truthed", 0),
-                "sat_unique_sites": c.get("sat_unique_sites", 0),
+                "scanner_rows": int(c.get("scanner_rows") or 0)
+                + int(conv.get("scanner_rows") or 0),
+                "properties_asked": asked,
+                "properties_unsat": int(c.get("properties_unsat") or 0)
+                + int(conv.get("properties_unsat") or 0),
+                "properties_sat": int(c.get("properties_sat") or 0)
+                + int(conv.get("properties_sat") or 0),
+                "sat_ground_truthed": int(c.get("sat_ground_truthed") or 0)
+                + int(conv.get("sat_ground_truthed") or 0),
+                "sat_unique_sites": int(c.get("sat_unique_sites") or 0)
+                + int(conv.get("sat_unique_sites") or 0),
             }
         )
     by_corpus.sort(key=lambda r: (-r["properties_asked"], r["corpus"]))

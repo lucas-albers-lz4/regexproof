@@ -448,3 +448,26 @@ def test_conversion_agent_derived_and_incomplete_do_not_increment(tmp_path: Path
         gen_dir=gen, upstream_path=upstream, security_tools=frozenset()
     )
     assert data["funnel"]["properties_asked"] == 0
+
+
+def test_conversion_version_diff_does_not_increment(tmp_path: Path):
+    gen = tmp_path / "generated"
+    gen.mkdir()
+    row = {
+        "schema_version": "1",
+        "kind": "property",
+        "result": "unsat",
+        "regex_id": "d" * 32,
+        "corpus": "openwrt_packages",
+        "site": "z:1:0",
+        "domain": "ascii",
+        "contract": _human_contract(provenance="version_diff"),
+        "synthesized": False,
+    }
+    (gen / "demo_conversion.ndjson").write_text(json.dumps(row) + "\n", encoding="utf-8")
+    upstream = tmp_path / "upstream.jsonl"
+    upstream.write_text("", encoding="utf-8")
+    data = cl.aggregate(
+        gen_dir=gen, upstream_path=upstream, security_tools=frozenset()
+    )
+    assert data["funnel"]["properties_asked"] == 0
