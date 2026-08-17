@@ -1,0 +1,17 @@
+{
+  "additional_surface_outside_probe_scope": {},
+  "candidate_url": "https://github.com/AlienVault-Labs/AlienVaultLabs",
+  "corpus": "AlienVaultLabs",
+  "corpus_pin": "347a57b31829b6f8e3280e0fd6a0ed49e5453c67",
+  "reason": "Novelty collapse vs admitted yarasigs (#422): 1255/1463 yara probe sites (85.8%) are SHA256-identical to 0day1day/yarasigs signatures/AlienVault/* (apt1/avdetect/vmdetect/dbgdetect/sandboxdetect/APT_NGO_wuaclt/GeorBot). Remaining ~208 sites are small Hangover/KINS/mask/leverage/urausy deltas — not worth WAVE after pack-level dupe. Smith no-go; do not admit.",
+  "regex_sites": 1466,
+  "schema_version": "1",
+  "sites_by_bucket": {
+    "pcre": 2,
+    "py_re": 1,
+    "yara": 1463
+  },
+  "smith_decision": "no-go",
+  "supersedes": "go"
+}
+
