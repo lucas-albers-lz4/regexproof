@@ -6,6 +6,8 @@ import importlib.util
 import json
 from pathlib import Path
 
+import pytest
+
 from regexproof.mine.ledger import empty_ledger
 from regexproof.mine.search import SearchRunResult
 from regexproof.mine.tree import TreeCache, materialize_tree_features
@@ -194,6 +196,35 @@ def test_list_gate_decision_paths_falls_back_to_glob_outside_repo(tmp_path: Path
     assert any(path.name.endswith("_gate_decision.json") for path in tracked)
     tmp_only = generated.parent.parent / "no-such-generated-for-labels-test"
     assert script._git_ls_decision_paths(tmp_only) is None
+
+
+def test_read_repo_bytes_keeps_git_spelling_without_resolve(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+):
+    from regexproof.mine import gate_files as gf
+
+    root = tmp_path / "repo"
+    generated = root / "properties" / "generated"
+    generated.mkdir(parents=True)
+    (generated / "validator_gate_decision.json").write_bytes(b"disk-folded")
+    calls: list[list[str]] = []
+
+    def fake_run(cmd, **kwargs):
+        calls.append(list(cmd))
+
+        class Proc:
+            returncode = 0
+            stdout = b'{"corpus":"Validator"}'
+
+        return Proc()
+
+    monkeypatch.setattr(gf.subprocess, "run", fake_run)
+    data = gf.read_repo_bytes(
+        generated / "Validator_gate_decision.json", repo_root=root
+    )
+    assert data == b'{"corpus":"Validator"}'
+    spec = "HEAD:properties/generated/Validator_gate_decision.json"
+    assert any(spec in cmd for cmd in calls)
 
 
 def test_assimilate_persists_enrichment_fields():

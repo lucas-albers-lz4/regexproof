@@ -24,7 +24,7 @@ if str(ROOT) not in sys.path:
 from regexproof.admission.serialize import dumps_pinned
 from regexproof.io_atomic import atomic_write_text
 from regexproof.mine.exclusions import normalize_repo_url
-from regexproof.mine.gate_files import git_ls_decision_paths, list_gate_decision_paths
+from regexproof.mine.gate_files import git_ls_decision_paths, list_gate_decision_paths, read_repo_bytes
 from regexproof.mine.ledger import ENRICH_FIELDS, load_ledger, save_ledger
 from regexproof.mine.search import AuthError, RateLimitError, enrich_repo, github_headers
 from regexproof.mine.tree import (
@@ -38,8 +38,8 @@ ARTIFACT_SCHEMA_VERSION = "1"
 
 def _read_json(path: Path) -> dict[str, Any] | None:
     try:
-        value = json.loads(path.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError):
+        value = json.loads(read_repo_bytes(path, repo_root=ROOT).decode("utf-8"))
+    except (OSError, json.JSONDecodeError, UnicodeDecodeError):
         return None
     return value if isinstance(value, dict) else None
 
@@ -270,7 +270,7 @@ def _inputs_hash(
     for p in sorted(decision_paths):
         h.update(b"decision:")
         h.update(p.name.encode("utf-8"))
-        h.update(p.read_bytes())
+        h.update(read_repo_bytes(p, repo_root=ROOT))
     return h.hexdigest()
 
 

@@ -49,16 +49,16 @@
     "accepted_per_extracted": 8e-06,
     "accepted_per_gt": null,
     "encodable_fraction": 0.622397,
-    "encodable_fraction_all_inventories": 0.625163,
+    "encodable_fraction_all_inventories": 0.627863,
     "encodable_fraction_excluding_yara": 0.617355,
-    "encodable_fraction_yara": 0.629186,
-    "fullword_share_of_unencodable": 0.635175,
+    "encodable_fraction_yara": 0.633215,
+    "fullword_share_of_unencodable": 0.635254,
     "gt_per_sat": null,
     "pipeline_accepted_per_extracted": 8e-06,
     "pipeline_accepted_per_gt": null,
     "property_asked_per_encodable": 0.0,
     "sat_per_property_asked": null,
-    "yara_share_of_unencodable": 0.652913
+    "yara_share_of_unencodable": 0.653003
   },
   "rule_diff_reports": {
     "crs_cross_engine_rule_diff_report.json": {
@@ -175,21 +175,21 @@
     }
   ],
   "yara_split": {
-    "encodable_fraction_all": 0.625163,
+    "encodable_fraction_all": 0.627863,
     "encodable_fraction_excluding_yara": 0.617355,
-    "encodable_fraction_yara": 0.629186,
-    "fraction_all_encodable": 102303,
-    "fraction_all_n": 163642,
+    "encodable_fraction_yara": 0.633215,
+    "fraction_all_encodable": 103517,
+    "fraction_all_n": 164872,
     "fraction_excluding_yara_encodable": 34349,
     "fraction_excluding_yara_n": 55639,
-    "fraction_yara_encodable": 67954,
-    "fraction_yara_n": 108003,
-    "fullword_boundary_all": 38961,
-    "fullword_boundary_yara": 38961,
-    "fullword_share_of_unencodable": 0.635175,
-    "fullword_share_of_yara_unencodable": 0.972833,
-    "unencodable_all": 61339,
-    "unencodable_yara": 40049,
-    "yara_share_of_unencodable": 0.652913
+    "fraction_yara_encodable": 69168,
+    "fraction_yara_n": 109233,
+    "fullword_boundary_all": 38976,
+    "fullword_boundary_yara": 38976,
+    "fullword_share_of_unencodable": 0.635254,
+    "fullword_share_of_yara_unencodable": 0.972819,
+    "unencodable_all": 61355,
+    "unencodable_yara": 40065,
+    "yara_share_of_unencodable": 0.653003
   }
 }

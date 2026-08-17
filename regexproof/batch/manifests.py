@@ -4184,6 +4184,28 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
             "max_disk_mb": 200,
         },
     },
+    "malzoo": {
+        "corpus_type": "rule_corpus",
+        # Materialize: ln -sfn /tmp/nheijmans-malzoo-malzoo/data/yara_rules \\
+        #   batch/corpora/malzoo/rules
+        # YARA pack only — exclude tests/smoke_test.sh (inflation).
+        "path": ROOT / "batch" / "corpora" / "malzoo" / "rules",
+        "glob": "**/*.yar,**/*.yara",
+        "dialect": "yara",
+        "extractor": "yara",
+        "repo": "nheijmans/malzoo",
+        "security_tool": True,
+        "lift_inline": False,
+        "corpus_pin": "de1b93347a9783e3d2ec7b5297306bf66c9fbaa1",
+        "commit": "de1b93347a9783e3d2ec7b5297306bf66c9fbaa1",
+        "budget": {
+            "max_patterns": 5000,
+            "max_wall_s": 600,
+            "redos_wall_s": 120,
+            "max_mem_mb": 1024,
+            "max_disk_mb": 100,
+        },
+    },
 }
 
 WAVE_CORPORA = frozenset({
@@ -4217,5 +4239,6 @@ WAVE_CORPORA = frozenset({
     "Doberman-Core",
     "devguard",
     "openmed",
+    "malzoo",
 })
 

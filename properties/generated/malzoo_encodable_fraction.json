@@ -1,0 +1,39 @@
+{
+  "budget": {
+    "max_disk_mb": 100,
+    "max_mem_mb": 1024,
+    "max_patterns": 5000,
+    "max_wall_s": 600,
+    "redos_wall_s": 120
+  },
+  "budget_breaches": null,
+  "commit": "de1b93347a9783e3d2ec7b5297306bf66c9fbaa1",
+  "compiler_fingerprint": "35ea1f238a9e",
+  "complete_run": true,
+  "corpus_pin": "de1b93347a9783e3d2ec7b5297306bf66c9fbaa1",
+  "decision": "go",
+  "decision_rule": "go iff encodable/sample_size >= 0.3",
+  "dialect": "yara",
+  "encodable": 1214,
+  "engine_versions": {
+    "python": "3.13.15",
+    "z3": "5.0.0"
+  },
+  "extractor_schema_version": "2",
+  "fraction": 0.987,
+  "go_no_go_threshold": 0.3,
+  "id_formula": "v2-domain-optional-ascii-default",
+  "inventory_path": "properties/generated/malzoo-inventory.ndjson",
+  "path": "batch/corpora/malzoo/rules",
+  "pilot": "malzoo",
+  "reasons": {
+    "fullword-boundary": 15,
+    "ok": 1214,
+    "wide-non-literal": 1
+  },
+  "sample_size": 1230,
+  "schema_version": "1",
+  "scope": "full_corpus",
+  "unclassified_parse_errors": 0,
+  "wall_s": 3.913
+}
