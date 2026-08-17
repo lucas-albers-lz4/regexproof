@@ -307,20 +307,31 @@ def test_apply_approval_sets_public_ok_only_when_ground_truthed(tmp_path: Path):
 
 
 def test_shell_posix_batch_includes_extensionless_shebang(tmp_path):
-    """luna #276 -r7 #3: the batch walk must include extensionless files
-    with a recognized shell shebang (the admission walker counts them)."""
+    """luna #276 -r7 #3 + OpenWrt conversion: batch walk admits known
+    suffixes, init.d/, and shebang-sniffed files regardless of suffix
+    (dogfood --dir `_classify`); zsh stays rejected (#276)."""
     from regexproof.batch.extract import _is_shell_script
     from regexproof.batch.extractor_registry import registry_glob
     from regexproof.batch.extract import extract_glob
 
     root = tmp_path / "tree"
     (root / "bin").mkdir(parents=True)
+    (root / "etc" / "init.d").mkdir(parents=True)
     (root / "bin" / "service").write_text(
         "#!/bin/sh\ngrep 'xya' /etc/passwd\n", encoding="utf-8")
     (root / "bin" / "tool.sh").write_text(
         "grep 'xyb' f\n", encoding="utf-8")
     (root / "bin" / "zsh-job").write_text(
         "#!/usr/bin/zsh\ngrep 'xyz' f\n", encoding="utf-8")
+    (root / "bin" / "pkg.defaults").write_text(
+        "#!/bin/sh\ngrep 'xyd' f\n", encoding="utf-8")
+    (root / "bin" / "zsh.defaults").write_text(
+        "#!/usr/bin/zsh\ngrep 'xye' f\n", encoding="utf-8")
+    (root / "etc" / "init.d" / "svc").write_text(
+        "grep 'xyi' f\n", encoding="utf-8")
+    (root / ".git" / "hooks").mkdir(parents=True)
+    (root / ".git" / "hooks" / "commit-msg.sample").write_text(
+        "#!/bin/sh\ngrep 'xyg' f\n", encoding="utf-8")
     (root / "notes.txt").write_text("not shell\n", encoding="utf-8")
 
     meta = {"repo": "t"}
@@ -333,8 +344,12 @@ def test_shell_posix_batch_includes_extensionless_shebang(tmp_path):
     files = {r["file"] for r in recs}
     assert any(f.endswith("bin/service") for f in files)  # extensionless + shebang
     assert any(f.endswith("bin/tool.sh") for f in files)  # normal .sh
+    assert any(f.endswith("bin/pkg.defaults") for f in files)  # suffix + listed shebang
+    assert any("init.d/svc" in f for f in files)  # init.d without reading
     # zsh shebang is NOT in the walker's exact allowlist — batch must agree
     assert not any(f.endswith("bin/zsh-job") for f in files)
+    assert not any(f.endswith("bin/zsh.defaults") for f in files)
+    assert not any(".git/" in f for f in files)  # admission skip-dirs
     assert not any(f.endswith("notes.txt") for f in files)  # non-shell excluded
     assert registry_glob("shell_posix", {"extractor": "shell_posix"})
 

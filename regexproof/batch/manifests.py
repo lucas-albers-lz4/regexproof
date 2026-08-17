@@ -56,6 +56,29 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
             "max_disk_mb": 500,
         },
     },
+    "openwrt_packages": {
+        "corpus_type": "rule_corpus",
+        # Materialize: ln -sfn <clone> batch/corpora/openwrt_packages/rules
+        # openwrt/packages feed @ e99adbc (713 shell sites). Conversion
+        # wave 1 (sweep/openwrt-conversion/plan.md) — manifest only, NOT
+        # in WAVE_CORPORA. shell_posix dispatch ignores glob and walks
+        # **/* + _is_shell_script (shebang regardless of suffix).
+        "path": ROOT / "batch" / "corpora" / "openwrt_packages" / "rules",
+        "dialect": "posix-shell",
+        "extractor": "shell_posix",
+        "repo": "openwrt/packages",
+        "security_tool": False,
+        "lift_inline": False,
+        "corpus_pin": "e99adbc49f7a11d0377c8135fe706c7757b9e68c",
+        "commit": "e99adbc49f7a11d0377c8135fe706c7757b9e68c",
+        "budget": {
+            "max_patterns": 5000,
+            "max_wall_s": 900,
+            "redos_wall_s": 180,
+            "max_mem_mb": 2048,
+            "max_disk_mb": 500,
+        },
+    },
     "volatility3-mcp": {
         "corpus_type": "rule_corpus",
         # Materialize: ln -sfn /tmp/v3-check/rules batch/corpora/volatility3-mcp/rules
