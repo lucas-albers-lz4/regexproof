@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import json
+
 from regexproof.rule_diff.batch_shape5 import (
     admit_shape5_for_batch,
     filter_batch_pairs,
@@ -101,6 +103,26 @@ def test_compile_bound_is_pattern_length_not_witness_max_len():
     assert len(rows) == 1
     assert rows[0]["result"] != "skipped_unencodable"
     assert rows[0]["result"] == "sat"
+
+
+def test_write_batch_shape5_strips_nondeterministic_witness(tmp_path):
+    from regexproof.batch.runner import _write_batch_shape5_artifact
+
+    rows = [
+        {
+            "pair_id": "a",
+            "result": "sat",
+            "ground_truth_status": "reproduced",
+            "witness": {"s": "volatile"},
+        }
+    ]
+    summary = {"executed": 1, "sat_search_gap": 1}
+    _write_batch_shape5_artifact("demo", tmp_path, rows=rows, summary=summary)
+    data = json.loads((tmp_path / "demo_batch_shape5.json").read_text(encoding="utf-8"))
+    assert data["rows"][0]["witness"] is None
+    assert data["rows"][0]["witness_present"] is True
+    # In-memory row still has the witness for callers that GT'd already.
+    assert rows[0]["witness"] == {"s": "volatile"}
 
 
 def test_timeout_gate_fails_batch(tmp_path, monkeypatch):

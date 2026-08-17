@@ -102,14 +102,26 @@ def _write_batch_shape5_artifact(
     rows: list[dict[str, Any]],
     summary: dict[str, Any],
 ) -> None:
-    """Rewrite ``{corpus}_batch_shape5.json`` so the ledger matches this run."""
+    """Rewrite ``{corpus}_batch_shape5.json`` so the ledger matches this run.
+
+    Z3 SAT witnesses are non-deterministic across runs; strip them from the
+    on-disk artifact (pad-gate GT already ran) so Phase-6 two-run repro stays
+    byte-identical. Keep ``witness_present`` for audit.
+    """
+    durable_rows: list[dict[str, Any]] = []
+    for rec in rows:
+        row = dict(rec)
+        if row.get("witness") is not None:
+            row["witness_present"] = True
+            row["witness"] = None
+        durable_rows.append(row)
     atomic_write_text(
         out_dir / f"{corpus}_batch_shape5.json",
         json.dumps(
             {
                 "schema_version": "1",
                 "corpus": corpus,
-                "rows": rows,
+                "rows": durable_rows,
                 "summary": summary,
             },
             indent=2,

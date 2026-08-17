@@ -9,9 +9,8 @@
       "result": "sat_fullmatch_only",
       "schema_version": "1",
       "search_pad_gate": false,
-      "witness": {
-        "s": "${\n}()"
-      }
+      "witness": null,
+      "witness_present": true
     },
     {
       "family": "RD-crs-941140-version",
@@ -21,9 +20,8 @@
       "result": "sat",
       "schema_version": "1",
       "search_pad_gate": true,
-      "witness": {
-        "s": "k=}:\n\u0000;>:uRL(jAVASCrIpt"
-      }
+      "witness": null,
+      "witness_present": true
     },
     {
       "family": "RD-crs-942220-version",
@@ -33,9 +31,8 @@
       "result": "sat",
       "schema_version": "1",
       "search_pad_gate": true,
-      "witness": {
-        "s": "jsON.1E309\n"
-      }
+      "witness": null,
+      "witness_present": true
     }
   ],
   "schema_version": "1",
@@ -45,8 +42,6 @@
     "sat_search_gap": 2,
     "skipped": 0,
     "timeout": 0,
-    "timeout_gate_ok": true,
-    "timeout_rate": 0.0,
     "unsat": 0
   }
 }
