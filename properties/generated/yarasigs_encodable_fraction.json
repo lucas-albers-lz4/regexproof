@@ -1,0 +1,37 @@
+{
+  "budget": {
+    "max_disk_mb": 100,
+    "max_mem_mb": 1024,
+    "max_patterns": 5000,
+    "max_wall_s": 600,
+    "redos_wall_s": 120
+  },
+  "budget_breaches": null,
+  "commit": "5a07dfcde3076615e4d9394ec75ff53e74c19b45",
+  "compiler_fingerprint": "35ea1f238a9e",
+  "complete_run": true,
+  "corpus_pin": "5a07dfcde3076615e4d9394ec75ff53e74c19b45",
+  "decision": "go",
+  "decision_rule": "go iff encodable/sample_size >= 0.3",
+  "dialect": "yara",
+  "encodable": 1363,
+  "engine_versions": {
+    "python": "3.14.6",
+    "z3": "5.0.0"
+  },
+  "extractor_schema_version": "2",
+  "fraction": 1.0,
+  "go_no_go_threshold": 0.3,
+  "id_formula": "v2-domain-optional-ascii-default",
+  "inventory_path": "properties/generated/yarasigs-inventory.ndjson",
+  "path": "batch/corpora/yarasigs/rules",
+  "pilot": "yarasigs",
+  "reasons": {
+    "ok": 1363
+  },
+  "sample_size": 1363,
+  "schema_version": "1",
+  "scope": "full_corpus",
+  "unclassified_parse_errors": 0,
+  "wall_s": 8.49
+}

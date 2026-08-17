@@ -66,6 +66,7 @@ SECURITY_TOOL_CORPORA = frozenset(
         "Doberman-Core",
         "devguard",
         "malzoo",
+        "yarasigs",
     }
 )
 

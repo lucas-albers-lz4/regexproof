@@ -1,0 +1,25 @@
+{
+  "address_space_cap": true,
+  "cache": {
+    "entries": 1363,
+    "hit_rate": 1.0,
+    "hits": 1363,
+    "misses": 0
+  },
+  "cache_hit_rate": 1.0,
+  "complete_run": true,
+  "corpus": "yarasigs",
+  "corpus_type": "rule_corpus",
+  "encodable": 1363,
+  "engine": {
+    "python": "3.14.6"
+  },
+  "extracted": 1363,
+  "findings": 4,
+  "inventory_questions": 4,
+  "join_regex_ids": 4,
+  "redos_findings": 0,
+  "redos_incomplete": false,
+  "schema_version": "1",
+  "triage": 0
+}
