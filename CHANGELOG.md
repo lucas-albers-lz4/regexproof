@@ -4,6 +4,13 @@ All entries below cover the initial development cycle plus the 2026-08-08
 dogfooding/corpus/fix waves. No release tags exist yet. This changelog groups
 the work by phase; dates are merge dates.
 
+## Cluster conversion SOP (2026-08-17)
+
+- Added `docs/CLUSTER-CONVERSION.md` and `sweep/openwrt-conversion/plan.md`:
+  conversion-wave SOP (rank 15 / write 5 human contracts per cluster) and
+  the first OpenWrt packages application. Heap saturates the compiler; this
+  SOP saturates `properties_asked`.
+
 ## Conversion ledger (2026-08-15)
 
 - Added `scripts/conversion-ledger.py` and
