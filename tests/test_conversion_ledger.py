@@ -369,3 +369,107 @@ def test_ci_golden_regenerates_and_drift_checks_ledger():
     assert "0/10" in readme
     assert "conversion-ledger.md" in why
     assert "Two machines" in why
+
+
+def _human_contract(**overrides):
+    base = {
+        "schema_version": "1",
+        "site": "net/pbr/files/etc/init.d/pbr:354:is_hostname",
+        "guarantee": "accepted hostname-label chars contain no semicolon",
+        "input_source": "UCI policy dest",
+        "trust": "config",
+        "declared_domain": "hostname label alphabet, single char",
+        "provenance": "human",
+    }
+    base.update(overrides)
+    return base
+
+
+def test_conversion_ndjson_increments_asked_without_batch_summary(tmp_path: Path):
+    gen = tmp_path / "generated"
+    gen.mkdir()
+    row = {
+        "schema_version": "1",
+        "kind": "property",
+        "result": "unsat",
+        "regex_id": "a" * 32,
+        "corpus": "openwrt_packages",
+        "site": "net/pbr/files/etc/init.d/pbr:354:is_hostname",
+        "domain": "hostname label alphabet, single char",
+        "ground_truth_status": None,
+        "contract": _human_contract(),
+        "synthesized": False,
+        "product_reportable": True,
+    }
+    (gen / "openwrt_packages_conversion.ndjson").write_text(
+        json.dumps(row) + "\n", encoding="utf-8"
+    )
+    upstream = tmp_path / "upstream.jsonl"
+    upstream.write_text("", encoding="utf-8")
+    data = cl.aggregate(
+        gen_dir=gen, upstream_path=upstream, security_tools=frozenset()
+    )
+    assert data["funnel"]["properties_asked"] == 1
+    assert data["funnel"]["properties_unsat"] == 1
+    assert data["funnel"]["scanner_rows"] == 0
+    assert data["funnel"]["batch_summary_findings"] == 0
+
+
+def test_conversion_agent_derived_and_incomplete_do_not_increment(tmp_path: Path):
+    gen = tmp_path / "generated"
+    gen.mkdir()
+    agent = {
+        "schema_version": "1",
+        "kind": "property",
+        "result": "unsat",
+        "regex_id": "b" * 32,
+        "corpus": "openwrt_packages",
+        "site": "x:1:0",
+        "domain": "ascii",
+        "contract": _human_contract(provenance="agent_derived"),
+        "synthesized": False,
+    }
+    incomplete = {
+        "schema_version": "1",
+        "kind": "property",
+        "result": "unsat",
+        "regex_id": "c" * 32,
+        "corpus": "openwrt_packages",
+        "site": "y:1:0",
+        "domain": "ascii",
+        "contract": _human_contract(guarantee=""),
+        "synthesized": False,
+    }
+    (gen / "demo_conversion.ndjson").write_text(
+        json.dumps(agent) + "\n" + json.dumps(incomplete) + "\n",
+        encoding="utf-8",
+    )
+    upstream = tmp_path / "upstream.jsonl"
+    upstream.write_text("", encoding="utf-8")
+    data = cl.aggregate(
+        gen_dir=gen, upstream_path=upstream, security_tools=frozenset()
+    )
+    assert data["funnel"]["properties_asked"] == 0
+
+
+def test_conversion_version_diff_does_not_increment(tmp_path: Path):
+    gen = tmp_path / "generated"
+    gen.mkdir()
+    row = {
+        "schema_version": "1",
+        "kind": "property",
+        "result": "unsat",
+        "regex_id": "d" * 32,
+        "corpus": "openwrt_packages",
+        "site": "z:1:0",
+        "domain": "ascii",
+        "contract": _human_contract(provenance="version_diff"),
+        "synthesized": False,
+    }
+    (gen / "demo_conversion.ndjson").write_text(json.dumps(row) + "\n", encoding="utf-8")
+    upstream = tmp_path / "upstream.jsonl"
+    upstream.write_text("", encoding="utf-8")
+    data = cl.aggregate(
+        gen_dir=gen, upstream_path=upstream, security_tools=frozenset()
+    )
+    assert data["funnel"]["properties_asked"] == 0

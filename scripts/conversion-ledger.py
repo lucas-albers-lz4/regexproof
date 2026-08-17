@@ -141,6 +141,88 @@ def load_upstream(path: Path | None = None) -> list[dict[str, Any]]:
     return rows
 
 
+def counts_as_conversion_asked(rec: dict[str, Any]) -> bool:
+    """Conversion-wave rows count only when product_reportable + human.
+
+    Kind alone would count smoke (agent_derived / incomplete contract).
+    """
+    from regexproof.harness.contract import product_reportable
+
+    if rec.get("synthesized"):
+        return False
+    contract = rec.get("contract")
+    if not isinstance(contract, dict) or str(contract.get("provenance") or "") != "human":
+        return False
+    return product_reportable(
+        {
+            "kind": rec.get("kind"),
+            "domain": rec.get("domain"),
+            "contract": contract,
+        }
+    )
+
+
+# Conversion NDJSON joins asked/SAT/GT only. Do not merge scanner-inventory
+# counters — those must stay equal to batch_summary findings.
+_CONVERSION_FUNNEL_KEYS = (
+    "properties_asked",
+    "properties_asked_synthesized",
+    "properties_asked_distinct",
+    "properties_unsat",
+    "properties_sat",
+    "properties_sat_synthesized",
+    "properties_sat_distinct",
+    "sat_ground_truthed",
+    "sat_unique_sites",
+)
+
+
+def classify_conversion_rows(rows: list[dict[str, Any]]) -> dict[str, int]:
+    """Funnel buckets for ``*_conversion.ndjson`` (product_reportable gate)."""
+    counts: Counter[str] = Counter(
+        {
+            "properties_asked": 0,
+            "properties_asked_synthesized": 0,
+            "properties_asked_distinct": 0,
+            "properties_unsat": 0,
+            "properties_sat": 0,
+            "properties_sat_synthesized": 0,
+            "properties_sat_distinct": 0,
+            "sat_ground_truthed": 0,
+            "sat_unique_sites": 0,
+        }
+    )
+    sat_sites: set[tuple[str, str, str]] = set()
+    asked_pairs: set[tuple[str, str]] = set()
+    sat_pairs: set[tuple[str, str]] = set()
+    for rec in rows:
+        if not counts_as_conversion_asked(rec):
+            continue
+        qid = rec.get("question_id") or rec.get("name") or ""
+        pair = (str(rec.get("site") or ""), str(qid))
+        counts["properties_asked"] += 1
+        asked_pairs.add(pair)
+        result = rec.get("result")
+        if result in UNSAT_RESULTS:
+            counts["properties_unsat"] += 1
+        elif result in SAT_RESULTS:
+            counts["properties_sat"] += 1
+            sat_pairs.add(pair)
+            sat_sites.add(
+                (
+                    str(rec.get("corpus") or ""),
+                    str(rec.get("regex_id") or ""),
+                    str(rec.get("site") or ""),
+                )
+            )
+            if is_ground_truthed(rec):
+                counts["sat_ground_truthed"] += 1
+    counts["sat_unique_sites"] = len(sat_sites)
+    counts["properties_asked_distinct"] = len(asked_pairs)
+    counts["properties_sat_distinct"] = len(sat_pairs)
+    return dict(counts)
+
+
 def scanner_ndjson_files(gen_dir: Path) -> list[Path]:
     """Batch scanner NDJSON: ``<corpus>.ndjson`` with a matching batch summary.
 
@@ -159,6 +241,11 @@ def scanner_ndjson_files(gen_dir: Path) -> list[Path]:
             continue
         stem = path.name[: -len(".ndjson")]
         if stem in summaries:
+            out.append(path)
+    # Special-case conversion-wave join: independent of a matching batch summary.
+    # Do not broaden to a generic *.ndjson scan.
+    for path in sorted(gen_dir.glob("*_conversion.ndjson")):
+        if path not in out:
             out.append(path)
     return out
 
@@ -435,15 +522,25 @@ def aggregate(
 
     scanner_files = scanner_ndjson_files(gen)
     all_rows: list[dict[str, Any]] = []
+    conversion_rows: list[dict[str, Any]] = []
     per_corpus: dict[str, list[dict[str, Any]]] = defaultdict(list)
+    conversion_by_corpus: dict[str, list[dict[str, Any]]] = defaultdict(list)
     for path in scanner_files:
         rows = _iter_ndjson(path)
-        all_rows.extend(rows)
-        for rec in rows:
-            per_corpus[str(rec.get("corpus") or path.stem)].append(rec)
+        if path.name.endswith("_conversion.ndjson"):
+            conversion_rows.extend(rows)
+            for rec in rows:
+                conversion_by_corpus[str(rec.get("corpus") or path.stem)].append(rec)
+        else:
+            all_rows.extend(rows)
+            for rec in rows:
+                per_corpus[str(rec.get("corpus") or path.stem)].append(rec)
 
     classified = classify_scanner_rows(all_rows)
-    private, public_ok = _count_disclosure(all_rows)
+    conv = classify_conversion_rows(conversion_rows)
+    for key in _CONVERSION_FUNNEL_KEYS:
+        classified[key] = int(classified.get(key) or 0) + int(conv.get(key) or 0)
+    private, public_ok = _count_disclosure(all_rows + conversion_rows)
     yara = yara_encodable_split(gen)
 
     dry_runs = 0
@@ -494,6 +591,19 @@ def aggregate(
         if is_planned(rec) or rec.get("kind") not in PRODUCT_KINDS:
             continue
         if rec.get("synthesized"):
+            continue
+        in_tool = rec.get("corpus") in tools
+        if in_tool:
+            asked_in_tools += 1
+        else:
+            asked_not_tools += 1
+        if rec.get("result") in SAT_RESULTS:
+            if in_tool:
+                sat_in_tools += 1
+            else:
+                sat_not_tools += 1
+    for rec in conversion_rows:
+        if not counts_as_conversion_asked(rec):
             continue
         in_tool = rec.get("corpus") in tools
         if in_tool:
@@ -571,20 +681,26 @@ def aggregate(
         "fullword_share_of_unencodable": yara["fullword_share_of_unencodable"],
     }
     by_corpus = []
-    for corpus in sorted(per_corpus):
-        c = classify_scanner_rows(per_corpus[corpus])
-        if c.get("properties_asked", 0) == 0:
+    for corpus in sorted(set(per_corpus) | set(conversion_by_corpus)):
+        c = classify_scanner_rows(per_corpus.get(corpus) or [])
+        conv = classify_conversion_rows(conversion_by_corpus.get(corpus) or [])
+        asked = int(c.get("properties_asked") or 0) + int(conv.get("properties_asked") or 0)
+        if asked == 0:
             continue
         by_corpus.append(
             {
                 "corpus": corpus,
                 "security_tool": corpus in tools,
-                "scanner_rows": c.get("scanner_rows", 0),
-                "properties_asked": c.get("properties_asked", 0),
-                "properties_unsat": c.get("properties_unsat", 0),
-                "properties_sat": c.get("properties_sat", 0),
-                "sat_ground_truthed": c.get("sat_ground_truthed", 0),
-                "sat_unique_sites": c.get("sat_unique_sites", 0),
+                "scanner_rows": int(c.get("scanner_rows") or 0),
+                "properties_asked": asked,
+                "properties_unsat": int(c.get("properties_unsat") or 0)
+                + int(conv.get("properties_unsat") or 0),
+                "properties_sat": int(c.get("properties_sat") or 0)
+                + int(conv.get("properties_sat") or 0),
+                "sat_ground_truthed": int(c.get("sat_ground_truthed") or 0)
+                + int(conv.get("sat_ground_truthed") or 0),
+                "sat_unique_sites": int(c.get("sat_unique_sites") or 0)
+                + int(conv.get("sat_unique_sites") or 0),
             }
         )
     by_corpus.sort(key=lambda r: (-r["properties_asked"], r["corpus"]))

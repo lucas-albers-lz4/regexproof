@@ -19,6 +19,8 @@ from regexproof.rule_diff.search_replay import gate_sat_witness
 SCALE_PROVENANCE = frozenset({"version_diff", "cross_engine"})
 # compile_pattern(max_length=) caps *pattern text*, not witness length.
 _PATTERN_CHAR_CAP = 256
+# CRS 941140/942220: five models still flipped sat↔fullmatch on Python 3.13.
+_PAD_GATE_MODEL_CAP = 16
 
 
 def provenance_token(pair: dict[str, Any]) -> str:
@@ -127,15 +129,18 @@ def _solve_one(pair: dict[str, Any], *, timeout_ms: int) -> dict[str, Any]:
     )
     solver = Solver()
     solver.set("timeout", timeout_ms)
+    solver.set("random_seed", 0)
     for constraint in constraints:
         solver.add(constraint)
     solver.add(bad)
-    # Enumerate a few distinct models: Z3 witnesses are nondeterministic and
+    # Enumerate distinct models: Z3 seq witnesses vary across runs and
     # Python re pad-gate can flip sat ↔ sat_fullmatch_only across 3.12/3.13
-    # (Golden conversion-ledger drift). Prefer any pad-confirmed search gap.
+    # (Golden conversion-ledger / two-run drift). Prefer any pad-confirmed
+    # search gap. Five models was not enough to stabilize CRS 941140/942220
+    # on Python 3.13.
     seen: set[str] = set()
     best: dict[str, Any] | None = None
-    for _ in range(5):
+    for _ in range(_PAD_GATE_MODEL_CAP):
         verdict = solver.check()
         if verdict == unknown:
             if best is None:

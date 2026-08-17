@@ -68,6 +68,11 @@ jobs:
               assert banned not in freeze.lower(), f"banned dep in proof freeze: {banned}"
           print("proof isolation ok")
           PY
+      - name: Install busybox (OW-packages product engine)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y busybox
+          busybox sed --help | head -1
       - name: Named mutation-coverage gate
         run: python scripts/z3-verify.py --check-mutation-coverage
       - name: Run the 4 canonical property shapes
@@ -78,9 +83,11 @@ jobs:
         # implementation (sed/escaper mirrors) or ok=False.
         # --require-domain (P1, #425): every property/counterexample_finder
         # must declare input_domain or the gate hard-fails (VF-006 / TRAPS #17).
+        # --require-contract (#476 / OpenWrt conversion): product kinds need
+        # a human contract + declared domain. Mutation guards are exempt.
         # --fail-on-property-failure (#360): ok=False is exit 1 so a violated
         # property cannot ship green. Default CLI stays the §10 recorder.
-        run: python scripts/z3-verify.py --all --require-ground-truth --require-domain --fail-on-property-failure
+        run: python scripts/z3-verify.py --all --require-ground-truth --require-domain --require-contract --fail-on-property-failure
       - name: Named property subset (P1-P4 + one rule_diff family)
         run: |
           python scripts/ci-run-property-subset.py
@@ -213,6 +220,10 @@ jobs:
         # Both engine verdicts must be recorded and agree; a busybox absence
         # or a GNU/busybox divergence is a hard failure.
         run: python scripts/ci-check-busybox-sed.py
+      - name: BusyBox OpenWrt dual replay
+        # Product engine is BusyBox; GNU is logged; disagreement is a delta.
+        # Absence of busybox is a hard fail. Expected-UNSAT shape-3 is fuzz.
+        run: python scripts/ci-check-busybox-openwrt.py
       - name: P8 gate-labels artifact (regenerated, #432)
         # The D3 fit source regenerates OFFLINE (no network) from the
         # tracked inputs (decisions + ledger + mine-tree-features.json).

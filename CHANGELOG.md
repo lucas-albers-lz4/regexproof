@@ -15,6 +15,9 @@ the work by phase; dates are merge dates.
   probe GO, batch + conversion-ledger regen.
 - Added `scripts/rank-conversion-candidates.py` and frozen
   `openwrt_packages_rank.json` (top 15; tests/ density dropped before score).
+- OpenWrt conversion wave 1 close-out: family `OW-packages` (5 human
+  contracts + BusyBox product-engine checker), `*_conversion.ndjson` ledger
+  join, proof-job busybox + `--require-contract`.
 
 ## Conversion ledger (2026-08-15)
 

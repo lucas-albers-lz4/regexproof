@@ -14,13 +14,13 @@ Heap's-law / singleton novelty saturates **compiler coverage**. This artifact sa
 | planned inventory stubs | 298 |
 | classification rows (usage/intent/triage kinds) | 5,674 |
 | mutation guards (hygiene) | 644 |
-| properties asked (non-planned product kinds) | 3 |
-| properties asked distinct `(site, question_id)` | 3 |
-| properties UNSAT (holds in declared domain) | 0 |
-| properties SAT | 2 |
-| properties SAT distinct `(site, question_id)` | 2 |
-| SAT unique sites | 0 |
-| SAT ground-truthed (`reproduced` / `PASS`) | 2 |
+| properties asked (non-planned product kinds) | 8 |
+| properties asked distinct `(site, question_id)` | 8 |
+| properties UNSAT (holds in declared domain) | 4 |
+| properties SAT | 3 |
+| properties SAT distinct `(site, question_id)` | 3 |
+| SAT unique sites | 1 |
+| SAT ground-truthed (`reproduced` / `PASS`) | 3 |
 | rule_diff report SAT (dedicated pilots) | 10 |
 | rule_diff report SAT + ground-truth | 10 |
 | disclosed `private_first` (scanner product+classification, skip planned) | 686 |
@@ -37,10 +37,10 @@ Heap's-law / singleton novelty saturates **compiler coverage**. This artifact sa
 | rate | value |
 |---|---|
 | encodable / extracted | 0.6269 |
-| properties asked / encodable | 3.80e-05 |
-| SAT / properties asked | 0.6667 |
+| properties asked / encodable | 0.0001 |
+| SAT / properties asked | 0.3750 |
 | ground-truthed / SAT | 1.0000 |
-| pipeline accepted (incl. own-code) / SAT GT | 0.5000 |
+| pipeline accepted (incl. own-code) / SAT GT | 0.3333 |
 | pipeline accepted / extracted | 8.00e-06 |
 | encodable / extracted excluding YARA inventories | 0.6128 |
 | YARA share of inventory unencodable | 0.6439 |
@@ -48,7 +48,7 @@ Heap's-law / singleton novelty saturates **compiler coverage**. This artifact sa
 
 ## Security-tool split (scanner product kinds)
 
-Asked in tools: 3. Asked elsewhere: 0. SAT in tools: 2. SAT elsewhere: 0.
+Asked in tools: 3. Asked elsewhere: 5. SAT in tools: 2. SAT elsewhere: 1.
 
 ## Upstream (curated)
 
@@ -60,6 +60,7 @@ Source: [`docs/conversion-upstream.jsonl`](../../docs/conversion-upstream.jsonl)
 
 | corpus | security tool | asked | unsat | sat | sat GT | unique SAT sites |
 |---|---|---|---|---|---|---|
+| openwrt_packages | false | 5 | 4 | 1 | 1 | 1 |
 | coreruleset | true | 3 | 0 | 2 | 2 | 0 |
 
 ## Denominator notes
