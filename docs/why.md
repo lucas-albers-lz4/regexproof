@@ -80,7 +80,7 @@ Headline counts (re-verify from the artifact before quoting):
 
 Most scanner "findings" are call-kind classification. Most asked properties are synthesized validator.js shape-1/2 rows, and most of those hold (UNSAT). SAT + ground-truth is cheap to count and is not the same as a filed bug. `docs/verified-findings.jsonl` remains the toolkit-trap log (10 VF-* rows); it is not this numerator.
 
-The next measurement that speaks to the end result is conversion yield on already-admitted security-boundary corpora, not another mine flush.
+The next measurement that speaks to the end result is conversion yield on already-admitted security-boundary corpora, not another mine flush. The SOP for that measurement is one **conversion wave** per cluster (rank 15, write 5 human contracts, ground-truth the device engine, emit `*_conversion.ndjson` so the ledger moves): [`CLUSTER-CONVERSION.md`](CLUSTER-CONVERSION.md). First application: [`sweep/openwrt-conversion/plan.md`](../sweep/openwrt-conversion/plan.md).
 
 ## Progress — what has actually been accomplished
 

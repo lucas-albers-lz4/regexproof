@@ -2,6 +2,11 @@
 
 A counted UNSAT or SAT is not a product result without a **contract**.
 
+How to pick *which* sites get a `human` contract, per distinct corpus
+cluster (cap 5, rank 15, no taint engine):
+[`CLUSTER-CONVERSION.md`](CLUSTER-CONVERSION.md). First wave:
+[`sweep/openwrt-conversion/plan.md`](../sweep/openwrt-conversion/plan.md).
+
 ## Object
 
 Schema: `regexproof/schemas/property_contract.schema.json`.
