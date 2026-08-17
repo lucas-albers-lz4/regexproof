@@ -83,6 +83,11 @@ def main(argv: list[str] | None = None) -> int:
         if entry.get("kind") == "mutation_guard":
             continue
         res = run_one(name, entry, require_ground_truth=True)
+        if not res.get("ok"):
+            raise SystemExit(
+                f"error: {name} harness run failed "
+                f"(result={res.get('result')!r} ground_truth={res.get('ground_truth')!r})"
+            )
         rec = row_from_run(name, entry, res, args.corpus)
         if not rec["product_reportable"]:
             raise SystemExit(f"error: {name} is not product_reportable")

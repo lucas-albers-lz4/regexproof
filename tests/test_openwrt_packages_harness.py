@@ -2,10 +2,13 @@
 
 from __future__ import annotations
 
+import importlib.util
 import json
 from pathlib import Path
+from unittest.mock import patch
 
 import jsonschema
+import pytest
 
 from regexproof.harness.contract import product_reportable
 from regexproof.harness.core import REGISTRY, check_mutation_coverage
@@ -94,3 +97,38 @@ def test_incomplete_contract_is_not_product_reportable():
     entry["contract"]["guarantee"] = "no semicolon"
     entry["contract"]["provenance"] = "agent_derived"
     assert product_reportable(entry) is False
+
+
+def _load_emit():
+    spec = importlib.util.spec_from_file_location(
+        "emit_conversion_ndjson",
+        ROOT / "scripts" / "emit-conversion-ndjson.py",
+    )
+    mod = importlib.util.module_from_spec(spec)
+    assert spec.loader is not None
+    spec.loader.exec_module(mod)
+    return mod
+
+
+def test_emit_conversion_ndjson_fails_closed_on_harness_failure(tmp_path: Path):
+    emit = _load_emit()
+    out = tmp_path / "openwrt_packages_conversion.ndjson"
+    failed = {
+        "ok": False,
+        "result": "sat",
+        "ground_truth": "failed",
+        "domain": "ascii",
+    }
+    with patch.object(emit, "run_one", return_value=failed):
+        with pytest.raises(SystemExit, match="harness run failed"):
+            emit.main(
+                [
+                    "--family",
+                    FAMILY,
+                    "--corpus",
+                    "openwrt_packages",
+                    "-o",
+                    str(out),
+                ]
+            )
+    assert not out.exists()
