@@ -141,6 +141,71 @@ def load_upstream(path: Path | None = None) -> list[dict[str, Any]]:
     return rows
 
 
+def counts_as_conversion_asked(rec: dict[str, Any]) -> bool:
+    """Conversion-wave rows count only when product_reportable + human.
+
+    Kind alone would count smoke (agent_derived / incomplete contract).
+    """
+    from regexproof.harness.contract import product_reportable
+
+    if rec.get("synthesized"):
+        return False
+    contract = rec.get("contract")
+    return product_reportable(
+        {
+            "kind": rec.get("kind"),
+            "domain": rec.get("domain"),
+            "contract": contract if isinstance(contract, dict) else {},
+        }
+    )
+
+
+def classify_conversion_rows(rows: list[dict[str, Any]]) -> dict[str, int]:
+    """Funnel buckets for ``*_conversion.ndjson`` (product_reportable gate)."""
+    counts: Counter[str] = Counter(
+        {
+            "scanner_rows": 0,
+            "planned_stubs": 0,
+            "classification_rows": 0,
+            "mutation_guards": 0,
+            "redos_rows": 0,
+            "other_rows": 0,
+            "properties_asked": 0,
+            "properties_asked_synthesized": 0,
+            "properties_asked_distinct": 0,
+            "properties_unsat": 0,
+            "properties_sat": 0,
+            "properties_sat_synthesized": 0,
+            "properties_sat_distinct": 0,
+            "scanner_rule_diff_sat": 0,
+            "sat_ground_truthed": 0,
+            "sat_unique_sites": 0,
+        }
+    )
+    asked_pairs: set[tuple[str, str]] = set()
+    sat_pairs: set[tuple[str, str]] = set()
+    for rec in rows:
+        counts["scanner_rows"] += 1
+        if not counts_as_conversion_asked(rec):
+            counts["other_rows"] += 1
+            continue
+        qid = rec.get("question_id") or rec.get("name") or ""
+        pair = (str(rec.get("site") or ""), str(qid))
+        counts["properties_asked"] += 1
+        asked_pairs.add(pair)
+        result = rec.get("result")
+        if result in UNSAT_RESULTS:
+            counts["properties_unsat"] += 1
+        elif result in SAT_RESULTS:
+            counts["properties_sat"] += 1
+            sat_pairs.add(pair)
+            if is_ground_truthed(rec):
+                counts["sat_ground_truthed"] += 1
+    counts["properties_asked_distinct"] = len(asked_pairs)
+    counts["properties_sat_distinct"] = len(sat_pairs)
+    return dict(counts)
+
+
 def scanner_ndjson_files(gen_dir: Path) -> list[Path]:
     """Batch scanner NDJSON: ``<corpus>.ndjson`` with a matching batch summary.
 
@@ -159,6 +224,11 @@ def scanner_ndjson_files(gen_dir: Path) -> list[Path]:
             continue
         stem = path.name[: -len(".ndjson")]
         if stem in summaries:
+            out.append(path)
+    # Special-case conversion-wave join: independent of a matching batch summary.
+    # Do not broaden to a generic *.ndjson scan.
+    for path in sorted(gen_dir.glob("*_conversion.ndjson")):
+        if path not in out:
             out.append(path)
     return out
 
@@ -435,15 +505,22 @@ def aggregate(
 
     scanner_files = scanner_ndjson_files(gen)
     all_rows: list[dict[str, Any]] = []
+    conversion_rows: list[dict[str, Any]] = []
     per_corpus: dict[str, list[dict[str, Any]]] = defaultdict(list)
     for path in scanner_files:
         rows = _iter_ndjson(path)
-        all_rows.extend(rows)
+        if path.name.endswith("_conversion.ndjson"):
+            conversion_rows.extend(rows)
+        else:
+            all_rows.extend(rows)
         for rec in rows:
             per_corpus[str(rec.get("corpus") or path.stem)].append(rec)
 
     classified = classify_scanner_rows(all_rows)
-    private, public_ok = _count_disclosure(all_rows)
+    conv = classify_conversion_rows(conversion_rows)
+    for key, val in conv.items():
+        classified[key] = int(classified.get(key) or 0) + int(val)
+    private, public_ok = _count_disclosure(all_rows + conversion_rows)
     yara = yara_encodable_split(gen)
 
     dry_runs = 0
@@ -494,6 +571,19 @@ def aggregate(
         if is_planned(rec) or rec.get("kind") not in PRODUCT_KINDS:
             continue
         if rec.get("synthesized"):
+            continue
+        in_tool = rec.get("corpus") in tools
+        if in_tool:
+            asked_in_tools += 1
+        else:
+            asked_not_tools += 1
+        if rec.get("result") in SAT_RESULTS:
+            if in_tool:
+                sat_in_tools += 1
+            else:
+                sat_not_tools += 1
+    for rec in conversion_rows:
+        if not counts_as_conversion_asked(rec):
             continue
         in_tool = rec.get("corpus") in tools
         if in_tool:
