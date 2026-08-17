@@ -108,6 +108,9 @@ def test_drop_interpolated_and_literal():
     assert rank.drop_reason(_rec(pattern="$IPv4_REGEX")) == "interpolated:$ident"
     assert rank.drop_reason(_rec(pattern="foo$BAR")) == "interpolated"
     assert rank.drop_reason(_rec(pattern="POINTOPOINT")) == "literal-no-metachar"
+    assert rank.drop_reason(_rec(pattern="")) == "malformed:empty-pattern"
+    assert rank.drop_reason(_rec(pattern="   ")) == "malformed:empty-pattern"
+    assert rank.drop_reason(_rec(site="", file="")) == "malformed:missing-site"
 
 
 def test_drop_substitution_without_capture_or_charset():

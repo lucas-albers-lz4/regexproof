@@ -118,6 +118,10 @@ def drop_reason(rec: dict[str, Any]) -> str | None:
     if name in DROP_TEST_NAMES or name.endswith(_TEST_NAME_SUFFIX):
         return f"test-filename:{name}"
     pat = str(rec.get("pattern") or "")
+    if not pat.strip():
+        return "malformed:empty-pattern"
+    if not (rec.get("site") or rec.get("file")):
+        return "malformed:missing-site"
     if _IDENT.fullmatch(pat.lstrip("$")) and pat.startswith("$"):
         return "interpolated:$ident"
     if _INTERP.search(pat):
