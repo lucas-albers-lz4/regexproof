@@ -24,5 +24,5 @@ python scripts/measure-corpus-fraction.py --corpus yarasigs --assert-determinism
 python -m regexproof.batch --corpus yarasigs
 python scripts/author-smith-decision.py --gate properties/generated/yarasigs_gate_decision.json \
   --fraction properties/generated/yarasigs_encodable_fraction.json \
-  --decision go --reason '<N_ok>/<N> = <frac> on signatures/'
+  --decision go --reason '1363/1363 = 1.0000 on signatures/'
 ```
