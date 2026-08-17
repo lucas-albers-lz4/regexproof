@@ -52,6 +52,10 @@ SAT_RESULTS = frozenset({"sat", "gap"})
 UNSAT_RESULTS = frozenset({"unsat"})
 GT_PASS = frozenset({"reproduced", "PASS"})
 RULE_DIFF_REPORT_GLOB = "*_rule_diff_report.json"
+BATCH_SHAPE5_GLOB = "*_batch_shape5.json"
+# Decided batch shape-5 outcomes that count as a property asked (#477).
+BATCH_SHAPE5_ASKED = frozenset({"sat", "unsat", "sat_fullmatch_only"})
+BATCH_SHAPE5_SAT = frozenset({"sat"})
 
 
 def _load_security_tool_corpora() -> frozenset[str]:
@@ -284,6 +288,42 @@ def _summarize_rule_diff_report(path: Path) -> dict[str, int]:
     }
 
 
+def summarize_batch_shape5(path: Path) -> dict[str, int]:
+    """Count decided batch shape-5 rows as product properties asked (#477)."""
+    data = _read_json(path)
+    rows = data.get("rows") if isinstance(data, dict) else None
+    if not isinstance(rows, list):
+        rows = []
+    asked = 0
+    sat = 0
+    sat_gt = 0
+    unsat = 0
+    fullmatch_only = 0
+    for rec in rows:
+        if not isinstance(rec, dict):
+            continue
+        result = rec.get("result")
+        if result not in BATCH_SHAPE5_ASKED:
+            continue
+        asked += 1
+        if result in BATCH_SHAPE5_SAT:
+            sat += 1
+            if is_ground_truthed(rec):
+                sat_gt += 1
+        elif result in UNSAT_RESULTS:
+            unsat += 1
+        elif result == "sat_fullmatch_only":
+            fullmatch_only += 1
+    return {
+        "properties_asked": asked,
+        "properties_sat": sat,
+        "properties_sat_gt": sat_gt,
+        "properties_unsat": unsat,
+        "sat_fullmatch_only": fullmatch_only,
+        "executed_rows": len(rows),
+    }
+
+
 def _upstream_counts(rows: list[dict[str, Any]]) -> dict[str, int]:
     by_status: Counter[str] = Counter()
     lang = 0
@@ -429,6 +469,21 @@ def aggregate(
 
     # Scanner NDJSON already has some rule_diff rows (result=gap). Dedicated
     # reports are extra sources; do not add them into properties_asked.
+    # Batch shape-5 JSON (*_batch_shape5.json) IS product asked (#477):
+    # contracted version_diff / cross_engine pairs executed in batch.
+    batch_shape5: dict[str, dict[str, int]] = {}
+    shape5_asked = 0
+    shape5_sat = 0
+    shape5_sat_gt = 0
+    shape5_unsat = 0
+    for path in sorted(gen.glob(BATCH_SHAPE5_GLOB)):
+        summary = summarize_batch_shape5(path)
+        batch_shape5[path.name] = summary
+        shape5_asked += summary["properties_asked"]
+        shape5_sat += summary["properties_sat"]
+        shape5_sat_gt += summary.get("properties_sat_gt", 0)
+        shape5_unsat += summary["properties_unsat"]
+
     up = _upstream_counts(upstream_rows)
 
     sat_in_tools = 0
@@ -451,9 +506,14 @@ def aggregate(
             else:
                 sat_not_tools += 1
 
-    asked = classified.get("properties_asked", 0)
-    sat = classified.get("properties_sat", 0)
-    gt = classified.get("sat_ground_truthed", 0)
+    asked = classified.get("properties_asked", 0) + shape5_asked
+    sat = classified.get("properties_sat", 0) + shape5_sat
+    unsat = classified.get("properties_unsat", 0) + shape5_unsat
+    gt = classified.get("sat_ground_truthed", 0) + shape5_sat_gt
+    # CRS batch shape-5 is a security-tool corpus when present.
+    if shape5_asked and "coreruleset_batch_shape5.json" in batch_shape5:
+        asked_in_tools += batch_shape5["coreruleset_batch_shape5.json"]["properties_asked"]
+        sat_in_tools += batch_shape5["coreruleset_batch_shape5.json"]["properties_sat"]
     funnel = {
         "batch_summaries": n_summaries,
         "sites_extracted": extracted,
@@ -469,14 +529,18 @@ def aggregate(
         "other_rows": classified.get("other_rows", 0),
         "properties_asked": asked,
         "properties_asked_synthesized": classified.get("properties_asked_synthesized", 0),
-        "properties_asked_distinct": classified.get("properties_asked_distinct", 0),
-        "properties_unsat": classified.get("properties_unsat", 0),
+        "properties_asked_distinct": classified.get("properties_asked_distinct", 0)
+        + shape5_asked,
+        "properties_unsat": unsat,
         "properties_sat": sat,
         "properties_sat_synthesized": classified.get("properties_sat_synthesized", 0),
-        "properties_sat_distinct": classified.get("properties_sat_distinct", 0),
+        "properties_sat_distinct": classified.get("properties_sat_distinct", 0)
+        + shape5_sat,
         "sat_unique_sites": classified.get("sat_unique_sites", 0),
         "sat_ground_truthed": gt,
         "scanner_rule_diff_sat": classified.get("scanner_rule_diff_sat", 0),
+        "batch_shape5_asked": shape5_asked,
+        "batch_shape5_sat": shape5_sat,
         "rule_diff_report_sat": rd_sat,
         "rule_diff_report_sat_gt": rd_sat_gt,
         "disclosed_private_first": private,
@@ -525,6 +589,36 @@ def aggregate(
         )
     by_corpus.sort(key=lambda r: (-r["properties_asked"], r["corpus"]))
 
+    # Surface CRS batch shape-5 even when scanner NDJSON asked is still 0.
+    for fname, summary in batch_shape5.items():
+        if summary.get("properties_asked", 0) <= 0:
+            continue
+        corpus = fname[: -len("_batch_shape5.json")] if fname.endswith(
+            "_batch_shape5.json"
+        ) else fname
+        sat_gt = int(summary.get("properties_sat_gt", 0))
+        if any(row["corpus"] == corpus for row in by_corpus):
+            for row in by_corpus:
+                if row["corpus"] == corpus:
+                    row["properties_asked"] += summary["properties_asked"]
+                    row["properties_sat"] += summary["properties_sat"]
+                    row["properties_unsat"] += summary["properties_unsat"]
+                    row["sat_ground_truthed"] += sat_gt
+            continue
+        by_corpus.append(
+            {
+                "corpus": corpus,
+                "security_tool": corpus in tools,
+                "scanner_rows": 0,
+                "properties_asked": summary["properties_asked"],
+                "properties_unsat": summary["properties_unsat"],
+                "properties_sat": summary["properties_sat"],
+                "sat_ground_truthed": sat_gt,
+                "sat_unique_sites": 0,
+            }
+        )
+    by_corpus.sort(key=lambda r: (-r["properties_asked"], r["corpus"]))
+
     return {
         "schema_version": SCHEMA_VERSION,
         "measure": "conversion_ledger",
@@ -535,6 +629,7 @@ def aggregate(
             "Mutation guards prove harness sensitivity; they are not product findings.",
             "SAT + ground-truth is a candidate finding; accepted_upstream is the last mile.",
             "would_open_public_upstream must stay 0 without a human approval file (SECURITY.md).",
+            "batch_shape5 contracted version_diff/cross_engine rows count as properties_asked.",
         ],
         "funnel": funnel,
         "rates": rates,
@@ -545,6 +640,7 @@ def aggregate(
             "properties_sat_not_tools": sat_not_tools,
         },
         "rule_diff_reports": rule_diff,
+        "batch_shape5": batch_shape5,
         "yara_split": yara,
         "upstream": up,
         "upstream_rows": [

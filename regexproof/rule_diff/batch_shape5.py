@@ -145,5 +145,13 @@ def _solve_one(pair: dict[str, Any], *, timeout_ms: int) -> dict[str, Any]:
     rec["witness"] = {"s": witness}
     gated = gate_sat_witness(pair, witness)
     rec["search_pad_gate"] = gated
-    rec["result"] = "sat" if gated else "sat_fullmatch_only"
+    if gated:
+        # Pad/search confirmation against the real Python re engine is the
+        # batch GT for a reportable search gap (VF-007). CRS pilot may still
+        # replay under PCRE for disclosure; conversion requires this stamp.
+        rec["result"] = "sat"
+        rec["ground_truth_status"] = "reproduced"
+    else:
+        rec["result"] = "sat_fullmatch_only"
+        rec["ground_truth_status"] = "fullmatch-only-not-search-gap"
     return rec

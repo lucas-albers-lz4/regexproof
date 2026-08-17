@@ -1,7 +1,38 @@
 {
-  "by_corpus": [],
+  "batch_shape5": {
+    "coreruleset_batch_shape5.json": {
+      "executed_rows": 3,
+      "properties_asked": 3,
+      "properties_sat": 2,
+      "properties_sat_gt": 2,
+      "properties_unsat": 0,
+      "sat_fullmatch_only": 1
+    },
+    "gitleaks_batch_shape5.json": {
+      "executed_rows": 0,
+      "properties_asked": 0,
+      "properties_sat": 0,
+      "properties_sat_gt": 0,
+      "properties_unsat": 0,
+      "sat_fullmatch_only": 0
+    }
+  },
+  "by_corpus": [
+    {
+      "corpus": "coreruleset",
+      "properties_asked": 3,
+      "properties_sat": 2,
+      "properties_unsat": 0,
+      "sat_ground_truthed": 2,
+      "sat_unique_sites": 0,
+      "scanner_rows": 0,
+      "security_tool": true
+    }
+  ],
   "funnel": {
     "accepted_upstream": 1,
+    "batch_shape5_asked": 3,
+    "batch_shape5_sat": 2,
     "batch_summaries": 75,
     "batch_summary_findings": 7117,
     "batch_triage_rows": 46688,
@@ -16,17 +47,17 @@
     "pr_dry_run_findings": 7117,
     "pr_dry_run_private_first": 810,
     "pr_dry_runs": 75,
-    "properties_asked": 0,
-    "properties_asked_distinct": 0,
+    "properties_asked": 3,
+    "properties_asked_distinct": 3,
     "properties_asked_synthesized": 644,
-    "properties_sat": 0,
-    "properties_sat_distinct": 0,
+    "properties_sat": 2,
+    "properties_sat_distinct": 2,
     "properties_sat_synthesized": 28,
     "properties_unsat": 0,
     "redos_rows": 0,
     "rule_diff_report_sat": 10,
     "rule_diff_report_sat_gt": 10,
-    "sat_ground_truthed": 0,
+    "sat_ground_truthed": 2,
     "sat_unique_sites": 0,
     "scanner_ndjson_files": 75,
     "scanner_rows": 7117,
@@ -43,21 +74,22 @@
     "Classification rows (usage/intent/triage kinds) are not security bugs.",
     "Mutation guards prove harness sensitivity; they are not product findings.",
     "SAT + ground-truth is a candidate finding; accepted_upstream is the last mile.",
-    "would_open_public_upstream must stay 0 without a human approval file (SECURITY.md)."
+    "would_open_public_upstream must stay 0 without a human approval file (SECURITY.md).",
+    "batch_shape5 contracted version_diff/cross_engine rows count as properties_asked."
   ],
   "rates": {
     "accepted_per_extracted": 8e-06,
-    "accepted_per_gt": null,
+    "accepted_per_gt": 0.5,
     "encodable_fraction": 0.622397,
     "encodable_fraction_all_inventories": 0.627863,
     "encodable_fraction_excluding_yara": 0.617355,
     "encodable_fraction_yara": 0.633215,
     "fullword_share_of_unencodable": 0.635254,
-    "gt_per_sat": null,
+    "gt_per_sat": 1.0,
     "pipeline_accepted_per_extracted": 8e-06,
-    "pipeline_accepted_per_gt": null,
-    "property_asked_per_encodable": 0.0,
-    "sat_per_property_asked": null,
+    "pipeline_accepted_per_gt": 0.5,
+    "property_asked_per_encodable": 3.9e-05,
+    "sat_per_property_asked": 0.666667,
     "yara_share_of_unencodable": 0.653003
   },
   "rule_diff_reports": {
@@ -85,9 +117,9 @@
   },
   "schema_version": "1",
   "security_tool_split": {
-    "properties_asked_in_tools": 0,
+    "properties_asked_in_tools": 3,
     "properties_asked_not_tools": 0,
-    "properties_sat_in_tools": 0,
+    "properties_sat_in_tools": 2,
     "properties_sat_not_tools": 0
   },
   "upstream": {

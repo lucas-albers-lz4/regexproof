@@ -95,6 +95,74 @@ def _discard_streamed_mirrors(
     compiled.clear()
 
 
+def _write_batch_shape5_artifact(
+    corpus: str,
+    out_dir: Path,
+    *,
+    rows: list[dict[str, Any]],
+    summary: dict[str, Any],
+) -> None:
+    """Rewrite ``{corpus}_batch_shape5.json`` so the ledger matches this run.
+
+    Z3 SAT witnesses are non-deterministic across runs; strip them from the
+    on-disk artifact (pad-gate GT already ran) so Phase-6 two-run repro stays
+    byte-identical. Keep ``witness_present`` for audit.
+    """
+    durable_rows: list[dict[str, Any]] = []
+    for rec in rows:
+        row = dict(rec)
+        if row.get("witness") is not None:
+            row["witness_present"] = True
+            row["witness"] = None
+        durable_rows.append(row)
+    atomic_write_text(
+        out_dir / f"{corpus}_batch_shape5.json",
+        json.dumps(
+            {
+                "schema_version": "1",
+                "corpus": corpus,
+                "rows": durable_rows,
+                "summary": summary,
+            },
+            indent=2,
+            sort_keys=True,
+        )
+        + "\n",
+    )
+
+
+def _clear_batch_shape5(corpus: str, out_dir: Path, *, note: str) -> None:
+    """Zero the shape-5 artifact when this run did not execute pairs.
+
+    Without a rewrite, a stale committed/local ``*_batch_shape5.json`` keeps
+    counting in ``conversion-ledger.py`` while ``batch_pair_counts.json``
+    reports executed=0.
+    """
+    from regexproof.rule_diff.batch_shape5 import summarize_shape5_rows
+
+    summary = summarize_shape5_rows([])
+    summary["note"] = note
+    _write_batch_shape5_artifact(corpus, out_dir, rows=[], summary=summary)
+
+
+def _enforce_shape5_ground_truth(rows: list[dict[str, Any]]) -> None:
+    """Hard-fail SAT search gaps without reproduced pad-gate GT (#510)."""
+    bad: list[str] = []
+    for rec in rows:
+        if rec.get("result") != "sat":
+            continue
+        if rec.get("ground_truth_status") == "reproduced":
+            continue
+        bad.append(
+            f"{rec.get('pair_id')}: sat without ground_truth_status=reproduced "
+            f"(got {rec.get('ground_truth_status')!r})"
+        )
+    if bad:
+        raise SystemExit(
+            "batch shape-5 --require-ground-truth failed:\n  " + "\n  ".join(bad)
+        )
+
+
 def _run_and_record_shape5(
     corpus: str,
     pairs: list[dict[str, Any]],
@@ -103,6 +171,7 @@ def _run_and_record_shape5(
     admitted: int,
     dropped: int,
     note: str,
+    require_ground_truth: bool = False,
 ) -> dict[str, Any]:
     """Filter, solve, pad-gate, and write ``{corpus}_batch_shape5.json``."""
     from regexproof.rule_diff.batch_shape5 import (
@@ -118,22 +187,11 @@ def _run_and_record_shape5(
     gate_ok, n_timeout, rate, bad = timeout_gate(rows, name_key="pair_id")
     summary["timeout_gate_ok"] = gate_ok
     summary["timeout_rate"] = rate
-    atomic_write_text(
-        out_dir / f"{corpus}_batch_shape5.json",
-        json.dumps(
-            {
-                "schema_version": "1",
-                "corpus": corpus,
-                "rows": rows,
-                "summary": summary,
-            },
-            indent=2,
-            sort_keys=True,
-        )
-        + "\n",
-    )
+    _write_batch_shape5_artifact(corpus, out_dir, rows=rows, summary=summary)
     if not gate_ok:
         raise SystemExit(fail_message(bad, n_timeout))
+    if require_ground_truth:
+        _enforce_shape5_ground_truth(rows)
     return {
         "admitted": admitted,
         "dropped": dropped,
@@ -606,6 +664,7 @@ def run_batch(
                     "cross_engine; batch executes 0 unless family_contract "
                     "is present (#477)"
                 ),
+                require_ground_truth=require_ground_truth,
             )
         else:
             pair_counts[name] = {
@@ -626,25 +685,62 @@ def run_batch(
             "note": "single-corpus Smith run; pass write_pilot_aggregate to measure CRS",
         }
     if crs["decision"] == "go":
-        pair_counts["coreruleset"] = {
-            "admitted": 0,
-            "dropped": 0,
-            "batch_shape5": 0,
-            "executed": 0,
-            "note": (
+        from regexproof.rule_diff.crs_batch import (
+            discover_crs_batch_pairs,
+            resolve_crs_version_trees,
+        )
+
+        trees = resolve_crs_version_trees()
+        if trees is None:
+            skip_note = (
                 "fraction gate go; version_diff family_contract is stamped "
                 "at CRS discovery. Batch shape-5 execute needs older+newer "
-                "rule trees in-checkout (not present here)."
-            ),
-            "scope": crs.get("scope"),
-            "fraction": crs.get("fraction"),
-        }
+                "rule trees (REGEXPROOF_CRS_*_RULES or /tmp/crs-shape5/)."
+            )
+            _clear_batch_shape5("coreruleset", out_dir, note=skip_note)
+            pair_counts["coreruleset"] = {
+                "admitted": 0,
+                "dropped": 0,
+                "batch_shape5": 0,
+                "executed": 0,
+                "note": skip_note,
+                "scope": crs.get("scope"),
+                "fraction": crs.get("fraction"),
+            }
+        else:
+            older_rules, newer_rules = trees
+            discovered = discover_crs_batch_pairs(
+                older_rules=older_rules,
+                newer_rules=newer_rules,
+            )
+            pair_counts["coreruleset"] = _run_and_record_shape5(
+                "coreruleset",
+                discovered["admitted"],
+                out_dir,
+                admitted=len(discovered["admitted"]),
+                dropped=len(discovered.get("dropped") or [])
+                + len(discovered.get("batch_timeout_skipped") or []),
+                note=(
+                    "CRS version_diff with family_contract; "
+                    f"timeout-skipped={len(discovered.get('batch_timeout_skipped') or [])}"
+                ),
+                require_ground_truth=require_ground_truth,
+            )
+            pair_counts["coreruleset"]["scope"] = crs.get("scope")
+            pair_counts["coreruleset"]["fraction"] = crs.get("fraction")
     else:
+        skip_note = (
+            f"excluded decision={crs['decision']} fraction={crs['fraction']}"
+        )
+        # Do not wipe a prior CRS artifact on single-corpus Smith runs that
+        # never measured CRS (decision=skipped) — that reintroduces ledger skew.
+        if crs["decision"] != "skipped":
+            _clear_batch_shape5("coreruleset", out_dir, note=skip_note)
         pair_counts["coreruleset"] = {
             "admitted": 0,
             "batch_shape5": 0,
             "executed": 0,
-            "note": f"excluded decision={crs['decision']} fraction={crs['fraction']}",
+            "note": skip_note,
             "scope": crs.get("scope"),
         }
 
