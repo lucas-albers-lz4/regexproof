@@ -14,11 +14,11 @@ Heap's-law / singleton novelty saturates **compiler coverage**. This artifact sa
 | planned inventory stubs | 290 |
 | classification rows (usage/intent/triage kinds) | 5,539 |
 | mutation guards (hygiene) | 644 |
-| properties asked (non-planned product kinds) | 0 |
-| properties asked distinct `(site, question_id)` | 0 |
+| properties asked (non-planned product kinds) | 3 |
+| properties asked distinct `(site, question_id)` | 3 |
 | properties UNSAT (holds in declared domain) | 0 |
-| properties SAT | 0 |
-| properties SAT distinct `(site, question_id)` | 0 |
+| properties SAT | 2 |
+| properties SAT distinct `(site, question_id)` | 2 |
 | SAT unique sites | 0 |
 | SAT ground-truthed (`reproduced` / `PASS`) | 0 |
 | rule_diff report SAT (dedicated pilots) | 10 |
@@ -37,9 +37,9 @@ Heap's-law / singleton novelty saturates **compiler coverage**. This artifact sa
 | rate | value |
 |---|---|
 | encodable / extracted | 0.6224 |
-| properties asked / encodable | 0.0000 |
-| SAT / properties asked | n/a |
-| ground-truthed / SAT | n/a |
+| properties asked / encodable | 3.90e-05 |
+| SAT / properties asked | 0.6667 |
+| ground-truthed / SAT | 0.0000 |
 | pipeline accepted (incl. own-code) / SAT GT | n/a |
 | pipeline accepted / extracted | 8.00e-06 |
 | encodable / extracted excluding YARA inventories | 0.6174 |
@@ -48,7 +48,7 @@ Heap's-law / singleton novelty saturates **compiler coverage**. This artifact sa
 
 ## Security-tool split (scanner product kinds)
 
-Asked in tools: 0. Asked elsewhere: 0. SAT in tools: 0. SAT elsewhere: 0.
+Asked in tools: 3. Asked elsewhere: 0. SAT in tools: 2. SAT elsewhere: 0.
 
 ## Upstream (curated)
 
@@ -60,6 +60,7 @@ Source: [`docs/conversion-upstream.jsonl`](../../docs/conversion-upstream.jsonl)
 
 | corpus | security tool | asked | unsat | sat | sat GT | unique SAT sites |
 |---|---|---|---|---|---|---|
+| coreruleset | true | 3 | 0 | 2 | 0 | 0 |
 
 ## Denominator notes
 

@@ -272,11 +272,58 @@ def test_sidecar_findings_ndjson_ignored_rule_diff_report_counted(tmp_path: Path
         assert "language_membership" in rec
 
 
+def test_batch_shape5_counts_as_properties_asked(tmp_path: Path):
+    gen = tmp_path / "generated"
+    gen.mkdir()
+    (gen / "demo_batch_summary.json").write_text(
+        json.dumps(
+            {"corpus": "demo", "extracted": 1, "encodable": 1, "findings": 0, "triage": 0}
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    (gen / "demo.ndjson").write_text("", encoding="utf-8")
+    (gen / "coreruleset_batch_shape5.json").write_text(
+        json.dumps(
+            {
+                "schema_version": "1",
+                "corpus": "coreruleset",
+                "rows": [
+                    {"pair_id": "a", "kind": "rule_diff", "result": "sat"},
+                    {"pair_id": "b", "kind": "rule_diff", "result": "unsat"},
+                    {
+                        "pair_id": "c",
+                        "kind": "rule_diff",
+                        "result": "sat_fullmatch_only",
+                    },
+                    {"pair_id": "d", "kind": "rule_diff", "result": "timeout"},
+                ],
+                "summary": {},
+            }
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    upstream = tmp_path / "upstream.jsonl"
+    upstream.write_text("", encoding="utf-8")
+    data = cl.aggregate(
+        gen_dir=gen, upstream_path=upstream, security_tools=frozenset({"coreruleset"})
+    )
+    f = data["funnel"]
+    assert f["properties_asked"] == 3
+    assert f["properties_sat"] == 1
+    assert f["properties_unsat"] == 1
+    assert f["batch_shape5_asked"] == 3
+    assert data["batch_shape5"]["coreruleset_batch_shape5.json"]["sat_fullmatch_only"] == 1
+
+
 def test_ci_golden_regenerates_and_drift_checks_ledger():
     ci = (ROOT / ".github" / "workflows" / "ci.yml").read_text(encoding="utf-8")
     assert "python scripts/conversion-ledger.py" in ci
     assert "properties/generated/conversion-ledger.json" in ci
     assert "properties/generated/conversion-ledger.md" in ci
+    assert "Materialize CRS version-diff trees" in ci
+    assert "/tmp/crs-shape5/coreruleset-v4.27.0" in ci
     path = ROOT / "properties" / "generated" / "conversion-ledger.json"
     data = json.loads(path.read_text(encoding="utf-8"))
     assert data["schema_version"] == "1"

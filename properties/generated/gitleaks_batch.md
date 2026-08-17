@@ -15,6 +15,7 @@ kind: property
 corpus: gitleaks
 shape: 1
 result: planned
+ground_truth_status: planned
 disclosure: private_first
 site: "inventory:rc-shape1-injection-alphabet"
 ```
@@ -37,7 +38,7 @@ null
 
 ### Ground-truth
 
-None
+planned
 
 ## property:inventory:rc-shape2-missing-keyword:rc-shape2-missing-keyword
 
@@ -48,6 +49,7 @@ kind: property
 corpus: gitleaks
 shape: 2
 result: planned
+ground_truth_status: planned
 disclosure: private_first
 site: "inventory:rc-shape2-missing-keyword"
 ```
@@ -70,7 +72,7 @@ null
 
 ### Ground-truth
 
-None
+planned
 
 ## property:inventory:rc-shape3-capture-truncation:rc-shape3-capture-truncation
 
@@ -81,6 +83,7 @@ kind: property
 corpus: gitleaks
 shape: 3
 result: planned
+ground_truth_status: planned
 disclosure: private_first
 site: "inventory:rc-shape3-capture-truncation"
 ```
@@ -103,7 +106,7 @@ null
 
 ### Ground-truth
 
-None
+planned
 
 ## property:inventory:rc-shape4-escape-image:rc-shape4-escape-image
 
@@ -114,6 +117,7 @@ kind: property
 corpus: gitleaks
 shape: 4
 result: planned
+ground_truth_status: planned
 disclosure: private_first
 site: "inventory:rc-shape4-escape-image"
 ```
@@ -136,4 +140,4 @@ null
 
 ### Ground-truth
 
-None
+planned

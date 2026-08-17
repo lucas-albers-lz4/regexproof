@@ -1,11 +1,18 @@
 {
   "address_space_cap": null,
+  "cache": {
+    "entries": 221,
+    "hit_rate": 0.8190045248868778,
+    "hits": 181,
+    "misses": 40
+  },
+  "cache_hit_rate": 0.8190045248868778,
   "complete_run": true,
   "corpus": "gitleaks",
   "corpus_type": "rule_corpus",
   "encodable": 181,
   "engine": {
-    "python": "3.13.5"
+    "python": "3.14.6"
   },
   "extracted": 221,
   "findings": 4,

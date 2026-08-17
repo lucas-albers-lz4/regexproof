@@ -1,11 +1,18 @@
 {
   "address_space_cap": null,
+  "cache": {
+    "entries": 212,
+    "hit_rate": 0.5801886792452831,
+    "hits": 123,
+    "misses": 89
+  },
+  "cache_hit_rate": 0.5801886792452831,
   "complete_run": true,
   "corpus": "validatorjs",
   "corpus_type": "validator",
   "encodable": 123,
   "engine": {
-    "python": "3.13.5"
+    "python": "3.14.6"
   },
   "extracted": 212,
   "findings": 1416,

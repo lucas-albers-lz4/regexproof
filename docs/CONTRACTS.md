@@ -53,9 +53,12 @@ gate (`gate_sat_witness`). A fullmatch SAT that fails the pad matrix is
 `sat_fullmatch_only`, not a search finding. Do not flip `solver_call_kind`
 to search (VF-007). Sibling-family and independent-spec pairs are not
 admitted. Gitleaks catalog pairs currently have no `family_contract`, so
-`batch_shape5`/`executed` stay 0. CRS `version_diff` stamps
-`family_contract` at discovery; executing them in batch still needs the
-older and newer rule trees in the checkout. The pad matrix uses Python
+`gitleaks_batch_shape5` executed stays 0. CRS `version_diff` stamps
+`family_contract` at discovery; Golden CI materializes older+newer rule
+trees under `/tmp/crs-shape5/` and batch writes
+`coreruleset_batch_shape5.json`. Pair `crs-942522` is excluded from batch
+(hard timeout at DEFAULT_MAX_LEN). The conversion ledger counts decided
+batch shape-5 rows as `properties_asked`. The pad matrix uses Python
 `re.search` as a necessary filter, not PCRE2/RE2 fidelity; filing still
 replays the real engines.
 

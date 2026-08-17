@@ -1,0 +1,15 @@
+{
+  "corpus": "gitleaks",
+  "rows": [],
+  "schema_version": "1",
+  "summary": {
+    "executed": 0,
+    "sat_fullmatch_only": 0,
+    "sat_search_gap": 0,
+    "skipped": 0,
+    "timeout": 0,
+    "timeout_gate_ok": true,
+    "timeout_rate": 0.0,
+    "unsat": 0
+  }
+}

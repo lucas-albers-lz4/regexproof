@@ -626,19 +626,46 @@ def run_batch(
             "note": "single-corpus Smith run; pass write_pilot_aggregate to measure CRS",
         }
     if crs["decision"] == "go":
-        pair_counts["coreruleset"] = {
-            "admitted": 0,
-            "dropped": 0,
-            "batch_shape5": 0,
-            "executed": 0,
-            "note": (
-                "fraction gate go; version_diff family_contract is stamped "
-                "at CRS discovery. Batch shape-5 execute needs older+newer "
-                "rule trees in-checkout (not present here)."
-            ),
-            "scope": crs.get("scope"),
-            "fraction": crs.get("fraction"),
-        }
+        from regexproof.rule_diff.crs_batch import (
+            discover_crs_batch_pairs,
+            resolve_crs_version_trees,
+        )
+
+        trees = resolve_crs_version_trees()
+        if trees is None:
+            pair_counts["coreruleset"] = {
+                "admitted": 0,
+                "dropped": 0,
+                "batch_shape5": 0,
+                "executed": 0,
+                "note": (
+                    "fraction gate go; version_diff family_contract is stamped "
+                    "at CRS discovery. Batch shape-5 execute needs older+newer "
+                    "rule trees (REGEXPROOF_CRS_*_RULES or /tmp/crs-shape5/)."
+                ),
+                "scope": crs.get("scope"),
+                "fraction": crs.get("fraction"),
+            }
+        else:
+            older_rules, newer_rules = trees
+            discovered = discover_crs_batch_pairs(
+                older_rules=older_rules,
+                newer_rules=newer_rules,
+            )
+            pair_counts["coreruleset"] = _run_and_record_shape5(
+                "coreruleset",
+                discovered["admitted"],
+                out_dir,
+                admitted=len(discovered["admitted"]),
+                dropped=len(discovered.get("dropped") or [])
+                + len(discovered.get("batch_timeout_skipped") or []),
+                note=(
+                    "CRS version_diff with family_contract; "
+                    f"timeout-skipped={len(discovered.get('batch_timeout_skipped') or [])}"
+                ),
+            )
+            pair_counts["coreruleset"]["scope"] = crs.get("scope")
+            pair_counts["coreruleset"]["fraction"] = crs.get("fraction")
     else:
         pair_counts["coreruleset"] = {
             "admitted": 0,
