@@ -145,6 +145,13 @@ def _haystack(rec: dict[str, Any]) -> str:
     ).lower()
 
 
+def _token_hit(hay: str, tok: str) -> bool:
+    """Whole-token match: ``wan`` must not fire on ``mwan3``."""
+    return re.search(
+        rf"(?<![a-z0-9]){re.escape(tok)}(?![a-z0-9])", hay
+    ) is not None
+
+
 def score(rec: dict[str, Any], vocab: tuple[str, ...]) -> int:
     path = _path_of(rec).lower()
     hay = _haystack(rec)
@@ -152,7 +159,7 @@ def score(rec: dict[str, Any], vocab: tuple[str, ...]) -> int:
     pts = 0
     if any(tok.lower() in path or tok.lower() in hay for tok in vocab):
         pts += 2
-    if any(tok in hay for tok in _UNTRUSTED):
+    if any(_token_hit(hay, tok) for tok in _UNTRUSTED):
         pts += 2
     if any(tok in hay for tok in _CONFIG):
         pts += 1

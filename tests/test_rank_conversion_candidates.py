@@ -150,6 +150,33 @@ def test_ranker_deterministic_fixture(tmp_path: Path):
     assert a["keep"] == b["keep"]
 
 
+def test_untrusted_wan_does_not_match_mwan3_substring():
+    rec = _rec(
+        site="net/mwan3/files/lib/mwan3/mwan3.sh:74:0",
+        file="net/mwan3/files/lib/mwan3/mwan3.sh",
+        pattern=r".*dev ([^ ]*).*",
+        call_kind="substitution",
+    )
+    # vocab still hits ``mwan``; ``wan`` must not double-count via substring.
+    pts = rank.score(rec, rank.DEFAULT_VOCAB)
+    rec2 = dict(rec)
+    rec2["site"] = "net/other/files/x.sh:1:0"
+    rec2["file"] = "net/other/files/x.sh"
+    # Without vocab, ``mwan3`` path must not get the untrusted +2.
+    assert rank.score(rec2, ()) == rank.score(
+        _rec(
+            site="net/other/files/x.sh:1:0",
+            file="net/other/files/x.sh",
+            pattern=r".*dev ([^ ]*).*",
+            call_kind="substitution",
+        ),
+        (),
+    )
+    assert not rank._token_hit("net/mwan3/files/lib/mwan3/mwan3.sh", "wan")
+    assert rank._token_hit("net/pbr/files/etc/uci-defaults/90-pbr wan_mark", "wan")
+    assert pts >= 1
+
+
 def test_frozen_openwrt_rank_has_15_keep_and_seed_reasons():
     path = ROOT / "properties" / "generated" / "openwrt_packages_rank.json"
     data = json.loads(path.read_text(encoding="utf-8"))

@@ -2503,47 +2503,11 @@
     {
       "call_kind": "substitution",
       "encodable": true,
-      "file": "batch/corpora/openwrt_packages/rules/net/mwan3/files/etc/init.d/mwan3",
-      "pattern": ".*table ([0-9]+).*",
-      "regex_id": "6f1dc10603c04c5d6e26f2790c66fe38",
-      "score": 9,
-      "site": "batch/corpora/openwrt_packages/rules/net/mwan3/files/etc/init.d/mwan3:75:42"
-    },
-    {
-      "call_kind": "search",
-      "encodable": true,
-      "file": "batch/corpora/openwrt_packages/rules/net/mwan3/files/lib/mwan3/mwan3.sh",
-      "pattern": ".*--comment ([^ ]*) .*$",
-      "regex_id": "2f2b18924b895fcdc1a83e2738d38a77",
-      "score": 9,
-      "site": "batch/corpora/openwrt_packages/rules/net/mwan3/files/lib/mwan3/mwan3.sh:1157:68"
-    },
-    {
-      "call_kind": "substitution",
-      "encodable": true,
-      "file": "batch/corpora/openwrt_packages/rules/net/mwan3/files/lib/mwan3/mwan3.sh",
-      "pattern": ".*dev ([^ ]*).*",
-      "regex_id": "d5b3028c1190dd5cd9e6718b01bc14cc",
-      "score": 9,
-      "site": "batch/corpora/openwrt_packages/rules/net/mwan3/files/lib/mwan3/mwan3.sh:74:37"
-    },
-    {
-      "call_kind": "substitution",
-      "encodable": true,
       "file": "batch/corpora/openwrt_packages/rules/net/pbr/files/etc/uci-defaults/90-pbr",
       "pattern": "option wan_mark '0x(.*)'",
       "regex_id": "f863d6db3dbd41345a1a689bd397ebc3",
       "score": 8,
       "site": "batch/corpora/openwrt_packages/rules/net/pbr/files/etc/uci-defaults/90-pbr:20:0"
-    },
-    {
-      "call_kind": "search",
-      "encodable": true,
-      "file": "batch/corpora/openwrt_packages/rules/net/strongswan/files/etc/uci-defaults/strongswan",
-      "pattern": "^[[:space:]]*option ignore_routing_tables",
-      "regex_id": "7d5e75204267d0074d4c05fb68007eb6",
-      "score": 8,
-      "site": "batch/corpora/openwrt_packages/rules/net/strongswan/files/etc/uci-defaults/strongswan:18:10"
     },
     {
       "call_kind": "search",
@@ -2582,22 +2546,31 @@
       "site": "batch/corpora/openwrt_packages/rules/net/https-dns-proxy/files/etc/init.d/https-dns-proxy:113:30"
     },
     {
-      "call_kind": "search",
+      "call_kind": "substitution",
       "encodable": true,
-      "file": "batch/corpora/openwrt_packages/rules/net/libreswan/files/etc/init.d/ipsec",
-      "pattern": "[\":/]",
-      "regex_id": "dc54cb17233e2ea530fd4abe5f6c6336",
+      "file": "batch/corpora/openwrt_packages/rules/net/mwan3/files/etc/init.d/mwan3",
+      "pattern": ".*table ([0-9]+).*",
+      "regex_id": "6f1dc10603c04c5d6e26f2790c66fe38",
       "score": 7,
-      "site": "batch/corpora/openwrt_packages/rules/net/libreswan/files/etc/init.d/ipsec:265:47"
+      "site": "batch/corpora/openwrt_packages/rules/net/mwan3/files/etc/init.d/mwan3:75:42"
     },
     {
       "call_kind": "search",
       "encodable": true,
-      "file": "batch/corpora/openwrt_packages/rules/net/mwan3/files/etc/init.d/mwan3",
-      "pattern": "^[1-3][0-9]{3}:",
-      "regex_id": "96ce86b7c4a026168c4dd157a13e942c",
+      "file": "batch/corpora/openwrt_packages/rules/net/mwan3/files/lib/mwan3/mwan3.sh",
+      "pattern": ".*--comment ([^ ]*) .*$",
+      "regex_id": "2f2b18924b895fcdc1a83e2738d38a77",
       "score": 7,
-      "site": "batch/corpora/openwrt_packages/rules/net/mwan3/files/etc/init.d/mwan3:80:32"
+      "site": "batch/corpora/openwrt_packages/rules/net/mwan3/files/lib/mwan3/mwan3.sh:1157:68"
+    },
+    {
+      "call_kind": "substitution",
+      "encodable": true,
+      "file": "batch/corpora/openwrt_packages/rules/net/mwan3/files/lib/mwan3/mwan3.sh",
+      "pattern": ".*dev ([^ ]*).*",
+      "regex_id": "d5b3028c1190dd5cd9e6718b01bc14cc",
+      "score": 7,
+      "site": "batch/corpora/openwrt_packages/rules/net/mwan3/files/lib/mwan3/mwan3.sh:74:37"
     },
     {
       "call_kind": "substitution",
@@ -2634,6 +2607,33 @@
       "regex_id": "2e635c86496ec6e4259100391d37eff8",
       "score": 7,
       "site": "batch/corpora/openwrt_packages/rules/net/pbr/files/etc/init.d/pbr:355:28"
+    },
+    {
+      "call_kind": "search",
+      "encodable": true,
+      "file": "batch/corpora/openwrt_packages/rules/net/pbr/files/etc/init.d/pbr",
+      "pattern": "^((25[0-5]|2[0-4][0-9]|1?[0-9]{1,2})\\.){3}(25[0-5]|2[0-4][0-9]|1?[0-9]{1,2})(/(3[0-2]|[12]?[0-9]))?$",
+      "regex_id": "4a325d957adc753010146f33fa656392",
+      "score": 7,
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/files/etc/init.d/pbr:364:24"
+    },
+    {
+      "call_kind": "search",
+      "encodable": true,
+      "file": "batch/corpora/openwrt_packages/rules/net/pbr/files/etc/init.d/pbr",
+      "pattern": "^([0-9A-Fa-f]{2}:){5}([0-9A-Fa-f]{2})$",
+      "regex_id": "246722ce7323dc5e08de57946a7b1d18",
+      "score": 7,
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/files/etc/init.d/pbr:373:31"
+    },
+    {
+      "call_kind": "search",
+      "encodable": true,
+      "file": "batch/corpora/openwrt_packages/rules/net/pbr/files/etc/init.d/pbr",
+      "pattern": "^([0-9A-Fa-f]{2}-){5}([0-9A-Fa-f]{2})$",
+      "regex_id": "cd0bb9173cbd41f5451a7e6cc83a42df",
+      "score": 7,
+      "site": "batch/corpora/openwrt_packages/rules/net/pbr/files/etc/init.d/pbr:374:44"
     }
   ],
   "limit": 15,
