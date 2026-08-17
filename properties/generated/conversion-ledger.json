@@ -23,7 +23,7 @@
       "properties_asked": 3,
       "properties_sat": 2,
       "properties_unsat": 0,
-      "sat_ground_truthed": 0,
+      "sat_ground_truthed": 2,
       "sat_unique_sites": 0,
       "scanner_rows": 0,
       "security_tool": true

@@ -60,7 +60,7 @@ Source: [`docs/conversion-upstream.jsonl`](../../docs/conversion-upstream.jsonl)
 
 | corpus | security tool | asked | unsat | sat | sat GT | unique SAT sites |
 |---|---|---|---|---|---|---|
-| coreruleset | true | 3 | 0 | 2 | 0 | 0 |
+| coreruleset | true | 3 | 0 | 2 | 2 | 0 |
 
 ## Denominator notes
 

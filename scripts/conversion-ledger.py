@@ -596,12 +596,14 @@ def aggregate(
         corpus = fname[: -len("_batch_shape5.json")] if fname.endswith(
             "_batch_shape5.json"
         ) else fname
+        sat_gt = int(summary.get("properties_sat_gt", 0))
         if any(row["corpus"] == corpus for row in by_corpus):
             for row in by_corpus:
                 if row["corpus"] == corpus:
                     row["properties_asked"] += summary["properties_asked"]
                     row["properties_sat"] += summary["properties_sat"]
                     row["properties_unsat"] += summary["properties_unsat"]
+                    row["sat_ground_truthed"] += sat_gt
             continue
         by_corpus.append(
             {
@@ -611,7 +613,7 @@ def aggregate(
                 "properties_asked": summary["properties_asked"],
                 "properties_unsat": summary["properties_unsat"],
                 "properties_sat": summary["properties_sat"],
-                "sat_ground_truthed": 0,
+                "sat_ground_truthed": sat_gt,
                 "sat_unique_sites": 0,
             }
         )
