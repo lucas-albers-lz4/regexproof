@@ -47,6 +47,8 @@ BANIP_EXPIRY = Union(
 )
 HEX_CLS = Union(Range("0", "9"), Range("a", "f"), Range("A", "F"))
 HEX_RE = Concat(HEX_CLS, Star(HEX_CLS))
+# TransIP token values: declared domain is NUL-free ASCII (POSIX/BusyBox).
+ASCII_NUL_FREE = Range("\x01", "\x7f")
 
 TRANSIP_SED = r's/^.*"token" *: *"\([^"]*\)".*$/\1/'
 WAN_MARK_SED = r"s/option wan_mark '0x\(.*\)'/option wan_mark '\1'/"
@@ -199,7 +201,11 @@ def ow_transip():
     v = String("v")
     first_quote = IndexOf(v, StringVal('"'), 0)
     capture = SubString(v, 0, first_quote)
-    return [first_quote > 0, capture != v], Contains(v, StringVal('"'))
+    return [
+        InRe(v, Star(ASCII_NUL_FREE)),
+        first_quote > 0,
+        capture != v,
+    ], Contains(v, StringVal('"'))
 
 
 @prop(

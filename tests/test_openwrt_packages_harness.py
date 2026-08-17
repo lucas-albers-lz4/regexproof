@@ -13,6 +13,7 @@ import pytest
 from regexproof.harness.contract import product_reportable
 from regexproof.harness.core import REGISTRY, check_mutation_coverage
 import regexproof.harness.openwrt_packages  # noqa: F401 — register family
+from regexproof.harness.openwrt_packages import ow_transip
 from regexproof.schemas import load_schema
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -77,6 +78,12 @@ def test_committed_conversion_ndjson_matches_registry():
         assert rec["result"] == (
             "sat" if not REGISTRY[rec["name"]]["expect_unsat"] else "unsat"
         )
+
+
+def test_transip_query_constrains_nul_free_ascii():
+    constraints, _claim = ow_transip()
+    blob = " ".join(str(c) for c in constraints)
+    assert "InRe" in blob
 
 
 def test_incomplete_contract_is_not_product_reportable():
