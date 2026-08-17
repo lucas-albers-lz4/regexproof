@@ -8,10 +8,10 @@ Heap's-law / singleton novelty saturates **compiler coverage**. This artifact sa
 
 | stage | count |
 |---|---|
-| sites extracted (batch summaries) | 123,643 |
-| sites encodable | 76,955 |
-| scanner NDJSON rows | 7,117 |
-| planned inventory stubs | 290 |
+| sites extracted (batch summaries) | 125,006 |
+| sites encodable | 78,318 |
+| scanner NDJSON rows | 7,121 |
+| planned inventory stubs | 294 |
 | classification rows (usage/intent/triage kinds) | 5,539 |
 | mutation guards (hygiene) | 644 |
 | properties asked (non-planned product kinds) | 3 |
@@ -25,7 +25,7 @@ Heap's-law / singleton novelty saturates **compiler coverage**. This artifact sa
 | rule_diff report SAT + ground-truth | 10 |
 | disclosed `private_first` (scanner product+classification, skip planned) | 686 |
 | disclosed `public_ok` | 0 |
-| dry-run `private_first` (includes planned stubs) | 810 |
+| dry-run `private_first` (includes planned stubs) | 814 |
 | dry-run would open public upstream | 0 |
 | accepted upstream (curated `fixed_upstream`) | 1 |
 | existence proofs (`fixed_upstream` + `private_first`) | 1 |
@@ -36,8 +36,8 @@ Heap's-law / singleton novelty saturates **compiler coverage**. This artifact sa
 
 | rate | value |
 |---|---|
-| encodable / extracted | 0.6224 |
-| properties asked / encodable | 3.90e-05 |
+| encodable / extracted | 0.6265 |
+| properties asked / encodable | 3.80e-05 |
 | SAT / properties asked | 0.6667 |
 | ground-truthed / SAT | 1.0000 |
 | pipeline accepted (incl. own-code) / SAT GT | 0.5000 |

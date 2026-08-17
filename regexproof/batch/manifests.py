@@ -4206,6 +4206,27 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
             "max_disk_mb": 100,
         },
     },
+    "yarasigs": {
+        "corpus_type": "rule_corpus",
+        # Materialize: ln -sfn /tmp/0day1day-yarasigs-yarasigs/signatures \\
+        #   batch/corpora/yarasigs/rules
+        "path": ROOT / "batch" / "corpora" / "yarasigs" / "rules",
+        "glob": "**/*.yar,**/*.yara",
+        "dialect": "yara",
+        "extractor": "yara",
+        "repo": "0day1day/yarasigs",
+        "security_tool": True,
+        "lift_inline": False,
+        "corpus_pin": "5a07dfcde3076615e4d9394ec75ff53e74c19b45",
+        "commit": "5a07dfcde3076615e4d9394ec75ff53e74c19b45",
+        "budget": {
+            "max_patterns": 5000,
+            "max_wall_s": 600,
+            "redos_wall_s": 120,
+            "max_mem_mb": 1024,
+            "max_disk_mb": 100,
+        },
+    },
 }
 
 WAVE_CORPORA = frozenset({
@@ -4240,5 +4261,6 @@ WAVE_CORPORA = frozenset({
     "devguard",
     "openmed",
     "malzoo",
+    "yarasigs",
 })
 
