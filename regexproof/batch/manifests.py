@@ -4227,6 +4227,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
             "max_disk_mb": 100,
         },
     },
+
 }
 
 WAVE_CORPORA = frozenset({
