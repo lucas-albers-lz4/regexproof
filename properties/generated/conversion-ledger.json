@@ -4,6 +4,7 @@
       "executed_rows": 3,
       "properties_asked": 3,
       "properties_sat": 2,
+      "properties_sat_gt": 2,
       "properties_unsat": 0,
       "sat_fullmatch_only": 1
     },
@@ -11,6 +12,7 @@
       "executed_rows": 0,
       "properties_asked": 0,
       "properties_sat": 0,
+      "properties_sat_gt": 0,
       "properties_unsat": 0,
       "sat_fullmatch_only": 0
     }
@@ -55,7 +57,7 @@
     "redos_rows": 0,
     "rule_diff_report_sat": 10,
     "rule_diff_report_sat_gt": 10,
-    "sat_ground_truthed": 0,
+    "sat_ground_truthed": 2,
     "sat_unique_sites": 0,
     "scanner_ndjson_files": 75,
     "scanner_rows": 7117,
@@ -77,15 +79,15 @@
   ],
   "rates": {
     "accepted_per_extracted": 8e-06,
-    "accepted_per_gt": null,
+    "accepted_per_gt": 0.5,
     "encodable_fraction": 0.622397,
     "encodable_fraction_all_inventories": 0.627863,
     "encodable_fraction_excluding_yara": 0.617355,
     "encodable_fraction_yara": 0.633215,
     "fullword_share_of_unencodable": 0.635254,
-    "gt_per_sat": 0.0,
+    "gt_per_sat": 1.0,
     "pipeline_accepted_per_extracted": 8e-06,
-    "pipeline_accepted_per_gt": null,
+    "pipeline_accepted_per_gt": 0.5,
     "property_asked_per_encodable": 3.9e-05,
     "sat_per_property_asked": 0.666667,
     "yara_share_of_unencodable": 0.653003

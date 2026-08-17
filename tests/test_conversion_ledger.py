@@ -289,7 +289,12 @@ def test_batch_shape5_counts_as_properties_asked(tmp_path: Path):
                 "schema_version": "1",
                 "corpus": "coreruleset",
                 "rows": [
-                    {"pair_id": "a", "kind": "rule_diff", "result": "sat"},
+                    {
+                        "pair_id": "a",
+                        "kind": "rule_diff",
+                        "result": "sat",
+                        "ground_truth_status": "reproduced",
+                    },
                     {"pair_id": "b", "kind": "rule_diff", "result": "unsat"},
                     {
                         "pair_id": "c",
@@ -312,9 +317,11 @@ def test_batch_shape5_counts_as_properties_asked(tmp_path: Path):
     f = data["funnel"]
     assert f["properties_asked"] == 3
     assert f["properties_sat"] == 1
+    assert f["sat_ground_truthed"] == 1
     assert f["properties_unsat"] == 1
     assert f["batch_shape5_asked"] == 3
     assert data["batch_shape5"]["coreruleset_batch_shape5.json"]["sat_fullmatch_only"] == 1
+    assert data["batch_shape5"]["coreruleset_batch_shape5.json"]["properties_sat_gt"] == 1
 
 
 def test_ci_golden_regenerates_and_drift_checks_ledger():

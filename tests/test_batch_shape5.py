@@ -76,6 +76,7 @@ def test_run_executes_sat_gate_and_skips_independent_spec():
     by_id = {r["pair_id"]: r for r in rows}
     assert by_id["toy-sat"]["result"] == "sat"
     assert by_id["toy-sat"]["search_pad_gate"] is True
+    assert by_id["toy-sat"]["ground_truth_status"] == "reproduced"
     assert by_id["toy-sat"]["witness"]["s"]
     assert by_id["toy-unsat"]["result"] == "unsat"
 
@@ -89,6 +90,7 @@ def test_sat_fullmatch_only_when_pad_gate_rejects(monkeypatch):
     assert len(rows) == 1
     assert rows[0]["result"] == "sat_fullmatch_only"
     assert rows[0]["search_pad_gate"] is False
+    assert rows[0]["ground_truth_status"] == "fullmatch-only-not-search-gap"
 
 
 def test_compile_bound_is_pattern_length_not_witness_max_len():
@@ -118,4 +120,32 @@ def test_timeout_gate_fails_batch(tmp_path, monkeypatch):
             admitted=1,
             dropped=0,
             note="test",
+        )
+
+
+def test_require_ground_truth_fails_sat_without_gt(tmp_path, monkeypatch):
+    import pytest
+
+    from regexproof.batch.runner import _run_and_record_shape5
+
+    monkeypatch.setattr(
+        "regexproof.rule_diff.batch_shape5.run_batch_shape5_pairs",
+        lambda pairs, timeout_ms=30000: [
+            {
+                "pair_id": "gap",
+                "result": "sat",
+                "search_pad_gate": True,
+                "ground_truth_status": None,
+            }
+        ],
+    )
+    with pytest.raises(SystemExit, match="require-ground-truth"):
+        _run_and_record_shape5(
+            "coreruleset",
+            [_toy_pair("gap", "a", "a|b")],
+            tmp_path,
+            admitted=1,
+            dropped=0,
+            note="test",
+            require_ground_truth=True,
         )

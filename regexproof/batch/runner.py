@@ -133,6 +133,24 @@ def _clear_batch_shape5(corpus: str, out_dir: Path, *, note: str) -> None:
     _write_batch_shape5_artifact(corpus, out_dir, rows=[], summary=summary)
 
 
+def _enforce_shape5_ground_truth(rows: list[dict[str, Any]]) -> None:
+    """Hard-fail SAT search gaps without reproduced pad-gate GT (#510)."""
+    bad: list[str] = []
+    for rec in rows:
+        if rec.get("result") != "sat":
+            continue
+        if rec.get("ground_truth_status") == "reproduced":
+            continue
+        bad.append(
+            f"{rec.get('pair_id')}: sat without ground_truth_status=reproduced "
+            f"(got {rec.get('ground_truth_status')!r})"
+        )
+    if bad:
+        raise SystemExit(
+            "batch shape-5 --require-ground-truth failed:\n  " + "\n  ".join(bad)
+        )
+
+
 def _run_and_record_shape5(
     corpus: str,
     pairs: list[dict[str, Any]],
@@ -141,6 +159,7 @@ def _run_and_record_shape5(
     admitted: int,
     dropped: int,
     note: str,
+    require_ground_truth: bool = False,
 ) -> dict[str, Any]:
     """Filter, solve, pad-gate, and write ``{corpus}_batch_shape5.json``."""
     from regexproof.rule_diff.batch_shape5 import (
@@ -159,6 +178,8 @@ def _run_and_record_shape5(
     _write_batch_shape5_artifact(corpus, out_dir, rows=rows, summary=summary)
     if not gate_ok:
         raise SystemExit(fail_message(bad, n_timeout))
+    if require_ground_truth:
+        _enforce_shape5_ground_truth(rows)
     return {
         "admitted": admitted,
         "dropped": dropped,
@@ -631,6 +652,7 @@ def run_batch(
                     "cross_engine; batch executes 0 unless family_contract "
                     "is present (#477)"
                 ),
+                require_ground_truth=require_ground_truth,
             )
         else:
             pair_counts[name] = {
@@ -690,6 +712,7 @@ def run_batch(
                     "CRS version_diff with family_contract; "
                     f"timeout-skipped={len(discovered.get('batch_timeout_skipped') or [])}"
                 ),
+                require_ground_truth=require_ground_truth,
             )
             pair_counts["coreruleset"]["scope"] = crs.get("scope")
             pair_counts["coreruleset"]["fraction"] = crs.get("fraction")
@@ -697,7 +720,10 @@ def run_batch(
         skip_note = (
             f"excluded decision={crs['decision']} fraction={crs['fraction']}"
         )
-        _clear_batch_shape5("coreruleset", out_dir, note=skip_note)
+        # Do not wipe a prior CRS artifact on single-corpus Smith runs that
+        # never measured CRS (decision=skipped) — that reintroduces ledger skew.
+        if crs["decision"] != "skipped":
+            _clear_batch_shape5("coreruleset", out_dir, note=skip_note)
         pair_counts["coreruleset"] = {
             "admitted": 0,
             "batch_shape5": 0,

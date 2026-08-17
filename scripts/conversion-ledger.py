@@ -296,6 +296,7 @@ def summarize_batch_shape5(path: Path) -> dict[str, int]:
         rows = []
     asked = 0
     sat = 0
+    sat_gt = 0
     unsat = 0
     fullmatch_only = 0
     for rec in rows:
@@ -307,6 +308,8 @@ def summarize_batch_shape5(path: Path) -> dict[str, int]:
         asked += 1
         if result in BATCH_SHAPE5_SAT:
             sat += 1
+            if is_ground_truthed(rec):
+                sat_gt += 1
         elif result in UNSAT_RESULTS:
             unsat += 1
         elif result == "sat_fullmatch_only":
@@ -314,6 +317,7 @@ def summarize_batch_shape5(path: Path) -> dict[str, int]:
     return {
         "properties_asked": asked,
         "properties_sat": sat,
+        "properties_sat_gt": sat_gt,
         "properties_unsat": unsat,
         "sat_fullmatch_only": fullmatch_only,
         "executed_rows": len(rows),
@@ -470,12 +474,14 @@ def aggregate(
     batch_shape5: dict[str, dict[str, int]] = {}
     shape5_asked = 0
     shape5_sat = 0
+    shape5_sat_gt = 0
     shape5_unsat = 0
     for path in sorted(gen.glob(BATCH_SHAPE5_GLOB)):
         summary = summarize_batch_shape5(path)
         batch_shape5[path.name] = summary
         shape5_asked += summary["properties_asked"]
         shape5_sat += summary["properties_sat"]
+        shape5_sat_gt += summary.get("properties_sat_gt", 0)
         shape5_unsat += summary["properties_unsat"]
 
     up = _upstream_counts(upstream_rows)
@@ -503,7 +509,7 @@ def aggregate(
     asked = classified.get("properties_asked", 0) + shape5_asked
     sat = classified.get("properties_sat", 0) + shape5_sat
     unsat = classified.get("properties_unsat", 0) + shape5_unsat
-    gt = classified.get("sat_ground_truthed", 0)
+    gt = classified.get("sat_ground_truthed", 0) + shape5_sat_gt
     # CRS batch shape-5 is a security-tool corpus when present.
     if shape5_asked and "coreruleset_batch_shape5.json" in batch_shape5:
         asked_in_tools += batch_shape5["coreruleset_batch_shape5.json"]["properties_asked"]

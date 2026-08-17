@@ -20,7 +20,7 @@ Heap's-law / singleton novelty saturates **compiler coverage**. This artifact sa
 | properties SAT | 2 |
 | properties SAT distinct `(site, question_id)` | 2 |
 | SAT unique sites | 0 |
-| SAT ground-truthed (`reproduced` / `PASS`) | 0 |
+| SAT ground-truthed (`reproduced` / `PASS`) | 2 |
 | rule_diff report SAT (dedicated pilots) | 10 |
 | rule_diff report SAT + ground-truth | 10 |
 | disclosed `private_first` (scanner product+classification, skip planned) | 686 |
@@ -39,8 +39,8 @@ Heap's-law / singleton novelty saturates **compiler coverage**. This artifact sa
 | encodable / extracted | 0.6224 |
 | properties asked / encodable | 3.90e-05 |
 | SAT / properties asked | 0.6667 |
-| ground-truthed / SAT | 0.0000 |
-| pipeline accepted (incl. own-code) / SAT GT | n/a |
+| ground-truthed / SAT | 1.0000 |
+| pipeline accepted (incl. own-code) / SAT GT | 0.5000 |
 | pipeline accepted / extracted | 8.00e-06 |
 | encodable / extracted excluding YARA inventories | 0.6174 |
 | YARA share of inventory unencodable | 0.6530 |
