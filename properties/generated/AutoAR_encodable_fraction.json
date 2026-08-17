@@ -1,0 +1,42 @@
+{
+  "budget": {
+    "max_disk_mb": 200,
+    "max_mem_mb": 2048,
+    "max_patterns": 5000,
+    "max_wall_s": 900,
+    "redos_wall_s": 180
+  },
+  "budget_breaches": null,
+  "commit": "01cd447ad3b1acfed7e0680596c2c74458a4cf06",
+  "compiler_fingerprint": "35ea1f238a9e",
+  "complete_run": true,
+  "corpus_pin": "01cd447ad3b1acfed7e0680596c2c74458a4cf06",
+  "decision": "no-go",
+  "decision_rule": "go iff encodable/sample_size >= 0.3",
+  "dialect": "ecma",
+  "encodable": 230,
+  "engine_versions": {
+    "python": "3.14.6",
+    "z3": "5.0.0"
+  },
+  "extractor_schema_version": "2",
+  "fraction": 0.2581,
+  "go_no_go_threshold": 0.3,
+  "id_formula": "v2-domain-optional-ascii-default",
+  "inventory_path": "properties/generated/AutoAR-inventory.ndjson",
+  "path": "batch/corpora/AutoAR/rules",
+  "pilot": "AutoAR",
+  "reasons": {
+    "backref": 2,
+    "composite-pattern": 5,
+    "lookaround": 4,
+    "ok": 230,
+    "per-alternative-anchor": 3,
+    "stateful": 647
+  },
+  "sample_size": 891,
+  "schema_version": "1",
+  "scope": "full_corpus",
+  "unclassified_parse_errors": 0,
+  "wall_s": 7.678
+}

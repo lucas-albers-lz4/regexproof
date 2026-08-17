@@ -1,0 +1,17 @@
+{
+  "additional_surface_outside_probe_scope": {
+    "posix-shell": 3,
+    "re2": 33
+  },
+  "candidate_url": "https://github.com/h0tak88r/AutoAR",
+  "corpus": "AutoAR",
+  "corpus_pin": "01cd447ad3b1acfed7e0680596c2c74458a4cf06",
+  "reason": "230/891 = 0.2581 on first-party UI JS allowlist (vendor/min/tests excluded). Below WAVE encode threshold; complete_run true.",
+  "regex_sites": 891,
+  "schema_version": "1",
+  "sites_by_bucket": {
+    "ecma": 891
+  },
+  "smith_decision": "no-go",
+  "supersedes": "go"
+}
