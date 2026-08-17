@@ -95,6 +95,44 @@ def _discard_streamed_mirrors(
     compiled.clear()
 
 
+def _write_batch_shape5_artifact(
+    corpus: str,
+    out_dir: Path,
+    *,
+    rows: list[dict[str, Any]],
+    summary: dict[str, Any],
+) -> None:
+    """Rewrite ``{corpus}_batch_shape5.json`` so the ledger matches this run."""
+    atomic_write_text(
+        out_dir / f"{corpus}_batch_shape5.json",
+        json.dumps(
+            {
+                "schema_version": "1",
+                "corpus": corpus,
+                "rows": rows,
+                "summary": summary,
+            },
+            indent=2,
+            sort_keys=True,
+        )
+        + "\n",
+    )
+
+
+def _clear_batch_shape5(corpus: str, out_dir: Path, *, note: str) -> None:
+    """Zero the shape-5 artifact when this run did not execute pairs.
+
+    Without a rewrite, a stale committed/local ``*_batch_shape5.json`` keeps
+    counting in ``conversion-ledger.py`` while ``batch_pair_counts.json``
+    reports executed=0.
+    """
+    from regexproof.rule_diff.batch_shape5 import summarize_shape5_rows
+
+    summary = summarize_shape5_rows([])
+    summary["note"] = note
+    _write_batch_shape5_artifact(corpus, out_dir, rows=[], summary=summary)
+
+
 def _run_and_record_shape5(
     corpus: str,
     pairs: list[dict[str, Any]],
@@ -118,20 +156,7 @@ def _run_and_record_shape5(
     gate_ok, n_timeout, rate, bad = timeout_gate(rows, name_key="pair_id")
     summary["timeout_gate_ok"] = gate_ok
     summary["timeout_rate"] = rate
-    atomic_write_text(
-        out_dir / f"{corpus}_batch_shape5.json",
-        json.dumps(
-            {
-                "schema_version": "1",
-                "corpus": corpus,
-                "rows": rows,
-                "summary": summary,
-            },
-            indent=2,
-            sort_keys=True,
-        )
-        + "\n",
-    )
+    _write_batch_shape5_artifact(corpus, out_dir, rows=rows, summary=summary)
     if not gate_ok:
         raise SystemExit(fail_message(bad, n_timeout))
     return {
@@ -633,16 +658,18 @@ def run_batch(
 
         trees = resolve_crs_version_trees()
         if trees is None:
+            skip_note = (
+                "fraction gate go; version_diff family_contract is stamped "
+                "at CRS discovery. Batch shape-5 execute needs older+newer "
+                "rule trees (REGEXPROOF_CRS_*_RULES or /tmp/crs-shape5/)."
+            )
+            _clear_batch_shape5("coreruleset", out_dir, note=skip_note)
             pair_counts["coreruleset"] = {
                 "admitted": 0,
                 "dropped": 0,
                 "batch_shape5": 0,
                 "executed": 0,
-                "note": (
-                    "fraction gate go; version_diff family_contract is stamped "
-                    "at CRS discovery. Batch shape-5 execute needs older+newer "
-                    "rule trees (REGEXPROOF_CRS_*_RULES or /tmp/crs-shape5/)."
-                ),
+                "note": skip_note,
                 "scope": crs.get("scope"),
                 "fraction": crs.get("fraction"),
             }
@@ -667,11 +694,15 @@ def run_batch(
             pair_counts["coreruleset"]["scope"] = crs.get("scope")
             pair_counts["coreruleset"]["fraction"] = crs.get("fraction")
     else:
+        skip_note = (
+            f"excluded decision={crs['decision']} fraction={crs['fraction']}"
+        )
+        _clear_batch_shape5("coreruleset", out_dir, note=skip_note)
         pair_counts["coreruleset"] = {
             "admitted": 0,
             "batch_shape5": 0,
             "executed": 0,
-            "note": f"excluded decision={crs['decision']} fraction={crs['fraction']}",
+            "note": skip_note,
             "scope": crs.get("scope"),
         }
 

@@ -162,14 +162,20 @@ jobs:
       - name: Materialize CRS version-diff trees (shape-5 batch, #477)
         # Older+newer rule trees unlock contracted CRS version_diff execution
         # in --corpus all (writes coreruleset_batch_shape5.json → conversion).
+        # Pin tag SHAs like detect-secrets so retagged releases cannot drift
+        # Z3 outcomes without a regexproof change.
         run: |
           mkdir -p /tmp/crs-shape5
           git clone --depth 1 --branch v4.27.0 \
             https://github.com/coreruleset/coreruleset.git \
             /tmp/crs-shape5/coreruleset-v4.27.0
+          test "$(git -C /tmp/crs-shape5/coreruleset-v4.27.0 rev-parse HEAD)" = \
+            "bb64941f9beb3382fecd215c9ef032c427884ff0"
           git clone --depth 1 --branch v4.28.0 \
             https://github.com/coreruleset/coreruleset.git \
             /tmp/crs-shape5/coreruleset-v4.28.0
+          test "$(git -C /tmp/crs-shape5/coreruleset-v4.28.0 rev-parse HEAD)" = \
+            "55b09f5acfd16413e7b31041100711ceb7adc89c"
           test -d /tmp/crs-shape5/coreruleset-v4.27.0/rules
           test -d /tmp/crs-shape5/coreruleset-v4.28.0/rules
       - name: Phase 5 batch mode

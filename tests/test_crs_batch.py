@@ -2,13 +2,28 @@
 
 from __future__ import annotations
 
+import json
 from pathlib import Path
 
+from regexproof.batch.runner import _clear_batch_shape5
 from regexproof.rule_diff.crs_batch import (
     BATCH_TIMEOUT_PAIR_IDS,
     discover_crs_batch_pairs,
     resolve_crs_version_trees,
 )
+
+
+def test_clear_batch_shape5_rewrites_stale(tmp_path: Path):
+    stale = tmp_path / "coreruleset_batch_shape5.json"
+    stale.write_text(
+        json.dumps({"schema_version": "1", "corpus": "coreruleset", "rows": [{"x": 1}]}),
+        encoding="utf-8",
+    )
+    _clear_batch_shape5("coreruleset", tmp_path, note="trees missing")
+    data = json.loads(stale.read_text(encoding="utf-8"))
+    assert data["rows"] == []
+    assert data["summary"]["executed"] == 0
+    assert data["summary"]["note"] == "trees missing"
 
 
 def test_resolve_missing_returns_none(tmp_path: Path, monkeypatch):
