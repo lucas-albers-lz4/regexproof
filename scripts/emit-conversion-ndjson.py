@@ -30,6 +30,11 @@ SHAPE = {
     "OW-packages-banip-expiry-no-semicolon": 1,
     "OW-packages-transip-token-truncation": 3,
     "OW-packages-wan-mark-hex-capture": 3,
+    "OW-packages-sanitizer-image-no-semicolon": 4,
+    "OW-packages-ipv4-regex-no-semicolon": 1,
+    "OW-packages-expand-ipv6-nibble-capture": 3,
+    "OW-packages-cloudflare-content-truncation": 3,
+    "OW-packages-huawei-id-no-semicolon": 1,
 }
 
 

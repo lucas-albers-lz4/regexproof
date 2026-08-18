@@ -13,7 +13,12 @@ import pytest
 from regexproof.harness.contract import product_reportable
 from regexproof.harness.core import REGISTRY, check_mutation_coverage
 import regexproof.harness.openwrt_packages  # noqa: F401 — register family
-from regexproof.harness.openwrt_packages import ow_transip
+from regexproof.harness.openwrt_packages import (
+    PBR_EXTRAS_CHARS,
+    is_prefix_truncation,
+    ow_cloudflare,
+    ow_transip,
+)
 from regexproof.schemas import load_schema
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -24,6 +29,11 @@ PRODUCT_NAMES = (
     "OW-packages-banip-expiry-no-semicolon",
     "OW-packages-transip-token-truncation",
     "OW-packages-wan-mark-hex-capture",
+    "OW-packages-sanitizer-image-no-semicolon",
+    "OW-packages-ipv4-regex-no-semicolon",
+    "OW-packages-expand-ipv6-nibble-capture",
+    "OW-packages-cloudflare-content-truncation",
+    "OW-packages-huawei-id-no-semicolon",
 )
 
 
@@ -67,7 +77,7 @@ def test_committed_conversion_ndjson_matches_registry():
     schema = load_schema("scanner_finding.schema.json")
     names = {r["name"] for r in rows}
     assert names == set(PRODUCT_NAMES)
-    assert 1 <= len(rows) <= 5
+    assert 6 <= len(rows) <= 10
     for rec in rows:
         jsonschema.validate(instance=rec, schema=schema)
         assert rec.get("domain")
@@ -84,6 +94,25 @@ def test_transip_query_constrains_nul_free_ascii():
     constraints, _claim = ow_transip()
     blob = " ".join(str(c) for c in constraints)
     assert "InRe" in blob
+
+
+def test_cloudflare_query_constrains_nul_free_ascii():
+    constraints, _claim = ow_cloudflare()
+    blob = " ".join(str(c) for c in constraints)
+    assert "InRe" in blob
+
+
+def test_sanitizer_extras_include_semicolon_not_underscore():
+    assert ";" in PBR_EXTRAS_CHARS
+    assert "_" not in PBR_EXTRAS_CHARS
+    assert " " in PBR_EXTRAS_CHARS
+
+
+def test_empty_capture_is_not_prefix_truncation():
+    assert is_prefix_truncation("", 'x"') is False
+    assert is_prefix_truncation(None, 'x"') is False
+    assert is_prefix_truncation("x", 'x"') is True
+    assert is_prefix_truncation('x"', 'x"') is False
 
 
 def test_incomplete_contract_is_not_product_reportable():

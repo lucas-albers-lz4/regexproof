@@ -20,11 +20,11 @@
   "by_corpus": [
     {
       "corpus": "openwrt_packages",
-      "properties_asked": 5,
-      "properties_sat": 1,
-      "properties_unsat": 4,
-      "sat_ground_truthed": 1,
-      "sat_unique_sites": 1,
+      "properties_asked": 10,
+      "properties_sat": 2,
+      "properties_unsat": 8,
+      "sat_ground_truthed": 2,
+      "sat_unique_sites": 2,
       "scanner_rows": 139,
       "security_tool": false
     },
@@ -57,18 +57,18 @@
     "pr_dry_run_findings": 7260,
     "pr_dry_run_private_first": 814,
     "pr_dry_runs": 77,
-    "properties_asked": 8,
-    "properties_asked_distinct": 8,
+    "properties_asked": 13,
+    "properties_asked_distinct": 13,
     "properties_asked_synthesized": 644,
-    "properties_sat": 3,
-    "properties_sat_distinct": 3,
+    "properties_sat": 4,
+    "properties_sat_distinct": 4,
     "properties_sat_synthesized": 28,
-    "properties_unsat": 4,
+    "properties_unsat": 8,
     "redos_rows": 0,
     "rule_diff_report_sat": 10,
     "rule_diff_report_sat_gt": 10,
-    "sat_ground_truthed": 3,
-    "sat_unique_sites": 1,
+    "sat_ground_truthed": 4,
+    "sat_unique_sites": 2,
     "scanner_ndjson_files": 78,
     "scanner_rows": 7260,
     "scanner_rule_diff_sat": 0,
@@ -89,7 +89,7 @@
   ],
   "rates": {
     "accepted_per_extracted": 8e-06,
-    "accepted_per_gt": 0.333333,
+    "accepted_per_gt": 0.25,
     "encodable_fraction": 0.626942,
     "encodable_fraction_all_inventories": 0.629237,
     "encodable_fraction_excluding_yara": 0.612816,
@@ -97,9 +97,9 @@
     "fullword_share_of_unencodable": 0.626352,
     "gt_per_sat": 1.0,
     "pipeline_accepted_per_extracted": 8e-06,
-    "pipeline_accepted_per_gt": 0.333333,
-    "property_asked_per_encodable": 0.000102,
-    "sat_per_property_asked": 0.375,
+    "pipeline_accepted_per_gt": 0.25,
+    "property_asked_per_encodable": 0.000165,
+    "sat_per_property_asked": 0.307692,
     "yara_share_of_unencodable": 0.643852
   },
   "rule_diff_reports": {
@@ -128,9 +128,9 @@
   "schema_version": "1",
   "security_tool_split": {
     "properties_asked_in_tools": 3,
-    "properties_asked_not_tools": 5,
+    "properties_asked_not_tools": 10,
     "properties_sat_in_tools": 2,
-    "properties_sat_not_tools": 1
+    "properties_sat_not_tools": 2
   },
   "upstream": {
     "accepted_upstream": 1,
