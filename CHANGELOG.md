@@ -26,6 +26,10 @@ the work by phase; dates are merge dates.
   content truncation, Huawei id alphabet). Hostname/IP/`[^"]*` idioms
   exhausted; next packages work is a new idiom bucket, not another +5 of
   the same class.
+- OpenWrt conversion wave 3 close-out: four more `OW-packages` contracts
+  (Aliyun `RecordId=[^&]*` truncation, DNSPod digit RecordId, Mosquitto
+  UCI quote-free capture, pbr nftset grep-E passthrough). Query-string /
+  UCI-quote / nftset-escape idioms exhausted.
 - Idiom-sliced waves: a large feed may run further serial 15/5 waves when
   the close-out names an unused bucket (`docs/CLUSTER-CONVERSION.md`,
   `.cursor/rules/cluster-conversion-waves.mdc`). Still no coverage climb.

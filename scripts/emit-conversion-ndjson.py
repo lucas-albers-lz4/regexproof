@@ -35,6 +35,10 @@ SHAPE = {
     "OW-packages-expand-ipv6-nibble-capture": 3,
     "OW-packages-cloudflare-content-truncation": 3,
     "OW-packages-huawei-id-no-semicolon": 1,
+    "OW-packages-aliyun-recordid-truncation": 3,
+    "OW-packages-dnspod-recordid-no-semicolon": 1,
+    "OW-packages-mosquitto-uci-quote-capture": 3,
+    "OW-packages-nftset-passthrough-no-dot": 4,
 }
 
 

@@ -15,6 +15,7 @@ from regexproof.harness.core import REGISTRY, check_mutation_coverage
 import regexproof.harness.openwrt_packages  # noqa: F401 — register family
 from regexproof.harness.openwrt_packages import (
     PBR_EXTRAS_CHARS,
+    PBR_NFTSET_EXTRAS_CHARS,
     is_prefix_truncation,
     ow_cloudflare,
     ow_transip,
@@ -34,6 +35,10 @@ PRODUCT_NAMES = (
     "OW-packages-expand-ipv6-nibble-capture",
     "OW-packages-cloudflare-content-truncation",
     "OW-packages-huawei-id-no-semicolon",
+    "OW-packages-aliyun-recordid-truncation",
+    "OW-packages-dnspod-recordid-no-semicolon",
+    "OW-packages-mosquitto-uci-quote-capture",
+    "OW-packages-nftset-passthrough-no-dot",
 )
 
 
@@ -77,7 +82,7 @@ def test_committed_conversion_ndjson_matches_registry():
     schema = load_schema("scanner_finding.schema.json")
     names = {r["name"] for r in rows}
     assert names == set(PRODUCT_NAMES)
-    assert 6 <= len(rows) <= 10
+    assert 11 <= len(rows) <= 15
     for rec in rows:
         jsonschema.validate(instance=rec, schema=schema)
         assert rec.get("domain")
@@ -106,6 +111,12 @@ def test_sanitizer_extras_include_semicolon_not_underscore():
     assert ";" in PBR_EXTRAS_CHARS
     assert "_" not in PBR_EXTRAS_CHARS
     assert " " in PBR_EXTRAS_CHARS
+
+
+def test_nftset_extras_include_dot_not_underscore():
+    assert "." in PBR_NFTSET_EXTRAS_CHARS
+    assert "_" not in PBR_NFTSET_EXTRAS_CHARS
+    assert ";" not in PBR_NFTSET_EXTRAS_CHARS
 
 
 def test_empty_capture_is_not_prefix_truncation():
