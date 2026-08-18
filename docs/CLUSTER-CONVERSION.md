@@ -43,26 +43,32 @@ Optimize **conversion yield per hour of reading**, not contracts per site.
 
 ## Object: a conversion wave
 
-One wave per cluster. Same gates every time; only the **trust map** and
-**path vocabulary** change.
+One wave is one **idiom slice**, not “finish the tree.” Same gates every
+time; only the **trust map**, **path vocabulary**, and **current bucket**
+change. A large feed (OpenWrt packages, an agent runtime) is a *campaign*
+of serial 15/5 waves, not one lifetime cap of 10 contracts.
 
 **Hard caps (load-bearing):**
 
-- Rank **15** survivors for reading.
-- Write **5** human contracts in wave 1 (mix below).
-- Add **at most +5** in a follow-on, and only if the stop rule fires the
-  expand branch.
-- Do **not** start cluster N+1 until cluster N’s wave is in the ledger
-  (including skip reasons).
+- Rank **15** survivors for reading **from the current idiom bucket**.
+- Write **≤5** human contracts per wave (mix below).
+- Wave 1 expand: **at most +5** if the stop rule fires, and only on a
+  **new idiom** (not another `is_hostname`).
+- Further 15/5 waves on the **same cluster** are allowed when the close-out
+  names an unused idiom bucket. Still no coverage climb, no parallel
+  clusters, no `WAVE_CORPORA` until budgeted.
+- Do **not** start cluster N+1 until the current wave is in the ledger
+  (including skip reasons). Different dialect or product engine (LuCI JS vs
+  packages ash) is a new cluster, not a slice.
 
 **Default mix** (quality/cost compromise):
 
 | Slots | Shape | Why |
 |---|---|---|
-| 2–3 | 1 alphabet disjointness | cheapest; length-independent; high-confidence UNSAT |
+| 2–3 | 1 alphabet disjointness | cheapest; length-independent; **only if a new alphabet** |
 | 1–2 | 3 capture / truncation | highest chance of a real SAT (usrmanage P3) |
 | 0–1 | 2 whitelist | only if length is load-bearing; skip if shape 1 covers it |
-| 0 | 4 / 5 | not wave 1 unless the cluster already has an escaper or a version/engine pair |
+| 0–1 | 4 / 5 | not wave 1 unless an escaper or version/engine pair is in the **bucket**; later slices same |
 
 A contract is the **correct type** when all four hold:
 
@@ -163,17 +169,28 @@ Do not ground-truth the rest of the encodable set.
 
 ### Stop / expand
 
-After 5 asked, record the wave (asked, SAT+GT, skip-with-reason). Then:
+After ≤5 asked, record the wave (asked, SAT+GT, skip-with-reason). The
+close-out **is the deny-list** for the next wave — efficiency is skips,
+not speed. Seams from wave 1 (family, emit, product-engine checker, ledger
+glob) are reused; later waves are rank-slice → read → ≤5 → emit.
 
-- **Stop the cluster** — a logged yield, including “5 UNSAT / 0 SAT / N
-  rejects,” is a prevalence datapoint. More of the same idiom does not help.
-- **Expand +5** — only if a SAT reproduced, or the first 5 were the wrong
-  type (all `internal` after reading). Do not climb toward coverage.
-- **Next cluster** — only after this wave is in the ledger. Parallel
-  clusters duplicate the same learning.
+Then pick **exactly one**:
 
-Compiler novelty stop (trailing-window novel rate) is a **different** stop.
-A cluster can be compiler-saturated and still worth one conversion wave.
+- **Next idiom slice (same cluster)** — unused bucket with a named sink
+  (`config` / `untrusted-input`). Rank 15 *in that bucket only*. Same pin
+  until reconcile fails. Same JSON `[^"]*` / hostname / IPv4-MAC class as
+  a prior ask is **not** a new idiom (one-line skip).
+- **Stop this cluster** — yield is flat, leftover keep-list is the same
+  idiom, or no unread survivor has a sink. A logged “5 UNSAT / 0 SAT” is
+  still a prevalence datapoint.
+- **Next cluster** — only after the current wave is in the ledger.
+  Parallel clusters duplicate the same learning. New dialect or engine
+  (ECMA LuCI vs BusyBox shell) waits until the current cluster’s close-out
+  names it.
+
+Wave-1 **Expand +5** still requires SAT reproduced (or the first 5 were
+the wrong type). Do not climb toward coverage. Compiler novelty stop
+(trailing-window novel rate) is a **different** stop.
 
 ## Ledger join (required seam)
 
@@ -241,10 +258,10 @@ not auto-open public upstream issues. Human approval before filing.
 |---|---|
 | Cluster trust map (paragraph + vocab tokens) | Gate 2 input |
 | Ranked shortlist JSON (top 15 + drop reasons) | reproducible Gate 1–2 |
-| 5 contracts + spike/registry properties | Gate 2 output |
+| ≤5 contracts + spike/registry properties | Gate 2 output |
 | `<corpus>_conversion.ndjson` | ledger join |
 | Dual-engine GT log (product engine is authoritative; peer is logged) | Gate 3 |
-| Wave close-out (asked / SAT+GT / skip / stop-or-expand) | product stop |
+| Wave close-out (asked / skip / **next bucket or stop**) | deny-list for the next slice |
 
 ## Non-goals
 
@@ -265,4 +282,5 @@ not auto-open public upstream issues. Human approval before filing.
 5. Ground-truth on the engine that actually runs.
 6. Generate `*_conversion.ndjson` from harness run records; regenerate the
    conversion ledger (special-case glob, not a broader `*.ndjson` scan).
-7. Close-out: stop or +5. Do not start the next cluster yet.
+7. Close-out: asked / skip / **next idiom bucket or stop-cluster**.
+   Do not start the next cluster yet.
