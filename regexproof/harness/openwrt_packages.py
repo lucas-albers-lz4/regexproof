@@ -1,9 +1,8 @@
 """OpenWrt packages conversion-wave properties (family ``OW-packages``).
 
-Wave 1: five human contracts from the frozen rank shortlist plus one
-mutation guard. Wave 2: five more on new idioms (sanitizer image, IPv4
-constant, IPv6 nibble capture, Cloudflare JSON content, Huawei id
-alphabet). Product engine is BusyBox; GNU is logged and must not decide
+Wave 1–2: ten human contracts plus one mutation guard. Wave 3: query-string
+``[^&]*``, DNSPod digit RecordId, Mosquitto UCI quote capture, pbr nftset
+escape image. Product engine is BusyBox; GNU is logged and must not decide
 the ground-truth bit. Importing this module registers into ``REGISTRY``.
 """
 
@@ -53,16 +52,23 @@ HEX_LC = Union(Range("0", "9"), Range("a", "f"))
 HEX3_LC = Concat(HEX_LC, HEX_LC, HEX_LC)
 IPV4_CHAR = Union(Range("0", "9"), Re("."))
 HUAWEI_ID_CHAR = Union(Range("a", "z"), Range("0", "9"))
+DIGIT_CHAR = Range("0", "9")
 # TransIP token values: declared domain is NUL-free ASCII (POSIX/BusyBox).
 ASCII_NUL_FREE = Range("\x01", "\x7f")
 # pbr extras class at :213 — mapped to ``_``; image is ASCII minus extras.
 PBR_EXTRAS_CHARS = set(". ~`!@#$%^&*()+=,<>?;:/\\-")
+# pbr nftset grep-E escape class at :1143 — mapped to ``\&``.
+PBR_NFTSET_EXTRAS_CHARS = set("/.^$*[\\")
+# Mosquitto UCI dump values: no single-quote in the declared domain.
+UCI_NO_QUOTE = Union(Range("\x01", "&"), Range("(", "\x7f"))
 
 TRANSIP_SED = r's/^.*"token" *: *"\([^"]*\)".*$/\1/'
 WAN_MARK_SED = r"s/option wan_mark '0x\(.*\)'/option wan_mark '\1'/"
 EXPAND_IPV6_SED = r"s|:\([0-9a-f]\{3\}\):|:0\1:|g"
 CLOUDFLARE_GREP1 = r'"content":\s*"[^"]*'
 CLOUDFLARE_GREP2 = r'[^"]*$'
+ALIYUN_GREP = r"RecordId=[^&]*"
+MOSQ_SED = r"s/^.*_\(auth_opt_.*\)='\(.*\)'/\1 \2/"
 
 OW_VERDICT_LOG: dict[str, dict[str, bool]] = {}
 
@@ -98,14 +104,14 @@ def _sed_engines(pattern: str, stream: str) -> dict[str, str | None]:
     return out
 
 
-def _sanitizer_image():
-    """ASCII 0x01–0x7f minus extras (those map to ``_``, already a safe char)."""
+def _ascii_minus(forbidden: set[str]):
+    """ASCII 0x01–0x7f minus *forbidden* (those chars are mapped away)."""
     parts = []
     start = None
     prev = None
     for i in range(1, 128):
         ch = chr(i)
-        if ch in PBR_EXTRAS_CHARS:
+        if ch in forbidden:
             if start is not None:
                 parts.append(Re(start) if start == prev else Range(start, prev))
                 start = None
@@ -121,7 +127,8 @@ def _sanitizer_image():
     return acc
 
 
-SANITIZER_IMAGE = _sanitizer_image()
+SANITIZER_IMAGE = _ascii_minus(PBR_EXTRAS_CHARS)
+NFTSET_PASSTHROUGH = _ascii_minus(PBR_NFTSET_EXTRAS_CHARS)
 
 
 def _run_grep_o(argv: list[str], stream: str) -> str:
@@ -220,6 +227,55 @@ def cloudflare_ground_truth(witness: dict) -> bool:
     gnu_ok = is_prefix_truncation(caps["gnu"], v)
     bb_ok = is_prefix_truncation(caps["busybox"], v)
     OW_VERDICT_LOG["OW-packages-cloudflare-content-truncation"] = {
+        "gnu": gnu_ok,
+        "busybox": bb_ok,
+        "busybox_absent": False,
+        "gnu_capture": caps["gnu"],
+        "busybox_capture": caps["busybox"],
+    }
+    return bb_ok
+
+
+def _aliyun_id(grep_prefix: list[str], stream: str) -> str:
+    raw = _run_grep_o(grep_prefix + ["-o", ALIYUN_GREP], stream)
+    lines = raw.splitlines()
+    if not lines:
+        return ""
+    line = lines[0]
+    if not line.startswith("RecordId="):
+        return ""
+    return line.split("=", 1)[1]
+
+
+def _aliyun_engines(stream: str) -> dict[str, str | None]:
+    _require_busybox()
+    return {
+        "gnu": _aliyun_id(["grep"], stream),
+        "busybox": _aliyun_id(["busybox", "grep"], stream),
+    }
+
+
+def aliyun_ground_truth(witness: dict) -> bool:
+    """Replay Aliyun ``RecordId=[^&]*`` extract on BusyBox grep.
+
+    Returns False on busybox-absent / grep failure so ``run_one`` records
+    ``ground_truth=failed`` instead of aborting the suite.
+    """
+    v = witness["v"]
+    stream = f"RecordId={v}&other=1"
+    try:
+        caps = _aliyun_engines(stream)
+    except RuntimeError as exc:
+        OW_VERDICT_LOG["OW-packages-aliyun-recordid-truncation"] = {
+            "busybox_absent": "busybox" in str(exc),
+            "gnu": False,
+            "busybox": False,
+        }
+        return False
+
+    gnu_ok = is_prefix_truncation(caps["gnu"], v)
+    bb_ok = is_prefix_truncation(caps["busybox"], v)
+    OW_VERDICT_LOG["OW-packages-aliyun-recordid-truncation"] = {
         "gnu": gnu_ok,
         "busybox": bb_ok,
         "busybox_absent": False,
@@ -477,6 +533,119 @@ def ow_cloudflare():
 def ow_huawei_id():
     c = String("c")
     return [InRe(c, HUAWEI_ID_CHAR), Length(c) == 1], c == StringVal(";")
+
+
+@prop(
+    "OW-packages-aliyun-recordid-truncation",
+    "exists v: v contains '&' AND BusyBox grep RecordId=[^&]* extract "
+    "is a strict prefix of v — Aliyun query-string RecordId",
+    expect_unsat=False,
+    ground_truth=aliyun_ground_truth,
+    kind="counterexample_finder",
+    family=FAMILY,
+    input_domain="ascii",
+    call_kind="search",
+    contract={
+        "schema_version": "1",
+        "site": "net/ddns-scripts/files/usr/lib/ddns/update_aliyun_com.sh:115:RecordId",
+        "guarantee": "query-string RecordId capture truncates at the first '&'",
+        "input_source": "UCI param_enc query fragment (config)",
+        "trust": "config",
+        "declared_domain": "ASCII query values, NUL-free, BusyBox grep",
+        "provenance": "human",
+    },
+)
+def ow_aliyun():
+    v = String("v")
+    amp = IndexOf(v, StringVal("&"), 0)
+    capture = SubString(v, 0, amp)
+    return [
+        InRe(v, Star(ASCII_NUL_FREE)),
+        amp > 0,
+        capture != v,
+    ], Contains(v, StringVal("&"))
+
+
+@prop(
+    "OW-packages-dnspod-recordid-no-semicolon",
+    "DNSPod JSON RecordId digit alphabet [0-9] contains no semicolon "
+    "(length-independent single-char; id is interpolated into ModifyRecord)",
+    expect_unsat=True,
+    family=FAMILY,
+    input_domain="ascii",
+    call_kind="search",
+    contract={
+        "schema_version": "1",
+        "site": "net/ddns-scripts/files/usr/lib/ddns/update_dnspod_cn_v3.sh:312:RecordId",
+        "guarantee": "extracted RecordId digit alphabet chars contain no semicolon",
+        "input_source": "Tencent DNSPod HTTPS JSON body (WAN)",
+        "trust": "untrusted-input",
+        "declared_domain": "RecordId alphabet [0-9], single char, ASCII",
+        "provenance": "human",
+    },
+)
+def ow_dnspod_recordid():
+    c = String("c")
+    return [InRe(c, DIGIT_CHAR), Length(c) == 1], c == StringVal(";")
+
+
+@prop(
+    "OW-packages-mosquitto-uci-quote-capture",
+    "UCI auth_opt values (no single-quote) are captured in full by "
+    r"s/^.*_(auth_opt_.*)='(.*)'/ — proven for len 1..16 quote-free ASCII",
+    expect_unsat=True,
+    family=FAMILY,
+    input_domain="ascii",
+    call_kind="substitution",
+    contract={
+        "schema_version": "1",
+        "site": "net/mosquitto/files/etc/init.d/mosquitto:101:auth_opt",
+        "guarantee": "quote-free UCI auth_opt values are captured in full into mosquitto.conf",
+        "input_source": "UCI mosquitto auth_opt_* options",
+        "trust": "config",
+        "declared_domain": "ASCII minus U+0027, len 1..16, BusyBox sed",
+        "provenance": "human",
+    },
+)
+def ow_mosquitto():
+    w = String("w")
+    q = IndexOf(w, StringVal("'"), 0)
+    cap = If(q < 0, w, SubString(w, 0, q))
+    return [
+        InRe(w, Concat(UCI_NO_QUOTE, Star(UCI_NO_QUOTE))),
+        Length(w) >= 1,
+        Length(w) <= 16,
+    ], cap != w
+
+
+@prop(
+    "OW-packages-nftset-passthrough-no-dot",
+    "pbr nftset grep-E escape passthrough alphabet (ASCII minus "
+    r"[/.^$*\[\\]; those map to \&) contains no '.' "
+    "(length-independent single-char)",
+    expect_unsat=True,
+    family=FAMILY,
+    input_domain="ascii",
+    call_kind="substitution",
+    contract={
+        "schema_version": "1",
+        "site": "net/pbr/files/etc/init.d/pbr:1143:nftset-escape",
+        "guarantee": (
+            "nftset names that skip the grep-E extras class contain no '.' "
+            "(extras including '.' are escaped)"
+        ),
+        "input_source": "dnsmasq nftset name from pbr policy",
+        "trust": "config",
+        "declared_domain": (
+            "nftset passthrough alphabet (ASCII 0x01-0x7f minus "
+            r"[/.^$*\[\\]), single char, ASCII"
+        ),
+        "provenance": "human",
+    },
+)
+def ow_nftset_passthrough():
+    c = String("c")
+    return [InRe(c, NFTSET_PASSTHROUGH), Length(c) == 1], c == StringVal(".")
 
 
 @prop(
