@@ -21,6 +21,10 @@ the work by phase; dates are merge dates.
 - CU-011: TransIP JSON-sed truncation is a pattern-class / regression-gate
   win (`wont_file`; JWT tokens cannot contain `"`). Ledger counts `wont_file`
   separately from existence proofs. Wave 1 close-out expands +5 on new idioms.
+- OpenWrt conversion wave 2 close-out: five more `OW-packages` contracts
+  (sanitizer image, IPV4_REGEX constant, expand_ipv6 nibble, Cloudflare
+  content truncation, Huawei id alphabet). SOP max expand used; stop this
+  cluster.
 
 ## Conversion ledger (2026-08-15)
 

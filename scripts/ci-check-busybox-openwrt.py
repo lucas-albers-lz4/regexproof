@@ -6,7 +6,8 @@ busybox-absent still PASSes if GNU reproduced), this checker:
 - hard-fails when busybox is absent
 - replays SAT OW-packages witnesses on BusyBox; GNU is logged
 - does not require GNU/BusyBox agreement
-- expected-UNSAT shape-3 (wan_mark hex) is differential fuzz, not witness replay
+- expected-UNSAT shape-3 (wan_mark hex, expand_ipv6 nibble) is
+  differential fuzz, not witness replay
 
 Run from the golden job after busybox is installed. The proof job must
 also install busybox because OW-packages stays on ``z3-verify.py --all``.
@@ -22,7 +23,9 @@ import sys
 from regexproof.harness.openwrt_packages import (
     FAMILY,
     OW_VERDICT_LOG,
+    EXPAND_IPV6_SED,
     WAN_MARK_SED,
+    cloudflare_ground_truth,
     transip_ground_truth,
 )
 from regexproof.harness.core import REGISTRY
@@ -66,6 +69,35 @@ def _fuzz_wan_mark(n: int = 32, seed: int = 42) -> int:
     return 0
 
 
+def _fuzz_expand_ipv6(n: int = 32, seed: int = 42) -> int:
+    """3-hex nibbles must round-trip through BusyBox sed (pad with 0)."""
+    import random
+
+    rng = random.Random(seed)
+    alphabet = "0123456789abcdef"
+    for i in range(n):
+        w = "".join(rng.choice(alphabet) for _ in range(3))
+        stream = f":{w}:"
+        proc = subprocess.run(
+            ["busybox", "sed", "-e", EXPAND_IPV6_SED],
+            input=stream,
+            capture_output=True,
+            text=True,
+            timeout=30,
+            check=False,
+        )
+        got = proc.stdout.rstrip("\n")
+        want = f":0{w}:"
+        if got != want:
+            print(
+                f"error: expand_ipv6 fuzz mismatch i={i} w={w!r} got={got!r} want={want!r}",
+                file=sys.stderr,
+            )
+            return 2
+    print(f"expand_ipv6 differential fuzz: {n} 3-hex nibbles identity-ok on BusyBox")
+    return 0
+
+
 def main() -> int:
     _require_busybox()
     names = [n for n, e in REGISTRY.items() if e.get("family") == FAMILY]
@@ -84,7 +116,24 @@ def main() -> int:
         return 2
     if log.get("gnu") is not True:
         print("note: GNU sed disagreed (logged, not a fail):", log)
-    return _fuzz_wan_mark()
+    ok_cf = cloudflare_ground_truth({"v": 'x"'})
+    log_cf = OW_VERDICT_LOG.get("OW-packages-cloudflare-content-truncation") or {}
+    print(
+        "cloudflare busybox SAT replay:",
+        {k: log_cf.get(k) for k in ("gnu", "busybox", "busybox_absent")},
+    )
+    if log_cf.get("busybox_absent") is True:
+        print("error: busybox_absent during Cloudflare SAT replay", file=sys.stderr)
+        return 2
+    if not ok_cf or log_cf.get("busybox") is not True:
+        print("error: BusyBox did not reproduce Cloudflare truncation", log_cf, file=sys.stderr)
+        return 2
+    if log_cf.get("gnu") is not True:
+        print("note: GNU grep disagreed (logged, not a fail):", log_cf)
+    wan = _fuzz_wan_mark()
+    if wan != 0:
+        return wan
+    return _fuzz_expand_ipv6()
 
 
 if __name__ == "__main__":
