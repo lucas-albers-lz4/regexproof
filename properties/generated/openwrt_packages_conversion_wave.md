@@ -2,8 +2,9 @@
 
 Pin: `openwrt/packages` @ `e99adbc49f7a11d0377c8135fe706c7757b9e68c`.
 Rank: `properties/generated/openwrt_packages_rank.json` (15 keep).
-Asked: **5** human contracts (family `OW-packages`). **Stop** (no +5).
-Next cluster: not started.
+Asked: **5** human contracts (family `OW-packages`). **Expand +5** (wave 2; new idioms only).
+TransIP: pattern-class / regression-gate win — [`CU-011`](../../docs/conversion-upstream.jsonl) `wont_file`.
+Next cluster: not started (LuCI / core wait until wave 2 is in the ledger).
 
 ## 15 read → 5 asked
 
@@ -28,6 +29,8 @@ Next cluster: not started.
 
 ## Stop vs expand
 
-**Stop the cluster.** Logged yield is 5 asked (mix matches the SOP). Expanding would repeat hostname/IP validators. Expand only on a new SAT+GT or a wrong-type first 5; this wave is the right type (config + one WAN capture).
+**Expand +5** (SOP: SAT reproduced). Wave 2 asks **different idioms** (pbr sanitizer image, ddns captures) — not another hostname/IP alphabet proof. Hostname/FQDN/IPv4/MAC/IPv6 validators stay skipped.
 
-No public OpenWrt filing from this wave (`would_open_public_upstream_issue` stays false). TransIP truncation is a known JSON-sed class (usrmanage P3 analogue), not an OpenWrt-specific CVE without a human approval file.
+TransIP is a **pattern-class / regression-gate win**, not a CVE: BusyBox sed `[^"]*` truncates at the first quote (same class as usrmanage P3), but TransIP `/v6/auth` tokens are JWT compact (base64url) so U+0022 cannot appear in the captured value. Last mile: `CU-011` `wont_file`. Do not count as `private_first` / existence proof. Keep `OW-packages-transip-token-truncation` in the harness.
+
+No public OpenWrt filing from this wave (`would_open_public_upstream_issue` stays false).

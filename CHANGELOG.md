@@ -18,6 +18,9 @@ the work by phase; dates are merge dates.
 - OpenWrt conversion wave 1 close-out: family `OW-packages` (5 human
   contracts + BusyBox product-engine checker), `*_conversion.ndjson` ledger
   join, proof-job busybox + `--require-contract`.
+- CU-011: TransIP JSON-sed truncation is a pattern-class / regression-gate
+  win (`wont_file`; JWT tokens cannot contain `"`). Ledger counts `wont_file`
+  separately from existence proofs. Wave 1 close-out expands +5 on new idioms.
 
 ## Conversion ledger (2026-08-15)
 
