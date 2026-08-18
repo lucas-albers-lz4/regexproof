@@ -136,7 +136,21 @@ def _run_grep_o(argv: list[str], stream: str) -> str:
         )
     except subprocess.TimeoutExpired as exc:
         raise RuntimeError("grep replay timed out") from exc
+    # grep: 0 = match, 1 = no match. Other rc is a hard error.
+    if proc.returncode not in (0, 1):
+        raise RuntimeError(f"grep replay failed rc={proc.returncode}")
     return proc.stdout
+
+
+def is_prefix_truncation(capture: str | None, v: str) -> bool:
+    """True when *capture* is a non-empty strict prefix of *v*.
+
+    Empty capture is not truncation — ``str.startswith("")`` is always
+    true, so a failed grep/sed replay must not count as reproduced.
+    """
+    if not capture:
+        return False
+    return capture != v and v.startswith(capture) and len(capture) < len(v)
 
 
 def _cloudflare_capture(grep_prefix: list[str], stream: str) -> str:
@@ -173,13 +187,8 @@ def transip_ground_truth(witness: dict) -> bool:
         }
         return False
 
-    def _trunc(capture: str | None) -> bool:
-        if capture is None:
-            return False
-        return capture != v and v.startswith(capture) and len(capture) < len(v)
-
-    gnu_ok = _trunc(caps["gnu"])
-    bb_ok = _trunc(caps["busybox"])
+    gnu_ok = is_prefix_truncation(caps["gnu"], v)
+    bb_ok = is_prefix_truncation(caps["busybox"], v)
     OW_VERDICT_LOG["OW-packages-transip-token-truncation"] = {
         "gnu": gnu_ok,
         "busybox": bb_ok,
@@ -208,13 +217,8 @@ def cloudflare_ground_truth(witness: dict) -> bool:
         }
         return False
 
-    def _trunc(capture: str | None) -> bool:
-        if capture is None:
-            return False
-        return capture != v and v.startswith(capture) and len(capture) < len(v)
-
-    gnu_ok = _trunc(caps["gnu"])
-    bb_ok = _trunc(caps["busybox"])
+    gnu_ok = is_prefix_truncation(caps["gnu"], v)
+    bb_ok = is_prefix_truncation(caps["busybox"], v)
     OW_VERDICT_LOG["OW-packages-cloudflare-content-truncation"] = {
         "gnu": gnu_ok,
         "busybox": bb_ok,

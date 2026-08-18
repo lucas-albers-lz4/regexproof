@@ -15,6 +15,7 @@ from regexproof.harness.core import REGISTRY, check_mutation_coverage
 import regexproof.harness.openwrt_packages  # noqa: F401 — register family
 from regexproof.harness.openwrt_packages import (
     PBR_EXTRAS_CHARS,
+    is_prefix_truncation,
     ow_cloudflare,
     ow_transip,
 )
@@ -105,6 +106,13 @@ def test_sanitizer_extras_include_semicolon_not_underscore():
     assert ";" in PBR_EXTRAS_CHARS
     assert "_" not in PBR_EXTRAS_CHARS
     assert " " in PBR_EXTRAS_CHARS
+
+
+def test_empty_capture_is_not_prefix_truncation():
+    assert is_prefix_truncation("", 'x"') is False
+    assert is_prefix_truncation(None, 'x"') is False
+    assert is_prefix_truncation("x", 'x"') is True
+    assert is_prefix_truncation('x"', 'x"') is False
 
 
 def test_incomplete_contract_is_not_product_reportable():
