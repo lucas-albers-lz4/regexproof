@@ -214,9 +214,12 @@ every finding against the surrounding code before filing, and report what you
   — `PROJECT_PAT` classic PAT with `repo`; ledger/queue commit-back to `main`;
   score-v1 allocator + `scripts/rank-mine-candidates.py` for next-to-probe
 - Cluster conversion (OpenWrt, OpenClaw, …): [`docs/CLUSTER-CONVERSION.md`](docs/CLUSTER-CONVERSION.md)
-  — rank 15 / write 5 human contracts; first wave
-  [`sweep/openwrt-conversion/plan.md`](sweep/openwrt-conversion/plan.md).
+  — rank 15 / write ≤5 human contracts **per idiom slice** (close-out is
+  the deny-list; later waves reuse emit + product-engine checker). First
+  application [`sweep/openwrt-conversion/plan.md`](sweep/openwrt-conversion/plan.md);
+  packages waves 1–2 close-outs under `properties/generated/openwrt_packages_conversion_wave*.md`.
   Heap saturates the compiler; this SOP saturates `properties_asked`.
+  Cursor: `.cursor/rules/cluster-conversion-waves.mdc`.
 - Auditing this repo's own security: [`docs/SECURITY-AUDIT.md`](docs/SECURITY-AUDIT.md)
 
 ## Related skills (Hermes)

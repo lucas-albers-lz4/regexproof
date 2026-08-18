@@ -3,7 +3,9 @@
 Pin: `openwrt/packages` @ `e99adbc49f7a11d0377c8135fe706c7757b9e68c` (unchanged).
 Family: `OW-packages`. Not in `WAVE_CORPORA`.
 Asked: **5** new human contracts (wave 1 had 5; ledger `properties_asked` 8 → 13).
-**Stop this cluster** (SOP max expand used). Next OpenWrt work is a new cluster (LuCI or `openwrt/openwrt` core), not +5 more on packages.
+**Idioms in this slice are exhausted.** Next packages work is a **new idiom
+bucket** (not another hostname/IP/`[^"]*` wave). LuCI JS is a different
+cluster (own probe, ECMA GT).
 
 ## 5 asked (new idioms only)
 
@@ -40,6 +42,17 @@ Asked: **5** new human contracts (wave 1 had 5; ledger `properties_asked` 8 → 
 
 Cloudflare SAT is the same sed/grep `[^"]*` pattern class as TransIP / usrmanage P3. Do **not** file publicly (`would_open_public_upstream_issue` stays false). No new `conversion-upstream.jsonl` row this wave.
 
-## Stop
+## Stop vs next slice
 
-**Stop this cluster.** Wave 1 expand is consumed. Leftover keep-list is more hostname/IP validators plus skipped internals. Next OpenWrt work: new cluster (LuCI or core) with its own trust map and probe — not another +5 on `openwrt/packages`.
+**This idiom slice is done.** Wave 1 expand is consumed. Do not re-ask
+hostname/FQDN/IPv4/MAC/IPv6 alphabets, TransIP/Cloudflare `[^"]*`, wan_mark
+hex, or the internals already skipped.
+
+**Next packages bucket** (same pin, same family, after this close-out):
+other provider JSON/sed that is **not** `[^"]*` truncation, banip/adblock
+ingest, leftover WAN/config captures with a named sink. Rank 15 in that
+bucket only.
+
+**Next cluster** (when packages idiom yield is flat): LuCI
+(`openwrt/luci` + `luci-app-*` `htdocs` JS) — own trust map, `ecma` GT,
+new family. Then `openwrt/openwrt` core. Not mixed into `OW-packages`.

@@ -1,0 +1,35 @@
+---
+description: Idiom-sliced conversion waves (15/5) — skip exhausted idioms, reuse seams
+alwaysApply: true
+---
+
+# Cluster conversion waves (idiom slices)
+
+SOP: [`docs/CLUSTER-CONVERSION.md`](docs/CLUSTER-CONVERSION.md). One wave =
+one **idiom bucket**, not “finish the tree.” Serial. Same pin. Not
+`WAVE_CORPORA` until budgeted.
+
+## Ritual
+
+1. Read the latest `*_conversion_wave*.md` close-out — that table is the
+   **deny-list**. Skip already asked / same class with a one-liner.
+2. Rank **15** from the **current bucket only** (existing ranker, no Z3).
+3. Read 50–150 lines; write **≤5** human contracts. Mix: 2–3 shape 1
+   **only if a new alphabet**, 1–2 shape 3, 0–1 shape 4 if an escaper is
+   in the bucket. No sink / unused helper / `internal` → skip.
+4. Product-engine GT (SAT replay; expected-UNSAT shape-3 = fuzz). Do not
+   clone P3 GNU∩BusyBox. Empty capture is **not** truncation.
+5. Emit `*_conversion.ndjson` (fail-closed); ledger `properties_asked`
+   delta in **[1, 5]**. Same `family=` including mutation guards.
+6. Close-out names **next unused bucket or stop**. Pattern-class SAT
+   (alphabet cannot contain the witness char) → `wont_file`, not
+   `private_first`.
+
+## Do not
+
+- Re-ask hostname / FQDN / IPv4 / MAC / IPv6 charset, or another `[^"]*`
+  JSON extract, after that class is in a close-out
+- Walk the inventory in file order or climb toward coverage
+- Mix dialects/engines in one family (packages ash ≠ LuCI JS)
+- Start cluster N+1 before this wave’s ledger join exists
+- Treat `TIMEOUT` as a pass

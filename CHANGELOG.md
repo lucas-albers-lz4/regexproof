@@ -23,8 +23,12 @@ the work by phase; dates are merge dates.
   separately from existence proofs. Wave 1 close-out expands +5 on new idioms.
 - OpenWrt conversion wave 2 close-out: five more `OW-packages` contracts
   (sanitizer image, IPV4_REGEX constant, expand_ipv6 nibble, Cloudflare
-  content truncation, Huawei id alphabet). SOP max expand used; stop this
-  cluster.
+  content truncation, Huawei id alphabet). Hostname/IP/`[^"]*` idioms
+  exhausted; next packages work is a new idiom bucket, not another +5 of
+  the same class.
+- Idiom-sliced waves: a large feed may run further serial 15/5 waves when
+  the close-out names an unused bucket (`docs/CLUSTER-CONVERSION.md`,
+  `.cursor/rules/cluster-conversion-waves.mdc`). Still no coverage climb.
 
 ## Conversion ledger (2026-08-15)
 
