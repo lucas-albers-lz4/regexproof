@@ -138,11 +138,12 @@
     "false_positive": 7,
     "filed_plan": 1,
     "fixed_upstream": 1,
-    "language_membership": 9,
+    "language_membership": 10,
     "out_of_scope_redos": 1,
     "private_first": 0,
-    "rows": 10,
-    "third_party_public": 0
+    "rows": 11,
+    "third_party_public": 0,
+    "wont_file": 1
   },
   "upstream_rows": [
     {
@@ -214,6 +215,13 @@
       "kind": "rule_diff",
       "language_membership": true,
       "status": "false_positive"
+    },
+    {
+      "corpus": "openwrt_packages",
+      "id": "CU-011",
+      "kind": "counterexample_finder",
+      "language_membership": true,
+      "status": "wont_file"
     }
   ],
   "yara_split": {

@@ -272,6 +272,39 @@ def test_sidecar_findings_ndjson_ignored_rule_diff_report_counted(tmp_path: Path
         assert "language_membership" in rec
 
 
+def test_wont_file_does_not_increment_existence_proofs(tmp_path: Path):
+    gen = tmp_path / "generated"
+    gen.mkdir()
+    (gen / "demo_batch_summary.json").write_text(
+        json.dumps(
+            {"corpus": "demo", "extracted": 1, "encodable": 1, "findings": 0, "triage": 0}
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    (gen / "demo.ndjson").write_text("", encoding="utf-8")
+    upstream = tmp_path / "upstream.jsonl"
+    upstream.write_text(
+        json.dumps(
+            {
+                "id": "CU-011",
+                "corpus": "openwrt_packages",
+                "status": "wont_file",
+                "kind": "counterexample_finder",
+                "language_membership": True,
+            }
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    data = cl.aggregate(
+        gen_dir=gen, upstream_path=upstream, security_tools=frozenset()
+    )
+    assert data["upstream"]["wont_file"] == 1
+    assert data["funnel"]["existence_proofs"] == 0
+    assert data["funnel"]["accepted_upstream"] == 0
+
+
 def test_batch_shape5_counts_as_properties_asked(tmp_path: Path):
     gen = tmp_path / "generated"
     gen.mkdir()
@@ -348,6 +381,8 @@ def test_ci_golden_regenerates_and_drift_checks_ledger():
     assert f["scanner_rows"] == f["batch_summary_findings"]
     assert "crs_cross_engine_rule_diff_report.json" in data["rule_diff_reports"]
     assert data["upstream"]["false_positive"] >= 1
+    assert data["upstream"]["wont_file"] >= 1
+    assert "CU-011" in {r["id"] for r in data["upstream_rows"]}
     assert "pipeline_accepted_per_gt" in data["rates"]
     assert "properties_asked_synthesized" in f
     assert f["properties_asked_distinct"] <= f["properties_asked"]

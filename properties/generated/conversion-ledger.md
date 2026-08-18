@@ -52,7 +52,7 @@ Asked in tools: 3. Asked elsewhere: 5. SAT in tools: 2. SAT elsewhere: 1.
 
 ## Upstream (curated)
 
-Rows: 10. Language-membership: 9. fixed_upstream: 1. filed_plan: 1. false_positive: 7. out_of_scope_redos: 1. private_first: 0.
+Rows: 11. Language-membership: 10. fixed_upstream: 1. filed_plan: 1. false_positive: 7. out_of_scope_redos: 1. private_first: 0. wont_file: 1.
 
 Source: [`docs/conversion-upstream.jsonl`](../../docs/conversion-upstream.jsonl).
 

@@ -426,6 +426,7 @@ def _upstream_counts(rows: list[dict[str, Any]]) -> dict[str, int]:
         "false_positive": by_status["false_positive"],
         "out_of_scope_redos": by_status["out_of_scope_redos"],
         "private_first": by_status["private_first"],
+        "wont_file": by_status["wont_file"],
         "accepted_upstream": by_status["fixed_upstream"],
         "existence_proofs": by_status["fixed_upstream"] + by_status["private_first"],
         "third_party_public": 0,
@@ -847,7 +848,7 @@ def render_md(data: dict[str, Any]) -> str:
         f"Rows: {up['rows']}. Language-membership: {up['language_membership']}. "
         f"fixed_upstream: {up['fixed_upstream']}. filed_plan: {up['filed_plan']}. "
         f"false_positive: {up['false_positive']}. out_of_scope_redos: {up['out_of_scope_redos']}. "
-        f"private_first: {up['private_first']}.",
+        f"private_first: {up['private_first']}. wont_file: {up['wont_file']}.",
         "",
         "Source: [`docs/conversion-upstream.jsonl`](../../docs/conversion-upstream.jsonl).",
         "",
