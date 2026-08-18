@@ -47,7 +47,19 @@ If unsure, treat as non-trivial.
 2. Ensure the PR head branch is checked out locally.
 3. Run Bugbot via the `review-bugbot` skill / `bugbot` subagent on **branch changes** (merge-base vs default base, usually `main`).
 4. If Bugbot reports findings: **fix them** (or explicitly document why a finding is a false positive), push, re-run Bugbot once after substantive fixes.
-5. Only then merge (`gh pr merge` with the repo’s usual strategy). Do not merge non-trivial PRs with unresolved Bugbot findings.
+5. Triage bot / external review comments on the PR before merge:
+   - If CodeRabbit (or another bot/human) left review comments, pull the
+     thread (`gh api repos/{owner}/{repo}/pulls/<n>/comments --paginate`,
+     plus `<n>/reviews` and issue comments) and classify each:
+     `CONFIRMED` (fix it), `DISMISS` (document why it's a false positive),
+     or `FOLD` (already addressed / duplicate).
+   - Do **not** auto-apply a CodeRabbit-suggested fix without ground-truthing
+     it against the code or the real API — a suggested fix can be wrong
+     (the 422 `path:`-OR inconsistency).
+   - Human `REQUEST_CHANGES` / substantive inline comments **outrank** bot
+     comments. A bare bot comment doesn't block merge by itself, but
+     unresolved `CONFIRMED` bot findings should not merge clean.
+6. Only then merge (`gh pr merge` with the repo’s usual strategy). Do not merge non-trivial PRs with unresolved Bugbot findings or un-triaged `CONFIRMED` bot comments.
 
 ## Do not
 
@@ -55,3 +67,4 @@ If unsure, treat as non-trivial.
 - Treat “listed checks passed” as sufficient when expected `verify` jobs are **absent**
 - Skip Bugbot because “we just ran tests locally”
 - Rely on AGENTS.md alone for this gate — this Cursor rule is the merge-cycle source of truth
+- Merge with unresolved `CONFIRMED` bot/CodeRabbit findings or an un-triaged review-comment thread
