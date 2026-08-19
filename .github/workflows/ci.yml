@@ -38,6 +38,27 @@ jobs:
           print("minors", minors)
           PY
 
+  lint:
+    name: Ruff lint
+    runs-on: ubuntu-latest
+    needs: matrix
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+      # Pin ruff to the version the tree was made clean under (#526) so a
+      # new-ruf-rule release can't silently break the gate. Conservative set
+      # (E/F/W/RUF + exclusions) is in pyproject.toml. Safe `--fix` only;
+      # `--unsafe-fixes` is banned. Fast (<1 min) — never blocks a mining run.
+      - name: Ruff check (hard gate, conservative set)
+        run: |
+          pip install 'ruff==0.15.22'
+          ruff check --output-format=github .
+
   proof:
     name: Z3 proof harness
     runs-on: ubuntu-latest
