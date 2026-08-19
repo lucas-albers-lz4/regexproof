@@ -43,7 +43,7 @@ def test_schema_requires_exactly_three_conditions():
 def test_sweep_examples_have_required_shape():
     schema = _load_schema()
     try:
-        import jsonschema  # noqa: PLC0415
+        import jsonschema
 
         validator = jsonschema
     except ImportError:  # pragma: no cover - environment-dependent

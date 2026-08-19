@@ -42,7 +42,7 @@ def test_negated_class_encodes_without_complement_star():
 
 
 def test_scoped_inline_i_fold():
-    from z3 import sat, unsat
+    from z3 import sat
 
     cr = compile_pattern(r"x(?i:ab)y", "", "pcre", "fullmatch")
     assert cr.encodable, cr.unencodable_reason
@@ -85,7 +85,7 @@ def test_hex_escape_soundness_codepoint_not_literal_text():
 
 
 def test_hex_range_in_class():
-    from z3 import InRe, String, sat, unsat
+    from z3 import InRe, String, sat
 
     cr = compile_pattern(r"^[\x21-\x7e]$", "", "pcre", "fullmatch")
     assert cr.encodable, cr.unencodable_reason

@@ -4,7 +4,8 @@
 Prints one line: "V <sat|unsat|unknown> <ms>" or "E <parse-error-text>".
 A segfault in the cvc5 C++ library kills only this process, never the caller.
 """
-import sys, time
+import sys
+import time
 
 def main():
     fn, timeout_ms = sys.argv[1], int(sys.argv[2])

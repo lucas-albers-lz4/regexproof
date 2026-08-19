@@ -17,7 +17,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from regexproof.batch.compile_records import compile_records
+from regexproof.batch.compile_records import compile_records  # noqa: E402  # ROOT bootstrap above
 from regexproof.batch.extract import extract_corpus  # noqa: E402
 from regexproof.redos.runner import analyze_record  # noqa: E402
 
@@ -144,7 +144,7 @@ def main(argv: list[str] | None = None) -> int:
         available = hasattr(z3, "re") and hasattr(z3.re, "from_ecma2020")
         if not available:
             available = hasattr(z3, "from_ecma2020")
-    except Exception as exc:  # noqa: BLE001
+    except Exception as exc:
         error = str(exc)
     noodler_status = {
         "fixture": str(noodler_path.relative_to(ROOT)),

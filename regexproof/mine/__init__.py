@@ -22,10 +22,10 @@ from regexproof.mine.transition import TransitionError, transition_candidate
 from regexproof.mine.tree import TreeCache, materialize_tree_features, probe_tree
 
 __all__ = [
-    "AuthError",
     "ALLOCATORS",
     "LEDGER_SCHEMA_VERSION",
     "SCORE_VERSION",
+    "AuthError",
     "TransitionError",
     "TreeCache",
     "candidate_score",
@@ -43,8 +43,8 @@ __all__ = [
     "run_audit_sampler",
     "run_search",
     "sample_size",
-    "score_version_for_allocator",
     "save_ledger",
     "save_queue",
+    "score_version_for_allocator",
     "transition_candidate",
 ]

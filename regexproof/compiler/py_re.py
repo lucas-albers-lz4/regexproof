@@ -368,7 +368,6 @@ def _char_class_excluding(excluded: frozenset[str], ctx: _Ctx):
     # at Length==1 — callers use as one char. For `.` body we need one char.
     # Use Union(Range) over BMP excluding \n — still huge. Practical: AllChar
     # and rely on membership queries; for `.` *pattern* we use:
-    from z3 import Complement, Length, String
 
     # Actually Complement(Re('\n')) is language complement — trap #1.
     # Safe for Length==1 contexts. Our Concat uses it as one atom — Z3

@@ -4,7 +4,6 @@ from __future__ import annotations
 
 from pathlib import Path
 
-import pytest
 
 from regexproof.batch import runner
 from regexproof.extractors.test262 import EXPECTED_REGEXP_FILES, extract_test262_tree

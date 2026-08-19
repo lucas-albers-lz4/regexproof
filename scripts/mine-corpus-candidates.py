@@ -19,10 +19,10 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from regexproof.mine.exclusions import is_excluded, load_admitted_urls
-from regexproof.mine.gate_files import list_gate_decision_paths
-from regexproof.mine.ledger import empty_ledger, find_candidate, load_ledger, save_ledger
-from regexproof.mine.queue import (
+from regexproof.mine.exclusions import is_excluded, load_admitted_urls  # noqa: E402  # ROOT bootstrap above
+from regexproof.mine.gate_files import list_gate_decision_paths  # noqa: E402  # ROOT bootstrap above
+from regexproof.mine.ledger import empty_ledger, find_candidate, load_ledger, save_ledger  # noqa: E402  # ROOT bootstrap above
+from regexproof.mine.queue import (  # noqa: E402  # ROOT bootstrap above
     MAX_REPLACEMENTS_PER_RUN,
     daily_mine_cap,
     drain,
@@ -31,9 +31,9 @@ from regexproof.mine.queue import (
     load_queue,
     save_queue,
 )
-from regexproof.mine.score import SCORE_VERSION, rank_candidates
-from regexproof.mine.search import AuthError, SearchRunResult, run_search
-from regexproof.mine.transition import TransitionError, set_status
+from regexproof.mine.score import SCORE_VERSION, rank_candidates  # noqa: E402  # ROOT bootstrap above
+from regexproof.mine.search import AuthError, SearchRunResult, run_search  # noqa: E402  # ROOT bootstrap above
+from regexproof.mine.transition import TransitionError, set_status  # noqa: E402  # ROOT bootstrap above
 
 
 _ENRICH_FIELDS = ("fork", "size", "language", "archived")

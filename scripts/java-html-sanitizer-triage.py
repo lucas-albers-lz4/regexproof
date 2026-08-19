@@ -21,13 +21,13 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from regexproof.admission.java_pin import (
+from regexproof.admission.java_pin import (  # noqa: E402  # ROOT bootstrap above
     JAVA_HTML_SANITIZER_PIN,
     JAVA_HTML_SANITIZER_URL,
 )
-from regexproof.admission.serialize import dumps_pinned
-from regexproof.compiler.pcre import compile_pcre
-from regexproof.extractors.java_pattern import extract_java_pattern
+from regexproof.admission.serialize import dumps_pinned  # noqa: E402  # ROOT bootstrap above
+from regexproof.compiler.pcre import compile_pcre  # noqa: E402  # ROOT bootstrap above
+from regexproof.extractors.java_pattern import extract_java_pattern  # noqa: E402  # ROOT bootstrap above
 
 HELPER = ROOT / "helpers" / "pcre2" / "match.py"
 DEFAULT_CORPUS = "java-html-sanitizer"

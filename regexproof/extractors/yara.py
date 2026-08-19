@@ -83,7 +83,6 @@ def extract_yara(
     lines = source.split("\n")
 
     for rule_m in _RULE_RE.finditer(source):
-        rule_start = rule_m.start()
         rule_body_start = rule_m.end()
 
         brace_depth = 1

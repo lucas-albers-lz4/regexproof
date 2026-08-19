@@ -45,7 +45,7 @@ _STRING_ENTRY = re.compile(
 
 
 class ParseStats:
-    __slots__ = ("parsed", "skipped", "errors")
+    __slots__ = ("errors", "parsed", "skipped")
 
     def __init__(self) -> None:
         self.parsed = 0

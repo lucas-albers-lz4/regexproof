@@ -66,7 +66,7 @@ def main() -> int:
                     "error_message": None,
                 }
             )
-    except Exception as exc:  # noqa: BLE001
+    except Exception as exc:
         emit(
             {
                 "tool": "regexploit",
@@ -85,7 +85,7 @@ def _version() -> str:
         from importlib.metadata import version
 
         return version("regexploit")
-    except Exception:  # noqa: BLE001
+    except Exception:
         return "unknown"
 
 

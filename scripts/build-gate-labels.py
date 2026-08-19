@@ -21,13 +21,13 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from regexproof.admission.serialize import dumps_pinned
-from regexproof.io_atomic import atomic_write_text
-from regexproof.mine.exclusions import normalize_repo_url
-from regexproof.mine.gate_files import git_ls_decision_paths, list_gate_decision_paths, read_repo_bytes
-from regexproof.mine.ledger import ENRICH_FIELDS, load_ledger, save_ledger
-from regexproof.mine.search import AuthError, RateLimitError, enrich_repo, github_headers
-from regexproof.mine.tree import (
+from regexproof.admission.serialize import dumps_pinned  # noqa: E402  # ROOT bootstrap above
+from regexproof.io_atomic import atomic_write_text  # noqa: E402  # ROOT bootstrap above
+from regexproof.mine.exclusions import normalize_repo_url  # noqa: E402  # ROOT bootstrap above
+from regexproof.mine.gate_files import git_ls_decision_paths, list_gate_decision_paths, read_repo_bytes  # noqa: E402  # ROOT bootstrap above
+from regexproof.mine.ledger import ENRICH_FIELDS, load_ledger, save_ledger  # noqa: E402  # ROOT bootstrap above
+from regexproof.mine.search import AuthError, RateLimitError, enrich_repo, github_headers  # noqa: E402  # ROOT bootstrap above
+from regexproof.mine.tree import (  # noqa: E402  # ROOT bootstrap above
     DEFAULT_TREE_PROBE_BUDGET,
     TreeCache,
     materialize_tree_features,

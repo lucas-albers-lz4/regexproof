@@ -14,7 +14,6 @@ import json
 from pathlib import Path
 
 import jsonschema
-import pytest
 
 from regexproof.batch.runner import check_admission_gates
 from regexproof.schemas import gate_decision_schema

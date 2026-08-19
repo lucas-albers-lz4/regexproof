@@ -271,7 +271,7 @@ def solve_constraint(constraint, s, *, timeout_ms: int) -> dict:
                 val = model[decl]
                 try:
                     out["witness"] = val.as_string()
-                except Exception:  # noqa: BLE001
+                except Exception:
                     out["witness"] = str(val)
                 break
     return out
@@ -310,11 +310,11 @@ def py_re_accepts(pattern: str, text: str, *, flags: str, call_kind: str) -> boo
 def re2_accepts(pattern: str, text: str, *, flags: str) -> bool | None:
     try:
         argv = replay_argv(pattern, flags)
-    except Exception:  # noqa: BLE001
+    except Exception:
         return None
     try:
         return real_accepts_argv(argv, text, timeout=5.0)
-    except Exception:  # noqa: BLE001
+    except Exception:
         return None
 
 

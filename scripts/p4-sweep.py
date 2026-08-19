@@ -24,17 +24,16 @@ Outputs (committed):
 """
 import json
 import os
-import subprocess
 import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from z3 import (Concat, Contains, InRe, Length, Range, Re, Star, String,  # noqa: E402
+from z3 import (Concat, Contains, InRe, Length, Range, Re, Star, String,
                 StringVal, Union)
 
-from regexproof.harness import core  # noqa: E402
-from regexproof.harness.sweep import (build_manifest, classify,  # noqa: E402
+from regexproof.harness import core
+from regexproof.harness.sweep import (build_manifest, classify,
                                       corpus_commit, d10_decision,
                                       divergence_rate, metric8,
                                       render_report, triage_audit,

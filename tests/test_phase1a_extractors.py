@@ -6,7 +6,6 @@ from pathlib import Path
 
 from regexproof.extractors.go_regexp import extract_go_regexp
 from regexproof.extractors.ids_rules import extract_ids_rules
-from regexproof.extractors.rule_file import extract_rule_file
 
 ROOT = Path(__file__).resolve().parent / "fixtures"
 

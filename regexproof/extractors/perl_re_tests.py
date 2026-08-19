@@ -26,7 +26,7 @@ _CLOSE = {"{": "}", "(": ")", "[": "]", "<": ">"}
 
 
 class ParseStats:
-    __slots__ = ("parsed", "skipped", "errors")
+    __slots__ = ("errors", "parsed", "skipped")
 
     def __init__(self) -> None:
         self.parsed = 0
@@ -134,7 +134,7 @@ def extract_perl_re_tests_table(
                 )
             )
             stats.parsed += 1
-        except Exception:  # noqa: BLE001
+        except Exception:
             stats.errors += 1
     for rec in out:
         rec["_parse_stats"] = stats.as_dict()

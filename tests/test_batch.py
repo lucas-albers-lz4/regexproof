@@ -87,7 +87,7 @@ def test_intent_no_substring_false_positive_on_curl():
 
 
 def test_intent_negated_class_whitespace_no_false_positive():
-    """`\s` inside a NEGATED class ([^\s@]) EXCLUDES whitespace — must not fire the
+    r"""`\s` inside a NEGATED class ([^\s@]) EXCLUDES whitespace — must not fire the
     "admits space" intent finding (the luna-gate catch on PR #258 / FeedbackForm)."""
     rec = {
         "regex_id": "b" * 32,

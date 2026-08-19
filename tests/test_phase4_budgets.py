@@ -6,7 +6,6 @@ import json
 import subprocess
 import sys
 from pathlib import Path
-from typing import Any
 
 import pytest
 
@@ -15,7 +14,6 @@ from regexproof.batch.runner import (
     WAVE_CORPORA,
     BudgetBreached,
     _check_budget_patterns,
-    _compile_all,
     _extract,
 )
 from regexproof.extractors.busybox_tests import extract_busybox_tests
@@ -63,7 +61,6 @@ class TestBudgetBreach:
         """Synthetic corpus with max_patterns=1 triggers exit 1."""
         report_dir = tmp_path / "out"
         report_dir.mkdir()
-        script = ROOT / "scripts" / "measure-corpus-fraction.py"
         result = subprocess.run(
             [sys.executable, "-c", _budget_breach_script(str(tmp_path))],
             capture_output=True, text=True, timeout=60,

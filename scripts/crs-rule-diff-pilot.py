@@ -19,7 +19,6 @@ import json
 import platform
 import subprocess
 import sys
-import time
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -179,7 +178,7 @@ def main(argv: list[str] | None = None) -> int:
                 if entry.get("ground_truth") and res.get("witness") is not None:
                     try:
                         gt_ok = bool(entry["ground_truth"](res["witness"]))
-                    except Exception as exc:  # noqa: BLE001
+                    except Exception as exc:
                         gt_ok = False
                         res["ground_truth_error"] = str(exc)
                     res["ground_truth_status"] = "reproduced" if gt_ok else "failed"

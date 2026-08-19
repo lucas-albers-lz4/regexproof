@@ -17,7 +17,6 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
-import os
 import platform
 
 import sys
@@ -53,7 +52,7 @@ def _disk_usage_mb(path: Path) -> float:
                 if fp.is_file():
                     total += fp.stat().st_size
         return total / (1024 * 1024)
-    except Exception:  # noqa: BLE001
+    except Exception:
         return 0.0
 
 
@@ -66,7 +65,7 @@ def _rss_mb() -> int:
         if sys.platform == "darwin":
             return int(usage.ru_maxrss / (1024 * 1024))
         return int(usage.ru_maxrss / 1024)
-    except Exception:  # noqa: BLE001
+    except Exception:
         return 0
 
 

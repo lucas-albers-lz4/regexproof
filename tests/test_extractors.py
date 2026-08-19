@@ -5,7 +5,6 @@ from __future__ import annotations
 from pathlib import Path
 
 import jsonschema
-import pytest
 
 from regexproof.extractors.js_babel import extract_js, extract_js_precise
 from regexproof.extractors.python_ast import extract_python

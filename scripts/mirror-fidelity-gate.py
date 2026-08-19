@@ -208,7 +208,7 @@ def _pcre_backend_is_grep() -> bool:
             argv = pcre_mod.replay_argv("^$", "")
             proc = subprocess.run(argv, input="", capture_output=True, timeout=10)
             _PCRE_BACKEND_IS_GREP = proc.returncode != 0
-        except Exception:  # noqa: BLE001
+        except Exception:
             _PCRE_BACKEND_IS_GREP = True  # fail closed: treat as line-oriented
     return _PCRE_BACKEND_IS_GREP
 
@@ -263,7 +263,7 @@ def _fuzz_one(rec: dict, *, runs: int, seed: int) -> dict:
             break
         try:
             real = real_accepts_argv(argv, s)
-        except Exception as exc:  # noqa: BLE001
+        except Exception as exc:
             return {
                 "regex_id": rec.get("regex_id"),
                 "status": "helper_error",

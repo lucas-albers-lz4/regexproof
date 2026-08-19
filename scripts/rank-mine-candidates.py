@@ -19,15 +19,14 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from regexproof.mine.exclusions import load_admitted_urls, normalize_repo_url
-from regexproof.mine.ledger import load_ledger
-from regexproof.mine.score import (
-    SCORE_VERSION,
+from regexproof.mine.exclusions import load_admitted_urls, normalize_repo_url  # noqa: E402  # ROOT bootstrap above
+from regexproof.mine.ledger import load_ledger  # noqa: E402  # ROOT bootstrap above
+from regexproof.mine.score import (  # noqa: E402  # ROOT bootstrap above
     candidate_score,
     rank_candidates,
     score_version_for_allocator,
 )
-from regexproof.mine.tree import (
+from regexproof.mine.tree import (  # noqa: E402  # ROOT bootstrap above
     TreeCache,
     materialize_tree_features,
 )

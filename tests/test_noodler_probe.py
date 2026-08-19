@@ -32,7 +32,7 @@ def test_noodler_probe_recorded():
             result["available"] = True
             result["triage_fallback"] = False
             result["tool_version"] = z3.get_version_string()
-    except Exception as exc:  # noqa: BLE001
+    except Exception as exc:
         result["error"] = f"{type(exc).__name__}: {exc}"
         result["triage_fallback"] = True
 

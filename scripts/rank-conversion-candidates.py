@@ -230,7 +230,6 @@ def annotate_seeds(result: dict[str, Any], seeds: tuple[dict[str, str], ...] = O
         for d in result.get("dropped") or []
     }
     notes: dict[str, Any] = {}
-    keep_pats = [(k.get("site") or "", k.get("pattern") or "") for k in result.get("keep") or []]
     all_keep = result.get("keep") or []
     for seed in seeds:
         sid = seed["id"]

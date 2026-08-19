@@ -21,7 +21,7 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from regexproof.admission.author import (
+from regexproof.admission.author import (  # noqa: E402  # ROOT bootstrap above
     AuthorError,
     author_auto,
     author_human,
@@ -29,15 +29,15 @@ from regexproof.admission.author import (
     emit_decision_text,
     load_probe_draft,
 )
-from regexproof.admission.auto_nogo import AutoNoGoError
-from regexproof.admission.llm_client import (
+from regexproof.admission.auto_nogo import AutoNoGoError  # noqa: E402  # ROOT bootstrap above
+from regexproof.admission.llm_client import (  # noqa: E402  # ROOT bootstrap above
     OpencodeDeepseekClassifier,
     RetryingClassifier,
     StaticClassifier,
 )
-from regexproof.admission.llm_draft import author_llm_draft
-from regexproof.admission.templates import TemplateError
-from regexproof.mine.audit import (
+from regexproof.admission.llm_draft import author_llm_draft  # noqa: E402  # ROOT bootstrap above
+from regexproof.admission.templates import TemplateError  # noqa: E402  # ROOT bootstrap above
+from regexproof.mine.audit import (  # noqa: E402  # ROOT bootstrap above
     append_model_call,
     mark_auto_filed,
     mark_human_resolved,

@@ -4,4 +4,4 @@ from regexproof.extractors.python_ast import extract_python
 from regexproof.extractors.rule_file import extract_rule_file
 from regexproof.extractors.js_babel import extract_js
 
-__all__ = ["extract_python", "extract_rule_file", "extract_js"]
+__all__ = ["extract_js", "extract_python", "extract_rule_file"]

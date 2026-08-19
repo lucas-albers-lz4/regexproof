@@ -1,4 +1,4 @@
-"""Phase 5 handoff pilot (PR, #221): the D14 fuzz + fwlive handoff contract.
+r"""Phase 5 handoff pilot (PR, #221): the D14 fuzz + fwlive handoff contract.
 
 AC coverage (issue #221, U9-amended):
 - D14 fuzz suite runs with ZERO in-domain divergences on the pilot's probe set
