@@ -7,6 +7,11 @@ search/pad matrix; a fullmatch-only SAT is recorded, not a search gap.
 
 from __future__ import annotations
 
+import json
+import subprocess
+import sys
+import time
+from pathlib import Path
 from typing import Any
 
 from z3 import Solver, StringVal, sat, unsat, unknown
@@ -14,13 +19,33 @@ from z3 import Solver, StringVal, sat, unsat, unknown
 from regexproof.compiler import compile_pattern
 from regexproof.harness.core import z3_str
 from regexproof.rule_diff.encode import shape5_constraints
-from regexproof.rule_diff.search_replay import gate_sat_witness
+
+ROOT = Path(__file__).resolve().parents[2]
+_PAD_GATE_SCRIPT = ROOT / "scripts" / "shape5-pad-gate.py"
 
 SCALE_PROVENANCE = frozenset({"version_diff", "cross_engine"})
 # compile_pattern(max_length=) caps *pattern text*, not witness length.
 _PATTERN_CHAR_CAP = 256
 # CRS 941140/942220: five models still flipped sat↔fullmatch on Python 3.13.
-_PAD_GATE_MODEL_CAP = 16
+# Issue #524: 16 was still flaky under load — the model enumeration loop stops
+# at the first `unknown` (timeout) once `best` is set, so a borderline solve
+# flipping between sat and sat_fullmatch_only changed the batch summaries
+# between the two reproducibility runs. A larger cap gives the pad-gate more
+# distinct witnesses to confirm on before the loop settles.
+_PAD_GATE_MODEL_CAP = 64
+# Issue #524: crs-941140 solves in ~9–26s on a quiet machine but crossed the
+# 30s per-check budget under CI load → `unknown` → `timeout` classification.
+# 120s is a 4–13x headroom over the observed solve time, so the batch outcome
+# is deterministic rather than load-dependent.
+_BATCH_SOLVE_TIMEOUT_MS = 120_000
+# Hard wall-clock deadline for the whole solve of a single pair, independent of
+# the per-check timeout and the model cap. The enumeration loop can issue up to
+# _PAD_GATE_MODEL_CAP checks, each with a fresh _BATCH_SOLVE_TIMEOUT_MS budget;
+# without a ceiling that product (64 × 120s ≈ 128 min/pair) could exceed the
+# Golden CI job's 60-minute limit (luna r1, issue #524). This deadline bounds
+# every pair, and with 3 admitted CRS pairs the shape-5 batch stays well under
+# the job budget.
+_BATCH_SOLVE_DEADLINE_MS = 240_000
 
 
 def provenance_token(pair: dict[str, Any]) -> str:
@@ -82,10 +107,84 @@ def summarize_shape5_rows(rows: list[dict[str, Any]]) -> dict[str, int]:
 def run_batch_shape5_pairs(
     pairs: list[dict[str, Any]],
     *,
-    timeout_ms: int = 30000,
+    timeout_ms: int = _BATCH_SOLVE_TIMEOUT_MS,
 ) -> list[dict[str, Any]]:
     """Fullmatch solve + search/pad SAT gate for admitted pairs only."""
     return [_solve_one(pair, timeout_ms=timeout_ms) for pair in filter_batch_pairs(pairs)]
+
+
+def _bounded_gate_sat_witness(
+    pair: dict[str, Any], witness: str, remaining_ms: int
+) -> bool | None:
+    """Run the search/pad gate over ``witness`` in a TIMED subprocess.
+
+    The pad-gate replays an *untrusted* ``py_re`` pattern with Python
+    ``re.search``; a catastrophic-backtracking pattern (e.g. ``(a+)+$``) can
+    take tens of seconds to effectively hang on a non-match. The repo's
+    security model runs every untrusted pattern in a timed subprocess
+    (compiler/pcre.py, compiler/ecma.py, redos/tools.py), so the shape-5 batch
+    pad gate does the same (luna r5, issue #524): the replay is bounded by the
+    remaining wall-clock deadline. Returns True/False on a clean verdict, or
+    None if the subprocess timed out or misbehaved (fail closed).
+    """
+    r1 = pair.get("r1") or {}
+    r2 = pair.get("r2") or {}
+    # Send the payload over stdin as one JSON object (never argv): a Z3 witness
+    # may contain characters that cannot cross the OS argv boundary (e.g. the
+    # NUL byte "\x00"), which would raise ValueError before the child even
+    # starts (luna r6, issue #524). Passing structured data over stdin also
+    # keeps the replay argv-only (no shell).
+    stdin_payload = json.dumps(
+        {
+            "r1_pattern": str(r1.get("pattern") or ""),
+            "r1_flags": str(r1.get("flags") or ""),
+            "r2_pattern": str(r2.get("pattern") or ""),
+            "r2_flags": str(r2.get("flags") or ""),
+            "witness": witness,
+        },
+        ensure_ascii=True,
+    )
+    argv = [sys.executable, str(_PAD_GATE_SCRIPT)]
+    # The subprocess gets a timeout of the remaining budget floored to the
+    # higher of the caller's guarantee of >0 and a sub-ms-safe epsilon (luna
+    # r6): we must not round a positive remaining budget to 0 (Z3-style 0 =
+    # unbounded semantics don't apply here, but we still guarantee the bound).
+    timeout_s = max(0.001, remaining_ms / 1000.0)
+    try:
+        proc = subprocess.run(
+            argv,
+            input=stdin_payload,
+            capture_output=True,
+            text=True,
+            shell=False,
+            timeout=timeout_s,
+            check=False,
+        )
+    except (subprocess.TimeoutExpired, ValueError, OSError):
+        # Timeout, or the child could not be started / the transport failed
+        # (NUL, exec error, ...). Fail closed: we do not have a clean verdict.
+        return None
+    line = (proc.stdout or "").strip().splitlines()
+    if not line:
+        return None
+    # Fail closed on ANY protocol/transport failure (coderabbit #529, issue
+    # #524) — not just on missing output. A non-zero child exit or an explicit
+    # `error` field in the payload means the replay did not produce a clean
+    # verdict, so it must be treated as `timeout`/`not_proven` (None), never
+    # parsed into a confident `False` -> sat_fullmatch_only.
+    if proc.returncode != 0:
+        return None
+    try:
+        payload = json.loads(line[-1])
+    except json.JSONDecodeError:
+        return None
+    if payload.get("error"):
+        return None
+    confirmed = payload.get("confirmed")
+    if not isinstance(confirmed, bool):
+        return None
+    return confirmed
+
 
 
 def _solve_one(pair: dict[str, Any], *, timeout_ms: int) -> dict[str, Any]:
@@ -127,26 +226,112 @@ def _solve_one(pair: dict[str, Any], *, timeout_ms: int) -> dict[str, Any]:
     constraints, bad, s = shape5_constraints(
         r1_c.mirror, r2_c.mirror, min_len=1, max_len=max_len
     )
-    solver = Solver()
-    solver.set("timeout", timeout_ms)
-    solver.set("random_seed", 0)
-    for constraint in constraints:
-        solver.add(constraint)
-    solver.add(bad)
     # Enumerate distinct models: Z3 seq witnesses vary across runs and
     # Python re pad-gate can flip sat ↔ sat_fullmatch_only across 3.12/3.13
     # (Golden conversion-ledger / two-run drift). Prefer any pad-confirmed
     # search gap. Five models was not enough to stabilize CRS 941140/942220
     # on Python 3.13.
+    # Issue #524 (luna r1): the per-check timeout is NOT the whole-pair budget —
+    # the loop can issue up to _PAD_GATE_MODEL_CAP checks, each with a fresh
+    # timeout_ms. A hard wall-clock deadline keeps the worst case (64 × 120s ≈
+    # 128 min/pair) bounded under the Golden CI job's 60-minute limit. The Z3
+    # solve itself is deterministic given random_seed=0 — a fresh process
+    # returns the same first witness (verified across 6 processes) — so once a
+    # solve completes within the deadline the classification is reproducible;
+    # the only load-dependence was a first-check timeout, which the deadline +
+    # transient retry below eliminate.
+    deadline = time.monotonic() + _BATCH_SOLVE_DEADLINE_MS / 1000.0
+
+    def _fresh_solver(per_check_ms: int) -> Solver:
+        """Build the solve with an explicit per-check timeout and random_seed=0.
+
+        random_seed=0 makes the solve deterministic across processes (verified:
+        a fresh process returns the same first witness), which is what the
+        two-run reproducibility gate needs. The per-check timeout is parameterised
+        so the caller can clamp it to the remaining wall-clock deadline.
+        """
+        s = Solver()
+        s.set("timeout", per_check_ms)
+        s.set("random_seed", 0)
+        for constraint in constraints:
+            s.add(constraint)
+        s.add(bad)
+        return s
+
+    solver = _fresh_solver(timeout_ms)
     seen: set[str] = set()
     best: dict[str, Any] | None = None
+    transient_retried = False
     for _ in range(_PAD_GATE_MODEL_CAP):
+        # luna r3 (issue #524): clamp the per-check timeout to the remaining
+        # wall-clock budget so a check cannot run a full timeout_ms past the
+        # deadline — the deadline is a hard ceiling, not a coarse guard.
+        remaining_ms = int((deadline - time.monotonic()) * 1000.0)
+        if remaining_ms <= 0:
+            # Hard whole-pair budget exhausted (luna r1, issue #524). Fail
+            # closed: an artificial wall-clock cutoff must not be converted into
+            # a confident `sat`/`sat_fullmatch_only` — a pad-confirmed gap or a
+            # proven fullmatch-only verdict requires the solver to have reached
+            # its own terminal condition. Deadline exhaustion is TIMEOUT /
+            # not-proven, which the timeout_gate then hard-fails (AGENTS.md).
+            rec["result"] = "timeout"
+            rec["not_proven"] = True
+            return rec
+        per_check_ms = min(timeout_ms, remaining_ms)
+        # luna r4 (issue #524): never floor to 0ms — Z3 treats timeout=0 as
+        # unbounded, which would silently defeat the deadline. Clamp to >=1.
+        per_check_ms = max(1, per_check_ms)
+        # True when the deadline shrank this check's budget below the nominal
+        # per-check timeout. An `unknown` under that clamp is deadline-induced,
+        # not a solver terminal verdict — it must fail closed, not be mistaken
+        # for a completed search (luna r4).
+        deadline_clamped = per_check_ms < timeout_ms
+        solver.set("timeout", per_check_ms)
         verdict = solver.check()
         if verdict == unknown:
             if best is None:
+                # A first-check timeout is almost always a transient scheduling
+                # spike (the solve completes in ~9-26s on a quiet machine) that
+                # Z3's internal re-check would resolve. Retry once with a fresh
+                # solver to turn a load-dependent `timeout` into the
+                # deterministic classification (problem #524). Exact Z3 state
+                # (timeout, seed, constraints) is reproduced, so the retried
+                # solve is the same deterministic one.
+                #
+                # The retry must not blow past the deadline (luna r6): it only
+                # fires while there is real budget left, and the fresh solver is
+                # clamped to the remaining wall-clock budget — never given a
+                # fresh full timeout_ms that could run past the hard ceiling.
+                if not transient_retried and time.monotonic() < deadline:
+                    retry_remaining_ms = int((deadline - time.monotonic()) * 1000.0)
+                    if retry_remaining_ms <= 0:
+                        rec["result"] = "timeout"
+                        rec["not_proven"] = True
+                        return rec
+                    transient_retried = True
+                    solver = _fresh_solver(min(timeout_ms, retry_remaining_ms))
+                    seen = set()
+                    best = None
+                    continue
                 rec["result"] = "timeout"
                 rec["not_proven"] = True
                 return rec
+            if deadline_clamped:
+                # The check was cut short by the remaining wall-clock budget;
+                # its `unknown` is a deadline-induced timeout, not a genuine
+                # solver terminal verdict. Fail closed (luna r4) — we must not
+                # claim a confident sat/sat_fullmatch_only from an incomplete
+                # search that the carrier deadline forced to stop early.
+                rec["result"] = "timeout"
+                rec["not_proven"] = True
+                return rec
+            # Z3 returned unknown AFTER at least one fullmatch witness was
+            # confirmed on a completed check (best is set) AND this check had
+            # the full per-check budget (no deadline clamp). The fullmatch gap
+            # is proven; the solver's own terminal unknown only failed to
+            # upgrade it to a search gap. Keep the proven fullmatch-only result
+            # (not a timeout) — this is the deliberate sat_fullmatch_only
+            # boundary that the committed golden artifacts depend on.
             break
         if verdict == unsat:
             break
@@ -159,7 +344,21 @@ def _solve_one(pair: dict[str, Any], *, timeout_ms: int) -> dict[str, Any]:
         if witness in seen:
             break
         seen.add(witness)
-        gated = gate_sat_witness(pair, witness)
+        # luna r5 (issue #524): the pad-gate replay over an untrusted py_re
+        # pattern must be bounded by the remaining deadline (timed subprocess, as
+        # the repo does for every untrusted pattern). A replay that exceeds the
+        # remaining budget returns None -> fail closed to timeout; it must not
+        # be mistaken for a clean sat/sat_fullmatch_only verdict.
+        remaining_ms = int((deadline - time.monotonic()) * 1000.0)
+        if remaining_ms <= 0:
+            rec["result"] = "timeout"
+            rec["not_proven"] = True
+            return rec
+        gated = _bounded_gate_sat_witness(pair, witness, remaining_ms)
+        if gated is None:
+            rec["result"] = "timeout"
+            rec["not_proven"] = True
+            return rec
         cand = {
             "witness": {"s": witness},
             "search_pad_gate": gated,
