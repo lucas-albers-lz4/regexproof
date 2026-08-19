@@ -129,25 +129,40 @@ def _bounded_gate_sat_witness(
     """
     r1 = pair.get("r1") or {}
     r2 = pair.get("r2") or {}
-    argv = [
-        sys.executable,
-        str(_PAD_GATE_SCRIPT),
-        str(r1.get("pattern") or ""),
-        str(r1.get("flags") or ""),
-        str(r2.get("pattern") or ""),
-        str(r2.get("flags") or ""),
-        witness,
-    ]
+    # Send the payload over stdin as one JSON object (never argv): a Z3 witness
+    # may contain characters that cannot cross the OS argv boundary (e.g. the
+    # NUL byte "\x00"), which would raise ValueError before the child even
+    # starts (luna r6, issue #524). Passing structured data over stdin also
+    # keeps the replay argv-only (no shell).
+    stdin_payload = json.dumps(
+        {
+            "r1_pattern": str(r1.get("pattern") or ""),
+            "r1_flags": str(r1.get("flags") or ""),
+            "r2_pattern": str(r2.get("pattern") or ""),
+            "r2_flags": str(r2.get("flags") or ""),
+            "witness": witness,
+        },
+        ensure_ascii=True,
+    )
+    argv = [sys.executable, str(_PAD_GATE_SCRIPT)]
+    # The subprocess gets a timeout of the remaining budget floored to the
+    # higher of the caller's guarantee of >0 and a sub-ms-safe epsilon (luna
+    # r6): we must not round a positive remaining budget to 0 (Z3-style 0 =
+    # unbounded semantics don't apply here, but we still guarantee the bound).
+    timeout_s = max(0.001, remaining_ms / 1000.0)
     try:
         proc = subprocess.run(
             argv,
+            input=stdin_payload,
             capture_output=True,
             text=True,
             shell=False,
-            timeout=max(1.0, remaining_ms / 1000.0),
+            timeout=timeout_s,
             check=False,
         )
-    except subprocess.TimeoutExpired:
+    except (subprocess.TimeoutExpired, ValueError, OSError):
+        # Timeout, or the child could not be started / the transport failed
+        # (NUL, exec error, ...). Fail closed: we do not have a clean verdict.
         return None
     line = (proc.stdout or "").strip().splitlines()
     if not line:
@@ -273,9 +288,19 @@ def _solve_one(pair: dict[str, Any], *, timeout_ms: int) -> dict[str, Any]:
                 # deterministic classification (problem #524). Exact Z3 state
                 # (timeout, seed, constraints) is reproduced, so the retried
                 # solve is the same deterministic one.
+                #
+                # The retry must not blow past the deadline (luna r6): it only
+                # fires while there is real budget left, and the fresh solver is
+                # clamped to the remaining wall-clock budget — never given a
+                # fresh full timeout_ms that could run past the hard ceiling.
                 if not transient_retried and time.monotonic() < deadline:
+                    retry_remaining_ms = int((deadline - time.monotonic()) * 1000.0)
+                    if retry_remaining_ms <= 0:
+                        rec["result"] = "timeout"
+                        rec["not_proven"] = True
+                        return rec
                     transient_retried = True
-                    solver = _fresh_solver(timeout_ms)
+                    solver = _fresh_solver(min(timeout_ms, retry_remaining_ms))
                     seen = set()
                     best = None
                     continue

@@ -292,3 +292,64 @@ def test_deadline_clamped_unknown_fails_closed(monkeypatch):
     assert all(t >= 1 for t in fake.timeout_seen), fake.timeout_seen
 
 
+def test_retry_budget_clamped_to_deadline(monkeypatch):
+    """luna r6 (issue #524): the transient first-check retry must recreate the
+    solver with the budget clamped to the *remaining* wall-clock deadline, never
+    a fresh full timeout_ms that would run past the hard ceiling."""
+    from regexproof.rule_diff import batch_shape5 as bs
+
+    pair = _toy_pair("retry", "a", "a|b")
+    pair["r1"] = {"pattern": "^a$", "flags": "", "dialect": "py_re"}
+    pair["r2"] = {"pattern": "^a+$", "flags": "", "dialect": "py_re"}
+
+    real_monotonic = bs.time.monotonic
+    start_real = [real_monotonic()]
+    calls = {"n": 0}
+
+    def _monotonic() -> float:
+        # 1st call sets deadline=start+240s. Loop checkpoints stay at ~10s
+        # before the deadline so every check is clamped; the retry must inherit
+        # that clamp, not jump back to the full 120s.
+        if calls["n"] == 0:
+            calls["n"] += 1
+            return start_real[0]
+        return start_real[0] + 230.0  # deadline=start+240 -> ~10s remaining
+
+    monkeypatch.setattr(bs.time, "monotonic", _monotonic)
+
+    timeouts = []
+
+    class _FakeSolver:
+        def __init__(self):
+            self.calls = 0
+
+        def set(self, key, value):
+            if key == "timeout":
+                timeouts.append(value)
+            return None
+
+        def add(self, c):
+            return None
+
+        def check(self):
+            self.calls += 1
+            # retry path: 1st & 2nd checks return unknown (transient), then the
+            # retried solver's check also returns unknown -> timeout result.
+            return bs.unknown
+
+        def model(self):
+            raise AssertionError("unknown never yields a model")
+
+    monkeypatch.setattr(bs, "Solver", lambda: _FakeSolver())
+    monkeypatch.setattr(bs, "_bounded_gate_sat_witness", lambda pair, w, ms: False)
+    rec = bs._solve_one(pair, timeout_ms=120_000)
+    assert rec["result"] == "timeout", rec
+    # The very first entry is the initial solver setup (full timeout_ms) before
+    # the loop clamps. Every subsequent per-check/retry timeout must be clamped
+    # to the ~10s remaining budget, never a fresh full 120s.
+    assert timeouts[0] == 120_000, timeouts  # initial setup (nominal)
+    assert all(t < 120_000 for t in timeouts[1:]), timeouts
+    assert timeouts, "retry should have engaged"
+
+
+

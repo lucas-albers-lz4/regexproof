@@ -9,8 +9,12 @@ redos/tools.py), so the shape-5 pad gate does the same: the solver calls this
 script with ``subprocess.run(timeout=...)`` and treats a timeout/error as a
 fail-closed unknown (the witness does NOT confirm a search gap).
 
-Interface: argv = [script, r1_pattern, r1_flags, r2_pattern, r2_flags, witness].
-Prints a single JSON object ``{"confirmed": bool, "error": null|str}``.
+Payload is read from **stdin as one JSON object** — never argv — so a Z3 witness
+containing characters that cannot cross the OS argv boundary (e.g. a NUL byte
+``\\x00``) is handled safely (luna r6, issue #524).
+
+Input JSON: {"r1_pattern", "r1_flags", "r2_pattern", "r2_flags", "witness"}
+Prints a single JSON object {"confirmed": bool, "error": null|str}.
 """
 from __future__ import annotations
 
@@ -44,11 +48,21 @@ def _real_search(pattern: str, flags: str, text: str) -> bool:
         return False
 
 
-def main(argv: list[str]) -> int:
-    if len(argv) != 6:
-        json.dump({"confirmed": False, "error": "bad-args"}, sys.stdout)
+def _main() -> int:
+    raw = sys.stdin.read()
+    if not raw.strip():
+        json.dump({"confirmed": False, "error": "empty-stdin"}, sys.stdout)
         return 2
-    _script, r1_pat, r1_flags, r2_pat, r2_flags, witness = argv
+    try:
+        payload = json.loads(raw)
+    except json.JSONDecodeError:
+        json.dump({"confirmed": False, "error": "bad-json"}, sys.stdout)
+        return 2
+    r1_pat = str(payload.get("r1_pattern") or "")
+    r1_flags = str(payload.get("r1_flags") or "")
+    r2_pat = str(payload.get("r2_pattern") or "")
+    r2_flags = str(payload.get("r2_flags") or "")
+    witness = payload.get("witness")
     if not isinstance(witness, str) or not witness:
         json.dump({"confirmed": False, "error": "empty-witness"}, sys.stdout)
         return 0
@@ -65,4 +79,4 @@ def main(argv: list[str]) -> int:
 
 
 if __name__ == "__main__":
-    raise SystemExit(main(sys.argv))
+    raise SystemExit(_main())
