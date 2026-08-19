@@ -146,12 +146,6 @@ def _solve_one(pair: dict[str, Any], *, timeout_ms: int) -> dict[str, Any]:
     constraints, bad, s = shape5_constraints(
         r1_c.mirror, r2_c.mirror, min_len=1, max_len=max_len
     )
-    solver = Solver()
-    solver.set("timeout", timeout_ms)
-    solver.set("random_seed", 0)
-    for constraint in constraints:
-        solver.add(constraint)
-    solver.add(bad)
     # Enumerate distinct models: Z3 seq witnesses vary across runs and
     # Python re pad-gate can flip sat ↔ sat_fullmatch_only across 3.12/3.13
     # (Golden conversion-ledger / two-run drift). Prefer any pad-confirmed
@@ -167,11 +161,33 @@ def _solve_one(pair: dict[str, Any], *, timeout_ms: int) -> dict[str, Any]:
     # the only load-dependence was a first-check timeout, which the deadline +
     # transient retry below eliminate.
     deadline = time.monotonic() + _BATCH_SOLVE_DEADLINE_MS / 1000.0
+
+    def _fresh_solver(per_check_ms: int) -> Solver:
+        """Build the solve with an explicit per-check timeout and random_seed=0.
+
+        random_seed=0 makes the solve deterministic across processes (verified:
+        a fresh process returns the same first witness), which is what the
+        two-run reproducibility gate needs. The per-check timeout is parameterised
+        so the caller can clamp it to the remaining wall-clock deadline.
+        """
+        s = Solver()
+        s.set("timeout", per_check_ms)
+        s.set("random_seed", 0)
+        for constraint in constraints:
+            s.add(constraint)
+        s.add(bad)
+        return s
+
+    solver = _fresh_solver(timeout_ms)
     seen: set[str] = set()
     best: dict[str, Any] | None = None
     transient_retried = False
     for _ in range(_PAD_GATE_MODEL_CAP):
-        if time.monotonic() >= deadline:
+        # luna r3 (issue #524): clamp the per-check timeout to the remaining
+        # wall-clock budget so a check cannot run a full timeout_ms past the
+        # deadline — the deadline is a hard ceiling, not a coarse guard.
+        remaining_ms = int((deadline - time.monotonic()) * 1000.0)
+        if remaining_ms <= 0:
             # Hard whole-pair budget exhausted (luna r1, issue #524). Fail
             # closed: an artificial wall-clock cutoff must not be converted into
             # a confident `sat`/`sat_fullmatch_only` — a pad-confirmed gap or a
@@ -181,6 +197,7 @@ def _solve_one(pair: dict[str, Any], *, timeout_ms: int) -> dict[str, Any]:
             rec["result"] = "timeout"
             rec["not_proven"] = True
             return rec
+        solver.set("timeout", min(timeout_ms, remaining_ms))
         verdict = solver.check()
         if verdict == unknown:
             if best is None:
@@ -193,12 +210,7 @@ def _solve_one(pair: dict[str, Any], *, timeout_ms: int) -> dict[str, Any]:
                 # solve is the same deterministic one.
                 if not transient_retried and time.monotonic() < deadline:
                     transient_retried = True
-                    solver = Solver()
-                    solver.set("timeout", timeout_ms)
-                    solver.set("random_seed", 0)
-                    for constraint in constraints:
-                        solver.add(constraint)
-                    solver.add(bad)
+                    solver = _fresh_solver(timeout_ms)
                     seen = set()
                     best = None
                     continue
