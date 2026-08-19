@@ -13,7 +13,11 @@ binary before trusting it. Checks, in order:
 Usage: python preflight.py [binary-path]   (default: the pinned v1.6.1)
 Exits 0 only if every check passes. Writes preflight-report.txt next to the binary.
 """
-import sys, os, re, subprocess, time, hashlib, json
+import sys
+import os
+import subprocess
+import time
+import hashlib
 
 PIN_SHA256 = "22b19f123d3e7f54e10fdc46af3f91de23d89148c9a259eb072bc9e12f083464"
 EXPECT_VERSION = "Z3 version 4.16.0"

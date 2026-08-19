@@ -23,7 +23,7 @@ _ROW = re.compile(
 
 
 class ParseStats:
-    __slots__ = ("parsed", "skipped", "errors")
+    __slots__ = ("errors", "parsed", "skipped")
 
     def __init__(self) -> None:
         self.parsed = 0
@@ -50,7 +50,7 @@ def extract_cpython_re_tests(
         lit = prefix + m.group("q") + raw + m.group("q")
         try:
             pattern = ast.literal_eval(lit)
-        except Exception:  # noqa: BLE001
+        except Exception:
             pattern = raw
             stats.errors += 1
         if not isinstance(pattern, str) or not pattern:

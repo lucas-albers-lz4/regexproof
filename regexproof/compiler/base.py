@@ -5,7 +5,6 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any
 
-import z3
 from z3 import AllChar, Concat, Loop, Plus, Re, Star, Union
 
 

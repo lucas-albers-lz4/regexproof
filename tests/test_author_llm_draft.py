@@ -4,10 +4,9 @@ from __future__ import annotations
 
 import importlib.util
 import json
-from datetime import date, datetime, timezone
+from datetime import date
 from pathlib import Path
 
-import pytest
 
 from regexproof.admission.author import emit_decision_text, load_probe_draft
 from regexproof.admission.auto_nogo import auto_nogo_eligible

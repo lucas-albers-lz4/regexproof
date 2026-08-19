@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import re
 
-from z3 import InRe, String, sat, unsat
+from z3 import InRe, String, sat
 
 from regexproof.compiler import compile_pattern
 from regexproof.compiler.pcre_strip import strip_atomic_and_possessive, strip_lazy_quantifiers

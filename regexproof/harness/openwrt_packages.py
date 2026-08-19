@@ -161,8 +161,8 @@ def is_prefix_truncation(capture: str | None, v: str) -> bool:
 
 
 def _cloudflare_capture(grep_prefix: list[str], stream: str) -> str:
-    p1 = _run_grep_o(grep_prefix + ["-o", CLOUDFLARE_GREP1], stream)
-    p2 = _run_grep_o(grep_prefix + ["-o", CLOUDFLARE_GREP2], p1)
+    p1 = _run_grep_o([*grep_prefix, "-o", CLOUDFLARE_GREP1], stream)
+    p2 = _run_grep_o([*grep_prefix, "-o", CLOUDFLARE_GREP2], p1)
     lines = p2.splitlines()
     return lines[0] if lines else ""
 
@@ -237,7 +237,7 @@ def cloudflare_ground_truth(witness: dict) -> bool:
 
 
 def _aliyun_id(grep_prefix: list[str], stream: str) -> str:
-    raw = _run_grep_o(grep_prefix + ["-o", ALIYUN_GREP], stream)
+    raw = _run_grep_o([*grep_prefix, "-o", ALIYUN_GREP], stream)
     lines = raw.splitlines()
     if not lines:
         return ""

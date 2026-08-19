@@ -65,7 +65,7 @@ def _parse_modifiers(text: str) -> str:
 
 
 class ParseStats:
-    __slots__ = ("parsed", "skipped", "errors")
+    __slots__ = ("errors", "parsed", "skipped")
 
     def __init__(self) -> None:
         self.parsed = 0
@@ -172,7 +172,7 @@ def extract_pcre2_testdata(
 
         try:
             flags = _parse_modifiers(modifier_text)
-        except Exception:  # noqa: BLE001
+        except Exception:
             flags = ""
             stats.errors += 1
 

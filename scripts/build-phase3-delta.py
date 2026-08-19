@@ -270,11 +270,11 @@ def main() -> int:
     OUT.mkdir(parents=True, exist_ok=True)
     # Wave #81 / P5: residual + decision matrix are historical stubs. Still
     # refresh hermes_delta / phase3_delta_table from current fractions.
-    skip_decision = _is_superseded(OUT / "phase3_decision_matrix.json") or (
+    skip_decision = _is_superseded(OUT / "phase3_decision_matrix.json") or ((
         OUT / "phase3_decision_matrix.md"
     ).is_file() and "SUPERSEDED" in (
         OUT / "phase3_decision_matrix.md"
-    ).read_text(encoding="utf-8")
+    ).read_text(encoding="utf-8"))
     skip_residual = _is_superseded(OUT / "gitleaks_residual_abc.json")
 
     unexplained = 0

@@ -20,7 +20,6 @@ from regexproof.extractors.go_regexp_tests import (
 )
 from regexproof.extractors.perl_re_tests import (
     EXPECTED_PERL_RE_FILES,
-    extract_perl_re_file,
     extract_perl_re_tests_table,
     extract_perl_re_tree,
     extract_perl_t_file,

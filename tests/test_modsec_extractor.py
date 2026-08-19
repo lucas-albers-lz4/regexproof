@@ -8,7 +8,6 @@ import re
 from pathlib import Path
 
 import jsonschema
-import pytest
 
 import regexproof.extractors.modsec as modsec
 from regexproof.extractors.modsec import count_operators, extract_modsec
@@ -125,7 +124,7 @@ def test_inline_crs_style_corpus():
     assert rx[1]["pattern"] == "(?i)union\\s+select"
     assert rx[2]["negated"] is True
     assert rx[2]["pattern"] == "(?i)charset.*?charset"
-    assert [r for r in recs if r.get("selector")][0]["pattern"] == "^_pk_ref"
+    assert next(r for r in recs if r.get("selector"))["pattern"] == "^_pk_ref"
 
 
 def test_selector_escaped_slash_body_extracted():

@@ -137,7 +137,7 @@ def run_noodler(smt: str, timeout_ms: int = 30000, want_model: bool = False,
          "wall_ms": float, "witness": dict|None, "state": "decided"|"abstain"}
 
     States (S13 literal): decided (verdict parsed, rc 0/1); ABSTAIN-TIMEOUT;
-    ABSTAIN-SIGSEGV (signal death, rc < 0 or 139 — output untrusted); 
+    ABSTAIN-SIGSEGV (signal death, rc < 0 or 139 — output untrusted);
     ABSTAIN-NO-VERDICT (rc 0, no verdict line); DISPATCH-ERROR (other rc).
     """
     import tempfile
@@ -196,7 +196,7 @@ def run_noodler(smt: str, timeout_ms: int = 30000, want_model: bool = False,
         # S13: exit-1-no-verdict = dispatch error (the get-model-after-unsat
         # class is exit 1 WITH a verdict); exit-0-no-verdict = abstention.
         if rc == 1:
-            return {"verdict": f"DISPATCH-ERROR(rc=1)", "rc": rc,
+            return {"verdict": "DISPATCH-ERROR(rc=1)", "rc": rc,
                     "wall_ms": dt, "witness": None, "state": "abstain"}
         return {"verdict": f"ABSTAIN-NO-VERDICT(rc={rc})", "rc": rc,
                 "wall_ms": dt, "witness": None, "state": "abstain"}

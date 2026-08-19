@@ -45,7 +45,7 @@ def check_budget_mem() -> int:
                 if line.startswith("VmRSS:"):
                     # VmRSS is kB.
                     return int(line.split()[1]) // 1024
-    except Exception:  # noqa: BLE001
+    except Exception:
         pass
     try:
         import resource
@@ -56,7 +56,7 @@ def check_budget_mem() -> int:
         if Path("/proc/self/status").exists():
             return raw // 1024
         return raw // (1024 * 1024)
-    except Exception:  # noqa: BLE001
+    except Exception:
         return 0
 
 
@@ -88,7 +88,7 @@ def apply_address_space_cap(budget: dict[str, Any]) -> bool:
         resource.setrlimit(resource.RLIMIT_AS, (new_soft, new_hard))
         LAST_ADDRESS_SPACE_CAP_APPLIED = True
         return True
-    except Exception as exc:  # noqa: BLE001
+    except Exception as exc:
         if not _ADDRESS_SPACE_CAP_WARNED:
             print(
                 f"WARNING: address-space memory cap unavailable "

@@ -82,7 +82,9 @@ def compile_pcre(
             raise Unencodable("helper-unavailable")
         raise Unencodable(ureason or "parse-error")
 
-    fold_fn = lambda ch: python_fold_closure(ch, ascii_only=True)
+    def fold_fn(ch):
+        return python_fold_closure(ch, ascii_only=True)
+
     spec = DialectSpec(
         dialect="pcre",
         declared_domain="ascii",

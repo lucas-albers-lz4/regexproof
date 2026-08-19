@@ -15,7 +15,7 @@ from typing import Any
 import jsonschema
 
 from regexproof.batch import budgets as _budgets
-from regexproof.batch.budgets import (  # noqa: F401
+from regexproof.batch.budgets import (
     BudgetBreached,
     apply_address_space_cap,
     check_budget_mem,
@@ -44,7 +44,7 @@ from regexproof.batch.intent import (
     detect_usage_mismatches,
 )
 from regexproof.batch.inventory import check_corpus_coverage, load_inventory
-from regexproof.batch.manifests import (  # noqa: F401
+from regexproof.batch.manifests import (
     CORPUS_MANIFESTS,
     MAX_FILE_BYTES,
     ROOT,

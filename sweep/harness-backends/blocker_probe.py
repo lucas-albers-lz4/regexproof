@@ -11,15 +11,20 @@ provable on the mirror holds for the as-written pattern.
 Writes sweep/harness-backends/p1-baseline/blocker-probe.json (the narrative report
 blocker-probe.md is authored from the JSON).
 """
-import sys, os, re, json, time, subprocess, tempfile
+import sys
+import os
+import json
+import time
+import subprocess
+import tempfile
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.insert(0, ROOT)
 sys.path.insert(0, os.path.join(ROOT, "sweep", "harness-backends"))
-import z3
-from z3 import String, InRe, Concat, Star, Union, Range, Re, StringVal, Not
-import ecma_pilot as ep  # mirror_re, ecma_pattern, PATTERNS, smt_string
-from matrix_baseline import run_cvc5
+import z3  # noqa: E402  # sys.path bootstrap (ROOT) above
+from z3 import String, InRe, StringVal  # noqa: E402
+import ecma_pilot as ep  # noqa: E402  # mirror_re, ecma_pattern, PATTERNS, smt_string
+from matrix_baseline import run_cvc5  # noqa: E402
 
 NOODLER = os.environ.get("NOODLER", "/tmp/noodler/z3-noodler-ubuntu-24.04-x86_64-shared")
 OUT = os.path.join(ROOT, "sweep", "harness-backends", "p1-baseline")
@@ -91,8 +96,10 @@ def main():
     # Equivalence theorem: both directions in Noodler
     m2e, m2e_ms = noodler_rule_diff(ECMA, "M2E")
     e2m, e2m_ms = noodler_rule_diff(ECMA, "E2M")
-    results["theorem_M2E"] = m2e; results["theorem_M2E_ms"] = m2e_ms
-    results["theorem_E2M"] = e2m; results["theorem_E2M_ms"] = e2m_ms
+    results["theorem_M2E"] = m2e
+    results["theorem_M2E_ms"] = m2e_ms
+    results["theorem_E2M"] = e2m
+    results["theorem_E2M_ms"] = e2m_ms
     print(f"Equivalence theorem: mirror→ecma diff: {m2e} ({m2e_ms}ms) | ecma→mirror diff: {e2m} ({e2m_ms}ms)")
     theorem = (m2e.startswith("unsat") and e2m.startswith("unsat"))
     results["equivalence_theorem"] = "HOLDS" if theorem else f"REFUTED ({m2e}, {e2m})"
@@ -103,7 +110,9 @@ def main():
     s = String("s")
     sol = z3.Solver()
     sol.add(InRe(s, MIRROR))
-    t0 = time.perf_counter(); ra = sol.check(); dt_a = (time.perf_counter() - t0) * 1000
+    t0 = time.perf_counter()
+    ra = sol.check()
+    dt_a = (time.perf_counter() - t0) * 1000
     results["branch_A_stock_nonempty"] = str(ra)
     print(f"Branch A stock (nonemptiness): {ra} ({dt_a:.1f}ms)")
     # cvc5 cross-check on the same formula

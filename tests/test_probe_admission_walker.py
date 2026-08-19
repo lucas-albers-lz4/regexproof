@@ -9,8 +9,6 @@ from types import SimpleNamespace
 
 import pytest
 
-ROOT = Path(__file__).resolve().parents[1]
-
 from regexproof.admission.clone import (
     CloneError,
     CloneResult,
@@ -211,8 +209,6 @@ def test_partial_clone_stale_pin_when_default_moves(tmp_path: Path):
 
 
 def test_partial_clone_rejects_batch_corpora(tmp_path: Path):
-    bad = tmp_path / "batch" / "corpora" / "x"
-    # Make path contain batch/corpora segment after resolve — use symlink structure
     # Simpler: pass a dest whose resolve string includes the forbidden segment.
     dest = ROOT / "batch" / "corpora" / "probe-tmp-should-fail"
     with pytest.raises(CloneError, match="batch/corpora"):

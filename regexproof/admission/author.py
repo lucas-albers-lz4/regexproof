@@ -7,7 +7,7 @@ from datetime import date, datetime, timezone
 from pathlib import Path
 from typing import Any, Callable
 
-from regexproof.admission.auto_nogo import AutoNoGoError, require_auto_nogo
+from regexproof.admission.auto_nogo import require_auto_nogo
 from regexproof.admission.forks import (
     fork_duplicate_reason,
     load_go_repo_names,

@@ -6,7 +6,6 @@ from dataclasses import dataclass
 
 import z3
 
-from regexproof.compiler import compile_pattern
 
 
 @dataclass
@@ -46,11 +45,6 @@ for pat, acc, rej in [
     (r"bar$", ["bar", "xbar"], ["barx"]),
     (r"(?i)^[a-z]+$", ["Abc", "ABC"], ["A1"]),
 ]:
-    ck = "fullmatch" if pat.startswith("^") and pat.endswith("$") else (
-        "match" if pat.startswith("^") and not pat.endswith("$") else (
-            "search" if not pat.startswith("^") and pat.endswith("$") else "search"
-        )
-    )
     if pat.startswith("^") and pat.endswith("$"):
         ck = "fullmatch"
     elif pat.startswith("^"):

@@ -166,7 +166,7 @@ def write_markdown(path: Path, *, corpus: str, findings: list[dict[str, Any]]) -
             val = f.get(key)
             if key == "schema_version":
                 # Always emit the string constant required by scanner schemas.
-                lines.append(f'schema_version: "1"')
+                lines.append('schema_version: "1"')
                 continue
             if val is None and key not in ("ground_truth_status", "disclosure", "shape"):
                 continue

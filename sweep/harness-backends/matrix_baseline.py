@@ -9,13 +9,18 @@ Noodler binary path via NOODLER env (default /tmp/noodler/...); the sha256 pin i
 documented in PIN.md. Origin/main must be checked out; properties load from
 regexproof.harness.properties.
 """
-import sys, time, subprocess, os, re, json
+import sys
+import time
+import subprocess
+import os
+import re
+import json
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.insert(0, ROOT)
-import z3
-from z3 import String, StringVal, Contains, InRe, Length, Concat, Star, Union, Range, Re
-from regexproof.harness.properties import REGISTRY
+import z3  # noqa: E402  # sys.path bootstrap (ROOT) above
+from z3 import String, StringVal, Contains, InRe, Length, Concat, Star, Union, Range, Re  # noqa: E402
+from regexproof.harness.properties import REGISTRY  # noqa: E402
 
 NOODLER = os.environ.get("NOODLER", "/tmp/noodler/z3-noodler-ubuntu-24.04-x86_64-shared")
 OUT = os.path.join(ROOT, "sweep", "harness-backends", "p1-baseline")
@@ -69,19 +74,30 @@ def scan_smt_string(text, i):
         c = text[i]
         if c == '"':
             if i + 1 < len(text) and text[i + 1] == '"':
-                out.append('"'); i += 2; continue
+                out.append('"')
+                i += 2
+                continue
             return "".join(out), i + 1
         if c == "\\" and i + 1 < len(text):
             nxt = text[i + 1]
             if nxt == "x":
-                out.append(chr(int(text[i+2:i+4], 16))); i += 4; continue
+                out.append(chr(int(text[i+2:i+4], 16)))
+                i += 4
+                continue
             if nxt == "u":
                 j = text.index("}", i + 2)
-                out.append(chr(int(text[i+3:j], 16))); i = j + 1; continue
+                out.append(chr(int(text[i+3:j], 16)))
+                i = j + 1
+                continue
             if nxt in "ntr":
-                out.append({"n": "\n", "t": "\t", "r": "\r"}[nxt]); i += 2; continue
-            out.append("\\"); i += 1; continue
-        out.append(c); i += 1
+                out.append({"n": "\n", "t": "\t", "r": "\r"}[nxt])
+                i += 2
+                continue
+            out.append("\\")
+            i += 1
+            continue
+        out.append(c)
+        i += 1
     return "".join(out), i
 
 def parse_noodler_model(out):
@@ -150,7 +166,6 @@ def run_cvc5(smt, timeout_ms):
     fn = os.path.join(OUT, "_cvc5_q.smt2")
     with open(fn, "w") as f:
         f.write(smt)
-    t0 = time.perf_counter()
     try:
         p = subprocess.Popen([sys.executable, worker, fn, str(timeout_ms)],
                              stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True,
@@ -161,7 +176,6 @@ def run_cvc5(smt, timeout_ms):
             os.killpg(os.getpgid(p.pid), 9)
             out, _ = p.communicate()
             return "ABSTAIN-TIMEOUT", timeout_ms, None
-        dt = (time.perf_counter() - t0) * 1000
         # Signal-killed worker output is not trustworthy; a non-zero exit without
         # a valid V/E line is a dispatch error, not a verdict.
         if p.returncode < 0:
@@ -190,7 +204,7 @@ def reloop_form():
 """
 
 def main():
-    names = sorted(REGISTRY.keys()) + ["P2-len64", "P4-monolithic"]
+    names = [*sorted(REGISTRY.keys()), "P2-len64", "P4-monolithic"]
     rows = []
     for name in names:
         if name in REGISTRY:
@@ -206,7 +220,7 @@ def main():
         r_cvc, dt_cvc, cvc_note = run_cvc5(smt, timeout_ms)
         wmatch = "n/a"
         if r_stock == "sat" and r_ndl == "sat" and w_stock is not None and w_ndl is not None:
-            wmatch = "MATCH" if w_stock == w_ndl else f"DIFF"
+            wmatch = "MATCH" if w_stock == w_ndl else "DIFF"
         rows.append({"property": name, "note": note, "stock": r_stock, "stock_ms": round(dt_stock, 1),
                      "noodler": r_ndl, "noodler_ms": round(dt_ndl, 1), "noodler_rc": rc_ndl,
                      "cvc5": r_cvc, "cvc5_ms": round(dt_cvc, 1), "cvc5_note": cvc_note,

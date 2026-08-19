@@ -18,8 +18,8 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from regexproof.io_atomic import atomic_write_text
-from regexproof.mine.score_v2 import DEFAULT_FIT_DATE, DEFAULT_SEED, fit_report, format_report
+from regexproof.io_atomic import atomic_write_text  # noqa: E402  # ROOT bootstrap above
+from regexproof.mine.score_v2 import DEFAULT_FIT_DATE, DEFAULT_SEED, fit_report, format_report  # noqa: E402  # ROOT bootstrap above
 
 
 def _load_rows(path: Path) -> list[dict[str, Any]]:

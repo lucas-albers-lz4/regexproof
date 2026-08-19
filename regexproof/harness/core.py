@@ -10,7 +10,6 @@ import re
 import sys
 import time
 
-import z3
 from z3 import (
     AllChar,
     Concat,
@@ -149,7 +148,7 @@ def prop(
     semantics (the mirror is the `.*pat.*` wrapped form, design D7). The
     registration gate (gates.validate_pattern) verifies the wrap shape.
     `pattern` / `pattern_flags`: the SOURCE pattern text + flags, declared
-    when the property participates in the registration gates (\p gate +
+    when the property participates in the registration gates (\\p gate +
     D7 structural checks). None = no source pattern declared (gate skipped).
     `contract`: optional property-contract object (#476). UNSAT/SAT is not
     counted as product without contract + declared domain.
@@ -310,7 +309,7 @@ def run_one(name, entry, require_ground_truth=False):
 # Registration validation (Phase 2 PR A — the \p gate + D7 structural gate)
 # ---------------------------------------------------------------------------
 def validate_registry(registry=None):
-    """Run the registration gates over every property that declares a source
+    r"""Run the registration gates over every property that declares a source
     pattern (gates.validate_pattern: \p gate + D7 anchored/wrap checks via the
     Node/regexpp parser). Returns (failures: list[str], checked: int). Call
     BEFORE running properties; the CLI does this by default."""

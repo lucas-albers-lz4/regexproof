@@ -63,7 +63,8 @@ _LANGUAGE_FEATURES = (
     "other",
 )
 
-V2_FEATURE_NAMES = V1_FEATURE_NAMES + (
+V2_FEATURE_NAMES = (
+    *V1_FEATURE_NAMES,
     "enrich_fork",
     "enrich_fork_missing",
     "enrich_archived",

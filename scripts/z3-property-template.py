@@ -25,7 +25,6 @@ from __future__ import annotations
 import sys
 
 from z3 import *
-import z3
 
 # Checkout bootstrap so regexproof.z3_pin resolves when run as a script.
 from pathlib import Path
