@@ -225,22 +225,22 @@ def test_deadline_clamped_unknown_fails_closed(monkeypatch):
     pair["r2"] = {"pattern": "^a+$", "flags": "", "dialect": "py_re"}
 
     real_monotonic = bs.time.monotonic
-    # Deadline is set from the FIRST call (real start). To keep the mock
-    # simple, fix the deadline relative to the real start: deadline = start+240s.
+    # Robust clock: return the real start until the solver is first constructed
+    # (the deadline computation runs before _fresh_solver), then return a time
+    # ~20s BEFORE the deadline so every per-check budget is deadline-clamped.
+    # Keying off solver construction rather than "the deadline is the first
+    # time.monotonic() call" keeps the test robust to clock-call reordering
+    # (coderabbit #529).
     start_real = [real_monotonic()]
-    deadline_value = [start_real[0] + 240.0]
+    deadline_value = [start_real[0] + 240.0]  # _BATCH_SOLVE_DEADLINE_MS /1000
+    created = [False]
 
     def _clamped_monotonic() -> float:
-        # The deadline computation called us first — that call must be the real
-        # start so deadline lands at start+240s. Every loop checkpoint then
-        # returns ~20s BEFORE the deadline => ~20s remaining (< 120s nominal),
-        # so each check is deadline_clamped.
-        if calls["n"] == 0:
-            calls["n"] += 1
+        if not created[0]:
+            # deadline computation happens before the first solver build
             return start_real[0]
         return deadline_value[0] - 20.0  # 20s remaining (< 120s) -> clamped
 
-    calls = {"n": 0}
     monkeypatch.setattr(bs.time, "monotonic", _clamped_monotonic)
 
     # Force the first check to complete a witness so `best` is set, then force
@@ -278,8 +278,12 @@ def test_deadline_clamped_unknown_fails_closed(monkeypatch):
 
     fake = _FakeSolver()
     # _fresh_solver is a closure calling the module-level Solver() constructor;
-    # patch Solver so every build returns the fake.
-    monkeypatch.setattr(bs, "Solver", lambda: fake)
+    # patch Solver so every build returns the fake and flips the clock marker.
+    def _build_solver():
+        created[0] = True
+        return fake
+
+    monkeypatch.setattr(bs, "Solver", _build_solver)
     # Force the pad-gate to NOT confirm the fake witness, so check 0 establishes
     # a `best` = sat_fullmatch_only; the following clamped `unknown` must then
     # fail closed to timeout rather than keep that confident (but deadline-cut)
@@ -304,20 +308,21 @@ def test_retry_budget_clamped_to_deadline(monkeypatch):
 
     real_monotonic = bs.time.monotonic
     start_real = [real_monotonic()]
-    calls = {"n": 0}
+    created = [False]
 
     def _monotonic() -> float:
-        # 1st call sets deadline=start+240s. Loop checkpoints stay at ~10s
-        # before the deadline so every check is clamped; the retry must inherit
-        # that clamp, not jump back to the full 120s.
-        if calls["n"] == 0:
-            calls["n"] += 1
+        # Return the real start until the first solver is constructed (deadline
+        # computation precedes the build), then ~10s before the deadline so every
+        # per-check budget is clamped; the retry must inherit that clamp, not
+        # jump back to a fresh full 120s (coderabbit #529 robustness).
+        if not created[0]:
             return start_real[0]
         return start_real[0] + 230.0  # deadline=start+240 -> ~10s remaining
 
     monkeypatch.setattr(bs.time, "monotonic", _monotonic)
 
     timeouts = []
+    builds = {"n": 0}
 
     class _FakeSolver:
         def __init__(self):
@@ -340,16 +345,22 @@ def test_retry_budget_clamped_to_deadline(monkeypatch):
         def model(self):
             raise AssertionError("unknown never yields a model")
 
-    monkeypatch.setattr(bs, "Solver", lambda: _FakeSolver())
+    def _build_solver():
+        builds["n"] += 1
+        created[0] = True
+        return _FakeSolver()
+
+    monkeypatch.setattr(bs, "Solver", _build_solver)
     monkeypatch.setattr(bs, "_bounded_gate_sat_witness", lambda pair, w, ms: False)
     rec = bs._solve_one(pair, timeout_ms=120_000)
     assert rec["result"] == "timeout", rec
-    # The very first entry is the initial solver setup (full timeout_ms) before
-    # the loop clamps. Every subsequent per-check/retry timeout must be clamped
-    # to the ~10s remaining budget, never a fresh full 120s.
+    # at least one retry solver must have been constructed (initial + retry >= 2)
+    # — this proves the retry actually ran (coderabbit #529).
+    assert builds["n"] >= 2, builds
+    # initial solver setup uses the full nominal timeout; every subsequent
+    # per-check/retry timeout must be clamped to the ~10s remaining budget.
     assert timeouts[0] == 120_000, timeouts  # initial setup (nominal)
     assert all(t < 120_000 for t in timeouts[1:]), timeouts
-    assert timeouts, "retry should have engaged"
 
 
 
