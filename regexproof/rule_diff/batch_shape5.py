@@ -172,13 +172,15 @@ def _solve_one(pair: dict[str, Any], *, timeout_ms: int) -> dict[str, Any]:
     transient_retried = False
     for _ in range(_PAD_GATE_MODEL_CAP):
         if time.monotonic() >= deadline:
-            # Hard whole-pair budget exhausted: report what we have (best), or
-            # a timeout if the first check never completed (fail-closed).
-            if best is None:
-                rec["result"] = "timeout"
-                rec["not_proven"] = True
-                return rec
-            break
+            # Hard whole-pair budget exhausted (luna r1, issue #524). Fail
+            # closed: an artificial wall-clock cutoff must not be converted into
+            # a confident `sat`/`sat_fullmatch_only` — a pad-confirmed gap or a
+            # proven fullmatch-only verdict requires the solver to have reached
+            # its own terminal condition. Deadline exhaustion is TIMEOUT /
+            # not-proven, which the timeout_gate then hard-fails (AGENTS.md).
+            rec["result"] = "timeout"
+            rec["not_proven"] = True
+            return rec
         verdict = solver.check()
         if verdict == unknown:
             if best is None:
@@ -203,6 +205,12 @@ def _solve_one(pair: dict[str, Any], *, timeout_ms: int) -> dict[str, Any]:
                 rec["result"] = "timeout"
                 rec["not_proven"] = True
                 return rec
+            # Z3 returned unknown AFTER at least one fullmatch witness was
+            # confirmed on a completed check (best is set). The fullmatch gap is
+            # proven; the pad-gate only failed to upgrade it to a search gap
+            # within the solver's own verdict. Keep the proven fullmatch-only
+            # result (not a timeout) — this is the deliberate sat_fullmatch_only
+            # boundary that the committed golden artifacts depend on.
             break
         if verdict == unsat:
             break

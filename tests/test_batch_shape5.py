@@ -176,3 +176,35 @@ def test_require_ground_truth_fails_sat_without_gt(tmp_path, monkeypatch):
             note="test",
             require_ground_truth=True,
         )
+
+
+def test_deadline_exhaustion_fails_closed_to_timeout(monkeypatch):
+    """luna r1/r2 (issue #524): a hard wall-clock deadline must not convert an
+    un-finished model-enumeration search into a confident sat/sat_fullmatch_only
+    result — deadline exhaustion is TIMEOUT / not_proven, which timeout_gate
+    then hard-fails. This locks in the fail-closed boundary on _solve_one."""
+    from regexproof.rule_diff import batch_shape5 as bs
+
+    pair = _toy_pair("dl", "a", "a|b")
+    pair["r1"] = {"pattern": "^a$", "flags": "", "dialect": "py_re"}
+    pair["r2"] = {"pattern": "^a+$", "flags": "", "dialect": "py_re"}
+
+    real_monotonic = bs.time.monotonic
+    calls = {"n": 0}
+
+    def _fast_deadline_forwards() -> float:
+        # First call (deadline = now + 240s) is real; every loop check sees a
+        # timestamp far beyond the deadline so the guard trips immediately,
+        # before any solver.check() can complete.
+        calls["n"] += 1
+        if calls["n"] == 1:
+            return real_monotonic()
+        return real_monotonic() + 100_000.0
+
+    monkeypatch.setattr(bs.time, "monotonic", _fast_deadline_forwards)
+    rec = bs._solve_one(pair, timeout_ms=120_000)
+    assert rec["result"] == "timeout"
+    assert rec.get("not_proven") is True
+    # Fail-closed means it must NOT claim a confident sat/sat_fullmatch_only.
+    assert rec["result"] not in ("sat", "sat_fullmatch_only")
+
