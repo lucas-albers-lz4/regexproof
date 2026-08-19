@@ -6,6 +6,8 @@ import importlib.util
 import json
 from pathlib import Path
 
+import pytest
+
 from regexproof.mine.ledger import empty_ledger
 from regexproof.mine.search import SearchRunResult
 from regexproof.mine.tree import TreeCache, materialize_tree_features
@@ -114,7 +116,7 @@ def test_truncated_tree_contributes_no_signal(tmp_path: Path):
     assert feature["regex_file_type_counts"] == {}
 
 
-def test_gate_labels_join_is_deterministic_and_keeps_duplicate_decisions(tmp_path: Path):
+def test_gate_labels_join_is_deterministic_and_dedupes_duplicate_urls(tmp_path: Path):
     script = _load_labels_script()
     generated = tmp_path / "generated"
     generated.mkdir()
@@ -163,8 +165,66 @@ def test_gate_labels_join_is_deterministic_and_keeps_duplicate_decisions(tmp_pat
     )
     assert first == second
     assert out.read_bytes() == first_bytes
-    assert len(first["rows"]) == 2
+    assert len(first["rows"]) == 1
     assert first["provenance"]["input_file_count"] == 2
+    ledger_path.write_text(
+        ledger_path.read_text(encoding="utf-8").replace('"stars": 3', '"stars": 4'),
+        encoding="utf-8",
+    )
+    after_ledger = script.build_gate_labels(
+        ledger_path=ledger_path,
+        generated_dir=generated,
+        output_path=out,
+    )
+    assert after_ledger["provenance"]["inputs_hash"] != first["provenance"]["inputs_hash"]
+
+
+def test_list_gate_decision_paths_falls_back_to_glob_outside_repo(tmp_path: Path):
+    from regexproof.mine.gate_files import git_ls_decision_paths, list_gate_decision_paths
+
+    generated = tmp_path / "generated"
+    generated.mkdir()
+    (generated / "acme_gate_decision.json").write_text("{}", encoding="utf-8")
+    assert git_ls_decision_paths(generated) is None
+    paths = list_gate_decision_paths(generated)
+    assert [p.name for p in paths] == ["acme_gate_decision.json"]
+    script = _load_labels_script()
+    generated = ROOT / "properties" / "generated"
+    tracked = script._git_ls_decision_paths(generated)
+    assert tracked is not None
+    assert tracked == script._decision_paths(generated)
+    assert any(path.name.endswith("_gate_decision.json") for path in tracked)
+    tmp_only = generated.parent.parent / "no-such-generated-for-labels-test"
+    assert script._git_ls_decision_paths(tmp_only) is None
+
+
+def test_read_repo_bytes_keeps_git_spelling_without_resolve(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+):
+    from regexproof.mine import gate_files as gf
+
+    root = tmp_path / "repo"
+    generated = root / "properties" / "generated"
+    generated.mkdir(parents=True)
+    (generated / "validator_gate_decision.json").write_bytes(b"disk-folded")
+    calls: list[list[str]] = []
+
+    def fake_run(cmd, **kwargs):
+        calls.append(list(cmd))
+
+        class Proc:
+            returncode = 0
+            stdout = b'{"corpus":"Validator"}'
+
+        return Proc()
+
+    monkeypatch.setattr(gf.subprocess, "run", fake_run)
+    data = gf.read_repo_bytes(
+        generated / "Validator_gate_decision.json", repo_root=root
+    )
+    assert data == b'{"corpus":"Validator"}'
+    spec = "HEAD:properties/generated/Validator_gate_decision.json"
+    assert any(spec in cmd for cmd in calls)
 
 
 def test_assimilate_persists_enrichment_fields():

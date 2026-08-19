@@ -15,14 +15,20 @@ from typing import Any
 import jsonschema
 
 from regexproof.batch import budgets as _budgets
-from regexproof.batch.budgets import (  # noqa: F401
+from regexproof.batch.budgets import (
     BudgetBreached,
     apply_address_space_cap,
     check_budget_mem,
     check_budget_patterns,
 )
 from regexproof.batch.compile_records import DEFAULT_WORKER_COUNT, compile_records
+from regexproof.batch.crs_measure import (  # noqa: F401
+    measure_coreruleset,
+    measure_coreruleset_full,
+    measure_coreruleset_sample,
+)
 from regexproof.batch.disclose import (
+    apply_approval,
     assert_no_auto_publication,
     tag_disclosure,
     write_pr_dry_run,
@@ -38,7 +44,7 @@ from regexproof.batch.intent import (
     detect_usage_mismatches,
 )
 from regexproof.batch.inventory import check_corpus_coverage, load_inventory
-from regexproof.batch.manifests import (  # noqa: F401
+from regexproof.batch.manifests import (
     CORPUS_MANIFESTS,
     MAX_FILE_BYTES,
     ROOT,
@@ -47,9 +53,7 @@ from regexproof.batch.manifests import (  # noqa: F401
 from regexproof.batch.report import write_markdown, write_ndjson
 from regexproof.batch.synthesize import synthesize_compiled
 from regexproof.batch.triage import triage_records_from_compiled, write_triage_ndjson
-from regexproof.compiler import compile_pattern
-from regexproof.extractors.modsec import count_operators
-from regexproof.io_atomic import atomic_write_lines, atomic_write_text
+from regexproof.io_atomic import atomic_write_text
 from regexproof.redos.join import join_findings
 from regexproof.z3_pin import assert_z3_pinned
 
@@ -57,12 +61,36 @@ from regexproof.z3_pin import assert_z3_pinned
 _MAX_FILE_BYTES = MAX_FILE_BYTES
 _extract = extract_corpus
 _extract_glob = extract_glob
+
+PILOT_CORPORA = ["gitleaks", "validatorjs", "detect-secrets"]
+AGGREGATE_ARTIFACTS = (
+    "batch_summary.json",
+    "batch_pair_counts.json",
+    "batch_repro.sha256",
+)
 _compile_all = compile_records
 _validate_expected_roots = validate_expected_roots
 _check_budget_patterns = check_budget_patterns
 _check_budget_mem = check_budget_mem
 _apply_address_space_cap = apply_address_space_cap
 _LAST_ADDRESS_SPACE_CAP_APPLIED = None  # compat; prefer _budgets.LAST_ADDRESS_SPACE_CAP_APPLIED
+
+
+def _serializable_summary(summary: dict[str, Any]) -> str:
+    """Serialize a corpus summary for the byte-compared reproducibility artifact.
+
+    Observational cache hit-rate stats are deliberately zeroed at write time,
+    the same policy as ``wall_ms`` (see report.write_ndjson): the mirror-cache
+    hit counter is shared across parallel compile workers and its accounting
+    order varies from process to process, so embedding it would make the
+    two-run byte-identity check (scripts/ci-batch-repro.py, issue #524) flaky
+    even with deterministic corpus output. The live value is still printed to
+    the console for operators.
+    """
+    payload = dict(summary)
+    payload["cache"] = {"hits": 0, "misses": 0, "entries": 0, "hit_rate": 0.0}
+    payload["cache_hit_rate"] = 0.0
+    return json.dumps(payload, indent=2, sort_keys=True) + "\n"
 
 
 def _discard_streamed_mirrors(
@@ -82,6 +110,112 @@ def _discard_streamed_mirrors(
     # (and the triple list) — callers extract rows first, then discard, so
     # clearing here is safe and reclaims RSS.
     compiled.clear()
+
+
+def _write_batch_shape5_artifact(
+    corpus: str,
+    out_dir: Path,
+    *,
+    rows: list[dict[str, Any]],
+    summary: dict[str, Any],
+) -> None:
+    """Rewrite ``{corpus}_batch_shape5.json`` so the ledger matches this run.
+
+    Z3 SAT witnesses are non-deterministic across runs; strip them from the
+    on-disk artifact (pad-gate GT already ran) so Phase-6 two-run repro stays
+    byte-identical. Keep ``witness_present`` for audit.
+    """
+    durable_rows: list[dict[str, Any]] = []
+    for rec in rows:
+        row = dict(rec)
+        if row.get("witness") is not None:
+            row["witness_present"] = True
+            row["witness"] = None
+        durable_rows.append(row)
+    atomic_write_text(
+        out_dir / f"{corpus}_batch_shape5.json",
+        json.dumps(
+            {
+                "schema_version": "1",
+                "corpus": corpus,
+                "rows": durable_rows,
+                "summary": summary,
+            },
+            indent=2,
+            sort_keys=True,
+        )
+        + "\n",
+    )
+
+
+def _clear_batch_shape5(corpus: str, out_dir: Path, *, note: str) -> None:
+    """Zero the shape-5 artifact when this run did not execute pairs.
+
+    Without a rewrite, a stale committed/local ``*_batch_shape5.json`` keeps
+    counting in ``conversion-ledger.py`` while ``batch_pair_counts.json``
+    reports executed=0.
+    """
+    from regexproof.rule_diff.batch_shape5 import summarize_shape5_rows
+
+    summary = summarize_shape5_rows([])
+    summary["note"] = note
+    _write_batch_shape5_artifact(corpus, out_dir, rows=[], summary=summary)
+
+
+def _enforce_shape5_ground_truth(rows: list[dict[str, Any]]) -> None:
+    """Hard-fail SAT search gaps without reproduced pad-gate GT (#510)."""
+    bad: list[str] = []
+    for rec in rows:
+        if rec.get("result") != "sat":
+            continue
+        if rec.get("ground_truth_status") == "reproduced":
+            continue
+        bad.append(
+            f"{rec.get('pair_id')}: sat without ground_truth_status=reproduced "
+            f"(got {rec.get('ground_truth_status')!r})"
+        )
+    if bad:
+        raise SystemExit(
+            "batch shape-5 --require-ground-truth failed:\n  " + "\n  ".join(bad)
+        )
+
+
+def _run_and_record_shape5(
+    corpus: str,
+    pairs: list[dict[str, Any]],
+    out_dir: Path,
+    *,
+    admitted: int,
+    dropped: int,
+    note: str,
+    require_ground_truth: bool = False,
+) -> dict[str, Any]:
+    """Filter, solve, pad-gate, and write ``{corpus}_batch_shape5.json``."""
+    from regexproof.rule_diff.batch_shape5 import (
+        filter_batch_pairs,
+        run_batch_shape5_pairs,
+        summarize_shape5_rows,
+    )
+    from regexproof.rule_diff.timeout_gate import fail_message, timeout_gate
+
+    batch_pairs = filter_batch_pairs(pairs)
+    rows = run_batch_shape5_pairs(batch_pairs)
+    summary = summarize_shape5_rows(rows)
+    gate_ok, n_timeout, rate, bad = timeout_gate(rows, name_key="pair_id")
+    summary["timeout_gate_ok"] = gate_ok
+    summary["timeout_rate"] = rate
+    _write_batch_shape5_artifact(corpus, out_dir, rows=rows, summary=summary)
+    if not gate_ok:
+        raise SystemExit(fail_message(bad, n_timeout))
+    if require_ground_truth:
+        _enforce_shape5_ground_truth(rows)
+    return {
+        "admitted": admitted,
+        "dropped": dropped,
+        "batch_shape5": len(batch_pairs),
+        **summary,
+        "note": note,
+    }
 
 
 def resolve_corpus_path(corpus: str, meta: dict[str, Any]) -> dict[str, Any]:
@@ -361,6 +495,7 @@ def run_corpus(
     joined = join_findings(z3_side, redos_findings)
 
     findings = tag_disclosure(findings, corpus=corpus)
+    findings = apply_approval(findings, approval_path=approval_path)
     enforce_evidence_gates(
         findings,
         require_ground_truth=require_ground_truth,
@@ -404,7 +539,7 @@ def run_corpus(
         summary["synthesis"] = synthesis.stats
     atomic_write_text(
         out_dir / f"{corpus}_batch_summary.json",
-        json.dumps(summary, indent=2, sort_keys=True) + "\n",
+        _serializable_summary(summary),
     )
     if redos_incomplete:
         raise SystemExit(
@@ -414,203 +549,6 @@ def run_corpus(
             f"(partial findings written to {out_dir / f'{corpus}.ndjson'})"
         )
     return summary
-
-
-def measure_coreruleset_sample(
-    out_dir: Path, *, as_primary: bool = False
-) -> dict[str, Any]:
-    """PCRE encodable-fraction gate on pinned CRS sample; go iff >= 0.30.
-
-    Always writes ``coreruleset_sample_encodable_fraction.json``. Only when
-    ``as_primary`` (full ``rules/`` absent) may it also write the primary
-    ``coreruleset_encodable_fraction.json`` — never overwrite a full-corpus
-    primary with the sample report.
-    """
-    sample = ROOT / "batch" / "corpora" / "coreruleset" / "sample.rules"
-    lines = [
-        ln.strip()
-        for ln in sample.read_text(encoding="utf-8").splitlines()
-        if ln.strip() and not ln.strip().startswith("#")
-    ]
-    encodable = 0
-    for i, pat in enumerate(lines):
-        cr = compile_pattern(pat, "", "pcre", "search")
-        if cr.encodable:
-            encodable += 1
-    n = len(lines) or 1
-    fraction = encodable / n
-    decision = "go" if fraction >= 0.30 else "no-go"
-    report = {
-        "schema_version": "1",
-        "pilot": "coreruleset",
-        "dialect": "pcre",
-        "sample_size": len(lines),
-        "encodable": encodable,
-        "fraction": fraction,
-        "go_no_go_threshold": 0.3,
-        "decision": decision,
-        "sample_path": str(sample.relative_to(ROOT)),
-        "scope": "sample",
-    }
-    out_dir.mkdir(parents=True, exist_ok=True)
-    payload = json.dumps(report, indent=2, sort_keys=True) + "\n"
-    atomic_write_text(out_dir / "coreruleset_sample_encodable_fraction.json", payload)
-    if as_primary:
-        primary = out_dir / "coreruleset_encodable_fraction.json"
-        # Never clobber a committed/full-corpus primary when rules/ is absent
-        # (CI smoke without materializing CRS).
-        keep_full = False
-        if primary.is_file():
-            try:
-                prev = json.loads(primary.read_text(encoding="utf-8"))
-                keep_full = prev.get("scope") == "full_corpus"
-            except json.JSONDecodeError:
-                keep_full = False
-        if not keep_full:
-            atomic_write_text(primary, payload)
-    return report
-
-
-def measure_coreruleset_full(out_dir: Path) -> dict[str, Any] | None:
-    """Full-corpus CRS fraction (modsec extractor + normalize → compile_pcre).
-
-    Returns None when ``batch/corpora/coreruleset/rules`` is not materialized.
-    Writes ``coreruleset_encodable_fraction.json`` (primary artifact) and
-    ``crs-inventory.ndjson`` for P2/P3 handoff. @rx-only numerator matches the
-    Phase-1 GO comment (selectors reported separately).
-    """
-    from collections import Counter
-
-    import platform as _platform
-
-    import z3
-
-    rules_dir = ROOT / "batch" / "corpora" / "coreruleset" / "rules"
-    if not rules_dir.is_dir():
-        return None
-
-    records: list[dict[str, Any]] = []
-    op_counts: Counter[str] = Counter()
-    for fp in sorted(rules_dir.glob("*.conf")):
-        src = fp.read_text(encoding="utf-8", errors="replace")
-        op_counts.update(count_operators(src))
-        rel = str(fp.relative_to(ROOT))
-        records.extend(extract_modsec(src, repo="coreruleset/coreruleset", file=rel))
-
-    compiled = _compile_all(
-        records, lift_inline=True, corpus_slug="coreruleset",
-        budget=CORPUS_MANIFESTS.get("coreruleset", {}).get("budget"),
-    )
-    rows = [pair[0] for pair in compiled]
-    _discard_streamed_mirrors(compiled)
-    rx_only = [c for c in rows if not c.get("selector")]
-    selectors = [c for c in rows if c.get("selector")]
-    rx_enc = [c for c in rx_only if c.get("encodable")]
-    n = len(rx_only) or 1
-    fraction = len(rx_enc) / n
-    decision = "go" if fraction >= 0.30 else "no-go"
-    reasons = Counter((c.get("compile_reason") or "ok") for c in rx_only)
-
-    out_dir.mkdir(parents=True, exist_ok=True)
-    inv_path = out_dir / "crs-inventory.ndjson"
-    atomic_write_lines(
-        inv_path,
-        (
-            json.dumps(
-                {
-                    "regex_id": c.get("regex_id"),
-                    "rule_id": c.get("rule_id"),
-                    "site": c.get("site"),
-                    "pattern": c.get("pattern"),
-                    "flags": c.get("flags") or "",
-                    "dialect": c.get("dialect"),
-                    "call_kind": c.get("call_kind"),
-                    "encodable": bool(c.get("encodable")),
-                    "compile_reason": c.get("compile_reason"),
-                    "negated": c.get("negated"),
-                    "selector": bool(c.get("selector")),
-                    "corpus": "coreruleset",
-                },
-                sort_keys=True,
-            )
-            for c in rows
-        ),
-    )
-
-    report = {
-        "schema_version": "1",
-        "pilot": "coreruleset",
-        "dialect": "pcre",
-        "scope": "full_corpus",
-        "corpus_pin": "v4.28.0",
-        "sample_size": len(rx_only),
-        "encodable": len(rx_enc),
-        "fraction": round(fraction, 4),
-        "go_no_go_threshold": 0.3,
-        "decision": decision,
-        "decision_rule": (
-            "go iff @rx-only encodable/sample_size >= 0.3 "
-            "(normalize_inline_flags → compile_pcre; selectors excluded from fraction)"
-        ),
-        "reasons": dict(reasons),
-        "selectors": {
-            "count": len(selectors),
-            "encodable": sum(1 for c in selectors if c.get("encodable")),
-        },
-        "operators": dict(op_counts),
-        "extracted_total": len(rows),
-        "inventory_path": str(inv_path),
-        "engine_versions": {
-            "python": _platform.python_version(),
-            "z3": z3.get_version_string(),
-        },
-        "records": [
-            {
-                "regex_id": c.get("regex_id"),
-                "rule_id": c.get("rule_id"),
-                "site": c.get("site"),
-                "call_kind": c.get("call_kind"),
-                "dialect": c.get("dialect"),
-                "encodable": bool(c.get("encodable")),
-                "reason": c.get("compile_reason"),
-                "pattern": (c.get("pattern") or "")[:120],
-                "flags": c.get("flags") or "",
-                "selector": bool(c.get("selector")),
-            }
-            for c in rows
-        ],
-    }
-    atomic_write_text(
-        out_dir / "coreruleset_encodable_fraction.json",
-        json.dumps(report, indent=2, sort_keys=True) + "\n",
-    )
-    return report
-
-
-def measure_coreruleset(out_dir: Path) -> dict[str, Any]:
-    """Prefer full-corpus fraction when rules/ is present and out_dir is in-repo."""
-    try:
-        out_dir.resolve().relative_to((ROOT / "properties").resolve())
-        in_repo_properties = True
-    except ValueError:
-        in_repo_properties = False
-    if in_repo_properties:
-        full = measure_coreruleset_full(out_dir)
-        if full is not None:
-            # Still emit sample artifact for CI smoke without depending on it for GO.
-            measure_coreruleset_sample(out_dir, as_primary=False)
-            return full
-        # rules/ missing: keep returning a committed full-corpus primary if present.
-        primary = out_dir / "coreruleset_encodable_fraction.json"
-        if primary.is_file():
-            try:
-                prev = json.loads(primary.read_text(encoding="utf-8"))
-            except json.JSONDecodeError:
-                prev = {}
-            if prev.get("scope") == "full_corpus":
-                measure_coreruleset_sample(out_dir, as_primary=False)
-                return prev
-    return measure_coreruleset_sample(out_dir, as_primary=True)
 
 
 def check_admission_gates(
@@ -681,6 +619,8 @@ def run_batch(
     synth_diff_fuzz_sample: int | None = None,
     jobs: int | None = None,
     cache_dir: Path | str | None = None,
+    write_pilot_aggregate: bool | None = None,
+    approval_path: Path | None = None,
 ) -> dict[str, Any]:
     cov = check_corpus_coverage()
     if cov:
@@ -693,6 +633,13 @@ def run_batch(
 
     out_dir.mkdir(parents=True, exist_ok=True)
     (ROOT / "properties" / "triage").mkdir(parents=True, exist_ok=True)
+    if write_pilot_aggregate is None:
+        write_pilot_aggregate = set(corpora) == set(PILOT_CORPORA)
+    if write_pilot_aggregate and set(corpora) != set(PILOT_CORPORA):
+        raise SystemExit(
+            "error: write_pilot_aggregate requires exactly the three "
+            f"pilot corpora {PILOT_CORPORA}"
+        )
 
     summaries = {}
     pair_counts = {}
@@ -709,6 +656,7 @@ def run_batch(
             synth_diff_fuzz_sample=synth_diff_fuzz_sample,
             jobs=jobs,
             cache_dir=cache_dir,
+            approval_path=approval_path,
         )
         cache = summaries[name].get("cache") or {}
         print(
@@ -722,26 +670,94 @@ def run_batch(
             specs = ROOT / "pilots" / "gitleaks" / "canonical_specs" / "catalog.json"
             toml = ROOT / "pilots" / "gitleaks" / "config" / "gitleaks.toml"
             d = discover_pairs(toml_path=toml, specs_path=specs)
+            pair_counts[name] = _run_and_record_shape5(
+                name,
+                d["admitted_pairs"],
+                out_dir,
+                admitted=d["admitted_count"],
+                dropped=d["dropped_count"],
+                note=(
+                    "independent-spec gitleaks pairs are not version_diff/"
+                    "cross_engine; batch executes 0 unless family_contract "
+                    "is present (#477)"
+                ),
+                require_ground_truth=require_ground_truth,
+            )
+        else:
             pair_counts[name] = {
-                "admitted": d["admitted_count"],
-                "dropped": d["dropped_count"],
+                "admitted": 0,
+                "dropped": 0,
+                "batch_shape5": 0,
+                "executed": 0,
+                "note": "no independent-spec catalog",
+            }
+
+    if write_pilot_aggregate or "coreruleset" in corpora:
+        crs = measure_coreruleset(out_dir)
+    else:
+        crs = {
+            "decision": "skipped",
+            "fraction": None,
+            "scope": "not-measured",
+            "note": "single-corpus Smith run; pass write_pilot_aggregate to measure CRS",
+        }
+    if crs["decision"] == "go":
+        from regexproof.rule_diff.crs_batch import (
+            discover_crs_batch_pairs,
+            resolve_crs_version_trees,
+        )
+
+        trees = resolve_crs_version_trees()
+        if trees is None:
+            skip_note = (
+                "fraction gate go; version_diff family_contract is stamped "
+                "at CRS discovery. Batch shape-5 execute needs older+newer "
+                "rule trees (REGEXPROOF_CRS_*_RULES or /tmp/crs-shape5/)."
+            )
+            _clear_batch_shape5("coreruleset", out_dir, note=skip_note)
+            pair_counts["coreruleset"] = {
+                "admitted": 0,
+                "dropped": 0,
+                "batch_shape5": 0,
+                "executed": 0,
+                "note": skip_note,
+                "scope": crs.get("scope"),
+                "fraction": crs.get("fraction"),
             }
         else:
-            pair_counts[name] = {"admitted": 0, "dropped": 0, "note": "no independent-spec catalog"}
-
-    crs = measure_coreruleset(out_dir)
-    if crs["decision"] == "go":
-        pair_counts["coreruleset"] = {
-            "admitted": 0,
-            "dropped": 0,
-            "note": "fraction gate go; CRS rule-derived adapter is Phase-2 rule_diff",
-            "scope": crs.get("scope"),
-            "fraction": crs.get("fraction"),
-        }
+            older_rules, newer_rules = trees
+            discovered = discover_crs_batch_pairs(
+                older_rules=older_rules,
+                newer_rules=newer_rules,
+            )
+            pair_counts["coreruleset"] = _run_and_record_shape5(
+                "coreruleset",
+                discovered["admitted"],
+                out_dir,
+                admitted=len(discovered["admitted"]),
+                dropped=len(discovered.get("dropped") or [])
+                + len(discovered.get("batch_timeout_skipped") or []),
+                note=(
+                    "CRS version_diff with family_contract; "
+                    f"timeout-skipped={len(discovered.get('batch_timeout_skipped') or [])}"
+                ),
+                require_ground_truth=require_ground_truth,
+            )
+            pair_counts["coreruleset"]["scope"] = crs.get("scope")
+            pair_counts["coreruleset"]["fraction"] = crs.get("fraction")
     else:
+        skip_note = (
+            f"excluded decision={crs['decision']} fraction={crs['fraction']}"
+        )
+        # Do not wipe a prior CRS artifact on single-corpus Smith runs that
+        # never measured CRS (decision=skipped) — that reintroduces ledger skew.
+        if crs["decision"] != "skipped":
+            _clear_batch_shape5("coreruleset", out_dir, note=skip_note)
         pair_counts["coreruleset"] = {
             "admitted": 0,
-            "note": f"excluded decision={crs['decision']} fraction={crs['fraction']}",
+            "batch_shape5": 0,
+            "executed": 0,
+            "note": skip_note,
             "scope": crs.get("scope"),
         }
 
@@ -764,13 +780,25 @@ def run_batch(
         for summary in summaries.values()
     )
     batch["cache_hit_rate"] = total_hits / total_entries if total_entries else 0.0
+    if not write_pilot_aggregate:
+        return batch
+
+    def _serializable_batch() -> str:
+        payload = dict(batch)
+        payload["corpora"] = {
+            name: json.loads(_serializable_summary(summary))
+            for name, summary in summaries.items()
+        }
+        payload["cache_hit_rate"] = 0.0
+        return json.dumps(payload, indent=2, sort_keys=True) + "\n"
+
     atomic_write_text(
         out_dir / "batch_pair_counts.json",
         json.dumps(pair_counts, indent=2, sort_keys=True) + "\n",
     )
     atomic_write_text(
         out_dir / "batch_summary.json",
-        json.dumps(batch, indent=2, sort_keys=True) + "\n",
+        _serializable_batch(),
     )
 
     # Byte-identical fingerprint of triage+ndjson names for reproducibility smoke
@@ -793,6 +821,12 @@ def main(argv: list[str] | None = None) -> int:
         help="gitleaks|validatorjs|detect-secrets|coreruleset|all",
     )
     ap.add_argument("--out", type=Path, default=ROOT / "properties" / "generated")
+    ap.add_argument(
+        "--write-pilot-aggregate",
+        action="store_true",
+        help="write batch_summary.json / pair counts / repro sha "
+        "(implied for --corpus all; omit on single-corpus Smith runs)",
+    )
     ap.add_argument("--with-redos", action="store_true")
     ap.add_argument(
         "--synthesize",
@@ -848,6 +882,13 @@ def main(argv: list[str] | None = None) -> int:
         help="omit inventory planned stubs from findings",
     )
     ap.add_argument(
+        "--approval-path",
+        type=Path,
+        default=None,
+        help="JSON file listing regex_ids allowed to become disclosure=public_ok "
+        "(ground-truthed findings only). Never auto-publishes.",
+    )
+    ap.add_argument(
         "--json-legacy",
         action="store_true",
         help="mutually exclusive legacy flag (rejected)",
@@ -893,6 +934,10 @@ def main(argv: list[str] | None = None) -> int:
         synth_diff_fuzz_sample=args.synth_diff_fuzz_sample,
         jobs=args.jobs,
         cache_dir=args.cache_dir,
+        write_pilot_aggregate=(
+            True if args.corpus == "all" else args.write_pilot_aggregate
+        ),
+        approval_path=args.approval_path,
     )
     print("batch ok:", ", ".join(corpora))
     return 0

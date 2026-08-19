@@ -21,7 +21,7 @@ _TYPE_TO_CALL_KIND = {
 
 
 class ParseStats:
-    __slots__ = ("parsed", "skipped", "errors")
+    __slots__ = ("errors", "parsed", "skipped")
 
     def __init__(self) -> None:
         self.parsed = 0
@@ -102,7 +102,7 @@ def extract_re2_testdata(
                 )
             )
             stats.parsed += 1
-        except Exception:  # noqa: BLE001
+        except Exception:
             stats.errors += 1
 
     for rec in out:

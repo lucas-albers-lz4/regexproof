@@ -18,9 +18,9 @@ from typing import Any, Mapping, Sequence
 from regexproof.admission.boundary import BoundarySignals, classify_boundary
 from regexproof.mine.exclusions import normalize_repo_url
 
-# Importing score is safe here: score imports this module lazily from its
-# score-v2 path, avoiding a module-level cycle.
-from regexproof.mine.score import (  # noqa: E402
+# Feature helpers live in features.py so v1/v2 do not import each other's
+# private score helpers. score.py still lazy-imports this module for v2.
+from regexproof.mine.features import (
     _query_family,
     _recency_points,
     _repo_slug,
@@ -63,7 +63,8 @@ _LANGUAGE_FEATURES = (
     "other",
 )
 
-V2_FEATURE_NAMES = V1_FEATURE_NAMES + (
+V2_FEATURE_NAMES = (
+    *V1_FEATURE_NAMES,
     "enrich_fork",
     "enrich_fork_missing",
     "enrich_archived",
@@ -566,7 +567,8 @@ def fit_report(
     sanity = _boundary_sanity_model(v1_model, today=today)
     interval = _bootstrap_auc_interval(full_holdout_scores, holdout_labels, seed=seed + 1)
     gate = {
-        "holdout_auc_ge_0_70": bool(holdout_auc >= 0.70),
+        "label_reproduction_auc_ge_0_70": bool(holdout_auc >= 0.70),
+        "holdout_auc_ge_0_70": bool(holdout_auc >= 0.70),  # alias
         "ablation_beats_v1_features": bool(holdout_auc > ablation_auc),
         "mean_gap_beats_v1_baseline_informational": bool(full_gap > baseline_gap),
         "default_allocator_flip_allowed": bool(holdout_auc >= 0.70 and holdout_auc > ablation_auc),
@@ -580,7 +582,8 @@ def fit_report(
         "weights": full_model["weights"],
         "n": len(rows),
         "date": today.isoformat(),
-        "holdout_auc": holdout_auc,
+        "label_reproduction_auc": holdout_auc,
+        "holdout_auc": holdout_auc,  # deprecated alias; not external validation
         "holdout_positive_count": sum(holdout_labels),
         "holdout_negative_count": len(holdout_labels) - sum(holdout_labels),
         "holdout_auc_bootstrap_95": interval,
@@ -601,7 +604,8 @@ def fit_report(
         "evaluation": {
             "label_set": "gate-labels.json",
             "positive_mapping": chosen_mapping,
-            "holdout_auc": holdout_auc,
+            "label_reproduction_auc": holdout_auc,
+            "holdout_auc": holdout_auc,  # deprecated alias
             "v1_feature_ablation_auc": ablation_auc,
             "recomputed_v1_baseline_auc": baseline_auc,
             "score_v2_mean_gap": full_gap,
@@ -644,7 +648,8 @@ def format_report(artifact: Mapping[str, Any]) -> dict[str, Any]:
         "date": artifact.get("date"),
         "positive_mapping": training.get("positive_mapping"),
         "mapping_decision": training.get("mapping_decision"),
-        "holdout_auc": artifact.get("holdout_auc"),
+        "label_reproduction_auc": artifact.get("label_reproduction_auc", artifact.get("holdout_auc")),
+        "holdout_auc": artifact.get("label_reproduction_auc", artifact.get("holdout_auc")),
         "holdout_positive_count": artifact.get("holdout_positive_count"),
         "holdout_auc_bootstrap_95": artifact.get("holdout_auc_bootstrap_95"),
         "v1_feature_ablation_auc": evaluation.get("v1_feature_ablation_auc"),

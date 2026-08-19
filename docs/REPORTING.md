@@ -65,7 +65,7 @@ Schema: `regexproof/schemas/scanner_finding.schema.json`.
 | `shape` | 1–5 or null |
 | `ground_truth_status` | Replay status. Present on Z3-verdict findings (`property`, `counterexample_finder`, `bug_demo`, `mutation_guard`, `rule_diff`); mutation guards require the exact `mutation-guard-sat-expected` value. Omitted on classification findings (`usage_mismatch`, `intent_mismatch`, `triage`, `redos`) — absence means "not a Z3 verdict", never a silent `N/A` |
 | `ground_truth` | Optional **per-engine** evidence object for cross-engine `rule_diff` (e.g. `{pcre2: {status, version, cmd, matched, replay}, go_re2: {...}, status}`). A single `ground_truth_status` alone is not sufficient to claim dual-engine ground truth. |
-| `disclosure` | `private_first` \| `public_ok` \| null |
+| `disclosure` | `private_first` \| `public_ok` \| null. **null** means the corpus is not in `SECURITY_TOOL_CORPORA` and no approval file listed this `regex_id`. On security-tool corpora, `tag_disclosure()` defaults to `private_first` for every kind unless listed in `DISCLOSURE_EXEMPT_KINDS` (empty; fail-closed). `public_ok` is set **only** by `apply_approval()` from `--approval-path` (JSON `{"regex_ids": [...]}`) on ground-truthed (`reproduced`/`PASS`) findings. `assert_no_auto_publication()` still forbids `publish` without `approved`. |
 | `witness` | Redacted when committed |
 | `detail` | Kind-specific object |
 
@@ -114,3 +114,54 @@ triage should route these per `scripts/crs-redos-dialect.py` `ROUTING` (and
 corpus equivalents).
 
 Human-mergable: one JSON object per line, stable key order (`sort_keys`).
+
+## Conversion ledger
+
+Writer: `scripts/conversion-ledger.py`. Artifacts:
+`properties/generated/conversion-ledger.{json,md}`. Curated last mile:
+[`docs/conversion-upstream.jsonl`](conversion-upstream.jsonl).
+
+This is the product funnel (sites → properties asked → SAT → ground-truthed →
+disclosed → accepted upstream). It is orthogonal to compiler-feature-yield
+(which ranks encode-path work) and to `docs/verified-findings.jsonl` (toolkit
+traps). Heap's-law novelty saturates coverage; this ledger saturates conversion.
+
+Golden CI regenerates the artifact after batch and `git diff --exit-code`s it.
+`would_open_public_upstream` must stay 0 without a human approval file
+([SECURITY.md](../SECURITY.md)). TIMEOUT / `unknown` is not a pass.
+
+Two `private_first` counters exist and must not be mixed (#486):
+
+- `disclosed_private_first` — scanner NDJSON product+classification kinds,
+  **skipping** planned inventory stubs (`is_planned`).
+- `pr_dry_run_private_first` — summed from `*-pr-dry-run.json`, **including**
+  planned stubs that `tag_disclosure()` marked private. The typical delta is
+  31 security-tool corpora × 4 stub questions = 124.
+
+Scanner product kinds counted as "properties asked": `property`,
+`counterexample_finder`, `bug_demo`, `rule_diff` with `result` other than
+`planned`. SAT-ish results: `sat` and `gap`. Ground-truth pass:
+`reproduced` and `PASS`. `mutation_guard` and `usage_mismatch` /
+`intent_mismatch` / `triage` are excluded from the product numerator.
+
+Ledger JSON (`schema_version: "1"`) field groups:
+
+| Group | Fields |
+|---|---|
+| funnel | `sites_extracted`, `sites_encodable`, `scanner_rows`, `planned_stubs`, `classification_rows`, `properties_asked`, `properties_asked_synthesized`, `properties_sat`, `properties_sat_synthesized`, `sat_unique_sites`, `sat_ground_truthed`, `rule_diff_report_sat`, `disclosed_private_first`, `pr_dry_run_private_first`, `accepted_upstream`, `existence_proofs`, `third_party_public`, … |
+| rates | `encodable_fraction`, `pipeline_accepted_per_gt`, `pipeline_accepted_per_extracted` (aliases `accepted_per_gt` / `accepted_per_extracted` for one release). These pipeline rates include own-code usrmanage; they are **not** a wild-bug conversion rate. |
+| security_tool_split | asked/SAT in vs not in `SECURITY_TOOL_CORPORA` |
+| upstream | curated `docs/conversion-upstream.jsonl` status counts |
+
+Do not quote a frozen pipeline-accepted / SAT-GT ratio from an old ledger as
+the product yield. Re-read the regenerated artifact; third-party public
+accepted is the conversion claim, and it is 0.
+
+`properties_asked` / `properties_sat` are raw scanner rows. Distinct
+`(site, question_id)` counts are `properties_asked_distinct` /
+`properties_sat_distinct` (#480). Synthesis is capped at `synth_max_sites`
+(default 200, first `regex_id` after sort) — recorded on the batch summary
+`synthesis` object.
+
+`crs-inventory.ndjson` is the CRS `@rx` measure, not the `coreruleset` batch
+inventory. Site-count deltas between those two files are expected (#493).

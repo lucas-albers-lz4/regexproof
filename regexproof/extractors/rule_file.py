@@ -77,7 +77,7 @@ def _extract_toml(source: str, *, repo: str, file: str, dialect: str) -> list[di
     out: list[dict[str, Any]] = []
     try:
         data = tomllib.loads(source)
-    except Exception:  # noqa: BLE001
+    except Exception:
         # Fallback line scan — never treat concatenation as a literal pattern.
         for i, line in enumerate(source.splitlines(), 1):
             if not re.search(r"regex\s*=", line):

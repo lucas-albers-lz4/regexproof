@@ -4,24 +4,27 @@ The OpenWrt probe decision is a PLAN-TIME admission artifact — consumed by
 (a) this validator (schema + ACs), (b) the wave-close review, (c) the
 follow-on stream kickoff that registers OpenWrt as a manifest corpus.  It is
 NOT a runtime gate artifact (``check_admission_gates`` reads only
-``{manifest_key}_gate_decision.json`` for manifest corpora — the shell
-corpus's own admission lives in ``dogfood_shell_gate_decision.json``).
+``{manifest_key}_gate_decision.json`` for manifest corpora).
 """
 
 from __future__ import annotations
 
+import hashlib
 import json
 from pathlib import Path
 
 import jsonschema
-import pytest
 
+from regexproof.batch.runner import check_admission_gates
 from regexproof.schemas import gate_decision_schema
 
-PROBE_DECISION = (
-    Path(__file__).resolve().parents[1]
-    / "properties" / "generated" / "openwrt_packages_probe_decision.json"
-)
+ROOT = Path(__file__).resolve().parents[1]
+GENERATED = ROOT / "properties" / "generated"
+PROBE_DECISION = GENERATED / "openwrt_packages_probe_decision.json"
+GATE_DECISION = GENERATED / "openwrt_packages_gate_decision.json"
+
+# Keys the runtime gate may add relative to the plan-time probe copy.
+_GATE_ONLY_TOP = frozenset({"related", "rationale"})
 
 
 def test_probe_decision_exists():
@@ -55,15 +58,55 @@ def test_probe_decision_records_shell_evidence():
     assert "posix-shell" in artifact["probe"]["dialect"]
 
 
-def test_probe_decision_is_not_a_runtime_gate_artifact():
-    """Consumer story: the probe decision is plan-time — the runtime gate
-    reads the SHELL corpus's manifest gate decision, not this file."""
-    gate = (
-        Path(__file__).resolve().parents[1]
-        / "properties" / "generated" / "dogfood_shell_gate_decision.json"
+def test_probe_decision_path_unchanged():
+    """Consumer story: the plan-time probe stays at the probe filename."""
+    assert PROBE_DECISION.name == "openwrt_packages_probe_decision.json"
+    assert PROBE_DECISION.is_file()
+
+
+def test_runtime_gate_exists_and_check_admission_gates_reads_it(tmp_path):
+    """Runtime gate is openwrt_packages_gate_decision.json, not the probe."""
+    assert GATE_DECISION.is_file()
+    gate = json.loads(GATE_DECISION.read_text(encoding="utf-8"))
+    jsonschema.validate(instance=gate, schema=gate_decision_schema())
+    assert gate["decision"] == "go"
+    assert gate["decision_date"] == "2026-08-12"
+    assert gate["corpus"] == "openwrt_packages"
+    related = gate["related"]
+    assert related.get("backfilled") is not True
+    assert related["probe_path"] == (
+        "properties/generated/openwrt_packages_probe_decision.json"
     )
-    if not gate.exists():
-        pytest.skip("dogfood_shell gate decision lands with P2c (#273)")
-    g = json.loads(gate.read_text(encoding="utf-8"))
-    assert g["corpus"] == "dogfood_shell"
-    assert g["decision"] == "go"
+    assert related["snapshot"] == "dated-2026-08-12"
+    assert related["conversion_wave"] == "sweep/openwrt-conversion/plan.md"
+    digest = hashlib.sha256(PROBE_DECISION.read_bytes()).hexdigest()
+    assert related["probe_sha256"] == digest
+
+    # Sandbox copy — check_admission_gates reads out_dir, not GENERATED.
+    (tmp_path / GATE_DECISION.name).write_bytes(GATE_DECISION.read_bytes())
+    assert not (tmp_path / PROBE_DECISION.name).exists()
+    assert check_admission_gates(["openwrt_packages"], out_dir=tmp_path) == []
+    # Missing the gate filename (probe alone) must fail closed.
+    probe_only = tmp_path / "probe_only"
+    probe_only.mkdir()
+    (probe_only / PROBE_DECISION.name).write_bytes(PROBE_DECISION.read_bytes())
+    violations = check_admission_gates(["openwrt_packages"], out_dir=probe_only)
+    assert violations and "openwrt_packages_gate_decision.json" in violations[0]
+
+
+def test_runtime_gate_matches_probe_aside_from_related_xref():
+    """Gate equals probe aside from related xref (+ rationale one-liner)."""
+    probe = json.loads(PROBE_DECISION.read_text(encoding="utf-8"))
+    gate = json.loads(GATE_DECISION.read_text(encoding="utf-8"))
+    for key in set(probe) | set(gate):
+        if key in _GATE_ONLY_TOP:
+            continue
+        assert gate.get(key) == probe.get(key), f"drift on {key}"
+    assert "related" in gate
+    assert gate["related"].get("backfilled") is not True
+
+
+def test_probe_decision_is_not_a_runtime_gate_artifact():
+    """Consumer story: check_admission_gates reads the gate file, not probe."""
+    assert GATE_DECISION.name == "openwrt_packages_gate_decision.json"
+    assert PROBE_DECISION.name != GATE_DECISION.name

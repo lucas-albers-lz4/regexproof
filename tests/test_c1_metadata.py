@@ -13,6 +13,7 @@ import z3
 from regexproof.batch.compile_records import compile_records
 from regexproof.batch.runner import _discard_streamed_mirrors
 from regexproof.compiler import compile_pattern
+from tests.toolchain import require_perl_pin
 
 
 def test_anchors_surface_in_meta_fullmatch():
@@ -82,11 +83,19 @@ def test_word_boundary_absent_for_plain_pattern():
 
 
 def test_mirror_exact_ascii_domain_templates():
-    for dialect in ("re2", "ecma", "pcre", "perl"):
+    for dialect in ("re2", "ecma", "pcre"):
         cr = compile_pattern(r"\w+", "", dialect, "search")
         assert cr.encodable, (dialect, cr.unencodable_reason)
         assert cr.declared_domain == "ascii"
         assert cr.mirror_exact is True, dialect
+
+
+def test_mirror_exact_ascii_domain_perl():
+    require_perl_pin()
+    cr = compile_pattern(r"\w+", "", "perl", "search")
+    assert cr.encodable, ("perl", cr.unencodable_reason)
+    assert cr.declared_domain == "ascii"
+    assert cr.mirror_exact is True
 
 
 def test_py_re_ascii_flag_mirror_exact():

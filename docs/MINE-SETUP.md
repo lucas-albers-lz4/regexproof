@@ -3,9 +3,14 @@
 Scheduled GitHub Actions job that runs
 [`scripts/mine-corpus-candidates.py`](../scripts/mine-corpus-candidates.py),
 then commit-backs
-[`properties/generated/candidate-ledger.json`](../properties/generated/candidate-ledger.json)
-and [`properties/generated/mine-queue.json`](../properties/generated/mine-queue.json)
-to `main`. Pattern matches sre-ai-llm-work `daily-scan.yml` (one scanner, no
+[`properties/generated/candidate-ledger.json`](../properties/generated/candidate-ledger.json),
+[`properties/generated/mine-queue.json`](../properties/generated/mine-queue.json),
+and a regenerated
+[`properties/generated/gate-labels.json`](../properties/generated/gate-labels.json)
+to `main`. Golden P8 hashes **ledger bytes** into `inputs_hash`; a ledger
+push without labels fails `git diff --exit-code` on that artifact. The job
+does **not** run `fit-score-v2.py` (Python 3.13 vs Golden's 3.12 weight pin).
+Pattern matches sre-ai-llm-work `daily-scan.yml` (one scanner, no
 issue filing).
 
 **Status (2026-08-09):** live. First `workflow_dispatch` succeeded with
@@ -56,8 +61,11 @@ runs (`cancel-in-progress: false`).
 
 - Job steps all green; “Fail job on mine soft failure” skipped.
 - Step summary shows accepted / ledger / queue / capped.
-- If ledger or queue changed: a bot commit
-  `chore(mine): daily candidate ledger + queue` on `main`.
+- If ledger or queue changed: bot commit
+  `chore(mine): daily candidate ledger + queue`. Labels always regenerate
+  after `git pull --rebase` (even when the ledger is unchanged) so a stale
+  `inputs_hash` can self-heal; that may add
+  `chore(mine): regen gate-labels after ledger`.
 - Day cap filled + overflow queued is **normal**, not a failure. With default
   `DAILY_MINE_CAP=10`, a rich search day will fill the ledger slice and park
   the rest in `mine-queue.json` (cap 100). Cron drains by **score-v1** (highest
@@ -83,12 +91,29 @@ fraction, compile likelihood.
 
 `mine_run_summary` includes `"allocator": "score-v1"`.
 
-### Score-v2 allocator (#432)
+**Live allocator is score-v1.** Do not treat score-v2 metrics as evidence
+about what gets scanned. The production score's load-bearing boundary term is
+`classify_boundary` on the repo name (about +50 of ~101 points). Score-v2 is
+opt-in (`--allocator score-v2`) and is **not** rolled out even when
+`default_allocator_flip_allowed` is true in the weight artifact (#490).
 
-Score-v2 is an explicit comparison allocator; score-v1 remains the production
-default. It is a pure-Python deterministic fit over the committed
-`properties/generated/gate-labels.json` artifact. Refit manually when the gate
-decision count grows by about 20%; the daily mine job does not refit weights.
+### Score-v2 allocator (#432) — comparison only
+
+Score-v2 is an explicit comparison allocator. It is a pure-Python
+deterministic fit over the committed `properties/generated/gate-labels.json`
+artifact. There is **no external validation set**. The number formerly named
+`holdout_auc` is **label-reproduction AUC**: how well the fit reproduces our
+own GO labels (`positive_mapping: go-only`), with `holdout_positive_count`
+(16 on the 2026-08-13 fit) sitting next to it so the CI width is readable.
+It is not gate accuracy on unseen repos (#484).
+
+Refit manually when the gate decision count grows by about 20%; the daily
+mine job regenerates **labels** (so Golden P8 `inputs_hash` matches the new
+ledger) but does not refit weights.
+
+Ungated ledger rows store the mined SHA as `pin`. Rank `--allocator score-v2`
+copies that into `pin_probed` so tree join is not `missing-probed-pin`.
+Admission E3 still refuses mined-pin fallback when writing a gate decision.
 
 ```bash
 python scripts/fit-score-v2.py
@@ -96,9 +121,9 @@ python scripts/rank-mine-candidates.py --allocator score-v2 --limit 10
 ```
 
 The fit output records the grouped split, dev-only positive-class decision,
-holdout AUC and interval, v1-feature ablation, and the informational gap
-comparison. Runtime scores are recomputed and never persisted. Each rank line
-tags both `allocator` and `score_version`.
+label-reproduction AUC and interval, v1-feature ablation, and the
+informational gap comparison. Runtime scores are recomputed and never
+persisted. Each rank line tags both `allocator` and `score_version`.
 
 Operator terms (mine / queue drain / rank / probe / gate / Smith):
 [`docs/terminology.md`](terminology.md).
@@ -138,8 +163,11 @@ Stdout ends with a `{"kind": "mine_run_summary", ...}` line (includes
 | Accepted 0 but queue growing | Day cap already filled (`DAILY_MINE_CAP`) | Wait for UTC day roll or dispatch with higher cap |
 | Queue at 100 / “mine-queue full” warnings | Overflow cap hit | Raise `daily_mine_cap` temporarily or wait for scored daily drain |
 | Rebase/push conflict on commit-back | Concurrent human push to ledger files | Re-run workflow; concurrency prevents two mine jobs overlapping |
+| Golden P8 `gate-labels.json` `inputs_hash` drift after a mine push | Ledger committed without regenerating labels | Job now commits labels; locally `python scripts/build-gate-labels.py` (do not refit score-v2 here) |
 
 ## Non-goals (this job)
 
-Smith extract/compile automation (#149) and native Java dialect (#150) remain
-follow-ons. Score-v1 does not auto-GO or file issues.
+Smith extract/compile is a **local helper** (#149), not this mine job:
+`scripts/materialize-corpus.py`, `scripts/author-smith-decision.py`. Native
+Java dialect (#150) remains a follow-on. Score-v1 does not auto-GO or file
+issues.

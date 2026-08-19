@@ -6,7 +6,8 @@ Replaces path-based ``importlib`` loads of ``scripts/z3-verify.py`` (#192).
 from __future__ import annotations
 
 # Register built-in properties before re-exporting (side effect on REGISTRY).
-import regexproof.harness.properties  # noqa: F401
+import regexproof.harness.properties
+import regexproof.harness.openwrt_packages  # noqa: F401
 from regexproof.harness.cli import main
 from regexproof.harness.core import (
     REGISTRY,

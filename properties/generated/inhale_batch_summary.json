@@ -1,0 +1,25 @@
+{
+  "address_space_cap": false,
+  "cache": {
+    "entries": 372,
+    "hit_rate": 0.8225806451612904,
+    "hits": 306,
+    "misses": 66
+  },
+  "cache_hit_rate": 0.8225806451612904,
+  "complete_run": true,
+  "corpus": "inhale",
+  "corpus_type": "rule_corpus",
+  "encodable": 306,
+  "engine": {
+    "python": "3.13.15"
+  },
+  "extracted": 372,
+  "findings": 5,
+  "inventory_questions": 4,
+  "join_regex_ids": 5,
+  "redos_findings": 0,
+  "redos_incomplete": false,
+  "schema_version": "1",
+  "triage": 66
+}

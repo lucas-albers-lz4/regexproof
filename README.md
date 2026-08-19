@@ -54,6 +54,23 @@ Expected: all shapes PASS (UNSAT where property holds, SAT with a witness for
 the counterexample finder — the sed-truncation bug repro). If you run the ReDoS
 stage, read `docs/REDOS.md` first.
 
+Pinned helpers (Perl 5.38.x, `recheck`, YARA CLI) are **hard failures in CI**.
+Locally, tests that need them skip and name the missing install:
+
+```bash
+# Perl pin (helpers/perl/match.py version → ok, 5.38.x)
+# macOS: brew install perl@5.38 && export PATH="$(brew --prefix perl@5.38)/bin:$PATH"
+
+# ReDoS recheck (helpers/redos/recheck.cjs)
+cd helpers/redos && npm install && cd ../..
+
+# YARA CLI (not the yara-python package) used by helpers/yara/match.py
+brew install yara
+```
+
+`CI=true` or `GITHUB_ACTIONS=true` keeps the skip path closed so CI still fails
+on toolchain drift.
+
 ## Layout
 
 | Path | Role |
@@ -71,9 +88,12 @@ stage, read `docs/REDOS.md` first.
 | `docs/DYNAMIC.md` | Dynamic compiles (`re.compile` from variables): classify, bound, prove or file | 
 | `docs/LOOKBEHIND_REWRITE.md` | Variable-width lookbehind → string-ops rewrite (the `(?<=^)` + MULTILINE case) |
 | `docs/REPORTING.md` | Scanner NDJSON / triage / batch MD field contracts |
-| `docs/why.md` | Why this project exists: the problem, the approach, and progress |
+| `docs/why.md` | Three claims with different evidence: mirror soundness, encodable fraction, conversion (0 third-party public). Phase 0 inventory: 0/10 public filings (920210 `wont_file`; 942220 `private_first`, not posted) |
+| `docs/CONTRACTS.md` | Property-contract object, provenance (`human` / `version_diff` / `cross_engine` / `agent_derived`), what batch may scale |
+| `docs/CLUSTER-CONVERSION.md` | Conversion-wave SOP: rank 15 / write ≤5 human contracts per idiom slice; ledger join via `*_conversion.ndjson`. First application: `sweep/openwrt-conversion/plan.md` |
+| `docs/conversion-upstream.jsonl` | Curated last-mile conversion events (filed / fixed / false positive / private_first) |
 | `docs/examples/shape5-rule_diff.md` | Shape-5 `rule_diff` kind/family/mutation guards |
-| `docs/verified-findings.jsonl` | Machine-readable verified implementation findings |
+| `docs/verified-findings.jsonl` | Machine-readable verified implementation findings (toolkit traps, not vuln counts) |
 | `docs/REDOS.md` | ReDoS (complexity) tooling — complements, not replaces, the SMT approach |
 | `docs/RESEARCH.md` | Deep-research findings: papers, tools, ecosystem, with sources |
 | `docs/PILOT.md` | Dogfooding report: usrmanage, fwlive, happycow trial runs + lessons |
@@ -87,12 +107,13 @@ stage, read `docs/REDOS.md` first.
 | `scripts/differential-fuzz.py` | Fuzz a Z3 mirror against a real engine via `--real-argv` (no `shell=True`) |
 | `scripts/rule-diff-pilot.py` | Phase-3 shape-5 `rule_diff` pilot on the gitleaks encodable subset |
 | `scripts/batch-scan.py` | Phase-5 batch scan driver: inventory → triage → NDJSON/MD reports |
+| `scripts/conversion-ledger.py` | Product funnel: sites → properties asked → SAT → GT → accepted upstream |
 | `scripts/ci-assert-toolchain.py` | CI gate: assert pinned toolchain versions before runs |
 | `scripts/ci-run-property-subset.py` | CI gate: run the measured-stable property subset |
 | `scripts/ground-truth-b.py` | Batch ground-truth replay helper (real engines on witnesses) |
 | `properties/usrmanage-p1-p6.md` | Worked property suite (P1–P6) from the usrmanage case study |
 | `properties/fwlive-classifier.md` | Worked regex inventory of the fwlive LuCI log classifier + lookahead blocker |
-| `properties/generated/` | Batch outputs: scanner NDJSON, `*_batch.md` reports, PR dry-runs (regenerated) |
+| `properties/generated/` | Batch outputs: scanner NDJSON, `*_batch.md` reports, PR dry-runs, conversion ledger (regenerated) |
 | `properties/triage/` | Triage NDJSON for unencodable / TIMEOUT / ambiguous compile items |
 | `ci/python-matrix.toml` | Supported Python minors for golden-suite re-run (non-empty enforced in CI) |
 | `ci/toolchain.toml` | Pinned toolchain versions for reproducible batch runs |

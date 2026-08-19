@@ -7,7 +7,11 @@ from pathlib import Path
 
 import jsonschema
 
-from regexproof.batch.disclose import assert_no_auto_publication, write_pr_dry_run
+from regexproof.batch.disclose import (
+    assert_no_auto_publication,
+    tag_disclosure,
+    write_pr_dry_run,
+)
 from regexproof.batch.intent import detect_intent_mismatches, detect_usage_mismatches
 from regexproof.batch.inventory import check_corpus_coverage, load_inventory
 from regexproof.batch.report import redact_witness
@@ -83,7 +87,7 @@ def test_intent_no_substring_false_positive_on_curl():
 
 
 def test_intent_negated_class_whitespace_no_false_positive():
-    """`\s` inside a NEGATED class ([^\s@]) EXCLUDES whitespace — must not fire the
+    r"""`\s` inside a NEGATED class ([^\s@]) EXCLUDES whitespace — must not fire the
     "admits space" intent finding (the luna-gate catch on PR #258 / FeedbackForm)."""
     rec = {
         "regex_id": "b" * 32,
@@ -270,21 +274,64 @@ def test_pr_dry_run_no_auto_publish(tmp_path: Path):
     assert art["would_open_public_upstream_issue"] is False
 
 
+def test_tag_disclosure_fail_closed_unknown_kind():
+    tagged = tag_disclosure(
+        [{"kind": "future_kind_not_in_schema", "regex_id": "x"}],
+        corpus="gitleaks",
+    )
+    assert tagged[0]["disclosure"] == "private_first"
+    tagged_redos = tag_disclosure([{"kind": "redos"}], corpus="coreruleset")
+    assert tagged_redos[0]["disclosure"] == "private_first"
+    tagged_missing = tag_disclosure([{}], corpus="gitleaks")
+    assert tagged_missing[0]["disclosure"] == "private_first"
+    tagged_other = tag_disclosure([{"kind": "property"}], corpus="validatorjs")
+    assert "disclosure" not in tagged_other[0]
+
+
+def test_apply_approval_sets_public_ok_only_when_ground_truthed(tmp_path: Path):
+    from regexproof.batch.disclose import apply_approval
+
+    path = tmp_path / "ok.json"
+    path.write_text('{"regex_ids": ["abc"]}\n', encoding="utf-8")
+    rows = apply_approval(
+        [
+            {"regex_id": "abc", "ground_truth_status": "reproduced", "disclosure": "private_first"},
+            {"regex_id": "abc", "ground_truth_status": None, "disclosure": "private_first"},
+            {"regex_id": "zzz", "ground_truth_status": "PASS", "disclosure": "private_first"},
+        ],
+        approval_path=path,
+    )
+    assert rows[0]["disclosure"] == "public_ok"
+    assert rows[1]["disclosure"] == "private_first"
+    assert rows[2]["disclosure"] == "private_first"
+
+
 def test_shell_posix_batch_includes_extensionless_shebang(tmp_path):
-    """luna #276 -r7 #3: the batch walk must include extensionless files
-    with a recognized shell shebang (the admission walker counts them)."""
+    """luna #276 -r7 #3 + OpenWrt conversion: batch walk admits known
+    suffixes, init.d/, and shebang-sniffed files regardless of suffix
+    (dogfood --dir `_classify`); zsh stays rejected (#276)."""
     from regexproof.batch.extract import _is_shell_script
     from regexproof.batch.extractor_registry import registry_glob
     from regexproof.batch.extract import extract_glob
 
     root = tmp_path / "tree"
     (root / "bin").mkdir(parents=True)
+    (root / "etc" / "init.d").mkdir(parents=True)
     (root / "bin" / "service").write_text(
         "#!/bin/sh\ngrep 'xya' /etc/passwd\n", encoding="utf-8")
     (root / "bin" / "tool.sh").write_text(
         "grep 'xyb' f\n", encoding="utf-8")
     (root / "bin" / "zsh-job").write_text(
         "#!/usr/bin/zsh\ngrep 'xyz' f\n", encoding="utf-8")
+    (root / "bin" / "pkg.defaults").write_text(
+        "#!/bin/sh\ngrep 'xyd' f\n", encoding="utf-8")
+    (root / "bin" / "zsh.defaults").write_text(
+        "#!/usr/bin/zsh\ngrep 'xye' f\n", encoding="utf-8")
+    (root / "etc" / "init.d" / "svc").write_text(
+        "grep 'xyi' f\n", encoding="utf-8")
+    (root / ".git" / "hooks").mkdir(parents=True)
+    (root / ".git" / "hooks" / "commit-msg.sample").write_text(
+        "#!/bin/sh\ngrep 'xyg' f\n", encoding="utf-8")
     (root / "notes.txt").write_text("not shell\n", encoding="utf-8")
 
     meta = {"repo": "t"}
@@ -297,8 +344,12 @@ def test_shell_posix_batch_includes_extensionless_shebang(tmp_path):
     files = {r["file"] for r in recs}
     assert any(f.endswith("bin/service") for f in files)  # extensionless + shebang
     assert any(f.endswith("bin/tool.sh") for f in files)  # normal .sh
+    assert any(f.endswith("bin/pkg.defaults") for f in files)  # suffix + listed shebang
+    assert any("init.d/svc" in f for f in files)  # init.d without reading
     # zsh shebang is NOT in the walker's exact allowlist — batch must agree
     assert not any(f.endswith("bin/zsh-job") for f in files)
+    assert not any(f.endswith("bin/zsh.defaults") for f in files)
+    assert not any(".git/" in f for f in files)  # admission skip-dirs
     assert not any(f.endswith("notes.txt") for f in files)  # non-shell excluded
     assert registry_glob("shell_posix", {"extractor": "shell_posix"})
 
@@ -388,6 +439,14 @@ def test_json_legacy_rejected():
     assert main(["--json-legacy"]) == 2
 
 
+def test_cli_exposes_approval_path():
+    from regexproof.batch import runner as runner_mod
+
+    src = Path(runner_mod.__file__).read_text(encoding="utf-8")
+    assert "--approval-path" in src
+    assert "approval_path=args.approval_path" in src
+
+
 def test_extract_corpus_routes_shell_posix_through_registry(tmp_path):
     """P2c luna finding: extract_corpus must dispatch shell_posix via the
     registry allowlist (not fall through to a legacy ValueError)."""
@@ -403,3 +462,80 @@ def test_extract_corpus_routes_shell_posix_through_registry(tmp_path):
     assert len(recs) == 2
     assert all(r["dialect"] == "posix-shell" for r in recs)
     assert {r["pattern"] for r in recs} == {"syn_flood", "^[0-9]+$"}
+
+
+def _assert_extract_corpus_matches_registry(root, *, name: str, dialect: str, repo: str):
+    """extract_corpus must equal EXTRACTORS[name] via extract_glob (#452)."""
+    from regexproof.batch.extract import extract_corpus, extract_glob
+    from regexproof.batch.extractor_registry import EXTRACTORS, registry_glob
+
+    meta = {
+        "path": root,
+        "extractor": name,
+        "repo": repo,
+        "dialect": dialect,
+    }
+    via_corpus = extract_corpus("fixture", dict(meta))
+    fn = EXTRACTORS[name]
+    via_registry = extract_glob(
+        root,
+        dict(meta),
+        glob=registry_glob(name, meta),
+        extract_fn=lambda src, rel: fn(src, rel, meta),
+    )
+    assert via_corpus == via_registry
+    assert via_corpus, f"{name}: empty extract — fixture produced no records"
+
+
+def test_extract_corpus_routes_semgrep_yaml_through_registry(tmp_path):
+    """#452: semgrep_yaml glob dispatch equals EXTRACTORS['semgrep_yaml']."""
+    root = tmp_path / "rules"
+    (root / "nested").mkdir(parents=True)
+    (root / "a.yaml").write_text(
+        "rules:\n  - id: y\n    patterns:\n      - pattern-regex: (?i)select\\b\n",
+        encoding="utf-8",
+    )
+    (root / "nested" / "b.yml").write_text(
+        'rules:\n  - id: m\n    metavariable-regex:\n      $KEY: "[A-Za-z0-9_]{8,}"\n',
+        encoding="utf-8",
+    )
+    (root / "skip.txt").write_text("pattern-regex: ignored\n", encoding="utf-8")
+    _assert_extract_corpus_matches_registry(
+        root, name="semgrep_yaml", dialect="py_re", repo="semgrep/semgrep-rules"
+    )
+
+
+def test_extract_corpus_routes_python_dir_through_registry(tmp_path):
+    """#452: python_dir glob dispatch equals EXTRACTORS['python_dir']."""
+    root = tmp_path / "plugins"
+    (root / "sub").mkdir(parents=True)
+    (root / "a.py").write_text("import re\nP = re.compile(r'abc')\n", encoding="utf-8")
+    (root / "sub" / "b.py").write_text("import re\nre.search(r'def', s)\n", encoding="utf-8")
+    (root / "skip.txt").write_text("re.compile(r'nope')\n", encoding="utf-8")
+    _assert_extract_corpus_matches_registry(
+        root, name="python_dir", dialect="py_re", repo="test/detect-secrets"
+    )
+
+
+def test_extract_corpus_re2_testdata_file_not_glob_only(tmp_path):
+    """re2_testdata stays in EXTRACTORS but must keep file-or-dir dispatch.
+
+    glob-only extract_glob returns [] for a file path; a file witness must
+    still extract (#452).
+    """
+    from regexproof.batch.extract import extract_corpus
+    from regexproof.batch.extractor_registry import EXTRACTORS
+
+    assert "re2_testdata" in EXTRACTORS
+    fp = tmp_path / "one.txt"
+    fp.write_text("E\t[a-z]+\thello\t(0,5)\n", encoding="utf-8")
+    meta = {
+        "path": fp,
+        "extractor": "re2_testdata",
+        "repo": "google/re2",
+        "dialect": "re2",
+    }
+    recs = extract_corpus("re2_testdata", meta)
+    assert recs
+    assert recs[0]["pattern"] == "[a-z]+"
+

@@ -116,6 +116,7 @@ ASCII approximations.
 ## Corpus-wave loop (minimal repro)
 
 1. Inventory → `scripts/measure-corpus-fraction.py --corpus NAME --assert-determinism`
+   (Smith materialize/author: `scripts/materialize-corpus.py`, `scripts/author-smith-decision.py` — #149)
 2. Matrix → `scripts/build-cross-corpus-matrix.py`
 3. Toolkit closeout → `properties/generated/phase2_toolkit_fix_closeout.md`
 4. Freeze IDs → `scripts/remeasure-frozen-ids.py --corpus gitleaks --write-baseline`

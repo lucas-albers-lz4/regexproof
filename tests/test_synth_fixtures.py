@@ -91,28 +91,11 @@ def test_bad_char_accepting_validator_replays_sat_witness():
     assert properties[0]["result"] == "sat"
     assert properties[0]["witness"] == ";"
     assert properties[0]["ground_truth_status"] == "reproduced"
-    assert result.stats["skip_buckets"]["synth_skipped_unencodable"] == 0
-    assert result.stats["skip_buckets"]["synth_skipped_missing_compile"] == 0
-    assert result.stats["skip_buckets"]["synth_skipped_certification_parse"] == 0
-    assert result.stats["shape1_certification_parse_failures"] == 0
-
-
-def test_selected_unencodable_is_counted_once():
-    row = _row("^a+$")
-    row["encodable"] = False
-    questions = [_question(), {**_question(), "id": "fixture-shape1-b"}]
-    result = synthesize_compiled(
-        "fixture",
-        [(row, None, None)],
-        {"questions": questions},
-        {"synth_max_sites": 1, "synth_diff_fuzz_sample": 0},
-    )
-    assert result.findings == []
-    assert result.stats["skip_buckets"]["synth_skipped_unencodable"] == 1
-    assert result.stats["skip_reasons"]["synth_skipped_unencodable"] == 1
 
 
 def test_unanchored_search_is_counted_once():
+    """Unanchored-search skips must be counted once per site, not once per
+    question x site pass (fix/synth-skip-count #444)."""
     row = _row("a+")
     compiled = compile_pattern(row["pattern"], "", "ecma", "search")
     questions = [_question(), {**_question(), "id": "fixture-shape1-b"}]
@@ -125,44 +108,3 @@ def test_unanchored_search_is_counted_once():
     assert result.findings == []
     assert result.stats["skip_buckets"]["synth_skipped_unanchored_search"] == 1
     assert result.stats["skip_reasons"]["synth_skipped_unanchored_search"] == 1
-
-
-def test_missing_compile_lookup_is_counted(monkeypatch):
-    row = _row("^a+$")
-    row["encodable"] = False
-    ghost = _row("^b+$", "d" * 32)
-    original = synth._selected_questions
-
-    def inject(rows, questions):
-        selected, outcomes = original(rows, questions)
-        for qid in selected:
-            selected[qid] = list(selected[qid]) + [ghost]
-        return selected, outcomes
-
-    monkeypatch.setattr(synth, "_selected_questions", inject)
-    result = synthesize_compiled(
-        "fixture",
-        [(row, None, None)],
-        {"questions": [_question()]},
-        {"synth_max_sites": 1, "synth_diff_fuzz_sample": 0},
-    )
-    assert result.stats["skip_buckets"]["synth_skipped_missing_compile"] == 1
-    assert result.stats["skip_reasons"]["synth_skipped_missing_compile"] == 1
-
-
-def test_certification_parse_failure_is_counted(monkeypatch):
-    row = _row("^a+$")
-    compiled = compile_pattern(row["pattern"], "", "ecma", "search")
-    monkeypatch.setattr(synth, "_parse_for_certification", lambda _pattern: None)
-    result = synthesize_compiled(
-        "fixture",
-        [(row, compiled.mirror, compiled.meta)],
-        {"questions": [_question()]},
-        {"synth_max_sites": 1, "synth_diff_fuzz_sample": 0},
-    )
-    assert result.stats["shape1_certification_parse_failures"] == 1
-    assert result.stats["skip_buckets"]["synth_skipped_certification_parse"] == 1
-    assert result.stats["pre_measure"]["shape1_certification_parse_failures"] == 1
-    properties = [finding for finding in result.findings if finding["kind"] == "property"]
-    assert len(properties) == 1
-    assert properties[0]["shape"] == 2

@@ -14,14 +14,10 @@ AC coverage (issue #218):
 
 from __future__ import annotations
 
-import json
 import os
 import stat
-import subprocess
 
 import pytest
-import z3
-from z3 import Contains, InRe, Solver, String, StringVal
 
 from regexproof.harness import core
 from regexproof.harness.noodler_runner import (

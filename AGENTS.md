@@ -32,6 +32,21 @@ Do NOT use Z3 for:
   config-supplied pattern is a finding, not a proof.
 - Cosmetic/internal patterns with no untrusted input — skip them; low value.
 
+## Property-contract precondition
+
+Do not count an UNSAT (or a synthesized SAT) as a **product** result unless
+the site has a contract: the guarantee you actually care about, the input
+source and trust class, declared domain, and provenance
+([`docs/CONTRACTS.md`](docs/CONTRACTS.md)). Untargeted
+shape-1/2 synthesis ("does this class contain a space?") is compiler smoke.
+Shape-5 `rule_diff` still needs an independent spec or a
+`version_diff` / `cross_engine` pair with a `family_contract` — sibling-family
+pairing is not a contract.
+
+Phase 0 search-semantics inventory of the ten SAT candidates that looked like
+third-party findings: **2 remain filing candidates** (CRS 942220 version-diff,
+cross-engine 920210). The other eight are spec-gap or collapse under search.
+
 ## The 5-step workflow (follow in order)
 
 ### 1. Inventory the regex surface
@@ -164,6 +179,11 @@ in the harness output so a reader knows exactly what was proven.
 - `docs/final-report.md` — corpus-wave (#51–#57) fraction table + gap closure
 - `docs/verified-findings.jsonl` — machine-readable implementation findings
   keyed into TRAPS/BACKENDS/SEMANTICS
+- `scripts/conversion-ledger.py` — product funnel (sites → properties asked →
+  SAT → ground-truth → accepted upstream). Artifact:
+  `properties/generated/conversion-ledger.md`. Curated last mile:
+  `docs/conversion-upstream.jsonl`. Heap's-law novelty saturates the compiler;
+  this ledger saturates the claim that we find real bugs.
 
 ## Auditing regexproof itself
 
@@ -193,6 +213,13 @@ every finding against the surrounding code before filing, and report what you
 - Daily corpus mine (GHA + ledger, live): [`docs/MINE-SETUP.md`](docs/MINE-SETUP.md)
   — `PROJECT_PAT` classic PAT with `repo`; ledger/queue commit-back to `main`;
   score-v1 allocator + `scripts/rank-mine-candidates.py` for next-to-probe
+- Cluster conversion (OpenWrt, OpenClaw, …): [`docs/CLUSTER-CONVERSION.md`](docs/CLUSTER-CONVERSION.md)
+  — rank 15 / write ≤5 human contracts **per idiom slice** (close-out is
+  the deny-list; later waves reuse emit + product-engine checker). First
+  application [`sweep/openwrt-conversion/plan.md`](sweep/openwrt-conversion/plan.md);
+  packages waves 1–2 close-outs under `properties/generated/openwrt_packages_conversion_wave*.md`.
+  Heap saturates the compiler; this SOP saturates `properties_asked`.
+  Cursor: `.cursor/rules/cluster-conversion-waves.mdc`.
 - Auditing this repo's own security: [`docs/SECURITY-AUDIT.md`](docs/SECURITY-AUDIT.md)
 
 ## Related skills (Hermes)

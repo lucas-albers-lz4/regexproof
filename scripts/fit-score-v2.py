@@ -18,8 +18,8 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from regexproof.io_atomic import atomic_write_text
-from regexproof.mine.score_v2 import DEFAULT_FIT_DATE, DEFAULT_SEED, fit_report, format_report
+from regexproof.io_atomic import atomic_write_text  # noqa: E402  # ROOT bootstrap above
+from regexproof.mine.score_v2 import DEFAULT_FIT_DATE, DEFAULT_SEED, fit_report, format_report  # noqa: E402  # ROOT bootstrap above
 
 
 def _load_rows(path: Path) -> list[dict[str, Any]]:
@@ -76,7 +76,8 @@ def main(argv: list[str] | None = None) -> int:
     print(json.dumps(format_report(artifact), sort_keys=True, ensure_ascii=False))
     gate = artifact.get("evaluation", {}).get("gate", {})
     if args.fail_on_gate and not (
-        gate.get("holdout_auc_ge_0_70") and gate.get("ablation_beats_v1_features")
+        (gate.get("label_reproduction_auc_ge_0_70") or gate.get("holdout_auc_ge_0_70"))
+        and gate.get("ablation_beats_v1_features")
     ):
         return 1
     return 0

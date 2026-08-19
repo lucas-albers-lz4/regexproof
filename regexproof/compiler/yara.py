@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from regexproof.compiler.base import CompileResult, Unencodable, add_compiler_meta, composite_meta
+from regexproof.compiler.base import CompileResult, composite_meta
 
 
 def compile_yara(
@@ -85,7 +85,6 @@ def _compile_wide(
     Only supports literal patterns (re.escape output) for now.
     Complex regex patterns in wide mode are rejected.
     """
-    import re
 
     try:
         if _is_literal_pattern(pattern):

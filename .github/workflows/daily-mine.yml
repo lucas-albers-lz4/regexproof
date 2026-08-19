@@ -149,11 +149,22 @@ jobs:
           git config user.name "regexproof-bot"
           git config user.email "regexproof-bot@users.noreply.github.com"
           git add properties/generated/candidate-ledger.json \
-                  properties/generated/mine-queue.json || true
+                  properties/generated/mine-queue.json
           if git diff --staged --quiet; then
             echo "No ledger/queue changes to commit."
           else
             git commit -m "chore(mine): daily candidate ledger + queue"
-            git pull --rebase --autostash origin "${GITHUB_REF_NAME}"
+          fi
+          git pull --rebase --autostash origin "${GITHUB_REF_NAME}"
+          # Always regen labels on the post-rebase tree (self-heal if
+          # gate files moved without a ledger write). Offline join only.
+          python scripts/build-gate-labels.py
+          git add properties/generated/gate-labels.json
+          if ! git diff --staged --quiet; then
+            git commit -m "chore(mine): regen gate-labels after ledger"
+          fi
+          if [ -n "$(git log --oneline "origin/${GITHUB_REF_NAME}..HEAD")" ]; then
             git push
+          else
+            echo "No mine commits to push."
           fi

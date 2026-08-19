@@ -1,9 +1,9 @@
 {
   "provenance": {
-    "gate_decision_count": 828,
-    "input_file_count": 828,
-    "inputs_hash": "036efd411d869fece0118ed25b7ab9748b3ad6801defec64560dd7f242c02e0a",
-    "linked_row_count": 806,
+    "gate_decision_count": 852,
+    "input_file_count": 852,
+    "inputs_hash": "0c65d0125b680f88ceddc320d1eca4f293d8f7b156e1e42e6312b133450f6409",
+    "linked_row_count": 820,
     "schema_version": "1"
   },
   "rows": [
@@ -1635,56 +1635,6 @@
         }
       },
       "url": "https://github.com/CircleOfNice/CoreWorker"
-    },
-    {
-      "decision_date": "2026-08-12",
-      "label": "go",
-      "ledger": {
-        "archived": false,
-        "capped": true,
-        "fork": false,
-        "language": null,
-        "pushed_date": "2019-10-19",
-        "size": 0,
-        "source_query": "filename:re_tests OR filename:test_re.py path:Lib/test",
-        "stars": 2
-      },
-      "probe": {
-        "dialect_counts": {
-          "ecma": 1,
-          "posix-shell": 10,
-          "py_re": 1188
-        },
-        "predicted_buckets": {
-          "backref": 30,
-          "inline-flag": 214,
-          "lookaround": 71,
-          "m-flag": 54,
-          "stateful": 1
-        },
-        "regex_sites": 1199,
-        "security_boundary": "unknown",
-        "tree_probe": {
-          "complete": true,
-          "path_count": 4311,
-          "probed_pin": "a487e12da470edf59e6bc96166d2178dad54dd85",
-          "regex_file_type_counts": {
-            ".c": 317,
-            ".cfg": 1,
-            ".conf": 2,
-            ".cpp": 5,
-            ".h": 374,
-            ".ini": 1,
-            ".js": 3,
-            ".py": 1889,
-            ".sh": 3,
-            ".yml": 8
-          },
-          "security_boundary": "unknown",
-          "truncated": false
-        }
-      },
-      "url": "https://github.com/ColdGrub1384/cpython"
     },
     {
       "decision_date": "2026-08-12",
@@ -5476,6 +5426,81 @@
       "url": "https://github.com/NOAA-CO-OPS/Next-Gen-NOS-OFS-Skill-Assessment"
     },
     {
+      "decision_date": "2026-08-15",
+      "label": "no-go",
+      "ledger": {
+        "archived": null,
+        "capped": true,
+        "fork": null,
+        "language": null,
+        "pushed_date": "2026-08-12",
+        "size": null,
+        "source_query": "filename:.gitleaks.toml",
+        "stars": 841
+      },
+      "probe": {
+        "dialect_counts": {
+          "ecma": 17,
+          "posix-shell": 9,
+          "py_re": 112
+        },
+        "predicted_buckets": {
+          "inline-flag": 3,
+          "lookaround": 3,
+          "m-flag": 2,
+          "stateful": 10,
+          "v-flag": 1
+        },
+        "regex_sites": 138,
+        "security_boundary": "deterministic-true",
+        "tree_probe": {
+          "complete": false,
+          "path_count": 0,
+          "probed_pin": "648f4d983392d0c38f2d2da18dea0479cdc650b2",
+          "reason": "budget-exhausted",
+          "regex_file_type_counts": {},
+          "security_boundary": "unknown",
+          "truncated": false
+        }
+      },
+      "url": "https://github.com/NVIDIA-BioNeMo/bionemo-recipes"
+    },
+    {
+      "decision_date": "2026-08-15",
+      "label": "no-go",
+      "ledger": {
+        "archived": null,
+        "capped": true,
+        "fork": null,
+        "language": null,
+        "pushed_date": "2026-08-13",
+        "size": null,
+        "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
+        "stars": 18119
+      },
+      "probe": {
+        "dialect_counts": {
+          "py_re": 256
+        },
+        "predicted_buckets": {
+          "inline-flag": 8,
+          "lookaround": 16
+        },
+        "regex_sites": 256,
+        "security_boundary": "unknown",
+        "tree_probe": {
+          "complete": false,
+          "path_count": 0,
+          "probed_pin": "71820fbc750b1623b7746958a03cb25788942f90",
+          "reason": "budget-exhausted",
+          "regex_file_type_counts": {},
+          "security_boundary": "unknown",
+          "truncated": false
+        }
+      },
+      "url": "https://github.com/NVIDIA-NeMo/Speech"
+    },
+    {
       "decision_date": "2026-08-12",
       "label": "no-go",
       "ledger": {
@@ -6094,6 +6119,49 @@
       "url": "https://github.com/Phantomojo/GhostWire-secure-mesh-communication"
     },
     {
+      "decision_date": "2026-08-15",
+      "label": "no-go",
+      "ledger": {
+        "archived": null,
+        "capped": true,
+        "fork": null,
+        "language": null,
+        "pushed_date": "2026-08-13",
+        "size": null,
+        "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
+        "stars": 710
+      },
+      "probe": {
+        "dialect_counts": {
+          "ecma": 1985,
+          "posix-shell": 22,
+          "py_re": 75
+        },
+        "predicted_buckets": {
+          "backref": 2,
+          "inline-flag": 142,
+          "lookaround": 4,
+          "m-flag": 6,
+          "posix-class": 5,
+          "stateful": 140,
+          "u-flag": 110,
+          "v-flag": 12
+        },
+        "regex_sites": 2082,
+        "security_boundary": "deterministic-true",
+        "tree_probe": {
+          "complete": false,
+          "path_count": 0,
+          "probed_pin": "a6144496b7fdf66c878bb191c110deb678006a63",
+          "reason": "budget-exhausted",
+          "regex_file_type_counts": {},
+          "security_boundary": "unknown",
+          "truncated": false
+        }
+      },
+      "url": "https://github.com/Pinvou/pinvou-agent"
+    },
+    {
       "decision_date": "2026-08-13",
       "label": "no-go",
       "ledger": {
@@ -6374,6 +6442,43 @@
         }
       },
       "url": "https://github.com/RHsyseng/5g-ran-deployments-on-ocp-lab"
+    },
+    {
+      "decision_date": "2026-08-14",
+      "label": "no-go",
+      "ledger": {
+        "archived": null,
+        "capped": true,
+        "fork": null,
+        "language": null,
+        "pushed_date": "2026-08-13",
+        "size": null,
+        "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
+        "stars": 1202
+      },
+      "probe": {
+        "dialect_counts": {
+          "posix-shell": 136,
+          "py_re": 227
+        },
+        "predicted_buckets": {
+          "inline-flag": 22,
+          "m-flag": 8,
+          "posix-class": 10
+        },
+        "regex_sites": 363,
+        "security_boundary": "deterministic-true",
+        "tree_probe": {
+          "complete": false,
+          "path_count": 0,
+          "probed_pin": "400a95ded0b68acfc141f6dd039b99ace0e6af10",
+          "reason": "budget-exhausted",
+          "regex_file_type_counts": {},
+          "security_boundary": "unknown",
+          "truncated": false
+        }
+      },
+      "url": "https://github.com/ROCm/TheRock"
     },
     {
       "decision_date": "2026-08-13",
@@ -13234,6 +13339,50 @@
       "url": "https://github.com/cjoudrey/graphql-schema-linter"
     },
     {
+      "decision_date": "2026-08-14",
+      "label": "no-go",
+      "ledger": {
+        "archived": null,
+        "capped": true,
+        "fork": null,
+        "language": null,
+        "pushed_date": "2026-08-13",
+        "size": null,
+        "source_query": "filename:.gitleaks.toml",
+        "stars": 5006
+      },
+      "probe": {
+        "dialect_counts": {
+          "ecma": 1875,
+          "posix-shell": 28,
+          "py_re": 4,
+          "re2": 82
+        },
+        "predicted_buckets": {
+          "backref": 19,
+          "inline-flag": 664,
+          "lookaround": 42,
+          "m-flag": 12,
+          "posix-class": 2,
+          "stateful": 555,
+          "u-flag": 6,
+          "v-flag": 1
+        },
+        "regex_sites": 1989,
+        "security_boundary": "unknown",
+        "tree_probe": {
+          "complete": false,
+          "path_count": 0,
+          "probed_pin": "da643bc08e8537fe708e72cd917e52091dddf644",
+          "reason": "budget-exhausted",
+          "regex_file_type_counts": {},
+          "security_boundary": "unknown",
+          "truncated": false
+        }
+      },
+      "url": "https://github.com/clidey/whodb"
+    },
+    {
       "decision_date": "2026-08-12",
       "label": "no-go",
       "ledger": {
@@ -13402,49 +13551,34 @@
       "url": "https://github.com/coapp-packages/python"
     },
     {
-      "decision_date": "2026-08-12",
+      "decision_date": "2026-08-15",
       "label": "no-go",
       "ledger": {
-        "archived": false,
+        "archived": null,
         "capped": true,
-        "fork": false,
-        "language": "Python",
-        "pushed_date": "2013-09-02",
-        "size": 104,
-        "source_query": "filename:re_tests OR filename:test_re.py path:Lib/test",
-        "stars": 3
+        "fork": null,
+        "language": null,
+        "pushed_date": "2026-08-13",
+        "size": null,
+        "source_query": "path:config filename:secrets.yml OR path:config filename:secrets.yaml",
+        "stars": 896
       },
       "probe": {
-        "dialect_counts": {
-          "posix-shell": 35,
-          "py_re": 789
-        },
-        "predicted_buckets": {
-          "backref": 18,
-          "inline-flag": 102,
-          "lookaround": 39,
-          "m-flag": 43
-        },
-        "regex_sites": 824,
+        "dialect_counts": {},
+        "predicted_buckets": {},
+        "regex_sites": 0,
         "security_boundary": "unknown",
         "tree_probe": {
-          "complete": true,
-          "path_count": 3740,
-          "probed_pin": "75067eda21400e173db0827011b99d3598c66d8d",
-          "regex_file_type_counts": {
-            ".c": 448,
-            ".cc": 2,
-            ".cfg": 1,
-            ".h": 238,
-            ".ini": 1,
-            ".py": 1539,
-            ".sh": 3
-          },
+          "complete": false,
+          "path_count": 0,
+          "probed_pin": "",
+          "reason": "missing-probed-pin",
+          "regex_file_type_counts": {},
           "security_boundary": "unknown",
           "truncated": false
         }
       },
-      "url": "https://github.com/coapp-packages/python"
+      "url": "https://github.com/code-dot-org/code-dot-org"
     },
     {
       "decision_date": "2026-08-13",
@@ -13603,6 +13737,41 @@
         }
       },
       "url": "https://github.com/consolelabs/mochi-discord"
+    },
+    {
+      "decision_date": "2026-08-14",
+      "label": "no-go",
+      "ledger": {
+        "archived": null,
+        "capped": true,
+        "fork": null,
+        "language": null,
+        "pushed_date": "2026-08-12",
+        "size": null,
+        "source_query": "path:config filename:secrets.yml OR path:config filename:secrets.yaml",
+        "stars": 1544
+      },
+      "probe": {
+        "dialect_counts": {
+          "ecma": 5,
+          "py_re": 46
+        },
+        "predicted_buckets": {
+          "stateful": 1
+        },
+        "regex_sites": 51,
+        "security_boundary": "unknown",
+        "tree_probe": {
+          "complete": false,
+          "path_count": 0,
+          "probed_pin": "9d072cca7a68cd960d5c871484265585dbd060d9",
+          "reason": "budget-exhausted",
+          "regex_file_type_counts": {},
+          "security_boundary": "unknown",
+          "truncated": false
+        }
+      },
+      "url": "https://github.com/consuldemocracy/consuldemocracy"
     },
     {
       "decision_date": "2026-08-13",
@@ -15708,6 +15877,36 @@
         }
       },
       "url": "https://github.com/elementalcollision/GraphMemory-IDE"
+    },
+    {
+      "decision_date": "2026-08-15",
+      "label": "no-go",
+      "ledger": {
+        "archived": null,
+        "capped": true,
+        "fork": null,
+        "language": null,
+        "pushed_date": "2026-08-13",
+        "size": null,
+        "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
+        "stars": 19036
+      },
+      "probe": {
+        "dialect_counts": {},
+        "predicted_buckets": {},
+        "regex_sites": 0,
+        "security_boundary": "unknown",
+        "tree_probe": {
+          "complete": false,
+          "path_count": 0,
+          "probed_pin": "",
+          "reason": "missing-probed-pin",
+          "regex_file_type_counts": {},
+          "security_boundary": "unknown",
+          "truncated": false
+        }
+      },
+      "url": "https://github.com/elizaOS/eliza"
     },
     {
       "decision_date": "2026-08-12",
@@ -19556,50 +19755,6 @@
       "url": "https://github.com/int3/jython"
     },
     {
-      "decision_date": "2026-08-12",
-      "label": "no-go",
-      "ledger": {
-        "archived": false,
-        "capped": true,
-        "fork": false,
-        "language": "Python",
-        "pushed_date": "2012-06-19",
-        "size": 141196,
-        "source_query": "filename:re_tests OR filename:test_re.py path:Lib/test",
-        "stars": 5
-      },
-      "probe": {
-        "dialect_counts": {
-          "java": 10,
-          "posix-shell": 9,
-          "py_re": 146
-        },
-        "predicted_buckets": {
-          "backref": 3,
-          "inline-flag": 29,
-          "lookaround": 19,
-          "m-flag": 5
-        },
-        "regex_sites": 165,
-        "security_boundary": "unknown",
-        "tree_probe": {
-          "complete": true,
-          "path_count": 4103,
-          "probed_pin": "d6db3fcf6198bb9a8f26feff0084beefb25141b2",
-          "regex_file_type_counts": {
-            ".c": 1,
-            ".h": 1,
-            ".java": 918,
-            ".py": 2239,
-            ".sh": 2
-          },
-          "security_boundary": "unknown",
-          "truncated": false
-        }
-      },
-      "url": "https://github.com/int3/jython"
-    },
-    {
       "decision_date": "2026-08-13",
       "label": "no-go",
       "ledger": {
@@ -19811,6 +19966,41 @@
         }
       },
       "url": "https://github.com/italia/verificac19-sdk"
+    },
+    {
+      "decision_date": "2026-08-15",
+      "label": "no-go",
+      "ledger": {
+        "archived": null,
+        "capped": true,
+        "fork": null,
+        "language": null,
+        "pushed_date": "2026-08-13",
+        "size": null,
+        "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
+        "stars": 492
+      },
+      "probe": {
+        "dialect_counts": {
+          "posix-shell": 6,
+          "py_re": 10
+        },
+        "predicted_buckets": {
+          "inline-flag": 4
+        },
+        "regex_sites": 16,
+        "security_boundary": "unknown",
+        "tree_probe": {
+          "complete": false,
+          "path_count": 0,
+          "probed_pin": "a4946db21052d40c6d67fce2179aae979a211d32",
+          "reason": "budget-exhausted",
+          "regex_file_type_counts": {},
+          "security_boundary": "unknown",
+          "truncated": false
+        }
+      },
+      "url": "https://github.com/itbench-hub/ITBench"
     },
     {
       "decision_date": "2026-08-12",
@@ -21433,6 +21623,45 @@
       "url": "https://github.com/ladda-js/ladda"
     },
     {
+      "decision_date": "2026-08-15",
+      "label": "no-go",
+      "ledger": {
+        "archived": null,
+        "capped": true,
+        "fork": null,
+        "language": null,
+        "pushed_date": "2026-08-13",
+        "size": null,
+        "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
+        "stars": 153170
+      },
+      "probe": {
+        "dialect_counts": {
+          "ecma": 782,
+          "posix-shell": 4,
+          "py_re": 265
+        },
+        "predicted_buckets": {
+          "inline-flag": 305,
+          "lookaround": 27,
+          "m-flag": 21,
+          "stateful": 167
+        },
+        "regex_sites": 1051,
+        "security_boundary": "unknown",
+        "tree_probe": {
+          "complete": false,
+          "path_count": 0,
+          "probed_pin": "9ad57adbb3dcd7c9eda9eff9da94e51df7d4f713",
+          "reason": "budget-exhausted",
+          "regex_file_type_counts": {},
+          "security_boundary": "unknown",
+          "truncated": false
+        }
+      },
+      "url": "https://github.com/langflow-ai/langflow"
+    },
+    {
       "decision_date": "2026-08-12",
       "label": "go",
       "ledger": {
@@ -22509,6 +22738,46 @@
       "url": "https://github.com/mattrobinsonsre/terrapod"
     },
     {
+      "decision_date": "2026-08-14",
+      "label": "go",
+      "ledger": {
+        "archived": null,
+        "capped": true,
+        "fork": null,
+        "language": null,
+        "pushed_date": "2026-08-13",
+        "size": null,
+        "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
+        "stars": 4979
+      },
+      "probe": {
+        "dialect_counts": {
+          "ecma": 67,
+          "py_re": 1287
+        },
+        "predicted_buckets": {
+          "backref": 12,
+          "inline-flag": 259,
+          "lookaround": 69,
+          "m-flag": 30,
+          "stateful": 18,
+          "u-flag": 7
+        },
+        "regex_sites": 1354,
+        "security_boundary": "deterministic-true",
+        "tree_probe": {
+          "complete": false,
+          "path_count": 0,
+          "probed_pin": "465921b2597e4bb606395d285809e05ebf0a5ce5",
+          "reason": "budget-exhausted",
+          "regex_file_type_counts": {},
+          "security_boundary": "unknown",
+          "truncated": false
+        }
+      },
+      "url": "https://github.com/maziyarpanahi/openmed"
+    },
+    {
       "decision_date": "2026-08-12",
       "label": "no-go",
       "ledger": {
@@ -22684,6 +22953,47 @@
         }
       },
       "url": "https://github.com/mgechev/revive"
+    },
+    {
+      "decision_date": "2026-08-14",
+      "label": "no-go",
+      "ledger": {
+        "archived": null,
+        "capped": true,
+        "fork": null,
+        "language": null,
+        "pushed_date": "2026-08-13",
+        "size": null,
+        "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
+        "stars": 1338
+      },
+      "probe": {
+        "dialect_counts": {
+          "ecma": 230,
+          "posix-shell": 17,
+          "py_re": 77
+        },
+        "predicted_buckets": {
+          "inline-flag": 144,
+          "lookaround": 1,
+          "m-flag": 7,
+          "posix-class": 2,
+          "stateful": 29,
+          "u-flag": 3
+        },
+        "regex_sites": 324,
+        "security_boundary": "unknown",
+        "tree_probe": {
+          "complete": false,
+          "path_count": 0,
+          "probed_pin": "48536976a42fea26ba422c27424f4acc1734e203",
+          "reason": "budget-exhausted",
+          "regex_file_type_counts": {},
+          "security_boundary": "unknown",
+          "truncated": false
+        }
+      },
+      "url": "https://github.com/microsoft/hve-core"
     },
     {
       "decision_date": "2026-08-12",
@@ -23620,6 +23930,43 @@
         }
       },
       "url": "https://github.com/mrcbax/ActiveAntiPhish"
+    },
+    {
+      "decision_date": "2026-08-14",
+      "label": "no-go",
+      "ledger": {
+        "archived": null,
+        "capped": true,
+        "fork": null,
+        "language": null,
+        "pushed_date": "2026-08-10",
+        "size": null,
+        "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
+        "stars": 1004
+      },
+      "probe": {
+        "dialect_counts": {
+          "ecma": 18,
+          "posix-shell": 2,
+          "py_re": 1
+        },
+        "predicted_buckets": {
+          "inline-flag": 5,
+          "stateful": 1
+        },
+        "regex_sites": 21,
+        "security_boundary": "deterministic-true",
+        "tree_probe": {
+          "complete": false,
+          "path_count": 0,
+          "probed_pin": "a872efcb365ae87ea61b7c920e93c6b6f95de6e8",
+          "reason": "budget-exhausted",
+          "regex_file_type_counts": {},
+          "security_boundary": "unknown",
+          "truncated": false
+        }
+      },
+      "url": "https://github.com/msitarzewski/brew-browser"
     },
     {
       "decision_date": "2026-08-12",
@@ -24954,6 +25301,47 @@
         }
       },
       "url": "https://github.com/open-toolchain/tekton-catalog"
+    },
+    {
+      "decision_date": "2026-08-15",
+      "label": "no-go",
+      "ledger": {
+        "archived": null,
+        "capped": true,
+        "fork": null,
+        "language": null,
+        "pushed_date": "2026-08-13",
+        "size": null,
+        "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
+        "stars": 1068
+      },
+      "probe": {
+        "dialect_counts": {
+          "ecma": 1386,
+          "posix-shell": 16
+        },
+        "predicted_buckets": {
+          "backref": 22,
+          "inline-flag": 185,
+          "lookaround": 128,
+          "m-flag": 18,
+          "posix-class": 6,
+          "stateful": 432,
+          "u-flag": 2
+        },
+        "regex_sites": 1402,
+        "security_boundary": "deterministic-true",
+        "tree_probe": {
+          "complete": false,
+          "path_count": 0,
+          "probed_pin": "ddb616c3a7aa277503f17ec4216c3546d42b24e1",
+          "reason": "budget-exhausted",
+          "regex_file_type_counts": {},
+          "security_boundary": "unknown",
+          "truncated": false
+        }
+      },
+      "url": "https://github.com/openSUSE/open-build-service"
     },
     {
       "decision_date": "2026-08-12",
@@ -29499,6 +29887,46 @@
       "url": "https://github.com/stripstarter/stripstarter"
     },
     {
+      "decision_date": "2026-08-15",
+      "label": "no-go",
+      "ledger": {
+        "archived": null,
+        "capped": true,
+        "fork": null,
+        "language": null,
+        "pushed_date": "2026-08-13",
+        "size": null,
+        "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
+        "stars": 958
+      },
+      "probe": {
+        "dialect_counts": {
+          "ecma": 2201,
+          "posix-shell": 1
+        },
+        "predicted_buckets": {
+          "backref": 15,
+          "inline-flag": 139,
+          "lookaround": 23,
+          "m-flag": 63,
+          "stateful": 257,
+          "u-flag": 386
+        },
+        "regex_sites": 2202,
+        "security_boundary": "deterministic-true",
+        "tree_probe": {
+          "complete": false,
+          "path_count": 0,
+          "probed_pin": "d256158f83a61074e39ff03511c3cc05cc3741b0",
+          "reason": "budget-exhausted",
+          "regex_file_type_counts": {},
+          "security_boundary": "unknown",
+          "truncated": false
+        }
+      },
+      "url": "https://github.com/superdoc/docx-editor"
+    },
+    {
       "decision_date": "2026-08-13",
       "label": "no-go",
       "ledger": {
@@ -30156,6 +30584,44 @@
       "url": "https://github.com/tkhq/turnkey-agent-skills"
     },
     {
+      "decision_date": "2026-08-14",
+      "label": "no-go",
+      "ledger": {
+        "archived": null,
+        "capped": true,
+        "fork": null,
+        "language": null,
+        "pushed_date": "2026-08-13",
+        "size": null,
+        "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
+        "stars": 2628
+      },
+      "probe": {
+        "dialect_counts": {
+          "posix-shell": 2,
+          "py_re": 156
+        },
+        "predicted_buckets": {
+          "backref": 1,
+          "inline-flag": 42,
+          "lookaround": 9,
+          "m-flag": 10
+        },
+        "regex_sites": 158,
+        "security_boundary": "unknown",
+        "tree_probe": {
+          "complete": false,
+          "path_count": 0,
+          "probed_pin": "769a6c88b16ccdc3239a14fcbaf9ef2c44d183a8",
+          "reason": "budget-exhausted",
+          "regex_file_type_counts": {},
+          "security_boundary": "unknown",
+          "truncated": false
+        }
+      },
+      "url": "https://github.com/tradermonty/claude-trading-skills"
+    },
+    {
       "decision_date": "2026-08-12",
       "label": "no-go",
       "ledger": {
@@ -30278,6 +30744,43 @@
         }
       },
       "url": "https://github.com/tsvikas/sync-with-uv"
+    },
+    {
+      "decision_date": "2026-08-15",
+      "label": "no-go",
+      "ledger": {
+        "archived": null,
+        "capped": true,
+        "fork": null,
+        "language": null,
+        "pushed_date": "2026-08-13",
+        "size": null,
+        "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
+        "stars": 603
+      },
+      "probe": {
+        "dialect_counts": {
+          "ecma": 130,
+          "posix-shell": 6
+        },
+        "predicted_buckets": {
+          "inline-flag": 19,
+          "lookaround": 1,
+          "stateful": 10
+        },
+        "regex_sites": 136,
+        "security_boundary": "deterministic-true",
+        "tree_probe": {
+          "complete": false,
+          "path_count": 0,
+          "probed_pin": "849fda41e0b08e2833a85dbccb9fde509790a71d",
+          "reason": "budget-exhausted",
+          "regex_file_type_counts": {},
+          "security_boundary": "unknown",
+          "truncated": false
+        }
+      },
+      "url": "https://github.com/tufantunc/ssh-mcp"
     },
     {
       "decision_date": "2026-08-13",

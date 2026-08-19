@@ -21,25 +21,25 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from regexproof.admission.serialize import dumps_pinned
-from regexproof.io_atomic import atomic_write_text
-from regexproof.mine.exclusions import normalize_repo_url
-from regexproof.mine.ledger import ENRICH_FIELDS, load_ledger, save_ledger
-from regexproof.mine.search import AuthError, RateLimitError, enrich_repo, github_headers
-from regexproof.mine.tree import (
+from regexproof.admission.serialize import dumps_pinned  # noqa: E402  # ROOT bootstrap above
+from regexproof.io_atomic import atomic_write_text  # noqa: E402  # ROOT bootstrap above
+from regexproof.mine.exclusions import normalize_repo_url  # noqa: E402  # ROOT bootstrap above
+from regexproof.mine.gate_files import git_ls_decision_paths, list_gate_decision_paths, read_repo_bytes  # noqa: E402  # ROOT bootstrap above
+from regexproof.mine.ledger import ENRICH_FIELDS, load_ledger, save_ledger  # noqa: E402  # ROOT bootstrap above
+from regexproof.mine.search import AuthError, RateLimitError, enrich_repo, github_headers  # noqa: E402  # ROOT bootstrap above
+from regexproof.mine.tree import (  # noqa: E402  # ROOT bootstrap above
     DEFAULT_TREE_PROBE_BUDGET,
     TreeCache,
     materialize_tree_features,
 )
 
-DECISION_GLOB = "*_gate_decision.json"
 ARTIFACT_SCHEMA_VERSION = "1"
 
 
 def _read_json(path: Path) -> dict[str, Any] | None:
     try:
-        value = json.loads(path.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError):
+        value = json.loads(read_repo_bytes(path, repo_root=ROOT).decode("utf-8"))
+    except (OSError, json.JSONDecodeError, UnicodeDecodeError):
         return None
     return value if isinstance(value, dict) else None
 
@@ -91,8 +91,12 @@ def _row(
     }
 
 
+def _git_ls_decision_paths(directory: Path) -> list[Path] | None:
+    return git_ls_decision_paths(directory, repo_root=ROOT)
+
+
 def _decision_paths(directory: Path) -> list[Path]:
-    return sorted(directory.glob(DECISION_GLOB), key=lambda path: path.name)
+    return list_gate_decision_paths(directory, repo_root=ROOT)
 
 
 def _linked_records(
@@ -104,6 +108,7 @@ def _linked_records(
             by_url.setdefault(normalize_repo_url(str(candidate["url"])), candidate)
 
     records: list[tuple[dict[str, Any], dict[str, Any], dict[str, Any]]] = []
+    seen_urls: set[str] = set()
     for path in decision_paths:
         decision = _read_json(path)
         if decision is None:
@@ -112,9 +117,15 @@ def _linked_records(
         label = decision.get("decision")
         if not url or label not in {"go", "triage-trial", "no-go"}:
             continue
-        candidate = by_url.get(normalize_repo_url(str(url)))
+        nurl = normalize_repo_url(str(url))
+        if nurl in seen_urls:
+            # Owner-prefix and manifest-slug copies of the same decision
+            # must not double-weight the P8 fit (one row per URL).
+            continue
+        candidate = by_url.get(nurl)
         if candidate is None:
             continue
+        seen_urls.add(nurl)
         records.append((candidate, decision, {"path": path.name}))
     return records
 
@@ -259,7 +270,7 @@ def _inputs_hash(
     for p in sorted(decision_paths):
         h.update(b"decision:")
         h.update(p.name.encode("utf-8"))
-        h.update(p.read_bytes())
+        h.update(read_repo_bytes(p, repo_root=ROOT))
     return h.hexdigest()
 
 

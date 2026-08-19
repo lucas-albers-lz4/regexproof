@@ -1,23 +1,46 @@
 {
   "coreruleset": {
-    "admitted": 0,
-    "dropped": 0,
+    "admitted": 3,
+    "batch_shape5": 3,
+    "dropped": 280,
+    "executed": 3,
     "fraction": 0.6908,
-    "note": "fraction gate go; CRS rule-derived adapter is Phase-2 rule_diff",
-    "scope": "full_corpus"
+    "note": "CRS version_diff with family_contract; timeout-skipped=1",
+    "sat_fullmatch_only": 1,
+    "sat_search_gap": 2,
+    "scope": "full_corpus",
+    "skipped": 0,
+    "timeout": 0,
+    "timeout_gate_ok": true,
+    "timeout_rate": 0.0,
+    "unsat": 0
   },
   "detect-secrets": {
     "admitted": 0,
+    "batch_shape5": 0,
     "dropped": 0,
+    "executed": 0,
     "note": "no independent-spec catalog"
   },
   "gitleaks": {
     "admitted": 22,
-    "dropped": 1
+    "batch_shape5": 0,
+    "dropped": 1,
+    "executed": 0,
+    "note": "independent-spec gitleaks pairs are not version_diff/cross_engine; batch executes 0 unless family_contract is present (#477)",
+    "sat_fullmatch_only": 0,
+    "sat_search_gap": 0,
+    "skipped": 0,
+    "timeout": 0,
+    "timeout_gate_ok": true,
+    "timeout_rate": 0.0,
+    "unsat": 0
   },
   "validatorjs": {
     "admitted": 0,
+    "batch_shape5": 0,
     "dropped": 0,
+    "executed": 0,
     "note": "no independent-spec catalog"
   }
 }

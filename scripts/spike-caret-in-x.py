@@ -15,7 +15,6 @@ from __future__ import annotations
 
 import json
 import sys
-from collections import Counter
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -28,7 +27,6 @@ from regexproof.compiler import compile_pattern  # noqa: E402
 from regexproof.compiler.caret_in_x import (  # noqa: E402
     CARET_IN_X_DOMAIN,
     is_caret_in_x_candidate,
-    try_compile_caret_in_x,
 )
 from regexproof.compiler.pcre import replay_argv  # noqa: E402
 from regexproof.compiler.trailing_alt_dollar import (  # noqa: E402

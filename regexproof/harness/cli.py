@@ -9,6 +9,7 @@ import sys
 
 from regexproof.harness.core import (
     REGISTRY,
+    check_contract_coverage,
     check_domain_coverage,
     check_mutation_coverage,
     run_one,
@@ -23,6 +24,7 @@ def main(argv=None):
     args = list(sys.argv[1:] if argv is None else argv)
     require_ground_truth = "--require-ground-truth" in args
     require_domain = "--require-domain" in args
+    require_contract = "--require-contract" in args
     as_json = "--json" in args
     as_json_legacy = "--json-legacy" in args
     check_cov_only = "--check-mutation-coverage" in args
@@ -41,6 +43,7 @@ def main(argv=None):
         not in (
             "--require-ground-truth",
             "--require-domain",
+            "--require-contract",
             "--json",
             "--json-legacy",
             "--check-mutation-coverage",
@@ -92,6 +95,7 @@ def main(argv=None):
 
     coverage_fail = check_mutation_coverage()
     domain_fail = check_domain_coverage(require=require_domain)
+    contract_fail = check_contract_coverage(require=require_contract)
     failures = 0
     not_proven_count = 0
     results = []
@@ -117,6 +121,7 @@ def main(argv=None):
             if res.get("not_proven"):
                 not_proven_count += 1
     failures += domain_fail
+    failures += contract_fail
     if as_json_legacy:
         # REPORT mode (one-release array): the verification tier is DERIVED at
         # report time (S15) — added to a COPY, never stored in the record.
@@ -141,7 +146,7 @@ def main(argv=None):
     # into exit 1 so a violated property cannot ship green. Default CLI stays §10.
     if any(r.get("disagreement") for r in results):
         return 2
-    if not_proven_count or coverage_fail or domain_fail:
+    if not_proven_count or coverage_fail or domain_fail or contract_fail:
         return 1
     if fail_on_property_failure and failures:
         return 1

@@ -7,7 +7,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-import pytest
+from tests.toolchain import require_perl_pin, require_yara
 
 ROOT = Path(__file__).resolve().parents[1]
 FIXTURES = ROOT / "sweep" / "corpus-wave2" / "fixtures"
@@ -36,6 +36,8 @@ WAVE3 = {
 
 
 def test_mirror_fidelity_gate_script_ok():
+    require_yara()
+    require_perl_pin()
     proc = subprocess.run(
         [
             sys.executable,
@@ -114,6 +116,7 @@ def test_mirror_fidelity_wave3_required_input():
 
 
 def test_yara_helper_version_and_match():
+    require_yara()
     proc = subprocess.run(
         [sys.executable, str(ROOT / "helpers" / "yara" / "match.py"), "version"],
         cwd=str(ROOT),

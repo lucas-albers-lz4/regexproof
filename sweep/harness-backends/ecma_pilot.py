@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""R9 ECMA-route pilot: fwlive classifier patterns (core/fwlive-log.js CLASSIFY_SPEC,
+r"""R9 ECMA-route pilot: fwlive classifier patterns (core/fwlive-log.js CLASSIFY_SPEC,
 fetched 2026-08-11, master) through three routes:
 
   R1 real implementation  — node, pattern AS WRITTEN with its flags (ground truth)
@@ -14,12 +14,16 @@ routes. Declared input domain: ASCII (D14 scoping; \s gap NBSP/U+2028 noted).
 
 Writes sweep/harness-backends/p1-baseline/ecma-pilot.json + ecma-pilot.md
 """
-import sys, os, re, json, time, subprocess, tempfile
+import sys
+import os
+import json
+import subprocess
+import tempfile
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.insert(0, ROOT)
-import z3
-from z3 import (String, InRe, Concat, Star, Union, Range, Re,
+import z3  # noqa: E402  # sys.path bootstrap (ROOT) above
+from z3 import (String, InRe, Concat, Star, Union, Range, Re,  # noqa: E402
                 StringVal)
 
 NOODLER = os.environ.get("NOODLER", "/tmp/noodler/z3-noodler-ubuntu-24.04-x86_64-shared")
@@ -95,7 +99,10 @@ def mirror_re(name, pat, flags):
                      Concat(ANY, NONWORD, w))            # nonword before, W to end
     if name == "TCP_FLAG_TAIL":
         f = alt_re(FLAGS)
-        one_or_more = lambda r: Concat(r, Star(r))
+
+        def one_or_more(r):
+            return Concat(r, Star(r))
+
         tail = Star(Concat(one_or_more(SPACE), f))
         return Union(Concat(f, tail, Star(SPACE)),       # flag seq at start
                      Concat(ANY, NONWORD, f, tail, Star(SPACE)))  # nonword before
@@ -113,7 +120,7 @@ def probe_corpus():
         for s in _gen(alpha, L):
             strs.add(s)
     # targeted: the words + boundary compositions + KV forms
-    words = (PREFIXES + "|" + HINTS + "|" + ACTIONS + "|" + FLAGS).split("|") + ["IN=", "OUT=", "SRC="]
+    words = [*(PREFIXES + "|" + HINTS + "|" + ACTIONS + "|" + FLAGS).split("|"), "IN=", "OUT=", "SRC="]
     for w in words:
         strs.update([w, w + " ", " " + w, w + "a", "a" + w, w + w, w + ":", w + "=",
                      "\t" + w, w + "\t", w.lower(), w.upper()])
@@ -206,7 +213,6 @@ def main():
         r1 = node_verdicts(pat, flags, corpus)
         r2 = noodler_ecma(pat_ecma, corpus)
         r3 = stock_mirror(mir, corpus)
-        r3 = {s: (v if isinstance(v, bool) else v) for s, v in r3.items()}
         # classify
         d12 = [(s, r1[s], r2[s]) for s in corpus if r1[s] != r2[s] and isinstance(r2[s], bool)]
         d13 = [(s, r1[s], r3[s]) for s in corpus if r1[s] != r3[s] and isinstance(r3[s], bool)]

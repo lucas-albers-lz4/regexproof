@@ -5,12 +5,11 @@ from __future__ import annotations
 import json
 from datetime import date
 from pathlib import Path
-from types import SimpleNamespace
 
 import pytest
 
 from regexproof.mine.exclusions import is_excluded, load_admitted_urls, normalize_repo_url
-from regexproof.mine.ledger import empty_ledger, load_ledger, save_ledger
+from regexproof.mine.ledger import empty_ledger
 from regexproof.mine.queue import (
     daily_mine_cap,
     drain,

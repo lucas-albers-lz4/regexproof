@@ -1,0 +1,104 @@
+{
+  "candidate_url": "https://github.com/tradermonty/claude-trading-skills",
+  "conditions": [
+    {
+      "evidence": "Predicted buckets present (4) but not treated as novel surface.",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Not a security boundary (probe.security_boundary=unknown).",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "158 sites < 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "claude-trading-skills",
+  "corpus_pin": "769a6c88b16ccdc3239a14fcbaf9ef2c44d183a8",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-14",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "backref": 1,
+      "lookaround": 9
+    },
+    "dialect": {
+      "posix-shell": 2,
+      "py_re": 156
+    },
+    "flags": {
+      "i": 23,
+      "m": 10,
+      "s": 19
+    },
+    "pin": "769a6c88b16ccdc3239a14fcbaf9ef2c44d183a8",
+    "pin_mined": "769a6c88b16ccdc3239a14fcbaf9ef2c44d183a8",
+    "pin_probed": "769a6c88b16ccdc3239a14fcbaf9ef2c44d183a8",
+    "predicted_buckets": {
+      "backref": 1,
+      "inline-flag": 42,
+      "lookaround": 9,
+      "m-flag": 10
+    },
+    "regex_sites": 158,
+    "regex_sites_per_file": {
+      "examples/daily-market-dashboard/agent/attachments.py": 2,
+      "examples/daily-market-dashboard/agent/knowledge.py": 3,
+      "examples/daily-market-dashboard/agent/sanitizer.py": 6,
+      "scripts/ci_test_matrix.py": 1,
+      "scripts/dev/bootstrap_skills_index.py": 4,
+      "scripts/generate_catalog_from_index.py": 1,
+      "scripts/generate_skill_docs.py": 8,
+      "scripts/generate_workflow_docs.py": 1,
+      "scripts/hooks/check_no_absolute_paths.py": 4,
+      "scripts/hooks/check_skill_frontmatter.py": 2,
+      "scripts/run_all_tests.sh": 2,
+      "scripts/run_skill_generation_pipeline.py": 3,
+      "scripts/run_skill_improvement_loop.py": 7,
+      "scripts/tests/test_faq_docs.py": 3,
+      "scripts/tests/test_github_templates.py": 2,
+      "scripts/tests/test_glossary_docs.py": 3,
+      "scripts/tests/test_your_first_week_docs.py": 4,
+      "scripts/validate_skills_index.py": 2,
+      "scripts/workflow_replay.py": 2,
+      "skills/cot-contrarian-detector/scripts/screen_cot_crowding.py": 4,
+      "skills/data-quality-checker/scripts/check_data_quality.py": 21,
+      "skills/drawdown-circuit-breaker/scripts/check_circuit_breaker.py": 2,
+      "skills/dual-axis-skill-reviewer/scripts/run_dual_axis_review.py": 8,
+      "skills/edge-candidate-agent/scripts/auto_detect_candidates.py": 2,
+      "skills/edge-pipeline-orchestrator/scripts/orchestrate_edge_pipeline.py": 1,
+      "skills/edge-signal-aggregator/scripts/aggregate_signals.py": 1,
+      "skills/edge-strategy-reviewer/scripts/review_strategy_drafts.py": 1,
+      "skills/finviz-screener/scripts/open_finviz_screener.py": 3,
+      "skills/futures-position-sizer/scripts/futures_sizing.py": 1,
+      "skills/institutional-flow-tracker/scripts/data_quality.py": 10,
+      "skills/mt5-robot-tester/scripts/mt5_batch_tester.py": 3,
+      "skills/mt5-robot-tester/scripts/mt5_common.py": 1,
+      "skills/mt5-robot-tester/scripts/parse_mt5_report.py": 3,
+      "skills/news-reaction-failure-analyzer/scripts/analyze_news_reaction.py": 4,
+      "skills/parabolic-short-trade-planner/scripts/tests/test_one_shot_idempotency.py": 1,
+      "skills/portfolio-manager/scripts/tests/test_check_alpaca_connection.py": 1,
+      "skills/pre-trade-discipline-gate/scripts/check_pre_trade_discipline.py": 3,
+      "skills/skill-idea-miner/scripts/mine_session_logs.py": 2,
+      "skills/skill-idea-miner/scripts/score_ideas.py": 1,
+      "skills/skill-integration-tester/scripts/validate_workflows.py": 8,
+      "skills/stockbee-episodic-pivot-analyzer/scripts/analyze_ep.py": 4,
+      "skills/technical-analyst/scripts/check_weekly_price_action.py": 4,
+      "skills/trade-hypothesis-ideator/scripts/pipeline/format_output.py": 4,
+      "skills/trade-hypothesis-ideator/scripts/pipeline/strategy_exporter.py": 1,
+      "skills/trade-performance-coach/scripts/review_trade_performance.py": 1,
+      "skills/trader-memory-core/scripts/thesis_store.py": 1,
+      "skills/trading-skills-navigator/scripts/tests/test_recommend.py": 1,
+      "skills/vcp-screener/scripts/historical_scanner.py": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Trading-skill pack. Probe 158 sites in data-quality checkers and doc generators, security_boundary=unknown. Not a regex corpus on a security boundary.",
+  "schema_version": "1"
+}

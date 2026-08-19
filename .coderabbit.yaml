@@ -1,0 +1,52 @@
+# regexproof — .coderabbit.yaml
+# Grounded in the actual repo invariants (from pyproject + ci.yml):
+#   - Python 3.9 target (target-version = "py39")
+#   - proof-job isolation from ReDoS tooling
+#   - seeded/deterministic property & fuzz code
+#   - ruff lint set E,F,W,I,UP,SIM,PTH,PIE,PLC,RUF,EXE with per-file ignores
+#   - regenerated data artifacts (must be produced by their generators)
+# Profile "chill": second-opinion comments; the Z3/golden CI is the gate.
+language: "en"
+early_access: false
+reviews:
+  profile: "chill"
+  request_changes_workflow: false
+  high_level_summary: true
+  poem: false
+  collapse_walkthrough: true
+  auto_review:
+    enabled: true
+    drafts: true
+    base: auto
+  tools:
+    ast_grep: true
+    bullseye: false           # security add-on is not the focus here; proof invariants are
+  path_instructions:
+    - path: "regexproof/**/*.py"
+      instructions: |
+        Target is Python 3.9. Flag 3.10+ syntax: `match` statements,
+        `str.removeprefix`/`removesuffix`, `X | Y` type unions in runtime
+        annotations, and parenthesized context-managers. Keep runtime code
+        importable under 3.9.
+    - path: "scripts/**/*.py"
+      instructions: |
+        These are the Z3 proof / property / fuzz drivers. Flag:
+        - any import of regexploit / vuln-regex-detector reaching a proof
+          path (CI asserts these stay OUT of the proof env),
+        - `subprocess` calls with `shell=True` (CI statically rejects them
+          in fuzz paths),
+        - unseeded `random` / `hash` / `time` used as sources of nondeterminism
+          in property or fuzz code (must stay deterministic),
+        - hand-edits to regenerated artifacts (ledger, D5/P8 files, score
+          weights) — these must come from their generators, not by hand.
+    - path: "**/ci/**"
+      instructions: |
+        CI contract files (python-matrix.toml, toolchain pins, etc.) must
+        stay consistent with what scripts/ actually requires. Flag a pin or
+        matrix change that desyncs from the toolchain-assert scripts.
+  system_instructions: |
+    This is regexproof, a Z3-backed ReDoS proof/property harness. Its CI is
+    deliberate and split (proof vs golden) with drift checks on regenerated
+    artifacts. Don't fight the existing gate design. Give precise, grounded
+    comments about 3.9-compat, proof isolation, determinism, or generated-
+    artifact hygiene; skip generic style nits the lint set already owns.

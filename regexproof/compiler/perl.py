@@ -191,7 +191,10 @@ def compile_perl(
                 ureason = _classify_perl_helper_error(str(gate.get("error") or ""))
             raise Unencodable(ureason or "malformed-pattern")
         ast = parse_pattern(rewritten)
-        fold_fn = lambda ch: python_fold_closure(ch, ascii_only=True)
+
+        def fold_fn(ch):
+            return python_fold_closure(ch, ascii_only=True)
+
         fold = fold_fn if "i" in flags else None
         # ``s`` (dotall): ``.`` matches newline — empty terminator set.
         terminators = frozenset() if "s" in flags else PERL_TERMINATORS

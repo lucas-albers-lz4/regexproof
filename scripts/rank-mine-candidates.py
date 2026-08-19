@@ -19,15 +19,14 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from regexproof.mine.exclusions import load_admitted_urls, normalize_repo_url
-from regexproof.mine.ledger import load_ledger
-from regexproof.mine.score import (
-    SCORE_VERSION,
+from regexproof.mine.exclusions import load_admitted_urls, normalize_repo_url  # noqa: E402  # ROOT bootstrap above
+from regexproof.mine.ledger import load_ledger  # noqa: E402  # ROOT bootstrap above
+from regexproof.mine.score import (  # noqa: E402  # ROOT bootstrap above
     candidate_score,
     rank_candidates,
     score_version_for_allocator,
 )
-from regexproof.mine.tree import (
+from regexproof.mine.tree import (  # noqa: E402  # ROOT bootstrap above
     TreeCache,
     materialize_tree_features,
 )
@@ -186,6 +185,14 @@ def main(argv: list[str] | None = None) -> int:
                 # AUTHORITATIVE — always set it (empty included) so a stale
                 # ledger mined pin can never probe the wrong commit.
                 c["pin_probed"] = dec_pin
+            elif not str(c.get("pin_probed") or ""):
+                # Ungated ledger rows store the mined SHA as `pin`. Copy it
+                # so score-v2 tree join is not `missing-probed-pin` (#490).
+                # This is ranking-only; admission E3 still refuses mined-pin
+                # fallback when probing for a gate decision.
+                mined = str(c.get("pin") or "")
+                if mined:
+                    c["pin_probed"] = mined
         pool.append(c)
     tree_features = {}
     if args.allocator == "score-v2" and pool:

@@ -16,13 +16,13 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from regexproof.admission.clone import (
+from regexproof.admission.clone import (  # noqa: E402  # ROOT bootstrap above
     CloneError,
     cleanup_clone,
     enforce_disk_budget,
     partial_clone,
 )
-from regexproof.admission.draft import build_draft, emit_draft_text
+from regexproof.admission.draft import build_draft, emit_draft_text  # noqa: E402  # ROOT bootstrap above
 
 
 def _is_url(s: str) -> bool:

@@ -89,7 +89,7 @@ def parse(pattern: str) -> int:
             pcre2.compile(pattern.encode())
             print(json.dumps({"ok": True, "helper": "pcre2-bindings"}))
             return 0
-        except Exception as exc:  # noqa: BLE001
+        except Exception as exc:
             print(
                 json.dumps(
                     {
@@ -148,7 +148,7 @@ def match(pattern: str, flags: str, data: str) -> int:
                 opts |= pcre2.COMPAT_I
             compiled = pcre2.compile(pattern.encode(), options=opts)
             return 0 if compiled.search(data.encode()) else 1
-        except Exception:  # noqa: BLE001
+        except Exception:
             return 2  # compile/engine error — not a rejection
     if _has_pcre2grep():
         # -M (multiline): match against the WHOLE stdin as one subject, not

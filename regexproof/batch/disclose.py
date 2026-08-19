@@ -60,21 +60,61 @@ SECURITY_TOOL_CORPORA = frozenset(
         "mole",
         "pm_shredder",
         "vedetta",
+        "inhale",
+        "llm-honeypot-intelligence",
+        "titus",
+        "Doberman-Core",
+        "devguard",
+        "malzoo",
+        "yarasigs",
     }
 )
+
+# Empty on purpose: a new finding kind on a security-tool corpus is
+# private_first unless explicitly exempted here with a stated reason (#494).
+DISCLOSURE_EXEMPT_KINDS: frozenset[str] = frozenset()
 
 
 def tag_disclosure(findings: list[dict[str, Any]], *, corpus: str) -> list[dict[str, Any]]:
     out = []
     for f in findings:
         rec = dict(f)
-        if corpus in SECURITY_TOOL_CORPORA and rec.get("kind") in (
-            "rule_diff",
-            "property",
-            "usage_mismatch",
-            "intent_mismatch",
-        ):
-            rec["disclosure"] = "private_first"
+        if corpus in SECURITY_TOOL_CORPORA:
+            kind = rec.get("kind")
+            if kind not in DISCLOSURE_EXEMPT_KINDS:
+                rec["disclosure"] = "private_first"
+        out.append(rec)
+    return out
+
+
+def apply_approval(
+    findings: list[dict[str, Any]],
+    *,
+    approval_path: Path | None,
+) -> list[dict[str, Any]]:
+    """Set ``public_ok`` only from a human approval file (#472).
+
+    The file is JSON: ``{"regex_ids": ["..."]}``. A finding is flipped
+    only when its ``regex_id`` is listed *and* ground-truth is
+    ``reproduced`` or ``PASS``. Unlisted findings are unchanged.
+    """
+    if approval_path is None or not approval_path.is_file():
+        return findings
+    try:
+        payload = json.loads(approval_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return findings
+    ids = payload.get("regex_ids") if isinstance(payload, dict) else None
+    if not isinstance(ids, list):
+        return findings
+    allowed = {str(x) for x in ids}
+    out = []
+    for f in findings:
+        rec = dict(f)
+        rid = str(rec.get("regex_id") or "")
+        gt = rec.get("ground_truth_status")
+        if rid in allowed and gt in ("reproduced", "PASS"):
+            rec["disclosure"] = "public_ok"
         out.append(rec)
     return out
 

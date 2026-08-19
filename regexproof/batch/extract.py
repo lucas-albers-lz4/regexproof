@@ -6,44 +6,33 @@ import sys
 from pathlib import Path
 from typing import Any
 
-from regexproof.admission.walk import _SHELL_SHEBANGS
+from regexproof.admission.walk import _SHELL_SHEBANGS, _SKIP_DIR_NAMES
 from regexproof.batch.extractor_registry import (
     EXTRACTORS,
     registry_glob,
 )
 from regexproof.batch.manifests import MAX_FILE_BYTES, ROOT, WAVE_CORPORA
-from regexproof.extractors.busybox_tests import extract_busybox_tests
 from regexproof.extractors.cpython_re_tests import (
     extract_cpython_combined,
     extract_cpython_re_tests,
 )
-from regexproof.extractors.re2_testdata import extract_re2_testdata
-from regexproof.extractors.go_regexp import extract_go_regexp
 from regexproof.extractors.go_regexp_tests import (
     extract_go_regexp_tests,
     extract_go_regexp_tests_tree,
 )
-from regexproof.extractors.ids_rules import extract_ids_rules
 from regexproof.extractors.js_babel import extract_js, extract_js_precise
 from regexproof.extractors.modsec import extract_modsec
-from regexproof.extractors.pcre2_testdata import extract_pcre2_testdata
 from regexproof.extractors.perl_re_tests import (
     extract_perl_re_file,
     extract_perl_re_tree,
 )
 from regexproof.extractors.python_ast import extract_python
+from regexproof.extractors.re2_testdata import extract_re2_testdata
 from regexproof.extractors.rule_file import extract_rule_file
-from regexproof.extractors.dompurify import extract_dompurify
-from regexproof.extractors.email_addresses import extract_email_addresses
-from regexproof.extractors.isemail import extract_isemail
-from regexproof.extractors.noseyparker import extract_noseyparker
-from regexproof.extractors.shhgit import extract_shhgit
-from regexproof.extractors.spamassassin import extract_spamassassin
 from regexproof.extractors.v8_mjsunit import (
     extract_v8_mjsunit,
     extract_v8_mjsunit_tree,
 )
-from regexproof.extractors.yara import extract_yara
 
 
 def _read_capped(path: Path, meta: dict[str, Any] | None = None) -> str | None:
@@ -92,6 +81,8 @@ def extract_corpus(corpus: str, meta: dict[str, Any]) -> list[dict[str, Any]]:
     path: Path = meta["path"]
     extractor = meta["extractor"]
     # Registry path for pure glob extractors (#195) — preserves regex_ids.
+    # re2_testdata is in EXTRACTORS but stays file-or-dir below; do not
+    # dispatch `if extractor in EXTRACTORS` blindly.
     if extractor in EXTRACTORS and extractor in {
         "python_dir",
         "go_regexp",
@@ -106,6 +97,7 @@ def extract_corpus(corpus: str, meta: dict[str, Any]) -> list[dict[str, Any]]:
         "dompurify",
         "isemail",
         "email_addresses",
+        "semgrep_yaml",
     }:
         fn = EXTRACTORS[extractor]
         if extractor == "shell_posix":
@@ -193,44 +185,6 @@ def extract_corpus(corpus: str, meta: dict[str, Any]) -> list[dict[str, Any]]:
             return []
         rel = str(path.relative_to(ROOT))
         return extract_python(source, repo=meta["repo"], file=rel)
-    if meta["extractor"] == "python_dir":
-        return extract_glob(
-            path,
-            meta,
-            glob=meta.get("glob") or "**/*.py",
-            extract_fn=lambda src, rel: extract_python(
-                src, repo=meta["repo"], file=rel
-            ),
-        )
-    if meta["extractor"] == "go_regexp":
-        return extract_glob(
-            path,
-            meta,
-            glob=meta.get("glob") or "**/*.go",
-            extract_fn=lambda src, rel: extract_go_regexp(
-                src, repo=meta["repo"], file=rel, dialect=meta["dialect"]
-            ),
-        )
-    if meta["extractor"] == "ids_rules":
-        return extract_glob(
-            path,
-            meta,
-            glob=meta.get("glob") or "*.rules",
-            extract_fn=lambda src, rel: extract_ids_rules(
-                src, repo=meta["repo"], file=rel, dialect=meta["dialect"]
-            ),
-        )
-    if meta["extractor"] == "semgrep_yaml":
-        from regexproof.extractors.semgrep_yaml import extract_semgrep_yaml
-
-        return extract_glob(
-            path,
-            meta,
-            glob=meta.get("glob") or "**/*.yml,**/*.yaml",
-            extract_fn=lambda src, rel: extract_semgrep_yaml(
-                src, repo=meta["repo"], file=rel, dialect=meta["dialect"]
-            ),
-        )
     if meta["extractor"] == "re2_testdata":
         if path.is_file():
             source = _read_capped(path, meta)
@@ -248,15 +202,6 @@ def extract_corpus(corpus: str, meta: dict[str, Any]) -> list[dict[str, Any]]:
             meta,
             glob=meta.get("glob") or "*.txt",
             extract_fn=lambda src, rel: extract_re2_testdata(
-                src, repo=meta["repo"], file=rel, dialect=meta["dialect"]
-            ),
-        )
-    if meta["extractor"] == "pcre2_testdata":
-        return extract_glob(
-            path,
-            meta,
-            glob=meta.get("glob") or "testinput*",
-            extract_fn=lambda src, rel: extract_pcre2_testdata(
                 src, repo=meta["repo"], file=rel, dialect=meta["dialect"]
             ),
         )
@@ -293,78 +238,6 @@ def extract_corpus(corpus: str, meta: dict[str, Any]) -> list[dict[str, Any]]:
                 source, repo=meta["repo"], file=rel, dialect=meta["dialect"]
             )
         return []
-    if meta["extractor"] == "busybox_tests":
-        return extract_glob(
-            path,
-            meta,
-            glob=meta.get("glob") or "*.tests",
-            extract_fn=lambda src, rel: extract_busybox_tests(
-                src, repo=meta["repo"], file=rel, dialect=meta["dialect"]
-            ),
-        )
-    if meta["extractor"] == "yara":
-        return extract_glob(
-            path,
-            meta,
-            glob=meta.get("glob") or "**/*.yar,**/*.yara",
-            extract_fn=lambda src, rel: extract_yara(
-                src, repo=meta["repo"], file=rel
-            ),
-        )
-    if meta["extractor"] == "spamassassin":
-        return extract_glob(
-            path,
-            meta,
-            glob=meta.get("glob") or "**/*.cf",
-            extract_fn=lambda src, rel: extract_spamassassin(
-                src, repo=meta["repo"], file=rel
-            ),
-        )
-    if meta["extractor"] == "noseyparker":
-        return extract_glob(
-            path,
-            meta,
-            glob=meta.get("glob") or "**/*.yml",
-            extract_fn=lambda src, rel: extract_noseyparker(
-                src, repo=meta["repo"], file=rel, dialect=meta["dialect"]
-            ),
-        )
-    if meta["extractor"] == "shhgit":
-        return extract_glob(
-            path,
-            meta,
-            glob=meta.get("glob") or "config.yaml",
-            extract_fn=lambda src, rel: extract_shhgit(
-                src, repo=meta["repo"], file=rel, dialect=meta["dialect"]
-            ),
-        )
-    if meta["extractor"] == "dompurify":
-        return extract_glob(
-            path,
-            meta,
-            glob=meta.get("glob") or "src/*.ts",
-            extract_fn=lambda src, rel: extract_dompurify(
-                src, repo=meta["repo"], file=rel
-            ),
-        )
-    if meta["extractor"] == "isemail":
-        return extract_glob(
-            path,
-            meta,
-            glob=meta.get("glob") or "*.js",
-            extract_fn=lambda src, rel: extract_isemail(
-                src, repo=meta["repo"], file=rel
-            ),
-        )
-    if meta["extractor"] == "email_addresses":
-        return extract_glob(
-            path,
-            meta,
-            glob=meta.get("glob") or "*.js",
-            extract_fn=lambda src, rel: extract_email_addresses(
-                src, repo=meta["repo"], file=rel
-            ),
-        )
     if meta["extractor"] == "test262":
         from regexproof.extractors.test262 import extract_test262, extract_test262_tree
 
@@ -487,17 +360,26 @@ def extract_corpus(corpus: str, meta: dict[str, Any]) -> list[dict[str, Any]]:
 
 
 def _is_shell_script(fp: Path) -> bool:
-    """shell_posix batch file filter — mirrors the admission walker's
-    `_is_shell_context` EXACTLY (luna #276 -r8 finding: the first version
-    substring-matched `sh` and wrongly admitted `#!/usr/bin/zsh`):
-    init.d path segment, known suffix, or extensionless file whose first
-    line is in the walker's exact shebang allowlist."""
+    """shell_posix batch file filter — aligned with dogfood ``--dir``
+    ``_classify`` (scripts/dogfood-singleton-analysis.py): known suffix,
+    ``init.d/`` path segment, or first line in the walker's exact shebang
+    allowlist **regardless of suffix**.
+
+    Luna #276: the allowlist is exact ``_SHELL_SHEBANGS`` (never a ``sh``
+    substring), so ``#!/usr/bin/zsh`` stays rejected. Suffix-early-return
+    previously dropped OpenWrt ``.defaults`` / ``.uci`` / ``.dnsprefetch``
+    shebang files that ``--dir`` admits.
+
+    Path segments in the admission walker's ``_SKIP_DIR_NAMES`` (``.git``,
+    ``node_modules``, …) are refused so ``**/*`` does not admit clone-hook
+    sample scripts under ``.git/hooks/``.
+    """
+    if any(p in _SKIP_DIR_NAMES for p in fp.parts):
+        return False
     if fp.suffix in (".sh", ".bash", ".init"):
         return True
     if any(p == "init.d" for p in fp.parts):
         return True
-    if fp.suffix:
-        return False  # other extensions are not shell
     try:
         with fp.open("r", encoding="utf-8", errors="replace") as fh:
             first = fh.readline(80).strip()

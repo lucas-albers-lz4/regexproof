@@ -143,7 +143,7 @@ def test_manifest_files_fail_closed_when_missing(tmp_path: Path):
         "repo": "cure53/DOMPurify",
         "files": ["src/purify.ts", "src/regexp.ts"],
     }
-    with pytest.raises(FileNotFoundError, match="regexp.ts"):
+    with pytest.raises(FileNotFoundError, match=r"regexp\.ts"):
         _extract_glob(
             root,
             meta,

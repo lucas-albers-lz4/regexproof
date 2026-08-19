@@ -1,0 +1,14 @@
+{
+  "schema_version": "1",
+  "corpus": "openmed",
+  "corpus_pin": "353c81a6ef996b4b52eff555560efd2ac86922bf",
+  "candidate_url": "https://github.com/maziyarpanahi/openmed",
+  "smith_decision": "go",
+  "supersedes": "go",
+  "reason": "151/179 = 0.8436 encodable on first-party clinical PII/PHI and re-identification regexes (Python re). Library corpus, not a scanner pack.",
+  "regex_sites": 179,
+  "sites_by_bucket": {
+    "py_re": 179
+  },
+  "additional_surface_outside_probe_scope": {}
+}

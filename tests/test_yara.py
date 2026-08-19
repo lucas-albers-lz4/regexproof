@@ -8,7 +8,7 @@ import jsonschema
 import pytest
 
 from regexproof.extractors.yara import extract_yara
-from regexproof.regex_id import DEFAULT_DOMAIN, make_regex_id
+from regexproof.regex_id import make_regex_id
 from regexproof.schemas import extractor_schema
 
 FIXTURES = Path(__file__).resolve().parent / "fixtures" / "yara"

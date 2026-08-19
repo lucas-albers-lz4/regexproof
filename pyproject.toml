@@ -32,19 +32,37 @@ pythonpath = ["."]
 [tool.ruff]
 line-length = 100
 target-version = "py39"
+# Data, not source: vendored/curated corpus pulls and intentional minimal test
+# fixtures are never lint targets (they'd spam F821/invalid-syntax/sample noise
+# and block the mining funnel). regexproof's own code under batch/, helpers/,
+# regexproof/, scripts/, sweep/, tests/ (non-fixture) is still fully linted.
+extend-exclude = [
+    "batch/corpora",
+    "tests/fixtures",
+]
 
 [tool.ruff.lint]
-# Curated set, same spine as the housekeeping toolkit (E,F,W,I,UP,SIM,PTH,PIE,PLC)
-# plus RUF (ruff-specific) and EXE (shebang/executable-bit — CLI tools must run).
-# Deliberately NOT selected (by-design noise for small solver scripts):
-#   ANN*   — no annotation mandates on throwaway solver scripts
-#   D*     — docstring pedantry; the scripts carry module + key-function docstrings
-#   FBT*   — boolean flags (expect_unsat=...) are the intended API
-#   PLR*   — magic-number / complexity refactors; solver constants are the domain
-#   Q*     — quote-style churn; mixed ' and " is deliberate (strings contain quotes)
-#   T201   — print IS the CLI output of these tools
-#   COM*   — trailing-comma style churn
-select = ["E", "F", "W", "I", "UP", "SIM", "PTH", "PIE", "PLC", "RUF", "EXE"]
+# Conservative, funnel-friendly set. Catch real defects cheaply without
+# blocking mining jobs on style noise. These run over the whole tree in a
+# fast (<1 min) CI lint job.
+# RULE OF THUMB: use safe `ruff --fix` ONLY. NEVER `--unsafe-fixes` — it has
+# broken things before and is banned for this repo.
+#   E   pycodestyle errors (E501 line-length excluded — long lines are
+#       load-bearing in solver/generated/corpus code)
+#   F   pyflakes — undefined names, unused imports/vars (the real-bug catcher)
+#   W   warnings
+#   RUF ruff-specific (RUF002/003 unicode ×/∨ excluded — deliberate math
+#       notation in the Z3 docs)
+# Deliberately NOT selected (by-design noise / low value for this funnel):
+#   PLC  — incl. PLC0415 function-level lazy imports, a deliberate pattern
+#          here (lazy deps, avoid import cycles)
+#   SIM / PTH / PIE — style simplifications (Yoda, pathlib pedantry, range start)
+#   I    — import sorting (cosmetic churn, no correctness value)
+#   UP   — pyupgrade modernization (unneeded for the py39 target)
+#   EXE  — EXE001 non-executable shebang (helpers are run via `python`, not exec)
+#   ANN*, D*, FBT*, PLR*, Q*, T201, COM* — as before (by-design noise)
+select = ["E", "F", "W", "RUF"]
+ignore = ["E501", "RUF002", "RUF003"]
 
 [tool.ruff.lint.per-file-ignores]
 # z3py idiom: the official Z3 guide's own examples use `from z3 import *`.

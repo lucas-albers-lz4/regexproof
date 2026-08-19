@@ -1,4 +1,4 @@
-"""Phase 2 registration gates (PR A): the \p gate + D7 structural checks.
+r"""Phase 2 registration gates (PR A): the \p gate + D7 structural checks.
 
 AC coverage (issue #218):
 - \p gate: real \p{}/\P{ tokens rejected (both cases, in-class, quantified);

@@ -25,8 +25,8 @@ sys.path.insert(0, str(ROOT))
 
 import z3  # noqa: E402
 
-from regexproof.batch.compile_records import compile_records
-from regexproof.batch.extract import extract_corpus
+from regexproof.batch.compile_records import compile_records  # noqa: E402  # ROOT bootstrap above
+from regexproof.batch.extract import extract_corpus  # noqa: E402  # ROOT bootstrap above
 from regexproof.batch.measure import compiler_fingerprint  # noqa: E402
 from regexproof.batch.manifests import CORPUS_MANIFESTS  # noqa: E402
 

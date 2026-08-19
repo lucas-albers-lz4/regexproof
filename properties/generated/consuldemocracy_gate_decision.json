@@ -1,0 +1,57 @@
+{
+  "candidate_url": "https://github.com/consuldemocracy/consuldemocracy",
+  "conditions": [
+    {
+      "evidence": "Predicted buckets present (1) but not treated as novel surface.",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Not a security boundary (probe.security_boundary=unknown).",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "51 sites < 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "consuldemocracy",
+  "corpus_pin": "3d80c27ec32e18fc92113d00407214064b53dc5c",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-14",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 5,
+      "py_re": 46
+    },
+    "flags": {
+      "g": 1
+    },
+    "pin": "3d80c27ec32e18fc92113d00407214064b53dc5c",
+    "pin_mined": "3d80c27ec32e18fc92113d00407214064b53dc5c",
+    "pin_probed": "9d072cca7a68cd960d5c871484265585dbd060d9",
+    "predicted_buckets": {
+      "stateful": 1
+    },
+    "regex_sites": 51,
+    "regex_sites_per_file": {
+      "app/assets/javascripts/comments.js": 1,
+      "app/assets/javascripts/dashboard_graphs.js": 1,
+      "app/assets/javascripts/map.js": 1,
+      "app/assets/javascripts/social_share.js": 1,
+      "app/assets/javascripts/tag_autocomplete.js": 1,
+      "public/machine_learning/scripts/budgets_related_content_and_tags_nmf.py": 18,
+      "public/machine_learning/scripts/budgets_summary_comments_textrank.py": 5,
+      "public/machine_learning/scripts/proposals_related_content_and_tags_nmf.py": 18,
+      "public/machine_learning/scripts/proposals_summary_comments_textrank.py": 5
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Civic-tech Rails app. Probe 51 sites concentrated in public/machine_learning NMF/textrank scripts, not a regex security-boundary corpus. Mined for secrets.yml, not first-party allowlists.",
+  "schema_version": "1"
+}

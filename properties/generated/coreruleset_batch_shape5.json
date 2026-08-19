@@ -1,0 +1,47 @@
+{
+  "corpus": "coreruleset",
+  "rows": [
+    {
+      "family": "RD-crs-933180-version",
+      "ground_truth_status": "fullmatch-only-not-search-gap",
+      "kind": "rule_diff",
+      "pair_id": "crs-933180-v4.27.0-v4.28.0",
+      "result": "sat_fullmatch_only",
+      "schema_version": "1",
+      "search_pad_gate": false,
+      "witness": null,
+      "witness_present": true
+    },
+    {
+      "family": "RD-crs-941140-version",
+      "ground_truth_status": "reproduced",
+      "kind": "rule_diff",
+      "pair_id": "crs-941140-v4.27.0-v4.28.0",
+      "result": "sat",
+      "schema_version": "1",
+      "search_pad_gate": true,
+      "witness": null,
+      "witness_present": true
+    },
+    {
+      "family": "RD-crs-942220-version",
+      "ground_truth_status": "reproduced",
+      "kind": "rule_diff",
+      "pair_id": "crs-942220-v4.27.0-v4.28.0",
+      "result": "sat",
+      "schema_version": "1",
+      "search_pad_gate": true,
+      "witness": null,
+      "witness_present": true
+    }
+  ],
+  "schema_version": "1",
+  "summary": {
+    "executed": 3,
+    "sat_fullmatch_only": 1,
+    "sat_search_gap": 2,
+    "skipped": 0,
+    "timeout": 0,
+    "unsat": 0
+  }
+}

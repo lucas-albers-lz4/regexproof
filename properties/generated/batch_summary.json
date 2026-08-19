@@ -1,4 +1,5 @@
 {
+  "cache_hit_rate": 0.628099173553719,
   "coreruleset": {
     "budget": {
       "redos_wall_s": 180
@@ -118,12 +119,19 @@
   "corpora": {
     "detect-secrets": {
       "address_space_cap": null,
+      "cache": {
+        "entries": 51,
+        "hit_rate": 0.0,
+        "hits": 0,
+        "misses": 51
+      },
+      "cache_hit_rate": 0.0,
       "complete_run": true,
       "corpus": "detect-secrets",
       "corpus_type": "rule_corpus",
       "encodable": 19,
       "engine": {
-        "python": "3.13.5"
+        "python": "3.14.6"
       },
       "extracted": 51,
       "findings": 4,
@@ -166,12 +174,19 @@
     },
     "gitleaks": {
       "address_space_cap": null,
+      "cache": {
+        "entries": 221,
+        "hit_rate": 0.8190045248868778,
+        "hits": 181,
+        "misses": 40
+      },
+      "cache_hit_rate": 0.8190045248868778,
       "complete_run": true,
       "corpus": "gitleaks",
       "corpus_type": "rule_corpus",
       "encodable": 181,
       "engine": {
-        "python": "3.13.5"
+        "python": "3.14.6"
       },
       "extracted": 221,
       "findings": 4,
@@ -214,12 +229,19 @@
     },
     "validatorjs": {
       "address_space_cap": null,
+      "cache": {
+        "entries": 212,
+        "hit_rate": 0.5801886792452831,
+        "hits": 123,
+        "misses": 89
+      },
+      "cache_hit_rate": 0.5801886792452831,
       "complete_run": true,
       "corpus": "validatorjs",
       "corpus_type": "validator",
       "encodable": 123,
       "engine": {
-        "python": "3.13.5"
+        "python": "3.14.6"
       },
       "extracted": 212,
       "findings": 1416,
@@ -276,24 +298,47 @@
   },
   "pair_counts": {
     "coreruleset": {
-      "admitted": 0,
-      "dropped": 0,
+      "admitted": 3,
+      "batch_shape5": 3,
+      "dropped": 280,
+      "executed": 3,
       "fraction": 0.6908,
-      "note": "fraction gate go; CRS rule-derived adapter is Phase-2 rule_diff",
-      "scope": "full_corpus"
+      "note": "CRS version_diff with family_contract; timeout-skipped=1",
+      "sat_fullmatch_only": 1,
+      "sat_search_gap": 2,
+      "scope": "full_corpus",
+      "skipped": 0,
+      "timeout": 0,
+      "timeout_gate_ok": true,
+      "timeout_rate": 0.0,
+      "unsat": 0
     },
     "detect-secrets": {
       "admitted": 0,
+      "batch_shape5": 0,
       "dropped": 0,
+      "executed": 0,
       "note": "no independent-spec catalog"
     },
     "gitleaks": {
       "admitted": 22,
-      "dropped": 1
+      "batch_shape5": 0,
+      "dropped": 1,
+      "executed": 0,
+      "note": "independent-spec gitleaks pairs are not version_diff/cross_engine; batch executes 0 unless family_contract is present (#477)",
+      "sat_fullmatch_only": 0,
+      "sat_search_gap": 0,
+      "skipped": 0,
+      "timeout": 0,
+      "timeout_gate_ok": true,
+      "timeout_rate": 0.0,
+      "unsat": 0
     },
     "validatorjs": {
       "admitted": 0,
+      "batch_shape5": 0,
       "dropped": 0,
+      "executed": 0,
       "note": "no independent-spec catalog"
     }
   },

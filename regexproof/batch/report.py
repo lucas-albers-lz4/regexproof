@@ -28,30 +28,31 @@ _FINDING_META_KEYS = (
 )
 
 
-def _redact_value(value: object) -> object:
+def _redact_value(value: object, *, min_len: int = 8) -> object:
     """Redact a dict/list value, recursing into nested containers."""
     if isinstance(value, dict):
-        return {k: _redact_value(v) for k, v in value.items()}
+        return {k: _redact_value(v, min_len=min_len) for k, v in value.items()}
     if isinstance(value, (list, tuple)):
-        return [_redact_value(v) for v in value]
+        return [_redact_value(v, min_len=min_len) for v in value]
     if isinstance(value, str) and value.startswith("<redacted"):
         return value
-    if isinstance(value, str) and len(value) >= 8:
+    if isinstance(value, str) and len(value) >= min_len:
         return f"<redacted len={len(value)}>"
     return value
 
 
-def redact_witness(witness: object) -> object:
+def redact_witness(witness: object, *, min_len: int = 8) -> object:
     """Idempotent redaction for secret-scanner-safe committed artifacts.
 
     Nested lists/dicts are walked so container-typed witness fields cannot
     leak secrets (fix-wave #71). Top-level non-dict witnesses remain fully
     opaque (`<redacted>`), matching the prior contract.
+    CRS reports pass ``min_len=1`` so short SAT strings are not committed (#473).
     """
     if witness is None:
         return None
     if isinstance(witness, dict):
-        return {k: _redact_value(v) for k, v in witness.items()}
+        return {k: _redact_value(v, min_len=min_len) for k, v in witness.items()}
     if isinstance(witness, str) and witness.startswith("<redacted"):
         return witness
     return "<redacted>"
@@ -165,7 +166,7 @@ def write_markdown(path: Path, *, corpus: str, findings: list[dict[str, Any]]) -
             val = f.get(key)
             if key == "schema_version":
                 # Always emit the string constant required by scanner schemas.
-                lines.append(f'schema_version: "1"')
+                lines.append('schema_version: "1"')
                 continue
             if val is None and key not in ("ground_truth_status", "disclosure", "shape"):
                 continue

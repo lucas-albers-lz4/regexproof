@@ -16,6 +16,7 @@ QUESTION_INVENTORY_SCHEMA_VERSION = "1"
 TRIAGE_RECORD_SCHEMA_VERSION = "1"
 SCANNER_FINDING_SCHEMA_VERSION = "1"
 GATE_DECISION_SCHEMA_VERSION = "1"
+SMITH_DECISION_SCHEMA_VERSION = "1"
 
 
 def load_schema(name: str) -> dict:
@@ -58,3 +59,11 @@ def scanner_finding_schema() -> dict:
 
 def gate_decision_schema() -> dict:
     return load_schema("gate_decision.schema.json")
+
+
+def smith_decision_schema() -> dict:
+    return load_schema("smith_decision.schema.json")
+
+
+def property_contract_schema() -> dict:
+    return load_schema("property_contract.schema.json")

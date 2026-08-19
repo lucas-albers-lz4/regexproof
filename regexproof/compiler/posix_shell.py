@@ -175,7 +175,7 @@ def compile_posix_shell(
     ``posix-shell`` dialect and the (normalized) pattern text actually
     compiled; the record keeps its own original pattern.
     """
-    from regexproof.compiler.pcre import compile_pcre  # noqa: PLC0415 — lazy
+    from regexproof.compiler.pcre import compile_pcre
     # import matches the repo's per-dialect convention (avoid loading pcre/z3
     # helpers at module import)
 

@@ -21,21 +21,20 @@
 Run: python scripts/p5-handoff.py   (needs node; NOODLER optional)
 """
 import json
-import os
 import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from z3 import InRe, String, StringVal, Solver, sat  # noqa: E402
+from z3 import InRe, String, StringVal, Solver, sat
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[0] / ".." /
                         "sweep" / "harness-backends"))
 
-from ecma_pilot import PATTERNS, mirror_re, node_verdicts, probe_corpus  # noqa: E402
+from ecma_pilot import PATTERNS, mirror_re, node_verdicts, probe_corpus
 
-from regexproof.harness import core  # noqa: E402
-from regexproof.harness.tiers import derive_tier  # noqa: E402
+from regexproof.harness import core
+from regexproof.harness.tiers import derive_tier
 
 HERE = Path(__file__).resolve().parents[1]
 OUT = HERE / "sweep" / "harness-backends"

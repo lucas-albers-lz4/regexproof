@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import json
 from pathlib import Path
 
 import pytest
@@ -15,7 +14,7 @@ def test_go_re2_parse_and_replay():
     pytest.importorskip("subprocess")
     try:
         ok = re2_mod.helper_used_for_parse_and_replay()
-    except Exception as exc:  # noqa: BLE001
+    except Exception as exc:
         pytest.skip(f"go helper unavailable: {exc}")
     if not ok:
         pytest.skip("go toolchain or helper build unavailable")
@@ -36,7 +35,6 @@ def test_pcre2_match_refuses_python_re_fallback():
     """Without a real engine, match must exit 2 — never Python re."""
     import subprocess
     import sys
-    from pathlib import Path
 
     helper = Path(__file__).resolve().parents[1] / "helpers" / "pcre2" / "match.py"
     # Force no bindings path by checking the helper's own refusal message when

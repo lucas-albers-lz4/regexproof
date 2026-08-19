@@ -13,7 +13,7 @@ search + ledger/queue step.
 | 2 | **Rank** | Score ledger rows and print the next batch to hand-probe (no network, no writes) | `python scripts/rank-mine-candidates.py --limit 10` (gated rows skipped by default; `--no-skip-gated` to include them) |
 | 3 | **Probe** | Clone a pinned repo and walk it for regex sites / dialects / boundary signals; emit an admission draft | `python scripts/probe-corpus-admission.py <url> --pin <sha>` |
 | 4 | **Gate** (author-gate) | Human or auto decision: GO / NO-GO / triage on the probe draft | `*_gate_decision.json` under `properties/generated/`; `scripts/author-gate-decision.py` |
-| 5 | **Smith** | After GO: extract → compile → encodable-fraction / tickets / allowlists | Smith scripts and `feat(smith): …` PRs |
+| 5 | **Smith** | After GO: extract → compile → encodable-fraction / tickets / allowlists | `scripts/materialize-corpus.py`, `scripts/scaffold-smith-corpus.py`, `scripts/author-smith-decision.py`, `feat(smith): …` PRs |
 
 Related ops terms (not numbered steps):
 
@@ -72,9 +72,14 @@ some shapes; GO / triage usually need a human. Ledger rows can remain
 ### Smith
 
 **Smith** is post-GO corpus work: inventory extract, dialect compile, encodable
-fraction, allowlists, and follow-on PRs/tickets. Mine does **not** auto-file
-Smith issues. Only gate GO (or an explicit triage path you choose) should
-start Smith effort.
+fraction, allowlists, and follow-on PRs/tickets. Local helpers (#149):
+`scripts/materialize-corpus.py` (unique `/tmp/<owner>-<slug>` clone + symlink),
+`scripts/scaffold-smith-corpus.py` (README + manifest stub, empty `files`),
+`scripts/author-smith-decision.py` (`--decision` required, never inferred).
+`python -m regexproof.batch --corpus X` does **not** overwrite the committed
+pilot `batch_summary.json` unless `--write-pilot-aggregate`. Mine does **not**
+auto-file Smith issues. Only gate GO (or an explicit triage path you choose)
+should start Smith effort.
 
 ## Suggested phrasing
 

@@ -1,0 +1,116 @@
+{
+  "candidate_url": "https://github.com/Leviticus-Triage/llm-honeypot-intelligence",
+  "conditions": [
+    {
+      "evidence": "Yara dialect covered; no new construct class.",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe deterministic-true; distributed honeypot intelligence platform with yara detection rules. Escape hatch for security tool below scale.",
+      "id": "security-boundary",
+      "met": true
+    },
+    {
+      "evidence": "617 sites below 1000 — escape hatch applied.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "llm-honeypot-intelligence",
+  "corpus_pin": "65624396e263074bb8cb2e049f9a9ec6215ea5c1",
+  "decision": "triage-trial",
+  "decision_basis": "escape_hatch",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": true,
+  "probe": {
+    "construct_counts": {
+      "(?i)": 1,
+      "(?m)": 1,
+      "(?s)": 3,
+      "lookaround": 2
+    },
+    "dialect": {
+      "pcre": 3,
+      "posix-shell": 16,
+      "py_re": 39,
+      "yara": 559
+    },
+    "flags": {
+      "i": 568,
+      "m": 3,
+      "s": 1
+    },
+    "pin": "65624396e263074bb8cb2e049f9a9ec6215ea5c1",
+    "predicted_buckets": {
+      "inline-flag": 573,
+      "lookaround": 2,
+      "m-flag": 4
+    },
+    "regex_sites": 617,
+    "regex_sites_per_file": {
+      "deploy/systemd/install.sh": 2,
+      "deploy/tpot-cloud/connect-ai-stack.sh": 1,
+      "deploy/tpot-cloud/install.sh": 1,
+      "deploy/tpot-cloud/remote-deploy.sh": 1,
+      "deploy/tpot-cloud/verify.sh": 1,
+      "deploy/tpot-cloud/wire-llm.sh": 3,
+      "proxy/run_adversarial_simulator.py": 1,
+      "proxy/run_ml_runner.py": 1,
+      "proxy/src/adversarial_judge.py": 1,
+      "proxy/src/cve_engine.py": 1,
+      "proxy/src/footprint_orchestrator.py": 2,
+      "proxy/src/ml_runner.py": 4,
+      "proxy/src/noise_filter.py": 1,
+      "proxy/src/osint_enrichment.py": 4,
+      "proxy/src/reward_aggregator.py": 3,
+      "proxy/src/rule_generator.py": 14,
+      "proxy/src/rule_validator/llm_judge.py": 1,
+      "proxy/src/rule_validator/static_checks.py": 6,
+      "rules/archive/20260325_1358/yara/honeypot_rules.yar": 13,
+      "rules/archive/20260325_1958/yara/honeypot_rules.yar": 17,
+      "rules/archive/20260326_0158/yara/honeypot_rules.yar": 24,
+      "rules/archive/20260326_0758/yara/honeypot_rules.yar": 27,
+      "rules/archive/20260326_0937/yara/honeypot_rules.yar": 27,
+      "rules/archive/20260326_1537/yara/honeypot_rules.yar": 32,
+      "rules/archive/20260326_2137/yara/honeypot_rules.yar": 25,
+      "rules/archive/20260327_0337/yara/honeypot_rules.yar": 24,
+      "rules/archive/20260327_0937/yara/honeypot_rules.yar": 30,
+      "rules/archive/20260327_1537/yara/honeypot_rules.yar": 24,
+      "rules/archive/20260327_2137/yara/honeypot_rules.yar": 18,
+      "rules/archive/20260328_0337/yara/honeypot_rules.yar": 16,
+      "rules/archive/20260328_0937/yara/honeypot_rules.yar": 16,
+      "rules/archive/20260328_1537/yara/honeypot_rules.yar": 16,
+      "rules/archive/20260402_0942/yara/honeypot_rules.yar": 7,
+      "rules/archive/20260407_0336/yara/honeypot_rules.yar": 2,
+      "rules/archive/20260407_0936/yara/honeypot_rules.yar": 2,
+      "rules/archive/20260407_1536/yara/honeypot_rules.yar": 2,
+      "rules/archive/20260413_2348/yara/honeypot_rules.yar": 25,
+      "rules/archive/20260414_0548/yara/honeypot_rules.yar": 25,
+      "rules/archive/20260414_1148/yara/honeypot_rules.yar": 25,
+      "rules/archive/20260414_1748/yara/honeypot_rules.yar": 25,
+      "rules/archive/20260419_2149/yara/honeypot_rules.yar": 5,
+      "rules/archive/20260420_0349/yara/honeypot_rules.yar": 6,
+      "rules/archive/20260420_0949/yara/honeypot_rules.yar": 6,
+      "rules/archive/20260420_1549/yara/honeypot_rules.yar": 11,
+      "rules/archive/20260420_2149/yara/honeypot_rules.yar": 9,
+      "rules/archive/20260421_0349/yara/honeypot_rules.yar": 11,
+      "rules/archive/20260421_0949/yara/honeypot_rules.yar": 11,
+      "rules/archive/20260421_1603/yara/honeypot_rules.yar": 5,
+      "rules/latest/yara/honeypot_rules.yar": 5,
+      "rules/suricata/c2-detection.rules": 3,
+      "rules/yara/honeypot-peak-run1.yar": 43,
+      "rules/yara/honeypot_rules.yar": 25,
+      "scripts/sync-blocklist-to-tpot.sh": 1,
+      "scripts/sync-noise-to-tpot.sh": 1,
+      "scripts/sync-to-github.sh": 1,
+      "spiderfoot-toolbox/scripts/verify-egress.sh": 1,
+      "spiderfoot-toolbox/tor-gateway/entrypoint.sh": 1,
+      "spiderfoot-toolbox/tor-gateway/rotate-mac.sh": 1,
+      "spiderfoot-toolbox/tor-gateway/rotate-tor.sh": 1
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Security-boundary corpus (boundary=deterministic-true) with findings-triage potential; 617 sites across [pcre:3, posix-shell:16, py_re:39, yara:559].",
+  "schema_version": "1"
+}

@@ -1,0 +1,17 @@
+{
+  "schema_version": "1",
+  "corpus": "malzoo",
+  "corpus_pin": "de1b93347a9783e3d2ec7b5297306bf66c9fbaa1",
+  "candidate_url": "https://github.com/nheijmans/malzoo",
+  "smith_decision": "go",
+  "supersedes": "go",
+  "reason": "1214/1230 = 0.9870 encodable on data/yara_rules (tests excluded). Pack novelty vs admitted yara_rules per gate; complete_run true.",
+  "regex_sites": 1230,
+  "sites_by_bucket": {
+    "yara": 1230
+  },
+  "additional_surface_outside_probe_scope": {
+    "posix-shell": 5,
+    "py_re": 1
+  }
+}

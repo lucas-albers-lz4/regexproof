@@ -38,6 +38,27 @@ jobs:
           print("minors", minors)
           PY
 
+  lint:
+    name: Ruff lint
+    runs-on: ubuntu-latest
+    needs: matrix
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+      # Pin ruff to the version the tree was made clean under (#526) so a
+      # new-ruf-rule release can't silently break the gate. Conservative set
+      # (E/F/W/RUF + exclusions) is in pyproject.toml. Safe `--fix` only;
+      # `--unsafe-fixes` is banned. Fast (<1 min) — never blocks a mining run.
+      - name: Ruff check (hard gate, conservative set)
+        run: |
+          pip install 'ruff==0.15.22'
+          ruff check --output-format=github .
+
   proof:
     name: Z3 proof harness
     runs-on: ubuntu-latest
@@ -68,6 +89,11 @@ jobs:
               assert banned not in freeze.lower(), f"banned dep in proof freeze: {banned}"
           print("proof isolation ok")
           PY
+      - name: Install busybox (OW-packages product engine)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y busybox
+          busybox sed --help | head -1
       - name: Named mutation-coverage gate
         run: python scripts/z3-verify.py --check-mutation-coverage
       - name: Run the 4 canonical property shapes
@@ -78,9 +104,11 @@ jobs:
         # implementation (sed/escaper mirrors) or ok=False.
         # --require-domain (P1, #425): every property/counterexample_finder
         # must declare input_domain or the gate hard-fails (VF-006 / TRAPS #17).
+        # --require-contract (#476 / OpenWrt conversion): product kinds need
+        # a human contract + declared domain. Mutation guards are exempt.
         # --fail-on-property-failure (#360): ok=False is exit 1 so a violated
         # property cannot ship green. Default CLI stays the §10 recorder.
-        run: python scripts/z3-verify.py --all --require-ground-truth --require-domain --fail-on-property-failure
+        run: python scripts/z3-verify.py --all --require-ground-truth --require-domain --require-contract --fail-on-property-failure
       - name: Named property subset (P1-P4 + one rule_diff family)
         run: |
           python scripts/ci-run-property-subset.py
@@ -159,6 +187,25 @@ jobs:
           test "$(git -C /tmp/detect-secrets rev-parse HEAD)" = "01886c8a910c64595c47f186ca1ffc0b77fa5458"
           ln -sfn /tmp/detect-secrets/detect_secrets/plugins \
             batch/corpora/detect-secrets/plugins
+      - name: Materialize CRS version-diff trees (shape-5 batch, #477)
+        # Older+newer rule trees unlock contracted CRS version_diff execution
+        # in --corpus all (writes coreruleset_batch_shape5.json → conversion).
+        # Pin tag SHAs like detect-secrets so retagged releases cannot drift
+        # Z3 outcomes without a regexproof change.
+        run: |
+          mkdir -p /tmp/crs-shape5
+          git clone --depth 1 --branch v4.27.0 \
+            https://github.com/coreruleset/coreruleset.git \
+            /tmp/crs-shape5/coreruleset-v4.27.0
+          test "$(git -C /tmp/crs-shape5/coreruleset-v4.27.0 rev-parse HEAD)" = \
+            "bb64941f9beb3382fecd215c9ef032c427884ff0"
+          git clone --depth 1 --branch v4.28.0 \
+            https://github.com/coreruleset/coreruleset.git \
+            /tmp/crs-shape5/coreruleset-v4.28.0
+          test "$(git -C /tmp/crs-shape5/coreruleset-v4.28.0 rev-parse HEAD)" = \
+            "55b09f5acfd16413e7b31041100711ceb7adc89c"
+          test -d /tmp/crs-shape5/coreruleset-v4.27.0/rules
+          test -d /tmp/crs-shape5/coreruleset-v4.28.0/rules
       - name: Phase 5 batch mode
         run: |
           # --require-ground-truth (P1, #425): SAT-ish Z3-verdict findings must
@@ -180,10 +227,24 @@ jobs:
           git diff --exit-code -- \
             properties/generated/compiler-feature-yield.json \
             properties/generated/compiler-feature-yield.md
+      - name: Conversion ledger (regenerated)
+        # Product funnel: sites → properties asked → SAT → GT → upstream.
+        # Orthogonal to D5 (compiler coverage). Observational; must regenerate
+        # after batch so scanner NDJSON identity matches the committed ledger.
+        run: python scripts/conversion-ledger.py
+      - name: Conversion ledger drift check
+        run: |
+          git diff --exit-code -- \
+            properties/generated/conversion-ledger.json \
+            properties/generated/conversion-ledger.md
       - name: E2 busybox-sed dual-engine replay enforced (#429, luna gate 1)
         # Both engine verdicts must be recorded and agree; a busybox absence
         # or a GNU/busybox divergence is a hard failure.
         run: python scripts/ci-check-busybox-sed.py
+      - name: BusyBox OpenWrt dual replay
+        # Product engine is BusyBox; GNU is logged; disagreement is a delta.
+        # Absence of busybox is a hard fail. Expected-UNSAT shape-3 is fuzz.
+        run: python scripts/ci-check-busybox-openwrt.py
       - name: P8 gate-labels artifact (regenerated, #432)
         # The D3 fit source regenerates OFFLINE (no network) from the
         # tracked inputs (decisions + ledger + mine-tree-features.json).

@@ -41,7 +41,7 @@ def main():
         t0 = time.perf_counter()
         r = solver.checkSat()
         dt = round((time.perf_counter() - t0) * 1000, 1)
-        print(f"V {str(r)} {dt}")
+        print(f"V {r!s} {dt}")
     except Exception as e:
         print(f"E {str(e)[:100]}")
 

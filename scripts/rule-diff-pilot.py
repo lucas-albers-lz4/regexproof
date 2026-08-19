@@ -360,7 +360,7 @@ def main(argv: list[str] | None = None) -> int:
                 try:
                     gt_ok = bool(entry["ground_truth"](res["witness"]))
                     gt_status = "PASS" if gt_ok else "FAILED"
-                except Exception:  # noqa: BLE001
+                except Exception:
                     gt_status = "FAILED"
             elif args.require_ground_truth:
                 print(f"FAIL --require-ground-truth missing witness for SAT: {name}")

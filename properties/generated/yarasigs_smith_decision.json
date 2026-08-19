@@ -1,0 +1,14 @@
+{
+  "additional_surface_outside_probe_scope": {},
+  "candidate_url": "https://github.com/0day1day/yarasigs",
+  "corpus": "yarasigs",
+  "corpus_pin": "5a07dfcde3076615e4d9394ec75ff53e74c19b45",
+  "reason": "1363/1363 = 1.0000 encodable on signatures/ (AlienVault-heavy pack). Pack novelty claimed at gate; complete_run true.",
+  "regex_sites": 1363,
+  "schema_version": "1",
+  "sites_by_bucket": {
+    "yara": 1363
+  },
+  "smith_decision": "go",
+  "supersedes": "go"
+}

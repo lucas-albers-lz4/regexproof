@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://regexproof.dev/schemas/smith_decision/v1",
+  "title": "CorpusSmithDecision",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "corpus",
+    "candidate_url",
+    "smith_decision",
+    "reason",
+    "regex_sites"
+  ],
+  "additionalProperties": true,
+  "properties": {
+    "schema_version": { "type": "string", "const": "1" },
+    "corpus": { "type": "string", "minLength": 1 },
+    "corpus_pin": { "type": ["string", "null"] },
+    "candidate_url": { "type": "string", "minLength": 1 },
+    "smith_decision": {
+      "type": "string",
+      "enum": ["go", "no-go", "triage-continues"],
+      "description": "Human Smith outcome. Never inferred from encodable fraction."
+    },
+    "supersedes": {
+      "type": ["string", "null"],
+      "description": "Admission decision this Smith record follows (go, triage-trial, or null)."
+    },
+    "reason": { "type": "string", "minLength": 1 },
+    "regex_sites": { "type": "integer", "minimum": 0 },
+    "sites_by_bucket": {
+      "type": "object",
+      "additionalProperties": { "type": "integer" }
+    },
+    "additional_surface_outside_probe_scope": {
+      "type": "object"
+    }
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "candidate_url": "https://github.com/nheijmans/malzoo",
+  "conditions": [
+    {
+      "evidence": "Yara dialect covered; corpus novelty is pack content (36% overlap with admitted, 481 novel patterns).",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Probe unknown but description confirms mass static malware analysis tool; yara rules = security boundary. GO 2+3.",
+      "id": "security-boundary",
+      "met": true
+    },
+    {
+      "evidence": "1,230 yara sites >= 1000, under-saturated.",
+      "id": "large-under-saturated",
+      "met": true
+    }
+  ],
+  "corpus": "malzoo",
+  "corpus_pin": "de1b93347a9783e3d2ec7b5297306bf66c9fbaa1",
+  "decision": "go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-13",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "posix-shell": 5,
+      "py_re": 1,
+      "yara": 1230
+    },
+    "flags": {
+      "W": 15,
+      "i": 63
+    },
+    "pin": "de1b93347a9783e3d2ec7b5297306bf66c9fbaa1",
+    "predicted_buckets": {
+      "inline-flag": 63
+    },
+    "regex_sites": 1236,
+    "regex_sites_per_file": {
+      "data/yara_rules/APT_NGO_wuaclt_PDF.yara": 1,
+      "data/yara_rules/MMC_d.yara": 11,
+      "data/yara_rules/XweberInstall.yara": 4,
+      "data/yara_rules/apt1.yara": 693,
+      "data/yara_rules/dridex.yar": 6,
+      "data/yara_rules/embedded.yara": 16,
+      "data/yara_rules/filetypes.yara": 2,
+      "data/yara_rules/hangover.yara": 132,
+      "data/yara_rules/kins.yara": 24,
+      "data/yara_rules/leverage.yar": 7,
+      "data/yara_rules/rats.yara": 233,
+      "data/yara_rules/themask.yara": 34,
+      "data/yara_rules/urausy_skypedat.yar": 10,
+      "data/yara_rules/vmdetect.yara": 57,
+      "malzoo/core/tools/emailtoolkit.py": 1,
+      "tests/smoke_test.sh": 5
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Security-boundary corpus (boundary=unknown) with findings-triage potential; 1236 sites across [posix-shell:5, py_re:1, yara:1230].",
+  "schema_version": "1"
+}

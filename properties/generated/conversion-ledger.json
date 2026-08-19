@@ -1,0 +1,245 @@
+{
+  "batch_shape5": {
+    "coreruleset_batch_shape5.json": {
+      "executed_rows": 3,
+      "properties_asked": 3,
+      "properties_sat": 2,
+      "properties_sat_gt": 2,
+      "properties_unsat": 0,
+      "sat_fullmatch_only": 1
+    },
+    "gitleaks_batch_shape5.json": {
+      "executed_rows": 0,
+      "properties_asked": 0,
+      "properties_sat": 0,
+      "properties_sat_gt": 0,
+      "properties_unsat": 0,
+      "sat_fullmatch_only": 0
+    }
+  },
+  "by_corpus": [
+    {
+      "corpus": "openwrt_packages",
+      "properties_asked": 14,
+      "properties_sat": 3,
+      "properties_unsat": 11,
+      "sat_ground_truthed": 3,
+      "sat_unique_sites": 3,
+      "scanner_rows": 139,
+      "security_tool": false
+    },
+    {
+      "corpus": "coreruleset",
+      "properties_asked": 3,
+      "properties_sat": 2,
+      "properties_unsat": 0,
+      "sat_ground_truthed": 2,
+      "sat_unique_sites": 0,
+      "scanner_rows": 0,
+      "security_tool": true
+    }
+  ],
+  "funnel": {
+    "accepted_upstream": 1,
+    "batch_shape5_asked": 3,
+    "batch_shape5_sat": 2,
+    "batch_summaries": 77,
+    "batch_summary_findings": 7260,
+    "batch_triage_rows": 46899,
+    "classification_rows": 5674,
+    "disclosed_private_first": 686,
+    "disclosed_public_ok": 0,
+    "existence_proofs": 1,
+    "false_positives_filed": 7,
+    "mutation_guards": 644,
+    "other_rows": 0,
+    "planned_stubs": 298,
+    "pr_dry_run_findings": 7260,
+    "pr_dry_run_private_first": 814,
+    "pr_dry_runs": 77,
+    "properties_asked": 17,
+    "properties_asked_distinct": 17,
+    "properties_asked_synthesized": 644,
+    "properties_sat": 5,
+    "properties_sat_distinct": 5,
+    "properties_sat_synthesized": 28,
+    "properties_unsat": 11,
+    "redos_rows": 0,
+    "rule_diff_report_sat": 10,
+    "rule_diff_report_sat_gt": 10,
+    "sat_ground_truthed": 5,
+    "sat_unique_sites": 3,
+    "scanner_ndjson_files": 78,
+    "scanner_rows": 7260,
+    "scanner_rule_diff_sat": 0,
+    "sites_encodable": 78816,
+    "sites_extracted": 125715,
+    "third_party_public": 0,
+    "would_open_public_upstream": 0
+  },
+  "measure": "conversion_ledger",
+  "notes": [
+    "Heap's-law / singleton novelty saturates compiler coverage, not this ledger.",
+    "docs/verified-findings.jsonl VF-* rows are toolkit traps, not vulnerability counts.",
+    "Classification rows (usage/intent/triage kinds) are not security bugs.",
+    "Mutation guards prove harness sensitivity; they are not product findings.",
+    "SAT + ground-truth is a candidate finding; accepted_upstream is the last mile.",
+    "would_open_public_upstream must stay 0 without a human approval file (SECURITY.md).",
+    "batch_shape5 contracted version_diff/cross_engine rows count as properties_asked."
+  ],
+  "rates": {
+    "accepted_per_extracted": 8e-06,
+    "accepted_per_gt": 0.2,
+    "encodable_fraction": 0.626942,
+    "encodable_fraction_all_inventories": 0.629237,
+    "encodable_fraction_excluding_yara": 0.612816,
+    "encodable_fraction_yara": 0.637736,
+    "fullword_share_of_unencodable": 0.626352,
+    "gt_per_sat": 1.0,
+    "pipeline_accepted_per_extracted": 8e-06,
+    "pipeline_accepted_per_gt": 0.2,
+    "property_asked_per_encodable": 0.000216,
+    "sat_per_property_asked": 0.294118,
+    "yara_share_of_unencodable": 0.643852
+  },
+  "rule_diff_reports": {
+    "crs_cross_engine_rule_diff_report.json": {
+      "mutation_guards": 0,
+      "rows": 8,
+      "rule_diff_sat": 5,
+      "rule_diff_sat_gt": 5,
+      "rule_diff_unsat": 3
+    },
+    "crs_rule_diff_report.json": {
+      "mutation_guards": 0,
+      "rows": 1,
+      "rule_diff_sat": 1,
+      "rule_diff_sat_gt": 1,
+      "rule_diff_unsat": 0
+    },
+    "gitleaks_rule_diff_report.json": {
+      "mutation_guards": 66,
+      "rows": 88,
+      "rule_diff_sat": 4,
+      "rule_diff_sat_gt": 4,
+      "rule_diff_unsat": 18
+    }
+  },
+  "schema_version": "1",
+  "security_tool_split": {
+    "properties_asked_in_tools": 3,
+    "properties_asked_not_tools": 14,
+    "properties_sat_in_tools": 2,
+    "properties_sat_not_tools": 3
+  },
+  "upstream": {
+    "accepted_upstream": 1,
+    "existence_proofs": 1,
+    "false_positive": 7,
+    "filed_plan": 1,
+    "fixed_upstream": 1,
+    "language_membership": 10,
+    "out_of_scope_redos": 1,
+    "private_first": 0,
+    "rows": 11,
+    "third_party_public": 0,
+    "wont_file": 1
+  },
+  "upstream_rows": [
+    {
+      "corpus": "usrmanage",
+      "id": "CU-001",
+      "kind": "counterexample_finder",
+      "language_membership": true,
+      "status": "fixed_upstream"
+    },
+    {
+      "corpus": "fwlive",
+      "id": "CU-002",
+      "kind": "property",
+      "language_membership": true,
+      "status": "filed_plan"
+    },
+    {
+      "corpus": "happycow",
+      "id": "CU-003",
+      "kind": "usage_mismatch",
+      "language_membership": true,
+      "status": "false_positive"
+    },
+    {
+      "corpus": "happycow",
+      "id": "CU-004",
+      "kind": "redos",
+      "language_membership": false,
+      "status": "out_of_scope_redos"
+    },
+    {
+      "corpus": "coreruleset",
+      "id": "CU-005",
+      "kind": "rule_diff",
+      "language_membership": true,
+      "status": "false_positive"
+    },
+    {
+      "corpus": "gitleaks",
+      "id": "CU-006",
+      "kind": "rule_diff",
+      "language_membership": true,
+      "status": "false_positive"
+    },
+    {
+      "corpus": "gitleaks",
+      "id": "CU-007",
+      "kind": "rule_diff",
+      "language_membership": true,
+      "status": "false_positive"
+    },
+    {
+      "corpus": "gitleaks",
+      "id": "CU-008",
+      "kind": "rule_diff",
+      "language_membership": true,
+      "status": "false_positive"
+    },
+    {
+      "corpus": "gitleaks",
+      "id": "CU-009",
+      "kind": "rule_diff",
+      "language_membership": true,
+      "status": "false_positive"
+    },
+    {
+      "corpus": "coreruleset",
+      "id": "CU-010",
+      "kind": "rule_diff",
+      "language_membership": true,
+      "status": "false_positive"
+    },
+    {
+      "corpus": "openwrt_packages",
+      "id": "CU-011",
+      "kind": "counterexample_finder",
+      "language_membership": true,
+      "status": "wont_file"
+    }
+  ],
+  "yara_split": {
+    "encodable_fraction_all": 0.629237,
+    "encodable_fraction_excluding_yara": 0.612816,
+    "encodable_fraction_yara": 0.637736,
+    "fraction_all_encodable": 105608,
+    "fraction_all_n": 167835,
+    "fraction_excluding_yara_encodable": 35077,
+    "fraction_excluding_yara_n": 57239,
+    "fraction_yara_encodable": 70531,
+    "fraction_yara_n": 110596,
+    "fullword_boundary_all": 38976,
+    "fullword_boundary_yara": 38976,
+    "fullword_share_of_unencodable": 0.626352,
+    "fullword_share_of_yara_unencodable": 0.972819,
+    "unencodable_all": 62227,
+    "unencodable_yara": 40065,
+    "yara_share_of_unencodable": 0.643852
+  }
+}

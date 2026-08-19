@@ -26,9 +26,9 @@ from regexproof.groundtruth.adapters import (
 
 __all__ = [
     "RefusedNoCallbackError",
-    "Replayability",
     "ReplayResult",
     "ReplayVerdict",
+    "Replayability",
     "classify_replayability",
     "has_adapter",
     "replay",

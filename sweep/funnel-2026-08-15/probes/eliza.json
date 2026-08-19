@@ -1,0 +1,19 @@
+{
+  "candidate_url": "https://github.com/elizaOS/eliza",
+  "corpus": "eliza",
+  "corpus_pin": "",
+  "draft": true,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {},
+    "extractor_errors": 0,
+    "flags": {},
+    "pin": "",
+    "pin_mined": "f2d016e0abf5da19f01abe3ca9c33166b5c65004",
+    "pin_probed": "",
+    "predicted_buckets": {},
+    "regex_sites": 0,
+    "regex_sites_per_file": {},
+    "security_boundary": "unknown"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "schema_version": "1",
+  "corpus": "Doberman-Core",
+  "corpus_pin": "53ae43c5298a2426c6696147fdd75e2a4aef10e2",
+  "candidate_url": "https://github.com/fu351/Doberman-Core",
+  "smith_decision": "go",
+  "supersedes": "triage-trial",
+  "reason": "GRADUATED from triage-trial: 40/69 = 0.5797 encodable on first-party engine/rules + turngate detectors (tests excluded). Security tool — SECURITY_TOOL_CORPORA private_first.",
+  "regex_sites": 69,
+  "sites_by_bucket": {
+    "py_re": 69
+  },
+  "additional_surface_outside_probe_scope": {}
+}

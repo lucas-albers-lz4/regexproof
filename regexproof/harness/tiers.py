@@ -17,7 +17,6 @@ The tier is DERIVED at report time from the raw NDJSON evidence — never stored
 
 from __future__ import annotations
 
-from typing import Optional
 
 TIER_SEQ_ONLY = "seq-only"
 TIER_ESCALATED = "escalated-unconfirmed"

@@ -9,7 +9,7 @@ import json
 import z3
 
 from regexproof.batch.compile_records import compile_records
-from regexproof.compiler import COMPILER_VERSION, compile_pattern, compiler_source_fingerprint
+from regexproof.compiler import compile_pattern, compiler_source_fingerprint
 from regexproof.compiler.cache import (
     deserialize_mirror,
     mirror_cache_key,

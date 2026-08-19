@@ -2,9 +2,17 @@
 
 from __future__ import annotations
 
+import pytest
+
 from regexproof.compiler import compile_pattern
 from regexproof.compiler.perl import compile_perl
 from regexproof.compiler.perl_strip import strip_k_reset, strip_perl_transparent
+from tests.toolchain import require_perl_pin
+
+
+@pytest.fixture(autouse=True)
+def _perl_pin():
+    require_perl_pin()
 
 
 def test_plain_encodable():

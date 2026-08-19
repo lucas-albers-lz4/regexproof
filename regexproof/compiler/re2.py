@@ -171,7 +171,7 @@ def helper_used_for_parse_and_replay() -> bool:
         return False
     try:
         binary = ensure_built()
-    except Exception:  # noqa: BLE001
+    except Exception:
         return False
     try:
         proc = subprocess.run(

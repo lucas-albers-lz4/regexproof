@@ -1,0 +1,38 @@
+{
+  "budget": {
+    "max_disk_mb": 100,
+    "max_mem_mb": 1024,
+    "max_patterns": 5000,
+    "max_wall_s": 600,
+    "redos_wall_s": 120
+  },
+  "budget_breaches": null,
+  "commit": "889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8",
+  "compiler_fingerprint": "35ea1f238a9e",
+  "complete_run": true,
+  "corpus_pin": "889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8",
+  "decision": "go",
+  "decision_rule": "go iff encodable/sample_size >= 0.3",
+  "dialect": "yara",
+  "encodable": 306,
+  "engine_versions": {
+    "python": "3.13.15",
+    "z3": "5.0.0"
+  },
+  "extractor_schema_version": "2",
+  "fraction": 0.8226,
+  "go_no_go_threshold": 0.3,
+  "id_formula": "v2-domain-optional-ascii-default",
+  "inventory_path": "properties/generated/inhale-inventory.ndjson",
+  "path": "batch/corpora/inhale/rules",
+  "pilot": "inhale",
+  "reasons": {
+    "fullword-boundary": 66,
+    "ok": 306
+  },
+  "sample_size": 372,
+  "schema_version": "1",
+  "scope": "full_corpus",
+  "unclassified_parse_errors": 0,
+  "wall_s": 1.153
+}

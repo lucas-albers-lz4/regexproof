@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""R2 \p gate table: every \p syntax position, gated against the harness policy,
+r"""R2 \p gate table: every \p syntax position, gated against the harness policy,
 with a Node differential corpus + a live from_ecma2020 probe per form (the
 rejection evidence is measured, not asserted).
 
@@ -11,7 +11,12 @@ the harness rejects with a rewrite suggestion.
 Writes p1-baseline/p-gate-table.md (the table + corpus results are the artifact;
 the JSON row data is regenerable).
 """
-import sys, os, re, json, subprocess, tempfile, time
+import sys
+import os
+import re
+import json
+import subprocess
+import tempfile
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.insert(0, ROOT)
@@ -62,7 +67,6 @@ def noodler_probe(pat_ecma, strs):
             f.write(body)
             path = f.name
         try:
-            t0 = time.perf_counter()
             try:
                 p = subprocess.Popen([NOODLER, path], stdout=subprocess.PIPE, stderr=subprocess.PIPE,
                                      text=True, start_new_session=True)
@@ -75,7 +79,6 @@ def noodler_probe(pat_ecma, strs):
                     continue
             except FileNotFoundError:
                 return "NO-BINARY"
-            dt = (time.perf_counter() - t0) * 1000
             first = out.strip().splitlines()[0] if out.strip() else "EMPTY"
             if p.returncode < 0 or p.returncode == 139:
                 out_bits += "C"

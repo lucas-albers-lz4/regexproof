@@ -175,6 +175,15 @@ for _name, _ch in INJECTION_CHARS:
         # exit unchanged, tier seq-only); in the noodler CI job the real binary
         # runs with the cvc5 cross-check leg.
         "backend": "noodler" if _name == "space" else "seq",
+        "contract": {
+            "schema_version": "1",
+            "site": "usrmanage:username-validator",
+            "guarantee": f"accepted usernames contain no {_name}",
+            "input_source": "rpcd username",
+            "trust": "untrusted-input",
+            "declared_domain": "usernames matching ^[a-z_][a-z0-9_-]{0,31}$ minus deny-list (len 1..32)",
+            "provenance": "human",
+        },
     }
 
 ACTOR_CLS = Union(
@@ -539,3 +548,26 @@ def p6_prefix_match_helper():
     return [InRe(s, prefix_match(Re("AND")))], s == StringVal("AND foo")
 
 
+
+
+def _attach_human_contracts() -> None:
+    for name, entry in REGISTRY.items():
+        if entry.get("contract"):
+            continue
+        if entry.get("kind") == "mutation_guard":
+            continue
+        domain = entry.get("domain")
+        if not isinstance(domain, str) or not domain.strip():
+            continue
+        entry["contract"] = {
+            "schema_version": "1",
+            "site": f"harness-registry:{name}",
+            "guarantee": domain,
+            "input_source": "harness-registry",
+            "trust": "untrusted-input",
+            "declared_domain": domain,
+            "provenance": "human",
+        }
+
+
+_attach_human_contracts()

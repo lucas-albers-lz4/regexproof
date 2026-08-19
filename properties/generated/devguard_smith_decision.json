@@ -1,0 +1,14 @@
+{
+  "schema_version": "1",
+  "corpus": "devguard",
+  "corpus_pin": "00c7f6fc3fb20b1656827f8a8e85e603c7f4a77d",
+  "candidate_url": "https://github.com/l3montree-dev/devguard",
+  "smith_decision": "go",
+  "supersedes": "triage-trial",
+  "reason": "GRADUATED from triage-trial: 9/9 = 1.0000 encodable on first-party dependency-firewall package-name regexes. Security tool — SECURITY_TOOL_CORPORA private_first.",
+  "regex_sites": 9,
+  "sites_by_bucket": {
+    "re2": 9
+  },
+  "additional_surface_outside_probe_scope": {}
+}

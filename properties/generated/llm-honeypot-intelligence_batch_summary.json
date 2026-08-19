@@ -1,0 +1,25 @@
+{
+  "address_space_cap": false,
+  "cache": {
+    "entries": 68,
+    "hit_rate": 1.0,
+    "hits": 68,
+    "misses": 0
+  },
+  "cache_hit_rate": 1.0,
+  "complete_run": true,
+  "corpus": "llm-honeypot-intelligence",
+  "corpus_type": "rule_corpus",
+  "encodable": 68,
+  "engine": {
+    "python": "3.13.15"
+  },
+  "extracted": 68,
+  "findings": 4,
+  "inventory_questions": 4,
+  "join_regex_ids": 4,
+  "redos_findings": 0,
+  "redos_incomplete": false,
+  "schema_version": "1",
+  "triage": 0
+}

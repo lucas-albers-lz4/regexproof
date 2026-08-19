@@ -7,8 +7,8 @@ CRS adapter (documented): R1 for same-ID adjacent-tag pairs is intentionally
 (gitleaks). Integrity for CRS is:
 
 - same-ID pairs: R1.rule_id == R2.rule_id, R1 from older tag, R2 from newer
-- sibling-family: shared family prefix (first 3 digits), distinct rule IDs,
-  both from the same tag, R1/R2 ordered by rule_id ascending
+- sibling-family: only with an explicit ``family_contract`` (R1, R2,
+  provenance). Default discovery does not admit sibling pairs (#469).
 
 Unchanged same-ID patterns are skipped (vacuous). Direction is always
 ``r2_minus_r1`` (shape-5: R2 accepts something R1 misses).
@@ -93,7 +93,7 @@ def _make_pair(
     max_len: int,
     provenance: dict[str, Any],
 ) -> dict[str, Any]:
-    return {
+    out = {
         "schema_version": ADMITTED_SCHEMA_VERSION,
         "pair_id": pair_id,
         "direction": "r2_minus_r1",
@@ -111,6 +111,14 @@ def _make_pair(
         "adapter_note": provenance.get("adapter_note"),
         "direction_label": provenance.get("direction_label"),
     }
+    if pair_kind in ("version_diff", "cross_engine"):
+        out["family_contract"] = {
+            "R1": r1.get("pattern") or "",
+            "R2": r2.get("pattern") or "",
+            "provenance": pair_kind,
+        }
+        out["provenance"] = {**provenance, "kind": pair_kind}
+    return out
 
 
 def discover_crs_version_pairs(
@@ -185,14 +193,45 @@ def discover_crs_version_pairs(
     }
 
 
+def _valid_family_contract(family_contract: object) -> bool:
+    if not isinstance(family_contract, dict):
+        return False
+    return all(str(family_contract.get(key) or "").strip() for key in ("R1", "R2", "provenance"))
+
+
 def discover_crs_sibling_pairs(
     *,
     rules_dir: Path,
     tag: str = "v4.28.0",
     max_len: int = DEFAULT_MAX_LEN,
     max_pairs_per_family: int = 8,
+    family_contract: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
-    """Sibling rules within a family (e.g. 942xxx); R1=lower id, R2=higher id."""
+    """Sibling rules within a family (e.g. 942xxx); R1=lower id, R2=higher id.
+
+    Requires an explicit ``family_contract`` (same field as the CRS
+    cross-engine report). Without it, nothing is admitted — sibling SAT is
+    not a version-diff or engine-parity theorem (#469).
+    """
+    empty = {
+        "schema_version": ADMITTED_SCHEMA_VERSION,
+        "pair_kind": "sibling_family",
+        "tag": tag,
+        "admitted": [],
+        "dropped": [],
+        "admitted_count": 0,
+        "dropped_count": 0,
+    }
+    if not _valid_family_contract(family_contract):
+        empty["dropped"] = [
+            {
+                "reason": "missing-family-contract",
+                "pair_kind": "sibling_family",
+            }
+        ]
+        empty["dropped_count"] = 1
+        return empty
+    empty["family_contract"] = family_contract
     by_id = _load_rules(rules_dir, tag=tag)
     families: dict[str, list[str]] = {}
     for rid in by_id:
@@ -273,6 +312,7 @@ def discover_crs_sibling_pairs(
         "schema_version": ADMITTED_SCHEMA_VERSION,
         "pair_kind": "sibling_family",
         "tag": tag,
+        "family_contract": family_contract,
         "admitted": admitted,
         "dropped": dropped,
         "admitted_count": len(admitted),
@@ -288,7 +328,7 @@ def discover_crs_pairs(
     newer_tag: str = "v4.28.0",
     max_len: int = DEFAULT_MAX_LEN,
 ) -> dict[str, Any]:
-    """Combine version-diff + sibling-family; dedupe by family name."""
+    """Version-diff pairs only. Sibling-family pairing is not a theorem (#469)."""
     ver = discover_crs_version_pairs(
         older_rules=older_rules,
         newer_rules=newer_rules,
@@ -296,21 +336,15 @@ def discover_crs_pairs(
         newer_tag=newer_tag,
         max_len=max_len,
     )
-    sib = discover_crs_sibling_pairs(
-        rules_dir=newer_rules, tag=newer_tag, max_len=max_len
-    )
-    by_family: dict[str, dict[str, Any]] = {}
-    for p in ver["admitted"] + sib["admitted"]:
-        by_family[p["family"]] = p
-    admitted = sorted(by_family.values(), key=lambda p: p["pair_id"])
+    admitted = sorted(ver["admitted"], key=lambda p: p["pair_id"])
     return {
         "schema_version": ADMITTED_SCHEMA_VERSION,
         "older_tag": older_tag,
         "newer_tag": newer_tag,
         "admitted": admitted,
-        "dropped": ver["dropped"] + sib["dropped"],
+        "dropped": ver["dropped"],
         "admitted_count": len(admitted),
-        "dropped_count": len(ver["dropped"]) + len(sib["dropped"]),
+        "dropped_count": len(ver["dropped"]),
         "version_diff_admitted": ver["admitted_count"],
-        "sibling_admitted": sib["admitted_count"],
+        "sibling_admitted": 0,
     }

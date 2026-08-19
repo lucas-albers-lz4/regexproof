@@ -1,0 +1,46 @@
+{
+  "candidate_url": "https://github.com/itbench-hub/ITBench",
+  "corpus": "ITBench",
+  "corpus_pin": "fb1a358fa4a2d85a87ab94410f50e6eede8181c6",
+  "draft": true,
+  "fields_remaining": [
+    "decision",
+    "rationale",
+    "conditions[].met",
+    "conditions[].evidence",
+    "decision_basis",
+    "escape_hatch_applied",
+    "related",
+    "decision_date"
+  ],
+  "pin_mined": "fb1a358fa4a2d85a87ab94410f50e6eede8181c6",
+  "pin_probed": "a4946db21052d40c6d67fce2179aae979a211d32",
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "posix-shell": 6,
+      "py_re": 10
+    },
+    "extractor_errors": 4,
+    "flags": {
+      "i": 3,
+      "s": 1
+    },
+    "pin": "fb1a358fa4a2d85a87ab94410f50e6eede8181c6",
+    "pin_mined": "fb1a358fa4a2d85a87ab94410f50e6eede8181c6",
+    "pin_probed": "a4946db21052d40c6d67fce2179aae979a211d32",
+    "predicted_buckets": {
+      "inline-flag": 4
+    },
+    "regex_sites": 16,
+    "regex_sites_per_file": {
+      ".claude/hooks/skill-activation-prompt.sh": 6,
+      ".github/workflows/leaderboard.py": 1,
+      ".github/workflows/parse_issue.py": 3,
+      ".github/workflows/update_benchmark_helper.py": 3,
+      "scenarios/sre/project/roles/recorders/files/scripts/clickhouse/gather.py": 3
+    },
+    "security_boundary": "unknown"
+  },
+  "schema_version": "1"
+}
