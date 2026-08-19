@@ -197,7 +197,16 @@ def _solve_one(pair: dict[str, Any], *, timeout_ms: int) -> dict[str, Any]:
             rec["result"] = "timeout"
             rec["not_proven"] = True
             return rec
-        solver.set("timeout", min(timeout_ms, remaining_ms))
+        per_check_ms = min(timeout_ms, remaining_ms)
+        # luna r4 (issue #524): never floor to 0ms — Z3 treats timeout=0 as
+        # unbounded, which would silently defeat the deadline. Clamp to >=1.
+        per_check_ms = max(1, per_check_ms)
+        # True when the deadline shrank this check's budget below the nominal
+        # per-check timeout. An `unknown` under that clamp is deadline-induced,
+        # not a solver terminal verdict — it must fail closed, not be mistaken
+        # for a completed search (luna r4).
+        deadline_clamped = per_check_ms < timeout_ms
+        solver.set("timeout", per_check_ms)
         verdict = solver.check()
         if verdict == unknown:
             if best is None:
@@ -217,11 +226,21 @@ def _solve_one(pair: dict[str, Any], *, timeout_ms: int) -> dict[str, Any]:
                 rec["result"] = "timeout"
                 rec["not_proven"] = True
                 return rec
+            if deadline_clamped:
+                # The check was cut short by the remaining wall-clock budget;
+                # its `unknown` is a deadline-induced timeout, not a genuine
+                # solver terminal verdict. Fail closed (luna r4) — we must not
+                # claim a confident sat/sat_fullmatch_only from an incomplete
+                # search that the carrier deadline forced to stop early.
+                rec["result"] = "timeout"
+                rec["not_proven"] = True
+                return rec
             # Z3 returned unknown AFTER at least one fullmatch witness was
-            # confirmed on a completed check (best is set). The fullmatch gap is
-            # proven; the pad-gate only failed to upgrade it to a search gap
-            # within the solver's own verdict. Keep the proven fullmatch-only
-            # result (not a timeout) — this is the deliberate sat_fullmatch_only
+            # confirmed on a completed check (best is set) AND this check had
+            # the full per-check budget (no deadline clamp). The fullmatch gap
+            # is proven; the solver's own terminal unknown only failed to
+            # upgrade it to a search gap. Keep the proven fullmatch-only result
+            # (not a timeout) — this is the deliberate sat_fullmatch_only
             # boundary that the committed golden artifacts depend on.
             break
         if verdict == unsat:

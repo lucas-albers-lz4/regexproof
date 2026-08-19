@@ -208,3 +208,84 @@ def test_deadline_exhaustion_fails_closed_to_timeout(monkeypatch):
     # Fail-closed means it must NOT claim a confident sat/sat_fullmatch_only.
     assert rec["result"] not in ("sat", "sat_fullmatch_only")
 
+
+def test_deadline_clamped_unknown_fails_closed(monkeypatch):
+    """luna r4 (issue #524): when the wall-clock deadline shrinks a check's
+    timeout below the nominal per-check budget, a resulting `unknown` is a
+    deadline-induced timeout — it must fail closed to time not/not_proven, NOT
+    be mistaken for a genuine solver-terminal `unknown` (which would keep a
+    confident sat_fullmatch_only from a search the deadline cut short)."""
+    from regexproof.rule_diff import batch_shape5 as bs
+
+    pair = _toy_pair("dlc", "a", "a|b")
+    pair["r1"] = {"pattern": "^a$", "flags": "", "dialect": "py_re"}
+    pair["r2"] = {"pattern": "^a+$", "flags": "", "dialect": "py_re"}
+
+    real_monotonic = bs.time.monotonic
+    # Deadline is set from the FIRST call (real start). To keep the mock
+    # simple, fix the deadline relative to the real start: deadline = start+240s.
+    start_real = [real_monotonic()]
+    deadline_value = [start_real[0] + 240.0]
+
+    def _clamped_monotonic() -> float:
+        # The deadline computation called us first — that call must be the real
+        # start so deadline lands at start+240s. Every loop checkpoint then
+        # returns ~20s BEFORE the deadline => ~20s remaining (< 120s nominal),
+        # so each check is deadline_clamped.
+        if calls["n"] == 0:
+            calls["n"] += 1
+            return start_real[0]
+        return deadline_value[0] - 20.0  # 20s remaining (< 120s) -> clamped
+
+    calls = {"n": 0}
+    monkeypatch.setattr(bs.time, "monotonic", _clamped_monotonic)
+
+    # Force the first check to complete a witness so `best` is set, then force
+    # the ENUMERATION check (with a blocking constraint) to return `unknown`.
+    # Under a deadline clamp that unknown must fail closed to timeout.
+    class _FakeSolver:
+        def __init__(self):
+            self.calls = 0
+            self.constraints = []
+            self.timeout_seen = []
+
+        def set(self, key, value):
+            if key == "timeout":
+                self.timeout_seen.append(value)
+            return None
+
+        def add(self, c):
+            self.constraints.append(c)
+            return None
+
+        def check(self):
+            self.calls += 1
+            if self.calls == 1:
+                return bs.sat
+            return bs.unknown
+
+        def model(self):
+            import z3
+
+            class _M:
+                def eval(self, a, model_completion=False):
+                    return z3.StringVal("a")
+
+            return _M()
+
+    fake = _FakeSolver()
+    # _fresh_solver is a closure calling the module-level Solver() constructor;
+    # patch Solver so every build returns the fake.
+    monkeypatch.setattr(bs, "Solver", lambda: fake)
+    # Force the pad-gate to NOT confirm the fake witness, so check 0 establishes
+    # a `best` = sat_fullmatch_only; the following clamped `unknown` must then
+    # fail closed to timeout rather than keep that confident (but deadline-cut)
+    # result.
+    monkeypatch.setattr(bs, "gate_sat_witness", lambda pair, w: False)
+    rec = bs._solve_one(pair, timeout_ms=120_000)
+    assert rec["result"] == "timeout", rec
+    assert rec.get("not_proven") is True
+    # The per-check timeout must never be 0 (Z3 treats 0 as unbounded).
+    assert all(t >= 1 for t in fake.timeout_seen), fake.timeout_seen
+
+
