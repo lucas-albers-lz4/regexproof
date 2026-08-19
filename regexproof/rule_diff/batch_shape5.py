@@ -167,9 +167,18 @@ def _bounded_gate_sat_witness(
     line = (proc.stdout or "").strip().splitlines()
     if not line:
         return None
+    # Fail closed on ANY protocol/transport failure (coderabbit #529, issue
+    # #524) — not just on missing output. A non-zero child exit or an explicit
+    # `error` field in the payload means the replay did not produce a clean
+    # verdict, so it must be treated as `timeout`/`not_proven` (None), never
+    # parsed into a confident `False` -> sat_fullmatch_only.
+    if proc.returncode != 0:
+        return None
     try:
         payload = json.loads(line[-1])
     except json.JSONDecodeError:
+        return None
+    if payload.get("error"):
         return None
     confirmed = payload.get("confirmed")
     if not isinstance(confirmed, bool):

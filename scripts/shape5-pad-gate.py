@@ -42,9 +42,14 @@ def _flags_int(flags: str) -> int:
 
 
 def _real_search(pattern: str, flags: str, text: str) -> bool:
+    # Untrusted patterns can raise more than re.error (coderabbit #529):
+    # RecursionError / OverflowError / MemoryError from catastrophic constructs.
+    # Any of these means the search could not be evaluated -> treat as no-match
+    # (False) so the replay still emits the defined JSON protocol instead of an
+    # unhandled traceback (which would leave stdout empty and fail the parent).
     try:
         return re.search(pattern, text, _flags_int(flags)) is not None
-    except re.error:
+    except (re.error, RecursionError, OverflowError, MemoryError):
         return False
 
 
@@ -74,6 +79,9 @@ def _main() -> int:
                 r1_pat, r1_flags, s
             ):
                 confirmed = True
+                break
+        if confirmed:
+            break
     json.dump({"confirmed": confirmed, "error": None}, sys.stdout)
     return 0
 
