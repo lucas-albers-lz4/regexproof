@@ -7,6 +7,7 @@ search/pad matrix; a fullmatch-only SAT is recorded, not a search gap.
 
 from __future__ import annotations
 
+import time
 from typing import Any
 
 from z3 import Solver, StringVal, sat, unsat, unknown
@@ -31,6 +32,14 @@ _PAD_GATE_MODEL_CAP = 64
 # 120s is a 4–13x headroom over the observed solve time, so the batch outcome
 # is deterministic rather than load-dependent.
 _BATCH_SOLVE_TIMEOUT_MS = 120_000
+# Hard wall-clock deadline for the whole solve of a single pair, independent of
+# the per-check timeout and the model cap. The enumeration loop can issue up to
+# _PAD_GATE_MODEL_CAP checks, each with a fresh _BATCH_SOLVE_TIMEOUT_MS budget;
+# without a ceiling that product (64 × 120s ≈ 128 min/pair) could exceed the
+# Golden CI job's 60-minute limit (luna r1, issue #524). This deadline bounds
+# every pair, and with 3 admitted CRS pairs the shape-5 batch stays well under
+# the job budget.
+_BATCH_SOLVE_DEADLINE_MS = 240_000
 
 
 def provenance_token(pair: dict[str, Any]) -> str:
@@ -148,12 +157,49 @@ def _solve_one(pair: dict[str, Any], *, timeout_ms: int) -> dict[str, Any]:
     # (Golden conversion-ledger / two-run drift). Prefer any pad-confirmed
     # search gap. Five models was not enough to stabilize CRS 941140/942220
     # on Python 3.13.
+    # Issue #524 (luna r1): the per-check timeout is NOT the whole-pair budget —
+    # the loop can issue up to _PAD_GATE_MODEL_CAP checks, each with a fresh
+    # timeout_ms. A hard wall-clock deadline keeps the worst case (64 × 120s ≈
+    # 128 min/pair) bounded under the Golden CI job's 60-minute limit. The Z3
+    # solve itself is deterministic given random_seed=0 — a fresh process
+    # returns the same first witness (verified across 6 processes) — so once a
+    # solve completes within the deadline the classification is reproducible;
+    # the only load-dependence was a first-check timeout, which the deadline +
+    # transient retry below eliminate.
+    deadline = time.monotonic() + _BATCH_SOLVE_DEADLINE_MS / 1000.0
     seen: set[str] = set()
     best: dict[str, Any] | None = None
+    transient_retried = False
     for _ in range(_PAD_GATE_MODEL_CAP):
+        if time.monotonic() >= deadline:
+            # Hard whole-pair budget exhausted: report what we have (best), or
+            # a timeout if the first check never completed (fail-closed).
+            if best is None:
+                rec["result"] = "timeout"
+                rec["not_proven"] = True
+                return rec
+            break
         verdict = solver.check()
         if verdict == unknown:
             if best is None:
+                # A first-check timeout is almost always a transient scheduling
+                # spike (the solve completes in ~9-26s on a quiet machine) that
+                # Z3's internal re-check would resolve. Retry once with a fresh
+                # solver to turn a load-dependent `timeout` into the
+                # deterministic classification (problem #524). Exact Z3 state
+                # (timeout, seed, constraints) is reproduced, so the retried
+                # solve is the same deterministic one.
+                if not transient_retried and time.monotonic() < deadline:
+                    transient_retried = True
+                    solver = Solver()
+                    solver.set("timeout", timeout_ms)
+                    solver.set("random_seed", 0)
+                    for constraint in constraints:
+                        solver.add(constraint)
+                    solver.add(bad)
+                    seen = set()
+                    best = None
+                    continue
                 rec["result"] = "timeout"
                 rec["not_proven"] = True
                 return rec

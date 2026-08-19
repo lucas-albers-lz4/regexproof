@@ -56,6 +56,7 @@ first; it is faster than reading the call site.
 | `REGEXPROOF_GO_RE2` path containment | `regexproof/compiler/re2.py` | env override must resolve under `helpers/go-re2/` (#176) |
 | Atomic write (temp + fsync + `os.replace`) | `regexproof/mine/ledger.py`, `regexproof/mine/queue.py` | ledger/queue only — batch NDJSON writers do *not* use this |
 | Evidence gates | `regexproof/batch/evidence.py` | Z3 `timeout`/`unknown` is a hard fail for property kinds |
+| Shape-5 batch solve budget | `regexproof/rule_diff/batch_shape5.py` | per-pair wall-clock `_BATCH_SOLVE_DEADLINE_MS` hard cap + per-check Z3 `timeout` caps model enumeration (`_PAD_GATE_MODEL_CAP` × timeout ≤ job window); `timeout_gate` still hard-fails TIMEOUT (AGENTS.md). Same-PR update (issue #524). |
 | Disclosure gate | `regexproof/batch/disclose.py` | `private_first` on security-tool corpora; no network publish |
 | Witness redaction | `scripts/rule-diff-pilot.py` | long solver strings redacted in committed artifacts |
 | Secret-scanning path ignores | `.github/secret_scanning.yml` | `paths-ignore` for fixture/pilot paths (gitleaks pilot artifacts) |
