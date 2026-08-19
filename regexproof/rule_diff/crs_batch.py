@@ -1,8 +1,8 @@
 """CRS version-diff trees + batch shape-5 admission (#477 follow-on).
 
 Batch executes only ``version_diff`` pairs with ``family_contract``. Pair
-``crs-942522`` times out at DEFAULT_MAX_LEN=96 under the 30s batch budget
-(measured); it stays out of batch until a bounded encoding lands.
+``crs-942522`` times out at DEFAULT_MAX_LEN=96 under the shape-5 batch solve
+budget (measured, 120s); it stays out of batch until a bounded encoding lands.
 """
 
 from __future__ import annotations
@@ -15,7 +15,8 @@ from regexproof.rule_diff.crs_pairs import discover_crs_version_pairs
 
 ROOT = Path(__file__).resolve().parents[2]
 
-# Hard timeout under batch 30s / even 120s at max_len=96 — exclude from batch.
+# Measured hard timeout even at the 120s batch solve budget (issue #524) at
+# max_len=96 — exclude from batch until a bounded encoding lands.
 BATCH_TIMEOUT_PAIR_IDS = frozenset(
     {
         "crs-942522-v4.27.0-v4.28.0",

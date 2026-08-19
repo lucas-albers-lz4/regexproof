@@ -20,7 +20,17 @@ SCALE_PROVENANCE = frozenset({"version_diff", "cross_engine"})
 # compile_pattern(max_length=) caps *pattern text*, not witness length.
 _PATTERN_CHAR_CAP = 256
 # CRS 941140/942220: five models still flipped sat↔fullmatch on Python 3.13.
-_PAD_GATE_MODEL_CAP = 16
+# Issue #524: 16 was still flaky under load — the model enumeration loop stops
+# at the first `unknown` (timeout) once `best` is set, so a borderline solve
+# flipping between sat and sat_fullmatch_only changed the batch summaries
+# between the two reproducibility runs. A larger cap gives the pad-gate more
+# distinct witnesses to confirm on before the loop settles.
+_PAD_GATE_MODEL_CAP = 64
+# Issue #524: crs-941140 solves in ~9–26s on a quiet machine but crossed the
+# 30s per-check budget under CI load → `unknown` → `timeout` classification.
+# 120s is a 4–13x headroom over the observed solve time, so the batch outcome
+# is deterministic rather than load-dependent.
+_BATCH_SOLVE_TIMEOUT_MS = 120_000
 
 
 def provenance_token(pair: dict[str, Any]) -> str:
@@ -82,7 +92,7 @@ def summarize_shape5_rows(rows: list[dict[str, Any]]) -> dict[str, int]:
 def run_batch_shape5_pairs(
     pairs: list[dict[str, Any]],
     *,
-    timeout_ms: int = 30000,
+    timeout_ms: int = _BATCH_SOLVE_TIMEOUT_MS,
 ) -> list[dict[str, Any]]:
     """Fullmatch solve + search/pad SAT gate for admitted pairs only."""
     return [_solve_one(pair, timeout_ms=timeout_ms) for pair in filter_batch_pairs(pairs)]
