@@ -76,6 +76,23 @@ _apply_address_space_cap = apply_address_space_cap
 _LAST_ADDRESS_SPACE_CAP_APPLIED = None  # compat; prefer _budgets.LAST_ADDRESS_SPACE_CAP_APPLIED
 
 
+def _serializable_summary(summary: dict[str, Any]) -> str:
+    """Serialize a corpus summary for the byte-compared reproducibility artifact.
+
+    Observational cache hit-rate stats are deliberately zeroed at write time,
+    the same policy as ``wall_ms`` (see report.write_ndjson): the mirror-cache
+    hit counter is shared across parallel compile workers and its accounting
+    order varies from process to process, so embedding it would make the
+    two-run byte-identity check (scripts/ci-batch-repro.py, issue #524) flaky
+    even with deterministic corpus output. The live value is still printed to
+    the console for operators.
+    """
+    payload = dict(summary)
+    payload["cache"] = {"hits": 0, "misses": 0, "entries": 0, "hit_rate": 0.0}
+    payload["cache_hit_rate"] = 0.0
+    return json.dumps(payload, indent=2, sort_keys=True) + "\n"
+
+
 def _discard_streamed_mirrors(
     compiled: list[tuple[dict[str, Any], Any, dict[str, Any] | None]],
 ) -> None:
@@ -522,7 +539,7 @@ def run_corpus(
         summary["synthesis"] = synthesis.stats
     atomic_write_text(
         out_dir / f"{corpus}_batch_summary.json",
-        json.dumps(summary, indent=2, sort_keys=True) + "\n",
+        _serializable_summary(summary),
     )
     if redos_incomplete:
         raise SystemExit(
@@ -765,13 +782,23 @@ def run_batch(
     batch["cache_hit_rate"] = total_hits / total_entries if total_entries else 0.0
     if not write_pilot_aggregate:
         return batch
+
+    def _serializable_batch() -> str:
+        payload = dict(batch)
+        payload["corpora"] = {
+            name: json.loads(_serializable_summary(summary))
+            for name, summary in summaries.items()
+        }
+        payload["cache_hit_rate"] = 0.0
+        return json.dumps(payload, indent=2, sort_keys=True) + "\n"
+
     atomic_write_text(
         out_dir / "batch_pair_counts.json",
         json.dumps(pair_counts, indent=2, sort_keys=True) + "\n",
     )
     atomic_write_text(
         out_dir / "batch_summary.json",
-        json.dumps(batch, indent=2, sort_keys=True) + "\n",
+        _serializable_batch(),
     )
 
     # Byte-identical fingerprint of triage+ndjson names for reproducibility smoke

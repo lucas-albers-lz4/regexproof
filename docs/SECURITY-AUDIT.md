@@ -56,6 +56,7 @@ first; it is faster than reading the call site.
 | `REGEXPROOF_GO_RE2` path containment | `regexproof/compiler/re2.py` | env override must resolve under `helpers/go-re2/` (#176) |
 | Atomic write (temp + fsync + `os.replace`) | `regexproof/mine/ledger.py`, `regexproof/mine/queue.py` | ledger/queue only — batch NDJSON writers do *not* use this |
 | Evidence gates | `regexproof/batch/evidence.py` | Z3 `timeout`/`unknown` is a hard fail for property kinds |
+| Shape-5 batch solve budget | `regexproof/rule_diff/batch_shape5.py` | per-pair wall-clock `_BATCH_SOLVE_DEADLINE_MS` hard cap bounds the whole solve *including the untrusted-`py_re` search/pad replay*, which now runs in a timed subprocess (`scripts/shape5-pad-gate.py`); per-check Z3 `timeout` caps model enumeration + model cap `_PAD_GATE_MODEL_CAP`; `timeout_gate` still hard-fails TIMEOUT (AGENTS.md). Same-PR update (issue #524). |
 | Disclosure gate | `regexproof/batch/disclose.py` | `private_first` on security-tool corpora; no network publish |
 | Witness redaction | `scripts/rule-diff-pilot.py` | long solver strings redacted in committed artifacts |
 | Secret-scanning path ignores | `.github/secret_scanning.yml` | `paths-ignore` for fixture/pilot paths (gitleaks pilot artifacts) |
@@ -239,6 +240,7 @@ This playbook is only useful if citations stay true. Maintenance rule:
 | Wave 4 | Reliability | #187 atomic writes; #188 silent-failure counters; #189 test gates; #190 `assert_z3_pinned`; #191 CI timeouts/concurrency + 429 retry — #209 |
 | Waves 5–7 | Fowler refactors + types | #192 harness package; #193 public batch API; #194/`#197` pilot_runner + measure; #198 dialect template; #195 extractor registry (partial); #196 `run_corpus` steps; #199 StrEnums; #201 spike/bootstrap thin — closes #202 |
 | 2026-08-12 | Dual-model self-audit (Opus 5 × Grok 4.6) | #360 proof-gate CI overlay; #361/#363 PCRE/Perl helper fail-closed; #362 unicode-prop reject; #364 required-check names; #365 extract read cap; #366 AST timeout=None + npm ci. Tracking #367 |
+| 2026-08-19 | Batch resource-exhaustion control refresh (issue #524) | Shape-5 batch solve budget: per-pair wall-clock `_BATCH_SOLVE_DEADLINE_MS` hard cap + per-check Z3 `timeout` (120s) + model cap 64 (new §2 control row). Deadline exhaustion fail-closes to TIMEOUT (AGENTS.md). Reviewer: luna (go) r1/r2 on #529. |
 
 Findings from the 2026-08 wave, for orientation on what this repo's issues
 actually look like: #169 CI gate cannot fail · #170 symlink read from cloned
