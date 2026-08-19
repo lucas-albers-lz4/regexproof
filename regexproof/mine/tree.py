@@ -156,12 +156,15 @@ class TreeCache:
 
 
 def _repo_slug(url_or_slug: str) -> str:
-    value = str(url_or_slug or "")
-    if "/" in value and value.startswith("https://github.com/"):
-        return normalize_repo_url(value).removeprefix("https://github.com/")
-    if value.startswith("github.com/"):
-        return value.removeprefix("github.com/").strip("/")
-    return value.strip("/")
+    """Return ``owner/repo`` from a URL or slug via ``normalize_repo_url``.
+
+    Always parse through the shared normalizer (scheme/host/.git tolerant)
+    instead of ``startswith("github.com/")`` substring checks, which CodeQL
+    flags as incomplete URL sanitization and which miss ``http://`` / SSH
+    forms.
+    """
+    canonical = normalize_repo_url(str(url_or_slug or ""))
+    return canonical.removeprefix("https://github.com/").strip("/")
 
 
 def _repo_name(slug: str) -> str:

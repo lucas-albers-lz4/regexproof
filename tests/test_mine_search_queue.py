@@ -418,6 +418,20 @@ def test_normalize_url_scheme_and_git_suffix():
     assert a == b == "https://github.com/acme/tool"
 
 
+def test_normalize_url_schemeless_host_and_slug():
+    want = "https://github.com/acme/tool"
+    assert normalize_repo_url("github.com/acme/tool") == want
+    assert normalize_repo_url("github.com/Acme/Tool.git") == want
+    assert normalize_repo_url("www.github.com/acme/tool") == want
+    assert normalize_repo_url("acme/tool") == want
+    assert normalize_repo_url("git@github.com:Acme/Tool.git") == want
+    # Host-suffix bypass: github.com.evil.com is not github.com.
+    assert (
+        normalize_repo_url("https://github.com.evil.com/acme/tool")
+        == "https://github.com.evil.com/acme/tool"
+    )
+
+
 def test_run_search_dedupes_across_queries():
     items = {
         "total_count": 1,

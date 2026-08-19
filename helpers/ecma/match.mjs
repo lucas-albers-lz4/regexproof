@@ -11,13 +11,17 @@
  * engine error. Batch framing: each witness is escaped byte-wise (0x00 →
  * `\0`, `\` → `\\`) before being NUL-delimited, so witnesses containing NUL
  * round-trip exactly across the NUL delimiter.
- * // pattern/flags are operator-supplied CLI args to this ground-truth replay
- * // harness (differential fuzzing); not an untrusted-input boundary. */
+ *
+ * Pattern/flags are CLI args to this ground-truth replay harness. Escaping
+ * them would change language membership (the pattern *is* the SUT). Compile
+ * failures exit 2; hang/ReDoS is bounded by the caller subprocess timeout.
+ * Not an untrusted-service injection boundary — see docs/SECURITY-AUDIT.md. */
 const batch = process.argv[2] === "--batch";
 const pattern = batch ? process.argv[3] ?? "" : process.argv[2] ?? "";
 const flags = batch ? process.argv[4] ?? "" : process.argv[3] ?? "";
 let re;
 try {
+  // codeql[js/regex-injection] Harness argv is the pattern under test; escaping would change fuzzing semantics.
   re = new RegExp(pattern, flags);
 } catch (e) {
   console.error(e);

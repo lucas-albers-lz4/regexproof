@@ -45,6 +45,12 @@ def normalize_repo_url(url: str) -> str:
             owner, repo = parts[0], parts[1].removesuffix(".git")
             return f"https://github.com/{owner}/{repo}".lower()
         return path.removesuffix(".git").lower()
+    if "://" not in u:
+        head = u.split("/", 1)[0]
+        # Schemeless host/path (github.com/owner/repo): give urlparse a host.
+        # Bare owner/repo slugs have no dot in the first segment.
+        if "." in head:
+            u = "https://" + u
     parsed = urlparse(u)
     host = (parsed.hostname or "").lower()
     parts = [p for p in parsed.path.split("/") if p]
