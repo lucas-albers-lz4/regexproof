@@ -85,9 +85,12 @@ def test_run_executes_sat_gate_and_skips_independent_spec():
 
 
 def test_sat_fullmatch_only_when_pad_gate_rejects(monkeypatch):
+    from regexproof.rule_diff import batch_shape5 as bs
+
     monkeypatch.setattr(
-        "regexproof.rule_diff.batch_shape5.gate_sat_witness",
-        lambda pair, witness: False,
+        bs,
+        "_bounded_gate_sat_witness",
+        lambda pair, witness, remaining_ms: False,
     )
     rows = run_batch_shape5_pairs([_toy_pair("toy-fm", "a", "a|b")], timeout_ms=8000)
     assert len(rows) == 1
@@ -281,7 +284,7 @@ def test_deadline_clamped_unknown_fails_closed(monkeypatch):
     # a `best` = sat_fullmatch_only; the following clamped `unknown` must then
     # fail closed to timeout rather than keep that confident (but deadline-cut)
     # result.
-    monkeypatch.setattr(bs, "gate_sat_witness", lambda pair, w: False)
+    monkeypatch.setattr(bs, "_bounded_gate_sat_witness", lambda pair, w, ms: False)
     rec = bs._solve_one(pair, timeout_ms=120_000)
     assert rec["result"] == "timeout", rec
     assert rec.get("not_proven") is True

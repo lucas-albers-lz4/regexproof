@@ -7,7 +7,11 @@ search/pad matrix; a fullmatch-only SAT is recorded, not a search gap.
 
 from __future__ import annotations
 
+import json
+import subprocess
+import sys
 import time
+from pathlib import Path
 from typing import Any
 
 from z3 import Solver, StringVal, sat, unsat, unknown
@@ -15,7 +19,9 @@ from z3 import Solver, StringVal, sat, unsat, unknown
 from regexproof.compiler import compile_pattern
 from regexproof.harness.core import z3_str
 from regexproof.rule_diff.encode import shape5_constraints
-from regexproof.rule_diff.search_replay import gate_sat_witness
+
+ROOT = Path(__file__).resolve().parents[2]
+_PAD_GATE_SCRIPT = ROOT / "scripts" / "shape5-pad-gate.py"
 
 SCALE_PROVENANCE = frozenset({"version_diff", "cross_engine"})
 # compile_pattern(max_length=) caps *pattern text*, not witness length.
@@ -105,6 +111,56 @@ def run_batch_shape5_pairs(
 ) -> list[dict[str, Any]]:
     """Fullmatch solve + search/pad SAT gate for admitted pairs only."""
     return [_solve_one(pair, timeout_ms=timeout_ms) for pair in filter_batch_pairs(pairs)]
+
+
+def _bounded_gate_sat_witness(
+    pair: dict[str, Any], witness: str, remaining_ms: int
+) -> bool | None:
+    """Run the search/pad gate over ``witness`` in a TIMED subprocess.
+
+    The pad-gate replays an *untrusted* ``py_re`` pattern with Python
+    ``re.search``; a catastrophic-backtracking pattern (e.g. ``(a+)+$``) can
+    take tens of seconds to effectively hang on a non-match. The repo's
+    security model runs every untrusted pattern in a timed subprocess
+    (compiler/pcre.py, compiler/ecma.py, redos/tools.py), so the shape-5 batch
+    pad gate does the same (luna r5, issue #524): the replay is bounded by the
+    remaining wall-clock deadline. Returns True/False on a clean verdict, or
+    None if the subprocess timed out or misbehaved (fail closed).
+    """
+    r1 = pair.get("r1") or {}
+    r2 = pair.get("r2") or {}
+    argv = [
+        sys.executable,
+        str(_PAD_GATE_SCRIPT),
+        str(r1.get("pattern") or ""),
+        str(r1.get("flags") or ""),
+        str(r2.get("pattern") or ""),
+        str(r2.get("flags") or ""),
+        witness,
+    ]
+    try:
+        proc = subprocess.run(
+            argv,
+            capture_output=True,
+            text=True,
+            shell=False,
+            timeout=max(1.0, remaining_ms / 1000.0),
+            check=False,
+        )
+    except subprocess.TimeoutExpired:
+        return None
+    line = (proc.stdout or "").strip().splitlines()
+    if not line:
+        return None
+    try:
+        payload = json.loads(line[-1])
+    except json.JSONDecodeError:
+        return None
+    confirmed = payload.get("confirmed")
+    if not isinstance(confirmed, bool):
+        return None
+    return confirmed
+
 
 
 def _solve_one(pair: dict[str, Any], *, timeout_ms: int) -> dict[str, Any]:
@@ -254,7 +310,21 @@ def _solve_one(pair: dict[str, Any], *, timeout_ms: int) -> dict[str, Any]:
         if witness in seen:
             break
         seen.add(witness)
-        gated = gate_sat_witness(pair, witness)
+        # luna r5 (issue #524): the pad-gate replay over an untrusted py_re
+        # pattern must be bounded by the remaining deadline (timed subprocess, as
+        # the repo does for every untrusted pattern). A replay that exceeds the
+        # remaining budget returns None -> fail closed to timeout; it must not
+        # be mistaken for a clean sat/sat_fullmatch_only verdict.
+        remaining_ms = int((deadline - time.monotonic()) * 1000.0)
+        if remaining_ms <= 0:
+            rec["result"] = "timeout"
+            rec["not_proven"] = True
+            return rec
+        gated = _bounded_gate_sat_witness(pair, witness, remaining_ms)
+        if gated is None:
+            rec["result"] = "timeout"
+            rec["not_proven"] = True
+            return rec
         cand = {
             "witness": {"s": witness},
             "search_pad_gate": gated,
