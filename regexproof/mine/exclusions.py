@@ -18,18 +18,16 @@ EXCLUDE_OWNERS = frozenset(
 
 
 def _owner_from_url(url: str) -> str | None:
-    # https://github.com/owner/repo or git@github.com:owner/repo.git
-    if url.startswith("git@"):
-        try:
-            path = url.split(":", 1)[1]
-            return path.split("/")[0].lower()
-        except IndexError:
-            return None
-    parsed = urlparse(url)
+    """Return the GitHub owner from a URL, slug, or schemeless host/path.
+
+    Parse the *normalized* form so ``github.com/owner/repo`` is not treated as
+    owner ``github.com`` (urlparse puts the host in the path without a scheme).
+    """
+    parsed = urlparse(normalize_repo_url(url))
     parts = [p for p in parsed.path.split("/") if p]
-    if len(parts) >= 1:
-        return parts[0].lower().removesuffix(".git")
-    return None
+    if not parts:
+        return None
+    return parts[0].lower().removesuffix(".git")
 
 
 def normalize_repo_url(url: str) -> str:

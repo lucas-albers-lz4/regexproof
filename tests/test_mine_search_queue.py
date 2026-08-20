@@ -153,6 +153,20 @@ def test_exclusions_owner_ledger_admitted(tmp_path: Path):
     assert any("gitleaks" in u for u in real)
 
 
+def test_exclusions_owner_schemeless_host_prefix():
+    """Schemeless github.com/owner/... must not parse the host as the owner."""
+    assert (
+        is_excluded("github.com/lucas-albers-lz4/regexproof")
+        == "excluded-owner:lucas-albers-lz4"
+    )
+    assert (
+        is_excluded("www.github.com/lucas-albers-lz4/regexproof")
+        == "excluded-owner:lucas-albers-lz4"
+    )
+    assert is_excluded("github.com/other/ok") is None
+    assert is_excluded("www.github.com/other/ok") is None
+
+
 def test_search_401_fail_fast():
     session = FakeSession([FakeResp(401, text="bad creds")])
     with pytest.raises(AuthError):
