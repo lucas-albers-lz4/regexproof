@@ -39,6 +39,16 @@ Aliyun SAT is config query-string truncation, not a CVE. Do **not** file publicl
 
 **This idiom slice is done.** Do not re-ask query-string `[^&]*`, DNSPod digits, UCI single-quote capture, or nftset grep-E extras.
 
-**Next packages bucket** (same pin, same family): leftover WAN/config captures that are **not** JSON `[^"]*`, query-string `[^&]*`, XML-fallback, or UCI quotes — e.g. other provider id alphabets, shell-token captures in `ddns`/`banip`/`adblock` with a named sink after this deny-list.
+**Stop this cluster (2026-08-20):** leftover WAN/config keep-list after the
+deny-list is siblings / internals / housekeeping (nginx version stamps,
+nftset escape neighbors, IPv4/MAC charset, `/proc` parses). Yield is flat
+at the product layer (14 asked / 3 SAT / 0 filings). Do **not** run packages
+wave 4.
 
-**Next cluster** (when that bucket is empty or yield is flat): LuCI (`openwrt/luci` + `luci-app-*` `htdocs` JS) — own probe, ECMA GT, new family.
+**Next cluster (started):** LuCI — `openwrt/luci` @
+`77dad3f31405bc11f8384d742f7ad95314179694`, plan
+[`sweep/openwrt-luci-conversion/plan.md`](../../sweep/openwrt-luci-conversion/plan.md),
+probe GO
+[`openwrt_luci_probe_decision.json`](openwrt_luci_probe_decision.json)
+(895 ECMA sites). Own family `OW-luci`, Node `RegExp` GT — not mixed into
+`OW-packages`.

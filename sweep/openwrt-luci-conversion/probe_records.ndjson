@@ -1,0 +1,895 @@
+{"pattern": "^\\s*!", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-acl/htdocs/luci-static/resources/view/system/acl.js", "line": 57}
+{"pattern": "^\\s*!", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-acl/htdocs/luci-static/resources/view/system/acl.js", "line": 58}
+{"pattern": "[.*+?^${}()|[\\]\\\\]", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-acl/htdocs/luci-static/resources/view/system/acl.js", "line": 66}
+{"pattern": "read", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-acl/htdocs/luci-static/resources/view/system/acl.js", "line": 88}
+{"pattern": "\\.json$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-acl/htdocs/luci-static/resources/view/system/acl.js", "line": 204}
+{"pattern": ":", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-acl/htdocs/luci-static/resources/view/system/acl.js", "line": 219}
+{"pattern": "\\.fullchain\\.crt$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js", "line": 15}
+{"pattern": "^[*a-z0-9][a-z0-9.-]*$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js", "line": 141}
+{"pattern": "^[a-z0-9]+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js", "line": 331}
+{"pattern": "_OptsAlt$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js", "line": 473}
+{"pattern": "\\.fullchain\\.crt$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js", "line": 532}
+{"pattern": "[^a-z0-9.\\-# \\r\\n]", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/allowlist.js", "line": 52}
+{"pattern": "\\r\\n?", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/allowlist.js", "line": 52}
+{"pattern": "[^a-z0-9.\\-# \\r\\n]", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/blocklist.js", "line": 52}
+{"pattern": "\\r\\n?", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/blocklist.js", "line": 52}
+{"pattern": "[^a-z0-9.-]|^-|-$|\\.\\.|\\.$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js", "line": 52}
+{"pattern": "[.]", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js", "line": 59}
+{"pattern": "[^a-z0-9.-]|^-|-$|\\.\\.|\\.$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js", "line": 97}
+{"pattern": "[.]", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js", "line": 104}
+{"pattern": "[^a-z0-9.-]", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js", "line": 162}
+{"pattern": "[^\\w.\\-:]", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js", "line": 255}
+{"pattern": "^[a-z0-9_]+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js", "line": 208}
+{"pattern": "^https?:\\/\\/[A-Za-z0-9[\\]/.?&+_@%=:~#-]+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js", "line": 219}
+{"pattern": "^(.*?)\\s*\\(([^()]*\\/[^()]*)\\)$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js", "line": 82}
+{"pattern": "^[a-zA-Z0-9 \\t.:/()[\\]!&|<>=+*%\\\\-]+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js", "line": 870}
+{"pattern": "^(\\w+);(.*?)(?:;(.*))?$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js", "line": 949}
+{"pattern": "^(Google Chrome|Microsoft Edge|Chromium|Brave|Opera|Vivaldi)$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js", "line": 22}
+{"pattern": "^#\\s*", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js", "line": 64}
+{"pattern": "\\s+", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js", "line": 64}
+{"pattern": "^[0-9]+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js", "line": 76}
+{"pattern": "^\\*\\/[0-9]+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js", "line": 79}
+{"pattern": "^/etc(/[^/]+)?/?$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-adguardhome/htdocs/luci-static/resources/view/adguardhome/config.js", "line": 19}
+{"pattern": "version\\s+(.*)", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-adguardhome/htdocs/luci-static/resources/view/adguardhome/config.js", "line": 59}
+{"pattern": "\\r?\\n", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-antiblock/htdocs/luci-static/resources/view/antiblock/domains.js", "line": 14}
+{"pattern": "\\r?\\n", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-antiblock/htdocs/luci-static/resources/view/antiblock/domains.js", "line": 29}
+{"pattern": "\\n", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-antiblock/htdocs/luci-static/resources/view/antiblock/log.js", "line": 13}
+{"pattern": "^<\\d+>", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-antiblock/htdocs/luci-static/resources/view/antiblock/log.js", "line": 14}
+{"pattern": "\\n", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-antiblock/htdocs/luci-static/resources/view/antiblock/statistics.js", "line": 13}
+{"pattern": "^<\\d+>", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-antiblock/htdocs/luci-static/resources/view/antiblock/statistics.js", "line": 14}
+{"pattern": "^\\/www", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-apinger/htdocs/luci-static/resources/view/apinger/graphs.js", "line": 44}
+{"pattern": "^\\d+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js", "line": 99}
+{"pattern": "\\r?\\n|\\r", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js", "line": 166}
+{"pattern": "^aria2 version", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js", "line": 169}
+{"pattern": "(\\d+\\.){2}\\d+", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js", "line": 170}
+{"pattern": "^Enabled Features", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js", "line": 172}
+{"pattern": "GZip", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js", "line": 173}
+{"pattern": "HTTPS", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js", "line": 174}
+{"pattern": "BitTorrent", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js", "line": 175}
+{"pattern": "SFTP", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js", "line": 176}
+{"pattern": "Async DNS", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js", "line": 177}
+{"pattern": "Firefox3 Cookie", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js", "line": 178}
+{"pattern": "\\.", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js", "line": 535}
+{"pattern": "\\n", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/log.js", "line": 24}
+{"pattern": "\\n", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/log.js", "line": 27}
+{"pattern": "\\/+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js", "line": 727}
+{"pattern": "rc", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js", "line": 82}
+{"pattern": "\\r\\n?", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-banip/htdocs/luci-static/resources/view/banip/allowlist.js", "line": 52}
+{"pattern": "\\r\\n?", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-banip/htdocs/luci-static/resources/view/banip/blocklist.js", "line": 52}
+{"pattern": "^[a-z0-9]+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js", "line": 210}
+{"pattern": "^https?:\\/\\/[A-Za-z0-9[\\]/.?&+_@%=:~#-]+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js", "line": 221}
+{"pattern": "^https?:\\/\\/[A-Za-z0-9[\\]/.?&+_@%=:~#-]+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js", "line": 232}
+{"pattern": "^(\\bgz\\b|\\btcp\\b|\\budp\\b|\\b[0-9-]+\\b| )*$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js", "line": 267}
+{"pattern": "^(.*?)\\s*\\(([^()]*\\/[^()]*)\\)$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js", "line": 67}
+{"pattern": "\\)$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js", "line": 129}
+{"pattern": "^[A-Za-z0-9.:]+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js", "line": 885}
+{"pattern": "^(\\w+)\\t", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js", "line": 954}
+{"pattern": "^\\w+\\t(\\w+)\\t", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js", "line": 955}
+{"pattern": "^\\w+\\t\\w+\\t(.*$)", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js", "line": 956}
+{"pattern": "^(\\w+)\\t", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js", "line": 1005}
+{"pattern": "^\\w+\\t(\\w+)\\t", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js", "line": 1006}
+{"pattern": "^\\w+\\t\\w+\\t(.*$)", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js", "line": 1007}
+{"pattern": "^(https?:\\/\\/)[A-Za-z0-9-]+\\.[A-Za-z0-9.-]+(:[0-9]+)?(\\/[A-Za-z0-9._\\-?&+=:~#%]*)?$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js", "line": 1021}
+{"pattern": "^([1-9][0-9]*(ms|s|m|h|d|w))+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js", "line": 1073}
+{"pattern": "\\D", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js", "line": 250}
+{"pattern": "^\\d+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js", "line": 381}
+{"pattern": "\\B(?=(\\d{3})+(?!\\d))", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js", "line": 384}
+{"pattern": "^[\\d ]+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js", "line": 394}
+{"pattern": " ", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js", "line": 395}
+{"pattern": "_", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-bmx7/htdocs/luci-static/resources/bmx7/js/netjsongraph.js", "line": 225}
+{"pattern": "_", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-bmx7/htdocs/luci-static/resources/bmx7/js/netjsongraph.js", "line": 254}
+{"pattern": "\\[.*\\] \\[(.*)\\]", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-cloudflared/htdocs/luci-static/resources/view/cloudflared/log.js", "line": 62}
+{"pattern": "^[a-z]+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-csshnpd/htdocs/luci-static/resources/view/sshnpd/config.js", "line": 17}
+{"pattern": "^[a-z][a-z0-9_-]+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-csshnpd/htdocs/luci-static/resources/view/sshnpd/config.js", "line": 23}
+{"pattern": "&", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js", "line": 685}
+{"pattern": "<", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js", "line": 685}
+{"pattern": ">", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js", "line": 685}
+{"pattern": "^(tcp|inet)6?:\\/\\/", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-dockerman/htdocs/luci-static/resources/dockerman/api.js", "line": 83}
+{"pattern": "\\[::1?\\]", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-dockerman/htdocs/luci-static/resources/dockerman/api.js", "line": 87}
+{"pattern": "0\\.0\\.0\\.0", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-dockerman/htdocs/luci-static/resources/dockerman/api.js", "line": 92}
+{"pattern": "\\r?\\n", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-dockerman/htdocs/luci-static/resources/dockerman/api.js", "line": 239}
+{"pattern": "^https:", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-dockerman/htdocs/luci-static/resources/dockerman/api.js", "line": 267}
+{"pattern": "^http:", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-dockerman/htdocs/luci-static/resources/dockerman/api.js", "line": 268}
+{"pattern": "^[0-7]+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-dockerman/htdocs/luci-static/resources/dockerman/common.js", "line": 461}
+{"pattern": "[^rwx-]", "flags": "gi", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-dockerman/htdocs/luci-static/resources/dockerman/common.js", "line": 462}
+{"pattern": "^([0-9.]+) *([bkmgtp])?i? *[Bb]?", "flags": "i", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-dockerman/htdocs/luci-static/resources/dockerman/common.js", "line": 491}
+{"pattern": "^\\/", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-dockerman/htdocs/luci-static/resources/dockerman/common.js", "line": 665}
+{"pattern": "^[a-z]+:\\/\\/", "flags": "i", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-dockerman/htdocs/luci-static/resources/dockerman/common.js", "line": 728}
+{"pattern": "\\/$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-dockerman/htdocs/luci-static/resources/dockerman/common.js", "line": 730}
+{"pattern": "^https?:\\/\\/", "flags": "i", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-dockerman/htdocs/luci-static/resources/dockerman/common.js", "line": 748}
+{"pattern": "^[a-z]+:\\/\\/", "flags": "i", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-dockerman/htdocs/luci-static/resources/dockerman/common.js", "line": 779}
+{"pattern": ":[0-9]+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-dockerman/htdocs/luci-static/resources/dockerman/common.js", "line": 786}
+{"pattern": "\\x1B\\[[0-9;?]*[A-Za-z]", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-dockerman/htdocs/luci-static/resources/dockerman/common.js", "line": 1242}
+{"pattern": "\\x1B\\][^\\x07]*\\x07", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-dockerman/htdocs/luci-static/resources/dockerman/common.js", "line": 1252}
+{"pattern": "\\x1B[><=]", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-dockerman/htdocs/luci-static/resources/dockerman/common.js", "line": 1255}
+{"pattern": "\\x07", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-dockerman/htdocs/luci-static/resources/dockerman/common.js", "line": 1258}
+{"pattern": "[&<>\"']", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-dockerman/htdocs/luci-static/resources/dockerman/common.js", "line": 1289}
+{"pattern": "\\x1B\\[([\\d;]*)m", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-dockerman/htdocs/luci-static/resources/dockerman/common.js", "line": 1294}
+{"pattern": "\\r\\n", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-dockerman/htdocs/luci-static/resources/dockerman/common.js", "line": 1380}
+{"pattern": "\\r", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-dockerman/htdocs/luci-static/resources/dockerman/common.js", "line": 1380}
+{"pattern": "\\n", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-dockerman/htdocs/luci-static/resources/dockerman/common.js", "line": 1380}
+{"pattern": "\"", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-dockerman/htdocs/luci-static/resources/view/dockerman/container_new.js", "line": 153}
+{"pattern": "(?:[^\\s\"]+|\"[^\"]*\")+", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-dockerman/htdocs/luci-static/resources/view/dockerman/container_new.js", "line": 802}
+{"pattern": "^\"|\"$", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-dockerman/htdocs/luci-static/resources/view/dockerman/container_new.js", "line": 802}
+{"pattern": "^([^:]+):(\\d+):(\\d+)\\/(tcp|udp)$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-dockerman/htdocs/luci-static/resources/view/dockerman/container_new.js", "line": 836}
+{"pattern": "^\\[([^\\]]+)\\]:(\\d+):(\\d+)\\/(tcp|udp)$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-dockerman/htdocs/luci-static/resources/view/dockerman/container_new.js", "line": 845}
+{"pattern": "^(\\d+):(\\d+)\\/(tcp|udp)$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-dockerman/htdocs/luci-static/resources/view/dockerman/container_new.js", "line": 854}
+{"pattern": "^(.*\\/volumes\\/)([^/]+)(\\/.*)?$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-dockerman/htdocs/luci-static/resources/view/dockerman/volumes.js", "line": 259}
+{"pattern": "^\\/", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-dockerman/htdocs/luci-static/resources/view/dockerman/volumes.js", "line": 308}
+{"pattern": "\\s+", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-filemanager/htdocs/luci-static/resources/view/system/filemanager/HexEditor.js", "line": 710}
+{"pattern": "^[0-9a-fA-F]+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-filemanager/htdocs/luci-static/resources/view/system/filemanager/HexEditor.js", "line": 711}
+{"pattern": ".{1,2}", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-filemanager/htdocs/luci-static/resources/view/system/filemanager/HexEditor.js", "line": 719}
+{"pattern": "[0-9a-fA-F]", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-filemanager/htdocs/luci-static/resources/view/system/filemanager/HexEditor.js", "line": 1100}
+{"pattern": "^ *", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-filemanager/htdocs/luci-static/resources/view/system/filemanager/md.js", "line": 39}
+{"pattern": "^###\\s+", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-filemanager/htdocs/luci-static/resources/view/system/filemanager/md.js", "line": 52}
+{"pattern": "^##\\s+", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-filemanager/htdocs/luci-static/resources/view/system/filemanager/md.js", "line": 57}
+{"pattern": "^#\\s+", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-filemanager/htdocs/luci-static/resources/view/system/filemanager/md.js", "line": 62}
+{"pattern": "^(\\d+)\\.\\s+(.*)", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-filemanager/htdocs/luci-static/resources/view/system/filemanager/md.js", "line": 71}
+{"pattern": "^[-*]\\s+(.*)", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-filemanager/htdocs/luci-static/resources/view/system/filemanager/md.js", "line": 92}
+{"pattern": "\\*\\*(.+?)\\*\\*", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-filemanager/htdocs/luci-static/resources/view/system/filemanager/md.js", "line": 131}
+{"pattern": "__(.+?)__", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-filemanager/htdocs/luci-static/resources/view/system/filemanager/md.js", "line": 132}
+{"pattern": "[&<>\"']", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-filemanager/htdocs/luci-static/resources/view/system/filemanager/md.js", "line": 149}
+{"pattern": "^option\\s+(\\S+)\\s+'([^']+)'$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-filemanager/htdocs/luci-static/resources/view/system/filemanager.js", "line": 148}
+{"pattern": "padding: \\d+px", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-filemanager/htdocs/luci-static/resources/view/system/filemanager.js", "line": 2420}
+{"pattern": "padding: \\d+px", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-filemanager/htdocs/luci-static/resources/view/system/filemanager.js", "line": 2465}
+{"pattern": "\\.", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js", "line": 98}
+{"pattern": "\\\\(.)", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js", "line": 138}
+{"pattern": "^!\\s*", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js", "line": 253}
+{"pattern": "^!\\s*", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js", "line": 299}
+{"pattern": "^(?:CS[0-7]|BE|AF[1234][123]|EF|(0x[0-9a-f]{1,2}|[0-9]{1,2}))$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js", "line": 301}
+{"pattern": "^!\\s*", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js", "line": 333}
+{"pattern": "^(0x[0-9a-f]{1,8}|[0-9]{1,10})(?:\\/(0x[0-9a-f]{1,8}|[0-9]{1,10}))?$", "flags": "i", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js", "line": 335}
+{"pattern": "^(?:0x[0-9a-f]{1,8}|[0-9]{1,10})\\/([a-z]+)$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js", "line": 362}
+{"pattern": "^(0x[0-9a-f]{1,2}|[0-9]{1,3})$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js", "line": 560}
+{"pattern": "^(0x[0-9a-f]{1,2}|[0-9]{1,3})$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js", "line": 594}
+{"pattern": "^(0x[0-9a-f]{1,2}|[0-9]{1,3})$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js", "line": 612}
+{"pattern": "\\r\\n", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/custom.js", "line": 12}
+{"pattern": "^(?:all|\\*)$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js", "line": 12}
+{"pattern": "^(!\\s*)?(\\S+)$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js", "line": 25}
+{"pattern": "^(!\\s*)?(0x[0-9a-f]{1,8}|[0-9]{1,10})(?:\\/(0x[0-9a-f]{1,8}|[0-9]{1,10}))?$", "flags": "i", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js", "line": 32}
+{"pattern": "X", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js", "line": 34}
+{"pattern": "^(\\d+)\\/([smhd])\\w*$", "flags": "i", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js", "line": 69}
+{"pattern": "^!\\s*", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js", "line": 333}
+{"pattern": "^[a-zA-Z_.][a-zA-Z0-9/_.-]*$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js", "line": 46}
+{"pattern": "bitmap", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js", "line": 137}
+{"pattern": "ipv4", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js", "line": 137}
+{"pattern": "_ip|_mac", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js", "line": 149}
+{"pattern": "_ip", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js", "line": 150}
+{"pattern": "_ip|_net|_mac", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js", "line": 156}
+{"pattern": "_port", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js", "line": 162}
+{"pattern": "_port", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js", "line": 163}
+{"pattern": "_port", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js", "line": 164}
+{"pattern": "_ip", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js", "line": 169}
+{"pattern": "_ip", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js", "line": 170}
+{"pattern": "^(?:any|\\*)$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js", "line": 12}
+{"pattern": "^(!\\s*)?(\\S+)$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js", "line": 25}
+{"pattern": "^(!\\s*)?(0x[0-9a-f]{1,8}|[0-9]{1,10})(?:\\/(0x[0-9a-f]{1,8}|[0-9]{1,10}))?$", "flags": "i", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js", "line": 32}
+{"pattern": "X", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js", "line": 34}
+{"pattern": "^(!\\s*)?(?:(CS[0-7]|BE|AF[1234][123]|EF)|(0x[0-9a-f]{1,2}|[0-9]{1,2}))$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js", "line": 40}
+{"pattern": "^(\\d+)\\/([smhd])\\w*$", "flags": "i", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js", "line": 86}
+{"pattern": "^!\\s*", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js", "line": 451}
+{"pattern": "^(?:all|\\*)$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js", "line": 12}
+{"pattern": "^(!\\s*)?(0x[0-9a-f]{1,8}|[0-9]{1,10})(?:\\/(0x[0-9a-f]{1,8}|[0-9]{1,10}))?$", "flags": "i", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js", "line": 26}
+{"pattern": "X", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js", "line": 28}
+{"pattern": "^(\\d+)\\/([smhd])\\w*$", "flags": "i", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js", "line": 64}
+{"pattern": "%s", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js", "line": 125}
+{"pattern": "%q", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js", "line": 125}
+{"pattern": "\\r?\\n", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js", "line": 21}
+{"pattern": " ([^;]*)", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js", "line": 26}
+{"pattern": ":(.*)", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js", "line": 41}
+{"pattern": ".+", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js", "line": 124}
+{"pattern": "KEY", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js", "line": 401}
+{"pattern": "^KEY", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js", "line": 523}
+{"pattern": "^HMAC_KEY", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js", "line": 524}
+{"pattern": "(\\{\\w+\\})", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/https-dns-proxy/status.js", "line": 41}
+{"pattern": "^\\{(\\w+)\\}$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/https-dns-proxy/status.js", "line": 43}
+{"pattern": "[.*+?^${}()|[\\]\\\\]", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/https-dns-proxy/status.js", "line": 45}
+{"pattern": "{(\\w+)}", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/https-dns-proxy/status.js", "line": 53}
+{"pattern": "\\bCPU\\d+\\b", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-irqbalance/htdocs/luci-static/resources/view/irqbalance.js", "line": 39}
+{"pattern": "\\b\\d+(?=: )", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-irqbalance/htdocs/luci-static/resources/view/irqbalance.js", "line": 40}
+{"pattern": "\\r\\n", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/notification.js", "line": 14}
+{"pattern": "version : (\\S+)", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-ksmbd/htdocs/luci-static/resources/view/ksmbd.js", "line": 13}
+{"pattern": "vermagic:\\t(\\S+)", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-ksmbd/htdocs/luci-static/resources/view/ksmbd.js", "line": 14}
+{"pattern": "\\r\\n", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-ksmbd/htdocs/luci-static/resources/view/ksmbd.js", "line": 72}
+{"pattern": "\\s+", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-ledtrig-usbport/htdocs/luci-static/resources/view/system/led-trigger/usbport.js", "line": 37}
+{"pattern": "^(\\d+)-(\\d+)$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-ledtrig-usbport/htdocs/luci-static/resources/view/system/led-trigger/usbport.js", "line": 40}
+{"pattern": "^[0-9]{1,3}[smhd]$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-libreswan/htdocs/luci-static/resources/view/libreswan/tunnels.js", "line": 174}
+{"pattern": "\\s+", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js", "line": 137}
+{"pattern": "\\s+", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js", "line": 233}
+{"pattern": "^coordinate|^address|^elin", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js", "line": 234}
+{"pattern": "\\s+", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js", "line": 246}
+{"pattern": "^coordinate|^address|^elin", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js", "line": 247}
+{"pattern": "^-?\\d+(?:\\.\\d+)?[NnSs]$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js", "line": 266}
+{"pattern": "^-?\\d+(?:\\.\\d+)?[WwEe]$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js", "line": 282}
+{"pattern": "^-?\\d+(?:\\.\\d+)? [mf]$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js", "line": 300}
+{"pattern": "^[A-Z]{2}$", "flags": "i", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js", "line": 331}
+{"pattern": "^(\\d+)(?:ms)?$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js", "line": 477}
+{"pattern": "^[0-9a-f]{2}$", "flags": "i", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js", "line": 866}
+{"pattern": "^(add|replace)?\\s*oui\\s+([0-9a-f]{2}(?:,[0-9a-f]{2})*)\\s+subtype\\s+([0-9a-f]{2})(?:\\s+oui-info\\s+([0-9a-f]{2}(?:,[0-9a-f]{2})*))?$", "flags": "i", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js", "line": 870}
+{"pattern": "[^a-z0-9]", "flags": "gi", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/status.js", "line": 302}
+{"pattern": "[\\s!@#$%^&*()+=[\\]{};':'\\\\|,<>/?]", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-lxc/htdocs/luci-static/resources/view/lxc/overview.js", "line": 38}
+{"pattern": "[_:]", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-lxc/htdocs/luci-static/resources/view/lxc/overview.js", "line": 424}
+{"pattern": "Audio files<\\/td><td>(\\d+)", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-minidlna/htdocs/luci-static/resources/view/minidlna.js", "line": 21}
+{"pattern": "Video files<\\/td><td>(\\d+)", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-minidlna/htdocs/luci-static/resources/view/minidlna.js", "line": 22}
+{"pattern": "Image files<\\/td><td>(\\d+)", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-minidlna/htdocs/luci-static/resources/view/minidlna.js", "line": 23}
+{"pattern": "[ \\t,]+", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-minidlna/htdocs/luci-static/resources/view/minidlna.js", "line": 63}
+{"pattern": "\\/", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-minidlna/htdocs/luci-static/resources/view/minidlna.js", "line": 82}
+{"pattern": "Audio files<\\/td><td>(\\d+)", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-minidlna/htdocs/luci-static/resources/view/status/include/80_minidlna.js", "line": 24}
+{"pattern": "Video files<\\/td><td>(\\d+)", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-minidlna/htdocs/luci-static/resources/view/status/include/80_minidlna.js", "line": 25}
+{"pattern": "Image files<\\/td><td>(\\d+)", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-minidlna/htdocs/luci-static/resources/view/status/include/80_minidlna.js", "line": 26}
+{"pattern": "\\r\\n", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/notify.js", "line": 14}
+{"pattern": "\\n", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js", "line": 110}
+{"pattern": "\\r\\n", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/config.js", "line": 41}
+{"pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}\\/[0-9]+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/config.js", "line": 67}
+{"pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}\\/[0-9]+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/config.js", "line": 78}
+{"pattern": "^([0-9]{4}-[0-9]{2}-[0-9]{2})\\/[0-9]+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/config.js", "line": 101}
+{"pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/config.js", "line": 106}
+{"pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}\\/([0-9]+)$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/config.js", "line": 116}
+{"pattern": "^([0-9a-fA-F:.]+)(?:\\/[0-9a-fA-F:.]+)?$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/config.js", "line": 136}
+{"pattern": "[^a-fA-F0-9]", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/display.js", "line": 180}
+{"pattern": "-", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/display.js", "line": 271}
+{"pattern": "-", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/display.js", "line": 276}
+{"pattern": "\\r\\n", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-ocserv/htdocs/luci-static/resources/view/ocserv/main.js", "line": 160}
+{"pattern": "\\r\\n", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-ocserv/htdocs/luci-static/resources/view/ocserv/user-config.js", "line": 122}
+{"pattern": "\\[\\s*\\n\\s*\\]", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-ocserv/htdocs/luci-static/resources/view/ocserv/users.js", "line": 37}
+{"pattern": "^\\$\\d+\\$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-ocserv/htdocs/luci-static/resources/view/ocserv/users.js", "line": 118}
+{"pattern": "\\[\\s*\\n\\s*\\]", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-ocserv/htdocs/luci-static/resources/view/status/include/80_ocserv.js", "line": 24}
+{"pattern": "^(\\d{1,3}\\.){3}\\d{1,3}$|^([a-fA-F0-9]{1,4}:){7}[a-fA-F0-9]{1,4}$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js", "line": 336}
+{"pattern": "^[0-1]\\.\\d+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js", "line": 342}
+{"pattern": "^([a-fA-F0-9]{1,4}:){7}[a-fA-F0-9]{1,4}$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js", "line": 330}
+{"pattern": "^[0-1]\\.\\d+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js", "line": 336}
+{"pattern": "^(\\d{1,3}\\.){3}\\d{1,3}$|^([a-fA-F0-9]{1,4}:){7}[a-fA-F0-9]{1,4}$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface.js", "line": 101}
+{"pattern": "^[0-1]\\.\\d+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface.js", "line": 107}
+{"pattern": "^(\\d{1,3}\\.){3}\\d{1,3}$|^([a-fA-F0-9]{1,4}:){7}[a-fA-F0-9]{1,4}$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface6.js", "line": 101}
+{"pattern": "^[0-1]\\.\\d+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface6.js", "line": 107}
+{"pattern": "^(olsrd.*)\\.so\\..*", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdplugins.js", "line": 24}
+{"pattern": "([^ ]+)%s+([^ ]+)", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdplugins.js", "line": 98}
+{"pattern": "^(olsrd_.*)\\.so\\..*", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdplugins6.js", "line": 22}
+{"pattern": "([^ ]+)%s+([^ ]+)", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdplugins6.js", "line": 96}
+{"pattern": "\\s+", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/hna.js", "line": 38}
+{"pattern": "\\s+", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/neighbors.js", "line": 72}
+{"pattern": "\\s+", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/routes.js", "line": 38}
+{"pattern": "\\t", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-olsr-services/htdocs/luci-static/resources/view/olsr-services/services.js", "line": 41}
+{"pattern": "^([^[\\]:]+)$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-openlist/htdocs/luci-static/resources/view/openlist/config.js", "line": 95}
+{"pattern": "^\\[(.+)\\]$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-openlist/htdocs/luci-static/resources/view/openlist/config.js", "line": 96}
+{"pattern": "([^\\n]*)\\n", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-package-manager/htdocs/luci-static/resources/view/package-manager.js", "line": 108}
+{"pattern": "^\\s(.*)$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-package-manager/htdocs/luci-static/resources/view/package-manager.js", "line": 113}
+{"pattern": "\\s*,\\s*", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-package-manager/htdocs/luci-static/resources/view/package-manager.js", "line": 128}
+{"pattern": "\\s+", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-package-manager/htdocs/luci-static/resources/view/package-manager.js", "line": 142}
+{"pattern": "^([\\w-]+)\\s*:(.+)$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-package-manager/htdocs/luci-static/resources/view/package-manager.js", "line": 184}
+{"pattern": "[.*+?^${}()|[\\]\\\\]", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-package-manager/htdocs/luci-static/resources/view/package-manager.js", "line": 267}
+{"pattern": "^luci-i18n-", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-package-manager/htdocs/luci-static/resources/view/package-manager.js", "line": 271}
+{"pattern": "\\n", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-package-manager/htdocs/luci-static/resources/view/package-manager.js", "line": 290}
+{"pattern": "[^0-9]+", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-package-manager/htdocs/luci-static/resources/view/package-manager.js", "line": 479}
+{"pattern": "[^0-9]+", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-package-manager/htdocs/luci-static/resources/view/package-manager.js", "line": 480}
+{"pattern": "^([^><=~\\s]+)\\s*\\(?([><=~]+)?\\s*([^)]+)?\\)?$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-package-manager/htdocs/luci-static/resources/view/package-manager.js", "line": 679}
+{"pattern": "\\b(([a-f0-9]{8})[a-f0-9]{24,32})\\b", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-package-manager/htdocs/luci-static/resources/view/package-manager.js", "line": 723}
+{"pattern": "^luci-([^-]+)-(.+)$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-package-manager/htdocs/luci-static/resources/view/package-manager.js", "line": 775}
+{"pattern": "^luci-([^-]+)-(.+)$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-package-manager/htdocs/luci-static/resources/view/package-manager.js", "line": 786}
+{"pattern": "^luci-i18n-base-", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-package-manager/htdocs/luci-static/resources/view/package-manager.js", "line": 793}
+{"pattern": "\\.conf$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-package-manager/htdocs/luci-static/resources/view/package-manager.js", "line": 958}
+{"pattern": "\\n", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-package-manager/htdocs/luci-static/resources/view/package-manager.js", "line": 984}
+{"pattern": "\\bquery=([^=]+)\\b", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-package-manager/htdocs/luci-static/resources/view/package-manager.js", "line": 1230}
+{"pattern": "[&<>\"']", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js", "line": 45}
+{"pattern": "^\\s+|\\s+$", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js", "line": 46}
+{"pattern": "qdisc cake|: active", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js", "line": 49}
+{"pattern": "\\x00", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js", "line": 62}
+{"pattern": "^\\S+\\s+\\S", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js", "line": 68}
+{"pattern": "(^|\\s)nat(\\s|$)", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js", "line": 105}
+{"pattern": "^[\"']|[\"']$", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js", "line": 127}
+{"pattern": "^\\s*config\\s+(\\S+)(?:\\s+(\\S+))?\\s*$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js", "line": 131}
+{"pattern": "['\"\\r\\n]", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js", "line": 139}
+{"pattern": "\\s+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js", "line": 152}
+{"pattern": "^\\s*option\\s+(\\S+)\\s+(.*)$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js", "line": 157}
+{"pattern": "\\s+", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js", "line": 176}
+{"pattern": "^\\+", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js", "line": 177}
+{"pattern": "^(0[xX][0-9a-fA-F]+|\\d+)$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js", "line": 179}
+{"pattern": "(^|\\n)config ", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js", "line": 476}
+{"pattern": "\\s+", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js", "line": 911}
+{"pattern": "^[\\w\\s.:-]*$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js", "line": 915}
+{"pattern": "^\\d+(\\.\\d+)?[kmg]?bit$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js", "line": 920}
+{"pattern": "^\\d+(\\.\\d+)?[kmg]?bit$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js", "line": 921}
+{"pattern": "^\\d+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js", "line": 922}
+{"pattern": "^[\\w.@:-]+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js", "line": 948}
+{"pattern": "\\r\\n", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js", "line": 980}
+{"pattern": "(^|\\n)config ", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js", "line": 1001}
+{"pattern": "\\r\\n", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js", "line": 1049}
+{"pattern": "\\x00", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js", "line": 1098}
+{"pattern": "(^|\\n)config ", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js", "line": 1099}
+{"pattern": "^\\d+(-\\d+)?$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js", "line": 1201}
+{"pattern": "[\\s#]", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js", "line": 1206}
+{"pattern": "^\\d{1,3}$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js", "line": 1209}
+{"pattern": "^[0-9a-fA-F:]+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js", "line": 1211}
+{"pattern": "\\s+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js", "line": 1220}
+{"pattern": "[^a-zA-Z0-9_]", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js", "line": 1241}
+{"pattern": "(^|\\n)\\s*config\\s+defaults\\s*$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js", "line": 1244}
+{"pattern": "\\s+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js", "line": 1256}
+{"pattern": "^[a-zA-Z0-9._-]+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-radicale3/htdocs/luci-static/resources/view/radicale3.js", "line": 253}
+{"pattern": "[;&|$`(){}[\\]<>'\"\\\\!]", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-rustdesk-server/htdocs/luci-static/resources/view/rustdesk-server/general.js", "line": 70}
+{"pattern": "[^A-Za-z0-9+/=]", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-rustdesk-server/htdocs/luci-static/resources/view/rustdesk-server/general.js", "line": 93}
+{"pattern": "^https?:\\/\\/", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-rustdesk-server/htdocs/luci-static/resources/view/rustdesk-server/general.js", "line": 110}
+{"pattern": "\\r\\n", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-samba4/htdocs/luci-static/resources/view/samba4.js", "line": 89}
+{"pattern": "^(\\d{2})(\\d{2})(\\d{2})", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-sfp-info/htdocs/luci-static/resources/view/sfp-info/main.js", "line": 23}
+{"pattern": "_", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-sfp-info/htdocs/luci-static/resources/view/sfp-info/main.js", "line": 190}
+{"pattern": "_", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-sfp-info/htdocs/luci-static/resources/view/sfp-info/main.js", "line": 198}
+{"pattern": "^(#[4|6]:)?[a-zA-Z0-9\\-_]+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-smartdns/htdocs/luci-static/resources/view/smartdns/smartdns.js", "line": 293}
+{"pattern": "^#[4|6]:[a-zA-Z0-9\\-_]+#[a-zA-Z0-9\\-_]+#[a-zA-Z0-9\\-_]+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-smartdns/htdocs/luci-static/resources/view/smartdns/smartdns.js", "line": 314}
+{"pattern": "^(#[4|6]:)?[a-zA-Z0-9\\-_]+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-smartdns/htdocs/luci-static/resources/view/smartdns/smartdns.js", "line": 450}
+{"pattern": "^#[4|6]:[a-zA-Z0-9\\-_]+#[a-zA-Z0-9\\-_]+#[a-zA-Z0-9\\-_]+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-smartdns/htdocs/luci-static/resources/view/smartdns/smartdns.js", "line": 469}
+{"pattern": "^(http|https|ftp|sftp):\\/\\/", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-smartdns/htdocs/luci-static/resources/view/smartdns/smartdns.js", "line": 546}
+{"pattern": "^(socks5|http):\\/\\/", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-smartdns/htdocs/luci-static/resources/view/smartdns/smartdns.js", "line": 573}
+{"pattern": "\\r\\n", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-smartdns/htdocs/luci-static/resources/view/smartdns/smartdns.js", "line": 594}
+{"pattern": "^(socks5):\\/\\/", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-smartdns/htdocs/luci-static/resources/view/smartdns/smartdns.js", "line": 782}
+{"pattern": "^(#[4|6]:)?[a-zA-Z0-9\\-_]+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-smartdns/htdocs/luci-static/resources/view/smartdns/smartdns.js", "line": 856}
+{"pattern": "^#[4|6]:[a-zA-Z0-9\\-_]+#[a-zA-Z0-9\\-_]+#[a-zA-Z0-9\\-_]+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-smartdns/htdocs/luci-static/resources/view/smartdns/smartdns.js", "line": 875}
+{"pattern": "\\r\\n", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-smartdns/htdocs/luci-static/resources/view/smartdns/smartdns.js", "line": 913}
+{"pattern": "\\r\\n", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-smartdns/htdocs/luci-static/resources/view/smartdns/smartdns.js", "line": 941}
+{"pattern": "#[4|6]:[a-zA-Z0-9\\-_]+#[a-zA-Z0-9\\-_]+#[a-zA-Z0-9\\-_]+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-smartdns/htdocs/luci-static/resources/view/smartdns/smartdns.js", "line": 1079}
+{"pattern": "\\r\\n", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-smartdns/htdocs/luci-static/resources/view/smartdns/smartdns.js", "line": 1109}
+{"pattern": "\\r\\n", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-smartdns/htdocs/luci-static/resources/view/smartdns/smartdns.js", "line": 1129}
+{"pattern": "MIB\\.(mib|my|txt)$", "flags": "i", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-snmpd/htdocs/luci-static/resources/view/snmpd/download.js", "line": 46}
+{"pattern": "UDP:\\d+", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-snmpd/htdocs/luci-static/resources/view/snmpd/snmpd.js", "line": 83}
+{"pattern": "UDP6:\\d+", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-snmpd/htdocs/luci-static/resources/view/snmpd/snmpd.js", "line": 86}
+{"pattern": "UDP6?:(\\d+)", "flags": "i", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-snmpd/htdocs/luci-static/resources/view/snmpd/snmpd.js", "line": 112}
+{"pattern": "ipv4", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-snmpd/htdocs/luci-static/resources/view/snmpd/snmpd.js", "line": 124}
+{"pattern": "ipv6", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-snmpd/htdocs/luci-static/resources/view/snmpd/snmpd.js", "line": 127}
+{"pattern": "(\\n$)", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-softether/htdocs/luci-static/resources/view/softether-status.js", "line": 20}
+{"pattern": "\\.qos$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js", "line": 32}
+{"pattern": "\\W+", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/olsrd.js", "line": 82}
+{"pattern": "\\W+", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/olsrd.js", "line": 83}
+{"pattern": "^[^-]+-([^-]+)-.+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/olsrd.js", "line": 84}
+{"pattern": "^openvpn\\.(.+)\\.status$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/openvpn.js", "line": 10}
+{"pattern": "%(H|pn|pi|dt|di|ds)", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool.js", "line": 8}
+{"pattern": ":", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool.js", "line": 65}
+{"pattern": "^[0-9a-fA-F]{6}$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool.js", "line": 71}
+{"pattern": "\\/$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool.js", "line": 152}
+{"pattern": "^(.+)\\.js$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool.js", "line": 161}
+{"pattern": "\\.rrd$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool.js", "line": 195}
+{"pattern": "^([^-]+)(?:-(.+))?$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool.js", "line": 223}
+{"pattern": "^([^-]+)(?:-(.+))?\\.rrd$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool.js", "line": 235}
+{"pattern": "^(\\d+)\\b", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool.js", "line": 261}
+{"pattern": "^(\\d+)\\b", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool.js", "line": 262}
+{"pattern": "[\\\\:]", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool.js", "line": 323}
+{"pattern": "\\{file\\}", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool.js", "line": 343}
+{"pattern": "\\W", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool.js", "line": 477}
+{"pattern": "\\W", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool.js", "line": 478}
+{"pattern": "\\W", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool.js", "line": 580}
+{"pattern": "\\.json$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/collectd.js", "line": 31}
+{"pattern": "^collectd_", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/collectd.js", "line": 96}
+{"pattern": "^collectd_", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/collectd.js", "line": 105}
+{"pattern": "^collectd_", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/collectd.js", "line": 120}
+{"pattern": "^collectd_", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/collectd.js", "line": 129}
+{"pattern": "^collectd_", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/collectd.js", "line": 141}
+{"pattern": "^collectd_", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/collectd.js", "line": 148}
+{"pattern": "^collectd_", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/collectd.js", "line": 169}
+{"pattern": "\\|", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/graphs.js", "line": 128}
+{"pattern": "\\n", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/disk.js", "line": 20}
+{"pattern": "^ +[0-9]+ +[0-9]+ +[0-9]+ (\\S+)$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/disk.js", "line": 23}
+{"pattern": "^[0-7]{1,4}$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/email.js", "line": 32}
+{"pattern": "\\n", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/iptables.js", "line": 26}
+{"pattern": "^\\*(\\S+)$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/iptables.js", "line": 33}
+{"pattern": "^-A (.+?) ([!-].+)$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/iptables.js", "line": 37}
+{"pattern": "-m comment --comment \"(.+?)\" ", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/iptables.js", "line": 47}
+{"pattern": "-m comment --comment \"(.+)\" -", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/iptables.js", "line": 54}
+{"pattern": "[ \\t\\n]", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/iptables.js", "line": 55}
+{"pattern": "[ \\t\\n]", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/iptables.js", "line": 80}
+{"pattern": "^(\\d+)", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/iptables.js", "line": 113}
+{"pattern": "^(\\d+)", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/iptables.js", "line": 114}
+{"pattern": "[ \\t\\n]", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/iptables.js", "line": 132}
+{"pattern": "[ \\t\\n]", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/iptables.js", "line": 153}
+{"pattern": "\\n", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/irq.js", "line": 21}
+{"pattern": "^\\s*([^\\s:]+):", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/irq.js", "line": 25}
+{"pattern": "^[^:]+:\\s+", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/irq.js", "line": 30}
+{"pattern": "^\\d+\\s*", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/irq.js", "line": 33}
+{"pattern": " {2,}", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/irq.js", "line": 35}
+{"pattern": "^openvpn\\..+\\.status$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/openvpn.js", "line": 32}
+{"pattern": "^[0-9]+(?:y|m|w|d|h|min|years?|months?|weeks?|days?|hours?)?$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js", "line": 51}
+{"pattern": "^[0-9]+(?:\\.[0-9]+)?$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js", "line": 69}
+{"pattern": "^[0-9]+(?:\\.[0-9]+)?v$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js", "line": 7}
+{"pattern": "^(?:ain|in|vccp|vdd|vid|vin|volt|voltbatt|vrm)[0-9]*$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js", "line": 8}
+{"pattern": "^(?:cpu_temp|remote_temp|temp)[0-9]*$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js", "line": 9}
+{"pattern": "^(?:fan)[0-9]*$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js", "line": 10}
+{"pattern": "^(?:humidity)[0-9]*$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js", "line": 11}
+{"pattern": "^(?:curr)[0-9]*$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js", "line": 12}
+{"pattern": "^(?:power)[0-9]*$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js", "line": 13}
+{"pattern": "^cooling_device", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/thermal.js", "line": 24}
+{"pattern": "^\\d+[smhd]$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js", "line": 15}
+{"pattern": "^\\d+\\.\\d+\\.\\d+\\.\\d+:\\d+", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-tinyproxy/htdocs/luci-static/resources/view/tinyproxy/tinyproxy.js", "line": 313}
+{"pattern": "^socks5 \\d+\\.\\d+\\.\\d+\\.\\d+:\\d+", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-tinyproxy/htdocs/luci-static/resources/view/tinyproxy/tinyproxy.js", "line": 314}
+{"pattern": "([\\\\;,:\"])", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js", "line": 20}
+{"pattern": "\\D", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js", "line": 105}
+{"pattern": "vpn:\\s*(.)", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/stations.js", "line": 231}
+{"pattern": "\\.login$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/stations.js", "line": 652}
+{"pattern": "^\\s*\\d+", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/stations.js", "line": 806}
+{"pattern": "^\"(.*)\"$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/stations.js", "line": 825}
+{"pattern": "\\r\\n", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-unbound/htdocs/luci-static/resources/view/unbound/files.js", "line": 44}
+{"pattern": "\\s+", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-unbound/htdocs/luci-static/resources/view/unbound/zones.js", "line": 68}
+{"pattern": "\\s+", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-unbound/htdocs/luci-static/resources/view/unbound/zones.js", "line": 92}
+{"pattern": "^\\s*nameserver\\b", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-unbound/htdocs/luci-static/resources/view/unbound/zones.js", "line": 109}
+{"pattern": ":", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js", "line": 69}
+{"pattern": "^[0-9a-f]{2}(:[0-9a-f]{2}){5}$", "flags": "i", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js", "line": 358}
+{"pattern": ":", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js", "line": 445}
+{"pattern": "^[0-7]{3,4}$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-ustreamer/htdocs/luci-static/resources/view/ustreamer/ustreamer.js", "line": 442}
+{"pattern": "^(\\d\\d?):(\\d\\d?)$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-wifischedule/htdocs/luci-static/resources/view/wifischedule/wifischedule.js", "line": 25}
+{"pattern": " ", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-wifischedule/htdocs/luci-static/resources/view/wifischedule/wifischedule.js", "line": 103}
+{"pattern": "[\\r\\n]+", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-wifischedule/htdocs/luci-static/resources/view/wifischedule/wifischedule.js", "line": 106}
+{"pattern": "\\s+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-wifischedule/htdocs/luci-static/resources/view/wifischedule/wifischedule.js", "line": 106}
+{"pattern": "^[A-Za-z0-9-_]*$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-xinetd/htdocs/luci-static/resources/view/xinetd/xinetd.js", "line": 83}
+{"pattern": "^[A-Za-z0-9_-]+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-xinetd/htdocs/luci-static/resources/view/xinetd/xinetd.js", "line": 136}
+{"pattern": "^([0-9]+\\s+[0-9]+$)", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-xinetd/htdocs/luci-static/resources/view/xinetd/xinetd.js", "line": 250}
+{"pattern": "^([01]\\d|2[0-3]):[0-5]\\d-([01]\\d|2[0-3]):[0-5]\\d$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "applications/luci-app-xinetd/htdocs/luci-static/resources/view/xinetd/xinetd.js", "line": 259}
+{"pattern": "\\W", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "libs/luci-lib-chartjs/htdocs/luci-static/resources/nlbw.chart.min.js", "line": 1}
+{"pattern": "[\\r\\t\\n]", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "libs/luci-lib-chartjs/htdocs/luci-static/resources/nlbw.chart.min.js", "line": 1}
+{"pattern": "((^|%>)[^\\t]*)'", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "libs/luci-lib-chartjs/htdocs/luci-static/resources/nlbw.chart.min.js", "line": 1}
+{"pattern": "\\t=(.*?)%>", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "libs/luci-lib-chartjs/htdocs/luci-static/resources/nlbw.chart.min.js", "line": 1}
+{"pattern": "^[0-9]*$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "libs/luci-lib-uqr/htdocs/luci-static/resources/uqr.js", "line": 7}
+{"pattern": "^[A-Z0-9 $%*+./:-]*$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "libs/luci-lib-uqr/htdocs/luci-static/resources/uqr.js", "line": 7}
+{"pattern": "[ \\t\\n]+", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/cbi.js", "line": 144}
+{"pattern": "\\.", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/cbi.js", "line": 409}
+{"pattern": "-([^-]+)$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/cbi.js", "line": 570}
+{"pattern": "&", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/cbi.js", "line": 652}
+{"pattern": "\"", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/cbi.js", "line": 652}
+{"pattern": "'", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/cbi.js", "line": 652}
+{"pattern": "<", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/cbi.js", "line": 652}
+{"pattern": ">", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/cbi.js", "line": 652}
+{"pattern": "\"", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/cbi.js", "line": 653}
+{"pattern": "'", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/cbi.js", "line": 653}
+{"pattern": "^(([^%]*)%('.|0|\\x20)?(-)?(\\d+)?(\\.\\d+)?(%|b|c|d|u|f|o|s|x|X|q|h|j|t|m))", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/cbi.js", "line": 686}
+{"pattern": "^(([^%]*)%\\{([^}:]+)(?::('.|0|\\x20)?(-)?(\\d+)?(\\.\\d+)?(b|c|d|u|f|o|s|x|X|q|h|j|t|m))?\\})", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/cbi.js", "line": 687}
+{"pattern": "[\\s\\n]+", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/cbi.js", "line": 875}
+{"pattern": "^[a-zA-Z0-9_]+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/firewall.js", "line": 111}
+{"pattern": "^[a-zA-Z0-9_]+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/firewall.js", "line": 203}
+{"pattern": "[<>&]", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/form.js", "line": 306}
+{"pattern": "([ \\t]*\\n)+", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/form.js", "line": 315}
+{"pattern": "\\.", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/form.js", "line": 744}
+{"pattern": "flag", "flags": "i", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/form.js", "line": 2971}
+{"pattern": " ", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/form.js", "line": 3417}
+{"pattern": "^#([a-f0-9]{2})([a-f0-9]{2})([a-f0-9]{2})$", "flags": "i", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/form.js", "line": 3420}
+{"pattern": "^rgba?\\(([0-9]+),([0-9]+),([0-9]+)[,)]$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/form.js", "line": 3425}
+{"pattern": "^.+\\/", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/form.js", "line": 4432}
+{"pattern": "^.+\\/", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/form.js", "line": 4448}
+{"pattern": "\\n", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/fs.js", "line": 352}
+{"pattern": "\\\\", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/fs.js", "line": 445}
+{"pattern": "(\\s)", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/fs.js", "line": 445}
+{"pattern": "\\\\", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/fs.js", "line": 450}
+{"pattern": "(\\s)", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/fs.js", "line": 450}
+{"pattern": "\\+", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/fs.js", "line": 453}
+{"pattern": "(?:^|[. -])(.)", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/luci.js", "line": 23}
+{"pattern": "\\?", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/luci.js", "line": 723}
+{"pattern": "\\?", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/luci.js", "line": 736}
+{"pattern": "^(.*)\\/luci\\.js(?:\\?v=([^?]+))?$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/luci.js", "line": 2254}
+{"pattern": "\\/[^/]+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/luci.js", "line": 2265}
+{"pattern": "\\n", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/luci.js", "line": 2322}
+{"pattern": "(.*?)@(.+):(\\d+):(\\d+)", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/luci.js", "line": 2329}
+{"pattern": "^  at ", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/luci.js", "line": 2333}
+{"pattern": "\\braise ", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/luci.js", "line": 2336}
+{"pattern": "\\berror ", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/luci.js", "line": 2339}
+{"pattern": "\\.", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/luci.js", "line": 2474}
+{"pattern": "^require[ \\t]+(\\S+)(?:[ \\t]+as[ \\t]+([a-zA-Z_]\\S*))?$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/luci.js", "line": 2483}
+{"pattern": "^use[ \\t]+strict$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/luci.js", "line": 2484}
+{"pattern": "[^a-zA-Z0-9_]", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/luci.js", "line": 2509}
+{"pattern": "\\.", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/luci.js", "line": 2553}
+{"pattern": "(.+)\\.js$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/luci.js", "line": 2634}
+{"pattern": "\\/+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/luci.js", "line": 2804}
+{"pattern": "\\/+", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/luci.js", "line": 2804}
+{"pattern": "\\/", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/luci.js", "line": 2804}
+{"pattern": "^(?:[a-zA-Z0-9_.%,;-]+\\/)*[a-zA-Z0-9_.%,;-]+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/luci.js", "line": 2845}
+{"pattern": "^\\?[a-zA-Z0-9_.%=&;-]+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/luci.js", "line": 2845}
+{"pattern": "(?:^|[.:])([0-9a-fA-F]{1,4})", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/luci.js", "line": 3011}
+{"pattern": "\\s+", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/luci.js", "line": 3096}
+{"pattern": "^(?:\\/|\\S+:\\/\\/)", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/luci.js", "line": 3239}
+{"pattern": "^application\\/json\\b", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/luci.js", "line": 3248}
+{"pattern": "^wmaster\\d+", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/network.js", "line": 25}
+{"pattern": "^wifi\\d+", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/network.js", "line": 26}
+{"pattern": "^hwsim\\d+", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/network.js", "line": 27}
+{"pattern": "^imq\\d+", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/network.js", "line": 28}
+{"pattern": "^ifb\\d+", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/network.js", "line": 29}
+{"pattern": "^mon\\.wlan\\d+", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/network.js", "line": 30}
+{"pattern": "^sit\\d+", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/network.js", "line": 31}
+{"pattern": "^gre\\d+", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/network.js", "line": 32}
+{"pattern": "^gretap\\d+", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/network.js", "line": 33}
+{"pattern": "^ip6gre\\d+", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/network.js", "line": 34}
+{"pattern": "^ip6tnl\\d+", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/network.js", "line": 35}
+{"pattern": "^tunl\\d+", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/network.js", "line": 36}
+{"pattern": "^lo$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/network.js", "line": 37}
+{"pattern": "^wlan\\d+", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/network.js", "line": 41}
+{"pattern": "^wl\\d+", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/network.js", "line": 42}
+{"pattern": "^ath\\d+", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/network.js", "line": 43}
+{"pattern": "^\\w+\\.network\\d+", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/network.js", "line": 44}
+{"pattern": "^(\\w+)\\.network(\\d+)$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/network.js", "line": 181}
+{"pattern": "\\s+", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/network.js", "line": 242}
+{"pattern": ":0(?::0)+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/network.js", "line": 325}
+{"pattern": "^hostapd\\.(.+)$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/network.js", "line": 528}
+{"pattern": ":.+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/network.js", "line": 556}
+{"pattern": "^[a-zA-Z0-9_]+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/network.js", "line": 923}
+{"pattern": "^[a-zA-Z0-9_]+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/network.js", "line": 1081}
+{"pattern": "\\s+", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/network.js", "line": 1204}
+{"pattern": "^(\\d+)([tu]?)$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/network.js", "line": 1206}
+{"pattern": "^([^:]+)(?::[ut*]+)?$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/network.js", "line": 1266}
+{"pattern": ":", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/network.js", "line": 2288}
+{"pattern": ":", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/network.js", "line": 2376}
+{"pattern": "\\S+", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/network.js", "line": 2618}
+{"pattern": "^([^:/]+)", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/network.js", "line": 2719}
+{"pattern": "^([^:/]+)", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/network.js", "line": 2774}
+{"pattern": "^([^:/]+)", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/network.js", "line": 2828}
+{"pattern": "^(wifi|radio)\\d", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/network.js", "line": 3866}
+{"pattern": "^\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\/(\\d{1,2}|\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3})$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/protocol/static.js", "line": 12}
+{"pattern": "\\d", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/tools/password.js", "line": 17}
+{"pattern": "[a-z]", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/tools/password.js", "line": 24}
+{"pattern": "[A-Z]", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/tools/password.js", "line": 24}
+{"pattern": "[^a-zA-Z0-9]", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/tools/password.js", "line": 28}
+{"pattern": "\\n", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/tools/views.js", "line": 103}
+{"pattern": ":", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/tools/widgets.js", "line": 15}
+{"pattern": ":", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/tools/widgets.js", "line": 25}
+{"pattern": "^@([a-zA-Z0-9_-]+)\\[(-?[0-9]+)\\]$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/uci.js", "line": 144}
+{"pattern": "(auto|scroll)", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/ui.js", "line": 1273}
+{"pattern": "^<!--|--!?>$", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/ui.js", "line": 1681}
+{"pattern": "{{value}}", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/ui.js", "line": 1685}
+{"pattern": "\\s+", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/ui.js", "line": 1719}
+{"pattern": "\\S", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/ui.js", "line": 2744}
+{"pattern": "\\/{2,}", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/ui.js", "line": 3231}
+{"pattern": "\\/\\.(\\/|$)", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/ui.js", "line": 3232}
+{"pattern": "[^/]+\\/\\.\\.(\\/|$)", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/ui.js", "line": 3233}
+{"pattern": "\\/$", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/ui.js", "line": 3234}
+{"pattern": "\\/", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/ui.js", "line": 3249}
+{"pattern": "\\/", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/ui.js", "line": 3327}
+{"pattern": "\\/[^/]+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/ui.js", "line": 3365}
+{"pattern": "^.+\\/", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/ui.js", "line": 3366}
+{"pattern": "^.+[/\\\\]", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/ui.js", "line": 3424}
+{"pattern": "\\/[^/]+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/ui.js", "line": 3640}
+{"pattern": "^([0-9a-fA-F:.]+)(?:\\/([0-9a-fA-F:.]+))?$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/ui.js", "line": 4012}
+{"pattern": "^(?:(\\d+)d )?(\\d+)h (\\d+)m (\\d+)s$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/ui.js", "line": 4047}
+{"pattern": "^(\\d+)\\b(\\D*)$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/ui.js", "line": 4052}
+{"pattern": "^.*[\\\\/]", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/ui.js", "line": 4947}
+{"pattern": "^(https?:\\/\\/[^/]+).*$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/ui.js", "line": 5105}
+{"pattern": "%([01234])", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/ui.js", "line": 5255}
+{"pattern": "'", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/ui.js", "line": 5267}
+{"pattern": "\\s+", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/ui.js", "line": 5293}
+{"pattern": "\\/", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/ui.js", "line": 5715}
+{"pattern": "\\\\(.)", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/validation.js", "line": 329}
+{"pattern": "^[ \\t]+", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/validation.js", "line": 330}
+{"pattern": "[ \\t]+$", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/validation.js", "line": 331}
+{"pattern": "^(['\"]).*\\1$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/validation.js", "line": 336}
+{"pattern": "^(['\"])(.*)\\1$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/validation.js", "line": 337}
+{"pattern": "^-?\\d+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/validation.js", "line": 376}
+{"pattern": "^-?\\d+(?:\\.\\d+)?$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/validation.js", "line": 385}
+{"pattern": "^(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/validation.js", "line": 394}
+{"pattern": "^([a-fA-F0-9:]+):(\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3})$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/validation.js", "line": 410}
+{"pattern": "^[a-fA-F0-9:]+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/validation.js", "line": 420}
+{"pattern": "::", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/validation.js", "line": 423}
+{"pattern": ":", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/validation.js", "line": 428}
+{"pattern": ":", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/validation.js", "line": 429}
+{"pattern": "^(\\d+\\.\\d+\\.\\d+\\.\\d+)$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/validation.js", "line": 520}
+{"pattern": "^(\\d+\\.\\d+\\.\\d+\\.\\d+)(?:\\/(\\d+\\.\\d+\\.\\d+\\.\\d+)|\\/(\\d{1,2}))?$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/validation.js", "line": 520}
+{"pattern": "^([0-9a-fA-F:.]+)$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/validation.js", "line": 534}
+{"pattern": "^([0-9a-fA-F:.]+)(?:\\/(\\d{1,3}))?$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/validation.js", "line": 534}
+{"pattern": "^(\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3})\\/(-)?(\\d{1,2})$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/validation.js", "line": 611}
+{"pattern": "^([0-9a-fA-F:.]+)\\/(-)?(\\d{1,3})$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/validation.js", "line": 624}
+{"pattern": "^(\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3})\\/(\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3})$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/validation.js", "line": 636}
+{"pattern": "^([0-9a-fA-F:.]+)\\/([0-9a-fA-F:.]+)$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/validation.js", "line": 647}
+{"pattern": "^(\\d+)-(\\d+)$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/validation.js", "line": 751}
+{"pattern": "^([a-fA-F0-9]{2}):([a-fA-F0-9]{2}:){4}[a-fA-F0-9]{2}$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/validation.js", "line": 768}
+{"pattern": "^[a-zA-Z0-9_]+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/validation.js", "line": 793}
+{"pattern": "^[a-zA-Z0-9_][a-zA-Z0-9_\\-.]*[a-zA-Z0-9]\\.?$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/validation.js", "line": 794}
+{"pattern": "[^0-9.]", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/validation.js", "line": 795}
+{"pattern": "^_", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/validation.js", "line": 796}
+{"pattern": ":", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/validation.js", "line": 819}
+{"pattern": ":", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/validation.js", "line": 832}
+{"pattern": "^([^[\\]:]+):(\\d+)$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/validation.js", "line": 845}
+{"pattern": "^\\[(.+)\\]:(\\d+)$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/validation.js", "line": 846}
+{"pattern": "^([^[\\]]+):(\\d+)$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/validation.js", "line": 846}
+{"pattern": "\\s+", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/validation.js", "line": 917}
+{"pattern": "^[a-fA-F0-9]{64}$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/validation.js", "line": 954}
+{"pattern": "^[a-fA-F0-9]{10,26}$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/validation.js", "line": 971}
+{"pattern": "^[a-zA-Z0-9_]+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/validation.js", "line": 982}
+{"pattern": "^[a-zA-Z_][a-zA-Z0-9_]+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/validation.js", "line": 991}
+{"pattern": "^[^:\\/%\\s]{1,15}$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/validation.js", "line": 1006}
+{"pattern": "^[ \\t]*![ \\t]*", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/validation.js", "line": 1178}
+{"pattern": "[^ \\t]+", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/validation.js", "line": 1200}
+{"pattern": "^[0-9*#!.]+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/validation.js", "line": 1214}
+{"pattern": "^(?:[01]\\d|2[0-3]):[0-5]\\d:(?:[0-5]\\d|60)$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/validation.js", "line": 1224}
+{"pattern": "^(\\d\\d\\d\\d)-(\\d\\d)-(\\d\\d)", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/validation.js", "line": 1234}
+{"pattern": "[^ \\t]+", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/validation.js", "line": 1271}
+{"pattern": "^([a-fA-F0-9]{2})+$", "flags": "i", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-base/htdocs/luci-static/resources/validation.js", "line": 1295}
+{"pattern": "\\.js$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-dashboard/htdocs/luci-static/resources/view/dashboard/index.js", "line": 80}
+{"pattern": "\\.js$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-dashboard/htdocs/luci-static/resources/view/dashboard/index.js", "line": 82}
+{"pattern": "^([^:]+)(?::([ut*]*))?$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-network/htdocs/luci-static/resources/tools/bridgevlan.js", "line": 47}
+{"pattern": "t", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-network/htdocs/luci-static/resources/tools/bridgevlan.js", "line": 56}
+{"pattern": "u", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-network/htdocs/luci-static/resources/tools/bridgevlan.js", "line": 57}
+{"pattern": "\\x2a", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-network/htdocs/luci-static/resources/tools/bridgevlan.js", "line": 58}
+{"pattern": "^([^:]+)(?::[ut*]+)?$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-network/htdocs/luci-static/resources/tools/bridgevlan.js", "line": 168}
+{"pattern": "[^A-Za-z0-9_]", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-network/htdocs/luci-static/resources/tools/bridgevlan.js", "line": 307}
+{"pattern": "^\"(.*)\"$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-network/htdocs/luci-static/resources/tools/dnsrecordhandlers.js", "line": 82}
+{"pattern": "^\"(.*)\"$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-network/htdocs/luci-static/resources/tools/dnsrecordhandlers.js", "line": 83}
+{"pattern": "^key(\\d{1,5})$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-network/htdocs/luci-static/resources/tools/dnsrecordhandlers.js", "line": 140}
+{"pattern": "\\d+\\.\\d+\\.\\d+\\.\\d+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-network/htdocs/luci-static/resources/tools/dnsrecordhandlers.js", "line": 195}
+{"pattern": "^key\\d{1,5}$", "flags": "i", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-network/htdocs/luci-static/resources/tools/dnsrecordhandlers.js", "line": 236}
+{"pattern": "[\\s:]", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-network/htdocs/luci-static/resources/tools/dnsrecordhandlers.js", "line": 249}
+{"pattern": ".{2}", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-network/htdocs/luci-static/resources/tools/dnsrecordhandlers.js", "line": 250}
+{"pattern": "^key\\d{1,5}$", "flags": "i", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-network/htdocs/luci-static/resources/tools/dnsrecordhandlers.js", "line": 371}
+{"pattern": "^(\\d+):(\\d+)$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js", "line": 16}
+{"pattern": ":", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js", "line": 321}
+{"pattern": "t", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js", "line": 326}
+{"pattern": "\\x2a", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js", "line": 328}
+{"pattern": "^.+\\.\\d+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js", "line": 510}
+{"pattern": "\\.\\d+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js", "line": 510}
+{"pattern": "^.+\\.\\d+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js", "line": 547}
+{"pattern": "^.+\\.", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js", "line": 547}
+{"pattern": "1", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js", "line": 1272}
+{"pattern": "1", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js", "line": 1276}
+{"pattern": "1", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js", "line": 1280}
+{"pattern": "1", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js", "line": 1285}
+{"pattern": "1", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js", "line": 1296}
+{"pattern": "1", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js", "line": 1302}
+{"pattern": "1", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js", "line": 1318}
+{"pattern": "1", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js", "line": 1322}
+{"pattern": "1", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js", "line": 1326}
+{"pattern": "1", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js", "line": 1330}
+{"pattern": "1", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js", "line": 1334}
+{"pattern": "^port_", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js", "line": 1404}
+{"pattern": ":[ut*]+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js", "line": 1416}
+{"pattern": "^([^:]+)(?::[ut*]+)?$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js", "line": 1514}
+{"pattern": "^\\*?\\.?|\\.$", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js", "line": 158}
+{"pattern": "\\.", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js", "line": 158}
+{"pattern": "^[a-z0-9_](?:[a-z0-9-]{0,61}[a-z0-9])?$", "flags": "i", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js", "line": 161}
+{"pattern": "^([a-f0-9]{2})+$", "flags": "i", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js", "line": 176}
+{"pattern": "^[a-f0-9]+$", "flags": "i", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js", "line": 179}
+{"pattern": "^(([0-9a-f]{2}|\\*):){5}([0-9a-f]{2}|\\*)$", "flags": "i", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js", "line": 204}
+{"pattern": "^[0-9]+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js", "line": 526}
+{"pattern": "^\\*?\\.?|\\.$", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js", "line": 25}
+{"pattern": "\\.", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js", "line": 25}
+{"pattern": "^[a-z0-9_](?:[a-z0-9-]{0,61}[a-z0-9])?$", "flags": "i", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js", "line": 28}
+{"pattern": "^\\/(.+)\\/$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js", "line": 38}
+{"pattern": "\\/", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js", "line": 39}
+{"pattern": "^(\\/.*\\/)?(.*)$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js", "line": 54}
+{"pattern": "^([0-9a-f:.]+)(?:%[^#@]+)?(?:#(\\d+))?(?:@([0-9a-f:.]+)(?:@[^#]+)?(?:#(\\d+))?)?$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js", "line": 69}
+{"pattern": "\\{(\\w+)\\}", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js", "line": 152}
+{"pattern": "[\\s:]", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js", "line": 466}
+{"pattern": "[:]", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js", "line": 509}
+{"pattern": "(.{2})", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js", "line": 510}
+{"pattern": "^(\\d+)base(\\w+)-(H|F)$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js", "line": 22}
+{"pattern": "^(\\d+)\\s+(\\S+)$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js", "line": 491}
+{"pattern": "^[0-9]+[smhdw]?$", "flags": "i", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js", "line": 747}
+{"pattern": "^$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js", "line": 1143}
+{"pattern": "^$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js", "line": 1144}
+{"pattern": "^$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js", "line": 1145}
+{"pattern": "^$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js", "line": 1146}
+{"pattern": "^(0x)?[0-9a-fA-F]+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js", "line": 1284}
+{"pattern": "^br-([A-Za-z0-9_]+)$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js", "line": 1561}
+{"pattern": "^dev:(.+)$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js", "line": 1574}
+{"pattern": "^dev:", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js", "line": 1596}
+{"pattern": "^dev:(.+)$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js", "line": 1602}
+{"pattern": "^dev:(.+)$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js", "line": 1686}
+{"pattern": "^dev:", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js", "line": 1773}
+{"pattern": "^(\\d+)base", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js", "line": 1811}
+{"pattern": "^(\\d+)\\s+(\\S+)$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js", "line": 22}
+{"pattern": "^(\\d+)([tu]?)", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js", "line": 15}
+{"pattern": "%q", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js", "line": 63}
+{"pattern": "%q", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js", "line": 149}
+{"pattern": "%q", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js", "line": 170}
+{"pattern": "%q", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js", "line": 171}
+{"pattern": " Wireless Controller .+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js", "line": 124}
+{"pattern": " ", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js", "line": 215}
+{"pattern": "^EHT", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js", "line": 315}
+{"pattern": "EHT20|EHT40|EHT80|EHT160|EHT320", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js", "line": 512}
+{"pattern": "HE20|HE40|HE80|HE160", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js", "line": 514}
+{"pattern": "VHT20|VHT40|VHT80|VHT160", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js", "line": 516}
+{"pattern": "HT20|HT40", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js", "line": 518}
+{"pattern": "a", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js", "line": 528}
+{"pattern": "^[A-Z0-9][A-Z0-9]$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js", "line": 683}
+{"pattern": "^radio\\d+\\.network", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js", "line": 1256}
+{"pattern": "\\+", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js", "line": 1310}
+{"pattern": "\\+.+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js", "line": 1311}
+{"pattern": "\\+", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js", "line": 1351}
+{"pattern": "^[^+]+\\+", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js", "line": 1352}
+{"pattern": "^[0-9]+(:s:.+|:d:[0-9]+|:x:([0-9a-zA-Z]{2})+)?$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js", "line": 1756}
+{"pattern": "^[1234]$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js", "line": 1852}
+{"pattern": "%q", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js", "line": 2546}
+{"pattern": "[EV]*H[TE]", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-status/htdocs/luci-static/resources/view/status/channel_analysis.js", "line": 230}
+{"pattern": "^([\\w-]+)\\s+(\\d+)\\/(\\w+)", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js", "line": 140}
+{"pattern": "\\n", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-status/htdocs/luci-static/resources/view/status/dmesg.js", "line": 44}
+{"pattern": "^<(\\w+)>", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-status/htdocs/luci-static/resources/view/status/dmesg.js", "line": 45}
+{"pattern": "^<\\w+>", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-status/htdocs/luci-static/resources/view/status/dmesg.js", "line": 50}
+{"pattern": "^\\[\\s*(\\d+(?:\\.\\d+)?)\\]", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-status/htdocs/luci-static/resources/view/status/dmesg.js", "line": 51}
+{"pattern": "^(.+)\\.([^.]+)$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/29_ports.js", "line": 31}
+{"pattern": "^[0-9]{1,4}$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/29_ports.js", "line": 42}
+{"pattern": "^[0-9]{1,4}$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/29_ports.js", "line": 62}
+{"pattern": ":[ut*]+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/29_ports.js", "line": 72}
+{"pattern": "\\/128$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js", "line": 63}
+{"pattern": " ", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js", "line": 35}
+{"pattern": "^Generic | Wireless Controller .+$", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js", "line": 178}
+{"pattern": "\\.js$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js", "line": 102}
+{"pattern": "\\.js$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js", "line": 104}
+{"pattern": "^\\[ViewStatusInclude\\d+_(.+)Class\\]$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js", "line": 120}
+{"pattern": "(^|_)(.)", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js", "line": 121}
+{"pattern": "-", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js", "line": 32}
+{"pattern": "([^\\n]*)\\n", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js", "line": 106}
+{"pattern": "^Chain (.+) \\(policy (\\w+) (\\d+) packets, (\\d+) bytes\\)$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js", "line": 111}
+{"pattern": "^Chain (.+) \\((\\d+) references\\)$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js", "line": 123}
+{"pattern": "^num ", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js", "line": 133}
+{"pattern": "^(\\d+) +(\\d+) +(\\d+) +(.*?) +(\\S+) +(\\S*) +(\\S+) +(\\S+) +(!?[a-f0-9:.]+(?:\\/[a-f0-9:.]+)?) +(!?[a-f0-9:.]+(?:\\/[a-f0-9:.]+)?) +(.+)$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js", "line": 136}
+{"pattern": "(?:^| )\\/\\* (.+) \\*\\/", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js", "line": 149}
+{"pattern": "^!fw3(: |$)", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js", "line": 151}
+{"pattern": "^@", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js", "line": 542}
+{"pattern": "^!fw4: ", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js", "line": 572}
+{"pattern": "^flow add (@\\S+)$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js", "line": 588}
+{"pattern": "\\n-A ", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js", "line": 798}
+{"pattern": "\\n-A ", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js", "line": 798}
+{"pattern": "\\n", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js", "line": 88}
+{"pattern": "^([0-9a-f:.]+) (.+) (\\S+) *$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js", "line": 89}
+{"pattern": "\\s+", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js", "line": 90}
+{"pattern": "^fe[89a-f][0-9a-f]:", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js", "line": 93}
+{"pattern": "\\n", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js", "line": 123}
+{"pattern": "^(?:([a-z_]+|\\d+) )?(default|[0-9a-f:.\\/]+) (.+)$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js", "line": 124}
+{"pattern": "\\s+", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js", "line": 126}
+{"pattern": "^(\\d+):\\s+(.+)$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js", "line": 152}
+{"pattern": "^fe[89a-f][0-9a-f]:", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-status/htdocs/luci-static/resources/view/status/routesj.js", "line": 98}
+{"pattern": "\\r\\n", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-system/htdocs/luci-static/resources/view/system/crontab.js", "line": 14}
+{"pattern": "\\n", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js", "line": 21}
+{"pattern": "^mtd\\d+: ([0-9a-f]+) [0-9a-f]+ \"(.+)\"$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js", "line": 22}
+{"pattern": "\\n", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js", "line": 51}
+{"pattern": "^\\s*\\d+\\s+\\d+\\s+(\\d+)\\s+(\\S+)$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js", "line": 52}
+{"pattern": "\\d", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js", "line": 56}
+{"pattern": "([^a-zA-Z0-9]+)", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js", "line": 175}
+{"pattern": "\\n", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js", "line": 355}
+{"pattern": "\\r\\n", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js", "line": 368}
+{"pattern": "\"rootfs_data\"", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js", "line": 378}
+{"pattern": "\\n", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js", "line": 415}
+{"pattern": "^mtd(\\d+): .+ \"(.+?)\"$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js", "line": 416}
+{"pattern": "^(.+)\\.js$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js", "line": 23}
+{"pattern": "\\S", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js", "line": 110}
+{"pattern": "^nodev\\t", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js", "line": 110}
+{"pattern": "\\S", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js", "line": 114}
+{"pattern": "^\\/(overlay|rom|tmp(?:\\/.+)?|dev(?:\\/.+)?|)$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js", "line": 184}
+{"pattern": "^\\/dev\\/(mtdblock|ubi|ubiblock)\\d", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js", "line": 344}
+{"pattern": "^\\/dev\\/(mtdblock|ubi|ubiblock)\\d", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js", "line": 360}
+{"pattern": "^\\/dev\\/(mtdblock|ubi|ubiblock)\\d", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js", "line": 375}
+{"pattern": "^(?=.{8,})(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*\\W).*$", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-system/htdocs/luci-static/resources/view/system/password.js", "line": 32}
+{"pattern": "^(?=.{7,})(((?=.*[A-Z])(?=.*[a-z]))|((?=.*[A-Z])(?=.*[0-9]))|((?=.*[a-z])(?=.*[0-9]))).*$", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-system/htdocs/luci-static/resources/view/system/password.js", "line": 33}
+{"pattern": "(?=.{6,}).*", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-system/htdocs/luci-static/resources/view/system/password.js", "line": 34}
+{"pattern": ":", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-system/htdocs/luci-static/resources/view/system/password.js", "line": 86}
+{"pattern": "\\.js$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-system/htdocs/luci-static/resources/view/system/plugins.js", "line": 19}
+{"pattern": "\\.js$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-system/htdocs/luci-static/resources/view/system/plugins.js", "line": 21}
+{"pattern": "^openwrt-[0-9]+\\.[0-9]+", "flags": "i", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js", "line": 26}
+{"pattern": "^openwrt-snapshots", "flags": "i", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js", "line": 28}
+{"pattern": "\\s+", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js", "line": 35}
+{"pattern": "-BEGIN ([A-Z ]+)?PUBLIC KEY-", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js", "line": 89}
+{"pattern": "^https?:\\/\\/\\S+$", "flags": "i", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js", "line": 112}
+{"pattern": "\\.[^.]+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js", "line": 141}
+{"pattern": "^((?:(?:^|,)[^ =,]+(?:=(?:[^ \",]+|\"(?:[^\"\\\\]|\\\\.)*\"))?)+ +)?(ssh-dss|ssh-rsa|ssh-ed25519|ecdsa-sha2-nistp[0-9]+|sk-ecdsa-sha2-nistp256@openssh\\.com|sk-ssh-ed25519@openssh\\.com) +([^ ]+)( +.*)?$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js", "line": 25}
+{"pattern": "^nistp(\\d+)$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js", "line": 61}
+{"pattern": "(?:^|,)([^ =,]+)(?:=(?:([^ \",]+)|\"((?:[^\"\\\\]|\\\\.)*)\"))?", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js", "line": 80}
+{"pattern": "[\"\\\\]", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js", "line": 187}
+{"pattern": "\\r\\n", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "modules/luci-mod-system/htdocs/luci-static/resources/view/system/startup.js", "line": 50}
+{"pattern": "^[A-Z2-7]+=*$", "flags": "i", "dialect": "ecma", "shell_flags": null, "file": "plugins/luci-plugin-2fa/root/www/luci-static/resources/view/plugins/bb4ea47fcffb44ec9bb3d3673c9b4ed2.js", "line": 93}
+{"pattern": "\\s", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "plugins/luci-plugin-2fa/root/www/luci-static/resources/view/plugins/bb4ea47fcffb44ec9bb3d3673c9b4ed2.js", "line": 93}
+{"pattern": "^tty[A-Z]", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js", "line": 15}
+{"pattern": "^cdc-wdm", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js", "line": 15}
+{"pattern": "^[0-9]+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js", "line": 15}
+{"pattern": "^3g-.+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js", "line": 21}
+{"pattern": "^[a-zA-Z0-9\\-.]*[a-zA-Z0-9]$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js", "line": 100}
+{"pattern": "^(\\d+)[ ,]\\d+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js", "line": 138}
+{"pattern": "^\\d+[ ,](\\d+)$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js", "line": 151}
+{"pattern": "^bat\\d+", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js", "line": 6}
+{"pattern": "^bat.+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv_hardif.js", "line": 6}
+{"pattern": "^bat\\d_\\d+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv_vlan.js", "line": 7}
+{"pattern": "^gre4-.+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js", "line": 6}
+{"pattern": "^[a-f0-9]{1,2}$", "flags": "i", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js", "line": 77}
+{"pattern": "^inherit$", "flags": "i", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js", "line": 77}
+{"pattern": "^gre4t-.+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js", "line": 6}
+{"pattern": "^[a-f0-9]{1,2}$", "flags": "i", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js", "line": 82}
+{"pattern": "^inherit$", "flags": "i", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js", "line": 82}
+{"pattern": "^gre6-.+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6.js", "line": 6}
+{"pattern": "^[a-f0-9]{1,2}$", "flags": "i", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6.js", "line": 82}
+{"pattern": "^inherit$", "flags": "i", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6.js", "line": 82}
+{"pattern": "^gre6t-.+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js", "line": 6}
+{"pattern": "^[a-f0-9]{1,2}$", "flags": "i", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js", "line": 87}
+{"pattern": "^inherit$", "flags": "i", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js", "line": 87}
+{"pattern": "^ipip-.+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-ipip/htdocs/luci-static/resources/protocol/ipip.js", "line": 6}
+{"pattern": "^464-.+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/464xlat.js", "line": 6}
+{"pattern": "^6in4-.+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/6in4.js", "line": 6}
+{"pattern": "^[a-fA-F0-9]{32}$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/6in4.js", "line": 76}
+{"pattern": "^6rd-.+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/6rd.js", "line": 5}
+{"pattern": "^6to4-.+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/6to4.js", "line": 5}
+{"pattern": "^ds-.+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dslite.js", "line": 6}
+{"pattern": "^ipip6-.+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/ipip6.js", "line": 6}
+{"pattern": "^map-.+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/map.js", "line": 6}
+{"pattern": "^cdc-wdm", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js", "line": 14}
+{"pattern": "^mbim-.+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js", "line": 20}
+{"pattern": "^[a-zA-Z0-9\\-.]*[a-zA-Z0-9]$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js", "line": 68}
+{"pattern": "^mobiledata-.+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js", "line": 7}
+{"pattern": "^[a-zA-Z0-9\\-.]*[a-zA-Z0-9]$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js", "line": 70}
+{"pattern": "^ttyUSB", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js", "line": 14}
+{"pattern": "^cdc-wdm", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js", "line": 14}
+{"pattern": "^ncm-.+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js", "line": 20}
+{"pattern": "^[a-zA-Z0-9\\-.]*[a-zA-Z0-9]$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js", "line": 96}
+{"pattern": "^vpn-.+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js", "line": 21}
+{"pattern": "\\r?\\n", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js", "line": 32}
+{"pattern": "\\n$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js", "line": 34}
+{"pattern": "^-----BEGIN (RSA )?PRIVATE KEY-----$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js", "line": 44}
+{"pattern": "^-----BEGIN CERTIFICATE-----$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js", "line": 44}
+{"pattern": "^-----END (RSA )?PRIVATE KEY-----$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js", "line": 45}
+{"pattern": "^-----END CERTIFICATE-----$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js", "line": 45}
+{"pattern": "[\\r\\n]", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js", "line": 46}
+{"pattern": "^(?:[A-Za-z0-9+\\/]{4})*(?:[A-Za-z0-9+\\/]{2}==|[A-Za-z0-9+\\/]{3}=)?$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js", "line": 47}
+{"pattern": "^(?:(\\w+):\\/\\/|)(?:\\[([0-9a-f:.]{2,45})\\]|([^/:]+))(?::([0-9]{1,5}))?(?:\\/.*)?$", "flags": "i", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js", "line": 106}
+{"pattern": "^(?:https|socks|socks4|socks5)$", "flags": "i", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js", "line": 112}
+{"pattern": "^[a-zA-Z0-9_]+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js", "line": 124}
+{"pattern": "^[a-zA-Z0-9_][a-zA-Z0-9_\\-.]*[a-zA-Z0-9]$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js", "line": 125}
+{"pattern": "[^0-9.]", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js", "line": 126}
+{"pattern": "^vpn-.+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js", "line": 21}
+{"pattern": "\\r\\n?", "flags": "g", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js", "line": 32}
+{"pattern": "\\n$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js", "line": 34}
+{"pattern": "[\\r\\n]", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js", "line": 41}
+{"pattern": "^-{5}BEGIN ((|RSA |DSA )PRIVATE KEY|(|TRUSTED |X509 )CERTIFICATE)-{5}$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js", "line": 49}
+{"pattern": "^(?:[A-Za-z0-9+\\/]{4})*(?:[A-Za-z0-9+\\/]{2}==|[A-Za-z0-9+\\/]{3}=)?$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js", "line": 51}
+{"pattern": "^-{5}END ((|RSA |DSA )PRIVATE KEY|(|TRUSTED |X509 )CERTIFICATE)-{5}$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js", "line": 55}
+{"pattern": "[1-3]", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js", "line": 355}
+{"pattern": "[1-3]", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js", "line": 363}
+{"pattern": "[1-3]", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js", "line": 371}
+{"pattern": "[1-3]", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js", "line": 379}
+{"pattern": "[1-3]", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js", "line": 387}
+{"pattern": "[1-3]", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js", "line": 395}
+{"pattern": "[1-3]", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js", "line": 403}
+{"pattern": "[1-3]", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js", "line": 411}
+{"pattern": "[1-3]", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js", "line": 419}
+{"pattern": "[1-3]", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js", "line": 427}
+{"pattern": "[1-3]", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js", "line": 435}
+{"pattern": "[1-3]", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js", "line": 443}
+{"pattern": "[1-3]", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js", "line": 451}
+{"pattern": "[1-3]", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js", "line": 459}
+{"pattern": "[1-3]", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js", "line": 467}
+{"pattern": "[1-3]", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js", "line": 475}
+{"pattern": "^openvpn-.+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js", "line": 1621}
+{"pattern": "^l2tp-.+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/l2tp.js", "line": 6}
+{"pattern": "^tty[A-Z]", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/ppp.js", "line": 15}
+{"pattern": "^cdc-wdm", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/ppp.js", "line": 15}
+{"pattern": "^[0-9]+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/ppp.js", "line": 15}
+{"pattern": "^ppp-.+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/ppp.js", "line": 21}
+{"pattern": "^(\\d+)[ ,]\\d+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/ppp.js", "line": 120}
+{"pattern": "^\\d+[ ,](\\d+)$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/ppp.js", "line": 133}
+{"pattern": "^pppoa-.+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoa.js", "line": 6}
+{"pattern": "^(\\d+)[ ,]\\d+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoa.js", "line": 106}
+{"pattern": "^\\d+[ ,](\\d+)$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoa.js", "line": 119}
+{"pattern": "^pppoe-.+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoe.js", "line": 6}
+{"pattern": "^(\\d+)[ ,]\\d+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoe.js", "line": 86}
+{"pattern": "^\\d+[ ,](\\d+)$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoe.js", "line": 99}
+{"pattern": "^pptp-.+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pptp.js", "line": 6}
+{"pattern": "^(\\d+)[ ,]\\d+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pptp.js", "line": 93}
+{"pattern": "^\\d+[ ,](\\d+)$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pptp.js", "line": 106}
+{"pattern": "^pppossh-.+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-pppossh/htdocs/luci-static/resources/protocol/pppossh.js", "line": 6}
+{"pattern": "^(\\d+)[ ,]\\d+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-pppossh/htdocs/luci-static/resources/protocol/pppossh.js", "line": 106}
+{"pattern": "^\\d+[ ,](\\d+)$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-pppossh/htdocs/luci-static/resources/protocol/pppossh.js", "line": 119}
+{"pattern": "^cdc-wdm", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js", "line": 14}
+{"pattern": "^qmi-.+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js", "line": 20}
+{"pattern": "^[a-zA-Z0-9\\-.]*[a-zA-Z0-9]$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js", "line": 72}
+{"pattern": "^relay-.+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-relay/htdocs/luci-static/resources/protocol/relay.js", "line": 7}
+{"pattern": "^sstp-.+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-sstp/htdocs/luci-static/resources/protocol/sstp.js", "line": 5}
+{"pattern": "^vpn-.+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js", "line": 5}
+{"pattern": "^vti-.+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-vti/htdocs/luci-static/resources/protocol/vti.js", "line": 6}
+{"pattern": "^vxlan-.+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js", "line": 7}
+{"pattern": "^inherit$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js", "line": 152}
+{"pattern": "^(22[4-9]|23[0-9])(\\.\\d{1,3}){3}$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js", "line": 236}
+{"pattern": "^ff[0-9a-fA-F]{0,2}:.*", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js", "line": 237}
+{"pattern": "^vxlan-.+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js", "line": 7}
+{"pattern": "^inherit$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js", "line": 152}
+{"pattern": "^(22[4-9]|23[0-9])(\\.\\d{1,3}){3}$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js", "line": 236}
+{"pattern": "^ff[0-9a-fA-F]{0,2}:.*", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js", "line": 237}
+{"pattern": "^(?:[A-Za-z0-9+\\/]{4})*(?:[A-Za-z0-9+\\/]{2}==|[A-Za-z0-9+\\/]{3}=)?$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js", "line": 37}
+{"pattern": "^0x[a-fA-F0-9]{1,8}$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js", "line": 179}
+{"pattern": "(\\r?\\n)+", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js", "line": 232}
+{"pattern": "#.*$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js", "line": 238}
+{"pattern": "^\\[(\\w+)\\]$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js", "line": 240}
+{"pattern": "^(\\w+)\\s*=\\s*(.+)$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js", "line": 248}
+{"pattern": "[, ]+", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js", "line": 258}
+{"pattern": "[, ]+", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js", "line": 266}
+{"pattern": "[, ]+", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js", "line": 287}
+{"pattern": "^\\[([a-fA-F0-9:]+)\\]:(\\d+)$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js", "line": 298}
+{"pattern": "^(.+):(\\d+)$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js", "line": 298}
+{"pattern": "^(.{5}).+(.{6})$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js", "line": 531}
+{"pattern": "^(.{5}).+(.{6})$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-wireguard/htdocs/luci-static/resources/view/wireguard/status.js", "line": 112}
+{"pattern": "^yggdrasil-.+$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js", "line": 8}
+{"pattern": "^([0-9a-fA-F]){128}$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js", "line": 14}
+{"pattern": "^([0-9a-fA-F]){64}$", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js", "line": 27}
+{"pattern": "^(tls|tcp|quic|unix|ws):\\/\\/", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js", "line": 36}
+{"pattern": "^(tls|tcp|quic|socks|sockstls|unix|ws|wss):\\/\\/", "flags": "", "dialect": "ecma", "shell_flags": null, "file": "protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js", "line": 42}
