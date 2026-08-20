@@ -10,7 +10,7 @@ import pytest
 
 from regexproof.mine.ledger import empty_ledger
 from regexproof.mine.search import SearchRunResult
-from regexproof.mine.tree import TreeCache, materialize_tree_features
+from regexproof.mine.tree import TreeCache, _repo_slug, materialize_tree_features
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -99,6 +99,85 @@ def test_tree_probe_uses_probed_pin_and_budget(tmp_path: Path):
     assert cached_calls == 0
     assert second_session.urls == []
     assert cached[("https://github.com/acme/tool", "PROBED")]["complete"] is True
+
+
+def test_repo_slug_normalizes_url_variants():
+    assert _repo_slug("https://github.com/Acme/Tool.git") == "acme/tool"
+    assert _repo_slug("http://github.com/acme/tool") == "acme/tool"
+    assert _repo_slug("github.com/Acme/Tool") == "acme/tool"
+    assert _repo_slug("www.github.com/acme/tool") == "acme/tool"
+    assert _repo_slug("acme/tool") == "acme/tool"
+    assert _repo_slug("git@github.com:acme/tool.git") == "acme/tool"
+    assert _repo_slug("") == ""
+    # Incomplete substring must not treat github.com.evil.com as github.com.
+    assert _repo_slug("https://github.com.evil.com/acme/tool") == ""
+    assert _repo_slug("git@gitlab.com:owner/repo") == ""
+    assert _repo_slug("git@github.com.evil.com:owner/repo") == ""
+
+
+def test_tree_probe_slug_from_http_and_host_prefix(tmp_path: Path):
+    session = _Session(
+        [
+            _Response(
+                200,
+                {
+                    "truncated": False,
+                    "tree": [{"path": "src/sanitizer.py", "type": "blob"}],
+                },
+            ),
+            _Response(
+                200,
+                {
+                    "truncated": False,
+                    "tree": [{"path": "src/sanitizer.py", "type": "blob"}],
+                },
+            ),
+        ]
+    )
+    cache = TreeCache(tmp_path / "tree.json")
+    features, calls = materialize_tree_features(
+        session,
+        [
+            {"url": "http://github.com/Acme/Tool.git", "pin_probed": "HEAD"},
+            {"url": "github.com/acme/other", "pin_probed": "PIN"},
+        ],
+        budget=2,
+        cache=cache,
+    )
+    assert calls == 2
+    assert session.urls == [
+        "https://api.github.com/repos/acme/tool/git/trees/HEAD",
+        "https://api.github.com/repos/acme/other/git/trees/PIN",
+    ]
+    assert features[("https://github.com/acme/tool", "HEAD")]["complete"] is True
+    assert features[("https://github.com/acme/other", "PIN")]["complete"] is True
+
+
+def test_tree_probe_skips_foreign_hosts(tmp_path: Path):
+    session = _Session([])
+    features, calls = materialize_tree_features(
+        session,
+        [
+            {
+                "url": "git@gitlab.com:lucas-albers-lz4/regexproof",
+                "pin_probed": "HEAD",
+            },
+            {
+                "url": "git@github.com.evil.com:acme/tool",
+                "pin_probed": "HEAD",
+            },
+        ],
+        budget=2,
+        cache=TreeCache(tmp_path / "tree.json"),
+    )
+    assert calls == 0
+    assert session.urls == []
+    gitlab = features[("https://gitlab.com/lucas-albers-lz4/regexproof", "HEAD")]
+    evil = features[("https://github.com.evil.com/acme/tool", "HEAD")]
+    assert gitlab["complete"] is False
+    assert gitlab["reason"] == "non-github-host"
+    assert evil["complete"] is False
+    assert evil["reason"] == "non-github-host"
 
 
 def test_truncated_tree_contributes_no_signal(tmp_path: Path):

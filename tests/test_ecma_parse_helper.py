@@ -85,6 +85,13 @@ def test_plain_slash_pattern_parses():
     assert r.get("ok") is True
 
 
+def test_match_helper_keeps_metacharacter_semantics():
+    """Guard: match.mjs must compile argv as a regex, not an escaped literal."""
+    assert _matches("a.b", "axb")
+    assert not _matches("a.b", "ab")
+    assert _matches("a+", "aaa")
+
+
 def test_escaped_slash_roundtrip_meaning():
     r"""Real-engine replay: `\/` denotes a plain slash; `\\/` denotes backslash+slash."""
     assert _matches(r"\/", "/")

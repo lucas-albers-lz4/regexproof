@@ -153,6 +153,26 @@ def test_exclusions_owner_ledger_admitted(tmp_path: Path):
     assert any("gitleaks" in u for u in real)
 
 
+def test_exclusions_owner_schemeless_host_prefix():
+    """Schemeless github.com/owner/... must not parse the host as the owner."""
+    assert (
+        is_excluded("github.com/lucas-albers-lz4/regexproof")
+        == "excluded-owner:lucas-albers-lz4"
+    )
+    assert (
+        is_excluded("www.github.com/lucas-albers-lz4/regexproof")
+        == "excluded-owner:lucas-albers-lz4"
+    )
+    assert is_excluded("github.com/other/ok") is None
+    assert is_excluded("www.github.com/other/ok") is None
+    assert is_excluded("git@github.com:lucas-albers-lz4/regexproof") == (
+        "excluded-owner:lucas-albers-lz4"
+    )
+    # Foreign hosts must not use the GitHub owner allowlist.
+    assert is_excluded("git@gitlab.com:lucas-albers-lz4/regexproof") is None
+    assert is_excluded("git@github.com.evil.com:lucas-albers-lz4/regexproof") is None
+
+
 def test_search_401_fail_fast():
     session = FakeSession([FakeResp(401, text="bad creds")])
     with pytest.raises(AuthError):
@@ -416,6 +436,31 @@ def test_normalize_url_scheme_and_git_suffix():
     a = normalize_repo_url("http://github.com/Acme/Tool.git")
     b = normalize_repo_url("https://github.com/acme/tool")
     assert a == b == "https://github.com/acme/tool"
+
+
+def test_normalize_url_schemeless_host_and_slug():
+    want = "https://github.com/acme/tool"
+    assert normalize_repo_url("github.com/acme/tool") == want
+    assert normalize_repo_url("github.com/Acme/Tool.git") == want
+    assert normalize_repo_url("www.github.com/acme/tool") == want
+    assert normalize_repo_url("acme/tool") == want
+    assert normalize_repo_url("git@github.com:Acme/Tool.git") == want
+    # Host-suffix bypass: github.com.evil.com is not github.com.
+    assert (
+        normalize_repo_url("https://github.com.evil.com/acme/tool")
+        == "https://github.com.evil.com/acme/tool"
+    )
+
+
+def test_normalize_url_ssh_foreign_hosts_are_not_github():
+    """git@ on a non-github host must not collapse to https://github.com/..."""
+    gitlab = normalize_repo_url("git@gitlab.com:owner/repo")
+    evil = normalize_repo_url("git@github.com.evil.com:owner/repo")
+    assert gitlab == "https://gitlab.com/owner/repo"
+    assert evil == "https://github.com.evil.com/owner/repo"
+    assert gitlab != "https://github.com/owner/repo"
+    assert evil != "https://github.com/owner/repo"
+    assert normalize_repo_url("git@github.com:owner/repo") == "https://github.com/owner/repo"
 
 
 def test_run_search_dedupes_across_queries():

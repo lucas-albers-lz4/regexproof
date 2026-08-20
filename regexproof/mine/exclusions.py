@@ -16,41 +16,62 @@ EXCLUDE_OWNERS = frozenset(
     }
 )
 
+_GITHUB_HOSTS = frozenset({"github.com", "www.github.com"})
+
+
+def github_repo_slug(url: str) -> str:
+    """Return ``owner/repo`` for github.com URLs/slugs; otherwise ``""``.
+
+    Uses the parsed hostname of ``normalize_repo_url`` (not a substring check)
+    so schemeless ``github.com/owner/repo`` works and ``gitlab.com`` /
+    ``github.com.evil.com`` do not.
+    """
+    parsed = urlparse(normalize_repo_url(str(url or "")))
+    if (parsed.hostname or "").lower() not in _GITHUB_HOSTS:
+        return ""
+    parts = [p for p in parsed.path.split("/") if p]
+    if len(parts) < 2:
+        return ""
+    return f"{parts[0]}/{parts[1]}"
+
 
 def _owner_from_url(url: str) -> str | None:
-    # https://github.com/owner/repo or git@github.com:owner/repo.git
-    if url.startswith("git@"):
-        try:
-            path = url.split(":", 1)[1]
-            return path.split("/")[0].lower()
-        except IndexError:
-            return None
-    parsed = urlparse(url)
-    parts = [p for p in parsed.path.split("/") if p]
-    if len(parts) >= 1:
-        return parts[0].lower().removesuffix(".git")
-    return None
+    """Return the GitHub owner, or None for non-github hosts."""
+    slug = github_repo_slug(url)
+    return slug.split("/", 1)[0] if slug else None
 
 
 def normalize_repo_url(url: str) -> str:
-    """Canonical https://github.com/owner/repo form (scheme/host/.git tolerant)."""
+    """Canonical https://host/owner/repo form (scheme/host/.git tolerant).
+
+    Only ``github.com`` / ``www.github.com`` collapse to ``https://github.com/...``.
+    Other SSH/HTTP hosts keep their own hostname.
+    """
     u = url.strip()
     if u.startswith("git@"):
-        try:
-            path = u.split(":", 1)[1]
-        except IndexError:
+        if ":" not in u:
             return u.lower()
+        host_part, path = u.split(":", 1)
+        host = host_part.removeprefix("git@").lower()
         parts = [p for p in path.split("/") if p]
         if len(parts) >= 2:
             owner, repo = parts[0], parts[1].removesuffix(".git")
-            return f"https://github.com/{owner}/{repo}".lower()
+            if host in _GITHUB_HOSTS:
+                return f"https://github.com/{owner}/{repo}".lower()
+            return f"https://{host}/{owner}/{repo}".lower()
         return path.removesuffix(".git").lower()
+    if "://" not in u:
+        head = u.split("/", 1)[0]
+        # Schemeless host/path (github.com/owner/repo): give urlparse a host.
+        # Bare owner/repo slugs have no dot in the first segment.
+        if "." in head:
+            u = "https://" + u
     parsed = urlparse(u)
     host = (parsed.hostname or "").lower()
     parts = [p for p in parsed.path.split("/") if p]
     if len(parts) >= 2:
         owner, repo = parts[0], parts[1].removesuffix(".git")
-        if host in {"github.com", "www.github.com"} or not host:
+        if host in _GITHUB_HOSTS or not host:
             return f"https://github.com/{owner}/{repo}".lower()
         return f"https://{host}/{owner}/{repo}".lower()
     fallback = u.rstrip("/")
