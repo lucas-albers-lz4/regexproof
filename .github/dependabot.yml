@@ -3,6 +3,13 @@
 # Security updates still surface via the repo setting; this file only gates
 # routine version-update PRs (none by default: open-pull-requests-limit 0).
 #
+# Cooldown policy: the Dependabot 3-day default is DELIBERATE (#522). The
+# cooldown only spaces out routine version-update PRs; security updates open
+# immediately (they patch public vulnerabilities), so a longer window adds no
+# security benefit here. zizmor's dependabot-cooldown finding (recommends
+# >= 7 days) is a known, accepted deviation — do not "fix" by adding a
+# cooldown block without revisiting #522.
+#
 # Docs:
 # https://docs.github.com/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
 
