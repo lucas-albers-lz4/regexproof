@@ -155,24 +155,23 @@ def extract_corpus(corpus: str, meta: dict[str, Any]) -> list[dict[str, Any]]:
             out.extend(extract_js(text, repo=meta["repo"], file=rel))
         return out
     if meta["extractor"] == "js_precise_dir":
-        # Wave ecma path: Babel/comment-aware extract_js_precise (not legacy extract_js).
-        out: list[dict[str, Any]] = []
-        for name in meta.get("files") or sorted(p.name for p in path.glob("*.js")):
-            fp = path / name
-            if not fp.is_file():
-                raise SystemExit(f"HARD ERROR: missing js_precise_dir file: {fp}")
-            rel = str(fp.relative_to(ROOT))
-            text = _read_capped(fp, meta)
-            if text is None:
-                continue
-            out.extend(
-                extract_js_precise(
-                    text,
-                    repo=meta["repo"],
-                    file=rel,
-                )
-            )
-        return out
+        # Wave ecma path: Babel/comment-aware extract_js_precise (not legacy
+        # extract_js). Honor explicit ``files`` (existing corpora) or ``glob``
+        # for tree walks (LuCI htdocs). Default flat ``*.js`` preserves the
+        # pre-glob behavior when neither is set.
+        def _js_precise_fn(src: str, rel: str) -> list[dict[str, Any]]:
+            return extract_js_precise(src, repo=meta["repo"], file=rel)
+
+        def _not_minified(fp: Path) -> bool:
+            return not fp.name.endswith(".min.js")
+
+        return extract_glob(
+            path,
+            meta,
+            glob=str(meta.get("glob") or "*.js"),
+            extract_fn=_js_precise_fn,
+            file_filter=_not_minified,
+        )
     if meta["extractor"] == "js":
         source = _read_capped(path, meta)
         if source is None:

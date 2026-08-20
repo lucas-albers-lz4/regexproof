@@ -1,0 +1,45 @@
+{
+  "budget": {
+    "max_disk_mb": 2000,
+    "max_mem_mb": 2048,
+    "max_patterns": 5000,
+    "max_wall_s": 900,
+    "redos_wall_s": 180
+  },
+  "budget_breaches": null,
+  "commit": "77dad3f31405bc11f8384d742f7ad95314179694",
+  "compiler_fingerprint": "35ea1f238a9e",
+  "complete_run": true,
+  "corpus_pin": "77dad3f31405bc11f8384d742f7ad95314179694",
+  "decision": "go",
+  "decision_note": "1 unclassified parse-error rows \u2014 Phase 1 requires zero",
+  "decision_rule": "go iff encodable/sample_size >= 0.3",
+  "dialect": "ecma",
+  "encodable": 701,
+  "engine_versions": {
+    "python": "3.14.6",
+    "z3": "5.0.0"
+  },
+  "extractor_schema_version": "2",
+  "fraction": 0.7772,
+  "go_no_go_threshold": 0.3,
+  "id_formula": "v2-domain-optional-ascii-default",
+  "inventory_path": "properties/generated/openwrt_luci-inventory.ndjson",
+  "path": "batch/corpora/openwrt_luci/rules",
+  "pilot": "openwrt_luci",
+  "reasons": {
+    "backref": 2,
+    "composite-pattern": 12,
+    "internal-anchor": 1,
+    "ok": 701,
+    "parse-error": 1,
+    "per-alternative-anchor": 14,
+    "stateful": 169,
+    "word-boundary": 2
+  },
+  "sample_size": 902,
+  "schema_version": "1",
+  "scope": "full_corpus",
+  "unclassified_parse_errors": 1,
+  "wall_s": 20.941
+}

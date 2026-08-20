@@ -79,6 +79,29 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
             "max_disk_mb": 500,
         },
     },
+    "openwrt_luci": {
+        "corpus_type": "rule_corpus",
+        # Materialize: ln -sfn <clone> batch/corpora/openwrt_luci/rules
+        # openwrt/luci @ 77dad3f (895 ECMA htdocs sites). Conversion
+        # wave 1 (sweep/openwrt-luci-conversion/plan.md) — manifest only,
+        # NOT in WAVE_CORPORA. js_precise_dir + htdocs glob; skips *.min.js.
+        "path": ROOT / "batch" / "corpora" / "openwrt_luci" / "rules",
+        "glob": "**/htdocs/**/*.js,**/htdocs/**/*.mjs",
+        "dialect": "ecma",
+        "extractor": "js_precise_dir",
+        "repo": "openwrt/luci",
+        "security_tool": False,
+        "lift_inline": False,
+        "corpus_pin": "77dad3f31405bc11f8384d742f7ad95314179694",
+        "commit": "77dad3f31405bc11f8384d742f7ad95314179694",
+        "budget": {
+            "max_patterns": 5000,
+            "max_wall_s": 900,
+            "redos_wall_s": 180,
+            "max_mem_mb": 2048,
+            "max_disk_mb": 2000,
+        },
+    },
     "volatility3-mcp": {
         "corpus_type": "rule_corpus",
         # Materialize: ln -sfn /tmp/v3-check/rules batch/corpora/volatility3-mcp/rules

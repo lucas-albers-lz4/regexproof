@@ -36,7 +36,12 @@ the work by phase; dates are merge dates.
 - **2026-08-20:** packages cluster **stopped** (leftover keep-list flat).
   Next cluster started: LuCI (`sweep/openwrt-luci-conversion/`) — probe GO
   on `security-boundary`, 895 ECMA sites @ `77dad3f`, family `OW-luci`,
-  Node `RegExp` GT.
+  Node `RegExp` GT. Policy issue [#533](https://github.com/lucas-albers-lz4/regexproof/issues/533)
+  parks Smith batches 19–31 in favor of LuCI conversion.
+- Registered `openwrt_luci` as a manifest corpus (not `WAVE_CORPORA`):
+  `js_precise_dir` honors `glob` for nested `htdocs` trees, runtime gate
+  copy of the 2026-08-20 probe GO, batch + conversion-ledger regen
+  (902 extracted / 701 encodable).
 
 ## Conversion ledger (2026-08-15)
 
