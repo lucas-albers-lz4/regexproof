@@ -452,7 +452,7 @@ jobs:
           restore-keys: |
             lychee-${{ runner.os }}-
       - name: Check markdown links (required surface)
-        uses: lycheeverse/lychee-action@v2
+        uses: lycheeverse/lychee-action@e7477775783ea5526144ba13e8db5eec57747ce8 # v2
         with:
           # Real gate: fail on broken links (NO --no-fail).
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -477,7 +477,7 @@ jobs:
       pull-requests: read
     steps:
       - uses: actions/checkout@v5
-      - uses: dorny/paths-filter@v3
+      - uses: dorny/paths-filter@0e4a8c6effa4802afeda77dc8d303f8176d7dfad # v3
         id: filter
         with:
           filters: |
@@ -493,7 +493,7 @@ jobs:
             lychee-${{ runner.os }}-
       - name: Check corpus README links
         if: steps.filter.outputs.corpora_md == 'true'
-        uses: lycheeverse/lychee-action@v2
+        uses: lycheeverse/lychee-action@e7477775783ea5526144ba13e8db5eec57747ce8 # v2
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           fail: true
