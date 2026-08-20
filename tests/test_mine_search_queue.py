@@ -446,6 +446,17 @@ def test_normalize_url_schemeless_host_and_slug():
     )
 
 
+def test_normalize_url_ssh_foreign_hosts_are_not_github():
+    """git@ on a non-github host must not collapse to https://github.com/..."""
+    gitlab = normalize_repo_url("git@gitlab.com:owner/repo")
+    evil = normalize_repo_url("git@github.com.evil.com:owner/repo")
+    assert gitlab == "https://gitlab.com/owner/repo"
+    assert evil == "https://github.com.evil.com/owner/repo"
+    assert gitlab != "https://github.com/owner/repo"
+    assert evil != "https://github.com/owner/repo"
+    assert normalize_repo_url("git@github.com:owner/repo") == "https://github.com/owner/repo"
+
+
 def test_run_search_dedupes_across_queries():
     items = {
         "total_count": 1,

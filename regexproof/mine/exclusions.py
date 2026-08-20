@@ -16,6 +16,8 @@ EXCLUDE_OWNERS = frozenset(
     }
 )
 
+_GITHUB_HOSTS = frozenset({"github.com", "www.github.com"})
+
 
 def _owner_from_url(url: str) -> str | None:
     """Return the GitHub owner from a URL, slug, or schemeless host/path.
@@ -31,17 +33,23 @@ def _owner_from_url(url: str) -> str | None:
 
 
 def normalize_repo_url(url: str) -> str:
-    """Canonical https://github.com/owner/repo form (scheme/host/.git tolerant)."""
+    """Canonical https://host/owner/repo form (scheme/host/.git tolerant).
+
+    Only ``github.com`` / ``www.github.com`` collapse to ``https://github.com/...``.
+    Other SSH/HTTP hosts keep their own hostname.
+    """
     u = url.strip()
     if u.startswith("git@"):
-        try:
-            path = u.split(":", 1)[1]
-        except IndexError:
+        if ":" not in u:
             return u.lower()
+        host_part, path = u.split(":", 1)
+        host = host_part.removeprefix("git@").lower()
         parts = [p for p in path.split("/") if p]
         if len(parts) >= 2:
             owner, repo = parts[0], parts[1].removesuffix(".git")
-            return f"https://github.com/{owner}/{repo}".lower()
+            if host in _GITHUB_HOSTS:
+                return f"https://github.com/{owner}/{repo}".lower()
+            return f"https://{host}/{owner}/{repo}".lower()
         return path.removesuffix(".git").lower()
     if "://" not in u:
         head = u.split("/", 1)[0]
@@ -54,7 +62,7 @@ def normalize_repo_url(url: str) -> str:
     parts = [p for p in parsed.path.split("/") if p]
     if len(parts) >= 2:
         owner, repo = parts[0], parts[1].removesuffix(".git")
-        if host in {"github.com", "www.github.com"} or not host:
+        if host in _GITHUB_HOSTS or not host:
             return f"https://github.com/{owner}/{repo}".lower()
         return f"https://{host}/{owner}/{repo}".lower()
     fallback = u.rstrip("/")

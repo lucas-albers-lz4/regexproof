@@ -111,6 +111,8 @@ def test_repo_slug_normalizes_url_variants():
     assert _repo_slug("") == ""
     # Incomplete substring must not treat github.com.evil.com as github.com.
     assert _repo_slug("https://github.com.evil.com/acme/tool") != "acme/tool"
+    assert _repo_slug("git@gitlab.com:owner/repo") != "owner/repo"
+    assert _repo_slug("git@github.com.evil.com:owner/repo") != "owner/repo"
 
 
 def test_tree_probe_slug_from_http_and_host_prefix(tmp_path: Path):
