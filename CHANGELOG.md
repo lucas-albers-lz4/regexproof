@@ -33,6 +33,10 @@ the work by phase; dates are merge dates.
 - Idiom-sliced waves: a large feed may run further serial 15/5 waves when
   the close-out names an unused bucket (`docs/CLUSTER-CONVERSION.md`,
   `.cursor/rules/cluster-conversion-waves.mdc`). Still no coverage climb.
+- **2026-08-20:** packages cluster **stopped** (leftover keep-list flat).
+  Next cluster started: LuCI (`sweep/openwrt-luci-conversion/`) — probe GO
+  on `security-boundary`, 895 ECMA sites @ `77dad3f`, family `OW-luci`,
+  Node `RegExp` GT.
 
 ## Conversion ledger (2026-08-15)
 
