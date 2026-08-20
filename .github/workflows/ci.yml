@@ -143,7 +143,7 @@ jobs:
       - uses: actions/setup-go@v5
         with:
           go-version: "1.22"
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
           node-version: "22"
       - name: Install JS helper deps
@@ -288,7 +288,7 @@ jobs:
       - uses: actions/setup-go@v5
         with:
           go-version: "1.22"
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
           node-version: "22"
       - name: Install JS helper deps
@@ -381,7 +381,7 @@ jobs:
       - uses: actions/setup-python@v6
         with:
           python-version: "3.13"
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
           node-version: "22"
       - name: Install JS ReDoS helpers (pinned)
@@ -442,7 +442,7 @@ jobs:
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v5
-      - uses: actions/cache@v4
+      - uses: actions/cache@v5
         with:
           path: .lycheecache
           # Include all markdown: required job still scans helpers/** and
@@ -483,7 +483,7 @@ jobs:
           filters: |
             corpora_md:
               - 'batch/corpora/**/*.md'
-      - uses: actions/cache@v4
+      - uses: actions/cache@v5
         if: steps.filter.outputs.corpora_md == 'true'
         with:
           path: .lycheecache
