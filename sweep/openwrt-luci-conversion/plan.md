@@ -94,43 +94,29 @@ From [`probe.md`](probe.md) and
 - Index links in `AGENTS.md` / README only if needed for discoverability
   (keep diff small).
 
-### P1 — Probe (Gate 0)
+### P1 — Runtime gate + manifest + batch (scan, not prove)
 
-- Clone `openwrt/luci` @ pin (`max_disk_mb` may exceed 500 — LuCI is ~550 MB
-  GitHub size; record actual `du` after walk materialization).
-- Count JS regex sites with
-  `scripts/dogfood-singleton-analysis.py --dir <clone> --name openwrt-luci
-  --ext js --ext mjs --ndjson` (or equivalent precise walk restricted to
-  `htdocs`).
-- Emit probe decision JSON + short `probe.md` (sites, density, dialect,
-  boundary, GO/NO-GO with evidence).
-- **Stop** if testdata-only, fork of admitted parent, or
-  `deterministic-false` with no escape hatch.
-
-### P2 — Manifest + batch (scan, not prove)
-
+- Runtime gate file for `check_admission_gates` (probe copy + `related` xref).
 - Register `openwrt_luci` in `CORPUS_MANIFESTS` (`extractor: js_precise_dir`,
-  `dialect: ecma`, `security_tool: false`).
-- Runtime gate file for `check_admission_gates`.
+  `dialect: ecma`, `security_tool: false`, htdocs glob).
 - Measure + batch; commit summary **and** conversion-ledger regen same PR.
-- Reconcile probe vs batch within 10% aggregate (and per-file when an NDJSON
-  fold exists).
+- Reconcile probe vs batch within 10% aggregate.
 
-### P3 — Rank 15 / write ≤5
+### P2 — Rank 15 / write ≤5
 
 - Vocab above; drop tests/vendor/minified.
 - Mix: 2–3 shape 1 (new alphabet only), 1–2 shape 3, 0–1 shape 4 if an
   escaper is in the bucket.
 - Family `OW-luci`; `provenance=human`; mutation guard required.
 
-### P4 — Node GT + ledger join
+### P3 — Node GT + ledger join
 
 - SAT: replay via `helpers/ecma/match.mjs`.
 - Expected-UNSAT shape-3: differential fuzz (Node vs mirror).
 - Generate `openwrt_luci_conversion.ndjson`; ledger `properties_asked`
   delta in **[1, 5]**.
 
-### P5 — Close-out
+### P4 — Close-out
 
 - Asked / skip / next idiom or stop-cluster / next cluster (e.g. OpenWrt
   core) named explicitly.
@@ -139,10 +125,9 @@ From [`probe.md`](probe.md) and
 
 | PR | Phase |
 |---|---|
-| A | P0 plan + packages stop note (docs) |
-| B | P1 probe artifacts |
-| C | P2 manifest + batch + ledger |
-| D | P3–P5 contracts + GT + close-out |
+| A | P0 plan + packages stop note + probe GO (docs) |
+| B | P1 gate + `js_precise_dir` glob + manifest + batch + ledger |
+| C | P2–P4 contracts, Node GT, close-out |
 
 Non-trivial PRs: **Luna then Bugbot** before merge (workspace Bugbot
 rule + this wave’s stronger Luna gate). Trivial docs-only may skip both.
