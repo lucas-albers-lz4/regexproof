@@ -42,9 +42,12 @@ jobs:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
         with:
           # PAT so ledger/queue commits can push to main under branch protection.
-          # zizmor: ignore[artipacked] — the git credential MUST persist: the
-          # commit step below pushes with it. A read-only checkout would set
-          # persist-credentials: false (see ci.yml); this job is the exception.
+          # persist-credentials: true is EXPLICIT (not the implicit default): the
+          # Commit ledger + queue step below pushes with the persisted git
+          # credential. Read-only checkouts set persist-credentials: false
+          # (see ci.yml); this job is the write exception.
+          # zizmor: ignore[artipacked] — credential persistence is intentional here.
+          persist-credentials: true
           token: ${{ secrets.PROJECT_PAT }}
 
       - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
