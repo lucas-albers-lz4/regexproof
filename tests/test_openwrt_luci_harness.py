@@ -6,7 +6,6 @@ import json
 from pathlib import Path
 
 import jsonschema
-import pytest
 
 from regexproof.harness.contract import product_reportable
 from regexproof.harness.core import REGISTRY, check_mutation_coverage

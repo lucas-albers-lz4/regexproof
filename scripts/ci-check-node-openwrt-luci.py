@@ -20,6 +20,7 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
+from regexproof.harness.core import REGISTRY  # noqa: E402
 from regexproof.harness.openwrt_luci import (  # noqa: E402
     DOCKERMAN_PUBLISH,
     _ADBLOCK_FILTER_CHARS,
@@ -129,7 +130,6 @@ def _spot_alphabets() -> int:
 
 def main() -> int:
     _require_node()
-    from regexproof.harness.core import REGISTRY  # noqa: WPS433
 
     names = [n for n, e in REGISTRY.items() if e.get("family") == "OW-luci"]
     if not names:
