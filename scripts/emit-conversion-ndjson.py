@@ -39,6 +39,10 @@ SHAPE = {
     "OW-packages-dnspod-recordid-no-semicolon": 1,
     "OW-packages-mosquitto-uci-quote-capture": 3,
     "OW-packages-nftset-passthrough-no-dot": 4,
+    "OW-luci-adblock-tcpdump-filter-no-semicolon": 1,
+    "OW-luci-netdevname-semicolon-admitted": 1,
+    "OW-luci-firewall-mark-no-semicolon": 1,
+    "OW-luci-dockerman-publish-host-capture": 3,
 }
 
 

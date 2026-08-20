@@ -38,6 +38,10 @@ the work by phase; dates are merge dates.
   on `security-boundary`, 895 ECMA sites @ `77dad3f`, family `OW-luci`,
   Node `RegExp` GT. Policy issue [#533](https://github.com/lucas-albers-lz4/regexproof/issues/533)
   parks Smith batches 19–31 in favor of LuCI conversion.
+- OpenWrt LuCI conversion wave 1 close-out: four `OW-luci` contracts
+  (adblock tcpdump-filter alphabet, netdevname semicolon admission SAT +
+  Node GT, firewall mark alphabet, dockerman publish-host capture) +
+  `ci-check-node-openwrt-luci.py`. Ledger `properties_asked` 17 → 21.
 - Registered `openwrt_luci` as a manifest corpus (not `WAVE_CORPORA`):
   `js_precise_dir` honors `glob` for nested `htdocs` trees, runtime gate
   copy of the 2026-08-20 probe GO, batch + conversion-ledger regen

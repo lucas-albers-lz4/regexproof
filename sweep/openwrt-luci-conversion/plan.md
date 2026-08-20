@@ -59,7 +59,8 @@ From [`probe.md`](probe.md) and
 | Extract | ~1.5 s; clone 211M (`blob:none`, `max_disk_mb=2000`) |
 | Density | `validation.js` 45, qosify 34, network.js 34, firewall app 42, banip 22 |
 | Probe decision | **GO** on `security-boundary`. `new-surface=false` (ECMA admitted). `large-under-saturated=false` (895&lt;1000). |
-| Batch | **not registered yet** — P2. |
+| Batch | **registered** — 902 extracted / 701 encodable @ same pin; see
+  `openwrt_luci_batch_summary.json`. |
 
 ## Non-goals
 
