@@ -39,12 +39,15 @@ jobs:
             exit 1
           fi
 
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
         with:
           # PAT so ledger/queue commits can push to main under branch protection.
+          # zizmor: ignore[artipacked] — the git credential MUST persist: the
+          # commit step below pushes with it. A read-only checkout would set
+          # persist-credentials: false (see ci.yml); this job is the exception.
           token: ${{ secrets.PROJECT_PAT }}
 
-      - uses: actions/setup-python@v6
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
         with:
           python-version: "3.13"
 
