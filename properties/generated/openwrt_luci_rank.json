@@ -1,0 +1,1791 @@
+{
+  "corpus": "openwrt_luci",
+  "dropped": [
+    {
+      "pattern": "\"rootfs_data\"",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:378:41"
+    },
+    {
+      "pattern": ":",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/network.js:2376:8"
+    },
+    {
+      "pattern": "\\.fullchain\\.crt$",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:532:33"
+    },
+    {
+      "pattern": "_",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-sfp-info/htdocs/luci-static/resources/view/sfp-info/main.js:198:23"
+    },
+    {
+      "pattern": "^collectd_",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/collectd.js:169:36"
+    },
+    {
+      "pattern": "%(H|pn|pi|dt|di|ds)",
+      "reason": "unencodable:stateful",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool.js:8:20"
+    },
+    {
+      "pattern": "[^/]+\\/\\.\\.(\\/|$)",
+      "reason": "unencodable:stateful",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/ui.js:3233:13"
+    },
+    {
+      "pattern": "^(\\d{1,3}\\.){3}\\d{1,3}$|^([a-fA-F0-9]{1,4}:){7}[a-fA-F0-9]{1,4}$",
+      "reason": "unencodable:per-alternative-anchor",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:336:10"
+    },
+    {
+      "pattern": "^(['\"])(.*)\\1$",
+      "reason": "unencodable:backref",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/validation.js:337:32"
+    },
+    {
+      "pattern": "",
+      "reason": "malformed:empty-pattern",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-acl/htdocs/luci-static/resources/view/system/acl.js:81:2"
+    },
+    {
+      "pattern": "%s",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:125:13"
+    },
+    {
+      "pattern": "\\n$",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:34:14"
+    },
+    {
+      "pattern": "[.*+?^${}()|[\\]\\\\]",
+      "reason": "unencodable:stateful",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/https-dns-proxy/status.js:45:31"
+    },
+    {
+      "pattern": "Async DNS",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:177:33"
+    },
+    {
+      "pattern": "1",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1280:20"
+    },
+    {
+      "pattern": "[^a-z0-9]",
+      "reason": "unencodable:stateful",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/status.js:302:21"
+    },
+    {
+      "pattern": "(^|\\n)config ",
+      "reason": "unencodable:per-alternative-anchor",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1001:6"
+    },
+    {
+      "pattern": "\\/128$",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js:63:47"
+    },
+    {
+      "pattern": "^http:",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-dockerman/htdocs/luci-static/resources/dockerman/api.js:268:13"
+    },
+    {
+      "pattern": "&",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:685:22"
+    },
+    {
+      "pattern": "^(?=.{7,})(((?=.*[A-Z])(?=.*[a-z]))|((?=.*[A-Z])(?=.*[0-9]))|((?=.*[a-z])(?=.*[0-9]))).*$",
+      "reason": "unencodable:stateful",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-mod-system/htdocs/luci-static/resources/view/system/password.js:33:20"
+    },
+    {
+      "pattern": "[\\s:]",
+      "reason": "unencodable:stateful",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:466:25"
+    },
+    {
+      "pattern": "\\r\\n",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:980:28"
+    },
+    {
+      "pattern": "\\x1B\\][^\\x07]*\\x07",
+      "reason": "unencodable:stateful",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-dockerman/htdocs/luci-static/resources/dockerman/common.js:1252:11"
+    },
+    {
+      "pattern": " ",
+      "reason": "malformed:empty-pattern",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:395:42"
+    },
+    {
+      "pattern": "^Generic | Wireless Controller .+$",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:178:40"
+    },
+    {
+      "pattern": "\\r\\n",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:368:82"
+    },
+    {
+      "pattern": "^.+\\/",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/form.js:4448:75"
+    },
+    {
+      "pattern": "%q",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:63:13"
+    },
+    {
+      "pattern": "\\.\\d+$",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:510:84"
+    },
+    {
+      "pattern": "\"",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-dockerman/htdocs/luci-static/resources/view/dockerman/container_new.js:153:31"
+    },
+    {
+      "pattern": "ipv6",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-snmpd/htdocs/luci-static/resources/view/snmpd/snmpd.js:127:25"
+    },
+    {
+      "pattern": "\\W+",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/olsrd.js:83:73"
+    },
+    {
+      "pattern": "^\\d+\\s*",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/irq.js:33:26"
+    },
+    {
+      "pattern": "_ip",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:169:56"
+    },
+    {
+      "pattern": "[.*+?^${}()|[\\]\\\\]",
+      "reason": "unencodable:stateful",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-acl/htdocs/luci-static/resources/view/system/acl.js:66:26"
+    },
+    {
+      "pattern": "\\/$",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-dockerman/htdocs/luci-static/resources/dockerman/common.js:730:23"
+    },
+    {
+      "pattern": "'",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/cbi.js:653:34"
+    },
+    {
+      "pattern": "\\s+",
+      "reason": "unencodable:stateful",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-filemanager/htdocs/luci-static/resources/view/system/filemanager/HexEditor.js:710:41"
+    },
+    {
+      "pattern": "\\r\\n",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/config.js:41:78"
+    },
+    {
+      "pattern": "(.*?)@(.+):(\\d+):(\\d+)",
+      "reason": "unencodable:stateful",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/luci.js:2329:35"
+    },
+    {
+      "pattern": "^<\\d+>",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-antiblock/htdocs/luci-static/resources/view/antiblock/log.js:14:24"
+    },
+    {
+      "pattern": "\\\\(.)",
+      "reason": "unencodable:stateful",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:138:37"
+    },
+    {
+      "pattern": "\\/",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/ui.js:5715:50"
+    },
+    {
+      "pattern": "^(?:any|\\*)$",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:12:74"
+    },
+    {
+      "pattern": "^\\+",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:177:21"
+    },
+    {
+      "pattern": "\\r\\n",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-mod-system/htdocs/luci-static/resources/view/system/crontab.js:14:78"
+    },
+    {
+      "pattern": "u",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-mod-network/htdocs/luci-static/resources/tools/bridgevlan.js:57:12"
+    },
+    {
+      "pattern": "^[ \\t]+",
+      "reason": "unencodable:stateful",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/validation.js:330:29"
+    },
+    {
+      "pattern": "([^a-zA-Z0-9]+)",
+      "reason": "unencodable:stateful",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:175:59"
+    },
+    {
+      "pattern": "\\r\\n",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-ksmbd/htdocs/luci-static/resources/view/ksmbd.js:72:78"
+    },
+    {
+      "pattern": "[^a-zA-Z0-9_]",
+      "reason": "unencodable:stateful",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1241:34"
+    },
+    {
+      "pattern": "[^rwx-]",
+      "reason": "unencodable:stateful",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-dockerman/htdocs/luci-static/resources/dockerman/common.js:462:33"
+    },
+    {
+      "pattern": "(^|\\n)config ",
+      "reason": "unencodable:per-alternative-anchor",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1099:7"
+    },
+    {
+      "pattern": "^<\\d+>",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-antiblock/htdocs/luci-static/resources/view/antiblock/statistics.js:14:36"
+    },
+    {
+      "pattern": "ipv4",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-snmpd/htdocs/luci-static/resources/view/snmpd/snmpd.js:124:25"
+    },
+    {
+      "pattern": "(?:^|[.:])([0-9a-fA-F]{1,4})",
+      "reason": "unencodable:stateful",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/luci.js:3011:33"
+    },
+    {
+      "pattern": "\\r\\n?",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/blocklist.js:52:130"
+    },
+    {
+      "pattern": "^collectd_",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/collectd.js:96:38"
+    },
+    {
+      "pattern": "\\bCPU\\d+\\b",
+      "reason": "unencodable:stateful",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-irqbalance/htdocs/luci-static/resources/view/irqbalance.js:39:34"
+    },
+    {
+      "pattern": "X",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:28:35"
+    },
+    {
+      "pattern": ">",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/cbi.js:652:79"
+    },
+    {
+      "pattern": "(\\{\\w+\\})",
+      "reason": "unencodable:stateful",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/https-dns-proxy/status.js:41:12"
+    },
+    {
+      "pattern": "HTTPS",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:174:34"
+    },
+    {
+      "pattern": "[\\s!@#$%^&*()+=[\\]{};':'\\\\|,<>/?]",
+      "reason": "unencodable:stateful",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-lxc/htdocs/luci-static/resources/view/lxc/overview.js:38:75"
+    },
+    {
+      "pattern": "\\r\\n",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-smartdns/htdocs/luci-static/resources/view/smartdns/smartdns.js:1109:80"
+    },
+    {
+      "pattern": "^!\\s*",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:253:19"
+    },
+    {
+      "pattern": "[^a-zA-Z0-9_]",
+      "reason": "unencodable:stateful",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/luci.js:2509:50"
+    },
+    {
+      "pattern": "^\\/",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-dockerman/htdocs/luci-static/resources/dockerman/common.js:665:51"
+    },
+    {
+      "pattern": "Firefox3 Cookie",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:178:35"
+    },
+    {
+      "pattern": "<",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:685:44"
+    },
+    {
+      "pattern": "\\r\\n",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-smartdns/htdocs/luci-static/resources/view/smartdns/smartdns.js:913:85"
+    },
+    {
+      "pattern": "^!fw3(: |$)",
+      "reason": "unencodable:per-alternative-anchor",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:151:27"
+    },
+    {
+      "pattern": "([^\\n]*)\\n",
+      "reason": "unencodable:stateful",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:106:13"
+    },
+    {
+      "pattern": "_port",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:162:56"
+    },
+    {
+      "pattern": "^coordinate|^address|^elin",
+      "reason": "unencodable:per-alternative-anchor",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:247:18"
+    },
+    {
+      "pattern": "[\\r\\n]+",
+      "reason": "unencodable:stateful",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-wifischedule/htdocs/luci-static/resources/view/wifischedule/wifischedule.js:106:33"
+    },
+    {
+      "pattern": "\\r\\n",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1049:28"
+    },
+    {
+      "pattern": "[^ \\t]+",
+      "reason": "unencodable:stateful",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/validation.js:1200:35"
+    },
+    {
+      "pattern": "\\/$",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/ui.js:3234:13"
+    },
+    {
+      "pattern": "1",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1334:26"
+    },
+    {
+      "pattern": "&",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/cbi.js:652:19"
+    },
+    {
+      "pattern": "_port",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:164:54"
+    },
+    {
+      "pattern": "padding: \\d+px",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-filemanager/htdocs/luci-static/resources/view/system/filemanager.js:2465:63"
+    },
+    {
+      "pattern": " ",
+      "reason": "malformed:empty-pattern",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-wifischedule/htdocs/luci-static/resources/view/wifischedule/wifischedule.js:103:22"
+    },
+    {
+      "pattern": "[^a-z0-9.\\-# \\r\\n]",
+      "reason": "unencodable:stateful",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/blocklist.js:52:95"
+    },
+    {
+      "pattern": "\\x1B[><=]",
+      "reason": "unencodable:stateful",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-dockerman/htdocs/luci-static/resources/dockerman/common.js:1255:11"
+    },
+    {
+      "pattern": "[&<>\"']",
+      "reason": "unencodable:stateful",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:45:54"
+    },
+    {
+      "pattern": "\\/+$",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:727:69"
+    },
+    {
+      "pattern": " {2,}",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/irq.js:35:27"
+    },
+    {
+      "pattern": "\\s+$",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1220:25"
+    },
+    {
+      "pattern": ":",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-acl/htdocs/luci-static/resources/view/system/acl.js:219:25"
+    },
+    {
+      "pattern": "GZip",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:173:33"
+    },
+    {
+      "pattern": "^\\/",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-dockerman/htdocs/luci-static/resources/view/dockerman/volumes.js:308:52"
+    },
+    {
+      "pattern": "\\W",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool.js:477:51"
+    },
+    {
+      "pattern": "\\r?\\n",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:32:15"
+    },
+    {
+      "pattern": "(\\s)",
+      "reason": "unencodable:stateful",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/fs.js:445:35"
+    },
+    {
+      "pattern": "UDP:\\d+",
+      "reason": "unencodable:stateful",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-snmpd/htdocs/luci-static/resources/view/snmpd/snmpd.js:83:19"
+    },
+    {
+      "pattern": "\\r\\n",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-samba4/htdocs/luci-static/resources/view/samba4.js:89:76"
+    },
+    {
+      "pattern": ":0(?::0)+$",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/network.js:325:77"
+    },
+    {
+      "pattern": "__(.+?)__",
+      "reason": "unencodable:stateful",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-filemanager/htdocs/luci-static/resources/view/system/filemanager/md.js:132:11"
+    },
+    {
+      "pattern": "^\\s+|\\s+$",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:46:40"
+    },
+    {
+      "pattern": " ",
+      "reason": "malformed:empty-pattern",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/form.js:3417:68"
+    },
+    {
+      "pattern": "\\+",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/fs.js:453:35"
+    },
+    {
+      "pattern": "^!\\s*",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:333:25"
+    },
+    {
+      "pattern": "[^A-Za-z0-9_]",
+      "reason": "unencodable:stateful",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-mod-network/htdocs/luci-static/resources/tools/bridgevlan.js:307:29"
+    },
+    {
+      "pattern": "(?:^| )\\/\\* (.+) \\*\\/",
+      "reason": "unencodable:per-alternative-anchor",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:149:37"
+    },
+    {
+      "pattern": "%q",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:149:119"
+    },
+    {
+      "pattern": "\\.js$",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:104:51"
+    },
+    {
+      "pattern": "^(\\d{1,3}\\.){3}\\d{1,3}$|^([a-fA-F0-9]{1,4}:){7}[a-fA-F0-9]{1,4}$",
+      "reason": "unencodable:per-alternative-anchor",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface.js:101:10"
+    },
+    {
+      "pattern": "\\/$",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool.js:152:107"
+    },
+    {
+      "pattern": "%q",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:171:47"
+    },
+    {
+      "pattern": "",
+      "reason": "malformed:empty-pattern",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:104:24"
+    },
+    {
+      "pattern": ":",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:445:42"
+    },
+    {
+      "pattern": ":",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/network.js:2288:9"
+    },
+    {
+      "pattern": "",
+      "reason": "malformed:empty-pattern",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-filemanager/htdocs/luci-static/resources/view/system/filemanager/HexEditor.js:688:16"
+    },
+    {
+      "pattern": "^#\\s*",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:64:32"
+    },
+    {
+      "pattern": "\\/{2,}",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/ui.js:3231:21"
+    },
+    {
+      "pattern": " ",
+      "reason": "malformed:empty-pattern",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:35:50"
+    },
+    {
+      "pattern": "1",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1285:20"
+    },
+    {
+      "pattern": "\\/+",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/luci.js:2804:46"
+    },
+    {
+      "pattern": "t",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-mod-network/htdocs/luci-static/resources/tools/bridgevlan.js:56:10"
+    },
+    {
+      "pattern": "1",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1302:25"
+    },
+    {
+      "pattern": "\\[\\s*\\n\\s*\\]",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-ocserv/htdocs/luci-static/resources/view/status/include/80_ocserv.js:24:41"
+    },
+    {
+      "pattern": "(^|\\n)config ",
+      "reason": "unencodable:per-alternative-anchor",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:476:34"
+    },
+    {
+      "pattern": "1",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1276:20"
+    },
+    {
+      "pattern": "\\n",
+      "reason": "unencodable:stateful",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-package-manager/htdocs/luci-static/resources/view/package-manager.js:984:57"
+    },
+    {
+      "pattern": "_",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-bmx7/htdocs/luci-static/resources/bmx7/js/netjsongraph.js:254:36"
+    },
+    {
+      "pattern": "^luci-i18n-base-",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-package-manager/htdocs/luci-static/resources/view/package-manager.js:793:92"
+    },
+    {
+      "pattern": ":",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/validation.js:819:31"
+    },
+    {
+      "pattern": "\\x07",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-dockerman/htdocs/luci-static/resources/dockerman/common.js:1258:11"
+    },
+    {
+      "pattern": "SFTP",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:176:33"
+    },
+    {
+      "pattern": "\\r\\n",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-dockerman/htdocs/luci-static/resources/dockerman/common.js:1380:21"
+    },
+    {
+      "pattern": "\\r\\n",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-smartdns/htdocs/luci-static/resources/view/smartdns/smartdns.js:594:74"
+    },
+    {
+      "pattern": "\\x1B\\[([\\d;]*)m",
+      "reason": "unencodable:stateful",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-dockerman/htdocs/luci-static/resources/dockerman/common.js:1294:19"
+    },
+    {
+      "pattern": ":",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:15:60"
+    },
+    {
+      "pattern": "^(\\bgz\\b|\\btcp\\b|\\budp\\b|\\b[0-9-]+\\b| )*$",
+      "reason": "unencodable:word-boundary",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:267:21"
+    },
+    {
+      "pattern": "\\r\\n?",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-banip/htdocs/luci-static/resources/view/banip/allowlist.js:52:95"
+    },
+    {
+      "pattern": "^.+\\.",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:547:84"
+    },
+    {
+      "pattern": "^(?:all|\\*)$",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:12:79"
+    },
+    {
+      "pattern": "-",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/display.js:271:24"
+    },
+    {
+      "pattern": "[^a-z0-9.-]|^-|-$|\\.\\.|\\.$",
+      "reason": "unencodable:per-alternative-anchor",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:97:10"
+    },
+    {
+      "pattern": "_",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-bmx7/htdocs/luci-static/resources/bmx7/js/netjsongraph.js:225:36"
+    },
+    {
+      "pattern": "",
+      "reason": "malformed:empty-pattern",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/https-dns-proxy/status.js:38:10"
+    },
+    {
+      "pattern": "\\b\\d+(?=: )",
+      "reason": "unencodable:stateful",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-irqbalance/htdocs/luci-static/resources/view/irqbalance.js:40:32"
+    },
+    {
+      "pattern": "\\.",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:25:52"
+    },
+    {
+      "pattern": "_OptsAlt$",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:473:27"
+    },
+    {
+      "pattern": "^\\s*!",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-acl/htdocs/luci-static/resources/view/system/acl.js:58:20"
+    },
+    {
+      "pattern": "\\s+",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:35:19"
+    },
+    {
+      "pattern": "^collectd_",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/collectd.js:120:52"
+    },
+    {
+      "pattern": "(?:^|,)([^ =,]+)(?:=(?:([^ \",]+)|\"((?:[^\"\\\\]|\\\\.)*)\"))?",
+      "reason": "unencodable:stateful",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:80:34"
+    },
+    {
+      "pattern": "\\r\\n",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-smartdns/htdocs/luci-static/resources/view/smartdns/smartdns.js:1129:75"
+    },
+    {
+      "pattern": ":",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool.js:65:13"
+    },
+    {
+      "pattern": ":",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-mod-system/htdocs/luci-static/resources/view/system/password.js:86:25"
+    },
+    {
+      "pattern": "\\s+$",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-wifischedule/htdocs/luci-static/resources/view/wifischedule/wifischedule.js:106:58"
+    },
+    {
+      "pattern": "_port",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:163:54"
+    },
+    {
+      "pattern": "\\r\\n",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-smartdns/htdocs/luci-static/resources/view/smartdns/smartdns.js:941:80"
+    },
+    {
+      "pattern": "bitmap",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:137:20"
+    },
+    {
+      "pattern": "^!\\s*",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:333:34"
+    },
+    {
+      "pattern": "^collectd_",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/collectd.js:129:36"
+    },
+    {
+      "pattern": "1",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1296:25"
+    },
+    {
+      "pattern": "[\\s:]",
+      "reason": "unencodable:stateful",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-mod-network/htdocs/luci-static/resources/tools/dnsrecordhandlers.js:249:25"
+    },
+    {
+      "pattern": "[^a-z0-9.-]",
+      "reason": "unencodable:stateful",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:162:90"
+    },
+    {
+      "pattern": "^collectd_",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/collectd.js:148:35"
+    },
+    {
+      "pattern": "[^a-fA-F0-9]",
+      "reason": "unencodable:stateful",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/display.js:180:36"
+    },
+    {
+      "pattern": "",
+      "reason": "malformed:empty-pattern",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/https-dns-proxy/status.js:50:9"
+    },
+    {
+      "pattern": "(\\s)",
+      "reason": "unencodable:stateful",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/fs.js:450:37"
+    },
+    {
+      "pattern": "[.]",
+      "reason": "unencodable:stateful",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:104:56"
+    },
+    {
+      "pattern": "\\{(\\w+)\\}",
+      "reason": "unencodable:stateful",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:152:27"
+    },
+    {
+      "pattern": "\\s+$",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:152:26"
+    },
+    {
+      "pattern": "([\\\\;,:\"])",
+      "reason": "unencodable:stateful",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:20:26"
+    },
+    {
+      "pattern": "^\\*?\\.?|\\.$",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:25:26"
+    },
+    {
+      "pattern": "[\"\\\\]",
+      "reason": "unencodable:stateful",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:187:71"
+    },
+    {
+      "pattern": "^[\"']|[\"']$",
+      "reason": "unencodable:stateful",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:127:45"
+    },
+    {
+      "pattern": "\\.",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:158:52"
+    },
+    {
+      "pattern": "\\r\\n",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-mod-system/htdocs/luci-static/resources/view/system/startup.js:50:78"
+    },
+    {
+      "pattern": "^!fw4: ",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:572:64"
+    },
+    {
+      "pattern": "^\\s*!",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-acl/htdocs/luci-static/resources/view/system/acl.js:57:14"
+    },
+    {
+      "pattern": "\\[\\s*\\n\\s*\\]",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-ocserv/htdocs/luci-static/resources/view/ocserv/users.js:37:41"
+    },
+    {
+      "pattern": "^\\*?\\.?|\\.$",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:158:26"
+    },
+    {
+      "pattern": "[.*+?^${}()|[\\]\\\\]",
+      "reason": "unencodable:stateful",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-package-manager/htdocs/luci-static/resources/view/package-manager.js:267:39"
+    },
+    {
+      "pattern": "\\\\",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/fs.js:445:12"
+    },
+    {
+      "pattern": "0\\.0\\.0\\.0",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-dockerman/htdocs/luci-static/resources/dockerman/api.js:92:35"
+    },
+    {
+      "pattern": "\\s+",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:64:58"
+    },
+    {
+      "pattern": "\\r\\n",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/notification.js:14:80"
+    },
+    {
+      "pattern": "ipv4",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:137:47"
+    },
+    {
+      "pattern": "[_:]",
+      "reason": "unencodable:stateful",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-lxc/htdocs/luci-static/resources/view/lxc/overview.js:424:36"
+    },
+    {
+      "pattern": "(?=.{6,}).*",
+      "reason": "unencodable:stateful",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-mod-system/htdocs/luci-static/resources/view/system/password.js:34:20"
+    },
+    {
+      "pattern": "\\D",
+      "reason": "unencodable:stateful",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:105:69"
+    },
+    {
+      "pattern": "[:]",
+      "reason": "unencodable:stateful",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:509:29"
+    },
+    {
+      "pattern": "^https:",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-dockerman/htdocs/luci-static/resources/dockerman/api.js:267:13"
+    },
+    {
+      "pattern": "padding: \\d+px",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-filemanager/htdocs/luci-static/resources/view/system/filemanager.js:2420:65"
+    },
+    {
+      "pattern": "{(\\w+)}",
+      "reason": "unencodable:stateful",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/https-dns-proxy/status.js:53:40"
+    },
+    {
+      "pattern": "X",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:34:35"
+    },
+    {
+      "pattern": "\\{file\\}",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool.js:343:22"
+    },
+    {
+      "pattern": "\"",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/cbi.js:653:19"
+    },
+    {
+      "pattern": "\\/",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/luci.js:2804:65"
+    },
+    {
+      "pattern": "KEY",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:401:36"
+    },
+    {
+      "pattern": "",
+      "reason": "malformed:empty-pattern",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-package-manager/htdocs/luci-static/resources/view/package-manager.js:796:17"
+    },
+    {
+      "pattern": "([ \\t]*\\n)+",
+      "reason": "unencodable:stateful",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/form.js:315:54"
+    },
+    {
+      "pattern": ":",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:69:30"
+    },
+    {
+      "pattern": "^\"|\"$",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-dockerman/htdocs/luci-static/resources/view/dockerman/container_new.js:802:90"
+    },
+    {
+      "pattern": "1",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1322:26"
+    },
+    {
+      "pattern": "\\r\\n?",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-banip/htdocs/luci-static/resources/view/banip/blocklist.js:52:95"
+    },
+    {
+      "pattern": ":",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:321:28"
+    },
+    {
+      "pattern": "(^|_)(.)",
+      "reason": "unencodable:stateful",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:121:39"
+    },
+    {
+      "pattern": "::",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/validation.js:423:32"
+    },
+    {
+      "pattern": ".{2}",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-mod-network/htdocs/luci-static/resources/tools/dnsrecordhandlers.js:250:38"
+    },
+    {
+      "pattern": "\\.",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/luci.js:2474:56"
+    },
+    {
+      "pattern": "_ip",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:150:38"
+    },
+    {
+      "pattern": "(.{2})",
+      "reason": "unencodable:stateful",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:510:26"
+    },
+    {
+      "pattern": "",
+      "reason": "malformed:empty-pattern",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-filemanager/htdocs/luci-static/resources/view/system/filemanager/HexEditor.js:745:16"
+    },
+    {
+      "pattern": "\\/+$",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/luci.js:2804:26"
+    },
+    {
+      "pattern": "\\.",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:535:42"
+    },
+    {
+      "pattern": "\\B(?=(\\d{3})+(?!\\d))",
+      "reason": "unencodable:stateful",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:384:23"
+    },
+    {
+      "pattern": ":",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:25:60"
+    },
+    {
+      "pattern": "\\t",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-olsr-services/htdocs/luci-static/resources/view/olsr-services/services.js:41:62"
+    },
+    {
+      "pattern": "^(?:all|\\*)$",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:12:79"
+    },
+    {
+      "pattern": "^<\\w+>",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-mod-status/htdocs/luci-static/resources/view/status/dmesg.js:50:35"
+    },
+    {
+      "pattern": "\\\\",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/fs.js:450:14"
+    },
+    {
+      "pattern": "^.+\\/",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/ui.js:3366:28"
+    },
+    {
+      "pattern": "1",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1272:20"
+    },
+    {
+      "pattern": "[^a-z0-9.-]|^-|-$|\\.\\.|\\.$",
+      "reason": "unencodable:per-alternative-anchor",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:52:10"
+    },
+    {
+      "pattern": "(?:^|[. -])(.)",
+      "reason": "unencodable:stateful",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/luci.js:23:36"
+    },
+    {
+      "pattern": "\\r\\n",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/custom.js:12:80"
+    },
+    {
+      "pattern": "\\r\\n",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-ocserv/htdocs/luci-static/resources/view/ocserv/user-config.js:122:80"
+    },
+    {
+      "pattern": "a",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:528:16"
+    },
+    {
+      "pattern": "^.+\\.\\d+$",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:547:47"
+    },
+    {
+      "pattern": "\\r",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-dockerman/htdocs/luci-static/resources/dockerman/common.js:1380:47"
+    },
+    {
+      "pattern": "[^a-z0-9.\\-# \\r\\n]",
+      "reason": "unencodable:stateful",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/allowlist.js:52:95"
+    },
+    {
+      "pattern": "%q",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:170:47"
+    },
+    {
+      "pattern": "BitTorrent",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:175:31"
+    },
+    {
+      "pattern": "",
+      "reason": "malformed:empty-pattern",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-package-manager/htdocs/luci-static/resources/view/package-manager.js:793:18"
+    },
+    {
+      "pattern": "\\D",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:250:63"
+    },
+    {
+      "pattern": "\\r?\\n|\\r",
+      "reason": "unencodable:stateful",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:166:36"
+    },
+    {
+      "pattern": ":",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/validation.js:428:49"
+    },
+    {
+      "pattern": "'",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/ui.js:5267:43"
+    },
+    {
+      "pattern": ":",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/validation.js:429:76"
+    },
+    {
+      "pattern": "[\\\\:]",
+      "reason": "unencodable:stateful",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool.js:323:12"
+    },
+    {
+      "pattern": "\\n$",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:34:14"
+    },
+    {
+      "pattern": "^(\\d+)\\b(\\D*)$",
+      "reason": "unencodable:word-boundary",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/ui.js:4052:7"
+    },
+    {
+      "pattern": " Wireless Controller .+$",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:124:41"
+    },
+    {
+      "pattern": "1",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1326:26"
+    },
+    {
+      "pattern": "^.+\\/",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/form.js:4432:75"
+    },
+    {
+      "pattern": "^collectd_",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/collectd.js:105:36"
+    },
+    {
+      "pattern": "[&<>\"']",
+      "reason": "unencodable:stateful",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-dockerman/htdocs/luci-static/resources/dockerman/common.js:1289:21"
+    },
+    {
+      "pattern": "\\r\\n",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-ocserv/htdocs/luci-static/resources/view/ocserv/main.js:160:80"
+    },
+    {
+      "pattern": "[^\\w.\\-:]",
+      "reason": "unencodable:stateful",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:255:80"
+    },
+    {
+      "pattern": "X",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:34:35"
+    },
+    {
+      "pattern": "\\s+",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:911:58"
+    },
+    {
+      "pattern": "\\x1B\\[[0-9;?]*[A-Za-z]",
+      "reason": "unencodable:stateful",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-dockerman/htdocs/luci-static/resources/dockerman/common.js:1242:11"
+    },
+    {
+      "pattern": "\\+",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1310:22"
+    },
+    {
+      "pattern": "\\.js$",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-mod-dashboard/htdocs/luci-static/resources/view/dashboard/index.js:82:54"
+    },
+    {
+      "pattern": "[ \\t\\n]+",
+      "reason": "unencodable:stateful",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/cbi.js:144:33"
+    },
+    {
+      "pattern": "1",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1330:26"
+    },
+    {
+      "pattern": "_ip",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:170:38"
+    },
+    {
+      "pattern": " ",
+      "reason": "malformed:empty-pattern",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:215:49"
+    },
+    {
+      "pattern": "",
+      "reason": "malformed:empty-pattern",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-package-manager/htdocs/luci-static/resources/view/package-manager.js:267:12"
+    },
+    {
+      "pattern": "\\r\\n",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/notify.js:14:80"
+    },
+    {
+      "pattern": "^\\/www",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-apinger/htdocs/luci-static/resources/view/apinger/graphs.js:44:27"
+    },
+    {
+      "pattern": "\\.js$",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-mod-system/htdocs/luci-static/resources/view/system/plugins.js:21:45"
+    },
+    {
+      "pattern": "%q",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2546:50"
+    },
+    {
+      "pattern": "[^ \\t]+",
+      "reason": "unencodable:stateful",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/validation.js:1271:83"
+    },
+    {
+      "pattern": "['\"\\r\\n]",
+      "reason": "unencodable:stateful",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:139:51"
+    },
+    {
+      "pattern": "[&<>\"']",
+      "reason": "unencodable:stateful",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-filemanager/htdocs/luci-static/resources/view/system/filemanager/md.js:149:21"
+    },
+    {
+      "pattern": "flag",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/form.js:2971:14"
+    },
+    {
+      "pattern": "\\*\\*(.+?)\\*\\*",
+      "reason": "unencodable:stateful",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-filemanager/htdocs/luci-static/resources/view/system/filemanager/md.js:131:11"
+    },
+    {
+      "pattern": "#.*$",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:238:32"
+    },
+    {
+      "pattern": "^(?=.{8,})(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*\\W).*$",
+      "reason": "unencodable:stateful",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-mod-system/htdocs/luci-static/resources/view/system/password.js:32:20"
+    },
+    {
+      "pattern": "\"",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/cbi.js:652:34"
+    },
+    {
+      "pattern": "[ \\t]+$",
+      "reason": "unencodable:stateful",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/validation.js:331:29"
+    },
+    {
+      "pattern": "\\r\\n?",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/allowlist.js:52:130"
+    },
+    {
+      "pattern": "(^|\\s)nat(\\s|$)",
+      "reason": "unencodable:per-alternative-anchor",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:105:26"
+    },
+    {
+      "pattern": "^openwrt-snapshots",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:28:39"
+    },
+    {
+      "pattern": "-",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:32:80"
+    },
+    {
+      "pattern": "(?:[^\\s\"]+|\"[^\"]*\")+",
+      "reason": "unencodable:stateful",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-dockerman/htdocs/luci-static/resources/view/dockerman/container_new.js:802:35"
+    },
+    {
+      "pattern": "[.]",
+      "reason": "unencodable:stateful",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:59:56"
+    },
+    {
+      "pattern": "'",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/cbi.js:652:49"
+    },
+    {
+      "pattern": "^((?:(?:^|,)[^ =,]+(?:=(?:[^ \",]+|\"(?:[^\"\\\\]|\\\\.)*\"))?)+ +)?(ssh-dss|ssh-rsa|ssh-ed25519|ecdsa-sha2-nistp[0-9]+|sk-ecdsa-sha2-nistp256@openssh\\.com|sk-ssh-ed25519@openssh\\.com) +([^ ]+)( +.*)?$",
+      "reason": "unencodable:internal-anchor",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:25:29"
+    },
+    {
+      "pattern": ":",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/validation.js:832:31"
+    },
+    {
+      "pattern": "UDP6:\\d+",
+      "reason": "unencodable:stateful",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-snmpd/htdocs/luci-static/resources/view/snmpd/snmpd.js:86:19"
+    },
+    {
+      "pattern": "t",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:326:13"
+    },
+    {
+      "pattern": "^!\\s*",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:299:34"
+    },
+    {
+      "pattern": "\\W",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool.js:580:43"
+    },
+    {
+      "pattern": "^collectd_",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/collectd.js:141:36"
+    },
+    {
+      "pattern": "",
+      "reason": "malformed:empty-pattern",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:59:24"
+    },
+    {
+      "pattern": "\\+",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1351:17"
+    },
+    {
+      "pattern": "read",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-acl/htdocs/luci-static/resources/view/system/acl.js:88:75"
+    },
+    {
+      "pattern": ":.+$",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/network.js:556:21"
+    },
+    {
+      "pattern": "%([01234])",
+      "reason": "unencodable:stateful",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/ui.js:5255:36"
+    },
+    {
+      "pattern": "_",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-sfp-info/htdocs/luci-static/resources/view/sfp-info/main.js:190:23"
+    },
+    {
+      "pattern": "^(['\"]).*\\1$",
+      "reason": "unencodable:backref",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/validation.js:336:27"
+    },
+    {
+      "pattern": "([^\\n]*)\\n",
+      "reason": "unencodable:stateful",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-package-manager/htdocs/luci-static/resources/view/package-manager.js:108:12"
+    },
+    {
+      "pattern": "\\[::1?\\]",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-dockerman/htdocs/luci-static/resources/dockerman/api.js:87:35"
+    },
+    {
+      "pattern": "<",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/cbi.js:652:64"
+    },
+    {
+      "pattern": "\\/\\.(\\/|$)",
+      "reason": "unencodable:stateful",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/ui.js:3232:13"
+    },
+    {
+      "pattern": "%q",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:125:34"
+    },
+    {
+      "pattern": "\\s+$",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1256:26"
+    },
+    {
+      "pattern": ">",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:685:65"
+    },
+    {
+      "pattern": "^!\\s*",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:451:25"
+    },
+    {
+      "pattern": "1",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1318:26"
+    },
+    {
+      "pattern": "\\W",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool.js:478:49"
+    },
+    {
+      "pattern": "\\r\\n",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-unbound/htdocs/luci-static/resources/view/unbound/files.js:44:72"
+    },
+    {
+      "pattern": "\\r\\n?",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:32:15"
+    },
+    {
+      "pattern": "\\n",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-dockerman/htdocs/luci-static/resources/dockerman/common.js:1380:71"
+    },
+    {
+      "pattern": "\\\\(.)",
+      "reason": "unencodable:stateful",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/validation.js:329:29"
+    },
+    {
+      "pattern": "^coordinate|^address|^elin",
+      "reason": "unencodable:per-alternative-anchor",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:234:18"
+    },
+    {
+      "pattern": "\\.json$",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/collectd.js:31:33"
+    },
+    {
+      "pattern": "^.+\\.\\d+$",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:510:47"
+    },
+    {
+      "pattern": "^@",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:542:61"
+    },
+    {
+      "pattern": "\\W+",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/olsrd.js:82:71"
+    },
+    {
+      "pattern": "",
+      "reason": "malformed:empty-pattern",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-acl/htdocs/luci-static/resources/view/system/acl.js:82:2"
+    },
+    {
+      "pattern": "\\+.+$",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1311:23"
+    },
+    {
+      "pattern": "^<!--|--!?>$",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/ui.js:1681:78"
+    },
+    {
+      "pattern": "^(\\d{1,3}\\.){3}\\d{1,3}$|^([a-fA-F0-9]{1,4}:){7}[a-fA-F0-9]{1,4}$",
+      "reason": "unencodable:per-alternative-anchor",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface6.js:101:10"
+    },
+    {
+      "pattern": "[\\s\\n]+",
+      "reason": "unencodable:stateful",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/cbi.js:875:21"
+    },
+    {
+      "pattern": "{{value}}",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/ui.js:1685:36"
+    },
+    {
+      "pattern": ".{1,2}",
+      "reason": "unencodable:stateful",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-filemanager/htdocs/luci-static/resources/view/system/filemanager/HexEditor.js:719:58"
+    },
+    {
+      "pattern": "",
+      "reason": "malformed:empty-pattern",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-package-manager/htdocs/luci-static/resources/view/package-manager.js:275:16"
+    },
+    {
+      "pattern": "rc",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:82:17"
+    },
+    {
+      "pattern": "-",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/display.js:276:39"
+    },
+    {
+      "pattern": "",
+      "reason": "malformed:empty-pattern",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1245:9"
+    },
+    {
+      "pattern": "(^|\\n)\\s*config\\s+defaults\\s*$",
+      "reason": "unencodable:per-alternative-anchor",
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1244:22"
+    }
+  ],
+  "dropped_count": 323,
+  "input_rows": 902,
+  "keep": [
+    {
+      "call_kind": "search",
+      "encodable": true,
+      "file": "batch/corpora/openwrt_luci/rules/applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js",
+      "pattern": "^(.*?)\\s*\\(([^()]*\\/[^()]*)\\)$",
+      "regex_id": "e7d56c5d1494b9cb2921be29c3fec3e8",
+      "score": 10,
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:82:30"
+    },
+    {
+      "call_kind": "search",
+      "encodable": true,
+      "file": "batch/corpora/openwrt_luci/rules/applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js",
+      "pattern": "^[a-zA-Z0-9 \\t.:/()[\\]!&|<>=+*%\\\\-]+$",
+      "regex_id": "9478bdf61ad47d35e56931f61edaa67c",
+      "score": 10,
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:870:17"
+    },
+    {
+      "call_kind": "search",
+      "encodable": true,
+      "file": "batch/corpora/openwrt_luci/rules/applications/luci-app-adguardhome/htdocs/luci-static/resources/view/adguardhome/config.js",
+      "pattern": "^/etc(/[^/]+)?/?$",
+      "regex_id": "bd47a7bacab48102c7d115913015bcdf",
+      "score": 10,
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-adguardhome/htdocs/luci-static/resources/view/adguardhome/config.js:19:19"
+    },
+    {
+      "call_kind": "search",
+      "encodable": true,
+      "file": "batch/corpora/openwrt_luci/rules/applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js",
+      "pattern": "^(https?:\\/\\/)[A-Za-z0-9-]+\\.[A-Za-z0-9.-]+(:[0-9]+)?(\\/[A-Za-z0-9._\\-?&+=:~#%]*)?$",
+      "regex_id": "564d761297820aaf739f14b95d72769b",
+      "score": 10,
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:1021:21"
+    },
+    {
+      "call_kind": "search",
+      "encodable": true,
+      "file": "batch/corpora/openwrt_luci/rules/applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js",
+      "pattern": "^([1-9][0-9]*(ms|s|m|h|d|w))+$",
+      "regex_id": "c6a6e271713163f2570996655bcd271d",
+      "score": 10,
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:1073:20"
+    },
+    {
+      "call_kind": "search",
+      "encodable": true,
+      "file": "batch/corpora/openwrt_luci/rules/applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js",
+      "pattern": "^(.*?)\\s*\\(([^()]*\\/[^()]*)\\)$",
+      "regex_id": "cd87af87d6496a3a28867b314a8563ac",
+      "score": 10,
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:67:30"
+    },
+    {
+      "call_kind": "exec",
+      "encodable": true,
+      "file": "batch/corpora/openwrt_luci/rules/applications/luci-app-dockerman/htdocs/luci-static/resources/dockerman/common.js",
+      "pattern": "^([0-9.]+) *([bkmgtp])?i? *[Bb]?",
+      "regex_id": "24cae3aa05cab72954072119e73d79b2",
+      "score": 10,
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-dockerman/htdocs/luci-static/resources/dockerman/common.js:491:14"
+    },
+    {
+      "call_kind": "search",
+      "encodable": true,
+      "file": "batch/corpora/openwrt_luci/rules/applications/luci-app-dockerman/htdocs/luci-static/resources/view/dockerman/container_new.js",
+      "pattern": "^([^:]+):(\\d+):(\\d+)\\/(tcp|udp)$",
+      "regex_id": "bc07c06646f944b6d0565db0dd61d22a",
+      "score": 10,
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-dockerman/htdocs/luci-static/resources/view/dockerman/container_new.js:836:26"
+    },
+    {
+      "call_kind": "search",
+      "encodable": true,
+      "file": "batch/corpora/openwrt_luci/rules/applications/luci-app-dockerman/htdocs/luci-static/resources/view/dockerman/container_new.js",
+      "pattern": "^\\[([^\\]]+)\\]:(\\d+):(\\d+)\\/(tcp|udp)$",
+      "regex_id": "2dbdb4576bb663720c28134aeeac4b45",
+      "score": 10,
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-dockerman/htdocs/luci-static/resources/view/dockerman/container_new.js:845:27"
+    },
+    {
+      "call_kind": "search",
+      "encodable": true,
+      "file": "batch/corpora/openwrt_luci/rules/applications/luci-app-dockerman/htdocs/luci-static/resources/view/dockerman/volumes.js",
+      "pattern": "^(.*\\/volumes\\/)([^/]+)(\\/.*)?$",
+      "regex_id": "42963b4a65e5e772de0c322adcc395fc",
+      "score": 10,
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-dockerman/htdocs/luci-static/resources/view/dockerman/volumes.js:259:26"
+    },
+    {
+      "call_kind": "search",
+      "encodable": true,
+      "file": "batch/corpora/openwrt_luci/rules/applications/luci-app-filemanager/htdocs/luci-static/resources/view/system/filemanager.js",
+      "pattern": "^option\\s+(\\S+)\\s+'([^']+)'$",
+      "regex_id": "e1381a89da5fe6b5c1f31df5dceebb3a",
+      "score": 10,
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-filemanager/htdocs/luci-static/resources/view/system/filemanager.js:148:38"
+    },
+    {
+      "call_kind": "search",
+      "encodable": true,
+      "file": "batch/corpora/openwrt_luci/rules/applications/luci-app-filemanager/htdocs/luci-static/resources/view/system/filemanager/md.js",
+      "pattern": "^[-*]\\s+(.*)",
+      "regex_id": "d2befd97bdda653e662cdd491e039fa9",
+      "score": 10,
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-filemanager/htdocs/luci-static/resources/view/system/filemanager/md.js:92:33"
+    },
+    {
+      "call_kind": "substitution",
+      "encodable": true,
+      "file": "batch/corpora/openwrt_luci/rules/applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js",
+      "pattern": "^(?:CS[0-7]|BE|AF[1234][123]|EF|(0x[0-9a-f]{1,2}|[0-9]{1,2}))$",
+      "regex_id": "e1c403cee5188626cf5a8e25e9f1d897",
+      "score": 10,
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:301:25"
+    },
+    {
+      "call_kind": "substitution",
+      "encodable": true,
+      "file": "batch/corpora/openwrt_luci/rules/applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js",
+      "pattern": "^(0x[0-9a-f]{1,8}|[0-9]{1,10})(?:\\/(0x[0-9a-f]{1,8}|[0-9]{1,10}))?$",
+      "regex_id": "4aeaa6222583637d5340c2acd5bb5de7",
+      "score": 10,
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:335:25"
+    },
+    {
+      "call_kind": "search",
+      "encodable": true,
+      "file": "batch/corpora/openwrt_luci/rules/applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js",
+      "pattern": "^(?:0x[0-9a-f]{1,8}|[0-9]{1,10})\\/([a-z]+)$",
+      "regex_id": "8a83a0ef98455862998da584dcf9d527",
+      "score": 10,
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:362:47"
+    }
+  ],
+  "limit": 15,
+  "schema_version": "1",
+  "seeds": {
+    "adblock-tcpdump-filter": {
+      "site": "batch/corpora/openwrt_luci/rules/applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:870:17",
+      "status": "kept"
+    },
+    "validation-netdevname": {
+      "needle_pat": "^[^:/\\%\\s]{1,15}$",
+      "needle_path": "modules/luci-base/htdocs/luci-static/resources/validation.js",
+      "note": "seed attention; asked shape-1 even though not in keep-15",
+      "status": "not-in-top"
+    }
+  },
+  "survivor_count": 579,
+  "vocab": [
+    "htdocs",
+    "luci-static",
+    "resources/view",
+    "firewall",
+    "network",
+    "system",
+    "status",
+    "uci",
+    "rpc",
+    "passwd",
+    "wireless",
+    "ddns",
+    "banip",
+    "pbr",
+    "adblock"
+  ]
+}

@@ -29,6 +29,16 @@
       "security_tool": false
     },
     {
+      "corpus": "openwrt_luci",
+      "properties_asked": 4,
+      "properties_sat": 1,
+      "properties_unsat": 3,
+      "sat_ground_truthed": 1,
+      "sat_unique_sites": 1,
+      "scanner_rows": 410,
+      "security_tool": false
+    },
+    {
       "corpus": "coreruleset",
       "properties_asked": 3,
       "properties_sat": 2,
@@ -57,19 +67,19 @@
     "pr_dry_run_findings": 7670,
     "pr_dry_run_private_first": 814,
     "pr_dry_runs": 78,
-    "properties_asked": 17,
-    "properties_asked_distinct": 17,
+    "properties_asked": 21,
+    "properties_asked_distinct": 21,
     "properties_asked_synthesized": 644,
-    "properties_sat": 5,
-    "properties_sat_distinct": 5,
+    "properties_sat": 6,
+    "properties_sat_distinct": 6,
     "properties_sat_synthesized": 28,
-    "properties_unsat": 11,
+    "properties_unsat": 14,
     "redos_rows": 0,
     "rule_diff_report_sat": 10,
     "rule_diff_report_sat_gt": 10,
-    "sat_ground_truthed": 5,
-    "sat_unique_sites": 3,
-    "scanner_ndjson_files": 79,
+    "sat_ground_truthed": 6,
+    "sat_unique_sites": 4,
+    "scanner_ndjson_files": 80,
     "scanner_rows": 7670,
     "scanner_rule_diff_sat": 0,
     "sites_encodable": 79517,
@@ -89,7 +99,7 @@
   ],
   "rates": {
     "accepted_per_extracted": 8e-06,
-    "accepted_per_gt": 0.2,
+    "accepted_per_gt": 0.166667,
     "encodable_fraction": 0.628012,
     "encodable_fraction_all_inventories": 0.630028,
     "encodable_fraction_excluding_yara": 0.615366,
@@ -97,9 +107,9 @@
     "fullword_share_of_unencodable": 0.624335,
     "gt_per_sat": 1.0,
     "pipeline_accepted_per_extracted": 8e-06,
-    "pipeline_accepted_per_gt": 0.2,
-    "property_asked_per_encodable": 0.000214,
-    "sat_per_property_asked": 0.294118,
+    "pipeline_accepted_per_gt": 0.166667,
+    "property_asked_per_encodable": 0.000264,
+    "sat_per_property_asked": 0.285714,
     "yara_share_of_unencodable": 0.641779
   },
   "rule_diff_reports": {
@@ -128,9 +138,9 @@
   "schema_version": "1",
   "security_tool_split": {
     "properties_asked_in_tools": 3,
-    "properties_asked_not_tools": 14,
+    "properties_asked_not_tools": 18,
     "properties_sat_in_tools": 2,
-    "properties_sat_not_tools": 3
+    "properties_sat_not_tools": 4
   },
   "upstream": {
     "accepted_upstream": 1,
