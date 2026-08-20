@@ -15,7 +15,7 @@ from typing import Any
 
 from regexproof.admission.boundary import BoundarySignals, classify_boundary
 from regexproof.io_atomic import atomic_write_text
-from regexproof.mine.exclusions import normalize_repo_url
+from regexproof.mine.exclusions import github_repo_slug, normalize_repo_url
 from regexproof.mine.search import (
     AuthError,
     HttpSession,
@@ -156,15 +156,13 @@ class TreeCache:
 
 
 def _repo_slug(url_or_slug: str) -> str:
-    """Return ``owner/repo`` from a URL or slug via ``normalize_repo_url``.
+    """Return github.com ``owner/repo``, or ``""`` for foreign hosts.
 
-    Always parse through the shared normalizer (scheme/host/.git tolerant)
-    instead of ``startswith("github.com/")`` substring checks, which CodeQL
-    flags as incomplete URL sanitization and which miss ``http://`` / SSH
-    forms.
+    Always parse through ``github_repo_slug`` / ``normalize_repo_url`` (no
+    ``startswith("github.com/")`` substring checks). Tree probes must not
+    send non-github URLs to ``api.github.com/repos/{slug}``.
     """
-    canonical = normalize_repo_url(str(url_or_slug or ""))
-    return canonical.removeprefix("https://github.com/").strip("/")
+    return github_repo_slug(str(url_or_slug or ""))
 
 
 def _repo_name(slug: str) -> str:
@@ -305,6 +303,10 @@ def materialize_tree_features(
         probed_pin = str(candidate.get("pin_probed") or "")
         key = (normalize_repo_url(url), probed_pin) if url else (url, probed_pin)
         slug = _repo_slug(url)
+        if not slug:
+            reason = "missing-slug-or-pin" if not str(url).strip() else "non-github-host"
+            features[key] = _incomplete(probed_pin, reason)
+            continue
         if not probed_pin:
             features[key] = _incomplete("", "missing-probed-pin")
             continue

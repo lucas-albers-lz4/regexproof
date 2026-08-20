@@ -165,6 +165,12 @@ def test_exclusions_owner_schemeless_host_prefix():
     )
     assert is_excluded("github.com/other/ok") is None
     assert is_excluded("www.github.com/other/ok") is None
+    assert is_excluded("git@github.com:lucas-albers-lz4/regexproof") == (
+        "excluded-owner:lucas-albers-lz4"
+    )
+    # Foreign hosts must not use the GitHub owner allowlist.
+    assert is_excluded("git@gitlab.com:lucas-albers-lz4/regexproof") is None
+    assert is_excluded("git@github.com.evil.com:lucas-albers-lz4/regexproof") is None
 
 
 def test_search_401_fail_fast():

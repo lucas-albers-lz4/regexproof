@@ -19,17 +19,26 @@ EXCLUDE_OWNERS = frozenset(
 _GITHUB_HOSTS = frozenset({"github.com", "www.github.com"})
 
 
-def _owner_from_url(url: str) -> str | None:
-    """Return the GitHub owner from a URL, slug, or schemeless host/path.
+def github_repo_slug(url: str) -> str:
+    """Return ``owner/repo`` for github.com URLs/slugs; otherwise ``""``.
 
-    Parse the *normalized* form so ``github.com/owner/repo`` is not treated as
-    owner ``github.com`` (urlparse puts the host in the path without a scheme).
+    Uses the parsed hostname of ``normalize_repo_url`` (not a substring check)
+    so schemeless ``github.com/owner/repo`` works and ``gitlab.com`` /
+    ``github.com.evil.com`` do not.
     """
-    parsed = urlparse(normalize_repo_url(url))
+    parsed = urlparse(normalize_repo_url(str(url or "")))
+    if (parsed.hostname or "").lower() not in _GITHUB_HOSTS:
+        return ""
     parts = [p for p in parsed.path.split("/") if p]
-    if not parts:
-        return None
-    return parts[0].lower().removesuffix(".git")
+    if len(parts) < 2:
+        return ""
+    return f"{parts[0]}/{parts[1]}"
+
+
+def _owner_from_url(url: str) -> str | None:
+    """Return the GitHub owner, or None for non-github hosts."""
+    slug = github_repo_slug(url)
+    return slug.split("/", 1)[0] if slug else None
 
 
 def normalize_repo_url(url: str) -> str:
