@@ -203,7 +203,7 @@ def ow_netdevname_semicolon():
         ),
         "input_source": "LuCI dockerman container publish form (config → Docker API)",
         "trust": "config",
-        "declared_domain": "ASCII minus U+003A, len 1..16, Node RegExp",
+        "declared_domain": "ASCII 0x01-0x7f minus U+003A, len 1..16, Node RegExp",
         "provenance": "human",
     },
 )
