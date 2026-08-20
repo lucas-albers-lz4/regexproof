@@ -1,0 +1,13947 @@
+---
+schema_version: "1"
+corpus: openwrt_luci
+findings: 410
+---
+
+# openwrt_luci batch findings
+
+## usage_mismatch:00aff2d14291e9325c17076f909a0267:search
+
+```yaml
+regex_id: 00aff2d14291e9325c17076f909a0267
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/validation.js:971:31"
+```
+
+### Pattern
+
+`^[a-fA-F0-9]{10,26}$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:016d782251a650fd2c294ed6bb70f171:search
+
+```yaml
+regex_id: 016d782251a650fd2c294ed6bb70f171
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:44:61"
+```
+
+### Pattern
+
+`^-----BEGIN CERTIFICATE-----$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:028ffc5ee61758bd3ce6b47862888d5d:search
+
+```yaml
+regex_id: 028ffc5ee61758bd3ce6b47862888d5d
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/network.js:3866:37"
+```
+
+### Pattern
+
+`^(wifi|radio)\d`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:0396b7ddd4f421e3df20f27ae99eb6fe:search
+
+```yaml
+regex_id: 0396b7ddd4f421e3df20f27ae99eb6fe
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:866:109"
+```
+
+### Pattern
+
+`^[0-9a-f]{2}$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:03ec36238268ef486d2d1dc5c535deff:search
+
+```yaml
+regex_id: 03ec36238268ef486d2d1dc5c535deff
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:52:25"
+```
+
+### Pattern
+
+`^\s*\d+\s+\d+\s+(\d+)\s+(\S+)$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:048c2b166d41d72015577a5b189a1452:search
+
+```yaml
+regex_id: 048c2b166d41d72015577a5b189a1452
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/firewall.js:111:24"
+```
+
+### Pattern
+
+`^[a-zA-Z0-9_]+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:04e3259c09119bc6c1913e48e10f1296:search
+
+```yaml
+regex_id: 04e3259c09119bc6c1913e48e10f1296
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/network.js:1081:27"
+```
+
+### Pattern
+
+`^[a-zA-Z0-9_]+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:04ec10d28db773b0b9fc400f9d920ca2:search
+
+```yaml
+regex_id: 04ec10d28db773b0b9fc400f9d920ca2
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-libreswan/htdocs/luci-static/resources/view/libreswan/tunnels.js:174:8"
+```
+
+### Pattern
+
+`^[0-9]{1,3}[smhd]$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:05953dccf03475471206d535f3d4fa47:search
+
+```yaml
+regex_id: 05953dccf03475471206d535f3d4fa47
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:179:89"
+```
+
+### Pattern
+
+`^[a-f0-9]+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:079bce388e4293c026e176289d03cb09:search
+
+```yaml
+regex_id: 079bce388e4293c026e176289d03cb09
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:13:1"
+```
+
+### Pattern
+
+`^(?:power)[0-9]*$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:08adc3e820e2220f5bb36b3d8499b568:search
+
+```yaml
+regex_id: 08adc3e820e2220f5bb36b3d8499b568
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/network.js:36:1"
+```
+
+### Pattern
+
+`^tunl\d+`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:0a04afdc57c1bc94f479697b153f0023:search
+
+```yaml
+regex_id: 0a04afdc57c1bc94f479697b153f0023
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-smartdns/htdocs/luci-static/resources/view/smartdns/smartdns.js:875:20"
+```
+
+### Pattern
+
+`^#[4|6]:[a-zA-Z0-9\-_]+#[a-zA-Z0-9\-_]+#[a-zA-Z0-9\-_]+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:0a92cd2e4b3c61023fee55ab9526da2c:search
+
+```yaml
+regex_id: 0a92cd2e4b3c61023fee55ab9526da2c
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-ledtrig-usbport/htdocs/luci-static/resources/view/system/led-trigger/usbport.js:40:23"
+```
+
+### Pattern
+
+`^(\d+)-(\d+)$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:0a97e222d3667eb61b7f2aa951ba0dc5:search
+
+```yaml
+regex_id: 0a97e222d3667eb61b7f2aa951ba0dc5
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-smartdns/htdocs/luci-static/resources/view/smartdns/smartdns.js:450:19"
+```
+
+### Pattern
+
+`^(#[4|6]:)?[a-zA-Z0-9\-_]+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:0ab86573dab514d11bb697a2d2d69e6f:search
+
+```yaml
+regex_id: 0ab86573dab514d11bb697a2d2d69e6f
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-pppossh/htdocs/luci-static/resources/protocol/pppossh.js:119:20"
+```
+
+### Pattern
+
+`^\d+[ ,](\d+)$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:0ad4b43cde8dc99d1dc38bd32a49b545:search
+
+```yaml
+regex_id: 0ad4b43cde8dc99d1dc38bd32a49b545
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:336:10"
+```
+
+### Pattern
+
+`^(\d{1,3}\.){3}\d{1,3}$|^([a-fA-F0-9]{1,4}:){7}[a-fA-F0-9]{1,4}$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:0af9cf5367f979a855be3e9c66c93e29:search
+
+```yaml
+regex_id: 0af9cf5367f979a855be3e9c66c93e29
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:491:28"
+```
+
+### Pattern
+
+`^(\d+)\s+(\S+)$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:0b26ef58169e8deb328266523b344498:search
+
+```yaml
+regex_id: 0b26ef58169e8deb328266523b344498
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-dockerman/htdocs/luci-static/resources/view/dockerman/container_new.js:854:27"
+```
+
+### Pattern
+
+`^(\d+):(\d+)\/(tcp|udp)$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:0b912aa289a81eaa9bfddac2d9121fa7:search
+
+```yaml
+regex_id: 0b912aa289a81eaa9bfddac2d9121fa7
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:20:31"
+```
+
+### Pattern
+
+`^qmi-.+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:0ba6b4dbb5674c69ea0a320ca1c9372a:search
+
+```yaml
+regex_id: 0ba6b4dbb5674c69ea0a320ca1c9372a
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:22:10"
+```
+
+### Pattern
+
+`^(Google Chrome|Microsoft Edge|Chromium|Brave|Opera|Vivaldi)$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:0c64f5481a1273fd96f7d4d7aacbb96f:search
+
+```yaml
+regex_id: 0c64f5481a1273fd96f7d4d7aacbb96f
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:588:43"
+```
+
+### Pattern
+
+`^flow add (@\S+)$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:0d0001331a287e72b0931d4543434484:search
+
+```yaml
+regex_id: 0d0001331a287e72b0931d4543434484
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/cbi.js:570:7"
+```
+
+### Pattern
+
+`-([^-]+)$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:0d7655aefd11a015fec9c9ce88134e33:search
+
+```yaml
+regex_id: 0d7655aefd11a015fec9c9ce88134e33
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-xinetd/htdocs/luci-static/resources/view/xinetd/xinetd.js:259:28"
+```
+
+### Pattern
+
+`^([01]\d|2[0-3]):[0-5]\d-([01]\d|2[0-3]):[0-5]\d$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:0e348a314bb833ded2cfa109a48eff45:search
+
+```yaml
+regex_id: 0e348a314bb833ded2cfa109a48eff45
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:42:18"
+```
+
+### Pattern
+
+`^(tls|tcp|quic|socks|sockstls|unix|ws|wss):\/\/`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:0e41f6d767e5b19e2e9640b591ed20a0:search
+
+```yaml
+regex_id: 0e41f6d767e5b19e2e9640b591ed20a0
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/ppp.js:15:95"
+```
+
+### Pattern
+
+`^[0-9]+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:0e4f855882ab4a964745f512bef57d3c:search
+
+```yaml
+regex_id: 0e4f855882ab4a964745f512bef57d3c
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-smartdns/htdocs/luci-static/resources/view/smartdns/smartdns.js:573:20"
+```
+
+### Pattern
+
+`^(socks5|http):\/\/`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:0f0ca79f3dc70b42daebe0dd09865ce0:search
+
+```yaml
+regex_id: 0f0ca79f3dc70b42daebe0dd09865ce0
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1602:30"
+```
+
+### Pattern
+
+`^dev:(.+)$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:0f50500d27750734bb8e5f8dd4032739:search
+
+```yaml
+regex_id: 0f50500d27750734bb8e5f8dd4032739
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:922:28"
+```
+
+### Pattern
+
+`^\d+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:0fba5af9d77356bd89ed08de71e2407b:search
+
+```yaml
+regex_id: 0fba5af9d77356bd89ed08de71e2407b
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-dockerman/htdocs/luci-static/resources/dockerman/common.js:461:6"
+```
+
+### Pattern
+
+`^[0-7]+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:0fbd0f39ac4a0924d8afc3965414c525:search
+
+```yaml
+regex_id: 0fbd0f39ac4a0924d8afc3965414c525
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:375:21"
+```
+
+### Pattern
+
+`^\/dev\/(mtdblock|ubi|ubiblock)\d`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:10b9b6ec96b2a52ba96e4fd3f93ac766:search
+
+```yaml
+regex_id: 10b9b6ec96b2a52ba96e4fd3f93ac766
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/config.js:67:11"
+```
+
+### Pattern
+
+`^[0-9]{4}-[0-9]{2}-[0-9]{2}\/[0-9]+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:110107e9341144a09aaef94aa274741f:search
+
+```yaml
+regex_id: 110107e9341144a09aaef94aa274741f
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:360:21"
+```
+
+### Pattern
+
+`^\/dev\/(mtdblock|ubi|ubiblock)\d`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:1138572c99c40fbd35dd3065df36e100:search
+
+```yaml
+regex_id: 1138572c99c40fbd35dd3065df36e100
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/6to4.js:5:31"
+```
+
+### Pattern
+
+`^6to4-.+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:119d6ba93f89980348ee2e7c4efa9756:search
+
+```yaml
+regex_id: 119d6ba93f89980348ee2e7c4efa9756
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1561:49"
+```
+
+### Pattern
+
+`^br-([A-Za-z0-9_]+)$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:11e7481a5e72f5eec870232a3c552232:search
+
+```yaml
+regex_id: 11e7481a5e72f5eec870232a3c552232
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:21:31"
+```
+
+### Pattern
+
+`^vpn-.+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:124b8e7073dbc2e536f22668721286cb:search
+
+```yaml
+regex_id: 124b8e7073dbc2e536f22668721286cb
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-mod-system/htdocs/luci-static/resources/view/system/password.js:33:20"
+```
+
+### Pattern
+
+`^(?=.{7,})(((?=.*[A-Z])(?=.*[a-z]))|((?=.*[A-Z])(?=.*[0-9]))|((?=.*[a-z])(?=.*[0-9]))).*$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:1257510caee7fe808532f644dc95872c:search
+
+```yaml
+regex_id: 1257510caee7fe808532f644dc95872c
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/luci.js:2484:24"
+```
+
+### Pattern
+
+`^use[ \t]+strict$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:132cc2876dda864fa937a99281b7c44c:search
+
+```yaml
+regex_id: 132cc2876dda864fa937a99281b7c44c
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:179:5"
+```
+
+### Pattern
+
+`^(0[xX][0-9a-fA-F]+|\d+)$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:1536cc412a2a2f70ccad9b9628e4c831:search
+
+```yaml
+regex_id: 1536cc412a2a2f70ccad9b9628e4c831
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-mod-status/htdocs/luci-static/resources/view/status/routesj.js:98:20"
+```
+
+### Pattern
+
+`^fe[89a-f][0-9a-f]:`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:15467aec556adfe4771e96bcba72349d:search
+
+```yaml
+regex_id: 15467aec556adfe4771e96bcba72349d
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoa.js:119:20"
+```
+
+### Pattern
+
+`^\d+[ ,](\d+)$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:15967f0e32936ea24357abeb383c44b6:search
+
+```yaml
+regex_id: 15967f0e32936ea24357abeb383c44b6
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:27:18"
+```
+
+### Pattern
+
+`^([0-9a-fA-F]){64}$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:1676ebce151b68797c8d449f7082114a:search
+
+```yaml
+regex_id: 1676ebce151b68797c8d449f7082114a
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:140:34"
+```
+
+### Pattern
+
+`^([\w-]+)\s+(\d+)\/(\w+)`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:16cc83ccf21585e9fecf3a5c0d1dd087:search
+
+```yaml
+regex_id: 16cc83ccf21585e9fecf3a5c0d1dd087
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:330:10"
+```
+
+### Pattern
+
+`^([a-fA-F0-9]{1,4}:){7}[a-fA-F0-9]{1,4}$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:1745745297de3967a00e89034f84d57e:search
+
+```yaml
+regex_id: 1745745297de3967a00e89034f84d57e
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/openvpn.js:32:50"
+```
+
+### Pattern
+
+`^openvpn\..+\.status$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:175e1a6e6d7b1cd3c63dd7278a6e6d1c:search
+
+```yaml
+regex_id: 175e1a6e6d7b1cd3c63dd7278a6e6d1c
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/validation.js:410:14"
+```
+
+### Pattern
+
+`^([a-fA-F0-9:]+):(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:18e0ae92ba5e6c8d15b089ca0c3458e1:search
+
+```yaml
+regex_id: 18e0ae92ba5e6c8d15b089ca0c3458e1
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:179:40"
+```
+
+### Pattern
+
+`^0x[a-fA-F0-9]{1,8}$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:19970976c12bf66ea12ab4198af3c2eb:search
+
+```yaml
+regex_id: 19970976c12bf66ea12ab4198af3c2eb
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:10:1"
+```
+
+### Pattern
+
+`^(?:fan)[0-9]*$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:19f75502da5c016b9a2958347796acc5:search
+
+```yaml
+regex_id: 19f75502da5c016b9a2958347796acc5
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:526:25"
+```
+
+### Pattern
+
+`^[0-9]+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:1a411221986fac6bef89116368212b2e:search
+
+```yaml
+regex_id: 1a411221986fac6bef89116368212b2e
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-filemanager/htdocs/luci-static/resources/view/system/filemanager/md.js:52:6"
+```
+
+### Pattern
+
+`^###\s+`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:1bba68140595791fb967c1eb11fd8a70:search
+
+```yaml
+regex_id: 1bba68140595791fb967c1eb11fd8a70
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/protocol/static.js:12:32"
+```
+
+### Pattern
+
+`^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\/(\d{1,2}|\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:1d1313e775e6d5605b751ddd3ad59c92:search
+
+```yaml
+regex_id: 1d1313e775e6d5605b751ddd3ad59c92
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:948:11"
+```
+
+### Pattern
+
+`^[\w.@:-]+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:1d2c479bb882b07a58326cde49dd3eb4:search
+
+```yaml
+regex_id: 1d2c479bb882b07a58326cde49dd3eb4
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/disk.js:23:26"
+```
+
+### Pattern
+
+`^ +[0-9]+ +[0-9]+ +[0-9]+ (\S+)$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:1d611a6f977dff1cf78163871d367897:search
+
+```yaml
+regex_id: 1d611a6f977dff1cf78163871d367897
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:96:8"
+```
+
+### Pattern
+
+`^[a-zA-Z0-9\-.]*[a-zA-Z0-9]$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:1e137eeccf183ced564f8794e0d12bbd:search
+
+```yaml
+regex_id: 1e137eeccf183ced564f8794e0d12bbd
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:210:21"
+```
+
+### Pattern
+
+`^[a-z0-9]+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:1e476eaa24e1d1dc3d02184c25c8dae6:search
+
+```yaml
+regex_id: 1e476eaa24e1d1dc3d02184c25c8dae6
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-acl/htdocs/luci-static/resources/view/system/acl.js:204:41"
+```
+
+### Pattern
+
+`\.json$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:1f6b2a94a8ef1f0864d010536d3a07a5:search
+
+```yaml
+regex_id: 1f6b2a94a8ef1f0864d010536d3a07a5
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6.js:82:76"
+```
+
+### Pattern
+
+`^inherit$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:2085591488d7f69445a34b5ca03fb14b:search
+
+```yaml
+regex_id: 2085591488d7f69445a34b5ca03fb14b
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1211:21"
+```
+
+### Pattern
+
+`^[0-9a-fA-F:]+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:215cda0b2a9df1eb1b482e75c7ae2aae:search
+
+```yaml
+regex_id: 215cda0b2a9df1eb1b482e75c7ae2aae
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/validation.js:534:23"
+```
+
+### Pattern
+
+`^([0-9a-fA-F:.]+)$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:21e310af0d85a134bea1d5e762bbe2d7:search
+
+```yaml
+regex_id: 21e310af0d85a134bea1d5e762bbe2d7
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:915:11"
+```
+
+### Pattern
+
+`^[\w\s.:-]*$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:2286145f25ca3dacd73e77f00cfe71ee:search
+
+```yaml
+regex_id: 2286145f25ca3dacd73e77f00cfe71ee
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-smartdns/htdocs/luci-static/resources/view/smartdns/smartdns.js:856:19"
+```
+
+### Pattern
+
+`^(#[4|6]:)?[a-zA-Z0-9\-_]+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:234b9003dd03725a8886a9cbfdf3bf96:search
+
+```yaml
+regex_id: 234b9003dd03725a8886a9cbfdf3bf96
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/l2tp.js:6:31"
+```
+
+### Pattern
+
+`^l2tp-.+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:23bb50024babc45c25e2f21476ca02cb:search
+
+```yaml
+regex_id: 23bb50024babc45c25e2f21476ca02cb
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1514:27"
+```
+
+### Pattern
+
+`^([^:]+)(?::[ut*]+)?$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:244edde4d720832555ac72a2cef8f9df:search
+
+```yaml
+regex_id: 244edde4d720832555ac72a2cef8f9df
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pptp.js:106:20"
+```
+
+### Pattern
+
+`^\d+[ ,](\d+)$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:2520776dfedcd0472343014484b31b6f:search
+
+```yaml
+regex_id: 2520776dfedcd0472343014484b31b6f
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:331:4"
+```
+
+### Pattern
+
+`^[A-Z]{2}$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:25aafa0b2fa3ba5ad2292d6a27aad247:search
+
+```yaml
+regex_id: 25aafa0b2fa3ba5ad2292d6a27aad247
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/validation.js:991:39"
+```
+
+### Pattern
+
+`^[a-zA-Z_][a-zA-Z0-9_]+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:25be90fd9c95922e0748a013a3ee261d:search
+
+```yaml
+regex_id: 25be90fd9c95922e0748a013a3ee261d
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:8:31"
+```
+
+### Pattern
+
+`^yggdrasil-.+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:262ac45c3c5cfd4b1f22e7b2b17ff3b7:search
+
+```yaml
+regex_id: 262ac45c3c5cfd4b1f22e7b2b17ff3b7
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/network.js:35:1"
+```
+
+### Pattern
+
+`^ip6tnl\d+`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:263060336962bfe027be515c0f285b6c:search
+
+```yaml
+regex_id: 263060336962bfe027be515c0f285b6c
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:7:31"
+```
+
+### Pattern
+
+`^mobiledata-.+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:2682e2ef65c3df37942ed4fdf4557d82:search
+
+```yaml
+regex_id: 2682e2ef65c3df37942ed4fdf4557d82
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/network.js:43:1"
+```
+
+### Pattern
+
+`^ath\d+`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:273736fd1ce426bca37c5d6591769ed5:search
+
+```yaml
+regex_id: 273736fd1ce426bca37c5d6591769ed5
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool.js:235:33"
+```
+
+### Pattern
+
+`^([^-]+)(?:-(.+))?\.rrd$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:28376c53daad44bb76a57dae3d926268:search
+
+```yaml
+regex_id: 28376c53daad44bb76a57dae3d926268
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:93:37"
+```
+
+### Pattern
+
+`^fe[89a-f][0-9a-f]:`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:29103ef4b7e88ac7c42c5c6f7fe30d1d:search
+
+```yaml
+regex_id: 29103ef4b7e88ac7c42c5c6f7fe30d1d
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1144:37"
+```
+
+### Pattern
+
+`^$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:2943a67b809041653d7b7fc848912bf5:search
+
+```yaml
+regex_id: 2943a67b809041653d7b7fc848912bf5
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:106:33"
+```
+
+### Pattern
+
+`^(?:(\w+):\/\/|)(?:\[([0-9a-f:.]{2,45})\]|([^/:]+))(?::([0-9]{1,5}))?(?:\/.*)?$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:2a289d318d5228216158bdc0656f46c4:search
+
+```yaml
+regex_id: 2a289d318d5228216158bdc0656f46c4
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:82:76"
+```
+
+### Pattern
+
+`^inherit$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:2a4d12b6630eb3b31d5642eae6c803e0:search
+
+```yaml
+regex_id: 2a4d12b6630eb3b31d5642eae6c803e0
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1686:30"
+```
+
+### Pattern
+
+`^dev:(.+)$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:2b6af5c0708d68d70ca97d5f73bb35d9:search
+
+```yaml
+regex_id: 2b6af5c0708d68d70ca97d5f73bb35d9
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/network.js:44:1"
+```
+
+### Pattern
+
+`^\w+\.network\d+`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:2dbdb4576bb663720c28134aeeac4b45:search
+
+```yaml
+regex_id: 2dbdb4576bb663720c28134aeeac4b45
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-dockerman/htdocs/luci-static/resources/view/dockerman/container_new.js:845:27"
+```
+
+### Pattern
+
+`^\[([^\]]+)\]:(\d+):(\d+)\/(tcp|udp)$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:2f0e7a5c550a550a70f602f49e82b7c9:search
+
+```yaml
+regex_id: 2f0e7a5c550a550a70f602f49e82b7c9
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:22:23"
+```
+
+### Pattern
+
+`^(\d+)base(\w+)-(H|F)$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:2fbd833cae623f00378aeee0769e26f6:search
+
+```yaml
+regex_id: 2fbd833cae623f00378aeee0769e26f6
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:14:26"
+```
+
+### Pattern
+
+`^ttyUSB`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:302ffe844d9db333740d404bd994a0fc:search
+
+```yaml
+regex_id: 302ffe844d9db333740d404bd994a0fc
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-wifischedule/htdocs/luci-static/resources/view/wifischedule/wifischedule.js:25:30"
+```
+
+### Pattern
+
+`^(\d\d?):(\d\d?)$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:30479438a614229c6069942974d57cfc:search
+
+```yaml
+regex_id: 30479438a614229c6069942974d57cfc
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/validation.js:954:31"
+```
+
+### Pattern
+
+`^[a-fA-F0-9]{64}$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:30660dc86bc0c03f6cd6d1dc98b663a5:search
+
+```yaml
+regex_id: 30660dc86bc0c03f6cd6d1dc98b663a5
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/validation.js:794:24"
+```
+
+### Pattern
+
+`^[a-zA-Z0-9_][a-zA-Z0-9_\-.]*[a-zA-Z0-9]\.?$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:30fe971a6914c91de10998c3514856fb:search
+
+```yaml
+regex_id: 30fe971a6914c91de10998c3514856fb
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool.js:261:21"
+```
+
+### Pattern
+
+`^(\d+)\b`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:31b31af9e2540d08d12ac06ab2c25d11:search
+
+```yaml
+regex_id: 31b31af9e2540d08d12ac06ab2c25d11
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:64:57"
+```
+
+### Pattern
+
+`^(\d+)\/([smhd])\w*$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:31c38d88294a1ecf32dd4b1da3c9144f:search
+
+```yaml
+regex_id: 31c38d88294a1ecf32dd4b1da3c9144f
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-xinetd/htdocs/luci-static/resources/view/xinetd/xinetd.js:136:28"
+```
+
+### Pattern
+
+`^[A-Za-z0-9_-]+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:31ca4fcdcc77d0f9164c6b1da4f37086:search
+
+```yaml
+regex_id: 31ca4fcdcc77d0f9164c6b1da4f37086
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:12:1"
+```
+
+### Pattern
+
+`^(?:curr)[0-9]*$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:34680ebf569b7bd20f38a3896c728cc9:search
+
+```yaml
+regex_id: 34680ebf569b7bd20f38a3896c728cc9
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/network.js:42:1"
+```
+
+### Pattern
+
+`^wl\d+`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:348d6cd411174f01589ad2cb15c01dde:search
+
+```yaml
+regex_id: 348d6cd411174f01589ad2cb15c01dde
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:14:26"
+```
+
+### Pattern
+
+`^cdc-wdm`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:3512235f18279cdf5f357b6936242200:search
+
+```yaml
+regex_id: 3512235f18279cdf5f357b6936242200
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:26:56"
+```
+
+### Pattern
+
+`^(!\s*)?(0x[0-9a-f]{1,8}|[0-9]{1,10})(?:\/(0x[0-9a-f]{1,8}|[0-9]{1,10}))?$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:36b975c7fd1495dc1f136f9993fc501b:search
+
+```yaml
+regex_id: 36b975c7fd1495dc1f136f9993fc501b
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:236:30"
+```
+
+### Pattern
+
+`^(22[4-9]|23[0-9])(\.\d{1,3}){3}$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:3a2815091f2bd15d3003ed5685e2b7cf:search
+
+```yaml
+regex_id: 3a2815091f2bd15d3003ed5685e2b7cf
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:300:4"
+```
+
+### Pattern
+
+`^-?\d+(?:\.\d+)? [mf]$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:3a9066f72dfc798234544c8dcc1e797f:search
+
+```yaml
+regex_id: 3a9066f72dfc798234544c8dcc1e797f
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:102:45"
+```
+
+### Pattern
+
+`\.js$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:3c46ce225b08a5560d9a878bc685ac29:search
+
+```yaml
+regex_id: 3c46ce225b08a5560d9a878bc685ac29
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:247:18"
+```
+
+### Pattern
+
+`^coordinate|^address|^elin`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:3c5b22c0ab2fff66fb84e59207d6e56c:search
+
+```yaml
+regex_id: 3c5b22c0ab2fff66fb84e59207d6e56c
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/stations.js:652:87"
+```
+
+### Pattern
+
+`\.login$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:3ed212fdf4b46efef96633a237f4d0ea:search
+
+```yaml
+regex_id: 3ed212fdf4b46efef96633a237f4d0ea
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/ppp.js:133:20"
+```
+
+### Pattern
+
+`^\d+[ ,](\d+)$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:3fd00e0129c728c6eef2a606814fc0e4:search
+
+```yaml
+regex_id: 3fd00e0129c728c6eef2a606814fc0e4
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/ppp.js:120:20"
+```
+
+### Pattern
+
+`^(\d+)[ ,]\d+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:3fd7784ff132c014a8d21fe294a8c3be:search
+
+```yaml
+regex_id: 3fd7784ff132c014a8d21fe294a8c3be
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/map.js:6:31"
+```
+
+### Pattern
+
+`^map-.+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:40bd3cfcbf4d40d41c5c4166ae7a4e7a:search
+
+```yaml
+regex_id: 40bd3cfcbf4d40d41c5c4166ae7a4e7a
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/validation.js:376:10"
+```
+
+### Pattern
+
+`^-?\d+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:418910c271d71b970be06f7ba4efefb2:search
+
+```yaml
+regex_id: 418910c271d71b970be06f7ba4efefb2
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-tinyproxy/htdocs/luci-static/resources/view/tinyproxy/tinyproxy.js:313:19"
+```
+
+### Pattern
+
+`^\d+\.\d+\.\d+\.\d+:\d+`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:41be16a1e8de787ab751597ef49edb32:search
+
+```yaml
+regex_id: 41be16a1e8de787ab751597ef49edb32
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:6:31"
+```
+
+### Pattern
+
+`^bat\d+`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:42963b4a65e5e772de0c322adcc395fc:search
+
+```yaml
+regex_id: 42963b4a65e5e772de0c322adcc395fc
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-dockerman/htdocs/luci-static/resources/view/dockerman/volumes.js:259:26"
+```
+
+### Pattern
+
+`^(.*\/volumes\/)([^/]+)(\/.*)?$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:42bb836354e3a56f543f6cbd1b339a50:search
+
+```yaml
+regex_id: 42bb836354e3a56f543f6cbd1b339a50
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/network.js:528:23"
+```
+
+### Pattern
+
+`^hostapd\.(.+)$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:42d0edf7d06a2a28a242c43275436e1d:search
+
+```yaml
+regex_id: 42d0edf7d06a2a28a242c43275436e1d
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/validation.js:420:15"
+```
+
+### Pattern
+
+`^[a-fA-F0-9:]+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:434e84b38d1aa3e74e93170558ad0f90:search
+
+```yaml
+regex_id: 434e84b38d1aa3e74e93170558ad0f90
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:138:22"
+```
+
+### Pattern
+
+`^(\d+)[ ,]\d+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:442953893a119eff3444ceb9cf9e6b2d:search
+
+```yaml
+regex_id: 442953893a119eff3444ceb9cf9e6b2d
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:7:1"
+```
+
+### Pattern
+
+`^[0-9]+(?:\.[0-9]+)?v$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:447fc4d7b986a7389c5bbad5b4c9f81a:search
+
+```yaml
+regex_id: 447fc4d7b986a7389c5bbad5b4c9f81a
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1756:10"
+```
+
+### Pattern
+
+`^[0-9]+(:s:.+|:d:[0-9]+|:x:([0-9a-zA-Z]{2})+)?$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:44989a2b9228d28a6625839a2cc7b6b2:search
+
+```yaml
+regex_id: 44989a2b9228d28a6625839a2cc7b6b2
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:920:12"
+```
+
+### Pattern
+
+`^\d+(\.\d+)?[kmg]?bit$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:44e98bb9cf31128b392adc021fcf9689:search
+
+```yaml
+regex_id: 44e98bb9cf31128b392adc021fcf9689
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:133:23"
+```
+
+### Pattern
+
+`^num `
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:44ef8d5f4a52b06a50b3b4123a48c240:search
+
+```yaml
+regex_id: 44ef8d5f4a52b06a50b3b4123a48c240
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-pppossh/htdocs/luci-static/resources/protocol/pppossh.js:6:31"
+```
+
+### Pattern
+
+`^pppossh-.+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:44fa7d69d87f009273c69ff109601ec1:search
+
+```yaml
+regex_id: 44fa7d69d87f009273c69ff109601ec1
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:25:62"
+```
+
+### Pattern
+
+`^(!\s*)?(\S+)$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:45a8ecee7112572f2f31b396382e83a6:search
+
+```yaml
+regex_id: 45a8ecee7112572f2f31b396382e83a6
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/luci.js:2845:71"
+```
+
+### Pattern
+
+`^\?[a-zA-Z0-9_.%=&;-]+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:466235d9764dfb99ddcf67a8ab51cb7b:search
+
+```yaml
+regex_id: 466235d9764dfb99ddcf67a8ab51cb7b
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface6.js:107:10"
+```
+
+### Pattern
+
+`^[0-1]\.\d+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:4705042a0ab69d1a9d3deafe73391296:search
+
+```yaml
+regex_id: 4705042a0ab69d1a9d3deafe73391296
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:77:76"
+```
+
+### Pattern
+
+`^inherit$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:48743eee8679e3612f68a9fe0c30cb21:search
+
+```yaml
+regex_id: 48743eee8679e3612f68a9fe0c30cb21
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/irq.js:25:26"
+```
+
+### Pattern
+
+`^\s*([^\s:]+):`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:489f967872f0f4d243ba6c15d93376f4:search
+
+```yaml
+regex_id: 489f967872f0f4d243ba6c15d93376f4
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:38:19"
+```
+
+### Pattern
+
+`^\/(.+)\/$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:4af6a12862c7d84efc3ac6c88231e81b:search
+
+```yaml
+regex_id: 4af6a12862c7d84efc3ac6c88231e81b
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:152:43"
+```
+
+### Pattern
+
+`^(\d+):\s+(.+)$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:4b10bde8944db146427789cfbcbc40b3:search
+
+```yaml
+regex_id: 4b10bde8944db146427789cfbcbc40b3
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:298:107"
+```
+
+### Pattern
+
+`^(.+):(\d+)$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:4b71da80dd77b54f3a870558779327e1:search
+
+```yaml
+regex_id: 4b71da80dd77b54f3a870558779327e1
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:15:22"
+```
+
+### Pattern
+
+`\.fullchain\.crt$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:4c639e96d9aeedd7a38f950582a40d20:search
+
+```yaml
+regex_id: 4c639e96d9aeedd7a38f950582a40d20
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-mod-network/htdocs/luci-static/resources/tools/bridgevlan.js:168:33"
+```
+
+### Pattern
+
+`^([^:]+)(?::[ut*]+)?$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:4cba806fb89072746048238229b8e92c:search
+
+```yaml
+regex_id: 4cba806fb89072746048238229b8e92c
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:141:8"
+```
+
+### Pattern
+
+`^[*a-z0-9][a-z0-9.-]*$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:4d0d0f95a57691c41ac20de188ee6cf1:search
+
+```yaml
+regex_id: 4d0d0f95a57691c41ac20de188ee6cf1
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-xinetd/htdocs/luci-static/resources/view/xinetd/xinetd.js:250:28"
+```
+
+### Pattern
+
+`^([0-9]+\s+[0-9]+$)`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:4d4d1ed8def812706b154c4f8694c9c3:search
+
+```yaml
+regex_id: 4d4d1ed8def812706b154c4f8694c9c3
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/form.js:3425:13"
+```
+
+### Pattern
+
+`^rgba?\(([0-9]+),([0-9]+),([0-9]+)[,)]$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:4d86a29d094d401ad0670c35a9ed97e8:search
+
+```yaml
+regex_id: 4d86a29d094d401ad0670c35a9ed97e8
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-ipip/htdocs/luci-static/resources/protocol/ipip.js:6:31"
+```
+
+### Pattern
+
+`^ipip-.+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:4dab79d8fde1266cff662acc220372cb:search
+
+```yaml
+regex_id: 4dab79d8fde1266cff662acc220372cb
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/6in4.js:76:7"
+```
+
+### Pattern
+
+`^[a-fA-F0-9]{32}$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:4e29130b8a8847995c4533dfdea55e3e:search
+
+```yaml
+regex_id: 4e29130b8a8847995c4533dfdea55e3e
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/config.js:78:6"
+```
+
+### Pattern
+
+`^[0-9]{4}-[0-9]{2}-[0-9]{2}\/[0-9]+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:4e72d91fc304750d4b91d21cbe557aa2:search
+
+```yaml
+regex_id: 4e72d91fc304750d4b91d21cbe557aa2
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-smartdns/htdocs/luci-static/resources/view/smartdns/smartdns.js:546:20"
+```
+
+### Pattern
+
+`^(http|https|ftp|sftp):\/\/`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:4f5c58e9479b82a7e67c85a923b6e182:search
+
+```yaml
+regex_id: 4f5c58e9479b82a7e67c85a923b6e182
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-filemanager/htdocs/luci-static/resources/view/system/filemanager/HexEditor.js:711:7"
+```
+
+### Pattern
+
+`^[0-9a-fA-F]+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:51c0846f088a4dcfea35ec1f56243ac1:search
+
+```yaml
+regex_id: 51c0846f088a4dcfea35ec1f56243ac1
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:9:1"
+```
+
+### Pattern
+
+`^(?:cpu_temp|remote_temp|temp)[0-9]*$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:522d1d76a977ccfd427183146448f375:search
+
+```yaml
+regex_id: 522d1d76a977ccfd427183146448f375
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:99:12"
+```
+
+### Pattern
+
+`^\d+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:523ab710163eb6fda5e8e789d24ff898:search
+
+```yaml
+regex_id: 523ab710163eb6fda5e8e789d24ff898
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/network.js:30:1"
+```
+
+### Pattern
+
+`^mon\.wlan\d+`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:527afebb07793d87c443851119dfbc45:search
+
+```yaml
+regex_id: 527afebb07793d87c443851119dfbc45
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:20:31"
+```
+
+### Pattern
+
+`^ncm-.+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:5321ba6a7f9ee129b86d209f958dfbb6:search
+
+```yaml
+regex_id: 5321ba6a7f9ee129b86d209f958dfbb6
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface.js:101:10"
+```
+
+### Pattern
+
+`^(\d{1,3}\.){3}\d{1,3}$|^([a-fA-F0-9]{1,4}:){7}[a-fA-F0-9]{1,4}$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:53bcc23dbe3ec8f4534747b2c9975bad:search
+
+```yaml
+regex_id: 53bcc23dbe3ec8f4534747b2c9975bad
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-dockerman/htdocs/luci-static/resources/dockerman/common.js:786:18"
+```
+
+### Pattern
+
+`:[0-9]+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:54120c3118ad07b2e8953e19869b9b76:search
+
+```yaml
+regex_id: 54120c3118ad07b2e8953e19869b9b76
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/network.js:34:1"
+```
+
+### Pattern
+
+`^ip6gre\d+`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:54e07ccd74435696ba39a8d4c82b6afc:search
+
+```yaml
+regex_id: 54e07ccd74435696ba39a8d4c82b6afc
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:747:21"
+```
+
+### Pattern
+
+`^[0-9]+[smhdw]?$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:564d761297820aaf739f14b95d72769b:search
+
+```yaml
+regex_id: 564d761297820aaf739f14b95d72769b
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:1021:21"
+```
+
+### Pattern
+
+`^(https?:\/\/)[A-Za-z0-9-]+\.[A-Za-z0-9.-]+(:[0-9]+)?(\/[A-Za-z0-9._\-?&+=:~#%]*)?$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:56b858a39a297b18c9768b29c29bf1b1:search
+
+```yaml
+regex_id: 56b858a39a297b18c9768b29c29bf1b1
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-filemanager/htdocs/luci-static/resources/view/system/filemanager/md.js:57:6"
+```
+
+### Pattern
+
+`^##\s+`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:56d12c69dfba43b85930f3bbfd25f917:search
+
+```yaml
+regex_id: 56d12c69dfba43b85930f3bbfd25f917
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:1007:34"
+```
+
+### Pattern
+
+`^\w+\t\w+\t(.*$)`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:588c2aaf5d2276c68d44dde63dbfbf68:search
+
+```yaml
+regex_id: 588c2aaf5d2276c68d44dde63dbfbf68
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:46:9"
+```
+
+### Pattern
+
+`^[a-zA-Z_.][a-zA-Z0-9/_.-]*$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:5900cea803b2dc60519cf6520ae10acb:search
+
+```yaml
+regex_id: 5900cea803b2dc60519cf6520ae10acb
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:6:31"
+```
+
+### Pattern
+
+`^gre4-.+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:599e8219a3d479194f16692928551e37:search
+
+```yaml
+regex_id: 599e8219a3d479194f16692928551e37
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/luci.js:3239:8"
+```
+
+### Pattern
+
+`^(?:\/|\S+:\/\/)`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:5a056049883e02186dde7697c0936c42:search
+
+```yaml
+regex_id: 5a056049883e02186dde7697c0936c42
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:47:16"
+```
+
+### Pattern
+
+`^(?:[A-Za-z0-9+\/]{4})*(?:[A-Za-z0-9+\/]{2}==|[A-Za-z0-9+\/]{3}=)?$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:5a5a38fcf1e3b37801b1befebd0ecdff:search
+
+```yaml
+regex_id: 5a5a38fcf1e3b37801b1befebd0ecdff
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-pppossh/htdocs/luci-static/resources/protocol/pppossh.js:106:20"
+```
+
+### Pattern
+
+`^(\d+)[ ,]\d+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:5ac52d7fa6f0be47a607e25814db0f6f:search
+
+```yaml
+regex_id: 5ac52d7fa6f0be47a607e25814db0f6f
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-mod-status/htdocs/luci-static/resources/view/status/dmesg.js:45:37"
+```
+
+### Pattern
+
+`^<(\w+)>`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:5ae1787959e7669d0f31e10aedb7766d:search
+
+```yaml
+regex_id: 5ae1787959e7669d0f31e10aedb7766d
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/validation.js:520:23"
+```
+
+### Pattern
+
+`^(\d+\.\d+\.\d+\.\d+)$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:5b2c2f734ea5ab93d4e175cf06c8397c:search
+
+```yaml
+regex_id: 5b2c2f734ea5ab93d4e175cf06c8397c
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:7:31"
+```
+
+### Pattern
+
+`^vxlan-.+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:5be01d600e37d97c3e88047ece556e96:search
+
+```yaml
+regex_id: 5be01d600e37d97c3e88047ece556e96
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:86:57"
+```
+
+### Pattern
+
+`^(\d+)\/([smhd])\w*$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:5c451c4034bda53e65234029def86b78:search
+
+```yaml
+regex_id: 5c451c4034bda53e65234029def86b78
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:32:50"
+```
+
+### Pattern
+
+`^(!\s*)?(0x[0-9a-f]{1,8}|[0-9]{1,10})(?:\/(0x[0-9a-f]{1,8}|[0-9]{1,10}))?$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:5cc418514b46569b10fbc860f18caa87:search
+
+```yaml
+regex_id: 5cc418514b46569b10fbc860f18caa87
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-filemanager/htdocs/luci-static/resources/view/system/filemanager/md.js:39:34"
+```
+
+### Pattern
+
+`^ *`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:5d1b3d024e3d2831c2331ea64c6e2e1d:search
+
+```yaml
+regex_id: 5d1b3d024e3d2831c2331ea64c6e2e1d
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:45:20"
+```
+
+### Pattern
+
+`^-----END (RSA )?PRIVATE KEY-----$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:5dcea91cfd016f281f5a9c0123fdc4a5:search
+
+```yaml
+regex_id: 5dcea91cfd016f281f5a9c0123fdc4a5
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:37:40"
+```
+
+### Pattern
+
+`^(?:[A-Za-z0-9+\/]{4})*(?:[A-Za-z0-9+\/]{2}==|[A-Za-z0-9+\/]{3}=)?$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:5def1cbc0c4811336d517acab613c1a2:search
+
+```yaml
+regex_id: 5def1cbc0c4811336d517acab613c1a2
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:176:70"
+```
+
+### Pattern
+
+`^([a-f0-9]{2})+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:5f167a8e5f04febaa9988394d75d8f7d:search
+
+```yaml
+regex_id: 5f167a8e5f04febaa9988394d75d8f7d
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-filemanager/htdocs/luci-static/resources/view/system/filemanager/md.js:71:31"
+```
+
+### Pattern
+
+`^(\d+)\.\s+(.*)`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:6097d1844e830140997791e3e6add295:search
+
+```yaml
+regex_id: 6097d1844e830140997791e3e6add295
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/validation.js:1006:30"
+```
+
+### Pattern
+
+`^[^:\/%\s]{1,15}$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:60ae139b82300456d58e8c71d41135fb:search
+
+```yaml
+regex_id: 60ae139b82300456d58e8c71d41135fb
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/6in4.js:6:31"
+```
+
+### Pattern
+
+`^6in4-.+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:6131bf975567037fcdcda78a34d86cea:search
+
+```yaml
+regex_id: 6131bf975567037fcdcda78a34d86cea
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-radicale3/htdocs/luci-static/resources/view/radicale3.js:253:8"
+```
+
+### Pattern
+
+`^[a-zA-Z0-9._-]+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:614c629b75d8251555ca53329ea51906:search
+
+```yaml
+regex_id: 614c629b75d8251555ca53329ea51906
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/thermal.js:24:48"
+```
+
+### Pattern
+
+`^cooling_device`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:627dfe7b63731b12fef56b57b6ec9764:search
+
+```yaml
+regex_id: 627dfe7b63731b12fef56b57b6ec9764
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:28:19"
+```
+
+### Pattern
+
+`^[a-z0-9_](?:[a-z0-9-]{0,61}[a-z0-9])?$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:6366da589539f066c3f8149c8a0e358f:search
+
+```yaml
+regex_id: 6366da589539f066c3f8149c8a0e358f
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:560:21"
+```
+
+### Pattern
+
+`^(0x[0-9a-f]{1,2}|[0-9]{1,3})$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:653b164ef7632bfabefb215c486965b5:search
+
+```yaml
+regex_id: 653b164ef7632bfabefb215c486965b5
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:110:33"
+```
+
+### Pattern
+
+`^nodev\t`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:6549703f71601036093a0aaf2f479138:search
+
+```yaml
+regex_id: 6549703f71601036093a0aaf2f479138
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoe.js:86:20"
+```
+
+### Pattern
+
+`^(\d+)[ ,]\d+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:662840d6349a889259f3fbcae226a1bf:search
+
+```yaml
+regex_id: 662840d6349a889259f3fbcae226a1bf
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1773:32"
+```
+
+### Pattern
+
+`^dev:`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:66768c2e099b2070efc2bf32cee429b0:search
+
+```yaml
+regex_id: 66768c2e099b2070efc2bf32cee429b0
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:7:31"
+```
+
+### Pattern
+
+`^vxlan-.+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:671819b1e133c0f8a2ed59cee0e469c6:search
+
+```yaml
+regex_id: 671819b1e133c0f8a2ed59cee0e469c6
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:248:35"
+```
+
+### Pattern
+
+`^(\w+)\s*=\s*(.+)$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:671d104f5e2ae0f605e68dc9458d9287:search
+
+```yaml
+regex_id: 671d104f5e2ae0f605e68dc9458d9287
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/validation.js:636:30"
+```
+
+### Pattern
+
+`^(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\/(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:67367755579bfda3fa38a76de1823a35:search
+
+```yaml
+regex_id: 67367755579bfda3fa38a76de1823a35
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/cbi.js:686:12"
+```
+
+### Pattern
+
+`^(([^%]*)%('.|0|\x20)?(-)?(\d+)?(\.\d+)?(%|b|c|d|u|f|o|s|x|X|q|h|j|t|m))`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:678f05f04f224c4d319a77f1fb5db082:search
+
+```yaml
+regex_id: 678f05f04f224c4d319a77f1fb5db082
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/network.js:26:1"
+```
+
+### Pattern
+
+`^wifi\d+`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:67bacc65b89ae887f00b8630c497ca5b:search
+
+```yaml
+regex_id: 67bacc65b89ae887f00b8630c497ca5b
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-openlist/htdocs/luci-static/resources/view/openlist/config.js:96:27"
+```
+
+### Pattern
+
+`^\[(.+)\]$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:697dd0e3a1a2974139ebda5d64205e03:search
+
+```yaml
+regex_id: 697dd0e3a1a2974139ebda5d64205e03
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-mod-system/htdocs/luci-static/resources/view/system/plugins.js:19:46"
+```
+
+### Pattern
+
+`\.js$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:6a0893f913a29a15dc66c5b75039a812:search
+
+```yaml
+regex_id: 6a0893f913a29a15dc66c5b75039a812
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/network.js:1266:31"
+```
+
+### Pattern
+
+`^([^:]+)(?::[ut*]+)?$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:6a661f84fd7d439ebfbd837c00bdf2c9:search
+
+```yaml
+regex_id: 6a661f84fd7d439ebfbd837c00bdf2c9
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/network.js:25:1"
+```
+
+### Pattern
+
+`^wmaster\d+`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:6b23d7a7d51cc0d3638416699a5053a1:search
+
+```yaml
+regex_id: 6b23d7a7d51cc0d3638416699a5053a1
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/network.js:2719:24"
+```
+
+### Pattern
+
+`^([^:/]+)`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:6b69a24157cc01f821542a1983534ca9:search
+
+```yaml
+regex_id: 6b69a24157cc01f821542a1983534ca9
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6.js:82:40"
+```
+
+### Pattern
+
+`^[a-f0-9]{1,2}$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:6ba3dd6895bfcba68f0a623696610c0e:search
+
+```yaml
+regex_id: 6ba3dd6895bfcba68f0a623696610c0e
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/network.js:31:1"
+```
+
+### Pattern
+
+`^sit\d+`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:6e43e8415a60a07f56bcb4c9b5106b20:search
+
+```yaml
+regex_id: 6e43e8415a60a07f56bcb4c9b5106b20
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/luci.js:2845:9"
+```
+
+### Pattern
+
+`^(?:[a-zA-Z0-9_.%,;-]+\/)*[a-zA-Z0-9_.%,;-]+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:6ec64e4adc921092397d5de5affc814d:search
+
+```yaml
+regex_id: 6ec64e4adc921092397d5de5affc814d
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool.js:262:21"
+```
+
+### Pattern
+
+`^(\d+)\b`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:6efd88057b307ac55fd92d4ecbcb51d7:search
+
+```yaml
+regex_id: 6efd88057b307ac55fd92d4ecbcb51d7
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pptp.js:6:31"
+```
+
+### Pattern
+
+`^pptp-.+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:6f25662d7eeb0d902c955789b249ee96:search
+
+```yaml
+regex_id: 6f25662d7eeb0d902c955789b249ee96
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/cbi.js:687:18"
+```
+
+### Pattern
+
+`^(([^%]*)%\{([^}:]+)(?::('.|0|\x20)?(-)?(\d+)?(\.\d+)?(b|c|d|u|f|o|s|x|X|q|h|j|t|m))?\})`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:6f5a1070ab1e32132299abd1ad779aa0:search
+
+```yaml
+regex_id: 6f5a1070ab1e32132299abd1ad779aa0
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:1005:32"
+```
+
+### Pattern
+
+`^(\w+)\t`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:719cc32e6d0a747bdec17e0213cdcb79:search
+
+```yaml
+regex_id: 719cc32e6d0a747bdec17e0213cdcb79
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-package-manager/htdocs/luci-static/resources/view/package-manager.js:775:38"
+```
+
+### Pattern
+
+`^luci-([^-]+)-(.+)$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:71c2a5af6086e7f5daed1087cfdd2347:search
+
+```yaml
+regex_id: 71c2a5af6086e7f5daed1087cfdd2347
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:267:21"
+```
+
+### Pattern
+
+`^(\bgz\b|\btcp\b|\budp\b|\b[0-9-]+\b| )*$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:725c32d408c8a9fcff1eee45617d7775:search
+
+```yaml
+regex_id: 725c32d408c8a9fcff1eee45617d7775
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:477:19"
+```
+
+### Pattern
+
+`^(\d+)(?:ms)?$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:72d8e00d0fcf7f82dfc258f28c9667cb:search
+
+```yaml
+regex_id: 72d8e00d0fcf7f82dfc258f28c9667cb
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:123:23"
+```
+
+### Pattern
+
+`^Chain (.+) \((\d+) references\)$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:7309bf83e85e32f96433b65273f59a1f:search
+
+```yaml
+regex_id: 7309bf83e85e32f96433b65273f59a1f
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:89:61"
+```
+
+### Pattern
+
+`^([0-9a-f:.]+) (.+) (\S+) *$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:73a110a8e62f91753287f466bbcbbc69:search
+
+```yaml
+regex_id: 73a110a8e62f91753287f466bbcbbc69
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-mod-network/htdocs/luci-static/resources/tools/bridgevlan.js:47:30"
+```
+
+### Pattern
+
+`^([^:]+)(?::([ut*]*))?$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:74b2ca75ad7fa91f1d92b224349cbfc1:search
+
+```yaml
+regex_id: 74b2ca75ad7fa91f1d92b224349cbfc1
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:69:16"
+```
+
+### Pattern
+
+`^([0-9a-f:.]+)(?:%[^#@]+)?(?:#(\d+))?(?:@([0-9a-f:.]+)(?:@[^#]+)?(?:#(\d+))?)?$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:754eac565bb851070188bcab08e780ea:search
+
+```yaml
+regex_id: 754eac565bb851070188bcab08e780ea
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:97:10"
+```
+
+### Pattern
+
+`[^a-z0-9.-]|^-|-$|\.\.|\.$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:756fc9ffd8a6d2b98cdbdd0edfb040ef:search
+
+```yaml
+regex_id: 756fc9ffd8a6d2b98cdbdd0edfb040ef
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1145:41"
+```
+
+### Pattern
+
+`^$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:763b55191c60e7cfd1bf088cafa1318f:search
+
+```yaml
+regex_id: 763b55191c60e7cfd1bf088cafa1318f
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-unbound/htdocs/luci-static/resources/view/unbound/zones.js:109:24"
+```
+
+### Pattern
+
+`^\s*nameserver\b`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:76981deec77cc48f51fda74ba660ccd3:search
+
+```yaml
+regex_id: 76981deec77cc48f51fda74ba660ccd3
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-relay/htdocs/luci-static/resources/protocol/relay.js:7:31"
+```
+
+### Pattern
+
+`^relay-.+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:77783f9cb721cddd923d29416b406c1c:search
+
+```yaml
+regex_id: 77783f9cb721cddd923d29416b406c1c
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-sstp/htdocs/luci-static/resources/protocol/sstp.js:5:31"
+```
+
+### Pattern
+
+`^sstp-.+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:7780dee459d0b297f2e7413618d5e355:search
+
+```yaml
+regex_id: 7780dee459d0b297f2e7413618d5e355
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:87:76"
+```
+
+### Pattern
+
+`^inherit$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:78274cf34c968979757c111948c7dc0f:search
+
+```yaml
+regex_id: 78274cf34c968979757c111948c7dc0f
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:16:23"
+```
+
+### Pattern
+
+`^(\d+):(\d+)$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:7a27c0055cfbe5b1346b1bfaf95a6997:search
+
+```yaml
+regex_id: 7a27c0055cfbe5b1346b1bfaf95a6997
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:87:40"
+```
+
+### Pattern
+
+`^[a-f0-9]{1,2}$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:7a441fb9059ed364fea8ff8357ac903e:search
+
+```yaml
+regex_id: 7a441fb9059ed364fea8ff8357ac903e
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool.js:195:49"
+```
+
+### Pattern
+
+`\.rrd$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:7ad36c5c1aa585f3f2176296a61fb940:search
+
+```yaml
+regex_id: 7ad36c5c1aa585f3f2176296a61fb940
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:20:31"
+```
+
+### Pattern
+
+`^mbim-.+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:7adfd7ed48bf036b206b322611e1c4f2:search
+
+```yaml
+regex_id: 7adfd7ed48bf036b206b322611e1c4f2
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/validation.js:1214:39"
+```
+
+### Pattern
+
+`^[0-9*#!.]+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:7ae32d9d2e7470ea603289ce3c5ca9db:search
+
+```yaml
+regex_id: 7ae32d9d2e7470ea603289ce3c5ca9db
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:955:31"
+```
+
+### Pattern
+
+`^\w+\t(\w+)\t`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:7b0abefd5609bae9c4e07743ca2ff5a3:search
+
+```yaml
+regex_id: 7b0abefd5609bae9c4e07743ca2ff5a3
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-package-manager/htdocs/luci-static/resources/view/package-manager.js:786:28"
+```
+
+### Pattern
+
+`^luci-([^-]+)-(.+)$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:7b8190a74c74f7f394745de134bab795:search
+
+```yaml
+regex_id: 7b8190a74c74f7f394745de134bab795
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:14:59"
+```
+
+### Pattern
+
+`^cdc-wdm`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:7e01481da82ab888f8fac2e0a31a0140:search
+
+```yaml
+regex_id: 7e01481da82ab888f8fac2e0a31a0140
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:208:21"
+```
+
+### Pattern
+
+`^[a-z0-9_]+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:7eaba685f2fe789ab84a27d0f28f6fde:search
+
+```yaml
+regex_id: 7eaba685f2fe789ab84a27d0f28f6fde
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-mod-network/htdocs/luci-static/resources/tools/dnsrecordhandlers.js:195:18"
+```
+
+### Pattern
+
+`\d+\.\d+\.\d+\.\d+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:7fb41f5eb5fa0335b87766342c3df4d5:search
+
+```yaml
+regex_id: 7fb41f5eb5fa0335b87766342c3df4d5
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/validation.js:1234:24"
+```
+
+### Pattern
+
+`^(\d\d\d\d)-(\d\d)-(\d\d)`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:811088e9b986f7df7e290e23f4982c14:search
+
+```yaml
+regex_id: 811088e9b986f7df7e290e23f4982c14
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/iptables.js:33:26"
+```
+
+### Pattern
+
+`^\*(\S+)$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:817d8219f98603016ebcbedd690b18e5:search
+
+```yaml
+regex_id: 817d8219f98603016ebcbedd690b18e5
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/464xlat.js:6:31"
+```
+
+### Pattern
+
+`^464-.+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:83ec0f1e3c8f22a0cedc1257da3aa53b:search
+
+```yaml
+regex_id: 83ec0f1e3c8f22a0cedc1257da3aa53b
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-package-manager/htdocs/luci-static/resources/view/package-manager.js:679:30"
+```
+
+### Pattern
+
+`^([^><=~\s]+)\s*\(?([><=~]+)?\s*([^)]+)?\)?$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:84592dd09037350990ed7ac19c827307:search
+
+```yaml
+regex_id: 84592dd09037350990ed7ac19c827307
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/libs/luci-lib-uqr/htdocs/luci-static/resources/uqr.js:7:550"
+```
+
+### Pattern
+
+`^[A-Z0-9 $%*+./:-]*$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:84e51ced28b524e94f3b220cd500a456:search
+
+```yaml
+regex_id: 84e51ced28b524e94f3b220cd500a456
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/network.js:29:1"
+```
+
+### Pattern
+
+`^ifb\d+`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:854972c574da0b1885388d78a7549256:search
+
+```yaml
+regex_id: 854972c574da0b1885388d78a7549256
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-mod-dashboard/htdocs/luci-static/resources/view/dashboard/index.js:80:45"
+```
+
+### Pattern
+
+`\.js$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:858f25fb91ea57ced3e9ad0016a3aaa5:search
+
+```yaml
+regex_id: 858f25fb91ea57ced3e9ad0016a3aaa5
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-xinetd/htdocs/luci-static/resources/view/xinetd/xinetd.js:83:7"
+```
+
+### Pattern
+
+`^[A-Za-z0-9-_]*$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:8684496fee0a184b9e523ee115f84f2c:search
+
+```yaml
+regex_id: 8684496fee0a184b9e523ee115f84f2c
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:885:20"
+```
+
+### Pattern
+
+`^[A-Za-z0-9.:]+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:86e36ae84c72cc7b8c50adce6dea4e70:search
+
+```yaml
+regex_id: 86e36ae84c72cc7b8c50adce6dea4e70
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:184:8"
+```
+
+### Pattern
+
+`^\/(overlay|rom|tmp(?:\/.+)?|dev(?:\/.+)?|)$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:8783f2f7b8219858c796f1c7c86981f5:search
+
+```yaml
+regex_id: 8783f2f7b8219858c796f1c7c86981f5
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:612:27"
+```
+
+### Pattern
+
+`^(0x[0-9a-f]{1,2}|[0-9]{1,3})$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:87eec23ed2cbb95a64dde9dc701d9a5d:search
+
+```yaml
+regex_id: 87eec23ed2cbb95a64dde9dc701d9a5d
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:55:55"
+```
+
+### Pattern
+
+`^-{5}END ((|RSA |DSA )PRIVATE KEY|(|TRUSTED |X509 )CERTIFICATE)-{5}$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:8815b806c231f8a919e4e044c2331df0:search
+
+```yaml
+regex_id: 8815b806c231f8a919e4e044c2331df0
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:342:10"
+```
+
+### Pattern
+
+`^[0-1]\.\d+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:88645a8189e24bc99d3983b4e8579505:search
+
+```yaml
+regex_id: 88645a8189e24bc99d3983b4e8579505
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:23:27"
+```
+
+### Pattern
+
+`^(.+)\.js$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:8a71ebaecad99696c0a70dc812f2e8cb:search
+
+```yaml
+regex_id: 8a71ebaecad99696c0a70dc812f2e8cb
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/network.js:33:1"
+```
+
+### Pattern
+
+`^gretap\d+`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:8a83a0ef98455862998da584dcf9d527:search
+
+```yaml
+regex_id: 8a83a0ef98455862998da584dcf9d527
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:362:47"
+```
+
+### Pattern
+
+`^(?:0x[0-9a-f]{1,8}|[0-9]{1,10})\/([a-z]+)$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:8a9563782c4e7227b751893f1a948cdf:search
+
+```yaml
+regex_id: 8a9563782c4e7227b751893f1a948cdf
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:6:31"
+```
+
+### Pattern
+
+`^gre6t-.+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:8b4ec251d29275e7679bf4256f995873:search
+
+```yaml
+regex_id: 8b4ec251d29275e7679bf4256f995873
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/network.js:2828:24"
+```
+
+### Pattern
+
+`^([^:/]+)`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:8c212268b4cca98f26d8c5d94a819a78:search
+
+```yaml
+regex_id: 8c212268b4cca98f26d8c5d94a819a78
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-package-manager/htdocs/luci-static/resources/view/package-manager.js:271:16"
+```
+
+### Pattern
+
+`^luci-i18n-`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:8c38f5c29161ef57b4a669d321f2b06d:search
+
+```yaml
+regex_id: 8c38f5c29161ef57b4a669d321f2b06d
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/validation.js:796:35"
+```
+
+### Pattern
+
+`^_`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:8ce5d0fd76b092f61019cb999dd1721c:search
+
+```yaml
+regex_id: 8ce5d0fd76b092f61019cb999dd1721c
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:136:29"
+```
+
+### Pattern
+
+`^(\d+) +(\d+) +(\d+) +(.*?) +(\S+) +(\S*) +(\S+) +(\S+) +(!?[a-f0-9:.]+(?:\/[a-f0-9:.]+)?) +(!?[a-f0-9:.]+(?:\/[a-f0-9:.]+)?) +(.+)$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:8d6ad25258688dcac59c0b896428a371:search
+
+```yaml
+regex_id: 8d6ad25258688dcac59c0b896428a371
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-smartdns/htdocs/luci-static/resources/view/smartdns/smartdns.js:293:19"
+```
+
+### Pattern
+
+`^(#[4|6]:)?[a-zA-Z0-9\-_]+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:8ddc056a6e75a67613a29e9eb8f31b4b:search
+
+```yaml
+regex_id: 8ddc056a6e75a67613a29e9eb8f31b4b
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:25:62"
+```
+
+### Pattern
+
+`^(!\s*)?(\S+)$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:8e81c5b4ba9de25d20427062947d59c2:search
+
+```yaml
+regex_id: 8e81c5b4ba9de25d20427062947d59c2
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:125:24"
+```
+
+### Pattern
+
+`^[a-zA-Z0-9_][a-zA-Z0-9_\-.]*[a-zA-Z0-9]$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:8f06698a27336eece4d68867766fd10d:search
+
+```yaml
+regex_id: 8f06698a27336eece4d68867766fd10d
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-smartdns/htdocs/luci-static/resources/view/smartdns/smartdns.js:469:20"
+```
+
+### Pattern
+
+`^#[4|6]:[a-zA-Z0-9\-_]+#[a-zA-Z0-9\-_]+#[a-zA-Z0-9\-_]+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:901be603f48bd82af8ecaa3f1aee05da:search
+
+```yaml
+regex_id: 901be603f48bd82af8ecaa3f1aee05da
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:358:12"
+```
+
+### Pattern
+
+`^[0-9a-f]{2}(:[0-9a-f]{2}){5}$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:906df9172b9b9cc29b9e21c46fd7bbac:search
+
+```yaml
+regex_id: 906df9172b9b9cc29b9e21c46fd7bbac
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/validation.js:624:30"
+```
+
+### Pattern
+
+`^([0-9a-fA-F:.]+)\/(-)?(\d{1,3})$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:9184832fde1c03d54a89f5242d105312:search
+
+```yaml
+regex_id: 9184832fde1c03d54a89f5242d105312
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/validation.js:1224:39"
+```
+
+### Pattern
+
+`^(?:[01]\d|2[0-3]):[0-5]\d:(?:[0-5]\d|60)$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:91e8461020658cc3703abf9b93c252cc:search
+
+```yaml
+regex_id: 91e8461020658cc3703abf9b93c252cc
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:15:27"
+```
+
+### Pattern
+
+`^\d+[smhd]$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:92e0bf5cdf71ae5df2e4a84eebb68ce9:search
+
+```yaml
+regex_id: 92e0bf5cdf71ae5df2e4a84eebb68ce9
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/iptables.js:37:31"
+```
+
+### Pattern
+
+`^-A (.+?) ([!-].+)$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:930f06d03d3e146d668d81cdaf413efd:search
+
+```yaml
+regex_id: 930f06d03d3e146d668d81cdaf413efd
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/validation.js:394:15"
+```
+
+### Pattern
+
+`^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:9381807b6d77eb0b5f2e5e24cc465dd9:search
+
+```yaml
+regex_id: 9381807b6d77eb0b5f2e5e24cc465dd9
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:8:1"
+```
+
+### Pattern
+
+`^(?:ain|in|vccp|vdd|vid|vin|volt|voltbatt|vrm)[0-9]*$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:938e4299cd74d6b40361d92f373766d8:search
+
+```yaml
+regex_id: 938e4299cd74d6b40361d92f373766d8
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:77:40"
+```
+
+### Pattern
+
+`^[a-f0-9]{1,2}$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:93a2f654f4a4a3d8ab601e1474da587b:search
+
+```yaml
+regex_id: 93a2f654f4a4a3d8ab601e1474da587b
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-openlist/htdocs/luci-static/resources/view/openlist/config.js:95:27"
+```
+
+### Pattern
+
+`^([^[\]:]+)$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:941420a04afc31f2f8eaaeb458744096:search
+
+```yaml
+regex_id: 941420a04afc31f2f8eaaeb458744096
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1811:25"
+```
+
+### Pattern
+
+`^(\d+)base`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:942e7cea556a76a931896a7cfe21a2fe:search
+
+```yaml
+regex_id: 942e7cea556a76a931896a7cfe21a2fe
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:68:9"
+```
+
+### Pattern
+
+`^\S+\s+\S`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:946185b8c898efc739ad3591e207245e:search
+
+```yaml
+regex_id: 946185b8c898efc739ad3591e207245e
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pptp.js:93:20"
+```
+
+### Pattern
+
+`^(\d+)[ ,]\d+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:9478bdf61ad47d35e56931f61edaa67c:search
+
+```yaml
+regex_id: 9478bdf61ad47d35e56931f61edaa67c
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:870:17"
+```
+
+### Pattern
+
+`^[a-zA-Z0-9 \t.:/()[\]!&|<>=+*%\\-]+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:95bdacb8aa3074bb8cc2e6cf1c419d51:search
+
+```yaml
+regex_id: 95bdacb8aa3074bb8cc2e6cf1c419d51
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-smartdns/htdocs/luci-static/resources/view/smartdns/smartdns.js:1079:20"
+```
+
+### Pattern
+
+`#[4|6]:[a-zA-Z0-9\-_]+#[a-zA-Z0-9\-_]+#[a-zA-Z0-9\-_]+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:95d1c531ad979fa0ea918f40bdd095d1:search
+
+```yaml
+regex_id: 95d1c531ad979fa0ea918f40bdd095d1
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:51:19"
+```
+
+### Pattern
+
+`^[0-9]+(?:y|m|w|d|h|min|years?|months?|weeks?|days?|hours?)?$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:969f72ae46196cff4cf5a73c44f84971:search
+
+```yaml
+regex_id: 969f72ae46196cff4cf5a73c44f84971
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/luci.js:3248:10"
+```
+
+### Pattern
+
+`^application\/json\b`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:969fda1b1196bc64dcd6c168507f16de:search
+
+```yaml
+regex_id: 969fda1b1196bc64dcd6c168507f16de
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:100:8"
+```
+
+### Pattern
+
+`^[a-zA-Z0-9\-.]*[a-zA-Z0-9]$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:973c4b969b28ccf2ef697f50b406e803:search
+
+```yaml
+regex_id: 973c4b969b28ccf2ef697f50b406e803
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/29_ports.js:31:25"
+```
+
+### Pattern
+
+`^(.+)\.([^.]+)$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:97ce62774b66d8d6b22ead231e571892:search
+
+```yaml
+regex_id: 97ce62774b66d8d6b22ead231e571892
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/validation.js:385:10"
+```
+
+### Pattern
+
+`^-?\d+(?:\.\d+)?$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:98398308f6c29e694bb716cd148d3aa2:search
+
+```yaml
+regex_id: 98398308f6c29e694bb716cd148d3aa2
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/validation.js:982:39"
+```
+
+### Pattern
+
+`^[a-zA-Z0-9_]+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:98660303365b40cc8a699c1d31854429:search
+
+```yaml
+regex_id: 98660303365b40cc8a699c1d31854429
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1146:41"
+```
+
+### Pattern
+
+`^$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:988ba77316c9ae41a3952d149b9e83b5:search
+
+```yaml
+regex_id: 988ba77316c9ae41a3952d149b9e83b5
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:6:31"
+```
+
+### Pattern
+
+`^gre4t-.+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:99d2860069d9905f841c3a9322d706c9:search
+
+```yaml
+regex_id: 99d2860069d9905f841c3a9322d706c9
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:336:10"
+```
+
+### Pattern
+
+`^[0-1]\.\d+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:99d850074bb14e76db6bf4a1274035cb:search
+
+```yaml
+regex_id: 99d850074bb14e76db6bf4a1274035cb
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:232:21"
+```
+
+### Pattern
+
+`^https?:\/\/[A-Za-z0-9[\]/.?&+_@%=:~#-]+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:9a332e45a962107c9d98b7047be279db:search
+
+```yaml
+regex_id: 9a332e45a962107c9d98b7047be279db
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:112:5"
+```
+
+### Pattern
+
+`^https?:\/\/\S+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:9a8a3792ba3c5f9129baf6246f717dc8:search
+
+```yaml
+regex_id: 9a8a3792ba3c5f9129baf6246f717dc8
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/ppp.js:15:61"
+```
+
+### Pattern
+
+`^cdc-wdm`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:9a8f3647b1437e786a8f8fcfb1e66b5b:search
+
+```yaml
+regex_id: 9a8f3647b1437e786a8f8fcfb1e66b5b
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/network.js:32:1"
+```
+
+### Pattern
+
+`^gre\d+`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:9aeb905f85b88acffd0cd1e8f339d679:search
+
+```yaml
+regex_id: 9aeb905f85b88acffd0cd1e8f339d679
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool.js:161:29"
+```
+
+### Pattern
+
+`^(.+)\.js$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:9b531428e0a06501bdf072e91a7e49d7:search
+
+```yaml
+regex_id: 9b531428e0a06501bdf072e91a7e49d7
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:15:61"
+```
+
+### Pattern
+
+`^cdc-wdm`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:9bf6c4d718c4ac0967cb8d3144a63166:search
+
+```yaml
+regex_id: 9bf6c4d718c4ac0967cb8d3144a63166
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/iptables.js:113:24"
+```
+
+### Pattern
+
+`^(\d+)`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:9c7c4799825c2855df1a1e8eb69199a2:search
+
+```yaml
+regex_id: 9c7c4799825c2855df1a1e8eb69199a2
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:1621:31"
+```
+
+### Pattern
+
+`^openvpn-.+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:9c93da205729b33c326703934d3a9311:search
+
+```yaml
+regex_id: 9c93da205729b33c326703934d3a9311
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/validation.js:534:46"
+```
+
+### Pattern
+
+`^([0-9a-fA-F:.]+)(?:\/(\d{1,3}))?$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:9dd69fbc930f9b48ce89106342890f88:search
+
+```yaml
+regex_id: 9dd69fbc930f9b48ce89106342890f88
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:22:25"
+```
+
+### Pattern
+
+`^mtd\d+: ([0-9a-f]+) [0-9a-f]+ "(.+)"$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:9e9fbb1680bb6abc850eca31c5c0f39b:search
+
+```yaml
+regex_id: 9e9fbb1680bb6abc850eca31c5c0f39b
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:40:50"
+```
+
+### Pattern
+
+`^(!\s*)?(?:(CS[0-7]|BE|AF[1234][123]|EF)|(0x[0-9a-f]{1,2}|[0-9]{1,2}))$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:9ebf00974cf44e75c571f694f915b7ec:search
+
+```yaml
+regex_id: 9ebf00974cf44e75c571f694f915b7ec
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:416:26"
+```
+
+### Pattern
+
+`^mtd(\d+): .+ "(.+?)"$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:9f5099e77ac4a92bc4d6b9f52493c106:search
+
+```yaml
+regex_id: 9f5099e77ac4a92bc4d6b9f52493c106
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-sfp-info/htdocs/luci-static/resources/view/sfp-info/main.js:23:20"
+```
+
+### Pattern
+
+`^(\d{2})(\d{2})(\d{2})`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:9f7d9c72ee7d7e6f9c6b118aedc28cc4:search
+
+```yaml
+regex_id: 9f7d9c72ee7d7e6f9c6b118aedc28cc4
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1256:9"
+```
+
+### Pattern
+
+`^radio\d+\.network`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:a03ab172de5edfe8061d1b87926e98cc:search
+
+```yaml
+regex_id: a03ab172de5edfe8061d1b87926e98cc
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:870:19"
+```
+
+### Pattern
+
+`^(add|replace)?\s*oui\s+([0-9a-f]{2}(?:,[0-9a-f]{2})*)\s+subtype\s+([0-9a-f]{2})(?:\s+oui-info\s+([0-9a-f]{2}(?:,[0-9a-f]{2})*))?$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:a07f365eac835e9a797019e7e7f880c9:search
+
+```yaml
+regex_id: a07f365eac835e9a797019e7e7f880c9
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:51:36"
+```
+
+### Pattern
+
+`^(?:[A-Za-z0-9+\/]{4})*(?:[A-Za-z0-9+\/]{2}==|[A-Za-z0-9+\/]{3}=)?$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:a13b46b72b5e2b91244b04911a4ad0c1:search
+
+```yaml
+regex_id: a13b46b72b5e2b91244b04911a4ad0c1
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/validation.js:611:30"
+```
+
+### Pattern
+
+`^(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\/(-)?(\d{1,2})$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:a157ad72a6c4fbe2a3234f2da7d7a9e4:search
+
+```yaml
+regex_id: a157ad72a6c4fbe2a3234f2da7d7a9e4
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/29_ports.js:62:30"
+```
+
+### Pattern
+
+`^[0-9]{1,4}$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:a35a2eca9294b3a139f2f323b10610bb:search
+
+```yaml
+regex_id: a35a2eca9294b3a139f2f323b10610bb
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/network.js:2774:26"
+```
+
+### Pattern
+
+`^([^:/]+)`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:a3d72f93a16ab4847741dc0a29c53360:search
+
+```yaml
+regex_id: a3d72f93a16ab4847741dc0a29c53360
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:49:21"
+```
+
+### Pattern
+
+`^-{5}BEGIN ((|RSA |DSA )PRIVATE KEY|(|TRUSTED |X509 )CERTIFICATE)-{5}$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:a458308d2b1e051033c8bfe5a4c2b367:search
+
+```yaml
+regex_id: a458308d2b1e051033c8bfe5a4c2b367
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/network.js:27:1"
+```
+
+### Pattern
+
+`^hwsim\d+`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:a62e86360c4f10de59f28c41619a02a0:search
+
+```yaml
+regex_id: a62e86360c4f10de59f28c41619a02a0
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:5:31"
+```
+
+### Pattern
+
+`^vpn-.+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:a63f57686c4e34a9520376fe50825635:search
+
+```yaml
+regex_id: a63f57686c4e34a9520376fe50825635
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:949:27"
+```
+
+### Pattern
+
+`^(\w+);(.*?)(?:;(.*))?$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:a6a832d368d5b4a8100221640862a62a:search
+
+```yaml
+regex_id: a6a832d368d5b4a8100221640862a62a
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoa.js:6:31"
+```
+
+### Pattern
+
+`^pppoa-.+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:a6f5dcca9c9cdcd36d3e116108e05fe2:search
+
+```yaml
+regex_id: a6f5dcca9c9cdcd36d3e116108e05fe2
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/luci.js:2254:51"
+```
+
+### Pattern
+
+`^(.*)\/luci\.js(?:\?v=([^?]+))?$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:a6f90f600a237c54f4817f313094bd6f:search
+
+```yaml
+regex_id: a6f90f600a237c54f4817f313094bd6f
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1404:81"
+```
+
+### Pattern
+
+`^port_`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:a83506ee465c5fbc251c89fc10c0501e:search
+
+```yaml
+regex_id: a83506ee465c5fbc251c89fc10c0501e
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:161:19"
+```
+
+### Pattern
+
+`^[a-z0-9_](?:[a-z0-9-]{0,61}[a-z0-9])?$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:a8c8a17cf80b584c5d71081402c1298d:search
+
+```yaml
+regex_id: a8c8a17cf80b584c5d71081402c1298d
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:44:20"
+```
+
+### Pattern
+
+`^-----BEGIN (RSA )?PRIVATE KEY-----$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:a952d41e278e8086a921366a0ff86e63:search
+
+```yaml
+regex_id: a952d41e278e8086a921366a0ff86e63
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:236:30"
+```
+
+### Pattern
+
+`^(22[4-9]|23[0-9])(\.\d{1,3}){3}$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:ae22239677048b69f0c2953b5541a7f6:search
+
+```yaml
+regex_id: ae22239677048b69f0c2953b5541a7f6
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-tinyproxy/htdocs/luci-static/resources/view/tinyproxy/tinyproxy.js:314:16"
+```
+
+### Pattern
+
+`^socks5 \d+\.\d+\.\d+\.\d+:\d+`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:afc90082c68e3c23c7d6600d05eac749:search
+
+```yaml
+regex_id: afc90082c68e3c23c7d6600d05eac749
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:344:21"
+```
+
+### Pattern
+
+`^\/dev\/(mtdblock|ubi|ubiblock)\d`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:aff7110fe8b46e05805fdc5a7c208ef7:search
+
+```yaml
+regex_id: aff7110fe8b46e05805fdc5a7c208ef7
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:315:41"
+```
+
+### Pattern
+
+`^EHT`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:b0229428bf58e6df187017ce6c9b9ec8:search
+
+```yaml
+regex_id: b0229428bf58e6df187017ce6c9b9ec8
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:21:31"
+```
+
+### Pattern
+
+`^3g-.+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:b0b51bd239cb2a52276cc3217ebf581f:search
+
+```yaml
+regex_id: b0b51bd239cb2a52276cc3217ebf581f
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:1006:30"
+```
+
+### Pattern
+
+`^\w+\t(\w+)\t`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:b23df0c8e09c3da1e37ddf6896894143:search
+
+```yaml
+regex_id: b23df0c8e09c3da1e37ddf6896894143
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdplugins6.js:22:39"
+```
+
+### Pattern
+
+`^(olsrd_.*)\.so\..*`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:b30edbdf79d9045dc1b9fdb5d10810dc:search
+
+```yaml
+regex_id: b30edbdf79d9045dc1b9fdb5d10810dc
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:68:8"
+```
+
+### Pattern
+
+`^[a-zA-Z0-9\-.]*[a-zA-Z0-9]$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:b3582124a6664a59b5e695c441594c64:search
+
+```yaml
+regex_id: b3582124a6664a59b5e695c441594c64
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:124:56"
+```
+
+### Pattern
+
+`^(?:([a-z_]+|\d+) )?(default|[0-9a-f:.\/]+) (.+)$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:b3c3b4ea72a9da1f493d4121a23391f5:search
+
+```yaml
+regex_id: b3c3b4ea72a9da1f493d4121a23391f5
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dslite.js:6:31"
+```
+
+### Pattern
+
+`^ds-.+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:b5052750923cf46209fd1e99b66e546e:search
+
+```yaml
+regex_id: b5052750923cf46209fd1e99b66e546e
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:954:33"
+```
+
+### Pattern
+
+`^(\w+)\t`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:b5280b8a19e27edba2a57846b925f1fc:search
+
+```yaml
+regex_id: b5280b8a19e27edba2a57846b925f1fc
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:36:18"
+```
+
+### Pattern
+
+`^(tls|tcp|quic|unix|ws):\/\/`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:b52aa025cff47e051559dc1f10ee5952:search
+
+```yaml
+regex_id: b52aa025cff47e051559dc1f10ee5952
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:52:10"
+```
+
+### Pattern
+
+`[^a-z0-9.-]|^-|-$|\.\.|\.$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:b9bee422f5a6221b8461676f88ef4765:search
+
+```yaml
+regex_id: b9bee422f5a6221b8461676f88ef4765
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:69:19"
+```
+
+### Pattern
+
+`^[0-9]+(?:\.[0-9]+)?$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:ba2c8fba90178c48146a07678e2d559b:search
+
+```yaml
+regex_id: ba2c8fba90178c48146a07678e2d559b
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/network.js:923:23"
+```
+
+### Pattern
+
+`^[a-zA-Z0-9_]+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:ba3d55b69a0b1286d02938d7cbf6bee0:search
+
+```yaml
+regex_id: ba3d55b69a0b1286d02938d7cbf6bee0
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:394:18"
+```
+
+### Pattern
+
+`^[\d ]+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:baadc0275196124c8cfb0f11b8192474:search
+
+```yaml
+regex_id: baadc0275196124c8cfb0f11b8192474
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoe.js:6:31"
+```
+
+### Pattern
+
+`^pppoe-.+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:bb49d99ad0b01475612624f0d39a547b:search
+
+```yaml
+regex_id: bb49d99ad0b01475612624f0d39a547b
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:282:4"
+```
+
+### Pattern
+
+`^-?\d+(?:\.\d+)?[WwEe]$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:bbcff4bb7dfdf684a63346a85ff0c8cd:search
+
+```yaml
+regex_id: bbcff4bb7dfdf684a63346a85ff0c8cd
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdplugins.js:24:39"
+```
+
+### Pattern
+
+`^(olsrd.*)\.so\..*`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:bc07c06646f944b6d0565db0dd61d22a:search
+
+```yaml
+regex_id: bc07c06646f944b6d0565db0dd61d22a
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-dockerman/htdocs/luci-static/resources/view/dockerman/container_new.js:836:26"
+```
+
+### Pattern
+
+`^([^:]+):(\d+):(\d+)\/(tcp|udp)$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:bc44b5eaae940e1b635e35777ecb451a:search
+
+```yaml
+regex_id: bc44b5eaae940e1b635e35777ecb451a
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:22:28"
+```
+
+### Pattern
+
+`^(\d+)\s+(\S+)$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:bc840a97b221fb29484f13f03acd3c92:search
+
+```yaml
+regex_id: bc840a97b221fb29484f13f03acd3c92
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:15:95"
+```
+
+### Pattern
+
+`^[0-9]+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:bd47a7bacab48102c7d115913015bcdf:search
+
+```yaml
+regex_id: bd47a7bacab48102c7d115913015bcdf
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-adguardhome/htdocs/luci-static/resources/view/adguardhome/config.js:19:19"
+```
+
+### Pattern
+
+`^/etc(/[^/]+)?/?$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:bd59ef1a9c58191ce8c96d2fc4f1cc28:search
+
+```yaml
+regex_id: bd59ef1a9c58191ce8c96d2fc4f1cc28
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/libs/luci-lib-uqr/htdocs/luci-static/resources/uqr.js:7:520"
+```
+
+### Pattern
+
+`^[0-9]*$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:bea68b17972379102d4d06ae79f209b4:search
+
+```yaml
+regex_id: bea68b17972379102d4d06ae79f209b4
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:151:22"
+```
+
+### Pattern
+
+`^\d+[ ,](\d+)$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:bf912f0ae18fc8a55510bf411d4e8747:search
+
+```yaml
+regex_id: bf912f0ae18fc8a55510bf411d4e8747
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-vti/htdocs/luci-static/resources/protocol/vti.js:6:31"
+```
+
+### Pattern
+
+`^vti-.+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:c033a6895acfbbceb6e7e60332eca2c4:search
+
+```yaml
+regex_id: c033a6895acfbbceb6e7e60332eca2c4
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-csshnpd/htdocs/luci-static/resources/view/sshnpd/config.js:23:6"
+```
+
+### Pattern
+
+`^[a-z][a-z0-9_-]+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:c0ecb38ac4576baf98b2694fd87711e6:search
+
+```yaml
+regex_id: c0ecb38ac4576baf98b2694fd87711e6
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/6rd.js:5:31"
+```
+
+### Pattern
+
+`^6rd-.+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:c128d58257d3bbb8783a4669c401e50e:search
+
+```yaml
+regex_id: c128d58257d3bbb8783a4669c401e50e
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/29_ports.js:42:11"
+```
+
+### Pattern
+
+`^[0-9]{1,4}$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:c1508c30dcb135707046eb53cab38cdb:search
+
+```yaml
+regex_id: c1508c30dcb135707046eb53cab38cdb
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:69:57"
+```
+
+### Pattern
+
+`^(\d+)\/([smhd])\w*$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:c213e0bc68aabe050b25f5f94b1c1ca4:search
+
+```yaml
+regex_id: c213e0bc68aabe050b25f5f94b1c1ca4
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv_hardif.js:6:31"
+```
+
+### Pattern
+
+`^bat.+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:c4579f4686e6ae9c70316ae6cbdb0443:search
+
+```yaml
+regex_id: c4579f4686e6ae9c70316ae6cbdb0443
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:237:30"
+```
+
+### Pattern
+
+`^ff[0-9a-fA-F]{0,2}:.*`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:c46e91e8ea61d9ff2e671bd5b5d82adc:search
+
+```yaml
+regex_id: c46e91e8ea61d9ff2e671bd5b5d82adc
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/validation.js:846:48"
+```
+
+### Pattern
+
+`^\[(.+)\]:(\d+)$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:c4a9947a6ad8538854cc4be54120e4d8:search
+
+```yaml
+regex_id: c4a9947a6ad8538854cc4be54120e4d8
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-csshnpd/htdocs/luci-static/resources/view/sshnpd/config.js:17:7"
+```
+
+### Pattern
+
+`^[a-z]+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:c543fd733997592fe7bb8e32c7605608:search
+
+```yaml
+regex_id: c543fd733997592fe7bb8e32c7605608
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:266:4"
+```
+
+### Pattern
+
+`^-?\d+(?:\.\d+)?[NnSs]$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:c5a4f4f6b945b2cd640f56425320a83e:search
+
+```yaml
+regex_id: c5a4f4f6b945b2cd640f56425320a83e
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:524:24"
+```
+
+### Pattern
+
+`^HMAC_KEY`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:c66fc2d3fc037343eabdb7d9edc72b81:search
+
+```yaml
+regex_id: c66fc2d3fc037343eabdb7d9edc72b81
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/form.js:3420:8"
+```
+
+### Pattern
+
+`^#([a-f0-9]{2})([a-f0-9]{2})([a-f0-9]{2})$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:c6a6e271713163f2570996655bcd271d:search
+
+```yaml
+regex_id: c6a6e271713163f2570996655bcd271d
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:1073:20"
+```
+
+### Pattern
+
+`^([1-9][0-9]*(ms|s|m|h|d|w))+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:c6ecb517e6246687297a6feacfa9df3b:search
+
+```yaml
+regex_id: c6ecb517e6246687297a6feacfa9df3b
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface.js:107:10"
+```
+
+### Pattern
+
+`^[0-1]\.\d+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:c7a0ce8328a7f8fe79ada8cbb7dbb794:search
+
+```yaml
+regex_id: c7a0ce8328a7f8fe79ada8cbb7dbb794
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoe.js:99:20"
+```
+
+### Pattern
+
+`^\d+[ ,](\d+)$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:c8285825cc0e0dbd64128d1769eb5c8a:search
+
+```yaml
+regex_id: c8285825cc0e0dbd64128d1769eb5c8a
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv_vlan.js:7:31"
+```
+
+### Pattern
+
+`^bat\d_\d+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:c9b560da41268df3946de663935fda8d:search
+
+```yaml
+regex_id: c9b560da41268df3946de663935fda8d
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6.js:6:31"
+```
+
+### Pattern
+
+`^gre6-.+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:c9bd12007f6d845846a3f147534c089c:search
+
+```yaml
+regex_id: c9bd12007f6d845846a3f147534c089c
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-mod-network/htdocs/luci-static/resources/tools/dnsrecordhandlers.js:236:8"
+```
+
+### Pattern
+
+`^key\d{1,5}$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:ca1fc2402dd00868abbbe2a34b979d69:search
+
+```yaml
+regex_id: ca1fc2402dd00868abbbe2a34b979d69
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/luci.js:2333:8"
+```
+
+### Pattern
+
+`^  at `
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:cbfbe5d9e46ec31fa18a962efb019bf2:search
+
+```yaml
+regex_id: cbfbe5d9e46ec31fa18a962efb019bf2
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/validation.js:846:69"
+```
+
+### Pattern
+
+`^([^[\]]+):(\d+)$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:cd87af87d6496a3a28867b314a8563ac:search
+
+```yaml
+regex_id: cd87af87d6496a3a28867b314a8563ac
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:67:30"
+```
+
+### Pattern
+
+`^(.*?)\s*\(([^()]*\/[^()]*)\)$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:cde6819cae46252cecbc7f72e69706ac:search
+
+```yaml
+regex_id: cde6819cae46252cecbc7f72e69706ac
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:921:12"
+```
+
+### Pattern
+
+`^\d+(\.\d+)?[kmg]?bit$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:cf9d65a41dfe80243dec2c996532c330:search
+
+```yaml
+regex_id: cf9d65a41dfe80243dec2c996532c330
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:204:17"
+```
+
+### Pattern
+
+`^(([0-9a-f]{2}|\*):){5}([0-9a-f]{2}|\*)$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:d0385193f55f880c87b7c7816b73f0fb:search
+
+```yaml
+regex_id: d0385193f55f880c87b7c7816b73f0fb
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:381:8"
+```
+
+### Pattern
+
+`^\d+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:d06eef214ba856b25c17052b36662115:search
+
+```yaml
+regex_id: d06eef214ba856b25c17052b36662115
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-rustdesk-server/htdocs/luci-static/resources/view/rustdesk-server/general.js:110:6"
+```
+
+### Pattern
+
+`^https?:\/\/`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:d0f8360c5602771bf677c151cfeadd0a:search
+
+```yaml
+regex_id: d0f8360c5602771bf677c151cfeadd0a
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:14:26"
+```
+
+### Pattern
+
+`^cdc-wdm`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:d190b4542bd7e483c2b06c201689b5ba:search
+
+```yaml
+regex_id: d190b4542bd7e483c2b06c201689b5ba
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/validation.js:647:30"
+```
+
+### Pattern
+
+`^([0-9a-fA-F:.]+)\/([0-9a-fA-F:.]+)$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:d1e69b24f4d4f310ece4ebff2d3f563f:search
+
+```yaml
+regex_id: d1e69b24f4d4f310ece4ebff2d3f563f
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoa.js:106:20"
+```
+
+### Pattern
+
+`^(\d+)[ ,]\d+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:d2befd97bdda653e662cdd491e039fa9:search
+
+```yaml
+regex_id: d2befd97bdda653e662cdd491e039fa9
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-filemanager/htdocs/luci-static/resources/view/system/filemanager/md.js:92:33"
+```
+
+### Pattern
+
+`^[-*]\s+(.*)`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:d30524f4cb6a3188355cf33a194437c0:search
+
+```yaml
+regex_id: d30524f4cb6a3188355cf33a194437c0
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1143:37"
+```
+
+### Pattern
+
+`^$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:d37d58d0389fa396cd2b8f1f599c855b:search
+
+```yaml
+regex_id: d37d58d0389fa396cd2b8f1f599c855b
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:32:32"
+```
+
+### Pattern
+
+`\.qos$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:d3a534faada04af8e7de426fd8805ff5:search
+
+```yaml
+regex_id: d3a534faada04af8e7de426fd8805ff5
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:76:10"
+```
+
+### Pattern
+
+`^[0-9]+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:d47ecd599cefef540cd53c249b234343:search
+
+```yaml
+regex_id: d47ecd599cefef540cd53c249b234343
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:331:8"
+```
+
+### Pattern
+
+`^[a-z0-9]+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:d77f3d1efabd68b7a650b1d28455c3ce:search
+
+```yaml
+regex_id: d77f3d1efabd68b7a650b1d28455c3ce
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/https-dns-proxy/status.js:43:35"
+```
+
+### Pattern
+
+`^\{(\w+)\}$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:d85493dc422be22e4ba7b0f4f97d7569:search
+
+```yaml
+regex_id: d85493dc422be22e4ba7b0f4f97d7569
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-smartdns/htdocs/luci-static/resources/view/smartdns/smartdns.js:314:20"
+```
+
+### Pattern
+
+`^#[4|6]:[a-zA-Z0-9\-_]+#[a-zA-Z0-9\-_]+#[a-zA-Z0-9\-_]+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:d86e82245f20559bae1284e492341ba6:search
+
+```yaml
+regex_id: d86e82245f20559bae1284e492341ba6
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-mod-system/htdocs/luci-static/resources/view/system/password.js:32:20"
+```
+
+### Pattern
+
+`^(?=.{8,})(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*\W).*$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:d8992eabd577903684830021764cfbdb:search
+
+```yaml
+regex_id: d8992eabd577903684830021764cfbdb
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/ppp.js:15:26"
+```
+
+### Pattern
+
+`^tty[A-Z]`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:d924264611e70956c2087806bb17900d:search
+
+```yaml
+regex_id: d924264611e70956c2087806bb17900d
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:15:26"
+```
+
+### Pattern
+
+`^tty[A-Z]`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:d950726c44297af6ed9e8e74b8b084dc:search
+
+```yaml
+regex_id: d950726c44297af6ed9e8e74b8b084dc
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:124:23"
+```
+
+### Pattern
+
+`^[a-zA-Z0-9_]+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:d95b3a171442a0d16433c367c06fbf38:search
+
+```yaml
+regex_id: d95b3a171442a0d16433c367c06fbf38
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:152:17"
+```
+
+### Pattern
+
+`^inherit$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:d9cd3a1c131aedfa7adb6518405ce0ae:search
+
+```yaml
+regex_id: d9cd3a1c131aedfa7adb6518405ce0ae
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1209:49"
+```
+
+### Pattern
+
+`^\d{1,3}$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:da955eb3ce1d9e3cab02d3dc8230aff6:search
+
+```yaml
+regex_id: da955eb3ce1d9e3cab02d3dc8230aff6
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:21:31"
+```
+
+### Pattern
+
+`^vpn-.+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:db612a3562477ae5f7a2bec26d3936dd:search
+
+```yaml
+regex_id: db612a3562477ae5f7a2bec26d3936dd
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-smartdns/htdocs/luci-static/resources/view/smartdns/smartdns.js:782:51"
+```
+
+### Pattern
+
+`^(socks5):\/\/`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:dd8dc4ae9d622c879551b055f4349ee6:search
+
+```yaml
+regex_id: dd8dc4ae9d622c879551b055f4349ee6
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:70:8"
+```
+
+### Pattern
+
+`^[a-zA-Z0-9\-.]*[a-zA-Z0-9]$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:ded6de612f4ec021b384c492e684ac77:search
+
+```yaml
+regex_id: ded6de612f4ec021b384c492e684ac77
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/luci.js:2634:38"
+```
+
+### Pattern
+
+`(.+)\.js$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:e0433664efdd10f23b9ed1a4cadd7e96:search
+
+```yaml
+regex_id: e0433664efdd10f23b9ed1a4cadd7e96
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:72:8"
+```
+
+### Pattern
+
+`^[a-zA-Z0-9\-.]*[a-zA-Z0-9]$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:e0d94ad39f86cbda2d81589d7c20a264:search
+
+```yaml
+regex_id: e0d94ad39f86cbda2d81589d7c20a264
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-dockerman/htdocs/luci-static/resources/dockerman/common.js:748:10"
+```
+
+### Pattern
+
+`^https?:\/\/`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:e1381a89da5fe6b5c1f31df5dceebb3a:search
+
+```yaml
+regex_id: e1381a89da5fe6b5c1f31df5dceebb3a
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-filemanager/htdocs/luci-static/resources/view/system/filemanager.js:148:38"
+```
+
+### Pattern
+
+`^option\s+(\S+)\s+'([^']+)'$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:e13bef252663978051b9bf4c56f431e3:search
+
+```yaml
+regex_id: e13bef252663978051b9bf4c56f431e3
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/network.js:1206:21"
+```
+
+### Pattern
+
+`^(\d+)([tu]?)$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:e1436ab90e40e0d177f56da6cfbb6e5b:search
+
+```yaml
+regex_id: e1436ab90e40e0d177f56da6cfbb6e5b
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:25:29"
+```
+
+### Pattern
+
+`^((?:(?:^|,)[^ =,]+(?:=(?:[^ ",]+|"(?:[^"\\]|\\.)*"))?)+ +)?(ssh-dss|ssh-rsa|ssh-ed25519|ecdsa-sha2-nistp[0-9]+|sk-ecdsa-sha2-nistp256@openssh\.com|sk-ssh-ed25519@openssh\.com) +([^ ]+)( +.*)?$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:e1f142dc808ef5a2b8540785168a5f5e:search
+
+```yaml
+regex_id: e1f142dc808ef5a2b8540785168a5f5e
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-mod-network/htdocs/luci-static/resources/tools/dnsrecordhandlers.js:371:8"
+```
+
+### Pattern
+
+`^key\d{1,5}$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:e2e3c42ced9853423f2461de7ab64856:search
+
+```yaml
+regex_id: e2e3c42ced9853423f2461de7ab64856
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-package-manager/htdocs/luci-static/resources/view/package-manager.js:958:38"
+```
+
+### Pattern
+
+`\.conf$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:e3082dcd032840537d69381999921d82:search
+
+```yaml
+regex_id: e3082dcd032840537d69381999921d82
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:523:23"
+```
+
+### Pattern
+
+`^KEY`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:e39b2a7fb2a8c6d3a3950d30361f0393:search
+
+```yaml
+regex_id: e39b2a7fb2a8c6d3a3950d30361f0393
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-package-manager/htdocs/luci-static/resources/view/package-manager.js:184:24"
+```
+
+### Pattern
+
+`^([\w-]+)\s*:(.+)$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:e4112d7584c08d74230a3106cf90aaab:search
+
+```yaml
+regex_id: e4112d7584c08d74230a3106cf90aaab
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/validation.js:751:24"
+```
+
+### Pattern
+
+`^(\d+)-(\d+)$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:e4453cb987c2d4721b5c5f8c7cad0723:search
+
+```yaml
+regex_id: e4453cb987c2d4721b5c5f8c7cad0723
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:14:18"
+```
+
+### Pattern
+
+`^([0-9a-fA-F]){128}$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:e4c9672d004a9832f0ca828c967f12df:search
+
+```yaml
+regex_id: e4c9672d004a9832f0ca828c967f12df
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:15:20"
+```
+
+### Pattern
+
+`^(\d+)([tu]?)`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:e55e4e291c58b2ad84d385e3f28902fb:search
+
+```yaml
+regex_id: e55e4e291c58b2ad84d385e3f28902fb
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:594:24"
+```
+
+### Pattern
+
+`^(0x[0-9a-f]{1,2}|[0-9]{1,3})$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:e64f416398c5472ba9c045f3118ea286:search
+
+```yaml
+regex_id: e64f416398c5472ba9c045f3118ea286
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/luci.js:2483:25"
+```
+
+### Pattern
+
+`^require[ \t]+(\S+)(?:[ \t]+as[ \t]+([a-zA-Z_]\S*))?$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:e72bda21eff4858f072b61793a9c24dc:search
+
+```yaml
+regex_id: e72bda21eff4858f072b61793a9c24dc
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-snmpd/htdocs/luci-static/resources/view/snmpd/download.js:46:21"
+```
+
+### Pattern
+
+`MIB\.(mib|my|txt)$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:e7d56c5d1494b9cb2921be29c3fec3e8:search
+
+```yaml
+regex_id: e7d56c5d1494b9cb2921be29c3fec3e8
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:82:30"
+```
+
+### Pattern
+
+`^(.*?)\s*\(([^()]*\/[^()]*)\)$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:e9ccaa365cc6ad49793b95baf42bf23e:search
+
+```yaml
+regex_id: e9ccaa365cc6ad49793b95baf42bf23e
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1596:41"
+```
+
+### Pattern
+
+`^dev:`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:e9dfe1babd994c6c03691416f9dd4e5e:search
+
+```yaml
+regex_id: e9dfe1babd994c6c03691416f9dd4e5e
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:298:47"
+```
+
+### Pattern
+
+`^\[([a-fA-F0-9:]+)\]:(\d+)$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:eaa62ecba3354d6ff3d17218bbb9e368:search
+
+```yaml
+regex_id: eaa62ecba3354d6ff3d17218bbb9e368
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1574:30"
+```
+
+### Pattern
+
+`^dev:(.+)$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:eba9bf19c019094d3ba3e6e20f5ec80a:search
+
+```yaml
+regex_id: eba9bf19c019094d3ba3e6e20f5ec80a
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool.js:71:40"
+```
+
+### Pattern
+
+`^[0-9a-fA-F]{6}$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:ebc0eaa42e553c03a34ae520a31b162b:search
+
+```yaml
+regex_id: ebc0eaa42e553c03a34ae520a31b162b
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/email.js:32:16"
+```
+
+### Pattern
+
+`^[0-7]{1,4}$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:ed975c4cbf25d38690f85ea8aa101a8b:search
+
+```yaml
+regex_id: ed975c4cbf25d38690f85ea8aa101a8b
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:79:10"
+```
+
+### Pattern
+
+`^\*\/[0-9]+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:eedb94eeb4d9c0b827894573f256a2a6:search
+
+```yaml
+regex_id: eedb94eeb4d9c0b827894573f256a2a6
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:32:50"
+```
+
+### Pattern
+
+`^(!\s*)?(0x[0-9a-f]{1,8}|[0-9]{1,10})(?:\/(0x[0-9a-f]{1,8}|[0-9]{1,10}))?$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:eef11cc8f8e5f5e850fd76b3fd8470ce:search
+
+```yaml
+regex_id: eef11cc8f8e5f5e850fd76b3fd8470ce
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/firewall.js:203:46"
+```
+
+### Pattern
+
+`^[a-zA-Z0-9_]+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:efee7cf2d9efb9fffa5dec17ac7b0180:search
+
+```yaml
+regex_id: efee7cf2d9efb9fffa5dec17ac7b0180
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-mod-network/htdocs/luci-static/resources/tools/dnsrecordhandlers.js:140:27"
+```
+
+### Pattern
+
+`^key(\d{1,5})$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:eff5a774206666d16418c33dfc0c8e12:search
+
+```yaml
+regex_id: eff5a774206666d16418c33dfc0c8e12
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:54:17"
+```
+
+### Pattern
+
+`^(\/.*\/)?(.*)$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:f03416c6c70f719e7e77296cbba9f41b:search
+
+```yaml
+regex_id: f03416c6c70f719e7e77296cbba9f41b
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:956:35"
+```
+
+### Pattern
+
+`^\w+\t\w+\t(.*$)`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:f035bff29bf54227fb1852c37b651d9a:search
+
+```yaml
+regex_id: f035bff29bf54227fb1852c37b651d9a
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1284:10"
+```
+
+### Pattern
+
+`^(0x)?[0-9a-fA-F]+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:f09eefa2e6823d9a0e59ea8d5c6db5f1:search
+
+```yaml
+regex_id: f09eefa2e6823d9a0e59ea8d5c6db5f1
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-filemanager/htdocs/luci-static/resources/view/system/filemanager/md.js:62:6"
+```
+
+### Pattern
+
+`^#\s+`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:f1dec6620f2b82ecfa88f4e4c6968758:search
+
+```yaml
+regex_id: f1dec6620f2b82ecfa88f4e4c6968758
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/ipip6.js:6:31"
+```
+
+### Pattern
+
+`^ipip6-.+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:f212bd7f9ec769676a2d4943db21e3fc:search
+
+```yaml
+regex_id: f212bd7f9ec769676a2d4943db21e3fc
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/validation.js:845:31"
+```
+
+### Pattern
+
+`^([^[\]:]+):(\d+)$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:f4ff76d03dbb1ddbb5f3ed84d4c391f0:search
+
+```yaml
+regex_id: f4ff76d03dbb1ddbb5f3ed84d4c391f0
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/validation.js:520:50"
+```
+
+### Pattern
+
+`^(\d+\.\d+\.\d+\.\d+)(?:\/(\d+\.\d+\.\d+\.\d+)|\/(\d{1,2}))?$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:f5d011ad549839d0243710993cee347b:search
+
+```yaml
+regex_id: f5d011ad549839d0243710993cee347b
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/network.js:37:1"
+```
+
+### Pattern
+
+`^lo$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:f5dd774b2db53545966d2d77f9ae10b3:search
+
+```yaml
+regex_id: f5dd774b2db53545966d2d77f9ae10b3
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool.js:223:32"
+```
+
+### Pattern
+
+`^([^-]+)(?:-(.+))?$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:f64506d0696604adeafe9e01d4af939c:search
+
+```yaml
+regex_id: f64506d0696604adeafe9e01d4af939c
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-ocserv/htdocs/luci-static/resources/view/ocserv/users.js:118:24"
+```
+
+### Pattern
+
+`^\$\d+\$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:f74408704cecdf3378633463d0aaec79:search
+
+```yaml
+regex_id: f74408704cecdf3378633463d0aaec79
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:234:18"
+```
+
+### Pattern
+
+`^coordinate|^address|^elin`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:f84f1bbf1ae8f4e272a121c7d5e77686:search
+
+```yaml
+regex_id: f84f1bbf1ae8f4e272a121c7d5e77686
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:112:20"
+```
+
+### Pattern
+
+`^(?:https|socks|socks4|socks5)$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:f95f1ee1763ca0c2b296659f226b80d5:search
+
+```yaml
+regex_id: f95f1ee1763ca0c2b296659f226b80d5
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:45:59"
+```
+
+### Pattern
+
+`^-----END CERTIFICATE-----$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:fa1b45f054ecd63645e0517d01cb87fa:search
+
+```yaml
+regex_id: fa1b45f054ecd63645e0517d01cb87fa
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/validation.js:793:23"
+```
+
+### Pattern
+
+`^[a-zA-Z0-9_]+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:fa6a76cb19f23d1e03154ae9e102042b:search
+
+```yaml
+regex_id: fa6a76cb19f23d1e03154ae9e102042b
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/validation.js:1295:39"
+```
+
+### Pattern
+
+`^([a-fA-F0-9]{2})+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:fa71bc666070504804e889c20e5b4a68:search
+
+```yaml
+regex_id: fa71bc666070504804e889c20e5b4a68
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface6.js:101:10"
+```
+
+### Pattern
+
+`^(\d{1,3}\.){3}\d{1,3}$|^([a-fA-F0-9]{1,4}:){7}[a-fA-F0-9]{1,4}$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:facd3fa85c2afa275c10fa3d81eee694:search
+
+```yaml
+regex_id: facd3fa85c2afa275c10fa3d81eee694
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:221:21"
+```
+
+### Pattern
+
+`^https?:\/\/[A-Za-z0-9[\]/.?&+_@%=:~#-]+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:fad5637b8ab0bb6b01cfb0f36d7aff36:search
+
+```yaml
+regex_id: fad5637b8ab0bb6b01cfb0f36d7aff36
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/iptables.js:114:24"
+```
+
+### Pattern
+
+`^(\d+)`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:fb18d5bd99629a5f7d9518c1110fef57:search
+
+```yaml
+regex_id: fb18d5bd99629a5f7d9518c1110fef57
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:219:21"
+```
+
+### Pattern
+
+`^https?:\/\/[A-Za-z0-9[\]/.?&+_@%=:~#-]+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:fba8f913ddfadae4ec972a2bd775f2fa:search
+
+```yaml
+regex_id: fba8f913ddfadae4ec972a2bd775f2fa
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/ppp.js:21:31"
+```
+
+### Pattern
+
+`^ppp-.+$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:fbb13eaf9fc6d781511d0652d6d69f7d:search
+
+```yaml
+regex_id: fbb13eaf9fc6d781511d0652d6d69f7d
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:152:17"
+```
+
+### Pattern
+
+`^inherit$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:fbd662a2b6031fc78c3e04a3a01a181d:search
+
+```yaml
+regex_id: fbd662a2b6031fc78c3e04a3a01a181d
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:237:30"
+```
+
+### Pattern
+
+`^ff[0-9a-fA-F]{0,2}:.*`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:fc207441da146e439f42eaea91054d10:search
+
+```yaml
+regex_id: fc207441da146e439f42eaea91054d10
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:11:1"
+```
+
+### Pattern
+
+`^(?:humidity)[0-9]*$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:fd203cd0796c3f597ceceb4af2f5b9e6:search
+
+```yaml
+regex_id: fd203cd0796c3f597ceceb4af2f5b9e6
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-ustreamer/htdocs/luci-static/resources/view/ustreamer/ustreamer.js:442:17"
+```
+
+### Pattern
+
+`^[0-7]{3,4}$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:fd3a08da2a9ea8f5b4e857d803d5850f:search
+
+```yaml
+regex_id: fd3a08da2a9ea8f5b4e857d803d5850f
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:82:40"
+```
+
+### Pattern
+
+`^[a-f0-9]{1,2}$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:fd77cc36a0d6d12126f27e4b32d68378:search
+
+```yaml
+regex_id: fd77cc36a0d6d12126f27e4b32d68378
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1852:12"
+```
+
+### Pattern
+
+`^[1234]$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:fe3ba1537135d0056727daca151b417d:search
+
+```yaml
+regex_id: fe3ba1537135d0056727daca151b417d
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:683:47"
+```
+
+### Pattern
+
+`^[A-Z0-9][A-Z0-9]$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:fe438c5941aa8c1e0e1d1f08e46bd64c:search
+
+```yaml
+regex_id: fe438c5941aa8c1e0e1d1f08e46bd64c
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/network.js:41:1"
+```
+
+### Pattern
+
+`^wlan\d+`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:fe5d1fb956b3e22b6477105a230b94d1:search
+
+```yaml
+regex_id: fe5d1fb956b3e22b6477105a230b94d1
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1201:10"
+```
+
+### Pattern
+
+`^\d+(-\d+)?$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:fe98f064f3e991374f5e48393d060ce0:search
+
+```yaml
+regex_id: fe98f064f3e991374f5e48393d060ce0
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/validation.js:768:30"
+```
+
+### Pattern
+
+`^([a-fA-F0-9]{2}):([a-fA-F0-9]{2}:){4}[a-fA-F0-9]{2}$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:ffd362f73bfe5799bad0da7ceb252cf4:search
+
+```yaml
+regex_id: ffd362f73bfe5799bad0da7ceb252cf4
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/stations.js:806:28"
+```
+
+### Pattern
+
+`^\s*\d+`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:ffd780682d37d85a920793c68e763e9a:search
+
+```yaml
+regex_id: ffd780682d37d85a920793c68e763e9a
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/modules/luci-base/htdocs/luci-static/resources/network.js:28:1"
+```
+
+### Pattern
+
+`^imq\d+`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## usage_mismatch:ffe87a79c68e055863fb2b93b525a1a1:search
+
+```yaml
+regex_id: ffe87a79c68e055863fb2b93b525a1a1
+schema_version: "1"
+kind: usage_mismatch
+corpus: openwrt_luci
+call_kind: search
+shape: null
+result: finding
+disclosure: null
+site: "batch/corpora/openwrt_luci/rules/applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1244:22"
+```
+
+### Pattern
+
+`(^|\n)\s*config\s+defaults\s*$`
+
+### Context
+
+```json
+{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+None
+
+## property:inventory:rc-shape1-injection-alphabet:rc-shape1-injection-alphabet
+
+```yaml
+regex_id: "inventory:rc-shape1-injection-alphabet"
+schema_version: "1"
+kind: property
+corpus: openwrt_luci
+shape: 1
+result: planned
+ground_truth_status: planned
+disclosure: null
+site: "inventory:rc-shape1-injection-alphabet"
+```
+
+### Pattern
+
+``
+
+### Context
+
+```json
+{"question_id": "rc-shape1-injection-alphabet", "threat": "Rule language admits control/injection characters unexpected for a secret token"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+planned
+
+## property:inventory:rc-shape2-missing-keyword:rc-shape2-missing-keyword
+
+```yaml
+regex_id: "inventory:rc-shape2-missing-keyword"
+schema_version: "1"
+kind: property
+corpus: openwrt_luci
+shape: 2
+result: planned
+ground_truth_status: planned
+disclosure: null
+site: "inventory:rc-shape2-missing-keyword"
+```
+
+### Pattern
+
+``
+
+### Context
+
+```json
+{"question_id": "rc-shape2-missing-keyword", "threat": "Regex accepts a string lacking its required keyword/prefix"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+planned
+
+## property:inventory:rc-shape3-capture-truncation:rc-shape3-capture-truncation
+
+```yaml
+regex_id: "inventory:rc-shape3-capture-truncation"
+schema_version: "1"
+kind: property
+corpus: openwrt_luci
+shape: 3
+result: planned
+ground_truth_status: planned
+disclosure: null
+site: "inventory:rc-shape3-capture-truncation"
+```
+
+### Pattern
+
+``
+
+### Context
+
+```json
+{"question_id": "rc-shape3-capture-truncation", "threat": "Fallback capture truncates or mismatches true token value"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+planned
+
+## property:inventory:rc-shape4-escape-image:rc-shape4-escape-image
+
+```yaml
+regex_id: "inventory:rc-shape4-escape-image"
+schema_version: "1"
+kind: property
+corpus: openwrt_luci
+shape: 4
+result: planned
+ground_truth_status: planned
+disclosure: null
+site: "inventory:rc-shape4-escape-image"
+```
+
+### Pattern
+
+``
+
+### Context
+
+```json
+{"question_id": "rc-shape4-escape-image", "threat": "If rule output is escaped into logs/shell, raw controls must not appear"}
+```
+
+### Witness
+
+```json
+null
+```
+
+### Ground-truth
+
+planned
