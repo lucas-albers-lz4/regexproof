@@ -1,0 +1,14 @@
+{
+  "additional_surface_outside_probe_scope": {},
+  "candidate_url": "https://github.com/lintendo/Axhub-Make",
+  "corpus": "lintendo-Axhub-Make",
+  "corpus_pin": "bc10e311028d5e72752de97187ff690b2095f466",
+  "reason": "759/2473 = 0.3069 encodable on first-party ECMA allowlist (tests/fixtures/examples/.test.mjs excluded); complete_run; public-first",
+  "regex_sites": 2473,
+  "schema_version": "1",
+  "sites_by_bucket": {
+    "ecma": 2473
+  },
+  "smith_decision": "go",
+  "supersedes": "go"
+}
