@@ -21,9 +21,15 @@ _RULE_DIFF = Path(__file__).resolve().parents[1] / "regexproof" / "rule_diff"
 
 
 def _re_bindings(tree: ast.Module) -> set[str]:
-    """Names bound to the stdlib ``re`` module in this module's scope."""
+    """Names bound to the stdlib ``re`` module anywhere in this module.
+
+    Walks the whole tree (not just module top level) so a function-scoped
+    ``import re as regex`` / ``from re import search`` cannot evade the guard.
+    Over-approximation is fine for a guard: a local binding applying to the
+    whole module only makes it stricter.
+    """
     bindings: set[str] = set()
-    for node in tree.body:
+    for node in ast.walk(tree):
         if isinstance(node, ast.Import):
             for alias in node.names:
                 if alias.name == "re":
