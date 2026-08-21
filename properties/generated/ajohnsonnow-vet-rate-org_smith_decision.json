@@ -1,0 +1,17 @@
+{
+  "additional_surface_outside_probe_scope": {
+    "posix-shell": 15,
+    "py_re": 126
+  },
+  "candidate_url": "https://github.com/ajohnsonnow/vet-rate-org",
+  "corpus": "ajohnsonnow-vet-rate-org",
+  "corpus_pin": "1e9b252ca541f7a6b7f9eff7f82a99a4a055b8a7",
+  "reason": "1408/2342 = 0.6012 encodable on first-party ECMA allowlist (tests/fixtures/i18n/e2e excluded); complete_run; public-first",
+  "regex_sites": 2342,
+  "schema_version": "1",
+  "sites_by_bucket": {
+    "ecma": 2342
+  },
+  "smith_decision": "go",
+  "supersedes": "go"
+}
