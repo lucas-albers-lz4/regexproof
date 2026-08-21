@@ -7,6 +7,7 @@ from pathlib import Path
 
 from regexproof.batch.disclose import SECURITY_TOOL_CORPORA
 from regexproof.batch.manifests import CORPUS_MANIFESTS, WAVE_CORPORA
+from regexproof.batch.runner import check_admission_gates
 
 ROOT = Path(__file__).resolve().parents[1]
 CORPUS = "visulima-visulima"
@@ -19,6 +20,8 @@ def test_visulima_manifest_and_disclose_sync():
     assert meta["security_tool"] is False
     assert meta["dialect"] == "ecma"
     assert meta["extractor"] == "js_precise_dir"
+    assert meta["corpus_pin"] == PIN
+    assert meta["commit"] == PIN
     assert len(meta["files"]) == 506
     assert CORPUS not in SECURITY_TOOL_CORPORA
     assert CORPUS not in WAVE_CORPORA
@@ -46,6 +49,7 @@ def test_visulima_gate_corpus_matches_filename():
     data = json.loads(path.read_text(encoding="utf-8"))
     assert data["corpus"] == CORPUS
     assert data["decision"] == "go"
+    assert check_admission_gates([CORPUS], out_dir=ROOT / "properties" / "generated") == []
 
 
 def test_visulima_dry_run_no_public():

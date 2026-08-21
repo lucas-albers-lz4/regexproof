@@ -36,7 +36,13 @@ If unsure, treat as non-trivial.
 
 ## Required sequence (non-trivial)
 
-1. Open or update the PR; wait for **CI** to go green (or fix failures first).
+All of the following must succeed on the **same final head commit** that will
+be merged. Missing, failed, timed-out, or otherwise unusable results are
+blocking. After any code-changing push, re-run the full gate set (CI → Luna →
+Bugbot → bot triage) on that new head — do not merge on stale checks from a
+prior SHA.
+
+1. Open or update the PR; wait for **CI** to go green on the current head (or fix failures first).
    **Presence, not just green:** required `verify` jobs must appear in
    `gh pr checks` — a rollup that only shows CodeQL is *not* green (issue #205).
    Exact required names on `main` (#364):
@@ -52,9 +58,9 @@ If unsure, treat as non-trivial.
    an unquoted `#220` becomes a comment and truncates the check context so
    branch protection never matches even when the job passed.
 2. Ensure the PR head branch is checked out locally.
-3. Run **Luna** (`Task`, `model: gpt-5.6-luna-medium`) on branch changes vs the default base. Address NO_GO / CONFIRMED findings (or document FOLD/DISMISS) before Bugbot.
+3. Run **Luna** (`Task`, `model: gpt-5.6-luna-medium`) on branch changes vs the default base. Address NO_GO / CONFIRMED findings (or document FOLD/DISMISS) before Bugbot. Unresolved Luna `CONFIRMED` findings block merge until fixed or documented FOLD/DISMISS.
 4. Run Bugbot via the `review-bugbot` skill / `bugbot` subagent on **branch changes** (merge-base vs default base, usually `main`).
-5. If Bugbot reports findings: **fix them** (or explicitly document why a finding is a false positive), push, re-run Bugbot once after substantive fixes (and re-run Luna if the fix changes load-bearing contracts).
+5. If Bugbot (or Luna) reports findings that require code changes: **fix them** (or explicitly document why a finding is a false positive), push, then **re-run CI + Luna + Bugbot** on the new head.
 6. Triage bot / external review comments on the PR before merge:
    - If CodeRabbit (or another bot/human) left review comments, pull the
      thread (`gh api repos/{owner}/{repo}/pulls/<n>/comments --paginate`,
@@ -67,7 +73,7 @@ If unsure, treat as non-trivial.
    - Human `REQUEST_CHANGES` / substantive inline comments **outrank** bot
      comments. A bare bot comment doesn't block merge by itself, but
      unresolved `CONFIRMED` bot findings should not merge clean.
-7. Only then merge (`gh pr merge` with the repo’s usual strategy). Do not merge non-trivial PRs with Luna NO_GO, unresolved Bugbot findings, or un-triaged `CONFIRMED` bot comments.
+7. Only then merge (`gh pr merge` with the repo’s usual strategy). Do not merge non-trivial PRs with Luna NO_GO, unresolved Luna `CONFIRMED` findings (without FOLD/DISMISS), unresolved Bugbot findings, or un-triaged `CONFIRMED` bot comments.
 
 ## Do not
 
@@ -75,5 +81,6 @@ If unsure, treat as non-trivial.
 - Treat “listed checks passed” as sufficient when expected `verify` jobs are **absent**
 - Skip Luna or Bugbot because “we just ran tests locally”
 - Substitute Opus-high (or any non-`gpt-5.6-luna-medium` slug) for Luna
+- Merge on CI/Luna/Bugbot results from a prior head after a code-changing push
 - Rely on AGENTS.md alone for this gate — this Cursor rule is the merge-cycle source of truth
 - Merge with unresolved `CONFIRMED` bot/CodeRabbit findings or an un-triaged review-comment thread
