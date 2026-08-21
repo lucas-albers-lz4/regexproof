@@ -1,0 +1,16 @@
+{
+  "additional_surface_outside_probe_scope": {
+    "posix-shell": 6
+  },
+  "candidate_url": "https://github.com/visulima/visulima",
+  "corpus": "visulima-visulima",
+  "corpus_pin": "50ce4889c75d82b4d7ad5f54a0fdf5142b06c710",
+  "reason": "1006/1704 = 0.5904 encodable on first-party ECMA allowlist (tests/fixtures/i18n excluded); complete_run; public-first (not security_tool)",
+  "regex_sites": 1704,
+  "schema_version": "1",
+  "sites_by_bucket": {
+    "ecma": 1704
+  },
+  "smith_decision": "go",
+  "supersedes": "go"
+}

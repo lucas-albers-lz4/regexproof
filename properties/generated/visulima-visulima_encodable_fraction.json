@@ -1,0 +1,51 @@
+{
+  "budget": {
+    "max_disk_mb": 2000,
+    "max_mem_mb": 2048,
+    "max_patterns": 5000,
+    "max_wall_s": 900,
+    "redos_wall_s": 180
+  },
+  "budget_breaches": null,
+  "commit": "50ce4889c75d82b4d7ad5f54a0fdf5142b06c710",
+  "compiler_fingerprint": "35ea1f238a9e",
+  "complete_run": true,
+  "corpus_pin": "50ce4889c75d82b4d7ad5f54a0fdf5142b06c710",
+  "decision": "go",
+  "decision_rule": "go iff encodable/sample_size >= 0.3",
+  "dialect": "ecma",
+  "encodable": 1006,
+  "engine_versions": {
+    "python": "3.14.6",
+    "z3": "5.0.0"
+  },
+  "extractor_schema_version": "2",
+  "fraction": 0.5904,
+  "go_no_go_threshold": 0.3,
+  "id_formula": "v2-domain-optional-ascii-default",
+  "inventory_path": "properties/generated/visulima-visulima-inventory.ndjson",
+  "path": "batch/corpora/visulima-visulima/rules",
+  "pilot": "visulima-visulima",
+  "reasons": {
+    "backref": 12,
+    "composite-pattern": 64,
+    "internal-anchor": 3,
+    "lookaround": 17,
+    "m-flag": 45,
+    "negated-shorthand": 8,
+    "ok": 1006,
+    "pattern-too-long": 1,
+    "per-alternative-anchor": 34,
+    "stateful": 368,
+    "u-flag": 135,
+    "unclosed-group": 3,
+    "unsupported-syntax": 1,
+    "v-flag": 3,
+    "word-boundary": 4
+  },
+  "sample_size": 1704,
+  "schema_version": "1",
+  "scope": "full_corpus",
+  "unclassified_parse_errors": 0,
+  "wall_s": 33.437
+}

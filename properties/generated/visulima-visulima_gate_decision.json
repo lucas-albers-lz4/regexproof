@@ -17,7 +17,7 @@
       "met": true
     }
   ],
-  "corpus": "visulima",
+  "corpus": "visulima-visulima",
   "corpus_pin": "50ce4889c75d82b4d7ad5f54a0fdf5142b06c710",
   "decision": "go",
   "decision_basis": "admission_conditions",
