@@ -8,11 +8,11 @@ Heap's-law / singleton novelty saturates **compiler coverage**. This artifact sa
 
 | stage | count |
 |---|---|
-| sites extracted (batch summaries) | 130,257 |
-| sites encodable | 81,454 |
-| scanner NDJSON rows | 8,716 |
+| sites extracted (batch summaries) | 130,170 |
+| sites encodable | 81,398 |
+| scanner NDJSON rows | 8,696 |
 | planned inventory stubs | 314 |
-| classification rows (usage/intent/triage kinds) | 7,114 |
+| classification rows (usage/intent/triage kinds) | 7,094 |
 | mutation guards (hygiene) | 644 |
 | properties asked (non-planned product kinds) | 21 |
 | properties asked distinct `(site, question_id)` | 21 |
@@ -42,9 +42,9 @@ Heap's-law / singleton novelty saturates **compiler coverage**. This artifact sa
 | ground-truthed / SAT | 1.0000 |
 | pipeline accepted (incl. own-code) / SAT GT | 0.1667 |
 | pipeline accepted / extracted | 8.00e-06 |
-| encodable / extracted excluding YARA inventories | 0.6105 |
-| YARA share of inventory unencodable | 0.6247 |
-| `fullword-boundary` share of inventory unencodable | 0.6078 |
+| encodable / extracted excluding YARA inventories | 0.6104 |
+| YARA share of inventory unencodable | 0.6250 |
+| `fullword-boundary` share of inventory unencodable | 0.6080 |
 
 ## Security-tool split (scanner product kinds)
 

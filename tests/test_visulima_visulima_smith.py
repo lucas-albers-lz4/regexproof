@@ -19,7 +19,7 @@ def test_visulima_manifest_and_disclose_sync():
     assert meta["security_tool"] is False
     assert meta["dialect"] == "ecma"
     assert meta["extractor"] == "js_precise_dir"
-    assert len(meta["files"]) == 548
+    assert len(meta["files"]) == 506
     assert CORPUS not in SECURITY_TOOL_CORPORA
     assert CORPUS not in WAVE_CORPORA
 
@@ -36,9 +36,9 @@ def test_visulima_fraction_complete():
     path = ROOT / "properties" / "generated" / f"{CORPUS}_encodable_fraction.json"
     data = json.loads(path.read_text(encoding="utf-8"))
     assert data["complete_run"] is True
-    assert data["sample_size"] == 1704
-    assert data["encodable"] == 1006
-    assert abs(float(data["fraction"]) - 0.5904) < 1e-4
+    assert data["sample_size"] == 1617
+    assert data["encodable"] == 950
+    assert abs(float(data["fraction"]) - 0.5875) < 1e-4
 
 
 def test_visulima_gate_corpus_matches_filename():
@@ -52,5 +52,5 @@ def test_visulima_dry_run_no_public():
     path = ROOT / "properties" / "generated" / f"{CORPUS}-pr-dry-run.json"
     data = json.loads(path.read_text(encoding="utf-8"))
     assert data["would_open_public_upstream_issue"] is False
-    assert data["finding_count"] == 596
+    assert data["finding_count"] == 576
     assert data["private_first_count"] == 0

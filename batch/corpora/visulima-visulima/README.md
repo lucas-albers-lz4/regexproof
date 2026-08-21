@@ -7,12 +7,13 @@ dev-tools/libraries monorepo, primarily ECMA). Issue
 
 ## Decision: go
 
-Measured **1006/1704 = 0.5904** encodable on a first-party
+Measured **950/1617 = 0.5875** encodable on a first-party
 `**/*.{js,mjs,cjs,ts,tsx}` allowlist (`complete_run`, deterministic). Probe
 had 2668 sites (ecma 2662 + shell 6); Smith measures ECMA after dropping
-tests/fixtures/i18n inflation (1704 sites / 548 files).
+tests / `__tests__` / fixtures / `__fixtures__` / `__bench__` / examples /
+i18n / storybook inflation (1617 sites / 506 files).
 
-596 scanner rows. Not a security tool → default disclosure (not
+576 scanner rows. Not a security tool → default disclosure (not
 `private_first`). Dry-run will not open public upstream issues (`publish`
 false until an explicit disclosure gate).
 
@@ -21,26 +22,24 @@ Not in `SECURITY_TOOL_CORPORA`. Not in `WAVE_CORPORA`.
 ## Triage buckets
 
 Per-`unencodable_reason` from
-`properties/triage/visulima-visulima.ndjson` (698 records; 1006 encodable +
-698 unencodable = 1704):
+`properties/triage/visulima-visulima.ndjson` (667 records; 950 encodable +
+667 unencodable = 1617):
 
 | Bucket | Count |
 |---|---|
-| `stateful` | 368 |
-| `u-flag` | 135 |
-| `composite-pattern` | 64 |
+| `stateful` | 356 |
+| `u-flag` | 133 |
+| `composite-pattern` | 59 |
 | `m-flag` | 45 |
-| `per-alternative-anchor` | 34 |
-| `lookaround` | 17 |
+| `per-alternative-anchor` | 33 |
+| `lookaround` | 15 |
 | `backref` | 12 |
-| `negated-shorthand` | 8 |
+| `negated-shorthand` | 7 |
 | `word-boundary` | 4 |
-| `unclosed-group` | 3 |
-| `internal-anchor` | 3 |
-| `v-flag` | 3 |
-| `unsupported-syntax` | 1 |
+| `unclosed-group` | 1 |
+| `internal-anchor` | 1 |
 | `pattern-too-long` | 1 |
-| **Total unencodable** | **698** |
+| **Total unencodable** | **667** |
 
 | Artifact | Path |
 |---|---|
@@ -56,7 +55,7 @@ python scripts/materialize-corpus.py --gate \
   --allowlist-file /tmp/visulima-allowlist.txt
 ```
 
-Manifest `files=` is the committed allowlist (548 paths).
+Manifest `files=` is the committed allowlist (506 paths).
 
 ## Measure / batch
 

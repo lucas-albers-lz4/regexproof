@@ -1,7 +1,7 @@
 ---
 schema_version: "1"
 corpus: visulima-visulima
-findings: 596
+findings: 576
 ---
 
 # visulima-visulima batch findings
@@ -870,40 +870,6 @@ site: "batch/corpora/visulima-visulima/rules/packages/data-manipulation/iso-loca
 ### Pattern
 
 `^[a-z]{3}$`
-
-### Context
-
-```json
-{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
-```
-
-### Witness
-
-```json
-null
-```
-
-### Ground-truth
-
-None
-
-## usage_mismatch:0b3ae3ce27a57f26367f23f585d0828c:search
-
-```yaml
-regex_id: 0b3ae3ce27a57f26367f23f585d0828c
-schema_version: "1"
-kind: usage_mismatch
-corpus: visulima-visulima
-call_kind: search
-shape: null
-result: finding
-disclosure: null
-site: "batch/corpora/visulima-visulima/rules/packages/tooling/tsconfig/__fixtures__/read-tsconfig/yarn-pnp/.pnp.cjs:5280:64"
-```
-
-### Pattern
-
-`^win`
 
 ### Context
 
@@ -3158,40 +3124,6 @@ null
 
 None
 
-## usage_mismatch:257a33af91efe484bbb3d3e95f3a96ca:search
-
-```yaml
-regex_id: 257a33af91efe484bbb3d3e95f3a96ca
-schema_version: "1"
-kind: usage_mismatch
-corpus: visulima-visulima
-call_kind: search
-shape: null
-result: finding
-disclosure: null
-site: "batch/corpora/visulima-visulima/rules/packages/tooling/tsconfig/__fixtures__/read-tsconfig/yarn-pnp/.pnp.cjs:4576:38"
-```
-
-### Pattern
-
-`^(\/?|)([\s\S]*?)((?:\.{1,2}|[^\/]+?|)(\.[^.\/]*|))(?:[\/]*)$`
-
-### Context
-
-```json
-{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
-```
-
-### Witness
-
-```json
-null
-```
-
-### Ground-truth
-
-None
-
 ## usage_mismatch:26275ca3a07a9f4681f31e4ac88f1c44:search
 
 ```yaml
@@ -3650,40 +3582,6 @@ site: "batch/corpora/visulima-visulima/rules/packages/error-debugging/vite-overl
 ### Pattern
 
 `^\/@fs\/`
-
-### Context
-
-```json
-{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
-```
-
-### Witness
-
-```json
-null
-```
-
-### Ground-truth
-
-None
-
-## usage_mismatch:2d34434ef8e4184df4a91ed1c45c5187:search
-
-```yaml
-regex_id: 2d34434ef8e4184df4a91ed1c45c5187
-schema_version: "1"
-kind: usage_mismatch
-corpus: visulima-visulima
-call_kind: search
-shape: null
-result: finding
-disclosure: null
-site: "batch/corpora/visulima-visulima/rules/packages/tooling/tsconfig/__fixtures__/read-tsconfig/yarn-pnp/.pnp.cjs:7693:58"
-```
-
-### Pattern
-
-`\(([A-Za-z ]+)\)$`
 
 ### Context
 
@@ -4360,40 +4258,6 @@ site: "batch/corpora/visulima-visulima/rules/packages/terminal/tui-kit/src/time-
 ### Pattern
 
 `^\d$`
-
-### Context
-
-```json
-{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
-```
-
-### Witness
-
-```json
-null
-```
-
-### Ground-truth
-
-None
-
-## usage_mismatch:37beebb5613ddc68617d6a9379ca36a8:search
-
-```yaml
-regex_id: 37beebb5613ddc68617d6a9379ca36a8
-schema_version: "1"
-kind: usage_mismatch
-corpus: visulima-visulima
-call_kind: search
-shape: null
-result: finding
-disclosure: null
-site: "batch/corpora/visulima-visulima/rules/packages/tooling/tsconfig/__fixtures__/read-tsconfig/yarn-pnp/.pnp.cjs:8640:27"
-```
-
-### Pattern
-
-`^(\/|\.{1,2}(\/|$))`
 
 ### Context
 
@@ -5175,7 +5039,7 @@ site: "batch/corpora/visulima-visulima/rules/packages/email/email/src/inbound/re
 ### Context
 
 ```json
-{"admitted_char": "'\\n'", "keyword": "email", "reason": "name/comment claims validation but pattern admits excluded char"}
+{"admitted_char": "' '", "keyword": "email", "reason": "name/comment claims validation but pattern admits excluded char"}
 ```
 
 ### Witness
@@ -5731,40 +5595,6 @@ null
 
 None
 
-## usage_mismatch:4ac1e142bae6a4303938696c4c074bac:search
-
-```yaml
-regex_id: 4ac1e142bae6a4303938696c4c074bac
-schema_version: "1"
-kind: usage_mismatch
-corpus: visulima-visulima
-call_kind: search
-shape: null
-result: finding
-disclosure: null
-site: "batch/corpora/visulima-visulima/rules/packages/tooling/tsconfig/__fixtures__/read-tsconfig/yarn-pnp/.pnp.cjs:348:32"
-```
-
-### Pattern
-
-`^\/\/(\.\/)?(.*)$`
-
-### Context
-
-```json
-{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
-```
-
-### Witness
-
-```json
-null
-```
-
-### Ground-truth
-
-None
-
 ## intent_mismatch:4c05c509656ebf09f267b59c0ab2db3d:email
 
 ```yaml
@@ -6257,40 +6087,6 @@ site: "batch/corpora/visulima-visulima/rules/packages/data-manipulation/yaml/src
 ### Pattern
 
 `^[-+]?0b`
-
-### Context
-
-```json
-{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
-```
-
-### Witness
-
-```json
-null
-```
-
-### Ground-truth
-
-None
-
-## usage_mismatch:54647aa0f47cdf84b409ca6ec2517f1b:search
-
-```yaml
-regex_id: 54647aa0f47cdf84b409ca6ec2517f1b
-schema_version: "1"
-kind: usage_mismatch
-corpus: visulima-visulima
-call_kind: search
-shape: null
-result: finding
-disclosure: null
-site: "batch/corpora/visulima-visulima/rules/packages/tooling/tsconfig/__fixtures__/read-tsconfig/yarn-pnp/.pnp.cjs:8828:47"
-```
-
-### Pattern
-
-`\/$`
 
 ### Context
 
@@ -6816,40 +6612,6 @@ null
 
 None
 
-## usage_mismatch:5a1c75c02f0819101920d18fd0737050:search
-
-```yaml
-regex_id: 5a1c75c02f0819101920d18fd0737050
-schema_version: "1"
-kind: usage_mismatch
-corpus: visulima-visulima
-call_kind: search
-shape: null
-result: finding
-disclosure: null
-site: "batch/corpora/visulima-visulima/rules/packages/tooling/tsconfig/__fixtures__/read-tsconfig/yarn-pnp/.pnp.cjs:2775:22"
-```
-
-### Pattern
-
-`^[0-9]+$`
-
-### Context
-
-```json
-{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
-```
-
-### Witness
-
-```json
-null
-```
-
-### Ground-truth
-
-None
-
 ## usage_mismatch:5a3ba97906428602b8b3f6d0a069af12:search
 
 ```yaml
@@ -6969,40 +6731,6 @@ site: "batch/corpora/visulima-visulima/rules/packages/email/free-email-domains/s
 ### Pattern
 
 `^\*\.`
-
-### Context
-
-```json
-{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
-```
-
-### Witness
-
-```json
-null
-```
-
-### Ground-truth
-
-None
-
-## usage_mismatch:5bdf4569561899461e68c4a1294fef8e:search
-
-```yaml
-regex_id: 5bdf4569561899461e68c4a1294fef8e
-schema_version: "1"
-kind: usage_mismatch
-corpus: visulima-visulima
-call_kind: search
-shape: null
-result: finding
-disclosure: null
-site: "batch/corpora/visulima-visulima/rules/packages/tooling/tsconfig/__fixtures__/read-tsconfig/yarn-pnp/.pnp.cjs:350:33"
-```
-
-### Pattern
-
-`^\/unc\/(\.dot\/)?(.*)$`
 
 ### Context
 
@@ -7867,40 +7595,6 @@ null
 
 None
 
-## usage_mismatch:65a85e616719cbf400dba6d065794811:search
-
-```yaml
-regex_id: 65a85e616719cbf400dba6d065794811
-schema_version: "1"
-kind: usage_mismatch
-corpus: visulima-visulima
-call_kind: search
-shape: null
-result: finding
-disclosure: null
-site: "batch/corpora/visulima-visulima/rules/packages/error-debugging/inspector/__bench__/index.bench.ts:38:22"
-```
-
-### Pattern
-
-`^abc$`
-
-### Context
-
-```json
-{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
-```
-
-### Witness
-
-```json
-null
-```
-
-### Ground-truth
-
-None
-
 ## usage_mismatch:65cdb8266e83f29df15667d14067828b:search
 
 ```yaml
@@ -8682,40 +8376,6 @@ null
 
 None
 
-## usage_mismatch:6fc52d5f9f971fd59858c8c7bff8bb65:search
-
-```yaml
-regex_id: 6fc52d5f9f971fd59858c8c7bff8bb65
-schema_version: "1"
-kind: usage_mismatch
-corpus: visulima-visulima
-call_kind: search
-shape: null
-result: finding
-disclosure: null
-site: "batch/corpora/visulima-visulima/rules/packages/tooling/tsconfig/__fixtures__/read-tsconfig/yarn-pnp/.pnp.cjs:349:29"
-```
-
-### Pattern
-
-`^\/([a-zA-Z]:.*)$`
-
-### Context
-
-```json
-{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
-```
-
-### Witness
-
-```json
-null
-```
-
-### Ground-truth
-
-None
-
 ## usage_mismatch:700df623e57a7892206c30f7de30068b:search
 
 ```yaml
@@ -9003,40 +8663,6 @@ site: "batch/corpora/visulima-visulima/rules/packages/tooling/vis/src/release/co
 ### Pattern
 
 `^## `
-
-### Context
-
-```json
-{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
-```
-
-### Witness
-
-```json
-null
-```
-
-### Ground-truth
-
-None
-
-## usage_mismatch:71e1cd2cfffeaf8a4bd98237b70134c6:search
-
-```yaml
-regex_id: 71e1cd2cfffeaf8a4bd98237b70134c6
-schema_version: "1"
-kind: usage_mismatch
-corpus: visulima-visulima
-call_kind: search
-shape: null
-result: finding
-disclosure: null
-site: "batch/corpora/visulima-visulima/rules/packages/tooling/tsconfig/__fixtures__/read-tsconfig/yarn-pnp/.pnp.cjs:2777:24"
-```
-
-### Pattern
-
-`^([^/]+-)?[a-f0-9]+$`
 
 ### Context
 
@@ -9495,40 +9121,6 @@ null
 
 None
 
-## usage_mismatch:78a7267e673bd2eea1d65be4b30347b5:search
-
-```yaml
-regex_id: 78a7267e673bd2eea1d65be4b30347b5
-schema_version: "1"
-kind: usage_mismatch
-corpus: visulima-visulima
-call_kind: search
-shape: null
-result: finding
-disclosure: null
-site: "batch/corpora/visulima-visulima/rules/packages/tooling/tsconfig/__fixtures__/read-tsconfig/yarn-pnp/.pnp.cjs:347:28"
-```
-
-### Pattern
-
-`^([a-zA-Z]:.*)$`
-
-### Context
-
-```json
-{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
-```
-
-### Witness
-
-```json
-null
-```
-
-### Ground-truth
-
-None
-
 ## intent_mismatch:7960524a0344aec92d2719afef260671:email
 
 ```yaml
@@ -9549,7 +9141,7 @@ site: "batch/corpora/visulima-visulima/rules/packages/email/email/src/inbound/re
 ### Context
 
 ```json
-{"admitted_char": "'\\n'", "keyword": "email", "reason": "name/comment claims validation but pattern admits excluded char"}
+{"admitted_char": "' '", "keyword": "email", "reason": "name/comment claims validation but pattern admits excluded char"}
 ```
 
 ### Witness
@@ -10307,40 +9899,6 @@ null
 
 None
 
-## usage_mismatch:86e0fd6b389d14c40725d5696174fc52:search
-
-```yaml
-regex_id: 86e0fd6b389d14c40725d5696174fc52
-schema_version: "1"
-kind: usage_mismatch
-corpus: visulima-visulima
-call_kind: search
-shape: null
-result: finding
-disclosure: null
-site: "batch/corpora/visulima-visulima/rules/packages/tooling/tsconfig/__fixtures__/read-tsconfig/yarn-pnp/.pnp.cjs:8641:24"
-```
-
-### Pattern
-
-`\/$`
-
-### Context
-
-```json
-{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
-```
-
-### Witness
-
-```json
-null
-```
-
-### Ground-truth
-
-None
-
 ## usage_mismatch:86f5d63f1d3f24e2685c5e7098233181:search
 
 ```yaml
@@ -10392,40 +9950,6 @@ site: "batch/corpora/visulima-visulima/rules/packages/data-manipulation/string/s
 ### Pattern
 
 `^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$`
-
-### Context
-
-```json
-{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
-```
-
-### Witness
-
-```json
-null
-```
-
-### Ground-truth
-
-None
-
-## usage_mismatch:8788d7ba1b96d894b0b46c5c7e47fea3:search
-
-```yaml
-regex_id: 8788d7ba1b96d894b0b46c5c7e47fea3
-schema_version: "1"
-kind: usage_mismatch
-corpus: visulima-visulima
-call_kind: search
-shape: null
-result: finding
-disclosure: null
-site: "batch/corpora/visulima-visulima/rules/apps/storybook/.storybook/preview.ts:21:23"
-```
-
-### Pattern
-
-`(background|color)$`
 
 ### Context
 
@@ -10596,7 +10120,7 @@ site: "batch/corpora/visulima-visulima/rules/packages/email/email/src/inbound/re
 ### Context
 
 ```json
-{"admitted_char": "'\\n'", "keyword": "email", "reason": "name/comment claims validation but pattern admits excluded char"}
+{"admitted_char": "' '", "keyword": "email", "reason": "name/comment claims validation but pattern admits excluded char"}
 ```
 
 ### Witness
@@ -11931,40 +11455,6 @@ null
 
 None
 
-## usage_mismatch:9bff9ac08f1d31e1301a1280eb85e366:search
-
-```yaml
-regex_id: 9bff9ac08f1d31e1301a1280eb85e366
-schema_version: "1"
-kind: usage_mismatch
-corpus: visulima-visulima
-call_kind: search
-shape: null
-result: finding
-disclosure: null
-site: "batch/corpora/visulima-visulima/rules/packages/tooling/tsconfig/__fixtures__/read-tsconfig/yarn-pnp/.pnp.cjs:8639:23"
-```
-
-### Pattern
-
-`^(?![a-zA-Z]:[\\/]|\\\\|\.{0,2}(?:\/|$))((?:node:)?(?:@[^/]+\/)?[^/]+)\/*(.*|)$`
-
-### Context
-
-```json
-{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
-```
-
-### Witness
-
-```json
-null
-```
-
-### Ground-truth
-
-None
-
 ## usage_mismatch:9d6681a6261b6ce7b867a6c98e98d607:search
 
 ```yaml
@@ -12254,40 +11744,6 @@ site: "batch/corpora/visulima-visulima/rules/packages/terminal/command-line-args
 ### Pattern
 
 `^\d+$`
-
-### Context
-
-```json
-{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
-```
-
-### Witness
-
-```json
-null
-```
-
-### Ground-truth
-
-None
-
-## usage_mismatch:a074550fff5f599bc3f7c80aa3224f74:search
-
-```yaml
-regex_id: a074550fff5f599bc3f7c80aa3224f74
-schema_version: "1"
-kind: usage_mismatch
-corpus: visulima-visulima
-call_kind: search
-shape: null
-result: finding
-disclosure: null
-site: "batch/corpora/visulima-visulima/rules/packages/tooling/tsconfig/__fixtures__/read-tsconfig/yarn-pnp/.pnp.cjs:8322:23"
-```
-
-### Pattern
-
-`^(?![a-zA-Z]:[\\/]|\\\\|\.{0,2}(?:\/|$))((?:@[^/]+\/)?[^/]+)\/*(.*|)$`
 
 ### Context
 
@@ -13185,40 +12641,6 @@ null
 
 None
 
-## usage_mismatch:abeb84a76c5a26251d64e4233f69a3e9:search
-
-```yaml
-regex_id: abeb84a76c5a26251d64e4233f69a3e9
-schema_version: "1"
-kind: usage_mismatch
-corpus: visulima-visulima
-call_kind: search
-shape: null
-result: finding
-disclosure: null
-site: "batch/corpora/visulima-visulima/rules/packages/tooling/tsconfig/__fixtures__/read-tsconfig/yarn-pnp/.pnp.cjs:8642:29"
-```
-
-### Pattern
-
-`^\.{0,2}\/`
-
-### Context
-
-```json
-{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
-```
-
-### Witness
-
-```json
-null
-```
-
-### Ground-truth
-
-None
-
 ## intent_mismatch:aca2d304d607fcfd21df35e0386cca1f:email
 
 ```yaml
@@ -14015,40 +13437,6 @@ site: "batch/corpora/visulima-visulima/rules/packages/data-manipulation/yaml/src
 ### Pattern
 
 `^\.(?:nan|NaN|NAN)$`
-
-### Context
-
-```json
-{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
-```
-
-### Witness
-
-```json
-null
-```
-
-### Ground-truth
-
-None
-
-## usage_mismatch:b7f06a6667d5cc1f3f9e8b966d13dff5:search
-
-```yaml
-regex_id: b7f06a6667d5cc1f3f9e8b966d13dff5
-schema_version: "1"
-kind: usage_mismatch
-corpus: visulima-visulima
-call_kind: search
-shape: null
-result: finding
-disclosure: null
-site: "batch/corpora/visulima-visulima/rules/apps/storybook/.storybook/preview.ts:22:22"
-```
-
-### Pattern
-
-`Date$`
 
 ### Context
 
@@ -15341,40 +14729,6 @@ site: "batch/corpora/visulima-visulima/rules/packages/tooling/vis/src/commands/u
 ### Pattern
 
 `^\s*-?\s*project:\s*(['"]?)([^'"\s#]+)\1(?:\s*#.*)?$`
-
-### Context
-
-```json
-{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
-```
-
-### Witness
-
-```json
-null
-```
-
-### Ground-truth
-
-None
-
-## usage_mismatch:c7a6faccd20b5f5f23fe4999ff56fd07:search
-
-```yaml
-regex_id: c7a6faccd20b5f5f23fe4999ff56fd07
-schema_version: "1"
-kind: usage_mismatch
-corpus: visulima-visulima
-call_kind: search
-shape: null
-result: finding
-disclosure: null
-site: "batch/corpora/visulima-visulima/rules/packages/tooling/tsconfig/__fixtures__/read-tsconfig/yarn-pnp/.pnp.cjs:2776:23"
-```
-
-### Pattern
-
-`^(\/(?:[^/]+\/)*?(?:\$\$virtual|__virtual__))((?:\/((?:[^/]+-)?[a-f0-9]+)(?:\/([^/]+))?)?((?:\/.*)?))$`
 
 ### Context
 
@@ -17446,7 +16800,7 @@ site: "batch/corpora/visulima-visulima/rules/packages/email/email/src/inbound/re
 ### Context
 
 ```json
-{"admitted_char": "'\\n'", "keyword": "email", "reason": "name/comment claims validation but pattern admits excluded char"}
+{"admitted_char": "' '", "keyword": "email", "reason": "name/comment claims validation but pattern admits excluded char"}
 ```
 
 ### Witness
@@ -19442,40 +18796,6 @@ site: "batch/corpora/visulima-visulima/rules/packages/data-manipulation/string/s
 ### Pattern
 
 `^[a-z0-9_]+$`
-
-### Context
-
-```json
-{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
-```
-
-### Witness
-
-```json
-null
-```
-
-### Ground-truth
-
-None
-
-## usage_mismatch:fabe69039d5598fa0b641f8aa29529e0:search
-
-```yaml
-regex_id: fabe69039d5598fa0b641f8aa29529e0
-schema_version: "1"
-kind: usage_mismatch
-corpus: visulima-visulima
-call_kind: search
-shape: null
-result: finding
-disclosure: null
-site: "batch/corpora/visulima-visulima/rules/packages/error-debugging/dev-toolbar/examples/vite-tanstack-start/vite.config.ts:23:22"
-```
-
-### Pattern
-
-`router\.tsx$`
 
 ### Context
 
