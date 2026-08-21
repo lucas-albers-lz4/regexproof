@@ -1,0 +1,16 @@
+{
+  "additional_surface_outside_probe_scope": {
+    "posix-shell": 12
+  },
+  "candidate_url": "https://github.com/SveltyCMS/SveltyCMS",
+  "corpus": "SveltyCMS-SveltyCMS",
+  "corpus_pin": "c48326afe2a9d429f105af9aa786738d970af848",
+  "reason": "701/1275 = 0.5498 encodable on first-party ECMA allowlist (tests/benchmarks/e2e excluded); complete_run; public-first",
+  "regex_sites": 1275,
+  "schema_version": "1",
+  "sites_by_bucket": {
+    "ecma": 1275
+  },
+  "smith_decision": "go",
+  "supersedes": "go"
+}

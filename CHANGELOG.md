@@ -52,6 +52,8 @@ the work by phase; dates are merge dates.
   first-party ECMA allowlist; public-first).
 - Smith #390: `lintendo-Axhub-Make` GO (759/2473 = 0.3069 on first-party
   ECMA allowlist; public-first).
+- Smith #396: `SveltyCMS-SveltyCMS` GO (701/1275 = 0.5498 on first-party
+  ECMA allowlist; public-first).
 - PR-cycle rule: Luna reviewer pinned to `gpt-5.6-luna-medium` (not Opus-high).
 - Registered `openwrt_luci` as a manifest corpus (not `WAVE_CORPORA`):
   `js_precise_dir` honors `glob` for nested `htdocs` trees, runtime gate
