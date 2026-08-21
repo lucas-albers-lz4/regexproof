@@ -131,6 +131,133 @@ def test_reject_untimed_subprocess_usage_clean_on_compilers():
     assert violations == [], violations
 
 
+def test_reject_untimed_subprocess_usage_covers_all_package_dirs(tmp_path):
+    """#543: the default scan scope covers the whole regexproof/ package —
+    harness/, rule_diff/, mine/, admission/ included — not just compiler +
+    helpers. A fixture in a package subdir with an untimed subprocess call
+    must be flagged."""
+    (tmp_path / "pkg").mkdir()
+    (tmp_path / "pkg" / "harness.py").write_text(
+        "import subprocess\n"
+        "def f():\n"
+        "    subprocess.run(['git', 'log'], capture_output=True)\n"
+    )
+    violations = reject_untimed_subprocess_usage([tmp_path / "pkg"])
+    assert len(violations) == 1, violations
+    assert "harness.py" in violations[0]
+    assert "missing timeout=" in violations[0]
+
+
+def test_reject_untimed_subprocess_usage_timed_variant_clean(tmp_path):
+    (tmp_path / "pkg").mkdir()
+    (tmp_path / "pkg" / "ok.py").write_text(
+        "import subprocess\n"
+        "def f():\n"
+        "    subprocess.run(['git', 'log'], capture_output=True, timeout=60)\n"
+    )
+    assert reject_untimed_subprocess_usage([tmp_path / "pkg"]) == []
+
+
+def test_reject_untimed_subprocess_usage_popen_timed_communicate_clean(tmp_path):
+    """#543: Popen takes no timeout= kwarg — the bound lives on
+    communicate()/wait(). A Popen whose result is waited on with a timeout in
+    the same function is compliant (harness runner pattern)."""
+    (tmp_path / "pkg").mkdir()
+    (tmp_path / "pkg" / "runner.py").write_text(
+        "import subprocess\n"
+        "def f():\n"
+        "    p = subprocess.Popen(['worker'], stdout=subprocess.PIPE, text=True)\n"
+        "    out, _ = p.communicate(timeout=30)\n"
+        "    return out\n"
+    )
+    assert reject_untimed_subprocess_usage([tmp_path / "pkg"]) == []
+
+
+def test_reject_untimed_subprocess_usage_popen_untimed_flagged(tmp_path):
+    """A Popen never waited on with a timeout is still a violation."""
+    (tmp_path / "pkg").mkdir()
+    (tmp_path / "pkg" / "runner.py").write_text(
+        "import subprocess\n"
+        "def f():\n"
+        "    p = subprocess.Popen(['worker'], stdout=subprocess.PIPE, text=True)\n"
+        "    out, _ = p.communicate()\n"
+        "    return out\n"
+    )
+    violations = reject_untimed_subprocess_usage([tmp_path / "pkg"])
+    assert len(violations) == 1, violations
+    assert "Popen" in violations[0]
+
+
+def test_reject_untimed_subprocess_usage_popen_wrong_receiver_flagged(tmp_path):
+    """#548 gate fold: a timed communicate() on a DIFFERENT variable must not
+    bless the Popen constructor."""
+    (tmp_path / "pkg").mkdir()
+    (tmp_path / "pkg" / "runner.py").write_text(
+        "import subprocess\n"
+        "def f():\n"
+        "    p = subprocess.Popen(['worker'], stdout=subprocess.PIPE, text=True)\n"
+        "    q = subprocess.Popen(['other'], stdout=subprocess.PIPE, text=True)\n"
+        "    out, _ = q.communicate(timeout=30)\n"
+        "    return out\n"
+    )
+    violations = reject_untimed_subprocess_usage([tmp_path / "pkg"])
+    assert len(violations) == 1, violations
+    assert "runner.py" in violations[0]
+
+
+def test_reject_untimed_subprocess_usage_popen_nested_def_flagged(tmp_path):
+    """#548 gate fold: a timed wait in an OUTER scope must not bless a Popen
+    created inside a nested function."""
+    (tmp_path / "pkg").mkdir()
+    (tmp_path / "pkg" / "runner.py").write_text(
+        "import subprocess\n"
+        "def outer():\n"
+        "    def inner():\n"
+        "        p = subprocess.Popen(['worker'], stdout=subprocess.PIPE, text=True)\n"
+        "        return p\n"
+        "    q = inner()\n"
+        "    out, _ = q.communicate(timeout=30)\n"
+        "    return out\n"
+    )
+    violations = reject_untimed_subprocess_usage([tmp_path / "pkg"])
+    assert len(violations) == 1, violations
+    assert "runner.py" in violations[0]
+
+
+def test_reject_untimed_subprocess_usage_popen_inner_timed_wait_flagged(tmp_path):
+    """#548 r3 fold: an outer Popen must NOT be blessed by a timed wait that
+    lives inside a nested function body (even when the inner closure shares
+    the receiver)."""
+    (tmp_path / "pkg").mkdir()
+    (tmp_path / "pkg" / "runner.py").write_text(
+        "import subprocess\n"
+        "def outer():\n"
+        "    p = subprocess.Popen(['worker'], stdout=subprocess.PIPE, text=True)\n"
+        "    def inner():\n"
+        "        return p.communicate(timeout=30)\n"
+        "    return p\n"
+    )
+    violations = reject_untimed_subprocess_usage([tmp_path / "pkg"])
+    assert len(violations) == 1, violations
+    assert "runner.py" in violations[0]
+
+
+def test_reject_untimed_subprocess_usage_popen_lambda_timed_wait_flagged(tmp_path):
+    """#548 r5 fold: an uncalled lambda's timed wait must not bless an outer
+    Popen (the lambda body runs only when invoked)."""
+    (tmp_path / "pkg").mkdir()
+    (tmp_path / "pkg" / "runner.py").write_text(
+        "import subprocess\n"
+        "def outer():\n"
+        "    p = subprocess.Popen(['worker'], stdout=subprocess.PIPE, text=True)\n"
+        "    callback = lambda: p.wait(timeout=30)\n"
+        "    return p\n"
+    )
+    violations = reject_untimed_subprocess_usage([tmp_path / "pkg"])
+    assert len(violations) == 1, violations
+    assert "runner.py" in violations[0]
+
+
 def test_pcre_parse_error_rejected_when_helper_present():
     """#361: PCRE2 parse-error must not be encoded into a Z3 mirror."""
     from regexproof.compiler.pcre import compile_pcre, helper_used_for_parse_and_replay

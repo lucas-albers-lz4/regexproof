@@ -53,13 +53,21 @@ def validate_clone_url(url: str) -> None:
         )
 
 
-def _default_run(argv: Sequence[str], **kwargs: object) -> subprocess.CompletedProcess[str]:
-    kwargs.setdefault("timeout", _DEFAULT_CLONE_TIMEOUT_SEC)
+def _default_run(
+    argv: Sequence[str],
+    *,
+    timeout: float = _DEFAULT_CLONE_TIMEOUT_SEC,
+    **kwargs: object,
+) -> subprocess.CompletedProcess[str]:
+    # timeout is an explicit parameter (not **kwargs) so the static
+    # untimed-subprocess ban sees a literal timeout= (#543); callers can
+    # still override it by keyword.
     return subprocess.run(
         list(argv),
         check=False,
         text=True,
         capture_output=True,
+        timeout=timeout,
         **kwargs,  # type: ignore[arg-type]
     )
 

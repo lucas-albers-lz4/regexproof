@@ -50,6 +50,7 @@ def preflight_crs(
         ["git", "-C", str(root), "rev-parse", "HEAD"],
         text=True,
         shell=False,
+        timeout=60,  # #543: local git op — bound it
     ).strip()
     if not head.startswith(pin_prefix):
         raise SystemExit(

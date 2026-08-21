@@ -8,7 +8,7 @@ from __future__ import annotations
 import ast
 import subprocess
 import sys
-from collections.abc import Sequence
+from collections.abc import Iterator, Sequence
 from pathlib import Path
 
 
@@ -221,17 +221,90 @@ def _timeout_is_explicit_and_enabled(call: ast.Call) -> bool:
     return False
 
 
+def _popen_timed_in_function(tree: ast.Module, call: ast.Call) -> bool:
+    """True when a Popen constructor's result is waited on with a timeout in
+    the same function. subprocess.Popen takes no ``timeout=`` kwarg — the
+    bound lives on ``communicate()`` / ``wait()`` — so a constructor whose
+    result is timed there is compliant (the harness Popen sites use exactly
+    this pattern with a process-group kill on TimeoutExpired).
+
+    Gate-review fold (#548): the timed wait must be on the SAME receiver as
+    the Popen result (``p.communicate(timeout=...)``, not some other
+    variable), and the check uses the INNERMOST enclosing function so a
+    Popen nested in an inner def cannot be blessed by a timed wait in the
+    outer scope.
+    """
+    def contains(outer: ast.AST, target: ast.AST) -> bool:
+        return any(child is target for child in ast.walk(outer))
+
+    def walk_flat(node: ast.AST) -> Iterator[ast.AST]:
+        """Yield descendants WITHOUT descending into nested function bodies:
+        a timed wait inside an inner def (or an uncalled lambda) must not
+        bless an outer Popen (CodeRabbit r3/r5 fold)."""
+        for child in ast.iter_child_nodes(node):
+            if isinstance(
+                child,
+                (ast.FunctionDef, ast.AsyncFunctionDef, ast.Lambda),
+            ):
+                continue
+            yield child
+            yield from walk_flat(child)
+
+    enclosing = None
+    for node in ast.walk(tree):
+        if (
+            isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef))
+            and contains(node, call)
+            and (enclosing is None or contains(enclosing, node))
+        ):
+            enclosing = node
+    if enclosing is None:
+        return False
+
+    targets: set[str] = set()
+    for node in walk_flat(enclosing):
+        if isinstance(node, ast.Assign) and node.value is call:
+            for t in node.targets:
+                if isinstance(t, ast.Name):
+                    targets.add(t.id)
+                elif isinstance(t, ast.Tuple):
+                    for elt in t.elts:
+                        if isinstance(elt, ast.Name):
+                            targets.add(elt.id)
+        elif isinstance(node, (ast.AnnAssign, ast.AugAssign)) and node.value is call:
+            if isinstance(node.target, ast.Name):
+                targets.add(node.target.id)
+    if not targets:
+        return False
+
+    for node in walk_flat(enclosing):
+        if not isinstance(node, ast.Call):
+            continue
+        func = node.func
+        if (
+            isinstance(func, ast.Attribute)
+            and func.attr in ("communicate", "wait")
+            and isinstance(func.value, ast.Name)
+            and func.value.id in targets
+            and _timeout_is_explicit_and_enabled(node)
+        ):
+            return True
+    return False
+
+
 def reject_untimed_subprocess_usage(paths: Sequence[Path] | None = None) -> list[str]:
     """Static check: fail if subprocess calls omit an explicit timeout=.
 
-    Scans compilers + helpers by default (#171 hang / self-ReDoS surface).
+    Scans the whole ``regexproof/`` package by default (#543; previously only
+    compilers + helpers, leaving harness/, rule_diff/, mine/ uncovered).
+    subprocess.Popen is exempt when its result is waited on with a timeout in
+    the same function (``communicate(timeout=...)`` / ``wait(timeout=...)``).
     Returns a list of violation messages (empty = clean).
     """
     if paths is None:
         root = Path(__file__).resolve().parents[2]
         paths = [
-            root / "regexproof" / "compiler",
-            root / "helpers",
+            root / "regexproof",
         ]
     violations: list[str] = []
     for path in paths:
@@ -264,6 +337,11 @@ def reject_untimed_subprocess_usage(paths: Sequence[Path] | None = None) -> list
                 elif isinstance(func, ast.Name) and func.id in imported:
                     name = func.id
                 if name is None:
+                    continue
+                if (
+                    name == "Popen"
+                    and _popen_timed_in_function(tree, node)
+                ):
                     continue
                 if not _timeout_is_explicit_and_enabled(node):
                     violations.append(

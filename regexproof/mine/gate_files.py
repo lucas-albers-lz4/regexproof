@@ -30,6 +30,7 @@ def git_ls_decision_paths(
             ["git", "-C", str(root), "ls-files", "-z", "--", spec],
             check=False,
             capture_output=True,
+            timeout=60,  # #543: local git op — bound it
         )
     except OSError:
         return None
@@ -73,6 +74,7 @@ def read_repo_bytes(path: Path, *, repo_root: Path | None = None) -> bytes:
             ["git", "-C", str(root), "show", spec],
             check=False,
             capture_output=True,
+            timeout=60,  # #543: local git op — bound it
         )
         if proc.returncode == 0 and proc.stdout:
             return proc.stdout

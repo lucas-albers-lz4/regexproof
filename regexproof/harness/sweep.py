@@ -32,7 +32,9 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 import re
+import stat
 import subprocess
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -149,12 +151,16 @@ def classify(result: dict) -> Classification:
                           evidence={"reason": f"cross-check {cc_verdict}"})
 
 
-def sha256_file(path: Path) -> str:
+def _hash_fileobj(fh) -> str:
     h = hashlib.sha256()
-    with open(path, "rb") as f:
-        for chunk in iter(lambda: f.read(65536), b""):
-            h.update(chunk)
+    for chunk in iter(lambda: fh.read(65536), b""):
+        h.update(chunk)
     return h.hexdigest()
+
+
+def sha256_file(path: Path) -> str:
+    with open(path, "rb") as f:
+        return _hash_fileobj(f)
 
 
 def build_manifest(commit: str, paths: list[Path], root: Path) -> dict:
@@ -181,21 +187,73 @@ def corpus_commit(root: Path, paths: list[Path]) -> str:
         ["git", "log", "-1", "--format=%H", "--"] +
         [str(p.relative_to(root)) for p in paths],
         cwd=root, capture_output=True, text=True,
+        timeout=60,  # #543: local git op — bound it (runs inside CI gates)
     )
     return out.stdout.strip()
 
 
+def _has_symlink_component(root: Path, target: Path) -> bool:
+    """True if any path component from root to target is a symlink (#544).
+
+    Mirrors the symlink discipline of admission/walk.py (walk skips
+    symlinks): verification must not follow a symlink out of the tree.
+    Non-existent components are not symlinks (is_symlink is False); the
+    missing-file case is reported separately.
+    """
+    try:
+        rel = target.relative_to(root)
+    except ValueError:
+        return False  # outside root — the containment check reports it
+    cur = root
+    for part in rel.parts:
+        cur = cur / part
+        if cur.is_symlink():
+            return True
+    return False
+
+
 def verify_manifest(manifest: dict, root: Path) -> list[str]:
     """Verify the manifest against disk (repo-relative paths resolved against
-    `root`); returns a list of mismatches (empty = verified)."""
+    `root`); returns a list of problems (empty = verified). Issue #544: paths
+    must stay under `root` (no ``..`` escapes) and must not traverse
+    symlinks — a committed manifest must not act as an existence/hash oracle
+    on arbitrary host files."""
+    base = root.resolve()
     problems = []
     for f in manifest.get("files", []):
-        p = (root / f["path"]).resolve()
-        if not p.is_file():
-            problems.append(f"{f['path']}: missing")
+        rel = f["path"]
+        raw = root / rel
+        if _has_symlink_component(root, raw):
+            problems.append(f"{rel}: symlink rejected")
             continue
-        if sha256_file(p) != f["sha256"]:
-            problems.append(f"{f['path']}: sha256 mismatch")
+        p = raw.resolve()
+        if not p.is_relative_to(base):
+            problems.append(f"{rel}: outside root")
+            continue
+        # Open ONCE after validation and hash the fd (CodeRabbit r3 fold):
+        # reopening by pathname would let a concurrent swap re-point the hash
+        # at a different inode than the one validated. O_NOFOLLOW also closes
+        # the final-component symlink race; intermediate components were
+        # checked by _has_symlink_component.
+        try:
+            fd = os.open(p, os.O_RDONLY | os.O_NOFOLLOW)
+        except FileNotFoundError:
+            problems.append(f"{rel}: missing")
+            continue
+        except OSError:
+            problems.append(f"{rel}: unreadable")
+            continue
+        with os.fdopen(fd, "rb") as fh:
+            try:
+                if not stat.S_ISREG(os.fstat(fh.fileno()).st_mode):
+                    problems.append(f"{rel}: not a regular file")
+                    continue
+                digest = _hash_fileobj(fh)
+            except OSError:
+                problems.append(f"{rel}: unreadable")
+                continue
+        if digest != f["sha256"]:
+            problems.append(f"{rel}: sha256 mismatch")
     return problems
 
 

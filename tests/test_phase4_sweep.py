@@ -20,6 +20,7 @@ AC coverage (issue #220):
 from __future__ import annotations
 
 import hashlib
+import os
 from pathlib import Path
 
 import pytest
@@ -176,6 +177,59 @@ def test_manifest_missing_file_detected(tmp_path):
     m = build_manifest("abc", [f1], tmp_path)
     f1.unlink()
     assert verify_manifest(m, tmp_path) == ["a.txt: missing"]
+
+
+def test_manifest_path_escape_rejected(tmp_path, monkeypatch):
+    """#544: a manifest path must not escape the repo root — an outside
+    target must be reported and never probed (no hash oracle)."""
+    outside = tmp_path / "outside.txt"
+    outside.write_text("secret")
+    m = {
+        "files": [
+            {"path": "../../outside.txt", "sha256": "0" * 64},
+        ]
+    }
+    # No os.open may be issued for the escaping path: the containment check
+    # must reject it before anything touches the filesystem target (the
+    # previous sha256_file monkeypatch became vacuous when verification
+    # switched to fd-based hashing).
+    opened: list[str] = []
+    real_open = os.open
+
+    def spy_open(path, *args, **kwargs):
+        opened.append(str(path))
+        return real_open(path, *args, **kwargs)
+
+    monkeypatch.setattr(os, "open", spy_open)
+    problems = verify_manifest(m, tmp_path)
+    assert problems == ["../../outside.txt: outside root"], problems
+    assert opened == [], f"outside path was opened: {opened}"
+
+
+def test_manifest_symlink_rejected(tmp_path):
+    """#544: a symlink anywhere under root must be rejected, not followed."""
+    (tmp_path / "real.txt").write_text("hello")
+    (tmp_path / "link.txt").symlink_to(tmp_path / "real.txt")
+    m = {
+        "files": [
+            {"path": "link.txt", "sha256": hashlib.sha256(b"hello").hexdigest()},
+        ]
+    }
+    assert verify_manifest(m, tmp_path) == ["link.txt: symlink rejected"]
+
+    # symlink pointing OUTSIDE the root is caught by the symlink check
+    # (and would be by containment even if followed).
+    outside = tmp_path / "out" / "target.txt"
+    outside.parent.mkdir()
+    outside.write_text("secret")
+    (tmp_path / "sub").mkdir()
+    (tmp_path / "sub" / "esc.txt").symlink_to(outside)
+    m2 = {
+        "files": [
+            {"path": "sub/esc.txt", "sha256": "0" * 64},
+        ]
+    }
+    assert verify_manifest(m2, tmp_path) == ["sub/esc.txt: symlink rejected"]
 
 
 def test_corpus_commit_is_stable_sha():
