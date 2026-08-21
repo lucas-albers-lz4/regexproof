@@ -17,7 +17,7 @@
       "met": true
     }
   ],
-  "corpus": "SveltyCMS",
+  "corpus": "SveltyCMS-SveltyCMS",
   "corpus_pin": "c48326afe2a9d429f105af9aa786738d970af848",
   "decision": "go",
   "decision_basis": "admission_conditions",

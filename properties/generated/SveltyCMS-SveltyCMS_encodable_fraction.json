@@ -1,0 +1,46 @@
+{
+  "budget": {
+    "max_disk_mb": 2000,
+    "max_mem_mb": 2048,
+    "max_patterns": 5000,
+    "max_wall_s": 900,
+    "redos_wall_s": 180
+  },
+  "budget_breaches": null,
+  "commit": "c48326afe2a9d429f105af9aa786738d970af848",
+  "compiler_fingerprint": "35ea1f238a9e",
+  "complete_run": true,
+  "corpus_pin": "c48326afe2a9d429f105af9aa786738d970af848",
+  "decision": "go",
+  "decision_rule": "go iff encodable/sample_size >= 0.3",
+  "dialect": "ecma",
+  "encodable": 701,
+  "engine_versions": {
+    "python": "3.14.6",
+    "z3": "5.0.0"
+  },
+  "extractor_schema_version": "2",
+  "fraction": 0.5498,
+  "go_no_go_threshold": 0.3,
+  "id_formula": "v2-domain-optional-ascii-default",
+  "inventory_path": "properties/generated/SveltyCMS-SveltyCMS-inventory.ndjson",
+  "path": "batch/corpora/SveltyCMS-SveltyCMS/rules",
+  "pilot": "SveltyCMS-SveltyCMS",
+  "reasons": {
+    "composite-pattern": 31,
+    "lookaround": 7,
+    "m-flag": 1,
+    "negated-shorthand": 7,
+    "ok": 701,
+    "pattern-too-long": 1,
+    "per-alternative-anchor": 14,
+    "stateful": 500,
+    "u-flag": 2,
+    "word-boundary": 11
+  },
+  "sample_size": 1275,
+  "schema_version": "1",
+  "scope": "full_corpus",
+  "unclassified_parse_errors": 0,
+  "wall_s": 22.872
+}
