@@ -239,10 +239,13 @@ def _popen_timed_in_function(tree: ast.Module, call: ast.Call) -> bool:
 
     def walk_flat(node: ast.AST) -> Iterator[ast.AST]:
         """Yield descendants WITHOUT descending into nested function bodies:
-        a timed wait inside an inner def must not bless an outer Popen
-        (CodeRabbit r3 fold)."""
+        a timed wait inside an inner def (or an uncalled lambda) must not
+        bless an outer Popen (CodeRabbit r3/r5 fold)."""
         for child in ast.iter_child_nodes(node):
-            if isinstance(child, (ast.FunctionDef, ast.AsyncFunctionDef)):
+            if isinstance(
+                child,
+                (ast.FunctionDef, ast.AsyncFunctionDef, ast.Lambda),
+            ):
                 continue
             yield child
             yield from walk_flat(child)
