@@ -48,6 +48,8 @@ the work by phase; dates are merge dates.
   py_re allowlist, private_first).
 - Smith #398: `visulima-visulima` GO (950/1617 = 0.5875 on first-party
   ECMA allowlist; public-first, not security_tool).
+- Smith #408: `ajohnsonnow-vet-rate-org` GO (1408/2342 = 0.6012 on
+  first-party ECMA allowlist; public-first).
 - PR-cycle rule: Luna reviewer pinned to `gpt-5.6-luna-medium` (not Opus-high).
 - Registered `openwrt_luci` as a manifest corpus (not `WAVE_CORPORA`):
   `js_precise_dir` honors `glob` for nested `htdocs` trees, runtime gate

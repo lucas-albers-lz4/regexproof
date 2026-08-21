@@ -17,7 +17,7 @@
       "met": true
     }
   ],
-  "corpus": "vet-rate-org",
+  "corpus": "ajohnsonnow-vet-rate-org",
   "corpus_pin": "1e9b252ca541f7a6b7f9eff7f82a99a4a055b8a7",
   "decision": "go",
   "decision_basis": "admission_conditions",

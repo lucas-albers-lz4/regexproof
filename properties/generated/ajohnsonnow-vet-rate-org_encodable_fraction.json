@@ -1,0 +1,48 @@
+{
+  "budget": {
+    "max_disk_mb": 2000,
+    "max_mem_mb": 2048,
+    "max_patterns": 5000,
+    "max_wall_s": 900,
+    "redos_wall_s": 180
+  },
+  "budget_breaches": null,
+  "commit": "1e9b252ca541f7a6b7f9eff7f82a99a4a055b8a7",
+  "compiler_fingerprint": "35ea1f238a9e",
+  "complete_run": true,
+  "corpus_pin": "1e9b252ca541f7a6b7f9eff7f82a99a4a055b8a7",
+  "decision": "go",
+  "decision_rule": "go iff encodable/sample_size >= 0.3",
+  "dialect": "ecma",
+  "encodable": 1408,
+  "engine_versions": {
+    "python": "3.14.6",
+    "z3": "5.0.0"
+  },
+  "extractor_schema_version": "2",
+  "fraction": 0.6012,
+  "go_no_go_threshold": 0.3,
+  "id_formula": "v2-domain-optional-ascii-default",
+  "inventory_path": "properties/generated/ajohnsonnow-vet-rate-org-inventory.ndjson",
+  "path": "batch/corpora/ajohnsonnow-vet-rate-org/rules",
+  "pilot": "ajohnsonnow-vet-rate-org",
+  "reasons": {
+    "backref": 4,
+    "composite-pattern": 17,
+    "empty-class": 1,
+    "lookaround": 31,
+    "m-flag": 29,
+    "negated-shorthand": 12,
+    "ok": 1408,
+    "per-alternative-anchor": 4,
+    "stateful": 830,
+    "u-flag": 2,
+    "unclosed-group": 1,
+    "word-boundary": 3
+  },
+  "sample_size": 2342,
+  "schema_version": "1",
+  "scope": "full_corpus",
+  "unclassified_parse_errors": 0,
+  "wall_s": 52.334
+}
