@@ -60,7 +60,7 @@ prior SHA.
 2. Ensure the PR head branch is checked out locally.
 3. Run **Luna** (`Task`, `model: gpt-5.6-luna-medium`) on branch changes vs the default base. Address NO_GO / CONFIRMED findings (or document FOLD/DISMISS) before Bugbot. Unresolved Luna `CONFIRMED` findings block merge until fixed or documented FOLD/DISMISS.
 4. Run Bugbot via the `review-bugbot` skill / `bugbot` subagent on **branch changes** (merge-base vs default base, usually `main`).
-5. If Bugbot (or Luna) reports findings that require code changes: **fix them** (or explicitly document why a finding is a false positive), push, then **re-run CI + Luna + Bugbot** on the new head.
+5. If Bugbot (or Luna) reports findings that require code changes: **fix them** (or explicitly document why a finding is a false positive), push, then **re-run CI + Luna + Bugbot + bot triage** on the new head.
 6. Triage bot / external review comments on the PR before merge:
    - If CodeRabbit (or another bot/human) left review comments, pull the
      thread (`gh api repos/{owner}/{repo}/pulls/<n>/comments --paginate`,
