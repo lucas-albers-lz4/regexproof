@@ -6,11 +6,11 @@ import json
 
 from regexproof.rule_diff.batch_shape5 import (
     _PAD_GATE_MODEL_CAP,
+    _bounded_gate_sat_witness,
     admit_shape5_for_batch,
     filter_batch_pairs,
     run_batch_shape5_pairs,
 )
-from regexproof.rule_diff.search_replay import search_pad_confirms_gap
 
 
 def test_sibling_family_not_admitted():
@@ -47,8 +47,20 @@ def test_filter_drops_gitleaks_independent_spec():
 
 
 def test_search_pad_confirms_unanchored_gap():
-    assert search_pad_confirms_gap(r"^keep-alive", r"keep-alive", "keep-alive")
-    assert not search_pad_confirms_gap(r"keep-alive", r"keep-alive", "keep-alive")
+    # Issue #542: the search/pad gate was re-pointed from the removed
+    # unbounded search_replay.py to the timed pad-gate subprocess (the
+    # production path since #524). Same semantics: an anchored R1 + unanchored
+    # R2 confirms a search gap; identical patterns do not.
+    pair_anchored = {
+        "r1": {"pattern": r"^keep-alive", "flags": ""},
+        "r2": {"pattern": r"keep-alive", "flags": ""},
+    }
+    pair_same = {
+        "r1": {"pattern": r"keep-alive", "flags": ""},
+        "r2": {"pattern": r"keep-alive", "flags": ""},
+    }
+    assert _bounded_gate_sat_witness(pair_anchored, "keep-alive", 10_000) is True
+    assert _bounded_gate_sat_witness(pair_same, "keep-alive", 10_000) is False
 
 
 def _toy_pair(pair_id: str, r1: str, r2: str, *, pair_kind: str = "version_diff") -> dict:
