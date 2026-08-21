@@ -22,7 +22,7 @@ def test_axhub_manifest_and_disclose_sync():
     assert meta["extractor"] == "js_precise_dir"
     assert meta["corpus_pin"] == PIN
     assert meta["commit"] == PIN
-    assert len(meta["files"]) == 314
+    assert len(meta["files"]) == 302
     assert CORPUS not in SECURITY_TOOL_CORPORA
     assert CORPUS not in WAVE_CORPORA
 
@@ -39,9 +39,9 @@ def test_axhub_fraction_complete():
     path = ROOT / "properties" / "generated" / f"{CORPUS}_encodable_fraction.json"
     data = json.loads(path.read_text(encoding="utf-8"))
     assert data["complete_run"] is True
-    assert data["sample_size"] == 2596
-    assert data["encodable"] == 790
-    assert abs(float(data["fraction"]) - 0.3043) < 1e-4
+    assert data["sample_size"] == 2473
+    assert data["encodable"] == 759
+    assert abs(float(data["fraction"]) - 0.3069) < 1e-4
 
 
 def test_axhub_gate_corpus_matches_filename():
@@ -57,5 +57,5 @@ def test_axhub_dry_run_no_public():
     path = ROOT / "properties" / "generated" / f"{CORPUS}-pr-dry-run.json"
     data = json.loads(path.read_text(encoding="utf-8"))
     assert data["would_open_public_upstream_issue"] is False
-    assert data["finding_count"] == 571
+    assert data["finding_count"] == 557
     assert data["private_first_count"] == 0

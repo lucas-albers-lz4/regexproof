@@ -1,23 +1,23 @@
 # Compiler feature-yield artifact (D5)
 
-<!-- provenance: 84 triage files, inputs ec70b8f95d1b, 837 gate decisions -->
+<!-- provenance: 84 triage files, inputs 4a964ec195cf, 837 gate decisions -->
 
 Sites unlocked per missing compiler feature, aggregated across
 `properties/triage/*.ndjson` and weighted by corpus admission status
 (GO=3, triage-trial=2, no-go=1). Sorted by weighted unlock value.
 
 - Input files: 84
-- Triage inputs hash: `ec70b8f95d1be0f0`
+- Triage inputs hash: `4a964ec195cf19dc`
 - Gate decisions: 837
-- Total unencodable rows: 51512
-- Total weighted sites: 151607.0
+- Total unencodable rows: 51420
+- Total weighted sites: 151331.0
 
 | # | unencodable_reason | sites | weighted | per-corpus (decision:weighted) | top dialects |
 |---|---|---|---|---|---|
 | 1 | `fullword-boundary` | 31864 | 95019.0 | go:93873.0, triage-trial:1146.0 | yara:31864 |
-| 2 | `stateful` | 4998 | 14222.0 | go:12678.0, triage-trial:1544.0 | ecma:4998 |
-| 3 | `composite-pattern` | 4347 | 12441.0 | go:12024.0, no-go:261.0, triage-trial:156.0 | py_re:4087, ecma:260 |
-| 4 | `u-flag` | 1930 | 5783.0 | go:5769.0, triage-trial:14.0 | ecma:1930 |
+| 2 | `stateful` | 4995 | 14213.0 | go:12669.0, triage-trial:1544.0 | ecma:4995 |
+| 3 | `composite-pattern` | 4345 | 12435.0 | go:12018.0, no-go:261.0, triage-trial:156.0 | py_re:4087, ecma:258 |
+| 4 | `u-flag` | 1843 | 5522.0 | go:5508.0, triage-trial:14.0 | ecma:1843 |
 | 5 | `word-boundary` | 1645 | 4730.0 | go:4386.0, no-go:22.0, triage-trial:322.0 | py_re:1518, ecma:99, pcre:21, re2:6 |
 | 6 | `lookaround` | 816 | 2327.0 | go:2232.0, no-go:49.0, triage-trial:46.0 | py_re:681, ecma:135 |
 | 7 | `wide-non-literal` | 694 | 1988.0 | go:1800.0, triage-trial:188.0 | yara:694 |
@@ -53,6 +53,6 @@ Sites unlocked per missing compiler feature, aggregated across
 
 | decision | weight | rows | weighted sites |
 |---|---|---|---|
-| go | 3 | 49048 | 147144.0 |
+| go | 3 | 48956 | 146868.0 |
 | no-go | 1 | 465 | 465.0 |
 | triage-trial | 2 | 1999 | 3998.0 |

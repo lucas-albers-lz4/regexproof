@@ -10,16 +10,16 @@
   "complete_run": true,
   "corpus": "lintendo-Axhub-Make",
   "corpus_type": "rule_corpus",
-  "encodable": 790,
+  "encodable": 759,
   "engine": {
     "python": "3.14.6"
   },
-  "extracted": 2596,
-  "findings": 571,
+  "extracted": 2473,
+  "findings": 557,
   "inventory_questions": 4,
-  "join_regex_ids": 565,
+  "join_regex_ids": 551,
   "redos_findings": 0,
   "redos_incomplete": false,
   "schema_version": "1",
-  "triage": 1806
+  "triage": 1714
 }

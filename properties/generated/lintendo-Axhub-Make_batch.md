@@ -1,7 +1,7 @@
 ---
 schema_version: "1"
 corpus: lintendo-Axhub-Make
-findings: 571
+findings: 557
 ---
 
 # lintendo-Axhub-Make batch findings
@@ -958,40 +958,6 @@ null
 
 None
 
-## usage_mismatch:0adec4dc02aa292bf04f4a53802c8a20:search
-
-```yaml
-regex_id: 0adec4dc02aa292bf04f4a53802c8a20
-schema_version: "1"
-kind: usage_mismatch
-corpus: lintendo-Axhub-Make
-call_kind: search
-shape: null
-result: finding
-disclosure: null
-site: "batch/corpora/lintendo-Axhub-Make/rules/scripts/release-make.test.mjs:854:36"
-```
-
-### Pattern
-
-`^!\.axhub\/make\/comments\/\*\*$`
-
-### Context
-
-```json
-{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
-```
-
-### Witness
-
-```json
-null
-```
-
-### Ground-truth
-
-None
-
 ## usage_mismatch:0b26d20b2ae29475d89fffdeff7dcbaf:search
 
 ```yaml
@@ -1247,40 +1213,6 @@ site: "batch/corpora/lintendo-Axhub-Make/rules/client/rules/references/impeccabl
 ### Pattern
 
 `^[\d.,+\-%\s]+$`
-
-### Context
-
-```json
-{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
-```
-
-### Witness
-
-```json
-null
-```
-
-### Ground-truth
-
-None
-
-## usage_mismatch:0f25dbc5b631e7e6ecd02562efbeca2e:search
-
-```yaml
-regex_id: 0f25dbc5b631e7e6ecd02562efbeca2e
-schema_version: "1"
-kind: usage_mismatch
-corpus: lintendo-Axhub-Make
-call_kind: search
-shape: null
-result: finding
-disclosure: null
-site: "batch/corpora/lintendo-Axhub-Make/rules/scripts/release-make.test.mjs:73:35"
-```
-
-### Pattern
-
-`\.(?:ts|tsx|mjs)$`
 
 ### Context
 
@@ -5851,40 +5783,6 @@ null
 
 None
 
-## usage_mismatch:56cb721ad576a7c77f7c1012a2dbd0ce:search
-
-```yaml
-regex_id: 56cb721ad576a7c77f7c1012a2dbd0ce
-schema_version: "1"
-kind: usage_mismatch
-corpus: lintendo-Axhub-Make
-call_kind: search
-shape: null
-result: finding
-disclosure: null
-site: "batch/corpora/lintendo-Axhub-Make/rules/scripts/release-make.test.mjs:110:6"
-```
-
-### Pattern
-
-`^(?:automation-reports|\.local|\.release|coverage|dist|node_modules)\/`
-
-### Context
-
-```json
-{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
-```
-
-### Witness
-
-```json
-null
-```
-
-### Ground-truth
-
-None
-
 ## usage_mismatch:57680a61b05429465ec6b36b0bb07119:search
 
 ```yaml
@@ -8602,40 +8500,6 @@ null
 
 None
 
-## usage_mismatch:7cadac05bed53bef4830cc69fb4a1a97:search
-
-```yaml
-regex_id: 7cadac05bed53bef4830cc69fb4a1a97
-schema_version: "1"
-kind: usage_mismatch
-corpus: lintendo-Axhub-Make
-call_kind: search
-shape: null
-result: finding
-disclosure: null
-site: "batch/corpora/lintendo-Axhub-Make/rules/scripts/github/workflow-contract.test.mjs:29:28"
-```
-
-### Pattern
-
-`^[a-f0-9]{40}$`
-
-### Context
-
-```json
-{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
-```
-
-### Witness
-
-```json
-null
-```
-
-### Ground-truth
-
-None
-
 ## usage_mismatch:7d800f0f01bab1ebaa985bdc516fc0e8:search
 
 ```yaml
@@ -10232,40 +10096,6 @@ null
 
 None
 
-## usage_mismatch:91bdea7735f2f56299be321a76469663:search
-
-```yaml
-regex_id: 91bdea7735f2f56299be321a76469663
-schema_version: "1"
-kind: usage_mismatch
-corpus: lintendo-Axhub-Make
-call_kind: search
-shape: null
-result: finding
-disclosure: null
-site: "batch/corpora/lintendo-Axhub-Make/rules/scripts/release-make.test.mjs:485:41"
-```
-
-### Pattern
-
-`^!\.axhub\/make\/(?:comments|comment-assets)(?:\/|\/\*\*)$`
-
-### Context
-
-```json
-{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
-```
-
-### Witness
-
-```json
-null
-```
-
-### Ground-truth
-
-None
-
 ## usage_mismatch:91fe5af4a8517f9ccdca8e9b77cfc76c:search
 
 ```yaml
@@ -10385,40 +10215,6 @@ site: "batch/corpora/lintendo-Axhub-Make/rules/client/.claude/skills/canvas-work
 ### Pattern
 
 `\.ya?ml$`
-
-### Context
-
-```json
-{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
-```
-
-### Witness
-
-```json
-null
-```
-
-### Ground-truth
-
-None
-
-## usage_mismatch:922a18ecbb423e61416116059e3bd769:search
-
-```yaml
-regex_id: 922a18ecbb423e61416116059e3bd769
-schema_version: "1"
-kind: usage_mismatch
-corpus: lintendo-Axhub-Make
-call_kind: search
-shape: null
-result: finding
-disclosure: null
-site: "batch/corpora/lintendo-Axhub-Make/rules/scripts/release-make.test.mjs:484:34"
-```
-
-### Pattern
-
-`^\.axhub\/make\/\*$`
 
 ### Context
 
@@ -13019,40 +12815,6 @@ null
 
 None
 
-## usage_mismatch:b46a3133ec447484b8c585c1db37eb8e:search
-
-```yaml
-regex_id: b46a3133ec447484b8c585c1db37eb8e
-schema_version: "1"
-kind: usage_mismatch
-corpus: lintendo-Axhub-Make
-call_kind: search
-shape: null
-result: finding
-disclosure: null
-site: "batch/corpora/lintendo-Axhub-Make/rules/scripts/release-make.test.mjs:853:36"
-```
-
-### Pattern
-
-`^!\.axhub\/make\/comments\/$`
-
-### Context
-
-```json
-{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
-```
-
-### Witness
-
-```json
-null
-```
-
-### Ground-truth
-
-None
-
 ## usage_mismatch:b488ebd636320252cbf7905daed2d796:search
 
 ```yaml
@@ -13070,40 +12832,6 @@ site: "batch/corpora/lintendo-Axhub-Make/rules/client/rules/references/impeccabl
 ### Pattern
 
 `^(1|true|yes)$`
-
-### Context
-
-```json
-{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
-```
-
-### Witness
-
-```json
-null
-```
-
-### Ground-truth
-
-None
-
-## usage_mismatch:b4dcb2abbca2e210b6e99468d3d6c3f6:search
-
-```yaml
-regex_id: b4dcb2abbca2e210b6e99468d3d6c3f6
-schema_version: "1"
-kind: usage_mismatch
-corpus: lintendo-Axhub-Make
-call_kind: search
-shape: null
-result: finding
-disclosure: null
-site: "batch/corpora/lintendo-Axhub-Make/rules/scripts/release-make.test.mjs:113:9"
-```
-
-### Pattern
-
-`^(?:package\.json|pnpm-lock\.yaml|bin\/|scripts\/|src\/|client\/(?:package\.json|src\/|\.axhub\/make\/|\.agents\/|\.claude\/|rules\/|vite-plugins\/))`
 
 ### Context
 
@@ -13920,40 +13648,6 @@ site: "batch/corpora/lintendo-Axhub-Make/rules/src/server/managementApi.bridge.t
 ### Pattern
 
 `^172\.(\d{1,3})\.`
-
-### Context
-
-```json
-{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
-```
-
-### Witness
-
-```json
-null
-```
-
-### Ground-truth
-
-None
-
-## usage_mismatch:bd9965152283eee7f26261d5f0f58e22:search
-
-```yaml
-regex_id: bd9965152283eee7f26261d5f0f58e22
-schema_version: "1"
-kind: usage_mismatch
-corpus: lintendo-Axhub-Make
-call_kind: search
-shape: null
-result: finding
-disclosure: null
-site: "batch/corpora/lintendo-Axhub-Make/rules/scripts/release-make.test.mjs:856:36"
-```
-
-### Pattern
-
-`^!\.axhub\/make\/comment-assets\/\*\*$`
 
 ### Context
 
@@ -15942,40 +15636,6 @@ null
 
 None
 
-## usage_mismatch:d83ec103006da40ff5571a751da289de:search
-
-```yaml
-regex_id: d83ec103006da40ff5571a751da289de
-schema_version: "1"
-kind: usage_mismatch
-corpus: lintendo-Axhub-Make
-call_kind: search
-shape: null
-result: finding
-disclosure: null
-site: "batch/corpora/lintendo-Axhub-Make/rules/scripts/github/run-area-check.test.mjs:55:6"
-```
-
-### Pattern
-
-`vitest run --coverage --maxWorkers=1 --exclude src\/server\/vendorPackages\.test\.ts src\/server src\/common$`
-
-### Context
-
-```json
-{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
-```
-
-### Witness
-
-```json
-null
-```
-
-### Ground-truth
-
-None
-
 ## usage_mismatch:d8589dc5facaea6587fad3cd42be6154:search
 
 ```yaml
@@ -16197,40 +15857,6 @@ site: "batch/corpora/lintendo-Axhub-Make/rules/src/index/app/index-page/previewA
 ### Pattern
 
 `^(?:\/prototypes|\/themes)\/`
-
-### Context
-
-```json
-{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
-```
-
-### Witness
-
-```json
-null
-```
-
-### Ground-truth
-
-None
-
-## usage_mismatch:dc5a4ae7705974bdc33da411e8f10e7d:search
-
-```yaml
-regex_id: dc5a4ae7705974bdc33da411e8f10e7d
-schema_version: "1"
-kind: usage_mismatch
-corpus: lintendo-Axhub-Make
-call_kind: search
-shape: null
-result: finding
-disclosure: null
-site: "batch/corpora/lintendo-Axhub-Make/rules/scripts/release-make.test.mjs:789:32"
-```
-
-### Pattern
-
-`^[a-f0-9]{64}$`
 
 ### Context
 
@@ -17607,40 +17233,6 @@ null
 
 None
 
-## usage_mismatch:edbc5fae35fa2f16937ad82811103f6f:search
-
-```yaml
-regex_id: edbc5fae35fa2f16937ad82811103f6f
-schema_version: "1"
-kind: usage_mismatch
-corpus: lintendo-Axhub-Make
-call_kind: search
-shape: null
-result: finding
-disclosure: null
-site: "batch/corpora/lintendo-Axhub-Make/rules/scripts/release-make.test.mjs:855:36"
-```
-
-### Pattern
-
-`^!\.axhub\/make\/comment-assets\/$`
-
-### Context
-
-```json
-{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
-```
-
-### Witness
-
-```json
-null
-```
-
-### Ground-truth
-
-None
-
 ## usage_mismatch:edca233c270633d09770011cde6e7ebc:search
 
 ```yaml
@@ -17658,40 +17250,6 @@ site: "batch/corpora/lintendo-Axhub-Make/rules/src/server/managementApi.document
 ### Pattern
 
 `^data:(image\/[a-z0-9+.-]+);base64,([a-z0-9+/=\s]+)$`
-
-### Context
-
-```json
-{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
-```
-
-### Witness
-
-```json
-null
-```
-
-### Ground-truth
-
-None
-
-## usage_mismatch:ee8544926f929dbde703af627f0598ee:search
-
-```yaml
-regex_id: ee8544926f929dbde703af627f0598ee
-schema_version: "1"
-kind: usage_mismatch
-corpus: lintendo-Axhub-Make
-call_kind: search
-shape: null
-result: finding
-disclosure: null
-site: "batch/corpora/lintendo-Axhub-Make/rules/scripts/release-make.test.mjs:829:36"
-```
-
-### Pattern
-
-`\.test\.[^/]+$`
 
 ### Context
 
@@ -18406,40 +17964,6 @@ site: "batch/corpora/lintendo-Axhub-Make/rules/client/.agents/skills/screenshot-
 ### Pattern
 
 `^(\d+)x(\d+)$`
-
-### Context
-
-```json
-{"call_kind": "search", "reason": "anchored pattern consumed via search/test"}
-```
-
-### Witness
-
-```json
-null
-```
-
-### Ground-truth
-
-None
-
-## usage_mismatch:f5524586ebddfee4472202fa642f75a7:search
-
-```yaml
-regex_id: f5524586ebddfee4472202fa642f75a7
-schema_version: "1"
-kind: usage_mismatch
-corpus: lintendo-Axhub-Make
-call_kind: search
-shape: null
-result: finding
-disclosure: null
-site: "batch/corpora/lintendo-Axhub-Make/rules/scripts/release-make.test.mjs:355:6"
-```
-
-### Pattern
-
-`^\d+\.\d+\.\d+(?:[-+][0-9A-Za-z.-]+)?$`
 
 ### Context
 

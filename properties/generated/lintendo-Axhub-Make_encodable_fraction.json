@@ -14,13 +14,13 @@
   "decision": "go",
   "decision_rule": "go iff encodable/sample_size >= 0.3",
   "dialect": "ecma",
-  "encodable": 790,
+  "encodable": 759,
   "engine_versions": {
     "python": "3.14.6",
     "z3": "5.0.0"
   },
   "extractor_schema_version": "2",
-  "fraction": 0.3043,
+  "fraction": 0.3069,
   "go_no_go_threshold": 0.3,
   "id_formula": "v2-domain-optional-ascii-default",
   "inventory_path": "properties/generated/lintendo-Axhub-Make-inventory.ndjson",
@@ -28,19 +28,19 @@
   "pilot": "lintendo-Axhub-Make",
   "reasons": {
     "backref": 2,
-    "composite-pattern": 37,
+    "composite-pattern": 35,
     "lookaround": 11,
     "m-flag": 8,
     "negated-shorthand": 8,
-    "ok": 790,
+    "ok": 759,
     "per-alternative-anchor": 21,
-    "stateful": 873,
-    "u-flag": 832,
+    "stateful": 870,
+    "u-flag": 745,
     "word-boundary": 14
   },
-  "sample_size": 2596,
+  "sample_size": 2473,
   "schema_version": "1",
   "scope": "full_corpus",
   "unclassified_parse_errors": 0,
-  "wall_s": 21.347
+  "wall_s": 5.716
 }

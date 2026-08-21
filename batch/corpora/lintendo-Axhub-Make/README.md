@@ -7,13 +7,13 @@ AI workbench, ECMA-only). Issue
 
 ## Decision: go
 
-Measured **790/2596 = 0.3043** encodable on a first-party
+Measured **759/2473 = 0.3069** encodable on a first-party
 `**/*.{js,mjs,cjs,ts,tsx}` allowlist (`complete_run`, deterministic). Probe
 had 2994 ECMA sites; Smith measures after dropping tests/fixtures/examples
-inflation (2596 sites / 314 files). Fraction clears the informational 0.30
-bar; `smith_decision=go` is explicit (not inferred).
+and `*.test.*` / `*.spec.*` files (2473 sites / 302 files). Fraction clears
+the informational 0.30 bar; `smith_decision=go` is explicit (not inferred).
 
-571 scanner rows. Not a security tool → default disclosure. Dry-run will not
+557 scanner rows. Not a security tool → default disclosure. Dry-run will not
 open public upstream issues.
 
 Not in `SECURITY_TOOL_CORPORA`. Not in `WAVE_CORPORA`.
@@ -21,21 +21,21 @@ Not in `SECURITY_TOOL_CORPORA`. Not in `WAVE_CORPORA`.
 ## Triage buckets
 
 Per-`unencodable_reason` from
-`properties/triage/lintendo-Axhub-Make.ndjson` (1806 records; 790 encodable +
-1806 unencodable = 2596):
+`properties/triage/lintendo-Axhub-Make.ndjson` (1714 records; 759 encodable +
+1714 unencodable = 2473):
 
 | Bucket | Count |
 |---|---|
-| `stateful` | 873 |
-| `u-flag` | 832 |
-| `composite-pattern` | 37 |
+| `stateful` | 870 |
+| `u-flag` | 745 |
+| `composite-pattern` | 35 |
 | `per-alternative-anchor` | 21 |
 | `word-boundary` | 14 |
 | `lookaround` | 11 |
 | `m-flag` | 8 |
 | `negated-shorthand` | 8 |
 | `backref` | 2 |
-| **Total unencodable** | **1806** |
+| **Total unencodable** | **1714** |
 
 | Artifact | Path |
 |---|---|
@@ -51,7 +51,7 @@ python scripts/materialize-corpus.py --gate \
   --allowlist-file /tmp/axhub-allowlist.txt
 ```
 
-Manifest `files=` is the committed allowlist (314 paths).
+Manifest `files=` is the committed allowlist (302 paths).
 
 ## Measure / batch
 

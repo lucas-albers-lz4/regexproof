@@ -50,7 +50,7 @@ the work by phase; dates are merge dates.
   ECMA allowlist; public-first, not security_tool).
 - Smith #408: `ajohnsonnow-vet-rate-org` GO (1408/2342 = 0.6012 on
   first-party ECMA allowlist; public-first).
-- Smith #390: `lintendo-Axhub-Make` GO (790/2596 = 0.3043 on first-party
+- Smith #390: `lintendo-Axhub-Make` GO (759/2473 = 0.3069 on first-party
   ECMA allowlist; public-first).
 - PR-cycle rule: Luna reviewer pinned to `gpt-5.6-luna-medium` (not Opus-high).
 - Registered `openwrt_luci` as a manifest corpus (not `WAVE_CORPORA`):
