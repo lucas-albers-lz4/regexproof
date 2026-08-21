@@ -17,7 +17,7 @@
       "met": false
     }
   ],
-  "corpus": "panther-analysis",
+  "corpus": "panther-labs-panther-analysis",
   "corpus_pin": "0cd0f5bd33469c9f03b578fe0104a4ebf23d9f4a",
   "decision": "triage-trial",
   "decision_basis": "escape_hatch",

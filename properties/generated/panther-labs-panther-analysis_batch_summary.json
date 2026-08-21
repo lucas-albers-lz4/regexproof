@@ -1,0 +1,25 @@
+{
+  "address_space_cap": true,
+  "cache": {
+    "entries": 0,
+    "hit_rate": 0.0,
+    "hits": 0,
+    "misses": 0
+  },
+  "cache_hit_rate": 0.0,
+  "complete_run": true,
+  "corpus": "panther-labs-panther-analysis",
+  "corpus_type": "rule_corpus",
+  "encodable": 37,
+  "engine": {
+    "python": "3.14.6"
+  },
+  "extracted": 57,
+  "findings": 22,
+  "inventory_questions": 4,
+  "join_regex_ids": 22,
+  "redos_findings": 0,
+  "redos_incomplete": false,
+  "schema_version": "1",
+  "triage": 20
+}

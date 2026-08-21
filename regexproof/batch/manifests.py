@@ -4273,6 +4273,29 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
             "max_disk_mb": 100,
         },
     },
+    "panther-labs-panther-analysis": {
+        "corpus_type": "rule_corpus",
+        # Smith #387 triage-trial. Materialize:
+        # python scripts/materialize-corpus.py --gate \
+        #   properties/generated/panther-labs-panther-analysis_gate_decision.json
+        "path": ROOT / "batch" / "corpora" / "panther-labs-panther-analysis" / "rules",
+        "files": [],
+        "glob": "**/*.py",
+        "dialect": "py_re",
+        "extractor": "python_dir",
+        "repo": "panther-labs/panther-analysis",
+        "security_tool": True,
+        "lift_inline": False,
+        "corpus_pin": "0cd0f5bd33469c9f03b578fe0104a4ebf23d9f4a",
+        "commit": "0cd0f5bd33469c9f03b578fe0104a4ebf23d9f4a",
+        "budget": {
+            "max_patterns": 5000,
+            "max_wall_s": 600,
+            "redos_wall_s": 120,
+            "max_mem_mb": 1024,
+            "max_disk_mb": 500,
+        },
+    },
 
 }
 
