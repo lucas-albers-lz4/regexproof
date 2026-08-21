@@ -9,11 +9,32 @@ hatch — SIEM detection-as-code, 57 py_re). Issue
 ## Decision: go
 
 Measured **37/57 = 0.6491** encodable (`complete_run`, deterministic).
-22 scanner findings, all `private_first` (security tool). Dry-run will not
+22 batch records (18 `usage_mismatch` findings + 4 planned inventory
+properties), all `private_first` (security tool). Dry-run will not
 open public upstream issues.
 
 Security tool → `SECURITY_TOOL_CORPORA` → `private_first`. Not in
 `WAVE_CORPORA`.
+
+## Triage buckets
+
+Per-`unencodable_reason` counts from
+`properties/triage/panther-labs-panther-analysis.ndjson` (20 records,
+all `reason_kind=unencodable`; 37 encodable + 20 unencodable = 57 sites):
+
+| Bucket | Definition | Count |
+|---|---|---|
+| `composite-pattern` | `re.compile` argument is an f-string or `+` concatenation (`ast.JoinedStr` / `BinOp`) — dynamic pattern, cannot fold to one literal | 12 |
+| `unicode-not-literal` | Complement of a literal over the full Unicode domain (non-ASCII `[^x]`) — over-broad complement rejected unless ASCII-only | 4 |
+| `m-flag` | `re.MULTILINE` / inline `(?m)` — per-line `^`/`$` anchors not encodable | 2 |
+| `negated-shorthand` | Negated shorthand category (`\D`, `\S`, `\W`) — complement not expressible | 1 |
+| `per-alternative-anchor` | `^`/`$` anchors inside alternation branches (branch-local anchors rejected) | 1 |
+| **Total unencodable** | | **20** |
+
+The 22 batch rows in `properties/generated/panther-labs-panther-analysis.ndjson`
+are a separate view (18 `usage_mismatch` findings + 4 planned inventory
+properties); the triage table above is the unencodable view and reconciles the
+37/57 ratio (37 encodable + 20 unencodable = 57 sites).
 
 | Artifact | Path |
 |---|---|
