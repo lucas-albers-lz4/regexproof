@@ -188,6 +188,42 @@ def test_reject_untimed_subprocess_usage_popen_untimed_flagged(tmp_path):
     assert "Popen" in violations[0]
 
 
+def test_reject_untimed_subprocess_usage_popen_wrong_receiver_flagged(tmp_path):
+    """#548 gate fold: a timed communicate() on a DIFFERENT variable must not
+    bless the Popen constructor."""
+    (tmp_path / "pkg").mkdir()
+    (tmp_path / "pkg" / "runner.py").write_text(
+        "import subprocess\n"
+        "def f():\n"
+        "    p = subprocess.Popen(['worker'], stdout=subprocess.PIPE, text=True)\n"
+        "    q = subprocess.Popen(['other'], stdout=subprocess.PIPE, text=True)\n"
+        "    out, _ = q.communicate(timeout=30)\n"
+        "    return out\n"
+    )
+    violations = reject_untimed_subprocess_usage([tmp_path / "pkg"])
+    assert len(violations) == 1, violations
+    assert "runner.py" in violations[0]
+
+
+def test_reject_untimed_subprocess_usage_popen_nested_def_flagged(tmp_path):
+    """#548 gate fold: a timed wait in an OUTER scope must not bless a Popen
+    created inside a nested function."""
+    (tmp_path / "pkg").mkdir()
+    (tmp_path / "pkg" / "runner.py").write_text(
+        "import subprocess\n"
+        "def outer():\n"
+        "    def inner():\n"
+        "        p = subprocess.Popen(['worker'], stdout=subprocess.PIPE, text=True)\n"
+        "        return p\n"
+        "    q = inner()\n"
+        "    out, _ = q.communicate(timeout=30)\n"
+        "    return out\n"
+    )
+    violations = reject_untimed_subprocess_usage([tmp_path / "pkg"])
+    assert len(violations) == 1, violations
+    assert "runner.py" in violations[0]
+
+
 def test_pcre_parse_error_rejected_when_helper_present():
     """#361: PCRE2 parse-error must not be encoded into a Z3 mirror."""
     from regexproof.compiler.pcre import compile_pcre, helper_used_for_parse_and_replay

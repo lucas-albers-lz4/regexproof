@@ -226,25 +226,53 @@ def _popen_timed_in_function(tree: ast.Module, call: ast.Call) -> bool:
     the same function. subprocess.Popen takes no ``timeout=`` kwarg — the
     bound lives on ``communicate()`` / ``wait()`` — so a constructor whose
     result is timed there is compliant (the harness Popen sites use exactly
-    this pattern with a process-group kill on TimeoutExpired)."""
-    fn = None
+    this pattern with a process-group kill on TimeoutExpired).
+
+    Gate-review fold (#548): the timed wait must be on the SAME receiver as
+    the Popen result (``p.communicate(timeout=...)``, not some other
+    variable), and the check uses the INNERMOST enclosing function so a
+    Popen nested in an inner def cannot be blessed by a timed wait in the
+    outer scope.
+    """
+    def contains(outer: ast.AST, target: ast.AST) -> bool:
+        return any(child is target for child in ast.walk(outer))
+
+    enclosing = None
     for node in ast.walk(tree):
-        if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
-            for child in ast.walk(node):
-                if child is call:
-                    fn = node
-                    break
-        if fn is not None:
-            break
-    if fn is None:
+        if (
+            isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef))
+            and contains(node, call)
+            and (enclosing is None or contains(enclosing, node))
+        ):
+            enclosing = node
+    if enclosing is None:
         return False
-    for node in ast.walk(fn):
+
+    targets: set[str] = set()
+    for node in ast.walk(enclosing):
+        if isinstance(node, ast.Assign) and node.value is call:
+            for t in node.targets:
+                if isinstance(t, ast.Name):
+                    targets.add(t.id)
+                elif isinstance(t, ast.Tuple):
+                    for elt in t.elts:
+                        if isinstance(elt, ast.Name):
+                            targets.add(elt.id)
+        elif isinstance(node, (ast.AnnAssign, ast.AugAssign)) and node.value is call:
+            if isinstance(node.target, ast.Name):
+                targets.add(node.target.id)
+    if not targets:
+        return False
+
+    for node in ast.walk(enclosing):
         if not isinstance(node, ast.Call):
             continue
         func = node.func
         if (
             isinstance(func, ast.Attribute)
             and func.attr in ("communicate", "wait")
+            and isinstance(func.value, ast.Name)
+            and func.value.id in targets
             and _timeout_is_explicit_and_enabled(node)
         ):
             return True
