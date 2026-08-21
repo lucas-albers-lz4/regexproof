@@ -1,0 +1,46 @@
+{
+  "budget": {
+    "max_disk_mb": 2000,
+    "max_mem_mb": 2048,
+    "max_patterns": 5000,
+    "max_wall_s": 900,
+    "redos_wall_s": 180
+  },
+  "budget_breaches": null,
+  "commit": "bc10e311028d5e72752de97187ff690b2095f466",
+  "compiler_fingerprint": "35ea1f238a9e",
+  "complete_run": true,
+  "corpus_pin": "bc10e311028d5e72752de97187ff690b2095f466",
+  "decision": "go",
+  "decision_rule": "go iff encodable/sample_size >= 0.3",
+  "dialect": "ecma",
+  "encodable": 790,
+  "engine_versions": {
+    "python": "3.14.6",
+    "z3": "5.0.0"
+  },
+  "extractor_schema_version": "2",
+  "fraction": 0.3043,
+  "go_no_go_threshold": 0.3,
+  "id_formula": "v2-domain-optional-ascii-default",
+  "inventory_path": "properties/generated/lintendo-Axhub-Make-inventory.ndjson",
+  "path": "batch/corpora/lintendo-Axhub-Make/rules",
+  "pilot": "lintendo-Axhub-Make",
+  "reasons": {
+    "backref": 2,
+    "composite-pattern": 37,
+    "lookaround": 11,
+    "m-flag": 8,
+    "negated-shorthand": 8,
+    "ok": 790,
+    "per-alternative-anchor": 21,
+    "stateful": 873,
+    "u-flag": 832,
+    "word-boundary": 14
+  },
+  "sample_size": 2596,
+  "schema_version": "1",
+  "scope": "full_corpus",
+  "unclassified_parse_errors": 0,
+  "wall_s": 21.347
+}

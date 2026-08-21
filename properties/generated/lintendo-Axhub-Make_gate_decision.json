@@ -17,7 +17,7 @@
       "met": true
     }
   ],
-  "corpus": "Axhub-Make",
+  "corpus": "lintendo-Axhub-Make",
   "corpus_pin": "bc10e311028d5e72752de97187ff690b2095f466",
   "decision": "go",
   "decision_basis": "admission_conditions",
