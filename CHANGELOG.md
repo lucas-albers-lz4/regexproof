@@ -46,6 +46,9 @@ the work by phase; dates are merge dates.
   encodable, private_first); first cheap-later after [#533](https://github.com/lucas-albers-lz4/regexproof/issues/533) close.
 - Smith #384: `gadievron-raptor` GO (894/1879 = 0.4758 on first-party
   py_re allowlist, private_first).
+- Smith #398: `visulima-visulima` GO (950/1617 = 0.5875 on first-party
+  ECMA allowlist; public-first, not security_tool).
+- PR-cycle rule: Luna reviewer pinned to `gpt-5.6-luna-medium` (not Opus-high).
 - Registered `openwrt_luci` as a manifest corpus (not `WAVE_CORPORA`):
   `js_precise_dir` honors `glob` for nested `htdocs` trees, runtime gate
   copy of the 2026-08-20 probe GO, batch + conversion-ledger regen
