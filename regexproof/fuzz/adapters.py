@@ -221,17 +221,49 @@ def _timeout_is_explicit_and_enabled(call: ast.Call) -> bool:
     return False
 
 
+def _popen_timed_in_function(tree: ast.Module, call: ast.Call) -> bool:
+    """True when a Popen constructor's result is waited on with a timeout in
+    the same function. subprocess.Popen takes no ``timeout=`` kwarg — the
+    bound lives on ``communicate()`` / ``wait()`` — so a constructor whose
+    result is timed there is compliant (the harness Popen sites use exactly
+    this pattern with a process-group kill on TimeoutExpired)."""
+    fn = None
+    for node in ast.walk(tree):
+        if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
+            for child in ast.walk(node):
+                if child is call:
+                    fn = node
+                    break
+        if fn is not None:
+            break
+    if fn is None:
+        return False
+    for node in ast.walk(fn):
+        if not isinstance(node, ast.Call):
+            continue
+        func = node.func
+        if (
+            isinstance(func, ast.Attribute)
+            and func.attr in ("communicate", "wait")
+            and _timeout_is_explicit_and_enabled(node)
+        ):
+            return True
+    return False
+
+
 def reject_untimed_subprocess_usage(paths: Sequence[Path] | None = None) -> list[str]:
     """Static check: fail if subprocess calls omit an explicit timeout=.
 
-    Scans compilers + helpers by default (#171 hang / self-ReDoS surface).
+    Scans the whole ``regexproof/`` package by default (#543; previously only
+    compilers + helpers, leaving harness/, rule_diff/, mine/ uncovered).
+    subprocess.Popen is exempt when its result is waited on with a timeout in
+    the same function (``communicate(timeout=...)`` / ``wait(timeout=...)``).
     Returns a list of violation messages (empty = clean).
     """
     if paths is None:
         root = Path(__file__).resolve().parents[2]
         paths = [
-            root / "regexproof" / "compiler",
-            root / "helpers",
+            root / "regexproof",
         ]
     violations: list[str] = []
     for path in paths:
@@ -264,6 +296,11 @@ def reject_untimed_subprocess_usage(paths: Sequence[Path] | None = None) -> list
                 elif isinstance(func, ast.Name) and func.id in imported:
                     name = func.id
                 if name is None:
+                    continue
+                if (
+                    name == "Popen"
+                    and _popen_timed_in_function(tree, node)
+                ):
                     continue
                 if not _timeout_is_explicit_and_enabled(node):
                     violations.append(

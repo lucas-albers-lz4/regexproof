@@ -178,6 +178,55 @@ def test_manifest_missing_file_detected(tmp_path):
     assert verify_manifest(m, tmp_path) == ["a.txt: missing"]
 
 
+def test_manifest_path_escape_rejected(tmp_path, monkeypatch):
+    """#544: a manifest path must not escape the repo root — an outside
+    target must be reported and never probed (no hash oracle)."""
+    outside = tmp_path / "outside.txt"
+    outside.write_text("secret")
+    m = {
+        "files": [
+            {"path": "../../outside.txt", "sha256": "0" * 64},
+        ]
+    }
+    calls: list[str] = []
+    import regexproof.harness.sweep as sweep
+
+    monkeypatch.setattr(
+        sweep,
+        "sha256_file",
+        lambda p: (calls.append(str(p)) or "x"),
+    )
+    problems = verify_manifest(m, tmp_path)
+    assert problems == ["../../outside.txt: outside root"], problems
+    assert calls == [], f"outside path was probed: {calls}"
+
+
+def test_manifest_symlink_rejected(tmp_path):
+    """#544: a symlink anywhere under root must be rejected, not followed."""
+    (tmp_path / "real.txt").write_text("hello")
+    (tmp_path / "link.txt").symlink_to(tmp_path / "real.txt")
+    m = {
+        "files": [
+            {"path": "link.txt", "sha256": hashlib.sha256(b"hello").hexdigest()},
+        ]
+    }
+    assert verify_manifest(m, tmp_path) == ["link.txt: symlink rejected"]
+
+    # symlink pointing OUTSIDE the root is caught by the symlink check
+    # (and would be by containment even if followed).
+    outside = tmp_path / "out" / "target.txt"
+    outside.parent.mkdir()
+    outside.write_text("secret")
+    (tmp_path / "sub").mkdir()
+    (tmp_path / "sub" / "esc.txt").symlink_to(outside)
+    m2 = {
+        "files": [
+            {"path": "sub/esc.txt", "sha256": "0" * 64},
+        ]
+    }
+    assert verify_manifest(m2, tmp_path) == ["sub/esc.txt: symlink rejected"]
+
+
 def test_corpus_commit_is_stable_sha():
     # the corpus commit is the last commit touching the corpus files — a
     # 40-hex sha that does NOT track the sweep's own HEAD (luna r2 on #234)
