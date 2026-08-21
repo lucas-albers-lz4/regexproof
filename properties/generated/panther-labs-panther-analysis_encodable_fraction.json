@@ -1,0 +1,42 @@
+{
+  "budget": {
+    "max_disk_mb": 500,
+    "max_mem_mb": 1024,
+    "max_patterns": 5000,
+    "max_wall_s": 600,
+    "redos_wall_s": 120
+  },
+  "budget_breaches": null,
+  "commit": "0cd0f5bd33469c9f03b578fe0104a4ebf23d9f4a",
+  "compiler_fingerprint": "35ea1f238a9e",
+  "complete_run": true,
+  "corpus_pin": "0cd0f5bd33469c9f03b578fe0104a4ebf23d9f4a",
+  "decision": "go",
+  "decision_rule": "go iff encodable/sample_size >= 0.3",
+  "dialect": "py_re",
+  "encodable": 37,
+  "engine_versions": {
+    "python": "3.14.6",
+    "z3": "5.0.0"
+  },
+  "extractor_schema_version": "2",
+  "fraction": 0.6491,
+  "go_no_go_threshold": 0.3,
+  "id_formula": "v2-domain-optional-ascii-default",
+  "inventory_path": "properties/generated/panther-labs-panther-analysis-inventory.ndjson",
+  "path": "batch/corpora/panther-labs-panther-analysis/rules",
+  "pilot": "panther-labs-panther-analysis",
+  "reasons": {
+    "composite-pattern": 12,
+    "m-flag": 2,
+    "negated-shorthand": 1,
+    "ok": 37,
+    "per-alternative-anchor": 1,
+    "unicode-not-literal": 4
+  },
+  "sample_size": 57,
+  "schema_version": "1",
+  "scope": "full_corpus",
+  "unclassified_parse_errors": 0,
+  "wall_s": 1.202
+}

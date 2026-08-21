@@ -1,0 +1,14 @@
+{
+  "additional_surface_outside_probe_scope": {},
+  "candidate_url": "https://github.com/panther-labs/panther-analysis",
+  "corpus": "panther-labs-panther-analysis",
+  "corpus_pin": "0cd0f5bd33469c9f03b578fe0104a4ebf23d9f4a",
+  "reason": "37/57 = 0.6491 encodable on SIEM detection py_re (complete_run); triage-trial escape hatch; security_tool private_first",
+  "regex_sites": 57,
+  "schema_version": "1",
+  "sites_by_bucket": {
+    "py_re": 57
+  },
+  "smith_decision": "go",
+  "supersedes": "triage-trial"
+}

@@ -61,21 +61,21 @@
       "reasons": {
         "backref": 3,
         "bad-range": 4,
-        "composite-pattern": 66,
+        "composite-pattern": 78,
         "fullword-boundary": 573,
         "gnu-extension": 1,
         "inline-flag": 30,
         "internal-anchor": 39,
         "lookaround": 23,
-        "m-flag": 20,
+        "m-flag": 22,
         "multi-match": 12,
-        "negated-shorthand": 39,
+        "negated-shorthand": 40,
         "parse-error": 1,
         "pattern-too-long": 12,
-        "per-alternative-anchor": 45,
+        "per-alternative-anchor": 46,
         "stateful": 772,
         "u-flag": 7,
-        "unicode-not-literal": 65,
+        "unicode-not-literal": 69,
         "unsupported-modifier:base64": 3,
         "unsupported-modifier:base64,base64wide": 2,
         "unsupported-syntax": 4,
@@ -83,14 +83,14 @@
         "wide-non-literal": 94,
         "word-boundary": 161
       },
-      "rows": 1979,
-      "sites_weighted": 3958.0
+      "rows": 1999,
+      "sites_weighted": 3998.0
     }
   },
   "provenance": {
     "gate_decision_count": 837,
-    "input_file_count": 79,
-    "triage_inputs_hash": "08db48b6c481d432"
+    "input_file_count": 80,
+    "triage_inputs_hash": "4a90af62427bad0f"
   },
   "rows": [
     {
@@ -113,19 +113,19 @@
       "per_corpus": {
         "go": 10980.0,
         "no-go": 261.0,
-        "triage-trial": 132.0
+        "triage-trial": 156.0
       },
       "per_corpus_raw": {
         "go": 3660,
         "no-go": 261,
-        "triage-trial": 66
+        "triage-trial": 78
       },
       "per_dialect": {
         "ecma": 147,
-        "py_re": 3840
+        "py_re": 3852
       },
-      "sites_unlocked": 3987,
-      "sites_weighted": 11373.0,
+      "sites_unlocked": 3999,
+      "sites_weighted": 11397.0,
       "unencodable_reason": "composite-pattern"
     },
     {
@@ -253,19 +253,19 @@
       "per_corpus": {
         "go": 1191.0,
         "no-go": 25.0,
-        "triage-trial": 40.0
+        "triage-trial": 44.0
       },
       "per_corpus_raw": {
         "go": 397,
         "no-go": 25,
-        "triage-trial": 20
+        "triage-trial": 22
       },
       "per_dialect": {
         "ecma": 73,
-        "py_re": 369
+        "py_re": 371
       },
-      "sites_unlocked": 442,
-      "sites_weighted": 1256.0,
+      "sites_unlocked": 444,
+      "sites_weighted": 1260.0,
       "unencodable_reason": "m-flag"
     },
     {
@@ -290,21 +290,21 @@
       "per_corpus": {
         "go": 1104.0,
         "no-go": 16.0,
-        "triage-trial": 78.0
+        "triage-trial": 80.0
       },
       "per_corpus_raw": {
         "go": 368,
         "no-go": 16,
-        "triage-trial": 39
+        "triage-trial": 40
       },
       "per_dialect": {
         "ecma": 175,
-        "py_re": 245,
+        "py_re": 246,
         "re2": 2,
         "yara": 1
       },
-      "sites_unlocked": 423,
-      "sites_weighted": 1198.0,
+      "sites_unlocked": 424,
+      "sites_weighted": 1200.0,
       "unencodable_reason": "negated-shorthand"
     },
     {
@@ -331,40 +331,40 @@
       "per_corpus": {
         "go": 984.0,
         "no-go": 3.0,
-        "triage-trial": 90.0
+        "triage-trial": 92.0
       },
       "per_corpus_raw": {
         "go": 328,
         "no-go": 3,
-        "triage-trial": 45
+        "triage-trial": 46
       },
       "per_dialect": {
         "ecma": 201,
         "posix-shell": 100,
-        "py_re": 70,
+        "py_re": 71,
         "re2": 3,
         "yara": 2
       },
-      "sites_unlocked": 376,
-      "sites_weighted": 1077.0,
+      "sites_unlocked": 377,
+      "sites_weighted": 1079.0,
       "unencodable_reason": "per-alternative-anchor"
     },
     {
       "per_corpus": {
         "go": 735.0,
         "no-go": 18.0,
-        "triage-trial": 130.0
+        "triage-trial": 138.0
       },
       "per_corpus_raw": {
         "go": 245,
         "no-go": 18,
-        "triage-trial": 65
+        "triage-trial": 69
       },
       "per_dialect": {
-        "py_re": 328
+        "py_re": 332
       },
-      "sites_unlocked": 328,
-      "sites_weighted": 883.0,
+      "sites_unlocked": 332,
+      "sites_weighted": 891.0,
       "unencodable_reason": "unicode-not-literal"
     },
     {
@@ -673,8 +673,8 @@
     }
   ],
   "schema_version": "1",
-  "total_rows": 47100,
-  "total_weighted": 138391.0,
+  "total_rows": 47120,
+  "total_weighted": 138431.0,
   "unknown_reason_rows": 8,
   "weights": {
     "go": 3,

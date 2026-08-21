@@ -67,6 +67,7 @@ SECURITY_TOOL_CORPORA = frozenset(
         "devguard",
         "malzoo",
         "yarasigs",
+        "panther-labs-panther-analysis",
     }
 )
 
