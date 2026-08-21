@@ -1,5 +1,5 @@
 {
-  "checked_ok": 4,
+  "checked_ok": 12,
   "engine_versions": {
     "perl": "v5.40.1",
     "python": "3.13.5",
@@ -11,35 +11,91 @@
   "mismatches": 0,
   "ok": true,
   "pcre2_helper": true,
-  "pcre_checked_ok": 2,
+  "pcre_checked_ok": 6,
   "perl_helper": true,
   "results": [
     {
       "corpus": "coreruleset",
       "dialect": "pcre",
-      "probes": 51,
+      "probes": 441,
       "regex_id": "d00fe967efcf75cd1166d48a59883c0c",
       "status": "ok"
     },
     {
       "corpus": "coreruleset",
       "dialect": "pcre",
-      "probes": 51,
+      "probes": 441,
       "regex_id": "4cda044c15b26e0b433f0b5df567047d",
       "status": "ok"
     },
     {
-      "corpus": "gitleaks",
-      "dialect": "re2",
-      "probes": 51,
-      "regex_id": "02311166d82eee2be879feba8bc37308",
+      "corpus": "coreruleset",
+      "dialect": "pcre",
+      "probes": 441,
+      "regex_id": "ca3e0bcb968304db4ddd317cd1b264ba",
+      "status": "ok"
+    },
+    {
+      "corpus": "coreruleset",
+      "dialect": "pcre",
+      "probes": 441,
+      "regex_id": "5ff6ec1d690eda40066530ff5f8a3f18",
+      "status": "ok"
+    },
+    {
+      "corpus": "coreruleset",
+      "dialect": "pcre",
+      "probes": 441,
+      "regex_id": "c632a1bc72497ad7b1145388b3ef3646",
+      "status": "ok"
+    },
+    {
+      "corpus": "coreruleset",
+      "dialect": "pcre",
+      "probes": 441,
+      "regex_id": "5bdd4eaf48ddce540a6c4b655a6f0be6",
       "status": "ok"
     },
     {
       "corpus": "gitleaks",
       "dialect": "re2",
-      "probes": 51,
-      "regex_id": "02e3224794efbcfed1577b160002807b",
+      "probes": 441,
+      "regex_id": "45fb01484e6593d0c34922f594e7344b",
+      "status": "ok"
+    },
+    {
+      "corpus": "gitleaks",
+      "dialect": "re2",
+      "probes": 441,
+      "regex_id": "f66e76a3534be1d3727febcfd8db409f",
+      "status": "ok"
+    },
+    {
+      "corpus": "gitleaks",
+      "dialect": "re2",
+      "probes": 441,
+      "regex_id": "ac8604fcd5ba993051be817dd6147a21",
+      "status": "ok"
+    },
+    {
+      "corpus": "gitleaks",
+      "dialect": "re2",
+      "probes": 441,
+      "regex_id": "41131f3939b610cc8c15586511750818",
+      "status": "ok"
+    },
+    {
+      "corpus": "gitleaks",
+      "dialect": "re2",
+      "probes": 441,
+      "regex_id": "c0f37f1028802aaaba673dc005d5fe2c",
+      "status": "ok"
+    },
+    {
+      "corpus": "gitleaks",
+      "dialect": "re2",
+      "probes": 441,
+      "regex_id": "7e1b515f4a13cba11c0609302fa8dff1",
       "status": "ok"
     }
   ],
