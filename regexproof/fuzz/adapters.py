@@ -8,7 +8,7 @@ from __future__ import annotations
 import ast
 import subprocess
 import sys
-from collections.abc import Sequence
+from collections.abc import Iterator, Sequence
 from pathlib import Path
 
 
@@ -237,6 +237,16 @@ def _popen_timed_in_function(tree: ast.Module, call: ast.Call) -> bool:
     def contains(outer: ast.AST, target: ast.AST) -> bool:
         return any(child is target for child in ast.walk(outer))
 
+    def walk_flat(node: ast.AST) -> Iterator[ast.AST]:
+        """Yield descendants WITHOUT descending into nested function bodies:
+        a timed wait inside an inner def must not bless an outer Popen
+        (CodeRabbit r3 fold)."""
+        for child in ast.iter_child_nodes(node):
+            if isinstance(child, (ast.FunctionDef, ast.AsyncFunctionDef)):
+                continue
+            yield child
+            yield from walk_flat(child)
+
     enclosing = None
     for node in ast.walk(tree):
         if (
@@ -249,7 +259,7 @@ def _popen_timed_in_function(tree: ast.Module, call: ast.Call) -> bool:
         return False
 
     targets: set[str] = set()
-    for node in ast.walk(enclosing):
+    for node in walk_flat(enclosing):
         if isinstance(node, ast.Assign) and node.value is call:
             for t in node.targets:
                 if isinstance(t, ast.Name):
@@ -264,7 +274,7 @@ def _popen_timed_in_function(tree: ast.Module, call: ast.Call) -> bool:
     if not targets:
         return False
 
-    for node in ast.walk(enclosing):
+    for node in walk_flat(enclosing):
         if not isinstance(node, ast.Call):
             continue
         func = node.func

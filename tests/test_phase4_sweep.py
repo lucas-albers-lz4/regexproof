@@ -20,6 +20,7 @@ AC coverage (issue #220):
 from __future__ import annotations
 
 import hashlib
+import os
 from pathlib import Path
 
 import pytest
@@ -188,17 +189,21 @@ def test_manifest_path_escape_rejected(tmp_path, monkeypatch):
             {"path": "../../outside.txt", "sha256": "0" * 64},
         ]
     }
-    calls: list[str] = []
-    import regexproof.harness.sweep as sweep
+    # No os.open may be issued for the escaping path: the containment check
+    # must reject it before anything touches the filesystem target (the
+    # previous sha256_file monkeypatch became vacuous when verification
+    # switched to fd-based hashing).
+    opened: list[str] = []
+    real_open = os.open
 
-    monkeypatch.setattr(
-        sweep,
-        "sha256_file",
-        lambda p: (calls.append(str(p)) or "x"),
-    )
+    def spy_open(path, *args, **kwargs):
+        opened.append(str(path))
+        return real_open(path, *args, **kwargs)
+
+    monkeypatch.setattr(os, "open", spy_open)
     problems = verify_manifest(m, tmp_path)
     assert problems == ["../../outside.txt: outside root"], problems
-    assert calls == [], f"outside path was probed: {calls}"
+    assert opened == [], f"outside path was opened: {opened}"
 
 
 def test_manifest_symlink_rejected(tmp_path):

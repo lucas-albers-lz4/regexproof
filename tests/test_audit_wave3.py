@@ -224,6 +224,24 @@ def test_reject_untimed_subprocess_usage_popen_nested_def_flagged(tmp_path):
     assert "runner.py" in violations[0]
 
 
+def test_reject_untimed_subprocess_usage_popen_inner_timed_wait_flagged(tmp_path):
+    """#548 r3 fold: an outer Popen must NOT be blessed by a timed wait that
+    lives inside a nested function body (even when the inner closure shares
+    the receiver)."""
+    (tmp_path / "pkg").mkdir()
+    (tmp_path / "pkg" / "runner.py").write_text(
+        "import subprocess\n"
+        "def outer():\n"
+        "    p = subprocess.Popen(['worker'], stdout=subprocess.PIPE, text=True)\n"
+        "    def inner():\n"
+        "        return p.communicate(timeout=30)\n"
+        "    return p\n"
+    )
+    violations = reject_untimed_subprocess_usage([tmp_path / "pkg"])
+    assert len(violations) == 1, violations
+    assert "runner.py" in violations[0]
+
+
 def test_pcre_parse_error_rejected_when_helper_present():
     """#361: PCRE2 parse-error must not be encoded into a Z3 mirror."""
     from regexproof.compiler.pcre import compile_pcre, helper_used_for_parse_and_replay
