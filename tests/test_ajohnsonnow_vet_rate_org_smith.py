@@ -48,6 +48,7 @@ def test_vet_rate_gate_corpus_matches_filename():
     path = ROOT / "properties" / "generated" / f"{CORPUS}_gate_decision.json"
     data = json.loads(path.read_text(encoding="utf-8"))
     assert data["corpus"] == CORPUS
+    assert data["corpus_pin"] == PIN
     assert data["decision"] == "go"
     assert check_admission_gates([CORPUS], out_dir=ROOT / "properties" / "generated") == []
 
