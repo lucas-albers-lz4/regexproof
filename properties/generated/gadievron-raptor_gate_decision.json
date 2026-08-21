@@ -17,7 +17,7 @@
       "met": true
     }
   ],
-  "corpus": "raptor",
+  "corpus": "gadievron-raptor",
   "corpus_pin": "d81cada060a5e7b61938445da021ed0b33236cbb",
   "decision": "go",
   "decision_basis": "admission_conditions",

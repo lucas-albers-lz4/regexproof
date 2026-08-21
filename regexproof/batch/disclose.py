@@ -68,6 +68,7 @@ SECURITY_TOOL_CORPORA = frozenset(
         "malzoo",
         "yarasigs",
         "panther-labs-panther-analysis",
+        "gadievron-raptor",
     }
 )
 

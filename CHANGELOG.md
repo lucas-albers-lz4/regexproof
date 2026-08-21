@@ -44,6 +44,8 @@ the work by phase; dates are merge dates.
   `ci-check-node-openwrt-luci.py`. Ledger `properties_asked` 17 → 21.
 - Smith #387: `panther-labs-panther-analysis` GO (37/57 = 0.6491
   encodable, private_first); first cheap-later after [#533](https://github.com/lucas-albers-lz4/regexproof/issues/533) close.
+- Smith #384: `gadievron-raptor` GO (894/1879 = 0.4758 on first-party
+  py_re allowlist, private_first).
 - Registered `openwrt_luci` as a manifest corpus (not `WAVE_CORPORA`):
   `js_precise_dir` honors `glob` for nested `htdocs` trees, runtime gate
   copy of the 2026-08-20 probe GO, batch + conversion-ledger regen

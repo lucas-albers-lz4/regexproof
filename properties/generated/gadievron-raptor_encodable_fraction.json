@@ -1,0 +1,47 @@
+{
+  "budget": {
+    "max_disk_mb": 500,
+    "max_mem_mb": 2048,
+    "max_patterns": 5000,
+    "max_wall_s": 900,
+    "redos_wall_s": 180
+  },
+  "budget_breaches": null,
+  "commit": "d81cada060a5e7b61938445da021ed0b33236cbb",
+  "compiler_fingerprint": "35ea1f238a9e",
+  "complete_run": true,
+  "corpus_pin": "d81cada060a5e7b61938445da021ed0b33236cbb",
+  "decision": "go",
+  "decision_rule": "go iff encodable/sample_size >= 0.3",
+  "dialect": "py_re",
+  "encodable": 894,
+  "engine_versions": {
+    "python": "3.14.6",
+    "z3": "5.0.0"
+  },
+  "extractor_schema_version": "2",
+  "fraction": 0.4758,
+  "go_no_go_threshold": 0.3,
+  "id_formula": "v2-domain-optional-ascii-default",
+  "inventory_path": "properties/generated/gadievron-raptor-inventory.ndjson",
+  "path": "batch/corpora/gadievron-raptor/rules",
+  "pilot": "gadievron-raptor",
+  "reasons": {
+    "backref": 5,
+    "composite-pattern": 235,
+    "lookaround": 16,
+    "m-flag": 80,
+    "multi-match": 15,
+    "negated-shorthand": 18,
+    "ok": 894,
+    "pattern-too-long": 23,
+    "per-alternative-anchor": 28,
+    "unicode-not-literal": 88,
+    "word-boundary": 477
+  },
+  "sample_size": 1879,
+  "schema_version": "1",
+  "scope": "full_corpus",
+  "unclassified_parse_errors": 0,
+  "wall_s": 11.353
+}

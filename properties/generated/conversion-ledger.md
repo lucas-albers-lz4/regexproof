@@ -8,11 +8,11 @@ Heap's-law / singleton novelty saturates **compiler coverage**. This artifact sa
 
 | stage | count |
 |---|---|
-| sites extracted (batch summaries) | 126,674 |
-| sites encodable | 79,554 |
-| scanner NDJSON rows | 7,692 |
-| planned inventory stubs | 306 |
-| classification rows (usage/intent/triage kinds) | 6,098 |
+| sites extracted (batch summaries) | 128,553 |
+| sites encodable | 80,448 |
+| scanner NDJSON rows | 8,120 |
+| planned inventory stubs | 310 |
+| classification rows (usage/intent/triage kinds) | 6,522 |
 | mutation guards (hygiene) | 644 |
 | properties asked (non-planned product kinds) | 21 |
 | properties asked distinct `(site, question_id)` | 21 |
@@ -23,9 +23,9 @@ Heap's-law / singleton novelty saturates **compiler coverage**. This artifact sa
 | SAT ground-truthed (`reproduced` / `PASS`) | 6 |
 | rule_diff report SAT (dedicated pilots) | 10 |
 | rule_diff report SAT + ground-truth | 10 |
-| disclosed `private_first` (scanner product+classification, skip planned) | 704 |
+| disclosed `private_first` (scanner product+classification, skip planned) | 1,128 |
 | disclosed `public_ok` | 0 |
-| dry-run `private_first` (includes planned stubs) | 836 |
+| dry-run `private_first` (includes planned stubs) | 1,264 |
 | dry-run would open public upstream | 0 |
 | accepted upstream (curated `fixed_upstream`) | 1 |
 | existence proofs (`fixed_upstream` + `private_first`) | 1 |
@@ -36,15 +36,15 @@ Heap's-law / singleton novelty saturates **compiler coverage**. This artifact sa
 
 | rate | value |
 |---|---|
-| encodable / extracted | 0.6280 |
+| encodable / extracted | 0.6258 |
 | properties asked / encodable | 0.0003 |
 | SAT / properties asked | 0.2857 |
 | ground-truthed / SAT | 1.0000 |
 | pipeline accepted (incl. own-code) / SAT GT | 0.1667 |
 | pipeline accepted / extracted | 8.00e-06 |
-| encodable / extracted excluding YARA inventories | 0.6154 |
-| YARA share of inventory unencodable | 0.6416 |
-| `fullword-boundary` share of inventory unencodable | 0.6241 |
+| encodable / extracted excluding YARA inventories | 0.6110 |
+| YARA share of inventory unencodable | 0.6316 |
+| `fullword-boundary` share of inventory unencodable | 0.6144 |
 
 ## Security-tool split (scanner product kinds)
 
