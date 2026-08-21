@@ -227,11 +227,13 @@ every finding against the surrounding code before filing, and report what you
 
 ## CodeRabbit (review bot)
 
-Draft PRs are **not** reviewed (`auto_review.drafts: false`). Mark the PR ready
-when the work is final — that starts the review. CodeRabbit takes ~5–10 min to
-write a round; **wait for the round to complete before pushing fixes**, batch
-all fixes into one push, and never declare the gate green while a round is
-still in flight. Full protocol: [`docs/CODERABBIT.md`](docs/CODERABBIT.md).
+Draft PRs are **not automatically** reviewed (`auto_review.drafts: false`);
+manual `@coderabbitai review` still works on drafts. Mark the PR ready when the
+work is final — that starts the automatic review. CodeRabbit takes ~5–10 min to
+write a round; **wait for the round to complete before pushing fixes** (new
+`COMMENTED` submission from `coderabbitai[bot]` with `commit_id` = your head),
+batch all fixes into one push, and never declare the gate green while a round
+is still in flight. Full protocol: [`docs/CODERABBIT.md`](docs/CODERABBIT.md).
 
 ## Related skills (Hermes)
 
