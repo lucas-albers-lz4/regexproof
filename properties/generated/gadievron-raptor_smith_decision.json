@@ -1,0 +1,17 @@
+{
+  "additional_surface_outside_probe_scope": {
+    "ecma": 1,
+    "posix-shell": 42
+  },
+  "candidate_url": "https://github.com/gadievron/raptor",
+  "corpus": "gadievron-raptor",
+  "corpus_pin": "d81cada060a5e7b61938445da021ed0b33236cbb",
+  "reason": "894/1879 = 0.4758 encodable on first-party py_re allowlist (tests/fixtures excluded); complete_run; security_tool private_first",
+  "regex_sites": 1879,
+  "schema_version": "1",
+  "sites_by_bucket": {
+    "py_re": 1879
+  },
+  "smith_decision": "go",
+  "supersedes": "go"
+}

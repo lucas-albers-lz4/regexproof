@@ -1,35 +1,35 @@
 # Compiler feature-yield artifact (D5)
 
-<!-- provenance: 80 triage files, inputs 4a90af62427b, 837 gate decisions -->
+<!-- provenance: 81 triage files, inputs 809aca266e4d, 837 gate decisions -->
 
 Sites unlocked per missing compiler feature, aggregated across
 `properties/triage/*.ndjson` and weighted by corpus admission status
 (GO=3, triage-trial=2, no-go=1). Sorted by weighted unlock value.
 
-- Input files: 80
-- Triage inputs hash: `4a90af62427bad0f`
+- Input files: 81
+- Triage inputs hash: `809aca266e4da5a2`
 - Gate decisions: 837
-- Total unencodable rows: 47120
-- Total weighted sites: 138431.0
+- Total unencodable rows: 48105
+- Total weighted sites: 141386.0
 
 | # | unencodable_reason | sites | weighted | per-corpus (decision:weighted) | top dialects |
 |---|---|---|---|---|---|
 | 1 | `fullword-boundary` | 31864 | 95019.0 | go:93873.0, triage-trial:1146.0 | yara:31864 |
-| 2 | `composite-pattern` | 3999 | 11397.0 | go:10980.0, no-go:261.0, triage-trial:156.0 | py_re:3852, ecma:147 |
+| 2 | `composite-pattern` | 4234 | 12102.0 | go:11685.0, no-go:261.0, triage-trial:156.0 | py_re:4087, ecma:147 |
 | 3 | `stateful` | 2939 | 8045.0 | go:6501.0, triage-trial:1544.0 | ecma:2939 |
-| 4 | `word-boundary` | 1147 | 3236.0 | go:2892.0, no-go:22.0, triage-trial:322.0 | py_re:1041, ecma:78, pcre:21, re2:6 |
+| 4 | `word-boundary` | 1624 | 4667.0 | go:4323.0, no-go:22.0, triage-trial:322.0 | py_re:1518, ecma:78, pcre:21, re2:6 |
 | 5 | `u-flag` | 963 | 2882.0 | go:2868.0, triage-trial:14.0 | ecma:963 |
-| 6 | `lookaround` | 743 | 2108.0 | go:2013.0, no-go:49.0, triage-trial:46.0 | py_re:665, ecma:78 |
+| 6 | `lookaround` | 759 | 2156.0 | go:2061.0, no-go:49.0, triage-trial:46.0 | py_re:681, ecma:78 |
 | 7 | `wide-non-literal` | 694 | 1988.0 | go:1800.0, triage-trial:188.0 | yara:694 |
-| 8 | `internal-anchor` | 489 | 1428.0 | go:1350.0, triage-trial:78.0 | posix-shell:480, ecma:8, pcre:1 |
-| 9 | `unsupported:POSSESSIVE_REPEAT` | 466 | 1398.0 | go:1398.0 | py_re:466 |
-| 10 | `m-flag` | 444 | 1260.0 | go:1191.0, no-go:25.0, triage-trial:44.0 | py_re:371, ecma:73 |
-| 11 | `multi-match` | 435 | 1229.0 | go:1173.0, no-go:32.0, triage-trial:24.0 | py_re:435 |
-| 12 | `negated-shorthand` | 424 | 1200.0 | go:1104.0, no-go:16.0, triage-trial:80.0 | py_re:246, ecma:175, re2:2, yara:1 |
-| 13 | `backref` | 382 | 1093.0 | go:1062.0, no-go:25.0, triage-trial:6.0 | py_re:348, ecma:33, posix-shell:1 |
-| 14 | `per-alternative-anchor` | 377 | 1079.0 | go:984.0, no-go:3.0, triage-trial:92.0 | ecma:201, posix-shell:100, py_re:71, re2:3 |
-| 15 | `unicode-not-literal` | 332 | 891.0 | go:735.0, no-go:18.0, triage-trial:138.0 | py_re:332 |
-| 16 | `pattern-too-long` | 289 | 839.0 | go:807.0, no-go:8.0, triage-trial:24.0 | py_re:169, pcre:72, yara:26, ecma:18 |
+| 8 | `m-flag` | 524 | 1500.0 | go:1431.0, no-go:25.0, triage-trial:44.0 | py_re:451, ecma:73 |
+| 9 | `internal-anchor` | 489 | 1428.0 | go:1350.0, triage-trial:78.0 | posix-shell:480, ecma:8, pcre:1 |
+| 10 | `unsupported:POSSESSIVE_REPEAT` | 466 | 1398.0 | go:1398.0 | py_re:466 |
+| 11 | `multi-match` | 450 | 1274.0 | go:1218.0, no-go:32.0, triage-trial:24.0 | py_re:450 |
+| 12 | `negated-shorthand` | 442 | 1254.0 | go:1158.0, no-go:16.0, triage-trial:80.0 | py_re:264, ecma:175, re2:2, yara:1 |
+| 13 | `per-alternative-anchor` | 405 | 1163.0 | go:1068.0, no-go:3.0, triage-trial:92.0 | ecma:201, posix-shell:100, py_re:99, re2:3 |
+| 14 | `unicode-not-literal` | 420 | 1155.0 | go:999.0, no-go:18.0, triage-trial:138.0 | py_re:420 |
+| 15 | `backref` | 387 | 1108.0 | go:1077.0, no-go:25.0, triage-trial:6.0 | py_re:353, ecma:33, posix-shell:1 |
+| 16 | `pattern-too-long` | 312 | 908.0 | go:876.0, no-go:8.0, triage-trial:24.0 | py_re:192, pcre:72, yara:26, ecma:18 |
 | 17 | `unsupported:ATOMIC_GROUP` | 276 | 828.0 | go:828.0 | py_re:276 |
 | 18 | `unsupported-modifier:base64` | 193 | 576.0 | go:570.0, triage-trial:6.0 | yara:193 |
 | 19 | `parse-error` | 119 | 356.0 | go:354.0, triage-trial:2.0 | pcre:53, ecma:51, posix-shell:8, yara:7 |
@@ -53,6 +53,6 @@ Sites unlocked per missing compiler feature, aggregated across
 
 | decision | weight | rows | weighted sites |
 |---|---|---|---|
-| go | 3 | 44656 | 133968.0 |
+| go | 3 | 45641 | 136923.0 |
 | no-go | 1 | 465 | 465.0 |
 | triage-trial | 2 | 1999 | 3998.0 |
