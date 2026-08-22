@@ -218,12 +218,15 @@ def crs942220_guard(upstream_path: Path, docs: tuple[Path, ...]) -> list[str]:
                 "conversion-upstream.jsonl as source of truth"
             )
         for n, ln in hits:
-            # A line that carries the curated status token is consistent —
-            # other disposition tokens on it refer to different rows in the
-            # same table cell (e.g. "usrmanage P3 fixed_upstream; CRS 942220
-            # is false_positive per CU-005"). Only flag a line that claims a
-            # DIFFERENT status for 942220 and never states the correct one.
+            # Per-line contract: every 942220 mention must either state the
+            # curated status or cite the curated file ON THAT LINE. A line
+            # that carries the correct status token is consistent even with
+            # sibling disposition tokens (different rows in the same table
+            # cell). A bare mention with neither status nor citation is a
+            # contract violation even if another line in the doc cites.
             if f"`{sot_status}`" in ln:
+                continue
+            if "conversion-upstream.jsonl" in ln:
                 continue
             for token in DISPOSITIONS:
                 if f"`{token}`" in ln and token != sot_status:
@@ -232,6 +235,13 @@ def crs942220_guard(upstream_path: Path, docs: tuple[Path, ...]) -> list[str]:
                         f"conflicts with curated {sot_id} `{sot_status}` "
                         "(cite conversion-upstream.jsonl on this line)"
                     )
+                    break
+            else:
+                problems.append(
+                    f"crs942220: {doc.name}:{n} mentions 942220 without "
+                    f"stating `{sot_status}` or citing conversion-upstream.jsonl "
+                    "on the line"
+                )
     return problems
 
 

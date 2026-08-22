@@ -279,6 +279,32 @@ def test_crs942220_guard_accepts_sibling_tokens_with_correct_status(
     assert chk.crs942220_guard(up, (good,)) == []
 
 
+def test_crs942220_guard_requires_status_or_cite_on_every_line(
+    tmp_path: Path,
+):
+    # Per-line contract: a 942220 mention with neither the curated status nor
+    # an on-line citation fails even when another line in the doc cites.
+    up = _write_upstream(
+        tmp_path / "conversion-upstream.jsonl",
+        {
+            "id": "CU-005",
+            "corpus": "coreruleset",
+            "status": "false_positive",
+            "rule": "942220",
+            "language_membership": True,
+        },
+        crs_row=False,
+    )
+    doc = tmp_path / "mixed.md"
+    doc.write_text(
+        "CRS 942220 is `false_positive` per conversion-upstream.jsonl\n"
+        "A bare CRS 942220 mention with no status and no citation\n",
+        encoding="utf-8",
+    )
+    problems = chk.crs942220_guard(up, (doc,))
+    assert any("without stating" in p for p in problems)
+
+
 def test_backfilled_row_rejects_non_iso_disposition_date(tmp_path: Path):
     gen = _gen_dir(
         tmp_path,
