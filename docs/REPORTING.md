@@ -160,7 +160,8 @@ accepted is the conversion claim, and it is 0.
 `properties_asked` / `properties_sat` are raw scanner rows. Distinct
 `(site, question_id)` counts are `properties_asked_distinct` /
 `properties_sat_distinct` (#480). Synthesis is capped at `synth_max_sites`
-(default 200, first `regex_id` after sort) — recorded on the batch summary
+(default 0 — untargeted synthesis is compute control; opt-in corpora set an
+explicit value, first `regex_id` after sort) — recorded on the batch summary
 `synthesis` object.
 
 `crs-inventory.ndjson` is the CRS `@rx` measure, not the `coreruleset` batch
