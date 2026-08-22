@@ -55,15 +55,29 @@ def load_decision_population() -> list[dict]:
         status = str(d.get("status") or d.get("decision") or "")
         if not status:
             continue
-        rows.append({"file": f.name, "url": d.get("candidate_url"), "status": status})
+        rows.append(
+            {
+                "file": f.name,
+                "url": d.get("candidate_url"),
+                "status": status,
+                "payload": d,  # full contents — hashed verbatim (canonical JSON)
+            }
+        )
     return rows
 
 
 def snapshot_hash(rows: list[dict]) -> str:
-    """Content hash over the sorted canonical JSON of every decision row."""
+    """Content hash over the FULL canonical JSON of every decision file.
+
+    Hashes each committed decision file's raw parsed contents (filename
+    framing + canonical JSON bytes), so ANY mutation — status, url, pin,
+    rationale, probe, conditions — changes the hash. This is the
+    reproducibility claim the freeze artifact makes."""
     h = hashlib.sha256()
     for r in sorted(rows, key=lambda r: r["file"]):
-        h.update(json.dumps(r, sort_keys=True).encode("utf-8"))
+        h.update(r["file"].encode("utf-8"))
+        h.update(b"\x00")
+        h.update(json.dumps(r["payload"], sort_keys=True).encode("utf-8"))
         h.update(b"\n")
     return h.hexdigest()
 
@@ -168,9 +182,15 @@ def main() -> int:
 
     FREEZE_OUT.write_text(json.dumps(freeze, indent=2, sort_keys=True) + "\n")
     BASELINE_OUT.write_text(json.dumps(baseline, indent=2, sort_keys=True) + "\n")
+    # External whole-file hash anchor (tamper-evident). Regenerated here so CI
+    # can drift-check it alongside the artifacts.
+    anchor = FREEZE_OUT.with_name(FREEZE_OUT.name + ".sha256")
+    anchor.write_text(
+        hashlib.sha256(FREEZE_OUT.read_bytes()).hexdigest() + "\n"
+    )
     print(f"phase0_freeze.json: n={n} pos={pos} rate={rate:.4f} "
           f"wilson95=[{lo:.4f}, {hi:.4f}]")
-    print("escape_baseline.json: written")
+    print(f"escape_baseline.json + {anchor.name}: written")
     return 0
 
 

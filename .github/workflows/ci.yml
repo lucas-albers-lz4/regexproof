@@ -256,6 +256,7 @@ jobs:
         run: |
           git diff --exit-code -- \
             properties/generated/phase0_freeze.json \
+            properties/generated/phase0_freeze.json.sha256 \
             properties/generated/escape_baseline.json
       - name: Phase 0 population + interval determinism tests (#555)
         run: python -m pytest tests/test_phase0_freeze.py tests/test_intervals.py -q

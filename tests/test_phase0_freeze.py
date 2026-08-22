@@ -88,10 +88,52 @@ def test_snapshot_hash_is_reproducible(freeze: dict):
         status = str(d.get("status") or d.get("decision") or "")
         if status:
             rows.append(
-                {"file": f.name, "url": d.get("candidate_url"), "status": status}
+                {"file": f.name, "url": d.get("candidate_url"), "status": status, "payload": d}
             )
     h = hashlib.sha256()
     for r in sorted(rows, key=lambda r: r["file"]):
-        h.update(json.dumps(r, sort_keys=True).encode("utf-8"))
+        h.update(r["file"].encode("utf-8"))
+        h.update(b"\x00")
+        h.update(json.dumps(r["payload"], sort_keys=True).encode("utf-8"))
         h.update(b"\n")
     assert h.hexdigest() == freeze["dataset"]["snapshot_sha256"]
+
+
+def test_snapshot_hash_detects_any_decision_mutation():
+    """Any change to a decision file's contents must change the hash — the
+    reproducibility claim (status, url, pin, rationale, probe, conditions)."""
+    import copy
+    import hashlib
+
+    freeze = json.loads((GEN / "phase0_freeze.json").read_text(encoding="utf-8"))
+    original = freeze["dataset"]["snapshot_sha256"]
+    files = sorted(GEN.glob("*_gate_decision.json"))
+    assert files, "expected committed decision files"
+
+    first = json.loads(files[0].read_text(encoding="utf-8"))
+    mutated = copy.deepcopy(first)
+    # Mutate a NON-status field that the old hash would have ignored.
+    mutated["rationale"] = "MUTATED-for-hash-test"
+    mutated_bytes = json.dumps(mutated, sort_keys=True).encode("utf-8")
+    h = hashlib.sha256()
+    for f in sorted(files):
+        payload = (
+            json.loads(mutated_bytes)
+            if f.name == files[0].name
+            else json.loads(f.read_text(encoding="utf-8"))
+        )
+        h.update(f.name.encode("utf-8"))
+        h.update(b"\x00")
+        h.update(json.dumps(payload, sort_keys=True).encode("utf-8"))
+        h.update(b"\n")
+    assert h.hexdigest() != original, "hash must change when a decision mutates"
+
+
+def test_sha256_anchor_matches_freeze():
+    anchor = (GEN / "phase0_freeze.json.sha256").read_text(encoding="utf-8").strip()
+    import hashlib
+
+    actual = hashlib.sha256(
+        (GEN / "phase0_freeze.json").read_bytes()
+    ).hexdigest()
+    assert anchor == actual
