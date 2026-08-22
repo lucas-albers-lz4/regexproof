@@ -44,8 +44,8 @@ Shape-5 `rule_diff` still needs an independent spec or a
 pairing is not a contract.
 
 Phase 0 search-semantics inventory of the ten SAT candidates that looked like
-third-party findings: **2 remain filing candidates** (CRS 942220 version-diff,
-cross-engine 920210). The other eight are spec-gap or collapse under search.
+third-party findings: none are public filings; dispositions live in
+[`docs/conversion-upstream.jsonl`](docs/conversion-upstream.jsonl) (source of truth: CRS 942220 version-diff = CU-005 `false_positive`, cross-engine 920210 = CU-010 `false_positive`). The other eight are spec-gap or collapse under search.
 
 ## The 5-step workflow (follow in order)
 

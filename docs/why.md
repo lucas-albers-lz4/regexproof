@@ -10,7 +10,7 @@ Keep three claims separate — they do not share evidence:
 
 1. **The Z3 mirror is sound** on the encoded fragment (traps, mutation guards, differential fuzz, ground-truth). Well evidenced.
 2. **The compiler covers a measured fraction** of admitted regex sites. Real, but a convenience sample with duplicated forks.
-3. **This finds real bugs in other people's code.** Not demonstrated: 0 third-party public accepted. Phase 0 search-semantics replay of ten SAT-looking rows left **0/10 public filings**: CRS 942220 stays `private_first` (do not post until disclosure plumbing is on `main`); cross-engine 920210 is `wont_file` (Connection-header `\b` trivia, no demonstrated backend reach). The rest are spec-gap or collapse under search.
+3. **This finds real bugs in other people's code.** Not demonstrated: 0 third-party public accepted. Phase 0 search-semantics replay of ten SAT-looking rows left **0/10 public filings**; dispositions live in [`conversion-upstream.jsonl`](conversion-upstream.jsonl), the source of truth: CRS 942220 is `false_positive` (CU-005 — the SAT is CRS's own already-shipped ARGS_NAMES coverage fix, so there is nothing to post), cross-engine 920210 likewise collapsed under replay (`false_positive`, CU-010 — Connection-header `\b` trivia, no demonstrated backend reach). The rest are spec-gap or collapse under search.
 
 A property without a contract (guarantee, input source, trust, declared domain) is not claim (3), even if the solver returns UNSAT.
 
@@ -52,7 +52,7 @@ The claim that still needs proof is a different quantity:
 
 Encodable fraction is tracked. Boundary classification is gated, and it already false-positives. Ground-truth on witnesses is enforced. What was missing as a ledger is conversion: sites → properties written → SAT → reproduced → disclosed → accepted upstream.
 
-One filed issue is an existence proof, not a rate. The cleanest existence proofs so far are also the weakest for "in the wild": usrmanage #6 and fwlive #120 are own code. CRS 942220 (`JSon.1e309`) is a real, machine-checked version-diff SAT that turned out to be CRS's own already-shipped ARGS_NAMES coverage fix — recorded `wont_file`, not a third-party hole. The method works. It has not yet shown how often this class appears in other people's validators, sanitizers, and parsers.
+One filed issue is an existence proof, not a rate. The cleanest existence proofs so far are also the weakest for "in the wild": usrmanage #6 and fwlive #120 are own code. CRS 942220 (`JSon.1e309`) is a real, machine-checked version-diff SAT that turned out to be CRS's own already-shipped ARGS_NAMES coverage fix — disposition `false_positive` in [`conversion-upstream.jsonl`](conversion-upstream.jsonl) (CU-005), not a third-party hole. The method works. It has not yet shown how often this class appears in other people's validators, sanitizers, and parsers.
 
 Two independent parameters:
 
@@ -65,6 +65,8 @@ The ingest-until-diminishing-returns plan is correct **for the toolkit**. The pr
 
 Live artifact: [`properties/generated/conversion-ledger.md`](../properties/generated/conversion-ledger.md) (JSON beside it). Regenerated from committed scanner NDJSON, batch summaries, rule_diff reports, and the curated last mile in [`conversion-upstream.jsonl`](conversion-upstream.jsonl). Golden CI drift-checks it, same as compiler-feature-yield.
 
+Historical-numerator rule (#554): curated dispositions in [`conversion-upstream.jsonl`](conversion-upstream.jsonl) govern filing state only. Prior wave / rule_diff `properties_asked` / `SAT` counts are left as recorded — CRS 942220 stays counted under `rule_diff_report_sat_gt` with no retroactive adjustment; the single CU-005 disposition is the filing truth.
+
 Headline counts (re-verify from the artifact before quoting):
 
 | stage | count |
@@ -74,7 +76,7 @@ Headline counts (re-verify from the artifact before quoting):
 | properties asked | 0 product (644 synthesized validator.js shape-1/2, counted separately) |
 | rule_diff report SAT + GT (CRS version-diff, CRS cross-engine, gitleaks) | 17 |
 | accepted upstream (`fixed_upstream`) | 1 (usrmanage P3, own code, later fixed) |
-| existence proofs | 1 (usrmanage P3 own-code `fixed_upstream`; CRS 942220 is `wont_file`) |
+| existence proofs | 1 (usrmanage P3 own-code `fixed_upstream`; CRS 942220 is `false_positive` per CU-005 in [`conversion-upstream.jsonl`](conversion-upstream.jsonl)) |
 | filed false positives | 1 (happycow interpolated `re.search`, already `re.escape`'d) |
 | third-party public accepted | 0 |
 

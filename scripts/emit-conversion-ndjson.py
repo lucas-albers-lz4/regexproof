@@ -50,7 +50,14 @@ def _regex_id(name: str) -> str:
     return hashlib.sha256(name.encode("utf-8")).hexdigest()[:32]
 
 
-def row_from_run(name: str, entry: dict, result: dict, corpus: str) -> dict:
+def row_from_run(
+    name: str,
+    entry: dict,
+    result: dict,
+    corpus: str,
+    wave_id: str | None = None,
+    idiom_bucket: str | None = None,
+) -> dict:
     domain = entry.get("domain") or result.get("domain")
     if not isinstance(domain, str) or not domain.strip():
         raise SystemExit(f"error: {name} missing top-level domain")
@@ -70,6 +77,10 @@ def row_from_run(name: str, entry: dict, result: dict, corpus: str) -> dict:
         "domain": domain,
         "name": name,
         "family": entry.get("family"),
+        # Wave join keys live at scanner-row TOP level (#554). Never inside
+        # `contract` — property_contract.schema.json is additionalProperties:false.
+        "wave_id": wave_id,
+        "idiom_bucket": idiom_bucket,
         "product_reportable": product_reportable(entry),
         "contract": entry.get("contract"),
         "synthesized": False,
@@ -81,6 +92,12 @@ def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--family", required=True)
     ap.add_argument("--corpus", required=True)
+    ap.add_argument("--wave-id", required=True, help="e.g. openwrt_packages_w2")
+    ap.add_argument(
+        "--idiom-bucket",
+        required=True,
+        help="Idiom slice label, e.g. image-and-ddns-json",
+    )
     ap.add_argument(
         "-o",
         "--output",
@@ -101,7 +118,14 @@ def main(argv: list[str] | None = None) -> int:
                 f"error: {name} harness run failed "
                 f"(result={res.get('result')!r} ground_truth={res.get('ground_truth')!r})"
             )
-        rec = row_from_run(name, entry, res, args.corpus)
+        rec = row_from_run(
+            name,
+            entry,
+            res,
+            args.corpus,
+            wave_id=args.wave_id,
+            idiom_bucket=args.idiom_bucket,
+        )
         if not rec["product_reportable"]:
             raise SystemExit(f"error: {name} is not product_reportable")
         if not rec.get("domain"):

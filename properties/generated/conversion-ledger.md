@@ -52,7 +52,7 @@ Asked in tools: 3. Asked elsewhere: 18. SAT in tools: 2. SAT elsewhere: 4.
 
 ## Upstream (curated)
 
-Rows: 11. Language-membership: 10. fixed_upstream: 1. filed_plan: 1. false_positive: 7. out_of_scope_redos: 1. private_first: 0. wont_file: 1.
+Rows: 14. Language-membership: 13. fixed_upstream: 1. filed_plan: 1. false_positive: 7. out_of_scope_redos: 1. private_first: 0. wont_file: 4.
 
 Source: [`docs/conversion-upstream.jsonl`](../../docs/conversion-upstream.jsonl).
 
@@ -63,6 +63,47 @@ Source: [`docs/conversion-upstream.jsonl`](../../docs/conversion-upstream.jsonl)
 | openwrt_packages | false | 14 | 11 | 3 | 3 | 3 |
 | openwrt_luci | false | 4 | 3 | 1 | 1 | 1 |
 | coreruleset | true | 3 | 0 | 2 | 2 | 0 |
+
+## Per-wave conversion hops (#554)
+
+asked → SAT → GT → filed → accepted per `(wave_id, idiom_bucket)`.
+**GT→filed is the currently empty hop** — highlighted. Join: curated
+`(site, question_id)`; filed = status filed/private_first/fixed_upstream
+(or filed_at set); accepted = fixed_upstream.
+
+| wave | idiom bucket | asked | SAT | GT | filed | accepted | GT→filed |
+|---|---|---|---|---|---|---|---|
+| openwrt_luci_w1 | form-validator-alphabets | 4 | 1 | 1 | **0** | 0 | **0.0000** |
+| openwrt_packages_w1 | validator-charsets-and-captures | 5 | 1 | 1 | **0** | 0 | **0.0000** |
+| openwrt_packages_w2 | image-and-ddns-json | 5 | 1 | 1 | **0** | 0 | **0.0000** |
+| openwrt_packages_w3 | ddns-query-and-escape-image | 4 | 1 | 1 | **0** | 0 | **0.0000** |
+
+## Starvation & queue pressure (#554)
+
+- demand_open (open gated:go clusters lacking a closed wave): **64**
+- admission_per_week (GO gate-decision artifacts, last 7-day window ending 2026-08-20): **2**
+- backlog_weeks = demand_open / admission_per_week = **32.0**
+- mine_queue_pressure = queue_len / queue_cap = 100 / 100 = **1.0000**
+- alert (backlog_weeks increased >= 2 consecutive windows): **no** (consecutive increases: 0)
+
+Admission is bounded by the ~10/day mine cap regardless of #550 batch
+flush, so backlog_weeks reflects mine-cap pressure by design — read it
+alongside mine_queue_pressure, not as a batch-health metric.
+
+## Contract-queue health (#551 Phase C states)
+
+artifacts present: False · emitted: 0 · claimed: 0 · contracted: 0 · skipped: 0 · median age: n/a days. Phase C queue artifacts not yet shipped
+
+## Property-shape mix (#554)
+
+Share of asked properties per shape, per wave (conversion rows).
+
+| wave | idiom bucket | asked | shape mix (%) |
+|---|---|---|---|
+| openwrt_luci_w1 | form-validator-alphabets | 4 | shape 1: 0.7500, shape 3: 0.2500 |
+| openwrt_packages_w1 | validator-charsets-and-captures | 5 | shape 1: 0.6000, shape 3: 0.4000 |
+| openwrt_packages_w2 | image-and-ddns-json | 5 | shape 1: 0.4000, shape 3: 0.4000, shape 4: 0.2000 |
+| openwrt_packages_w3 | ddns-query-and-escape-image | 4 | shape 1: 0.2500, shape 3: 0.5000, shape 4: 0.2500 |
 
 ## Denominator notes
 

@@ -27,6 +27,7 @@ import importlib.util
 import json
 import sys
 from collections import Counter, defaultdict
+from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 
@@ -56,6 +57,368 @@ BATCH_SHAPE5_GLOB = "*_batch_shape5.json"
 # Decided batch shape-5 outcomes that count as a property asked (#477).
 BATCH_SHAPE5_ASKED = frozenset({"sat", "unsat", "sat_fullmatch_only"})
 BATCH_SHAPE5_SAT = frozenset({"sat"})
+
+# --- #554 Phase A: wave join keys, hop table, starvation -------------------
+# Disposition statuses that mean the finding was actually filed somewhere.
+FILED_STATUSES = frozenset({"filed", "private_first", "fixed_upstream"})
+ACCEPTED_STATUSES = frozenset({"fixed_upstream"})
+WAVE_FALLBACK = "(no wave)"
+BUCKET_FALLBACK = "(no bucket)"
+STARVATION_WINDOW_DAYS = 7
+CLOSED_WAVE_GLOB = "*_conversion_wave.md"
+
+
+def canonical_site(site: str) -> str:
+    """Join-key canonicalization for ``site`` (#554; see checker docstring).
+
+    Strip whitespace. URL-shaped sites get scheme+hostname lowercased with the
+    remainder verbatim; everything else compares verbatim (repo-relative
+    paths are case-sensitive).
+    """
+    s = str(site or "").strip()
+    if "://" in s:
+        scheme, rest = s.split("://", 1)
+        host_sep = rest.find("/")
+        if host_sep == -1:
+            return f"{scheme.lower()}://{rest.lower()}"
+        return f"{scheme.lower()}://{rest[:host_sep].lower()}{rest[host_sep:]}"
+    return s
+
+
+def canonical_question_id(rec: dict[str, Any]) -> str:
+    """Exact-string ``question_id``; scanner rows fall back to ``name``."""
+    qid = rec.get("question_id") or rec.get("name") or ""
+    return str(qid).strip()
+
+
+def wave_key(rec: dict[str, Any]) -> tuple[str, str]:
+    """Top-level ``(wave_id, idiom_bucket)`` aggregation key with fallbacks."""
+    return (
+        str(rec.get("wave_id") or "").strip() or WAVE_FALLBACK,
+        str(rec.get("idiom_bucket") or "").strip() or BUCKET_FALLBACK,
+    )
+
+
+def upstream_join_index(upstream_rows: list[dict[str, Any]]) -> dict[tuple[str, str], dict[str, Any]]:
+    """Index curated rows on canonical ``(site, question_id)``."""
+    index: dict[tuple[str, str], dict[str, Any]] = {}
+    for row in upstream_rows:
+        site = canonical_site(str(row.get("site") or ""))
+        qid = str(row.get("question_id") or "").strip()
+        if site and qid:
+            index[(site, qid)] = row
+    return index
+
+
+def classify_wave_rows(rows: list[dict[str, Any]]) -> dict[tuple[str, str], dict[str, Any]]:
+    """Per-(wave_id, idiom_bucket) funnel buckets + property-shape mix."""
+    waves: dict[tuple[str, str], dict[str, Any]] = {}
+    for rec in rows:
+        if not counts_as_conversion_asked(rec):
+            continue
+        key = wave_key(rec)
+        w = waves.setdefault(
+            key,
+            {
+                "wave_id": key[0],
+                "idiom_bucket": key[1],
+                "corpora": sorted({str(rec.get("corpus") or "")} - {""}),
+                "properties_asked": 0,
+                "properties_sat": 0,
+                "sat_ground_truthed": 0,
+                "filed": 0,
+                "accepted": 0,
+                "shape_counts": {},
+            },
+        )
+        corp = str(rec.get("corpus") or "")
+        if corp and corp not in w["corpora"]:
+            w["corpora"].append(corp)
+            w["corpora"].sort()
+        w["properties_asked"] += 1
+        shape = rec.get("shape")
+        if isinstance(shape, int):
+            w["shape_counts"][str(shape)] = int(w["shape_counts"].get(str(shape) , 0)) + 1
+        if rec.get("result") in SAT_RESULTS:
+            w["properties_sat"] += 1
+            if is_ground_truthed(rec):
+                w["sat_ground_truthed"] += 1
+    return waves
+
+
+def join_wave_dispositions(
+    waves: dict[tuple[str, str], dict[str, Any]],
+    rows: list[dict[str, Any]],
+    upstream_index: dict[tuple[str, str], dict[str, Any]],
+) -> None:
+    """Fill ``filed`` / ``accepted`` per wave from curated dispositions.
+
+    Join runs over ground-truth-confirmed SAT rows (filing happens after GT).
+    ``filed`` = curated status says filed somewhere (``filed`` /
+    ``private_first`` / ``fixed_upstream``) or an explicit ``filed_at``;
+    ``accepted`` = ``fixed_upstream``.
+    """
+    for rec in rows:
+        if not counts_as_conversion_asked(rec):
+            continue
+        if rec.get("result") not in SAT_RESULTS or not is_ground_truthed(rec):
+            continue
+        row = upstream_index.get(
+            (canonical_site(str(rec.get("site") or "")), canonical_question_id(rec))
+        )
+        if row is None:
+            continue
+        key = wave_key(rec)
+        w = waves.get(key)
+        if w is None:
+            continue
+        status = str(row.get("status") or "")
+        if status in FILED_STATUSES or row.get("filed_at"):
+            w["filed"] += 1
+        if status in ACCEPTED_STATUSES:
+            w["accepted"] += 1
+
+
+# Canonical repo → corpus mapping for wave-close-out matching. The close-out
+# artifacts are named <corpus>_conversion_wave.md, where <corpus> is the
+# canonical corpus id (e.g. openwrt_packages), NOT the last URL path segment
+# (e.g. packages). Repos with wave machinery must be mapped explicitly so the
+# starvation demand signal does not count closed waves as open.
+CANONICAL_CORPUS_BY_REPO = {
+    "openwrt/packages": "openwrt_packages",
+    "openwrt/luci": "openwrt_luci",
+}
+
+
+def corpus_key_from_url(url: str) -> str:
+    """Mine-cluster identity: canonical corpus id, else lowercased last path
+    segment minus .git (fallback for non-wave corpora)."""
+    u = str(url or "").strip().rstrip("/")
+    # repo identity = last TWO path segments (owner/name), e.g.
+    # openwrt/packages — matches the canonical mapping keys. Lowercased
+    # BEFORE the mapping lookup so owner/name case variants resolve
+    # (https://github.com/OpenWrt/Packages.git → openwrt/packages).
+    parts = u.rsplit("/", 2)[-2:] if u else []
+    repo = "/".join(parts) if len(parts) == 2 else (parts[0] if parts else "")
+    repo = repo.removesuffix(".git") if repo else ""
+    if repo.lower() in CANONICAL_CORPUS_BY_REPO:
+        return CANONICAL_CORPUS_BY_REPO[repo.lower()]
+    return repo.rsplit("/", 1)[-1].lower()
+
+
+def closed_wave_corpora(gen_dir: Path) -> set[str]:
+    """Corpora with a committed conversion-wave close-out artifact."""
+    return {
+        p.name[: -len("_conversion_wave.md")]
+        for p in gen_dir.glob(CLOSED_WAVE_GLOB)
+    }
+
+
+def load_go_decision_dates(gen_dir: Path) -> list[str]:
+    """ISO decision dates of committed GO gate decisions (admission flow).
+
+    Sourced from gate-decision ARTIFACTS, not the lagging candidate ledger
+    (#554): every ``*_gate_decision.json`` with ``decision == "go"``
+    contributes its ``decision_date``.
+    """
+    dates: list[str] = []
+    for path in sorted(gen_dir.glob("*_gate_decision.json")):
+        try:
+            data = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            continue
+        if str(data.get("decision") or "") == "go":
+            date = str(data.get("decision_date") or "").strip()
+            if date:
+                dates.append(date)
+    return dates
+
+
+def admission_per_week(
+    go_dates: list[str], window_days: int = STARVATION_WINDOW_DAYS
+) -> tuple[int, str | None]:
+    """GO admissions in the most recent complete 7-day window.
+
+    Window end = latest committed GO ``decision_date`` (artifact clock, not
+    wall clock, so regeneration is deterministic). Returns ``(count, window_end)``.
+    """
+    if not go_dates:
+        return 0, None
+    parsed = []
+    for d in go_dates:
+        try:
+            parsed.append(date.fromisoformat(d[:10]))
+        except ValueError:
+            continue
+    if not parsed:
+        return 0, None
+    end = max(parsed)
+    start = end - timedelta(days=window_days - 1)
+    count = sum(1 for d in parsed if start <= d <= end)
+    return count, end.isoformat()
+
+
+def starvation_metrics(
+    gen_dir: Path,
+    mine_ledger_path: Path,
+    queue_path: Path | None = None,
+    prior_history: list[dict[str, Any]] | None = None,
+    queue_cap: int | None = None,
+) -> dict[str, Any]:
+    """Backlog_weeks stock/flow signal + mine queue pressure (#554).
+
+    ``backlog_weeks = demand_open / admission_per_week`` where demand (stock)
+    = open ``gated:go`` clusters lacking a closed wave (candidate ledger) and
+    admission (flow) = GO gate-decision artifacts per 7-day window. Bounded by
+    the ~10/day mine cap by design — read alongside ``mine_queue_pressure``,
+    not as batch health. Alert when ``backlog_weeks`` rises for >= 2
+    consecutive windows (history carried in this artifact between runs).
+    """
+    if queue_cap is None:
+        from regexproof.mine.queue import DEFAULT_QUEUE_CAP
+
+        queue_cap = DEFAULT_QUEUE_CAP
+    go_dates = load_go_decision_dates(gen_dir)
+    admission, window_end = admission_per_week(go_dates)
+
+    closed = {c.lower() for c in closed_wave_corpora(gen_dir)}
+    demand_open = 0
+    if mine_ledger_path.is_file():
+        try:
+            ledger = json.loads(mine_ledger_path.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            ledger = {}
+        seen: set[str] = set()
+        for cand in ledger.get("candidates") or []:
+            if str(cand.get("status") or "") != "gated:go":
+                continue
+            url = str(cand.get("url") or "")
+            if url in seen:
+                continue
+            seen.add(url)
+            if corpus_key_from_url(url) not in closed:
+                demand_open += 1
+
+    backlog_weeks: float | None = None
+    if admission > 0:
+        backlog_weeks = round(demand_open / admission, 4)
+
+    queue_len = 0
+    if queue_path is None:
+        queue_path = gen_dir / "mine-queue.json"
+    if queue_path.is_file():
+        try:
+            queue = json.loads(queue_path.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            queue = {}
+        items = queue.get("items")
+        if isinstance(items, list):
+            queue_len = len(items)
+    mine_queue_pressure = round(queue_len / queue_cap, 4) if queue_cap else None
+
+    history = list(prior_history or [])
+    if window_end is not None and (not history or history[-1].get("week_end") != window_end):
+        history.append(
+            {
+                "week_end": window_end,
+                "demand_open": demand_open,
+                "admission_per_week": admission,
+                "backlog_weeks": backlog_weeks,
+            }
+        )
+    consecutive_rises = 0
+    values = [h.get("backlog_weeks") for h in history]
+    for i in range(len(values) - 1, 0, -1):
+        prev, cur = values[i - 1], values[i]
+        if prev is not None and cur is not None and cur > prev:
+            consecutive_rises += 1
+        else:
+            break
+    alert = consecutive_rises >= 2
+
+    return {
+        "demand_open_gated_go_no_closed_wave": demand_open,
+        "admission_per_week": admission,
+        "admission_window_days": STARVATION_WINDOW_DAYS,
+        "admission_window_end": window_end,
+        "backlog_weeks": backlog_weeks,
+        "formula": "backlog_weeks = demand_open / admission_per_week",
+        "mine_queue_pressure": mine_queue_pressure,
+        "mine_queue_len": queue_len,
+        "mine_queue_cap": queue_cap,
+        "history": history,
+        "alert_backlog_increasing": alert,
+        "consecutive_increases": consecutive_rises,
+    }
+
+
+def contract_queue_health(gen_dir: Path, clock_iso: str | None = None) -> dict[str, Any]:
+    """Contract-queue stub states (Phase C artifacts; absent today).
+
+    Counts ``properties/conversion_queue/*.json`` by ``status`` and reports
+    median stub age in days when a ``created_at`` timestamp exists. Age is
+    computed against the committed artifact clock (the admission window end)
+    so repeated regeneration is byte-deterministic — never ``datetime.now()``.
+    The queue owns only pre-contract states; later states are derived joins
+    (#551 C).
+    """
+    queue_dir = gen_dir.parent / "conversion_queue"
+    counts = {"emitted": 0, "claimed": 0, "contracted": 0, "skipped": 0}
+    ages: list[float] = []
+    present = queue_dir.is_dir()
+    if present:
+        for path in sorted(queue_dir.glob("*.json")):
+            try:
+                data = json.loads(path.read_text(encoding="utf-8"))
+            except (OSError, ValueError):
+                continue
+            status = str(data.get("status") or "")
+            if status == "contracted":
+                counts["contracted"] += 1
+            elif status.startswith("skipped"):
+                counts["skipped"] += 1
+            elif status == "claimed":
+                counts["claimed"] += 1
+            elif status in {"emitted", "unassigned"}:
+                counts["emitted"] += 1
+            created = str(data.get("created_at") or "")
+            if created and clock_iso:
+                try:
+                    # Normalize to naive UTC: created_at may carry an offset
+                    # (…Z) while the artifact clock is a plain ISO date.
+                    clock = datetime.fromisoformat(clock_iso)
+                    created_dt = datetime.fromisoformat(created)
+                    if created_dt.tzinfo is not None:
+                        created_dt = created_dt.astimezone(timezone.utc).replace(
+                            tzinfo=None
+                        )
+                    if clock.tzinfo is not None:
+                        clock = clock.astimezone(timezone.utc).replace(tzinfo=None)
+                    # Clamp to >= 0: the date-only artifact clock parses as
+                    # midnight, so a same-day record would otherwise compute a
+                    # negative age.
+                    ages.append(max(0.0, (clock - created_dt).total_seconds() / 86400))
+                except ValueError:
+                    pass
+    if ages:
+        ages_sorted = sorted(ages)
+        n = len(ages_sorted)
+        mid = n // 2
+        median_age = (
+            ages_sorted[mid]
+            if n % 2
+            else (ages_sorted[mid - 1] + ages_sorted[mid]) / 2
+        )
+        median_age = round(median_age, 2)
+    else:
+        median_age = None
+    return {
+        "artifacts_present": present,
+        **counts,
+        "median_age_days": median_age,
+        "note": "" if present else "Phase C queue artifacts not yet shipped",
+    }
+
 
 
 def _load_security_tool_corpora() -> frozenset[str]:
@@ -501,6 +864,9 @@ def aggregate(
     gen_dir: Path | None = None,
     upstream_path: Path | None = None,
     security_tools: frozenset[str] | None = None,
+    mine_ledger_path: Path | None = None,
+    queue_path: Path | None = None,
+    prior_starvation_history: list[dict[str, Any]] | None = None,
 ) -> dict[str, Any]:
     gen = gen_dir if gen_dir is not None else GEN_DIR
     tools = security_tools if security_tools is not None else _load_security_tool_corpora()
@@ -583,6 +949,45 @@ def aggregate(
         shape5_unsat += summary["properties_unsat"]
 
     up = _upstream_counts(upstream_rows)
+
+    # --- #554 Phase A: per-wave hops, shape mix, starvation -----------------
+    upstream_index = upstream_join_index(upstream_rows)
+    waves = classify_wave_rows(conversion_rows)
+    join_wave_dispositions(waves, conversion_rows, upstream_index)
+    per_wave = [waves[k] for k in sorted(waves)]
+    for w in per_wave:
+        w["shape_mix"] = {
+            f"shape_{s}": _ratio(n, w["properties_asked"])
+            for s, n in sorted(w["shape_counts"].items(), key=lambda kv: int(kv[0]))
+        }
+    shape_by_corpus: dict[str, dict[str, int]] = defaultdict(dict)
+
+    def _count_shape(rec: dict[str, Any], asked_here: bool) -> None:
+        corp = str(rec.get("corpus") or "")
+        shape = rec.get("shape")
+        if asked_here and corp and isinstance(shape, int):
+            key = f"shape_{shape}"
+            shape_by_corpus[corp][key] = int(shape_by_corpus[corp].get(key, 0)) + 1
+
+    for rec in conversion_rows:
+        _count_shape(rec, counts_as_conversion_asked(rec))
+    for rec in all_rows:
+        _count_shape(
+            rec,
+            rec.get("kind") in PRODUCT_KINDS
+            and not is_planned(rec)
+            and not rec.get("synthesized"),
+        )
+    starvation = starvation_metrics(
+        gen,
+        mine_ledger_path if mine_ledger_path is not None else gen / "candidate-ledger.json",
+        queue_path=queue_path,
+        prior_history=prior_starvation_history,
+    )
+    queue_health = contract_queue_health(
+        gen, clock_iso=starvation.get("admission_window_end")
+    )
+
 
     sat_in_tools = 0
     sat_not_tools = 0
@@ -747,6 +1152,13 @@ def aggregate(
             "SAT + ground-truth is a candidate finding; accepted_upstream is the last mile.",
             "would_open_public_upstream must stay 0 without a human approval file (SECURITY.md).",
             "batch_shape5 contracted version_diff/cross_engine rows count as properties_asked.",
+            "#554: per-wave hop rates join curated dispositions on (site, question_id);",
+            "filed = curated status filed/private_first/fixed_upstream (or filed_at set);",
+            "accepted = fixed_upstream. Starvation: backlog_weeks = demand_open /",
+            "admission_per_week, admission from GO gate-decision artifacts (not the",
+            "lagging candidate ledger). unknown_date rows are excluded from median",
+            "time-to-acceptance; time-to-acceptance is Kaplan-Meier or median of",
+            "closed rows only — never censored + closed mixed in a plain median.",
         ],
         "funnel": funnel,
         "rates": rates,
@@ -758,6 +1170,13 @@ def aggregate(
         },
         "rule_diff_reports": rule_diff,
         "batch_shape5": batch_shape5,
+        "per_wave": per_wave,
+        "starvation": starvation,
+        "queue_health": queue_health,
+        "shape_mix_by_corpus": {
+            corp: dict(sorted(counts.items(), key=lambda kv: int(kv[0].split("_")[1])))
+            for corp, counts in sorted(shape_by_corpus.items())
+        },
         "yara_split": yara,
         "upstream": up,
         "upstream_rows": [
@@ -865,6 +1284,85 @@ def render_md(data: dict[str, Any]) -> str:
             f"{row['sat_unique_sites']} |"
         )
     lines.append("")
+
+    per_wave = data.get("per_wave") or []
+    lines.extend(
+        [
+            "## Per-wave conversion hops (#554)",
+            "",
+            "asked → SAT → GT → filed → accepted per `(wave_id, idiom_bucket)`.",
+            "**GT→filed is the currently empty hop** — highlighted. Join: curated",
+            "`(site, question_id)`; filed = status filed/private_first/fixed_upstream",
+            "(or filed_at set); accepted = fixed_upstream.",
+            "",
+            "| wave | idiom bucket | asked | SAT | GT | filed | accepted | GT→filed |",
+            "|---|---|---|---|---|---|---|---|",
+        ]
+    )
+    for w in per_wave:
+        gt = w["sat_ground_truthed"]
+        ratio = _ratio(w["filed"], gt)
+        lines.append(
+            f"| {w['wave_id']} | {w['idiom_bucket']} | {w['properties_asked']} | "
+            f"{w['properties_sat']} | {gt} | **{w['filed']}** | {w['accepted']} | "
+            f"**{pct(ratio) if gt else 'n/a'}** |"
+        )
+    lines.append("")
+
+    star = data.get("starvation") or {}
+    lines.extend(
+        [
+            "## Starvation & queue pressure (#554)",
+            "",
+            f"- demand_open (open gated:go clusters lacking a closed wave): "
+            f"**{n(star.get('demand_open_gated_go_no_closed_wave') or 0)}**",
+            f"- admission_per_week (GO gate-decision artifacts, last "
+            f"{star.get('admission_window_days')}-day window ending "
+            f"{star.get('admission_window_end')}): **{n(star.get('admission_per_week') or 0)}**",
+            f"- backlog_weeks = demand_open / admission_per_week = "
+            f"**{star.get('backlog_weeks') if star.get('backlog_weeks') is not None else 'n/a'}**",
+            f"- mine_queue_pressure = queue_len / queue_cap = "
+            f"{star.get('mine_queue_len')} / {n(star.get('mine_queue_cap') or 0)} = "
+            f"**{pct(star.get('mine_queue_pressure'))}**",
+            f"- alert (backlog_weeks increased >= 2 consecutive windows): "
+            f"**{'YES' if star.get('alert_backlog_increasing') else 'no'}** "
+            f"(consecutive increases: {star.get('consecutive_increases')})",
+            "",
+            "Admission is bounded by the ~10/day mine cap regardless of #550 batch",
+            "flush, so backlog_weeks reflects mine-cap pressure by design — read it",
+            "alongside mine_queue_pressure, not as a batch-health metric.",
+            "",
+        ]
+    )
+
+    qh = data.get("queue_health") or {}
+    lines.extend(
+        [
+            "## Contract-queue health (#551 Phase C states)",
+            "",
+            f"artifacts present: {qh.get('artifacts_present')} · emitted: "
+            f"{qh.get('emitted')} · claimed: {qh.get('claimed')} · contracted: "
+            f"{qh.get('contracted')} · skipped: {qh.get('skipped')} · median age: "
+            f"{qh.get('median_age_days') if qh.get('median_age_days') is not None else 'n/a'} days."
+            f" {qh.get('note') or ''}".rstrip(),
+            "",
+            "## Property-shape mix (#554)",
+            "",
+            "Share of asked properties per shape, per wave (conversion rows).",
+            "",
+            "| wave | idiom bucket | asked | shape mix (%) |",
+            "|---|---|---|---|",
+        ]
+    )
+    for w in per_wave:
+        mix = ", ".join(
+            f"{k.replace('_', ' ')}: {pct(v)}"
+            for k, v in (w.get("shape_mix") or {}).items()
+        )
+        lines.append(
+            f"| {w['wave_id']} | {w['idiom_bucket']} | {w['properties_asked']} | {mix or 'n/a'} |"
+        )
+    lines.append("")
     lines.extend(
         [
             "## Denominator notes",
@@ -911,12 +1409,29 @@ def main(argv: list[str] | None = None) -> int:
         print(f"FATAL: upstream file missing: {args.upstream}", file=sys.stderr)
         return 2
 
-    data = aggregate(gen_dir=args.generated_dir, upstream_path=args.upstream)
-
+    # Carry the starvation history forward from the committed artifact so the
+    # backlog alert can observe consecutive windows; aggregate() appends the
+    # current admission window only when it advanced (same-week reruns stable).
     out_dir = args.output_dir
     out_dir.mkdir(parents=True, exist_ok=True)
     json_path = out_dir / "conversion-ledger.json"
     md_path = out_dir / "conversion-ledger.md"
+    prior_history: list[dict[str, Any]] | None = None
+    if json_path.is_file():
+        try:
+            prior = json.loads(json_path.read_text(encoding="utf-8"))
+            hist = (prior.get("starvation") or {}).get("history")
+            if isinstance(hist, list):
+                prior_history = hist
+        except (OSError, ValueError):
+            prior_history = None
+
+    data = aggregate(
+        gen_dir=args.generated_dir,
+        upstream_path=args.upstream,
+        prior_starvation_history=prior_history,
+    )
+
     json_path.write_text(
         json.dumps(data, indent=2, sort_keys=True, ensure_ascii=False) + "\n",
         encoding="utf-8",

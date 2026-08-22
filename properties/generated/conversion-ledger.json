@@ -95,8 +95,110 @@
     "Mutation guards prove harness sensitivity; they are not product findings.",
     "SAT + ground-truth is a candidate finding; accepted_upstream is the last mile.",
     "would_open_public_upstream must stay 0 without a human approval file (SECURITY.md).",
-    "batch_shape5 contracted version_diff/cross_engine rows count as properties_asked."
+    "batch_shape5 contracted version_diff/cross_engine rows count as properties_asked.",
+    "#554: per-wave hop rates join curated dispositions on (site, question_id);",
+    "filed = curated status filed/private_first/fixed_upstream (or filed_at set);",
+    "accepted = fixed_upstream. Starvation: backlog_weeks = demand_open /",
+    "admission_per_week, admission from GO gate-decision artifacts (not the",
+    "lagging candidate ledger). unknown_date rows are excluded from median",
+    "time-to-acceptance; time-to-acceptance is Kaplan-Meier or median of",
+    "closed rows only — never censored + closed mixed in a plain median."
   ],
+  "per_wave": [
+    {
+      "accepted": 0,
+      "corpora": [
+        "openwrt_luci"
+      ],
+      "filed": 0,
+      "idiom_bucket": "form-validator-alphabets",
+      "properties_asked": 4,
+      "properties_sat": 1,
+      "sat_ground_truthed": 1,
+      "shape_counts": {
+        "1": 3,
+        "3": 1
+      },
+      "shape_mix": {
+        "shape_1": 0.75,
+        "shape_3": 0.25
+      },
+      "wave_id": "openwrt_luci_w1"
+    },
+    {
+      "accepted": 0,
+      "corpora": [
+        "openwrt_packages"
+      ],
+      "filed": 0,
+      "idiom_bucket": "validator-charsets-and-captures",
+      "properties_asked": 5,
+      "properties_sat": 1,
+      "sat_ground_truthed": 1,
+      "shape_counts": {
+        "1": 3,
+        "3": 2
+      },
+      "shape_mix": {
+        "shape_1": 0.6,
+        "shape_3": 0.4
+      },
+      "wave_id": "openwrt_packages_w1"
+    },
+    {
+      "accepted": 0,
+      "corpora": [
+        "openwrt_packages"
+      ],
+      "filed": 0,
+      "idiom_bucket": "image-and-ddns-json",
+      "properties_asked": 5,
+      "properties_sat": 1,
+      "sat_ground_truthed": 1,
+      "shape_counts": {
+        "1": 2,
+        "3": 2,
+        "4": 1
+      },
+      "shape_mix": {
+        "shape_1": 0.4,
+        "shape_3": 0.4,
+        "shape_4": 0.2
+      },
+      "wave_id": "openwrt_packages_w2"
+    },
+    {
+      "accepted": 0,
+      "corpora": [
+        "openwrt_packages"
+      ],
+      "filed": 0,
+      "idiom_bucket": "ddns-query-and-escape-image",
+      "properties_asked": 4,
+      "properties_sat": 1,
+      "sat_ground_truthed": 1,
+      "shape_counts": {
+        "1": 1,
+        "3": 2,
+        "4": 1
+      },
+      "shape_mix": {
+        "shape_1": 0.25,
+        "shape_3": 0.5,
+        "shape_4": 0.25
+      },
+      "wave_id": "openwrt_packages_w3"
+    }
+  ],
+  "queue_health": {
+    "artifacts_present": false,
+    "claimed": 0,
+    "contracted": 0,
+    "emitted": 0,
+    "median_age_days": null,
+    "note": "Phase C queue artifacts not yet shipped",
+    "skipped": 0
+  },
   "rates": {
     "accepted_per_extracted": 7e-06,
     "accepted_per_gt": 0.166667,
@@ -142,18 +244,50 @@
     "properties_sat_in_tools": 2,
     "properties_sat_not_tools": 4
   },
+  "shape_mix_by_corpus": {
+    "openwrt_luci": {
+      "shape_1": 3,
+      "shape_3": 1
+    },
+    "openwrt_packages": {
+      "shape_1": 6,
+      "shape_3": 6,
+      "shape_4": 2
+    }
+  },
+  "starvation": {
+    "admission_per_week": 2,
+    "admission_window_days": 7,
+    "admission_window_end": "2026-08-20",
+    "alert_backlog_increasing": false,
+    "backlog_weeks": 32.0,
+    "consecutive_increases": 0,
+    "demand_open_gated_go_no_closed_wave": 64,
+    "formula": "backlog_weeks = demand_open / admission_per_week",
+    "history": [
+      {
+        "admission_per_week": 2,
+        "backlog_weeks": 32.0,
+        "demand_open": 64,
+        "week_end": "2026-08-20"
+      }
+    ],
+    "mine_queue_cap": 100,
+    "mine_queue_len": 100,
+    "mine_queue_pressure": 1.0
+  },
   "upstream": {
     "accepted_upstream": 1,
     "existence_proofs": 1,
     "false_positive": 7,
     "filed_plan": 1,
     "fixed_upstream": 1,
-    "language_membership": 10,
+    "language_membership": 13,
     "out_of_scope_redos": 1,
     "private_first": 0,
-    "rows": 11,
+    "rows": 14,
     "third_party_public": 0,
-    "wont_file": 1
+    "wont_file": 4
   },
   "upstream_rows": [
     {
@@ -229,6 +363,27 @@
     {
       "corpus": "openwrt_packages",
       "id": "CU-011",
+      "kind": "counterexample_finder",
+      "language_membership": true,
+      "status": "wont_file"
+    },
+    {
+      "corpus": "openwrt_packages",
+      "id": "CU-012",
+      "kind": "counterexample_finder",
+      "language_membership": true,
+      "status": "wont_file"
+    },
+    {
+      "corpus": "openwrt_packages",
+      "id": "CU-013",
+      "kind": "counterexample_finder",
+      "language_membership": true,
+      "status": "wont_file"
+    },
+    {
+      "corpus": "openwrt_luci",
+      "id": "CU-014",
       "kind": "counterexample_finder",
       "language_membership": true,
       "status": "wont_file"
