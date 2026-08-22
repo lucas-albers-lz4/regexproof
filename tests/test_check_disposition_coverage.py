@@ -305,6 +305,29 @@ def test_crs942220_guard_requires_status_or_cite_on_every_line(
     assert any("without stating" in p for p in problems)
 
 
+def test_crs942220_guard_rejects_cited_conflicting_status(tmp_path: Path):
+    # A line that cites the curated file AND claims a conflicting status is a
+    # contradiction — the citation must not exempt it from conflict detection.
+    up = _write_upstream(
+        tmp_path / "conversion-upstream.jsonl",
+        {
+            "id": "CU-005",
+            "corpus": "coreruleset",
+            "status": "false_positive",
+            "rule": "942220",
+            "language_membership": True,
+        },
+        crs_row=False,
+    )
+    doc = tmp_path / "contradicts.md"
+    doc.write_text(
+        "CRS 942220 is `wont_file` per conversion-upstream.jsonl\n",
+        encoding="utf-8",
+    )
+    problems = chk.crs942220_guard(up, (doc,))
+    assert any("claims `wont_file`" in p for p in problems)
+
+
 def test_backfilled_row_rejects_non_iso_disposition_date(tmp_path: Path):
     gen = _gen_dir(
         tmp_path,

@@ -219,24 +219,30 @@ def crs942220_guard(upstream_path: Path, docs: tuple[Path, ...]) -> list[str]:
             )
         for n, ln in hits:
             # Per-line contract: every 942220 mention must either state the
-            # curated status or cite the curated file ON THAT LINE. A line
-            # that carries the correct status token is consistent even with
-            # sibling disposition tokens (different rows in the same table
-            # cell). A bare mention with neither status nor citation is a
-            # contract violation even if another line in the doc cites.
+            # curated status or cite the curated file ON THAT LINE.
+            # Order matters: a line carrying the correct status token is
+            # consistent even with sibling disposition tokens (different rows
+            # in the same table cell); a line that cites AND claims a
+            # conflicting status is a contradiction and must fail; a bare
+            # mention with neither status nor citation is a violation even if
+            # another line in the doc cites.
             if f"`{sot_status}`" in ln:
                 continue
-            if "conversion-upstream.jsonl" in ln:
-                continue
-            for token in DISPOSITIONS:
-                if f"`{token}`" in ln and token != sot_status:
-                    problems.append(
-                        f"crs942220: {doc.name}:{n} claims `{token}` which "
-                        f"conflicts with curated {sot_id} `{sot_status}` "
-                        "(cite conversion-upstream.jsonl on this line)"
-                    )
-                    break
-            else:
+            conflict = next(
+                (
+                    token
+                    for token in DISPOSITIONS
+                    if f"`{token}`" in ln and token != sot_status
+                ),
+                None,
+            )
+            if conflict is not None:
+                problems.append(
+                    f"crs942220: {doc.name}:{n} claims `{conflict}` which "
+                    f"conflicts with curated {sot_id} `{sot_status}` "
+                    "(cite conversion-upstream.jsonl on this line)"
+                )
+            elif "conversion-upstream.jsonl" not in ln:
                 problems.append(
                     f"crs942220: {doc.name}:{n} mentions 942220 without "
                     f"stating `{sot_status}` or citing conversion-upstream.jsonl "
