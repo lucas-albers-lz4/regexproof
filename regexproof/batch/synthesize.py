@@ -42,7 +42,7 @@ from regexproof.groundtruth.adapters import (
     status_for_claim,
 )
 
-DEFAULT_SYNTH_MAX_SITES = 200
+DEFAULT_SYNTH_MAX_SITES = 0
 DEFAULT_SYNTH_LEN_BOUND = 16
 DEFAULT_SYNTH_DIFF_FUZZ_SAMPLE = 5
 
