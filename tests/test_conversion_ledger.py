@@ -735,8 +735,9 @@ def test_starvation_history_stable_within_week_and_alert_after_two_rises(tmp_pat
     assert s1["consecutive_increases"] == 2
     assert s1["alert_backlog_increasing"] is True
 
-    falling = prior[:-1] + [
-        {"week_end": "2026-08-20", "demand_open": 40, "admission_per_week": 20, "backlog_weeks": 2.0}
+    falling = [
+        *prior[:-1],
+        {"week_end": "2026-08-20", "demand_open": 40, "admission_per_week": 20, "backlog_weeks": 2.0},
     ]
     s2 = cl.starvation_metrics(gen, ledger, prior_history=falling, queue_cap=100)
     assert s2["alert_backlog_increasing"] is False
