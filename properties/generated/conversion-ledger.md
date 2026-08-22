@@ -70,5 +70,5 @@ Source: [`docs/conversion-upstream.jsonl`](../../docs/conversion-upstream.jsonl)
 
 Synthesis considers at most `synth_max_sites` (default 0 — untargeted
 synthesis is compute control; opt-in corpora set an explicit value, sort
-by `regex_id`) per corpus. Corpora with properties asked are listed 
+by `regex_id`) per corpus. Corpora with properties asked are listed
 in the table above; their batch summaries record `synth_max_sites`.
