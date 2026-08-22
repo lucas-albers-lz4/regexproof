@@ -649,6 +649,12 @@ def test_corpus_key_from_url_and_closed_wave_corpora(tmp_path: Path):
         == "openwrt_packages"
     )
     assert cl.corpus_key_from_url("https://github.com/openwrt/luci") == "openwrt_luci"
+    # Owner/name case variants resolve through the mapping (lowercased before
+    # lookup): https://github.com/OpenWrt/Packages.git → openwrt_packages.
+    assert (
+        cl.corpus_key_from_url("https://github.com/OpenWrt/Packages.git")
+        == "openwrt_packages"
+    )
     # Non-wave corpora fall back to the last path segment.
     assert cl.corpus_key_from_url("https/git.openwrt.org/pkg/luci.git") == "luci"
     assert cl.corpus_key_from_url("https://x/y/Packages/") == "packages"
@@ -765,3 +771,13 @@ def test_contract_queue_health_absent_until_phase_c(tmp_path: Path):
     assert qh2["median_age_days"] is None
     qh3 = cl.contract_queue_health(gen, clock_iso="2026-08-21")
     assert qh3["median_age_days"] == 2.0
+    # Same-day created_at against the midnight artifact clock clamps to 0
+    # (never a negative age).
+    (qdir / "c.json").write_text(
+        json.dumps(
+            {"status": "emitted", "created_at": "2026-08-21T12:00:00Z"}
+        )
+        + "\n"
+    )
+    qh4 = cl.contract_queue_health(gen, clock_iso="2026-08-21")
+    assert qh4["median_age_days"] >= 0.0

@@ -52,6 +52,7 @@ def _curated(**overrides):
         "question_id": "no-semicolon-in-hostname",
         "wave_id": "demo_w1",
         "idiom_bucket": "validator-charsets",
+        "filed_at": "2026-08-20",
     }
     row.update(overrides)
     return row
@@ -370,3 +371,70 @@ def test_backfilled_row_accepts_iso_and_unknown_date(tmp_path: Path):
             },
         )
         assert chk.run(gen, curated) == 0
+
+
+def test_non_backfilled_filing_row_requires_date(tmp_path: Path):
+    gen = _gen_dir(
+        tmp_path,
+        _gt_row(ground_truth_status="ground_truth_reproduced"),
+    )
+    # Non-backfilled filing-status row without filed_at/resolved_at fails.
+    curated = _write_upstream(
+        tmp_path / "conversion-upstream.jsonl",
+        {
+            "id": "CU-300",
+            "corpus": "demo",
+            "status": "filed",
+            "site": "demo/site.py:10",
+            "question_id": "demo-1",
+        },
+    )
+    with pytest.raises(SystemExit, match="missing filed_at and resolved_at"):
+        chk.run(gen, curated)
+    # Invalid date also fails.
+    curated2 = _write_upstream(
+        tmp_path / "conversion-upstream.jsonl",
+        {
+            "id": "CU-301",
+            "corpus": "demo",
+            "status": "filed",
+            "site": "demo/site.py:10",
+            "question_id": "demo-1",
+            "filed_at": "not-a-date",
+        },
+    )
+    with pytest.raises(SystemExit, match="not an ISO date"):
+        chk.run(gen, curated2)
+    # Valid date passes.
+    curated3 = _write_upstream(
+        tmp_path / "conversion-upstream.jsonl",
+        {
+            "id": "CU-302",
+            "corpus": "demo",
+            "status": "filed",
+            "site": "demo/site.py:10",
+            "question_id": "demo-1",
+            "filed_at": "2026-08-20",
+        },
+    )
+    assert chk.run(gen, curated3) == 0
+
+
+def test_crs942220_guard_requires_reconciliation_present(tmp_path: Path):
+    # Fail-closed: if no guarded doc mentions 942220 at all, the guard must
+    # fail (reconciliation prose removed entirely).
+    up = _write_upstream(
+        tmp_path / "conversion-upstream.jsonl",
+        {
+            "id": "CU-005",
+            "corpus": "coreruleset",
+            "status": "false_positive",
+            "rule": "942220",
+            "language_membership": True,
+        },
+        crs_row=False,
+    )
+    doc = tmp_path / "nodoc.md"
+    doc.write_text("No mention of the rule anywhere.\n", encoding="utf-8")
+    problems = chk.crs942220_guard(up, (doc,))
+    assert any("no guarded doc mentions 942220" in p for p in problems)

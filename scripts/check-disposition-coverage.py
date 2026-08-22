@@ -77,6 +77,11 @@ DISPOSITIONS = frozenset(
     }
 )
 DATE_UNKNOWN = "unknown_date"
+# Filing-status dispositions: these rows record an upstream filing and must
+# carry filed_at / resolved_at going forward. No-filing statuses
+# (wont_file, false_positive, approval_missing, out_of_scope_redos) never
+# get filed and need no date.
+FILING_STATUSES = frozenset({"filed", "filed_plan", "private_first", "fixed_upstream"})
 GT_PASS = frozenset({"reproduced", "PASS"})
 
 CRS_GUARD_DOCS = (
@@ -152,6 +157,28 @@ def load_curated_index(
                         f"error: {path.name}:{row.get('id')}: disposition_date "
                         f"{d!r} is not an ISO date or 'unknown_date'"
                     )
+        else:
+            # Forward filing rows: filed_at / resolved_at are required (the
+            # design makes them optional-with-reason only for backfilled
+            # rows). No-filing statuses need no date. Any date provided must
+            # be ISO-valid.
+            fa = str(row.get("filed_at") or "").strip()
+            ra = str(row.get("resolved_at") or "").strip()
+            if status in FILING_STATUSES and not fa and not ra:
+                raise SystemExit(
+                    f"error: {path.name}:{row.get('id')}: non-backfilled "
+                    f"filing-status row missing filed_at and resolved_at "
+                    "(both are required going forward)"
+                )
+            for label, val in (("filed_at", fa), ("resolved_at", ra)):
+                if val:
+                    try:
+                        date.fromisoformat(val)
+                    except ValueError:
+                        raise SystemExit(
+                            f"error: {path.name}:{row.get('id')}: {label} "
+                            f"{val!r} is not an ISO date"
+                        )
         site = cl.canonical_site(str(row.get("site") or ""))
         qid = str(row.get("question_id") or "").strip()
 
@@ -203,6 +230,8 @@ def crs942220_guard(upstream_path: Path, docs: tuple[Path, ...]) -> list[str]:
             "'false_positive' — the 942220 reconciliation pins CU-005 to "
             "false_positive"
         )
+    docs_seen = 0
+    docs_cited = 0
     for doc in docs:
         if not doc.is_file():
             problems.append(f"crs942220: guarded doc missing: {doc}")
@@ -211,8 +240,11 @@ def crs942220_guard(upstream_path: Path, docs: tuple[Path, ...]) -> list[str]:
         hits = [(n, ln) for n, ln in enumerate(lines, 1) if "942220" in ln]
         if not hits:
             continue
+        docs_seen += 1
         cited = any("conversion-upstream.jsonl" in ln for _, ln in hits)
-        if not cited:
+        if cited:
+            docs_cited += 1
+        else:
             problems.append(
                 f"crs942220: {doc.name} mentions 942220 but never cites "
                 "conversion-upstream.jsonl as source of truth"
@@ -248,6 +280,15 @@ def crs942220_guard(upstream_path: Path, docs: tuple[Path, ...]) -> list[str]:
                     f"stating `{sot_status}` or citing conversion-upstream.jsonl "
                     "on the line"
                 )
+    # Fail-closed: the reconciliation must be present somewhere — if no
+    # guarded doc mentions 942220 (prose removed entirely), the guard has
+    # nothing to enforce and that itself is a violation.
+    if docs_seen == 0:
+        problems.append(
+            "crs942220: no guarded doc mentions 942220 — the reconciliation "
+            "prose is absent (why.md / AGENTS.md must state or cite the "
+            "CU-005 false_positive disposition)"
+        )
     return problems
 
 

@@ -195,12 +195,14 @@ def corpus_key_from_url(url: str) -> str:
     segment minus .git (fallback for non-wave corpora)."""
     u = str(url or "").strip().rstrip("/")
     # repo identity = last TWO path segments (owner/name), e.g.
-    # openwrt/packages — matches the canonical mapping keys.
+    # openwrt/packages — matches the canonical mapping keys. Lowercased
+    # BEFORE the mapping lookup so owner/name case variants resolve
+    # (https://github.com/OpenWrt/Packages.git → openwrt/packages).
     parts = u.rsplit("/", 2)[-2:] if u else []
     repo = "/".join(parts) if len(parts) == 2 else (parts[0] if parts else "")
     repo = repo.removesuffix(".git") if repo else ""
-    if repo in CANONICAL_CORPUS_BY_REPO:
-        return CANONICAL_CORPUS_BY_REPO[repo]
+    if repo.lower() in CANONICAL_CORPUS_BY_REPO:
+        return CANONICAL_CORPUS_BY_REPO[repo.lower()]
     return repo.rsplit("/", 1)[-1].lower()
 
 
@@ -392,7 +394,10 @@ def contract_queue_health(gen_dir: Path, clock_iso: str | None = None) -> dict[s
                         )
                     if clock.tzinfo is not None:
                         clock = clock.astimezone(timezone.utc).replace(tzinfo=None)
-                    ages.append((clock - created_dt).total_seconds() / 86400)
+                    # Clamp to >= 0: the date-only artifact clock parses as
+                    # midnight, so a same-day record would otherwise compute a
+                    # negative age.
+                    ages.append(max(0.0, (clock - created_dt).total_seconds() / 86400))
                 except ValueError:
                     pass
     if ages:
