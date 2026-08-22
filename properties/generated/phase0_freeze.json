@@ -19,9 +19,7 @@
   "determinism": {
     "bootstrap_seed": 20260822,
     "intervals_library": "regexproof/stats/intervals.py (stdlib, seeded)",
-    "runtime_versions": {
-      "python": "3.13.5"
-    }
+    "runtime_versions": "python >= 3.10 (pyproject requires-python); z3-solver==5.0.0 pinned. Literal interpreter versions are NOT embedded: they differ across the CI matrix and would break byte-stable regeneration."
   },
   "escape_baseline": {
     "computed_at": "2026-08-22",

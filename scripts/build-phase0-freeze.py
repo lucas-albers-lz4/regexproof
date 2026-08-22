@@ -149,9 +149,10 @@ def main() -> int:
         "determinism": {
             "intervals_library": "regexproof/stats/intervals.py (stdlib, seeded)",
             "bootstrap_seed": SPLIT_SEED,
-            "runtime_versions": {
-                "python": sys.version.split()[0],
-            },
+            "runtime_versions": "python >= 3.10 (pyproject requires-python); "
+            "z3-solver==5.0.0 pinned. Literal interpreter versions are NOT "
+            "embedded: they differ across the CI matrix and would break "
+            "byte-stable regeneration.",
         },
     }
 
