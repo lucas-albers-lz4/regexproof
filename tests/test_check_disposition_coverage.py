@@ -234,3 +234,90 @@ def test_crs942220_guard_requires_exactly_one_curated_row(tmp_path: Path):
     problems = chk.crs942220_guard(up, ())
     assert len(problems) == 1
     assert "found 0" in problems[0]
+
+
+def test_crs942220_guard_rejects_wrong_curated_status(tmp_path: Path):
+    # A single 942220 row that is NOT CU-005 false_positive must fail — the
+    # guard exists to pin this rule's disposition, not merely to count rows.
+    up = _write_upstream(
+        tmp_path / "conversion-upstream.jsonl",
+        {
+            "id": "CU-005",
+            "corpus": "coreruleset",
+            "status": "wont_file",
+            "rule": "942220",
+            "language_membership": True,
+        },
+        crs_row=False,
+    )
+    problems = chk.crs942220_guard(up, ())
+    assert any("not 'false_positive'" in p for p in problems)
+
+
+def test_crs942220_guard_accepts_sibling_tokens_with_correct_status(
+    tmp_path: Path,
+):
+    # A line that states the correct status alongside other dispositions
+    # (different rows in the same table cell) is consistent.
+    up = _write_upstream(
+        tmp_path / "conversion-upstream.jsonl",
+        {
+            "id": "CU-005",
+            "corpus": "coreruleset",
+            "status": "false_positive",
+            "rule": "942220",
+            "language_membership": True,
+        },
+        crs_row=False,
+    )
+    good = tmp_path / "good.md"
+    good.write_text(
+        "existence proofs: 1 (usrmanage P3 own-code `fixed_upstream`; "
+        "CRS 942220 is `false_positive` per conversion-upstream.jsonl)\n",
+        encoding="utf-8",
+    )
+    assert chk.crs942220_guard(up, (good,)) == []
+
+
+def test_backfilled_row_rejects_non_iso_disposition_date(tmp_path: Path):
+    gen = _gen_dir(
+        tmp_path,
+        _gt_row(ground_truth_status="ground_truth_reproduced"),
+    )
+    curated = _write_upstream(
+        tmp_path / "conversion-upstream.jsonl",
+        {
+            "id": "CU-200",
+            "corpus": "demo",
+            "status": "wont_file",
+            "site": "demo/site.py:10",
+            "question_id": "demo-1",
+            "backfilled": True,
+            "reason_code": "pattern_class_regression_gate",
+            "disposition_date": "yesterday",
+        },
+    )
+    with pytest.raises(SystemExit, match="not an ISO date"):
+        chk.run(gen_dir=gen, upstream_path=curated)
+
+
+def test_backfilled_row_accepts_iso_and_unknown_date(tmp_path: Path):
+    for disp_date in ("2026-08-20", "unknown_date"):
+        gen = _gen_dir(
+            tmp_path,
+            _gt_row(ground_truth_status="ground_truth_reproduced"),
+        )
+        curated = _write_upstream(
+            tmp_path / "conversion-upstream.jsonl",
+            {
+                "id": "CU-201",
+                "corpus": "demo",
+                "status": "wont_file",
+                "site": "demo/site.py:10",
+                "question_id": "demo-1",
+                "backfilled": True,
+                "reason_code": "pattern_class_regression_gate",
+                "disposition_date": disp_date,
+            },
+        )
+        assert chk.run(gen, curated) == 0

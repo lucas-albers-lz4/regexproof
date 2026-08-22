@@ -53,6 +53,7 @@ import argparse
 import importlib.util
 import json
 import sys
+from datetime import date
 from pathlib import Path
 from typing import Any
 
@@ -143,6 +144,14 @@ def load_curated_index(
                     f"error: {path.name}:{row.get('id')}: backfilled row "
                     "missing disposition_date (ISO date or 'unknown_date')"
                 )
+            if d != "unknown_date":
+                try:
+                    date.fromisoformat(d)
+                except ValueError:
+                    raise SystemExit(
+                        f"error: {path.name}:{row.get('id')}: disposition_date "
+                        f"{d!r} is not an ISO date or 'unknown_date'"
+                    )
         site = cl.canonical_site(str(row.get("site") or ""))
         qid = str(row.get("question_id") or "").strip()
 
@@ -179,6 +188,21 @@ def crs942220_guard(upstream_path: Path, docs: tuple[Path, ...]) -> list[str]:
         ]
     sot_status = str(rows[0].get("status") or "")
     sot_id = str(rows[0].get("id") or "")
+    # The reconciliation pins this rule's disposition: CU-005, false_positive.
+    # A single row that merely mentions 942220 with a different status (e.g.
+    # wont_file) must fail — the whole point of the guard is that the curated
+    # file is the source of truth for THIS rule.
+    if sot_id != "CU-005":
+        problems.append(
+            f"crs942220: curated row {sot_id!r} is not CU-005 — the 942220 "
+            "reconciliation pins CRS 942220 to CU-005"
+        )
+    if sot_status != "false_positive":
+        problems.append(
+            f"crs942220: curated row {sot_id} status {sot_status!r} is not "
+            "'false_positive' — the 942220 reconciliation pins CU-005 to "
+            "false_positive"
+        )
     for doc in docs:
         if not doc.is_file():
             problems.append(f"crs942220: guarded doc missing: {doc}")
@@ -194,7 +218,12 @@ def crs942220_guard(upstream_path: Path, docs: tuple[Path, ...]) -> list[str]:
                 "conversion-upstream.jsonl as source of truth"
             )
         for n, ln in hits:
-            if "conversion-upstream.jsonl" in ln:
+            # A line that carries the curated status token is consistent —
+            # other disposition tokens on it refer to different rows in the
+            # same table cell (e.g. "usrmanage P3 fixed_upstream; CRS 942220
+            # is false_positive per CU-005"). Only flag a line that claims a
+            # DIFFERENT status for 942220 and never states the correct one.
+            if f"`{sot_status}`" in ln:
                 continue
             for token in DISPOSITIONS:
                 if f"`{token}`" in ln and token != sot_status:

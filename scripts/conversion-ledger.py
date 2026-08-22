@@ -179,11 +179,29 @@ def join_wave_dispositions(
             w["accepted"] += 1
 
 
+# Canonical repo → corpus mapping for wave-close-out matching. The close-out
+# artifacts are named <corpus>_conversion_wave.md, where <corpus> is the
+# canonical corpus id (e.g. openwrt_packages), NOT the last URL path segment
+# (e.g. packages). Repos with wave machinery must be mapped explicitly so the
+# starvation demand signal does not count closed waves as open.
+CANONICAL_CORPUS_BY_REPO = {
+    "openwrt/packages": "openwrt_packages",
+    "openwrt/luci": "openwrt_luci",
+}
+
+
 def corpus_key_from_url(url: str) -> str:
-    """Mine-cluster identity: lowercased last URL path segment minus .git."""
+    """Mine-cluster identity: canonical corpus id, else lowercased last path
+    segment minus .git (fallback for non-wave corpora)."""
     u = str(url or "").strip().rstrip("/")
-    tail = u.rsplit("/", 1)[-1] if u else ""
-    return tail.removesuffix(".git").lower()
+    # repo identity = last TWO path segments (owner/name), e.g.
+    # openwrt/packages — matches the canonical mapping keys.
+    parts = u.rsplit("/", 2)[-2:] if u else []
+    repo = "/".join(parts) if len(parts) == 2 else (parts[0] if parts else "")
+    repo = repo.removesuffix(".git") if repo else ""
+    if repo in CANONICAL_CORPUS_BY_REPO:
+        return CANONICAL_CORPUS_BY_REPO[repo]
+    return repo.rsplit("/", 1)[-1].lower()
 
 
 def closed_wave_corpora(gen_dir: Path) -> set[str]:
@@ -332,12 +350,15 @@ def starvation_metrics(
     }
 
 
-def contract_queue_health(gen_dir: Path) -> dict[str, Any]:
+def contract_queue_health(gen_dir: Path, clock_iso: str | None = None) -> dict[str, Any]:
     """Contract-queue stub states (Phase C artifacts; absent today).
 
     Counts ``properties/conversion_queue/*.json`` by ``status`` and reports
-    median stub age in days when a ``created_at`` timestamp exists. The queue
-    owns only pre-contract states; later states are derived joins (#551 C).
+    median stub age in days when a ``created_at`` timestamp exists. Age is
+    computed against the committed artifact clock (the admission window end)
+    so repeated regeneration is byte-deterministic — never ``datetime.now()``.
+    The queue owns only pre-contract states; later states are derived joins
+    (#551 C).
     """
     queue_dir = gen_dir.parent / "conversion_queue"
     counts = {"emitted": 0, "claimed": 0, "contracted": 0, "skipped": 0}
@@ -359,12 +380,33 @@ def contract_queue_health(gen_dir: Path) -> dict[str, Any]:
             elif status in {"emitted", "unassigned"}:
                 counts["emitted"] += 1
             created = str(data.get("created_at") or "")
-            if created:
+            if created and clock_iso:
                 try:
-                    ages.append((datetime.now(timezone.utc) - datetime.fromisoformat(created)).total_seconds() / 86400)
+                    # Normalize to naive UTC: created_at may carry an offset
+                    # (…Z) while the artifact clock is a plain ISO date.
+                    clock = datetime.fromisoformat(clock_iso)
+                    created_dt = datetime.fromisoformat(created)
+                    if created_dt.tzinfo is not None:
+                        created_dt = created_dt.astimezone(timezone.utc).replace(
+                            tzinfo=None
+                        )
+                    if clock.tzinfo is not None:
+                        clock = clock.astimezone(timezone.utc).replace(tzinfo=None)
+                    ages.append((clock - created_dt).total_seconds() / 86400)
                 except ValueError:
                     pass
-    median_age = round(sorted(ages)[len(ages) // 2], 2) if ages else None
+    if ages:
+        ages_sorted = sorted(ages)
+        n = len(ages_sorted)
+        mid = n // 2
+        median_age = (
+            ages_sorted[mid]
+            if n % 2
+            else (ages_sorted[mid - 1] + ages_sorted[mid]) / 2
+        )
+        median_age = round(median_age, 2)
+    else:
+        median_age = None
     return {
         "artifacts_present": present,
         **counts,
@@ -937,7 +979,9 @@ def aggregate(
         queue_path=queue_path,
         prior_history=prior_starvation_history,
     )
-    queue_health = contract_queue_health(gen)
+    queue_health = contract_queue_health(
+        gen, clock_iso=starvation.get("admission_window_end")
+    )
 
 
     sat_in_tools = 0

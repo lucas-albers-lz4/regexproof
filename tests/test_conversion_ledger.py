@@ -643,12 +643,25 @@ def test_join_wave_dispositions_ignores_ungrounded_sat():
 
 
 def test_corpus_key_from_url_and_closed_wave_corpora(tmp_path: Path):
+    # Canonical wave-cluster repos map to their close-out corpus ids.
+    assert (
+        cl.corpus_key_from_url("https://github.com/openwrt/packages")
+        == "openwrt_packages"
+    )
+    assert cl.corpus_key_from_url("https://github.com/openwrt/luci") == "openwrt_luci"
+    # Non-wave corpora fall back to the last path segment.
     assert cl.corpus_key_from_url("https/git.openwrt.org/pkg/luci.git") == "luci"
     assert cl.corpus_key_from_url("https://x/y/Packages/") == "packages"
+    # The canonical key must match the close-out artifact name so closed waves
+    # are not counted as open demand (starvation signal, #554).
     gen = tmp_path / "generated"
     gen.mkdir()
     (gen / "banip_conversion_wave.md").write_text("# closed\n")
-    assert cl.closed_wave_corpora(gen) == {"banip"}
+    (gen / "openwrt_packages_conversion_wave.md").write_text("# closed\n")
+    closed = cl.closed_wave_corpora(gen)
+    assert closed == {"banip", "openwrt_packages"}
+    assert cl.corpus_key_from_url("https://github.com/openwrt/packages") in closed
+    assert cl.corpus_key_from_url("https://github.com/openwrt/luci") not in closed
 
 
 def test_admission_per_week_window_is_artifact_clock():
@@ -742,8 +755,12 @@ def test_contract_queue_health_absent_until_phase_c(tmp_path: Path):
         json.dumps({"status": "emitted", "created_at": "2026-08-19T00:00:00Z"}) + "\n"
     )
     (qdir / "b.json").write_text(json.dumps({"status": "skipped:duplicate"}) + "\n")
+    # Age is computed against the committed artifact clock, never now():
+    # without a clock the deterministic artifact omits median_age_days.
     qh2 = cl.contract_queue_health(gen)
     assert qh2["artifacts_present"] is True
     assert qh2["emitted"] == 1
     assert qh2["skipped"] == 1
-    assert qh2["median_age_days"] is not None
+    assert qh2["median_age_days"] is None
+    qh3 = cl.contract_queue_health(gen, clock_iso="2026-08-21")
+    assert qh3["median_age_days"] == 2.0
