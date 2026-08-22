@@ -152,6 +152,68 @@ Ledger JSON (`schema_version: "1"`) field groups:
 | rates | `encodable_fraction`, `pipeline_accepted_per_gt`, `pipeline_accepted_per_extracted` (aliases `accepted_per_gt` / `accepted_per_extracted` for one release). These pipeline rates include own-code usrmanage; they are **not** a wild-bug conversion rate. |
 | security_tool_split | asked/SAT in vs not in `SECURITY_TOOL_CORPORA` |
 | upstream | curated `docs/conversion-upstream.jsonl` status counts |
+| per_wave (#554) | one row per top-level `(wave_id, idiom_bucket)`: `properties_asked` → `properties_sat` → `sat_ground_truthed` → `filed` → `accepted`, plus `shape_counts` / `shape_mix`. Join: curated rows on canonical `(site, question_id)`; `filed` = status `filed` / `private_first` / `fixed_upstream` (or `filed_at` set); `accepted` = `fixed_upstream`. GT→filed is the currently empty hop and is highlighted in the MD. |
+| starvation (#554) | `backlog_weeks = demand_open / admission_per_week`; demand = open `gated:go` clusters lacking a closed wave (candidate ledger); admission = GO `*_gate_decision.json` artifacts per 7-day window ending at the latest committed GO date (artifact clock — deterministic; NOT the lagging candidate ledger). `mine_queue_pressure = queue_len / queue_cap`. `alert_backlog_increasing` when `backlog_weeks` rises ≥ 2 consecutive windows (`history` carried in this artifact). Admission is mine-cap-bounded by design — read with `mine_queue_pressure`, not as batch health. |
+| queue_health (#551 C) | `properties/conversion_queue/*.json` counts by pre-contract state: emitted / claimed / contracted / skipped (+ median age days from `created_at`). Absent until Phase C ships. |
+| shape_mix_by_corpus (#554) | per-corpus shape-1..5 counts over asked properties (descriptive until n ≥ 50). |
+
+### Entity IDs and dedup (#554)
+
+Conversion counts are **property-level**: the unit is
+`(site, question_id)` (scanner `name` is the `question_id` fallback),
+canonicalized as in `scripts/check-disposition-coverage.py`'s docstring.
+`properties_asked_distinct` / `properties_sat_distinct` dedupe on that pair,
+consistent with #480. Findings-per-site and upstream-issue-level rollups are
+derived, never stored twice.
+
+### Headline findings metric (#554, additive to encodable fraction)
+
+Until the contracted boundary-site denominator crosses the committed
+threshold (**n ≥ 50**): raw finding counts with a **Clopper-Pearson**
+(exact) interval; findings per site use **Wilson**. Per-10k thereafter.
+Encodable fraction stays the compiler headline (why.md three-claim
+separation). Bootstrap CIs elsewhere: B=10000, 95% BCa with
+percentile/exact-binomial fallback.
+
+### Shape-3/5 ground-truth discipline
+
+SAT shape-3/5 properties require product-engine ground-truth replay before
+they count as GT (BusyBox sed/grep for OpenWrt packages, Node `RegExp` for
+LuCI); expected-UNSAT shape-3 requires differential fuzz. See AGENTS.md §4
+and `docs/TRAPS.md`.
+
+## Curated dispositions (`docs/conversion-upstream.jsonl`)
+
+Curated rows are the **source of truth for filing state** (why.md /
+AGENTS.md must match or cite them — enforced by
+`scripts/check-disposition-coverage.py` in CI).
+
+- **Disposition enum** (`status`, unknown values rejected):
+  `filed`, `filed_plan` ("filed upstream, awaiting response" — distinct from
+  `wont_file`), `wont_file`, `false_positive`, `private_first`,
+  `fixed_upstream`, `approval_missing`, `out_of_scope_redos`.
+- **Join keys:** `site` + `question_id`, canonicalized per the checker
+  docstring; scanner `name` is the `question_id` fallback. Wave keys
+  (`wave_id`, `idiom_bucket`) live at scanner-row top level in
+  `*_conversion.ndjson` — never inside `contract`
+  (`property_contract.schema.json` is `additionalProperties: false`).
+- **`filed_at` / `resolved_at`:** required going forward;
+  optional-with-reason for backfilled rows.
+- **Backfill rule:** backfilled rows carry `reason_code` plus
+  `disposition_date` = ISO date or the explicit enum value `unknown_date`.
+- **Censoring-aware time-to-acceptance:** `unknown_date` rows are excluded
+  from medians; report via Kaplan-Meier or state "median of closed rows
+  only" — never mix censored + closed rows in a plain median.
+- **Coverage join (#554):** every GT-confirmed SAT row in
+  `*_conversion.ndjson` (`result` sat/gap, non-synthesized product kind,
+  `ground_truth_status` reproduced/PASS) needs a curated row;
+  `scripts/check-disposition-coverage.py` fails closed otherwise.
+- **CRS 942220:** exactly one curated disposition (CU-005,
+  `false_positive`). Historical-numerator rule: prior wave / rule_diff
+  asked/SAT counts stay as recorded; the curated disposition governs filing
+  state only.
+
+
 
 Do not quote a frozen pipeline-accepted / SAT-GT ratio from an old ledger as
 the product yield. Re-read the regenerated artifact; third-party public

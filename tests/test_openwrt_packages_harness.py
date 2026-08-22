@@ -174,8 +174,25 @@ def test_emit_conversion_ndjson_fails_closed_on_harness_failure(tmp_path: Path):
                     FAMILY,
                     "--corpus",
                     "openwrt_packages",
+                    "--wave-id",
+                    "openwrt_packages_w1",
+                    "--idiom-bucket",
+                    "validator-charsets-and-captures",
                     "-o",
                     str(out),
                 ]
             )
+    assert not out.exists()
+
+
+def test_emit_conversion_ndjson_requires_wave_join_keys(tmp_path: Path, capsys):
+    """#554: rows must carry top-level wave_id / idiom_bucket — CLI fails closed."""
+    emit = _load_emit()
+    out = tmp_path / "openwrt_packages_conversion.ndjson"
+    with pytest.raises(SystemExit) as excinfo:
+        emit.main(
+            ["--family", FAMILY, "--corpus", "openwrt_packages", "-o", str(out)]
+        )
+    assert excinfo.value.code == 2
+    assert "--wave-id" in capsys.readouterr().err
     assert not out.exists()

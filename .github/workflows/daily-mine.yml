@@ -169,6 +169,16 @@ jobs:
           if ! git diff --staged --quiet; then
             git commit -m "chore(mine): regen gate-labels after ledger"
           fi
+          # The conversion ledger now reads candidate-ledger.json /
+          # mine-queue.json / gate decisions (#554 starvation signal), so it
+          # must be regenerated in the same push or the golden drift check
+          # on main goes red after every mine flush.
+          python scripts/conversion-ledger.py
+          git add properties/generated/conversion-ledger.json \
+                  properties/generated/conversion-ledger.md
+          if ! git diff --staged --quiet; then
+            git commit -m "chore(mine): regen conversion ledger after ledger"
+          fi
           if [ -n "$(git log --oneline "origin/${GITHUB_REF_NAME}..HEAD")" ]; then
             git push
           else
