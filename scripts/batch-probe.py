@@ -64,12 +64,12 @@ def _record(
     extra: dict | None,
     state: pathlib.Path | None,
 ) -> None:
-    try:
-        batch_state.record_outcome(
-            digest or "unknown", url, pin, outcome, extra=extra, path=state,
-        )
-    except SystemExit as exc:
-        print(f"batch-probe: state write failed ({exc})", file=sys.stderr)
+    # Luna r3 #2: a state-write failure must NOT be swallowed — a corrupt
+    # state must not produce a successful probe with no durable outcome.
+    # Propagate SystemExit so the CLI fails closed.
+    batch_state.record_outcome(
+        digest or "unknown", url, pin, outcome, extra=extra, path=state,
+    )
 
 
 def _dir_size_bytes(path: pathlib.Path) -> int:
@@ -109,6 +109,12 @@ def main(argv: list[str] | None = None) -> int:
     args = ap.parse_args(argv)
 
     probe_cap = args.probe_fetch_limit_mb or args.max_disk_mb
+    # #6 (Luna r3): injected paths must be CONSISTENT — the lease registry
+    # lives under the cache root (cache/<root>/leases.json), and the
+    # admission registry follows the state path. Separate cache/state roots
+    # must not silently conflict on leases or bypass shared admission.
+    cache_root = args.cache_root
+    registry_path = None if cache_root is None else cache_root / "leases.json"
 
     if args.skip_wave_active:
         status = _wave_status(args.corpus)
@@ -148,7 +154,7 @@ def main(argv: list[str] | None = None) -> int:
             entry = clone_cache.cache_acquire(
                 args.url, args.pin, owner_pid=owner,
                 max_disk_mb=probe_cap,
-                root=args.cache_root,
+                root=cache_root, registry_path=registry_path,
             )
         except SystemExit as exc:
             msg = str(exc)
@@ -193,7 +199,14 @@ def main(argv: list[str] | None = None) -> int:
 
         try:
             wt = clone_cache.worktree_for(
-                args.url, args.pin, owner_pid=owner, root=args.cache_root,
+                args.url, args.pin, owner_pid=owner, root=cache_root,
+            )
+            # Renew the lease AFTER the walk so a long walk can't be evicted
+            # mid-use (Luna r3 #5) — done under the registry lock.
+            from regexproof.mine import lease_registry
+
+            lease_registry.renew(
+                args.url, args.pin, owner_pid=owner, path=registry_path,
             )
             # Post-walk disk budget (unchanged semantics, on the worktree).
             enforce_disk_budget(wt, args.max_disk_mb)
@@ -252,16 +265,30 @@ def main(argv: list[str] | None = None) -> int:
               f"fetch={probe_fetch_bytes}B saved={bytes_saved}B walk={walked} clone_ms={clone_ms}")
         return 0
     finally:
-        if wt is not None and wt.exists():
-            clone_cache.worktree_remove(
-                args.url, args.pin, owner_pid=owner, root=args.cache_root,
+        # Exception-safe cleanup (Luna r3 #3): a worktree_remove failure
+        # must NOT skip lease + admission release. Each step is guarded.
+        try:
+            if wt is not None and wt.exists():
+                clone_cache.worktree_remove(
+                    args.url, args.pin, owner_pid=owner, root=cache_root,
+                )
+        except Exception:  # cleanup must never mask the result
+            pass
+        try:
+            if entry is not None:
+                clone_cache.release(
+                    args.url, args.pin, owner_pid=owner,
+                    registry_path=registry_path,
+                )
+        except Exception:
+            pass
+        try:
+            disk_admission.release(
+                owner_pid=owner,
+                path=None if args.state is None else args.state.with_name("admission.json"),
             )
-        if entry is not None:
-            clone_cache.release(args.url, args.pin, owner_pid=owner)
-        disk_admission.release(
-            owner_pid=owner,
-            path=None if args.state is None else args.state.with_name("admission.json"),
-        )
+        except Exception:
+            pass
 
 
 if __name__ == "__main__":

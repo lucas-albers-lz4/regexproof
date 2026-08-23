@@ -316,3 +316,39 @@ def run_under_lock(fn, *, path: pathlib.Path | None = None):
     lease obtained between the snapshot and the rmtree would be evicted
     while live)."""
     return _with_registry_lock(path, fn)
+
+
+def renew(
+    url: str,
+    pin: str,
+    *,
+    owner_pid: int,
+    ttl_s: float = DEFAULT_TTL_S,
+    path: pathlib.Path | None = None,
+) -> dict[str, Any]:
+    """Extend a lease's expiry (Luna r3 #5: a walk exceeding the original
+    TTL must not be evicted mid-use). Refuses when the lease is gone,
+    expired, or owned by someone else — fail closed."""
+
+    def _renew() -> dict[str, Any]:
+        reg = _read_registry(path)
+        k = _key(url, pin)
+        now = _now()
+        existing = reg["leases"].get(k)
+        if existing is None or _expired(existing, now):
+            raise SystemExit(
+                f"lease_registry: lease_reject — cannot renew ({url}, {pin}): "
+                "no live lease"
+            )
+        if int(existing.get("owner_pid") or -1) != owner_pid:
+            raise SystemExit(
+                f"lease_registry: lease_reject — cannot renew ({url}, {pin}): "
+                f"leased by pid {existing.get('owner_pid')}"
+            )
+        existing["ttl_s"] = ttl_s
+        existing["expires_at"] = now + ttl_s
+        existing["start_time"] = now
+        _write_registry(reg, path)
+        return existing
+
+    return _with_registry_lock(path, _renew)

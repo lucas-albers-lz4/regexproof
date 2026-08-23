@@ -48,6 +48,8 @@ def _disk_usage_mb(path: Path) -> float:
         if path.is_file():
             total = path.stat().st_size
         elif path.is_dir():
+            if path.name == "staged_probes":
+                return 0.0  # never measure staged probes (CI guard #559)
             for fp in path.rglob("*"):
                 if fp.is_file():
                     total += fp.stat().st_size

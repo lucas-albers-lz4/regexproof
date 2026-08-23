@@ -57,6 +57,8 @@ _SKIP_DIR_NAMES = frozenset(
 def _iter_java(root: Path) -> list[Path]:
     out: list[Path] = []
     root = root.resolve()
+    if root.name == "staged_probes":
+        return out  # never walk staged probes (CI guard #559)
     for p in sorted(root.rglob("*.java")):
         if not p.is_file():
             continue

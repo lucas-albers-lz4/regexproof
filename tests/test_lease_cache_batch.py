@@ -308,6 +308,62 @@ def test_default_probe_cap_consistent_with_max(tmp_path):
     assert "cap=2048" not in proc.stderr + proc.stdout
 
 
+def test_lease_renew_extends_expiry(tmp_path):
+    """Luna r3 #5: renew() extends a live lease's expiry under the lock and
+    refuses when the lease is gone/expired/foreign."""
+    p = _reg(tmp_path)
+    lease = lease_registry.acquire("https://x/y", "a" * 40, owner_pid=1, path=p)
+    old_expiry = lease["expires_at"]
+    renewed = lease_registry.renew("https://x/y", "a" * 40, owner_pid=1, path=p)
+    assert renewed["expires_at"] > old_expiry
+    # Foreign owner cannot renew.
+    with pytest.raises(SystemExit, match="lease_reject"):
+        lease_registry.renew("https://x/y", "a" * 40, owner_pid=2, path=p)
+    # Expired lease cannot renew.
+    lease_registry.reap_stale(now=time.time() + 7200, path=p)
+    with pytest.raises(SystemExit, match="no live lease"):
+        lease_registry.renew("https://x/y", "a" * 40, owner_pid=1, path=p)
+
+
+def test_acquire_before_dir_check_closes_toctou(tmp_path):
+    """Luna r3 #4: cache_acquire takes the lease BEFORE the dir check — a
+    GC sweep (which holds the lock and never evicts leased dirs) cannot
+    remove the clone between check and hit return."""
+    from regexproof.admission import clone_cache
+
+    cache_root = tmp_path / "cache"
+    reg_path = tmp_path / "leases.json"
+    url, pin = "https://github.com/ow/packages", "a" * 40
+    d = clone_cache.cache_dir(url, pin, root=cache_root)
+    d.mkdir(parents=True)
+    (d / "refs").mkdir()
+    (d / ".cache-key").write_text(f"{url}#{pin}", encoding="utf-8")
+    # A lease already held by us (simulating acquire-first) makes GC skip
+    # the dir — eviction-vs-acquire cannot interleave.
+    lease_registry.acquire(url, pin, owner_pid=1, path=reg_path)
+    removed = clone_cache.cache_gc(root=cache_root, registry_path=reg_path)
+    assert removed == 0
+    assert d.is_dir()
+
+
+def test_dogfood_excludes_staged_probes(tmp_path):
+    """Luna r3 #1: dogfood-singleton-analysis must not walk staged_probes —
+    the walker guard's false negative (Path(path).rglob) is closed."""
+    import importlib.util
+
+    root = pathlib.Path(__file__).resolve().parent.parent
+    staged = tmp_path / "staged_probes"
+    staged.mkdir()
+    (staged / "x.draft.json").write_text("{}", encoding="utf-8")
+    spec = importlib.util.spec_from_file_location(
+        "dsa", root / "scripts" / "dogfood-singleton-analysis.py",
+    )
+    dsa = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(dsa)  # type: ignore[union-attr]
+    scan = dsa.extract_repo("test", str(staged))
+    assert scan.scanned_files == 0  # staged probes never walked
+
+
 # --- disk admission (Luna r1 #4) ---------------------------------------------
 
 

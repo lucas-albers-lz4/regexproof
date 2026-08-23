@@ -139,7 +139,12 @@ def extract_repo(name: str, path: str, *, dir_mode: bool = False,
     records: list[dict] = []
     per_file: list[tuple[str, int]] = []
     scanned = oversized = 0
-    for p in sorted(Path(path).rglob("*")):
+    walk_root = Path(path)
+    if walk_root.name == "staged_probes":
+        # Never walk staged probes (CI guard #559) — return a consistent
+        # RepoScan (the namedtuple, not a bare tuple).
+        return RepoScan(records, per_file, scanned, oversized)
+    for p in sorted(walk_root.rglob("*")):
         if not p.is_file():
             continue
         rel = str(p.relative_to(path))

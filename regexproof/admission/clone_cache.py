@@ -73,20 +73,22 @@ def cache_acquire(
     validate_clone_url(url)  # Luna r2 #6: same control as admission/clone.py
     run_fn = run or _default_run
     d = cache_dir(url, pin, root)
-    if d.is_dir() and (d / "refs").is_dir() and (d / ".cache-key").is_file():
-        # Completeness marker (.cache-key is written only AFTER the pin
-        # fetch succeeds) — a partial dir is never a hit (Luna r2 #3).
-        lease = lease_registry.acquire(
-            url, pin, owner_pid=owner_pid, ttl_s=ttl_s,
-            path=registry_path,
-        )
-        return {**lease, "cache_hit": True, "dir": str(d)}
-
-    # Probe phase: short lease, then clone, then promote.
+    # Acquire FIRST, then verify the dir — closing the GC/acquire TOCTOU
+    # (Luna r3 #4): a lease taken before the dir check means GC (which
+    # holds the registry lock and never evicts leased dirs) cannot remove
+    # it between the check and the hit return.
     lease_registry.acquire(
         url, pin, owner_pid=owner_pid,
         ttl_s=lease_registry.PROBE_TTL_S, path=registry_path,
     )
+    if d.is_dir() and (d / "refs").is_dir() and (d / ".cache-key").is_file():
+        # Complete reference clone: promote the probe lease to the durable
+        # TTL and report a HIT.
+        lease = lease_registry.promote(
+            url, pin, owner_pid=owner_pid, ttl_s=ttl_s, path=registry_path,
+        )
+        return {**lease, "cache_hit": True, "dir": str(d)}
+    # Miss: clone under the (already-held) probe lease, then promote.
     if d.exists():
         shutil.rmtree(d, ignore_errors=True)
     d.parent.mkdir(parents=True, exist_ok=True)
@@ -112,16 +114,22 @@ def cache_acquire(
         raise
     # Sidecar key maps the hashed dir back to (url, pin) for safe GC. It is
     # the COMPLETENESS marker — written only after the pin fetch succeeds.
-    (d / ".cache-key").write_text(f"{url}#{pin}", encoding="utf-8")
-    if max_disk_mb is not None:
-        size_mb = _dir_size_mb(d)
-        if size_mb > max_disk_mb:
-            lease_registry.release(url, pin, owner_pid=owner_pid, path=registry_path)
-            shutil.rmtree(d, ignore_errors=True)
-            raise CloneError(
-                f"probe fetch {size_mb:.1f} MB > --probe-fetch-limit-mb "
-                f"{max_disk_mb} (disk_budget)"
-            )
+    # Marker-write/disk-check failures MUST release the probe lease too
+    # (Luna r3 #3: IsADirectoryError reproduced with the lease still
+    # installed).
+    try:
+        (d / ".cache-key").write_text(f"{url}#{pin}", encoding="utf-8")
+        if max_disk_mb is not None:
+            size_mb = _dir_size_mb(d)
+            if size_mb > max_disk_mb:
+                raise CloneError(
+                    f"probe fetch {size_mb:.1f} MB > --probe-fetch-limit-mb "
+                    f"{max_disk_mb} (disk_budget)"
+                )
+    except (CloneError, OSError):
+        lease_registry.release(url, pin, owner_pid=owner_pid, path=registry_path)
+        shutil.rmtree(d, ignore_errors=True)
+        raise
     lease = lease_registry.promote(
         url, pin, owner_pid=owner_pid, ttl_s=ttl_s, path=registry_path,
     )
