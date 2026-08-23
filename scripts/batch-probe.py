@@ -220,9 +220,26 @@ def main(argv: list[str] | None = None) -> int:
         import json
 
         walked = 0
+        # Lease heartbeat: renew BEFORE expiry so GC (which treats an
+        # expired lease as inactive and evicts the clone/worktree) can
+        # never remove the dir mid-walk. Renewal after the walk is too
+        # late — a long walk exceeding the TTL loses the lease first
+        # (Luna r5, deterministic replay). Heartbeat every HEARTBEAT_N
+        # files OR HEARTBEAT_S seconds, whichever comes first (a slow
+        # walk must not stall between count-based beats).
+        from regexproof.mine import lease_registry
+
+        HEARTBEAT_N = 2000
+        HEARTBEAT_S = 300  # well under the 3600s default TTL
+        _hb_last = time.monotonic()
         for p in sorted(wt.rglob("*")):
             if p.is_file() and ".git" not in p.parts:
                 walked += 1
+                if walked % HEARTBEAT_N == 0 or time.monotonic() - _hb_last > HEARTBEAT_S:
+                    lease_registry.renew(
+                        args.url, args.pin, owner_pid=owner, path=registry_path,
+                    )
+                    _hb_last = time.monotonic()
         draft = {
             "manifest_digest": digest,
             "url": args.url,
@@ -240,11 +257,8 @@ def main(argv: list[str] | None = None) -> int:
         tmp.write_text(json.dumps(draft, indent=2, sort_keys=True) + "\n", encoding="utf-8")
         os.replace(tmp, draft_path)
 
-        # Renew the lease AFTER the walk so a long walk can't be evicted
-        # mid-use (Luna r3 #5, placement confirmed in r4: renew must follow
-        # the walk, not precede it) — done under the registry lock.
-        from regexproof.mine import lease_registry
-
+        # Final renewal before recording — the heartbeat kept the lease
+        # live through the walk; this extends it through the outcome write.
         lease_registry.renew(
             args.url, args.pin, owner_pid=owner, path=registry_path,
         )
