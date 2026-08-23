@@ -83,7 +83,14 @@ def emit(
 
     ``ranked`` items carry at minimum ``site``; stub fields
     (``provenance=stub``, idiom bucket, cheap signals) are validated
-    against the stub schema by the emitter's caller."""
+    against the stub schema by the emitter's caller. ``wave_id`` must be
+    NONBLANK — an unbound artifact would bypass the wave-binding check at
+    claim time (Luna r4 #2)."""
+    if not str(wave_id or "").strip():
+        raise SystemExit(
+            "conversion_queue: emit refused — wave_id must be nonblank (an "
+            "unbound artifact would bypass claim-time wave binding)"
+        )
     q = empty_queue(cluster, generation=generation, wave_id=wave_id)
     for i, item in enumerate(ranked, start=1):
         row = {
@@ -187,12 +194,17 @@ def claim(
                 f"conversion_queue: claim refused — {cluster} generation is "
                 f"{current}, not the caller's {generation} (stale snapshot)"
             )
-        # Wave binding (Luna r2 #1 / r3 #2): the ARTIFACT's wave is
-        # authoritative — a caller-supplied wave_id must NOT override it.
-        # A queue emitted for w1 can never be claimed during w2.
+        # Wave binding (Luna r2 #1 / r3 #2 / r4 #2): the ARTIFACT's wave is
+        # authoritative and REQUIRED nonblank — an unbound artifact cannot
+        # be claimed at all, and a caller-supplied wave_id cannot override.
         active = _active_wave_id(cluster, lock_log)
         artifact_wave = str(q.get("wave_id") or "")
-        if active and artifact_wave and active != artifact_wave:
+        if not artifact_wave:
+            raise SystemExit(
+                f"conversion_queue: claim refused — queue {cluster} has no "
+                "wave binding (emit requires a nonblank wave_id)"
+            )
+        if active and artifact_wave != active:
             raise SystemExit(
                 f"conversion_queue: claim refused — queue {cluster} is bound "
                 f"to wave {artifact_wave!r} but active wave is {active!r}"

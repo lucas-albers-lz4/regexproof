@@ -21,6 +21,7 @@
     },
     "not_proven": false,
     "backend": "seq",
+    "product": false,
     "state": "stock"
   },
   {
@@ -36,13 +37,14 @@
     "ok": true,
     "witness": null,
     "ground_truth": null,
-    "wall_ms": 888.5,
+    "wall_ms": 795.6,
     "engine_versions": {
       "z3": "5.0.0",
       "python": "3.13.5"
     },
     "not_proven": false,
     "backend": "seq",
+    "product": false,
     "state": "stock"
   },
   {
@@ -58,13 +60,14 @@
     "ok": true,
     "witness": null,
     "ground_truth": null,
-    "wall_ms": 4.0,
+    "wall_ms": 0.2,
     "engine_versions": {
       "z3": "5.0.0",
       "python": "3.13.5"
     },
     "not_proven": false,
     "backend": "seq",
+    "product": false,
     "state": "stock"
   },
   {
@@ -89,6 +92,7 @@
     },
     "not_proven": false,
     "backend": "seq",
+    "product": false,
     "state": "stock"
   },
   {
@@ -106,13 +110,14 @@
       "s": "a"
     },
     "ground_truth": "mutation-guard-sat-expected",
-    "wall_ms": 3.3,
+    "wall_ms": 4.9,
     "engine_versions": {
       "z3": "5.0.0",
       "python": "3.13.5"
     },
     "not_proven": false,
     "backend": "seq",
+    "product": false,
     "state": "stock"
   },
   {
@@ -128,13 +133,14 @@
     "ok": true,
     "witness": null,
     "ground_truth": null,
-    "wall_ms": 107.3,
+    "wall_ms": 57.3,
     "engine_versions": {
       "z3": "5.0.0",
       "python": "3.13.5"
     },
     "not_proven": false,
     "backend": "seq",
+    "product": false,
     "state": "stock"
   },
   {
@@ -149,16 +155,17 @@
     "result": "sat",
     "ok": true,
     "witness": {
-      "s": "o://"
+      "s": "z://"
     },
     "ground_truth": "reproduced",
-    "wall_ms": 8.2,
+    "wall_ms": 4.9,
     "engine_versions": {
       "z3": "5.0.0",
       "python": "3.13.5"
     },
     "not_proven": false,
     "backend": "seq",
+    "product": false,
     "state": "stock"
   },
   {
@@ -176,13 +183,14 @@
       "s": "://"
     },
     "ground_truth": "mutation-guard-sat-expected",
-    "wall_ms": 1.7,
+    "wall_ms": 2.1,
     "engine_versions": {
       "z3": "5.0.0",
       "python": "3.13.5"
     },
     "not_proven": false,
     "backend": "seq",
+    "product": false,
     "state": "stock"
   }
 ]

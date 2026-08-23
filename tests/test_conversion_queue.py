@@ -217,6 +217,19 @@ def test_claim_wave_id_param_cannot_override_artifact(tmp_path):
         )
 
 
+def test_emit_refuses_unbound_wave_id(tmp_path):
+    """Luna r4 #2: emit() must refuse a blank wave_id — an unbound
+    artifact would bypass claim-time wave binding."""
+    with pytest.raises(SystemExit, match="wave_id must be nonblank"):
+        cq.emit(
+            "openwrt_packages",
+            wave_id="",
+            generation=0,
+            ranked=_ranked(),
+            root=tmp_path,
+        )
+
+
 def test_skip_refused_on_contracted_row(tmp_path):
     """Luna r1 #11: a live contract can never be reverted to a skip state."""
     _, q = _queue(tmp_path)
