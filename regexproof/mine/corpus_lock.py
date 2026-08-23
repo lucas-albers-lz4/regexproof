@@ -84,7 +84,13 @@ def _append_event(
     payload = json.dumps(event, sort_keys=True) + "\n"
     fd = os.open(str(path), os.O_APPEND | os.O_CREAT | os.O_WRONLY, 0o644)
     try:
-        os.write(fd, payload.encode("utf-8"))
+        data = payload.encode("utf-8")
+        view = memoryview(data)
+        while view:
+            n = os.write(fd, view)  # short writes are retried (Luna r2 #10)
+            if n <= 0:
+                raise OSError(f"corpus_lock: short write to {path}: {n}")
+            view = view[n:]
         os.fsync(fd)
     finally:
         os.close(fd)
@@ -206,10 +212,17 @@ def wave_close(
                 f"corpus_lock: {corpus} active wave is {active_id!r}, not "
                 f"{wave_id!r} — refusing wrong-id close"
             )
-        if force and queue_root is not None:
-            # Enforced close-out: every non-contracted top-15 row needs an
-            # explicit skip reason — the lock refuses a forced close that
-            # would strand candidates.
+        if force:
+            # Enforced close-out: a forced close REQUIRES the queue artifact
+            # (Luna r2 #3: force without a queue would bypass enforcement),
+            # and every non-contracted top-15 row needs an explicit skip
+            # reason.
+            if queue_root is None:
+                raise SystemExit(
+                    f"corpus_lock: forced close of {corpus} requires "
+                    "queue_root (close-out enforcement cannot run without "
+                    "the queue artifact)"
+                )
             from regexproof.mine.conversion_queue import (
                 load_queue,
                 non_contracted_top15,
@@ -217,11 +230,12 @@ def wave_close(
 
             q = load_queue(corpus, root=queue_root)
             blockers = non_contracted_top15(q)
-            missing = [
-                (r["site"], r.get("status"))
-                for r in blockers
-                if r["site"] not in (skip_reasons or {})
-            ]
+            reasons = skip_reasons or {}
+            missing = []
+            for r in blockers:
+                reason = reasons.get(r["site"])
+                if not reason or not str(reason).strip():
+                    missing.append((r["site"], r.get("status")))
             if missing:
                 raise SystemExit(
                     f"corpus_lock: forced close refused — {len(missing)} "

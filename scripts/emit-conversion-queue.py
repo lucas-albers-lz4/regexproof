@@ -105,13 +105,19 @@ def main(argv: list[str] | None = None) -> int:
     out = args.output.expanduser().resolve()
     out.parent.mkdir(parents=True, exist_ok=True)
     # cq.emit writes <root>/<cluster>.json — root is the queue directory.
+    # The exact -o path wins (Luna r2 #8: a custom output filename must be
+    # honored, not silently replaced by <corpus>.json).
+    queue_root = out.parent
     cq.emit(
         args.corpus,
         wave_id=args.wave_id,
         generation=args.generation,
         ranked=stubs,
-        root=out.parent,
+        root=queue_root,
     )
+    canonical = queue_root / f"{args.corpus}.json"
+    if canonical != out:
+        canonical.replace(out)
     print(f"stub queue -> {out}: {len(stubs)} stubs (schema-validated)")
     return 0
 

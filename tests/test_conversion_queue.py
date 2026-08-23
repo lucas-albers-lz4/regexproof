@@ -187,6 +187,21 @@ def test_claim_refused_on_stale_generation(tmp_path):
         )
 
 
+def test_claim_refused_on_wave_mismatch(tmp_path):
+    """Luna r2 #1: a queue emitted for w1 can never be claimed during w2 —
+    the claim must ride the wave the queue was bound to."""
+    _, q = _queue(tmp_path)  # queue wave_id = ow_w1
+    site = q["candidate_sites"][0]["site"]
+    lock_log = _open_wave(tmp_path, wave_id="ow_w2")  # active wave = ow_w2
+    with pytest.raises(SystemExit, match="bound to wave"):
+        cq.claim(
+            q["cluster"], site,
+            corpus_status="gated:go",
+            ledger_state={}, generation=0, root=tmp_path, lock_log=lock_log,
+            wave_id="ow_w1",
+        )
+
+
 def test_skip_refused_on_contracted_row(tmp_path):
     """Luna r1 #11: a live contract can never be reverted to a skip state."""
     _, q = _queue(tmp_path)

@@ -109,6 +109,26 @@ def _row(q: dict[str, Any], site: str) -> dict[str, Any]:
     raise SystemExit(f"conversion_queue: site {site!r} not in queue {q['cluster']}")
 
 
+def _queue_lock_path(cluster: str, root: pathlib.Path | None = None) -> pathlib.Path:
+    return (pathlib.Path(root) if root is not None else QUEUE_ROOT) / f"{cluster}.json.lock"
+
+
+def _with_queue_lock(cluster: str, root: pathlib.Path | None, fn):
+    """Serialize queue read-modify-write across processes with an exclusive
+    flock on a per-cluster lock file (Luna r2 #9: concurrent claims/
+    contracts/skips must not lose updates)."""
+    import fcntl
+
+    lock_path = _queue_lock_path(cluster, root)
+    lock_path.parent.mkdir(parents=True, exist_ok=True)
+    with open(lock_path, "a+", encoding="utf-8") as fh:
+        fcntl.flock(fh.fileno(), fcntl.LOCK_EX)
+        try:
+            return fn()
+        finally:
+            fcntl.flock(fh.fileno(), fcntl.LOCK_UN)
+
+
 def claim(
     cluster: str,
     site: str,
@@ -123,49 +143,65 @@ def claim(
     """Claim a site for review. Refused unless: the corpus is ``gated:go``,
     the site is within the top-15, the site is currently ``emitted``, and —
     when a lock provider is available — the corpus has an ACTIVE wave whose
-    generation matches the caller's snapshot (Luna r1 fold #3: the claim is
-    validated against the corpus lock, not trusted from callers)."""
-    q = load_queue(cluster, root)
-    if corpus_status != GATED_GO:
-        raise SystemExit(
-            f"conversion_queue: claim refused — corpus {cluster} is "
-            f"{corpus_status!r}, not {GATED_GO!r}"
-        )
-    row = _row(q, site)
-    if int(row.get("rank") or 999) > 15:
-        raise SystemExit(
-            f"conversion_queue: claim refused — {site} is rank "
-            f"{row.get('rank')} (top-15 requirement)"
-        )
-    if row["status"] != "emitted":
-        raise SystemExit(
-            f"conversion_queue: claim refused — {site} status is "
-            f"{row['status']!r}, not 'emitted'"
-        )
-    # Lock validation: the claim must ride an ACTIVE wave at the snapshot
-    # generation. A claim against a closed wave or a moved generation is
-    # refused (the lock, not the caller, owns admission).
-    from regexproof.mine.corpus_lock import wave_status, read_generation
+    generation matches the caller's snapshot (Luna r1 #3). The lock
+    validation and the queue write happen under ONE flock (Luna r2 #2: a
+    close racing between validation and write can no longer strand a claim
+    after the wave closed)."""
 
-    status = wave_status(cluster, lock_log)
-    if status != "active":
-        raise SystemExit(
-            f"conversion_queue: claim refused — corpus {cluster} wave_status "
-            f"is {status!r}, not 'active' (claims ride an open wave)"
-        )
-    current = read_generation(cluster, lock_log)
-    if current != generation:
-        raise SystemExit(
-            f"conversion_queue: claim refused — {cluster} generation is "
-            f"{current}, not the caller's {generation} (stale snapshot)"
-        )
-    row["status"] = "claimed"
-    row["claimed_at"] = ledger_state.get("now_iso", "")
-    row["ledger_state_at_claim"] = ledger_state
-    row["wave_generation_at_claim"] = generation
-    row["wave_id"] = wave_id or q.get("wave_id", "")
-    _write(q, root)
-    return row
+    def _claim() -> dict[str, Any]:
+        q = load_queue(cluster, root)
+        if corpus_status != GATED_GO:
+            raise SystemExit(
+                f"conversion_queue: claim refused — corpus {cluster} is "
+                f"{corpus_status!r}, not {GATED_GO!r}"
+            )
+        row = _row(q, site)
+        if int(row.get("rank") or 999) > 15:
+            raise SystemExit(
+                f"conversion_queue: claim refused — {site} is rank "
+                f"{row.get('rank')} (top-15 requirement)"
+            )
+        if row["status"] != "emitted":
+            raise SystemExit(
+                f"conversion_queue: claim refused — {site} status is "
+                f"{row['status']!r}, not 'emitted'"
+            )
+        # Lock validation INSIDE the queue lock (Luna r2 #2): the wave
+        # cannot close between this check and the write below.
+        from regexproof.mine.corpus_lock import wave_status, read_generation, _active_wave_id
+
+        status = wave_status(cluster, lock_log)
+        if status != "active":
+            raise SystemExit(
+                f"conversion_queue: claim refused — corpus {cluster} wave_status "
+                f"is {status!r}, not 'active' (claims ride an open wave)"
+            )
+        current = read_generation(cluster, lock_log)
+        if current != generation:
+            raise SystemExit(
+                f"conversion_queue: claim refused — {cluster} generation is "
+                f"{current}, not the caller's {generation} (stale snapshot)"
+            )
+        # Wave binding (Luna r2 #1): the claim must ride the wave the queue
+        # was emitted for — a queue emitted for w1 can never be claimed
+        # during w2 (generation is unchanged across an abort, so the count
+        # check alone is insufficient).
+        active = _active_wave_id(cluster, lock_log)
+        claimed_wave = wave_id or str(q.get("wave_id") or "")
+        if active and claimed_wave and active != claimed_wave:
+            raise SystemExit(
+                f"conversion_queue: claim refused — queue {cluster} is bound "
+                f"to wave {claimed_wave!r} but active wave is {active!r}"
+            )
+        row["status"] = "claimed"
+        row["claimed_at"] = ledger_state.get("now_iso", "")
+        row["ledger_state_at_claim"] = ledger_state
+        row["wave_generation_at_claim"] = generation
+        row["wave_id"] = wave_id or q.get("wave_id", "")
+        _write(q, root)
+        return row
+
+    return _with_queue_lock(cluster, root, _claim)
 
 
 def contract(
@@ -178,22 +214,26 @@ def contract(
     """Adopt a contract for a claimed site. Contract fields are validated
     by the caller against the contract schema; ``provenance=stub`` rows
     NEVER contract (they must be re-ranked / human-adopted first)."""
-    q = load_queue(cluster, root)
-    row = _row(q, site)
-    if row["status"] != "claimed":
-        raise SystemExit(
-            f"conversion_queue: contract refused — {site} status is "
-            f"{row['status']!r}, not 'claimed'"
-        )
-    if (row.get("provenance") or "human") == "stub":
-        raise SystemExit(
-            f"conversion_queue: contract refused — {site} is a stub "
-            "(provenance=stub); stubs never become contracts directly"
-        )
-    row["status"] = "contracted"
-    row["contract"] = contract
-    _write(q, root)
-    return row
+
+    def _contract() -> dict[str, Any]:
+        q = load_queue(cluster, root)
+        row = _row(q, site)
+        if row["status"] != "claimed":
+            raise SystemExit(
+                f"conversion_queue: contract refused — {site} status is "
+                f"{row['status']!r}, not 'claimed'"
+            )
+        if (row.get("provenance") or "human") == "stub":
+            raise SystemExit(
+                f"conversion_queue: contract refused — {site} is a stub "
+                "(provenance=stub); stubs never become contracts directly"
+            )
+        row["status"] = "contracted"
+        row["contract"] = contract
+        _write(q, root)
+        return row
+
+    return _with_queue_lock(cluster, root, _contract)
 
 
 def skip(
@@ -214,17 +254,20 @@ def skip(
             f"conversion_queue: unknown skip reason {reason!r}; allowed: "
             f"{sorted(s for s in STATUSES if s.startswith('skipped_'))}"
         )
-    q = load_queue(cluster, root)
-    row = _row(q, site)
-    if row["status"] == "contracted":
-        raise SystemExit(
-            f"conversion_queue: skip refused — {site} is contracted; a live "
-            "contract cannot be reverted to a skip state"
-        )
-    row["status"] = status
-    row["reasons"].append({"reason": reason, "note": note})
-    _write(q, root)
-    return row
+    def _skip() -> dict[str, Any]:
+        q = load_queue(cluster, root)
+        row = _row(q, site)
+        if row["status"] == "contracted":
+            raise SystemExit(
+                f"conversion_queue: skip refused — {site} is contracted; a live "
+                "contract cannot be reverted to a skip state"
+            )
+        row["status"] = status
+        row["reasons"].append({"reason": reason, "note": note})
+        _write(q, root)
+        return row
+
+    return _with_queue_lock(cluster, root, _skip)
 
 
 def non_contracted_top15(q: dict[str, Any]) -> list[dict[str, Any]]:

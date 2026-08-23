@@ -58,13 +58,30 @@ def test_close_requires_open(tmp_path):
 def test_force_close_records_flag(tmp_path):
     log = _log(tmp_path)
     cl.wave_open("ow", "w1", log=log)
+    # Forced close requires a queue artifact + skip reasons for every
+    # non-contracted top-15 candidate (Luna r1 #4 / r2 #3).
+    from regexproof.mine import conversion_queue as cq
+
+    ranked = [{"site": "net/demo/a.sh:1:tok", "corpus": "ow", "provenance": "stub"}]
+    cq.emit("ow", wave_id="w1", generation=0, ranked=ranked, root=tmp_path)
     cl.wave_close(
-        "ow", "w1", force=True, skip_reasons={"site-a": "out_of_scope"}, log=log
+        "ow", "w1", force=True,
+        skip_reasons={"net/demo/a.sh:1:tok": "out_of_scope"},
+        queue_root=tmp_path, log=log,
     )
     events = [json.loads(line) for line in log.read_text().splitlines()]
     close = events[-1]
     assert close["force"] is True
-    assert close["skip_reasons"] == {"site-a": "out_of_scope"}
+    assert close["skip_reasons"] == {"net/demo/a.sh:1:tok": "out_of_scope"}
+
+
+def test_forced_close_requires_queue_root(tmp_path):
+    """Luna r2 #3: force without a queue artifact must be refused — the
+    close-out enforcement cannot run without the queue."""
+    log = _log(tmp_path)
+    cl.wave_open("ow", "w1", log=log)
+    with pytest.raises(SystemExit, match=r"requires.*queue_root"):
+        cl.wave_close("ow", "w1", force=True, log=log)
 
 
 def test_verify_generation_optimistic_lock(tmp_path):

@@ -31,6 +31,8 @@ REACHABILITY = frozenset({"reachable", "unreachable", "unverified"})
 
 MIN_WINDOW = 50
 MAX_WINDOW = 150
+# Context files above this size are refused (Luna r2 #7 — unbounded reads).
+MAX_FILE_BYTES = 8 * 1024 * 1024
 
 
 def parse_site(site: str) -> tuple[str, int, str]:
@@ -75,6 +77,10 @@ def extract_window(
     if not raw_target.is_file():
         sys.exit(f"error: {path} not found under {checkout}")
     full = raw_target
+    # Size cap (Luna r2 #7): never read+split an unbounded file — the
+    # repository's other extraction paths are capped too.
+    if full.stat().st_size > MAX_FILE_BYTES:
+        sys.exit(f"error: {path} is {full.stat().st_size} bytes (> {MAX_FILE_BYTES})")
     lines = full.read_text(encoding="utf-8", errors="replace").splitlines()
     total = len(lines)
     if line > total:
@@ -154,6 +160,25 @@ def validate_form(form: dict) -> None:
     for key in ("path", "target_line", "window_lines", "lines"):
         if key not in (form.get("window") or {}):
             sys.exit(f"error: review form missing window.{key} (structural)")
+    # Type/range validation (Luna r2 #6): target_line int >= 1,
+    # window_lines positive, lines non-empty and target present.
+    window = form["window"]
+    try:
+        target_line = int(window.get("target_line"))
+        window_lines = int(window.get("window_lines"))
+    except (TypeError, ValueError):
+        sys.exit("error: review form window.target_line / window_lines must be integers")
+    if target_line < 1:
+        sys.exit("error: review form window.target_line must be >= 1")
+    if window_lines < 1:
+        sys.exit("error: review form window.window_lines must be positive")
+    if not isinstance(window.get("lines"), list) or not window["lines"]:
+        sys.exit("error: review form window.lines must be a non-empty list")
+    if not any(
+        isinstance(entry, dict) and int(entry.get("line") or 0) == target_line
+        for entry in window["lines"]
+    ):
+        sys.exit("error: review form window.lines must contain the target line")
     if r == "unreachable":
         form["queue_action"] = "skipped_unreachable"
     elif r == "unverified":

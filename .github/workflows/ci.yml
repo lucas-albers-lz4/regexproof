@@ -258,6 +258,11 @@ jobs:
             properties/generated/phase0_freeze.json \
             properties/generated/phase0_freeze.json.sha256 \
             properties/generated/escape_baseline.json
+      - name: Corpus events log append-only + transition check (#558)
+        # Luna r2 #4: check_events_log was never wired as a gate — illegal
+        # transitions (close-without-open, wrong-id, generation rewrite)
+        # went unchecked. Now every CI run validates it.
+        run: python -c "from regexproof.mine.corpus_lock import check_events_log; raise SystemExit(check_events_log())"
       - name: Phase 0 population + interval determinism tests (#555)
         run: python -m pytest tests/test_phase0_freeze.py tests/test_intervals.py -q
       - name: E2 busybox-sed dual-engine replay enforced (#429, luna gate 1)

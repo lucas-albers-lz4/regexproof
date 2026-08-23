@@ -93,9 +93,12 @@ OPENWRT_SEEDS = (
 
 def _path_of(rec: dict[str, Any]) -> str:
     site = str(rec.get("site") or rec.get("file") or "")
-    # site is file:line:column — strip the last two numeric fields when present.
+    # Site is path:line:token (or path:line:column). The line field is
+    # ALWAYS numeric; the token may be textual (e.g. "RecordId") — strip
+    # both trailing fields so test-filename drops still apply to
+    # "pkg/foo.test.sh:7:RecordId" (Luna r2 #5).
     parts = site.replace("\\", "/").split(":")
-    if len(parts) >= 3 and parts[-1].isdigit() and parts[-2].isdigit():
+    if len(parts) >= 3 and parts[-2].isdigit():
         return ":".join(parts[:-2])
     return str(rec.get("file") or site)
 
