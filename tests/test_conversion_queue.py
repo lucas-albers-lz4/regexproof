@@ -202,6 +202,21 @@ def test_claim_refused_on_wave_mismatch(tmp_path):
         )
 
 
+def test_claim_wave_id_param_cannot_override_artifact(tmp_path):
+    """Luna r3 #2: a caller-supplied wave_id must NOT override the
+    artifact's binding — the artifact is authoritative."""
+    _, q = _queue(tmp_path)  # artifact wave_id = ow_w1
+    site = q["candidate_sites"][0]["site"]
+    lock_log = _open_wave(tmp_path, wave_id="ow_w2")  # active wave = ow_w2
+    with pytest.raises(SystemExit, match="bound to wave"):
+        cq.claim(
+            q["cluster"], site,
+            corpus_status="gated:go",
+            ledger_state={}, generation=0, root=tmp_path, lock_log=lock_log,
+            wave_id="ow_w2",  # must NOT override the artifact's ow_w1
+        )
+
+
 def test_skip_refused_on_contracted_row(tmp_path):
     """Luna r1 #11: a live contract can never be reverted to a skip state."""
     _, q = _queue(tmp_path)

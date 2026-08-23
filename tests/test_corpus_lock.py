@@ -84,6 +84,30 @@ def test_forced_close_requires_queue_root(tmp_path):
         cl.wave_close("ow", "w1", force=True, log=log)
 
 
+def test_forced_close_rejects_off_vocabulary_reason(tmp_path):
+    """Luna r3 #3: a nonblank but off-vocabulary skip reason must be
+    refused — 'bogus' is not a queue skip reason."""
+    from regexproof.mine import conversion_queue as cq
+
+    ranked = [{"site": "net/demo/a.sh:1:tok", "corpus": "ow", "provenance": "stub"}]
+    cq.emit("ow", wave_id="w1", generation=0, ranked=ranked, root=tmp_path)
+    log = _log(tmp_path)
+    cl.wave_open("ow", "w1", log=log)
+    with pytest.raises(SystemExit, match="not in the queue vocabulary"):
+        cl.wave_close(
+            "ow", "w1", force=True,
+            skip_reasons={"net/demo/a.sh:1:tok": "bogus"},
+            queue_root=tmp_path, log=log,
+        )
+    # A vocabulary reason passes.
+    cl.wave_close(
+        "ow", "w1", force=True,
+        skip_reasons={"net/demo/a.sh:1:tok": "out_of_scope"},
+        queue_root=tmp_path, log=log,
+    )
+    assert cl.read_generation("ow", log) == 1
+
+
 def test_verify_generation_optimistic_lock(tmp_path):
     log = _log(tmp_path)
     cl.wave_open("ow", "w1", log=log)

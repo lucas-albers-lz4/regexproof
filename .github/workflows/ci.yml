@@ -261,8 +261,13 @@ jobs:
       - name: Corpus events log append-only + transition check (#558)
         # Luna r2 #4: check_events_log was never wired as a gate — illegal
         # transitions (close-without-open, wrong-id, generation rewrite)
-        # went unchecked. Now every CI run validates it.
-        run: python -c "from regexproof.mine.corpus_lock import check_events_log; raise SystemExit(check_events_log())"
+        # went unchecked. Now every CI run validates it. Luna r3 #4: the
+        # check ALSO proves append-only history against the committed
+        # artifact — any rewrite of a previously committed events log shows
+        # as a tracked-file modification and fails the build.
+        run: |
+          python -c "from regexproof.mine.corpus_lock import check_events_log; raise SystemExit(check_events_log())"
+          git diff --exit-code -- properties/generated/corpus_events.jsonl
       - name: Phase 0 population + interval determinism tests (#555)
         run: python -m pytest tests/test_phase0_freeze.py tests/test_intervals.py -q
       - name: E2 busybox-sed dual-engine replay enforced (#429, luna gate 1)

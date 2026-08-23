@@ -14,7 +14,7 @@
       "s": " "
     },
     "ground_truth": "mutation-guard-sat-expected",
-    "wall_ms": 1.7,
+    "wall_ms": 1.8,
     "engine_versions": {
       "z3": "5.0.0",
       "python": "3.13.5"
@@ -37,7 +37,7 @@
     "ok": true,
     "witness": null,
     "ground_truth": null,
-    "wall_ms": 798.4,
+    "wall_ms": 788.3,
     "engine_versions": {
       "z3": "5.0.0",
       "python": "3.13.5"
@@ -110,7 +110,7 @@
       "s": "a"
     },
     "ground_truth": "mutation-guard-sat-expected",
-    "wall_ms": 4.0,
+    "wall_ms": 4.4,
     "engine_versions": {
       "z3": "5.0.0",
       "python": "3.13.5"
@@ -133,7 +133,7 @@
     "ok": true,
     "witness": null,
     "ground_truth": null,
-    "wall_ms": 57.7,
+    "wall_ms": 63.6,
     "engine_versions": {
       "z3": "5.0.0",
       "python": "3.13.5"
@@ -158,7 +158,7 @@
       "s": "z://"
     },
     "ground_truth": "reproduced",
-    "wall_ms": 4.0,
+    "wall_ms": 3.9,
     "engine_versions": {
       "z3": "5.0.0",
       "python": "3.13.5"

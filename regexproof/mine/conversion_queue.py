@@ -38,6 +38,17 @@ STATUSES = frozenset(
 )
 GATED_GO = "gated:go"
 
+# Skip-reason vocabulary (Luna r3 #3): forced close-out accepts ONLY these
+# reasons — an arbitrary nonblank string must not satisfy the requirement.
+SKIP_REASONS = frozenset(
+    {
+        "unreachable",
+        "out_of_scope",
+        "no_response",
+        "duplicate",
+    }
+)
+
 
 def queue_path(cluster: str) -> pathlib.Path:
     return QUEUE_ROOT / f"{cluster}.json"
@@ -113,20 +124,14 @@ def _queue_lock_path(cluster: str, root: pathlib.Path | None = None) -> pathlib.
     return (pathlib.Path(root) if root is not None else QUEUE_ROOT) / f"{cluster}.json.lock"
 
 
-def _with_queue_lock(cluster: str, root: pathlib.Path | None, fn):
-    """Serialize queue read-modify-write across processes with an exclusive
-    flock on a per-cluster lock file (Luna r2 #9: concurrent claims/
-    contracts/skips must not lose updates)."""
-    import fcntl
+def _with_queue_lock(cluster: str, root: pathlib.Path | None, lock_log, fn):
+    """Serialize queue read-modify-write on the corpus lock's SINGLE
+    primitive — the events log flock (Luna r3 #1: a separate per-cluster
+    lock would not exclude ``wave_close``, so a claim could persist after
+    the wave closed)."""
+    from regexproof.mine.corpus_lock import events_lock
 
-    lock_path = _queue_lock_path(cluster, root)
-    lock_path.parent.mkdir(parents=True, exist_ok=True)
-    with open(lock_path, "a+", encoding="utf-8") as fh:
-        fcntl.flock(fh.fileno(), fcntl.LOCK_EX)
-        try:
-            return fn()
-        finally:
-            fcntl.flock(fh.fileno(), fcntl.LOCK_UN)
+    return events_lock(cluster, fn, log=lock_log)
 
 
 def claim(
@@ -182,26 +187,25 @@ def claim(
                 f"conversion_queue: claim refused — {cluster} generation is "
                 f"{current}, not the caller's {generation} (stale snapshot)"
             )
-        # Wave binding (Luna r2 #1): the claim must ride the wave the queue
-        # was emitted for — a queue emitted for w1 can never be claimed
-        # during w2 (generation is unchanged across an abort, so the count
-        # check alone is insufficient).
+        # Wave binding (Luna r2 #1 / r3 #2): the ARTIFACT's wave is
+        # authoritative — a caller-supplied wave_id must NOT override it.
+        # A queue emitted for w1 can never be claimed during w2.
         active = _active_wave_id(cluster, lock_log)
-        claimed_wave = wave_id or str(q.get("wave_id") or "")
-        if active and claimed_wave and active != claimed_wave:
+        artifact_wave = str(q.get("wave_id") or "")
+        if active and artifact_wave and active != artifact_wave:
             raise SystemExit(
                 f"conversion_queue: claim refused — queue {cluster} is bound "
-                f"to wave {claimed_wave!r} but active wave is {active!r}"
+                f"to wave {artifact_wave!r} but active wave is {active!r}"
             )
         row["status"] = "claimed"
         row["claimed_at"] = ledger_state.get("now_iso", "")
         row["ledger_state_at_claim"] = ledger_state
         row["wave_generation_at_claim"] = generation
-        row["wave_id"] = wave_id or q.get("wave_id", "")
+        row["wave_id"] = artifact_wave
         _write(q, root)
         return row
 
-    return _with_queue_lock(cluster, root, _claim)
+    return _with_queue_lock(cluster, root, lock_log, _claim)
 
 
 def contract(
@@ -210,6 +214,7 @@ def contract(
     *,
     contract: dict[str, Any],
     root: pathlib.Path | None = None,
+    lock_log: pathlib.Path | None = None,
 ) -> dict[str, Any]:
     """Adopt a contract for a claimed site. Contract fields are validated
     by the caller against the contract schema; ``provenance=stub`` rows
@@ -233,7 +238,7 @@ def contract(
         _write(q, root)
         return row
 
-    return _with_queue_lock(cluster, root, _contract)
+    return _with_queue_lock(cluster, root, lock_log, _contract)
 
 
 def skip(
@@ -243,17 +248,18 @@ def skip(
     reason: str,
     note: str = "",
     root: pathlib.Path | None = None,
+    lock_log: pathlib.Path | None = None,
 ) -> dict[str, Any]:
     """Skip a site with a reason (skipped_<reason> vocabulary). A row that
     is already ``contracted`` can NEVER be skipped — that would strand a
     live contract (Luna r1 #11: transition safety)."""
     reason = str(reason or "").strip()
-    status = f"skipped_{reason}" if reason else ""
-    if status not in STATUSES:
+    if reason not in SKIP_REASONS:
         raise SystemExit(
             f"conversion_queue: unknown skip reason {reason!r}; allowed: "
-            f"{sorted(s for s in STATUSES if s.startswith('skipped_'))}"
+            f"{sorted(SKIP_REASONS)}"
         )
+    status = f"skipped_{reason}"
     def _skip() -> dict[str, Any]:
         q = load_queue(cluster, root)
         row = _row(q, site)
@@ -267,7 +273,7 @@ def skip(
         _write(q, root)
         return row
 
-    return _with_queue_lock(cluster, root, _skip)
+    return _with_queue_lock(cluster, root, lock_log, _skip)
 
 
 def non_contracted_top15(q: dict[str, Any]) -> list[dict[str, Any]]:

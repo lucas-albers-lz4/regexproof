@@ -160,14 +160,18 @@ def validate_form(form: dict) -> None:
     for key in ("path", "target_line", "window_lines", "lines"):
         if key not in (form.get("window") or {}):
             sys.exit(f"error: review form missing window.{key} (structural)")
-    # Type/range validation (Luna r2 #6): target_line int >= 1,
-    # window_lines positive, lines non-empty and target present.
+    # Type/range validation (Luna r2 #6 / r3 #5): target_line int >= 1,
+    # window_lines positive, lines non-empty and target present. Strict
+    # isinstance — int(1.9) coercion must NOT pass a float (Luna r3 #5).
     window = form["window"]
-    try:
-        target_line = int(window.get("target_line"))
-        window_lines = int(window.get("window_lines"))
-    except (TypeError, ValueError):
-        sys.exit("error: review form window.target_line / window_lines must be integers")
+    target_raw = window.get("target_line")
+    window_raw = window.get("window_lines")
+    if not isinstance(target_raw, int) or isinstance(target_raw, bool):
+        sys.exit("error: review form window.target_line must be an integer")
+    if not isinstance(window_raw, int) or isinstance(window_raw, bool):
+        sys.exit("error: review form window.window_lines must be an integer")
+    target_line = target_raw
+    window_lines = window_raw
     if target_line < 1:
         sys.exit("error: review form window.target_line must be >= 1")
     if window_lines < 1:

@@ -139,6 +139,16 @@ def _with_lock(path: pathlib.Path, fn):
             fcntl.flock(fh.fileno(), fcntl.LOCK_UN)
 
 
+def events_lock(corpus: str, fn, *, log: pathlib.Path | None = None):
+    """The corpus lock's SINGLE primitive, exported for queue operations
+    (Luna r3 #1): a claim/contract/skip must hold the SAME exclusive flock
+    as ``wave_close`` — a per-cluster ``.json.lock`` would be a second
+    lock that does not exclude a close racing between claim validation
+    and write. The events log is the one lock."""
+    path = pathlib.Path(log) if log is not None else EVENTS_LOG
+    return _with_lock(path, fn)
+
+
 def _active_wave_id(corpus: str, log: pathlib.Path | None = None) -> str:
     """The wave_id of the corpus's last event if it is ``wave_opened``."""
     last: dict[str, Any] | None = None
@@ -226,6 +236,7 @@ def wave_close(
             from regexproof.mine.conversion_queue import (
                 load_queue,
                 non_contracted_top15,
+                SKIP_REASONS,
             )
 
             q = load_queue(corpus, root=queue_root)
@@ -236,6 +247,15 @@ def wave_close(
                 reason = reasons.get(r["site"])
                 if not reason or not str(reason).strip():
                     missing.append((r["site"], r.get("status")))
+                    continue
+                # Reason must be a queue-vocabulary skip reason, not an
+                # arbitrary string (Luna r3 #3).
+                if str(reason).strip() not in SKIP_REASONS:
+                    raise SystemExit(
+                        f"corpus_lock: forced close refused — skip reason "
+                        f"{reason!r} for {r['site']} is not in the queue "
+                        f"vocabulary {sorted(SKIP_REASONS)}"
+                    )
             if missing:
                 raise SystemExit(
                     f"corpus_lock: forced close refused — {len(missing)} "
