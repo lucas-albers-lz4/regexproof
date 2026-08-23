@@ -168,9 +168,14 @@ def wave_open(
 ) -> int:
     """Open a wave: appends ``wave_opened`` under an exclusive flock. Fails
     closed if the corpus has an active wave (no parallel waves). Returns the
-    generation (unchanged)."""
+    generation (unchanged). ``wave_id`` must be nonblank (Luna r5 #3: a
+    blank active-wave ID would bypass claim-time equality checks)."""
 
     def _open() -> int:
+        if not str(wave_id or "").strip():
+            raise SystemExit(
+                "corpus_lock: wave_open refused — wave_id must be nonblank"
+            )
         if wave_status(corpus, log) == "active":
             raise SystemExit(
                 f"corpus_lock: {corpus} already has an active wave — close or "

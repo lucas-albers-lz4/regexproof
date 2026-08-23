@@ -42,6 +42,14 @@ def test_wave_status_derived_from_last_event(tmp_path):
     assert cl.wave_status("ow", log) == "aborted"
 
 
+def test_wave_open_refuses_blank_id(tmp_path):
+    """Luna r5 #3: a blank active-wave ID would bypass claim-time equality
+    checks — wave_open must refuse it."""
+    log = _log(tmp_path)
+    with pytest.raises(SystemExit, match="wave_id must be nonblank"):
+        cl.wave_open("ow", "", log=log)
+
+
 def test_no_parallel_waves(tmp_path):
     log = _log(tmp_path)
     cl.wave_open("ow", "w1", log=log)

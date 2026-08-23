@@ -260,17 +260,19 @@ jobs:
             properties/generated/escape_baseline.json
       - name: Corpus events log append-only + transition check (#558)
         # Luna r2 #4: check_events_log was never wired as a gate — illegal
-        # transitions went unchecked. Luna r3/r4 #4: the CI step diffs the
-        # events log against the PR BASE (not HEAD — a committed rewrite
-        # would otherwise pass) and requires PREFIX-ONLY additions: any
-        # deletion/rewrite of previously committed history fails the build.
+        # transitions went unchecked. Luna r3/r4/r5 #4: the CI step diffs
+        # the events log against the PR BASE SHA (always present in the
+        # workflow context — origin/main may be absent under shallow fetch)
+        # and requires PREFIX-ONLY additions: a rewrite OR a deletion of
+        # previously committed history fails the build.
         run: |
           python -c "from regexproof.mine.corpus_lock import check_events_log; raise SystemExit(check_events_log())"
-          if git cat-file -e origin/main:properties/generated/corpus_events.jsonl 2>/dev/null; then
-            base_content=$(git show origin/main:properties/generated/corpus_events.jsonl)
+          BASE_SHA="${{ github.event.pull_request.base.sha }}"
+          if [ -n "$BASE_SHA" ] && git cat-file -e "${BASE_SHA}:properties/generated/corpus_events.jsonl" 2>/dev/null; then
+            base_content=$(git show "${BASE_SHA}:properties/generated/corpus_events.jsonl")
             head_content=$(git show HEAD:properties/generated/corpus_events.jsonl 2>/dev/null || true)
-            if [ -n "$head_content" ] && [ "$base_content" != "$head_content" ] && [[ "$head_content" != "$base_content"* ]]; then
-              echo "FATAL: corpus_events.jsonl was rewritten (not a pure prefix append)."
+            if [ -n "$base_content" ] && [ "$head_content" != "$base_content" ] && [[ "$head_content" != "$base_content"* ]]; then
+              echo "FATAL: corpus_events.jsonl was rewritten or deleted (not a pure prefix append)."
               exit 1
             fi
           fi

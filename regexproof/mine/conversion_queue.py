@@ -204,7 +204,9 @@ def claim(
                 f"conversion_queue: claim refused — queue {cluster} has no "
                 "wave binding (emit requires a nonblank wave_id)"
             )
-        if active and artifact_wave != active:
+        if artifact_wave != active:
+            # wave_open enforces nonblank wave_id, so an active wave always
+            # has an ID; equality is unconditional (Luna r5 #3).
             raise SystemExit(
                 f"conversion_queue: claim refused — queue {cluster} is bound "
                 f"to wave {artifact_wave!r} but active wave is {active!r}"
