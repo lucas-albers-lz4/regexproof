@@ -1,0 +1,6 @@
+# Merged with CodeQL default setup when github-codeql-config-file points here.
+# See docs/SECURITY-AUDIT.md §3 (match.mjs argv RegExp is operator harness, not a boundary).
+name: CodeQL Configuration
+
+paths-ignore:
+  - helpers/ecma/match.mjs
