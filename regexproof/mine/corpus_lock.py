@@ -140,8 +140,12 @@ def _with_lock(path: pathlib.Path, fn):
 
     path.parent.mkdir(parents=True, exist_ok=True)
     fd = os.open(str(path), os.O_APPEND | os.O_CREAT | os.O_RDWR, 0o600)
-    os.fchmod(fd, 0o600)  # existing logs keep 0600 too (Luna r8 #1)
-    fh = os.fdopen(fd, "a+", encoding="utf-8")  # fdopen owns fd from here
+    try:
+        os.fchmod(fd, 0o600)  # existing logs keep 0600 too (Luna r8 #1)
+        fh = os.fdopen(fd, "a+", encoding="utf-8")  # fdopen owns fd from here
+    except Exception:
+        os.close(fd)  # no leak if fchmod/fdopen raises (Luna r9 note)
+        raise
     fcntl.flock(fh.fileno(), fcntl.LOCK_EX)
     try:
         return fn()
