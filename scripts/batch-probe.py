@@ -35,7 +35,7 @@ import pathlib
 import subprocess
 import sys
 import time
-from typing import Callable
+from typing import Callable, Iterator
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
@@ -308,25 +308,36 @@ def _walk_and_heartbeat(
     owner_pid: int,
     registry_path: pathlib.Path | None,
     now_fn: Callable[[], float] = time.monotonic,
+    walk_fn: Callable[[], Iterator] | None = None,
 ) -> int:
-    """Walk the worktree with a lease heartbeat. Iterates the rglob
-    GENERATOR directly — sorted() materializes the full traversal up front,
-    so a heartbeat inside the loop would never fire during enumeration and
-    a traversal exceeding the TTL could be GC-evicted before the first
-    renewal (Luna r6). Returns the file count. ``now_fn`` is injectable for
-    deterministic slow-walk tests (Luna r7 #2)."""
+    """Walk the worktree with a lease heartbeat.
+
+    - Iterates the rglob GENERATOR directly — sorted() materializes the
+      full traversal up front, so a heartbeat inside the loop could never
+      fire during enumeration (Luna r6).
+    - Heartbeats on EVERY iteration (files, dirs, .git entries) — a long
+      traversal through non-file entries must not exceed the TTL before the
+      first eligible file (Luna r8 #2).
+    - ``walk_fn`` (default: ``wt.rglob``) is injectable so tests can drive
+      the clock DURING enumeration: a sorted() mutant consumes the factory
+      up front, the lease expires mid-consumption, and the first renewal
+      raises 'no live lease' — detected deterministically (Luna r8 #1).
+
+    Returns the file count."""
     walked = 0
     HEARTBEAT_N = 2000
     HEARTBEAT_S = 300  # well under the 3600s default TTL
     _hb_last = now_fn()
-    for p in wt.rglob("*"):
+    iterator = (walk_fn() if walk_fn is not None else wt.rglob("*"))
+    for p in iterator:
+        # Heartbeat EVERY iteration, not just eligible files (Luna r8 #2).
+        if walked % HEARTBEAT_N == 0 or now_fn() - _hb_last > HEARTBEAT_S:
+            lease_registry.renew(
+                url, pin, owner_pid=owner_pid, path=registry_path,
+            )
+            _hb_last = now_fn()
         if p.is_file() and ".git" not in p.parts:
             walked += 1
-            if walked % HEARTBEAT_N == 0 or now_fn() - _hb_last > HEARTBEAT_S:
-                lease_registry.renew(
-                    url, pin, owner_pid=owner_pid, path=registry_path,
-                )
-                _hb_last = now_fn()
     return walked
 
 

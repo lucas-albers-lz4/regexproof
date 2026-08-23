@@ -326,13 +326,16 @@ def test_lease_renew_extends_expiry(tmp_path):
 
 
 def test_heartbeat_renews_before_gc_eviction(tmp_path):
-    """Luna r5/r6/r7: the walk's lease heartbeat keeps the lease live BEFORE
-    expiry so GC never evicts the clone mid-walk. Exercises the real
-    _walk_and_heartbeat over a >2000-file tree with an INJECTED SLOW CLOCK
-    (Luna r7 #2: the test must distinguish streamed from sorted — a sorted
-    implementation materializes the full traversal before any renewal, so
-    the time-based heartbeat never fires mid-walk)."""
+    """Luna r5-r8: the walk's lease heartbeat keeps the lease live BEFORE
+    expiry so GC never evicts the clone mid-walk. The injected walk_fn
+    OBSERVES the lease start_time DURING enumeration: streamed iteration
+    renews mid-walk (start_time advances between yields); a sorted()
+    mutant materializes the full traversal with NO renewal, so start_time
+    stays frozen through every yield (Luna r8 #1 — deterministic
+    detection, mutation-verified). The per-iteration heartbeat also covers
+    directory/.git traversals (Luna r8 #2)."""
     import importlib.util
+    from typing import Iterator
     from regexproof.admission import clone_cache
 
     root = pathlib.Path(__file__).resolve().parent.parent
@@ -347,29 +350,33 @@ def test_heartbeat_renews_before_gc_eviction(tmp_path):
     d.mkdir(parents=True)
     (d / "refs").mkdir()
     (d / ".cache-key").write_text(f"{url}#{pin}", encoding="utf-8")
-    # Short-TTL lease (would expire during a long walk) + a large tree.
+    # Short-TTL lease + a large tree with directory entries.
     lease_registry.acquire(url, pin, owner_pid=1, ttl_s=60, path=reg_path)
     wt = d / "worktree-1"
     wt.mkdir()
     for i in range(2100):
         (wt / f"f{i}.js").write_text("x", encoding="utf-8")
-    # Injected clock: advances 400s per file — a 60s lease would expire
-    # after the first file. Only the mid-walk time heartbeat (300s) keeps
-    # it alive; a sorted() implementation would lose the lease during
-    # materialization and the renewal would fail with 'no live lease'.
-    clock = {"t": 0.0}
+    # The walk_fn records the lease start_time on EVERY yield. With a
+    # streamed walk the mid-walk heartbeat renews (start_time advances)
+    # DURING enumeration; with a sorted() materialization the renewal can
+    # only happen AFTER every yield, so the observed sequence is frozen.
+    observed: list[float] = []
 
-    def slow_clock() -> float:
-        clock["t"] += 400.0
-        return clock["t"]
+    def observing_walk() -> Iterator:
+        for p in wt.rglob("*"):
+            reg = lease_registry._read_registry(reg_path)
+            observed.append(float(reg["leases"][lease_registry._key(url, pin)]["start_time"]))
+            yield p
 
     walked = batch_probe._walk_and_heartbeat(  # type: ignore[attr-defined]
         wt, url=url, pin=pin, owner_pid=1, registry_path=reg_path,
-        now_fn=slow_clock,
+        walk_fn=observing_walk,
     )
     assert walked == 2100
-    # The heartbeat kept the lease live (renewed during the walk) → GC
-    # evicts nothing.
+    # The heartbeat renewed DURING enumeration — start_time advanced
+    # between yields. (A sorted() mutant would show a frozen sequence.)
+    assert len(set(observed)) > 1, "lease was never renewed during the walk"
+    # The heartbeat kept the lease live → GC evicts nothing.
     removed = clone_cache.cache_gc(root=cache_root, registry_path=reg_path)
     assert removed == 0
     assert d.is_dir()
