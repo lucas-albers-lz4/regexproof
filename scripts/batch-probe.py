@@ -212,40 +212,25 @@ def main(argv: list[str] | None = None) -> int:
 
         # Metrics (Luna r1 #15 — were reversed): hits account AVOIDED fetch
         # bytes; lifecycle_bytes is probe-fetch ONLY (zero on hits).
-        # Then WALK the worktree and write a staged probe draft (Luna r1
-        # #2: a probe that only creates a worktree is not a probe).
+        # Then WALK the worktree (with the lease heartbeat) and write a
+        # staged probe draft (Luna r1 #2: a probe that only creates a
+        # worktree is not a probe).
+        walked = _walk_and_heartbeat(
+            wt,
+            url=args.url, pin=args.pin, owner_pid=owner,
+            registry_path=registry_path,
+        )
         staged_root = args.walk_root or (ROOT / "properties" / "staged_probes")
         staged_root.mkdir(parents=True, exist_ok=True)
         import hashlib
         import json
 
-        walked = 0
-        # Lease heartbeat: renew BEFORE expiry so GC (which treats an
-        # expired lease as inactive and evicts the clone/worktree) can
-        # never remove the dir mid-walk. Renewal after the walk is too
-        # late — a long walk exceeding the TTL loses the lease first
-        # (Luna r5, deterministic replay). Heartbeat every HEARTBEAT_N
-        # files OR HEARTBEAT_S seconds, whichever comes first (a slow
-        # walk must not stall between count-based beats).
-        from regexproof.mine import lease_registry
-
-        HEARTBEAT_N = 2000
-        HEARTBEAT_S = 300  # well under the 3600s default TTL
-        _hb_last = time.monotonic()
-        for p in sorted(wt.rglob("*")):
-            if p.is_file() and ".git" not in p.parts:
-                walked += 1
-                if walked % HEARTBEAT_N == 0 or time.monotonic() - _hb_last > HEARTBEAT_S:
-                    lease_registry.renew(
-                        args.url, args.pin, owner_pid=owner, path=registry_path,
-                    )
-                    _hb_last = time.monotonic()
         draft = {
             "manifest_digest": digest,
             "url": args.url,
             "pin": args.pin,
             "corpus": args.corpus,
-            "cache_hit": bool(entry.get("cache_hit")),
+            "cache_hit": is_hit,
             "clone_ms": clone_ms,
             "files_walked": walked,
             "probe_fetch_bytes": probe_fetch_bytes,
@@ -259,6 +244,8 @@ def main(argv: list[str] | None = None) -> int:
 
         # Final renewal before recording — the heartbeat kept the lease
         # live through the walk; this extends it through the outcome write.
+        from regexproof.mine import lease_registry
+
         lease_registry.renew(
             args.url, args.pin, owner_pid=owner, path=registry_path,
         )
@@ -305,6 +292,36 @@ def main(argv: list[str] | None = None) -> int:
             )
         except Exception:
             pass
+
+
+def _walk_and_heartbeat(
+    wt: pathlib.Path,
+    *,
+    url: str,
+    pin: str,
+    owner_pid: int,
+    registry_path: pathlib.Path | None,
+) -> int:
+    """Walk the worktree with a lease heartbeat. Iterates the rglob
+    GENERATOR directly — sorted() materializes the full traversal up front,
+    so a heartbeat inside the loop would never fire during enumeration and
+    a traversal exceeding the TTL could be GC-evicted before the first
+    renewal (Luna r6). Returns the file count."""
+    from regexproof.mine import lease_registry
+
+    walked = 0
+    HEARTBEAT_N = 2000
+    HEARTBEAT_S = 300  # well under the 3600s default TTL
+    _hb_last = time.monotonic()
+    for p in wt.rglob("*"):
+        if p.is_file() and ".git" not in p.parts:
+            walked += 1
+            if walked % HEARTBEAT_N == 0 or time.monotonic() - _hb_last > HEARTBEAT_S:
+                lease_registry.renew(
+                    url, pin, owner_pid=owner_pid, path=registry_path,
+                )
+                _hb_last = time.monotonic()
+    return walked
 
 
 if __name__ == "__main__":

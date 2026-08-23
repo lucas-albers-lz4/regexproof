@@ -326,10 +326,17 @@ def test_lease_renew_extends_expiry(tmp_path):
 
 
 def test_heartbeat_renews_before_gc_eviction(tmp_path):
-    """Luna r5: a lease renewed (heartbeat) BEFORE expiry must survive GC —
-    an expired lease gets its clone evicted mid-walk; a heartbeated lease
-    stays active and GC skips it."""
+    """Luna r5/r6: the walk's lease heartbeat keeps the lease live BEFORE
+    expiry so GC never evicts the clone mid-walk. Exercises the real
+    _walk_and_heartbeat over a >2000-file tree (Luna r6: the test must
+    drive the walk, not just renew())."""
+    import importlib.util
     from regexproof.admission import clone_cache
+
+    root = pathlib.Path(__file__).resolve().parent.parent
+    spec = importlib.util.spec_from_file_location("bp", root / "scripts" / "batch-probe.py")
+    batch_probe = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(batch_probe)  # type: ignore[union-attr]
 
     cache_root = tmp_path / "cache"
     reg_path = tmp_path / "leases.json"
@@ -338,10 +345,19 @@ def test_heartbeat_renews_before_gc_eviction(tmp_path):
     d.mkdir(parents=True)
     (d / "refs").mkdir()
     (d / ".cache-key").write_text(f"{url}#{pin}", encoding="utf-8")
-    # Simulate a walk: short lease + heartbeat renewal before expiry.
+    # Short-TTL lease (simulating a TTL that would expire during a long
+    # walk) + a tree large enough to trip the count heartbeat.
     lease_registry.acquire(url, pin, owner_pid=1, ttl_s=60, path=reg_path)
-    lease_registry.renew(url, pin, owner_pid=1, ttl_s=60, path=reg_path)
-    # GC runs while the lease is live (heartbeated) → nothing evicted.
+    wt = d / "worktree-1"
+    wt.mkdir()
+    for i in range(2100):
+        (wt / f"f{i}.js").write_text("x", encoding="utf-8")
+    walked = batch_probe._walk_and_heartbeat(  # type: ignore[attr-defined]
+        wt, url=url, pin=pin, owner_pid=1, registry_path=reg_path,
+    )
+    assert walked == 2100
+    # The heartbeat kept the lease live (renewed during the walk) → GC
+    # evicts nothing.
     removed = clone_cache.cache_gc(root=cache_root, registry_path=reg_path)
     assert removed == 0
     assert d.is_dir()
