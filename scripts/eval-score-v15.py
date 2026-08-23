@@ -81,10 +81,24 @@ def validate_freeze_snapshot(freeze: dict) -> None:
             "build-phase0-freeze.py output (the eval cannot verify the model)."
         )
     canonical = json.dumps(_TREE_OVERLAY_WEIGHTS, sort_keys=True).encode("utf-8")
-    if hashlib.sha256(canonical).hexdigest() != pinned["sha256"]:
+    impl_hash = hashlib.sha256(canonical).hexdigest()
+    if impl_hash != pinned["sha256"]:
         raise SystemExit(
             "FATAL: score-v1.5 overlay hash mismatch — the implementation "
             "drifted from the frozen weights. Re-freeze or fix the weights."
+        )
+    # The freeze's recorded weight map must itself hash to the anchor — a
+    # hand-edited weights map (with a copied sha) would otherwise pass.
+    pinned_map = pinned.get("weights")
+    if not isinstance(pinned_map, dict):
+        raise SystemExit("FATAL: freeze score_v15_overlay.weights is missing")
+    pinned_hash = hashlib.sha256(
+        json.dumps(pinned_map, sort_keys=True).encode("utf-8")
+    ).hexdigest()
+    if pinned_hash != pinned["sha256"]:
+        raise SystemExit(
+            "FATAL: freeze score_v15_overlay.weights does not match its "
+            "recorded sha256 — the freeze artifact is inconsistent."
         )
 
 
@@ -241,6 +255,11 @@ def _auc_delta_ci(
         if d == d:
             deltas.append(d)
     deltas.sort()
+    if not deltas:
+        # Every resample was single-class — the statistic is undefined on
+        # this population; never index an empty list. The eval treats this
+        # as "no evidence" (no flip) rather than crashing.
+        return (0.0, 0.0, "undefined-single-class")
 
     def endpoint(p: float) -> float:
         return deltas[max(0, math.floor(p * len(deltas)) - 1)]
@@ -259,15 +278,17 @@ def _auc_delta_ci(
             accel = num / (6.0 * den**1.5) if den else 0.0
             observed = delta_of(list(range(n)))
             frac = sum(1.0 for d in deltas if d < observed) / len(deltas)
-            z0 = _inv_normal(frac) if 0.0 < frac < 1.0 else 0.0
-            za = abs(_inv_normal(0.025))
-            a1 = z0 + (z0 + za) / (1.0 - accel * (z0 + za))
-            a2 = z0 + (z0 - za) / (1.0 - accel * (z0 - za))
-            p1 = _normal_cdf(a1)
-            p2 = _normal_cdf(a2)
-            lo = deltas[max(0, math.floor(min(p1, p2) * len(deltas)) - 1)]
-            hi = deltas[min(len(deltas) - 1, math.ceil(max(p1, p2) * len(deltas)) - 1)]
-            return (lo, hi, method_used)
+            if 0.0 < frac < 1.0:
+                z0 = _inv_normal(frac)
+                za = abs(_inv_normal(0.025))
+                a1 = z0 + (z0 + za) / (1.0 - accel * (z0 + za))
+                a2 = z0 + (z0 - za) / (1.0 - accel * (z0 - za))
+                p1 = _normal_cdf(a1)
+                p2 = _normal_cdf(a2)
+                lo = deltas[max(0, math.floor(min(p1, p2) * len(deltas)) - 1)]
+                hi = deltas[min(len(deltas) - 1, math.ceil(max(p1, p2) * len(deltas)) - 1)]
+                return (lo, hi, method_used)
+        # BCa undefined (no finite acceleration / z0) → declared fallback.
         method_used = "percentile-fallback"
     return (endpoint(0.025), endpoint(0.975), method_used)
 

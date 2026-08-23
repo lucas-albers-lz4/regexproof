@@ -36,12 +36,15 @@ def test_flip_decision_exists_and_is_shape_checked():
 
 
 def test_flip_decision_deterministic():
-    """Same seed + same data ⇒ byte-identical decision (golden discipline)."""
+    """Same seed + same data ⇒ byte-identical decision (golden discipline).
+
+    Bounded by a timeout — the eval runs 10k bootstrap iterations."""
     before = FLIP_OUT.read_bytes()
     r = subprocess.run(
         [sys.executable, str(ROOT / "scripts" / "eval-score-v15.py")],
         capture_output=True,
         text=True,
+        timeout=120,
     )
     assert r.returncode == 0, r.stderr
     assert FLIP_OUT.read_bytes() == before, "flip decision drifts on re-run"
@@ -57,18 +60,17 @@ def test_eval_fails_closed_on_freeze_mismatch(tmp_path: Path):
     assert spec is not None and spec.loader is not None
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)
-
-    freeze = mod.load_freeze()
-    (GEN / "_zz_mut_gate_decision.json").write_text(
+    # Isolate the test's decision file in tmp_path — never write into the
+    # real generated dir.
+    setattr(mod, "GEN", tmp_path)
+    (tmp_path / "_zz_mut_gate_decision.json").write_text(
         json.dumps({"candidate_url": "https://x/y", "decision": "go"})
         + "\n",
         encoding="utf-8",
     )
-    try:
-        with pytest.raises(SystemExit, match="snapshot hash mismatch"):
-            mod.validate_freeze_snapshot(freeze)
-    finally:
-        (GEN / "_zz_mut_gate_decision.json").unlink()
+    freeze = mod.load_freeze()
+    with pytest.raises(SystemExit, match="snapshot hash mismatch"):
+        mod.validate_freeze_snapshot(freeze)
 
 
 def test_join_pin_precedence_matches_tree_builder(tmp_path: Path):
@@ -84,9 +86,17 @@ def test_join_pin_precedence_matches_tree_builder(tmp_path: Path):
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)
 
+    # Isolate all writes in tmp_path (mirrors the real GEN layout).
+    setattr(mod, "GEN", tmp_path)
+    (tmp_path / "candidate-ledger.json").write_text(
+        json.dumps({"candidates": []}), encoding="utf-8"
+    )
+    (tmp_path / "mine-tree-features.json").write_text(
+        json.dumps({"schema_version": "1", "entries": {}}), encoding="utf-8"
+    )
     # Decision with probe.pin_probed = probed-pin; ledger has a DIFFERENT
     # mined pin. The join must use probe.pin_probed.
-    (GEN / "_zz_pin_gate_decision.json").write_text(
+    (tmp_path / "_zz_pin_gate_decision.json").write_text(
         json.dumps(
             {
                 "candidate_url": "https://github.com/zztest/probe-pin-repo",
@@ -99,28 +109,25 @@ def test_join_pin_precedence_matches_tree_builder(tmp_path: Path):
         encoding="utf-8",
     )
     # Tree artifact has BOTH pins; only the probed pin resolves.
-    tree_path = GEN / "mine-tree-features.json"
-    original = tree_path.read_text(encoding="utf-8") if tree_path.is_file() else None
-    artifact = {"schema_version": "1", "entries": {}}
-    if original:
-        artifact = json.loads(original)
-    artifact.setdefault("entries", {})["zztest/probe-pin-repo"] = {
-        "probed-pin": {
-            "complete": True,
-            "truncated": False,
-            "security_boundary": "deterministic-true",
-            "regex_file_type_counts": {".yara": 3},
-            "path_count": 10,
-        }
+    artifact = {
+        "schema_version": "1",
+        "entries": {
+            "zztest/probe-pin-repo": {
+                "probed-pin": {
+                    "complete": True,
+                    "truncated": False,
+                    "security_boundary": "deterministic-true",
+                    "regex_file_type_counts": {".yara": 3},
+                    "path_count": 10,
+                }
+            }
+        },
     }
-    tree_path.write_text(json.dumps(artifact), encoding="utf-8")
-    try:
-        rows = mod.join_rows(mod.load_freeze())
-        row = next(r for r in rows if "probe-pin-repo" in r["url"])
-        assert row["pin"] == "probed-pin", f"pin={row['pin']!r}"
-        assert row["tree_feature"] is not None, "tree feature must resolve"
-        assert row["tree_feature"]["path_count"] == 10
-    finally:
-        (GEN / "_zz_pin_gate_decision.json").unlink()
-        if original is not None:
-            tree_path.write_text(original, encoding="utf-8")
+    (tmp_path / "mine-tree-features.json").write_text(
+        json.dumps(artifact), encoding="utf-8"
+    )
+    rows = mod.join_rows(mod.load_freeze())
+    row = next(r for r in rows if "probe-pin-repo" in r["url"])
+    assert row["pin"] == "probed-pin", f"pin={row['pin']!r}"
+    assert row["tree_feature"] is not None, "tree feature must resolve"
+    assert row["tree_feature"]["path_count"] == 10

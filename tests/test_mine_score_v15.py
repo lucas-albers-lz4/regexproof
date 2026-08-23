@@ -8,6 +8,8 @@ protocol and flips only if the bootstrap difference CI excludes 0."""
 
 from __future__ import annotations
 
+from datetime import date
+
 from regexproof.mine.score import (
     _TREE_OVERLAY_WEIGHTS,
     _normalize_allocator,
@@ -16,6 +18,10 @@ from regexproof.mine.score import (
     rank_candidates,
     score_version_for_allocator,
 )
+
+# Fixed eval date — recency scoring must never fall back to the wall clock
+# (a run on a later day would silently change scores).
+TODAY = date(2026, 8, 22)
 
 CAND = {
     "url": "https://github.com/openwrt/packages",
@@ -37,19 +43,19 @@ COMPLETE_TREE = {
 def test_v1_reproduction_is_unchanged():
     """--allocator score-v1 must reproduce the v1 totals exactly (the v1.5
     branch must not disturb the base path)."""
-    t1, b1 = candidate_score(CAND, today=None, allocator="score-v1")
+    t1, b1 = candidate_score(CAND, today=TODAY, allocator="score-v1")
     assert b1["score_version"] == "v1"
     assert t1 == 49.0  # boundary 50 + family 30... see weights: deterministic-true
     # v1.5 with no tree = v1 base minus the unavailable penalty.
-    t15, b15 = candidate_score(CAND, today=None, allocator="score-v1.5")
+    t15, b15 = candidate_score(CAND, today=TODAY, allocator="score-v1.5")
     assert b15["tree_unavailable"] is True
     assert t15 == round(t1 + _TREE_OVERLAY_WEIGHTS["tree_unavailable"], 4)
 
 
 def test_v15_with_complete_tree_adds_overlay():
-    t1, _ = candidate_score(CAND, today=None, allocator="score-v1")
+    t1, _ = candidate_score(CAND, today=TODAY, allocator="score-v1")
     t15, b15 = candidate_score(
-        CAND, today=None, allocator="score-v1.5", tree_feature=COMPLETE_TREE
+        CAND, today=TODAY, allocator="score-v1.5", tree_feature=COMPLETE_TREE
     )
     assert b15["tree_unavailable"] is False
     assert b15["tree_overlay_pts"] > 0
@@ -68,7 +74,7 @@ def test_v15_truncated_probe_is_unavailable():
         "reason": "truncated",
     }
     _, b15 = candidate_score(
-        CAND, today=None, allocator="score-v1.5", tree_feature=truncated
+        CAND, today=TODAY, allocator="score-v1.5", tree_feature=truncated
     )
     assert b15["tree_unavailable"] is True
     assert b15["tree_overlay_pts"] == _TREE_OVERLAY_WEIGHTS["tree_unavailable"]
@@ -79,7 +85,7 @@ def test_v15_rank_deprioritizes_unavailable():
     other["url"] = "https://github.com/other/repo2"
     ranked = rank_candidates(
         [other, CAND],
-        today=None,
+        today=TODAY,
         allocator="score-v1.5",
         tree_features={("https://github.com/openwrt/packages", ""): COMPLETE_TREE},
     )
@@ -102,7 +108,7 @@ def test_v15_hard_tier_beats_high_base_unavailable():
     # high_base has no tree feature → unavailable; CAND has a complete tree.
     ranked = rank_candidates(
         [high_base, CAND],
-        today=None,
+        today=TODAY,
         allocator="score-v1.5",
         tree_features={("https://github.com/openwrt/packages", ""): COMPLETE_TREE},
     )
@@ -145,7 +151,7 @@ def test_tree_counts_never_drive_auto_no_go():
     # No tree for the bad one; rich tree for the good one.
     ranked = rank_candidates(
         [bad, CAND],
-        today=None,
+        today=TODAY,
         allocator="score-v1.5",
         tree_features={("https://github.com/openwrt/packages", ""): COMPLETE_TREE},
     )
