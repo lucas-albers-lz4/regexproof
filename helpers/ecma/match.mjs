@@ -21,7 +21,8 @@ const pattern = batch ? process.argv[3] ?? "" : process.argv[2] ?? "";
 const flags = batch ? process.argv[4] ?? "" : process.argv[3] ?? "";
 let re;
 try {
-  // codeql[js/regex-injection] Harness argv is the pattern under test; escaping would change fuzzing semantics.
+  // argv pattern/flags are the SUT (not untrusted service input). CodeQL alert #30 dismissed won't-fix;
+  // see docs/SECURITY-AUDIT.md §3 and .github/codeql/codeql-configuration.yml.
   re = new RegExp(pattern, flags);
 } catch (e) {
   console.error(e);
