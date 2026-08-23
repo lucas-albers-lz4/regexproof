@@ -50,31 +50,63 @@ def extract_window(
     checkout: pathlib.Path,
     path: str,
     line: int,
+    token: str = "",
     *,
     min_window: int = MIN_WINDOW,
     max_window: int = MAX_WINDOW,
 ) -> dict:
-    """Return a 50-150 line window centered on ``line`` (clamped to file
-    bounds) with the line itself flagged."""
-    full = checkout / path
-    if not full.is_file():
+    """Return a bounded 50-150 line window centered on ``line`` (Luna r1
+    #8: the window NEVER exceeds ``max_window``, even at file edges — a
+    200-line file with target line 1 yields ≤150 lines, not the whole
+    file). The checkout is protected against escapes (#9: absolute paths,
+    ``..``, and symlinks may not read outside the resolved checkout)."""
+    # #9: resolve both sides and require the target beneath the checkout.
+    resolved_checkout = checkout.resolve()
+    raw_target = (resolved_checkout / path).resolve()
+    try:
+        raw_target.relative_to(resolved_checkout)
+    except ValueError:
+        sys.exit(
+            f"error: {path} resolves outside the checkout "
+            f"({resolved_checkout}) — escape refused"
+        )
+    if line < 1:
+        sys.exit(f"error: line {line} is out of range (must be >= 1)")
+    if not raw_target.is_file():
         sys.exit(f"error: {path} not found under {checkout}")
+    full = raw_target
     lines = full.read_text(encoding="utf-8", errors="replace").splitlines()
     total = len(lines)
-    half = max(min_window, min(max_window, max(min_window, 8))) // 2
+    if line > total:
+        sys.exit(f"error: line {line} exceeds file length {total}")
+    half = max(1, min(max_window, max(min_window, 8)) // 2)
     start = max(1, line - half)
     end = min(total, line + half)
+    # Hard bound: never exceed max_window even at edges. If the centered
+    # window is too short (edge), extend to the other side up to the cap.
     if end - start + 1 < min_window:
-        # File smaller than the window: take the whole file.
-        start, end = 1, total
+        shortfall = min_window - (end - start + 1)
+        extend = min(shortfall, max(0, start - 1))
+        start -= extend
+        shortfall -= extend
+        end += min(shortfall, max(0, total - end))
+    if end - start + 1 > max_window:
+        excess = end - start + 1 - max_window
+        # Trim from the side farther from the target first, then evenly.
+        above = end - line
+        below = line - start
+        if above > below:
+            end -= min(excess, above)
+            excess -= min(excess, above)
+        start += excess
     window = [
         {"line": i + 1, "text": lines[i], "is_target": (i + 1 == line)}
         for i in range(start - 1, end)
     ]
     return {
-        "path": path,
+        "path": str(full.relative_to(resolved_checkout)),
         "target_line": line,
-        "token": str(pathlib.Path(path).name),
+        "token": token or pathlib.Path(path).name,
         "window_start": start,
         "window_end": end,
         "window_lines": len(window),
@@ -105,7 +137,10 @@ def review_form(
 
 
 def validate_form(form: dict) -> None:
-    """Structurally enforce the required review fields."""
+    """Structurally enforce the required review fields (Luna r1 #7:
+    ``input_format_constraint`` is required, not optional; ``unverified``
+    derives ``claimed`` — a real queue-vocabulary state, never an
+    off-vocabulary ``claimed_unverified``)."""
     r = str(form.get("witness_reachability") or "")
     if r not in REACHABILITY:
         sys.exit(
@@ -113,10 +148,16 @@ def validate_form(form: dict) -> None:
         )
     if not str(form.get("evidence_ref") or "").strip():
         sys.exit("error: evidence_ref required (window slice or format spec)")
+    if not str(form.get("input_format_constraint") or "").strip():
+        sys.exit("error: input_format_constraint required (the human states "
+                 "what input format the property constrains)")
+    for key in ("path", "target_line", "window_lines", "lines"):
+        if key not in (form.get("window") or {}):
+            sys.exit(f"error: review form missing window.{key} (structural)")
     if r == "unreachable":
         form["queue_action"] = "skipped_unreachable"
     elif r == "unverified":
-        form["queue_action"] = "claimed_unverified"  # stays a queue state
+        form["queue_action"] = "claimed"  # queue vocabulary — stays a queue state
     else:
         form["queue_action"] = "contractable"
 
@@ -141,8 +182,8 @@ def main(argv: list[str] | None = None) -> int:
     if not args.corpus or args.checkout is None or not args.site:
         ap.error("--corpus, --checkout and --site are required (unless --validate)")
 
-    path, line, _token = parse_site(args.site)
-    window = extract_window(args.checkout, path, line)
+    path, line, token = parse_site(args.site)
+    window = extract_window(args.checkout, path, line, token=token)
     out: dict = window
     if args.review_form:
         out = review_form(

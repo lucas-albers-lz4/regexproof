@@ -73,7 +73,10 @@ def main(argv: list[str] | None = None) -> int:
 
     ranker = _load_ranker()
     records = ranker.load_ndjson(args.ndjson)
-    result = ranker.rank_rows(records, vocab=ranker.DEFAULT_VOCAB, limit=15)
+    # Conversion rows are human-adopted candidate sites — the pattern-based
+    # scanner drops do not apply (Luna r1 fold #1: the documented input must
+    # not produce an empty queue). rank_sites keeps path/test-name drops.
+    result = ranker.rank_sites(records, vocab=ranker.DEFAULT_VOCAB, limit=15)
     keep = result.get("keep", [])
 
     from regexproof.mine import conversion_queue as cq

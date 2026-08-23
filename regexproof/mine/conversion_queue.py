@@ -116,10 +116,15 @@ def claim(
     corpus_status: str,
     ledger_state: dict[str, Any],
     generation: int,
+    wave_id: str = "",
     root: pathlib.Path | None = None,
+    lock_log: pathlib.Path | None = None,
 ) -> dict[str, Any]:
     """Claim a site for review. Refused unless: the corpus is ``gated:go``,
-    the site is within the top-15, and the site is currently ``emitted``."""
+    the site is within the top-15, the site is currently ``emitted``, and —
+    when a lock provider is available — the corpus has an ACTIVE wave whose
+    generation matches the caller's snapshot (Luna r1 fold #3: the claim is
+    validated against the corpus lock, not trusted from callers)."""
     q = load_queue(cluster, root)
     if corpus_status != GATED_GO:
         raise SystemExit(
@@ -137,10 +142,28 @@ def claim(
             f"conversion_queue: claim refused — {site} status is "
             f"{row['status']!r}, not 'emitted'"
         )
+    # Lock validation: the claim must ride an ACTIVE wave at the snapshot
+    # generation. A claim against a closed wave or a moved generation is
+    # refused (the lock, not the caller, owns admission).
+    from regexproof.mine.corpus_lock import wave_status, read_generation
+
+    status = wave_status(cluster, lock_log)
+    if status != "active":
+        raise SystemExit(
+            f"conversion_queue: claim refused — corpus {cluster} wave_status "
+            f"is {status!r}, not 'active' (claims ride an open wave)"
+        )
+    current = read_generation(cluster, lock_log)
+    if current != generation:
+        raise SystemExit(
+            f"conversion_queue: claim refused — {cluster} generation is "
+            f"{current}, not the caller's {generation} (stale snapshot)"
+        )
     row["status"] = "claimed"
     row["claimed_at"] = ledger_state.get("now_iso", "")
     row["ledger_state_at_claim"] = ledger_state
     row["wave_generation_at_claim"] = generation
+    row["wave_id"] = wave_id or q.get("wave_id", "")
     _write(q, root)
     return row
 
@@ -181,7 +204,9 @@ def skip(
     note: str = "",
     root: pathlib.Path | None = None,
 ) -> dict[str, Any]:
-    """Skip a site with a reason (skipped_<reason> vocabulary)."""
+    """Skip a site with a reason (skipped_<reason> vocabulary). A row that
+    is already ``contracted`` can NEVER be skipped — that would strand a
+    live contract (Luna r1 #11: transition safety)."""
     reason = str(reason or "").strip()
     status = f"skipped_{reason}" if reason else ""
     if status not in STATUSES:
@@ -191,6 +216,11 @@ def skip(
         )
     q = load_queue(cluster, root)
     row = _row(q, site)
+    if row["status"] == "contracted":
+        raise SystemExit(
+            f"conversion_queue: skip refused — {site} is contracted; a live "
+            "contract cannot be reverted to a skip state"
+        )
     row["status"] = status
     row["reasons"].append({"reason": reason, "note": note})
     _write(q, root)
@@ -210,5 +240,12 @@ def non_contracted_top15(q: dict[str, Any]) -> list[dict[str, Any]]:
 
 
 def _write(q: dict[str, Any], root: pathlib.Path | None = None) -> None:
+    """Atomic write: tmp file + os.replace (a crash mid-write can never
+    truncate the artifact — Luna r1 #11)."""
+    import os
+
     path = (pathlib.Path(root) if root is not None else QUEUE_ROOT) / f"{q['cluster']}.json"
-    path.write_text(json.dumps(q, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    path.parent.mkdir(parents=True, exist_ok=True)
+    tmp = path.with_suffix(".json.tmp")
+    tmp.write_text(json.dumps(q, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    os.replace(tmp, path)

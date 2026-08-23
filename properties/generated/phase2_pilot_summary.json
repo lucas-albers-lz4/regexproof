@@ -2,10 +2,10 @@
   "schema_version": "1",
   "pilots": {
     "validatorjs": {
-      "fraction": 0.7689,
+      "fraction": 0.5802,
       "decision": "go",
       "sample_size": 212,
-      "encodable": 163
+      "encodable": 123
     },
     "gitleaks": {
       "fraction": 0.819,

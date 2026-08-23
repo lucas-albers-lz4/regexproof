@@ -45,6 +45,15 @@ def _queue(tmp_path, ranked=None, corpus="openwrt_packages"):
     return path, cq.load_queue(corpus, root=tmp_path)
 
 
+def _open_wave(tmp_path, corpus="openwrt_packages", wave_id="ow_w1"):
+    """Open an active wave at generation 0 so claims pass the lock gate."""
+    from regexproof.mine.corpus_lock import wave_open
+
+    log = tmp_path / "events.jsonl"
+    wave_open(corpus, wave_id, log=log)
+    return log
+
+
 # --- emit / artifact shape ------------------------------------------------
 
 
@@ -68,8 +77,9 @@ def test_claim_refused_on_non_gated_go(tmp_path):
             q["cluster"], q["candidate_sites"][0]["site"],
             corpus_status="gated:triage-trial",
             ledger_state={"now_iso": "2026-08-23"},
-            generation=1,
+            generation=0,
             root=tmp_path,
+            lock_log=_open_wave(tmp_path),
         )
 
 
@@ -81,8 +91,9 @@ def test_claim_refused_outside_top15(tmp_path):
             q["cluster"], site16,
             corpus_status="gated:go",
             ledger_state={"now_iso": "2026-08-23"},
-            generation=1,
+            generation=0,
             root=tmp_path,
+            lock_log=_open_wave(tmp_path),
         )
 
 
@@ -93,27 +104,29 @@ def test_claim_success_within_top15(tmp_path):
         q["cluster"], site,
         corpus_status="gated:go",
         ledger_state={"now_iso": "2026-08-23", "n": 853},
-        generation=1,
+        generation=0,
         root=tmp_path,
+        lock_log=_open_wave(tmp_path),
     )
     assert row["status"] == "claimed"
     assert row["ledger_state_at_claim"]["n"] == 853
-    assert row["wave_generation_at_claim"] == 1
+    assert row["wave_generation_at_claim"] == 0
 
 
 def test_claim_refused_when_not_emitted(tmp_path):
     _, q = _queue(tmp_path)
     site = q["candidate_sites"][0]["site"]
+    lock_log = _open_wave(tmp_path)
     cq.claim(
         q["cluster"], site,
         corpus_status="gated:go",
-        ledger_state={}, generation=1, root=tmp_path,
+        ledger_state={}, generation=0, root=tmp_path, lock_log=lock_log,
     )
     with pytest.raises(SystemExit, match="not 'emitted'"):
         cq.claim(
             q["cluster"], site,
             corpus_status="gated:go",
-            ledger_state={}, generation=1, root=tmp_path,
+            ledger_state={}, generation=0, root=tmp_path, lock_log=lock_log,
         )
 
 
@@ -126,7 +139,7 @@ def test_stub_never_contracts(tmp_path):
     cq.claim(
         q["cluster"], site,
         corpus_status="gated:go",
-        ledger_state={}, generation=1, root=tmp_path,
+        ledger_state={}, generation=0, root=tmp_path, lock_log=_open_wave(tmp_path),
     )
     with pytest.raises(SystemExit, match="stub"):
         cq.contract(
@@ -141,7 +154,7 @@ def test_contract_after_human_adoption(tmp_path):
     cq.claim(
         q["cluster"], site,
         corpus_status="gated:go",
-        ledger_state={}, generation=1, root=tmp_path,
+        ledger_state={}, generation=0, root=tmp_path, lock_log=_open_wave(tmp_path),
     )
     # Human adoption replaces provenance (queue state), then contracts.
     q = cq.load_queue(q["cluster"], root=tmp_path)
@@ -159,6 +172,80 @@ def test_contract_after_human_adoption(tmp_path):
 
 
 # --- skip vocabulary / close-out -------------------------------------------
+
+
+def test_claim_refused_on_stale_generation(tmp_path):
+    """Luna r1 #3: a claim at a stale generation (wave moved) is refused."""
+    _, q = _queue(tmp_path)
+    site = q["candidate_sites"][0]["site"]
+    lock_log = _open_wave(tmp_path)
+    with pytest.raises(SystemExit, match="stale snapshot"):
+        cq.claim(
+            q["cluster"], site,
+            corpus_status="gated:go",
+            ledger_state={}, generation=999, root=tmp_path, lock_log=lock_log,
+        )
+
+
+def test_skip_refused_on_contracted_row(tmp_path):
+    """Luna r1 #11: a live contract can never be reverted to a skip state."""
+    _, q = _queue(tmp_path)
+    site = q["candidate_sites"][0]["site"]
+    lock_log = _open_wave(tmp_path)
+    cq.claim(
+        q["cluster"], site,
+        corpus_status="gated:go",
+        ledger_state={}, generation=0, root=tmp_path, lock_log=lock_log,
+    )
+    q = cq.load_queue(q["cluster"], root=tmp_path)
+    q["candidate_sites"][0]["provenance"] = "human"
+    (tmp_path / f"{q['cluster']}.json").write_text(
+        json.dumps(q, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
+    cq.contract(
+        q["cluster"], site,
+        contract={"guarantee": "x", "input_source": "y"}, root=tmp_path,
+    )
+    with pytest.raises(SystemExit, match="cannot be reverted"):
+        cq.skip(q["cluster"], site, reason="unreachable", root=tmp_path)
+
+
+def test_queue_health_joins_candidate_rows(tmp_path):
+    """Luna r1 #10: contract_queue_health must read per-candidate status —
+    the real artifact stores state under candidate_sites, not top level."""
+    import importlib.util
+
+    # Real layout: <root>/conversion_queue/<cluster>.json, gen_dir = <root>/generated
+    root = tmp_path / "root"
+    gen_dir = root / "generated"
+    qdir = root / "conversion_queue"
+    gen_dir.mkdir(parents=True)
+    _, q = _queue(qdir, corpus="openwrt_packages")
+    site = q["candidate_sites"][0]["site"]
+    lock_log = _open_wave(root, corpus="openwrt_packages")
+    cq.claim(
+        q["cluster"], site,
+        corpus_status="gated:go",
+        ledger_state={}, generation=0, root=qdir, lock_log=lock_log,
+    )
+    q = cq.load_queue(q["cluster"], root=qdir)
+    q["candidate_sites"][0]["provenance"] = "human"
+    (qdir / f"{q['cluster']}.json").write_text(
+        json.dumps(q, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
+    cq.contract(
+        q["cluster"], site,
+        contract={"guarantee": "x", "input_source": "y"}, root=qdir,
+    )
+    spec = importlib.util.spec_from_file_location(
+        "conversion_ledger", ROOT / "scripts" / "conversion-ledger.py"
+    )
+    assert spec is not None and spec.loader is not None
+    ledger = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(ledger)
+    health = ledger.contract_queue_health(gen_dir, clock_iso="2026-08-23")
+    assert health["contracted"] == 1  # flattened from candidate_sites
+    assert health["emitted"] == 18
 
 
 def test_skip_requires_known_reason(tmp_path):
@@ -182,7 +269,7 @@ def test_wave_closeout_requires_skip_reasons(tmp_path):
     cq.claim(
         q["cluster"], site,
         corpus_status="gated:go",
-        ledger_state={}, generation=1, root=tmp_path,
+        ledger_state={}, generation=0, root=tmp_path, lock_log=_open_wave(tmp_path),
     )
     q = cq.load_queue(q["cluster"], root=tmp_path)
     q["candidate_sites"][0]["provenance"] = "human"
@@ -269,7 +356,9 @@ def test_stub_emitter_rejects_contract_fields(tmp_path):
 
 
 def test_stub_emitter_end_to_end(tmp_path):
-    """Ranker output → schema-validated queue artifact (real ndjson input)."""
+    """Ranker output → schema-validated queue artifact (real ndjson input).
+    Asserts NON-EMPTY output (Luna r1 #1 regression: the documented input
+    must not produce an empty queue)."""
     ndjson = tmp_path / "ow_conversion.ndjson"
     ndjson.write_text(
         json.dumps(
@@ -302,9 +391,30 @@ def test_stub_emitter_end_to_end(tmp_path):
     q = json.loads(out.read_text(encoding="utf-8"))
     assert q["cluster"] == "openwrt_packages"
     assert q["wave_generation"] == 1
+    assert len(q["candidate_sites"]) >= 1  # non-empty (Luna r1 #1)
     for row in q["candidate_sites"]:
         assert row["status"] == "emitted"
         assert row.get("provenance") == "stub"
+
+
+def test_stub_emitter_real_corpus_nonempty(tmp_path):
+    """The real openwrt_packages conversion corpus must emit >0 stubs —
+    regression for Luna r1 #1 (empty-queue blocker)."""
+    real = ROOT / "properties" / "generated" / "openwrt_packages_conversion.ndjson"
+    if not real.is_file():
+        pytest.skip("real conversion ndjson not present")
+    out = tmp_path / "queue" / "openwrt_packages.json"
+    r = subprocess.run(
+        [
+            sys.executable, str(ROOT / "scripts" / "emit-conversion-queue.py"),
+            "--ndjson", str(real), "--corpus", "openwrt_packages",
+            "--wave-id", "ow_w1", "--generation", "0", "-o", str(out),
+        ],
+        capture_output=True, text=True,
+    )
+    assert r.returncode == 0, r.stderr
+    q = json.loads(out.read_text(encoding="utf-8"))
+    assert len(q["candidate_sites"]) > 0
 
 
 # --- context extractor ------------------------------------------------------
@@ -334,6 +444,61 @@ def test_extractor_window_around_target(tmp_path):
     assert out["target_line"] == 100
     assert 50 <= out["window_lines"] <= 150
     assert any(line["is_target"] and line["line"] == 100 for line in out["lines"])
+
+
+def test_extractor_bounded_window_at_edge(tmp_path):
+    """Luna r1 #8: a 200-line file with target line 1 yields <=150 lines
+    (never the whole file)."""
+    tree = _checkout(tmp_path)
+    r = subprocess.run(
+        [
+            sys.executable, str(ROOT / "scripts" / "context-extractor.py"),
+            "--corpus", "openwrt_packages", "--checkout", str(tree),
+            "--site", "net/demo/app.sh:1:token",
+        ],
+        capture_output=True, text=True,
+    )
+    assert r.returncode == 0, r.stderr
+    out = json.loads(r.stdout)
+    assert out["window_lines"] <= 150
+    assert out["window_start"] == 1
+    assert out["target_line"] == 1
+
+
+def test_extractor_rejects_out_of_range_line(tmp_path):
+    tree = _checkout(tmp_path)
+    for bad in ("net/demo/app.sh:0:token", "net/demo/app.sh:201:token"):
+        r = subprocess.run(
+            [
+                sys.executable, str(ROOT / "scripts" / "context-extractor.py"),
+                "--corpus", "openwrt_packages", "--checkout", str(tree),
+                "--site", bad,
+            ],
+            capture_output=True, text=True,
+        )
+        assert r.returncode != 0, f"accepted bad line {bad}"
+
+
+def test_extractor_rejects_checkout_escape(tmp_path):
+    """Luna r1 #9: absolute paths / .. / symlinks may not read outside the
+    checkout."""
+    tree = _checkout(tmp_path)
+    outside = tmp_path / "outside.txt"
+    outside.write_text("SECRET", encoding="utf-8")
+    for site in (
+        "../outside.txt:1:token",
+        str(outside) + ":1:token",
+    ):
+        r = subprocess.run(
+            [
+                sys.executable, str(ROOT / "scripts" / "context-extractor.py"),
+                "--corpus", "openwrt_packages", "--checkout", str(tree),
+                "--site", site,
+            ],
+            capture_output=True, text=True,
+        )
+        assert r.returncode != 0, f"escape not blocked: {site}"
+        assert "outside the checkout" in r.stderr or "not found" in r.stderr
 
 
 def test_review_form_validation_enforced(tmp_path):
@@ -366,6 +531,7 @@ def test_review_form_validation_enforced(tmp_path):
     # Filled form with evidence passes and derives the queue action.
     form["witness_reachability"] = "unreachable"
     form["evidence_ref"] = "app.sh:90-110: format spec §3"
+    form["input_format_constraint"] = "ASCII NUL-free query values"
     form_path.write_text(json.dumps(form), encoding="utf-8")
     r3 = subprocess.run(
         [

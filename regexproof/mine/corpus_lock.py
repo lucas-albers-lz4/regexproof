@@ -74,12 +74,20 @@ def _append_event(
     event: dict[str, Any],
     log: pathlib.Path | None = None,
 ) -> None:
-    """Append one event with O_APPEND (single write syscall, append-only)."""
+    """Append one event durably with O_APPEND + a single ``os.write``.
+
+    Durable: the bytes are written AND fsynced before the fd closes (a
+    buffered text stream would need flush-before-fsync — this path skips
+    buffering entirely)."""
     path = pathlib.Path(log) if log is not None else EVENTS_LOG
     path.parent.mkdir(parents=True, exist_ok=True)
-    with open(path, "a", encoding="utf-8") as fh:
-        fh.write(json.dumps(event, sort_keys=True) + "\n")
-        os.fsync(fh.fileno())
+    payload = json.dumps(event, sort_keys=True) + "\n"
+    fd = os.open(str(path), os.O_APPEND | os.O_CREAT | os.O_WRONLY, 0o644)
+    try:
+        os.write(fd, payload.encode("utf-8"))
+        os.fsync(fd)
+    finally:
+        os.close(fd)
 
 
 def read_generation(corpus: str, log: pathlib.Path | None = None) -> int:
@@ -110,30 +118,62 @@ def wave_status(corpus: str, log: pathlib.Path | None = None) -> str:
     return "none"
 
 
+def _with_lock(path: pathlib.Path, fn):
+    """Serialize the read/check/append sequence across processes with an
+    exclusive flock on the events log (O_APPEND serializes writes, NOT the
+    read/check/append transition — Luna r1 fold #2)."""
+    import fcntl
+
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with open(path, "a+", encoding="utf-8") as fh:
+        fcntl.flock(fh.fileno(), fcntl.LOCK_EX)
+        try:
+            return fn()
+        finally:
+            fcntl.flock(fh.fileno(), fcntl.LOCK_UN)
+
+
+def _active_wave_id(corpus: str, log: pathlib.Path | None = None) -> str:
+    """The wave_id of the corpus's last event if it is ``wave_opened``."""
+    last: dict[str, Any] | None = None
+    for e in _read_events(log):
+        if e.get("corpus") == corpus:
+            last = e
+    if last is not None and last.get("event") == OPEN_EVENT:
+        return str(last.get("wave_id") or "")
+    return ""
+
+
 def wave_open(
     corpus: str,
     wave_id: str,
     *,
     log: pathlib.Path | None = None,
 ) -> int:
-    """Open a wave: appends ``wave_opened``. Fails closed if the corpus has
-    an active wave (no parallel waves). Returns the generation (unchanged)."""
-    if wave_status(corpus, log) == "active":
-        raise SystemExit(
-            f"corpus_lock: {corpus} already has an active wave — close or "
-            "abort it before opening another (skip_wave_active)"
+    """Open a wave: appends ``wave_opened`` under an exclusive flock. Fails
+    closed if the corpus has an active wave (no parallel waves). Returns the
+    generation (unchanged)."""
+
+    def _open() -> int:
+        if wave_status(corpus, log) == "active":
+            raise SystemExit(
+                f"corpus_lock: {corpus} already has an active wave — close or "
+                "abort it before opening another (skip_wave_active)"
+            )
+        _append_event(
+            {
+                "event": OPEN_EVENT,
+                "corpus": corpus,
+                "wave_id": wave_id,
+                "at": _now_iso(),
+                "generation": read_generation(corpus, log),
+            },
+            log,
         )
-    _append_event(
-        {
-            "event": OPEN_EVENT,
-            "corpus": corpus,
-            "wave_id": wave_id,
-            "at": _now_iso(),
-            "generation": read_generation(corpus, log),
-        },
-        log,
-    )
-    return read_generation(corpus, log)
+        return read_generation(corpus, log)
+
+    path = pathlib.Path(log) if log is not None else EVENTS_LOG
+    return _with_lock(path, _open)
 
 
 def wave_close(
@@ -142,33 +182,69 @@ def wave_close(
     *,
     force: bool = False,
     skip_reasons: dict[str, str] | None = None,
+    queue_root: pathlib.Path | None = None,
     log: pathlib.Path | None = None,
 ) -> int:
-    """Close a wave: appends ``wave_closed`` — this INCREMENTS generation.
-    ``force=True`` is recorded in the event (the queue enforces skip
-    reasons for non-contracted top-15 before calling with force)."""
-    status = wave_status(corpus, log)
-    if status == "none":
-        raise SystemExit(
-            f"corpus_lock: {corpus} has no wave to close — open one first "
-            "(pre-Phase-C fallback fails closed)"
+    """Close a wave: appends ``wave_closed`` under an exclusive flock — this
+    INCREMENTS generation. The active wave's ``wave_id`` MUST match (a
+    wrong-id close is refused — Luna r1 fold #2). ``force=True`` is recorded
+    in the event AND is ENFORCED against the queue: every non-contracted
+    top-15 candidate must carry a skip reason (Luna r1 fold #4)."""
+
+    def _close() -> int:
+        status = wave_status(corpus, log)
+        if status == "none":
+            raise SystemExit(
+                f"corpus_lock: {corpus} has no wave to close — open one first "
+                "(pre-Phase-C fallback fails closed)"
+            )
+        if status == "closed":
+            raise SystemExit(f"corpus_lock: {corpus} wave already closed")
+        active_id = _active_wave_id(corpus, log)
+        if active_id and active_id != wave_id:
+            raise SystemExit(
+                f"corpus_lock: {corpus} active wave is {active_id!r}, not "
+                f"{wave_id!r} — refusing wrong-id close"
+            )
+        if force and queue_root is not None:
+            # Enforced close-out: every non-contracted top-15 row needs an
+            # explicit skip reason — the lock refuses a forced close that
+            # would strand candidates.
+            from regexproof.mine.conversion_queue import (
+                load_queue,
+                non_contracted_top15,
+            )
+
+            q = load_queue(corpus, root=queue_root)
+            blockers = non_contracted_top15(q)
+            missing = [
+                (r["site"], r.get("status"))
+                for r in blockers
+                if r["site"] not in (skip_reasons or {})
+            ]
+            if missing:
+                raise SystemExit(
+                    f"corpus_lock: forced close refused — {len(missing)} "
+                    "non-contracted top-15 candidate(s) lack skip reasons: "
+                    + ", ".join(f"{s} ({st})" for s, st in missing)
+                )
+        gen = read_generation(corpus, log)
+        _append_event(
+            {
+                "event": CLOSE_EVENT,
+                "corpus": corpus,
+                "wave_id": wave_id,
+                "at": _now_iso(),
+                "generation": gen + 1,  # post-flip generation, recorded atomically
+                "force": bool(force),
+                "skip_reasons": skip_reasons or {},
+            },
+            log,
         )
-    if status == "closed":
-        raise SystemExit(f"corpus_lock: {corpus} wave already closed")
-    gen = read_generation(corpus, log)
-    _append_event(
-        {
-            "event": CLOSE_EVENT,
-            "corpus": corpus,
-            "wave_id": wave_id,
-            "at": _now_iso(),
-            "generation": gen + 1,  # post-flip generation, recorded atomically
-            "force": bool(force),
-            "skip_reasons": skip_reasons or {},
-        },
-        log,
-    )
-    return gen + 1
+        return gen + 1
+
+    path = pathlib.Path(log) if log is not None else EVENTS_LOG
+    return _with_lock(path, _close)
 
 
 def wave_abort(
@@ -179,18 +255,36 @@ def wave_abort(
     log: pathlib.Path | None = None,
 ) -> None:
     """Abort a wave (compensation for a stuck/mis-begun wave). Does NOT
-    increment generation — an aborted wave is not a closed wave."""
-    _append_event(
-        {
-            "event": ABORT_EVENT,
-            "corpus": corpus,
-            "wave_id": wave_id,
-            "at": _now_iso(),
-            "reason": reason,
-            "generation": read_generation(corpus, log),
-        },
-        log,
-    )
+    increment generation. Only an ACTIVE wave with a matching wave_id may
+    be aborted (a closed/nonexistent wave cannot — Luna r1 fold #2)."""
+
+    def _abort() -> None:
+        status = wave_status(corpus, log)
+        if status != "active":
+            raise SystemExit(
+                f"corpus_lock: {corpus} has no active wave to abort "
+                f"(status={status})"
+            )
+        active_id = _active_wave_id(corpus, log)
+        if active_id and active_id != wave_id:
+            raise SystemExit(
+                f"corpus_lock: {corpus} active wave is {active_id!r}, not "
+                f"{wave_id!r} — refusing wrong-id abort"
+            )
+        _append_event(
+            {
+                "event": ABORT_EVENT,
+                "corpus": corpus,
+                "wave_id": wave_id,
+                "at": _now_iso(),
+                "reason": reason,
+                "generation": read_generation(corpus, log),
+            },
+            log,
+        )
+
+    path = pathlib.Path(log) if log is not None else EVENTS_LOG
+    _with_lock(path, _abort)
 
 
 def verify_generation(corpus: str, expected: int, *, log: pathlib.Path | None = None) -> None:
@@ -243,9 +337,11 @@ def stuck_wave_health(
 
 
 def check_events_log(log: pathlib.Path | None = None) -> int:
-    """CI append-only check: every line parses; the log is a sequence of
-    events with monotonic (non-decreasing) generation per corpus; the last
-    event per corpus has a valid state. Returns 0 (or raises)."""
+    """CI append-only + transition check. Every line parses; per-corpus
+    generation is monotonic AND equals the running closed-event count; every
+    transition is legal (close/abort require a preceding open; open requires
+    no active wave); a close-without-open or wrong-id close is a violation.
+    Returns 0 (or raises)."""
     events = _read_events(log)
     for e in events:
         if e.get("event") not in WAVE_EVENTS:
@@ -256,15 +352,57 @@ def check_events_log(log: pathlib.Path | None = None) -> int:
             raise SystemExit(f"corpus_lock: event missing corpus/wave_id: {e}")
         if not isinstance(e.get("generation"), int):
             raise SystemExit(f"corpus_lock: event missing int generation: {e}")
-    # Monotonic per-corpus generation: generation never decreases.
-    last_gen: dict[str, int] = {}
+    # Per-corpus state machine: monotonic generation AND legal transitions.
+    state: dict[str, str] = {}  # corpus -> last event kind
+    closed_count: dict[str, int] = {}
+    active_id: dict[str, str] = {}
     for e in events:
         corpus = str(e.get("corpus") or "")
+        kind = str(e.get("event") or "")
         gen = int(e.get("generation") or 0)
-        if corpus in last_gen and gen < last_gen[corpus]:
+        wave_id = str(e.get("wave_id") or "")
+        before = closed_count.get(corpus, 0)
+        # A close event records the POST-flip generation (before + 1);
+        # open/abort record the unchanged pre-flip count.
+        expected_gen = before + 1 if kind == CLOSE_EVENT else before
+        if gen != expected_gen:
             raise SystemExit(
-                f"corpus_lock: {corpus} generation decreased {last_gen[corpus]} "
-                f"-> {gen} — the log was rewritten (append-only violation)"
+                f"corpus_lock: {corpus} event generation {gen} != expected "
+                f"{expected_gen} — the log was rewritten or miscalculated "
+                "(append-only violation)"
             )
-        last_gen[corpus] = gen
+        if kind == OPEN_EVENT:
+            if state.get(corpus) == OPEN_EVENT:
+                raise SystemExit(
+                    f"corpus_lock: {corpus} opened while active (wave "
+                    f"{active_id.get(corpus, '?')}) — parallel waves violate "
+                    "the single-primitive lock"
+                )
+            state[corpus] = OPEN_EVENT
+            active_id[corpus] = wave_id
+        elif kind == CLOSE_EVENT:
+            if state.get(corpus) != OPEN_EVENT:
+                raise SystemExit(
+                    f"corpus_lock: {corpus} closed without an open wave — "
+                    "illegal transition (append-only violation)"
+                )
+            if active_id.get(corpus) != wave_id:
+                raise SystemExit(
+                    f"corpus_lock: {corpus} closed with wrong wave_id "
+                    f"{wave_id!r} (active {active_id.get(corpus, '?')!r})"
+                )
+            closed_count[corpus] = gen
+            state[corpus] = CLOSE_EVENT
+        elif kind == ABORT_EVENT:
+            if state.get(corpus) != OPEN_EVENT:
+                raise SystemExit(
+                    f"corpus_lock: {corpus} aborted without an open wave — "
+                    "illegal transition"
+                )
+            if active_id.get(corpus) != wave_id:
+                raise SystemExit(
+                    f"corpus_lock: {corpus} aborted with wrong wave_id "
+                    f"{wave_id!r} (active {active_id.get(corpus, '?')!r})"
+                )
+            state[corpus] = ABORT_EVENT
     return 0
