@@ -179,6 +179,32 @@ def load_curated_index(
                             f"error: {path.name}:{row.get('id')}: {label} "
                             f"{val!r} is not an ISO date"
                         )
+        # Wave B (#556): approval_missing is a REAL hop with a defined escape
+        # — either an approval signal (approval_present + ref) or an explicit
+        # wont_file transition (escape=wont_file + reason). A bare
+        # approval_missing label is no longer accepted (the design forbids
+        # leaving GT-confirmed SATs structurally blocked without a path).
+        if status == "approval_missing":
+            esc = str(row.get("approval_escape") or "").strip()
+            if esc == "approval_present":
+                if not str(row.get("approval_ref") or "").strip():
+                    raise SystemExit(
+                        f"error: {path.name}:{row.get('id')}: approval_missing "
+                        "with escape=approval_present is missing approval_ref "
+                        "(approval file path or issue/PR reference)"
+                    )
+            elif esc == "wont_file":
+                if not str(row.get("reason_code") or "").strip():
+                    raise SystemExit(
+                        f"error: {path.name}:{row.get('id')}: approval_missing "
+                        "with escape=wont_file is missing reason_code"
+                    )
+            else:
+                raise SystemExit(
+                    f"error: {path.name}:{row.get('id')}: approval_missing "
+                    "requires approval_escape (approval_present with "
+                    "approval_ref, or wont_file with reason_code)"
+                )
         site = cl.canonical_site(str(row.get("site") or ""))
         qid = str(row.get("question_id") or "").strip()
 

@@ -192,6 +192,13 @@ AGENTS.md must match or cite them — enforced by
   `filed`, `filed_plan` ("filed upstream, awaiting response" — distinct from
   `wont_file`), `wont_file`, `false_positive`, `private_first`,
   `fixed_upstream`, `approval_missing`, `out_of_scope_redos`.
+- **`approval_missing` escape (required, #556):** a row with
+  `status=approval_missing` must carry `approval_escape` — either
+  `approval_present` (with `approval_ref`: approval file path or issue/PR
+  reference) or `wont_file` (with `reason_code`). A bare `approval_missing`
+  label is rejected by the coverage checker; it is a real hop with a defined
+  path, not a dead end. Record decisions via
+  `scripts/record-filing-decision.py`.
 - **Join keys:** `site` + `question_id`, canonicalized per the checker
   docstring; scanner `name` is the `question_id` fallback. Wave keys
   (`wave_id`, `idiom_bucket`) live at scanner-row top level in
