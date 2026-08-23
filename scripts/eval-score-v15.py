@@ -293,7 +293,20 @@ def _auc_delta_ci(
     return (endpoint(0.025), endpoint(0.975), method_used)
 
 
-def main() -> int:
+def main(argv: list[str] | None = None) -> int:
+    import argparse
+
+    ap = argparse.ArgumentParser(description=__doc__)
+    ap.add_argument(
+        "--out",
+        type=pathlib.Path,
+        default=FLIP_OUT,
+        help="Output path for the flip decision (default: "
+        "properties/generated/score_v15_flip_decision.json). Tests pass a "
+        "tmp path so the committed artifact is never mutated.",
+    )
+    args = ap.parse_args(argv)
+    out_path = args.out
     sys.path.insert(0, str(ROOT))
     freeze = load_freeze()
     validate_freeze_snapshot(freeze)
@@ -367,7 +380,7 @@ def main() -> int:
         "action": "flip live drain to score-v1.5" if flips else "keep score-v1",
         "note": "v2 comparison is label reproduction only, never validation",
     }
-    FLIP_OUT.write_text(json.dumps(decision, indent=2, sort_keys=True) + "\n")
+    out_path.write_text(json.dumps(decision, indent=2, sort_keys=True) + "\n")
     print(f"eval: n={n} pos={pos} test={len(test)}")
     print(f"  auc_v1={auc_v1:.4f} auc_v15={auc_v15:.4f} delta={auc_v15 - auc_v1:+.4f}")
     print(f"  bootstrap95_delta=[{lo_ci:.4f}, {hi_ci:.4f}] -> flip={flips}")

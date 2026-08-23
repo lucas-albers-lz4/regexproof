@@ -35,19 +35,30 @@ def test_flip_decision_exists_and_is_shape_checked():
     assert "cap_raise_calibration_note" in d["eval"]
 
 
-def test_flip_decision_deterministic():
+def test_flip_decision_deterministic(tmp_path: Path):
     """Same seed + same data ⇒ byte-identical decision (golden discipline).
 
-    Bounded by a timeout — the eval runs 10k bootstrap iterations."""
-    before = FLIP_OUT.read_bytes()
+    Writes to a tmp path via --out — the committed artifact is never
+    mutated by the test. Bounded by a timeout (10k bootstrap iterations)."""
+    out = tmp_path / "flip.json"
     r = subprocess.run(
-        [sys.executable, str(ROOT / "scripts" / "eval-score-v15.py")],
+        [sys.executable, str(ROOT / "scripts" / "eval-score-v15.py"), "--out", str(out)],
         capture_output=True,
         text=True,
         timeout=120,
     )
     assert r.returncode == 0, r.stderr
-    assert FLIP_OUT.read_bytes() == before, "flip decision drifts on re-run"
+    first = out.read_bytes()
+    r2 = subprocess.run(
+        [sys.executable, str(ROOT / "scripts" / "eval-score-v15.py"), "--out", str(out)],
+        capture_output=True,
+        text=True,
+        timeout=120,
+    )
+    assert r2.returncode == 0, r2.stderr
+    assert out.read_bytes() == first, "flip decision drifts on re-run"
+    # The committed artifact is untouched by this test.
+    assert (GEN / "score_v15_flip_decision.json").is_file()
 
 
 def test_eval_fails_closed_on_freeze_mismatch(tmp_path: Path):
