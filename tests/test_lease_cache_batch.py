@@ -326,10 +326,12 @@ def test_lease_renew_extends_expiry(tmp_path):
 
 
 def test_heartbeat_renews_before_gc_eviction(tmp_path):
-    """Luna r5/r6: the walk's lease heartbeat keeps the lease live BEFORE
+    """Luna r5/r6/r7: the walk's lease heartbeat keeps the lease live BEFORE
     expiry so GC never evicts the clone mid-walk. Exercises the real
-    _walk_and_heartbeat over a >2000-file tree (Luna r6: the test must
-    drive the walk, not just renew())."""
+    _walk_and_heartbeat over a >2000-file tree with an INJECTED SLOW CLOCK
+    (Luna r7 #2: the test must distinguish streamed from sorted — a sorted
+    implementation materializes the full traversal before any renewal, so
+    the time-based heartbeat never fires mid-walk)."""
     import importlib.util
     from regexproof.admission import clone_cache
 
@@ -345,15 +347,25 @@ def test_heartbeat_renews_before_gc_eviction(tmp_path):
     d.mkdir(parents=True)
     (d / "refs").mkdir()
     (d / ".cache-key").write_text(f"{url}#{pin}", encoding="utf-8")
-    # Short-TTL lease (simulating a TTL that would expire during a long
-    # walk) + a tree large enough to trip the count heartbeat.
+    # Short-TTL lease (would expire during a long walk) + a large tree.
     lease_registry.acquire(url, pin, owner_pid=1, ttl_s=60, path=reg_path)
     wt = d / "worktree-1"
     wt.mkdir()
     for i in range(2100):
         (wt / f"f{i}.js").write_text("x", encoding="utf-8")
+    # Injected clock: advances 400s per file — a 60s lease would expire
+    # after the first file. Only the mid-walk time heartbeat (300s) keeps
+    # it alive; a sorted() implementation would lose the lease during
+    # materialization and the renewal would fail with 'no live lease'.
+    clock = {"t": 0.0}
+
+    def slow_clock() -> float:
+        clock["t"] += 400.0
+        return clock["t"]
+
     walked = batch_probe._walk_and_heartbeat(  # type: ignore[attr-defined]
         wt, url=url, pin=pin, owner_pid=1, registry_path=reg_path,
+        now_fn=slow_clock,
     )
     assert walked == 2100
     # The heartbeat kept the lease live (renewed during the walk) → GC

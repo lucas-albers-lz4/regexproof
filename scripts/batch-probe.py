@@ -35,13 +35,14 @@ import pathlib
 import subprocess
 import sys
 import time
+from typing import Callable
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
 from regexproof.admission import clone_cache  # noqa: E402
 from regexproof.admission.clone import CloneError, enforce_disk_budget  # noqa: E402
-from regexproof.mine import batch_state, corpus_lock, disk_admission  # noqa: E402
+from regexproof.mine import batch_state, corpus_lock, disk_admission, lease_registry  # noqa: E402
 
 
 def _wave_status(corpus: str) -> str:
@@ -194,6 +195,13 @@ def main(argv: list[str] | None = None) -> int:
         # happened). On a MISS bytes_saved = 0 and lifecycle_bytes = the
         # actual probe fetch.
         is_hit = bool(entry.get("cache_hit"))
+        # Renew BEFORE any traversal (Luna r7 #1): _dir_size_bytes and
+        # enforce_disk_budget recursively scan WITHOUT a heartbeat — a long
+        # scan can expire the lease and get the clone GC-evicted before the
+        # walk heartbeat even starts.
+        lease_registry.renew(
+            args.url, args.pin, owner_pid=owner, path=registry_path,
+        )
         probe_fetch_bytes = 0 if is_hit else _dir_size_bytes(cache_dir)
         bytes_saved = _dir_size_bytes(cache_dir) if is_hit else 0
 
@@ -244,8 +252,6 @@ def main(argv: list[str] | None = None) -> int:
 
         # Final renewal before recording — the heartbeat kept the lease
         # live through the walk; this extends it through the outcome write.
-        from regexproof.mine import lease_registry
-
         lease_registry.renew(
             args.url, args.pin, owner_pid=owner, path=registry_path,
         )
@@ -301,26 +307,26 @@ def _walk_and_heartbeat(
     pin: str,
     owner_pid: int,
     registry_path: pathlib.Path | None,
+    now_fn: Callable[[], float] = time.monotonic,
 ) -> int:
     """Walk the worktree with a lease heartbeat. Iterates the rglob
     GENERATOR directly — sorted() materializes the full traversal up front,
     so a heartbeat inside the loop would never fire during enumeration and
     a traversal exceeding the TTL could be GC-evicted before the first
-    renewal (Luna r6). Returns the file count."""
-    from regexproof.mine import lease_registry
-
+    renewal (Luna r6). Returns the file count. ``now_fn`` is injectable for
+    deterministic slow-walk tests (Luna r7 #2)."""
     walked = 0
     HEARTBEAT_N = 2000
     HEARTBEAT_S = 300  # well under the 3600s default TTL
-    _hb_last = time.monotonic()
+    _hb_last = now_fn()
     for p in wt.rglob("*"):
         if p.is_file() and ".git" not in p.parts:
             walked += 1
-            if walked % HEARTBEAT_N == 0 or time.monotonic() - _hb_last > HEARTBEAT_S:
+            if walked % HEARTBEAT_N == 0 or now_fn() - _hb_last > HEARTBEAT_S:
                 lease_registry.renew(
                     url, pin, owner_pid=owner_pid, path=registry_path,
                 )
-                _hb_last = time.monotonic()
+                _hb_last = now_fn()
     return walked
 
 
