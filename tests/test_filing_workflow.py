@@ -257,6 +257,26 @@ def test_cli_filing_status_requires_date(tmp_path: Path):
     assert "--filed-at" in r.stderr
 
 
+def test_cli_rejects_non_iso_filed_at(tmp_path: Path):
+    """A non-ISO --filed-at must be rejected by the CLI (it would make the
+    coverage checker fail on the written row — Luna r1 fold)."""
+    curated = _write_upstream(tmp_path / "upstream.jsonl", _curated())
+    for bad in ("not-a-date", "2026-99-99", "  "):
+        r = subprocess.run(
+            _cli_args(
+                tmp_path, curated, "--id", "CU-901", "--status", "filed",
+                "--reason", "opened", "--filed-at", bad,
+            ),
+            capture_output=True,
+            text=True,
+        )
+        assert r.returncode != 0, f"accepted bad date {bad!r}: {r.stdout}"
+        assert "ISO date" in r.stderr
+    # The curated file must be untouched by the rejected attempts.
+    rows = [json.loads(line) for line in curated.read_text().splitlines() if line.strip()]
+    assert rows[0]["status"] == "filed_plan"
+
+
 def test_cli_records_on_phase_a_backfilled_row(tmp_path: Path):
     """CU-011..014 (Phase A backfills) are the first test input: a GT-
     confirmed SAT row can record a filing disposition end-to-end."""

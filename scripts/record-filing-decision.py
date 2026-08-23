@@ -29,6 +29,7 @@ import argparse
 import json
 import pathlib
 import sys
+from datetime import date
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 CURATED = ROOT / "docs" / "conversion-upstream.jsonl"
@@ -77,14 +78,22 @@ def validate_disposition(
 ) -> None:
     if status not in DISPOSITIONS:
         sys.exit(f"error: unknown disposition status {status!r}; allowed: {sorted(DISPOSITIONS)}")
-    if status in FILING_STATUSES and not filed_at:
+    if status in FILING_STATUSES and not filed_at.strip():
         sys.exit(f"error: {row_id}: filing status {status!r} requires --filed-at (ISO date)")
+    if filed_at.strip():
+        try:
+            date.fromisoformat(filed_at.strip())
+        except ValueError:
+            sys.exit(
+                f"error: {row_id}: --filed-at {filed_at!r} is not an ISO date "
+                "(the coverage checker rejects it — record a valid date)"
+            )
     reason_required = not (
         status == "approval_missing"
         and approval_escape == "approval_present"
-        and approval_ref
+        and approval_ref.strip()
     )
-    if reason_required and not reason and not reason_code:
+    if reason_required and not reason.strip() and not reason_code.strip():
         sys.exit(f"error: {row_id}: provide --reason or --reason-code")
     if status == "approval_missing":
         if approval_escape not in APPROVAL_ESCAPES:
@@ -92,12 +101,12 @@ def validate_disposition(
                 f"error: {row_id}: approval_missing requires --approval-escape "
                 f"({sorted(APPROVAL_ESCAPES)})"
             )
-        if approval_escape == "approval_present" and not approval_ref:
+        if approval_escape == "approval_present" and not approval_ref.strip():
             sys.exit(
                 f"error: {row_id}: approval-escape approval_present requires "
                 "--approval-ref (approval file path or issue/PR reference)"
             )
-        if approval_escape == "wont_file" and not reason_code:
+        if approval_escape == "wont_file" and not reason_code.strip():
             sys.exit(
                 f"error: {row_id}: approval-escape wont_file requires --reason-code"
             )
