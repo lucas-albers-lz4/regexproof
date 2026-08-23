@@ -320,6 +320,7 @@ def test_default_probe_cap_consistent_with_max(tmp_path):
             "--url", "https://github.com/openwrt/packages",
             "--pin", "a" * 40, "--corpus", "openwrt_packages",
             "--state", str(tmp_path / "state.json"),
+            "--walk-root", str(tmp_path / "staged"),
         ])
     # main completed through the patched path (return 0; no real Git ops).
     assert rc == 0, f"main returned {rc}"
