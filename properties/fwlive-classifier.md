@@ -70,3 +70,21 @@ rest are regular-language expressible.
 - Keep stock `z3-solver` as the default path; use Noodler for the
   ECMA-direct properties. Noodler is a separate binary (cmake build,
   auto-fetches Mata) — CI wiring needs a build step or vendored binary.
+
+## As shipped in fwlive (2026-08)
+
+fwlive PRs [#201](https://github.com/lucas-albers-lz4/fwlive/pull/201)–[#203](https://github.com/lucas-albers-lz4/fwlive/pull/203) land host verification without runtime changes:
+
+| Piece | Where | Notes |
+| ----- | ----- | ----- |
+| F1 address alphabet | `fwlive/scripts/z3-verify.py` | Pre-awk gate, bounded length |
+| F2 classify predicates | same | Stock `seq` string-ops; upper+lower+original tokens |
+| F3 differential parity | same | Z3 sat-models + fixed corpus; JS vs `fwlive-is-firewall-event.sh` under `sh` + `busybox sh` |
+| F4 robustness | `fwlive/scripts/z3-robustness.js` + rpcd `__selftest` | Malformed string corpus |
+
+**Explicitly out of model in fwlive harness:**
+
+- Arbitrary `/i` mixed-case in Z3 predicates (covered by F3 fixed mixed-case parity block)
+- `NETFILTER_KV_GLUE` as ECMA regex (fwlive uses string-ops rewrite)
+
+**Upstream target (this repo):** ECMA-direct `/i` properties via `re.from_ecma2020` — [#571](https://github.com/lucas-albers-lz4/regexproof/issues/571). Depends on harness Noodler path ([#212](https://github.com/lucas-albers-lz4/regexproof/issues/212)).
