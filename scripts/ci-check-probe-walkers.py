@@ -38,6 +38,7 @@ def _is_broad_walker(script: pathlib.Path) -> bool:
 
 def main() -> int:
     problems = []
+    # Walker-exclusion scan.
     for script in sorted((ROOT / "scripts").glob("*.py")):
         if script.name.startswith(("ci-", "test_")):
             continue
@@ -50,6 +51,17 @@ def main() -> int:
                 f"'{EXCLUSION_TOKEN}' (staged-draft probes must never be "
                 "walked as contract material)"
             )
+    # batch/state.json integrity (the docstring promises this check): parse
+    # + verify the checksum; corrupt state is a hard failure.
+    state = ROOT / "batch" / "state.json"
+    if state.is_file():
+        try:
+            sys.path.insert(0, str(ROOT))
+            from regexproof.mine.batch_state import load_state
+
+            load_state(path=state)
+        except SystemExit as exc:
+            problems.append(f"batch/state.json: {exc}")
     if problems:
         print("\n".join(problems), file=sys.stderr)
         return 1

@@ -86,6 +86,8 @@ def _with_registry_lock(path: pathlib.Path | None, fn):
 def _pid_alive(pid: int) -> bool:
     try:
         os.kill(pid, 0)
+    except PermissionError:
+        return True  # exists but owned by another user — NOT dead (CodeRabbit #570)
     except (OSError, ProcessLookupError):
         return False
     return True

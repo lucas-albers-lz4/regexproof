@@ -49,7 +49,7 @@ def _wave_status(corpus: str) -> str:
     missing/invalid status refuses to probe — Luna r1 #14)."""
     try:
         return corpus_lock.wave_status(corpus)
-    except Exception as exc:  # fail closed on any read error
+    except (OSError, ValueError, KeyError, TypeError) as exc:
         raise SystemExit(
             f"batch-probe: cannot derive wave status for {corpus!r} from the "
             f"corpus event log ({exc}) — fail closed"
@@ -146,12 +146,15 @@ def main(argv: list[str] | None = None) -> int:
             )
         except SystemExit as exc:
             msg = str(exc)
-            if "lease_reject" in msg:
+            # Order matters: promote's "no live probe lease (cache_miss_reprobe)"
+            # message ALSO contains "lease_reject" — check the specific
+            # cache_miss_reprobe marker first (CodeRabbit #570).
+            if "cache_miss_reprobe" in msg or "no live probe lease" in msg:
+                outcome = "cache_miss_reprobe"
+            elif "lease_reject" in msg:
                 outcome = "lease_reject"
             elif "disk_budget" in msg or "probe-fetch-limit-mb" in msg:
                 outcome = "disk_budget"
-            elif "no live probe lease" in msg or "cache_miss_reprobe" in msg:
-                outcome = "cache_miss_reprobe"
             else:
                 outcome = "error"
             _record(digest, args.url, args.pin, outcome,
@@ -173,7 +176,14 @@ def main(argv: list[str] | None = None) -> int:
 
         clone_ms = int((time.monotonic() - t0) * 1000)
         cache_dir = pathlib.Path(entry["dir"])
-        probe_fetch_bytes = _dir_size_bytes(cache_dir) if not entry.get("cache_hit") else 0
+        # Byte accounting (CodeRabbit #570 / Luna r1 #15): on a HIT the
+        # probe avoided a full fetch — bytes_saved = the clone size a fresh
+        # fetch would have cost; lifecycle_bytes stays ZERO (no probe fetch
+        # happened). On a MISS bytes_saved = 0 and lifecycle_bytes = the
+        # actual probe fetch.
+        is_hit = bool(entry.get("cache_hit"))
+        probe_fetch_bytes = 0 if is_hit else _dir_size_bytes(cache_dir)
+        bytes_saved = _dir_size_bytes(cache_dir) if is_hit else 0
 
         try:
             wt = clone_cache.worktree_for(
@@ -221,9 +231,9 @@ def main(argv: list[str] | None = None) -> int:
             digest, args.url, args.pin, "ok",
             {
                 "corpus": args.corpus,
-                "cache_hit": bool(entry.get("cache_hit")),
-                "bytes_saved": probe_fetch_bytes,      # avoided fetch on hit
-                "fetch_bytes": probe_fetch_bytes,      # actual probe fetch
+                "cache_hit": is_hit,
+                "bytes_saved": bytes_saved,          # avoided fetch (hits)
+                "fetch_bytes": probe_fetch_bytes,    # actual probe fetch
                 "lifecycle_bytes": probe_fetch_bytes,  # probe_fetch only
                 "clone_ms": clone_ms,
                 "files_walked": walked,
@@ -231,8 +241,8 @@ def main(argv: list[str] | None = None) -> int:
             },
             args.state,
         )
-        print(f"ok: {args.url}@{args.pin[:12]} hit={entry.get('cache_hit')} "
-              f"fetch={probe_fetch_bytes}B walk={walked} clone_ms={clone_ms}")
+        print(f"ok: {args.url}@{args.pin[:12]} hit={is_hit} "
+              f"fetch={probe_fetch_bytes}B saved={bytes_saved}B walk={walked} clone_ms={clone_ms}")
         return 0
     finally:
         if wt is not None and wt.exists():

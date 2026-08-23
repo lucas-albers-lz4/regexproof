@@ -25,7 +25,8 @@ def _reg(tmp_path):
 def test_acquire_release_roundtrip(tmp_path):
     p = _reg(tmp_path)
     lease = lease_registry.acquire("https://x/y", "a" * 40, owner_pid=1, path=p)
-    assert lease["cache_hit"] if "cache_hit" in lease else True
+    assert lease["owner_pid"] == 1
+    assert lease["ttl_s"] == lease_registry.DEFAULT_TTL_S
     assert lease_registry.active_leases(path=p)[0]["url"] == "https://x/y"
     assert lease_registry.release("https://x/y", "a" * 40, owner_pid=1, path=p)
     assert lease_registry.active_leases(path=p) == []
@@ -180,13 +181,16 @@ def test_begin_item_is_resumable(tmp_path):
 def test_checksum_verification_and_bak_recovery(tmp_path):
     p = _state(tmp_path)
     batch_state.record_outcome("d1", "https://x/y", "a" * 40, "ok", path=p)
+    # Second write rotates a verified .bak into place (needed for recovery).
+    batch_state.record_outcome("d1", "https://x/y", "a" * 40, "ok", path=p)
+    # Corrupt the state file by mutating a VALUE — the checksum covers the
+    # canonical body, so any DATA mutation trips it (whitespace-only edits
+    # survive re-serialization and are intentionally accepted; CodeRabbit
+    # #570). load falls back to .bak.
     good = p.read_text(encoding="utf-8")
-    # Corrupt the state file (mutate the checksum itself) — load falls back
-    # to .bak (the checksum covers the canonical body, so ANY mutation
-    # including whitespace trips it).
-    p.write_text(good.replace('"outcome": "ok"', '"outcome": "ok"  '), encoding="utf-8")
+    p.write_text(good.replace('"outcome": "ok"', '"outcome": "error"'), encoding="utf-8")
     reg = batch_state.load_state(path=p)
-    assert reg["rows"]  # recovered from .bak
+    assert next(iter(reg["rows"].values()))["outcome"] == "ok"  # from .bak
 
 
 def test_corrupt_state_no_bak_fails_closed(tmp_path):

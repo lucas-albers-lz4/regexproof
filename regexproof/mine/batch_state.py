@@ -206,7 +206,7 @@ def _write(reg: dict[str, Any], path: pathlib.Path | None = None) -> None:
     reg["sha256"] = _checksum_of(reg)
     text = _canonical(reg)
     tmp = p.with_suffix(".json.tmp")
-    fd = os.open(str(tmp), os.O_CREAT | os.O_WRONLY | os.O_TRUNC, 0o644)
+    fd = os.open(str(tmp), os.O_CREAT | os.O_WRONLY | os.O_TRUNC, 0o600)
     try:
         os.write(fd, text.encode("utf-8"))
         os.fsync(fd)
@@ -214,12 +214,15 @@ def _write(reg: dict[str, Any], path: pathlib.Path | None = None) -> None:
         os.close(fd)
     # Verify the new temp BEFORE installing (write-then-verify-then-rename).
     _verify(tmp.read_text(encoding="utf-8"))
-    # Rotate the current verified state to .bak (overwrite only when the
-    # current file is verifiable — never clobber a good .bak with garbage).
+    # Rotate the current verified state to .bak via COPY (not rename — a
+    # crash between the two renames would otherwise leave NO state file;
+    # CodeRabbit #570). Only when the current file verifies.
     if p.is_file():
         try:
             _verify(p.read_text(encoding="utf-8"))
-            os.replace(p, p.with_suffix(".json.bak"))
+            import shutil
+
+            shutil.copy2(p, p.with_suffix(".json.bak"))
         except (ValueError, json.JSONDecodeError, OSError):
             pass  # current is corrupt: keep the existing .bak, replace state
     os.replace(tmp, p)
