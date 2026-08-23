@@ -11,6 +11,10 @@ Usage::
   python3 scripts/record-filing-decision.py --id CU-015 \\
       --status filed --reason "opened upstream issue" --filed-at 2026-08-23
 
+  # fixed_upstream can record via --resolved-at (checker accepts either):
+  python3 scripts/record-filing-decision.py --id CU-001 \\
+      --status fixed_upstream --reason "upstream fixed" --resolved-at 2026-08-23
+
   # approval_missing REQUIRES an escape (never a dead-end label):
   python3 scripts/record-filing-decision.py --id CU-016 \\
       --status approval_missing --approval-escape approval_present \\
@@ -70,30 +74,42 @@ def find_row(rows: list[dict], row_id: str) -> dict | None:
 def validate_disposition(
     row_id: str,
     status: str,
+    filed_at: str,
+    resolved_at: str,
     reason: str,
     reason_code: str,
-    filed_at: str,
     approval_escape: str,
     approval_ref: str,
 ) -> None:
     if status not in DISPOSITIONS:
         sys.exit(f"error: unknown disposition status {status!r}; allowed: {sorted(DISPOSITIONS)}")
-    if status in FILING_STATUSES and not filed_at.strip():
-        sys.exit(f"error: {row_id}: filing status {status!r} requires --filed-at (ISO date)")
-    if filed_at.strip():
-        try:
-            date.fromisoformat(filed_at.strip())
-        except ValueError:
-            sys.exit(
-                f"error: {row_id}: --filed-at {filed_at!r} is not an ISO date "
-                "(the coverage checker rejects it — record a valid date)"
-            )
+    filed_at = filed_at.strip()
+    resolved_at = resolved_at.strip()
+    reason = reason.strip()
+    reason_code = reason_code.strip()
+    approval_escape = approval_escape.strip()
+    approval_ref = approval_ref.strip()
+    # The checker accepts filed_at OR resolved_at for filing statuses.
+    if status in FILING_STATUSES and not filed_at and not resolved_at:
+        sys.exit(
+            f"error: {row_id}: filing status {status!r} requires --filed-at "
+            "or --resolved-at (ISO date)"
+        )
+    for label, val in (("--filed-at", filed_at), ("--resolved-at", resolved_at)):
+        if val:
+            try:
+                date.fromisoformat(val)
+            except ValueError:
+                sys.exit(
+                    f"error: {row_id}: {label} {val!r} is not an ISO date "
+                    "(the coverage checker rejects it — record a valid date)"
+                )
     reason_required = not (
         status == "approval_missing"
         and approval_escape == "approval_present"
-        and approval_ref.strip()
+        and approval_ref
     )
-    if reason_required and not reason.strip() and not reason_code.strip():
+    if reason_required and not reason and not reason_code:
         sys.exit(f"error: {row_id}: provide --reason or --reason-code")
     if status == "approval_missing":
         if approval_escape not in APPROVAL_ESCAPES:
@@ -101,12 +117,12 @@ def validate_disposition(
                 f"error: {row_id}: approval_missing requires --approval-escape "
                 f"({sorted(APPROVAL_ESCAPES)})"
             )
-        if approval_escape == "approval_present" and not approval_ref.strip():
+        if approval_escape == "approval_present" and not approval_ref:
             sys.exit(
                 f"error: {row_id}: approval-escape approval_present requires "
                 "--approval-ref (approval file path or issue/PR reference)"
             )
-        if approval_escape == "wont_file" and not reason_code.strip():
+        if approval_escape == "wont_file" and not reason_code:
             sys.exit(
                 f"error: {row_id}: approval-escape wont_file requires --reason-code"
             )
@@ -131,7 +147,8 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--status", required=True, help="Disposition status")
     ap.add_argument("--reason", default="", help="Human-readable reason")
     ap.add_argument("--reason-code", default="", help="Machine reason code (required for some escapes)")
-    ap.add_argument("--filed-at", default="", help="ISO filing date (required for filing statuses)")
+    ap.add_argument("--filed-at", default="", help="ISO filing date (required for filing statuses unless --resolved-at)")
+    ap.add_argument("--resolved-at", default="", help="ISO resolution date (alternative filing-status date; checker accepts either)")
     ap.add_argument("--approval-escape", default="", choices=sorted(APPROVAL_ESCAPES))
     ap.add_argument("--approval-ref", default="", help="Approval file path or issue/PR ref")
     ap.add_argument("--curated", type=pathlib.Path, default=CURATED, help=argparse.SUPPRESS)
@@ -146,24 +163,27 @@ def main(argv: list[str] | None = None) -> int:
     validate_disposition(
         args.id,
         args.status,
+        args.filed_at,
+        args.resolved_at,
         args.reason,
         args.reason_code,
-        args.filed_at,
         args.approval_escape,
         args.approval_ref,
     )
 
     update: dict = {"id": args.id, "status": args.status}
-    if args.reason:
-        update["reason"] = args.reason
-    if args.reason_code:
-        update["reason_code"] = args.reason_code
-    if args.filed_at:
-        update["filed_at"] = args.filed_at
-    if args.approval_escape:
-        update["approval_escape"] = args.approval_escape
-    if args.approval_ref:
-        update["approval_ref"] = args.approval_ref
+    if args.reason.strip():
+        update["reason"] = args.reason.strip()
+    if args.reason_code.strip():
+        update["reason_code"] = args.reason_code.strip()
+    if args.filed_at.strip():
+        update["filed_at"] = args.filed_at.strip()
+    if args.resolved_at.strip():
+        update["resolved_at"] = args.resolved_at.strip()
+    if args.approval_escape.strip():
+        update["approval_escape"] = args.approval_escape.strip()
+    if args.approval_ref.strip():
+        update["approval_ref"] = args.approval_ref.strip()
     rows = upsert_row(rows, update)
 
     path.write_text(

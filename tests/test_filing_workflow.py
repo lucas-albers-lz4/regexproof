@@ -277,6 +277,56 @@ def test_cli_rejects_non_iso_filed_at(tmp_path: Path):
     assert rows[0]["status"] == "filed_plan"
 
 
+def test_cli_fixed_upstream_via_resolved_at(tmp_path: Path):
+    """fixed_upstream records via --resolved-at (the checker accepts either
+    filed_at or resolved_at — CodeRabbit fold)."""
+    curated = _write_upstream(tmp_path / "upstream.jsonl", _curated())
+    r = subprocess.run(
+        _cli_args(
+            tmp_path, curated, "--id", "CU-901", "--status", "fixed_upstream",
+            "--reason", "upstream fixed", "--resolved-at", "2026-08-23",
+        ),
+        capture_output=True,
+        text=True,
+    )
+    assert r.returncode == 0, r.stderr
+    rows = [json.loads(line) for line in curated.read_text().splitlines() if line.strip()]
+    assert rows[0]["status"] == "fixed_upstream"
+    assert rows[0]["resolved_at"] == "2026-08-23"
+    gen = _gen_dir(tmp_path, _gt_row())
+    assert check.run(gen, curated) == 0
+
+
+def test_cli_rejects_whitespace_only_approval_fields(tmp_path: Path):
+    """Whitespace-only approval_ref / reason_code must be rejected (they
+    would pass a non-stripped check and then fail the checker)."""
+    curated = _write_upstream(tmp_path / "upstream.jsonl", _curated())
+    r = subprocess.run(
+        _cli_args(
+            tmp_path, curated, "--id", "CU-901", "--status", "approval_missing",
+            "--approval-escape", "approval_present", "--approval-ref", "   ",
+        ),
+        capture_output=True,
+        text=True,
+    )
+    assert r.returncode != 0
+    # Whitespace-only ref strips to empty: rejected either via the reason
+    # requirement or the approval-ref requirement.
+    assert "--approval-ref" in r.stderr or "--reason" in r.stderr
+    r2 = subprocess.run(
+        _cli_args(
+            tmp_path, curated, "--id", "CU-901", "--status", "approval_missing",
+            "--approval-escape", "wont_file", "--reason-code", "   ",
+        ),
+        capture_output=True,
+        text=True,
+    )
+    assert r2.returncode != 0
+    assert "--reason-code" in r2.stderr
+    rows = [json.loads(line) for line in curated.read_text().splitlines() if line.strip()]
+    assert rows[0]["status"] == "filed_plan"
+
+
 def test_cli_records_on_phase_a_backfilled_row(tmp_path: Path):
     """CU-011..014 (Phase A backfills) are the first test input: a GT-
     confirmed SAT row can record a filing disposition end-to-end."""
