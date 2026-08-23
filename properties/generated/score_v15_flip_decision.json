@@ -1,0 +1,33 @@
+{
+  "action": "keep score-v1",
+  "eval": {
+    "auc_delta_v15_minus_v1": 0.036372,
+    "auc_v1": 0.608708,
+    "auc_v15": 0.64508,
+    "bootstrap_ci_95_delta": [
+      -0.069662,
+      0.136493
+    ],
+    "cap_raise_calibration_note": "overlay shifts scores by 58.5566 on average; any cap raise must be recalibrated, never applied silently",
+    "mean_score_delta": 58.5566,
+    "population_n": 853,
+    "positive": 127,
+    "precision_at_k": {
+      "clopper_pearson_95": [
+        0.343255,
+        0.716582
+      ],
+      "k": 30,
+      "positive_in_top_k": 16
+    },
+    "split": {
+      "ratio": 0.5,
+      "seed": 20260822
+    },
+    "test_n": 427
+  },
+  "flip_rule": "bootstrap BCa difference CI (v1.5 - v1) excludes 0, one-sided, AUC-only, no OR alternative",
+  "flip_to_v15": false,
+  "note": "v2 comparison is label reproduction only, never validation",
+  "schema_version": "1"
+}

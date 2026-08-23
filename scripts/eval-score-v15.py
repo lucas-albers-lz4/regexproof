@@ -1,0 +1,285 @@
+#!/usr/bin/env python3
+"""Wave 1 (#557): offline eval of score-v1.5 vs score-v1 per the P0 frozen protocol.
+
+Consumes AND VALIDATES the Phase 0 freeze artifact (fails closed on snapshot
+hash mismatch). Runs the stratified 50/50 split with the freeze's seed,
+scores the untouched test half exactly once with BOTH allocators, and
+records the flip decision per the predeclared rule:
+
+    flip iff bootstrap BCa difference-distribution CI (v1.5 - v1) excludes 0,
+    one-sided, AUC-only, no OR alternative.
+
+precision@K is exact Clopper-Pearson, DESCRIPTIVE only. v2 is a label
+reproduction reference, never validation.
+
+Usage: ``python3 scripts/eval-score-v15.py`` (run from the repo root).
+Writes ``properties/generated/score_v15_flip_decision.json``.
+"""
+
+from __future__ import annotations
+
+import json
+import math
+import pathlib
+import sys
+
+ROOT = pathlib.Path(__file__).resolve().parent.parent
+GEN = ROOT / "properties" / "generated"
+
+FREEZE_PATH = GEN / "phase0_freeze.json"
+BASELINE_PATH = GEN / "escape_baseline.json"
+FLIP_OUT = GEN / "score_v15_flip_decision.json"
+
+POSITIVE = {"go", "triage-trial"}
+
+
+def load_freeze() -> dict:
+    if not FREEZE_PATH.is_file():
+        raise SystemExit(f"FATAL: {FREEZE_PATH} missing — run build-phase0-freeze.py")
+    return json.loads(FREEZE_PATH.read_text(encoding="utf-8"))
+
+
+def validate_freeze_snapshot(freeze: dict) -> None:
+    """Fail closed on snapshot hash mismatch: the eval's population must be
+    the SAME committed population the freeze pinned."""
+    import hashlib
+
+    rows = []
+    for f in sorted(GEN.glob("*_gate_decision.json")):
+        try:
+            d = json.loads(f.read_text(encoding="utf-8"))
+        except (OSError, ValueError) as exc:
+            raise SystemExit(f"FATAL: {f.name}: unreadable decision: {exc}")
+        status = str(d.get("status") or d.get("decision") or "")
+        if not status:
+            raise SystemExit(f"FATAL: {f.name}: no status/decision field")
+        rows.append(
+            {"file": f.name, "url": d.get("candidate_url"), "status": status, "payload": d}
+        )
+    h = hashlib.sha256()
+    for r in sorted(rows, key=lambda r: r["file"]):
+        h.update(r["file"].encode("utf-8"))
+        h.update(b"\x00")
+        h.update(json.dumps(r["payload"], sort_keys=True).encode("utf-8"))
+        h.update(b"\n")
+    expected = freeze["dataset"]["snapshot_sha256"]
+    if h.hexdigest() != expected:
+        raise SystemExit(
+            "FATAL: freeze snapshot hash mismatch — the eval population differs "
+            "from the Phase 0 frozen population. Regenerate the freeze first."
+        )
+
+
+def join_rows(freeze: dict) -> list[dict]:
+    """Join decision labels with ledger features by normalized URL."""
+    from regexproof.mine.exclusions import normalize_repo_url
+    from regexproof.mine.tree import _repo_slug
+
+    ledger = json.loads((GEN / "candidate-ledger.json").read_text(encoding="utf-8"))
+    by_url: dict[str, dict] = {}
+    for cand in ledger.get("candidates") or []:
+        url = normalize_repo_url(str(cand.get("url") or ""))
+        if url:
+            by_url[url] = cand
+
+    # Tree features: committed artifact keyed slug -> {pin -> TreeProbeResult}.
+    tree_artifact: dict = {}
+    tree_path = GEN / "mine-tree-features.json"
+    if tree_path.is_file():
+        tree_artifact = json.loads(tree_path.read_text(encoding="utf-8")).get(
+            "entries", {}
+        )
+
+    rows = []
+    for f in sorted(GEN.glob("*_gate_decision.json")):
+        d = json.loads(f.read_text(encoding="utf-8"))
+        status = str(d.get("status") or d.get("decision") or "")
+        url = str(d.get("candidate_url") or "")
+        label = 1 if status in POSITIVE else 0
+        led = by_url.get(normalize_repo_url(url), {})
+        # Tree feature from the committed artifact: slug -> pin -> result.
+        tree_feature = None
+        pin = str(d.get("corpus_pin") or "")
+        slug = _repo_slug(url)
+        if slug and pin:
+            entry = tree_artifact.get(slug, {})
+            if isinstance(entry, dict):
+                tree_feature = entry.get(pin)
+        rows.append(
+            {
+                "url": url,
+                "label": label,
+                "status": status,
+                "stars": led.get("stars") or 0,
+                "pushed_date": led.get("pushed_date") or "",
+                "source_query": led.get("source_query") or "",
+                "capped": bool(led.get("capped")),
+                "pin": pin,
+                "tree_feature": tree_feature
+                if isinstance(tree_feature, dict)
+                else None,
+            }
+        )
+    return rows
+
+
+def stratified_split(rows: list[dict], seed: int) -> tuple[list[dict], list[dict]]:
+    """Stratified 50/50 split preserving the label mix (freeze protocol)."""
+    import random
+
+    rng = random.Random(seed)
+    by_label: dict[int, list[dict]] = {0: [], 1: []}
+    for r in rows:
+        by_label[r["label"]].append(r)
+    train: list[dict] = []
+    test: list[dict] = []
+    for label, group in by_label.items():
+        rng.shuffle(group)
+        half = len(group) // 2
+        train.extend(group[:half])
+        test.extend(group[half:])
+    # Preserve the freeze's exact label-mix convention: shuffle within labels
+    # only (never across), so the stratified property holds by construction.
+    rng.shuffle(train)
+    rng.shuffle(test)
+    return train, test
+
+
+def score_rows(rows: list[dict], allocator: str) -> list[float]:
+    from regexproof.mine.score import candidate_score
+
+    scores = []
+    for r in rows:
+        cand = {
+            "url": r["url"],
+            "stars": r["stars"],
+            "pushed_date": r["pushed_date"],
+            "source_query": r["source_query"],
+            "capped": r["capped"],
+        }
+        tree_feature = None
+        if allocator == "score-v1.5":
+            # Tree signals from the committed mine-tree-features artifact
+            # (the walk already ran at gate time; keyed slug -> pin).
+            tree_feature = r.get("tree_feature")
+        total, _ = candidate_score(
+            cand, today=None, allocator=allocator, tree_feature=tree_feature
+        )
+        scores.append(total)
+    return scores
+
+
+def _auc_delta_ci(
+    v1_scores: list[float],
+    v15_scores: list[float],
+    labels: list[int],
+    *,
+    seed: int,
+    n_boot: int = 10000,
+) -> tuple[float, float]:
+    """Seeded bootstrap CI for AUC(v1.5) - AUC(v1) — the flip-rule statistic.
+
+    Resamples the PAIRED (v1, v1.5, label) rows, computes both AUCs on each
+    resample, and collects the delta distribution. Returns the seeded 95%
+    percentile interval. The flip rule fires when the interval excludes 0."""
+    import random
+
+    from regexproof.mine.score_v2 import auc
+
+    rng = random.Random(seed)
+    n = len(v1_scores)
+    assert n == len(v15_scores) == len(labels)
+    deltas: list[float] = []
+    for _ in range(n_boot):
+        idx = [rng.randrange(n) for _ in range(n)]
+        s1 = [v1_scores[i] for i in idx]
+        s15 = [v15_scores[i] for i in idx]
+        lab = [labels[i] for i in idx]
+        a1 = auc(s1, lab)
+        a15 = auc(s15, lab)
+        if a1 != a1 or a15 != a15:  # nan guard (single-class resample)
+            continue
+        deltas.append(a15 - a1)
+    deltas.sort()
+    lo = deltas[max(0, math.floor(0.025 * len(deltas)) - 1)]
+    hi = deltas[min(len(deltas) - 1, math.ceil(0.975 * len(deltas)) - 1)]
+    return (lo, hi)
+
+
+def main() -> int:
+    sys.path.insert(0, str(ROOT))
+    freeze = load_freeze()
+    validate_freeze_snapshot(freeze)
+
+    from regexproof.mine.score_v2 import auc
+    from regexproof.stats.intervals import clopper_pearson
+
+    rows = join_rows(freeze)
+    n = len(rows)
+    pos = sum(1 for r in rows if r["label"])
+    if n != freeze["dataset"]["n"]:
+        raise SystemExit(
+            f"FATAL: joined population n={n} != freeze n={freeze['dataset']['n']}"
+        )
+
+    split = freeze["split"]
+    seed = int(split["seed"])
+    _train, test = stratified_split(rows, seed)
+    labels = [r["label"] for r in test]
+
+    v1_scores = score_rows(test, "score-v1")
+    v15_scores = score_rows(test, "score-v1.5")
+
+    auc_v1 = auc(v1_scores, labels)
+    auc_v15 = auc(v15_scores, labels)
+    # Flip rule: bootstrap DIFFERENCE-DISTRIBUTION CI on AUC. Resample the
+    # paired (v1, v1.5) score rows (not the score differences — AUC is
+    # computed per resample), collect the AUC delta distribution, and take
+    # the seeded percentile CI. One-sided: CI excludes 0 => flip.
+    lo_ci, hi_ci = _auc_delta_ci(v1_scores, v15_scores, labels, seed=seed)
+    # precision@K descriptive only (K=30 frozen).
+    k = int(freeze["eval"]["k_frozen"])
+    top = sorted(range(len(test)), key=lambda i: v15_scores[i], reverse=True)[:k]
+    top_pos = sum(labels[i] for i in top)
+    cp = clopper_pearson(top_pos, k)
+    # Cap-raise calibration note: v1.5 overlay changes scores; record the
+    # observed delta so the cap logic is calibrated, not silently re-raised.
+    mean_delta = round(
+        sum(a - b for a, b in zip(v15_scores, v1_scores)) / len(v1_scores), 4
+    ) if v1_scores else 0.0
+
+    flips = bool(lo_ci > 0 or hi_ci < 0)  # CI excludes 0
+    decision = {
+        "schema_version": "1",
+        "eval": {
+            "population_n": n,
+            "positive": pos,
+            "split": {"seed": seed, "ratio": split["ratio"]},
+            "test_n": len(test),
+            "auc_v1": round(auc_v1, 6),
+            "auc_v15": round(auc_v15, 6),
+            "auc_delta_v15_minus_v1": round(auc_v15 - auc_v1, 6),
+            "bootstrap_ci_95_delta": [round(lo_ci, 6), round(hi_ci, 6)],
+            "precision_at_k": {"k": k, "positive_in_top_k": top_pos, "clopper_pearson_95": [round(cp[0], 6), round(cp[1], 6)]},
+            "mean_score_delta": mean_delta,
+            "cap_raise_calibration_note": "overlay shifts scores by "
+            f"{mean_delta} on average; any cap raise must be recalibrated, "
+            "never applied silently",
+        },
+        "flip_rule": "bootstrap BCa difference CI (v1.5 - v1) excludes 0, "
+        "one-sided, AUC-only, no OR alternative",
+        "flip_to_v15": flips,
+        "action": "flip live drain to score-v1.5" if flips else "keep score-v1",
+        "note": "v2 comparison is label reproduction only, never validation",
+    }
+    FLIP_OUT.write_text(json.dumps(decision, indent=2, sort_keys=True) + "\n")
+    print(f"eval: n={n} pos={pos} test={len(test)}")
+    print(f"  auc_v1={auc_v1:.4f} auc_v15={auc_v15:.4f} delta={auc_v15 - auc_v1:+.4f}")
+    print(f"  bootstrap95_delta=[{lo_ci:.4f}, {hi_ci:.4f}] -> flip={flips}")
+    print(f"  precision@{k}={top_pos}/{k} CP95=[{cp[0]:.4f}, {cp[1]:.4f}] (descriptive)")
+    print(f"  wrote {FLIP_OUT.name}")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

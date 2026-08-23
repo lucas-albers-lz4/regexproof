@@ -21,7 +21,7 @@ from regexproof.mine.features import (  # noqa: F401
 )
 
 SCORE_VERSION = "v1"
-ALLOCATORS = ("score-v1", "score-v2")
+ALLOCATORS = ("score-v1", "score-v1.5", "score-v2")
 SCORE_V2_WEIGHTS_PATH = Path(__file__).resolve().with_name("score_v2_weights.json")
 
 # Family weights locked in #148 plan.
@@ -38,6 +38,117 @@ _BOUNDARY_WEIGHTS: dict[str, float] = {
     "unknown": 0.0,
     "deterministic-false": -40.0,
 }
+
+# Tree-overlay weights for score-v1.5 (#550 Phase 1 / Item II, REVISION 8).
+# FROZEN in Phase 0: feature definitions + weights are committed here and
+# referenced by the Phase 0 freeze artifact; Phase 1's offline eval consumes
+# the P0 freeze (fails closed on hash mismatch) and records the flip
+# decision. The overlay is additive on top of the v1 base — tree counts
+# NEVER drive auto-NO-GO without a walk (the walk is the boundary signal).
+_TREE_OVERLAY_WEIGHTS: dict[str, float] = {
+    "tree_regex_files_log": 6.0,
+    "tree_python": 4.0,
+    "tree_javascript": 3.0,
+    "tree_yara": 5.0,
+    "tree_shell": 3.0,
+    "tree_config": 2.0,
+    "tree_path_log": 1.0,
+    "tree_boundary_true": 8.0,
+    "tree_boundary_false": -6.0,
+    "tree_unavailable": -5.0,
+}
+
+_TREE_PYTHON_SUFFIXES = {".py", ".pyi"}
+_TREE_JS_SUFFIXES = {".js", ".mjs", ".cjs", ".ts", ".tsx"}
+_TREE_CONFIG_SUFFIXES = {".json", ".yaml", ".yml", ".toml", ".ini", ".conf"}
+_TREE_YARA_SUFFIXES = {".yar", ".yara"}
+_TREE_SHELL_SUFFIXES = {".sh", ".bash", ".zsh"}
+
+
+def _tree_overlay_signals(tree_feature: dict[str, Any] | None) -> dict[str, float]:
+    """Extract the frozen v1.5 tree-overlay signals from a tree probe.
+
+    ``tree_feature`` is the TreeProbeResult dict (or None when no probe ran).
+    A missing/incomplete/truncated probe yields ``tree_unavailable=1`` and
+    zero for the file-type signals — the deprioritized tier."""
+    signals: dict[str, float] = {name: 0.0 for name in _TREE_OVERLAY_WEIGHTS}
+    if not isinstance(tree_feature, dict):
+        signals["tree_unavailable"] = 1.0
+        return signals
+    complete = tree_feature.get("complete") is True and tree_feature.get("truncated") is not True
+    boundary = str(tree_feature.get("security_boundary") or "unknown")
+    signals["tree_boundary_true"] = 1.0 if boundary == "deterministic-true" else 0.0
+    signals["tree_boundary_false"] = 1.0 if boundary == "deterministic-false" else 0.0
+    if not complete:
+        signals["tree_unavailable"] = 1.0
+        return signals
+    counts = tree_feature.get("regex_file_type_counts")
+    counts = counts if isinstance(counts, dict) else {}
+
+    def _scaled_log(value: int | None) -> float:
+        if value is None or value <= 0:
+            return 0.0
+        import math
+
+        return round(math.log1p(float(value)), 4)
+
+    signals["tree_regex_files_log"] = _scaled_log(
+        sum(max(0, int(v or 0)) for v in counts.values())
+    )
+    signals["tree_python"] = _scaled_log(
+        sum(int(counts.get(s) or 0) for s in _TREE_PYTHON_SUFFIXES)
+    )
+    signals["tree_javascript"] = _scaled_log(
+        sum(int(counts.get(s) or 0) for s in _TREE_JS_SUFFIXES)
+    )
+    signals["tree_config"] = _scaled_log(
+        sum(int(counts.get(s) or 0) for s in _TREE_CONFIG_SUFFIXES)
+    )
+    signals["tree_yara"] = _scaled_log(
+        sum(int(counts.get(s) or 0) for s in _TREE_YARA_SUFFIXES)
+    )
+    signals["tree_shell"] = _scaled_log(
+        sum(int(counts.get(s) or 0) for s in _TREE_SHELL_SUFFIXES)
+    )
+    signals["tree_path_log"] = _scaled_log(tree_feature.get("path_count"))
+    return signals
+
+
+def _v1_base_score(
+    cand: dict[str, Any], *, today: date | None
+) -> tuple[float, dict[str, Any]]:
+    """The score-v1 base (boundary + family + stars + recency + capped)."""
+    url = str(cand.get("url") or "")
+    slug = _repo_slug(url)
+    repo_name = slug.split("/")[-1] if slug else ""
+    boundary = classify_boundary(BoundarySignals(repo_name=repo_name))
+    boundary_pts = _BOUNDARY_WEIGHTS.get(boundary, 0.0)
+
+    family = _query_family(str(cand.get("source_query") or ""))
+    family_pts = _FAMILY_WEIGHTS.get(family, _FAMILY_WEIGHTS["other"])
+
+    stars = int(cand.get("stars") or 0)
+    stars_pts = _stars_points(stars)
+
+    recency_pts = _recency_points(str(cand.get("pushed_date") or ""), today=today)
+
+    capped = bool(cand.get("capped"))
+    capped_pts = -10.0 if capped else 0.0
+
+    total = boundary_pts + family_pts + stars_pts + recency_pts + capped_pts
+    breakdown: dict[str, Any] = {
+        "boundary": boundary,
+        "boundary_pts": boundary_pts,
+        "family": family,
+        "family_pts": family_pts,
+        "stars": stars,
+        "stars_pts": stars_pts,
+        "recency_pts": recency_pts,
+        "capped": capped,
+        "capped_pts": capped_pts,
+        "total": total,
+    }
+    return total, breakdown
 
 
 def candidate_score(
@@ -66,36 +177,25 @@ def candidate_score(
         }
         return total, breakdown
 
-    url = str(cand.get("url") or "")
-    slug = _repo_slug(url)
-    repo_name = slug.split("/")[-1] if slug else ""
-    boundary = classify_boundary(BoundarySignals(repo_name=repo_name))
-    boundary_pts = _BOUNDARY_WEIGHTS.get(boundary, 0.0)
+    base_total, base = _v1_base_score(cand, today=today)
+    if allocator == "score-v1":
+        base["allocator"] = allocator
+        base["score_version"] = "v1"
+        return base_total, base
 
-    family = _query_family(str(cand.get("source_query") or ""))
-    family_pts = _FAMILY_WEIGHTS.get(family, _FAMILY_WEIGHTS["other"])
-
-    stars = int(cand.get("stars") or 0)
-    stars_pts = _stars_points(stars)
-
-    recency_pts = _recency_points(str(cand.get("pushed_date") or ""), today=today)
-
-    capped = bool(cand.get("capped"))
-    capped_pts = -10.0 if capped else 0.0
-
-    total = boundary_pts + family_pts + stars_pts + recency_pts + capped_pts
+    # score-v1.5: v1 base + frozen tree overlay (#550 Phase 1 / Item II).
+    signals = _tree_overlay_signals(tree_feature)
+    overlay_pts = sum(
+        _TREE_OVERLAY_WEIGHTS[name] * signals[name] for name in _TREE_OVERLAY_WEIGHTS
+    )
+    total = round(base_total + overlay_pts, 4)
     breakdown: dict[str, Any] = {
         "allocator": allocator,
-        "score_version": "v1",
-        "boundary": boundary,
-        "boundary_pts": boundary_pts,
-        "family": family,
-        "family_pts": family_pts,
-        "stars": stars,
-        "stars_pts": stars_pts,
-        "recency_pts": recency_pts,
-        "capped": capped,
-        "capped_pts": capped_pts,
+        "score_version": "v1.5",
+        **base,
+        "tree_unavailable": signals["tree_unavailable"] == 1.0,
+        "tree_signals": {k: v for k, v in signals.items() if v != 0.0},
+        "tree_overlay_pts": round(overlay_pts, 4),
         "total": total,
     }
     return total, breakdown
@@ -128,13 +228,22 @@ def _normalize_allocator(value: str) -> str:
     value = str(value or "score-v1").strip().lower()
     if value in {"v1", "score-v1"}:
         return "score-v1"
+    if value in {"v1.5", "score-v1.5"}:
+        return "score-v1.5"
     if value in {"v2", "score-v2"}:
         return "score-v2"
-    raise ValueError(f"unknown allocator {value!r}; expected score-v1 or score-v2")
+    raise ValueError(
+        f"unknown allocator {value!r}; expected score-v1, score-v1.5 or score-v2"
+    )
 
 
 def score_version_for_allocator(value: str) -> str:
-    return "v2" if _normalize_allocator(value) == "score-v2" else "v1"
+    norm = _normalize_allocator(value)
+    if norm == "score-v2":
+        return "v2"
+    if norm == "score-v1.5":
+        return "v1.5"
+    return "v1"
 
 
 def _tree_feature_for_candidate(
