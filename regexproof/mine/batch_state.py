@@ -39,6 +39,10 @@ OUTCOMES = frozenset(
         "lease_reject",
         "cache_miss_reprobe",
         "skip_wave_active",
+        "auto_nogo",       # Luna r1 #13: complete #559 vocabulary
+        "needs_human",
+        "rate_limited",
+        "error",
     }
 )
 
@@ -65,9 +69,13 @@ def _with_state_lock(path: pathlib.Path | None, fn):
     """Exclusive flock on the dedicated never-renamed lock file. With an
     injected state path, the lock is derived as ``<state>.lock`` — never
     the state file itself (an a+ open would create an empty file and
-    corrupt reads)."""
-    p = pathlib.Path(path) if path is not None else LOCK_PATH
-    lock = p.with_name(p.name + ".lock")
+    corrupt reads). The DEFAULT lock path is used verbatim (Luna r1 #10:
+    no double suffix)."""
+    if path is not None:
+        p = pathlib.Path(path)
+        lock = p.with_name(p.name + ".lock")
+    else:
+        lock = LOCK_PATH  # already batch/state.json.lock
     lock.parent.mkdir(parents=True, exist_ok=True)
     with open(lock, "a+", encoding="utf-8") as fh:
         fcntl.flock(fh.fileno(), fcntl.LOCK_EX)
@@ -82,7 +90,7 @@ def load_state(path: pathlib.Path | None = None) -> dict[str, Any]:
     (loud: prints a warning). Raises SystemExit if both are unreadable."""
     p = pathlib.Path(path) if path is not None else STATE_PATH
     if not p.is_file():
-        return {"schema_version": "1", "manifest_digests": {}, "rows": []}
+        return {"schema_version": "1", "manifest_digests": {}, "rows": {}}
     text = p.read_text(encoding="utf-8")
     try:
         return _verify(text)
@@ -101,6 +109,45 @@ def load_state(path: pathlib.Path | None = None) -> dict[str, Any]:
         ) from exc
 
 
+def _row_key(manifest_digest: str, url: str, pin: str) -> str:
+    return f"{manifest_digest}#{url}#{pin}"
+
+
+def begin_item(
+    manifest_digest: str,
+    url: str,
+    pin: str,
+    *,
+    at: str = "",
+    path: pathlib.Path | None = None,
+) -> dict[str, Any]:
+    """Start a probe item (Luna r1 #11: keyed + resumable — an incomplete
+    item has started_at but no completed_at and is re-run on resume)."""
+    import datetime as _dt
+
+    at = at or _dt.datetime.now(_dt.timezone.utc).isoformat(timespec="seconds")
+
+    def _begin() -> dict[str, Any]:
+        reg = load_state(path)
+        k = _row_key(manifest_digest, url, pin)
+        row = {
+            "key": k,
+            "manifest_digest": manifest_digest,
+            "url": url,
+            "pin": pin,
+            "started_at": at,
+            "completed_at": "",
+            "outcome": "",
+        }
+        reg["rows"][k] = row  # keyed: no duplicates, resume-safe
+        reg["manifest_digests"].setdefault(manifest_digest, {"count": 0})
+        _rebuild_counts(reg)
+        _write(reg, path)
+        return row
+
+    return _with_state_lock(path, _begin)
+
+
 def record_outcome(
     manifest_digest: str,
     url: str,
@@ -110,38 +157,50 @@ def record_outcome(
     extra: dict[str, Any] | None = None,
     path: pathlib.Path | None = None,
 ) -> dict[str, Any]:
-    """Append one probe outcome row under the state lock. Prior-digest rows
-    are retained. Returns the updated registry."""
+    """Complete a probe item with an outcome (keyed upsert — no duplicate
+    rows; prior-digest rows retained via the key namespace)."""
     if outcome not in OUTCOMES:
         raise SystemExit(f"batch_state: unknown outcome {outcome!r}")
+    import datetime as _dt
+
+    at = _dt.datetime.now(_dt.timezone.utc).isoformat(timespec="seconds")
 
     def _record() -> dict[str, Any]:
         reg = load_state(path)
+        k = _row_key(manifest_digest, url, pin)
+        prev = reg["rows"].get(k, {})
         row = {
+            "key": k,
             "manifest_digest": manifest_digest,
             "url": url,
             "pin": pin,
+            "started_at": prev.get("started_at", at),
+            "completed_at": at,
             "outcome": outcome,
             **(extra or {}),
         }
-        reg.setdefault("rows", []).append(row)
-        reg.setdefault("manifest_digests", {})[manifest_digest] = reg.get(
-            "manifest_digests", {}
-        ).get(manifest_digest, {"count": 0, "first_seen": row.get("at", "")})
-        # Recompute the digest map count from the rows (single source).
-        counts: dict[str, int] = {}
-        for r in reg["rows"]:
-            counts[r["manifest_digest"]] = counts.get(r["manifest_digest"], 0) + 1
-        reg["manifest_digests"] = {
-            d: {"count": counts[d]} for d in counts
-        }
+        reg["rows"][k] = row
+        reg.setdefault("manifest_digests", {}).setdefault(manifest_digest, {})
+        _rebuild_counts(reg)
         _write(reg, path)
-        return reg
+        return row
 
     return _with_state_lock(path, _record)
 
 
+def _rebuild_counts(reg: dict[str, Any]) -> None:
+    counts: dict[str, int] = {}
+    for r in reg["rows"].values():
+        counts[r["manifest_digest"]] = counts.get(r["manifest_digest"], 0) + 1
+    reg["manifest_digests"] = {d: {"count": counts[d]} for d in counts}
+
+
 def _write(reg: dict[str, Any], path: pathlib.Path | None = None) -> None:
+    """Crash-safe install (Luna r1 #12): write temp, fsync, then atomically
+    replace the state. The PREVIOUS verified state becomes .bak only after
+    the new state is installed — a crash mid-write leaves the old state
+    intact (never a window with no state file), and a good .bak is never
+    overwritten by a corrupt current file."""
     p = pathlib.Path(path) if path is not None else STATE_PATH
     p.parent.mkdir(parents=True, exist_ok=True)
     reg["sha256"] = _checksum_of(reg)
@@ -153,12 +212,16 @@ def _write(reg: dict[str, Any], path: pathlib.Path | None = None) -> None:
         os.fsync(fd)
     finally:
         os.close(fd)
-    # Keep a .bak of the previous good state for recovery.
+    # Verify the new temp BEFORE installing (write-then-verify-then-rename).
+    _verify(tmp.read_text(encoding="utf-8"))
+    # Rotate the current verified state to .bak (overwrite only when the
+    # current file is verifiable — never clobber a good .bak with garbage).
     if p.is_file():
         try:
+            _verify(p.read_text(encoding="utf-8"))
             os.replace(p, p.with_suffix(".json.bak"))
-        except OSError:
-            pass
+        except (ValueError, json.JSONDecodeError, OSError):
+            pass  # current is corrupt: keep the existing .bak, replace state
     os.replace(tmp, p)
 
 
@@ -167,7 +230,7 @@ def projection(path: pathlib.Path | None = None) -> dict[str, Any]:
     bytes_saved, lifecycle_bytes (probe_fetch only), clone_ms p50/p95, and
     the survivor rate for the escape clause."""
     reg = load_state(path)
-    rows = reg["rows"]
+    rows = list(reg["rows"].values()) if isinstance(reg.get("rows"), dict) else reg.get("rows", [])
     hits = [r for r in rows if r.get("cache_hit")]
     misses = [r for r in rows if not r.get("cache_hit")]
     bytes_saved = sum(int(r.get("bytes_saved") or 0) for r in rows)

@@ -35,9 +35,13 @@ PROBE_FETCH_LIMIT_MB = 2048
 
 
 def cache_dir(url: str, pin: str, root: pathlib.Path | None = None) -> pathlib.Path:
+    """Cache dir keyed by a FULL (url, pin) content hash — the URL basename
+    + pin prefix can collide across repos (Luna r1 #5)."""
+    import hashlib
+
     base = pathlib.Path(root) if root is not None else CACHE_ROOT
-    corpus = url.rstrip("/").rsplit("/", 1)[-1]
-    return base / f"{corpus}__{pin[:16]}"
+    key = hashlib.sha256(f"{url}#{pin}".encode("utf-8")).hexdigest()
+    return base / key[:32]
 
 
 def cache_hit(url: str, pin: str, *, root: pathlib.Path | None = None) -> bool:
@@ -94,6 +98,8 @@ def cache_acquire(
         lease_registry.release(url, pin, owner_pid=owner_pid, path=registry_path)
         shutil.rmtree(d, ignore_errors=True)
         raise CloneError(f"git fetch {pin} failed: {fetch.stderr or fetch.stdout}")
+    # Sidecar key maps the hashed dir back to (url, pin) for safe GC.
+    (d / ".cache-key").write_text(f"{url}#{pin}", encoding="utf-8")
     if max_disk_mb is not None:
         size_mb = _dir_size_mb(d)
         if size_mb > max_disk_mb:
@@ -134,6 +140,31 @@ def worktree_for(
     return wt
 
 
+def worktree_remove(
+    url: str,
+    pin: str,
+    *,
+    owner_pid: int,
+    root: pathlib.Path | None = None,
+    run: RunFn | None = None,
+) -> None:
+    """Remove a probe worktree THROUGH GIT (``git worktree remove``) so the
+    linked-worktree metadata is cleaned; filesystem removal only as a
+    guarded fallback (Luna r1 #16 — rmtree alone leaves dangling metadata
+    that breaks future add/prune)."""
+    run_fn = run or _default_run
+    d = cache_dir(url, pin, root)
+    wt = d / f"worktree-{owner_pid}"
+    if not wt.exists():
+        return
+    proc = run_fn(["git", "-C", str(d), "worktree", "remove", "--force", str(wt)])
+    if proc.returncode != 0:
+        # Guarded fallback: only if git refuses (e.g. dirty) AND the dir is
+        # a real worktree we created.
+        if wt.is_dir():
+            shutil.rmtree(wt, ignore_errors=True)
+
+
 def release(
     url: str,
     pin: str,
@@ -150,20 +181,33 @@ def cache_gc(
     root: pathlib.Path | None = None,
     registry_path: pathlib.Path | None = None,
 ) -> int:
-    """Batch-start GC: drop leases not in the retain set AND remove their
-    reference clones. Returns the number of cache dirs removed."""
-    lease_registry.purge(
-        retain_go_corpora=retain_go_corpora, path=registry_path,
-    )
+    """Batch-start GC. NEVER removes a clone with an ACTIVE lease — eviction
+    only touches unleased/expired entries (Luna r1 #6: purge-then-delete
+    could remove a clone a live probe was using). Retained corpora keep
+    their clones warm. Returns the number of cache dirs removed.
+
+    NOTE: ``retain_go_corpora`` is honored via the lease registry (kept
+    leases) — the directory sweep below only removes dirs whose lease is
+    gone AND whose corpus is not retained."""
     base = pathlib.Path(root) if root is not None else CACHE_ROOT
     removed = 0
     if not base.is_dir():
         return 0
+    live: set[str] = set()
+    for lease in lease_registry.active_leases(path=registry_path):
+        live.add(str(lease.get("url") or "") + "#" + str(lease.get("pin") or ""))
     for d in base.iterdir():
         if not d.is_dir():
             continue
-        # Retain corpora keep their clone warm.
-        corpus = d.name.split("__")[0]
+        # Map the dir back to (url, pin) via a sidecar key file written at
+        # clone time; without one, refuse to guess (safety).
+        key_file = d / ".cache-key"
+        if not key_file.is_file():
+            continue
+        url, pin = key_file.read_text(encoding="utf-8").split("#", 1)
+        if f"{url}#{pin}" in live:
+            continue  # active lease — never evict
+        corpus = url.rstrip("/").rsplit("/", 1)[-1]
         if retain_go_corpora and corpus in retain_go_corpora:
             continue
         shutil.rmtree(d, ignore_errors=True)

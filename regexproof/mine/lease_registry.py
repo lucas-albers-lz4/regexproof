@@ -67,9 +67,13 @@ def _with_registry_lock(path: pathlib.Path | None, fn):
     convention as corpus_lock (Wave C) and measure-p5-guarded. When a
     custom registry path is injected, the lock is derived as
     ``<registry>.lock`` (never the registry itself — that would create an
-    empty file and corrupt reads)."""
-    p = pathlib.Path(path) if path is not None else LOCK_PATH
-    lock = p.with_name(p.name + ".lock")
+    empty file and corrupt reads). The DEFAULT lock path is used verbatim
+    (Luna r1 #10: no double suffix)."""
+    if path is not None:
+        p = pathlib.Path(path)
+        lock = p.with_name(p.name + ".lock")
+    else:
+        lock = LOCK_PATH  # already cache/leases.json.lock
     lock.parent.mkdir(parents=True, exist_ok=True)
     with open(lock, "a+", encoding="utf-8") as fh:
         fcntl.flock(fh.fileno(), fcntl.LOCK_EX)
@@ -87,10 +91,35 @@ def _pid_alive(pid: int) -> bool:
     return True
 
 
+def _proc_start_ticks(pid: int) -> int | None:
+    """Process start time from /proc/<pid>/stat field 22 (jiffies) — the
+    anti-PID-reuse identity (#559 / Luna r1 #8: PID liveness alone lets a
+    recycled PID inherit a stale lease)."""
+    try:
+        stat = pathlib.Path(f"/proc/{pid}/stat").read_text(encoding="utf-8")
+    except OSError:
+        return None
+    try:
+        # Comm may contain spaces/parens; take everything after the last ')'.
+        return int(stat.rsplit(")", 1)[1].split()[19])
+    except (ValueError, IndexError):
+        return None
+
+
 def _expired(lease: dict[str, Any], now: float) -> bool:
     start = float(lease.get("start_time") or 0)
     ttl = float(lease.get("ttl_s") or DEFAULT_TTL_S)
-    return (now - start) > ttl or not _pid_alive(int(lease.get("owner_pid") or -1))
+    if (now - start) > ttl:
+        return True
+    pid = int(lease.get("owner_pid") or -1)
+    if not _pid_alive(pid):
+        return True
+    recorded = lease.get("owner_start_ticks")
+    if recorded is not None:
+        current = _proc_start_ticks(pid)
+        if current is not None and int(recorded) != current:
+            return True  # PID recycled — the lease belongs to a dead process
+    return False
 
 
 def _key(url: str, pin: str) -> str:
@@ -132,6 +161,11 @@ def acquire(
         reg = _read_registry(path)
         k = _key(url, pin)
         now = _now()
+        # Reap stale entries FIRST — a dead/expired lease must not consume
+        # the cap and cause a false lease_reject (Luna r1 #7).
+        for kk in list(reg["leases"]):
+            if _expired(reg["leases"][kk], now):
+                del reg["leases"][kk]
         existing = reg["leases"].get(k)
         if existing is not None and not _expired(existing, now):
             # Leased by a LIVE owner — reject unless it's the same owner
@@ -145,6 +179,7 @@ def acquire(
             existing["ttl_s"] = ttl_s
             existing["expires_at"] = now + ttl_s
             existing["start_time"] = now
+            existing["owner_start_ticks"] = _proc_start_ticks(owner_pid)
             _write_registry(reg, path)
             return existing
         if max_leases is not None and len(reg["leases"]) >= max_leases:
@@ -156,6 +191,7 @@ def acquire(
             "url": url,
             "pin": pin,
             "owner_pid": owner_pid,
+            "owner_start_ticks": _proc_start_ticks(owner_pid),
             "start_time": now,
             "ttl_s": ttl_s,
             "expires_at": now + ttl_s,
@@ -184,7 +220,16 @@ def promote(
         k = _key(url, pin)
         now = _now()
         existing = reg["leases"].get(k)
-        if existing is not None and int(existing.get("owner_pid") or -1) != owner_pid:
+        # Promote requires a LIVE probe lease owned by the caller — creating
+        # a lease from nothing, or promoting a dead/expired probe, would let
+        # stale or missing data into the durable cache (Luna r1 #9 /
+        # cache_miss_reprobe semantics).
+        if existing is None or _expired(existing, now):
+            raise SystemExit(
+                f"lease_registry: lease_reject — cannot promote ({url}, {pin}): "
+                "no live probe lease (cache_miss_reprobe)"
+            )
+        if int(existing.get("owner_pid") or -1) != owner_pid:
             raise SystemExit(
                 f"lease_registry: lease_reject — cannot promote ({url}, {pin}): "
                 f"leased by pid {existing.get('owner_pid')}"
@@ -193,6 +238,7 @@ def promote(
             "url": url,
             "pin": pin,
             "owner_pid": owner_pid,
+            "owner_start_ticks": _proc_start_ticks(owner_pid),
             "start_time": now,
             "ttl_s": ttl_s,
             "expires_at": now + ttl_s,

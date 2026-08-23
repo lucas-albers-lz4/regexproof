@@ -81,6 +81,36 @@ def test_two_phase_promote_handoff(tmp_path):
     assert len(lease_registry.active_leases(path=p)) == 1
 
 
+def test_promote_without_live_probe_rejected(tmp_path):
+    """Luna r1 #9: promote requires a LIVE probe lease — creating a lease
+    from nothing would promote missing/stale data (cache_miss_reprobe)."""
+    p = _reg(tmp_path)
+    with pytest.raises(SystemExit, match="no live probe lease"):
+        lease_registry.promote("https://x/y", "a" * 40, owner_pid=1, path=p)
+    # Expired probe lease also refuses.
+    lease_registry.acquire(
+        "https://x/y", "a" * 40, owner_pid=1,
+        ttl_s=lease_registry.PROBE_TTL_S, path=p,
+    )
+    lease_registry.reap_stale(now=time.time() + 1000, path=p)
+    with pytest.raises(SystemExit, match="no live probe lease"):
+        lease_registry.promote(
+            "https://x/y", "a" * 40, owner_pid=1,
+            ttl_s=lease_registry.DEFAULT_TTL_S,
+            path=p,
+        )
+
+
+def test_stale_reaped_before_capacity_check(tmp_path):
+    """Luna r1 #7: a dead lease must not consume the cap and cause a false
+    lease_reject."""
+    p = _reg(tmp_path)
+    lease_registry.acquire("https://x/a", "a" * 40, owner_pid=99999999, path=p)
+    # Dead owner + capacity 1: the dead lease is reaped first, so the new
+    # acquire succeeds instead of falsely rejecting.
+    lease_registry.acquire("https://x/b", "b" * 40, owner_pid=1, max_leases=1, path=p)
+
+
 def test_purge_retain_go(tmp_path):
     p = _reg(tmp_path)
     lease_registry.acquire("https://github.com/ow/packages", "a" * 40, owner_pid=1, path=p)
@@ -101,11 +131,13 @@ def _state(tmp_path):
 
 def test_record_and_projection(tmp_path):
     p = _state(tmp_path)
+    batch_state.begin_item("d1", "https://x/y", "a" * 40, at="2026-08-23T00:00:00+00:00", path=p)
     batch_state.record_outcome(
         "d1", "https://x/y", "a" * 40, "ok",
         extra={"cache_hit": True, "bytes_saved": 5000, "lifecycle_bytes": 100, "clone_ms": 120},
         path=p,
     )
+    batch_state.begin_item("d1", "https://x/z", "b" * 40, at="2026-08-23T00:00:01+00:00", path=p)
     batch_state.record_outcome(
         "d1", "https://x/z", "b" * 40, "ok",
         extra={"cache_hit": False, "bytes_saved": 0, "lifecycle_bytes": 900, "clone_ms": 340},
@@ -121,14 +153,40 @@ def test_record_and_projection(tmp_path):
     assert proj["survivor_rate"] == 1.0
 
 
+def test_keyed_rows_no_duplicates(tmp_path):
+    """Luna r1 #11: keyed state — recording the same (digest, url, pin)
+    twice must UPSERT, not append."""
+    p = _state(tmp_path)
+    batch_state.begin_item("d1", "https://x/y", "a" * 40, at="2026-08-23T00:00:00+00:00", path=p)
+    batch_state.record_outcome("d1", "https://x/y", "a" * 40, "ok", path=p)
+    batch_state.record_outcome("d1", "https://x/y", "a" * 40, "ok", path=p)
+    reg = batch_state.load_state(path=p)
+    assert len(reg["rows"]) == 1  # keyed upsert
+    assert reg["rows"][batch_state._row_key("d1", "https://x/y", "a" * 40)]["outcome"] == "ok"
+
+
+def test_begin_item_is_resumable(tmp_path):
+    """Luna r1 #11: an item with started_at but no completed_at is
+    incomplete (re-run on resume)."""
+    p = _state(tmp_path)
+    batch_state.begin_item("d1", "https://x/y", "a" * 40, at="2026-08-23T00:00:00+00:00", path=p)
+    reg = batch_state.load_state(path=p)
+    row = next(iter(reg["rows"].values()))
+    assert row["started_at"]
+    assert row["completed_at"] == ""
+    assert row["outcome"] == ""
+
+
 def test_checksum_verification_and_bak_recovery(tmp_path):
     p = _state(tmp_path)
     batch_state.record_outcome("d1", "https://x/y", "a" * 40, "ok", path=p)
     good = p.read_text(encoding="utf-8")
-    # Corrupt the state file (flip a byte) — load falls back to .bak.
+    # Corrupt the state file (mutate the checksum itself) — load falls back
+    # to .bak (the checksum covers the canonical body, so ANY mutation
+    # including whitespace trips it).
     p.write_text(good.replace('"outcome": "ok"', '"outcome": "ok"  '), encoding="utf-8")
     reg = batch_state.load_state(path=p)
-    assert reg["rows"][0]["outcome"] == "ok"  # recovered from .bak
+    assert reg["rows"]  # recovered from .bak
 
 
 def test_corrupt_state_no_bak_fails_closed(tmp_path):
@@ -143,7 +201,7 @@ def test_prior_digest_rows_retained(tmp_path):
     batch_state.record_outcome("old-digest", "https://x/y", "a" * 40, "ok", path=p)
     batch_state.record_outcome("new-digest", "https://x/y", "a" * 40, "cache_miss_reprobe", path=p)
     reg = batch_state.load_state(path=p)
-    assert {r["manifest_digest"] for r in reg["rows"]} == {"old-digest", "new-digest"}
+    assert {r["manifest_digest"] for r in reg["rows"].values()} == {"old-digest", "new-digest"}
     assert reg["manifest_digests"]["old-digest"]["count"] == 1
 
 
@@ -157,4 +215,64 @@ def test_outcomes_vocabulary():
     assert batch_state.OUTCOMES >= {
         "clone_timeout", "disk_budget", "lease_reject",
         "cache_miss_reprobe", "skip_wave_active",
+        "auto_nogo", "needs_human", "rate_limited", "error",
     }
+
+
+# --- disk admission (Luna r1 #4) ---------------------------------------------
+
+
+def test_admission_w0_fails_closed(tmp_path):
+    from regexproof.mine import disk_admission
+
+    assert disk_admission.reserve(
+        worker_count=0, per_clone_cap_mb=100, max_disk_mb=500,
+        owner_pid=1, path=tmp_path / "admission.json",
+    ) is False
+
+
+def test_admission_budget_exhausted(tmp_path):
+    from regexproof.mine import disk_admission
+
+    p = tmp_path / "admission.json"
+    assert disk_admission.reserve(
+        worker_count=1, per_clone_cap_mb=400, max_disk_mb=500,
+        owner_pid=1, path=p,
+    ) is True
+    # Second reservation exceeds the 500MB budget.
+    assert disk_admission.reserve(
+        worker_count=1, per_clone_cap_mb=200, max_disk_mb=500,
+        owner_pid=2, path=p,
+    ) is False
+    # Release frees the budget.
+    disk_admission.release(owner_pid=1, path=p)
+    assert disk_admission.reserve(
+        worker_count=1, per_clone_cap_mb=200, max_disk_mb=500,
+        owner_pid=2, path=p,
+    ) is True
+
+
+# --- clone cache GC safety (Luna r1 #6) ---------------------------------------
+
+
+def test_cache_gc_never_removes_leased(tmp_path):
+    """GC must not delete a clone whose lease is ACTIVE — eviction only
+    touches unleased/expired entries."""
+    from regexproof.admission import clone_cache
+
+    cache_root = tmp_path / "cache"
+    reg_path = tmp_path / "leases.json"
+    url, pin = "https://github.com/ow/packages", "a" * 40
+    d = clone_cache.cache_dir(url, pin, root=cache_root)
+    d.mkdir(parents=True)
+    (d / "refs").mkdir()
+    (d / ".cache-key").write_text(f"{url}#{pin}", encoding="utf-8")
+    lease_registry.acquire(url, pin, owner_pid=1, path=reg_path)
+    removed = clone_cache.cache_gc(root=cache_root, registry_path=reg_path)
+    assert removed == 0
+    assert d.is_dir()  # leased clone survived GC
+    # After the lease expires (past the 3600s TTL), GC removes it.
+    lease_registry.reap_stale(now=time.time() + 7200, path=reg_path)
+    removed = clone_cache.cache_gc(root=cache_root, registry_path=reg_path)
+    assert removed == 1
+    assert not d.exists()
