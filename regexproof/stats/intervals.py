@@ -48,12 +48,11 @@ DEFAULT_SEED = 20260822  # Phase 0 freeze date; overridden by the artifact
 # ---------------------------------------------------------------------------
 
 
-def _z(confidence: float) -> float:
-    """Two-sided normal quantile for ``confidence`` (stdlib, no scipy).
+def _inv_normal(p: float) -> float:
+    """SIGNED lower-tail normal quantile Φ⁻¹(p) (stdlib, no scipy).
 
-    Uses the A&S 26.2.23 rational approximation (error < 1e-8)."""
-    # Half-tail probability
-    p = (1.0 - confidence) / 2.0
+    Uses the A&S 26.2.23 rational approximation (error < 1e-8). Returns
+    negative for p < 0.5, zero at p = 0.5, positive for p > 0.5."""
     # Rational approximation for the inverse normal CDF (Acklam / A&S).
     a = (
         -3.969683028665376e01,
@@ -103,9 +102,12 @@ def _z(confidence: float) -> float:
         x = -(((((c[0] * q + c[1]) * q + c[2]) * q + c[3]) * q + c[4]) * q + c[5]) / (
             (((d[0] * q + d[1]) * q + d[2]) * q + d[3]) * q + 1.0
         )
-    # The Acklam branches return the SIGNED lower-tail quantile; the interval
-    # formulas need the symmetric magnitude |z|.
-    return abs(x)
+    return x
+
+
+def _z(confidence: float) -> float:
+    """Two-sided normal quantile magnitude for ``confidence`` (stdlib)."""
+    return abs(_inv_normal((1.0 - confidence) / 2.0))
 
 
 def wilson_ci(
@@ -115,9 +117,10 @@ def wilson_ci(
 ) -> tuple[float, float]:
     """Wilson score interval for ``k`` successes in ``n`` trials.
 
-    Returns ``(lower, upper)``. The escape baseline and the shared-gate
-    two-proportion test use this (with the continuity correction applied in
-    ``two_proportion_test``)."""
+    Returns ``(lower, upper)``. Used by the escape-baseline artifact. The
+    escape decision test itself (``two_proportion_test``) compares the window
+    rate against the fixed baseline using the null SE — no continuity
+    correction."""
     if n <= 0:
         raise ValueError("n must be > 0")
     if not 0 <= k <= n:
@@ -264,14 +267,17 @@ def bootstrap_ci(
         den = sum((mean_jack - j) ** 2 for j in jack)
         accel = num / (6.0 * den**1.5) if den else 0.0
         frac = sum(1.0 for b in boot if b < observed) / n_boot
-        z0 = _z(1.0 - 2.0 * frac) if 0.0 < frac < 1.0 else 0.0
+        # z0 is the SIGNED bias-correction quantile (negative when the
+        # bootstrap median sits below the observed statistic). za is the
+        # positive two-sided critical value.
+        z0 = _inv_normal(frac) if 0.0 < frac < 1.0 else 0.0
         za = _z(confidence)
         a1 = z0 + (z0 + za) / (1.0 - accel * (z0 + za))
         a2 = z0 + (z0 - za) / (1.0 - accel * (z0 - za))
         p1 = _normal_cdf(a1)
         p2 = _normal_cdf(a2)
-        lo = boot[max(0, math.floor(p1 * n_boot) - 1)]
-        hi = boot[min(n_boot - 1, math.ceil(p2 * n_boot) - 1)]
+        lo = boot[max(0, math.floor(min(p1, p2) * n_boot) - 1)]
+        hi = boot[min(n_boot - 1, math.ceil(max(p1, p2) * n_boot) - 1)]
         return (lo, hi)
     raise ValueError(f"unknown method: {method!r}")
 

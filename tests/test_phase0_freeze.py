@@ -6,10 +6,12 @@ real gate-decision population (n=853, pos=127, Wilson 95% [12.6%, 17.4%])."""
 
 from __future__ import annotations
 
+import importlib.util
 import json
 import pathlib
 import subprocess
 import sys
+from pathlib import Path
 
 import pytest
 
@@ -63,6 +65,7 @@ def test_regeneration_is_byte_stable():
     before = {
         "freeze": (GEN / "phase0_freeze.json").read_bytes(),
         "baseline": (GEN / "escape_baseline.json").read_bytes(),
+        "anchor": (GEN / "phase0_freeze.json.sha256").read_bytes(),
     }
     r = subprocess.run(
         [sys.executable, str(ROOT / "scripts" / "build-phase0-freeze.py")],
@@ -73,6 +76,7 @@ def test_regeneration_is_byte_stable():
     after = {
         "freeze": (GEN / "phase0_freeze.json").read_bytes(),
         "baseline": (GEN / "escape_baseline.json").read_bytes(),
+        "anchor": (GEN / "phase0_freeze.json.sha256").read_bytes(),
     }
     assert after == before, "freeze artifacts drift on regeneration"
 
@@ -137,3 +141,33 @@ def test_sha256_anchor_matches_freeze():
         (GEN / "phase0_freeze.json").read_bytes()
     ).hexdigest()
     assert anchor == actual
+
+
+def test_builder_fails_loud_on_malformed_decision(tmp_path: Path):
+    """A malformed or status-less decision file must abort the build — the
+    frozen population must never silently shrink (CodeRabbit)."""
+    spec = importlib.util.spec_from_file_location(
+        "build_p0", ROOT / "scripts" / "build-phase0-freeze.py"
+    )
+    assert spec is not None and spec.loader is not None
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+
+    # Malformed JSON → SystemExit.
+    bad = GEN / "_zz_test_gate_decision.json"
+    bad.write_text("{not json", encoding="utf-8")
+    try:
+        with pytest.raises(SystemExit, match="unreadable/invalid"):
+            mod.load_decision_population()
+    finally:
+        bad.unlink()
+
+    # Status-less file → SystemExit.
+    (GEN / "_zz_test_gate_decision.json").write_text(
+        json.dumps({"candidate_url": "https://x/y"}), encoding="utf-8"
+    )
+    try:
+        with pytest.raises(SystemExit, match="neither 'status'"):
+            mod.load_decision_population()
+    finally:
+        (GEN / "_zz_test_gate_decision.json").unlink()

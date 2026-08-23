@@ -53,6 +53,18 @@ def test_bootstrap_ci_is_seed_deterministic():
     assert a != c  # different seed → different resample (statistically certain)
 
 
+def test_bootstrap_bca_interval_is_ordered():
+    """BCa must return an ascending (lo, hi) interval. Regression test for the
+    sign bug where _z(abs) collapsed z0 and inverted the endpoints."""
+    data = [1.0] * 127 + [0.0] * 726
+    lo, hi = bootstrap_ci(
+        data, statistics.mean, seed=42, n_boot=2000, method="bca"
+    )
+    assert lo <= hi
+    # The interval must be a plausible CI around the observed mean (0.1489).
+    assert 0.10 < lo < 0.1489 < hi < 0.20
+
+
 def test_bootstrap_stratified_preserves_strata():
     strata: dict[str, Sequence[float]] = {
         "go": [1.0] * 10,

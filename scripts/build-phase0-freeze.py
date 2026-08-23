@@ -50,11 +50,17 @@ def load_decision_population() -> list[dict]:
     for f in files:
         try:
             d = json.loads(f.read_text(encoding="utf-8"))
-        except (OSError, ValueError):
-            continue
+        except (OSError, ValueError) as exc:
+            raise SystemExit(
+                f"error: {f.name}: unreadable/invalid decision file — the "
+                f"frozen population must not silently shrink: {exc}"
+            )
         status = str(d.get("status") or d.get("decision") or "")
         if not status:
-            continue
+            raise SystemExit(
+                f"error: {f.name}: decision file has neither 'status' nor "
+                "'decision' — a population row cannot be silently dropped"
+            )
         rows.append(
             {
                 "file": f.name,
