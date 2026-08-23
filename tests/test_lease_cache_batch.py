@@ -325,6 +325,28 @@ def test_lease_renew_extends_expiry(tmp_path):
         lease_registry.renew("https://x/y", "a" * 40, owner_pid=1, path=p)
 
 
+def test_heartbeat_renews_before_gc_eviction(tmp_path):
+    """Luna r5: a lease renewed (heartbeat) BEFORE expiry must survive GC —
+    an expired lease gets its clone evicted mid-walk; a heartbeated lease
+    stays active and GC skips it."""
+    from regexproof.admission import clone_cache
+
+    cache_root = tmp_path / "cache"
+    reg_path = tmp_path / "leases.json"
+    url, pin = "https://github.com/ow/packages", "a" * 40
+    d = clone_cache.cache_dir(url, pin, root=cache_root)
+    d.mkdir(parents=True)
+    (d / "refs").mkdir()
+    (d / ".cache-key").write_text(f"{url}#{pin}", encoding="utf-8")
+    # Simulate a walk: short lease + heartbeat renewal before expiry.
+    lease_registry.acquire(url, pin, owner_pid=1, ttl_s=60, path=reg_path)
+    lease_registry.renew(url, pin, owner_pid=1, ttl_s=60, path=reg_path)
+    # GC runs while the lease is live (heartbeated) → nothing evicted.
+    removed = clone_cache.cache_gc(root=cache_root, registry_path=reg_path)
+    assert removed == 0
+    assert d.is_dir()
+
+
 def test_acquire_before_dir_check_closes_toctou(tmp_path):
     """Luna r3 #4: cache_acquire takes the lease BEFORE the dir check — a
     GC sweep (which holds the lock and never evicts leased dirs) cannot
