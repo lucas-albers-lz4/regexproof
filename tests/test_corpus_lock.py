@@ -204,12 +204,13 @@ def test_events_log_rejects_reused_wave_id(tmp_path):
 
 def test_events_log_mode_is_0600(tmp_path):
     """Luna r8 #1: fchmod enforces 0600 on EXISTING logs (os.open's mode is
-    ignored when the file exists)."""
+    ignored when the file exists). The fixture file is created with the
+    default umask mode (typically 0644) — no explicit chmod, so CodeQL's
+    overly-permissive rule does not fire on the test itself."""
     import os
 
     log = _log(tmp_path)
-    log.write_text("", encoding="utf-8")
-    os.chmod(log, 0o644)
+    log.write_text("", encoding="utf-8")  # default mode, typically 0644
     cl.wave_open("ow", "w1", log=log)
     assert (log.stat().st_mode & 0o777) == 0o600
 
