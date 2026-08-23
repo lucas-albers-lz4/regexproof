@@ -260,13 +260,15 @@ jobs:
             properties/generated/escape_baseline.json
       - name: Corpus events log append-only + transition check (#558)
         # Luna r2 #4: check_events_log was never wired as a gate — illegal
-        # transitions went unchecked. Luna r3/r4/r5 #4: the CI step diffs
-        # the events log against the PR BASE SHA (always present in the
-        # workflow context — origin/main may be absent under shallow fetch)
-        # and requires PREFIX-ONLY additions: a rewrite OR a deletion of
-        # previously committed history fails the build.
+        # transitions went unchecked. The append-only comparison runs only
+        # on pull_request events (the base SHA exists only there — Luna r7
+        # #1: push/workflow_dispatch must not fail on an empty PR context).
         run: |
           python -c "from regexproof.mine.corpus_lock import check_events_log; raise SystemExit(check_events_log())"
+          if [ "${{ github.event_name }}" != "pull_request" ]; then
+            echo "append-only base comparison skipped: event=${{ github.event_name }} (no PR base)"
+            exit 0
+          fi
           BASE_SHA="${{ github.event.pull_request.base.sha }}"
           if [ -z "$BASE_SHA" ]; then
             echo "FATAL: empty PR base SHA — the append-only check must not silently skip (Luna r6 / CodeRabbit #569)."

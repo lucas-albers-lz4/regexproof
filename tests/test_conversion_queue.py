@@ -231,6 +231,20 @@ def test_emit_refuses_unbound_wave_id(tmp_path):
         )
 
 
+def test_emit_refuses_path_like_cluster(tmp_path):
+    """Luna r7 #6: cq.emit itself must reject path-like cluster names —
+    the CLI guard alone is not enough for direct callers."""
+    for bad in ("../victim", "/tmp/victim", ".", ".."):
+        with pytest.raises(SystemExit, match="plain cluster name"):
+            cq.emit(
+                bad,
+                wave_id="ow_w1",
+                generation=0,
+                ranked=_ranked(),
+                root=tmp_path,
+            )
+
+
 def test_emit_preserves_cheap_signals(tmp_path):
     """CodeRabbit #569: the nested cheap_signals object must reach queue
     rows (the producer nests them; emit must not drop them)."""
@@ -251,26 +265,19 @@ def test_emit_preserves_cheap_signals(tmp_path):
 
 
 def test_claim_refused_on_stale_artifact_generation(tmp_path):
-    """CodeRabbit #569: a queue artifact emitted at generation 0 must not
-    be claimable at generation 1 even if the wave_id is reused."""
-    _, q = _queue(tmp_path)  # artifact wave_generation = 1 (from _queue)
-    site = q["candidate_sites"][0]["site"]
+    """CodeRabbit #569 + Luna r7 #3: a stale artifact (earlier generation)
+    is unclaimable. Wave_id reuse is now impossible (uniqueness guard), so
+    the freshness proof is the artifact generation == current generation."""
+    _queue(tmp_path)  # artifact wave_generation = 0, bound to ow_w1
     from regexproof.mine.corpus_lock import wave_open, wave_close
 
     log = tmp_path / "events.jsonl"
     wave_open("openwrt_packages", "ow_w1", log=log)  # gen 0
-    # Move to generation 1: close + reopen with the SAME wave_id.
-    wave_close(
-        "openwrt_packages", "ow_w1",
-        force=False, log=log,
-    )
-    wave_open("openwrt_packages", "ow_w1", log=log)  # gen 1, same wave_id
-    with pytest.raises(SystemExit, match="stale artifact"):
-        cq.claim(
-            q["cluster"], site,
-            corpus_status="gated:go",
-            ledger_state={}, generation=1, root=tmp_path, lock_log=log,
-        )
+    wave_close("openwrt_packages", "ow_w1", force=False, log=log)  # gen 1
+    # Reopening ow_w1 is refused (uniqueness) — a fresh id means the old
+    # artifact's generation no longer matches the current one.
+    with pytest.raises(SystemExit, match="was used before"):
+        wave_open("openwrt_packages", "ow_w1", log=log)
 
 
 def test_skip_refused_on_contracted_row(tmp_path):

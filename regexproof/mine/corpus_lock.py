@@ -129,16 +129,21 @@ def wave_status(corpus: str, log: pathlib.Path | None = None) -> str:
 def _with_lock(path: pathlib.Path, fn):
     """Serialize the read/check/append sequence across processes with an
     exclusive flock on the events log (O_APPEND serializes writes, NOT the
-    read/check/append transition — Luna r1 fold #2)."""
+    read/check/append transition — Luna r1 fold #2). The log is created
+    with 0o600 — an ``a+`` open would otherwise create it 0644 and defeat
+    the CodeQL fix (Luna r7)."""
     import fcntl
+    import os
 
     path.parent.mkdir(parents=True, exist_ok=True)
-    with open(path, "a+", encoding="utf-8") as fh:
-        fcntl.flock(fh.fileno(), fcntl.LOCK_EX)
-        try:
-            return fn()
-        finally:
-            fcntl.flock(fh.fileno(), fcntl.LOCK_UN)
+    fd = os.open(str(path), os.O_APPEND | os.O_CREAT | os.O_RDWR, 0o600)
+    fh = os.fdopen(fd, "a+", encoding="utf-8")  # fdopen owns fd from here
+    fcntl.flock(fh.fileno(), fcntl.LOCK_EX)
+    try:
+        return fn()
+    finally:
+        fcntl.flock(fh.fileno(), fcntl.LOCK_UN)
+        fh.close()
 
 
 def events_lock(corpus: str, fn, *, log: pathlib.Path | None = None):
@@ -162,6 +167,18 @@ def _active_wave_id(corpus: str, log: pathlib.Path | None = None) -> str:
     return ""
 
 
+def _wave_id_used(corpus: str, wave_id: str, log: pathlib.Path | None = None) -> bool:
+    """True if wave_id was EVER used for this corpus (open/close/abort).
+
+    Wave IDs must be unique per corpus (Luna r7 #3): after an abort the
+    generation is unchanged, so REUSING the same id would let the aborted
+    wave's stale artifact pass the binding check and become claimable."""
+    return any(
+        e.get("corpus") == corpus and e.get("wave_id") == wave_id
+        for e in _read_events(log)
+    )
+
+
 def wave_open(
     corpus: str,
     wave_id: str,
@@ -169,9 +186,10 @@ def wave_open(
     log: pathlib.Path | None = None,
 ) -> int:
     """Open a wave: appends ``wave_opened`` under an exclusive flock. Fails
-    closed if the corpus has an active wave (no parallel waves). Returns the
-    generation (unchanged). ``wave_id`` must be nonblank (Luna r5 #3: a
-    blank active-wave ID would bypass claim-time equality checks)."""
+    closed if the corpus has an active wave (no parallel waves) or if the
+    wave_id was EVER used before (Luna r7 #3: reuse after an abort would
+    let the stale artifact through). Returns the generation (unchanged).
+    ``wave_id`` must be nonblank (Luna r5 #3)."""
 
     def _open() -> int:
         if not str(wave_id or "").strip():
@@ -182,6 +200,12 @@ def wave_open(
             raise SystemExit(
                 f"corpus_lock: {corpus} already has an active wave — close or "
                 "abort it before opening another (skip_wave_active)"
+            )
+        if _wave_id_used(corpus, wave_id, log):
+            raise SystemExit(
+                f"corpus_lock: {corpus} wave_id {wave_id!r} was used before "
+                "(open/close/abort) — wave IDs must be unique per corpus; "
+                "choose a fresh id (Luna r7 #3)"
             )
         _append_event(
             {
@@ -238,17 +262,11 @@ def wave_close(
                 f"corpus_lock: {corpus} active wave is {active_id!r}, not "
                 f"{wave_id!r} — refusing wrong-id close"
             )
-        if force:
-            # Enforced close-out: a forced close REQUIRES the queue artifact
-            # (Luna r2 #3: force without a queue would bypass enforcement),
-            # and every non-contracted top-15 row needs an explicit skip
-            # reason.
-            if queue_root is None:
-                raise SystemExit(
-                    f"corpus_lock: forced close of {corpus} requires "
-                    "queue_root (close-out enforcement cannot run without "
-                    "the queue artifact)"
-                )
+        if queue_root is not None:
+            # Close-out enforcement runs on EVERY close that names a queue
+            # (Luna r7 #4: force=False must not bypass it), and the queue
+            # artifact must be CURRENT (generation + wave binding — Luna r7
+            # #5: a stale/empty artifact cannot satisfy close-out).
             from regexproof.mine.conversion_queue import (
                 load_queue,
                 non_contracted_top15,
@@ -256,6 +274,21 @@ def wave_close(
             )
 
             q = load_queue(corpus, root=queue_root)
+            gen_raw = q.get("wave_generation")
+            artifact_gen = int(gen_raw) if gen_raw is not None else -1
+            if artifact_gen != read_generation(corpus, log):
+                raise SystemExit(
+                    f"corpus_lock: close-out refused — queue {corpus} artifact "
+                    f"generation {artifact_gen} != current "
+                    f"{read_generation(corpus, log)} (stale artifact)"
+                )
+            artifact_wave = str(q.get("wave_id") or "")
+            active_id = _active_wave_id(corpus, log)
+            if artifact_wave and active_id and artifact_wave != active_id:
+                raise SystemExit(
+                    f"corpus_lock: close-out refused — queue {corpus} bound "
+                    f"to wave {artifact_wave!r} but active wave is {active_id!r}"
+                )
             blockers = non_contracted_top15(q)
             reasons = skip_reasons or {}
             missing = []
@@ -264,17 +297,15 @@ def wave_close(
                 if not reason or not str(reason).strip():
                     missing.append((r["site"], r.get("status")))
                     continue
-                # Reason must be a queue-vocabulary skip reason, not an
-                # arbitrary string (Luna r3 #3).
                 if str(reason).strip() not in SKIP_REASONS:
                     raise SystemExit(
-                        f"corpus_lock: forced close refused — skip reason "
+                        f"corpus_lock: close-out refused — skip reason "
                         f"{reason!r} for {r['site']} is not in the queue "
                         f"vocabulary {sorted(SKIP_REASONS)}"
                     )
             if missing:
                 raise SystemExit(
-                    f"corpus_lock: forced close refused — {len(missing)} "
+                    f"corpus_lock: close-out refused — {len(missing)} "
                     "non-contracted top-15 candidate(s) lack skip reasons: "
                     + ", ".join(f"{s} ({st})" for s, st in missing)
                 )

@@ -94,6 +94,19 @@ def emit(
             "conversion_queue: emit refused — wave_id must be nonblank (an "
             "unbound artifact would bypass claim-time wave binding)"
         )
+    # Cluster name must be a plain id — path-like values would write
+    # outside the requested root (Luna r7 #6: the CLI guard alone is not
+    # enough; direct cq.emit('../x', ...) must fail too).
+    if (
+        cluster in {".", ".."}
+        or "/" in cluster
+        or "\\" in cluster
+        or not str(cluster or "").strip()
+    ):
+        raise SystemExit(
+            f"conversion_queue: emit refused — cluster {cluster!r} is not a "
+            "plain cluster name"
+        )
     q = empty_queue(cluster, generation=generation, wave_id=wave_id)
     for i, item in enumerate(ranked, start=1):
         row = {

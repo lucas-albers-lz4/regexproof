@@ -184,14 +184,15 @@ def validate_form(form: dict) -> None:
         sys.exit("error: review form window.lines must be a non-empty list")
 
     def _is_target(entry: object) -> bool:
-        # Malformed entries produce a validation error, not a traceback
-        # (CodeRabbit #569).
+        # Malformed entries produce a validation error, not a traceback,
+        # and line must be a STRICT int — "100" or 100.9 must not coerce
+        # (Luna r7 #8 / CodeRabbit #569).
         if not isinstance(entry, dict):
             return False
-        try:
-            return int(entry.get("line") or 0) == target_line
-        except (TypeError, ValueError):
+        line_val = entry.get("line")
+        if not isinstance(line_val, int) or isinstance(line_val, bool):
             return False
+        return line_val == target_line
 
     if not any(_is_target(entry) for entry in window["lines"]):
         sys.exit("error: review form window.lines must contain the target line")

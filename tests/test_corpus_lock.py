@@ -95,12 +95,12 @@ def test_force_close_records_flag(tmp_path):
 
 
 def test_forced_close_requires_queue_root(tmp_path):
-    """Luna r2 #3: force without a queue artifact must be refused — the
-    close-out enforcement cannot run without the queue."""
+    """Luna r2 #3 / r7 #4: a close WITHOUT a named queue skips close-out
+    (non-queue waves are legitimate) — but the FORCE flag still records."""
     log = _log(tmp_path)
     cl.wave_open("ow", "w1", log=log)
-    with pytest.raises(SystemExit, match=r"requires.*queue_root"):
-        cl.wave_close("ow", "w1", force=True, log=log)
+    cl.wave_close("ow", "w1", force=True, log=log)  # no queue_root: allowed
+    assert cl.read_generation("ow", log) == 1
 
 
 def test_forced_close_rejects_off_vocabulary_reason(tmp_path):
@@ -112,7 +112,7 @@ def test_forced_close_rejects_off_vocabulary_reason(tmp_path):
     cq.emit("ow", wave_id="w1", generation=0, ranked=ranked, root=tmp_path)
     log = _log(tmp_path)
     cl.wave_open("ow", "w1", log=log)
-    with pytest.raises(SystemExit, match="not in the queue vocabulary"):
+    with pytest.raises(SystemExit, match="close-out refused"):
         cl.wave_close(
             "ow", "w1", force=True,
             skip_reasons={"net/demo/a.sh:1:tok": "bogus"},
@@ -233,7 +233,7 @@ def test_forced_close_enforces_queue_skip_reasons(tmp_path):
     log = _log(tmp_path)
     cl.wave_open("ow", "w1", log=log)
     # All three are non-contracted top-15 and lack skip reasons.
-    with pytest.raises(SystemExit, match="forced close refused"):
+    with pytest.raises(SystemExit, match="close-out refused"):
         cl.wave_close("ow", "w1", force=True, queue_root=tmp_path, log=log)
     # With skip reasons for every blocker the forced close succeeds.
     cl.wave_close(
