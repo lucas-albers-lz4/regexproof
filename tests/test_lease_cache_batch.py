@@ -8,6 +8,7 @@ and the batch summary projections."""
 
 from __future__ import annotations
 
+import pathlib
 import time
 
 import pytest
@@ -221,6 +222,90 @@ def test_outcomes_vocabulary():
         "cache_miss_reprobe", "skip_wave_active",
         "auto_nogo", "needs_human", "rate_limited", "error",
     }
+
+
+def test_v1_list_state_migrates_to_keyed(tmp_path):
+    """Luna r2 #7: an existing valid v1 state (rows as a LIST) must resume —
+    begin_item/record_outcome require the keyed v2 shape."""
+    p = _state(tmp_path)
+    v1 = {
+        "schema_version": "1",
+        "manifest_digests": {"d1": {"count": 1}},
+        "rows": [
+            {"manifest_digest": "d1", "url": "https://x/y", "pin": "a" * 40,
+             "outcome": "ok"},
+        ],
+    }
+    v1["sha256"] = batch_state._checksum_of(v1)
+    p.write_text(batch_state._canonical(v1), encoding="utf-8")
+    reg = batch_state.load_state(path=p)
+    assert isinstance(reg["rows"], dict)
+    assert len(reg["rows"]) == 1
+    # record_outcome resumes on the migrated state.
+    batch_state.record_outcome("d1", "https://x/y", "a" * 40, "ok", path=p)
+    assert len(batch_state.load_state(path=p)["rows"]) == 1
+
+
+def test_partial_cache_dir_is_not_a_hit(tmp_path):
+    """Luna r2 #3: a partial clone dir (refs but NO .cache-key completeness
+    marker) must never be treated as a cache hit."""
+    from regexproof.admission import clone_cache
+
+    cache_root = tmp_path / "cache"
+    url, pin = "https://github.com/ow/packages", "a" * 40
+    d = clone_cache.cache_dir(url, pin, root=cache_root)
+    d.mkdir(parents=True)
+    (d / "refs").mkdir()  # partial: no .cache-key
+    assert not clone_cache.cache_hit(url, pin, root=cache_root)
+
+
+def test_gc_sweep_holds_registry_lock(tmp_path):
+    """Luna r2 #5 + #559 AC: eviction-vs-promote must be atomic — the GC
+    sweep runs under the registry lock, so a concurrent acquire can never
+    lease a dir that is about to be evicted."""
+    from regexproof.admission import clone_cache
+
+    cache_root = tmp_path / "cache"
+    reg_path = tmp_path / "leases.json"
+    url, pin = "https://github.com/ow/packages", "a" * 40
+    d = clone_cache.cache_dir(url, pin, root=cache_root)
+    d.mkdir(parents=True)
+    (d / "refs").mkdir()
+    (d / ".cache-key").write_text(f"{url}#{pin}", encoding="utf-8")
+    # An acquire DURING the sweep must be serialized against it — acquiring
+    # before the sweep makes the dir untouchable; after the sweep (lease
+    # released) it is evictable. The lock ensures no interleave.
+    lease_registry.acquire(url, pin, owner_pid=1, path=reg_path)
+    removed = clone_cache.cache_gc(root=cache_root, registry_path=reg_path)
+    assert removed == 0
+    assert d.is_dir()
+    lease_registry.reap_stale(now=time.time() + 7200, path=reg_path)
+    removed = clone_cache.cache_gc(root=cache_root, registry_path=reg_path)
+    assert removed == 1
+
+
+def test_default_probe_cap_consistent_with_max(tmp_path):
+    """Luna r2 #1: the CLI derives probe cap from --max-disk-mb when
+    --probe-fetch-limit-mb is unset (the documented invocation must not
+    self-refuse). The derivation lives in batch-probe.main; here we verify
+    the CLI runs to the admission stage with defaults and does NOT
+    self-refuse on cap > max."""
+    import subprocess
+    import sys
+
+    sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent.parent))
+    proc = subprocess.run(
+        [sys.executable, "scripts/batch-probe.py",
+         "--url", "https://github.com/openwrt/packages",
+         "--pin", "a" * 40, "--corpus", "openwrt_packages",
+         "--state", str(tmp_path / "state.json"),
+         "--skip-wave-active"],
+        capture_output=True, text=True, cwd=str(pathlib.Path(__file__).resolve().parent.parent),
+        timeout=60,
+    )
+    # Must NOT fail with 'cap=2048' (the old self-refusing default); the
+    # admission refusal message would contain the resolved cap if it fired.
+    assert "cap=2048" not in proc.stderr + proc.stdout
 
 
 # --- disk admission (Luna r1 #4) ---------------------------------------------

@@ -308,3 +308,11 @@ def active_leases(*, path: pathlib.Path | None = None) -> list[dict[str, Any]]:
         for k, v in _read_registry(path)["leases"].items()
         if not _expired(v, _now())
     ]
+
+
+def run_under_lock(fn, *, path: pathlib.Path | None = None):
+    """Run *fn* while holding the registry lock (Luna r2 #5: cache_gc's
+    eviction sweep must be atomic against concurrent acquire/promote — a
+    lease obtained between the snapshot and the rmtree would be evicted
+    while live)."""
+    return _with_registry_lock(path, fn)

@@ -25,6 +25,7 @@ from __future__ import annotations
 
 import pathlib
 import shutil
+import subprocess
 from typing import Any
 
 from regexproof.admission.clone import CloneError, RunFn, _default_run
@@ -46,7 +47,10 @@ def cache_dir(url: str, pin: str, root: pathlib.Path | None = None) -> pathlib.P
 
 def cache_hit(url: str, pin: str, *, root: pathlib.Path | None = None) -> bool:
     d = cache_dir(url, pin, root)
-    return d.is_dir() and (d / "refs").is_dir()
+    # .cache-key is the completeness marker (written only after the pin
+    # fetch succeeds) — a partial dir is never a hit (Luna r2 #3). Must
+    # agree with cache_acquire's hit decision.
+    return d.is_dir() and (d / "refs").is_dir() and (d / ".cache-key").is_file()
 
 
 def cache_acquire(
@@ -64,9 +68,14 @@ def cache_acquire(
     is leasable; otherwise clone bare+blob:none under a short probe lease
     and promote to the durable TTL (two-phase handoff). Raises SystemExit
     (``lease_reject``) when the entry is leased by a live owner."""
+    from regexproof.admission.clone import validate_clone_url
+
+    validate_clone_url(url)  # Luna r2 #6: same control as admission/clone.py
     run_fn = run or _default_run
     d = cache_dir(url, pin, root)
-    if d.is_dir() and (d / "refs").is_dir():
+    if d.is_dir() and (d / "refs").is_dir() and (d / ".cache-key").is_file():
+        # Completeness marker (.cache-key is written only AFTER the pin
+        # fetch succeeds) — a partial dir is never a hit (Luna r2 #3).
         lease = lease_registry.acquire(
             url, pin, owner_pid=owner_pid, ttl_s=ttl_s,
             path=registry_path,
@@ -81,24 +90,28 @@ def cache_acquire(
     if d.exists():
         shutil.rmtree(d, ignore_errors=True)
     d.parent.mkdir(parents=True, exist_ok=True)
-    argv = [
-        "git", "clone", "--bare", "--filter=blob:none", url, str(d),
-    ]
-    proc = run_fn(argv)
-    if proc.returncode != 0:
+    try:
+        argv = [
+            "git", "clone", "--bare", "--filter=blob:none", url, str(d),
+        ]
+        proc = run_fn(argv)
+        if proc.returncode != 0:
+            raise CloneError(
+                f"git clone (bare, blob:none) failed ({proc.returncode}): "
+                f"{proc.stderr or proc.stdout}"
+            )
+        # Fetch the pin explicitly — bare default-branch clones miss other SHAs.
+        fetch = run_fn(["git", "-C", str(d), "fetch", "--filter=blob:none", "origin", pin])
+        if fetch.returncode != 0:
+            raise CloneError(f"git fetch {pin} failed: {fetch.stderr or fetch.stdout}")
+    except (CloneError, subprocess.TimeoutExpired):
+        # Timeout/failure must release the probe lease AND remove the
+        # partial cache — never leave either behind (Luna r2 #3).
         lease_registry.release(url, pin, owner_pid=owner_pid, path=registry_path)
         shutil.rmtree(d, ignore_errors=True)
-        raise CloneError(
-            f"git clone (bare, blob:none) failed ({proc.returncode}): "
-            f"{proc.stderr or proc.stdout}"
-        )
-    # Fetch the pin explicitly — bare default-branch clones miss other SHAs.
-    fetch = run_fn(["git", "-C", str(d), "fetch", "--filter=blob:none", "origin", pin])
-    if fetch.returncode != 0:
-        lease_registry.release(url, pin, owner_pid=owner_pid, path=registry_path)
-        shutil.rmtree(d, ignore_errors=True)
-        raise CloneError(f"git fetch {pin} failed: {fetch.stderr or fetch.stdout}")
-    # Sidecar key maps the hashed dir back to (url, pin) for safe GC.
+        raise
+    # Sidecar key maps the hashed dir back to (url, pin) for safe GC. It is
+    # the COMPLETENESS marker — written only after the pin fetch succeeds.
     (d / ".cache-key").write_text(f"{url}#{pin}", encoding="utf-8")
     if max_disk_mb is not None:
         size_mb = _dir_size_mb(d)
@@ -133,7 +146,11 @@ def worktree_for(
         raise CloneError(f"cache miss: no reference clone for ({url}, {pin})")
     wt = d / f"worktree-{owner_pid}"
     if wt.exists():
-        shutil.rmtree(wt, ignore_errors=True)
+        # Remove a stale worktree THROUGH GIT (Luna r2 #10: rmtree leaves
+        # linked-worktree metadata behind if the subsequent add fails).
+        run_fn(["git", "-C", str(d), "worktree", "remove", "--force", str(wt)])
+        if wt.exists():
+            shutil.rmtree(wt, ignore_errors=True)
     proc = run_fn(["git", "-C", str(d), "worktree", "add", "--detach", str(wt), pin])
     if proc.returncode != 0:
         raise CloneError(f"worktree add failed: {proc.stderr or proc.stdout}")
@@ -193,26 +210,33 @@ def cache_gc(
     removed = 0
     if not base.is_dir():
         return 0
-    live: set[str] = set()
-    for lease in lease_registry.active_leases(path=registry_path):
-        live.add(str(lease.get("url") or "") + "#" + str(lease.get("pin") or ""))
-    for d in base.iterdir():
-        if not d.is_dir():
-            continue
-        # Map the dir back to (url, pin) via a sidecar key file written at
-        # clone time; without one, refuse to guess (safety).
-        key_file = d / ".cache-key"
-        if not key_file.is_file():
-            continue
-        url, pin = key_file.read_text(encoding="utf-8").split("#", 1)
-        if f"{url}#{pin}" in live:
-            continue  # active lease — never evict
-        corpus = url.rstrip("/").rsplit("/", 1)[-1]
-        if retain_go_corpora and corpus in retain_go_corpora:
-            continue
-        shutil.rmtree(d, ignore_errors=True)
-        removed += 1
-    return removed
+
+    def _sweep() -> int:
+        nonlocal removed
+        live: set[str] = set()
+        for lease in lease_registry.active_leases(path=registry_path):
+            live.add(str(lease.get("url") or "") + "#" + str(lease.get("pin") or ""))
+        for d in base.iterdir():
+            if not d.is_dir():
+                continue
+            # Map the dir back to (url, pin) via a sidecar key file written at
+            # clone time; without one, refuse to guess (safety).
+            key_file = d / ".cache-key"
+            if not key_file.is_file():
+                continue
+            url, pin = key_file.read_text(encoding="utf-8").split("#", 1)
+            if f"{url}#{pin}" in live:
+                continue  # active lease — never evict
+            corpus = url.rstrip("/").rsplit("/", 1)[-1]
+            if retain_go_corpora and corpus in retain_go_corpora:
+                continue
+            shutil.rmtree(d, ignore_errors=True)
+            removed += 1
+        return removed
+
+    # The whole sweep runs under the registry lock — a concurrent acquire
+    # can never lease a dir that is about to be evicted (Luna r2 #5).
+    return lease_registry.run_under_lock(_sweep, path=registry_path)
 
 
 def _dir_size_mb(path: pathlib.Path) -> float:

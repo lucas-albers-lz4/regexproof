@@ -90,7 +90,11 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--corpus", default="")
     ap.add_argument("--manifest-digest", default="")
     ap.add_argument("--max-disk-mb", type=int, default=500)
-    ap.add_argument("--probe-fetch-limit-mb", type=int, default=clone_cache.PROBE_FETCH_LIMIT_MB)
+    ap.add_argument(
+        "--probe-fetch-limit-mb", type=int, default=None,
+        help="Per-clone fetch cap; defaults to --max-disk-mb (a default of "
+             "2048 with a 500 max would always be refused — Luna r2 #1)",
+    )
     ap.add_argument("--cache-root", type=pathlib.Path, default=None)
     ap.add_argument("--state", type=pathlib.Path, default=None)
     ap.add_argument("--worker-count", type=int, default=1, help="W for the disk semaphore")
@@ -103,6 +107,8 @@ def main(argv: list[str] | None = None) -> int:
         "(wave status derived from the corpus event log)",
     )
     args = ap.parse_args(argv)
+
+    probe_cap = args.probe_fetch_limit_mb or args.max_disk_mb
 
     if args.skip_wave_active:
         status = _wave_status(args.corpus)
@@ -124,7 +130,7 @@ def main(argv: list[str] | None = None) -> int:
     batch_state.begin_item(digest, args.url, args.pin, path=args.state)
     admitted = disk_admission.reserve(
         worker_count=args.worker_count,
-        per_clone_cap_mb=args.probe_fetch_limit_mb,
+        per_clone_cap_mb=probe_cap,
         max_disk_mb=args.max_disk_mb,
         owner_pid=owner,
         path=None if args.state is None else args.state.with_name("admission.json"),
@@ -135,13 +141,13 @@ def main(argv: list[str] | None = None) -> int:
                  "error": "disk admission refused (W=0 or budget exhausted)"},
                 args.state)
         print(f"disk_budget: admission refused W={args.worker_count} "
-              f"cap={args.probe_fetch_limit_mb}MB max={args.max_disk_mb}MB")
+              f"cap={probe_cap}MB max={args.max_disk_mb}MB")
         return 2
     try:
         try:
             entry = clone_cache.cache_acquire(
                 args.url, args.pin, owner_pid=owner,
-                max_disk_mb=args.probe_fetch_limit_mb,
+                max_disk_mb=probe_cap,
                 root=args.cache_root,
             )
         except SystemExit as exc:
@@ -191,7 +197,8 @@ def main(argv: list[str] | None = None) -> int:
             )
             # Post-walk disk budget (unchanged semantics, on the worktree).
             enforce_disk_budget(wt, args.max_disk_mb)
-        except (CloneError, SystemExit) as exc:
+        except (CloneError, SystemExit, subprocess.TimeoutExpired) as exc:
+            # Worktree timeouts were uncaught (Luna r2 #3) — record + exit.
             _record(digest, args.url, args.pin, "disk_budget",
                     {"corpus": args.corpus, "error": str(exc)[:200]}, args.state)
             print(f"disk_budget: {str(exc)[:160]}")

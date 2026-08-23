@@ -62,6 +62,19 @@ def _verify(text: str) -> dict[str, Any]:
     reg = json.loads(text)
     if _checksum_of(reg) != reg.get("sha256"):
         raise ValueError("checksum mismatch")
+    return _migrate(reg)
+
+
+def _migrate(reg: dict[str, Any]) -> dict[str, Any]:
+    """Schema migration (Luna r2 #7): v1 rows were a LIST; v2 is keyed by
+    (digest,url,pin). An existing valid v1 file must resume, not crash."""
+    if isinstance(reg.get("rows"), list):
+        reg["schema_version"] = "2"
+        keyed: dict[str, dict[str, Any]] = {}
+        for r in reg["rows"]:
+            keyed[_row_key(r.get("manifest_digest", ""), r.get("url", ""), r.get("pin", ""))] = r
+        reg["rows"] = keyed
+        _rebuild_counts(reg)
     return reg
 
 

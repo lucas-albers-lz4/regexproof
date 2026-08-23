@@ -20,6 +20,19 @@ from typing import Any
 ADMISSION_PATH = pathlib.Path("cache/admission.json")
 
 
+def _proc_start_ticks(pid: int) -> int | None:
+    """Process start time from /proc/<pid>/stat field 22 (jiffies) — the
+    anti-PID-reuse identity (same as lease_registry)."""
+    try:
+        stat = pathlib.Path(f"/proc/{pid}/stat").read_text(encoding="utf-8")
+    except OSError:
+        return None
+    try:
+        return int(stat.rsplit(")", 1)[1].split()[19])
+    except (ValueError, IndexError):
+        return None
+
+
 def _read(path: pathlib.Path | None) -> dict[str, Any]:
     p = pathlib.Path(path) if path is not None else ADMISSION_PATH
     if not p.is_file():
@@ -52,20 +65,31 @@ def reserve(
 
         fcntl.flock(fh.fileno(), fcntl.LOCK_EX)
         reg = _read(path)
-        # Reap reservations whose owner died (like lease reaping).
+        # Reap reservations whose owner died (like lease reaping). PID
+        # liveness + start-ticks (Luna r2 #9: kill(pid,0) alone lets a
+        # recycled PID inherit a stale reservation).
         live = {}
         for k, v in reg["reservations"].items():
+            pid = int(v.get("owner_pid") or -1)
             try:
-                os.kill(int(v.get("owner_pid") or -1), 0)
-                live[k] = v
+                os.kill(pid, 0)
+            except PermissionError:
+                live[k] = v  # alive but foreign-owned
+                continue
             except (OSError, ProcessLookupError):
-                pass  # dead owner — reservation released
+                continue  # dead owner — reservation released
+            recorded = v.get("owner_start_ticks")
+            current = _proc_start_ticks(pid)
+            if recorded is not None and current is not None and int(recorded) != current:
+                continue  # PID recycled
+            live[k] = v
         reg["reservations"] = live
         used = sum(int(v.get("reserved_mb") or 0) for v in live.values())
         if used + per_clone_cap_mb > max_disk_mb:
             return False
         reg["reservations"][str(owner_pid)] = {
             "owner_pid": owner_pid,
+            "owner_start_ticks": _proc_start_ticks(owner_pid),
             "reserved_mb": per_clone_cap_mb,
         }
         tmp = p.with_suffix(".json.tmp")
