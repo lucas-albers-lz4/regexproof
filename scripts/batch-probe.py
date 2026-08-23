@@ -201,13 +201,6 @@ def main(argv: list[str] | None = None) -> int:
             wt = clone_cache.worktree_for(
                 args.url, args.pin, owner_pid=owner, root=cache_root,
             )
-            # Renew the lease AFTER the walk so a long walk can't be evicted
-            # mid-use (Luna r3 #5) — done under the registry lock.
-            from regexproof.mine import lease_registry
-
-            lease_registry.renew(
-                args.url, args.pin, owner_pid=owner, path=registry_path,
-            )
             # Post-walk disk budget (unchanged semantics, on the worktree).
             enforce_disk_budget(wt, args.max_disk_mb)
         except (CloneError, SystemExit, subprocess.TimeoutExpired) as exc:
@@ -246,6 +239,15 @@ def main(argv: list[str] | None = None) -> int:
         tmp = draft_path.with_suffix(".tmp")
         tmp.write_text(json.dumps(draft, indent=2, sort_keys=True) + "\n", encoding="utf-8")
         os.replace(tmp, draft_path)
+
+        # Renew the lease AFTER the walk so a long walk can't be evicted
+        # mid-use (Luna r3 #5, placement confirmed in r4: renew must follow
+        # the walk, not precede it) — done under the registry lock.
+        from regexproof.mine import lease_registry
+
+        lease_registry.renew(
+            args.url, args.pin, owner_pid=owner, path=registry_path,
+        )
 
         _record(
             digest, args.url, args.pin, "ok",
