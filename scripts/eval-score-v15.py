@@ -385,7 +385,7 @@ def main(argv: list[str] | None = None) -> int:
     print(f"  auc_v1={auc_v1:.4f} auc_v15={auc_v15:.4f} delta={auc_v15 - auc_v1:+.4f}")
     print(f"  bootstrap95_delta=[{lo_ci:.4f}, {hi_ci:.4f}] -> flip={flips}")
     print(f"  precision@{k}={top_pos}/{k} CP95=[{cp[0]:.4f}, {cp[1]:.4f}] (descriptive)")
-    print(f"  wrote {FLIP_OUT.name}")
+    print(f"  wrote {out_path.name}")
     return 0
 
 
