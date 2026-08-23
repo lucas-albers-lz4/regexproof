@@ -109,9 +109,9 @@ def main(argv: list[str] | None = None) -> int:
     )
     ap.add_argument(
         "--allocator",
-        choices=("score-v1", "score-v2"),
+        choices=("score-v1", "score-v1.5", "score-v2"),
         default="score-v1",
-        help="Score allocator (default: score-v1).",
+        help="Score allocator (default: score-v1; v1.5 adds the tree overlay).",
     )
     args = ap.parse_args(argv)
 

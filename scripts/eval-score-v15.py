@@ -68,6 +68,24 @@ def validate_freeze_snapshot(freeze: dict) -> None:
             "FATAL: freeze snapshot hash mismatch — the eval population differs "
             "from the Phase 0 frozen population. Regenerate the freeze first."
         )
+    # The frozen score-v1.5 overlay must match the implementation — a drift
+    # in the weights would silently change what the eval measures.
+    import hashlib
+
+    from regexproof.mine.score import _TREE_OVERLAY_WEIGHTS
+
+    pinned = freeze.get("eval", {}).get("score_v15_overlay")
+    if not pinned:
+        raise SystemExit(
+            "FATAL: freeze has no score_v15_overlay definition — regenerate "
+            "build-phase0-freeze.py output (the eval cannot verify the model)."
+        )
+    canonical = json.dumps(_TREE_OVERLAY_WEIGHTS, sort_keys=True).encode("utf-8")
+    if hashlib.sha256(canonical).hexdigest() != pinned["sha256"]:
+        raise SystemExit(
+            "FATAL: score-v1.5 overlay hash mismatch — the implementation "
+            "drifted from the frozen weights. Re-freeze or fix the weights."
+        )
 
 
 def join_rows(freeze: dict) -> list[dict]:
@@ -98,8 +116,16 @@ def join_rows(freeze: dict) -> list[dict]:
         label = 1 if status in POSITIVE else 0
         led = by_url.get(normalize_repo_url(url), {})
         # Tree feature from the committed artifact: slug -> pin -> result.
+        # Pin precedence matches the tree builder's contract: pin_probed is
+        # authoritative (the mined pin is never a fallback), then the
+        # decision's corpus_pin.
         tree_feature = None
-        pin = str(d.get("corpus_pin") or "")
+        pin = str(
+            led.get("pin_probed")
+            or d.get("corpus_pin")
+            or (d.get("probe") or {}).get("pin")
+            or ""
+        )
         slug = _repo_slug(url)
         if slug and pin:
             entry = tree_artifact.get(slug, {})
@@ -124,28 +150,28 @@ def join_rows(freeze: dict) -> list[dict]:
 
 
 def stratified_split(rows: list[dict], seed: int) -> tuple[list[dict], list[dict]]:
-    """Stratified 50/50 split preserving the label mix (freeze protocol)."""
+    """Stratified 50/50 split per the freeze protocol: THREE status strata
+    (go / triage-trial / no-go), then collapse to binary labels only for AUC.
+    Preserves the label mix by construction."""
     import random
 
     rng = random.Random(seed)
-    by_label: dict[int, list[dict]] = {0: [], 1: []}
+    by_status: dict[str, list[dict]] = {}
     for r in rows:
-        by_label[r["label"]].append(r)
+        by_status.setdefault(r["status"], []).append(r)
     train: list[dict] = []
     test: list[dict] = []
-    for label, group in by_label.items():
+    for status, group in sorted(by_status.items()):
         rng.shuffle(group)
         half = len(group) // 2
         train.extend(group[:half])
         test.extend(group[half:])
-    # Preserve the freeze's exact label-mix convention: shuffle within labels
-    # only (never across), so the stratified property holds by construction.
     rng.shuffle(train)
     rng.shuffle(test)
     return train, test
 
 
-def score_rows(rows: list[dict], allocator: str) -> list[float]:
+def score_rows(rows: list[dict], allocator: str, *, today=None) -> list[float]:
     from regexproof.mine.score import candidate_score
 
     scores = []
@@ -163,7 +189,7 @@ def score_rows(rows: list[dict], allocator: str) -> list[float]:
             # (the walk already ran at gate time; keyed slug -> pin).
             tree_feature = r.get("tree_feature")
         total, _ = candidate_score(
-            cand, today=None, allocator=allocator, tree_feature=tree_feature
+            cand, today=today, allocator=allocator, tree_feature=tree_feature
         )
         scores.append(total)
     return scores
@@ -176,34 +202,72 @@ def _auc_delta_ci(
     *,
     seed: int,
     n_boot: int = 10000,
-) -> tuple[float, float]:
+    method: str = "bca",
+) -> tuple[float, float, str]:
     """Seeded bootstrap CI for AUC(v1.5) - AUC(v1) — the flip-rule statistic.
 
     Resamples the PAIRED (v1, v1.5, label) rows, computes both AUCs on each
-    resample, and collects the delta distribution. Returns the seeded 95%
-    percentile interval. The flip rule fires when the interval excludes 0."""
+    resample, and collects the delta distribution. ``method='bca'`` applies
+    the bias-corrected-and-accelerated adjustment (jackknife over leave-one-
+    out paired rows); ``method='percentile'`` is the declared fallback.
+    Returns ``(lo, hi, method_used)`` — the flip rule fires only when the
+    whole interval sits above 0 (one-sided IMPROVEMENT)."""
     import random
 
     from regexproof.mine.score_v2 import auc
+    from regexproof.stats.intervals import _inv_normal, _normal_cdf
 
     rng = random.Random(seed)
     n = len(v1_scores)
     assert n == len(v15_scores) == len(labels)
-    deltas: list[float] = []
-    for _ in range(n_boot):
-        idx = [rng.randrange(n) for _ in range(n)]
-        s1 = [v1_scores[i] for i in idx]
-        s15 = [v15_scores[i] for i in idx]
-        lab = [labels[i] for i in idx]
+    pairs = list(zip(v1_scores, v15_scores, labels))
+
+    def delta_of(idx: list[int]) -> float:
+        s1 = [pairs[i][0] for i in idx]
+        s15 = [pairs[i][1] for i in idx]
+        lab = [pairs[i][2] for i in idx]
         a1 = auc(s1, lab)
         a15 = auc(s15, lab)
         if a1 != a1 or a15 != a15:  # nan guard (single-class resample)
-            continue
-        deltas.append(a15 - a1)
+            return float("nan")
+        return a15 - a1
+
+    deltas: list[float] = []
+    for _ in range(n_boot):
+        idx = [rng.randrange(n) for _ in range(n)]
+        d = delta_of(idx)
+        if d == d:
+            deltas.append(d)
     deltas.sort()
-    lo = deltas[max(0, math.floor(0.025 * len(deltas)) - 1)]
-    hi = deltas[min(len(deltas) - 1, math.ceil(0.975 * len(deltas)) - 1)]
-    return (lo, hi)
+
+    def endpoint(p: float) -> float:
+        return deltas[max(0, math.floor(p * len(deltas)) - 1)]
+
+    method_used = method
+    if method == "bca" and len(deltas) >= 100:
+        # Jackknife over leave-one-out paired rows for the acceleration a.
+        jack = [
+            delta_of([j for j in range(n) if j != i]) for i in range(n)
+        ]
+        finite = [j for j in jack if j == j]
+        if len(finite) >= 3:
+            mean_j = sum(finite) / len(finite)
+            num = sum((mean_j - j) ** 3 for j in finite)
+            den = sum((mean_j - j) ** 2 for j in finite)
+            accel = num / (6.0 * den**1.5) if den else 0.0
+            observed = delta_of(list(range(n)))
+            frac = sum(1.0 for d in deltas if d < observed) / len(deltas)
+            z0 = _inv_normal(frac) if 0.0 < frac < 1.0 else 0.0
+            za = abs(_inv_normal(0.025))
+            a1 = z0 + (z0 + za) / (1.0 - accel * (z0 + za))
+            a2 = z0 + (z0 - za) / (1.0 - accel * (z0 - za))
+            p1 = _normal_cdf(a1)
+            p2 = _normal_cdf(a2)
+            lo = deltas[max(0, math.floor(min(p1, p2) * len(deltas)) - 1)]
+            hi = deltas[min(len(deltas) - 1, math.ceil(max(p1, p2) * len(deltas)) - 1)]
+            return (lo, hi, method_used)
+        method_used = "percentile-fallback"
+    return (endpoint(0.025), endpoint(0.975), method_used)
 
 
 def main() -> int:
@@ -227,16 +291,23 @@ def main() -> int:
     _train, test = stratified_split(rows, seed)
     labels = [r["label"] for r in test]
 
-    v1_scores = score_rows(test, "score-v1")
-    v15_scores = score_rows(test, "score-v1.5")
+    # Frozen eval date: the recency features must NOT use the wall clock.
+    # The freeze's escape baseline records computed_at — the artifact clock.
+    from datetime import date
+
+    eval_date = date.fromisoformat(str(freeze["escape_baseline"]["computed_at"]))
+
+    v1_scores = score_rows(test, "score-v1", today=eval_date)
+    v15_scores = score_rows(test, "score-v1.5", today=eval_date)
 
     auc_v1 = auc(v1_scores, labels)
     auc_v15 = auc(v15_scores, labels)
     # Flip rule: bootstrap DIFFERENCE-DISTRIBUTION CI on AUC. Resample the
     # paired (v1, v1.5) score rows (not the score differences — AUC is
     # computed per resample), collect the AUC delta distribution, and take
-    # the seeded percentile CI. One-sided: CI excludes 0 => flip.
-    lo_ci, hi_ci = _auc_delta_ci(v1_scores, v15_scores, labels, seed=seed)
+    # the seeded percentile CI. One-sided IMPROVEMENT: flip only when the
+    # whole CI sits above 0 (a significantly WORSE v1.5 must never flip).
+    lo_ci, hi_ci, ci_method = _auc_delta_ci(v1_scores, v15_scores, labels, seed=seed)
     # precision@K descriptive only (K=30 frozen).
     k = int(freeze["eval"]["k_frozen"])
     top = sorted(range(len(test)), key=lambda i: v15_scores[i], reverse=True)[:k]
@@ -248,7 +319,7 @@ def main() -> int:
         sum(a - b for a, b in zip(v15_scores, v1_scores)) / len(v1_scores), 4
     ) if v1_scores else 0.0
 
-    flips = bool(lo_ci > 0 or hi_ci < 0)  # CI excludes 0
+    flips = bool(lo_ci > 0)  # one-sided IMPROVEMENT only — CI above 0
     decision = {
         "schema_version": "1",
         "eval": {
@@ -260,6 +331,7 @@ def main() -> int:
             "auc_v15": round(auc_v15, 6),
             "auc_delta_v15_minus_v1": round(auc_v15 - auc_v1, 6),
             "bootstrap_ci_95_delta": [round(lo_ci, 6), round(hi_ci, 6)],
+            "bootstrap_method": ci_method,
             "precision_at_k": {"k": k, "positive_in_top_k": top_pos, "clopper_pearson_95": [round(cp[0], 6), round(cp[1], 6)]},
             "mean_score_delta": mean_delta,
             "cap_raise_calibration_note": "overlay shifts scores by "

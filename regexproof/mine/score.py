@@ -208,20 +208,35 @@ def rank_candidates(
     allocator: str = "score-v1",
     tree_features: dict[tuple[str, str], dict[str, Any]] | None = None,
 ) -> list[dict[str, Any]]:
-    """Return a new list sorted highest score first; ties by ``url`` ascending."""
+    """Return a new list sorted highest score first; ties by ``url`` ascending.
 
+    For score-v1.5, tree-available rows form a HARD upper tier: a candidate
+    with a complete tree probe always outranks one without, regardless of
+    base score (the design's deprioritized-tier rule). Within each tier,
+    sort by total score descending."""
     allocator = _normalize_allocator(allocator)
+    if allocator != "score-v1.5":
+        def sort_key(c: dict[str, Any]) -> tuple[float, str]:
+            total, _ = candidate_score(
+                c,
+                today=today,
+                allocator=allocator,
+                tree_feature=_tree_feature_for_candidate(c, tree_features),
+            )
+            return (-total, str(c.get("url") or ""))
 
-    def sort_key(c: dict[str, Any]) -> tuple[float, str]:
-        total, _ = candidate_score(
-            c,
-            today=today,
-            allocator=allocator,
-            tree_feature=_tree_feature_for_candidate(c, tree_features),
+        return sorted(cands, key=sort_key)
+
+    def v15_sort_key(c: dict[str, Any]) -> tuple[int, float, str]:
+        tree = _tree_feature_for_candidate(c, tree_features)
+        total, breakdown = candidate_score(
+            c, today=today, allocator=allocator, tree_feature=tree
         )
-        return (-total, str(c.get("url") or ""))
+        available = not bool(breakdown.get("tree_unavailable"))
+        # Tier 0 = tree-available (hard upper), tier 1 = unavailable.
+        return (0 if available else 1, -total, str(c.get("url") or ""))
 
-    return sorted(cands, key=sort_key)
+    return sorted(cands, key=v15_sort_key)
 
 
 def _normalize_allocator(value: str) -> str:

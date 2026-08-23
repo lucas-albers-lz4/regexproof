@@ -88,6 +88,32 @@ def test_v15_rank_deprioritizes_unavailable():
     assert ranked[1]["url"] == other["url"]
 
 
+def test_v15_hard_tier_beats_high_base_unavailable():
+    """A complete-tree candidate ALWAYS outranks an unavailable one, even
+    when the unavailable candidate has a much higher base score (the
+    deprioritized-tier rule — a -5 penalty alone would not guarantee this)."""
+    high_base = {
+        "url": "https://github.com/huge/security-tool",
+        "source_query": "security",
+        "stars": 50000,
+        "pushed_date": "2026-08-01",
+        "capped": False,
+    }
+    # high_base has no tree feature → unavailable; CAND has a complete tree.
+    ranked = rank_candidates(
+        [high_base, CAND],
+        today=None,
+        allocator="score-v1.5",
+        tree_features={("https://github.com/openwrt/packages", ""): COMPLETE_TREE},
+    )
+    assert ranked[0]["url"] == CAND["url"], (
+        "complete-tree candidate must outrank high-base unavailable "
+        f"got {[r['url'].split('/')[-1] for r in ranked]}"
+    )
+    # And within the available tier, higher total sorts first.
+    assert ranked[1]["url"] == high_base["url"]
+
+
 def test_tree_overlay_signals_frozen_shape():
     signals = _tree_overlay_signals(COMPLETE_TREE)
     assert set(signals) == set(_TREE_OVERLAY_WEIGHTS)

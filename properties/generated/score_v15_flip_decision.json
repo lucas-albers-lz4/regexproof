@@ -1,15 +1,16 @@
 {
   "action": "keep score-v1",
   "eval": {
-    "auc_delta_v15_minus_v1": 0.036372,
-    "auc_v1": 0.608708,
-    "auc_v15": 0.64508,
+    "auc_delta_v15_minus_v1": 0.070894,
+    "auc_v1": 0.613765,
+    "auc_v15": 0.684659,
     "bootstrap_ci_95_delta": [
-      -0.069662,
-      0.136493
+      -0.029107,
+      0.162887
     ],
-    "cap_raise_calibration_note": "overlay shifts scores by 58.5566 on average; any cap raise must be recalibrated, never applied silently",
-    "mean_score_delta": 58.5566,
+    "bootstrap_method": "bca",
+    "cap_raise_calibration_note": "overlay shifts scores by 58.0064 on average; any cap raise must be recalibrated, never applied silently",
+    "mean_score_delta": 58.0064,
     "population_n": 853,
     "positive": 127,
     "precision_at_k": {

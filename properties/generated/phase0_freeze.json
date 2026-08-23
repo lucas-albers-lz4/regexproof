@@ -34,11 +34,27 @@
   },
   "eval": {
     "auc": "bootstrap BCa, B=10000, 95%, percentile fallback",
-    "flip_rule": "bootstrap difference-distribution CI (v1.5 - v1) excludes 0, one-sided, AUC-only, no OR alternative",
+    "flip_rule": "bootstrap difference-distribution CI (v1.5 - v1) excludes 0, one-sided IMPROVEMENT only (lo > 0), AUC-only, no OR alternative",
     "k_frozen": 30,
     "k_note": "Frozen a priori \u2014 no K search anywhere in Phase 0 code paths.",
     "missing_values": "median imputation from TRAIN split only",
     "precision_at_k": "exact Clopper-Pearson, descriptive only",
+    "score_v15_overlay": {
+      "sha256": "f30d0740bdcc9d767eeefdd2b3098b4e7bf6efb9f7e65f44a0322105b9130201",
+      "source": "regexproof.mine.score._TREE_OVERLAY_WEIGHTS",
+      "weights": {
+        "tree_boundary_false": -6.0,
+        "tree_boundary_true": 8.0,
+        "tree_config": 2.0,
+        "tree_javascript": 3.0,
+        "tree_path_log": 1.0,
+        "tree_python": 4.0,
+        "tree_regex_files_log": 6.0,
+        "tree_shell": 3.0,
+        "tree_unavailable": -5.0,
+        "tree_yara": 5.0
+      }
+    },
     "tie_breaking": "stable: (regex_id, site) lexicographic"
   },
   "protocol": {
