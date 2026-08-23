@@ -26,6 +26,8 @@ import json
 import pathlib
 import sys
 
+Path = pathlib.Path
+
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 GEN = ROOT / "properties" / "generated"
 
@@ -44,8 +46,8 @@ N_FLOOR = 50
 POSITIVE_STATUSES = ("go", "triage-trial")
 
 
-def load_decision_population() -> list[dict]:
-    files = sorted(GEN.glob("*_gate_decision.json"))
+def load_decision_population(gen: Path | None = None) -> list[dict]:
+    files = sorted((gen if gen is not None else GEN).glob("*_gate_decision.json"))
     rows = []
     for f in files:
         try:
@@ -65,11 +67,27 @@ def load_decision_population() -> list[dict]:
             {
                 "file": f.name,
                 "url": d.get("candidate_url"),
+                "pin": d.get("pin") or d.get("probed_pin") or "",
                 "status": status,
                 "payload": d,  # full contents — hashed verbatim (canonical JSON)
             }
         )
-    return rows
+    # (url, pin) supersession dedup (#560 Wave 3): when a candidate is
+    # requeued and re-decided at a NEWER pin, the older decision is
+    # superseded — eval/escape counters must count only the latest pin per
+    # url. Deterministic: keep the max pin (ties → the last file, which is
+    # the newest by sort order). URL-less rows are never superseded.
+    by_url: dict[str, dict] = {}
+    url_less = [r for r in rows if not str(r.get("url") or "")]
+    for r in rows:
+        url = str(r.get("url") or "")
+        if not url:
+            continue
+        prev = by_url.get(url)
+        if prev is None or str(r.get("pin") or "") >= str(prev.get("pin") or ""):
+            by_url[url] = r
+    keep_ids = {id(r) for r in by_url.values()} | {id(r) for r in url_less}
+    return [r for r in rows if id(r) in keep_ids]
 
 
 def snapshot_hash(rows: list[dict]) -> str:

@@ -1,12 +1,12 @@
 {
   "computed_at": "2026-08-22",
-  "n": 853,
-  "population": "probe-lifecycle: all probe outcomes counted (committed gate-decision artifacts, n=853)",
+  "n": 844,
+  "population": "probe-lifecycle: all probe outcomes counted (committed gate-decision artifacts, n=844)",
   "query": "properties/generated/*_gate_decision.json with status in {go, triage-trial}",
-  "sample_size_note": "n=853 committed decision files; ledger lag (candidate-ledger rows) is documented sync drift, never a second population.",
+  "sample_size_note": "n=844 committed decision files; ledger lag (candidate-ledger rows) is documented sync drift, never a second population.",
   "schema_version": "1",
-  "survivor_rate": 0.148886,
-  "survivors": 127,
+  "survivor_rate": 0.143365,
+  "survivors": 121,
   "test": {
     "fire_action": "BLOCKS #550 Phase 2 scale; no low-yield unlock",
     "h0": "window_rate >= baseline",
@@ -17,7 +17,7 @@
     "two_windows_rule": "n < floor requires two consecutive 7-day windows"
   },
   "wilson_ci_95": [
-    0.126573,
-    0.174348
+    0.121336,
+    0.168625
   ]
 }
