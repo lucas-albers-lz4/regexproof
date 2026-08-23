@@ -116,14 +116,16 @@ def join_rows(freeze: dict) -> list[dict]:
         label = 1 if status in POSITIVE else 0
         led = by_url.get(normalize_repo_url(url), {})
         # Tree feature from the committed artifact: slug -> pin -> result.
-        # Pin precedence matches the tree builder's contract: pin_probed is
-        # authoritative (the mined pin is never a fallback), then the
-        # decision's corpus_pin.
+        # Pin precedence MUST match the tree builder (build-gate-labels.py):
+        # a decision's probe.pin_probed is the decision-time probed pin
+        # (E3), then corpus_pin, then probe.pin. The ledger's mined
+        # pin_probed is NEVER substituted (E3 data absent).
         tree_feature = None
+        probe = d.get("probe") if isinstance(d.get("probe"), dict) else {}
         pin = str(
-            led.get("pin_probed")
+            probe.get("pin_probed")
             or d.get("corpus_pin")
-            or (d.get("probe") or {}).get("pin")
+            or probe.get("pin")
             or ""
         )
         slug = _repo_slug(url)

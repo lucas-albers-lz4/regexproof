@@ -69,3 +69,58 @@ def test_eval_fails_closed_on_freeze_mismatch(tmp_path: Path):
             mod.validate_freeze_snapshot(freeze)
     finally:
         (GEN / "_zz_mut_gate_decision.json").unlink()
+
+
+def test_join_pin_precedence_matches_tree_builder(tmp_path: Path):
+    """probe.pin_probed (the decision-time E3 pin) must win over the ledger's
+    mined pin — a distinct probed pin must join against the probed pin's tree
+    entry, not silently fall back (Luna r2 fold)."""
+    import importlib.util
+
+    spec = importlib.util.spec_from_file_location(
+        "eval_v15b", ROOT / "scripts" / "eval-score-v15.py"
+    )
+    assert spec is not None and spec.loader is not None
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+
+    # Decision with probe.pin_probed = probed-pin; ledger has a DIFFERENT
+    # mined pin. The join must use probe.pin_probed.
+    (GEN / "_zz_pin_gate_decision.json").write_text(
+        json.dumps(
+            {
+                "candidate_url": "https://github.com/zztest/probe-pin-repo",
+                "decision": "go",
+                "corpus_pin": "mined-pin",
+                "probe": {"pin_probed": "probed-pin", "pin": "probe-pin"},
+            }
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    # Tree artifact has BOTH pins; only the probed pin resolves.
+    tree_path = GEN / "mine-tree-features.json"
+    original = tree_path.read_text(encoding="utf-8") if tree_path.is_file() else None
+    artifact = {"schema_version": "1", "entries": {}}
+    if original:
+        artifact = json.loads(original)
+    artifact.setdefault("entries", {})["zztest/probe-pin-repo"] = {
+        "probed-pin": {
+            "complete": True,
+            "truncated": False,
+            "security_boundary": "deterministic-true",
+            "regex_file_type_counts": {".yara": 3},
+            "path_count": 10,
+        }
+    }
+    tree_path.write_text(json.dumps(artifact), encoding="utf-8")
+    try:
+        rows = mod.join_rows(mod.load_freeze())
+        row = next(r for r in rows if "probe-pin-repo" in r["url"])
+        assert row["pin"] == "probed-pin", f"pin={row['pin']!r}"
+        assert row["tree_feature"] is not None, "tree feature must resolve"
+        assert row["tree_feature"]["path_count"] == 10
+    finally:
+        (GEN / "_zz_pin_gate_decision.json").unlink()
+        if original is not None:
+            tree_path.write_text(original, encoding="utf-8")
