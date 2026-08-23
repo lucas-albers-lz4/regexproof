@@ -10,9 +10,14 @@ Integrity
 - Atomic writes: temp file + ``os.replace`` (a crash mid-write can never
   truncate the state).
 - fsync before replace.
-- Checksum: the state file carries ``sha256`` of its own canonical JSON;
-  ``load_state`` verifies it and falls back to ``.bak`` when corrupt
-  (loud fallback — never silent).
+- Checksum: the state file carries ``sha256`` of its own canonical JSON
+  (computed over the canonical body with the ``sha256`` field excluded —
+  it cannot checksum itself). SCOPE: the checksum covers the STRUCTURAL
+  content (parsed + re-serialized canonical form), so data mutations and
+  re-orderings trip it; byte-level whitespace/padding changes that decode
+  to the same structure are intentionally tolerated (CodeRabbit #570).
+  ``load_state`` verifies and falls back to ``.bak`` when corrupt (loud
+  fallback — never silent).
 - Dedicated never-renamed lock file ``batch/state.json.lock`` (flock),
   matching the repo convention (corpus_lock / lease_registry).
 """
@@ -227,15 +232,18 @@ def _write(reg: dict[str, Any], path: pathlib.Path | None = None) -> None:
         os.close(fd)
     # Verify the new temp BEFORE installing (write-then-verify-then-rename).
     _verify(tmp.read_text(encoding="utf-8"))
-    # Rotate the current verified state to .bak via COPY (not rename — a
-    # crash between the two renames would otherwise leave NO state file;
-    # CodeRabbit #570). Only when the current file verifies.
+    # Rotate the current verified state to .bak — via temp + os.replace so
+    # the backup install is ATOMIC (copy2 directly onto the live .bak can
+    # truncate it on a crash mid-copy; CodeRabbit #570 heavy-lift). Only
+    # when the current file verifies.
     if p.is_file():
         try:
             _verify(p.read_text(encoding="utf-8"))
             import shutil
 
-            shutil.copy2(p, p.with_suffix(".json.bak"))
+            bak_tmp = p.with_suffix(".json.bak.tmp")
+            shutil.copy2(p, bak_tmp)
+            os.replace(bak_tmp, p.with_suffix(".json.bak"))
         except (ValueError, json.JSONDecodeError, OSError):
             pass  # current is corrupt: keep the existing .bak, replace state
     os.replace(tmp, p)
