@@ -88,6 +88,24 @@ def snapshot_hash(rows: list[dict]) -> str:
     return h.hexdigest()
 
 
+def _score_v15_overlay_definition() -> dict:
+    """Pin the score-v1.5 overlay (weights + hash) in the freeze artifact.
+
+    The weights are FROZEN in ``regexproof.mine.score._TREE_OVERLAY_WEIGHTS``
+    (#550 Phase 1 / Item II); the freeze records them and a SHA-256 so Wave
+    1's offline eval can fail closed if the implementation drifts."""
+    import hashlib
+
+    from regexproof.mine.score import _TREE_OVERLAY_WEIGHTS
+
+    canonical = json.dumps(_TREE_OVERLAY_WEIGHTS, sort_keys=True).encode("utf-8")
+    return {
+        "weights": {k: v for k, v in sorted(_TREE_OVERLAY_WEIGHTS.items())},
+        "sha256": hashlib.sha256(canonical).hexdigest(),
+        "source": "regexproof.mine.score._TREE_OVERLAY_WEIGHTS",
+    }
+
+
 def main() -> int:
     rows = load_decision_population()
     n = len(rows)
@@ -130,9 +148,11 @@ def main() -> int:
             "auc": "bootstrap BCa, B=10000, 95%, percentile fallback",
             "precision_at_k": "exact Clopper-Pearson, descriptive only",
             "flip_rule": "bootstrap difference-distribution CI (v1.5 - v1) "
-            "excludes 0, one-sided, AUC-only, no OR alternative",
+            "excludes 0, one-sided IMPROVEMENT only (lo > 0), AUC-only, "
+            "no OR alternative",
             "missing_values": "median imputation from TRAIN split only",
             "tie_breaking": "stable: (regex_id, site) lexicographic",
+            "score_v15_overlay": _score_v15_overlay_definition(),
         },
         "escape_baseline": {
             "value": round(rate, 6),
