@@ -93,9 +93,12 @@ OPENWRT_SEEDS = (
 
 def _path_of(rec: dict[str, Any]) -> str:
     site = str(rec.get("site") or rec.get("file") or "")
-    # site is file:line:column — strip the last two numeric fields when present.
+    # Site is path:line:token (or path:line:column). The line field is
+    # ALWAYS numeric; the token may be textual (e.g. "RecordId") — strip
+    # both trailing fields so test-filename drops still apply to
+    # "pkg/foo.test.sh:7:RecordId" (Luna r2 #5).
     parts = site.replace("\\", "/").split(":")
-    if len(parts) >= 3 and parts[-1].isdigit() and parts[-2].isdigit():
+    if len(parts) >= 3 and parts[-2].isdigit():
         return ":".join(parts[:-2])
     return str(rec.get("file") or site)
 
@@ -174,6 +177,91 @@ def score(rec: dict[str, Any], vocab: tuple[str, ...]) -> int:
     if _INTERP.search(pat):
         pts -= 3
     return pts
+
+
+def rank_sites(
+    records: list[dict[str, Any]],
+    *,
+    vocab: tuple[str, ...] = DEFAULT_VOCAB,
+    limit: int = 15,
+) -> dict[str, Any]:
+    """Rank conversion CANDIDATE SITES (Gate 2 stub emitter input).
+
+    Conversion rows are human-adopted (they carry ``contract.site`` or a
+    top-level ``site``); the scanner-pattern drop rules do NOT apply to
+    them — there is no ``pattern`` to gate. Path/test-name drops still
+    apply so test-dir density cannot outrank a real init script (Luna r1
+    fold #1: the documented ``*_conversion.ndjson`` input must not produce
+    an empty queue)."""
+    dropped: list[dict[str, Any]] = []
+    survivors: list[dict[str, Any]] = []
+    for rec in records:
+        site = rec.get("site") or (rec.get("contract") or {}).get("site") or rec.get("file")
+        rec = dict(rec)
+        rec["site"] = site
+        if not site:
+            dropped.append({"site": None, "reason": "malformed:missing-site"})
+            continue
+        reason = _drop_reason_for_site(rec)
+        if reason:
+            dropped.append({"site": site, "reason": reason})
+            continue
+        survivors.append(rec)
+    scored = []
+    for rec in survivors:
+        pts = score(rec, vocab)
+        # Preserve ALL optional stub metadata (CodeRabbit #569): the emitter
+        # reads capture_group/charset_class/path_vocabulary/trust_guess and
+        # suggested_sink_question from the ranked row — discarding them here
+        # silently drops the pre-probe signals the ranker produced.
+        row: dict[str, Any] = {
+            "score": pts,
+            "site": rec.get("site"),
+            "file": _path_of(rec),
+            "idiom_bucket": rec.get("idiom_bucket"),
+            "corpus": rec.get("corpus"),
+            "pin": rec.get("pin") or rec.get("corpus_pin"),
+            "provenance": rec.get("provenance", "stub"),
+            "suggested_shape": rec.get("suggested_shape", ""),
+        }
+        for key in (
+            "capture_group",
+            "charset_class",
+            "path_vocabulary",
+            "trust_guess",
+            "suggested_sink_question",
+        ):
+            if rec.get(key) is not None:
+                row[key] = rec[key]
+        scored.append(row)
+    scored.sort(key=lambda r: (-int(r["score"]), str(r["site"] or "")))
+    keep = scored[:limit]
+    return {
+        "schema_version": "1",
+        "vocab": list(vocab),
+        "limit": limit,
+        "input_rows": len(records),
+        "dropped_count": len(dropped),
+        "survivor_count": len(survivors),
+        "keep": keep,
+        "dropped": dropped,
+    }
+
+
+def _drop_reason_for_site(rec: dict[str, Any]) -> str | None:
+    """Drop rules that apply to conversion candidate sites (no pattern gate).
+
+    Keeps the path-segment / test-filename filters; skips all pattern-based
+    rules because conversion rows are human-adopted candidates, not scanner
+    output (Luna r1 fold #1)."""
+    path = _path_of(rec)
+    segs = _path_segments(path)
+    name = segs[-1] if segs else ""
+    if any(s in _DROP_PATH_SEGS for s in segs):
+        return "path-segment:tests|testdata|fixtures"
+    if name in DROP_TEST_NAMES or name.endswith(_TEST_NAME_SUFFIX):
+        return f"test-filename:{name}"
+    return None
 
 
 def rank_rows(

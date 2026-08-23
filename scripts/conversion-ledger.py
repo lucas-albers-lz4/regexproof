@@ -372,34 +372,39 @@ def contract_queue_health(gen_dir: Path, clock_iso: str | None = None) -> dict[s
                 data = json.loads(path.read_text(encoding="utf-8"))
             except (OSError, ValueError):
                 continue
-            status = str(data.get("status") or "")
-            if status == "contracted":
-                counts["contracted"] += 1
-            elif status.startswith("skipped"):
-                counts["skipped"] += 1
-            elif status == "claimed":
-                counts["claimed"] += 1
-            elif status in {"emitted", "unassigned"}:
-                counts["emitted"] += 1
-            created = str(data.get("created_at") or "")
-            if created and clock_iso:
-                try:
-                    # Normalize to naive UTC: created_at may carry an offset
-                    # (…Z) while the artifact clock is a plain ISO date.
-                    clock = datetime.fromisoformat(clock_iso)
-                    created_dt = datetime.fromisoformat(created)
-                    if created_dt.tzinfo is not None:
-                        created_dt = created_dt.astimezone(timezone.utc).replace(
-                            tzinfo=None
-                        )
-                    if clock.tzinfo is not None:
-                        clock = clock.astimezone(timezone.utc).replace(tzinfo=None)
-                    # Clamp to >= 0: the date-only artifact clock parses as
-                    # midnight, so a same-day record would otherwise compute a
-                    # negative age.
-                    ages.append(max(0.0, (clock - created_dt).total_seconds() / 86400))
-                except ValueError:
-                    pass
+            # Queue artifacts store state per candidate row (#558): the
+            # health join FLATTENS candidate_sites — top-level status does
+            # not exist (Luna r1 #10 fold).
+            rows = data.get("candidate_sites") or [data]
+            for row in rows:
+                status = str(row.get("status") or "")
+                if status == "contracted":
+                    counts["contracted"] += 1
+                elif status.startswith("skipped"):
+                    counts["skipped"] += 1
+                elif status == "claimed":
+                    counts["claimed"] += 1
+                elif status in {"emitted", "unassigned"}:
+                    counts["emitted"] += 1
+                created = str(row.get("created_at") or "")
+                if created and clock_iso:
+                    try:
+                        # Normalize to naive UTC: created_at may carry an offset
+                        # (…Z) while the artifact clock is a plain ISO date.
+                        clock = datetime.fromisoformat(clock_iso)
+                        created_dt = datetime.fromisoformat(created)
+                        if created_dt.tzinfo is not None:
+                            created_dt = created_dt.astimezone(timezone.utc).replace(
+                                tzinfo=None
+                            )
+                        if clock.tzinfo is not None:
+                            clock = clock.astimezone(timezone.utc).replace(tzinfo=None)
+                        # Clamp to >= 0: the date-only artifact clock parses as
+                        # midnight, so a same-day record would otherwise compute a
+                        # negative age.
+                        ages.append(max(0.0, (clock - created_dt).total_seconds() / 86400))
+                    except ValueError:
+                        pass
     if ages:
         ages_sorted = sorted(ages)
         n = len(ages_sorted)

@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/lucas-albers-lz4/regexproof/schemas/queue_stub.schema.json",
+  "title": "conversion queue stub",
+  "description": "Cluster-conversion-rank stub (#551 Phase C REVISION 8). QUEUE-ONLY: a stub never increments properties_asked (it is not a contract). provenance=stub is enforced structurally; additionalProperties is false so no stray field can smuggle contract semantics.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "provenance",
+    "corpus",
+    "pin",
+    "site",
+    "idiom_bucket",
+    "suggested_shape"
+  ],
+  "properties": {
+    "provenance": {
+      "const": "stub",
+      "description": "Queue-only marker; human adoption changes the provenance, never the stub row."
+    },
+    "corpus": { "type": "string" },
+    "pin": { "type": "string" },
+    "site": {
+      "type": "string",
+      "description": "file:line:token reference (canonical site form)."
+    },
+    "idiom_bucket": { "type": "string" },
+    "cheap_signals": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Cheap pre-probe signals only — never guarantee/trust/input_source.",
+      "properties": {
+        "capture_group": { "type": "string" },
+        "charset_class": { "type": "string" },
+        "path_vocabulary": { "type": "array", "items": { "type": "string" } },
+        "trust_guess": { "type": "string" }
+      }
+    },
+    "suggested_shape": { "type": "string" },
+    "suggested_sink_question": { "type": "string" }
+  }
+}

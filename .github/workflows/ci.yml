@@ -258,6 +258,37 @@ jobs:
             properties/generated/phase0_freeze.json \
             properties/generated/phase0_freeze.json.sha256 \
             properties/generated/escape_baseline.json
+      - name: Corpus events log append-only + transition check (#558)
+        # Luna r2 #4: check_events_log was never wired as a gate — illegal
+        # transitions went unchecked. The append-only comparison runs only
+        # on pull_request events (the base SHA exists only there — Luna r7
+        # #1: push/workflow_dispatch must not fail on an empty PR context).
+        run: |
+          python -c "from regexproof.mine.corpus_lock import check_events_log; raise SystemExit(check_events_log())"
+          if [ "${{ github.event_name }}" != "pull_request" ]; then
+            echo "append-only base comparison skipped: event=${{ github.event_name }} (no PR base)"
+            exit 0
+          fi
+          BASE_SHA="${{ github.event.pull_request.base.sha }}"
+          if [ -z "$BASE_SHA" ]; then
+            echo "FATAL: empty PR base SHA — the append-only check must not silently skip (Luna r6 / CodeRabbit #569)."
+            exit 1
+          fi
+          # Shallow checkout (fetch-depth: 1) usually lacks the base object —
+          # fetch it explicitly, then fail closed if it still cannot resolve.
+          git fetch --depth 1 origin "$BASE_SHA" >/dev/null 2>&1 || true
+          if ! git cat-file -e "${BASE_SHA}^{commit}" 2>/dev/null; then
+            echo "FATAL: cannot resolve PR base ${BASE_SHA} locally after fetch — the append-only check must not silently skip (Luna r6 / CodeRabbit #569)."
+            exit 1
+          fi
+          if git cat-file -e "${BASE_SHA}:properties/generated/corpus_events.jsonl" 2>/dev/null; then
+            base_content=$(git show "${BASE_SHA}:properties/generated/corpus_events.jsonl")
+            head_content=$(git show HEAD:properties/generated/corpus_events.jsonl 2>/dev/null || true)
+            if [ -n "$base_content" ] && [ "$head_content" != "$base_content" ] && [[ "$head_content" != "$base_content"* ]]; then
+              echo "FATAL: corpus_events.jsonl was rewritten or deleted (not a pure prefix append)."
+              exit 1
+            fi
+          fi
       - name: Phase 0 population + interval determinism tests (#555)
         run: python -m pytest tests/test_phase0_freeze.py tests/test_intervals.py -q
       - name: E2 busybox-sed dual-engine replay enforced (#429, luna gate 1)
