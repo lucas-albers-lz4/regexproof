@@ -78,6 +78,7 @@ def emit(
     generation: int,
     ranked: list[dict[str, Any]],
     root: pathlib.Path | None = None,
+    clock_iso: str | None = None,
 ) -> pathlib.Path:
     """Create the queue artifact from a ranked candidate list (Gate 2).
 
@@ -85,7 +86,9 @@ def emit(
     (``provenance=stub``, idiom bucket, cheap signals) are validated
     against the stub schema by the emitter's caller. ``wave_id`` must be
     NONBLANK — an unbound artifact would bypass the wave-binding check at
-    claim time (Luna r4 #2)."""
+    claim time (Luna r4 #2). Rows get a deterministic ``created_at`` from
+    ``clock_iso`` (the ledger artifact clock) so queue health can compute
+    median age — never ``datetime.now()`` (CodeRabbit #569)."""
     if not str(wave_id or "").strip():
         raise SystemExit(
             "conversion_queue: emit refused — wave_id must be nonblank (an "
@@ -98,7 +101,21 @@ def emit(
             "site": str(item.get("site") or ""),
             "status": "emitted",
             "reasons": [],
+            "created_at": clock_iso or "unknown_date",
         }
+        # cheap_signals is NESTED per the stub schema (CodeRabbit #569):
+        # the flat capture_group/... keys never exist on queue rows — the
+        # producer emits a cheap_signals object, and the emitter copies it
+        # through verbatim.
+        if isinstance(item.get("cheap_signals"), dict) and item["cheap_signals"]:
+            row["cheap_signals"] = item["cheap_signals"]
+        else:
+            nested = {}
+            for key in ("capture_group", "charset_class", "path_vocabulary", "trust_guess"):
+                if item.get(key) is not None:
+                    nested[key] = item[key]
+            if nested:
+                row["cheap_signals"] = nested
         for key in (
             "corpus",
             "pin",
@@ -106,10 +123,6 @@ def emit(
             "provenance",
             "suggested_shape",
             "suggested_sink_question",
-            "capture_group",
-            "charset_class",
-            "path_vocabulary",
-            "trust_guess",
         ):
             if key in item:
                 row[key] = item[key]
@@ -193,6 +206,18 @@ def claim(
             raise SystemExit(
                 f"conversion_queue: claim refused — {cluster} generation is "
                 f"{current}, not the caller's {generation} (stale snapshot)"
+            )
+        # Artifact generation must match the current generation too
+        # (CodeRabbit #569): a queue artifact emitted at generation 0 must
+        # not be claimable during generation 1 even if the wave_id is
+        # reused — wave_id alone is not a freshness proof.
+        gen_raw = q.get("wave_generation")
+        artifact_gen = int(gen_raw) if gen_raw is not None else -1
+        if artifact_gen != current:
+            raise SystemExit(
+                f"conversion_queue: claim refused — queue {cluster} artifact "
+                f"generation {artifact_gen} != current generation {current} "
+                "(stale artifact)"
             )
         # Wave binding (Luna r2 #1 / r3 #2 / r4 #2): the ARTIFACT's wave is
         # authoritative and REQUIRED nonblank — an unbound artifact cannot

@@ -50,6 +50,17 @@ def test_wave_open_refuses_blank_id(tmp_path):
         cl.wave_open("ow", "", log=log)
 
 
+def test_close_refused_after_abort(tmp_path):
+    """CodeRabbit #569 (Critical): an aborted wave must never be closable —
+    the close would write an illegal transition and bump generation."""
+    log = _log(tmp_path)
+    cl.wave_open("ow", "w1", log=log)
+    cl.wave_abort("ow", "w1", reason="mis-begun", log=log)
+    with pytest.raises(SystemExit, match="ABORTED"):
+        cl.wave_close("ow", "w1", log=log)
+    assert cl.read_generation("ow", log) == 0
+
+
 def test_no_parallel_waves(tmp_path):
     log = _log(tmp_path)
     cl.wave_open("ow", "w1", log=log)

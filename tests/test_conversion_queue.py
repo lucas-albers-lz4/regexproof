@@ -38,9 +38,10 @@ def _queue(tmp_path, ranked=None, corpus="openwrt_packages"):
     path = cq.emit(
         corpus,
         wave_id="ow_w1",
-        generation=1,
+        generation=0,  # matches the opened wave's derived generation
         ranked=ranked,
         root=tmp_path,
+        clock_iso="2026-08-23T00:00:00",
     )
     return path, cq.load_queue(corpus, root=tmp_path)
 
@@ -61,7 +62,7 @@ def test_emit_creates_queue_with_ranked_rows(tmp_path):
     path, q = _queue(tmp_path)
     assert path.is_file()
     assert q["cluster"] == "openwrt_packages"
-    assert q["wave_generation"] == 1
+    assert q["wave_generation"] == 0
     assert len(q["candidate_sites"]) == 19
     assert q["candidate_sites"][0]["rank"] == 1
     assert q["candidate_sites"][0]["status"] == "emitted"
@@ -227,6 +228,48 @@ def test_emit_refuses_unbound_wave_id(tmp_path):
             generation=0,
             ranked=_ranked(),
             root=tmp_path,
+        )
+
+
+def test_emit_preserves_cheap_signals(tmp_path):
+    """CodeRabbit #569: the nested cheap_signals object must reach queue
+    rows (the producer nests them; emit must not drop them)."""
+    ranked = _ranked()
+    path = cq.emit(
+        "openwrt_packages",
+        wave_id="ow_w1",
+        generation=0,
+        ranked=ranked,
+        root=tmp_path,
+        clock_iso="2026-08-23T00:00:00",
+    )
+    q = json.loads(path.read_text(encoding="utf-8"))
+    row = q["candidate_sites"][0]
+    assert row["cheap_signals"]["capture_group"] == "x"
+    assert row["cheap_signals"]["trust_guess"] == "config"
+    assert row["created_at"] == "2026-08-23T00:00:00"  # CodeRabbit #569
+
+
+def test_claim_refused_on_stale_artifact_generation(tmp_path):
+    """CodeRabbit #569: a queue artifact emitted at generation 0 must not
+    be claimable at generation 1 even if the wave_id is reused."""
+    _, q = _queue(tmp_path)  # artifact wave_generation = 1 (from _queue)
+    site = q["candidate_sites"][0]["site"]
+    from regexproof.mine.corpus_lock import wave_open, wave_close
+
+    log = tmp_path / "events.jsonl"
+    wave_open("openwrt_packages", "ow_w1", log=log)  # gen 0
+    # Move to generation 1: close + reopen with the SAME wave_id.
+    wave_close(
+        "openwrt_packages", "ow_w1",
+        force=False, log=log,
+    )
+    wave_open("openwrt_packages", "ow_w1", log=log)  # gen 1, same wave_id
+    with pytest.raises(SystemExit, match="stale artifact"):
+        cq.claim(
+            q["cluster"], site,
+            corpus_status="gated:go",
+            ledger_state={}, generation=1, root=tmp_path, lock_log=log,
         )
 
 

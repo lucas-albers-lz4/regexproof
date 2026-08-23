@@ -210,18 +210,30 @@ def rank_sites(
     scored = []
     for rec in survivors:
         pts = score(rec, vocab)
-        scored.append(
-            {
-                "score": pts,
-                "site": rec.get("site"),
-                "file": _path_of(rec),
-                "idiom_bucket": rec.get("idiom_bucket"),
-                "corpus": rec.get("corpus"),
-                "pin": rec.get("pin") or rec.get("corpus_pin"),
-                "provenance": rec.get("provenance", "stub"),
-                "suggested_shape": rec.get("suggested_shape", ""),
-            }
-        )
+        # Preserve ALL optional stub metadata (CodeRabbit #569): the emitter
+        # reads capture_group/charset_class/path_vocabulary/trust_guess and
+        # suggested_sink_question from the ranked row — discarding them here
+        # silently drops the pre-probe signals the ranker produced.
+        row: dict[str, Any] = {
+            "score": pts,
+            "site": rec.get("site"),
+            "file": _path_of(rec),
+            "idiom_bucket": rec.get("idiom_bucket"),
+            "corpus": rec.get("corpus"),
+            "pin": rec.get("pin") or rec.get("corpus_pin"),
+            "provenance": rec.get("provenance", "stub"),
+            "suggested_shape": rec.get("suggested_shape", ""),
+        }
+        for key in (
+            "capture_group",
+            "charset_class",
+            "path_vocabulary",
+            "trust_guess",
+            "suggested_sink_question",
+        ):
+            if rec.get(key) is not None:
+                row[key] = rec[key]
+        scored.append(row)
     scored.sort(key=lambda r: (-int(r["score"]), str(r["site"] or "")))
     keep = scored[:limit]
     return {

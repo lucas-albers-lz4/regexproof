@@ -268,7 +268,11 @@ jobs:
         run: |
           python -c "from regexproof.mine.corpus_lock import check_events_log; raise SystemExit(check_events_log())"
           BASE_SHA="${{ github.event.pull_request.base.sha }}"
-          if [ -n "$BASE_SHA" ] && git cat-file -e "${BASE_SHA}:properties/generated/corpus_events.jsonl" 2>/dev/null; then
+          if [ -z "$BASE_SHA" ] || ! git cat-file -e "${BASE_SHA}^{commit}" 2>/dev/null; then
+            echo "FATAL: cannot resolve PR base ${BASE_SHA:-<empty>} — the append-only check must not silently skip (CodeRabbit #569)."
+            exit 1
+          fi
+          if git cat-file -e "${BASE_SHA}:properties/generated/corpus_events.jsonl" 2>/dev/null; then
             base_content=$(git show "${BASE_SHA}:properties/generated/corpus_events.jsonl")
             head_content=$(git show HEAD:properties/generated/corpus_events.jsonl 2>/dev/null || true)
             if [ -n "$base_content" ] && [ "$head_content" != "$base_content" ] && [[ "$head_content" != "$base_content"* ]]; then

@@ -68,8 +68,23 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--corpus", required=True)
     ap.add_argument("--wave-id", required=True)
     ap.add_argument("--generation", type=int, default=0)
+    ap.add_argument(
+        "--clock-iso", default="",
+        help="ISO clock for deterministic created_at (ledger artifact clock; "
+             "never datetime.now() — CodeRabbit #569)",
+    )
     ap.add_argument("-o", "--output", type=pathlib.Path, required=True)
     args = ap.parse_args(argv)
+
+    # Corpus name must be a plain cluster id — a path-like value (/, \\, ..)
+    # would make cq.emit write outside out.parent (CodeRabbit #569).
+    if (
+        args.corpus in {".", ".."}
+        or "/" in args.corpus
+        or "\\" in args.corpus
+        or not args.corpus.strip()
+    ):
+        ap.error(f"invalid --corpus {args.corpus!r}: must be a plain cluster name")
 
     ranker = _load_ranker()
     records = ranker.load_ndjson(args.ndjson)
@@ -114,6 +129,7 @@ def main(argv: list[str] | None = None) -> int:
         generation=args.generation,
         ranked=stubs,
         root=queue_root,
+        clock_iso=args.clock_iso or None,
     )
     canonical = queue_root / f"{args.corpus}.json"
     if canonical != out:

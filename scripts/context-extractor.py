@@ -157,13 +157,17 @@ def validate_form(form: dict) -> None:
     if not str(form.get("input_format_constraint") or "").strip():
         sys.exit("error: input_format_constraint required (the human states "
                  "what input format the property constrains)")
+    # Structural window validation (CodeRabbit #569: window must be an
+    # OBJECT — a list passes the key check then crashes on .get()).
+    window = form.get("window")
+    if not isinstance(window, dict):
+        sys.exit("error: review form window must be an object")
     for key in ("path", "target_line", "window_lines", "lines"):
-        if key not in (form.get("window") or {}):
+        if key not in window:
             sys.exit(f"error: review form missing window.{key} (structural)")
     # Type/range validation (Luna r2 #6 / r3 #5): target_line int >= 1,
     # window_lines positive, lines non-empty and target present. Strict
     # isinstance — int(1.9) coercion must NOT pass a float (Luna r3 #5).
-    window = form["window"]
     target_raw = window.get("target_line")
     window_raw = window.get("window_lines")
     if not isinstance(target_raw, int) or isinstance(target_raw, bool):
@@ -178,10 +182,18 @@ def validate_form(form: dict) -> None:
         sys.exit("error: review form window.window_lines must be positive")
     if not isinstance(window.get("lines"), list) or not window["lines"]:
         sys.exit("error: review form window.lines must be a non-empty list")
-    if not any(
-        isinstance(entry, dict) and int(entry.get("line") or 0) == target_line
-        for entry in window["lines"]
-    ):
+
+    def _is_target(entry: object) -> bool:
+        # Malformed entries produce a validation error, not a traceback
+        # (CodeRabbit #569).
+        if not isinstance(entry, dict):
+            return False
+        try:
+            return int(entry.get("line") or 0) == target_line
+        except (TypeError, ValueError):
+            return False
+
+    if not any(_is_target(entry) for entry in window["lines"]):
         sys.exit("error: review form window.lines must contain the target line")
     if r == "unreachable":
         form["queue_action"] = "skipped_unreachable"

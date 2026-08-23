@@ -82,7 +82,9 @@ def _append_event(
     path = pathlib.Path(log) if log is not None else EVENTS_LOG
     path.parent.mkdir(parents=True, exist_ok=True)
     payload = json.dumps(event, sort_keys=True) + "\n"
-    fd = os.open(str(path), os.O_APPEND | os.O_CREAT | os.O_WRONLY, 0o644)
+    # 0o600: the events log is operationally sensitive (wave transitions);
+    # world-readable 0o644 was flagged by CodeQL (#569).
+    fd = os.open(str(path), os.O_APPEND | os.O_CREAT | os.O_WRONLY, 0o600)
     try:
         data = payload.encode("utf-8")
         view = memoryview(data)
@@ -221,6 +223,15 @@ def wave_close(
             )
         if status == "closed":
             raise SystemExit(f"corpus_lock: {corpus} wave already closed")
+        if status == "aborted":
+            # CodeRabbit #569 (Critical): an aborted wave must never be
+            # closable — the close would increment generation for a wave
+            # that is not open (and check_events_log would then flag the
+            # illegal transition).
+            raise SystemExit(
+                f"corpus_lock: {corpus} wave was ABORTED — closing it would "
+                "write an illegal transition; open a new wave instead"
+            )
         active_id = _active_wave_id(corpus, log)
         if active_id and active_id != wave_id:
             raise SystemExit(
