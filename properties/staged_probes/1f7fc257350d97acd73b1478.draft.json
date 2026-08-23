@@ -1,0 +1,11 @@
+{
+  "at": "2026-08-23T22:39:03Z",
+  "cache_hit": false,
+  "clone_ms": 0,
+  "corpus": "openwrt_packages",
+  "files_walked": 0,
+  "manifest_digest": "unknown",
+  "pin": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "probe_fetch_bytes": 0,
+  "url": "https://github.com/openwrt/packages"
+}

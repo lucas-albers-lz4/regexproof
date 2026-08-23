@@ -15,12 +15,12 @@ from __future__ import annotations
 import json
 import os
 import pathlib
-from typing import Any
+from typing import Any, Optional
 
 ADMISSION_PATH = pathlib.Path("cache/admission.json")
 
 
-def _proc_start_ticks(pid: int) -> int | None:
+def _proc_start_ticks(pid: int) -> Optional[int]:
     """Process start time from /proc/<pid>/stat field 22 (jiffies) — the
     anti-PID-reuse identity (same as lease_registry)."""
     try:
@@ -33,7 +33,7 @@ def _proc_start_ticks(pid: int) -> int | None:
         return None
 
 
-def _read(path: pathlib.Path | None) -> dict[str, Any]:
+def _read(path: Optional[pathlib.Path]) -> dict[str, Any]:
     p = pathlib.Path(path) if path is not None else ADMISSION_PATH
     if not p.is_file():
         return {"schema_version": "1", "reservations": {}}
@@ -51,7 +51,7 @@ def reserve(
     per_clone_cap_mb: int,
     max_disk_mb: int,
     owner_pid: int,
-    path: pathlib.Path | None = None,
+    path: Optional[pathlib.Path] = None,
 ) -> bool:
     """Reserve one per-clone slot. W=0 → fail closed (False). Returns False
     (no admission) when reservations + cap exceed max_disk_mb."""
@@ -84,6 +84,11 @@ def reserve(
                 continue  # PID recycled
             live[k] = v
         reg["reservations"] = live
+        # Worker limit FIRST (CodeRabbit #570): with worker_count=2, three
+        # live owners must not all hold slots even when the byte budget
+        # permits — the semaphore is a CONCURRENCY cap as well as a byte cap.
+        if len(live) >= worker_count:
+            return False
         used = sum(int(v.get("reserved_mb") or 0) for v in live.values())
         if used + per_clone_cap_mb > max_disk_mb:
             return False
@@ -98,7 +103,7 @@ def reserve(
         return True
 
 
-def release(*, owner_pid: int, path: pathlib.Path | None = None) -> None:
+def release(*, owner_pid: int, path: Optional[pathlib.Path] = None) -> None:
     p = pathlib.Path(path) if path is not None else ADMISSION_PATH
     lock = p.with_name(p.name + ".lock")
     lock.parent.mkdir(parents=True, exist_ok=True)

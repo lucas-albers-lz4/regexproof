@@ -234,19 +234,39 @@ def _write(reg: dict[str, Any], path: pathlib.Path | None = None) -> None:
     _verify(tmp.read_text(encoding="utf-8"))
     # Rotate the current verified state to .bak — via temp + os.replace so
     # the backup install is ATOMIC (copy2 directly onto the live .bak can
-    # truncate it on a crash mid-copy; CodeRabbit #570 heavy-lift). Only
-    # when the current file verifies.
+    # truncate it on a crash mid-copy; CodeRabbit #570 heavy-lift). The
+    # temp backup is fsynced BEFORE the atomic replace, and a disk-full or
+    # backup failure BLOCKS the install (never install the new state over
+    # a broken backup chain). Only when the current file verifies.
     if p.is_file():
         try:
             _verify(p.read_text(encoding="utf-8"))
-            import shutil
-
             bak_tmp = p.with_suffix(".json.bak.tmp")
-            shutil.copy2(p, bak_tmp)
+            fd = os.open(str(bak_tmp), os.O_CREAT | os.O_WRONLY | os.O_TRUNC, 0o600)
+            try:
+                os.write(fd, p.read_bytes())
+                os.fsync(fd)
+            finally:
+                os.close(fd)
             os.replace(bak_tmp, p.with_suffix(".json.bak"))
         except (ValueError, json.JSONDecodeError, OSError):
-            pass  # current is corrupt: keep the existing .bak, replace state
+            # Corrupt current OR backup failure: keep the existing .bak and
+            # DO NOT install the new state (disk-full must not proceed).
+            raise SystemExit(
+                f"batch_state: cannot rotate verified backup for {p.name} — "
+                "state install aborted (fail closed)"
+            )
     os.replace(tmp, p)
+    # fsync the parent directory so the primary install is durable across a
+    # crash (CodeRabbit #570 heavy-lift).
+    try:
+        dfd = os.open(str(p.parent), os.O_RDONLY)
+        try:
+            os.fsync(dfd)
+        finally:
+            os.close(dfd)
+    except OSError:
+        pass  # dir-fsync is best-effort on some filesystems
 
 
 def projection(path: pathlib.Path | None = None) -> dict[str, Any]:

@@ -285,27 +285,45 @@ def test_gc_sweep_holds_registry_lock(tmp_path):
 
 
 def test_default_probe_cap_consistent_with_max(tmp_path):
-    """Luna r2 #1: the CLI derives probe cap from --max-disk-mb when
-    --probe-fetch-limit-mb is unset (the documented invocation must not
-    self-refuse). The derivation lives in batch-probe.main; here we verify
-    the CLI runs to the admission stage with defaults and does NOT
-    self-refuse on cap > max."""
-    import subprocess
-    import sys
+    """Luna r2 #1 + CodeRabbit #570: the CLI derives probe cap from
+    --max-disk-mb when --probe-fetch-limit-mb is unset. PATCHES
+    disk_admission.reserve to capture per_clone_cap_mb and return before
+    any clone execution — no real Git ops, deterministic outcome."""
+    import importlib.util
+    from unittest import mock
+    from regexproof.admission import clone_cache
+    from regexproof.mine import disk_admission as da, lease_registry as lr
 
-    sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent.parent))
-    proc = subprocess.run(
-        [sys.executable, "scripts/batch-probe.py",
-         "--url", "https://github.com/openwrt/packages",
-         "--pin", "a" * 40, "--corpus", "openwrt_packages",
-         "--state", str(tmp_path / "state.json"),
-         "--skip-wave-active"],
-        capture_output=True, text=True, cwd=str(pathlib.Path(__file__).resolve().parent.parent),
-        timeout=60,
-    )
-    # Must NOT fail with 'cap=2048' (the old self-refusing default); the
-    # admission refusal message would contain the resolved cap if it fired.
-    assert "cap=2048" not in proc.stderr + proc.stdout
+    root = pathlib.Path(__file__).resolve().parent.parent
+    spec = importlib.util.spec_from_file_location("bp", root / "scripts" / "batch-probe.py")
+    batch_probe = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(batch_probe)  # type: ignore[union-attr]
+
+    captured: dict[str, int] = {}
+    fake_dir = tmp_path / "fake-cache"
+
+    def fake_reserve(*, worker_count, per_clone_cap_mb, max_disk_mb, owner_pid, path):
+        captured["per_clone_cap_mb"] = per_clone_cap_mb
+        captured["worker_count"] = worker_count
+        return True
+
+    fake_entry = {"cache_hit": False, "dir": str(fake_dir), "owner_pid": 1}
+
+    with (
+        mock.patch.object(da, "reserve", side_effect=fake_reserve),
+        mock.patch.object(clone_cache, "cache_acquire", return_value=fake_entry),
+        mock.patch.object(clone_cache, "worktree_for", return_value=tmp_path / "fake-wt"),
+        mock.patch.object(clone_cache, "worktree_remove", return_value=None),
+        mock.patch.object(lr, "renew", return_value=fake_entry),
+    ):
+        rc = batch_probe.main([  # type: ignore[attr-defined]
+            "--url", "https://github.com/openwrt/packages",
+            "--pin", "a" * 40, "--corpus", "openwrt_packages",
+            "--state", str(tmp_path / "state.json"),
+        ])
+    # main completed through the patched path (return 0; no real Git ops).
+    assert rc == 0, f"main returned {rc}"
+    assert captured["per_clone_cap_mb"] == 500  # derived from --max-disk-mb
 
 
 def test_lease_renew_extends_expiry(tmp_path):

@@ -228,11 +228,16 @@ def cache_gc(
             if not d.is_dir():
                 continue
             # Map the dir back to (url, pin) via a sidecar key file written at
-            # clone time; without one, refuse to guess (safety).
+            # clone time; without one, refuse to guess (safety). A MALFORMED
+            # or unreadable sidecar is treated like a missing one — skip the
+            # dir, never abort the sweep (CodeRabbit #570).
             key_file = d / ".cache-key"
             if not key_file.is_file():
                 continue
-            url, pin = key_file.read_text(encoding="utf-8").split("#", 1)
+            try:
+                url, pin = key_file.read_text(encoding="utf-8").split("#", 1)
+            except (OSError, ValueError):
+                continue  # malformed/unreadable sidecar — skip, don't delete
             if f"{url}#{pin}" in live:
                 continue  # active lease — never evict
             corpus = url.rstrip("/").rsplit("/", 1)[-1]
