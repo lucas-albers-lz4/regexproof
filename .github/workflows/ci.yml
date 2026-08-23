@@ -258,6 +258,10 @@ jobs:
             properties/generated/phase0_freeze.json \
             properties/generated/phase0_freeze.json.sha256 \
             properties/generated/escape_baseline.json
+      - name: Probe-walker staged_probes exclusion guard (#559)
+        # Properties-walking tools must never sweep staged_probes/ as
+        # contract material (Wave 2 CI guard).
+        run: python scripts/ci-check-probe-walkers.py
       - name: Corpus events log append-only + transition check (#558)
         # Luna r2 #4: check_events_log was never wired as a gate — illegal
         # transitions went unchecked. The append-only comparison runs only
