@@ -189,6 +189,31 @@ def test_events_log_rejects_unknown_event(tmp_path):
         cl.check_events_log(log)
 
 
+def test_events_log_rejects_reused_wave_id(tmp_path):
+    """Luna r8 #2: the CI gate must agree with wave_open's uniqueness guard —
+    open w1 → close w1 → open w1 must fail the check."""
+    log = _log(tmp_path)
+    cl.wave_open("ow", "w1", log=log)
+    cl.wave_close("ow", "w1", log=log)
+    # Hand-write a reused open (the API refuses it; the gate must too).
+    with open(log, "a", encoding="utf-8") as fh:
+        fh.write(json.dumps({"event": "wave_opened", "corpus": "ow", "wave_id": "w1", "at": "2026-08-23T00:00:00+00:00", "generation": 1}) + "\n")
+    with pytest.raises(SystemExit, match="reuses wave_id"):
+        cl.check_events_log(log)
+
+
+def test_events_log_mode_is_0600(tmp_path):
+    """Luna r8 #1: fchmod enforces 0600 on EXISTING logs (os.open's mode is
+    ignored when the file exists)."""
+    import os
+
+    log = _log(tmp_path)
+    log.write_text("", encoding="utf-8")
+    os.chmod(log, 0o644)
+    cl.wave_open("ow", "w1", log=log)
+    assert (log.stat().st_mode & 0o777) == 0o600
+
+
 def test_close_without_open_is_illegal(tmp_path):
     """Luna r1 #5: a close event with no preceding open must fail the check."""
     log = _log(tmp_path)

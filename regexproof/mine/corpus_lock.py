@@ -83,9 +83,12 @@ def _append_event(
     path.parent.mkdir(parents=True, exist_ok=True)
     payload = json.dumps(event, sort_keys=True) + "\n"
     # 0o600: the events log is operationally sensitive (wave transitions);
-    # world-readable 0o644 was flagged by CodeQL (#569).
+    # world-readable 0o644 was flagged by CodeQL (#569). os.open's mode is
+    # ignored when the file EXISTS (Luna r8 #1: the tracked log is 0644) —
+    # fchmod enforces 0600 unconditionally, new AND existing logs.
     fd = os.open(str(path), os.O_APPEND | os.O_CREAT | os.O_WRONLY, 0o600)
     try:
+        os.fchmod(fd, 0o600)
         data = payload.encode("utf-8")
         view = memoryview(data)
         while view:
@@ -137,6 +140,7 @@ def _with_lock(path: pathlib.Path, fn):
 
     path.parent.mkdir(parents=True, exist_ok=True)
     fd = os.open(str(path), os.O_APPEND | os.O_CREAT | os.O_RDWR, 0o600)
+    os.fchmod(fd, 0o600)  # existing logs keep 0600 too (Luna r8 #1)
     fh = os.fdopen(fd, "a+", encoding="utf-8")  # fdopen owns fd from here
     fcntl.flock(fh.fileno(), fcntl.LOCK_EX)
     try:
@@ -284,7 +288,13 @@ def wave_close(
                 )
             artifact_wave = str(q.get("wave_id") or "")
             active_id = _active_wave_id(corpus, log)
-            if artifact_wave and active_id and artifact_wave != active_id:
+            if not artifact_wave:
+                raise SystemExit(
+                    f"corpus_lock: close-out refused — queue {corpus} has no "
+                    "wave binding (unbound artifact cannot satisfy close-out; "
+                    "Luna r8 #3)"
+                )
+            if artifact_wave != active_id:
                 raise SystemExit(
                     f"corpus_lock: close-out refused — queue {corpus} bound "
                     f"to wave {artifact_wave!r} but active wave is {active_id!r}"
@@ -437,6 +447,7 @@ def check_events_log(log: pathlib.Path | None = None) -> int:
     state: dict[str, str] = {}  # corpus -> last event kind
     closed_count: dict[str, int] = {}
     active_id: dict[str, str] = {}
+    used_ids: dict[str, set[str]] = {}  # corpus -> set of used wave_ids
     for e in events:
         corpus = str(e.get("corpus") or "")
         kind = str(e.get("event") or "")
@@ -452,6 +463,16 @@ def check_events_log(log: pathlib.Path | None = None) -> int:
                 f"{expected_gen} — the log was rewritten or miscalculated "
                 "(append-only violation)"
             )
+        # Wave-id uniqueness per corpus (Luna r8 #2: the CI gate must agree
+        # with wave_open's guard — open w1 → close w1 → open w1 must fail).
+        used = used_ids.setdefault(corpus, set())
+        if kind == OPEN_EVENT:
+            if wave_id in used:
+                raise SystemExit(
+                    f"corpus_lock: {corpus} reuses wave_id {wave_id!r} — wave "
+                    "IDs must be unique per corpus (append-only violation)"
+                )
+        used.add(wave_id)
         if kind == OPEN_EVENT:
             if state.get(corpus) == OPEN_EVENT:
                 raise SystemExit(

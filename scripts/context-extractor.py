@@ -183,10 +183,18 @@ def validate_form(form: dict) -> None:
     if not isinstance(window.get("lines"), list) or not window["lines"]:
         sys.exit("error: review form window.lines must be a non-empty list")
 
+    # EVERY line entry must be a strict int (Luna r8 #4: a malformed
+    # non-target entry must not pass just because the target is valid).
+    for entry in window["lines"]:
+        line_val = entry.get("line") if isinstance(entry, dict) else None
+        if not isinstance(line_val, int) or isinstance(line_val, bool):
+            sys.exit(
+                "error: review form window.lines entries must be objects "
+                "with an integer 'line'"
+            )
+
     def _is_target(entry: object) -> bool:
-        # Malformed entries produce a validation error, not a traceback,
-        # and line must be a STRICT int — "100" or 100.9 must not coerce
-        # (Luna r7 #8 / CodeRabbit #569).
+        # line is strict int (already validated above) — target search.
         if not isinstance(entry, dict):
             return False
         line_val = entry.get("line")
