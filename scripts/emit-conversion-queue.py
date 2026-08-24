@@ -118,10 +118,19 @@ def main(argv: list[str] | None = None) -> int:
         stubs.append(stub)
 
     out = args.output.expanduser().resolve()
+    # Final-gate #5 (MEDIUM): the output MUST be the canonical
+    # <cluster>.json name — the scheduler and queue consumers read
+    # <root>/<cluster>.json; a custom filename would move the artifact
+    # where no consumer looks (queue invisible to scheduler blocking).
+    canonical = out.parent / f"{args.corpus}.json"
+    if out != canonical:
+        raise SystemExit(
+            f"emit-conversion-queue: --output must be the canonical "
+            f"{canonical} (got {out}) — queue consumers read "
+            "<root>/<cluster>.json"
+        )
     out.parent.mkdir(parents=True, exist_ok=True)
     # cq.emit writes <root>/<cluster>.json — root is the queue directory.
-    # The exact -o path wins (Luna r2 #8: a custom output filename must be
-    # honored, not silently replaced by <corpus>.json).
     queue_root = out.parent
     cq.emit(
         args.corpus,
@@ -131,9 +140,6 @@ def main(argv: list[str] | None = None) -> int:
         root=queue_root,
         clock_iso=args.clock_iso or None,
     )
-    canonical = queue_root / f"{args.corpus}.json"
-    if canonical != out:
-        canonical.replace(out)
     print(f"stub queue -> {out}: {len(stubs)} stubs (schema-validated)")
     return 0
 

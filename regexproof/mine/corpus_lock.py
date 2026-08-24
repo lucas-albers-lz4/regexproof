@@ -279,6 +279,7 @@ def wave_close(
                 load_queue,
                 non_contracted_top15,
                 SKIP_REASONS,
+                _write as _write_queue,
             )
 
             q = load_queue(corpus, root=queue_root)
@@ -323,6 +324,20 @@ def wave_close(
                     "non-contracted top-15 candidate(s) lack skip reasons: "
                     + ", ".join(f"{s} ({st})" for s, st in missing)
                 )
+            # Final-gate #2 (MEDIUM): close-out validates skip reasons but
+            # must ALSO transition the blocker rows — a row left
+            # emitted/claimed after the wave closes blocks the scheduler
+            # (its queue check sees PENDING sites) indefinitely. Persist
+            # the transitioned rows under the same exclusive lock, BEFORE
+            # the close event (the generation bump the close records must
+            # reflect the already-skipped queue).
+            for r in blockers:
+                reason = str(reasons.get(r["site"]) or "").strip()
+                for row in q.get("candidate_sites", []):
+                    if row.get("site") == r["site"]:
+                        row["status"] = f"skipped_{reason}"
+                        break
+            _write_queue(q, root=queue_root)
         gen = read_generation(corpus, log)
         _append_event(
             {

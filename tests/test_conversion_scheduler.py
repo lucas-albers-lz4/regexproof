@@ -15,6 +15,8 @@ import json
 import pathlib
 import sys
 
+import pytest
+
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
@@ -391,7 +393,14 @@ def test_cache_interplay_note_present():
 def test_deterministic_with_at(tmp_path):
     cs = _load_cs()
     out = tmp_path / "schedule.json"
-    rc = cs.main(["--ledger", str(tmp_path / "missing.ndjson"),
+    # Final-gate #4: the ledger must EXIST (fail-closed on missing input) —
+    # a real per_wave aggregate with one row.
+    ledger = tmp_path / "conversion-ledger.json"
+    ledger.write_text(json.dumps({"per_wave": [
+        {"wave_id": "openwrt_packages_w1",
+         "idiom_bucket": "validator-charsets-and-captures"},
+    ]}) + "\n", encoding="utf-8")
+    rc = cs.main(["--ledger", str(ledger),
                   "--gate-decisions", str(tmp_path / "missing"),
                   "--dispositions", str(tmp_path / "missing"),
                   "--queues-dir", str(tmp_path / "queues"),
@@ -400,3 +409,53 @@ def test_deterministic_with_at(tmp_path):
     d = json.loads(out.read_text(encoding="utf-8"))
     assert d["generated_at"] == "2026-08-24T03:00:00Z"
     assert list(d.keys()) == sorted(d.keys())  # canonical sorted keys
+
+
+def test_ledger_missing_fails_closed(tmp_path):
+    """Final-gate #4: a MISSING ledger is refused — a silently-empty
+    history would let the scheduler re-select an already-consumed first
+    bucket."""
+    cs = _load_cs()
+    out = tmp_path / "schedule.json"
+    with pytest.raises(SystemExit, match="missing"):
+        cs.main(["--ledger", str(tmp_path / "missing.ndjson"),
+                 "--gate-decisions", str(tmp_path / "missing"),
+                 "--dispositions", str(tmp_path / "missing"),
+                 "--queues-dir", str(tmp_path / "queues"),
+                 "--out", str(out), "--at", "2026-08-24T03:00:00Z"])
+
+
+def test_ledger_row_missing_idiom_bucket_fails_closed(tmp_path):
+    """CodeRabbit #583: a per_wave row WITHOUT idiom_bucket is refused —
+    a consumed bucket would be silently ignored and re-selected."""
+    cs = _load_cs()
+    ledger = tmp_path / "conversion-ledger.json"
+    ledger.write_text(json.dumps({"per_wave": [
+        {"wave_id": "openwrt_packages_w1"},  # no idiom_bucket
+    ]}) + "\n", encoding="utf-8")
+    with pytest.raises(SystemExit, match="no idiom_bucket"):
+        cs._load_ledger_rows(ledger)
+
+
+def test_ledger_scalar_row_fails_closed(tmp_path):
+    """CodeRabbit #583: a scalar per_wave row would crash
+    used_buckets_per_cluster — refused instead."""
+    cs = _load_cs()
+    ledger = tmp_path / "conversion-ledger.json"
+    ledger.write_text(json.dumps({"per_wave": ["openwrt_packages_w1"]}) + "\n",
+                      encoding="utf-8")
+    with pytest.raises(SystemExit, match="not an object"):
+        cs._load_ledger_rows(ledger)
+
+
+def test_ledger_row_missing_cluster_identity_fails_closed(tmp_path):
+    """Luna r4 #2: a row with idiom_bucket but NEITHER wave_id NOR cluster
+    is dropped by used_buckets_per_cluster — its consumed bucket would be
+    silently ignored and re-selected. Refused."""
+    cs = _load_cs()
+    ledger = tmp_path / "conversion-ledger.json"
+    ledger.write_text(json.dumps({"per_wave": [
+        {"idiom_bucket": "validator-charsets-and-captures"},  # no identity
+    ]}) + "\n", encoding="utf-8")
+    with pytest.raises(SystemExit, match="neither wave_id nor cluster"):
+        cs._load_ledger_rows(ledger)

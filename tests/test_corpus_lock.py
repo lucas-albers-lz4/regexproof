@@ -250,7 +250,8 @@ def test_forced_close_enforces_queue_skip_reasons(tmp_path):
     from regexproof.mine import conversion_queue as cq
 
     ranked = [
-        {"site": f"net/demo/a.sh:{i}:tok", "corpus": "ow", "provenance": "stub"}
+        {"site": f"net/demo/a.sh:{i}:tok", "corpus": "ow", "provenance": "stub",
+         "idiom_bucket": "validator-charsets-and-captures"}
         for i in range(1, 4)
     ]
     cq.emit("ow", wave_id="w1", generation=0, ranked=ranked, root=tmp_path)
@@ -266,3 +267,19 @@ def test_forced_close_enforces_queue_skip_reasons(tmp_path):
         queue_root=tmp_path, log=log,
     )
     assert cl.read_generation("ow", log) == 1
+    # Final-gate #2: close-out TRANSITIONS the blocker rows — they must no
+    # longer be emitted/claimed (a pending row after close would block the
+    # scheduler indefinitely).
+    q = cq.load_queue("ow", root=tmp_path)
+    for row in q["candidate_sites"]:
+        assert row["status"] == "skipped_out_of_scope", row
+    # And a subsequent scheduler check sees no PENDING sites for the bucket.
+    import importlib.util
+
+    _spec = importlib.util.spec_from_file_location(
+        "cs_check", pathlib.Path(__file__).resolve().parent.parent
+        / "scripts" / "conversion-scheduler.py")
+    _cs = importlib.util.module_from_spec(_spec)
+    _spec.loader.exec_module(_cs)  # type: ignore[union-attr]
+    assert _cs._queue_has_pending(
+        tmp_path, "ow", "validator-charsets-and-captures") is False

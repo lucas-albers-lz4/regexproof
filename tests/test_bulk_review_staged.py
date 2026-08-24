@@ -27,10 +27,13 @@ from regexproof.mine import audit, lease_registry  # noqa: E402
 def _probe_draft(url: str = "https://x/y", *, corpus: str = "ow") -> dict:
     """Real probe-shaped draft (what load_probe_draft accepts). The auto
     NO-GO path reads regex_sites as a COUNT; sites=0 is auto-eligible
-    regardless of security_boundary (require_auto_nogo)."""
+    regardless of security_boundary (require_auto_nogo). Mirrors the real
+    producer (admission/draft.py): corpus_pin at draft level == probe.pin
+    — the revision identity the embedded-probe binding validates against."""
     return {
         "candidate_url": url,
         "corpus": corpus,
+        "corpus_pin": "a" * 40,
         "probe": {
             "dialect": {"shell": 1},
             "flags": [],
@@ -384,6 +387,147 @@ def test_lightweight_batch_probe_draft_enriched(tmp_path, monkeypatch):
     assert rc == 0  # enrichment succeeded; authoring ran on the resolved probe
     dec = json.loads((gen / "ow_gate_decision.json").read_text(encoding="utf-8"))
     assert dec["decision"] == "no-go"
+
+
+def test_embedded_probe_wrong_url_refused(tmp_path, monkeypatch):
+    """Final-gate #1 (HIGH): a draft that EMBEDS probe evidence for a
+    DIFFERENT candidate is refused — embedded probes are validated for
+    identity, not trusted by presence alone."""
+    brs = _load_brs()
+    gen = tmp_path / "generated"
+    gen.mkdir()
+    monkeypatch.setattr(brs, "GEN", gen)
+    draft = _write_draft(tmp_path, {
+        "url": "https://x/y", "pin": "a" * 40, "corpus": "ow",
+        "candidate_url": "https://x/y",
+        "probe": {"candidate_url": "https://github.com/other/repo",
+                  "pin": "b" * 40, "security_boundary": "deterministic-false",
+                  "regex_sites": 1},
+    })
+    ledger = _write_ledger(tmp_path)
+    with pytest.raises(SystemExit, match="mismatched embedded probe"):
+        brs.main(["--draft", str(draft), "--no-go", "--ledger", str(ledger)])
+
+
+def test_embedded_probe_wrong_pin_refused(tmp_path, monkeypatch):
+    """Final-gate #1 (HIGH): an embedded probe with a CONFLICTING pin is
+    refused even when the URL matches."""
+    brs = _load_brs()
+    gen = tmp_path / "generated"
+    gen.mkdir()
+    monkeypatch.setattr(brs, "GEN", gen)
+    draft = _write_draft(tmp_path, {
+        "url": "https://x/y", "pin": "a" * 40, "corpus": "ow",
+        "candidate_url": "https://x/y",
+        "probe": {"candidate_url": "https://x/y", "pin": "b" * 40,
+                  "security_boundary": "deterministic-false",
+                  "regex_sites": 1},
+    })
+    ledger = _write_ledger(tmp_path)
+    with pytest.raises(SystemExit, match="do not match draft pins"):
+        brs.main(["--draft", str(draft), "--no-go", "--ledger", str(ledger)])
+
+
+def test_embedded_probe_pinless_draft_refused(tmp_path, monkeypatch):
+    """Luna r1 #1: a draft that embeds a PINNED probe but carries NO pin of
+    its own is unattributable — refused (candidate B must never inherit
+    candidate A's probe via a pin-less draft)."""
+    brs = _load_brs()
+    gen = tmp_path / "generated"
+    gen.mkdir()
+    monkeypatch.setattr(brs, "GEN", gen)
+    draft = _write_draft(tmp_path, {
+        "url": "https://x/y", "corpus": "ow",  # NO pin on the draft
+        "candidate_url": "https://x/y",
+        "probe": {"candidate_url": "https://x/y", "pin": "b" * 40,
+                  "security_boundary": "deterministic-false",
+                  "regex_sites": 1},
+    })
+    ledger = _write_ledger(tmp_path)
+    with pytest.raises(SystemExit, match="carries NO pin"):
+        brs.main(["--draft", str(draft), "--no-go", "--ledger", str(ledger)])
+
+
+def test_lightweight_pinless_draft_refuses_inherited_evidence(tmp_path, monkeypatch):
+    """Luna r2 #1: a pinless LIGHTWEIGHT draft must not inherit pinned
+    evidence from the probe-decision artifact — same unattributable-identity
+    rule as the embedded-probe path."""
+    brs = _load_brs()
+    gen = tmp_path / "generated"
+    gen.mkdir()
+    monkeypatch.setattr(brs, "GEN", gen)
+    # Pinned probe evidence exists for corpus ow at the same URL.
+    (gen / "ow_probe_decision.json").write_text(
+        json.dumps({"corpus": "ow", "candidate_url": "https://x/y",
+                    "corpus_pin": "b" * 40,
+                    "probe": {"dialect": {"shell": 1}, "regex_sites": 1,
+                              "security_boundary": "deterministic-false",
+                              "pin": "b" * 40}},
+                   sort_keys=True) + "\n", encoding="utf-8")
+    # Lightweight stub WITHOUT any pin (batch-probe emits url/pin normally,
+    # but a stripped draft must fail closed rather than inherit blindly).
+    draft = _write_draft(tmp_path, {
+        "url": "https://x/y", "corpus": "ow", "manifest_digest": "d1",
+    })
+    ledger = _write_ledger(tmp_path)
+    with pytest.raises(SystemExit, match="carries NO pin"):
+        brs.main(["--draft", str(draft), "--no-go", "--ledger", str(ledger)])
+
+
+def test_embedded_probe_no_identity_refused(tmp_path, monkeypatch):
+    """CodeRabbit #583: a probe with NEITHER a url NOR a pin carries no
+    identity — it cannot be bound to any candidate and is refused."""
+    brs = _load_brs()
+    gen = tmp_path / "generated"
+    gen.mkdir()
+    monkeypatch.setattr(brs, "GEN", gen)
+    draft = _write_draft(tmp_path, {
+        "url": "https://x/y", "pin": "a" * 40, "corpus": "ow",
+        "candidate_url": "https://x/y",
+        "probe": {"security_boundary": "deterministic-false", "regex_sites": 1},
+    })
+    ledger = _write_ledger(tmp_path)
+    with pytest.raises(SystemExit, match="NO url and NO pin"):
+        brs.main(["--draft", str(draft), "--no-go", "--ledger", str(ledger)])
+
+
+def test_embedded_probe_empty_dict_refused(tmp_path, monkeypatch):
+    """Luna r4 #1: an EMPTY probe object ({}) carries no identity — refused,
+    never silently treated as absent (which would author with no evidence)."""
+    brs = _load_brs()
+    gen = tmp_path / "generated"
+    gen.mkdir()
+    monkeypatch.setattr(brs, "GEN", gen)
+    draft = _write_draft(tmp_path, {
+        "url": "https://x/y", "pin": "a" * 40, "corpus": "ow",
+        "candidate_url": "https://x/y",
+        "probe": {},
+    })
+    ledger = _write_ledger(tmp_path)
+    with pytest.raises(SystemExit, match="EMPTY probe"):
+        brs.main(["--draft", str(draft), "--no-go", "--ledger", str(ledger)])
+
+
+def test_embedded_probe_matching_accepted(tmp_path, monkeypatch):
+    """Final-gate #1 (HIGH): an embedded probe whose URL AND pin match the
+    draft is accepted — the validation must not reject legitimate drafts."""
+    brs = _load_brs()
+    gen = tmp_path / "generated"
+    gen.mkdir()
+    monkeypatch.setattr(brs, "GEN", gen)
+    monkeypatch.setattr(brs, "default_output_path",
+                        lambda corpus, repo_root=None: gen / f"{corpus}_gate_decision.json")
+    draft = _write_draft(tmp_path, {
+        "url": "https://x/y", "pin": "a" * 40, "corpus": "ow",
+        "candidate_url": "https://x/y",
+        "probe": {"candidate_url": "https://x/y", "pin": "a" * 40,
+                  "security_boundary": "deterministic-false",
+                  "regex_sites": 1},
+    })
+    ledger = _write_ledger(tmp_path)
+    # Reaches the no-go path (author_auto) without a probe-evidence error.
+    rc = brs.main(["--draft", str(draft), "--no-go", "--ledger", str(ledger)])
+    assert rc == 0
 
 
 def test_lightweight_draft_without_evidence_fails_closed(tmp_path, monkeypatch):

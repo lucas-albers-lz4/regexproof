@@ -64,6 +64,57 @@ def _utc_ts(dt: datetime.datetime | None = None) -> str:
     return datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
+def _validate_probe_identity(draft: dict, probe: dict, draft_url: str, name: str) -> None:
+    """Final-gate #1 (HIGH): an EMBEDDED probe object must be bound to the
+    draft candidate exactly like the inherit path. The real producer emits
+    the URL only at DRAFT level (admission/draft.py) — the probe carries
+    only a pin — so the binding anchor is the REVISION identity:
+    - a draft carrying probe evidence MUST itself carry a pin (corpus_pin
+      or pin) — a pin-less draft is unattributable (candidate B could
+      inherit candidate A's probe with no way to detect it);
+    - ALL pins present on both sides must agree.
+    A mismatched/missing binding is refused (candidate B must never be
+    reviewed with candidate A's evidence)."""
+    from regexproof.mine.exclusions import normalize_repo_url
+
+    probe_url = normalize_repo_url(
+        str(probe.get("candidate_url") or probe.get("url") or "")
+    )
+    if probe_url and draft_url and probe_url != draft_url:
+        raise SystemExit(
+            f"bulk-review: {name} embeds probe evidence for {probe_url!r} but "
+            f"the draft candidate is {draft_url!r} — refusing mismatched "
+            "embedded probe evidence"
+        )
+    probe_pins = {str(p) for p in (probe.get("corpus_pin"), probe.get("pin")) if p}
+    draft_pins = {
+        str(p) for p in (draft.get("corpus_pin"), draft.get("pin")) if p
+    }
+    if probe_pins and not draft_pins:
+        raise SystemExit(
+            f"bulk-review: {name} embeds probe evidence carrying pins "
+            f"{sorted(probe_pins)} but the draft carries NO pin — the "
+            "revision identity is unattributable, refusing (candidate B "
+            "must never inherit candidate A's probe)"
+        )
+    if not probe_url and not probe_pins:
+        # CodeRabbit #583: a probe with NEITHER a url NOR a pin carries no
+        # identity at all — it cannot be bound to any candidate and must
+        # not be used as evidence.
+        raise SystemExit(
+            f"bulk-review: {name} embeds probe evidence with NO url and NO "
+            "pin — the evidence is unbounded to any revision, refusing "
+            "(authoring requires bound probe evidence)"
+        )
+    all_pins = probe_pins | draft_pins
+    if len(all_pins) > 1:
+        raise SystemExit(
+            f"bulk-review: {name} embedded probe pins {sorted(probe_pins)} "
+            f"do not match draft pins {sorted(draft_pins)} for {draft_url} — "
+            "refusing mismatched embedded probe evidence"
+        )
+
+
 def _load_draft(draft_path: pathlib.Path) -> dict:
     """Load a staged probe draft; refuse queue stubs structurally (Luna r1
     #2: provenance=stub is queue-only and can never be promoted).
@@ -87,6 +138,25 @@ def _load_draft(draft_path: pathlib.Path) -> dict:
             f"bulk-review: {draft_path.name} is a queue stub (provenance=stub) "
             "— stubs are queue-only and cannot be promoted"
         )
+    # Final-gate #1 (HIGH): probe identity MUST be validated for BOTH paths —
+    # an EMBEDDED probe object is not trusted by presence alone; candidate B
+    # carrying candidate A's probe evidence must be refused exactly like the
+    # inherit path refuses mismatched evidence.
+    from regexproof.mine.exclusions import normalize_repo_url
+
+    draft_url = normalize_repo_url(str(draft.get("candidate_url") or draft.get("url") or ""))
+    embedded_probe = draft.get("probe")
+    if isinstance(embedded_probe, dict):
+        # Luna r4 #1: an EMPTY probe dict ({}) is still an object — it has
+        # no identity and must be refused, not silently treated as absent
+        # (which would fall through to authoring with no evidence at all).
+        if not embedded_probe:
+            raise SystemExit(
+                f"bulk-review: {draft_path.name} embeds an EMPTY probe object "
+                "— no evidence, refusing (authoring requires bound probe "
+                "evidence)"
+            )
+        _validate_probe_identity(draft, embedded_probe, draft_url, draft_path.name)
     if "probe" not in draft or not isinstance(draft.get("probe"), dict):
         corpus = str(draft.get("corpus") or "")
         # Luna r6 #1: probe evidence MUST be bound to the draft candidate —
@@ -121,6 +191,16 @@ def _load_draft(draft_path: pathlib.Path) -> dict:
                         if p}
             draft_pins = {str(p) for p in (draft.get("corpus_pin"), draft.get("pin"))
                           if p}
+            if art_pins and not draft_pins:
+                # Luna r2 #1: pinned evidence must never be inherited by a
+                # pin-less draft — the revision identity is unattributable
+                # (same rule as the embedded-probe path).
+                raise SystemExit(
+                    f"bulk-review: {candidate.name} probe evidence carries "
+                    f"pins {sorted(art_pins)} but the draft carries NO pin — "
+                    f"the revision identity is unattributable, refusing to "
+                    "inherit probe evidence"
+                )
             all_pins = art_pins | draft_pins
             if len(all_pins) > 1:
                 raise SystemExit(

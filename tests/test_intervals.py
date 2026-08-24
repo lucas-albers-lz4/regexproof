@@ -93,6 +93,20 @@ def test_escape_does_not_fire_at_or_above_baseline():
     assert t2["fires"] is False
 
 
+def test_escape_continuity_correction_boundary():
+    """CodeRabbit #583: the correction is decision-relevant at the gate's
+    own committed baseline — k=3/n=50 vs BASELINE (121/844): uncorrected
+    p≈0.0463 (<0.05, fires) vs corrected p≈0.0694 (does NOT fire)."""
+    t = two_proportion_test(k_window=3, n_window=50, baseline=BASELINE)
+    assert t["fires"] is False
+    assert t["p_value"] == pytest.approx(0.069395, abs=1e-6)  # corrected oracle
+    # Sanity: without the correction the same input fires (0.046276).
+    se = (0.06 - BASELINE) / ((BASELINE * (1.0 - BASELINE) / 50) ** 0.5)
+    from regexproof.stats.intervals import _normal_cdf
+
+    assert _normal_cdf(se) == pytest.approx(0.046276, abs=1e-6)
+
+
 def test_escape_respects_n_floor_and_predeclared_shape():
     # The gate needs n >= 50 or two consecutive windows — at n=10 the test is
     # UNDERpowered (0/10 vs baseline: z = -1.32, p ≈ 0.09, does not fire),
