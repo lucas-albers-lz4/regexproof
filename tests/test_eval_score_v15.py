@@ -27,8 +27,8 @@ def test_flip_decision_exists_and_is_shape_checked():
     assert d["eval"]["split"]["ratio"] == 0.5
     assert d["flip_rule"].startswith("bootstrap BCa difference CI")
     assert d["action"] in (
-        "flip live drain to score-v1.5",
-        "keep score-v1",
+        "record offline AUC flip to score-v1.5; live drain unchanged",
+        "keep score-v1 (offline AUC and live drain)",
     )
     # precision@K is descriptive only.
     assert d["eval"]["precision_at_k"]["k"] == 30

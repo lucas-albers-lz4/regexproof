@@ -1,5 +1,5 @@
 {
-  "action": "flip live drain to score-v1.5",
+  "action": "record offline AUC flip to score-v1.5; live drain unchanged",
   "designed_mismatch": "Eval already flipped to v1.5 (flip_to_v15). Live drain is still v1. AUC is a global-health statistic; the operational flip of the probe stream is a separate, currently unowned decision. A firing escape while v1.5 sits unflipped on live drain is a designed outcome. No second top-K flip rule (freeze is AUC-only).",
   "eval": {
     "auc_delta_v15_minus_v1": 0.122136,

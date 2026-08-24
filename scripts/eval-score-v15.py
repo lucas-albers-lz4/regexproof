@@ -387,7 +387,11 @@ def main(argv: list[str] | None = None) -> int:
         "flip_rule": "bootstrap BCa difference CI (v1.5 - v1) excludes 0, "
         "one-sided, AUC-only, no OR alternative",
         "flip_to_v15": flips,
-        "action": "flip live drain to score-v1.5" if flips else "keep score-v1",
+        "action": (
+            "record offline AUC flip to score-v1.5; live drain unchanged"
+            if flips
+            else "keep score-v1 (offline AUC and live drain)"
+        ),
         "note": "v2 comparison is label reproduction only, never validation",
         "live_drain": "score-v1 (rank-mine-candidates.py / docs/MINE-SETUP.md)",
         "designed_mismatch": (
