@@ -94,6 +94,14 @@ def load_decision_population(gen: Path | None = None) -> list[dict]:
         if not url:
             continue
         prev = by_url.get(url)
+        if prev is not None and (not r["recency"] or not prev["recency"]):
+            # CodeRabbit #573: fail CLOSED when the ordering value is absent
+            # for a dedup-eligible pair — a silent tie could pick the wrong
+            # decision as "latest".
+            raise SystemExit(
+                f"error: {r['file']}/{prev['file']}: same url {url} but no "
+                "decision_date/updated_at to order by — cannot supersede"
+            )
         if prev is None or r["recency"] >= prev["recency"]:
             by_url[url] = r
     keep_ids = {id(r) for r in by_url.values()} | {id(r) for r in url_less}

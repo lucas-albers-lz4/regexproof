@@ -155,7 +155,7 @@ def test_human_go_writes_decision_and_promotes(tmp_path, monkeypatch):
     # Ledger promoted for the sampler (Luna r1 #3).
     cand = next(iter(json.loads(ledger.read_text(encoding="utf-8"))["candidates"]))
     assert cand["audit"]["promoted_via"] == "bulk-review"
-    assert cand["audit"]["promoted_at"] == at
+    assert cand["audit"]["promoted_at"] == "2026-08-21T10:00:00Z"  # canonical UTC
 
 
 def test_auto_no_go_is_deterministic(tmp_path, monkeypatch):
@@ -192,7 +192,7 @@ def test_promotion_fails_closed_on_missing_candidate(tmp_path, monkeypatch):
 
     ledger.write_text(json.dumps(empty_ledger(), indent=2, sort_keys=True) + "\n",
                       encoding="utf-8")
-    with pytest.raises(SystemExit, match="ledger promotion failed"):
+    with pytest.raises(SystemExit, match=r"auto-filing refused|candidate not in ledger"):
         brs.main(["--draft", str(draft), "--no-go", "--ledger", str(ledger)])
 
 
@@ -215,13 +215,18 @@ def test_requeue_transitions_and_archives(tmp_path, monkeypatch):
     gen = tmp_path / "generated"
     gen.mkdir()
     monkeypatch.setattr(brs, "GEN", gen)
-    from regexproof.mine.tree import _repo_slug
-
     url = "https://github.com/openwrt/packages"
-    slug = _repo_slug(url)
-    assert slug  # realistic GitHub URL yields a slug
-    safe = slug.replace("/", "_")  # files use the SANITIZED slug (Luna r2)
-    (gen / f"{safe}_gate_decision.json").write_text("{}", encoding="utf-8")
+    safe = "openwrt_packages"
+    (gen / f"{safe}_gate_decision.json").write_text(
+        json.dumps({"candidate_url": url, "decision": "no-go"}, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
+    # Unrelated decision must survive (Luna r3: filename globs were ambiguous).
+    (gen / "other_openwrt_packages_gate_decision.json").write_text(
+        json.dumps({"candidate_url": "https://github.com/other/packages",
+                    "decision": "no-go"}, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
     draft = _write_draft(tmp_path, _probe_draft(url))
     ledger = _write_ledger(tmp_path, url)
     rc = brs.main(["--draft", str(draft), "--requeue",
@@ -231,7 +236,46 @@ def test_requeue_transitions_and_archives(tmp_path, monkeypatch):
     assert cand["status"] == "queued"  # P2-owned transition API
     # Decision archived so the read-only sync cannot reapply it.
     assert not (gen / f"{safe}_gate_decision.json").exists()
+    assert (gen / "other_openwrt_packages_gate_decision.json").exists()
     assert len(list(gen.glob("*.requeued.json"))) == 1
+
+
+def test_requeue_records_retained_location(tmp_path, monkeypatch):
+    """CodeRabbit #573: --requeue --retained-location must NOT be silently
+    dropped — the ledger row records it."""
+    brs = _load_brs()
+    gen = tmp_path / "generated"
+    gen.mkdir()
+    monkeypatch.setattr(brs, "GEN", gen)
+    url = "https://github.com/openwrt/packages"
+    safe = "openwrt_packages"
+    (gen / f"{safe}_gate_decision.json").write_text(
+        json.dumps({"candidate_url": url, "decision": "no-go"}, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
+    draft = _write_draft(tmp_path, _probe_draft(url))
+    ledger = _write_ledger(tmp_path, url)
+    rc = brs.main(["--draft", str(draft), "--requeue",
+                   "--retained-location", "batch/corpora/ow",
+                   "--reason", "bulk-review", "--ledger", str(ledger)])
+    assert rc == 0
+    cand = next(iter(json.loads(ledger.read_text(encoding="utf-8"))["candidates"]))
+    assert cand["status"] == "queued"
+    assert cand["retained_location"] == "batch/corpora/ow"
+
+
+def test_malformed_at_fails_closed(tmp_path):
+    """CodeRabbit #573: a malformed --at fails early with a clean error on
+    EVERY verb path — never an uncaught traceback or a raw string in the
+    audit timestamps."""
+    brs = _load_brs()
+    draft = _write_draft(tmp_path)
+    ledger = _write_ledger(tmp_path)
+    for verb in (["--no-go"], ["--demote-retain-corpus",
+                               "--retained-location", "x"]):
+        with pytest.raises(SystemExit, match=r"--at must be ISO"):
+            brs.main(["--draft", str(draft), *verb,
+                      "--at", "not-a-timestamp", "--ledger", str(ledger)])
 
 
 def test_demote_records_retained_location(tmp_path):
@@ -382,6 +426,21 @@ def test_supersession_dedup_missing_url_kept(tmp_path, monkeypatch):
     monkeypatch.setattr(bpf, "GEN", gen)
     rows = bpf.load_decision_population()
     assert len(rows) == 1  # url-less rows are untouched
+
+
+def test_supersession_dedup_fails_closed_on_missing_recency(tmp_path, monkeypatch):
+    """CodeRabbit #573: a dedup-eligible pair with NO ordering value must
+    fail closed — a silent tie could pick the wrong decision as latest."""
+    bpf = _load_bpf()
+
+    gen = tmp_path
+    _decision_file(gen, "a_gate_decision.json", "https://x/y",
+                   corpus_pin="aaa", decision="no_go")  # NO decision_date
+    _decision_file(gen, "b_gate_decision.json", "https://x/y",
+                   corpus_pin="bbb", decision="go")  # NO decision_date
+    monkeypatch.setattr(bpf, "GEN", gen)
+    with pytest.raises(SystemExit, match="cannot supersede"):
+        bpf.load_decision_population()
 
 
 # --- golden inputs_hash no-drift on requeue AND demote (#560 AC) -------------
