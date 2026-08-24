@@ -89,6 +89,30 @@ def test_go_requires_reviewer(tmp_path):
         brs.main(["--draft", str(draft), "--go", "--ledger", str(ledger)])
 
 
+def test_negative_active_minutes_fails_before_authoring(tmp_path):
+    brs = _load_brs()
+    draft = _write_draft(tmp_path)
+    ledger = _write_ledger(tmp_path)
+    with pytest.raises(SystemExit, match="finite number"):
+        brs.main([
+            "--draft", str(draft), "--go", "--reviewer", "alice",
+            "--rationale", "verified", "--conditions-ok",
+            "--ledger", str(ledger), "--active-minutes", "-1",
+        ])
+    assert not list(tmp_path.glob("*_gate_decision.json"))
+
+
+def test_active_minutes_refused_on_nogo(tmp_path):
+    brs = _load_brs()
+    draft = _write_draft(tmp_path)
+    ledger = _write_ledger(tmp_path)
+    with pytest.raises(SystemExit, match="--go / --triage-trial"):
+        brs.main([
+            "--draft", str(draft), "--no-go", "--ledger", str(ledger),
+            "--active-minutes", "3",
+        ])
+
+
 def test_go_requires_rationale(tmp_path):
     brs = _load_brs()
     draft = _write_draft(tmp_path)

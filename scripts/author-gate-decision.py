@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import sys
 import time
 from datetime import date, datetime, timezone
@@ -163,6 +164,12 @@ def main(argv: list[str] | None = None) -> int:
     )
     ap.add_argument("--ledger", type=Path, help="Candidate ledger path")
     ap.add_argument(
+        "--active-minutes",
+        type=float,
+        default=None,
+        help="Stopwatch active minutes for a human-reviewed survivor (Wave 6)",
+    )
+    ap.add_argument(
         "--now",
         default=None,
         help="Inject decision_date as YYYY-MM-DD (determinism)",
@@ -188,6 +195,17 @@ def main(argv: list[str] | None = None) -> int:
         help="Test seam: fail the first N classify calls before succeeding",
     )
     args = ap.parse_args(argv)
+
+    if args.active_minutes is not None and (
+        args.active_minutes < 0 or not math.isfinite(args.active_minutes)
+    ):
+        ap.error("--active-minutes must be a finite number >= 0")
+    if args.active_minutes is not None and not args.human:
+        ap.error("--active-minutes applies only to --human go/triage-trial")
+    if args.active_minutes is not None and args.human and args.decision is None:
+        ap.error("--human requires --decision")
+    if args.active_minutes is not None and args.decision not in ("go", "triage-trial"):
+        ap.error("--active-minutes applies only to --human go/triage-trial")
 
     if args.audit_sample:
         if not args.ledger:
@@ -355,6 +373,24 @@ def main(argv: list[str] | None = None) -> int:
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(emit_decision_text(decision), encoding="utf-8")
     print(str(out))
+    if (
+        args.human
+        and args.active_minutes is not None
+        and str(decision.get("decision") or "") in ("go", "triage-trial")
+    ):
+        from regexproof.mine.operator_minutes import append_row
+
+        try:
+            append_row(
+                url=str(decision.get("candidate_url") or draft.get("candidate_url") or ""),
+                pin=str(decision.get("corpus_pin") or draft.get("corpus_pin") or ""),
+                decision=str(decision.get("decision")),
+                source="stopwatch",
+                active_minutes=args.active_minutes,
+                decision_date=str(decision.get("decision_date") or ""),
+            )
+        except (Exception, SystemExit) as exc:
+            print(f"warning: stopwatch row not recorded: {exc}", file=sys.stderr)
     return 0
 
 

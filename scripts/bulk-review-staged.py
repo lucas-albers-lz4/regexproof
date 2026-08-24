@@ -35,6 +35,7 @@ from __future__ import annotations
 import argparse
 import datetime
 import json
+import math
 import os
 import pathlib
 import sys
@@ -348,6 +349,13 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--cache-root", type=pathlib.Path, default=None,
                     help="cache root whose leases.json holds this probe's "
                          "lease (batch-probe --cache-root)")
+    ap.add_argument(
+        "--active-minutes",
+        type=float,
+        default=None,
+        help="Stopwatch active minutes for this human-reviewed survivor "
+        "(Wave 6). Appended to operator_minutes.jsonl; never the freeze.",
+    )
     group = ap.add_mutually_exclusive_group(required=True)
     group.add_argument("--go", action="store_true")
     group.add_argument("--no-go", dest="no_go", action="store_true")
@@ -356,10 +364,27 @@ def main(argv: list[str] | None = None) -> int:
     group.add_argument("--demote-retain-corpus", action="store_true")
     args = ap.parse_args(argv)
 
+    if args.active_minutes is not None and (
+        args.active_minutes < 0 or not math.isfinite(args.active_minutes)
+    ):
+        raise SystemExit("bulk-review: --active-minutes must be a finite number >= 0")
+    if args.active_minutes is not None and (args.no_go or args.requeue or args.demote_retain_corpus):
+        raise SystemExit(
+            "bulk-review: --active-minutes applies only to --go / --triage-trial"
+        )
+
     # Luna r11 #4: complete any pending journals BEFORE loading the draft —
     # a retry after a crash between the ledger commit and os.replace must
     # not depend on the draft still being present.
     if _resume_pending_installs(args.ledger, GEN):
+        if args.active_minutes is not None:
+            print(
+                "bulk-review: pending install resumed (draft-independent); "
+                "--active-minutes was NOT recorded. Append a stopwatch row "
+                "via regexproof.mine.operator_minutes.append_row after you "
+                "know the installed candidate.",
+                file=sys.stderr,
+            )
         print("bulk-review: resumed pending install(s); run again for new work")
         return 0
 
@@ -599,6 +624,28 @@ def main(argv: list[str] | None = None) -> int:
         ) from exc
     print(f"{decision}: {url} -> {out_path.name} (provenance=human)" if decision != "no-go"
           else f"no_go: {url} -> {out_path.name} (provenance=auto)")
+    if decision in ("go", "triage-trial") and args.active_minutes is not None:
+        from regexproof.mine.operator_minutes import append_row
+
+        pin = str(draft.get("corpus_pin") or draft.get("pin") or "")
+        try:
+            append_row(
+                url=url,
+                pin=pin,
+                decision=decision,
+                source="stopwatch",
+                active_minutes=args.active_minutes,
+                decision_date=(
+                    at_dt.date().isoformat()
+                    if at_dt is not None
+                    else datetime.datetime.now(datetime.timezone.utc).date().isoformat()
+                ),
+            )
+        except (Exception, SystemExit) as exc:
+            print(
+                f"bulk-review: WARNING stopwatch row not recorded: {exc}",
+                file=sys.stderr,
+            )
     return 0
 
 
