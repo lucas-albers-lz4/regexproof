@@ -1,34 +1,34 @@
 {
-  "action": "keep score-v1",
+  "action": "flip live drain to score-v1.5",
   "eval": {
-    "auc_delta_v15_minus_v1": 0.070894,
-    "auc_v1": 0.613765,
-    "auc_v15": 0.684659,
+    "auc_delta_v15_minus_v1": 0.122136,
+    "auc_v1": 0.536568,
+    "auc_v15": 0.658704,
     "bootstrap_ci_95_delta": [
-      -0.029107,
-      0.162887
+      0.015208,
+      0.211981
     ],
     "bootstrap_method": "bca",
-    "cap_raise_calibration_note": "overlay shifts scores by 58.0064 on average; any cap raise must be recalibrated, never applied silently",
-    "mean_score_delta": 58.0064,
-    "population_n": 853,
-    "positive": 127,
+    "cap_raise_calibration_note": "overlay shifts scores by 59.2666 on average; any cap raise must be recalibrated, never applied silently",
+    "mean_score_delta": 59.2666,
+    "population_n": 844,
+    "positive": 121,
     "precision_at_k": {
       "clopper_pearson_95": [
-        0.343255,
-        0.716582
+        0.254608,
+        0.625727
       ],
       "k": 30,
-      "positive_in_top_k": 16
+      "positive_in_top_k": 13
     },
     "split": {
       "ratio": 0.5,
       "seed": 20260822
     },
-    "test_n": 427
+    "test_n": 423
   },
   "flip_rule": "bootstrap BCa difference CI (v1.5 - v1) excludes 0, one-sided, AUC-only, no OR alternative",
-  "flip_to_v15": false,
+  "flip_to_v15": true,
   "note": "v2 comparison is label reproduction only, never validation",
   "schema_version": "1"
 }

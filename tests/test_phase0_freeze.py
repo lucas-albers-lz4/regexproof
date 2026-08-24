@@ -2,7 +2,9 @@
 
 The committed ``phase0_freeze.json`` / ``escape_baseline.json`` must be
 byte-stable under regeneration (golden drift check in CI) and must match the
-real gate-decision population (n=853, pos=127, Wilson 95% [12.6%, 17.4%])."""
+real gate-decision population (n=844, pos=121, Wilson 95% [12.1%, 16.9%],
+with (url, pin) supersession dedup — 9 older-pin decisions removed per
+#560 Wave 3)."""
 
 from __future__ import annotations
 
@@ -19,6 +21,17 @@ ROOT = pathlib.Path(__file__).resolve().parent.parent
 GEN = ROOT / "properties" / "generated"
 
 
+def _load_bpf():
+    import importlib.util
+
+    spec = importlib.util.spec_from_file_location(
+        "bpf", ROOT / "scripts" / "build-phase0-freeze.py",
+    )
+    bpf = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(bpf)  # type: ignore[union-attr]
+    return bpf
+
+
 @pytest.fixture(scope="module")
 def freeze() -> dict:
     return json.loads((GEN / "phase0_freeze.json").read_text(encoding="utf-8"))
@@ -31,17 +44,17 @@ def baseline() -> dict:
 
 def test_freeze_pins_the_pinned_population(freeze: dict):
     ds = freeze["dataset"]
-    assert ds["n"] == 853
-    assert ds["positive_count"] == 127
-    assert ds["positive_rate"] == pytest.approx(127 / 853, abs=1e-6)
-    assert ds["status_counts"]["go"] == 82
-    assert ds["status_counts"]["triage-trial"] == 45
+    assert ds["n"] == 844
+    assert ds["positive_count"] == 121
+    assert ds["positive_rate"] == pytest.approx(121 / 844, abs=1e-6)
+    assert ds["status_counts"]["go"] == 81
+    assert ds["status_counts"]["triage-trial"] == 40
 
 
 def test_escape_baseline_matches_design(freeze: dict, baseline: dict):
     lo, hi = baseline["wilson_ci_95"]
-    assert lo == pytest.approx(0.1266, abs=0.001)
-    assert hi == pytest.approx(0.1743, abs=0.001)
+    assert lo == pytest.approx(0.1213, abs=0.001)
+    assert hi == pytest.approx(0.1686, abs=0.001)
     # The baseline is the same fixed constant referenced by the freeze.
     assert baseline["survivor_rate"] == freeze["escape_baseline"]["value"]
 
@@ -82,18 +95,12 @@ def test_regeneration_is_byte_stable():
 
 
 def test_snapshot_hash_is_reproducible(freeze: dict):
-    """The dataset hash must be reproducible from the committed files."""
+    """The dataset hash must be reproducible from the committed files —
+    via the SAME deduped population path the freeze uses (#560 Wave 3:
+    (url, pin) supersession dedup applies to the hash too)."""
     import hashlib
 
-    files = sorted(GEN.glob("*_gate_decision.json"))
-    rows = []
-    for f in files:
-        d = json.loads(f.read_text(encoding="utf-8"))
-        status = str(d.get("status") or d.get("decision") or "")
-        if status:
-            rows.append(
-                {"file": f.name, "url": d.get("candidate_url"), "status": status, "payload": d}
-            )
+    rows = _load_bpf().load_decision_population()
     h = hashlib.sha256()
     for r in sorted(rows, key=lambda r: r["file"]):
         h.update(r["file"].encode("utf-8"))

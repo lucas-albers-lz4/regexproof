@@ -20,14 +20,14 @@ from regexproof.stats.intervals import (
     wilson_ci,
 )
 
-BASELINE = 127 / 853  # committed Phase 0 escape baseline ≈ 14.9%
+BASELINE = 121 / 844  # committed Phase 0 escape baseline ≈ 14.3% (deduped, #560 W3)
 
 
-def test_wilson_ci_matches_escape_baseline():
-    lo, hi = wilson_ci(127, 853)
-    # Design pins [12.6%, 17.5%] for the 127/853 baseline.
-    assert lo == pytest.approx(0.1266, abs=0.001)
-    assert hi == pytest.approx(0.1743, abs=0.001)
+def test_wilson_ci_escape_baseline():
+    lo, hi = wilson_ci(121, 844)
+    # Design pins [12.1%, 16.9%] for the 121/844 baseline.
+    assert lo == pytest.approx(0.1213, abs=0.001)
+    assert hi == pytest.approx(0.1686, abs=0.001)
 
 
 def test_wilson_ci_edges():

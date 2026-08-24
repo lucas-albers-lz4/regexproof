@@ -41,32 +41,29 @@ def load_freeze() -> dict:
 
 def validate_freeze_snapshot(freeze: dict) -> None:
     """Fail closed on snapshot hash mismatch: the eval's population must be
-    the SAME committed population the freeze pinned."""
+    the SAME committed population the freeze pinned — including the (url,
+    pin) supersession dedup (#560 Wave 3: the freeze counts only the
+    latest pin per url)."""
     import hashlib
+    import importlib.util
 
-    rows = []
-    for f in sorted(GEN.glob("*_gate_decision.json")):
-        try:
-            d = json.loads(f.read_text(encoding="utf-8"))
-        except (OSError, ValueError) as exc:
-            raise SystemExit(f"FATAL: {f.name}: unreadable decision: {exc}")
-        status = str(d.get("status") or d.get("decision") or "")
-        if not status:
-            raise SystemExit(f"FATAL: {f.name}: no status/decision field")
-        rows.append(
-            {"file": f.name, "url": d.get("candidate_url"), "status": status, "payload": d}
-        )
+    spec = importlib.util.spec_from_file_location(
+        "bpf", ROOT / "scripts" / "build-phase0-freeze.py",
+    )
+    bpf = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(bpf)  # type: ignore[union-attr]
+    rows = bpf.load_decision_population(gen=GEN)
     h = hashlib.sha256()
     for r in sorted(rows, key=lambda r: r["file"]):
         h.update(r["file"].encode("utf-8"))
         h.update(b"\x00")
         h.update(json.dumps(r["payload"], sort_keys=True).encode("utf-8"))
         h.update(b"\n")
-    expected = freeze["dataset"]["snapshot_sha256"]
-    if h.hexdigest() != expected:
+    if h.hexdigest() != freeze["dataset"]["snapshot_sha256"]:
         raise SystemExit(
-            "FATAL: freeze snapshot hash mismatch — the eval population differs "
-            "from the Phase 0 frozen population. Regenerate the freeze first."
+            "FATAL: freeze snapshot hash mismatch — the eval population "
+            "differs from the Phase 0 frozen population. Regenerate the "
+            "freeze first."
         )
     # The frozen score-v1.5 overlay must match the implementation — a drift
     # in the weights would silently change what the eval measures.
@@ -103,7 +100,11 @@ def validate_freeze_snapshot(freeze: dict) -> None:
 
 
 def join_rows(freeze: dict) -> list[dict]:
-    """Join decision labels with ledger features by normalized URL."""
+    """Join decision labels with ledger features by normalized URL. The
+    decision population is the SAME deduped one the freeze pinned (#560
+    Wave 3: (url, pin) supersession — only the latest pin per url counts
+    for eval/escape counters)."""
+    import importlib.util
     from regexproof.mine.exclusions import normalize_repo_url
     from regexproof.mine.tree import _repo_slug
 
@@ -123,8 +124,13 @@ def join_rows(freeze: dict) -> list[dict]:
         )
 
     rows = []
-    for f in sorted(GEN.glob("*_gate_decision.json")):
-        d = json.loads(f.read_text(encoding="utf-8"))
+    spec = importlib.util.spec_from_file_location(
+        "bpf", ROOT / "scripts" / "build-phase0-freeze.py",
+    )
+    bpf = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(bpf)  # type: ignore[union-attr]
+    for f in bpf.load_decision_population(gen=GEN):
+        d = f["payload"]
         status = str(d.get("status") or d.get("decision") or "")
         url = str(d.get("candidate_url") or "")
         label = 1 if status in POSITIVE else 0

@@ -26,6 +26,8 @@ import json
 import pathlib
 import sys
 
+Path = pathlib.Path
+
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 GEN = ROOT / "properties" / "generated"
 
@@ -44,8 +46,8 @@ N_FLOOR = 50
 POSITIVE_STATUSES = ("go", "triage-trial")
 
 
-def load_decision_population() -> list[dict]:
-    files = sorted(GEN.glob("*_gate_decision.json"))
+def load_decision_population(gen: Path | None = None) -> list[dict]:
+    files = sorted((gen if gen is not None else GEN).glob("*_gate_decision.json"))
     rows = []
     for f in files:
         try:
@@ -61,15 +63,49 @@ def load_decision_population() -> list[dict]:
                 f"error: {f.name}: decision file has neither 'status' nor "
                 "'decision' — a population row cannot be silently dropped"
             )
+        # Canonical pin: real artifacts carry corpus_pin (top-level) and
+        # probe.pin (nested); the eval's join_rows uses the same precedence
+        # (Luna r1 #4 — reading top-level pin/probed_pin yields EMPTY pins).
+        probe = d.get("probe") if isinstance(d.get("probe"), dict) else {}
+        pin = str(d.get("corpus_pin") or probe.get("pin") or "")
+        # Chronological recency: decision_date (Luna r1 #5 — lexical SHA
+        # order is wrong: a newer commit can have a smaller SHA).
+        recency = str(d.get("decision_date") or d.get("updated_at") or "")
         rows.append(
             {
                 "file": f.name,
                 "url": d.get("candidate_url"),
+                "pin": pin,
+                "recency": recency,
                 "status": status,
                 "payload": d,  # full contents — hashed verbatim (canonical JSON)
             }
         )
-    return rows
+    # (url, pin) supersession dedup (#560 Wave 3): when a candidate is
+    # requeued and re-decided, only the LATEST decision counts for
+    # eval/escape counters. "Latest" = the recorded decision_date
+    # (chronological), NOT lexical pin order (Luna r1 #5); ties break
+    # deterministically by the last file in sort order. URL-less rows are
+    # never superseded.
+    by_url: dict[str, dict] = {}
+    url_less = [r for r in rows if not str(r.get("url") or "")]
+    for r in rows:
+        url = str(r.get("url") or "")
+        if not url:
+            continue
+        prev = by_url.get(url)
+        if prev is not None and (not r["recency"] or not prev["recency"]):
+            # CodeRabbit #573: fail CLOSED when the ordering value is absent
+            # for a dedup-eligible pair — a silent tie could pick the wrong
+            # decision as "latest".
+            raise SystemExit(
+                f"error: {r['file']}/{prev['file']}: same url {url} but no "
+                "decision_date/updated_at to order by — cannot supersede"
+            )
+        if prev is None or r["recency"] >= prev["recency"]:
+            by_url[url] = r
+    keep_ids = {id(r) for r in by_url.values()} | {id(r) for r in url_less}
+    return [r for r in rows if id(r) in keep_ids]
 
 
 def snapshot_hash(rows: list[dict]) -> str:

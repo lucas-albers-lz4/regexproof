@@ -23,7 +23,7 @@ def test_flip_decision_exists_and_is_shape_checked():
     assert FLIP_OUT.is_file(), "eval must produce the flip decision artifact"
     d = json.loads(FLIP_OUT.read_text(encoding="utf-8"))
     assert d["schema_version"] == "1"
-    assert d["eval"]["population_n"] == 853
+    assert d["eval"]["population_n"] == 844
     assert d["eval"]["split"]["ratio"] == 0.5
     assert d["flip_rule"].startswith("bootstrap BCa difference CI")
     assert d["action"] in (

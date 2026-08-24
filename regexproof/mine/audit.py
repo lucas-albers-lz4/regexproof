@@ -214,14 +214,23 @@ def _in_iso_week(iso_ts: str, year: int, week: int) -> bool:
 
 
 def auto_filed_in_week(ledger: dict[str, Any], week: str) -> list[dict[str, Any]]:
+    """Week's auto-filed population, extended (#560 Wave 3): ALSO includes
+    bulk-CLI-promoted decisions (``promoted_via == "bulk-review"``); excludes
+    ``provenance=stub`` rows at schema level (a stub is never contract
+    material, so it cannot join the audit population)."""
     year, w = _parse_iso_week(week)
     out: list[dict[str, Any]] = []
     for c in ledger.get("candidates", []):
+        if str(c.get("provenance") or "") == "stub":
+            continue  # schema-level exclusion (stub is queue-only)
         audit = c.get("audit") or {}
-        if not audit.get("auto_filed"):
+        is_bulk = str(audit.get("promoted_via") or "") == "bulk-review"
+        if not (audit.get("auto_filed") or is_bulk):
             continue
-        # Prefer auto_filed_at so later audit updates do not move week membership.
-        ts = str(audit.get("auto_filed_at") or audit.get("updated_at") or "")
+        # Prefer auto_filed_at so later audit updates do not move week
+        # membership; bulk promotions carry their own promoted_at.
+        ts = str(audit.get("auto_filed_at") or audit.get("promoted_at")
+                 or audit.get("updated_at") or "")
         if _in_iso_week(ts, year, w):
             out.append(c)
     return out
