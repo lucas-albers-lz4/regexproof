@@ -69,6 +69,9 @@ def _iter_files(
         if heartbeat is not None and seen % every == 0:
             heartbeat()
         for name in filenames:
+            seen += 1
+            if heartbeat is not None and seen % every == 0:
+                heartbeat()
             p = Path(dirpath) / name
             # Skip symlinks before is_file() — is_file() follows links.
             if p.is_symlink():
@@ -81,9 +84,6 @@ def _iter_files(
             except OSError:
                 continue
             files.append(p)
-            seen += 1
-            if heartbeat is not None and seen % every == 0:
-                heartbeat()
     return sorted(files)
 
 
