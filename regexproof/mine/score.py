@@ -11,7 +11,7 @@ from pathlib import Path
 from typing import Any
 
 from regexproof.admission.boundary import BoundarySignals, classify_boundary
-from regexproof.mine.root_dir import root_dir_deprioritized
+from regexproof.mine.root_dir import root_dir_deprioritized, root_names_from_paths
 from regexproof.mine.deny_list import slug_denied
 from regexproof.mine.features import (  # noqa: F401
     _QUERY_FAMILY,
@@ -116,6 +116,27 @@ def _tree_overlay_signals(tree_feature: dict[str, Any] | None) -> dict[str, floa
     return signals
 
 
+def _root_names_for_screen(
+    cand: dict[str, Any], tree_feature: dict[str, Any] | None
+) -> list[str]:
+    """Depth-1 names from a fresh tree summary, else walked file paths.
+
+    Historical ``mine-tree-features.json`` rows omit ``root_dir_names``.
+    Missing names are *unknown*, not a deprioritize.
+    """
+    if isinstance(tree_feature, dict):
+        names = tree_feature.get("root_dir_names") or ()
+        if names:
+            return [str(n) for n in names]
+    probe = cand.get("probe") if isinstance(cand.get("probe"), dict) else {}
+    files = probe.get("regex_sites_per_file")
+    if not isinstance(files, dict):
+        files = cand.get("regex_sites_per_file")
+    if isinstance(files, dict) and files:
+        return root_names_from_paths(files)
+    return []
+
+
 def wave9_soft_flags(
     cand: dict[str, Any],
     tree_feature: dict[str, Any] | None,
@@ -127,14 +148,10 @@ def wave9_soft_flags(
 
     ``code_search_hits is None`` means the density probe did not run or
     degraded (rate-limit) — that is *not* an empty-hit signal.
+    Historical tree summaries without ``root_dir_names`` do not flag.
     """
-    root = False
-    if (
-        isinstance(tree_feature, dict)
-        and tree_feature.get("complete") is True
-        and tree_feature.get("truncated") is not True
-    ):
-        root = root_dir_deprioritized(tree_feature.get("root_dir_names") or ())
+    names = _root_names_for_screen(cand, tree_feature)
+    root = bool(names) and root_dir_deprioritized(names)
     denied = bool(deny_slugs) and slug_denied(str(cand.get("url") or ""), deny_slugs)
     return {
         "root_dir_deprioritized": bool(root),

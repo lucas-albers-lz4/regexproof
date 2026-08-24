@@ -135,7 +135,10 @@ stars / query / pushed_date. No network, no writes (tree/density budgets
 default to 0). Wave 9 (#578) adds **soft** screens only — never a hard
 reject, and live drain stays score-v1:
 
-- Root-dir deprioritize from committed tree summaries (`tests|vendor|docs|…`).
+- Root-dir deprioritize when the tree summary has `root_dir_names` (new
+  probes via `--tree-probe-budget`) or when walked `regex_sites_per_file`
+  is on the row. Historical `mine-tree-features.json` omits that field —
+  missing names are unknown, not a reject.
 - Optional `--code-search-budget N` density probe; rate-limit degrades to
   unknown (not a zero).
 - Post-walk deny-list (`properties/generated/probe_deny_list.json`) — distinct

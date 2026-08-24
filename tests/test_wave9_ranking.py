@@ -80,6 +80,25 @@ def test_v1_totals_unchanged_with_wave9_flags():
     )
     assert t2 == t
     assert b2["wave9_soft"]["root_dir_deprioritized"] is True
+    historical = {
+        "complete": True,
+        "truncated": False,
+        "security_boundary": "deterministic-true",
+        "regex_file_type_counts": {".py": 1},
+        "path_count": 3,
+    }
+    _, b_hist = candidate_score(
+        CAND_A, today=TODAY, allocator="score-v1", tree_feature=historical
+    )
+    assert b_hist["wave9_soft"]["root_dir_deprioritized"] is False
+    walked = dict(CAND_A)
+    walked["regex_sites_per_file"] = {
+        "tests/a.py": 1,
+        "docs/b.md": 1,
+        "vendor/x.js": 1,
+    }
+    _, b_walk = candidate_score(walked, today=TODAY, allocator="score-v1")
+    assert b_walk["wave9_soft"]["root_dir_deprioritized"] is True
 
 
 def test_overlay_weights_still_match_freeze():

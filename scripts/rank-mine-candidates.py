@@ -233,23 +233,22 @@ def main(argv: list[str] | None = None) -> int:
                 c["pin_probed"] = mined
         pool.append(c)
     tree_features = {}
-    if pool:
-        if args.allocator == "score-v2":
-            cache_path = args.tree_cache or args.tree_features
-            session = _http_session() if args.tree_probe_budget > 0 else None
-        elif args.tree_probe_budget > 0:
-            cache_path = args.tree_cache
-            session = _http_session()
-        else:
-            # Budget 0 still joins committed tree summaries so Wave 9
-            # root-dir deprioritize can fire without extra API calls.
-            cache_path = args.tree_cache or args.tree_features
-            session = None
+    if args.allocator == "score-v2" and pool:
+        # score-v2 uses the committed materialized artifact by default. A
+        # caller can still select a writable cache for budgeted live probes.
+        cache_path = args.tree_cache or args.tree_features
         tree_features, _calls = materialize_tree_features(
-            session,
+            _http_session() if args.tree_probe_budget > 0 else None,
             pool,
             budget=args.tree_probe_budget,
             cache=TreeCache(cache_path),
+        )
+    elif args.tree_probe_budget > 0 and pool:
+        tree_features, _calls = materialize_tree_features(
+            _http_session(),
+            pool,
+            budget=args.tree_probe_budget,
+            cache=TreeCache(args.tree_cache),
         )
     density_hits: dict = {}
     if args.code_search_budget > 0 and pool:
