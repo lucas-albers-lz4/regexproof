@@ -31,13 +31,22 @@ PRODUCTIVE_SHARE = 0.7   # productive (used) buckets get 70% of reserved capacit
 NOVEL_SHARE = 0.2        # novel-idiom exploration
 UNBIASED_SHARE = 0.1     # small unbiased exploration slice (always >= 1)
 
-NEXT_BUCKET_BY_CLUSTER = {
-    # #551 Phase E: named next buckets per cluster after the current one
-    # (real cluster names from the committed conversion ledger).
-    "openwrt_packages": "openwrt_luci",
-    "openwrt_luci": "form-validators",
-    "form-validators": "qosify-network-dscp",
-    "qosify-network-dscp": "openwrt_packages",  # cycle sentinel — never selected
+# CodeRabbit #582: the ledger's committed idiom_bucket values are the ONLY
+# vocabulary the scheduler may emit — cluster names like 'openwrt_luci' are
+# never bucket values. Ordered per-cluster progression (first unused wins);
+# the design's named next (qosify/network.js/firewall DSCP) extends the tail.
+BUCKET_PROGRESSION: dict[str, list[str]] = {
+    "openwrt_packages": [
+        "validator-charsets-and-captures",
+        "image-and-ddns-json",
+        "ddns-query-and-escape-image",
+        "qosify-network-dscp",
+    ],
+    "openwrt_luci": [
+        "form-validator-alphabets",
+        "network-js-dscp",
+        "firewall-dscp",
+    ],
 }
 
 DEFAULT_QUEUES_DIR = ROOT / "properties" / "conversion_queue"
@@ -127,8 +136,9 @@ def _queue_has_pending(queues_dir: pathlib.Path, bucket: str) -> bool:
     PENDING sites (emitted/claimed) — a fully contracted/skipped queue is
     closed work and does not block (Luna r1 #2: file existence alone is
     wrong). An EMPTY candidate_sites list is the valid empty_queue() shape
-    and does NOT block (Luna r2 #2). Non-dict rows are skipped (Luna r2
-    #3)."""
+    and does NOT block (Luna r2 #2). ANY malformed entry (non-dict or
+    status-less) FAILS CLOSED — the queue is treated as blocking
+    (CodeRabbit #582: malformed site data must never permit selection)."""
     qpath = queues_dir / f"{bucket}.json"
     if not qpath.exists():
         return False
@@ -141,8 +151,11 @@ def _queue_has_pending(queues_dir: pathlib.Path, bucket: str) -> bool:
         return True  # queue present with no rows — conservatively blocking
     for s in sites:
         if not isinstance(s, dict):
-            continue  # malformed row — skip, not crash
-        if str(s.get("status") or "") in PENDING_SITE_STATUSES:
+            return True  # malformed entry (e.g. null) — fail closed
+        status = str(s.get("status") or "").strip()
+        if not status:
+            return True  # status-less entry — fail closed
+        if status in PENDING_SITE_STATUSES:
             return True
     return False  # empty or all-closed queue — does not block
 
@@ -152,16 +165,14 @@ def next_unused_bucket(
     used: set[str],
     queues_dir: pathlib.Path,
 ) -> str | None:
-    """The named next bucket for the cluster that is NOT yet used and has no
-    PENDING queue. The traversal terminates at the STARTING cluster — the
-    cycle sentinel is never selected (Luna r1 #1)."""
-    start = cluster
-    candidate = NEXT_BUCKET_BY_CLUSTER.get(cluster)
-    while candidate and candidate != start:
+    """The first bucket in the cluster's ORDERED progression that is NOT yet
+    used and has no PENDING queue — committed idiom_bucket vocabulary only
+    (CodeRabbit #582). No wrap-around: when the progression is exhausted
+    the cluster has no next bucket."""
+    for candidate in BUCKET_PROGRESSION.get(cluster, []):
         if candidate not in used and not _queue_has_pending(queues_dir, candidate):
             return candidate
-        candidate = NEXT_BUCKET_BY_CLUSTER.get(candidate)
-    return None  # full cycle or self-loop — no unused bucket available
+    return None  # progression exhausted — no unused bucket available
 
 
 def build_schedule(

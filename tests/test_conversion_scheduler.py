@@ -1,12 +1,12 @@
 """Wave E (#562): conversion scheduler over GO clusters tests.
 
-Covers (incl. Luna r1 #1-#5): next-unused selection with start-anchored
-cycle guard (sentinel NEVER selected); queue blocking on PENDING sites only
-(contracted/skipped queues don't block); wont-file classes from the REAL
-disposition source with deterministic deny-list (wont-file-heavy target
-blocked); GO-cluster inventory from gated:go artifacts (no fabricated
-clusters on empty input); exact `_w<digits>` wave stripping (foo_west
-unmangled); capacity reservation shares; no mine re-rank; cache note.
+Covers (incl. Luna r1 #1-#5, r2 #1-#3, CodeRabbit #582): first-unused
+selection from ordered per-cluster progression using COMMITTED idiom_bucket
+vocabulary; progression exhaustion (no wrap, no sentinel); queue blocking on
+PENDING sites only with FAIL-CLOSED malformed entries; wont-file deny-list
+keyed on corpus with threshold; GO-cluster inventory from gated:go
+artifacts; exact `_w<digits>` wave stripping; capacity reservation; no mine
+re-rank; cache note; deterministic output.
 """
 
 from __future__ import annotations
@@ -53,7 +53,10 @@ def _queue(queues_dir: pathlib.Path, bucket: str, statuses: list[str]) -> None:
         encoding="utf-8")
 
 
-def test_selects_next_unused_bucket(tmp_path):
+def test_selects_first_unused_progression_bucket(tmp_path):
+    """CodeRabbit #582: selection uses the COMMITTED idiom_bucket vocabulary
+    (validator-charsets-and-captures, image-and-ddns-json, ...) — never
+    cluster names."""
     cs = _load_cs()
     gen = tmp_path / "generated"
     _gate_decision(gen, "openwrt_packages")
@@ -63,19 +66,20 @@ def test_selects_next_unused_bucket(tmp_path):
                               dispositions_path=tmp_path / "d.jsonl")
     sel = sched["selections"][0]
     assert sel["cluster"] == "openwrt_packages"
-    assert sel["selected_bucket"] == "openwrt_luci"  # named next, unused
+    assert sel["used_buckets"] == ["validator-charsets-and-captures"]
+    assert sel["selected_bucket"] == "image-and-ddns-json"  # first unused
 
 
-def test_cycle_sentinel_never_selected(tmp_path):
-    """Luna r1 #1: with every named bucket used, the traversal returns to
-    the STARTING cluster — the cycle sentinel (openwrt_packages) is NEVER
-    selected."""
+def test_progression_exhausted_no_wrap(tmp_path):
+    """Luna r1 #1 + CodeRabbit #582: when every progression bucket is used,
+    no next bucket exists — nothing is selected (no wrap, no sentinel)."""
     cs = _load_cs()
     gen = tmp_path / "generated"
     _gate_decision(gen, "openwrt_packages")
     rows = [
         _row("openwrt_packages_w1", b) for b in
-        ("openwrt_luci", "form-validators", "qosify-network-dscp")
+        ("validator-charsets-and-captures", "image-and-ddns-json",
+         "ddns-query-and-escape-image", "qosify-network-dscp")
     ]
     sched = cs.build_schedule(rows, queues_dir=tmp_path / "queues",
                               gate_decisions_dir=gen,
@@ -94,38 +98,75 @@ def test_queue_blocks_only_pending_sites(tmp_path):
     _gate_decision(gen, "openwrt_packages")
     rows = [_row("openwrt_packages_w1", "validator-charsets-and-captures")]
 
-    # Pending queue for openwrt_luci -> blocked; next is form-validators.
-    _queue(tmp_path / "queues", "openwrt_luci", ["emitted", "claimed"])
+    # Pending queue for image-and-ddns-json -> blocked; next is
+    # ddns-query-and-escape-image.
+    _queue(tmp_path / "queues", "image-and-ddns-json", ["emitted", "claimed"])
     sched = cs.build_schedule(rows, queues_dir=tmp_path / "queues",
                               gate_decisions_dir=gen,
                               dispositions_path=tmp_path / "d.jsonl")
     sel = sched["selections"][0]
-    assert sel["selected_bucket"] == "form-validators"
+    assert sel["selected_bucket"] == "ddns-query-and-escape-image"
 
-    # Closed queue (all contracted) -> openwrt_luci is selectable again.
-    _queue(tmp_path / "queues", "openwrt_luci", ["contracted", "skipped_unreachable"])
+    # Closed queue (all contracted) -> image-and-ddns-json selectable again.
+    _queue(tmp_path / "queues", "image-and-ddns-json", ["contracted", "skipped_unreachable"])
     sched = cs.build_schedule(rows, queues_dir=tmp_path / "queues",
                               gate_decisions_dir=gen,
                               dispositions_path=tmp_path / "d.jsonl")
     sel = sched["selections"][0]
-    assert sel["selected_bucket"] == "openwrt_luci"
+    assert sel["selected_bucket"] == "image-and-ddns-json"
 
 
-def test_wont_file_classes_from_real_source(tmp_path):
-    """Luna r1 #3: wont-file classes come from the REAL disposition source
-    (docs/conversion-upstream.jsonl shape: status=wont_file + class)."""
+def test_empty_queue_does_not_block(tmp_path):
+    """Luna r2 #2: an empty candidate_sites queue is the valid
+    empty_queue() shape — it must NOT block selection."""
     cs = _load_cs()
-    disp = tmp_path / "d.jsonl"
-    disp.write_text("\n".join([
-        json.dumps({"id": "CU-1", "status": "wont_file", "class": "third_party_security_tool"}),
-        json.dumps({"id": "CU-2", "status": "wont_file", "class": "third_party_security_tool"}),
-        json.dumps({"id": "CU-3", "status": "wont_file", "class": "no_sandbox"}),
-        json.dumps({"id": "CU-4", "status": "false_positive", "class": "x"}),
-        "",
-    ]) + "\n", encoding="utf-8")
-    assert cs.wont_file_classes(disp) == {
-        "third_party_security_tool": 2, "no_sandbox": 1,
-    }
+    gen = tmp_path / "generated"
+    _gate_decision(gen, "openwrt_packages")
+    _queue(tmp_path / "queues", "image-and-ddns-json", [])  # empty sites
+    rows = [_row("openwrt_packages_w1", "validator-charsets-and-captures")]
+    sched = cs.build_schedule(rows, queues_dir=tmp_path / "queues",
+                              gate_decisions_dir=gen,
+                              dispositions_path=tmp_path / "d.jsonl")
+    sel = sched["selections"][0]
+    assert sel["selected_bucket"] == "image-and-ddns-json"  # not blocked
+
+
+def test_malformed_queue_fails_closed(tmp_path):
+    """CodeRabbit #582: ANY malformed queue entry (null, non-dict, or
+    status-less) makes the queue BLOCK selection — malformed site data must
+    never permit selection."""
+    cs = _load_cs()
+    gen = tmp_path / "generated"
+    _gate_decision(gen, "openwrt_packages")
+    queues_dir = tmp_path / "queues"
+    queues_dir.mkdir(parents=True, exist_ok=True)
+    rows = [_row("openwrt_packages_w1", "validator-charsets-and-captures")]
+
+    # null entry -> fail closed (block)
+    (queues_dir / "image-and-ddns-json.json").write_text(
+        json.dumps({"candidate_sites": [None]}) + "\n", encoding="utf-8")
+    sched = cs.build_schedule(rows, queues_dir=queues_dir,
+                              gate_decisions_dir=gen,
+                              dispositions_path=tmp_path / "d.jsonl")
+    assert sched["selections"][0]["selected_bucket"] == "ddns-query-and-escape-image"
+
+    # status-less entry -> fail closed (block); progression continues to
+    # qosify-network-dscp (no queue -> selected).
+    (queues_dir / "ddns-query-and-escape-image.json").write_text(
+        json.dumps({"candidate_sites": [{"site": "s0"}]}) + "\n", encoding="utf-8")
+    sched = cs.build_schedule(rows, queues_dir=queues_dir,
+                              gate_decisions_dir=gen,
+                              dispositions_path=tmp_path / "d.jsonl")
+    assert sched["selections"][0]["selected_bucket"] == "qosify-network-dscp"
+
+
+def test_malformed_gate_artifact_skipped(tmp_path):
+    """Luna r2 #3: a JSON-list gate artifact is skipped, not fatal."""
+    cs = _load_cs()
+    gen = tmp_path / "generated"
+    _gate_decision(gen, "openwrt_packages", "go")
+    (gen / "bad_gate_decision.json").write_text("[1, 2, 3]", encoding="utf-8")
+    assert cs.go_clusters(gen) == ["openwrt_packages"]
 
 
 def test_wont_file_blocks_named_next(tmp_path):
@@ -135,12 +176,12 @@ def test_wont_file_blocks_named_next(tmp_path):
     gen = tmp_path / "generated"
     _gate_decision(gen, "openwrt_packages")
     disp = tmp_path / "d.jsonl"
-    # openwrt_luci (the named next) has 2 wont_file rows -> denied.
+    # image-and-ddns-json (the first unused) has 2 wont_file rows -> denied.
     disp.write_text("\n".join([
         json.dumps({"id": "CU-1", "status": "wont_file", "class": "third_party",
-                    "corpus": "openwrt_luci"}),
+                    "corpus": "image-and-ddns-json"}),
         json.dumps({"id": "CU-2", "status": "wont_file", "class": "third_party",
-                    "corpus": "openwrt_luci"}),
+                    "corpus": "image-and-ddns-json"}),
     ]) + "\n", encoding="utf-8")
     rows = [_row("openwrt_packages_w1", "validator-charsets-and-captures")]
     sched = cs.build_schedule(rows, queues_dir=tmp_path / "queues",
@@ -153,64 +194,45 @@ def test_wont_file_blocks_named_next(tmp_path):
 
 def test_wont_file_single_occurrence_does_not_block(tmp_path):
     """Luna r2 #1: a SINGLE wont-file row on the target corpus is noise,
-    not a pattern — the named-next selection stands."""
+    not a pattern — the selection stands."""
     cs = _load_cs()
     gen = tmp_path / "generated"
     _gate_decision(gen, "openwrt_packages")
     disp = tmp_path / "d.jsonl"
     disp.write_text(json.dumps(
         {"id": "CU-1", "status": "wont_file", "class": "third_party",
-         "corpus": "openwrt_luci"}) + "\n", encoding="utf-8")
+         "corpus": "image-and-ddns-json"}) + "\n", encoding="utf-8")
     rows = [_row("openwrt_packages_w1", "validator-charsets-and-captures")]
     sched = cs.build_schedule(rows, queues_dir=tmp_path / "queues",
                               gate_decisions_dir=gen,
                               dispositions_path=disp)
     sel = sched["selections"][0]
-    assert sel["selected_bucket"] == "openwrt_luci"
+    assert sel["selected_bucket"] == "image-and-ddns-json"
     assert sel["selection_basis"] == "named-next-unused"
 
 
-def test_empty_queue_does_not_block(tmp_path):
-    """Luna r2 #2: an empty candidate_sites queue is the valid
-    empty_queue() shape — it must NOT block selection."""
+def test_wont_file_classes_from_real_source(tmp_path):
+    """Luna r1 #3: wont-file classes come from the REAL disposition source
+    (docs/conversion-upstream.jsonl shape: status=wont_file + class)."""
     cs = _load_cs()
-    gen = tmp_path / "generated"
-    _gate_decision(gen, "openwrt_packages")
-    _queue(tmp_path / "queues", "openwrt_luci", [])  # empty candidate_sites
-    rows = [_row("openwrt_packages_w1", "validator-charsets-and-captures")]
-    sched = cs.build_schedule(rows, queues_dir=tmp_path / "queues",
-                              gate_decisions_dir=gen,
-                              dispositions_path=tmp_path / "d.jsonl")
-    sel = sched["selections"][0]
-    assert sel["selected_bucket"] == "openwrt_luci"  # not blocked
-
-
-def test_malformed_queue_rows_skipped(tmp_path):
-    """Luna r2 #3: non-dict queue rows are skipped, not fatal — a pending
-    status on a VALID row still blocks."""
-    cs = _load_cs()
-    gen = tmp_path / "generated"
-    _gate_decision(gen, "openwrt_packages")
-    queues_dir = tmp_path / "queues"
-    queues_dir.mkdir(parents=True, exist_ok=True)
-    (queues_dir / "openwrt_luci.json").write_text(json.dumps({
-        "candidate_sites": ["not-a-dict", {"site": "s1", "status": "claimed"}]}) + "\n",
-        encoding="utf-8")
-    rows = [_row("openwrt_packages_w1", "validator-charsets-and-captures")]
-    sched = cs.build_schedule(rows, queues_dir=queues_dir,
-                              gate_decisions_dir=gen,
-                              dispositions_path=tmp_path / "d.jsonl")
-    sel = sched["selections"][0]
-    assert sel["selected_bucket"] == "form-validators"  # openwrt_luci blocked
-
-
-def test_malformed_gate_artifact_skipped(tmp_path):
-    """Luna r2 #3: a JSON-list gate artifact is skipped, not fatal."""
-    cs = _load_cs()
-    gen = tmp_path / "generated"
-    _gate_decision(gen, "openwrt_packages", "go")
-    (gen / "bad_gate_decision.json").write_text("[1, 2, 3]", encoding="utf-8")
-    assert cs.go_clusters(gen) == ["openwrt_packages"]
+    disp = tmp_path / "d.jsonl"
+    disp.write_text("\n".join([
+        json.dumps({"id": "CU-1", "status": "wont_file", "class": "third_party",
+                    "corpus": "openwrt_packages"}),
+        json.dumps({"id": "CU-2", "status": "wont_file", "class": "third_party",
+                    "corpus": "openwrt_packages"}),
+        json.dumps({"id": "CU-3", "status": "wont_file", "class": "no_sandbox",
+                    "corpus": "openwrt_luci"}),
+        json.dumps({"id": "CU-4", "status": "false_positive", "class": "x",
+                    "corpus": "y"}),
+        "",
+    ]) + "\n", encoding="utf-8")
+    assert cs.wont_file_classes(disp) == {
+        "third_party": 2, "no_sandbox": 1,
+    }
+    assert cs.wont_file_corpora(disp) == {
+        "openwrt_packages": 2, "openwrt_luci": 1,
+    }
 
 
 def test_go_clusters_from_gate_decisions(tmp_path):
@@ -222,7 +244,6 @@ def test_go_clusters_from_gate_decisions(tmp_path):
     _gate_decision(gen, "openwrt_luci", "go")
     _gate_decision(gen, "notadmitted", "no-go")  # NOT a GO cluster
     assert cs.go_clusters(gen) == ["openwrt_luci", "openwrt_packages"]
-    # Empty/missing dir -> NO selections (not the named-bucket map).
     assert cs.go_clusters(tmp_path / "missing") == []
 
 
@@ -234,16 +255,18 @@ def test_empty_input_no_selections(tmp_path):
     assert sched["selections"] == []  # no fabricated clusters
 
 
-def test_wave_strip_exact_suffix(tmp_path):
+def test_wave_strip_exact_suffix():
     """Luna r1 #5: only a trailing _w<digits> is stripped — foo_west is
     NOT mangled."""
     cs = _load_cs()
     rows = [_row("openwrt_packages_w2", "image-and-ddns-json"),
-            _row("foo_west", "x")]
+            _row("foo_west", "x"),
+            _row("bar_w1x", "y")]  # _w1x is not a pure numeric generation
     used = cs.used_buckets_per_cluster(rows)
     assert "openwrt_packages" in used
     assert "openwrt_packages_w2" not in used
     assert "foo_west" in used  # untouched
+    assert "bar_w1x" in used  # untouched
 
 
 def test_no_mine_re_rank(tmp_path):
