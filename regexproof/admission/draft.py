@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Any
+from typing import Any, Callable
 
 from regexproof.admission.boundary import BoundarySignals, classify_boundary
 from regexproof.admission.serialize import dumps_pinned
@@ -45,20 +45,31 @@ def build_boundary_signals(
     repo_name: str,
     root: Path | None = None,
     topics: tuple[str, ...] = (),
+    heartbeat: Callable[[], None] | None = None,
+    heartbeat_every: int = 2000,
 ) -> BoundarySignals:
     description = ""
     paths: list[str] = []
     if root is not None:
         description = _readme_text(root)
         # Sample path strings for path_substring signals (skip .git / vendor / …).
+        # Heartbeat during rglob — never sorted(rglob) which materializes first.
         try:
-            paths = [
-                str(p.relative_to(root))
-                for p in sorted(root.rglob("*"))
-                if not p.is_symlink()
-                and p.is_file()
-                and not any(part in _SKIP_DIR_NAMES for part in p.parts)
-            ][:200]
+            found: list[str] = []
+            seen = 0
+            every = max(1, heartbeat_every)
+            for p in root.rglob("*"):
+                seen += 1
+                if heartbeat is not None and seen % every == 0:
+                    heartbeat()
+                if p.is_symlink():
+                    continue
+                if not p.is_file():
+                    continue
+                if any(part in _SKIP_DIR_NAMES for part in p.parts):
+                    continue
+                found.append(str(p.relative_to(root)))
+            paths = sorted(found)[:200]
         except OSError:
             paths = []
     return BoundarySignals(
@@ -78,13 +89,16 @@ def build_draft(
     repo_name: str | None = None,
     candidate_url: str = "",
     topics: tuple[str, ...] = (),
+    heartbeat: Callable[[], None] | None = None,
 ) -> dict[str, Any]:
     """Build a flagged (non-schema-valid) probe draft for *root* at *pin*."""
     root_p = Path(root).resolve()
     name = repo_name or root_p.name
-    walked = walk_repo(root_p, repo_name=name)
+    walked = walk_repo(root_p, repo_name=name, heartbeat=heartbeat)
     boundary = classify_boundary(
-        build_boundary_signals(repo_name=name, root=root_p, topics=topics)
+        build_boundary_signals(
+            repo_name=name, root=root_p, topics=topics, heartbeat=heartbeat
+        )
     )
     return {
         "draft": True,

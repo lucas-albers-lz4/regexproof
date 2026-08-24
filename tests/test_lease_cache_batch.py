@@ -302,6 +302,21 @@ def test_default_probe_cap_consistent_with_max(tmp_path):
 
     captured: dict[str, int] = {}
     fake_dir = tmp_path / "fake-cache"
+    fake_dir.mkdir()
+    wt = tmp_path / "fake-wt"
+    wt.mkdir()
+    gen = tmp_path / "generated"
+    gen.mkdir()
+    from regexproof.mine.ledger import empty_ledger, save_ledger
+
+    ledger = tmp_path / "ledger.json"
+    led = empty_ledger()
+    led["candidates"].append({
+        "url": "https://github.com/openwrt/packages",
+        "status": "mined",
+        "pin": "a" * 40,
+    })
+    save_ledger(ledger, led)
 
     def fake_reserve(*, worker_count, per_clone_cap_mb, max_disk_mb, owner_pid, path):
         captured["per_clone_cap_mb"] = per_clone_cap_mb
@@ -313,7 +328,7 @@ def test_default_probe_cap_consistent_with_max(tmp_path):
     with (
         mock.patch.object(da, "reserve", side_effect=fake_reserve),
         mock.patch.object(clone_cache, "cache_acquire", return_value=fake_entry),
-        mock.patch.object(clone_cache, "worktree_for", return_value=tmp_path / "fake-wt"),
+        mock.patch.object(clone_cache, "worktree_for", return_value=wt),
         mock.patch.object(clone_cache, "worktree_remove", return_value=None),
         mock.patch.object(lr, "renew", return_value=fake_entry),
     ):
@@ -322,10 +337,17 @@ def test_default_probe_cap_consistent_with_max(tmp_path):
             "--pin", "a" * 40, "--corpus", "openwrt_packages",
             "--state", str(tmp_path / "state.json"),
             "--walk-root", str(tmp_path / "staged"),
+            "--generated", str(gen),
+            "--ledger", str(ledger),
         ])
     # main completed through the patched path (return 0; no real Git ops).
     assert rc == 0, f"main returned {rc}"
     assert captured["per_clone_cap_mb"] == 500  # derived from --max-disk-mb
+    from regexproof.mine import batch_state as bs
+
+    st = bs.load_state(path=tmp_path / "state.json")
+    row = next(iter(st["rows"].values()))
+    assert row["outcome"] == "auto_nogo"  # empty worktree is below-scale, not ok
 
 
 def test_lease_renew_extends_expiry(tmp_path):

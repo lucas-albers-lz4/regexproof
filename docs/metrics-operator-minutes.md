@@ -36,7 +36,12 @@ stopwatch rows exist.
 
 Post Wave 5: same jsonl, `source: "stopwatch"`. Speedup =
 `median(active_minutes)_pre / median(active_minutes)_post` on human-reviewed
-survivors only.
+survivors only. Deterministic `auto_nogo` walks are **not** survivors — do
+not start a stopwatch on them. The unattended drain is
+`python3 scripts/batch-run.py --limit N` (hashed `batch/manifest.json`,
+resume on `(manifest_digest, url, pin)`). `batch_state.projection()["clone_ms_p95"]`
+is the Phase-2 clone-time evidence Wave 4 (#563) is waiting on; do not
+activate that trigger until a real drain has populated it.
 
 ## Artifact contract
 

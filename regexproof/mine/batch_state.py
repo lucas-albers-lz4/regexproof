@@ -272,7 +272,8 @@ def _write(reg: dict[str, Any], path: pathlib.Path | None = None) -> None:
 def projection(path: pathlib.Path | None = None) -> dict[str, Any]:
     """Batch summary projections from state.json: cache_hits, cache_misses,
     bytes_saved, lifecycle_bytes (probe_fetch only), clone_ms p50/p95, and
-    probe_success_rate (pooled ``ok`` / total rows).
+    probe_success_rate (pooled walk-completed outcomes / total rows).
+    Walk-completed is ``ok`` (pre-Wave-5) ∪ ``auto_nogo`` ∪ ``needs_human``.
 
     ``probe_success_rate`` is a walk-outcome rate. It is NOT the escape-clause
     7-day survivor (human-reviewed-and-admitted ``go ∪ triage-trial`` over
@@ -287,7 +288,9 @@ def projection(path: pathlib.Path | None = None) -> dict[str, Any]:
     clone_ms = sorted(int(r.get("clone_ms") or 0) for r in rows if r.get("clone_ms"))
     p50 = clone_ms[(len(clone_ms) - 1) // 2] if clone_ms else None
     p95 = clone_ms[min(len(clone_ms) - 1, int(len(clone_ms) * 0.95))] if clone_ms else None
-    ok = [r for r in rows if r.get("outcome") == "ok"]
+    from regexproof.mine.batch_nogo import WALK_COMPLETED
+
+    walked_ok = [r for r in rows if r.get("outcome") in WALK_COMPLETED]
     return {
         "rows": len(rows),
         "cache_hits": len(hits),
@@ -296,5 +299,5 @@ def projection(path: pathlib.Path | None = None) -> dict[str, Any]:
         "lifecycle_bytes": lifecycle,
         "clone_ms_p50": p50,
         "clone_ms_p95": p95,
-        "probe_success_rate": (len(ok) / len(rows)) if rows else None,
+        "probe_success_rate": (len(walked_ok) / len(rows)) if rows else None,
     }
