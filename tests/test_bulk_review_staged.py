@@ -12,6 +12,7 @@ decision_date (not lexical SHA order).
 from __future__ import annotations
 
 import json
+import os
 import pathlib
 import sys
 
@@ -20,7 +21,7 @@ import pytest
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
-from regexproof.mine import audit  # noqa: E402
+from regexproof.mine import audit, lease_registry  # noqa: E402
 
 
 def _probe_draft(url: str = "https://x/y", *, corpus: str = "ow") -> dict:
@@ -276,6 +277,45 @@ def test_malformed_at_fails_closed(tmp_path):
         with pytest.raises(SystemExit, match=r"--at must be ISO"):
             brs.main(["--draft", str(draft), *verb,
                       "--at", "not-a-timestamp", "--ledger", str(ledger)])
+
+
+def test_auto_no_go_refusal_leaves_no_artifact(tmp_path, monkeypatch):
+    """Luna r4: when mark_auto_filed refuses (re_evaluate=true), NO decision
+    artifact may be left active — the next sync would apply it."""
+    brs = _load_brs()
+    gen = tmp_path / "generated"
+    gen.mkdir()
+    monkeypatch.setattr(brs, "GEN", gen)
+    monkeypatch.setattr(brs, "default_output_path",
+                        lambda corpus, repo_root=None: gen / f"{corpus}_gate_decision.json")
+    from regexproof.mine.ledger import empty_ledger
+
+    url = "https://x/y"
+    ledger = tmp_path / "ledger.json"
+    ld = empty_ledger()
+    ld["candidates"].append({"url": url, "status": "mined",
+                             "audit": {"re_evaluate": True}})
+    ledger.write_text(json.dumps(ld, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    draft = _write_draft(tmp_path, _probe_draft(url))
+    with pytest.raises(SystemExit, match="auto-filing refused"):
+        brs.main(["--draft", str(draft), "--no-go", "--ledger", str(ledger)])
+    # Fail closed: nothing was written — the sync cannot apply a stale decision.
+    assert not (gen / "ow_gate_decision.json").exists()
+
+
+def test_custom_cache_root_lease_released(tmp_path):
+    """Luna r4: _release_lease must release from the CUSTOM registry
+    (--cache-root), not the default cache/leases.json."""
+    brs = _load_brs()
+    cache_root = tmp_path / "cache"
+    cache_root.mkdir()
+    url = "https://github.com/openwrt/packages"
+    lease_registry.acquire(
+        url, "a" * 40, owner_pid=os.getpid(), path=cache_root / "leases.json",
+    )
+    assert lease_registry.active_leases(path=cache_root / "leases.json")
+    brs._release_lease(url, cache_root=cache_root)
+    assert lease_registry.active_leases(path=cache_root / "leases.json") == []
 
 
 def test_demote_records_retained_location(tmp_path):

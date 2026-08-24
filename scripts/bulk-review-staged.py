@@ -97,6 +97,8 @@ def _release_lease(url: str, cache_root: pathlib.Path | None = None) -> None:
             lease_registry.release(
                 url, str(lease.get("pin") or ""),
                 owner_pid=int(lease.get("owner_pid") or -1),
+                path=registry_path,  # Luna r4: release MUST target the same
+                                     # registry that active_leases read
             )
 
 
@@ -267,22 +269,13 @@ def main(argv: list[str] | None = None) -> int:
         except AuthorError as exc:
             raise SystemExit(f"bulk-review: auto authoring refused: {exc}")
 
-    # Persist the schema-validated decision + audit-promote the ledger row.
-    out_path = default_output_path(corpus, repo_root=ROOT)
-    out_path.parent.mkdir(parents=True, exist_ok=True)
-    out_path.write_text(json.dumps(out, indent=2, sort_keys=True) + "\n", encoding="utf-8")
-    # Only HUMAN decisions (go/triage-trial) are bulk-promoted — auto no-go
-    # is deterministic and must NOT join the sampler population via
-    # promoted_via (Luna r2: promotion provenance is for human decisions).
     # Auto no-go goes through mark_auto_filed(), which rejects candidates
     # flagged re_evaluate=true (Luna r3: a direct auto_filed=True write
-    # bypassed the mandatory human re-review gate).
-    if decision != "no-go":
-        promote_updates = {
-            "promoted_via": "bulk-review",
-            "promoted_at": (_utc_ts(at_dt) if at_dt is not None else _utc_ts()),
-        }
-    else:
+    # bypassed the mandatory human re-review gate). The gate must run
+    # BEFORE the decision is persisted (Luna r4: writing first left an
+    # ACTIVE decision artifact after a refusal — the next sync applied it
+    # and transitioned the candidate to gated:no-go).
+    if decision == "no-go":
         try:
             audit.mark_auto_filed(
                 args.ledger, url,
@@ -290,6 +283,20 @@ def main(argv: list[str] | None = None) -> int:
             )
         except ValueError as exc:
             raise SystemExit(f"bulk-review: auto-filing refused: {exc}") from exc
+
+    # Persist the schema-validated decision + audit-promote the ledger row.
+    out_path = default_output_path(corpus, repo_root=ROOT)
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    out_path.write_text(json.dumps(out, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    # Only HUMAN decisions (go/triage-trial) are bulk-promoted — auto no-go
+    # is deterministic and must NOT join the sampler population via
+    # promoted_via (Luna r2: promotion provenance is for human decisions).
+    if decision != "no-go":
+        promote_updates = {
+            "promoted_via": "bulk-review",
+            "promoted_at": (_utc_ts(at_dt) if at_dt is not None else _utc_ts()),
+        }
+    else:
         print(f"no_go: {url} -> {out_path.name} (provenance=auto)")
         return 0
     try:
