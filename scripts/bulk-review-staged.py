@@ -200,6 +200,12 @@ def _resume_pending_installs(ledger_path: pathlib.Path, gen: pathlib.Path) -> bo
         except (OSError, ValueError):
             pending.unlink(missing_ok=True)  # corrupt journal — clean, fail-closed
             continue
+        if not isinstance(payload, dict):
+            # Luna r12: json.loads accepts [], null, strings, numbers —
+            # .get() would crash the scanner (and it runs BEFORE draft
+            # loading, so one malformed journal blocks every invocation).
+            pending.unlink(missing_ok=True)
+            continue
         url = str(payload.get("candidate_url") or "")
         decision = str(payload.get("decision") or "")
         if not url or decision not in ("go", "no-go", "triage-trial"):

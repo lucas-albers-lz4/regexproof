@@ -610,6 +610,29 @@ def test_resume_refuses_re_evaluate_candidate(tmp_path, monkeypatch):
     assert not (gen / "ow_gate_decision.json").exists()
 
 
+def test_resume_cleans_non_object_journal(tmp_path, monkeypatch):
+    """Luna r12: a journal whose JSON is a non-object ([]/null/string/
+    number) must be CLEANED, not crash the scanner — one malformed journal
+    must not block every invocation (the scan runs before draft loading)."""
+    brs = _load_brs()
+    gen = tmp_path / "generated"
+    gen.mkdir()
+    monkeypatch.setattr(brs, "GEN", gen)
+    from regexproof.mine.ledger import empty_ledger
+
+    ledger = tmp_path / "ledger.json"
+    ledger.write_text(json.dumps(empty_ledger(), indent=2, sort_keys=True) + "\n",
+                      encoding="utf-8")
+    for i, bad in enumerate(("[]", "null", '"str"', "42")):
+        (gen / f"bad{i}_gate_decision.json.pending").write_text(bad, encoding="utf-8")
+    # Non-object journals cleaned; the scan proceeds (next failure is the
+    # missing draft — NOT an AttributeError from the scanner).
+    with pytest.raises(SystemExit, match="cannot read draft"):
+        brs.main(["--draft", str(tmp_path / "missing.json"), "--no-go",
+                  "--ledger", str(ledger)])
+    assert list(gen.glob("*.pending")) == []
+
+
 def test_demote_records_retained_location(tmp_path):
     brs = _load_brs()
     draft = _write_draft(tmp_path)
