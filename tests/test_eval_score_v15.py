@@ -40,6 +40,8 @@ def test_flip_decision_exists_and_is_shape_checked():
     assert d["eval"]["precision_at_k_v1"]["k"] == 30
     assert d["eval"]["precision_at_k"]["positive_in_top_k"] == 13
     assert d["eval"]["precision_at_k_v1"]["positive_in_top_k"] == 8
+    assert d["eval"]["precision_at_k"]["clopper_pearson_95"] == [0.254608, 0.625727]
+    assert d["eval"]["precision_at_k_v1"]["clopper_pearson_95"] == [0.122795, 0.458894]
     for name in ("precision_at_k", "precision_at_k_v1"):
         lo, hi = d["eval"][name]["clopper_pearson_95"]
         assert 0 <= lo <= hi <= 1
