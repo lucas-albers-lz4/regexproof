@@ -240,6 +240,7 @@ def main(argv: list[str] | None = None) -> int:
             "pushed_date": cand.get("pushed_date"),
             "status": cand.get("status"),
             "pin": cand.get("pin"),
+            "pin_probed": cand.get("pin_probed") or "",
             "features": {
                 "fork": cand.get("fork"),
                 "size": cand.get("size"),

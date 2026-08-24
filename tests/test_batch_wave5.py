@@ -35,7 +35,13 @@ def test_walk_repo_invokes_heartbeat(tmp_path):
     assert hits["n"] >= 1
 
 
-def test_items_digest_stable_and_pin_required():
+def test_items_prefer_pin_probed_over_mined():
+    probed = "b" * 40
+    mined = "c" * 40
+    items = batch_manifest.items_from_rank_ndjson(
+        json.dumps({"url": URL, "pin": mined, "pin_probed": probed, "score": 1})
+    )
+    assert items[0]["pin"] == probed
     items = batch_manifest.items_from_rank_ndjson(
         json.dumps({"url": URL, "pin": PIN, "score": 1.0, "allocator": "score-v1"})
     )

@@ -42,9 +42,14 @@ def items_digest(items: list[dict[str, Any]]) -> str:
     return hashlib.sha256(body.encode("utf-8")).hexdigest()
 
 
+def _sha40(value: str) -> bool:
+    return len(value) == 40 and all(c in "0123456789abcdefABCDEF" for c in value)
+
+
 def items_from_rank_ndjson(text: str) -> list[dict[str, Any]]:
     """Parse rank-mine-candidates stdout into manifest items. Fail closed
-    on a ranked row with an empty pin (E3: no mined-pin fallback here)."""
+    on a ranked row with an empty pin (E3: prefer ``pin_probed`` when it is
+    a 40-char SHA; otherwise the ledger mined ``pin``)."""
     items: list[dict[str, Any]] = []
     for line_no, raw in enumerate(text.splitlines(), start=1):
         line = raw.strip()
@@ -59,10 +64,12 @@ def items_from_rank_ndjson(text: str) -> list[dict[str, Any]]:
         if not isinstance(row, dict):
             raise SystemExit(f"batch-manifest: rank NDJSON line {line_no} is not an object")
         url = str(row.get("url") or "").strip()
-        pin = str(row.get("pin") or row.get("pin_probed") or "").strip()
+        probed = str(row.get("pin_probed") or "").strip()
+        mined = str(row.get("pin") or "").strip()
+        pin = probed if _sha40(probed) else mined
         if not url:
             raise SystemExit(f"batch-manifest: rank NDJSON line {line_no} missing url")
-        if len(pin) != 40 or any(c not in "0123456789abcdefABCDEF" for c in pin):
+        if not _sha40(pin):
             raise SystemExit(
                 f"batch-manifest: rank NDJSON line {line_no} pin must be a 40-char hex SHA "
                 f"(got {pin!r}) — refuse empty/mined-fallback"
