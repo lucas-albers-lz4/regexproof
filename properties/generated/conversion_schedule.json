@@ -1,0 +1,33 @@
+{
+  "cache_interplay_note": "GO-cluster utilization accelerates #550 lease pressure \u2014 leased clone count + byte caps apply; there is NO immortal lease set. Each conversion wave must fit within the current cache budget and release leases on close-out.",
+  "capacity_reservation": {
+    "novel_exploration_share": 0.2,
+    "productive_share": 0.7,
+    "unbiased_slice_share": 0.1
+  },
+  "generated_at": "2026-08-24T03:15:00Z",
+  "schema_version": "1",
+  "selections": [
+    {
+      "cluster": "openwrt_luci",
+      "mine_re_ranked": false,
+      "selected_bucket": "form-validators",
+      "selection_basis": "named-next-unused",
+      "used_buckets": [
+        "form-validator-alphabets"
+      ]
+    },
+    {
+      "cluster": "openwrt_packages",
+      "mine_re_ranked": false,
+      "selected_bucket": "openwrt_luci",
+      "selection_basis": "named-next-unused",
+      "used_buckets": [
+        "ddns-query-and-escape-image",
+        "image-and-ddns-json",
+        "validator-charsets-and-captures"
+      ]
+    }
+  ],
+  "wont_file_classes": {}
+}
