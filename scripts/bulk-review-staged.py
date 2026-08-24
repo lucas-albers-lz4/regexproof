@@ -173,6 +173,16 @@ def _load_draft(draft_path: pathlib.Path) -> dict:
                         if p}
             draft_pins = {str(p) for p in (draft.get("corpus_pin"), draft.get("pin"))
                           if p}
+            if art_pins and not draft_pins:
+                # Luna r2 #1: pinned evidence must never be inherited by a
+                # pin-less draft — the revision identity is unattributable
+                # (same rule as the embedded-probe path).
+                raise SystemExit(
+                    f"bulk-review: {candidate.name} probe evidence carries "
+                    f"pins {sorted(art_pins)} but the draft carries NO pin — "
+                    f"the revision identity is unattributable, refusing to "
+                    "inherit probe evidence"
+                )
             all_pins = art_pins | draft_pins
             if len(all_pins) > 1:
                 raise SystemExit(

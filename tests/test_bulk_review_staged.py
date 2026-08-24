@@ -448,6 +448,32 @@ def test_embedded_probe_pinless_draft_refused(tmp_path, monkeypatch):
         brs.main(["--draft", str(draft), "--no-go", "--ledger", str(ledger)])
 
 
+def test_lightweight_pinless_draft_refuses_inherited_evidence(tmp_path, monkeypatch):
+    """Luna r2 #1: a pinless LIGHTWEIGHT draft must not inherit pinned
+    evidence from the probe-decision artifact — same unattributable-identity
+    rule as the embedded-probe path."""
+    brs = _load_brs()
+    gen = tmp_path / "generated"
+    gen.mkdir()
+    monkeypatch.setattr(brs, "GEN", gen)
+    # Pinned probe evidence exists for corpus ow at the same URL.
+    (gen / "ow_probe_decision.json").write_text(
+        json.dumps({"corpus": "ow", "candidate_url": "https://x/y",
+                    "corpus_pin": "b" * 40,
+                    "probe": {"dialect": {"shell": 1}, "regex_sites": 1,
+                              "security_boundary": "deterministic-false",
+                              "pin": "b" * 40}},
+                   sort_keys=True) + "\n", encoding="utf-8")
+    # Lightweight stub WITHOUT any pin (batch-probe emits url/pin normally,
+    # but a stripped draft must fail closed rather than inherit blindly).
+    draft = _write_draft(tmp_path, {
+        "url": "https://x/y", "corpus": "ow", "manifest_digest": "d1",
+    })
+    ledger = _write_ledger(tmp_path)
+    with pytest.raises(SystemExit, match="carries NO pin"):
+        brs.main(["--draft", str(draft), "--no-go", "--ledger", str(ledger)])
+
+
 def test_embedded_probe_matching_accepted(tmp_path, monkeypatch):
     """Final-gate #1 (HIGH): an embedded probe whose URL AND pin match the
     draft is accepted — the validation must not reject legitimate drafts."""
