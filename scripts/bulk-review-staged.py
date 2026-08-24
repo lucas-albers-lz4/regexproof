@@ -96,7 +96,6 @@ def _load_draft(draft_path: pathlib.Path) -> dict:
         from regexproof.mine.exclusions import normalize_repo_url
 
         draft_url = normalize_repo_url(str(draft.get("candidate_url") or draft.get("url") or ""))
-        draft_pin = str(draft.get("pin") or "")
         probe_evidence: dict | None = None
         for candidate in (GEN / f"{corpus}_probe_decision.json",
                           GEN / f"{corpus}_gate_decision.json"):
@@ -112,12 +111,21 @@ def _load_draft(draft_path: pathlib.Path) -> dict:
             art_probe = art.get("probe")
             if not isinstance(art_probe, dict) or not art_probe:
                 continue
-            art_pin = str(art.get("corpus_pin") or art_probe.get("pin") or "")
-            if draft_pin and art_pin and art_pin != draft_pin:
+            # Luna r7: pin binding checks EVERY pin on both sides — the
+            # artifact's corpus_pin AND probe.pin, against the draft's
+            # corpus_pin AND pin. If any pins are present, ALL of them must
+            # agree; a single conflicting pin (even when another matches)
+            # means evidence from a different revision — refuse.
+            art_pins = {str(p) for p in (art.get("corpus_pin"), art_probe.get("pin"))
+                        if p}
+            draft_pins = {str(p) for p in (draft.get("corpus_pin"), draft.get("pin"))
+                          if p}
+            all_pins = art_pins | draft_pins
+            if len(all_pins) > 1:
                 raise SystemExit(
-                    f"bulk-review: {candidate.name} probe pin {art_pin!r} does "
-                    f"not match draft pin {draft_pin!r} for {draft_url} — "
-                    "refusing to inherit mismatched probe evidence"
+                    f"bulk-review: {candidate.name} probe pins {sorted(art_pins)} "
+                    f"do not match draft pins {sorted(draft_pins)} for "
+                    f"{draft_url} — refusing to inherit mismatched probe evidence"
                 )
             probe_evidence = art_probe
             break

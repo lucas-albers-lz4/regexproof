@@ -424,6 +424,29 @@ def test_lightweight_draft_refuses_wrong_url_evidence(tmp_path, monkeypatch):
         brs.main(["--draft", str(draft), "--no-go", "--ledger", str(ledger)])
 
 
+def test_lightweight_draft_refuses_conflicting_probe_pin(tmp_path, monkeypatch):
+    """Luna r7: pin binding checks EVERY pin — an artifact with a matching
+    corpus_pin but a CONFLICTING probe.pin must be refused (evidence from
+    the wrong revision must not pass the binding gate)."""
+    brs = _load_brs()
+    gen = tmp_path / "generated"
+    gen.mkdir()
+    monkeypatch.setattr(brs, "GEN", gen)
+    (gen / "ow_probe_decision.json").write_text(
+        json.dumps({"corpus": "ow", "candidate_url": "https://x/y",
+                    "corpus_pin": "a" * 40,  # matches the draft pin
+                    "probe": {"dialect": {"shell": 1}, "regex_sites": 1,
+                              "security_boundary": "deterministic-false",
+                              "pin": "b" * 40}},  # CONFLICTS
+                   sort_keys=True) + "\n", encoding="utf-8")
+    stub = {"url": "https://x/y", "pin": "a" * 40, "corpus": "ow",
+            "manifest_digest": "d1"}
+    draft = _write_draft(tmp_path, stub)
+    ledger = _write_ledger(tmp_path)
+    with pytest.raises(SystemExit, match="do not match draft pins"):
+        brs.main(["--draft", str(draft), "--no-go", "--ledger", str(ledger)])
+
+
 def test_failed_promotion_leaves_no_artifact(tmp_path, monkeypatch):
     """Luna r6 #2: when a ledger update fails, NO active decision artifact
     may remain — the next sync must not apply a stale decision."""
