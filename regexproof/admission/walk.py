@@ -46,17 +46,28 @@ _FLAG_LETTER_TO_CONSTRUCT = {
 ExtractFn = Callable[[str, str], list[dict[str, Any]]]
 
 
-def _iter_files(root: Path) -> list[Path]:
+def _iter_files(
+    root: Path,
+    *,
+    heartbeat: Callable[[], None] | None = None,
+    heartbeat_every: int = 2000,
+) -> list[Path]:
     """List candidate files under *root*, pruning skip-dir names in-place.
 
     Same membership as the prior ``rglob`` + post-filter path: skip
     ``_SKIP_DIR_NAMES`` subtrees, symlinks (``is_file()`` follows links), and
     files larger than ``_MAX_FILE_BYTES``. Result is sorted for stable walk order.
+    Heartbeat during discovery so a long ``os.walk`` cannot expire a clone lease.
     """
     files: list[Path] = []
     root_s = str(root)
+    seen = 0
+    every = max(1, heartbeat_every)
     for dirpath, dirnames, filenames in os.walk(root_s, topdown=True, followlinks=False):
         dirnames[:] = sorted(d for d in dirnames if d not in _SKIP_DIR_NAMES)
+        seen += 1
+        if heartbeat is not None and seen % every == 0:
+            heartbeat()
         for name in filenames:
             p = Path(dirpath) / name
             # Skip symlinks before is_file() — is_file() follows links.
@@ -70,6 +81,9 @@ def _iter_files(root: Path) -> list[Path]:
             except OSError:
                 continue
             files.append(p)
+            seen += 1
+            if heartbeat is not None and seen % every == 0:
+                heartbeat()
     return sorted(files)
 
 
@@ -184,7 +198,9 @@ def walk_repo(
     extractor_errors = 0
     seen = 0
 
-    for fp in _iter_files(root_p):
+    for fp in _iter_files(
+        root_p, heartbeat=heartbeat, heartbeat_every=heartbeat_every
+    ):
         seen += 1
         if heartbeat is not None and seen % max(1, heartbeat_every) == 0:
             heartbeat()
