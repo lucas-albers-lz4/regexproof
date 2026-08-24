@@ -307,7 +307,9 @@ def _load_ledger_rows(ledger_path: pathlib.Path) -> list[dict]:
         )
     if ledger_path.suffix == ".ndjson":
         rows: list[dict] = []
-        for i, line in enumerate(ledger_path.read_text(encoding="utf-8").splitlines()):
+        for i, line in enumerate(
+            ledger_path.read_text(encoding="utf-8").splitlines(), start=1
+        ):
             line = line.strip()
             if not line:
                 continue
