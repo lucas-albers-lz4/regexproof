@@ -348,6 +348,13 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--cache-root", type=pathlib.Path, default=None,
                     help="cache root whose leases.json holds this probe's "
                          "lease (batch-probe --cache-root)")
+    ap.add_argument(
+        "--active-minutes",
+        type=float,
+        default=None,
+        help="Stopwatch active minutes for this human-reviewed survivor "
+        "(Wave 6). Appended to operator_minutes.jsonl; never the freeze.",
+    )
     group = ap.add_mutually_exclusive_group(required=True)
     group.add_argument("--go", action="store_true")
     group.add_argument("--no-go", dest="no_go", action="store_true")
@@ -599,6 +606,17 @@ def main(argv: list[str] | None = None) -> int:
         ) from exc
     print(f"{decision}: {url} -> {out_path.name} (provenance=human)" if decision != "no-go"
           else f"no_go: {url} -> {out_path.name} (provenance=auto)")
+    if decision in ("go", "triage-trial") and args.active_minutes is not None:
+        from regexproof.mine.operator_minutes import append_row
+
+        pin = str(draft.get("corpus_pin") or draft.get("pin") or "")
+        append_row(
+            url=url,
+            pin=pin,
+            decision=decision,
+            source="stopwatch",
+            active_minutes=args.active_minutes,
+        )
     return 0
 
 
