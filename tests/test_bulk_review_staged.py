@@ -176,6 +176,37 @@ def test_auto_no_go_is_deterministic(tmp_path, monkeypatch):
     assert dec["escape_hatch_applied"] is False
 
 
+def test_promotion_fails_closed_on_missing_candidate(tmp_path, monkeypatch):
+    """Luna r2 P0: a missing ledger candidate must FAIL CLOSED — the
+    decision write must not look like a successful promotion without audit
+    provenance."""
+    brs = _load_brs()
+    gen = tmp_path / "generated"
+    gen.mkdir()
+    monkeypatch.setattr(brs, "GEN", gen)
+    monkeypatch.setattr(brs, "default_output_path",
+                        lambda corpus, repo_root=None: gen / f"{corpus}_gate_decision.json")
+    draft = _write_draft(tmp_path)
+    ledger = tmp_path / "ledger.json"  # EMPTY ledger — candidate missing
+    from regexproof.mine.ledger import empty_ledger
+
+    ledger.write_text(json.dumps(empty_ledger(), indent=2, sort_keys=True) + "\n",
+                      encoding="utf-8")
+    with pytest.raises(SystemExit, match="ledger promotion failed"):
+        brs.main(["--draft", str(draft), "--no-go", "--ledger", str(ledger)])
+
+
+def test_demote_requires_retained_location(tmp_path):
+    """Luna r2 Medium: demotion must not silently succeed without the
+    required retained-location state."""
+    brs = _load_brs()
+    draft = _write_draft(tmp_path)
+    ledger = _write_ledger(tmp_path)
+    with pytest.raises(SystemExit, match="--retained-location"):
+        brs.main(["--draft", str(draft), "--demote-retain-corpus",
+                  "--ledger", str(ledger)])
+
+
 # --- requeue / demote semantics (Luna r1 #1: real transitions) ---------------
 
 
@@ -186,17 +217,20 @@ def test_requeue_transitions_and_archives(tmp_path, monkeypatch):
     monkeypatch.setattr(brs, "GEN", gen)
     from regexproof.mine.tree import _repo_slug
 
-    slug = _repo_slug("https://x/y")
-    (gen / f"x_{slug}_gate_decision.json").write_text("{}", encoding="utf-8")
-    draft = _write_draft(tmp_path)
-    ledger = _write_ledger(tmp_path)
+    url = "https://github.com/openwrt/packages"
+    slug = _repo_slug(url)
+    assert slug  # realistic GitHub URL yields a slug
+    safe = slug.replace("/", "_")  # files use the SANITIZED slug (Luna r2)
+    (gen / f"{safe}_gate_decision.json").write_text("{}", encoding="utf-8")
+    draft = _write_draft(tmp_path, _probe_draft(url))
+    ledger = _write_ledger(tmp_path, url)
     rc = brs.main(["--draft", str(draft), "--requeue",
                    "--reason", "bulk-review", "--ledger", str(ledger)])
     assert rc == 0
     cand = next(iter(json.loads(ledger.read_text(encoding="utf-8"))["candidates"]))
     assert cand["status"] == "queued"  # P2-owned transition API
     # Decision archived so the read-only sync cannot reapply it.
-    assert not (gen / f"x_{slug}_gate_decision.json").exists()
+    assert not (gen / f"{safe}_gate_decision.json").exists()
     assert len(list(gen.glob("*.requeued.json"))) == 1
 
 

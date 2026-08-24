@@ -75,6 +75,22 @@ def _url_of(draft: dict) -> str:
     return url
 
 
+def _release_lease(url: str) -> None:
+    """Release EVERY live lease for the URL (Luna r2 High: leases require
+    the exact pin AND owning PID — release(url, '', 0) matches nothing, so
+    normal leases would linger until stale cleanup). Best-effort: a missing
+    registry is not fatal."""
+    try:
+        for lease in lease_registry.active_leases():
+            if str(lease.get("url") or "") == url:
+                lease_registry.release(
+                    url, str(lease.get("pin") or ""),
+                    owner_pid=int(lease.get("owner_pid") or -1),
+                )
+    except (OSError, ValueError, SystemExit):
+        pass  # best-effort — stale cleanup reaps leftovers
+
+
 def _reviewer_required(args, verb: str) -> None:
     if not str(args.reviewer or "").strip():
         raise SystemExit(f"bulk-review: {verb} requires --reviewer")
@@ -121,17 +137,25 @@ def main(argv: list[str] | None = None) -> int:
 
     if args.requeue:
         # Requeue: transition via the P2-owned API + archive the decision so
-        # the read-only sync cannot reapply it (Luna r1 #1).
+        # the read-only sync cannot reapply it (Luna r1 #1). The archive
+        # glob must use the SANITIZED slug (files are owner-repo_, NOT
+        # owner/repo_ — Luna r2 P0: an unsanitized glob left the decision
+        # active and the next sync re-gated the candidate).
         transition.transition_candidate(
             args.ledger, url, to="queued", reason=args.reason or "bulk-review-requeue",
         )
         from regexproof.mine.tree import _repo_slug
 
         slug = _repo_slug(url)
-        for f in GEN.glob(f"*_{slug}_gate_decision.json"):
+        import re
+
+        safe = re.sub(r"[^A-Za-z0-9._-]+", "_", slug.strip()) or "corpus"
+        archived = 0
+        for f in GEN.glob(f"*{safe}_gate_decision.json"):
             f.rename(f.with_name(f.name.replace("_gate_decision.json", ".gate_decision.requeued.json")))
-        lease_registry.release(url, "", owner_pid=0)  # best-effort
-        print(f"requeue: {url}")
+            archived += 1
+        _release_lease(url)
+        print(f"requeue: {url} archived={archived}")
         return 0
 
     if args.demote_retain_corpus:
@@ -141,17 +165,27 @@ def main(argv: list[str] | None = None) -> int:
 
         ledger = load_ledger(args.ledger)
         cand = find_candidate(ledger, url)
-        if cand is not None:
-            cand["status"] = "demoted"
-            if args.retained_location:
-                cand["retained_location"] = args.retained_location
-            audit_obj = cand.setdefault("audit", {})
-            if not isinstance(audit_obj, dict):
-                raise SystemExit("bulk-review: candidate audit must be an object")
-            audit_obj["demoted_at"] = args.at or datetime.datetime.utcnow().isoformat()
-            save_ledger(args.ledger, ledger)
-        lease_registry.release(url, "", owner_pid=0)  # best-effort
-        print(f"demote_retain_corpus: {url} retained={args.retained_location or '-'}")
+        if cand is None:
+            raise SystemExit(
+                f"bulk-review: demote refused — {url} not in ledger "
+                "(Luna r2: demotion must not silently succeed without "
+                "required state)"
+            )
+        cand["status"] = "demoted"
+        if args.retained_location:
+            cand["retained_location"] = args.retained_location
+        else:
+            raise SystemExit(
+                "bulk-review: demote requires --retained-location (the "
+                "retained location must be recorded in the ledger row)"
+            )
+        audit_obj = cand.setdefault("audit", {})
+        if not isinstance(audit_obj, dict):
+            raise SystemExit("bulk-review: candidate audit must be an object")
+        audit_obj["demoted_at"] = args.at or datetime.datetime.utcnow().isoformat()
+        save_ledger(args.ledger, ledger)
+        _release_lease(url)
+        print(f"demote_retain_corpus: {url} retained={args.retained_location}")
         return 0
 
     # go / triage-trial / no-go — the schema-valid authoring path.
@@ -200,16 +234,29 @@ def main(argv: list[str] | None = None) -> int:
     out_path = default_output_path(corpus, repo_root=ROOT)
     out_path.parent.mkdir(parents=True, exist_ok=True)
     out_path.write_text(json.dumps(out, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    # Only HUMAN decisions (go/triage-trial) are bulk-promoted — auto no-go
+    # is deterministic and must NOT join the sampler population via
+    # promoted_via (Luna r2: promotion provenance is for human decisions).
+    promote_updates = (
+        {
+            "promoted_via": "bulk-review",
+            "promoted_at": args.at or datetime.datetime.utcnow().isoformat(),
+        }
+        if decision != "no-go"
+        else {"auto_filed": True}
+    )
     try:
         audit.ensure_candidate_audit(
-            args.ledger, url,
-            updates={
-                "promoted_via": "bulk-review",
-                "promoted_at": args.at or datetime.datetime.utcnow().isoformat(),
-            },
+            args.ledger, url, updates=promote_updates,
         )
     except ValueError as exc:
-        print(f"bulk-review: warning: ledger update skipped ({exc})", file=sys.stderr)
+        # Luna r2 P0: a missing ledger candidate must FAIL CLOSED — a
+        # decision written without audit provenance is not sampler-eligible
+        # and must not look like a successful promotion.
+        raise SystemExit(
+            f"bulk-review: ledger promotion failed for {url}: {exc} — "
+            "decision written but NOT promoted (audit provenance missing)"
+        ) from exc
 
     print(f"{decision}: {url} -> {out_path.name} (provenance=human)" if decision != "no-go"
           else f"no_go: {url} -> {out_path.name} (provenance=auto)")
