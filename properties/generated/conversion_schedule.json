@@ -5,7 +5,7 @@
     "productive_share": 0.7,
     "unbiased_slice_share": 0.1
   },
-  "generated_at": "2026-08-24T04:10:00Z",
+  "generated_at": "2026-08-24T04:20:00Z",
   "schema_version": "1",
   "selections": [
     {
@@ -382,8 +382,8 @@
     {
       "cluster": "openwrt_luci",
       "mine_re_ranked": false,
-      "selected_bucket": "network-js-dscp",
-      "selection_basis": "named-next-unused",
+      "selected_bucket": null,
+      "selection_basis": "unregistered-next",
       "used_buckets": [
         "form-validator-alphabets"
       ]
@@ -391,8 +391,8 @@
     {
       "cluster": "openwrt_packages",
       "mine_re_ranked": false,
-      "selected_bucket": "qosify-network-dscp",
-      "selection_basis": "named-next-unused",
+      "selected_bucket": null,
+      "selection_basis": "unregistered-next",
       "used_buckets": [
         "ddns-query-and-escape-image",
         "image-and-ddns-json",

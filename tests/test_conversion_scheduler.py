@@ -71,22 +71,41 @@ def test_selects_first_unused_progression_bucket(tmp_path):
 
 
 def test_progression_exhausted_no_wrap(tmp_path):
-    """Luna r1 #1 + CodeRabbit #582: when every progression bucket is used,
-    no next bucket exists — nothing is selected (no wrap, no sentinel)."""
+    """Luna r1 #1 + CodeRabbit #582 + r4: when every registered progression
+    bucket is used, the DESIGN tails (qosify/network-js/firewall-dscp) are
+    NOT emitted until registered — basis 'unregistered-next', nothing
+    selected (no wrap, no sentinel)."""
     cs = _load_cs()
     gen = tmp_path / "generated"
     _gate_decision(gen, "openwrt_packages")
     rows = [
         _row("openwrt_packages_w1", b) for b in
         ("validator-charsets-and-captures", "image-and-ddns-json",
-         "ddns-query-and-escape-image", "qosify-network-dscp")
+         "ddns-query-and-escape-image")
     ]
     sched = cs.build_schedule(rows, queues_dir=tmp_path / "queues",
                               gate_decisions_dir=gen,
                               dispositions_path=tmp_path / "d.jsonl")
     sel = sched["selections"][0]
     assert sel["selected_bucket"] is None
-    assert sel["selection_basis"] == "none-available"
+    assert sel["selection_basis"] == "unregistered-next"  # design tail refused
+
+
+def test_design_tail_never_emitted_unregistered(tmp_path):
+    """Luna r4: qosify/network-js/firewall-dscp are NOT in the committed
+    ledger — the scheduler must never emit them as selected_bucket."""
+    cs = _load_cs()
+    gen = tmp_path / "generated"
+    _gate_decision(gen, "openwrt_packages")
+    rows = [_row("openwrt_packages_w1", b) for b in
+            ("validator-charsets-and-captures", "image-and-ddns-json",
+             "ddns-query-and-escape-image")]
+    sched = cs.build_schedule(rows, queues_dir=tmp_path / "queues",
+                              gate_decisions_dir=gen,
+                              dispositions_path=tmp_path / "d.jsonl")
+    for sel in sched["selections"]:
+        assert sel["selected_bucket"] not in (
+            "qosify-network-dscp", "network-js-dscp", "firewall-dscp")
 
 
 def test_queue_blocks_only_pending_sites(tmp_path):
@@ -150,14 +169,34 @@ def test_malformed_queue_fails_closed(tmp_path):
                               dispositions_path=tmp_path / "d.jsonl")
     assert sched["selections"][0]["selected_bucket"] == "ddns-query-and-escape-image"
 
-    # status-less entry -> fail closed (block); progression continues to
-    # qosify-network-dscp (no queue -> selected).
+    # status-less entry -> fail closed (block); the registered progression
+    # is now exhausted and the qosify design tail is UNREGISTERED -> refused.
     (queues_dir / "ddns-query-and-escape-image.json").write_text(
         json.dumps({"candidate_sites": [{"site": "s0"}]}) + "\n", encoding="utf-8")
     sched = cs.build_schedule(rows, queues_dir=queues_dir,
                               gate_decisions_dir=gen,
                               dispositions_path=tmp_path / "d.jsonl")
-    assert sched["selections"][0]["selected_bucket"] == "qosify-network-dscp"
+    assert sched["selections"][0]["selected_bucket"] is None
+    assert sched["selections"][0]["selection_basis"] == "unregistered-next"
+
+
+def test_unknown_queue_status_fails_closed(tmp_path):
+    """Luna r4: a status OUTSIDE the queue vocabulary (e.g. 'bogus') is
+    malformed — the queue must BLOCK, never permit selection."""
+    cs = _load_cs()
+    gen = tmp_path / "generated"
+    _gate_decision(gen, "openwrt_packages")
+    queues_dir = tmp_path / "queues"
+    queues_dir.mkdir(parents=True, exist_ok=True)
+    (queues_dir / "image-and-ddns-json.json").write_text(
+        json.dumps({"candidate_sites": [{"site": "s0", "status": "bogus"}]}) + "\n",
+        encoding="utf-8")
+    rows = [_row("openwrt_packages_w1", "validator-charsets-and-captures")]
+    sched = cs.build_schedule(rows, queues_dir=queues_dir,
+                              gate_decisions_dir=gen,
+                              dispositions_path=tmp_path / "d.jsonl")
+    # image-and-ddns-json blocked (unknown status) -> ddns-query selected.
+    assert sched["selections"][0]["selected_bucket"] == "ddns-query-and-escape-image"
 
 
 def test_malformed_gate_artifact_skipped(tmp_path):

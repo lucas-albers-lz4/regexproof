@@ -31,26 +31,39 @@ PRODUCTIVE_SHARE = 0.7   # productive (used) buckets get 70% of reserved capacit
 NOVEL_SHARE = 0.2        # novel-idiom exploration
 UNBIASED_SHARE = 0.1     # small unbiased exploration slice (always >= 1)
 
-# CodeRabbit #582: the ledger's committed idiom_bucket values are the ONLY
-# vocabulary the scheduler may emit — cluster names like 'openwrt_luci' are
-# never bucket values. Ordered per-cluster progression (first unused wins);
-# the design's named next (qosify/network.js/firewall DSCP) extends the tail.
+# CodeRabbit #582 + Luna r4: the ledger's committed idiom_bucket values are
+# the ONLY vocabulary the scheduler may emit. Ordered per-cluster progression
+# (first unused wins). DESIGN_TAIL_BUCKETS are the #551 Phase E named nexts
+# (qosify/network.js/firewall DSCP) that are NOT yet registered in the
+# committed ledger — the scheduler REFUSES to emit them until they appear
+# (fail closed: an unregistered bucket is never a valid selected_bucket).
 BUCKET_PROGRESSION: dict[str, list[str]] = {
     "openwrt_packages": [
         "validator-charsets-and-captures",
         "image-and-ddns-json",
         "ddns-query-and-escape-image",
-        "qosify-network-dscp",
     ],
     "openwrt_luci": [
         "form-validator-alphabets",
-        "network-js-dscp",
-        "firewall-dscp",
     ],
+}
+
+DESIGN_TAIL_BUCKETS: dict[str, list[str]] = {
+    "openwrt_packages": ["qosify-network-dscp"],
+    "openwrt_luci": ["network-js-dscp", "firewall-dscp"],
 }
 
 DEFAULT_QUEUES_DIR = ROOT / "properties" / "conversion_queue"
 PENDING_SITE_STATUSES = frozenset({"emitted", "claimed"})
+# Luna r4: the queue's own vocabulary (regexproof/mine/conversion_queue.py)
+# — ANY status outside it is malformed and must fail closed.
+KNOWN_SITE_STATUSES = PENDING_SITE_STATUSES | frozenset({
+    "contracted",
+    "skipped_unreachable",
+    "skipped_out_of_scope",
+    "skipped_no_response",
+    "skipped_duplicate",
+})
 # Luna r2 #1: a wont-file pattern class that recurs this many times on a
 # target CORPUS denies it as the named-next bucket (deterministic policy;
 # single occurrences are noise, not a pattern).
@@ -136,9 +149,10 @@ def _queue_has_pending(queues_dir: pathlib.Path, bucket: str) -> bool:
     PENDING sites (emitted/claimed) — a fully contracted/skipped queue is
     closed work and does not block (Luna r1 #2: file existence alone is
     wrong). An EMPTY candidate_sites list is the valid empty_queue() shape
-    and does NOT block (Luna r2 #2). ANY malformed entry (non-dict or
-    status-less) FAILS CLOSED — the queue is treated as blocking
-    (CodeRabbit #582: malformed site data must never permit selection)."""
+    and does NOT block (Luna r2 #2). ANY malformed entry (non-dict,
+    status-less, or a status OUTSIDE the queue's own vocabulary) FAILS
+    CLOSED — malformed site data must never permit selection (CodeRabbit
+    #582, Luna r4)."""
     qpath = queues_dir / f"{bucket}.json"
     if not qpath.exists():
         return False
@@ -155,6 +169,8 @@ def _queue_has_pending(queues_dir: pathlib.Path, bucket: str) -> bool:
         status = str(s.get("status") or "").strip()
         if not status:
             return True  # status-less entry — fail closed
+        if status not in KNOWN_SITE_STATUSES:
+            return True  # unknown status — fail closed (Luna r4)
         if status in PENDING_SITE_STATUSES:
             return True
     return False  # empty or all-closed queue — does not block
@@ -164,15 +180,18 @@ def next_unused_bucket(
     cluster: str,
     used: set[str],
     queues_dir: pathlib.Path,
-) -> str | None:
-    """The first bucket in the cluster's ORDERED progression that is NOT yet
-    used and has no PENDING queue — committed idiom_bucket vocabulary only
-    (CodeRabbit #582). No wrap-around: when the progression is exhausted
-    the cluster has no next bucket."""
+) -> tuple[str | None, str]:
+    """(bucket, basis) for the cluster's next bucket. Registered progression
+    buckets (committed ledger vocabulary) win first; DESIGN_TAIL_BUCKETS
+    (qosify/network-js/firewall-dscp) are NEVER emitted until they appear
+    in the committed ledger — their basis is 'unregistered-next' (Luna r4).
+    No wrap-around: progression exhausted -> none-available."""
     for candidate in BUCKET_PROGRESSION.get(cluster, []):
         if candidate not in used and not _queue_has_pending(queues_dir, candidate):
-            return candidate
-    return None  # progression exhausted — no unused bucket available
+            return candidate, "named-next-unused"
+    if DESIGN_TAIL_BUCKETS.get(cluster):
+        return None, "unregistered-next"
+    return None, "none-available"
 
 
 def build_schedule(
@@ -190,7 +209,7 @@ def build_schedule(
     selections: list[dict] = []
     for cluster in clusters:
         used_set = used.get(cluster, set())
-        nxt = next_unused_bucket(cluster, used_set, queues_dir)
+        nxt, nxt_basis = next_unused_bucket(cluster, used_set, queues_dir)
         # #551 Phase E / Luna r1 #3 + r2 #1: wont-file pattern classes feed
         # selection via a DETERMINISTIC deny-list keyed on the target's
         # CORPUS (the row's corpus IS the bucket name — classes like
@@ -206,8 +225,7 @@ def build_schedule(
                 "used_buckets": sorted(used_set),
                 "selected_bucket": None if wont_blocked else nxt,
                 "selection_basis": (
-                    "wont-file-blocked" if wont_blocked
-                    else ("named-next-unused" if nxt else "none-available")
+                    "wont-file-blocked" if wont_blocked else nxt_basis
                 ),
                 # #550/#551: NO mine re-rank by converted-pattern similarity —
                 # the scheduler never touches ranking; only bucket selection.
