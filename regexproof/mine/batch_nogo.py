@@ -64,12 +64,11 @@ def fold_auto_nogo(
         out_path = generated_dir / safe
     out_path.parent.mkdir(parents=True, exist_ok=True)
     pending = out_path.with_name(out_path.name + ".pending")
-    if not pending.exists():
-        pending.write_text(
-            json.dumps(decision, indent=2, sort_keys=True) + "\n", encoding="utf-8"
-        )
-    # Resume path: keep an existing .pending journal and retry ledger +
-    # install. Never delete it on mark_auto_filed failure.
+    pending.write_text(
+        json.dumps(decision, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
+    # Always rewrite pending from this inventory. Keep the file on
+    # OSError so a transient install can retry; never install a stale journal.
     try:
         audit.mark_auto_filed(ledger_path, url)
     except ValueError as exc:
