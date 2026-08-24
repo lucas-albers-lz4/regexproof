@@ -22,8 +22,7 @@ timeout must not dominate).
    candidate that will become `go` or `triage-trial`.
 2. Stop when the gate decision is authored (`bulk-review-staged.py --go` /
    `--triage-trial` or `author-gate-decision.py --human`).
-3. Pass `--active-minutes <float>` on the promote CLI. The CLI appends one
-   jsonl row with a fresh `measurement_id` (uuid4). Do not reuse ids.
+3. Pass `--active-minutes <float>` on the promote CLI (`bulk-review-staged.py --go` / `--triage-trial`, or `author-gate-decision.py --human`). The CLI appends one jsonl row with a fresh `measurement_id` (uuid4). Do not reuse ids.
 4. Do **not** record active minutes on deterministic `--no-go` (not a
    human-reviewed survivor).
 

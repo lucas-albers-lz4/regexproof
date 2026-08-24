@@ -363,10 +363,31 @@ def main(argv: list[str] | None = None) -> int:
     group.add_argument("--demote-retain-corpus", action="store_true")
     args = ap.parse_args(argv)
 
+    if args.active_minutes is not None and args.active_minutes < 0:
+        raise SystemExit("bulk-review: --active-minutes must be >= 0")
+    if args.active_minutes is not None and (args.no_go or args.requeue or args.demote_retain_corpus):
+        raise SystemExit(
+            "bulk-review: --active-minutes applies only to --go / --triage-trial"
+        )
+
     # Luna r11 #4: complete any pending journals BEFORE loading the draft —
     # a retry after a crash between the ledger commit and os.replace must
     # not depend on the draft still being present.
     if _resume_pending_installs(args.ledger, GEN):
+        if args.active_minutes is not None:
+            from regexproof.mine.operator_minutes import append_row
+
+            draft = _load_draft(args.draft)
+            url = _url_of(draft)
+            pin = str(draft.get("corpus_pin") or draft.get("pin") or "")
+            decision = "go" if args.go else "triage-trial"
+            append_row(
+                url=url,
+                pin=pin,
+                decision=decision,
+                source="stopwatch",
+                active_minutes=args.active_minutes,
+            )
         print("bulk-review: resumed pending install(s); run again for new work")
         return 0
 
