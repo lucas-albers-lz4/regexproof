@@ -280,6 +280,27 @@ def contract(
                 f"conversion_queue: contract refused — {site} status is "
                 f"{row['status']!r}, not 'claimed'"
             )
+        # Final-gate #3 (MEDIUM): a claimed row must not be contractable
+        # after its wave closed/aborted. Enforced ONLY when the caller
+        # opts into the corpus-lock regime by passing lock_log (the
+        # events-log path) — queue-only usage has no wave context. The
+        # row's claim snapshot (wave_id) must match the CURRENT active
+        # wave, else a contract from a stale wave silently lands in a
+        # closed queue.
+        if lock_log is not None:
+            from regexproof.mine.corpus_lock import _active_wave_id
+
+            try:
+                current_wave = _active_wave_id(cluster, lock_log)
+            except SystemExit:
+                current_wave = ""
+            claimed_wave = str(row.get("wave_id") or "")
+            if claimed_wave and current_wave != claimed_wave:
+                raise SystemExit(
+                    f"conversion_queue: contract refused — {site} claimed under "
+                    f"wave {claimed_wave!r} but active wave is {current_wave!r} "
+                    "(stale claim after close/abort)"
+                )
         if (row.get("provenance") or "human") == "stub":
             raise SystemExit(
                 f"conversion_queue: contract refused — {site} is a stub "

@@ -332,7 +332,14 @@ def two_proportion_test(
     (``one_sided='smaller'``). The baseline is the committed Phase 0 artifact
     value (14.9%), treated as a FIXED constant — not a random draw — so the
     test is a one-proportion z-test of the window against the fixed null
-    proportion, using the null standard error sqrt(b0*(1-b0)/n).
+    proportion, using the null standard error sqrt(b0*(1-b0)/n) WITH the
+    1/(2n) continuity correction (the named spec implementation is
+    ``statsmodels.stats.proportion.proportions_ztest`` with
+    ``correction=True``, ``alternative='smaller'`` — #550 REV-6).
+
+    Final-gate #6 (MEDIUM): the correction is DECISION-RELEVANT at the
+    boundary — e.g. k=3/n=50 uncorrected p=0.0463 (<0.05, fires) vs
+    corrected p≈0.0694 (does not fire). The gate must match the spec.
 
     Returns ``{p_value, window_rate, baseline, z, fires, n_window}`` where
     ``fires`` means "admission yield too low to justify scale" and BLOCKS
@@ -346,12 +353,15 @@ def two_proportion_test(
     p_hat = k_window / n_window
     # Null standard error (fixed baseline proportion, not p_hat).
     se = math.sqrt(baseline * (1.0 - baseline) / n_window)
+    # Continuity correction 1/(2n), applied toward the null (shrink the
+    # deviation by half a trial's worth of probability mass).
+    cc = 1.0 / (2.0 * n_window) if n_window > 0 else 0.0
     if one_sided == "smaller":
-        z = (p_hat - baseline) / se if se > 0 else 0.0
+        z = (p_hat + cc - baseline) / se if se > 0 else 0.0
         p_value = _normal_cdf(z)  # P(Z <= z) under H0
         fires = p_value < significance
     elif one_sided == "greater":
-        z = (p_hat - baseline) / se if se > 0 else 0.0
+        z = (p_hat - cc - baseline) / se if se > 0 else 0.0
         p_value = 1.0 - _normal_cdf(z)
         fires = p_value < significance
     else:

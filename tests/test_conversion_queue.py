@@ -149,6 +149,56 @@ def test_stub_never_contracts(tmp_path):
         )
 
 
+def test_contract_refused_after_wave_close(tmp_path):
+    """Final-gate #3: a claimed row must not contract after its wave
+    closed — the corpus-lock regime (lock_log passed) refuses the stale
+    claim."""
+    from regexproof.mine.corpus_lock import wave_close
+
+    _, q = _queue(tmp_path)
+    site = q["candidate_sites"][0]["site"]
+    log = _open_wave(tmp_path)
+    cq.claim(
+        q["cluster"], site,
+        corpus_status="gated:go",
+        ledger_state={}, generation=0, root=tmp_path, lock_log=log,
+    )
+    wave_close(q["cluster"], "ow_w1", log=log)  # wave closed, no queue root
+    with pytest.raises(SystemExit, match="stale claim after close"):
+        cq.contract(
+            q["cluster"], site,
+            contract={"guarantee": "x", "input_source": "y"},
+            root=tmp_path, lock_log=log,
+        )
+
+
+def test_contract_allowed_in_active_wave(tmp_path):
+    """Final-gate #3: a claimed row CONTRACTS normally while its wave is
+    still active (corpus-lock regime, lock_log passed)."""
+    import json
+
+    _, q = _queue(tmp_path)
+    site = q["candidate_sites"][0]["site"]
+    log = _open_wave(tmp_path)
+    cq.claim(
+        q["cluster"], site,
+        corpus_status="gated:go",
+        ledger_state={}, generation=0, root=tmp_path, lock_log=log,
+    )
+    # Human adoption replaces stub provenance (queue state), then contracts.
+    q = cq.load_queue(q["cluster"], root=tmp_path)
+    q["candidate_sites"][0]["provenance"] = "human"
+    (tmp_path / f"{q['cluster']}.json").write_text(
+        json.dumps(q, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
+    row = cq.contract(
+        q["cluster"], site,
+        contract={"guarantee": "x", "input_source": "y"},
+        root=tmp_path, lock_log=log,
+    )
+    assert row["status"] == "contracted"
+
+
 def test_contract_after_human_adoption(tmp_path):
     _, q = _queue(tmp_path)
     site = q["candidate_sites"][0]["site"]
@@ -488,6 +538,36 @@ def test_stub_emitter_end_to_end(tmp_path):
     for row in q["candidate_sites"]:
         assert row["status"] == "emitted"
         assert row.get("provenance") == "stub"
+
+
+def test_emitter_refuses_noncanonical_output(tmp_path):
+    """Final-gate #5: --output MUST be the canonical <cluster>.json name —
+    a custom filename would move the artifact where scheduler/queue
+    consumers never look."""
+    import subprocess
+
+    ndjson = tmp_path / "in.ndjson"
+    ndjson.write_text(
+        json.dumps(
+            {"site": "net/demo/files/etc/init.d/demo:1:token_1",
+             "corpus": "openwrt_packages", "wave_id": "ow_w1",
+             "generation": 1}
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    bad = tmp_path / "queue" / "custom-name.json"
+    r = subprocess.run(
+        [
+            sys.executable, str(ROOT / "scripts" / "emit-conversion-queue.py"),
+            "--ndjson", str(ndjson), "--corpus", "openwrt_packages",
+            "--wave-id", "ow_w1", "--generation", "1", "-o", str(bad),
+        ],
+        capture_output=True, text=True,
+    )
+    assert r.returncode != 0
+    assert "canonical" in r.stderr
+    assert not bad.exists()
 
 
 def test_stub_emitter_real_corpus_nonempty(tmp_path):

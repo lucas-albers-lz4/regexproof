@@ -296,9 +296,15 @@ def _load_ledger_rows(ledger_path: pathlib.Path) -> list[dict]:
     """Load conversion rows from the COMMITTED conversion-ledger.json
     aggregate (per_wave section: (wave_id, idiom_bucket, ...) rows) — the
     scheduler's used-bucket source. Falls back to raw ndjson if the path
-    ends in .ndjson."""
+    ends in .ndjson. Final-gate #4 (MEDIUM): MISSING or MALFORMED input
+    FAILS CLOSED — a silently-empty history would let the scheduler
+    re-select a first bucket already consumed by a prior wave (duplicate
+    selection)."""
     if not ledger_path.exists():
-        return []
+        raise SystemExit(
+            f"conversion-scheduler: ledger {ledger_path} is missing — "
+            "refusing to schedule with empty history (fail closed)"
+        )
     if ledger_path.suffix == ".ndjson":
         rows: list[dict] = []
         for line in ledger_path.read_text(encoding="utf-8").splitlines():
@@ -307,17 +313,26 @@ def _load_ledger_rows(ledger_path: pathlib.Path) -> list[dict]:
                 continue
             try:
                 rows.append(json.loads(line))
-            except ValueError:
-                continue
+            except ValueError as exc:
+                raise SystemExit(
+                    f"conversion-scheduler: malformed ledger line in "
+                    f"{ledger_path}: {exc} — refusing to schedule (fail closed)"
+                ) from exc
         return rows
     try:
         data = json.loads(ledger_path.read_text(encoding="utf-8"))
-    except ValueError:
-        return []
+    except ValueError as exc:
+        raise SystemExit(
+            f"conversion-scheduler: ledger {ledger_path} is not valid JSON: "
+            f"{exc} — refusing to schedule (fail closed)"
+        ) from exc
     per_wave = data.get("per_wave") if isinstance(data, dict) else None
     if isinstance(per_wave, list):
         return per_wave
-    return []
+    raise SystemExit(
+        f"conversion-scheduler: ledger {ledger_path} has no per_wave list — "
+        "refusing to schedule with empty history (fail closed)"
+    )
 
 
 if __name__ == "__main__":

@@ -15,6 +15,8 @@ import json
 import pathlib
 import sys
 
+import pytest
+
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
@@ -391,7 +393,14 @@ def test_cache_interplay_note_present():
 def test_deterministic_with_at(tmp_path):
     cs = _load_cs()
     out = tmp_path / "schedule.json"
-    rc = cs.main(["--ledger", str(tmp_path / "missing.ndjson"),
+    # Final-gate #4: the ledger must EXIST (fail-closed on missing input) —
+    # a real per_wave aggregate with one row.
+    ledger = tmp_path / "conversion-ledger.json"
+    ledger.write_text(json.dumps({"per_wave": [
+        {"wave_id": "openwrt_packages_w1",
+         "idiom_bucket": "validator-charsets-and-captures"},
+    ]}) + "\n", encoding="utf-8")
+    rc = cs.main(["--ledger", str(ledger),
                   "--gate-decisions", str(tmp_path / "missing"),
                   "--dispositions", str(tmp_path / "missing"),
                   "--queues-dir", str(tmp_path / "queues"),
@@ -400,3 +409,17 @@ def test_deterministic_with_at(tmp_path):
     d = json.loads(out.read_text(encoding="utf-8"))
     assert d["generated_at"] == "2026-08-24T03:00:00Z"
     assert list(d.keys()) == sorted(d.keys())  # canonical sorted keys
+
+
+def test_ledger_missing_fails_closed(tmp_path):
+    """Final-gate #4: a MISSING ledger is refused — a silently-empty
+    history would let the scheduler re-select an already-consumed first
+    bucket."""
+    cs = _load_cs()
+    out = tmp_path / "schedule.json"
+    with pytest.raises(SystemExit, match="missing"):
+        cs.main(["--ledger", str(tmp_path / "missing.ndjson"),
+                 "--gate-decisions", str(tmp_path / "missing"),
+                 "--dispositions", str(tmp_path / "missing"),
+                 "--queues-dir", str(tmp_path / "queues"),
+                 "--out", str(out), "--at", "2026-08-24T03:00:00Z"])

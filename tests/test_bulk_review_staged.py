@@ -386,6 +386,67 @@ def test_lightweight_batch_probe_draft_enriched(tmp_path, monkeypatch):
     assert dec["decision"] == "no-go"
 
 
+def test_embedded_probe_wrong_url_refused(tmp_path, monkeypatch):
+    """Final-gate #1 (HIGH): a draft that EMBEDS probe evidence for a
+    DIFFERENT candidate is refused — embedded probes are validated for
+    identity, not trusted by presence alone."""
+    brs = _load_brs()
+    gen = tmp_path / "generated"
+    gen.mkdir()
+    monkeypatch.setattr(brs, "GEN", gen)
+    draft = _write_draft(tmp_path, {
+        "url": "https://x/y", "pin": "a" * 40, "corpus": "ow",
+        "candidate_url": "https://x/y",
+        "probe": {"candidate_url": "https://github.com/other/repo",
+                  "pin": "b" * 40, "security_boundary": "deterministic-false",
+                  "regex_sites": 1},
+    })
+    ledger = _write_ledger(tmp_path)
+    with pytest.raises(SystemExit, match="mismatched embedded probe"):
+        brs.main(["--draft", str(draft), "--no-go", "--ledger", str(ledger)])
+
+
+def test_embedded_probe_wrong_pin_refused(tmp_path, monkeypatch):
+    """Final-gate #1 (HIGH): an embedded probe with a CONFLICTING pin is
+    refused even when the URL matches."""
+    brs = _load_brs()
+    gen = tmp_path / "generated"
+    gen.mkdir()
+    monkeypatch.setattr(brs, "GEN", gen)
+    draft = _write_draft(tmp_path, {
+        "url": "https://x/y", "pin": "a" * 40, "corpus": "ow",
+        "candidate_url": "https://x/y",
+        "probe": {"candidate_url": "https://x/y", "pin": "b" * 40,
+                  "security_boundary": "deterministic-false",
+                  "regex_sites": 1},
+    })
+    ledger = _write_ledger(tmp_path)
+    with pytest.raises(SystemExit, match="do not match draft pins"):
+        brs.main(["--draft", str(draft), "--no-go", "--ledger", str(ledger)])
+
+
+def test_embedded_probe_matching_accepted(tmp_path, monkeypatch):
+    """Final-gate #1 (HIGH): an embedded probe whose URL AND pin match the
+    draft is accepted — the validation must not reject legitimate drafts."""
+    brs = _load_brs()
+    gen = tmp_path / "generated"
+    gen.mkdir()
+    monkeypatch.setattr(brs, "GEN", gen)
+    monkeypatch.setattr(brs, "default_output_path",
+                        lambda corpus, repo_root=None: gen / f"{corpus}_gate_decision.json")
+    draft = _write_draft(tmp_path, {
+        "url": "https://x/y", "pin": "a" * 40, "corpus": "ow",
+        "candidate_url": "https://x/y",
+        "probe": {"candidate_url": "https://x/y", "pin": "a" * 40,
+                  "security_boundary": "deterministic-false",
+                  "regex_sites": 1},
+    })
+    ledger = _write_ledger(tmp_path)
+    # Reaches the no-go path (author_auto) without a probe-evidence error.
+    rc = brs.main(["--draft", str(draft), "--no-go", "--ledger", str(ledger)])
+    assert rc == 0
+
+
 def test_lightweight_draft_without_evidence_fails_closed(tmp_path, monkeypatch):
     """Luna r5 #1: a lightweight draft with NO probe evidence anywhere must
     fail closed with a clear routing error."""
