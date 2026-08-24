@@ -352,9 +352,12 @@ def main(argv: list[str] | None = None) -> int:
     lo_ci, hi_ci, ci_method = _auc_delta_ci(v1_scores, v15_scores, labels, seed=seed)
     # precision@K descriptive only (K=30 frozen).
     k = int(freeze["eval"]["k_frozen"])
-    top = sorted(range(len(test)), key=lambda i: v15_scores[i], reverse=True)[:k]
-    top_pos = sum(labels[i] for i in top)
+    top_v15 = sorted(range(len(test)), key=lambda i: v15_scores[i], reverse=True)[:k]
+    top_v1 = sorted(range(len(test)), key=lambda i: v1_scores[i], reverse=True)[:k]
+    top_pos = sum(labels[i] for i in top_v15)
+    top_pos_v1 = sum(labels[i] for i in top_v1)
     cp = clopper_pearson(top_pos, k)
+    cp_v1 = clopper_pearson(top_pos_v1, k)
     # Cap-raise calibration note: v1.5 overlay changes scores; record the
     # observed delta so the cap logic is calibrated, not silently re-raised.
     mean_delta = round(
@@ -375,6 +378,7 @@ def main(argv: list[str] | None = None) -> int:
             "bootstrap_ci_95_delta": [round(lo_ci, 6), round(hi_ci, 6)],
             "bootstrap_method": ci_method,
             "precision_at_k": {"k": k, "positive_in_top_k": top_pos, "clopper_pearson_95": [round(cp[0], 6), round(cp[1], 6)]},
+            "precision_at_k_v1": {"k": k, "positive_in_top_k": top_pos_v1, "clopper_pearson_95": [round(cp_v1[0], 6), round(cp_v1[1], 6)]},
             "mean_score_delta": mean_delta,
             "cap_raise_calibration_note": "overlay shifts scores by "
             f"{mean_delta} on average; any cap raise must be recalibrated, "
@@ -385,12 +389,21 @@ def main(argv: list[str] | None = None) -> int:
         "flip_to_v15": flips,
         "action": "flip live drain to score-v1.5" if flips else "keep score-v1",
         "note": "v2 comparison is label reproduction only, never validation",
+        "live_drain": "score-v1 (rank-mine-candidates.py / docs/MINE-SETUP.md)",
+        "designed_mismatch": (
+            "Eval already flipped to v1.5 (flip_to_v15). Live drain is still "
+            "v1. AUC is a global-health statistic; the operational flip of "
+            "the probe stream is a separate, currently unowned decision. A "
+            "firing escape while v1.5 sits unflipped on live drain is a "
+            "designed outcome. No second top-K flip rule (freeze is AUC-only)."
+        ),
     }
     out_path.write_text(json.dumps(decision, indent=2, sort_keys=True) + "\n")
     print(f"eval: n={n} pos={pos} test={len(test)}")
     print(f"  auc_v1={auc_v1:.4f} auc_v15={auc_v15:.4f} delta={auc_v15 - auc_v1:+.4f}")
     print(f"  bootstrap95_delta=[{lo_ci:.4f}, {hi_ci:.4f}] -> flip={flips}")
-    print(f"  precision@{k}={top_pos}/{k} CP95=[{cp[0]:.4f}, {cp[1]:.4f}] (descriptive)")
+    print(f"  precision@{k} v1.5={top_pos}/{k} CP95=[{cp[0]:.4f}, {cp[1]:.4f}] (descriptive)")
+    print(f"  precision@{k} v1={top_pos_v1}/{k} CP95=[{cp_v1[0]:.4f}, {cp_v1[1]:.4f}] (descriptive)")
     print(f"  wrote {out_path.name}")
     return 0
 

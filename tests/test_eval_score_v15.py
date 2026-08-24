@@ -32,6 +32,9 @@ def test_flip_decision_exists_and_is_shape_checked():
     )
     # precision@K is descriptive only.
     assert d["eval"]["precision_at_k"]["k"] == 30
+    assert d["eval"]["precision_at_k_v1"]["k"] == 30
+    assert "designed_mismatch" in d
+    assert "no second top-K flip" in d["designed_mismatch"].lower() or "No second top-K" in d["designed_mismatch"]
     assert "cap_raise_calibration_note" in d["eval"]
 
 
