@@ -43,7 +43,7 @@ def test_append_stopwatch_row(tmp_path: Path):
     assert s["wall_minutes"]["median"] is None
 
 
-def test_stopwatch_row_is_idempotent_per_url_pin(tmp_path: Path):
+def test_stopwatch_rows_get_fresh_measurement_ids(tmp_path: Path):
     log = tmp_path / "m.jsonl"
     first = append_row(
         url="https://github.com/x/y", pin="a" * 40, decision="go",
@@ -53,8 +53,8 @@ def test_stopwatch_row_is_idempotent_per_url_pin(tmp_path: Path):
         url="https://github.com/x/y", pin="a" * 40, decision="go",
         source="stopwatch", active_minutes=9.0, path=log,
     )
-    assert second["measurement_id"] == first["measurement_id"]
-    assert load_rows(log)[0]["active_minutes"] == 4.5
+    assert second["measurement_id"] != first["measurement_id"]
+    assert len(load_rows(log)) == 2
     log = tmp_path / "m.jsonl"
     with pytest.raises(SystemExit, match="not a human-reviewed survivor"):
         append_row(

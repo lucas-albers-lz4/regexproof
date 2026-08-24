@@ -52,14 +52,6 @@ def append_row(
     }
     dest = pathlib.Path(path) if path is not None else LOG_PATH
     dest.parent.mkdir(parents=True, exist_ok=True)
-    if dest.is_file() and source == "stopwatch":
-        for existing in load_rows(dest):
-            if (
-                existing.get("url") == url
-                and existing.get("pin") == pin
-                and existing.get("source") == "stopwatch"
-            ):
-                return existing
     with dest.open("a", encoding="utf-8") as fh:
         fh.write(json.dumps(row, sort_keys=True) + "\n")
     return row
