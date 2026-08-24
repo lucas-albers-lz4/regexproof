@@ -532,9 +532,10 @@ def test_filing_failure_preserves_prior_artifact(tmp_path, monkeypatch):
 
 
 def test_install_failure_resumes_from_journal(tmp_path, monkeypatch):
-    """Luna r10: if os.replace fails AFTER the ledger commits, the .pending
-    journal is retained and a re-run completes the install without
-    re-authoring (ledger already records the decision)."""
+    """Luna r10/r11: if os.replace fails AFTER the ledger commits, the
+    .pending journal is retained; a re-run completes the install WITHOUT
+    re-authoring — even with the draft MISSING (r11 #4: resume is
+    draft-independent)."""
     brs = _load_brs()
     gen = tmp_path / "generated"
     gen.mkdir()
@@ -558,7 +559,7 @@ def test_install_failure_resumes_from_journal(tmp_path, monkeypatch):
             raise OSError("simulated rename failure")
         return real_replace(src, dst)
     monkeypatch.setattr(brs.os, "replace", _fail_artifact_replace)
-    with pytest.raises(SystemExit, match="re-run the same command"):
+    with pytest.raises(SystemExit, match="re-run to retry"):
         brs.main(["--draft", str(draft), "--no-go", "--ledger", str(ledger)])
     # Journal retained; ledger already records auto_filed; artifact NOT installed.
     assert (gen / "ow_gate_decision.json.pending").exists()
@@ -566,12 +567,47 @@ def test_install_failure_resumes_from_journal(tmp_path, monkeypatch):
     cand = next(iter(json.loads(ledger.read_text(encoding="utf-8"))["candidates"]))
     assert cand["audit"]["auto_filed"] is True
 
-    # Re-run: the journal + already-filed ledger complete the install.
+    # Re-run with the DRAFT DELETED: the journal + already-filed ledger
+    # complete the install without the draft (r11 #4).
     monkeypatch.setattr(brs.os, "replace", real_replace)
+    draft.unlink()
     rc = brs.main(["--draft", str(draft), "--no-go", "--ledger", str(ledger)])
     assert rc == 0
     assert (gen / "ow_gate_decision.json").exists()
     assert not (gen / "ow_gate_decision.json.pending").exists()
+
+
+def test_resume_refuses_re_evaluate_candidate(tmp_path, monkeypatch):
+    """Luna r11 #2: a pending journal for a candidate now flagged
+    re_evaluate=true is NEVER reinstalled — mandatory human re-review is
+    not skipped by the resume path."""
+    brs = _load_brs()
+    gen = tmp_path / "generated"
+    gen.mkdir()
+    monkeypatch.setattr(brs, "GEN", gen)
+    monkeypatch.setattr(brs, "default_output_path",
+                        lambda corpus, repo_root=None: gen / f"{corpus}_gate_decision.json")
+    from regexproof.mine.ledger import empty_ledger
+
+    url = "https://x/y"
+    ledger = tmp_path / "ledger.json"
+    ld = empty_ledger()
+    ld["candidates"].append({"url": url, "status": "mined",
+                             "audit": {"re_evaluate": True,  # sampler flagged it
+                                       "auto_filed": True}})
+    ledger.write_text(json.dumps(ld, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    # A pending journal from a pre-flag crash.
+    (gen / "ow_gate_decision.json.pending").write_text(
+        json.dumps({"candidate_url": url, "decision": "no-go"}) + "\n",
+        encoding="utf-8")
+    # The resume scan runs BEFORE the draft is touched — a missing draft is
+    # fine here.
+    with pytest.raises(SystemExit, match="human re-review required"):
+        brs.main(["--draft", str(tmp_path / "missing.json"), "--no-go",
+                  "--ledger", str(ledger)])
+    # Journal retained for the human to resolve — NOT installed.
+    assert (gen / "ow_gate_decision.json.pending").exists()
+    assert not (gen / "ow_gate_decision.json").exists()
 
 
 def test_demote_records_retained_location(tmp_path):

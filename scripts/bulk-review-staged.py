@@ -176,6 +176,69 @@ def _reviewer_required(args, verb: str) -> None:
         raise SystemExit(f"bulk-review: {verb} requires --reviewer")
 
 
+def _resume_pending_installs(ledger_path: pathlib.Path, gen: pathlib.Path) -> bool:
+    """Complete any `.pending` decision journals whose ledger state is
+    already filed (Luna r10/r11: a crash between the ledger commit and
+    os.replace left the journal behind).
+
+    Draft-INDEPENDENT (runs before _load_draft — a missing or changed
+    draft cannot block the retry). Each journal's payload is verified
+    against the ledger (candidate exists + filed state matches the
+    payload's decision); a candidate now flagged re_evaluate=true is NEVER
+    reinstated (human re-resolution is mandatory, r11 #2); install failure
+    keeps the journal with a controlled error (r11 #1). Returns True when
+    any install completed.
+    """
+    from regexproof.mine.ledger import load_ledger
+
+    ledger = load_ledger(ledger_path)
+    installed = 0
+    for pending in sorted(gen.glob("*_gate_decision.json.pending")):
+        out_path = pending.with_name(pending.name[: -len(".pending")])
+        try:
+            payload = json.loads(pending.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            pending.unlink(missing_ok=True)  # corrupt journal — clean, fail-closed
+            continue
+        url = str(payload.get("candidate_url") or "")
+        decision = str(payload.get("decision") or "")
+        if not url or decision not in ("go", "no-go", "triage-trial"):
+            pending.unlink(missing_ok=True)  # unverifiable payload — stale
+            continue
+        cand = find_candidate(ledger, url)
+        if cand is None:
+            pending.unlink(missing_ok=True)  # candidate gone — stale
+            continue
+        audit_obj = cand.get("audit") or {}
+        if not isinstance(audit_obj, dict):
+            pending.unlink(missing_ok=True)
+            continue
+        if audit_obj.get("re_evaluate"):
+            # r11 #2: never reinstate a decision the sampler flagged for
+            # mandatory human re-review.
+            raise SystemExit(
+                f"bulk-review: refusing to install {pending.name}: candidate "
+                f"{url} is now re_evaluate=true — human re-review required"
+            )
+        filed = (
+            (decision == "no-go" and audit_obj.get("auto_filed") is True)
+            or (decision != "no-go" and audit_obj.get("promoted_via") == "bulk-review")
+        )
+        if not filed:
+            pending.unlink(missing_ok=True)  # ledger no longer filed — stale
+            continue
+        try:
+            os.replace(pending, out_path)  # r11 #1: controlled failure
+        except OSError as exc:
+            raise SystemExit(
+                f"bulk-review: journal install failed for {pending.name}: {exc} "
+                "— re-run to retry (journal retained)"
+            ) from exc
+        installed += 1
+        print(f"resumed: {url} -> {out_path.name} ({decision})")
+    return installed > 0
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--draft", type=pathlib.Path, required=True,
@@ -206,6 +269,13 @@ def main(argv: list[str] | None = None) -> int:
     group.add_argument("--requeue", action="store_true")
     group.add_argument("--demote-retain-corpus", action="store_true")
     args = ap.parse_args(argv)
+
+    # Luna r11 #4: complete any pending journals BEFORE loading the draft —
+    # a retry after a crash between the ledger commit and os.replace must
+    # not depend on the draft still being present.
+    if _resume_pending_installs(args.ledger, GEN):
+        print("bulk-review: resumed pending install(s); run again for new work")
+        return 0
 
     draft = _load_draft(args.draft)
     url = _url_of(draft)
@@ -376,33 +446,9 @@ def main(argv: list[str] | None = None) -> int:
     out_path = default_output_path(corpus, repo_root=ROOT)
     out_path.parent.mkdir(parents=True, exist_ok=True)
     pending = out_path.with_name(out_path.name + ".pending")
-
-    # Luna r10: the .pending file doubles as a RETRY JOURNAL. If a previous
-    # run committed the ledger but crashed before os.replace, a re-run finds
-    # the pending file and — when the ledger ALREADY records this decision —
-    # completes the install instead of re-authoring.
-    from regexproof.mine.ledger import load_ledger
-
-    ledger_cand = find_candidate(load_ledger(args.ledger), url)
-    ledger_audit = (
-        ledger_cand.get("audit") or {}
-        if ledger_cand is not None else {}
-    )
-    ledger_filed = bool(
-        ledger_cand is not None
-        and isinstance(ledger_audit, dict)
-        and (
-            (decision == "no-go" and ledger_audit.get("auto_filed") is True)
-            or (decision != "no-go" and ledger_audit.get("promoted_via") == "bulk-review")
-        )
-    )
-    if pending.exists() and ledger_filed:
-        # Resume: the ledger already reflects this decision — install it.
-        os.replace(pending, out_path)
-        print(f"{decision}: {url} -> {out_path.name} (provenance={'human' if decision != 'no-go' else 'auto'}, resumed)")
-        return 0
     if pending.exists():
-        pending.unlink(missing_ok=True)  # stale journal from a different state
+        pending.unlink(missing_ok=True)  # stale journal — the scanner already
+                                         # resumed anything filed
 
     pending.write_text(json.dumps(out, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 
@@ -463,8 +509,7 @@ def main(argv: list[str] | None = None) -> int:
     except OSError as exc:
         raise SystemExit(
             f"bulk-review: ledger updated but artifact install failed for "
-            f"{url}: {exc} — re-run the same command to complete the "
-            "install (pending journal retained)"
+            f"{url}: {exc} — re-run to retry (pending journal retained)"
         ) from exc
     print(f"{decision}: {url} -> {out_path.name} (provenance=human)" if decision != "no-go"
           else f"no_go: {url} -> {out_path.name} (provenance=auto)")
