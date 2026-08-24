@@ -42,12 +42,17 @@ NEXT_BUCKET_BY_CLUSTER = {
 
 DEFAULT_QUEUES_DIR = ROOT / "properties" / "conversion_queue"
 PENDING_SITE_STATUSES = frozenset({"emitted", "claimed"})
+# Luna r2 #1: a wont-file pattern class that recurs this many times on a
+# target CORPUS denies it as the named-next bucket (deterministic policy;
+# single occurrences are noise, not a pattern).
+WONT_FILE_DENY_THRESHOLD = 2
 
 
 def go_clusters(gate_decisions_dir: pathlib.Path) -> list[str]:
     """Source clusters from validated gated:go gate-decision artifacts
     (Luna r1 #4: empty/missing input must NOT fabricate cluster selections;
-    the named-bucket map is not a cluster inventory)."""
+    the named-bucket map is not a cluster inventory). Malformed artifacts
+    are skipped, never fatal (Luna r2 #3)."""
     clusters: set[str] = set()
     if gate_decisions_dir.is_dir():
         for f in sorted(gate_decisions_dir.glob("*_gate_decision.json")):
@@ -55,6 +60,8 @@ def go_clusters(gate_decisions_dir: pathlib.Path) -> list[str]:
                 d = json.loads(f.read_text(encoding="utf-8"))
             except (OSError, ValueError):
                 continue
+            if not isinstance(d, dict):
+                continue  # e.g. a JSON list — skip, not crash
             if str(d.get("decision") or "") == "go":
                 corpus = str(d.get("corpus") or "").strip()
                 if corpus:
@@ -65,7 +72,19 @@ def go_clusters(gate_decisions_dir: pathlib.Path) -> list[str]:
 def wont_file_classes(dispositions_path: pathlib.Path) -> dict[str, int]:
     """wont-file pattern classes from the REAL disposition source
     (docs/conversion-upstream.jsonl — status=wont_file rows), aggregated by
-    pattern class, sorted desc (Luna r1 #3)."""
+    pattern class, sorted desc (Luna r1 #3). Reporting summary only —
+    selection uses wont_file_corpora()."""
+    return _wont_file_agg(dispositions_path, key="class")
+
+
+def wont_file_corpora(dispositions_path: pathlib.Path) -> dict[str, int]:
+    """wont-file rows keyed by CORPUS (the target bucket/cluster name) —
+    the deny-list key (Luna r2 #1: classes like 'third_party' never match
+    bucket names like 'openwrt_luci'; the row's corpus does)."""
+    return _wont_file_agg(dispositions_path, key="corpus")
+
+
+def _wont_file_agg(dispositions_path: pathlib.Path, *, key: str) -> dict[str, int]:
     if not dispositions_path.exists():
         return {}
     out: dict[str, int] = {}
@@ -77,10 +96,10 @@ def wont_file_classes(dispositions_path: pathlib.Path) -> dict[str, int]:
             rec = json.loads(line)
         except ValueError:
             continue
-        if str(rec.get("status") or "") != "wont_file":
+        if not isinstance(rec, dict) or str(rec.get("status") or "") != "wont_file":
             continue
-        cls = str(rec.get("class") or "no-class").strip() or "no-class"
-        out[cls] = out.get(cls, 0) + 1
+        k = str(rec.get(key) or "no-corpus").strip() or "no-corpus"
+        out[k] = out.get(k, 0) + 1
     return dict(sorted(out.items(), key=lambda kv: (-kv[1], kv[0])))
 
 
@@ -107,7 +126,9 @@ def _queue_has_pending(queues_dir: pathlib.Path, bucket: str) -> bool:
     """A queue artifact for the bucket blocks selection only when it has
     PENDING sites (emitted/claimed) — a fully contracted/skipped queue is
     closed work and does not block (Luna r1 #2: file existence alone is
-    wrong)."""
+    wrong). An EMPTY candidate_sites list is the valid empty_queue() shape
+    and does NOT block (Luna r2 #2). Non-dict rows are skipped (Luna r2
+    #3)."""
     qpath = queues_dir / f"{bucket}.json"
     if not qpath.exists():
         return False
@@ -116,11 +137,14 @@ def _queue_has_pending(queues_dir: pathlib.Path, bucket: str) -> bool:
     except (OSError, ValueError):
         return True  # unreadable queue — fail closed, treat as blocking
     sites = q.get("candidate_sites") if isinstance(q, dict) else None
-    if not isinstance(sites, list) or not sites:
+    if not isinstance(sites, list):
         return True  # queue present with no rows — conservatively blocking
-    return any(
-        str(s.get("status") or "") in PENDING_SITE_STATUSES for s in sites
-    )
+    for s in sites:
+        if not isinstance(s, dict):
+            continue  # malformed row — skip, not crash
+        if str(s.get("status") or "") in PENDING_SITE_STATUSES:
+            return True
+    return False  # empty or all-closed queue — does not block
 
 
 def next_unused_bucket(
@@ -150,17 +174,21 @@ def build_schedule(
 ) -> dict:
     used = used_buckets_per_cluster(rows)
     wont = wont_file_classes(dispositions_path)
+    wont_by_corpus = wont_file_corpora(dispositions_path)
     clusters = clusters if clusters is not None else go_clusters(gate_decisions_dir)
     selections: list[dict] = []
     for cluster in clusters:
         used_set = used.get(cluster, set())
         nxt = next_unused_bucket(cluster, used_set, queues_dir)
-        # #551 Phase E / Luna r1 #3: wont-file pattern classes feed selection
-        # via a DETERMINISTIC deny-list — a wont-file-heavy next target is
-        # blocked (never the named-next pick) and reported for the operator.
-        wont_blocked = False
-        if nxt is not None and nxt in wont and wont[nxt] > 0:
-            wont_blocked = True
+        # #551 Phase E / Luna r1 #3 + r2 #1: wont-file pattern classes feed
+        # selection via a DETERMINISTIC deny-list keyed on the target's
+        # CORPUS (the row's corpus IS the bucket name — classes like
+        # 'third_party' never match buckets). A corpus whose wont-file
+        # count reaches the threshold is denied as the named-next pick.
+        wont_blocked = (
+            nxt is not None
+            and wont_by_corpus.get(nxt, 0) >= WONT_FILE_DENY_THRESHOLD
+        )
         selections.append(
             {
                 "cluster": cluster,

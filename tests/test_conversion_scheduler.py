@@ -129,15 +129,19 @@ def test_wont_file_classes_from_real_source(tmp_path):
 
 
 def test_wont_file_blocks_named_next(tmp_path):
-    """Luna r1 #3: a wont-file-heavy next target is DENIED — the scheduler
-    refuses to pick it and reports wont-file-blocked."""
+    """Luna r1 #3 + r2 #1: a wont-file-heavy next target (corpus-keyed,
+    >= threshold) is DENIED — the scheduler refuses to pick it."""
     cs = _load_cs()
     gen = tmp_path / "generated"
     _gate_decision(gen, "openwrt_packages")
     disp = tmp_path / "d.jsonl"
-    disp.write_text(json.dumps(
-        {"id": "CU-1", "status": "wont_file", "class": "openwrt_luci"}) + "\n",
-        encoding="utf-8")
+    # openwrt_luci (the named next) has 2 wont_file rows -> denied.
+    disp.write_text("\n".join([
+        json.dumps({"id": "CU-1", "status": "wont_file", "class": "third_party",
+                    "corpus": "openwrt_luci"}),
+        json.dumps({"id": "CU-2", "status": "wont_file", "class": "third_party",
+                    "corpus": "openwrt_luci"}),
+    ]) + "\n", encoding="utf-8")
     rows = [_row("openwrt_packages_w1", "validator-charsets-and-captures")]
     sched = cs.build_schedule(rows, queues_dir=tmp_path / "queues",
                               gate_decisions_dir=gen,
@@ -145,6 +149,68 @@ def test_wont_file_blocks_named_next(tmp_path):
     sel = sched["selections"][0]
     assert sel["selected_bucket"] is None
     assert sel["selection_basis"] == "wont-file-blocked"
+
+
+def test_wont_file_single_occurrence_does_not_block(tmp_path):
+    """Luna r2 #1: a SINGLE wont-file row on the target corpus is noise,
+    not a pattern — the named-next selection stands."""
+    cs = _load_cs()
+    gen = tmp_path / "generated"
+    _gate_decision(gen, "openwrt_packages")
+    disp = tmp_path / "d.jsonl"
+    disp.write_text(json.dumps(
+        {"id": "CU-1", "status": "wont_file", "class": "third_party",
+         "corpus": "openwrt_luci"}) + "\n", encoding="utf-8")
+    rows = [_row("openwrt_packages_w1", "validator-charsets-and-captures")]
+    sched = cs.build_schedule(rows, queues_dir=tmp_path / "queues",
+                              gate_decisions_dir=gen,
+                              dispositions_path=disp)
+    sel = sched["selections"][0]
+    assert sel["selected_bucket"] == "openwrt_luci"
+    assert sel["selection_basis"] == "named-next-unused"
+
+
+def test_empty_queue_does_not_block(tmp_path):
+    """Luna r2 #2: an empty candidate_sites queue is the valid
+    empty_queue() shape — it must NOT block selection."""
+    cs = _load_cs()
+    gen = tmp_path / "generated"
+    _gate_decision(gen, "openwrt_packages")
+    _queue(tmp_path / "queues", "openwrt_luci", [])  # empty candidate_sites
+    rows = [_row("openwrt_packages_w1", "validator-charsets-and-captures")]
+    sched = cs.build_schedule(rows, queues_dir=tmp_path / "queues",
+                              gate_decisions_dir=gen,
+                              dispositions_path=tmp_path / "d.jsonl")
+    sel = sched["selections"][0]
+    assert sel["selected_bucket"] == "openwrt_luci"  # not blocked
+
+
+def test_malformed_queue_rows_skipped(tmp_path):
+    """Luna r2 #3: non-dict queue rows are skipped, not fatal — a pending
+    status on a VALID row still blocks."""
+    cs = _load_cs()
+    gen = tmp_path / "generated"
+    _gate_decision(gen, "openwrt_packages")
+    queues_dir = tmp_path / "queues"
+    queues_dir.mkdir(parents=True, exist_ok=True)
+    (queues_dir / "openwrt_luci.json").write_text(json.dumps({
+        "candidate_sites": ["not-a-dict", {"site": "s1", "status": "claimed"}]}) + "\n",
+        encoding="utf-8")
+    rows = [_row("openwrt_packages_w1", "validator-charsets-and-captures")]
+    sched = cs.build_schedule(rows, queues_dir=queues_dir,
+                              gate_decisions_dir=gen,
+                              dispositions_path=tmp_path / "d.jsonl")
+    sel = sched["selections"][0]
+    assert sel["selected_bucket"] == "form-validators"  # openwrt_luci blocked
+
+
+def test_malformed_gate_artifact_skipped(tmp_path):
+    """Luna r2 #3: a JSON-list gate artifact is skipped, not fatal."""
+    cs = _load_cs()
+    gen = tmp_path / "generated"
+    _gate_decision(gen, "openwrt_packages", "go")
+    (gen / "bad_gate_decision.json").write_text("[1, 2, 3]", encoding="utf-8")
+    assert cs.go_clusters(gen) == ["openwrt_packages"]
 
 
 def test_go_clusters_from_gate_decisions(tmp_path):
