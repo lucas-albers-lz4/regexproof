@@ -5,10 +5,16 @@ One probe unit: acquire a lease on the (url, pin) reference clone (HIT
 reuses the warm clone; MISS clones bare+blob:none under a short probe
 lease, then promotes), create a throwaway worktree, walk it, release.
 
-Outcomes recorded in batch/state.json (keyed, resumable): ``ok``,
-``clone_timeout``, ``disk_budget``, ``lease_reject``, ``cache_miss_reprobe``,
-``skip_wave_active``, ``auto_nogo``, ``needs_human``, ``rate_limited``,
-``error``.
+Outcomes recorded in batch/state.json (keyed, resumable): ``ok``
+(pre-Wave-5 rows only), ``clone_timeout``, ``disk_budget``, ``lease_reject``,
+``cache_miss_reprobe``, ``skip_wave_active``, ``auto_nogo``, ``needs_human``,
+``rate_limited``, ``error``.
+
+A successful walk no longer records ``ok``. Wave 5 (#574) runs the admission
+inventory on the worktree and folds deterministic auto-NO-GO
+(``author_auto``) into the batch: sub-scale / duplicate-fork walks file a
+gate decision and record ``auto_nogo``; everyone else records ``needs_human``.
+Operator-initiated no-go stays on ``bulk-review-staged.py --no-go``.
 
 Wave gating is DERIVED from the corpus event log (corpus_lock) — the
 caller cannot claim the wave is active (Luna r1 #14); a missing/invalid
@@ -106,6 +112,15 @@ def main(argv: list[str] | None = None) -> int:
         "--skip-wave-active", action="store_true",
         help="#559: skip an E3 reprobe while a conversion wave is ACTIVE "
         "(wave status derived from the corpus event log)",
+    )
+    ap.add_argument(
+        "--generated", type=pathlib.Path, default=None,
+        help="Gate-decision output dir (default: properties/generated)",
+    )
+    ap.add_argument(
+        "--ledger", type=pathlib.Path, default=None,
+        help="Candidate ledger for auto-file / needs_human flags "
+             "(default: properties/generated/candidate-ledger.json)",
     )
     args = ap.parse_args(argv)
 
@@ -250,29 +265,69 @@ def main(argv: list[str] | None = None) -> int:
         tmp.write_text(json.dumps(draft, indent=2, sort_keys=True) + "\n", encoding="utf-8")
         os.replace(tmp, draft_path)
 
-        # Final renewal before recording — the heartbeat kept the lease
-        # live through the walk; this extends it through the outcome write.
+        # Inventory walk (regex_sites + boundary) — auto-NO-GO needs the
+        # real probe, not the file-count stub. Renew first so TTL covers it.
+        lease_registry.renew(
+            args.url, args.pin, owner_pid=owner, path=registry_path,
+        )
+        from regexproof.admission.draft import build_draft
+        from regexproof.mine.batch_nogo import fold_auto_nogo
+
+        inventory = build_draft(
+            wt,
+            pin=args.pin,
+            pin_probed=args.pin,
+            repo_name=args.corpus or "probe",
+            candidate_url=args.url,
+        )
+        draft.update(
+            {
+                "draft": True,
+                "schema_version": inventory.get("schema_version", "1"),
+                "corpus": inventory.get("corpus") or args.corpus,
+                "candidate_url": args.url,
+                "corpus_pin": args.pin,
+                "pin_probed": args.pin,
+                "probe": inventory["probe"],
+                "fields_remaining": inventory.get("fields_remaining", []),
+            }
+        )
+        tmp.write_text(json.dumps(draft, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+        os.replace(tmp, draft_path)
+
+        generated = args.generated or (ROOT / "properties" / "generated")
+        ledger = args.ledger or (ROOT / "properties" / "generated" / "candidate-ledger.json")
+        outcome, decision_path, note = fold_auto_nogo(
+            draft,
+            generated_dir=pathlib.Path(generated),
+            ledger_path=pathlib.Path(ledger),
+            repo_root=ROOT,
+        )
+
         lease_registry.renew(
             args.url, args.pin, owner_pid=owner, path=registry_path,
         )
 
-        _record(
-            digest, args.url, args.pin, "ok",
-            {
-                "corpus": args.corpus,
-                "cache_hit": is_hit,
-                "bytes_saved": bytes_saved,          # avoided fetch (hits)
-                "fetch_bytes": probe_fetch_bytes,    # actual probe fetch
-                "lifecycle_bytes": probe_fetch_bytes,  # probe_fetch only
-                "clone_ms": clone_ms,
-                "files_walked": walked,
-                "draft": str(draft_path),
-            },
-            args.state,
+        extra = {
+            "corpus": args.corpus,
+            "cache_hit": is_hit,
+            "bytes_saved": bytes_saved,          # avoided fetch (hits)
+            "fetch_bytes": probe_fetch_bytes,    # actual probe fetch
+            "lifecycle_bytes": probe_fetch_bytes,  # probe_fetch only
+            "clone_ms": clone_ms,
+            "files_walked": walked,
+            "regex_sites": int((draft.get("probe") or {}).get("regex_sites") or 0),
+            "draft": str(draft_path),
+            "note": note[:200],
+        }
+        if decision_path is not None:
+            extra["decision"] = str(decision_path)
+        _record(digest, args.url, args.pin, outcome, extra, args.state)
+        print(
+            f"{outcome}: {args.url}@{args.pin[:12]} hit={is_hit} "
+            f"sites={extra['regex_sites']} walk={walked} clone_ms={clone_ms}"
         )
-        print(f"ok: {args.url}@{args.pin[:12]} hit={is_hit} "
-              f"fetch={probe_fetch_bytes}B saved={bytes_saved}B walk={walked} clone_ms={clone_ms}")
-        return 0
+        return 0 if outcome in ("auto_nogo", "needs_human") else 3
     finally:
         # Exception-safe cleanup (Luna r3 #3): a worktree_remove failure
         # must NOT skip lease + admission release. Each step is guarded.
