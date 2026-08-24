@@ -628,18 +628,24 @@ def main(argv: list[str] | None = None) -> int:
         from regexproof.mine.operator_minutes import append_row
 
         pin = str(draft.get("corpus_pin") or draft.get("pin") or "")
-        append_row(
-            url=url,
-            pin=pin,
-            decision=decision,
-            source="stopwatch",
-            active_minutes=args.active_minutes,
-            decision_date=(
-                at_dt.date().isoformat()
-                if at_dt is not None
-                else datetime.datetime.now(datetime.timezone.utc).date().isoformat()
-            ),
-        )
+        try:
+            append_row(
+                url=url,
+                pin=pin,
+                decision=decision,
+                source="stopwatch",
+                active_minutes=args.active_minutes,
+                decision_date=(
+                    at_dt.date().isoformat()
+                    if at_dt is not None
+                    else datetime.datetime.now(datetime.timezone.utc).date().isoformat()
+                ),
+            )
+        except Exception as exc:
+            print(
+                f"bulk-review: WARNING stopwatch row not recorded: {exc}",
+                file=sys.stderr,
+            )
     return 0
 
 

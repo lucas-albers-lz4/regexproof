@@ -202,6 +202,8 @@ def main(argv: list[str] | None = None) -> int:
         ap.error("--active-minutes must be a finite number >= 0")
     if args.active_minutes is not None and not args.human:
         ap.error("--active-minutes applies only to --human go/triage-trial")
+    if args.active_minutes is not None and args.human and args.decision is None:
+        ap.error("--human requires --decision")
     if args.active_minutes is not None and args.decision not in ("go", "triage-trial"):
         ap.error("--active-minutes applies only to --human go/triage-trial")
 
@@ -378,14 +380,17 @@ def main(argv: list[str] | None = None) -> int:
     ):
         from regexproof.mine.operator_minutes import append_row
 
-        append_row(
-            url=str(decision.get("candidate_url") or draft.get("candidate_url") or ""),
-            pin=str(decision.get("corpus_pin") or draft.get("corpus_pin") or ""),
-            decision=str(decision.get("decision")),
-            source="stopwatch",
-            active_minutes=args.active_minutes,
-            decision_date=str(decision.get("decision_date") or ""),
-        )
+        try:
+            append_row(
+                url=str(decision.get("candidate_url") or draft.get("candidate_url") or ""),
+                pin=str(decision.get("corpus_pin") or draft.get("corpus_pin") or ""),
+                decision=str(decision.get("decision")),
+                source="stopwatch",
+                active_minutes=args.active_minutes,
+                decision_date=str(decision.get("decision_date") or ""),
+            )
+        except Exception as exc:
+            print(f"warning: stopwatch row not recorded: {exc}", file=sys.stderr)
     return 0
 
 
