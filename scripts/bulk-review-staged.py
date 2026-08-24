@@ -66,10 +66,15 @@ def _utc_ts(dt: datetime.datetime | None = None) -> str:
 
 def _validate_probe_identity(draft: dict, probe: dict, draft_url: str, name: str) -> None:
     """Final-gate #1 (HIGH): an EMBEDDED probe object must be bound to the
-    draft candidate exactly like the inherit path — its candidate_url/url
-    (normalized) must match the draft's, and ALL pins present on both sides
-    must agree. A mismatched embedded probe is refused (candidate B must
-    never be reviewed with candidate A's evidence)."""
+    draft candidate exactly like the inherit path. The real producer emits
+    the URL only at DRAFT level (admission/draft.py) — the probe carries
+    only a pin — so the binding anchor is the REVISION identity:
+    - a draft carrying probe evidence MUST itself carry a pin (corpus_pin
+      or pin) — a pin-less draft is unattributable (candidate B could
+      inherit candidate A's probe with no way to detect it);
+    - ALL pins present on both sides must agree.
+    A mismatched/missing binding is refused (candidate B must never be
+    reviewed with candidate A's evidence)."""
     from regexproof.mine.exclusions import normalize_repo_url
 
     probe_url = normalize_repo_url(
@@ -85,6 +90,13 @@ def _validate_probe_identity(draft: dict, probe: dict, draft_url: str, name: str
     draft_pins = {
         str(p) for p in (draft.get("corpus_pin"), draft.get("pin")) if p
     }
+    if probe_pins and not draft_pins:
+        raise SystemExit(
+            f"bulk-review: {name} embeds probe evidence carrying pins "
+            f"{sorted(probe_pins)} but the draft carries NO pin — the "
+            "revision identity is unattributable, refusing (candidate B "
+            "must never inherit candidate A's probe)"
+        )
     all_pins = probe_pins | draft_pins
     if len(all_pins) > 1:
         raise SystemExit(

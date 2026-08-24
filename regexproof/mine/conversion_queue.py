@@ -294,8 +294,16 @@ def contract(
                 current_wave = _active_wave_id(cluster, lock_log)
             except SystemExit:
                 current_wave = ""
-            claimed_wave = str(row.get("wave_id") or "")
-            if claimed_wave and current_wave != claimed_wave:
+            claimed_wave = str(row.get("wave_id") or "").strip()
+            if not claimed_wave:
+                # A claimed row without a wave binding is unattributable in
+                # the corpus-lock regime — refuse (Luna r1 #2).
+                raise SystemExit(
+                    f"conversion_queue: contract refused — {site} was claimed "
+                    "without a wave_id; the corpus-lock regime requires a "
+                    "claim wave matching the active wave"
+                )
+            if current_wave != claimed_wave:
                 raise SystemExit(
                     f"conversion_queue: contract refused — {site} claimed under "
                     f"wave {claimed_wave!r} but active wave is {current_wave!r} "

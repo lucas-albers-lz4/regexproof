@@ -27,10 +27,13 @@ from regexproof.mine import audit, lease_registry  # noqa: E402
 def _probe_draft(url: str = "https://x/y", *, corpus: str = "ow") -> dict:
     """Real probe-shaped draft (what load_probe_draft accepts). The auto
     NO-GO path reads regex_sites as a COUNT; sites=0 is auto-eligible
-    regardless of security_boundary (require_auto_nogo)."""
+    regardless of security_boundary (require_auto_nogo). Mirrors the real
+    producer (admission/draft.py): corpus_pin at draft level == probe.pin
+    — the revision identity the embedded-probe binding validates against."""
     return {
         "candidate_url": url,
         "corpus": corpus,
+        "corpus_pin": "a" * 40,
         "probe": {
             "dialect": {"shell": 1},
             "flags": [],
@@ -422,6 +425,26 @@ def test_embedded_probe_wrong_pin_refused(tmp_path, monkeypatch):
     })
     ledger = _write_ledger(tmp_path)
     with pytest.raises(SystemExit, match="do not match draft pins"):
+        brs.main(["--draft", str(draft), "--no-go", "--ledger", str(ledger)])
+
+
+def test_embedded_probe_pinless_draft_refused(tmp_path, monkeypatch):
+    """Luna r1 #1: a draft that embeds a PINNED probe but carries NO pin of
+    its own is unattributable — refused (candidate B must never inherit
+    candidate A's probe via a pin-less draft)."""
+    brs = _load_brs()
+    gen = tmp_path / "generated"
+    gen.mkdir()
+    monkeypatch.setattr(brs, "GEN", gen)
+    draft = _write_draft(tmp_path, {
+        "url": "https://x/y", "corpus": "ow",  # NO pin on the draft
+        "candidate_url": "https://x/y",
+        "probe": {"candidate_url": "https://x/y", "pin": "b" * 40,
+                  "security_boundary": "deterministic-false",
+                  "regex_sites": 1},
+    })
+    ledger = _write_ledger(tmp_path)
+    with pytest.raises(SystemExit, match="carries NO pin"):
         brs.main(["--draft", str(draft), "--no-go", "--ledger", str(ledger)])
 
 

@@ -199,6 +199,33 @@ def test_contract_allowed_in_active_wave(tmp_path):
     assert row["status"] == "contracted"
 
 
+def test_contract_refused_when_claim_wave_blank(tmp_path):
+    """Luna r1 #2: a claimed row with NO wave binding is refused in the
+    corpus-lock regime — unattributable claims never contract."""
+    import json
+
+    _, q = _queue(tmp_path)
+    site = q["candidate_sites"][0]["site"]
+    log = _open_wave(tmp_path)
+    cq.claim(
+        q["cluster"], site,
+        corpus_status="gated:go",
+        ledger_state={}, generation=0, root=tmp_path, lock_log=log,
+    )
+    # Strip the claim wave binding (simulates an unattributable row).
+    q = cq.load_queue(q["cluster"], root=tmp_path)
+    q["candidate_sites"][0]["wave_id"] = ""
+    (tmp_path / f"{q['cluster']}.json").write_text(
+        json.dumps(q, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
+    with pytest.raises(SystemExit, match="without a wave_id"):
+        cq.contract(
+            q["cluster"], site,
+            contract={"guarantee": "x", "input_source": "y"},
+            root=tmp_path, lock_log=log,
+        )
+
+
 def test_contract_after_human_adoption(tmp_path):
     _, q = _queue(tmp_path)
     site = q["candidate_sites"][0]["site"]
