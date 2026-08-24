@@ -224,6 +224,27 @@ def test_other_bucket_rows_do_not_block(tmp_path):
     assert sched["selections"][0]["selected_bucket"] == "image-and-ddns-json"
 
 
+def test_site_only_queue_row_fails_closed(tmp_path):
+    """Luna r6: a pending row with NO idiom_bucket (emit() accepts site-only
+    ranked items) is un-attributable — fail closed (block), never skipped
+    as 'unrelated'."""
+    cs = _load_cs()
+    gen = tmp_path / "generated"
+    _gate_decision(gen, "openwrt_packages")
+    queues_dir = tmp_path / "queues"
+    queues_dir.mkdir(parents=True, exist_ok=True)
+    (queues_dir / "openwrt_packages.json").write_text(
+        json.dumps({"candidate_sites": [{"site": "s0", "status": "emitted"}]}) + "\n",
+        encoding="utf-8")
+    rows = [_row("openwrt_packages_w1", "validator-charsets-and-captures")]
+    sched = cs.build_schedule(rows, queues_dir=queues_dir,
+                              gate_decisions_dir=gen,
+                              dispositions_path=tmp_path / "d.jsonl")
+    # Un-attributable row blocks every progression bucket -> design tail.
+    assert sched["selections"][0]["selected_bucket"] is None
+    assert sched["selections"][0]["selection_basis"] == "unregistered-next"
+
+
 def test_malformed_gate_artifact_skipped(tmp_path):
     """Luna r2 #3: a JSON-list gate artifact is skipped, not fatal."""
     cs = _load_cs()

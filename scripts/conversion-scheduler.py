@@ -164,7 +164,13 @@ def _queue_has_pending(queues_dir: pathlib.Path, cluster: str, bucket: str) -> b
     for s in sites:
         if not isinstance(s, dict):
             return True  # malformed entry (e.g. null) — fail closed
-        if str(s.get("idiom_bucket") or "").strip() != bucket:
+        row_bucket = str(s.get("idiom_bucket") or "").strip()
+        if not row_bucket:
+            # Luna r6: a site-only row (no idiom_bucket — emit() accepts
+            # site-only ranked items) is UN-ATTRIBUTABLE: fail closed like
+            # null rows, never skip as 'unrelated'.
+            return True
+        if row_bucket != bucket:
             continue  # a different bucket's row — irrelevant here
         status = str(s.get("status") or "").strip()
         if not status:
