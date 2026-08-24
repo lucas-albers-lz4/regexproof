@@ -40,6 +40,11 @@ def append_row(
         raise SystemExit("operator_minutes: active_minutes must be a finite number >= 0")
     if wall_minutes is not None and (wall_minutes < 0 or not math.isfinite(wall_minutes)):
         raise SystemExit("operator_minutes: wall_minutes must be a finite number >= 0")
+    if not url:
+        raise SystemExit("operator_minutes: url is required")
+    pin = pin.strip().lower()
+    if len(pin) != 40 or any(c not in "0123456789abcdef" for c in pin):
+        raise SystemExit("operator_minutes: pin must be a 40-char lowercase hex SHA")
     row = {
         "measurement_id": str(uuid.uuid4()),
         "url": url,

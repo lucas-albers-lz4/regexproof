@@ -66,9 +66,15 @@ def test_stopwatch_rows_get_fresh_measurement_ids(tmp_path: Path):
             url="https://x/y", pin="a" * 40, decision="go",
             source="stopwatch", active_minutes=float("nan"), path=log,
         )
+    with pytest.raises(SystemExit, match="finite"):
         append_row(
             url="https://x/y", pin="a" * 40, decision="go",
             source="stopwatch", active_minutes=-1, path=log,
+        )
+    with pytest.raises(SystemExit, match="40-char"):
+        append_row(
+            url="https://x/y", pin="", decision="go",
+            source="stopwatch", active_minutes=1, path=log,
         )
 
 
