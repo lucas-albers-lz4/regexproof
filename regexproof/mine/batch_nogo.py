@@ -44,8 +44,10 @@ def fold_auto_nogo(
     except AutoNoGoError as exc:
         try:
             audit.mark_needs_human_review(ledger_path, url, reason=str(exc))
-        except (ValueError, OSError):
-            pass  # draft is the durable hand-off; ledger is best-effort here
+        except Exception as ledger_exc:
+            raise IncompleteFoldError(
+                f"needs_human ledger join failed: {ledger_exc}"
+            ) from ledger_exc
         return "needs_human", None, str(exc)
     except AuthorError as exc:
         return "error", None, f"author_auto refused: {exc}"
@@ -58,27 +60,18 @@ def fold_auto_nogo(
         out_path = generated_dir / safe
     out_path.parent.mkdir(parents=True, exist_ok=True)
     pending = out_path.with_name(out_path.name + ".pending")
-    if pending.exists():
-        pending.unlink(missing_ok=True)
-    pending.write_text(
-        json.dumps(decision, indent=2, sort_keys=True) + "\n", encoding="utf-8"
-    )
-
-    def _rollback() -> None:
-        try:
-            pending.unlink(missing_ok=True)
-        except OSError:
-            pass
-
+    if not pending.exists():
+        pending.write_text(
+            json.dumps(decision, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+        )
+    # Resume path: keep an existing .pending journal and retry ledger +
+    # install. Never delete it on mark_auto_filed failure.
     try:
         audit.mark_auto_filed(ledger_path, url)
     except Exception as exc:
-        _rollback()
         raise IncompleteFoldError(f"auto-filing refused: {exc}") from exc
     try:
         os.replace(pending, out_path)
     except OSError as exc:
-        # Keep the .pending journal (same as bulk-review-staged). Do not
-        # complete the batch row — resume must retry the install.
         raise IncompleteFoldError(f"artifact install failed: {exc}") from exc
     return "auto_nogo", out_path, "below-scale or duplicate-fork"

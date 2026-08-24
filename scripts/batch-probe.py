@@ -273,12 +273,18 @@ def main(argv: list[str] | None = None) -> int:
         from regexproof.admission.draft import build_draft
         from regexproof.mine.batch_nogo import IncompleteFoldError, fold_auto_nogo
 
+        def _inventory_heartbeat() -> None:
+            lease_registry.renew(
+                args.url, args.pin, owner_pid=owner, path=registry_path,
+            )
+
         inventory = build_draft(
             wt,
             pin=args.pin,
             pin_probed=args.pin,
             repo_name=args.corpus or "probe",
             candidate_url=args.url,
+            heartbeat=_inventory_heartbeat,
         )
         draft.update(
             {

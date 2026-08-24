@@ -168,7 +168,13 @@ def count_java_pattern_compile(source: str) -> list[str]:
     return [m.group(1) for m in _JAVA_PATTERN_COMPILE.finditer(source)]
 
 
-def walk_repo(root: Path | str, *, repo_name: str = "probe") -> dict[str, Any]:
+def walk_repo(
+    root: Path | str,
+    *,
+    repo_name: str = "probe",
+    heartbeat: Callable[[], None] | None = None,
+    heartbeat_every: int = 2000,
+) -> dict[str, Any]:
     """Walk *root* and aggregate probe facts (sites, dialects, flags, constructs)."""
     root_p = Path(root).resolve()
     dialect_counts: Counter[str] = Counter()
@@ -176,8 +182,12 @@ def walk_repo(root: Path | str, *, repo_name: str = "probe") -> dict[str, Any]:
     patterns: list[str] = []
     per_file: dict[str, int] = {}
     extractor_errors = 0
+    seen = 0
 
     for fp in _iter_files(root_p):
+        seen += 1
+        if heartbeat is not None and seen % max(1, heartbeat_every) == 0:
+            heartbeat()
         if not _should_read(fp):
             continue
         rel = _rel(root_p, fp)

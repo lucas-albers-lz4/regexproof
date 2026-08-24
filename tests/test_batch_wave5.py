@@ -25,7 +25,14 @@ def _ledger(tmp_path, url=URL):
     return p
 
 
-def test_items_digest_stable_and_pin_required():
+def test_walk_repo_invokes_heartbeat(tmp_path):
+    from regexproof.admission.walk import walk_repo
+
+    for i in range(4):
+        (tmp_path / f"f{i}.py").write_text("x = 1\n")
+    hits = {"n": 0}
+    walk_repo(tmp_path, heartbeat=lambda: hits.__setitem__("n", hits["n"] + 1), heartbeat_every=2)
+    assert hits["n"] >= 1
     items = batch_manifest.items_from_rank_ndjson(
         json.dumps({"url": URL, "pin": PIN, "score": 1.0, "allocator": "score-v1"})
     )
@@ -67,6 +74,22 @@ def test_fold_auto_nogo_below_scale(tmp_path):
     assert decision is not None and decision.is_file()
     body = json.loads(decision.read_text(encoding="utf-8"))
     assert body["decision"] == "no-go"
+
+
+def test_fold_needs_human_ledger_failure_is_incomplete(tmp_path):
+    draft = load_probe_draft(FIXTURES / "probe_draft_wtforms_shaped.json")
+    draft = json.loads(json.dumps(draft))
+    draft["probe"]["regex_sites"] = 250
+    draft["probe"]["security_boundary"] = "unknown"
+    missing = tmp_path / "empty-ledger.json"
+    save_ledger(missing, empty_ledger())
+    with pytest.raises(batch_nogo.IncompleteFoldError, match="needs_human ledger"):
+        batch_nogo.fold_auto_nogo(
+            draft,
+            generated_dir=tmp_path / "generated",
+            ledger_path=missing,
+            repo_root=ROOT,
+        )
 
 
 def test_fold_needs_human_when_above_scale(tmp_path):

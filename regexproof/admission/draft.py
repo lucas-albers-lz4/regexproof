@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Any
+from typing import Any, Callable
 
 from regexproof.admission.boundary import BoundarySignals, classify_boundary
 from regexproof.admission.serialize import dumps_pinned
@@ -78,11 +78,12 @@ def build_draft(
     repo_name: str | None = None,
     candidate_url: str = "",
     topics: tuple[str, ...] = (),
+    heartbeat: Callable[[], None] | None = None,
 ) -> dict[str, Any]:
     """Build a flagged (non-schema-valid) probe draft for *root* at *pin*."""
     root_p = Path(root).resolve()
     name = repo_name or root_p.name
-    walked = walk_repo(root_p, repo_name=name)
+    walked = walk_repo(root_p, repo_name=name, heartbeat=heartbeat)
     boundary = classify_boundary(
         build_boundary_signals(repo_name=name, root=root_p, topics=topics)
     )
