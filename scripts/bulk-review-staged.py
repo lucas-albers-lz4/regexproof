@@ -35,6 +35,7 @@ from __future__ import annotations
 import argparse
 import datetime
 import json
+import math
 import os
 import pathlib
 import sys
@@ -363,8 +364,10 @@ def main(argv: list[str] | None = None) -> int:
     group.add_argument("--demote-retain-corpus", action="store_true")
     args = ap.parse_args(argv)
 
-    if args.active_minutes is not None and args.active_minutes < 0:
-        raise SystemExit("bulk-review: --active-minutes must be >= 0")
+    if args.active_minutes is not None and (
+        args.active_minutes < 0 or not math.isfinite(args.active_minutes)
+    ):
+        raise SystemExit("bulk-review: --active-minutes must be a finite number >= 0")
     if args.active_minutes is not None and (args.no_go or args.requeue or args.demote_retain_corpus):
         raise SystemExit(
             "bulk-review: --active-minutes applies only to --go / --triage-trial"

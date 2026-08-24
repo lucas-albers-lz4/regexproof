@@ -93,7 +93,7 @@ def test_negative_active_minutes_fails_before_authoring(tmp_path):
     brs = _load_brs()
     draft = _write_draft(tmp_path)
     ledger = _write_ledger(tmp_path)
-    with pytest.raises(SystemExit, match="--active-minutes must be >= 0"):
+    with pytest.raises(SystemExit, match="finite number"):
         brs.main([
             "--draft", str(draft), "--go", "--reviewer", "alice",
             "--rationale", "verified", "--conditions-ok",

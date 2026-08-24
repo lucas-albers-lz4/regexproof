@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import math
 import pathlib
 import statistics
 import uuid
@@ -35,10 +36,10 @@ def append_row(
         )
     if source not in SOURCES:
         raise SystemExit(f"operator_minutes: unknown source {source!r}")
-    if active_minutes is not None and active_minutes < 0:
-        raise SystemExit("operator_minutes: active_minutes must be >= 0")
-    if wall_minutes is not None and wall_minutes < 0:
-        raise SystemExit("operator_minutes: wall_minutes must be >= 0")
+    if active_minutes is not None and (active_minutes < 0 or not math.isfinite(active_minutes)):
+        raise SystemExit("operator_minutes: active_minutes must be a finite number >= 0")
+    if wall_minutes is not None and (wall_minutes < 0 or not math.isfinite(wall_minutes)):
+        raise SystemExit("operator_minutes: wall_minutes must be a finite number >= 0")
     row = {
         "measurement_id": str(uuid.uuid4()),
         "url": url,

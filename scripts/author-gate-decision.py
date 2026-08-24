@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import sys
 import time
 from datetime import date, datetime, timezone
@@ -195,8 +196,10 @@ def main(argv: list[str] | None = None) -> int:
     )
     args = ap.parse_args(argv)
 
-    if args.active_minutes is not None and args.active_minutes < 0:
-        ap.error("--active-minutes must be >= 0")
+    if args.active_minutes is not None and (
+        args.active_minutes < 0 or not math.isfinite(args.active_minutes)
+    ):
+        ap.error("--active-minutes must be a finite number >= 0")
     if args.active_minutes is not None and not args.human:
         ap.error("--active-minutes applies only to --human go/triage-trial")
     if args.active_minutes is not None and args.decision not in ("go", "triage-trial"):
