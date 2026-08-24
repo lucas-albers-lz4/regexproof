@@ -68,6 +68,16 @@ def fold_auto_nogo(
     # install. Never delete it on mark_auto_filed failure.
     try:
         audit.mark_auto_filed(ledger_path, url)
+    except ValueError as exc:
+        # re_evaluate=true is human routing, not a transient install failure.
+        # Completing as needs_human prevents an infinite re-clone loop.
+        if "re_evaluate" in str(exc):
+            try:
+                pending.unlink(missing_ok=True)
+            except OSError:
+                pass
+            return "needs_human", None, str(exc)
+        raise IncompleteFoldError(f"auto-filing refused: {exc}") from exc
     except Exception as exc:
         raise IncompleteFoldError(f"auto-filing refused: {exc}") from exc
     try:

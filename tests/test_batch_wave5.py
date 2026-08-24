@@ -33,6 +33,9 @@ def test_walk_repo_invokes_heartbeat(tmp_path):
     hits = {"n": 0}
     walk_repo(tmp_path, heartbeat=lambda: hits.__setitem__("n", hits["n"] + 1), heartbeat_every=2)
     assert hits["n"] >= 1
+
+
+def test_items_digest_stable_and_pin_required():
     items = batch_manifest.items_from_rank_ndjson(
         json.dumps({"url": URL, "pin": PIN, "score": 1.0, "allocator": "score-v1"})
     )
@@ -108,6 +111,32 @@ def test_fold_needs_human_when_above_scale(tmp_path):
     assert "auto-NO-GO refused" in note
 
 
+def test_fold_re_evaluate_is_needs_human_not_incomplete(tmp_path):
+    draft = load_probe_draft(FIXTURES / "probe_draft_wtforms_shaped.json")
+    ledger = tmp_path / "ledger.json"
+    led = empty_ledger()
+    led["candidates"].append({
+        "url": URL,
+        "status": "mined",
+        "pin": PIN,
+        "audit": {"re_evaluate": True},
+    })
+    save_ledger(ledger, led)
+    gen = tmp_path / "generated"
+    gen.mkdir()
+    outcome, decision, note = batch_nogo.fold_auto_nogo(
+        draft,
+        generated_dir=gen,
+        ledger_path=ledger,
+        repo_root=ROOT,
+    )
+    assert outcome == "needs_human"
+    assert decision is None
+    assert "re_evaluate" in note
+    assert not list(gen.glob("*.pending"))
+    assert not list(gen.glob("*_gate_decision.json"))
+
+
 def test_fold_install_failure_does_not_complete(tmp_path, monkeypatch):
     draft = load_probe_draft(FIXTURES / "probe_draft_wtforms_shaped.json")
     gen = tmp_path / "generated"
@@ -157,6 +186,9 @@ def test_batch_run_forwards_ledger_to_rank(tmp_path, monkeypatch):
     assert rc == 0
     assert "--ledger" in captured["argv"]
     assert str(ledger) in captured["argv"]
+
+
+def test_batch_run_snapshot_and_resume(tmp_path):
     import importlib.util
 
     spec = importlib.util.spec_from_file_location(
@@ -182,7 +214,6 @@ def test_batch_run_forwards_ledger_to_rank(tmp_path, monkeypatch):
     assert rc == 0
     doc = batch_manifest.load_and_verify(man)
     digest = doc["digest"]
-    # Pretend the probe already finished — drain must skip.
     batch_state.begin_item(digest, URL, PIN, path=state)
     batch_state.record_outcome(digest, URL, PIN, "needs_human", path=state)
     rc = mod.main([
@@ -190,10 +221,9 @@ def test_batch_run_forwards_ledger_to_rank(tmp_path, monkeypatch):
         "--state", str(state),
         "--snapshot-only",
     ])
-    assert rc == 0  # existing manifest, snapshot-only is a no-op drain skip
-    # Drain path: completed row is skipped (no clone).
+    assert rc == 0
     rc = mod.main(["--manifest", str(man), "--state", str(state)])
     assert rc == 0
     proj = batch_state.projection(path=state)
     assert proj["probe_success_rate"] == 1.0
-    assert proj["clone_ms_p95"] is None  # no clone_ms on the stub row
+    assert proj["clone_ms_p95"] is None
