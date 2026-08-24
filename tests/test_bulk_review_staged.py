@@ -462,8 +462,39 @@ def test_failed_promotion_leaves_no_artifact(tmp_path, monkeypatch):
 
     ledger.write_text(json.dumps(empty_ledger(), indent=2, sort_keys=True) + "\n",
                       encoding="utf-8")
-    with pytest.raises(SystemExit, match=r"auto-filing refused|candidate not in ledger"):
+    with pytest.raises(SystemExit, match="not in ledger"):
         brs.main(["--draft", str(draft), "--no-go", "--ledger", str(ledger)])
+    assert not (gen / "ow_gate_decision.json").exists()
+
+
+def test_filing_failure_rolls_back_artifact(tmp_path, monkeypatch):
+    """CodeRabbit #573: if mark_auto_filed fails AFTER the artifact write,
+    the artifact is REMOVED — audit state and decision files must never
+    diverge (candidate auto_filed with no decision file would be invisible
+    to freeze/eval)."""
+    brs = _load_brs()
+    gen = tmp_path / "generated"
+    gen.mkdir()
+    monkeypatch.setattr(brs, "GEN", gen)
+    monkeypatch.setattr(brs, "default_output_path",
+                        lambda corpus, repo_root=None: gen / f"{corpus}_gate_decision.json")
+    from regexproof.mine.ledger import empty_ledger
+
+    url = "https://x/y"
+    ledger = tmp_path / "ledger.json"
+    ld = empty_ledger()
+    ld["candidates"].append({"url": url, "status": "mined",
+                             "audit": {"re_evaluate": False}})
+    ledger.write_text(json.dumps(ld, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    draft = _write_draft(tmp_path, _probe_draft(url))
+    # Simulate a filing failure that happens AFTER the artifact write.
+    def _boom(*args, **kwargs):
+        raise ValueError("simulated filing failure")
+    monkeypatch.setattr(brs.audit, "mark_auto_filed", _boom)
+    with pytest.raises(SystemExit, match="auto-filing refused"):
+        brs.main(["--draft", str(draft), "--no-go", "--ledger", str(ledger)])
+    # Rollback: the artifact must NOT remain (auto_filed with no decision
+    # file would be invisible to freeze/eval).
     assert not (gen / "ow_gate_decision.json").exists()
 
 

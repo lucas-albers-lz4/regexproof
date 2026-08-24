@@ -337,12 +337,46 @@ def main(argv: list[str] | None = None) -> int:
         except AuthorError as exc:
             raise SystemExit(f"bulk-review: auto authoring refused: {exc}")
 
-    # Auto no-go goes through mark_auto_filed(), which rejects candidates
-    # flagged re_evaluate=true (Luna r3: a direct auto_filed=True write
-    # bypassed the mandatory human re-review gate). The gate must run
-    # BEFORE the decision is persisted (Luna r4: writing first left an
-    # ACTIVE decision artifact after a refusal — the next sync applied it
-    # and transitioned the candidate to gated:no-go).
+    # Ledger prechecks — READ-ONLY, before any artifact is written
+    # (CodeRabbit #573: a filing decision that fails after persisting the
+    # artifact must not leave the candidate flagged with no decision file).
+    if decision == "no-go":
+        # Auto no-go goes through mark_auto_filed(), which rejects candidates
+        # flagged re_evaluate=true (Luna r3). Precheck read-only so the
+        # refusal happens BEFORE the artifact exists (Luna r4: writing first
+        # left an ACTIVE decision after a refusal — the sync applied it).
+        from regexproof.mine.ledger import load_ledger
+
+        cand = find_candidate(load_ledger(args.ledger), url)
+        if cand is None:
+            raise SystemExit(f"bulk-review: auto-filing refused: {url} not in ledger")
+        audit_obj = cand.get("audit") or {}
+        if isinstance(audit_obj, dict) and audit_obj.get("re_evaluate"):
+            raise SystemExit(
+                "bulk-review: auto-filing refused: candidate flagged "
+                "re_evaluate=true (routes to human review)"
+            )
+    else:
+        from regexproof.mine.ledger import load_ledger
+
+        if find_candidate(load_ledger(args.ledger), url) is None:
+            raise SystemExit(
+                f"bulk-review: {url} not in ledger — cannot author {decision}"
+            )
+
+    # Persist the artifact FIRST (after the prechecks), then the ledger
+    # updates — and if a ledger update fails, REMOVE the artifact so audit
+    # state and decision files can never diverge (CodeRabbit #573).
+    out_path = default_output_path(corpus, repo_root=ROOT)
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    out_path.write_text(json.dumps(out, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+    def _rollback_artifact() -> None:
+        try:
+            out_path.unlink(missing_ok=True)
+        except OSError:
+            pass
+
     if decision == "no-go":
         try:
             audit.mark_auto_filed(
@@ -350,6 +384,7 @@ def main(argv: list[str] | None = None) -> int:
                 clock=clock if clock is not None else None,
             )
         except ValueError as exc:
+            _rollback_artifact()
             raise SystemExit(f"bulk-review: auto-filing refused: {exc}") from exc
     else:
         # Luna r5 #2: human decisions must CLEAR the re-review state
@@ -362,6 +397,7 @@ def main(argv: list[str] | None = None) -> int:
                 clock=clock if clock is not None else None,
             )
         except ValueError as exc:
+            _rollback_artifact()
             raise SystemExit(
                 f"bulk-review: human-resolved update failed for {url}: {exc}"
             ) from exc
@@ -377,17 +413,11 @@ def main(argv: list[str] | None = None) -> int:
             # Luna r2 P0: a missing ledger candidate must FAIL CLOSED — a
             # decision written without audit provenance is not sampler-eligible
             # and must not look like a successful promotion.
+            _rollback_artifact()
             raise SystemExit(
                 f"bulk-review: ledger promotion failed for {url}: {exc} — "
-                "audit provenance missing (no decision was written)"
+                "audit provenance missing (decision artifact removed)"
             ) from exc
-
-    # Luna r6 #2: persist the decision artifact ONLY AFTER every ledger
-    # update has succeeded — a failed update must never leave an ACTIVE
-    # decision file that the next sync can apply.
-    out_path = default_output_path(corpus, repo_root=ROOT)
-    out_path.parent.mkdir(parents=True, exist_ok=True)
-    out_path.write_text(json.dumps(out, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 
     print(f"{decision}: {url} -> {out_path.name} (provenance=human)" if decision != "no-go"
           else f"no_go: {url} -> {out_path.name} (provenance=auto)")
