@@ -63,20 +63,30 @@ def load_decision_population(gen: Path | None = None) -> list[dict]:
                 f"error: {f.name}: decision file has neither 'status' nor "
                 "'decision' — a population row cannot be silently dropped"
             )
+        # Canonical pin: real artifacts carry corpus_pin (top-level) and
+        # probe.pin (nested); the eval's join_rows uses the same precedence
+        # (Luna r1 #4 — reading top-level pin/probed_pin yields EMPTY pins).
+        probe = d.get("probe") if isinstance(d.get("probe"), dict) else {}
+        pin = str(d.get("corpus_pin") or probe.get("pin") or "")
+        # Chronological recency: decision_date (Luna r1 #5 — lexical SHA
+        # order is wrong: a newer commit can have a smaller SHA).
+        recency = str(d.get("decision_date") or d.get("updated_at") or "")
         rows.append(
             {
                 "file": f.name,
                 "url": d.get("candidate_url"),
-                "pin": d.get("pin") or d.get("probed_pin") or "",
+                "pin": pin,
+                "recency": recency,
                 "status": status,
                 "payload": d,  # full contents — hashed verbatim (canonical JSON)
             }
         )
     # (url, pin) supersession dedup (#560 Wave 3): when a candidate is
-    # requeued and re-decided at a NEWER pin, the older decision is
-    # superseded — eval/escape counters must count only the latest pin per
-    # url. Deterministic: keep the max pin (ties → the last file, which is
-    # the newest by sort order). URL-less rows are never superseded.
+    # requeued and re-decided, only the LATEST decision counts for
+    # eval/escape counters. "Latest" = the recorded decision_date
+    # (chronological), NOT lexical pin order (Luna r1 #5); ties break
+    # deterministically by the last file in sort order. URL-less rows are
+    # never superseded.
     by_url: dict[str, dict] = {}
     url_less = [r for r in rows if not str(r.get("url") or "")]
     for r in rows:
@@ -84,7 +94,7 @@ def load_decision_population(gen: Path | None = None) -> list[dict]:
         if not url:
             continue
         prev = by_url.get(url)
-        if prev is None or str(r.get("pin") or "") >= str(prev.get("pin") or ""):
+        if prev is None or r["recency"] >= prev["recency"]:
             by_url[url] = r
     keep_ids = {id(r) for r in by_url.values()} | {id(r) for r in url_less}
     return [r for r in rows if id(r) in keep_ids]

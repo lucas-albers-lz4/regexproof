@@ -1,9 +1,12 @@
 """Wave 3 (#560): staged bulk review CLI + requeue/demote semantics tests.
 
-Covers: provenance enforcement (go/triage-trial REQUIRE human; auto paths
-are NO-GO-only); audit sampler population extension (bulk-CLI-promoted
-included, provenance=stub excluded at schema level); (url, pin)
-supersession dedup for eval/escape counters; canonical JSON output.
+Covers the REAL pipeline wiring (Luna r1): schema-valid authoring via
+author_human/author_auto, provenance enforcement (go/triage-trial REQUIRE
+human + reviewer + conditions + rationale; auto = NO-GO-only), stub
+rejection, ledger audit promotion (promoted_via/promoted_at for the
+sampler), requeue via transition API + decision archiving, demote with
+retained location, and (url, pin) supersession dedup by CHRONOLOGICAL
+decision_date (not lexical SHA order).
 """
 
 from __future__ import annotations
@@ -20,15 +23,24 @@ sys.path.insert(0, str(ROOT))
 from regexproof.mine import audit  # noqa: E402
 
 
-def _staged(site: str, *, url="https://x/y", pin="a" * 40, corpus="ow") -> dict:
+def _probe_draft(url: str = "https://x/y", *, corpus: str = "ow") -> dict:
+    """Real probe-shaped draft (what load_probe_draft accepts). The auto
+    NO-GO path reads regex_sites as a COUNT; sites=0 is auto-eligible
+    regardless of security_boundary (require_auto_nogo)."""
     return {
-        "site": site, "url": url, "pin": pin, "corpus": corpus,
-        "manifest_digest": "d1", "idiom_bucket": "regex",
+        "candidate_url": url,
+        "corpus": corpus,
+        "probe": {
+            "dialect": {"shell": 1},
+            "flags": [],
+            "pin": "a" * 40,
+            "regex_sites": 0,
+            "predicted_buckets": {"high-yield": 1},  # AC4 under-report rule
+        },
     }
 
 
-@pytest.fixture()
-def staged_root(tmp_path, monkeypatch):
+def _load_brs():
     import importlib.util
 
     spec = importlib.util.spec_from_file_location(
@@ -36,90 +48,169 @@ def staged_root(tmp_path, monkeypatch):
     )
     brs = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(brs)  # type: ignore[union-attr]
-    monkeypatch.setattr(brs, "STAGED_ROOT", tmp_path)
-    return brs, tmp_path
+    return brs
 
 
-def _write_draft(tmp_path: pathlib.Path, site: str, **kw) -> None:
-    import hashlib
-
-    d = _staged(site, **kw)
-    name = hashlib.sha256(f"{d['manifest_digest']}#{d['url']}#{d['pin']}".encode()).hexdigest()[:24]
-    (tmp_path / f"{name}.draft.json").write_text(
-        json.dumps(d, sort_keys=True) + "\n", encoding="utf-8",
-    )
+def _write_draft(tmp_path: pathlib.Path, draft: dict | None = None) -> pathlib.Path:
+    d = draft or _probe_draft()
+    p = tmp_path / "draft.json"
+    p.write_text(json.dumps(d, sort_keys=True) + "\n", encoding="utf-8")
+    return p
 
 
-# --- provenance enforcement --------------------------------------------------
+def _ledger_with(url: str = "https://x/y") -> dict:
+    from regexproof.mine.ledger import empty_ledger
+
+    ledger = empty_ledger()
+    # Requeue is a legal transition from gated:* → queued.
+    ledger["candidates"].append({"url": url, "status": "gated:no-go"})
+    return ledger
 
 
-def test_go_requires_human_provenance(staged_root, tmp_path):
-    brs, root = staged_root
-    _write_draft(root, "net/demo/a.sh:1:tok")
-    with pytest.raises(SystemExit, match="requires --provenance human"):
-        brs.main(["--go", "net/demo/a.sh:1:tok", "--reviewer", ""])
+def _write_ledger(tmp_path: pathlib.Path, url: str = "https://x/y") -> pathlib.Path:
+    p = tmp_path / "ledger.json"
+    p.write_text(json.dumps(_ledger_with(url), indent=2, sort_keys=True) + "\n",
+                 encoding="utf-8")
+    return p
 
 
-def test_go_requires_reviewer(staged_root, tmp_path):
-    brs, root = staged_root
-    _write_draft(root, "net/demo/a.sh:1:tok")
+# --- provenance enforcement (Luna r1 #2: schema-valid, not flag-level) -------
+
+
+def test_go_requires_reviewer(tmp_path):
+    brs = _load_brs()
+    draft = _write_draft(tmp_path)
+    ledger = _write_ledger(tmp_path)
     with pytest.raises(SystemExit, match="requires --reviewer"):
-        brs.main(["--go", "net/demo/a.sh:1:tok", "--provenance", "human"])
+        brs.main(["--draft", str(draft), "--go", "--ledger", str(ledger)])
 
 
-def test_triage_trial_requires_human(staged_root, tmp_path):
-    brs, root = staged_root
-    _write_draft(root, "net/demo/b.sh:2:tok")
-    with pytest.raises(SystemExit, match="requires --provenance human"):
-        brs.main(["--triage-trial", "net/demo/b.sh:2:tok"])
+def test_go_requires_rationale(tmp_path):
+    brs = _load_brs()
+    draft = _write_draft(tmp_path)
+    ledger = _write_ledger(tmp_path)
+    with pytest.raises(SystemExit, match="requires --rationale"):
+        brs.main(["--draft", str(draft), "--go", "--reviewer", "alice",
+                  "--ledger", str(ledger)])
 
 
-def test_auto_no_go_allowed(staged_root, tmp_path):
-    """Auto paths are deterministic NO-GO-only — no-go is the one verb that
-    works without human provenance."""
-    brs, root = staged_root
-    _write_draft(root, "net/demo/c.sh:3:tok")
-    rc = brs.main(["--no-go", "net/demo/c.sh:3:tok", "--ledger", str(tmp_path / "l.jsonl")])
+def test_go_requires_conditions_ok(tmp_path):
+    brs = _load_brs()
+    draft = _write_draft(tmp_path)
+    ledger = _write_ledger(tmp_path)
+    with pytest.raises(SystemExit, match="requires --conditions-ok"):
+        brs.main(["--draft", str(draft), "--go", "--reviewer", "alice",
+                  "--rationale", "verified", "--ledger", str(ledger)])
+
+
+def test_triage_trial_requires_human_flow(tmp_path):
+    brs = _load_brs()
+    draft = _write_draft(tmp_path)
+    ledger = _write_ledger(tmp_path)
+    with pytest.raises(SystemExit, match="requires --reviewer"):
+        brs.main(["--draft", str(draft), "--triage-trial", "--ledger", str(ledger)])
+
+
+def test_stub_provenance_rejected(tmp_path):
+    """Luna r1 #2: provenance=stub in the input draft is structurally
+    rejected — a queue stub can never be promoted."""
+    brs = _load_brs()
+    d = _probe_draft()
+    d["provenance"] = "stub"
+    draft = _write_draft(tmp_path, d)
+    ledger = _write_ledger(tmp_path)
+    with pytest.raises(SystemExit, match="queue stub"):
+        brs.main(["--draft", str(draft), "--no-go", "--ledger", str(ledger)])
+
+
+def test_human_go_writes_decision_and_promotes(tmp_path, monkeypatch):
+    """Luna r1 #1/#3: a human go drives author_human (schema-validated),
+    writes the gate decision, and promotes the ledger row so the sampler
+    includes it."""
+    brs = _load_brs()
+    gen = tmp_path / "generated"
+    gen.mkdir()
+    monkeypatch.setattr(brs, "GEN", gen)
+    monkeypatch.setattr(brs, "default_output_path",
+                        lambda corpus, repo_root=None: gen / f"{corpus}_gate_decision.json")
+    # go needs regex_sites >= 1 (schema minimum); auto-no-go needs 0.
+    d = _probe_draft()
+    d["probe"]["regex_sites"] = 1
+    draft = _write_draft(tmp_path, d)
+    ledger = _write_ledger(tmp_path)
+    at = "2026-08-21T10:00:00"
+    rc = brs.main(["--draft", str(draft), "--go", "--reviewer", "alice",
+                   "--rationale", "human verified all conditions",
+                   "--conditions-ok",
+                   "--evidence", "new-surface=manual-source-confirmed",
+                   "--evidence", "security-boundary=manual-review",
+                   "--evidence", "large-under-saturated=manual-review",
+                   "--at", at, "--ledger", str(ledger)])
     assert rc == 0
-    rows = [json.loads(line) for line in (tmp_path / "l.jsonl").read_text().splitlines() if line]
-    assert rows[0]["outcome"] == "no_go"
-    assert rows[0]["provenance"] == "auto"
+    # Schema-validated decision written.
+    dec = json.loads((gen / "ow_gate_decision.json").read_text(encoding="utf-8"))
+    assert dec["decision"] == "go"
+    assert dec["rationale"] == "human verified all conditions"
+    assert dec["decision_basis"] == "admission_conditions"
+    # Ledger promoted for the sampler (Luna r1 #3).
+    cand = next(iter(json.loads(ledger.read_text(encoding="utf-8"))["candidates"]))
+    assert cand["audit"]["promoted_via"] == "bulk-review"
+    assert cand["audit"]["promoted_at"] == at
 
 
-def test_human_go_writes_row(staged_root, tmp_path):
-    brs, root = staged_root
-    _write_draft(root, "net/demo/d.sh:4:tok")
-    rc = brs.main([
-        "--go", "net/demo/d.sh:4:tok",
-        "--provenance", "human", "--reviewer", "alice",
-        "--ledger", str(tmp_path / "l.jsonl"),
-    ])
+def test_auto_no_go_is_deterministic(tmp_path, monkeypatch):
+    """Auto paths are deterministic NO-GO-only — the auto author path never
+    emits go/triage-trial (Luna r1 #2)."""
+    brs = _load_brs()
+    gen = tmp_path / "generated"
+    gen.mkdir()
+    monkeypatch.setattr(brs, "GEN", gen)
+    monkeypatch.setattr(brs, "default_output_path",
+                        lambda corpus, repo_root=None: gen / f"{corpus}_gate_decision.json")
+    draft = _write_draft(tmp_path)
+    ledger = _write_ledger(tmp_path)
+    rc = brs.main(["--draft", str(draft), "--no-go", "--ledger", str(ledger)])
     assert rc == 0
-    rows = [json.loads(line) for line in (tmp_path / "l.jsonl").read_text().splitlines() if line]
-    assert rows[0]["outcome"] == "go"
-    assert rows[0]["provenance"] == "human"
-    assert rows[0]["reviewer"] == "alice"
+    dec = json.loads((gen / "ow_gate_decision.json").read_text(encoding="utf-8"))
+    assert dec["decision"] == "no-go"
+    assert dec["escape_hatch_applied"] is False
 
 
-def test_stub_provenance_rejected_for_go(staged_root, tmp_path):
-    brs, root = staged_root
-    _write_draft(root, "net/demo/e.sh:5:tok")
-    with pytest.raises(SystemExit, match="requires --provenance human"):
-        brs.main(["--go", "net/demo/e.sh:5:tok", "--provenance", "stub"])
+# --- requeue / demote semantics (Luna r1 #1: real transitions) ---------------
 
 
-def test_demote_records_retained_location(staged_root, tmp_path):
-    brs, root = staged_root
-    _write_draft(root, "net/demo/f.sh:6:tok")
-    rc = brs.main([
-        "--demote-retain-corpus", "net/demo/f.sh:6:tok",
-        "--retained-location", "batch/corpora/ow",
-        "--ledger", str(tmp_path / "l.jsonl"),
-    ])
+def test_requeue_transitions_and_archives(tmp_path, monkeypatch):
+    brs = _load_brs()
+    gen = tmp_path / "generated"
+    gen.mkdir()
+    monkeypatch.setattr(brs, "GEN", gen)
+    from regexproof.mine.tree import _repo_slug
+
+    slug = _repo_slug("https://x/y")
+    (gen / f"x_{slug}_gate_decision.json").write_text("{}", encoding="utf-8")
+    draft = _write_draft(tmp_path)
+    ledger = _write_ledger(tmp_path)
+    rc = brs.main(["--draft", str(draft), "--requeue",
+                   "--reason", "bulk-review", "--ledger", str(ledger)])
     assert rc == 0
-    rows = [json.loads(line) for line in (tmp_path / "l.jsonl").read_text().splitlines() if line]
-    assert rows[0]["outcome"] == "demote_retain_corpus"
-    assert rows[0]["retained_location"] == "batch/corpora/ow"
+    cand = next(iter(json.loads(ledger.read_text(encoding="utf-8"))["candidates"]))
+    assert cand["status"] == "queued"  # P2-owned transition API
+    # Decision archived so the read-only sync cannot reapply it.
+    assert not (gen / f"x_{slug}_gate_decision.json").exists()
+    assert len(list(gen.glob("*.requeued.json"))) == 1
+
+
+def test_demote_records_retained_location(tmp_path):
+    brs = _load_brs()
+    draft = _write_draft(tmp_path)
+    ledger = _write_ledger(tmp_path)
+    rc = brs.main(["--draft", str(draft), "--demote-retain-corpus",
+                   "--retained-location", "batch/corpora/ow",
+                   "--ledger", str(ledger)])
+    assert rc == 0
+    cand = next(iter(json.loads(ledger.read_text(encoding="utf-8"))["candidates"]))
+    assert cand["status"] == "demoted"
+    assert cand["retained_location"] == "batch/corpora/ow"
 
 
 # --- audit sampler population extension (#560 Wave 3) ------------------------
@@ -166,11 +257,20 @@ def test_sampler_keeps_regular_auto_filed():
 # --- (url, pin) supersession dedup for eval/escape counters ------------------
 
 
-def _decision_file(tmp_path: pathlib.Path, name: str, url: str, pin: str, status: str) -> None:
+def _decision_file(
+    tmp_path: pathlib.Path, name: str, url: str,
+    *, corpus_pin: str = "", decision: str = "no_go",
+    decision_date: str = "",
+) -> None:
+    """Real gate-decision shape (Luna r1 #4): corpus_pin + decision +
+    decision_date — NOT a top-level 'pin'/'status'."""
+    d = {"candidate_url": url, "decision": decision}
+    if corpus_pin:
+        d["corpus_pin"] = corpus_pin
+    if decision_date:
+        d["decision_date"] = decision_date
     (tmp_path / name).write_text(
-        json.dumps({"candidate_url": url, "pin": pin, "status": status}, sort_keys=True)
-        + "\n",
-        encoding="utf-8",
+        json.dumps(d, sort_keys=True) + "\n", encoding="utf-8",
     )
 
 
@@ -185,25 +285,54 @@ def _load_bpf():
     return bpf
 
 
-def test_supersession_dedup_keeps_newest_pin(tmp_path, monkeypatch):
+def test_supersession_dedup_keeps_latest_decision(tmp_path, monkeypatch):
+    """Luna r1 #4/#5: dedup keys on the CANONICAL pin (corpus_pin) and
+    selects by CHRONOLOGICAL decision_date, not lexical SHA order."""
     bpf = _load_bpf()
 
     gen = tmp_path
-    _decision_file(gen, "a_gate_decision.json", "https://x/y", "aaa", "no_go")
-    _decision_file(gen, "b_gate_decision.json", "https://x/y", "bbb", "go")
+    # Older decision_date with a LEXICALLY-LARGER pin (a newer commit can
+    # have a smaller SHA) — the chronological winner must be the newer date.
+    _decision_file(gen, "a_gate_decision.json", "https://x/y",
+                   corpus_pin="ffff", decision="no_go", decision_date="2026-08-01")
+    _decision_file(gen, "b_gate_decision.json", "https://x/y",
+                   corpus_pin="0000", decision="go", decision_date="2026-08-22")
     monkeypatch.setattr(bpf, "GEN", gen)
     rows = bpf.load_decision_population()
-    assert len(rows) == 1  # superseded: the older pin's row is dropped
-    assert rows[0]["pin"] == "bbb"  # newest pin wins
+    assert len(rows) == 1  # superseded: the older decision is dropped
+    assert rows[0]["pin"] == "0000"  # newer decision_date wins, NOT lexical max
     assert rows[0]["status"] == "go"
+
+
+def test_supersession_dedup_reads_nested_probe_pin(tmp_path, monkeypatch):
+    """Luna r1 #4: when corpus_pin is absent, the nested probe.pin is the
+    canonical pin — a top-level pin read would see an empty key."""
+    bpf = _load_bpf()
+
+    gen = tmp_path
+    (gen / "a_gate_decision.json").write_text(
+        json.dumps({
+            "candidate_url": "https://x/y",
+            "decision": "no_go",
+            "probe": {"pin": "abc123"},
+            "decision_date": "2026-08-22",
+        }, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(bpf, "GEN", gen)
+    rows = bpf.load_decision_population()
+    assert len(rows) == 1
+    assert rows[0]["pin"] == "abc123"
 
 
 def test_supersession_dedup_distinct_urls_untouched(tmp_path, monkeypatch):
     bpf = _load_bpf()
 
     gen = tmp_path
-    _decision_file(gen, "a_gate_decision.json", "https://x/y", "aaa", "no_go")
-    _decision_file(gen, "c_gate_decision.json", "https://x/z", "ccc", "triage_trial")
+    _decision_file(gen, "a_gate_decision.json", "https://x/y",
+                   corpus_pin="aaa", decision="no_go", decision_date="2026-08-01")
+    _decision_file(gen, "c_gate_decision.json", "https://x/z",
+                   corpus_pin="ccc", decision="triage_trial", decision_date="2026-08-01")
     monkeypatch.setattr(bpf, "GEN", gen)
     rows = bpf.load_decision_population()
     assert len(rows) == 2  # distinct urls never dedup
@@ -213,49 +342,45 @@ def test_supersession_dedup_missing_url_kept(tmp_path, monkeypatch):
     bpf = _load_bpf()
 
     gen = tmp_path
-    _decision_file(gen, "a_gate_decision.json", "", "aaa", "no_go")
+    (gen / "a_gate_decision.json").write_text(
+        json.dumps({"decision": "no_go"}, sort_keys=True) + "\n", encoding="utf-8",
+    )
     monkeypatch.setattr(bpf, "GEN", gen)
     rows = bpf.load_decision_population()
     assert len(rows) == 1  # url-less rows are untouched
 
 
-# --- canonical JSON (#560: sorted keys, \\n-terminated, stable order) --------
-
-
-def test_ledger_rows_canonical(staged_root, tmp_path):
-    brs, root = staged_root
-    _write_draft(root, "net/demo/g.sh:7:tok")
-    ledger = tmp_path / "l.jsonl"
-    brs.main(["--no-go", "net/demo/g.sh:7:tok", "--ledger", str(ledger)])
-    line = ledger.read_text(encoding="utf-8")
-    assert line.endswith("\n")
-    d = json.loads(line.strip())
-    assert list(d.keys()) == sorted(d.keys())  # sorted keys
-
-
 # --- golden inputs_hash no-drift on requeue AND demote (#560 AC) -------------
 
 
-def _inputs_hash_of(gen: pathlib.Path) -> str:
-    import hashlib
+def _load_bgl():
+    """Production hash: build-gate-labels._inputs_hash (Luna r1 #6 — the
+    tests must exercise the PRODUCTION hash, not a local reimplementation)."""
+    import importlib.util
 
-    h = hashlib.sha256()
-    for p in sorted(gen.glob("*_gate_decision.json")):
-        h.update(b"decision:")
-        h.update(p.name.encode("utf-8"))
-        h.update(p.read_bytes())
-    return h.hexdigest()
+    spec = importlib.util.spec_from_file_location(
+        "bgl", ROOT / "scripts" / "build-gate-labels.py",
+    )
+    bgl = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(bgl)  # type: ignore[union-attr]
+    return bgl
+
+
+def _inputs_hash_of(gen: pathlib.Path) -> str:
+    return _load_bgl()._inputs_hash(sorted(gen.glob("*_gate_decision.json")))
 
 
 def test_inputs_hash_no_drift_on_requeue(tmp_path):
-    """Requeue (materialize --teardown / audit-failed archive) must NOT
-    drift the golden inputs hash when decision CONTENT is unchanged — the
-    hash is content-derived (D5 lesson), not HEAD-derived."""
+    """Requeue (materialize --teardown / requeued archive) must NOT drift
+    the golden inputs hash when decision CONTENT is unchanged — the hash is
+    content-derived (D5 lesson), not HEAD-derived."""
     gen = tmp_path
-    _decision_file(gen, "a_gate_decision.json", "https://x/y", "aaa", "no_go")
-    _decision_file(gen, "b_gate_decision.json", "https://x/z", "bbb", "go")
+    _decision_file(gen, "a_gate_decision.json", "https://x/y",
+                   corpus_pin="aaa", decision="no_go", decision_date="2026-08-01")
+    _decision_file(gen, "b_gate_decision.json", "https://x/z",
+                   corpus_pin="bbb", decision="go", decision_date="2026-08-01")
     # Requeue = archive one decision (the read-only sync cannot reapply it).
-    (gen / "a_gate_decision.json").rename(gen / "a_gate_decision.audit-failed.json")
+    (gen / "a_gate_decision.json").rename(gen / "a_gate_decision.requeued.json")
     h2 = _inputs_hash_of(gen)
     # Content-derived: the hash over the SURVIVING decisions is stable and
     # the excluded file no longer counts — recomputing is deterministic.
@@ -266,7 +391,8 @@ def test_inputs_hash_no_drift_on_demote(tmp_path):
     """Demote (retain corpus, release lease) must NOT drift the golden
     inputs hash when decision content is unchanged."""
     gen = tmp_path
-    _decision_file(gen, "a_gate_decision.json", "https://x/y", "aaa", "no_go")
+    _decision_file(gen, "a_gate_decision.json", "https://x/y",
+                   corpus_pin="aaa", decision="no_go", decision_date="2026-08-01")
     h1 = _inputs_hash_of(gen)
     # Demote rewrites the row metadata but not the decision status/content.
     d = json.loads((gen / "a_gate_decision.json").read_text(encoding="utf-8"))
@@ -279,3 +405,24 @@ def test_inputs_hash_no_drift_on_demote(tmp_path):
     h2 = _inputs_hash_of(gen)
     assert h2 != h1  # metadata mutation detected (hash is content-derived)
     assert h2 == _inputs_hash_of(gen)  # stable across re-runs
+
+
+# --- canonical JSON (#560: sorted keys, \\n-terminated, stable order) --------
+
+
+def test_decision_output_canonical(tmp_path, monkeypatch):
+    """The authored gate decision is canonical JSON (sorted keys, trailing
+    newline) — golden artifacts must be byte-stable under regeneration."""
+    brs = _load_brs()
+    gen = tmp_path / "generated"
+    gen.mkdir()
+    monkeypatch.setattr(brs, "GEN", gen)
+    monkeypatch.setattr(brs, "default_output_path",
+                        lambda corpus, repo_root=None: gen / f"{corpus}_gate_decision.json")
+    draft = _write_draft(tmp_path)
+    ledger = _write_ledger(tmp_path)
+    brs.main(["--draft", str(draft), "--no-go", "--ledger", str(ledger)])
+    text = (gen / "ow_gate_decision.json").read_text(encoding="utf-8")
+    assert text.endswith("\n")
+    d = json.loads(text)
+    assert list(d.keys()) == sorted(d.keys())  # sorted keys
