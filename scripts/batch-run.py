@@ -171,6 +171,8 @@ def main(argv: list[str] | None = None) -> int:
                 rank_argv.extend(["--ledger", str(args.ledger)])
             text = _rank_ndjson(rank_argv)
         items = batch_manifest.items_from_rank_ndjson(text)
+        if args.limit and args.limit > 0:
+            items = items[: args.limit]
         doc = batch_manifest.write_manifest(
             items,
             allocator=args.allocator,

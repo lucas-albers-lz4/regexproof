@@ -217,6 +217,7 @@ def test_batch_run_snapshot_and_resume(tmp_path):
         "--manifest", str(man),
         "--snapshot-only",
         "--replace-manifest",
+        "--limit", "1",
     ])
     assert rc == 0
     doc = batch_manifest.load_and_verify(man)
