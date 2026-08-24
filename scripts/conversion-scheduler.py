@@ -144,16 +144,14 @@ def used_buckets_per_cluster(rows: list[dict]) -> dict[str, set[str]]:
     return out
 
 
-def _queue_has_pending(queues_dir: pathlib.Path, bucket: str) -> bool:
-    """A queue artifact for the bucket blocks selection only when it has
-    PENDING sites (emitted/claimed) — a fully contracted/skipped queue is
-    closed work and does not block (Luna r1 #2: file existence alone is
-    wrong). An EMPTY candidate_sites list is the valid empty_queue() shape
-    and does NOT block (Luna r2 #2). ANY malformed entry (non-dict,
-    status-less, or a status OUTSIDE the queue's own vocabulary) FAILS
-    CLOSED — malformed site data must never permit selection (CodeRabbit
-    #582, Luna r4)."""
-    qpath = queues_dir / f"{bucket}.json"
+def _queue_has_pending(queues_dir: pathlib.Path, cluster: str, bucket: str) -> bool:
+    """The cluster's queue (<cluster>.json — the canonical emit layout) has
+    a PENDING row for this BUCKET (row.idiom_bucket == bucket, status
+    emitted/claimed) → blocks selection. Empty queue / no matching rows /
+    only closed-status rows → does not block. ANY malformed row FOR THE
+    BUCKET (non-dict, status-less, unknown status) FAILS CLOSED — malformed
+    site data must never permit selection (CodeRabbit #582, Luna r4/r5)."""
+    qpath = queues_dir / f"{cluster}.json"
     if not qpath.exists():
         return False
     try:
@@ -166,14 +164,16 @@ def _queue_has_pending(queues_dir: pathlib.Path, bucket: str) -> bool:
     for s in sites:
         if not isinstance(s, dict):
             return True  # malformed entry (e.g. null) — fail closed
+        if str(s.get("idiom_bucket") or "").strip() != bucket:
+            continue  # a different bucket's row — irrelevant here
         status = str(s.get("status") or "").strip()
         if not status:
-            return True  # status-less entry — fail closed
+            return True  # status-less entry for this bucket — fail closed
         if status not in KNOWN_SITE_STATUSES:
             return True  # unknown status — fail closed (Luna r4)
         if status in PENDING_SITE_STATUSES:
             return True
-    return False  # empty or all-closed queue — does not block
+    return False  # no pending/malformed rows for this bucket — does not block
 
 
 def next_unused_bucket(
@@ -187,7 +187,7 @@ def next_unused_bucket(
     in the committed ledger — their basis is 'unregistered-next' (Luna r4).
     No wrap-around: progression exhausted -> none-available."""
     for candidate in BUCKET_PROGRESSION.get(cluster, []):
-        if candidate not in used and not _queue_has_pending(queues_dir, candidate):
+        if candidate not in used and not _queue_has_pending(queues_dir, cluster, candidate):
             return candidate, "named-next-unused"
     if DESIGN_TAIL_BUCKETS.get(cluster):
         return None, "unregistered-next"

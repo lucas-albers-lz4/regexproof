@@ -44,13 +44,17 @@ def _gate_decision(gen: pathlib.Path, corpus: str, decision: str = "go") -> None
         encoding="utf-8")
 
 
-def _queue(queues_dir: pathlib.Path, bucket: str, statuses: list[str]) -> None:
+def _queue(queues_dir: pathlib.Path, cluster: str, rows: list[dict]) -> None:
+    """Canonical emit layout (Luna r5): <cluster>.json with per-row
+    idiom_bucket + status."""
     queues_dir.mkdir(parents=True, exist_ok=True)
-    (queues_dir / f"{bucket}.json").write_text(
-        json.dumps({"cluster": bucket,
-                    "candidate_sites": [{"site": f"s{i}", "status": st}
-                                        for i, st in enumerate(statuses)]}) + "\n",
+    (queues_dir / f"{cluster}.json").write_text(
+        json.dumps({"cluster": cluster, "candidate_sites": rows}) + "\n",
         encoding="utf-8")
+
+
+def _site(bucket: str, status: str) -> dict:
+    return {"site": f"s:{bucket}", "idiom_bucket": bucket, "status": status}
 
 
 def test_selects_first_unused_progression_bucket(tmp_path):
@@ -117,17 +121,21 @@ def test_queue_blocks_only_pending_sites(tmp_path):
     _gate_decision(gen, "openwrt_packages")
     rows = [_row("openwrt_packages_w1", "validator-charsets-and-captures")]
 
-    # Pending queue for image-and-ddns-json -> blocked; next is
+    # Pending queue rows for image-and-ddns-json -> blocked; next is
     # ddns-query-and-escape-image.
-    _queue(tmp_path / "queues", "image-and-ddns-json", ["emitted", "claimed"])
+    _queue(tmp_path / "queues", "openwrt_packages",
+           [_site("image-and-ddns-json", "emitted"),
+            _site("image-and-ddns-json", "claimed")])
     sched = cs.build_schedule(rows, queues_dir=tmp_path / "queues",
                               gate_decisions_dir=gen,
                               dispositions_path=tmp_path / "d.jsonl")
     sel = sched["selections"][0]
     assert sel["selected_bucket"] == "ddns-query-and-escape-image"
 
-    # Closed queue (all contracted) -> image-and-ddns-json selectable again.
-    _queue(tmp_path / "queues", "image-and-ddns-json", ["contracted", "skipped_unreachable"])
+    # Closed queue rows (all contracted) -> image-and-ddns-json selectable.
+    _queue(tmp_path / "queues", "openwrt_packages",
+           [_site("image-and-ddns-json", "contracted"),
+            _site("image-and-ddns-json", "skipped_unreachable")])
     sched = cs.build_schedule(rows, queues_dir=tmp_path / "queues",
                               gate_decisions_dir=gen,
                               dispositions_path=tmp_path / "d.jsonl")
@@ -141,7 +149,7 @@ def test_empty_queue_does_not_block(tmp_path):
     cs = _load_cs()
     gen = tmp_path / "generated"
     _gate_decision(gen, "openwrt_packages")
-    _queue(tmp_path / "queues", "image-and-ddns-json", [])  # empty sites
+    _queue(tmp_path / "queues", "openwrt_packages", [])  # empty sites
     rows = [_row("openwrt_packages_w1", "validator-charsets-and-captures")]
     sched = cs.build_schedule(rows, queues_dir=tmp_path / "queues",
                               gate_decisions_dir=gen,
@@ -161,23 +169,26 @@ def test_malformed_queue_fails_closed(tmp_path):
     queues_dir.mkdir(parents=True, exist_ok=True)
     rows = [_row("openwrt_packages_w1", "validator-charsets-and-captures")]
 
-    # null entry -> fail closed (block)
-    (queues_dir / "image-and-ddns-json.json").write_text(
+    # null entry -> fail closed (block) — a malformed row with no
+    # idiom_bucket is un-attributable, so the whole cluster queue is
+    # suspect: every progression bucket is blocked -> unregistered-next.
+    (queues_dir / "openwrt_packages.json").write_text(
         json.dumps({"candidate_sites": [None]}) + "\n", encoding="utf-8")
-    sched = cs.build_schedule(rows, queues_dir=queues_dir,
-                              gate_decisions_dir=gen,
-                              dispositions_path=tmp_path / "d.jsonl")
-    assert sched["selections"][0]["selected_bucket"] == "ddns-query-and-escape-image"
-
-    # status-less entry -> fail closed (block); the registered progression
-    # is now exhausted and the qosify design tail is UNREGISTERED -> refused.
-    (queues_dir / "ddns-query-and-escape-image.json").write_text(
-        json.dumps({"candidate_sites": [{"site": "s0"}]}) + "\n", encoding="utf-8")
     sched = cs.build_schedule(rows, queues_dir=queues_dir,
                               gate_decisions_dir=gen,
                               dispositions_path=tmp_path / "d.jsonl")
     assert sched["selections"][0]["selected_bucket"] is None
     assert sched["selections"][0]["selection_basis"] == "unregistered-next"
+
+    # status-less entry for image-and-ddns -> fail closed (block that
+    # bucket); the progression advances to ddns-query-and-escape-image.
+    (queues_dir / "openwrt_packages.json").write_text(
+        json.dumps({"candidate_sites": [{"site": "s0", "idiom_bucket": "image-and-ddns-json"}]}) + "\n",
+        encoding="utf-8")
+    sched = cs.build_schedule(rows, queues_dir=queues_dir,
+                              gate_decisions_dir=gen,
+                              dispositions_path=tmp_path / "d.jsonl")
+    assert sched["selections"][0]["selected_bucket"] == "ddns-query-and-escape-image"
 
 
 def test_unknown_queue_status_fails_closed(tmp_path):
@@ -186,17 +197,31 @@ def test_unknown_queue_status_fails_closed(tmp_path):
     cs = _load_cs()
     gen = tmp_path / "generated"
     _gate_decision(gen, "openwrt_packages")
-    queues_dir = tmp_path / "queues"
-    queues_dir.mkdir(parents=True, exist_ok=True)
-    (queues_dir / "image-and-ddns-json.json").write_text(
-        json.dumps({"candidate_sites": [{"site": "s0", "status": "bogus"}]}) + "\n",
-        encoding="utf-8")
+    _queue(tmp_path / "queues", "openwrt_packages",
+           [_site("image-and-ddns-json", "bogus")])
     rows = [_row("openwrt_packages_w1", "validator-charsets-and-captures")]
-    sched = cs.build_schedule(rows, queues_dir=queues_dir,
+    sched = cs.build_schedule(rows, queues_dir=tmp_path / "queues",
                               gate_decisions_dir=gen,
                               dispositions_path=tmp_path / "d.jsonl")
     # image-and-ddns-json blocked (unknown status) -> ddns-query selected.
     assert sched["selections"][0]["selected_bucket"] == "ddns-query-and-escape-image"
+
+
+def test_other_bucket_rows_do_not_block(tmp_path):
+    """Luna r5: a PENDING row for a DIFFERENT bucket in the cluster queue
+    does not block this bucket's selection."""
+    cs = _load_cs()
+    gen = tmp_path / "generated"
+    _gate_decision(gen, "openwrt_packages")
+    # Pending row for validator-charsets (already used) — irrelevant to the
+    # image-and-ddns-json candidate.
+    _queue(tmp_path / "queues", "openwrt_packages",
+           [_site("validator-charsets-and-captures", "emitted")])
+    rows = [_row("openwrt_packages_w1", "validator-charsets-and-captures")]
+    sched = cs.build_schedule(rows, queues_dir=tmp_path / "queues",
+                              gate_decisions_dir=gen,
+                              dispositions_path=tmp_path / "d.jsonl")
+    assert sched["selections"][0]["selected_bucket"] == "image-and-ddns-json"
 
 
 def test_malformed_gate_artifact_skipped(tmp_path):
