@@ -151,12 +151,13 @@ def test_duplicate_url_pin_keeps_newer_decision(tmp_path: Path):
     assert result["k_window"] == 1
 
 
-def test_duplicate_url_pin_equal_recency_fails_closed(tmp_path: Path):
+def test_duplicate_url_pin_equal_recency_keeps_last_sorted_file(tmp_path: Path):
+    """Freeze supersession: equal recency → last sorted path wins."""
     state = _state(tmp_path)
     gen = tmp_path / "gen"
     gen.mkdir()
     _decision(gen, "https://x/y", PIN_A, "go")
-    (gen / "y_dup_gate_decision.json").write_text(
+    (gen / "zzz_y_dup_gate_decision.json").write_text(
         json.dumps({
             "candidate_url": "https://x/y",
             "corpus_pin": PIN_A,
@@ -165,13 +166,22 @@ def test_duplicate_url_pin_equal_recency_fails_closed(tmp_path: Path):
         }) + "\n",
         encoding="utf-8",
     )
-    with pytest.raises(SystemExit, match="equal recency"):
-        escape_window(
-            state_path=state,
-            gen=gen,
-            baseline_path=_baseline(tmp_path),
-            now=NOW,
-        )
+    result = escape_window(
+        state_path=state,
+        gen=gen,
+        baseline_path=_baseline(tmp_path),
+        now=NOW,
+    )
+    # y_dup sorts after y_gate_decision → no-go wins → k_window 0 for y.
+    assert result["k_window"] == 0
+
+
+def test_indexes_committed_gate_decisions():
+    """Default checkout must not abort on real equal-recency aliases (#584 Luna)."""
+    from regexproof.mine.escape_window import _index_decisions
+
+    indexed = _index_decisions(Path("properties/generated"))
+    assert len(indexed) > 100
 
 
 def test_rows_outside_window_are_excluded(tmp_path: Path):

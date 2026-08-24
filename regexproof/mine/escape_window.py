@@ -80,26 +80,19 @@ def _index_decisions(gen: pathlib.Path) -> dict[tuple[str, str], dict[str, Any]]
         key = (url, pin)
         when = _decision_recency(payload)
         if key not in indexed:
-            if when is None:
-                raise SystemExit(
-                    f"escape_window: gate decision {path} has no decision_date/"
-                    "updated_at; refuse to index an unordered (url, pin)"
-                )
             indexed[key] = payload
-            recency[key] = when
+            recency[key] = when  # may be None until a duplicate appears
             continue
-        if when is None:
+        if when is None or recency[key] is None:
             raise SystemExit(
                 f"escape_window: duplicate (url, pin) {key} in {path} has no "
                 "decision_date/updated_at — fail closed"
             )
         prev = recency[key]
-        if when == prev:
-            raise SystemExit(
-                f"escape_window: duplicate (url, pin) {key} with equal recency "
-                f"— fail closed ({path})"
-            )
-        if when > prev:
+        # Same policy as freeze supersession: later recency wins; equal
+        # recency keeps the last file in sorted-path order (deterministic,
+        # matches load_decision_population).
+        if when >= prev:
             indexed[key] = payload
             recency[key] = when
     return indexed
