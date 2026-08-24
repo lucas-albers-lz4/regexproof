@@ -272,7 +272,12 @@ def _write(reg: dict[str, Any], path: pathlib.Path | None = None) -> None:
 def projection(path: pathlib.Path | None = None) -> dict[str, Any]:
     """Batch summary projections from state.json: cache_hits, cache_misses,
     bytes_saved, lifecycle_bytes (probe_fetch only), clone_ms p50/p95, and
-    the survivor rate for the escape clause."""
+    probe_success_rate (pooled ``ok`` / total rows).
+
+    ``probe_success_rate`` is a walk-outcome rate. It is NOT the escape-clause
+    7-day survivor (human-reviewed-and-admitted ``go ∪ triage-trial`` over
+    probes run). Use :func:`regexproof.mine.escape_window.escape_window`.
+    """
     reg = load_state(path)
     rows = list(reg["rows"].values()) if isinstance(reg.get("rows"), dict) else reg.get("rows", [])
     hits = [r for r in rows if r.get("cache_hit")]
@@ -291,5 +296,5 @@ def projection(path: pathlib.Path | None = None) -> dict[str, Any]:
         "lifecycle_bytes": lifecycle,
         "clone_ms_p50": p50,
         "clone_ms_p95": p95,
-        "survivor_rate": (len(ok) / len(rows)) if rows else None,
+        "probe_success_rate": (len(ok) / len(rows)) if rows else None,
     }

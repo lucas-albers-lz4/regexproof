@@ -73,6 +73,16 @@ def test_escape_protocol_is_predeclared(baseline: dict):
     assert "no low-yield unlock" in t["fire_action"]
 
 
+def test_escape_protocol_records_test_revision(baseline: dict):
+    rev = baseline["test_revision"]
+    assert rev["date"] == "2026-08-24"
+    assert "1/(2n)" in rev["to"]
+    assert rev["implementation"] == "regexproof.stats.intervals.two_proportion_test"
+    assert "p~=0.0463" in rev["effect"]
+    assert "p~=0.0694" in rev["effect"]
+    assert "0.0386" not in rev["effect"]
+
+
 def test_regeneration_is_byte_stable():
     """Regenerate and diff — the golden CI check must not drift."""
     before = {

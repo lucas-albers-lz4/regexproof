@@ -152,7 +152,8 @@ def test_record_and_projection(tmp_path):
     assert proj["bytes_saved"] == 5000
     assert proj["lifecycle_bytes"] == 1000  # probe_fetch only
     assert proj["clone_ms_p50"] == 120
-    assert proj["survivor_rate"] == 1.0
+    assert proj["probe_success_rate"] == 1.0
+    assert "survivor_rate" not in proj
 
 
 def test_keyed_rows_no_duplicates(tmp_path):

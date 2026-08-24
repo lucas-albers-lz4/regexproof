@@ -241,6 +241,24 @@ def main() -> int:
             "two_windows_rule": "n < floor requires two consecutive 7-day windows",
             "fire_action": "BLOCKS #550 Phase 2 scale; no low-yield unlock",
         },
+        "test_revision": {
+            "date": "2026-08-24",
+            "from": "statsmodels.stats.proportion.proportions_ztest with "
+            "Wilson continuity-corrected SE (#550 REV-6 named impl)",
+            "via": "stdlib null-SE z-test without continuity correction "
+            "(Phase 0 / waves, intervals.py before PR #583)",
+            "to": "stdlib one-proportion z-test with 1/(2n) continuity "
+            "correction toward the null (PR #583)",
+            "implementation": "regexproof.stats.intervals.two_proportion_test",
+            "effect": "k=3/n=50 vs baseline 121/844: uncorrected fires "
+            "(p~=0.0463); corrected does not (p~=0.0694). Pinned in "
+            "tests/test_intervals.py.",
+            "rationale": "Match the predeclared #550 continuity-corrected "
+            "oracle. statsmodels' two-proportion wrapper has no "
+            "correction parameter -- the corrected oracle is this "
+            "stdlib function. Future method changes append here "
+            "instead of each operator re-deriving one.",
+        },
     }
 
     FREEZE_OUT.write_text(json.dumps(freeze, indent=2, sort_keys=True) + "\n")
