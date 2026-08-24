@@ -531,6 +531,49 @@ def test_filing_failure_preserves_prior_artifact(tmp_path, monkeypatch):
     assert not (gen / "ow_gate_decision.json.pending").exists()
 
 
+def test_install_failure_resumes_from_journal(tmp_path, monkeypatch):
+    """Luna r10: if os.replace fails AFTER the ledger commits, the .pending
+    journal is retained and a re-run completes the install without
+    re-authoring (ledger already records the decision)."""
+    brs = _load_brs()
+    gen = tmp_path / "generated"
+    gen.mkdir()
+    monkeypatch.setattr(brs, "GEN", gen)
+    monkeypatch.setattr(brs, "default_output_path",
+                        lambda corpus, repo_root=None: gen / f"{corpus}_gate_decision.json")
+    from regexproof.mine.ledger import empty_ledger
+
+    url = "https://x/y"
+    ledger = tmp_path / "ledger.json"
+    ld = empty_ledger()
+    ld["candidates"].append({"url": url, "status": "mined",
+                             "audit": {"re_evaluate": False}})
+    ledger.write_text(json.dumps(ld, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    draft = _write_draft(tmp_path, _probe_draft(url))
+
+    real_replace = os.replace
+
+    def _fail_artifact_replace(src, dst):
+        if str(src).endswith(".pending"):
+            raise OSError("simulated rename failure")
+        return real_replace(src, dst)
+    monkeypatch.setattr(brs.os, "replace", _fail_artifact_replace)
+    with pytest.raises(SystemExit, match="re-run the same command"):
+        brs.main(["--draft", str(draft), "--no-go", "--ledger", str(ledger)])
+    # Journal retained; ledger already records auto_filed; artifact NOT installed.
+    assert (gen / "ow_gate_decision.json.pending").exists()
+    assert not (gen / "ow_gate_decision.json").exists()
+    cand = next(iter(json.loads(ledger.read_text(encoding="utf-8"))["candidates"]))
+    assert cand["audit"]["auto_filed"] is True
+
+    # Re-run: the journal + already-filed ledger complete the install.
+    monkeypatch.setattr(brs.os, "replace", real_replace)
+    rc = brs.main(["--draft", str(draft), "--no-go", "--ledger", str(ledger)])
+    assert rc == 0
+    assert (gen / "ow_gate_decision.json").exists()
+    assert not (gen / "ow_gate_decision.json.pending").exists()
+
+
 def test_demote_records_retained_location(tmp_path):
     brs = _load_brs()
     draft = _write_draft(tmp_path)

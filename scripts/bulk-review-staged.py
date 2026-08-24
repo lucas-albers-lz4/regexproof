@@ -376,6 +376,34 @@ def main(argv: list[str] | None = None) -> int:
     out_path = default_output_path(corpus, repo_root=ROOT)
     out_path.parent.mkdir(parents=True, exist_ok=True)
     pending = out_path.with_name(out_path.name + ".pending")
+
+    # Luna r10: the .pending file doubles as a RETRY JOURNAL. If a previous
+    # run committed the ledger but crashed before os.replace, a re-run finds
+    # the pending file and — when the ledger ALREADY records this decision —
+    # completes the install instead of re-authoring.
+    from regexproof.mine.ledger import load_ledger
+
+    ledger_cand = find_candidate(load_ledger(args.ledger), url)
+    ledger_audit = (
+        ledger_cand.get("audit") or {}
+        if ledger_cand is not None else {}
+    )
+    ledger_filed = bool(
+        ledger_cand is not None
+        and isinstance(ledger_audit, dict)
+        and (
+            (decision == "no-go" and ledger_audit.get("auto_filed") is True)
+            or (decision != "no-go" and ledger_audit.get("promoted_via") == "bulk-review")
+        )
+    )
+    if pending.exists() and ledger_filed:
+        # Resume: the ledger already reflects this decision — install it.
+        os.replace(pending, out_path)
+        print(f"{decision}: {url} -> {out_path.name} (provenance={'human' if decision != 'no-go' else 'auto'}, resumed)")
+        return 0
+    if pending.exists():
+        pending.unlink(missing_ok=True)  # stale journal from a different state
+
     pending.write_text(json.dumps(out, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 
     def _rollback_pending() -> None:
@@ -426,8 +454,18 @@ def main(argv: list[str] | None = None) -> int:
                 "audit provenance missing (no decision was installed)"
             ) from exc
 
-    # All ledger updates succeeded — atomically install the decision.
-    os.replace(pending, out_path)
+    # All ledger updates succeeded — atomically install the decision. On
+    # failure the .pending journal is KEPT so a re-run can resume (Luna
+    # r10); the ledger already records the decision, so re-running the same
+    # command completes the install without re-authoring.
+    try:
+        os.replace(pending, out_path)
+    except OSError as exc:
+        raise SystemExit(
+            f"bulk-review: ledger updated but artifact install failed for "
+            f"{url}: {exc} — re-run the same command to complete the "
+            "install (pending journal retained)"
+        ) from exc
     print(f"{decision}: {url} -> {out_path.name} (provenance=human)" if decision != "no-go"
           else f"no_go: {url} -> {out_path.name} (provenance=auto)")
     return 0
