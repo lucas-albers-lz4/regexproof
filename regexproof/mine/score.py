@@ -11,6 +11,8 @@ from pathlib import Path
 from typing import Any
 
 from regexproof.admission.boundary import BoundarySignals, classify_boundary
+from regexproof.mine.root_dir import root_dir_deprioritized
+from regexproof.mine.deny_list import slug_denied
 from regexproof.mine.features import (  # noqa: F401
     _QUERY_FAMILY,
     _parse_pushed,
@@ -114,6 +116,41 @@ def _tree_overlay_signals(tree_feature: dict[str, Any] | None) -> dict[str, floa
     return signals
 
 
+def wave9_soft_flags(
+    cand: dict[str, Any],
+    tree_feature: dict[str, Any] | None,
+    *,
+    deny_slugs: set[str] | None = None,
+    code_search_hits: int | None = None,
+) -> dict[str, bool]:
+    """Wave 9 (#578) screens: never drop a candidate, only flag deprioritize.
+
+    ``code_search_hits is None`` means the density probe did not run or
+    degraded (rate-limit) — that is *not* an empty-hit signal.
+    """
+    root = False
+    if (
+        isinstance(tree_feature, dict)
+        and tree_feature.get("complete") is True
+        and tree_feature.get("truncated") is not True
+    ):
+        root = root_dir_deprioritized(tree_feature.get("root_dir_names") or ())
+    denied = bool(deny_slugs) and slug_denied(str(cand.get("url") or ""), deny_slugs)
+    return {
+        "root_dir_deprioritized": bool(root),
+        "deny_list": bool(denied),
+        "code_search_empty": code_search_hits == 0,
+    }
+
+
+def wave9_deprioritize(flags: dict[str, bool]) -> bool:
+    return bool(
+        flags.get("root_dir_deprioritized")
+        or flags.get("deny_list")
+        or flags.get("code_search_empty")
+    )
+
+
 def _v1_base_score(
     cand: dict[str, Any], *, today: date | None
 ) -> tuple[float, dict[str, Any]]:
@@ -157,9 +194,25 @@ def candidate_score(
     today: date | None = None,
     allocator: str = "score-v1",
     tree_feature: dict[str, Any] | None = None,
+    deny_slugs: set[str] | None = None,
+    code_search_hits: int | None = None,
 ) -> tuple[float, dict[str, Any]]:
-    """Return ``(total, breakdown)`` for a ledger/queue candidate row."""
+    """Return ``(total, breakdown)`` for a ledger/queue candidate row.
+
+    Wave 9 screens are recorded on ``breakdown["wave9_soft"]`` and never
+    mutate the numeric total (v1 pin 49.0 / frozen v1.5 overlay stay put).
+    """
     allocator = _normalize_allocator(allocator)
+    hits = code_search_hits
+    if hits is None:
+        raw = cand.get("code_search_hits")
+        hits = int(raw) if isinstance(raw, int) else None
+    flags = wave9_soft_flags(
+        cand,
+        tree_feature,
+        deny_slugs=deny_slugs,
+        code_search_hits=hits,
+    )
     if allocator == "score-v2":
         from regexproof.mine.score_v2 import linear_score, load_weights
 
@@ -174,6 +227,7 @@ def candidate_score(
             "score_version": "v2",
             "total": total,
             "feature_set": model.get("feature_set", "v2"),
+            "wave9_soft": flags,
         }
         return total, breakdown
 
@@ -181,6 +235,7 @@ def candidate_score(
     if allocator == "score-v1":
         base["allocator"] = allocator
         base["score_version"] = "v1"
+        base["wave9_soft"] = flags
         return base_total, base
 
     # score-v1.5: v1 base + frozen tree overlay (#550 Phase 1 / Item II).
@@ -189,13 +244,14 @@ def candidate_score(
         _TREE_OVERLAY_WEIGHTS[name] * signals[name] for name in _TREE_OVERLAY_WEIGHTS
     )
     total = round(base_total + overlay_pts, 4)
-    breakdown: dict[str, Any] = {
+    breakdown = {
         "allocator": allocator,
         "score_version": "v1.5",
         **base,
         "tree_unavailable": signals["tree_unavailable"] == 1.0,
         "tree_signals": {k: v for k, v in signals.items() if v != 0.0},
         "tree_overlay_pts": round(overlay_pts, 4),
+        "wave9_soft": flags,
         "total": total,
     }
     return total, breakdown
@@ -207,34 +263,60 @@ def rank_candidates(
     today: date | None = None,
     allocator: str = "score-v1",
     tree_features: dict[tuple[str, str], dict[str, Any]] | None = None,
+    deny_slugs: set[str] | None = None,
+    density_hits: dict[str, int | None] | None = None,
 ) -> list[dict[str, Any]]:
     """Return a new list sorted highest score first; ties by ``url`` ascending.
 
     For score-v1.5, tree-available rows form a HARD upper tier: a candidate
     with a complete tree probe always outranks one without, regardless of
     base score (the design's deprioritized-tier rule). Within each tier,
-    sort by total score descending."""
+    sort by total score descending.
+
+    Wave 9 (#578) adds a *soft* inner tier (root-dir / deny-list / empty
+    code-search). Soft-deprioritized rows still appear — they are never
+    dropped from the pool.
+    """
     allocator = _normalize_allocator(allocator)
+
+    def _hits_for(c: dict[str, Any]) -> int | None:
+        if density_hits is None:
+            raw = c.get("code_search_hits")
+            return int(raw) if isinstance(raw, int) else None
+        url = str(c.get("url") or "")
+        if url in density_hits:
+            return density_hits[url]
+        from regexproof.mine.exclusions import normalize_repo_url
+
+        return density_hits.get(normalize_repo_url(url))
+
+    def _score(c: dict[str, Any]) -> tuple[float, dict[str, Any], dict[str, Any] | None]:
+        tree = _tree_feature_for_candidate(c, tree_features)
+        total, breakdown = candidate_score(
+            c,
+            today=today,
+            allocator=allocator,
+            tree_feature=tree,
+            deny_slugs=deny_slugs,
+            code_search_hits=_hits_for(c),
+        )
+        return total, breakdown, tree
+
     if allocator != "score-v1.5":
-        def sort_key(c: dict[str, Any]) -> tuple[float, str]:
-            total, _ = candidate_score(
-                c,
-                today=today,
-                allocator=allocator,
-                tree_feature=_tree_feature_for_candidate(c, tree_features),
-            )
-            return (-total, str(c.get("url") or ""))
+        def sort_key(c: dict[str, Any]) -> tuple[int, float, str]:
+            total, breakdown, _tree = _score(c)
+            soft = 1 if wave9_deprioritize(breakdown.get("wave9_soft") or {}) else 0
+            return (soft, -total, str(c.get("url") or ""))
 
         return sorted(cands, key=sort_key)
 
-    def v15_sort_key(c: dict[str, Any]) -> tuple[int, float, str]:
-        tree = _tree_feature_for_candidate(c, tree_features)
-        total, breakdown = candidate_score(
-            c, today=today, allocator=allocator, tree_feature=tree
-        )
+    def v15_sort_key(c: dict[str, Any]) -> tuple[int, int, float, str]:
+        total, breakdown, _tree = _score(c)
         available = not bool(breakdown.get("tree_unavailable"))
+        soft = 1 if wave9_deprioritize(breakdown.get("wave9_soft") or {}) else 0
         # Tier 0 = tree-available (hard upper), tier 1 = unavailable.
-        return (0 if available else 1, -total, str(c.get("url") or ""))
+        # Soft deprioritize is inner: available+flagged still beats unavailable.
+        return (0 if available else 1, soft, -total, str(c.get("url") or ""))
 
     return sorted(cands, key=v15_sort_key)
 

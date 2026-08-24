@@ -163,6 +163,7 @@ def join_rows(freeze: dict) -> list[dict]:
                 "source_query": led.get("source_query") or "",
                 "capped": bool(led.get("capped")),
                 "pin": pin,
+                "regex_sites": int(probe.get("regex_sites") or 0),
                 "tree_feature": tree_feature
                 if isinstance(tree_feature, dict)
                 else None,

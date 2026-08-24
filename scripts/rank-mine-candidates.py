@@ -19,6 +19,11 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
+from regexproof.mine.deny_list import load_deny_slugs  # noqa: E402  # ROOT bootstrap above
+from regexproof.mine.density import (  # noqa: E402  # ROOT bootstrap above
+    DensityCache,
+    materialize_density_hits,
+)
 from regexproof.mine.exclusions import load_admitted_urls, normalize_repo_url  # noqa: E402  # ROOT bootstrap above
 from regexproof.mine.ledger import load_ledger  # noqa: E402  # ROOT bootstrap above
 from regexproof.mine.score import (  # noqa: E402  # ROOT bootstrap above
@@ -113,6 +118,35 @@ def main(argv: list[str] | None = None) -> int:
         default="score-v1",
         help="Score allocator (default: score-v1; v1.5 adds the tree overlay).",
     )
+    ap.add_argument(
+        "--deny-list",
+        type=Path,
+        default=None,
+        help=(
+            "Wave 9 probe deny-list JSON (default: "
+            "properties/generated/probe_deny_list.json). Soft penalty only."
+        ),
+    )
+    ap.add_argument(
+        "--no-deny-list",
+        action="store_true",
+        help="Do not apply the post-walk deny-list (soft screen stays off).",
+    )
+    ap.add_argument(
+        "--code-search-budget",
+        type=int,
+        default=0,
+        help=(
+            "Max uncached GitHub code-search density calls (default: 0). "
+            "Rate-limit degrades to unknown, never a hard reject."
+        ),
+    )
+    ap.add_argument(
+        "--density-cache",
+        type=Path,
+        default=None,
+        help="Density cache path (default: .cache/regexproof/mine-density.json).",
+    )
     args = ap.parse_args(argv)
 
     ledger_path = args.ledger.expanduser().resolve()
@@ -193,29 +227,47 @@ def main(argv: list[str] | None = None) -> int:
                 mined = str(c.get("pin") or "")
                 if mined:
                     c["pin_probed"] = mined
+        elif not str(c.get("pin_probed") or ""):
+            mined = str(c.get("pin") or "")
+            if mined:
+                c["pin_probed"] = mined
         pool.append(c)
     tree_features = {}
-    if args.allocator == "score-v2" and pool:
-        # score-v2 uses the committed materialized artifact by default. A
-        # caller can still select a writable cache for budgeted live probes.
-        cache_path = args.tree_cache or args.tree_features
+    if pool:
+        if args.allocator == "score-v2":
+            cache_path = args.tree_cache or args.tree_features
+            session = _http_session() if args.tree_probe_budget > 0 else None
+        elif args.tree_probe_budget > 0:
+            cache_path = args.tree_cache
+            session = _http_session()
+        else:
+            # Budget 0 still joins committed tree summaries so Wave 9
+            # root-dir deprioritize can fire without extra API calls.
+            cache_path = args.tree_cache or args.tree_features
+            session = None
         tree_features, _calls = materialize_tree_features(
-            _http_session() if args.tree_probe_budget > 0 else None,
+            session,
             pool,
             budget=args.tree_probe_budget,
             cache=TreeCache(cache_path),
         )
-    elif args.tree_probe_budget > 0 and pool:
-        tree_features, _calls = materialize_tree_features(
+    density_hits: dict = {}
+    if args.code_search_budget > 0 and pool:
+        density_hits, _dcalls = materialize_density_hits(
             _http_session(),
             pool,
-            budget=args.tree_probe_budget,
-            cache=TreeCache(args.tree_cache),
+            budget=args.code_search_budget,
+            cache=DensityCache(args.density_cache),
         )
+    deny_slugs = set()
+    if not args.no_deny_list:
+        deny_slugs = load_deny_slugs(args.deny_list)
     ranked = rank_candidates(
         pool,
         allocator=args.allocator,
         tree_features=tree_features,
+        deny_slugs=deny_slugs or None,
+        density_hits=density_hits or None,
     )
     if args.limit and args.limit > 0:
         ranked = ranked[: args.limit]
@@ -224,10 +276,15 @@ def main(argv: list[str] | None = None) -> int:
         url = str(cand.get("url") or "")
         pin = str(cand.get("pin_probed") or "")
         tree_feature = tree_features.get((normalize_repo_url(url), pin))
+        hits = None
+        if density_hits:
+            hits = density_hits.get(normalize_repo_url(url), density_hits.get(url))
         total, breakdown = candidate_score(
             cand,
             allocator=args.allocator,
             tree_feature=tree_feature,
+            deny_slugs=deny_slugs or None,
+            code_search_hits=hits,
         )
         row = {
             "url": cand.get("url"),

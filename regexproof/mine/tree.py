@@ -14,6 +14,7 @@ from pathlib import Path
 from typing import Any
 
 from regexproof.admission.boundary import BoundarySignals, classify_boundary
+from regexproof.mine.root_dir import root_names_from_paths
 from regexproof.io_atomic import atomic_write_text
 from regexproof.mine.exclusions import github_repo_slug, normalize_repo_url
 from regexproof.mine.search import (
@@ -93,6 +94,7 @@ class TreeProbeResult:
     regex_file_type_counts: dict[str, int]
     path_count: int
     probed_pin: str
+    root_dir_names: tuple[str, ...] = ()
     reason: str | None = None
 
     def as_dict(self) -> dict[str, Any]:
@@ -103,6 +105,7 @@ class TreeProbeResult:
             "regex_file_type_counts": dict(self.regex_file_type_counts),
             "path_count": self.path_count,
             "probed_pin": self.probed_pin,
+            "root_dir_names": list(self.root_dir_names),
         }
         if self.reason:
             out["reason"] = self.reason
@@ -216,6 +219,7 @@ def summarize_tree(body: dict[str, Any], slug: str, probed_pin: str) -> TreeProb
         regex_file_type_counts=dict(sorted(counts.items())),
         path_count=len(paths),
         probed_pin=probed_pin,
+        root_dir_names=tuple(root_names_from_paths(paths)),
     )
 
 
