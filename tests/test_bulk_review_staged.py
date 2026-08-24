@@ -468,10 +468,9 @@ def test_failed_promotion_leaves_no_artifact(tmp_path, monkeypatch):
 
 
 def test_filing_failure_rolls_back_artifact(tmp_path, monkeypatch):
-    """CodeRabbit #573: if mark_auto_filed fails AFTER the artifact write,
-    the artifact is REMOVED — audit state and decision files must never
-    diverge (candidate auto_filed with no decision file would be invisible
-    to freeze/eval)."""
+    """CodeRabbit #573 + Luna r9: if mark_auto_filed fails AFTER the pending
+    write, the .pending file is removed and the final artifact never
+    installed — audit state and decision files must never diverge."""
     brs = _load_brs()
     gen = tmp_path / "generated"
     gen.mkdir()
@@ -487,15 +486,49 @@ def test_filing_failure_rolls_back_artifact(tmp_path, monkeypatch):
                              "audit": {"re_evaluate": False}})
     ledger.write_text(json.dumps(ld, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     draft = _write_draft(tmp_path, _probe_draft(url))
-    # Simulate a filing failure that happens AFTER the artifact write.
+    # Simulate a filing failure that happens AFTER the pending write.
     def _boom(*args, **kwargs):
         raise ValueError("simulated filing failure")
     monkeypatch.setattr(brs.audit, "mark_auto_filed", _boom)
     with pytest.raises(SystemExit, match="auto-filing refused"):
         brs.main(["--draft", str(draft), "--no-go", "--ledger", str(ledger)])
-    # Rollback: the artifact must NOT remain (auto_filed with no decision
-    # file would be invisible to freeze/eval).
+    # Rollback: neither the pending file nor the final artifact remains.
     assert not (gen / "ow_gate_decision.json").exists()
+    assert not (gen / "ow_gate_decision.json.pending").exists()
+
+
+def test_filing_failure_preserves_prior_artifact(tmp_path, monkeypatch):
+    """Luna r9: a failed RETRY must NOT delete an existing valid decision —
+    the pending-then-replace pattern only touches the new file."""
+    brs = _load_brs()
+    gen = tmp_path / "generated"
+    gen.mkdir()
+    monkeypatch.setattr(brs, "GEN", gen)
+    monkeypatch.setattr(brs, "default_output_path",
+                        lambda corpus, repo_root=None: gen / f"{corpus}_gate_decision.json")
+    from regexproof.mine.ledger import empty_ledger
+
+    url = "https://x/y"
+    ledger = tmp_path / "ledger.json"
+    ld = empty_ledger()
+    ld["candidates"].append({"url": url, "status": "mined",
+                             "audit": {"re_evaluate": False}})
+    ledger.write_text(json.dumps(ld, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    draft = _write_draft(tmp_path, _probe_draft(url))
+    # A PRIOR valid decision already exists.
+    (gen / "ow_gate_decision.json").write_text(
+        json.dumps({"decision": "no-go", "schema_version": "1"}) + "\n",
+        encoding="utf-8")
+    prior = (gen / "ow_gate_decision.json").read_text(encoding="utf-8")
+
+    def _boom(*args, **kwargs):
+        raise OSError("simulated ledger write failure")
+    monkeypatch.setattr(brs.audit, "mark_auto_filed", _boom)
+    with pytest.raises(SystemExit, match="auto-filing refused"):
+        brs.main(["--draft", str(draft), "--no-go", "--ledger", str(ledger)])
+    # The prior decision survives untouched; no pending file leaks.
+    assert (gen / "ow_gate_decision.json").read_text(encoding="utf-8") == prior
+    assert not (gen / "ow_gate_decision.json.pending").exists()
 
 
 def test_demote_records_retained_location(tmp_path):

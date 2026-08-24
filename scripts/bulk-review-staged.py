@@ -35,6 +35,7 @@ from __future__ import annotations
 import argparse
 import datetime
 import json
+import os
 import pathlib
 import sys
 
@@ -364,16 +365,22 @@ def main(argv: list[str] | None = None) -> int:
                 f"bulk-review: {url} not in ledger — cannot author {decision}"
             )
 
-    # Persist the artifact FIRST (after the prechecks), then the ledger
-    # updates — and if a ledger update fails, REMOVE the artifact so audit
-    # state and decision files can never diverge (CodeRabbit #573).
+    # Persist the artifact via temp + os.replace: the decision file is
+    # written to `<name>.pending`, the ledger updates run, and ONLY on
+    # success is it atomically renamed into place (Luna r9: an in-place
+    # write followed by rollback could DELETE a prior valid decision on a
+    # retry, and a non-ValueError failure left the artifact active). A
+    # `.pending` file is invisible to sync_gate_decisions (glob is
+    # *_gate_decision.json), so no crash window can apply an unproven
+    # decision.
     out_path = default_output_path(corpus, repo_root=ROOT)
     out_path.parent.mkdir(parents=True, exist_ok=True)
-    out_path.write_text(json.dumps(out, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    pending = out_path.with_name(out_path.name + ".pending")
+    pending.write_text(json.dumps(out, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 
-    def _rollback_artifact() -> None:
+    def _rollback_pending() -> None:
         try:
-            out_path.unlink(missing_ok=True)
+            pending.unlink(missing_ok=True)
         except OSError:
             pass
 
@@ -383,8 +390,8 @@ def main(argv: list[str] | None = None) -> int:
                 args.ledger, url,
                 clock=clock if clock is not None else None,
             )
-        except ValueError as exc:
-            _rollback_artifact()
+        except Exception as exc:
+            _rollback_pending()
             raise SystemExit(f"bulk-review: auto-filing refused: {exc}") from exc
     else:
         # Luna r5 #2: human decisions must CLEAR the re-review state
@@ -396,8 +403,8 @@ def main(argv: list[str] | None = None) -> int:
                 args.ledger, url, decision=decision,
                 clock=clock if clock is not None else None,
             )
-        except ValueError as exc:
-            _rollback_artifact()
+        except Exception as exc:
+            _rollback_pending()
             raise SystemExit(
                 f"bulk-review: human-resolved update failed for {url}: {exc}"
             ) from exc
@@ -409,16 +416,18 @@ def main(argv: list[str] | None = None) -> int:
             audit.ensure_candidate_audit(
                 args.ledger, url, updates=promote_updates,
             )
-        except ValueError as exc:
+        except Exception as exc:
             # Luna r2 P0: a missing ledger candidate must FAIL CLOSED — a
             # decision written without audit provenance is not sampler-eligible
             # and must not look like a successful promotion.
-            _rollback_artifact()
+            _rollback_pending()
             raise SystemExit(
                 f"bulk-review: ledger promotion failed for {url}: {exc} — "
-                "audit provenance missing (decision artifact removed)"
+                "audit provenance missing (no decision was installed)"
             ) from exc
 
+    # All ledger updates succeeded — atomically install the decision.
+    os.replace(pending, out_path)
     print(f"{decision}: {url} -> {out_path.name} (provenance=human)" if decision != "no-go"
           else f"no_go: {url} -> {out_path.name} (provenance=auto)")
     return 0
