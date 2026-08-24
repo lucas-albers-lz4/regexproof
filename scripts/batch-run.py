@@ -103,8 +103,17 @@ def _drain(
             argv.extend(["--walk-root", str(walk_root)])
         if cache_root is not None:
             argv.extend(["--cache-root", str(cache_root)])
-        rc = probe_mod.main(argv)
-        if rc not in (0,):
+        try:
+            rc = probe_mod.main(argv)
+        except SystemExit as exc:
+            # batch-probe fail-closed paths raise SystemExit; one item
+            # must not abort the unattended drain.
+            rc = exc.code
+            if rc is None:
+                rc = 0
+            elif not isinstance(rc, int):
+                rc = 1
+        if rc != 0:
             failures += 1
             print(f"batch-run: probe rc={rc} {url}@{pin[:12]}", file=sys.stderr)
     return 0 if failures == 0 else 2
