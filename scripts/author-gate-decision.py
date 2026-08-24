@@ -199,6 +199,8 @@ def main(argv: list[str] | None = None) -> int:
         ap.error("--active-minutes must be >= 0")
     if args.active_minutes is not None and not args.human:
         ap.error("--active-minutes applies only to --human go/triage-trial")
+    if args.active_minutes is not None and args.decision not in ("go", "triage-trial"):
+        ap.error("--active-minutes applies only to --human go/triage-trial")
 
     if args.audit_sample:
         if not args.ledger:
@@ -379,6 +381,7 @@ def main(argv: list[str] | None = None) -> int:
             decision=str(decision.get("decision")),
             source="stopwatch",
             active_minutes=args.active_minutes,
+            decision_date=str(decision.get("decision_date") or ""),
         )
     return 0
 

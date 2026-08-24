@@ -9,7 +9,7 @@ import uuid
 from datetime import datetime, timezone
 from typing import Any
 
-LOG_PATH = pathlib.Path("properties/generated/operator_minutes.jsonl")
+LOG_PATH = pathlib.Path(__file__).resolve().parents[2] / "properties" / "generated" / "operator_minutes.jsonl"
 SURVIVOR = frozenset({"go", "triage-trial"})
 SOURCES = frozenset({"seed-artifact-timestamps", "stopwatch"})
 

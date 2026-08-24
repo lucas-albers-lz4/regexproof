@@ -631,6 +631,11 @@ def main(argv: list[str] | None = None) -> int:
             decision=decision,
             source="stopwatch",
             active_minutes=args.active_minutes,
+            decision_date=(
+                at_dt.date().isoformat()
+                if at_dt is not None
+                else datetime.datetime.now(datetime.timezone.utc).date().isoformat()
+            ),
         )
     return 0
 
