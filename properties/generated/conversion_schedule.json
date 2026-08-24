@@ -5,9 +5,380 @@
     "productive_share": 0.7,
     "unbiased_slice_share": 0.1
   },
-  "generated_at": "2026-08-24T03:15:00Z",
+  "generated_at": "2026-08-24T03:30:00Z",
   "schema_version": "1",
   "selections": [
+    {
+      "cluster": "AegisMind",
+      "mine_re_ranked": false,
+      "selected_bucket": null,
+      "selection_basis": "none-available",
+      "used_buckets": []
+    },
+    {
+      "cluster": "AlienVaultLabs",
+      "mine_re_ranked": false,
+      "selected_bucket": null,
+      "selection_basis": "none-available",
+      "used_buckets": []
+    },
+    {
+      "cluster": "Antivirus",
+      "mine_re_ranked": false,
+      "selected_bucket": null,
+      "selection_basis": "none-available",
+      "used_buckets": []
+    },
+    {
+      "cluster": "AutoAR",
+      "mine_re_ranked": false,
+      "selected_bucket": null,
+      "selection_basis": "none-available",
+      "used_buckets": []
+    },
+    {
+      "cluster": "BlueBox",
+      "mine_re_ranked": false,
+      "selected_bucket": null,
+      "selection_basis": "none-available",
+      "used_buckets": []
+    },
+    {
+      "cluster": "DataCon2020",
+      "mine_re_ranked": false,
+      "selected_bucket": null,
+      "selection_basis": "none-available",
+      "used_buckets": []
+    },
+    {
+      "cluster": "Hachi",
+      "mine_re_ranked": false,
+      "selected_bucket": null,
+      "selection_basis": "none-available",
+      "used_buckets": []
+    },
+    {
+      "cluster": "Hazer",
+      "mine_re_ranked": false,
+      "selected_bucket": null,
+      "selection_basis": "none-available",
+      "used_buckets": []
+    },
+    {
+      "cluster": "Inboxscanner",
+      "mine_re_ranked": false,
+      "selected_bucket": null,
+      "selection_basis": "none-available",
+      "used_buckets": []
+    },
+    {
+      "cluster": "JARVIS",
+      "mine_re_ranked": false,
+      "selected_bucket": null,
+      "selection_basis": "none-available",
+      "used_buckets": []
+    },
+    {
+      "cluster": "NetDefender",
+      "mine_re_ranked": false,
+      "selected_bucket": null,
+      "selection_basis": "none-available",
+      "used_buckets": []
+    },
+    {
+      "cluster": "OctopusBeak",
+      "mine_re_ranked": false,
+      "selected_bucket": null,
+      "selection_basis": "none-available",
+      "used_buckets": []
+    },
+    {
+      "cluster": "Open-Source-YARA-rules",
+      "mine_re_ranked": false,
+      "selected_bucket": null,
+      "selection_basis": "none-available",
+      "used_buckets": []
+    },
+    {
+      "cluster": "PEpper",
+      "mine_re_ranked": false,
+      "selected_bucket": null,
+      "selection_basis": "none-available",
+      "used_buckets": []
+    },
+    {
+      "cluster": "RustPython",
+      "mine_re_ranked": false,
+      "selected_bucket": null,
+      "selection_basis": "none-available",
+      "used_buckets": []
+    },
+    {
+      "cluster": "SMAT",
+      "mine_re_ranked": false,
+      "selected_bucket": null,
+      "selection_basis": "none-available",
+      "used_buckets": []
+    },
+    {
+      "cluster": "SentinelX",
+      "mine_re_ranked": false,
+      "selected_bucket": null,
+      "selection_basis": "none-available",
+      "used_buckets": []
+    },
+    {
+      "cluster": "SveltyCMS-SveltyCMS",
+      "mine_re_ranked": false,
+      "selected_bucket": null,
+      "selection_basis": "none-available",
+      "used_buckets": []
+    },
+    {
+      "cluster": "Yara-Rules",
+      "mine_re_ranked": false,
+      "selected_bucket": null,
+      "selection_basis": "none-available",
+      "used_buckets": []
+    },
+    {
+      "cluster": "aidevops",
+      "mine_re_ranked": false,
+      "selected_bucket": null,
+      "selection_basis": "none-available",
+      "used_buckets": []
+    },
+    {
+      "cluster": "ajohnsonnow-vet-rate-org",
+      "mine_re_ranked": false,
+      "selected_bucket": null,
+      "selection_basis": "none-available",
+      "used_buckets": []
+    },
+    {
+      "cluster": "bernstein",
+      "mine_re_ranked": false,
+      "selected_bucket": null,
+      "selection_basis": "none-available",
+      "used_buckets": []
+    },
+    {
+      "cluster": "bike4mind",
+      "mine_re_ranked": false,
+      "selected_bucket": null,
+      "selection_basis": "none-available",
+      "used_buckets": []
+    },
+    {
+      "cluster": "caia",
+      "mine_re_ranked": false,
+      "selected_bucket": null,
+      "selection_basis": "none-available",
+      "used_buckets": []
+    },
+    {
+      "cluster": "cinder",
+      "mine_re_ranked": false,
+      "selected_bucket": null,
+      "selection_basis": "none-available",
+      "used_buckets": []
+    },
+    {
+      "cluster": "claude-code-plugins",
+      "mine_re_ranked": false,
+      "selected_bucket": null,
+      "selection_basis": "none-available",
+      "used_buckets": []
+    },
+    {
+      "cluster": "coreruleset",
+      "mine_re_ranked": false,
+      "selected_bucket": null,
+      "selection_basis": "none-available",
+      "used_buckets": []
+    },
+    {
+      "cluster": "cpython",
+      "mine_re_ranked": false,
+      "selected_bucket": null,
+      "selection_basis": "none-available",
+      "used_buckets": []
+    },
+    {
+      "cluster": "cpython-13",
+      "mine_re_ranked": false,
+      "selected_bucket": null,
+      "selection_basis": "none-available",
+      "used_buckets": []
+    },
+    {
+      "cluster": "detect-secrets",
+      "mine_re_ranked": false,
+      "selected_bucket": null,
+      "selection_basis": "none-available",
+      "used_buckets": []
+    },
+    {
+      "cluster": "dogfood_shell",
+      "mine_re_ranked": false,
+      "selected_bucket": null,
+      "selection_basis": "none-available",
+      "used_buckets": []
+    },
+    {
+      "cluster": "dompurify",
+      "mine_re_ranked": false,
+      "selected_bucket": null,
+      "selection_basis": "none-available",
+      "used_buckets": []
+    },
+    {
+      "cluster": "exchange-api",
+      "mine_re_ranked": false,
+      "selected_bucket": null,
+      "selection_basis": "none-available",
+      "used_buckets": []
+    },
+    {
+      "cluster": "freki",
+      "mine_re_ranked": false,
+      "selected_bucket": null,
+      "selection_basis": "none-available",
+      "used_buckets": []
+    },
+    {
+      "cluster": "gadievron-raptor",
+      "mine_re_ranked": false,
+      "selected_bucket": null,
+      "selection_basis": "none-available",
+      "used_buckets": []
+    },
+    {
+      "cluster": "gilectomy",
+      "mine_re_ranked": false,
+      "selected_bucket": null,
+      "selection_basis": "none-available",
+      "used_buckets": []
+    },
+    {
+      "cluster": "gitleaks",
+      "mine_re_ranked": false,
+      "selected_bucket": null,
+      "selection_basis": "none-available",
+      "used_buckets": []
+    },
+    {
+      "cluster": "globussoft-crm",
+      "mine_re_ranked": false,
+      "selected_bucket": null,
+      "selection_basis": "none-available",
+      "used_buckets": []
+    },
+    {
+      "cluster": "hippo",
+      "mine_re_ranked": false,
+      "selected_bucket": null,
+      "selection_basis": "none-available",
+      "used_buckets": []
+    },
+    {
+      "cluster": "ids_rules",
+      "mine_re_ranked": false,
+      "selected_bucket": null,
+      "selection_basis": "none-available",
+      "used_buckets": []
+    },
+    {
+      "cluster": "java-html-sanitizer",
+      "mine_re_ranked": false,
+      "selected_bucket": null,
+      "selection_basis": "none-available",
+      "used_buckets": []
+    },
+    {
+      "cluster": "jython3",
+      "mine_re_ranked": false,
+      "selected_bucket": null,
+      "selection_basis": "none-available",
+      "used_buckets": []
+    },
+    {
+      "cluster": "kubilitics",
+      "mine_re_ranked": false,
+      "selected_bucket": null,
+      "selection_basis": "none-available",
+      "used_buckets": []
+    },
+    {
+      "cluster": "lintendo-Axhub-Make",
+      "mine_re_ranked": false,
+      "selected_bucket": null,
+      "selection_basis": "none-available",
+      "used_buckets": []
+    },
+    {
+      "cluster": "lw-yara",
+      "mine_re_ranked": false,
+      "selected_bucket": null,
+      "selection_basis": "none-available",
+      "used_buckets": []
+    },
+    {
+      "cluster": "lyrie-ai",
+      "mine_re_ranked": false,
+      "selected_bucket": null,
+      "selection_basis": "none-available",
+      "used_buckets": []
+    },
+    {
+      "cluster": "malcontent",
+      "mine_re_ranked": false,
+      "selected_bucket": null,
+      "selection_basis": "none-available",
+      "used_buckets": []
+    },
+    {
+      "cluster": "malzoo",
+      "mine_re_ranked": false,
+      "selected_bucket": null,
+      "selection_basis": "none-available",
+      "used_buckets": []
+    },
+    {
+      "cluster": "moonpython",
+      "mine_re_ranked": false,
+      "selected_bucket": null,
+      "selection_basis": "none-available",
+      "used_buckets": []
+    },
+    {
+      "cluster": "mycelium",
+      "mine_re_ranked": false,
+      "selected_bucket": null,
+      "selection_basis": "none-available",
+      "used_buckets": []
+    },
+    {
+      "cluster": "nogil-3.12",
+      "mine_re_ranked": false,
+      "selected_bucket": null,
+      "selection_basis": "none-available",
+      "used_buckets": []
+    },
+    {
+      "cluster": "noseyparker",
+      "mine_re_ranked": false,
+      "selected_bucket": null,
+      "selection_basis": "none-available",
+      "used_buckets": []
+    },
+    {
+      "cluster": "openmed",
+      "mine_re_ranked": false,
+      "selected_bucket": null,
+      "selection_basis": "none-available",
+      "used_buckets": []
+    },
     {
       "cluster": "openwrt_luci",
       "mine_re_ranked": false,
@@ -27,7 +398,184 @@
         "image-and-ddns-json",
         "validator-charsets-and-captures"
       ]
+    },
+    {
+      "cluster": "pass-culture-main",
+      "mine_re_ranked": false,
+      "selected_bucket": null,
+      "selection_basis": "none-available",
+      "used_buckets": []
+    },
+    {
+      "cluster": "patrolaroid",
+      "mine_re_ranked": false,
+      "selected_bucket": null,
+      "selection_basis": "none-available",
+      "used_buckets": []
+    },
+    {
+      "cluster": "pyparallel",
+      "mine_re_ranked": false,
+      "selected_bucket": null,
+      "selection_basis": "none-available",
+      "used_buckets": []
+    },
+    {
+      "cluster": "python_3_8_2",
+      "mine_re_ranked": false,
+      "selected_bucket": null,
+      "selection_basis": "none-available",
+      "used_buckets": []
+    },
+    {
+      "cluster": "pythowon",
+      "mine_re_ranked": false,
+      "selected_bucket": null,
+      "selection_basis": "none-available",
+      "used_buckets": []
+    },
+    {
+      "cluster": "real-router",
+      "mine_re_ranked": false,
+      "selected_bucket": null,
+      "selection_basis": "none-available",
+      "used_buckets": []
+    },
+    {
+      "cluster": "sec_check",
+      "mine_re_ranked": false,
+      "selected_bucket": null,
+      "selection_basis": "none-available",
+      "used_buckets": []
+    },
+    {
+      "cluster": "semgrep_rules",
+      "mine_re_ranked": false,
+      "selected_bucket": null,
+      "selection_basis": "none-available",
+      "used_buckets": []
+    },
+    {
+      "cluster": "shhgit",
+      "mine_re_ranked": false,
+      "selected_bucket": null,
+      "selection_basis": "none-available",
+      "used_buckets": []
+    },
+    {
+      "cluster": "sonash-v0",
+      "mine_re_ranked": false,
+      "selected_bucket": null,
+      "selection_basis": "none-available",
+      "used_buckets": []
+    },
+    {
+      "cluster": "spamassassin",
+      "mine_re_ranked": false,
+      "selected_bucket": null,
+      "selection_basis": "none-available",
+      "used_buckets": []
+    },
+    {
+      "cluster": "stateset-icommerce",
+      "mine_re_ranked": false,
+      "selected_bucket": null,
+      "selection_basis": "none-available",
+      "used_buckets": []
+    },
+    {
+      "cluster": "tarcoin",
+      "mine_re_ranked": false,
+      "selected_bucket": null,
+      "selection_basis": "none-available",
+      "used_buckets": []
+    },
+    {
+      "cluster": "three-ui",
+      "mine_re_ranked": false,
+      "selected_bucket": null,
+      "selection_basis": "none-available",
+      "used_buckets": []
+    },
+    {
+      "cluster": "trufflehog",
+      "mine_re_ranked": false,
+      "selected_bucket": null,
+      "selection_basis": "none-available",
+      "used_buckets": []
+    },
+    {
+      "cluster": "typenix",
+      "mine_re_ranked": false,
+      "selected_bucket": null,
+      "selection_basis": "none-available",
+      "used_buckets": []
+    },
+    {
+      "cluster": "typescript-go",
+      "mine_re_ranked": false,
+      "selected_bucket": null,
+      "selection_basis": "none-available",
+      "used_buckets": []
+    },
+    {
+      "cluster": "validatorjs",
+      "mine_re_ranked": false,
+      "selected_bucket": null,
+      "selection_basis": "none-available",
+      "used_buckets": []
+    },
+    {
+      "cluster": "ver",
+      "mine_re_ranked": false,
+      "selected_bucket": null,
+      "selection_basis": "none-available",
+      "used_buckets": []
+    },
+    {
+      "cluster": "visulima-visulima",
+      "mine_re_ranked": false,
+      "selected_bucket": null,
+      "selection_basis": "none-available",
+      "used_buckets": []
+    },
+    {
+      "cluster": "volatility3-mcp",
+      "mine_re_ranked": false,
+      "selected_bucket": null,
+      "selection_basis": "none-available",
+      "used_buckets": []
+    },
+    {
+      "cluster": "whohk",
+      "mine_re_ranked": false,
+      "selected_bucket": null,
+      "selection_basis": "none-available",
+      "used_buckets": []
+    },
+    {
+      "cluster": "xibo-cms",
+      "mine_re_ranked": false,
+      "selected_bucket": null,
+      "selection_basis": "none-available",
+      "used_buckets": []
+    },
+    {
+      "cluster": "yara_rules",
+      "mine_re_ranked": false,
+      "selected_bucket": null,
+      "selection_basis": "none-available",
+      "used_buckets": []
+    },
+    {
+      "cluster": "yarasigs",
+      "mine_re_ranked": false,
+      "selected_bucket": null,
+      "selection_basis": "none-available",
+      "used_buckets": []
     }
   ],
-  "wont_file_classes": {}
+  "wont_file_classes": {
+    "third_party": 4
+  }
 }
