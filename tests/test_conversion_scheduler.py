@@ -446,3 +446,16 @@ def test_ledger_scalar_row_fails_closed(tmp_path):
                       encoding="utf-8")
     with pytest.raises(SystemExit, match="not an object"):
         cs._load_ledger_rows(ledger)
+
+
+def test_ledger_row_missing_cluster_identity_fails_closed(tmp_path):
+    """Luna r4 #2: a row with idiom_bucket but NEITHER wave_id NOR cluster
+    is dropped by used_buckets_per_cluster — its consumed bucket would be
+    silently ignored and re-selected. Refused."""
+    cs = _load_cs()
+    ledger = tmp_path / "conversion-ledger.json"
+    ledger.write_text(json.dumps({"per_wave": [
+        {"idiom_bucket": "validator-charsets-and-captures"},  # no identity
+    ]}) + "\n", encoding="utf-8")
+    with pytest.raises(SystemExit, match="neither wave_id nor cluster"):
+        cs._load_ledger_rows(ledger)

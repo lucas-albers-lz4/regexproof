@@ -332,6 +332,13 @@ def _load_ledger_rows(ledger_path: pathlib.Path) -> list[dict]:
                     "no idiom_bucket — a consumed bucket would be silently "
                     "ignored (duplicate selection risk), refusing (fail closed)"
                 )
+            if not str(rec.get("wave_id") or rec.get("cluster") or "").strip():
+                raise SystemExit(
+                    f"conversion-scheduler: ledger {ledger_path} line {i} has "
+                    "neither wave_id nor cluster — the consumed bucket's "
+                    "cluster is unattributable (duplicate selection risk), "
+                    "refusing (fail closed)"
+                )
             rows.append(rec)
         return rows
     try:
@@ -362,6 +369,16 @@ def _load_ledger_rows(ledger_path: pathlib.Path) -> list[dict]:
                 f"conversion-scheduler: ledger {ledger_path} per_wave[{i}] "
                 "has no idiom_bucket — a consumed bucket would be silently "
                 "ignored (duplicate selection risk), refusing (fail closed)"
+            )
+        if not str(rec.get("wave_id") or rec.get("cluster") or "").strip():
+            # Luna r4 #2: a row without CLUSTER identity is dropped by
+            # used_buckets_per_cluster (its `if not wave: continue`), so
+            # its consumed bucket would be silently ignored and re-selected.
+            raise SystemExit(
+                f"conversion-scheduler: ledger {ledger_path} per_wave[{i}] "
+                "has neither wave_id nor cluster — the consumed bucket's "
+                "cluster is unattributable (duplicate selection risk), "
+                "refusing (fail closed)"
             )
     return per_wave
 

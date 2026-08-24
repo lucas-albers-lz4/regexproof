@@ -491,6 +491,23 @@ def test_embedded_probe_no_identity_refused(tmp_path, monkeypatch):
         brs.main(["--draft", str(draft), "--no-go", "--ledger", str(ledger)])
 
 
+def test_embedded_probe_empty_dict_refused(tmp_path, monkeypatch):
+    """Luna r4 #1: an EMPTY probe object ({}) carries no identity — refused,
+    never silently treated as absent (which would author with no evidence)."""
+    brs = _load_brs()
+    gen = tmp_path / "generated"
+    gen.mkdir()
+    monkeypatch.setattr(brs, "GEN", gen)
+    draft = _write_draft(tmp_path, {
+        "url": "https://x/y", "pin": "a" * 40, "corpus": "ow",
+        "candidate_url": "https://x/y",
+        "probe": {},
+    })
+    ledger = _write_ledger(tmp_path)
+    with pytest.raises(SystemExit, match="EMPTY probe"):
+        brs.main(["--draft", str(draft), "--no-go", "--ledger", str(ledger)])
+
+
 def test_embedded_probe_matching_accepted(tmp_path, monkeypatch):
     """Final-gate #1 (HIGH): an embedded probe whose URL AND pin match the
     draft is accepted — the validation must not reject legitimate drafts."""

@@ -146,7 +146,16 @@ def _load_draft(draft_path: pathlib.Path) -> dict:
 
     draft_url = normalize_repo_url(str(draft.get("candidate_url") or draft.get("url") or ""))
     embedded_probe = draft.get("probe")
-    if isinstance(embedded_probe, dict) and embedded_probe:
+    if isinstance(embedded_probe, dict):
+        # Luna r4 #1: an EMPTY probe dict ({}) is still an object — it has
+        # no identity and must be refused, not silently treated as absent
+        # (which would fall through to authoring with no evidence at all).
+        if not embedded_probe:
+            raise SystemExit(
+                f"bulk-review: {draft_path.name} embeds an EMPTY probe object "
+                "— no evidence, refusing (authoring requires bound probe "
+                "evidence)"
+            )
         _validate_probe_identity(draft, embedded_probe, draft_url, draft_path.name)
     if "probe" not in draft or not isinstance(draft.get("probe"), dict):
         corpus = str(draft.get("corpus") or "")
