@@ -375,18 +375,12 @@ def main(argv: list[str] | None = None) -> int:
     # not depend on the draft still being present.
     if _resume_pending_installs(args.ledger, GEN):
         if args.active_minutes is not None:
-            from regexproof.mine.operator_minutes import append_row
-
-            draft = _load_draft(args.draft)
-            url = _url_of(draft)
-            pin = str(draft.get("corpus_pin") or draft.get("pin") or "")
-            decision = "go" if args.go else "triage-trial"
-            append_row(
-                url=url,
-                pin=pin,
-                decision=decision,
-                source="stopwatch",
-                active_minutes=args.active_minutes,
+            print(
+                "bulk-review: pending install resumed (draft-independent); "
+                "--active-minutes was NOT recorded. Append a stopwatch row "
+                "via regexproof.mine.operator_minutes.append_row after you "
+                "know the installed candidate.",
+                file=sys.stderr,
             )
         print("bulk-review: resumed pending install(s); run again for new work")
         return 0
