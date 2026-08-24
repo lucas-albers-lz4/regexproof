@@ -391,11 +391,19 @@ def main(argv: list[str] | None = None) -> int:
         "note": "v2 comparison is label reproduction only, never validation",
         "live_drain": "score-v1 (rank-mine-candidates.py / docs/MINE-SETUP.md)",
         "designed_mismatch": (
-            "Eval already flipped to v1.5 (flip_to_v15). Live drain is still "
-            "v1. AUC is a global-health statistic; the operational flip of "
-            "the probe stream is a separate, currently unowned decision. A "
-            "firing escape while v1.5 sits unflipped on live drain is a "
-            "designed outcome. No second top-K flip rule (freeze is AUC-only)."
+            (
+                "Eval already flipped to v1.5 (flip_to_v15). Live drain is still "
+                "v1. AUC is a global-health statistic; the operational flip of "
+                "the probe stream is a separate, currently unowned decision. A "
+                "firing escape while v1.5 sits unflipped on live drain is a "
+                "designed outcome. No second top-K flip rule (freeze is AUC-only)."
+            )
+            if flips
+            else (
+                "Eval kept score-v1 (flip_to_v15 false). Live drain is also "
+                "v1; there is no drain mismatch. No second top-K flip rule "
+                "(freeze is AUC-only)."
+            )
         ),
     }
     out_path.write_text(json.dumps(decision, indent=2, sort_keys=True) + "\n")

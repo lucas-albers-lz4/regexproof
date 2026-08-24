@@ -34,7 +34,11 @@ def test_flip_decision_exists_and_is_shape_checked():
     assert d["eval"]["precision_at_k"]["k"] == 30
     assert d["eval"]["precision_at_k_v1"]["k"] == 30
     assert "designed_mismatch" in d
-    assert "no second top-K flip" in d["designed_mismatch"].lower() or "No second top-K" in d["designed_mismatch"]
+    assert "no second top-k flip" in d["designed_mismatch"].lower()
+    if d["flip_to_v15"]:
+        assert "live drain is still" in d["designed_mismatch"].lower()
+    else:
+        assert "no drain mismatch" in d["designed_mismatch"].lower()
     assert "cap_raise_calibration_note" in d["eval"]
 
 
