@@ -192,6 +192,7 @@ def test_batch_run_forwards_ledger_to_rank(tmp_path, monkeypatch):
     assert rc == 0
     assert "--ledger" in captured["argv"]
     assert str(ledger) in captured["argv"]
+    assert captured["argv"][captured["argv"].index("--status") + 1] == "mined"
 
 
 def test_batch_run_snapshot_and_resume(tmp_path):

@@ -114,6 +114,11 @@ def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--limit", type=int, default=10, help="Rank snapshot size (0 = all)")
     ap.add_argument(
+        "--status",
+        default="mined",
+        help="Rank status filter passed to rank-mine-candidates (default: mined)",
+    )
+    ap.add_argument(
         "--allocator",
         choices=("score-v1", "score-v1.5", "score-v2"),
         default="score-v1",
@@ -155,7 +160,11 @@ def main(argv: list[str] | None = None) -> int:
         if args.from_ndjson is not None:
             text = args.from_ndjson.read_text(encoding="utf-8")
         else:
-            rank_argv = ["--limit", str(args.limit), "--allocator", args.allocator]
+            rank_argv = [
+                "--limit", str(args.limit),
+                "--allocator", args.allocator,
+                "--status", args.status,
+            ]
             if args.generated is not None:
                 rank_argv.extend(["--generated", str(args.generated)])
             if args.ledger is not None:
