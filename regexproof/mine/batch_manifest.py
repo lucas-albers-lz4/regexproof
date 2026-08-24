@@ -13,14 +13,18 @@ import pathlib
 from typing import Any
 from urllib.parse import urlparse
 
-from regexproof.mine.exclusions import normalize_repo_url
+from regexproof.mine.exclusions import github_repo_slug, normalize_repo_url
 
 MANIFEST_PATH = pathlib.Path("batch/manifest.json")
 SCHEMA_VERSION = "1"
 
 
 def corpus_from_url(url: str) -> str:
-    """Derive a corpus slug from a git URL (never the clone dirname)."""
+    """Owner-qualified corpus slug (``owner-repo``) so two GitHub repos
+    with the same basename cannot share a gate-decision filename."""
+    slug = github_repo_slug(url)
+    if slug:
+        return slug.replace("/", "-")
     s = str(url or "").strip().rstrip("/")
     if s.startswith("git@"):
         path = s.split(":", 1)[-1]
@@ -29,6 +33,11 @@ def corpus_from_url(url: str) -> str:
     else:
         return pathlib.Path(s).name or "unknown"
     parts = [p for p in path.split("/") if p]
+    if len(parts) >= 2:
+        owner, repo = parts[-2], parts[-1]
+        if repo.endswith(".git"):
+            repo = repo[:-4]
+        return f"{owner}-{repo}" or "unknown"
     if not parts:
         return "unknown"
     name = parts[-1]

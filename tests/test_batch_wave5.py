@@ -35,7 +35,9 @@ def test_walk_repo_invokes_heartbeat(tmp_path):
     assert hits["n"] >= 1
 
 
-def test_items_prefer_pin_probed_over_mined():
+def test_corpus_from_url_owner_qualified():
+    assert batch_manifest.corpus_from_url("https://github.com/acme/tool") == "acme-tool"
+    assert batch_manifest.corpus_from_url("https://github.com/other/tool") == "other-tool"
     probed = "b" * 40
     mined = "c" * 40
     items = batch_manifest.items_from_rank_ndjson(
@@ -45,7 +47,7 @@ def test_items_prefer_pin_probed_over_mined():
     items = batch_manifest.items_from_rank_ndjson(
         json.dumps({"url": URL, "pin": PIN, "score": 1.0, "allocator": "score-v1"})
     )
-    assert items[0]["corpus"] == "wtforms"
+    assert items[0]["corpus"] == "wtforms-wtforms"
     assert items[0]["pin"] == PIN
     d1 = batch_manifest.items_digest(items)
     d2 = batch_manifest.items_digest(items)
