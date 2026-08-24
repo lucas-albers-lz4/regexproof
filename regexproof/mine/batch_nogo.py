@@ -20,6 +20,10 @@ from regexproof.mine import audit
 WALK_COMPLETED = frozenset({"ok", "auto_nogo", "needs_human"})
 
 
+class IncompleteFoldError(RuntimeError):
+    """Ledger or artifact install failed — do not complete the batch row."""
+
+
 def fold_auto_nogo(
     draft: dict[str, Any],
     *,
@@ -70,9 +74,11 @@ def fold_auto_nogo(
         audit.mark_auto_filed(ledger_path, url)
     except Exception as exc:
         _rollback()
-        return "error", None, f"auto-filing refused: {exc}"
+        raise IncompleteFoldError(f"auto-filing refused: {exc}") from exc
     try:
         os.replace(pending, out_path)
     except OSError as exc:
-        return "error", None, f"artifact install failed: {exc}"
+        # Keep the .pending journal (same as bulk-review-staged). Do not
+        # complete the batch row — resume must retry the install.
+        raise IncompleteFoldError(f"artifact install failed: {exc}") from exc
     return "auto_nogo", out_path, "below-scale or duplicate-fork"

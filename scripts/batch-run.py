@@ -158,6 +158,8 @@ def main(argv: list[str] | None = None) -> int:
             rank_argv = ["--limit", str(args.limit), "--allocator", args.allocator]
             if args.generated is not None:
                 rank_argv.extend(["--generated", str(args.generated)])
+            if args.ledger is not None:
+                rank_argv.extend(["--ledger", str(args.ledger)])
             text = _rank_ndjson(rank_argv)
         items = batch_manifest.items_from_rank_ndjson(text)
         doc = batch_manifest.write_manifest(

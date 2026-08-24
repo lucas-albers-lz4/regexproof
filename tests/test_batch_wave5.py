@@ -85,7 +85,55 @@ def test_fold_needs_human_when_above_scale(tmp_path):
     assert "auto-NO-GO refused" in note
 
 
-def test_batch_run_snapshot_and_resume(tmp_path):
+def test_fold_install_failure_does_not_complete(tmp_path, monkeypatch):
+    draft = load_probe_draft(FIXTURES / "probe_draft_wtforms_shaped.json")
+    gen = tmp_path / "generated"
+    gen.mkdir()
+    ledger = _ledger(tmp_path)
+
+    def boom(_src, _dst):
+        raise OSError("disk full")
+
+    monkeypatch.setattr(batch_nogo.audit, "mark_auto_filed", lambda *a, **k: {})
+    monkeypatch.setattr(batch_nogo.os, "replace", boom)
+    with pytest.raises(batch_nogo.IncompleteFoldError, match="artifact install"):
+        batch_nogo.fold_auto_nogo(
+            draft,
+            generated_dir=gen,
+            ledger_path=ledger,
+            repo_root=ROOT,
+        )
+    pending = list(gen.glob("*.pending"))
+    assert pending, "pending journal must remain for resume"
+
+
+def test_batch_run_forwards_ledger_to_rank(tmp_path, monkeypatch):
+    import importlib.util
+
+    spec = importlib.util.spec_from_file_location(
+        "batch_run", ROOT / "scripts" / "batch-run.py"
+    )
+    assert spec is not None and spec.loader is not None
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    captured: dict[str, list[str]] = {}
+
+    def fake_rank(argv):
+        captured["argv"] = list(argv)
+        return json.dumps({"url": URL, "pin": PIN, "score": 1, "allocator": "score-v1"}) + "\n"
+
+    monkeypatch.setattr(mod, "_rank_ndjson", fake_rank)
+    ledger = tmp_path / "custom-ledger.json"
+    man = tmp_path / "manifest.json"
+    rc = mod.main([
+        "--limit", "1",
+        "--ledger", str(ledger),
+        "--manifest", str(man),
+        "--snapshot-only",
+    ])
+    assert rc == 0
+    assert "--ledger" in captured["argv"]
+    assert str(ledger) in captured["argv"]
     import importlib.util
 
     spec = importlib.util.spec_from_file_location(

@@ -271,7 +271,7 @@ def main(argv: list[str] | None = None) -> int:
             args.url, args.pin, owner_pid=owner, path=registry_path,
         )
         from regexproof.admission.draft import build_draft
-        from regexproof.mine.batch_nogo import fold_auto_nogo
+        from regexproof.mine.batch_nogo import IncompleteFoldError, fold_auto_nogo
 
         inventory = build_draft(
             wt,
@@ -297,12 +297,16 @@ def main(argv: list[str] | None = None) -> int:
 
         generated = args.generated or (ROOT / "properties" / "generated")
         ledger = args.ledger or (ROOT / "properties" / "generated" / "candidate-ledger.json")
-        outcome, decision_path, note = fold_auto_nogo(
-            draft,
-            generated_dir=pathlib.Path(generated),
-            ledger_path=pathlib.Path(ledger),
-            repo_root=ROOT,
-        )
+        try:
+            outcome, decision_path, note = fold_auto_nogo(
+                draft,
+                generated_dir=pathlib.Path(generated),
+                ledger_path=pathlib.Path(ledger),
+                repo_root=ROOT,
+            )
+        except IncompleteFoldError as exc:
+            print(f"incomplete: {args.url}@{args.pin[:12]} ({exc})")
+            return 3
 
         lease_registry.renew(
             args.url, args.pin, owner_pid=owner, path=registry_path,
