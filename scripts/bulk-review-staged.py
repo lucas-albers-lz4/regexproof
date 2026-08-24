@@ -65,15 +65,54 @@ def _utc_ts(dt: datetime.datetime | None = None) -> str:
 
 def _load_draft(draft_path: pathlib.Path) -> dict:
     """Load a staged probe draft; refuse queue stubs structurally (Luna r1
-    #2: provenance=stub is queue-only and can never be promoted)."""
-    from regexproof.admission.author import load_probe_draft
+    #2: provenance=stub is queue-only and can never be promoted).
 
-    draft = load_probe_draft(draft_path)
+    Luna r5 #1: batch-probe.py emits LIGHTWEIGHT review stubs (url/pin/
+    corpus, NO probe object) — the author path requires probe evidence
+    (conditions, security_boundary, predicted_buckets). Resolve the probe
+    from the pipeline's probe-decision artifact for the same corpus
+    (``{corpus}_probe_decision.json``, then ``{corpus}_gate_decision.json``)
+    so the producer→reviewer workflow works without an undocumented
+    conversion step. Fail closed when no probe evidence exists.
+    """
+    try:
+        draft = json.loads(draft_path.read_text(encoding="utf-8"))
+    except (OSError, ValueError) as exc:
+        raise SystemExit(f"bulk-review: cannot read draft {draft_path}: {exc}") from exc
+    if not isinstance(draft, dict):
+        raise SystemExit(f"bulk-review: {draft_path.name} must be a JSON object")
     if str(draft.get("provenance") or "") == "stub":
         raise SystemExit(
             f"bulk-review: {draft_path.name} is a queue stub (provenance=stub) "
             "— stubs are queue-only and cannot be promoted"
         )
+    if "probe" not in draft or not isinstance(draft.get("probe"), dict):
+        corpus = str(draft.get("corpus") or "")
+        probe_evidence: dict | None = None
+        for candidate in (GEN / f"{corpus}_probe_decision.json",
+                          GEN / f"{corpus}_gate_decision.json"):
+            if candidate.is_file():
+                try:
+                    art = json.loads(candidate.read_text(encoding="utf-8"))
+                except (OSError, ValueError):
+                    continue
+                p = art.get("probe")
+                if isinstance(p, dict) and p:
+                    probe_evidence = p
+                    break
+        if probe_evidence is None:
+            raise SystemExit(
+                f"bulk-review: {draft_path.name} has no probe object and no "
+                f"probe evidence for corpus {corpus!r} — run "
+                "probe-corpus-admission.py first (authoring requires "
+                "probe evidence)"
+            )
+        draft = dict(draft)
+        draft["probe"] = probe_evidence
+        # batch-probe stubs carry top-level url; the author path requires
+        # candidate_url.
+        if not draft.get("candidate_url") and draft.get("url"):
+            draft["candidate_url"] = draft["url"]
     return draft
 
 
@@ -292,6 +331,19 @@ def main(argv: list[str] | None = None) -> int:
     # is deterministic and must NOT join the sampler population via
     # promoted_via (Luna r2: promotion provenance is for human decisions).
     if decision != "no-go":
+        # Luna r5 #2: human decisions must CLEAR the re-review state
+        # (re_evaluate / needs_human_review / auto_filed) — ensure_candidate_audit
+        # alone left a resolved candidate still flagged, blocking later
+        # auto-filing and leaving stale sampler state.
+        try:
+            audit.mark_human_resolved(
+                args.ledger, url, decision=decision,
+                clock=clock if clock is not None else None,
+            )
+        except ValueError as exc:
+            raise SystemExit(
+                f"bulk-review: human-resolved update failed for {url}: {exc}"
+            ) from exc
         promote_updates = {
             "promoted_via": "bulk-review",
             "promoted_at": (_utc_ts(at_dt) if at_dt is not None else _utc_ts()),

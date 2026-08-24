@@ -157,6 +157,46 @@ def test_human_go_writes_decision_and_promotes(tmp_path, monkeypatch):
     cand = next(iter(json.loads(ledger.read_text(encoding="utf-8"))["candidates"]))
     assert cand["audit"]["promoted_via"] == "bulk-review"
     assert cand["audit"]["promoted_at"] == "2026-08-21T10:00:00Z"  # canonical UTC
+    # Luna r5 #2: human go must CLEAR the re-review state.
+    assert cand["audit"]["re_evaluate"] is False
+    assert cand["audit"]["needs_human_review"] is False
+    assert cand["audit"]["human_resolved"] is True
+
+
+def test_human_go_clears_re_evaluate_state(tmp_path, monkeypatch):
+    """Luna r5 #2: a candidate flagged re_evaluate=true becomes fully
+    resolved after a human go — later auto-filing is unblocked."""
+    brs = _load_brs()
+    gen = tmp_path / "generated"
+    gen.mkdir()
+    monkeypatch.setattr(brs, "GEN", gen)
+    monkeypatch.setattr(brs, "default_output_path",
+                        lambda corpus, repo_root=None: gen / f"{corpus}_gate_decision.json")
+    from regexproof.mine.ledger import empty_ledger
+
+    url = "https://x/y"
+    ledger = tmp_path / "ledger.json"
+    ld = empty_ledger()
+    ld["candidates"].append({"url": url, "status": "mined",
+                             "audit": {"re_evaluate": True,
+                                       "needs_human_review": True}})
+    ledger.write_text(json.dumps(ld, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    d = _probe_draft(url)
+    d["probe"]["regex_sites"] = 1
+    draft = _write_draft(tmp_path, d)
+    rc = brs.main(["--draft", str(draft), "--go", "--reviewer", "alice",
+                   "--rationale", "human verified all conditions",
+                   "--conditions-ok",
+                   "--evidence", "new-surface=manual-source-confirmed",
+                   "--evidence", "security-boundary=manual-review",
+                   "--evidence", "large-under-saturated=manual-review",
+                   "--at", "2026-08-21T10:00:00", "--ledger", str(ledger)])
+    assert rc == 0
+    cand = next(iter(json.loads(ledger.read_text(encoding="utf-8"))["candidates"]))
+    assert cand["audit"]["re_evaluate"] is False
+    assert cand["audit"]["needs_human_review"] is False
+    assert cand["audit"]["human_resolved"] is True
+    assert cand["audit"]["auto_filed"] is False
 
 
 def test_auto_no_go_is_deterministic(tmp_path, monkeypatch):
@@ -316,6 +356,49 @@ def test_custom_cache_root_lease_released(tmp_path):
     assert lease_registry.active_leases(path=cache_root / "leases.json")
     brs._release_lease(url, cache_root=cache_root)
     assert lease_registry.active_leases(path=cache_root / "leases.json") == []
+
+
+def test_lightweight_batch_probe_draft_enriched(tmp_path, monkeypatch):
+    """Luna r5 #1: a lightweight batch-probe stub (url/pin/corpus, NO probe)
+    is enriched from the {corpus}_probe_decision.json artifact — the
+    producer→reviewer workflow works without an undocumented conversion."""
+    brs = _load_brs()
+    gen = tmp_path / "generated"
+    gen.mkdir()
+    monkeypatch.setattr(brs, "GEN", gen)
+    monkeypatch.setattr(brs, "default_output_path",
+                        lambda corpus, repo_root=None: gen / f"{corpus}_gate_decision.json")
+    # Probe evidence artifact (what probe-corpus-admission emits).
+    (gen / "ow_probe_decision.json").write_text(
+        json.dumps({"corpus": "ow", "candidate_url": "https://x/y",
+                    "probe": {"dialect": {"shell": 1}, "regex_sites": 1,
+                              "security_boundary": "deterministic-false",
+                              "pin": "a" * 40}},
+                   sort_keys=True) + "\n", encoding="utf-8")
+    # Lightweight stub — batch-probe.py shape (no probe object).
+    stub = {"url": "https://x/y", "pin": "a" * 40, "corpus": "ow",
+            "manifest_digest": "d1", "files_walked": 10}
+    draft = _write_draft(tmp_path, stub)
+    ledger = _write_ledger(tmp_path)
+    rc = brs.main(["--draft", str(draft), "--no-go", "--ledger", str(ledger)])
+    assert rc == 0  # enrichment succeeded; authoring ran on the resolved probe
+    dec = json.loads((gen / "ow_gate_decision.json").read_text(encoding="utf-8"))
+    assert dec["decision"] == "no-go"
+
+
+def test_lightweight_draft_without_evidence_fails_closed(tmp_path, monkeypatch):
+    """Luna r5 #1: a lightweight draft with NO probe evidence anywhere must
+    fail closed with a clear routing error."""
+    brs = _load_brs()
+    gen = tmp_path / "generated"
+    gen.mkdir()
+    monkeypatch.setattr(brs, "GEN", gen)
+    stub = {"url": "https://x/y", "pin": "a" * 40, "corpus": "ow",
+            "manifest_digest": "d1"}
+    draft = _write_draft(tmp_path, stub)
+    ledger = _write_ledger(tmp_path)
+    with pytest.raises(SystemExit, match="probe evidence"):
+        brs.main(["--draft", str(draft), "--no-go", "--ledger", str(ledger)])
 
 
 def test_demote_records_retained_location(tmp_path):
