@@ -44,7 +44,11 @@ def fold_auto_nogo(
     except AutoNoGoError as exc:
         try:
             audit.mark_needs_human_review(ledger_path, url, reason=str(exc))
-        except Exception as ledger_exc:
+        except ValueError as ledger_exc:
+            # Missing ledger row is deterministic — complete so drain
+            # does not re-clone forever.
+            return "error", None, f"needs_human ledger join failed: {ledger_exc}"
+        except OSError as ledger_exc:
             raise IncompleteFoldError(
                 f"needs_human ledger join failed: {ledger_exc}"
             ) from ledger_exc
@@ -77,8 +81,12 @@ def fold_auto_nogo(
             except OSError:
                 pass
             return "needs_human", None, str(exc)
-        raise IncompleteFoldError(f"auto-filing refused: {exc}") from exc
-    except Exception as exc:
+        try:
+            pending.unlink(missing_ok=True)
+        except OSError:
+            pass
+        return "error", None, f"auto-filing refused: {exc}"
+    except OSError as exc:
         raise IncompleteFoldError(f"auto-filing refused: {exc}") from exc
     try:
         os.replace(pending, out_path)

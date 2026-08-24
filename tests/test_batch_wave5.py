@@ -94,13 +94,15 @@ def test_fold_needs_human_ledger_failure_is_incomplete(tmp_path):
     draft["probe"]["security_boundary"] = "unknown"
     missing = tmp_path / "empty-ledger.json"
     save_ledger(missing, empty_ledger())
-    with pytest.raises(batch_nogo.IncompleteFoldError, match="needs_human ledger"):
-        batch_nogo.fold_auto_nogo(
-            draft,
-            generated_dir=tmp_path / "generated",
-            ledger_path=missing,
-            repo_root=ROOT,
-        )
+    outcome, decision, note = batch_nogo.fold_auto_nogo(
+        draft,
+        generated_dir=tmp_path / "generated",
+        ledger_path=missing,
+        repo_root=ROOT,
+    )
+    assert outcome == "error"
+    assert decision is None
+    assert "needs_human ledger join failed" in note
 
 
 def test_fold_needs_human_when_above_scale(tmp_path):
