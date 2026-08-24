@@ -57,19 +57,51 @@ def _decision_pin(payload: dict[str, Any]) -> str:
     return str(payload.get("corpus_pin") or probe.get("pin") or "")
 
 
+def _decision_recency(payload: dict[str, Any]) -> dt.datetime | None:
+    return _parse_iso(str(payload.get("decision_date") or payload.get("updated_at") or ""))
+
+
 def _index_decisions(gen: pathlib.Path) -> dict[tuple[str, str], dict[str, Any]]:
     indexed: dict[tuple[str, str], dict[str, Any]] = {}
+    recency: dict[tuple[str, str], dt.datetime] = {}
     if not gen.is_dir():
         return indexed
-    for path in gen.glob("*_gate_decision.json"):
+    for path in sorted(gen.glob("*_gate_decision.json")):
         try:
             payload = json.loads(path.read_text(encoding="utf-8"))
-        except (OSError, ValueError):
-            continue
+        except (OSError, ValueError) as exc:
+            raise SystemExit(
+                f"escape_window: unreadable/invalid gate decision {path}: {exc}"
+            ) from exc
         url = str(payload.get("candidate_url") or "")
         pin = _decision_pin(payload)
-        if url and pin:
-            indexed[(url, pin)] = payload
+        if not url or not pin:
+            continue
+        key = (url, pin)
+        when = _decision_recency(payload)
+        if key not in indexed:
+            if when is None:
+                raise SystemExit(
+                    f"escape_window: gate decision {path} has no decision_date/"
+                    "updated_at; refuse to index an unordered (url, pin)"
+                )
+            indexed[key] = payload
+            recency[key] = when
+            continue
+        if when is None:
+            raise SystemExit(
+                f"escape_window: duplicate (url, pin) {key} in {path} has no "
+                "decision_date/updated_at — fail closed"
+            )
+        prev = recency[key]
+        if when == prev:
+            raise SystemExit(
+                f"escape_window: duplicate (url, pin) {key} with equal recency "
+                f"— fail closed ({path})"
+            )
+        if when > prev:
+            indexed[key] = payload
+            recency[key] = when
     return indexed
 
 

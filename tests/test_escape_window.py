@@ -6,6 +6,8 @@ import datetime as dt
 import json
 from pathlib import Path
 
+import pytest
+
 from regexproof.mine import batch_state
 from regexproof.mine.escape_window import escape_window
 
@@ -103,6 +105,73 @@ def test_incomplete_rows_are_excluded(tmp_path: Path):
     )
     assert result["n_window"] == 0
     assert result["rate"] is None
+
+
+def test_unreadable_gate_decision_fails_closed(tmp_path: Path):
+    state = _state(tmp_path)
+    gen = tmp_path / "gen"
+    gen.mkdir()
+    _decision(gen, "https://x/y", PIN_A, "go")
+    (gen / "broken_gate_decision.json").write_text("{not json", encoding="utf-8")
+    with pytest.raises(SystemExit, match="unreadable/invalid"):
+        escape_window(
+            state_path=state,
+            gen=gen,
+            baseline_path=_baseline(tmp_path),
+            now=NOW,
+        )
+
+
+def test_duplicate_url_pin_keeps_newer_decision(tmp_path: Path):
+    state = _state(tmp_path)
+    gen = tmp_path / "gen"
+    gen.mkdir()
+    _decision(gen, "https://x/y", PIN_A, "no-go")
+    newer = {
+        "candidate_url": "https://x/y",
+        "corpus_pin": PIN_A,
+        "decision": "go",
+        "decision_date": "2026-08-24",
+        "updated_at": "2026-08-24T11:00:00+00:00",
+    }
+    (gen / "y_newer_gate_decision.json").write_text(
+        json.dumps(newer) + "\n", encoding="utf-8"
+    )
+    # older file used decision_date 2026-08-24 without time — parse as midnight.
+    # Give the first file an older date.
+    older = json.loads((gen / "y_gate_decision.json").read_text(encoding="utf-8"))
+    older["decision_date"] = "2026-08-23"
+    (gen / "y_gate_decision.json").write_text(json.dumps(older) + "\n", encoding="utf-8")
+    result = escape_window(
+        state_path=state,
+        gen=gen,
+        baseline_path=_baseline(tmp_path),
+        now=NOW,
+    )
+    assert result["k_window"] == 1
+
+
+def test_duplicate_url_pin_equal_recency_fails_closed(tmp_path: Path):
+    state = _state(tmp_path)
+    gen = tmp_path / "gen"
+    gen.mkdir()
+    _decision(gen, "https://x/y", PIN_A, "go")
+    (gen / "y_dup_gate_decision.json").write_text(
+        json.dumps({
+            "candidate_url": "https://x/y",
+            "corpus_pin": PIN_A,
+            "decision": "no-go",
+            "decision_date": "2026-08-24",
+        }) + "\n",
+        encoding="utf-8",
+    )
+    with pytest.raises(SystemExit, match="equal recency"):
+        escape_window(
+            state_path=state,
+            gen=gen,
+            baseline_path=_baseline(tmp_path),
+            now=NOW,
+        )
 
 
 def test_rows_outside_window_are_excluded(tmp_path: Path):

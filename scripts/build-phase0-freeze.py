@@ -251,7 +251,7 @@ def main() -> int:
             "correction toward the null (PR #583)",
             "implementation": "regexproof.stats.intervals.two_proportion_test",
             "effect": "k=3/n=50 vs baseline 121/844: uncorrected fires "
-            "(p~=0.0386); corrected does not (p~=0.0694). Pinned in "
+            "(p~=0.0463); corrected does not (p~=0.0694). Pinned in "
             "tests/test_intervals.py.",
             "rationale": "Match the predeclared #550 continuity-corrected "
             "oracle. statsmodels' two-proportion wrapper has no "
