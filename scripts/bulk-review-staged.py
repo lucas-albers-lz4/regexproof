@@ -641,7 +641,7 @@ def main(argv: list[str] | None = None) -> int:
                     else datetime.datetime.now(datetime.timezone.utc).date().isoformat()
                 ),
             )
-        except Exception as exc:
+        except (Exception, SystemExit) as exc:
             print(
                 f"bulk-review: WARNING stopwatch row not recorded: {exc}",
                 file=sys.stderr,

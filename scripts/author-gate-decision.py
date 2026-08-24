@@ -389,7 +389,7 @@ def main(argv: list[str] | None = None) -> int:
                 active_minutes=args.active_minutes,
                 decision_date=str(decision.get("decision_date") or ""),
             )
-        except Exception as exc:
+        except (Exception, SystemExit) as exc:
             print(f"warning: stopwatch row not recorded: {exc}", file=sys.stderr)
     return 0
 
