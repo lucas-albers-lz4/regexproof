@@ -423,3 +423,26 @@ def test_ledger_missing_fails_closed(tmp_path):
                  "--dispositions", str(tmp_path / "missing"),
                  "--queues-dir", str(tmp_path / "queues"),
                  "--out", str(out), "--at", "2026-08-24T03:00:00Z"])
+
+
+def test_ledger_row_missing_idiom_bucket_fails_closed(tmp_path):
+    """CodeRabbit #583: a per_wave row WITHOUT idiom_bucket is refused —
+    a consumed bucket would be silently ignored and re-selected."""
+    cs = _load_cs()
+    ledger = tmp_path / "conversion-ledger.json"
+    ledger.write_text(json.dumps({"per_wave": [
+        {"wave_id": "openwrt_packages_w1"},  # no idiom_bucket
+    ]}) + "\n", encoding="utf-8")
+    with pytest.raises(SystemExit, match="no idiom_bucket"):
+        cs._load_ledger_rows(ledger)
+
+
+def test_ledger_scalar_row_fails_closed(tmp_path):
+    """CodeRabbit #583: a scalar per_wave row would crash
+    used_buckets_per_cluster — refused instead."""
+    cs = _load_cs()
+    ledger = tmp_path / "conversion-ledger.json"
+    ledger.write_text(json.dumps({"per_wave": ["openwrt_packages_w1"]}) + "\n",
+                      encoding="utf-8")
+    with pytest.raises(SystemExit, match="not an object"):
+        cs._load_ledger_rows(ledger)

@@ -97,6 +97,15 @@ def _validate_probe_identity(draft: dict, probe: dict, draft_url: str, name: str
             "revision identity is unattributable, refusing (candidate B "
             "must never inherit candidate A's probe)"
         )
+    if not probe_url and not probe_pins:
+        # CodeRabbit #583: a probe with NEITHER a url NOR a pin carries no
+        # identity at all — it cannot be bound to any candidate and must
+        # not be used as evidence.
+        raise SystemExit(
+            f"bulk-review: {name} embeds probe evidence with NO url and NO "
+            "pin — the evidence is unbounded to any revision, refusing "
+            "(authoring requires bound probe evidence)"
+        )
     all_pins = probe_pins | draft_pins
     if len(all_pins) > 1:
         raise SystemExit(

@@ -474,6 +474,23 @@ def test_lightweight_pinless_draft_refuses_inherited_evidence(tmp_path, monkeypa
         brs.main(["--draft", str(draft), "--no-go", "--ledger", str(ledger)])
 
 
+def test_embedded_probe_no_identity_refused(tmp_path, monkeypatch):
+    """CodeRabbit #583: a probe with NEITHER a url NOR a pin carries no
+    identity — it cannot be bound to any candidate and is refused."""
+    brs = _load_brs()
+    gen = tmp_path / "generated"
+    gen.mkdir()
+    monkeypatch.setattr(brs, "GEN", gen)
+    draft = _write_draft(tmp_path, {
+        "url": "https://x/y", "pin": "a" * 40, "corpus": "ow",
+        "candidate_url": "https://x/y",
+        "probe": {"security_boundary": "deterministic-false", "regex_sites": 1},
+    })
+    ledger = _write_ledger(tmp_path)
+    with pytest.raises(SystemExit, match="NO url and NO pin"):
+        brs.main(["--draft", str(draft), "--no-go", "--ledger", str(ledger)])
+
+
 def test_embedded_probe_matching_accepted(tmp_path, monkeypatch):
     """Final-gate #1 (HIGH): an embedded probe whose URL AND pin match the
     draft is accepted — the validation must not reject legitimate drafts."""

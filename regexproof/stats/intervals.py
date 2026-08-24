@@ -333,13 +333,17 @@ def two_proportion_test(
     value (14.9%), treated as a FIXED constant — not a random draw — so the
     test is a one-proportion z-test of the window against the fixed null
     proportion, using the null standard error sqrt(b0*(1-b0)/n) WITH the
-    1/(2n) continuity correction (the named spec implementation is
-    ``statsmodels.stats.proportion.proportions_ztest`` with
-    ``correction=True``, ``alternative='smaller'`` — #550 REV-6).
+    1/(2n) continuity correction applied toward the null. The oracle is
+    defined exactly here (stdlib, deterministic): z = (p_hat ± 1/(2n) -
+    b0)/se; the named spec implementation is the continuity-corrected
+    one-proportion z-test per #550 REV-6 (statsmodels' two-proportion
+    wrapper has no ``correction`` parameter — the corrected oracle is this
+    function).
 
     Final-gate #6 (MEDIUM): the correction is DECISION-RELEVANT at the
-    boundary — e.g. k=3/n=50 uncorrected p=0.0463 (<0.05, fires) vs
-    corrected p≈0.0694 (does not fire). The gate must match the spec.
+    boundary — e.g. k=3/n=50 vs baseline 0.149: uncorrected p≈0.0386
+    (<0.05, fires) vs corrected p≈0.0584 (does not fire). The gate must
+    match the spec.
 
     Returns ``{p_value, window_rate, baseline, z, fires, n_window}`` where
     ``fires`` means "admission yield too low to justify scale" and BLOCKS
