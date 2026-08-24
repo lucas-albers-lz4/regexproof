@@ -26,12 +26,29 @@ def test_flip_decision_exists_and_is_shape_checked():
     assert d["eval"]["population_n"] == 844
     assert d["eval"]["split"]["ratio"] == 0.5
     assert d["flip_rule"].startswith("bootstrap BCa difference CI")
-    assert d["action"] in (
-        "flip live drain to score-v1.5",
-        "keep score-v1",
+    # Freeze-eval golden: current population flips offline to v1.5; live drain stays v1.
+    assert d["flip_to_v15"] is True
+    assert d["action"] == (
+        "record offline AUC flip to score-v1.5; live drain unchanged"
     )
-    # precision@K is descriptive only.
+    mismatch = d["designed_mismatch"].lower()
+    assert "live drain is still" in mismatch
+    assert "auc is a global-health statistic" in mismatch
+    assert "operational flip of the probe stream" in mismatch
+    assert "no second top-k flip" in mismatch
+    assert d["live_drain"] == (
+        "score-v1 (rank-mine-candidates.py / docs/MINE-SETUP.md)"
+    )
+    # precision@K is descriptive only; freeze-eval golden counts.
     assert d["eval"]["precision_at_k"]["k"] == 30
+    assert d["eval"]["precision_at_k_v1"]["k"] == 30
+    assert d["eval"]["precision_at_k"]["positive_in_top_k"] == 13
+    assert d["eval"]["precision_at_k_v1"]["positive_in_top_k"] == 8
+    assert d["eval"]["precision_at_k"]["clopper_pearson_95"] == [0.254608, 0.625727]
+    assert d["eval"]["precision_at_k_v1"]["clopper_pearson_95"] == [0.122795, 0.458894]
+    for name in ("precision_at_k", "precision_at_k_v1"):
+        lo, hi = d["eval"][name]["clopper_pearson_95"]
+        assert 0 <= lo <= hi <= 1
     assert "cap_raise_calibration_note" in d["eval"]
 
 
