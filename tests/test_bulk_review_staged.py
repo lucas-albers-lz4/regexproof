@@ -401,6 +401,49 @@ def test_lightweight_draft_without_evidence_fails_closed(tmp_path, monkeypatch):
         brs.main(["--draft", str(draft), "--no-go", "--ledger", str(ledger)])
 
 
+def test_lightweight_draft_refuses_wrong_url_evidence(tmp_path, monkeypatch):
+    """Luna r6 #1: probe evidence is BOUND to the draft candidate — an
+    artifact for a DIFFERENT url must never be inherited (corpus filename
+    alone is not identity)."""
+    brs = _load_brs()
+    gen = tmp_path / "generated"
+    gen.mkdir()
+    monkeypatch.setattr(brs, "GEN", gen)
+    # Evidence exists for corpus ow BUT a different url.
+    (gen / "ow_probe_decision.json").write_text(
+        json.dumps({"corpus": "ow", "candidate_url": "https://github.com/other/repo",
+                    "probe": {"dialect": {"shell": 1}, "regex_sites": 1,
+                              "security_boundary": "deterministic-false",
+                              "pin": "b" * 40}},
+                   sort_keys=True) + "\n", encoding="utf-8")
+    stub = {"url": "https://x/y", "pin": "a" * 40, "corpus": "ow",
+            "manifest_digest": "d1"}
+    draft = _write_draft(tmp_path, stub)
+    ledger = _write_ledger(tmp_path)
+    with pytest.raises(SystemExit, match="probe evidence"):
+        brs.main(["--draft", str(draft), "--no-go", "--ledger", str(ledger)])
+
+
+def test_failed_promotion_leaves_no_artifact(tmp_path, monkeypatch):
+    """Luna r6 #2: when a ledger update fails, NO active decision artifact
+    may remain — the next sync must not apply a stale decision."""
+    brs = _load_brs()
+    gen = tmp_path / "generated"
+    gen.mkdir()
+    monkeypatch.setattr(brs, "GEN", gen)
+    monkeypatch.setattr(brs, "default_output_path",
+                        lambda corpus, repo_root=None: gen / f"{corpus}_gate_decision.json")
+    draft = _write_draft(tmp_path)
+    ledger = tmp_path / "ledger.json"  # EMPTY ledger — candidate missing
+    from regexproof.mine.ledger import empty_ledger
+
+    ledger.write_text(json.dumps(empty_ledger(), indent=2, sort_keys=True) + "\n",
+                      encoding="utf-8")
+    with pytest.raises(SystemExit, match=r"auto-filing refused|candidate not in ledger"):
+        brs.main(["--draft", str(draft), "--no-go", "--ledger", str(ledger)])
+    assert not (gen / "ow_gate_decision.json").exists()
+
+
 def test_demote_records_retained_location(tmp_path):
     brs = _load_brs()
     draft = _write_draft(tmp_path)

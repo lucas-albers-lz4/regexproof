@@ -88,23 +88,44 @@ def _load_draft(draft_path: pathlib.Path) -> dict:
         )
     if "probe" not in draft or not isinstance(draft.get("probe"), dict):
         corpus = str(draft.get("corpus") or "")
+        # Luna r6 #1: probe evidence MUST be bound to the draft candidate —
+        # corpus filename alone is not identity. Require the artifact's
+        # candidate_url (+ pin when the draft carries one) to match, else
+        # fail closed (a draft could otherwise inherit URL/pin A's evidence
+        # while claiming to review URL/pin B).
+        from regexproof.mine.exclusions import normalize_repo_url
+
+        draft_url = normalize_repo_url(str(draft.get("candidate_url") or draft.get("url") or ""))
+        draft_pin = str(draft.get("pin") or "")
         probe_evidence: dict | None = None
         for candidate in (GEN / f"{corpus}_probe_decision.json",
                           GEN / f"{corpus}_gate_decision.json"):
-            if candidate.is_file():
-                try:
-                    art = json.loads(candidate.read_text(encoding="utf-8"))
-                except (OSError, ValueError):
-                    continue
-                p = art.get("probe")
-                if isinstance(p, dict) and p:
-                    probe_evidence = p
-                    break
+            if not candidate.is_file():
+                continue
+            try:
+                art = json.loads(candidate.read_text(encoding="utf-8"))
+            except (OSError, ValueError):
+                continue
+            art_url = normalize_repo_url(str(art.get("candidate_url") or ""))
+            if not art_url or (draft_url and art_url != draft_url):
+                continue  # wrong candidate — never inherit
+            art_probe = art.get("probe")
+            if not isinstance(art_probe, dict) or not art_probe:
+                continue
+            art_pin = str(art.get("corpus_pin") or art_probe.get("pin") or "")
+            if draft_pin and art_pin and art_pin != draft_pin:
+                raise SystemExit(
+                    f"bulk-review: {candidate.name} probe pin {art_pin!r} does "
+                    f"not match draft pin {draft_pin!r} for {draft_url} — "
+                    "refusing to inherit mismatched probe evidence"
+                )
+            probe_evidence = art_probe
+            break
         if probe_evidence is None:
             raise SystemExit(
                 f"bulk-review: {draft_path.name} has no probe object and no "
-                f"probe evidence for corpus {corpus!r} — run "
-                "probe-corpus-admission.py first (authoring requires "
+                f"probe evidence for corpus {corpus!r} at url {draft_url!r} — "
+                "run probe-corpus-admission.py first (authoring requires "
                 "probe evidence)"
             )
         draft = dict(draft)
@@ -322,15 +343,7 @@ def main(argv: list[str] | None = None) -> int:
             )
         except ValueError as exc:
             raise SystemExit(f"bulk-review: auto-filing refused: {exc}") from exc
-
-    # Persist the schema-validated decision + audit-promote the ledger row.
-    out_path = default_output_path(corpus, repo_root=ROOT)
-    out_path.parent.mkdir(parents=True, exist_ok=True)
-    out_path.write_text(json.dumps(out, indent=2, sort_keys=True) + "\n", encoding="utf-8")
-    # Only HUMAN decisions (go/triage-trial) are bulk-promoted — auto no-go
-    # is deterministic and must NOT join the sampler population via
-    # promoted_via (Luna r2: promotion provenance is for human decisions).
-    if decision != "no-go":
+    else:
         # Luna r5 #2: human decisions must CLEAR the re-review state
         # (re_evaluate / needs_human_review / auto_filed) — ensure_candidate_audit
         # alone left a resolved candidate still flagged, blocking later
@@ -348,21 +361,25 @@ def main(argv: list[str] | None = None) -> int:
             "promoted_via": "bulk-review",
             "promoted_at": (_utc_ts(at_dt) if at_dt is not None else _utc_ts()),
         }
-    else:
-        print(f"no_go: {url} -> {out_path.name} (provenance=auto)")
-        return 0
-    try:
-        audit.ensure_candidate_audit(
-            args.ledger, url, updates=promote_updates,
-        )
-    except ValueError as exc:
-        # Luna r2 P0: a missing ledger candidate must FAIL CLOSED — a
-        # decision written without audit provenance is not sampler-eligible
-        # and must not look like a successful promotion.
-        raise SystemExit(
-            f"bulk-review: ledger promotion failed for {url}: {exc} — "
-            "decision written but NOT promoted (audit provenance missing)"
-        ) from exc
+        try:
+            audit.ensure_candidate_audit(
+                args.ledger, url, updates=promote_updates,
+            )
+        except ValueError as exc:
+            # Luna r2 P0: a missing ledger candidate must FAIL CLOSED — a
+            # decision written without audit provenance is not sampler-eligible
+            # and must not look like a successful promotion.
+            raise SystemExit(
+                f"bulk-review: ledger promotion failed for {url}: {exc} — "
+                "audit provenance missing (no decision was written)"
+            ) from exc
+
+    # Luna r6 #2: persist the decision artifact ONLY AFTER every ledger
+    # update has succeeded — a failed update must never leave an ACTIVE
+    # decision file that the next sync can apply.
+    out_path = default_output_path(corpus, repo_root=ROOT)
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    out_path.write_text(json.dumps(out, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 
     print(f"{decision}: {url} -> {out_path.name} (provenance=human)" if decision != "no-go"
           else f"no_go: {url} -> {out_path.name} (provenance=auto)")
