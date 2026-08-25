@@ -4,6 +4,14 @@ All entries below cover the initial development cycle plus the 2026-08-08
 dogfooding/corpus/fix waves. No release tags exist yet. This changelog groups
 the work by phase; dates are merge dates.
 
+## Fowler refactor PR1b — newgate D15 exit 2 (2026-08-25)
+
+- Scaffolded gates (`regexproof.newgate.runner`) now return exit **2** when
+  any result record has `disagreement=True` (same §10 contract as the stock
+  harness). Documented in `docs/NEWGATE.md`.
+- Registry isolation after `REGISTRY.clear()` remains required so copied
+  gates do not run built-in P1–P6 / OpenWrt suites.
+
 ## Cluster conversion SOP (2026-08-17)
 
 - Added `docs/CLUSTER-CONVERSION.md` and `sweep/openwrt-conversion/plan.md`:

@@ -92,7 +92,9 @@ def main(argv: list[str] | None = None) -> int:
         print(f"\n{len(names) - failures}/{len(names)} passed")
     failures += domain_fail
     failures += contract_fail
-    # Exit policy owned by this CLI (PR1: no D15 check yet — PR1b).
+    # §10: 0 recorded, 1 not-proven/coverage, 2 D15 disagreement hard fail.
+    if any(r.get("disagreement") for r in results):
+        return 2
     if not_proven_count or coverage_fail or domain_fail or contract_fail:
         return 1
     if fail_on_property_failure and failures:

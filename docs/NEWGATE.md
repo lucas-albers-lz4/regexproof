@@ -102,6 +102,20 @@ is not product without that.
 - Existing scaffold files → refuse unless `--force`
 - v1 dialect is `py_re` only
 
+## Scaffolded gate exit codes (§10)
+
+`python3 gates/<slug>/gate.py …` uses the same operator contract as the
+stock harness (`regexproof.harness.cli`):
+
+| Exit | Meaning |
+|------|---------|
+| 0 | Result recorded (proven, finding, or recorded fallback) |
+| 1 | Not-proven (`unknown`/abstain), mutation/domain/contract coverage failure, or `--fail-on-property-failure` with `ok=False` |
+| 2 | D15 disagreement hard fail (`disagreement` on any result record) |
+
+Consumer CI that copies `ci.yml` should treat exit 2 as a hard fail, not a
+soft skip. TIMEOUT / not-proven is never a silent pass.
+
 ## After the scaffold
 
 1. Read 50–150 lines around the site. Edit the contract (`trust`,
