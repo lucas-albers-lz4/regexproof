@@ -94,10 +94,123 @@ def test_file_colon_pattern_split(tmp_path: Path):
     assert "REGEXPROOF_ROOT" in ci
     assert "lucas-albers-lz4/regexproof" in ci
     assert "github.workspace" in ci
+    assert "ref:" in ci
+    assert "pip install" in ci and "-e ./regexproof-src" in ci
     fuzz = (out / "fuzz.py").read_text(encoding="utf-8")
     assert "differential-fuzz.py" in fuzz
     assert "shell=False" in fuzz
     assert "shell=True" not in fuzz.replace("shell=False", "")
+
+
+def test_out_path_drives_ci_workdir(tmp_path: Path):
+    src = tmp_path / "validators.py"
+    src.write_text("USERNAME = r'^[a-z]+$'\n", encoding="utf-8")
+    # Absolute --out: CI stub falls back to gates/<slug>.
+    out_abs = tmp_path / "gates" / "username"
+    assert (
+        newgate_main(
+            [
+                "--out",
+                str(out_abs),
+                "--slug",
+                "username",
+                "--fuzz-runs",
+                "1",
+                str(src),
+                r"^[a-z]+$",
+            ]
+        )
+        == 0
+    )
+    ci = (out_abs / "ci.yml").read_text(encoding="utf-8")
+    assert "working-directory: gates/username" in ci
+    assert "name: regexproof-gate-username" in ci
+    assert "ref:" in ci
+
+
+def test_relative_out_matches_ci_workdir(tmp_path: Path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    src = Path("validators.py")
+    src.write_text("USERNAME = r'^[a-z]+$'\n", encoding="utf-8")
+    assert (
+        newgate_main(
+            [
+                "--out",
+                "gates/username",
+                "--slug",
+                "username",
+                "--fuzz-runs",
+                "1",
+                str(src),
+                r"^[a-z]+$",
+            ]
+        )
+        == 0
+    )
+    ci = Path("gates/username/ci.yml").read_text(encoding="utf-8")
+    assert "working-directory: gates/username" in ci
+    assert "name: regexproof-gate-username" in ci
+
+
+def test_bad_slug_fails_closed(tmp_path: Path):
+    src = tmp_path / "validators.py"
+    src.write_text("x = r'[a-z]+'\n", encoding="utf-8")
+    with pytest.raises(SystemExit, match="--slug"):
+        newgate_main(
+            [
+                "--slug",
+                "bad slug!",
+                "--out",
+                str(tmp_path / "out"),
+                str(src),
+                r"[a-z]+",
+            ]
+        )
+
+
+def test_exhaust_ge_max_len_fails_closed(tmp_path: Path):
+    src = tmp_path / "validators.py"
+    src.write_text("x = r'[a-z]+'\n", encoding="utf-8")
+    with pytest.raises(SystemExit, match="exhaust-max-len"):
+        newgate_main(
+            [
+                "--out",
+                str(tmp_path / "out"),
+                "--exhaust-max-len",
+                "8",
+                "--fuzz-max-len",
+                "8",
+                str(src),
+                r"[a-z]+",
+            ]
+        )
+
+
+def test_wide_range_fails_closed(tmp_path: Path):
+    src = tmp_path / "validators.py"
+    # \x00-\x80 spans 129 code points → refuse partial alphabet.
+    src.write_text("WIDE = r'^[\\x00-\\x80]+$'\n", encoding="utf-8")
+    with pytest.raises(SystemExit, match=r"spans|false UNSAT"):
+        newgate_main(
+            [
+                "--out",
+                str(tmp_path / "out"),
+                "--fuzz-runs",
+                "1",
+                str(src),
+                r"^[\x00-\x80]+$",
+            ]
+        )
+
+
+def test_mutation_sentinel_outside_star_alphabet(tmp_path: Path):
+    src = tmp_path / "validators.py"
+    src.write_text("GLOB = r'^[a-z*]+$'\n", encoding="utf-8")
+    out = tmp_path / "out"
+    assert newgate_main(["--out", str(out), "--fuzz-runs", "1", str(src), r"^[a-z*]+$"]) == 0
+    text = (out / "gate.py").read_text(encoding="utf-8")
+    assert "MUTATION_CH" in text
+    assert "MUTATION_CH = '*'" not in text
 
 
 def test_min_length_quantifier_uses_alphabet_not_full_mirror(tmp_path: Path):

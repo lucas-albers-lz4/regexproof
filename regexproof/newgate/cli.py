@@ -19,6 +19,7 @@ from regexproof.newgate.scaffold import (
     default_slug,
     family_ident,
     scaffold,
+    validate_slug,
 )
 
 USAGE = """regexproof newgate — scaffold a property gate from FILE + PATTERN
@@ -88,6 +89,12 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--slug", default=None, help="directory slug under gates/")
     ap.add_argument("--family", default=None, help="harness family id")
     ap.add_argument(
+        "--regexproof-ref",
+        default=None,
+        dest="regexproof_ref",
+        help="git SHA/tag pinned in generated ci.yml (default: this checkout HEAD)",
+    )
+    ap.add_argument(
         "--dialect",
         default="py_re",
         help="regex dialect (v1: py_re only)",
@@ -149,9 +156,11 @@ def main(argv: list[str] | None = None) -> int:
         ap.print_help()
         return 0
     source, pattern = parse_targets(list(args.targets))
-    slug = args.slug or default_slug(source, pattern)
+    slug = validate_slug(args.slug or default_slug(source, pattern))
     family = args.family or family_ident(slug)
     out = Path(args.out) if args.out else Path("gates") / slug
+    flags = str(args.flags or "").lower()
+    pin = args.regexproof_ref or _default_regexproof_ref()
     result = scaffold(
         ScaffoldRequest(
             source_file=source,
@@ -161,19 +170,48 @@ def main(argv: list[str] | None = None) -> int:
             family=family,
             dialect=args.dialect,
             call_kind=args.call_kind,
-            flags=args.flags,
+            flags=flags,
             forbidden=args.chars,
             fuzz_runs=args.fuzz_runs,
             exhaust_max_len=args.exhaust_max_len,
             fuzz_max_len=args.fuzz_max_len,
             mutations=args.mutations,
             force=args.force,
+            regexproof_ref=pin,
         )
     )
     print(f"newgate: wrote {result.out}")
     for name in result.files:
         print(f"  {name}")
     return 0
+
+
+def _default_regexproof_ref() -> str:
+    """Pin CI to this checkout's HEAD when run from a git tree."""
+    import subprocess
+    from pathlib import Path
+
+    root = Path(__file__).resolve().parents[2]
+    try:
+        proc = subprocess.run(
+            ["git", "-C", str(root), "rev-parse", "HEAD"],
+            check=False,
+            capture_output=True,
+            text=True,
+            shell=False,
+            timeout=10,
+        )
+    except OSError as exc:
+        raise SystemExit(
+            f"newgate: cannot resolve --regexproof-ref via git ({exc}); "
+            "pass --regexproof-ref SHA"
+        ) from exc
+    if proc.returncode != 0:
+        raise SystemExit(
+            "newgate: pass --regexproof-ref SHA/tag "
+            "(not running inside a regexproof git checkout)"
+        )
+    return proc.stdout.strip()
 
 
 if __name__ == "__main__":

@@ -32,7 +32,11 @@ def mirror_to_py(expr, *, max_len: int = _MAX_EXPR) -> str:
 
 
 def collect_singleton_alphabet(expr) -> str:
-    """Printable single-char leaves (ranges expanded, trailing ``\\n`` skipped)."""
+    """Printable single-char leaves (ranges expanded, trailing ``\\n`` skipped).
+
+    Fail-closed on wide ranges (≥128 code points): silently skipping them
+    would omit accepted chars and yield false UNSAT shape-1 properties.
+    """
     found: list[str] = []
     seen: set[str] = set()
 
@@ -47,11 +51,19 @@ def collect_singleton_alphabet(expr) -> str:
         if name == "re.range" and len(kids) == 2:
             lo = kids[0].as_string()
             hi = kids[1].as_string()
-            if len(lo) == 1 and len(hi) == 1:
-                a, b = ord(lo), ord(hi)
-                if 0 <= a <= b <= 0x10FFFF and (b - a) < 128:
-                    for code in range(a, b + 1):
-                        add(chr(code))
+            if len(lo) != 1 or len(hi) != 1:
+                raise ValueError("re.range bounds must be single characters")
+            a, b = ord(lo), ord(hi)
+            if not (0 <= a <= b <= 0x10FFFF):
+                raise ValueError(f"re.range out of order or out of Unicode: {lo!r}-{hi!r}")
+            span = b - a
+            if span >= 128:
+                raise ValueError(
+                    f"re.range {lo!r}-{hi!r} spans {span + 1} chars (≥128); "
+                    "newgate v1 refuses partial alphabet extraction (false UNSAT risk)"
+                )
+            for code in range(a, b + 1):
+                add(chr(code))
             return
         if name == "str.to_re":
             s = kids[0].as_string() if kids else ""

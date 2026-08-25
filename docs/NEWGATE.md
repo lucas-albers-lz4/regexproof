@@ -38,8 +38,13 @@ python3 -m venv .venv
 .venv/bin/python -m regexproof.newgate path/to/validators.py:^[a-z0-9._-]+$
 
 # After install:
-regexproof newgate --out gates/username path/to/validators.py '^[a-z0-9._-]+$'
+regexproof newgate --out gates/username --slug username \
+  path/to/validators.py '^[a-z0-9._-]+$'
 ```
+
+(`--slug` must match `[A-Za-z0-9_]`; when using `--out gates/username`, set
+`--slug username` so the workflow `name:` matches the directory. The CI
+`working-directory` always follows `--out`.)
 
 Then:
 
@@ -52,8 +57,10 @@ REGEXPROOF_ROOT=/path/to/regexproof python3 gates/<slug>/fuzz.py
 `REGEXPROOF_ROOT` is required when regexproof is not an editable checkout
 (fuzz locates `scripts/differential-fuzz.py` and the Python match helper).
 A PyPI wheel does **not** ship those paths — the generated `ci.yml` clones
-`lucas-albers-lz4/regexproof` into `regexproof-src` and points
-`REGEXPROOF_ROOT` there. Fuzz never uses `shell=True`.
+`lucas-albers-lz4/regexproof` at a **pinned** `ref:` (from
+`--regexproof-ref`, defaulting to this checkout's `HEAD`), installs that
+tree with `pip install -e`, and points `REGEXPROOF_ROOT` there. Fuzz never
+uses `shell=True`.
 
 ## What the mirror proves
 
@@ -72,9 +79,10 @@ charset proof that way.
 A **mutation guard** widens the alphabet with `Union(alphabet, Re('*'))`
 and expects SAT. A harness that cannot fail proves nothing.
 
-Ground-truth replay for SAT witnesses checks membership in the scaffolded
-alphabet chars (shape-1 domain). Differential fuzz still compares the
-**full** mirror language to Python `re` via `helpers/python/match.py`.
+Ground-truth replay for SAT witnesses runs Python `re` on `ch*n` for
+`n` in 1..32 (so `{8,}` still confirms the char is in the real language).
+Differential fuzz compares the **full** mirror language to Python `re`
+via `helpers/python/match.py`.
 
 Contracts are `provenance: agent_derived` until you read the surrounding
 code and adopt them as `human` ([`CONTRACTS.md`](CONTRACTS.md)). UNSAT
@@ -86,6 +94,9 @@ is not product without that.
 - Pattern the compiler cannot encode → `SystemExit` with the unencodable reason
 - Mirror too wide to emit as `--mirror-expr` (e.g. `.` expanded to a BMP union) → refuse; use a charset whitelist
 - Pattern with no singleton char alphabet (fixed multi-char literals only) → refuse
+- Wide `re.range` (≥128 code points) → refuse (partial extraction → false UNSAT)
+- `--slug` outside `[A-Za-z0-9_]{1,40}` → refuse (YAML injection)
+- `--exhaust-max-len >= --fuzz-max-len` → refuse
 - Existing scaffold files → refuse unless `--force`
 - v1 dialect is `py_re` only
 
