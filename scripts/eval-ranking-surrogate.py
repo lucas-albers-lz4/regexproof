@@ -62,14 +62,17 @@ def main(argv: list[str] | None = None) -> int:
     rows = ev.join_rows(freeze)
     split = freeze["split"]
     seed = int(split["seed"])
-    train, test = ev.stratified_split(rows, seed)
+    train_all, test_all = ev.stratified_split(rows, seed)
+    train = [row for row in train_all if type(row.get("regex_sites")) is int]
+    test = [row for row in test_all if type(row.get("regex_sites")) is int]
+    labeled_rows = [row for row in rows if type(row.get("regex_sites")) is int]
     y_train = [skip_class_label(r["status"], r.get("regex_sites")) for r in train]
     y_test = [skip_class_label(r["status"], r.get("regex_sites")) for r in test]
     model = fit_surrogate(train, y_train, today=DEFAULT_FIT_DATE)
     metrics = evaluate_skip_rate(
         test, y_test, model, threshold=PREDECLARED_THRESHOLD, today=DEFAULT_FIT_DATE
     )
-    skip_pop = sum(1 for r in rows if skip_class_label(r["status"], r.get("regex_sites")))
+    skip_pop = sum(1 for r in labeled_rows if skip_class_label(r["status"], r.get("regex_sites")))
     art = {
         "schema_version": "1",
         "wave": 9,
@@ -83,8 +86,8 @@ def main(argv: list[str] | None = None) -> int:
             "rule": f"status==no-go and regex_sites<={SKIP_SITE_CAP}",
             "site_cap": SKIP_SITE_CAP,
             "population_skip_n": skip_pop,
-            "population_n": len(rows),
-            "population_skip_frac": round(skip_pop / len(rows), 6) if rows else 0.0,
+            "population_n": len(labeled_rows),
+            "population_skip_frac": round(skip_pop / len(labeled_rows), 6) if labeled_rows else 0.0,
         },
         "split": {"seed": seed, "ratio": split["ratio"], "train_n": len(train), "test_n": len(test)},
         "features": {

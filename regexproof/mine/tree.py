@@ -105,8 +105,9 @@ class TreeProbeResult:
             "regex_file_type_counts": dict(self.regex_file_type_counts),
             "path_count": self.path_count,
             "probed_pin": self.probed_pin,
-            "root_dir_names": list(self.root_dir_names),
         }
+        if self.root_dir_names:
+            out["root_dir_names"] = list(self.root_dir_names)
         if self.reason:
             out["reason"] = self.reason
         return out

@@ -27,6 +27,8 @@ def root_names_from_paths(paths: Iterable[str]) -> list[str]:
         p = str(raw or "").strip().lstrip("./")
         if not p:
             continue
+        if "/" not in p:
+            continue
         names.add(p.split("/", 1)[0].lower())
     return sorted(names)
 

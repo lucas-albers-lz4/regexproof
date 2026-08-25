@@ -251,9 +251,9 @@ def main(argv: list[str] | None = None) -> int:
             cache=TreeCache(args.tree_cache),
         )
     density_hits: dict = {}
-    if args.code_search_budget > 0 and pool:
+    if pool:
         density_hits, _dcalls = materialize_density_hits(
-            _http_session(),
+            _http_session() if args.code_search_budget > 0 else None,
             pool,
             budget=args.code_search_budget,
             cache=DensityCache(args.density_cache),

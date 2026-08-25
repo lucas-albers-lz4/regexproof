@@ -44,6 +44,9 @@ def test_root_names_and_deprioritize():
     assert root_dir_deprioritized(names) is True
     assert root_dir_deprioritized(["src", "lib", "tests"]) is False
     assert root_dir_deprioritized([]) is False
+    # Root-level files are not directories (README.md is not a root dir).
+    assert root_names_from_paths(["README.md", "tests/a.py", "LICENSE"]) == ["tests"]
+    assert root_dir_deprioritized(root_names_from_paths(["README.md", "tests/a.py"])) is True
 
 
 def test_summarize_tree_records_root_dir_names():
@@ -58,8 +61,11 @@ def test_summarize_tree_records_root_dir_names():
         "acme/tool",
         "PIN",
     )
-    assert result.root_dir_names == ("readme.md", "src")
-    assert root_dir_deprioritized(result.root_dir_names) is False
+    assert result.root_dir_names == ("src",)
+    assert result.as_dict()["root_dir_names"] == ["src"]
+    assert "root_dir_names" not in summarize_tree(
+        {"truncated": True, "tree": []}, "acme/tool", "PIN"
+    ).as_dict()
 
 
 def test_v1_totals_unchanged_with_wave9_flags():
