@@ -46,7 +46,7 @@
       "frac_gt_200": 0.458333,
       "frac_le50": 0.458333,
       "mean_regex_sites": 1726.9,
-      "median_regex_sites": 189.0,
+      "median_regex_sites": 142.0,
       "n": 24
     },
     "rules": {
@@ -60,7 +60,7 @@
       "frac_gt_200": 0.23262,
       "frac_le50": 0.609626,
       "mean_regex_sites": 426.9,
-      "median_regex_sites": 24.0,
+      "median_regex_sites": 23.5,
       "n": 374
     },
     "testdata": {

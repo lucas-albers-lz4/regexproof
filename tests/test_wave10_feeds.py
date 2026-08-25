@@ -20,7 +20,12 @@ from regexproof.mine.search import DEFAULT_QUERY_BUDGET, SEARCH_QUERIES
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def test_daily_mine_cap_not_raised():
+def test_median_averages_even_samples():
+    from regexproof.mine.feeds import median
+
+    assert median([1]) == 1.0
+    assert median([1, 3]) == 2.0
+    assert median([1, 2, 3]) == 2.0
     assert DEFAULT_DAILY_CAP == 10
 
 

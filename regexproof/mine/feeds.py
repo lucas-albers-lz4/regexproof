@@ -64,7 +64,11 @@ def median(values: Sequence[int]) -> float | None:
     xs = sorted(int(v) for v in values)
     if not xs:
         return None
-    return float(xs[len(xs) // 2])
+    n = len(xs)
+    mid = n // 2
+    if n % 2:
+        return float(xs[mid])
+    return (xs[mid - 1] + xs[mid]) / 2.0
 
 
 def query_share_n(budget: int, *, share: float = TARGET_QUERY_SHARE) -> int:
