@@ -93,20 +93,11 @@ def _nogo_counts(gen: Path) -> dict[str, int]:
 
 
 def _escape(state_path: Path, gen: Path, baseline: Path) -> dict[str, Any]:
-    try:
-        return escape_window.escape_window(
-            state_path=state_path,
-            gen=gen,
-            baseline_path=baseline,
-        )
-    except (OSError, KeyError, TypeError, ValueError):
-        return {
-            "n_window": 0,
-            "k_window": 0,
-            "rate": None,
-            "baseline": None,
-            "fires": None,
-        }
+    return escape_window.escape_window(
+        state_path=state_path,
+        gen=gen,
+        baseline_path=baseline,
+    )
 
 
 def snapshot(

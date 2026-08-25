@@ -48,15 +48,18 @@ def main(argv: list[str] | None = None) -> int:
     if not argv or argv[0] in {"-h", "--help"}:
         ap.print_help()
         return 0
-    mode = None
-    for tok in argv:
-        if tok == "--single" and mode is None:
-            mode = "single"
-        elif tok == "--batch" and mode is None:
-            mode = "batch"
-    if mode is None:
+    has_single = "--single" in argv
+    has_batch = "--batch" in argv
+    if has_single and has_batch:
+        ap.error("--single and --batch are mutually exclusive")
+    if has_single:
+        mode = "single"
+    elif has_batch:
+        mode = "batch"
+    else:
         ap.error("one of --single / --batch is required")
     rest = [tok for tok in argv if tok not in {"--single", "--batch"}]
+    prev = os.environ.get(_CANONICAL_ENV)
     os.environ[_CANONICAL_ENV] = "1"
     script = (
         "probe-corpus-admission.py" if mode == "single" else "batch-probe.py"
@@ -68,4 +71,9 @@ def main(argv: list[str] | None = None) -> int:
         if code is None:
             return 0
         return int(code) if isinstance(code, int) else 1
+    finally:
+        if prev is None:
+            os.environ.pop(_CANONICAL_ENV, None)
+        else:
+            os.environ[_CANONICAL_ENV] = prev
     return int(rc)

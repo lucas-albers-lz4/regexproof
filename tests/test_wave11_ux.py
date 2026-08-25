@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import os
 from pathlib import Path
 
 import pytest
@@ -169,6 +170,18 @@ def test_corrupt_gate_decision_fails_closed(tmp_path: Path):
         )
 
 
+def test_missing_baseline_fails_closed(tmp_path: Path):
+    with pytest.raises(OSError):
+        snapshot(
+            generated=tmp_path,
+            state_path=tmp_path / "state.json",
+            ledger_path=tmp_path / "ledger.json",
+            queue_path=tmp_path / "queue.json",
+            conversion_ledger=tmp_path / "conv.json",
+            baseline_path=tmp_path / "no-baseline.json",
+        )
+
+
 def test_probe_cli_help():
     assert probe_main(["--help"]) == 0
     assert probe_main(["--single", "--help"]) == 0
@@ -181,6 +194,7 @@ def test_probe_cli_forwards_args_before_mode(monkeypatch):
         @staticmethod
         def main(argv):
             seen["argv"] = list(argv)
+            seen["env"] = os.environ.get("REGEXPROOF_PROBE_CANONICAL")
             return 0
 
     monkeypatch.setattr(
@@ -191,6 +205,15 @@ def test_probe_cli_forwards_args_before_mode(monkeypatch):
         == 0
     )
     assert seen["argv"] == ["--url", "https://example.com/r", "--pin", "abc"]
+    assert seen["env"] == "1"
+    assert "REGEXPROOF_PROBE_CANONICAL" not in os.environ
+
+
+def test_probe_cli_rejects_both_modes(capsys):
+    with pytest.raises(SystemExit) as excinfo:
+        probe_main(["--single", "--batch"])
+    assert excinfo.value.code == 2
+    assert "mutually exclusive" in capsys.readouterr().err
 
 
 def test_z3_verify_help():
