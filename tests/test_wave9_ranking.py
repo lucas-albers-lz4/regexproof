@@ -195,12 +195,26 @@ def test_density_rate_limit_omits_zero(monkeypatch):
     assert density_query("acme/gitleaks").startswith("repo:acme/gitleaks ")
 
 
+def test_density_auth_degrades(monkeypatch):
+    from regexproof.mine import density as dens
+    from regexproof.mine.search import AuthError
+
+    def boom(*_a, **_k):
+        raise AuthError("401")
+
+    monkeypatch.setattr(dens, "search_code", boom)
+    hits, calls = materialize_density_hits(object(), [CAND_A], budget=1)
+    assert calls == 1
+    assert hits["https://github.com/acme/gitleaks"] is None
+
+
 def test_build_deny_doc_zero_surface_only():
     doc = build_deny_doc(
         [
             {
                 "candidate_url": "https://github.com/acme/empty",
-                "probe": {"regex_sites": 0},
+                "corpus_pin": "abc123",
+                "probe": {"regex_sites": 0, "pin": "abc123"},
             },
             {
                 "candidate_url": "https://github.com/acme/missing-sites",
@@ -211,8 +225,10 @@ def test_build_deny_doc_zero_surface_only():
                 "probe": {"regex_sites": 12},
             },
             {
-                "candidate_url": "https://github.com/acme/fraction",
-                "probe": {"regex_sites": 0.2},
+                "candidate_url": "https://github.com/acme/clone-fail",
+                "corpus_pin": "",
+                "probe": {"regex_sites": 0, "pin": ""},
+                "related": {"probe_failure": "git clone/checkout error"},
             },
         ]
     )
@@ -282,4 +298,4 @@ def test_committed_surrogate_is_offline_only():
     )
     assert deny["hard_reject"] is False
     assert deny["not_conversion_wont_file"] is True
-    assert len(deny["slugs"]) == 132
+    assert len(deny["slugs"]) == 99

@@ -141,7 +141,12 @@ def materialize_density_hits(
             continue
         if session is None or remaining <= 0:
             continue
-        count, called = probe_density(session, slug, cache=cache)
+        try:
+            count, called = probe_density(session, slug, cache=cache)
+        except AuthError:
+            if cache is not None:
+                cache.put(slug, None, reason="auth")
+            count, called = None, True
         if called:
             calls += 1
             remaining -= 1

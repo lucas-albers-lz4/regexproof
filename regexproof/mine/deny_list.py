@@ -43,6 +43,12 @@ def build_deny_doc(decisions: list[dict[str, Any]]) -> dict[str, Any]:
     slugs: set[str] = set()
     for dec in decisions:
         probe = dec.get("probe") if isinstance(dec.get("probe"), dict) else {}
+        related = dec.get("related") if isinstance(dec.get("related"), dict) else {}
+        if related.get("probe_failure") or dec.get("probe_failure"):
+            continue
+        pin = str(dec.get("corpus_pin") or probe.get("pin") or "")
+        if not pin.strip():
+            continue
         sites_raw = probe.get("regex_sites")
         if type(sites_raw) is not int or sites_raw != 0:
             continue
