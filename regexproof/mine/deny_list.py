@@ -44,13 +44,7 @@ def build_deny_doc(decisions: list[dict[str, Any]]) -> dict[str, Any]:
     for dec in decisions:
         probe = dec.get("probe") if isinstance(dec.get("probe"), dict) else {}
         sites_raw = probe.get("regex_sites")
-        if sites_raw is None or isinstance(sites_raw, bool):
-            continue
-        try:
-            sites = int(sites_raw)
-        except (TypeError, ValueError):
-            continue
-        if sites != 0:
+        if type(sites_raw) is not int or sites_raw != 0:
             continue
         url = str(dec.get("candidate_url") or "")
         slug = github_repo_slug(url).lower()
