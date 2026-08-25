@@ -16,6 +16,7 @@ from regexproof.batch.budgets import (
     BUDGET_TESTDATA_LIGHT,
     BUDGET_VALIDATOR,
     BUDGET_VALIDATOR_DISK200,
+    CorpusManifest,
     budget_as_dict,
 )
 
@@ -25,7 +26,7 @@ ROOT = Path(__file__).resolve().parents[2]
 # (detect-secrets plugins/ materialization); size is the only gate here.
 MAX_FILE_BYTES = 2_000_000
 
-CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
+CORPUS_MANIFESTS: dict[str, CorpusManifest] = {
     "json-editor": {
         "corpus_type": "validator",
         # Materialize: ln -sfn /tmp/je-check/src batch/corpora/json-editor/rules

@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import sys
 from pathlib import Path
-from typing import Any, NotRequired, TypedDict
+from typing import Any, TypedDict
 
 _ADDRESS_SPACE_CAP_WARNED = False
 LAST_ADDRESS_SPACE_CAP_APPLIED: bool | None = None
@@ -104,9 +104,7 @@ BUDGET_PRESETS: dict[str, Budget] = {
 }
 
 
-class CorpusManifest(TypedDict, total=False):
-    """Loose TypedDict — glob / files / measure_scope are NotRequired (Grok G5)."""
-
+class _CorpusManifestCore(TypedDict):
     corpus_type: str
     path: Path
     dialect: str
@@ -115,14 +113,19 @@ class CorpusManifest(TypedDict, total=False):
     security_tool: bool
     lift_inline: bool
     corpus_pin: str
+
+
+class CorpusManifest(_CorpusManifestCore, total=False):
+    """Typed manifest row — optional glob/files/measure_scope per Grok G5."""
+
     budget: Budget
-    glob: NotRequired[str]
-    files: NotRequired[list[str]]
-    measure_scope: NotRequired[str]
-    sample_path: NotRequired[Path]
-    full_path: NotRequired[Path]
-    declared_semantics: NotRequired[str]
-    commit: NotRequired[str]
+    glob: str
+    files: list[str]
+    measure_scope: str
+    sample_path: Path
+    full_path: Path
+    declared_semantics: str
+    commit: str
 
 
 def budget_as_dict(budget: Budget) -> dict[str, Any]:
