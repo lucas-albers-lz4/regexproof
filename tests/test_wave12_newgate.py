@@ -304,10 +304,10 @@ def test_min_length_quantifier_uses_alphabet_not_full_mirror(tmp_path: Path):
 
 def test_no_singleton_alphabet_fails_closed(tmp_path: Path):
     src = tmp_path / "validators.py"
-    src.write_text("EMPTY = r'^$'\n", encoding="utf-8")
+    src.write_text("EMPTY = r'(?:)'\n", encoding="utf-8")
     with pytest.raises(SystemExit, match="singleton char alphabet"):
         newgate_main(
-            ["--out", str(tmp_path / "out"), "--fuzz-runs", "1", str(src), r"^$"]
+            ["--out", str(tmp_path / "out"), "--fuzz-runs", "1", str(src), r"(?:)"]
         )
 
 
