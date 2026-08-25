@@ -38,6 +38,24 @@ def _load_json(path: Path, *, required: bool = False) -> dict[str, Any]:
     return data
 
 
+def _require_list_field(doc: dict[str, Any], key: str, path: Path) -> list[Any]:
+    value = doc.get(key)
+    if not isinstance(value, list):
+        raise SystemExit(
+            f"pipeline-status: {path} missing list field {key!r}"
+        )
+    return value
+
+
+def _require_dict_field(doc: dict[str, Any], key: str, path: Path) -> dict[str, Any]:
+    value = doc.get(key)
+    if not isinstance(value, dict):
+        raise SystemExit(
+            f"pipeline-status: {path} missing object field {key!r}"
+        )
+    return value
+
+
 def _nogo_reason(payload: dict[str, Any]) -> str:
     basis = str(payload.get("decision_basis") or "")
     if basis == "author_auto":
@@ -116,22 +134,16 @@ def snapshot(
     baseline_path: Path | None = None,
 ) -> dict[str, Any]:
     gen = generated if generated is not None else GEN
-    conv = _load_json(
-        conversion_ledger if conversion_ledger is not None else LEDGER_JSON,
-        required=True,
-    )
-    starvation = conv.get("starvation") if isinstance(conv.get("starvation"), dict) else {}
-    hops = conv.get("per_wave") if isinstance(conv.get("per_wave"), list) else []
-    cand_doc = _load_json(
-        ledger_path if ledger_path is not None else CANDIDATE_LEDGER,
-        required=True,
-    )
-    candidates = cand_doc.get("candidates") if isinstance(cand_doc.get("candidates"), list) else []
-    queue_doc = _load_json(
-        queue_path if queue_path is not None else QUEUE_PATH,
-        required=True,
-    )
-    items = queue_doc.get("items") if isinstance(queue_doc.get("items"), list) else []
+    conv_path = conversion_ledger if conversion_ledger is not None else LEDGER_JSON
+    conv = _load_json(conv_path, required=True)
+    starvation = _require_dict_field(conv, "starvation", conv_path)
+    hops = _require_list_field(conv, "per_wave", conv_path)
+    ledger_p = ledger_path if ledger_path is not None else CANDIDATE_LEDGER
+    cand_doc = _load_json(ledger_p, required=True)
+    candidates = _require_list_field(cand_doc, "candidates", ledger_p)
+    queue_p = queue_path if queue_path is not None else QUEUE_PATH
+    queue_doc = _load_json(queue_p, required=True)
+    items = _require_list_field(queue_doc, "items", queue_p)
     state = state_path if state_path is not None else (ROOT / "batch" / "state.json")
     proj = batch_state.projection(state)
     baseline = baseline_path if baseline_path is not None else BASELINE_PATH

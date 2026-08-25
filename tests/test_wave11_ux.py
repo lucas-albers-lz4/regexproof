@@ -18,9 +18,11 @@ def _empty_stores(tmp_path: Path) -> tuple[Path, Path, Path]:
     ledger = tmp_path / "ledger.json"
     queue = tmp_path / "queue.json"
     conv = tmp_path / "conv.json"
-    ledger.write_text("{}\n", encoding="utf-8")
-    queue.write_text("{}\n", encoding="utf-8")
-    conv.write_text("{}\n", encoding="utf-8")
+    ledger.write_text(json.dumps({"candidates": []}) + "\n", encoding="utf-8")
+    queue.write_text(json.dumps({"items": []}) + "\n", encoding="utf-8")
+    conv.write_text(
+        json.dumps({"starvation": {}, "per_wave": []}) + "\n", encoding="utf-8"
+    )
     return ledger, queue, conv
 
 
@@ -205,6 +207,21 @@ def test_missing_conversion_ledger_fails_closed(tmp_path: Path):
             ledger_path=ledger,
             queue_path=queue,
             conversion_ledger=missing,
+            baseline_path=tmp_path / "no-baseline.json",
+        )
+
+
+def test_schema_empty_object_fails_closed(tmp_path: Path):
+    ledger, queue, _conv = _empty_stores(tmp_path)
+    bad = tmp_path / "bad-conv.json"
+    bad.write_text("{}\n", encoding="utf-8")
+    with pytest.raises(SystemExit, match="missing object field"):
+        snapshot(
+            generated=tmp_path,
+            state_path=tmp_path / "state.json",
+            ledger_path=ledger,
+            queue_path=queue,
+            conversion_ledger=bad,
             baseline_path=tmp_path / "no-baseline.json",
         )
 
