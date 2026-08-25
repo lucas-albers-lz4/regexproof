@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from dataclasses import dataclass, replace
 from typing import Callable
 
 from z3 import Concat, Range, Re, Star, Union
@@ -31,6 +32,25 @@ _WORD_CODES = frozenset(
     + [ord("_")]
 )
 _BMP_HI = 0xFFFF
+
+
+@dataclass(frozen=True)
+class LowerCtx:
+    """Dialect kwargs for AST→Z3 lowering (Introduce Parameter Object).
+
+    Mirrors the role of ``py_re._Ctx``: packs fold/class/space plumbing so
+    recursive helpers take ``ctx`` instead of a long kwargs list. Does **not**
+    unify ``_wrap`` with ``py_re._apply_wrappers``.
+    """
+
+    fold: Callable[[str], set[str]] | None
+    case_fold: Callable[[str], set[str]] | None
+    dot_terminators: frozenset[str]
+    digit: Callable[[], object]
+    space: Callable[[], object]
+    word: Callable[[], object]
+    allow_ascii_word_boundary: bool
+    space_codes: frozenset[int]
 
 
 def lower(
@@ -64,20 +84,17 @@ def lower(
         "word_boundary_wrap": False,
     }
     scodes = space_codes if space_codes is not None else _SPACE_CODES
-    body = _lower_node(
-        node,
+    ctx = LowerCtx(
         fold=fold,
         case_fold=case_fold or fold,
         dot_terminators=dot_terminators,
         digit=digit,
         space=space,
         word=word,
-        meta=meta,
-        at_start=True,
-        at_end=True,
         allow_ascii_word_boundary=allow_ascii_word_boundary,
         space_codes=scodes,
     )
+    body = _lower_node(node, ctx, meta, at_start=True, at_end=True)
     if meta["has_internal_anchor"]:
         raise Unencodable("internal-anchor")
     if meta["trailing_dollar"] and trailing_dollar_nl:
@@ -118,38 +135,17 @@ def _wrap(body, call_kind, meta):
     return parts[0] if len(parts) == 1 else Concat(*parts)
 
 
-def _lower_seq(
-    node,
-    *,
-    fold,
-    case_fold,
-    dot_terminators,
-    digit,
-    space,
-    word,
-    meta,
-    at_start,
-    at_end,
-    allow_ascii_word_boundary: bool,
-    space_codes: frozenset[int],
-):
+def _lower_seq(node, ctx: LowerCtx, meta, *, at_start, at_end):
     items = node.items
     parts = []
     for idx, it in enumerate(items):
         parts.append(
             _lower_node(
                 it,
-                fold=fold,
-                case_fold=case_fold,
-                dot_terminators=dot_terminators,
-                digit=digit,
-                space=space,
-                word=word,
-                meta=meta,
+                ctx,
+                meta,
                 at_start=at_start and idx == 0,
                 at_end=at_end and idx == len(items) - 1,
-                allow_ascii_word_boundary=allow_ascii_word_boundary,
-                space_codes=space_codes,
             )
         )
     if not parts:
@@ -157,21 +153,7 @@ def _lower_seq(
     return parts[0] if len(parts) == 1 else Concat(*parts)
 
 
-def _lower_alt(
-    node,
-    *,
-    fold,
-    case_fold,
-    dot_terminators,
-    digit,
-    space,
-    word,
-    meta,
-    at_start,
-    at_end,
-    allow_ascii_word_boundary: bool,
-    space_codes: frozenset[int],
-):
+def _lower_alt(node, ctx: LowerCtx, meta, *, at_start, at_end):
     # Per-alternative anchors must not hoist onto the whole Union
     # (false-UNSAT under search: ^a|b vs ^(a|b)). Reject like py_re.
     alts = []
@@ -185,17 +167,10 @@ def _lower_alt(
         }
         lowered = _lower_node(
             it,
-            fold=fold,
-            case_fold=case_fold,
-            dot_terminators=dot_terminators,
-            digit=digit,
-            space=space,
-            word=word,
-            meta=alt_meta,
+            ctx,
+            alt_meta,
             at_start=at_start,
             at_end=at_end,
-            allow_ascii_word_boundary=allow_ascii_word_boundary,
-            space_codes=space_codes,
         )
         if alt_meta.get("has_internal_anchor"):
             meta["has_internal_anchor"] = True
@@ -230,109 +205,52 @@ def _lower_alt(
         meta["mirror_exact"] = False
     return Union(*alts) if len(alts) > 1 else alts[0]
 
-def _lower_node(
-    node,
-    *,
-    fold,
-    case_fold,
-    dot_terminators,
-    digit,
-    space,
-    word,
-    meta,
-    at_start,
-    at_end,
-    allow_ascii_word_boundary: bool = False,
-    space_codes: frozenset[int] = _SPACE_CODES,
-):
+def _lower_node(node, ctx: LowerCtx, meta, *, at_start, at_end):
     if isinstance(node, sp.WordBoundary):
         raise Unencodable("word-boundary")
     if isinstance(node, sp.WordBounded):
-        if not allow_ascii_word_boundary:
+        if not ctx.allow_ascii_word_boundary:
             raise Unencodable("word-boundary")
-        return _lower_word_bounded(
-            node,
-            fold=fold,
-            case_fold=case_fold,
-            dot_terminators=dot_terminators,
-            digit=digit,
-            space=space,
-            word=word,
-            meta=meta,
-            space_codes=space_codes,
-        )
+        return _lower_word_bounded(node, ctx, meta)
     if isinstance(node, sp.Folded):
-        active = case_fold if case_fold is not None else fold
+        active = ctx.case_fold if ctx.case_fold is not None else ctx.fold
         if active is None:
             raise Unencodable("inline-flag")
         return _lower_node(
             node.item,
-            fold=active,
-            case_fold=case_fold,
-            dot_terminators=dot_terminators,
-            digit=digit,
-            space=space,
-            word=word,
-            meta=meta,
+            replace(ctx, fold=active),
+            meta,
             at_start=at_start,
             at_end=at_end,
-            allow_ascii_word_boundary=allow_ascii_word_boundary,
-            space_codes=space_codes,
         )
     if isinstance(node, sp.Lit):
         if node.ch == "":
             return Re("")
-        return _lit(node.ch, fold)
+        return _lit(node.ch, ctx.fold)
     if isinstance(node, sp.Any):
-        return _dot(dot_terminators)
+        return _dot(ctx.dot_terminators)
     if isinstance(node, sp.Seq):
-        return _lower_seq(
-            node,
-            fold=fold,
-            case_fold=case_fold,
-            dot_terminators=dot_terminators,
-            digit=digit,
-            space=space,
-            word=word,
-            meta=meta,
-            at_start=at_start,
-            at_end=at_end,
-            allow_ascii_word_boundary=allow_ascii_word_boundary,
-            space_codes=space_codes,
-        )
+        return _lower_seq(node, ctx, meta, at_start=at_start, at_end=at_end)
     if isinstance(node, sp.Alt):
-        return _lower_alt(
-            node,
-            fold=fold,
-            case_fold=case_fold,
-            dot_terminators=dot_terminators,
-            digit=digit,
-            space=space,
-            word=word,
-            meta=meta,
-            at_start=at_start,
-            at_end=at_end,
-            allow_ascii_word_boundary=allow_ascii_word_boundary,
-            space_codes=space_codes,
-        )
+        return _lower_alt(node, ctx, meta, at_start=at_start, at_end=at_end)
     if isinstance(node, sp.Repeat):
         inner = _lower_node(
             node.item,
-            fold=fold,
-            case_fold=case_fold,
-            dot_terminators=dot_terminators,
-            digit=digit,
-            space=space,
-            word=word,
-            meta=meta,
+            ctx,
+            meta,
             at_start=False,
             at_end=False,
-            allow_ascii_word_boundary=allow_ascii_word_boundary,
-            space_codes=space_codes,
         )
         return _repeat(inner, node.lo, node.hi)
     if isinstance(node, sp.Cls):
-        return _class(node, fold, digit, space, word, space_codes=space_codes)
+        return _class(
+            node,
+            ctx.fold,
+            ctx.digit,
+            ctx.space,
+            ctx.word,
+            space_codes=ctx.space_codes,
+        )
     if isinstance(node, sp.Anchor):
         if node.kind == "start":
             if at_start:
@@ -354,18 +272,7 @@ def _ascii_nonword():
     return ranges_excluding(set(_WORD_CODES))
 
 
-def _lower_word_bounded(
-    node: sp.WordBounded,
-    *,
-    fold,
-    case_fold,
-    dot_terminators,
-    digit,
-    space,
-    word,
-    meta,
-    space_codes: frozenset[int] = _SPACE_CODES,
-):
+def _lower_word_bounded(node: sp.WordBounded, ctx: LowerCtx, meta):
     """Encode edge ``\\b`` as (^|\\W)inner(\\W|$) under ASCII ``\\w``.
 
     Faithful for engines whose ``\\w`` is ASCII (RE2, stock PCRE without UCP,
@@ -378,19 +285,13 @@ def _lower_word_bounded(
         "has_internal_anchor": False,
         "word_boundary_wrap": False,
     }
+    inner_ctx = replace(ctx, allow_ascii_word_boundary=False)  # no nested WordBounded
     inner = _lower_node(
         node.item,
-        fold=fold,
-        case_fold=case_fold,
-        dot_terminators=dot_terminators,
-        digit=digit,
-        space=space,
-        word=word,
-        meta=inner_meta,
+        inner_ctx,
+        inner_meta,
         at_start=True,
         at_end=True,
-        allow_ascii_word_boundary=False,  # no nested WordBounded
-        space_codes=space_codes,
     )
     if inner_meta["has_internal_anchor"]:
         raise Unencodable("internal-anchor")
