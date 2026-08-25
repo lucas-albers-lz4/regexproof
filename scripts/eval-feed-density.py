@@ -31,7 +31,7 @@ from regexproof.mine.feeds import (  # noqa: E402
     median,
     query_share_n,
 )
-from regexproof.mine.features import _query_family  # noqa: E402
+from regexproof.mine.features import query_family  # noqa: E402
 from regexproof.mine.queue import DEFAULT_DAILY_CAP as QUEUE_CAP  # noqa: E402
 from regexproof.mine.search import DEFAULT_QUERY_BUDGET  # noqa: E402
 
@@ -84,7 +84,7 @@ def main(argv: list[str] | None = None) -> int:
             continue
         sites = probe["regex_sites"]
         url = str(dec.get("candidate_url") or "")
-        fam = _query_family(str(by_url.get(normalize_repo_url(url), {}).get("source_query") or ""))
+        fam = query_family(str(by_url.get(normalize_repo_url(url), {}).get("source_query") or ""))
         fam_sites[fam].append(sites)
         slug = github_repo_slug(url).lower()
         if slug in EXEMPLAR_SLUGS:
