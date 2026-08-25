@@ -118,6 +118,37 @@ def test_pipeline_status_snapshot(tmp_path: Path):
     assert "below-scale=1" in weekly
 
 
+def test_injected_missing_state_does_not_use_default(tmp_path: Path, monkeypatch):
+    seen: dict = {}
+
+    def fake_escape(**kwargs):
+        seen.update(kwargs)
+        return {
+            "n_window": 0,
+            "k_window": 0,
+            "rate": None,
+            "baseline": 0.14,
+            "fires": None,
+        }
+
+    monkeypatch.setattr(
+        "regexproof.mine.pipeline_status.escape_window.escape_window",
+        fake_escape,
+    )
+    missing = tmp_path / "absent-state.json"
+    baseline = tmp_path / "absent-baseline.json"
+    snapshot(
+        generated=tmp_path,
+        state_path=missing,
+        ledger_path=tmp_path / "no-ledger.json",
+        queue_path=tmp_path / "no-queue.json",
+        conversion_ledger=tmp_path / "no-conv.json",
+        baseline_path=baseline,
+    )
+    assert seen["state_path"] == missing
+    assert seen["baseline_path"] == baseline
+
+
 def test_probe_cli_help():
     assert probe_main(["--help"]) == 0
     assert probe_main(["--single", "--help"]) == 0

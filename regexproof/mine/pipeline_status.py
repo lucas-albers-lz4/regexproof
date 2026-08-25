@@ -92,12 +92,12 @@ def _nogo_counts(gen: Path) -> dict[str, int]:
     return dict(counts.most_common())
 
 
-def _escape(state_path: Path | None, gen: Path, baseline: Path) -> dict[str, Any]:
+def _escape(state_path: Path, gen: Path, baseline: Path) -> dict[str, Any]:
     try:
         return escape_window.escape_window(
             state_path=state_path,
             gen=gen,
-            baseline_path=baseline if baseline.is_file() else None,
+            baseline_path=baseline,
         )
     except (SystemExit, OSError, KeyError, TypeError, ValueError):
         return {
@@ -128,11 +128,8 @@ def snapshot(
     items = queue_doc.get("items") if isinstance(queue_doc.get("items"), list) else []
     state = state_path if state_path is not None else (ROOT / "batch" / "state.json")
     proj = batch_state.projection(state)
-    esc = _escape(
-        state if state.is_file() else None,
-        gen,
-        baseline_path if baseline_path is not None else BASELINE_PATH,
-    )
+    baseline = baseline_path if baseline_path is not None else BASELINE_PATH
+    esc = _escape(state, gen, baseline)
     nogo = _nogo_counts(gen)
     drain = _latest_mine_day_drain(candidates)
     return {
