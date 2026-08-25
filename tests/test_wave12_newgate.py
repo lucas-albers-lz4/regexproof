@@ -440,3 +440,82 @@ def test_module_entry_help():
         timeout=20,
     )
     assert probe.returncode == 0, probe.stderr
+
+
+def test_newgate_runner_exit_2_on_disagreement(monkeypatch):
+    """Scaffolded gate CLI hard-fails on D15 disagreement (§10 exit 2)."""
+    from regexproof.harness import core
+    from regexproof.newgate import runner
+
+    def fake_run(names, *, require_gt=False, as_json=False):
+        return [
+            {
+                "name": names[0] if names else "x",
+                "ok": True,
+                "not_proven": False,
+                "disagreement": True,
+            }
+        ]
+
+    monkeypatch.setattr(runner, "run_named_properties", fake_run)
+    monkeypatch.setattr(runner, "check_mutation_coverage", lambda: 0)
+    monkeypatch.setattr(runner, "check_domain_coverage", lambda require=False: 0)
+    monkeypatch.setattr(runner, "check_contract_coverage", lambda require=False: 0)
+    monkeypatch.setattr(runner, "validate_registry", lambda: ([], 0))
+    core.REGISTRY["NG_fixture"] = {
+        "expect_unsat": True,
+        "kind": "property",
+        "family": "NG_fixture",
+    }
+    try:
+        assert runner.main(["NG_fixture"]) == 2
+    finally:
+        core.REGISTRY.pop("NG_fixture", None)
+
+
+def test_scaffolded_gate_registry_only_ng_properties(tmp_path: Path):
+    """After REGISTRY.clear(), a generated gate must not keep built-in suites."""
+    src = tmp_path / "validators.py"
+    src.write_text("USERNAME = r'^[a-z0-9._-]+$'\n", encoding="utf-8")
+    out = tmp_path / "gate"
+    assert (
+        newgate_main(
+            ["--out", str(out), "--fuzz-runs", "1", "--chars", ";", str(src), r"^[a-z0-9._-]+$"]
+        )
+        == 0
+    )
+    gate = out / "gate.py"
+    text = gate.read_text(encoding="utf-8")
+    assert "REGISTRY.clear()" in text
+    # Import order: prop then clear (harness/__init__ side effect).
+    prop_idx = text.index("from regexproof.harness.core import REGISTRY, prop")
+    clear_idx = text.index("REGISTRY.clear()")
+    assert prop_idx < clear_idx
+    # Load gate in a subprocess so REGISTRY isolation is real.
+    probe = subprocess.run(
+        [
+            sys.executable,
+            "-c",
+            (
+                "import runpy, sys;\n"
+                f"sys.path.insert(0, {str(out)!r});\n"
+                "ns = runpy.run_path('gate.py');\n"
+                "from regexproof.harness.core import REGISTRY;\n"
+                "names = sorted(REGISTRY);\n"
+                "bad = [n for n in names if not n.startswith('NG_') "
+                "and 'mutated' not in n.lower()];\n"
+                # Mutation guards keep family prefix; allow NG_* only.
+                "bad = [n for n in names if not n.startswith('NG_')];\n"
+                "print('NAMES', ','.join(names));\n"
+                "sys.exit(1 if bad else 0)\n"
+            ),
+        ],
+        cwd=out,
+        capture_output=True,
+        text=True,
+        check=False,
+        timeout=30,
+    )
+    assert probe.returncode == 0, probe.stdout + probe.stderr
+    assert "NAMES NG_" in probe.stdout
+    assert "P1-" not in probe.stdout
