@@ -638,7 +638,7 @@ jobs:
         uses: actions/checkout@v4  # pin this
         with:
           repository: lucas-albers-lz4/regexproof
-          ref: {pin}
+          ref: "{pin}"
           path: regexproof-src
       - uses: actions/setup-python@v5  # pin this
         with:
