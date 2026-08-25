@@ -60,7 +60,13 @@ def _repo_slug(url: str) -> str:
     return u
 
 
-def _query_family(source_query: str) -> str:
+def query_family(source_query: str) -> str:
+    """Classify a search/source query into a density family.
+
+    Exact ``SEARCH_QUERIES`` / ``FEED_QUERIES`` map first; fuzzy fallback
+    for drifted historical ``source_query`` text. Keep ``_query_family`` as
+    a compatibility alias.
+    """
     q = (source_query or "").strip()
     if q in _QUERY_FAMILY:
         return _QUERY_FAMILY[q]
@@ -79,6 +85,10 @@ def _query_family(source_query: str) -> str:
     if "procd" in ql or "netifd" in ql or "apkbuild" in ql or "fstools" in ql:
         return "other"
     return "other"
+
+
+# Compatibility alias (scripts / older call sites).
+_query_family = query_family
 
 
 def _parse_pushed(pushed: str) -> date | None:

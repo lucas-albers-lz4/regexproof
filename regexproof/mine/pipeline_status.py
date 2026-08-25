@@ -124,6 +124,17 @@ def _escape(state_path: Path, gen: Path, baseline: Path) -> dict[str, Any]:
     )
 
 
+def _format_rate(rate: Any) -> str:
+    return f"{rate:.4f}" if isinstance(rate, (int, float)) else "n/a"
+
+
+def _drain_line(drain: dict[str, Any]) -> str:
+    base = f"latest mine-day drain: {drain.get('admitted', 0)} ledger admits"
+    if drain.get("date"):
+        return f"{base} (UTC {drain.get('date')})"
+    return base
+
+
 def snapshot(
     *,
     generated: Path | None = None,
@@ -188,12 +199,10 @@ def snapshot(
 def render_status(snap: dict[str, Any]) -> str:
     drain = snap.get("latest_mine_day_drain") or {}
     week = snap.get("week_survival") or {}
-    rate = week.get("rate")
-    rate_s = f"{rate:.4f}" if isinstance(rate, (int, float)) else "n/a"
+    rate_s = _format_rate(week.get("rate"))
     lines = [
         "regexproof pipeline status",
-        f"latest mine-day drain: {drain.get('admitted', 0)} ledger admits"
-        + (f" (UTC {drain.get('date')})" if drain.get("date") else ""),
+        _drain_line(drain),
         f"queue pressure: {snap.get('queue_pressure')} "
         f"({snap.get('queue_len')}/{snap.get('queue_cap')})",
         f"this week's survival: k={week.get('k')} / n={week.get('n')} "
@@ -213,8 +222,7 @@ def render_weekly(snap: dict[str, Any]) -> str:
     week = snap.get("week_survival") or {}
     nogo = snap.get("nogo_by_reason") or {}
     nogo_lines = ", ".join(f"{k}={v}" for k, v in list(nogo.items())[:8]) or "none"
-    rate = week.get("rate")
-    rate_s = f"{rate:.4f}" if isinstance(rate, (int, float)) else "n/a"
+    rate_s = _format_rate(week.get("rate"))
     return "\n".join(
         [
             "### What changed this week",
