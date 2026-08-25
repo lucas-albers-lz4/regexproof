@@ -1,7 +1,8 @@
 """Isolated harness runner for a scaffolded gate (no built-in P1–P6 registry).
 
-Import ``regexproof.harness.core`` only — never ``regexproof.harness`` — so
-``REGISTRY`` contains just the properties this process registered.
+Scaffolded ``gate.py`` must ``REGISTRY.clear()`` after importing ``prop``
+because ``import regexproof.harness.core`` still executes
+``harness/__init__.py``, which registers the built-in suites.
 """
 
 from __future__ import annotations

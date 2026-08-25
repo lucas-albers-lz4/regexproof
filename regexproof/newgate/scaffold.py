@@ -326,11 +326,15 @@ from __future__ import annotations
 
 import re
 
-from z3 import InRe, Length, Re, String, StringVal, Union
+from z3 import InRe, Length, Range, Re, String, StringVal, Union
 
-from regexproof.harness.core import prop
+from regexproof.harness.core import REGISTRY, prop
 from regexproof.newgate.runner import main
 from regexproof.z3_pin import assert_z3_pinned
+
+# ``import regexproof.harness.core`` still runs harness/__init__.py, which
+# registers the built-in P1–P6 / OpenWrt suites. Isolate this gate.
+REGISTRY.clear()
 
 assert_z3_pinned()
 
@@ -363,9 +367,21 @@ _RX = re.compile(PATTERN, _BITS)
 
 
 def _build_alphabet():
-    parts = [Re(ch) for ch in ALPHABET_CHARS]
-    if not parts:
+    """Collapse contiguous code points into Range (Union of 39 Re() is slow)."""
+    if not ALPHABET_CHARS:
         raise SystemExit("newgate gate: empty ALPHABET_CHARS")
+    codes = sorted({{ord(ch) for ch in ALPHABET_CHARS}})
+    parts = []
+    start = prev = codes[0]
+    for code in codes[1:]:
+        if code == prev + 1:
+            prev = code
+            continue
+        parts.append(
+            Range(chr(start), chr(prev)) if start != prev else Re(chr(start))
+        )
+        start = prev = code
+    parts.append(Range(chr(start), chr(prev)) if start != prev else Re(chr(start)))
     if len(parts) == 1:
         return parts[0]
     return Union(*parts)
