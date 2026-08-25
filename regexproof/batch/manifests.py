@@ -3,7 +3,21 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Any
+
+from regexproof.batch.budgets import (
+    BUDGET_HEAVY_30K,
+    BUDGET_HEAVY_50K,
+    BUDGET_LIGHT,
+    BUDGET_LUCI_DISK,
+    BUDGET_PATROL,
+    BUDGET_PATROL_DISK1000,
+    BUDGET_RULE_DEFAULT,
+    BUDGET_TESTDATA_LIGHT,
+    BUDGET_VALIDATOR,
+    BUDGET_VALIDATOR_DISK200,
+    CorpusManifest,
+    budget_as_dict,
+)
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -11,7 +25,7 @@ ROOT = Path(__file__).resolve().parents[2]
 # (detect-secrets plugins/ materialization); size is the only gate here.
 MAX_FILE_BYTES = 2_000_000
 
-CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
+CORPUS_MANIFESTS: dict[str, CorpusManifest] = {
     "json-editor": {
         "corpus_type": "validator",
         # Materialize: ln -sfn /tmp/je-check/src batch/corpora/json-editor/rules
@@ -26,13 +40,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": False,
         "corpus_pin": "b31ddabecf4ed3209d37a2f5b29956120cd8f9ce",
         "commit": "b31ddabecf4ed3209d37a2f5b29956120cd8f9ce",
-        "budget": {
-            "max_patterns": 5000,
-            "max_wall_s": 600,
-            "redos_wall_s": 120,
-            "max_mem_mb": 1024,
-            "max_disk_mb": 100,
-        },
+        "budget": budget_as_dict(BUDGET_VALIDATOR),
     },
     "anax": {
         "corpus_type": "rule_corpus",
@@ -48,13 +56,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": False,
         "corpus_pin": "2f3fa5a506d6565fa68858b7963450567ddda114",
         "commit": "2f3fa5a506d6565fa68858b7963450567ddda114",
-        "budget": {
-            "max_patterns": 5000,
-            "max_wall_s": 900,
-            "redos_wall_s": 180,
-            "max_mem_mb": 2048,
-            "max_disk_mb": 500,
-        },
+        "budget": budget_as_dict(BUDGET_RULE_DEFAULT),
     },
     "openwrt_packages": {
         "corpus_type": "rule_corpus",
@@ -71,13 +73,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": False,
         "corpus_pin": "e99adbc49f7a11d0377c8135fe706c7757b9e68c",
         "commit": "e99adbc49f7a11d0377c8135fe706c7757b9e68c",
-        "budget": {
-            "max_patterns": 5000,
-            "max_wall_s": 900,
-            "redos_wall_s": 180,
-            "max_mem_mb": 2048,
-            "max_disk_mb": 500,
-        },
+        "budget": budget_as_dict(BUDGET_RULE_DEFAULT),
     },
     "openwrt_luci": {
         "corpus_type": "rule_corpus",
@@ -94,13 +90,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": False,
         "corpus_pin": "77dad3f31405bc11f8384d742f7ad95314179694",
         "commit": "77dad3f31405bc11f8384d742f7ad95314179694",
-        "budget": {
-            "max_patterns": 5000,
-            "max_wall_s": 900,
-            "redos_wall_s": 180,
-            "max_mem_mb": 2048,
-            "max_disk_mb": 2000,
-        },
+        "budget": budget_as_dict(BUDGET_LUCI_DISK),
     },
     "volatility3-mcp": {
         "corpus_type": "rule_corpus",
@@ -117,13 +107,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": False,
         "corpus_pin": "edc50f35005032c940bf6260ca791dab700eaabc",
         "commit": "edc50f35005032c940bf6260ca791dab700eaabc",
-        "budget": {
-            "max_patterns": 50000,
-            "max_wall_s": 1200,
-            "redos_wall_s": 240,
-            "max_mem_mb": 4096,
-            "max_disk_mb": 1000,
-        },
+        "budget": budget_as_dict(BUDGET_HEAVY_50K),
     },
     "globussoft-crm": {
         "corpus_type": "rule_corpus",
@@ -201,13 +185,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": False,
         "corpus_pin": "8a53d8b624cacad6049d9a49255f4f8493169085",
         "commit": "8a53d8b624cacad6049d9a49255f4f8493169085",
-        "budget": {
-            "max_patterns": 5000,
-            "max_wall_s": 900,
-            "redos_wall_s": 180,
-            "max_mem_mb": 2048,
-            "max_disk_mb": 500,
-        },
+        "budget": budget_as_dict(BUDGET_RULE_DEFAULT),
     },
     "JARVIS": {
         "corpus_type": "rule_corpus",
@@ -284,13 +262,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": False,
         "corpus_pin": "d9164ff679c6f2cd3e1fa19c311db7a9eed32c7e",
         "commit": "d9164ff679c6f2cd3e1fa19c311db7a9eed32c7e",
-        "budget": {
-            "max_patterns": 5000,
-            "max_wall_s": 900,
-            "redos_wall_s": 180,
-            "max_mem_mb": 2048,
-            "max_disk_mb": 500,
-        },
+        "budget": budget_as_dict(BUDGET_RULE_DEFAULT),
     },
     "claude-code-plugins": {
         "corpus_type": "rule_corpus",
@@ -307,13 +279,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": False,
         "corpus_pin": "f44d0df5e7bf023b88cccc37301402ba7f9dcdb1",
         "commit": "f44d0df5e7bf023b88cccc37301402ba7f9dcdb1",
-        "budget": {
-            "max_patterns": 5000,
-            "max_wall_s": 900,
-            "redos_wall_s": 180,
-            "max_mem_mb": 2048,
-            "max_disk_mb": 500,
-        },
+        "budget": budget_as_dict(BUDGET_RULE_DEFAULT),
     },
     "typescript-go": {
         "corpus_type": "testdata",
@@ -411,13 +377,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": False,
         "corpus_pin": "34ffe2a2531a226da0046d213899ae0b721229b0",
         "commit": "34ffe2a2531a226da0046d213899ae0b721229b0",
-        "budget": {
-            "max_patterns": 5000,
-            "max_wall_s": 900,
-            "redos_wall_s": 180,
-            "max_mem_mb": 2048,
-            "max_disk_mb": 500,
-        },
+        "budget": budget_as_dict(BUDGET_RULE_DEFAULT),
     },
     "whohk": {
         "corpus_type": "rule_corpus",
@@ -433,13 +393,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": False,
         "corpus_pin": "1143af45b06c2e49c9f13efb149cd20067e8ea38",
         "commit": "1143af45b06c2e49c9f13efb149cd20067e8ea38",
-        "budget": {
-            "max_patterns": 5000,
-            "max_wall_s": 900,
-            "redos_wall_s": 180,
-            "max_mem_mb": 2048,
-            "max_disk_mb": 500,
-        },
+        "budget": budget_as_dict(BUDGET_RULE_DEFAULT),
     },
     "tarcoin": {
         "corpus_type": "rule_corpus",
@@ -498,13 +452,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": False,
         "corpus_pin": "a6552d17180dbf4a43a74c875db3e9a77f9437d6",
         "commit": "a6552d17180dbf4a43a74c875db3e9a77f9437d6",
-        "budget": {
-            "max_patterns": 5000,
-            "max_wall_s": 600,
-            "redos_wall_s": 120,
-            "max_mem_mb": 1024,
-            "max_disk_mb": 200,
-        },
+        "budget": budget_as_dict(BUDGET_VALIDATOR_DISK200),
     },
     "SMAT": {
         "corpus_type": "rule_corpus",
@@ -520,13 +468,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": False,
         "corpus_pin": "def00ebdfb7f3e004677c0edf15164819a8e6c6d",
         "commit": "def00ebdfb7f3e004677c0edf15164819a8e6c6d",
-        "budget": {
-            "max_patterns": 30000,
-            "max_wall_s": 1200,
-            "redos_wall_s": 240,
-            "max_mem_mb": 4096,
-            "max_disk_mb": 1000,
-        },
+        "budget": budget_as_dict(BUDGET_HEAVY_30K),
     },
     "PEpper": {
         "corpus_type": "rule_corpus",
@@ -542,13 +484,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": False,
         "corpus_pin": "9dfcade04b41422b5c8457956f984cd25fe3e6d2",
         "commit": "9dfcade04b41422b5c8457956f984cd25fe3e6d2",
-        "budget": {
-            "max_patterns": 30000,
-            "max_wall_s": 1200,
-            "redos_wall_s": 240,
-            "max_mem_mb": 4096,
-            "max_disk_mb": 1000,
-        },
+        "budget": budget_as_dict(BUDGET_HEAVY_30K),
     },
     "sec_check": {
         "corpus_type": "rule_corpus",
@@ -564,13 +500,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": False,
         "corpus_pin": "b7b9841432f0f4c69f360d910c5fcce4d0e4a01f",
         "commit": "b7b9841432f0f4c69f360d910c5fcce4d0e4a01f",
-        "budget": {
-            "max_patterns": 30000,
-            "max_wall_s": 1200,
-            "redos_wall_s": 240,
-            "max_mem_mb": 4096,
-            "max_disk_mb": 1000,
-        },
+        "budget": budget_as_dict(BUDGET_HEAVY_30K),
     },
     "Antivirus": {
         "corpus_type": "rule_corpus",
@@ -586,13 +516,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": False,
         "corpus_pin": "2d7fea93eca3be3df4ad7087e339d21bcd915103",
         "commit": "2d7fea93eca3be3df4ad7087e339d21bcd915103",
-        "budget": {
-            "max_patterns": 30000,
-            "max_wall_s": 1200,
-            "redos_wall_s": 240,
-            "max_mem_mb": 4096,
-            "max_disk_mb": 1000,
-        },
+        "budget": budget_as_dict(BUDGET_HEAVY_30K),
     },
     "patrolaroid": {
         "corpus_type": "rule_corpus",
@@ -608,13 +532,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": False,
         "corpus_pin": "ed7ad98fa495ca9a7d9e855dd260218ba4e67a9b",
         "commit": "ed7ad98fa495ca9a7d9e855dd260218ba4e67a9b",
-        "budget": {
-            "max_patterns": 5000,
-            "max_wall_s": 600,
-            "redos_wall_s": 120,
-            "max_mem_mb": 2048,
-            "max_disk_mb": 500,
-        },
+        "budget": budget_as_dict(BUDGET_PATROL),
     },
     "moonpython": {
         "corpus_type": "rule_corpus",
@@ -691,13 +609,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": False,
         "corpus_pin": "03f07eadcef3b4a4b9592d7d62703a6840e3e5d5",
         "commit": "03f07eadcef3b4a4b9592d7d62703a6840e3e5d5",
-        "budget": {
-            "max_patterns": 5000,
-            "max_wall_s": 900,
-            "redos_wall_s": 180,
-            "max_mem_mb": 2048,
-            "max_disk_mb": 500,
-        },
+        "budget": budget_as_dict(BUDGET_RULE_DEFAULT),
     },
 
     "nogil-3.12": {
@@ -775,13 +687,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": False,
         "corpus_pin": "cedde4f5ec3759ad723c89d44738776f362df564",
         "commit": "cedde4f5ec3759ad723c89d44738776f362df564",
-        "budget": {
-            "max_patterns": 5000,
-            "max_wall_s": 900,
-            "redos_wall_s": 180,
-            "max_mem_mb": 2048,
-            "max_disk_mb": 500,
-        },
+        "budget": budget_as_dict(BUDGET_RULE_DEFAULT),
     },
 
     "gilectomy": {
@@ -859,13 +765,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": False,
         "corpus_pin": "4315ec3f1d6d4f813cc82ce27a24e7f784dbfc1a",
         "commit": "4315ec3f1d6d4f813cc82ce27a24e7f784dbfc1a",
-        "budget": {
-            "max_patterns": 5000,
-            "max_wall_s": 900,
-            "redos_wall_s": 180,
-            "max_mem_mb": 2048,
-            "max_disk_mb": 500,
-        },
+        "budget": budget_as_dict(BUDGET_RULE_DEFAULT),
     },
 
     "cpython-13": {
@@ -943,13 +843,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": False,
         "corpus_pin": "5975602bc460d4e684807260e8ce2f6363910a55",
         "commit": "5975602bc460d4e684807260e8ce2f6363910a55",
-        "budget": {
-            "max_patterns": 5000,
-            "max_wall_s": 900,
-            "redos_wall_s": 180,
-            "max_mem_mb": 2048,
-            "max_disk_mb": 500,
-        },
+        "budget": budget_as_dict(BUDGET_RULE_DEFAULT),
     },
 
     "jython3": {
@@ -1029,13 +923,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": False,
         "corpus_pin": "e0d80bbddff0d5465f2da3f9de52bff89ab00e53",
         "commit": "e0d80bbddff0d5465f2da3f9de52bff89ab00e53",
-        "budget": {
-            "max_patterns": 5000,
-            "max_wall_s": 900,
-            "redos_wall_s": 180,
-            "max_mem_mb": 2048,
-            "max_disk_mb": 500,
-        },
+        "budget": budget_as_dict(BUDGET_RULE_DEFAULT),
     },
     "pythowon": {
         "corpus_type": "rule_corpus",
@@ -1114,13 +1002,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": False,
         "corpus_pin": "2b78a358c0da53219e48cf10dddb7ad3f93d474a",
         "commit": "2b78a358c0da53219e48cf10dddb7ad3f93d474a",
-        "budget": {
-            "max_patterns": 5000,
-            "max_wall_s": 900,
-            "redos_wall_s": 180,
-            "max_mem_mb": 2048,
-            "max_disk_mb": 500,
-        },
+        "budget": budget_as_dict(BUDGET_RULE_DEFAULT),
     },
     "python_3_8_2": {
         "corpus_type": "rule_corpus",
@@ -1199,13 +1081,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": False,
         "corpus_pin": "06cdf3fc9ae103afc55cbd5657ba7c7d09120a81",
         "commit": "06cdf3fc9ae103afc55cbd5657ba7c7d09120a81",
-        "budget": {
-            "max_patterns": 5000,
-            "max_wall_s": 900,
-            "redos_wall_s": 180,
-            "max_mem_mb": 2048,
-            "max_disk_mb": 500,
-        },
+        "budget": budget_as_dict(BUDGET_RULE_DEFAULT),
     },
     "binaryalert": {
         "corpus_type": "rule_corpus",
@@ -1222,13 +1098,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": False,
         "corpus_pin": "a9c0f06affc35e1f8e45bb77f835b92350c68a0b",
         "commit": "a9c0f06affc35e1f8e45bb77f835b92350c68a0b",
-        "budget": {
-            "max_patterns": 5000,
-            "max_wall_s": 600,
-            "redos_wall_s": 120,
-            "max_mem_mb": 2048,
-            "max_disk_mb": 500,
-        },
+        "budget": budget_as_dict(BUDGET_PATROL),
     },
     "pm_shredder": {
         "corpus_type": "rule_corpus",
@@ -1244,13 +1114,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": False,
         "corpus_pin": "7fa83b2250a434bfe153a67eb52e015558e9409a",
         "commit": "7fa83b2250a434bfe153a67eb52e015558e9409a",
-        "budget": {
-            "max_patterns": 5000,
-            "max_wall_s": 600,
-            "redos_wall_s": 120,
-            "max_mem_mb": 2048,
-            "max_disk_mb": 500,
-        },
+        "budget": budget_as_dict(BUDGET_PATROL),
     },
     "mole": {
         "corpus_type": "rule_corpus",
@@ -1268,13 +1132,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": False,
         "corpus_pin": "eb5356d56e914552d6b1c8dc822f19bd6f0e5774",
         "commit": "eb5356d56e914552d6b1c8dc822f19bd6f0e5774",
-        "budget": {
-            "max_patterns": 5000,
-            "max_wall_s": 600,
-            "redos_wall_s": 120,
-            "max_mem_mb": 2048,
-            "max_disk_mb": 500,
-        },
+        "budget": budget_as_dict(BUDGET_PATROL),
     },
     "detekt": {
         "corpus_type": "rule_corpus",
@@ -1291,13 +1149,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": False,
         "corpus_pin": "14aea88a5ff4cb2840d3712dbd8a85078cd03b28",
         "commit": "14aea88a5ff4cb2840d3712dbd8a85078cd03b28",
-        "budget": {
-            "max_patterns": 5000,
-            "max_wall_s": 600,
-            "redos_wall_s": 120,
-            "max_mem_mb": 2048,
-            "max_disk_mb": 500,
-        },
+        "budget": budget_as_dict(BUDGET_PATROL),
     },
     "XPR-dump": {
         "corpus_type": "rule_corpus",
@@ -1312,13 +1164,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": False,
         "corpus_pin": "510bf67808d018cbbaa51b7e66282da965917c95",
         "commit": "510bf67808d018cbbaa51b7e66282da965917c95",
-        "budget": {
-            "max_patterns": 5000,
-            "max_wall_s": 600,
-            "redos_wall_s": 120,
-            "max_mem_mb": 2048,
-            "max_disk_mb": 500,
-        },
+        "budget": budget_as_dict(BUDGET_PATROL),
     },
     "ActiveAntiPhish": {
         "corpus_type": "rule_corpus",
@@ -1333,13 +1179,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": False,
         "corpus_pin": "6148bb167ebe641901fc468157b640a03ee4e388",
         "commit": "6148bb167ebe641901fc468157b640a03ee4e388",
-        "budget": {
-            "max_patterns": 5000,
-            "max_wall_s": 600,
-            "redos_wall_s": 120,
-            "max_mem_mb": 2048,
-            "max_disk_mb": 500,
-        },
+        "budget": budget_as_dict(BUDGET_PATROL),
     },
     "SentryShield": {
         "corpus_type": "rule_corpus",
@@ -1354,13 +1194,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": False,
         "corpus_pin": "4f43015c80fde0cb1bd3f001a7551c40eed2682c",
         "commit": "4f43015c80fde0cb1bd3f001a7551c40eed2682c",
-        "budget": {
-            "max_patterns": 5000,
-            "max_wall_s": 600,
-            "redos_wall_s": 120,
-            "max_mem_mb": 2048,
-            "max_disk_mb": 500,
-        },
+        "budget": budget_as_dict(BUDGET_PATROL),
     },
     "Astra_AV": {
         "corpus_type": "rule_corpus",
@@ -1375,13 +1209,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": False,
         "corpus_pin": "87fe9529fdf9c64126bd81fc45658bb86bd64755",
         "commit": "87fe9529fdf9c64126bd81fc45658bb86bd64755",
-        "budget": {
-            "max_patterns": 5000,
-            "max_wall_s": 600,
-            "redos_wall_s": 120,
-            "max_mem_mb": 2048,
-            "max_disk_mb": 500,
-        },
+        "budget": budget_as_dict(BUDGET_PATROL),
     },
     "rkcheck": {
         "corpus_type": "rule_corpus",
@@ -1396,13 +1224,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": False,
         "corpus_pin": "ca4b30b254861b5f76d6cad68c9cc5c9e49a58ac",
         "commit": "ca4b30b254861b5f76d6cad68c9cc5c9e49a58ac",
-        "budget": {
-            "max_patterns": 5000,
-            "max_wall_s": 600,
-            "redos_wall_s": 120,
-            "max_mem_mb": 2048,
-            "max_disk_mb": 500,
-        },
+        "budget": budget_as_dict(BUDGET_PATROL),
     },
     "100DaysOfYARA": {
         "corpus_type": "rule_corpus",
@@ -1417,13 +1239,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": False,
         "corpus_pin": "50c8516ecb73db2a7b44e0bf42a99b0eaf94155d",
         "commit": "50c8516ecb73db2a7b44e0bf42a99b0eaf94155d",
-        "budget": {
-            "max_patterns": 5000,
-            "max_wall_s": 600,
-            "redos_wall_s": 120,
-            "max_mem_mb": 2048,
-            "max_disk_mb": 500,
-        },
+        "budget": budget_as_dict(BUDGET_PATROL),
     },
     "weissman-cybersecurity": {
         "corpus_type": "rule_corpus",
@@ -1500,13 +1316,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": False,
         "corpus_pin": "74de1d9d45b17c602040cbde82e2d7623a2d379d",
         "commit": "74de1d9d45b17c602040cbde82e2d7623a2d379d",
-        "budget": {
-            "max_patterns": 5000,
-            "max_wall_s": 600,
-            "redos_wall_s": 120,
-            "max_mem_mb": 2048,
-            "max_disk_mb": 500,
-        },
+        "budget": budget_as_dict(BUDGET_PATROL),
     },
     "mobissh": {
         "corpus_type": "rule_corpus",
@@ -1546,13 +1356,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": False,
         "corpus_pin": "ced24fa12d650e2aa6ea44a4e0a7f52bec548409",
         "commit": "ced24fa12d650e2aa6ea44a4e0a7f52bec548409",
-        "budget": {
-            "max_patterns": 5000,
-            "max_wall_s": 600,
-            "redos_wall_s": 120,
-            "max_mem_mb": 2048,
-            "max_disk_mb": 500,
-        },
+        "budget": budget_as_dict(BUDGET_PATROL),
     },
     "canvas-drop": {
         "corpus_type": "rule_corpus",
@@ -1607,13 +1411,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": False,
         "corpus_pin": "ef9baeb3743426c58853e58fbad820e69e459144",
         "commit": "ef9baeb3743426c58853e58fbad820e69e459144",
-        "budget": {
-            "max_patterns": 5000,
-            "max_wall_s": 600,
-            "redos_wall_s": 120,
-            "max_mem_mb": 2048,
-            "max_disk_mb": 500,
-        },
+        "budget": budget_as_dict(BUDGET_PATROL),
     },
     "forge-cli": {
         "corpus_type": "rule_corpus",
@@ -1692,13 +1490,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": False,
         "corpus_pin": "efcf8e4c0087def553a737dc1c4eebda5d8a90cd",
         "commit": "efcf8e4c0087def553a737dc1c4eebda5d8a90cd",
-        "budget": {
-            "max_patterns": 5000,
-            "max_wall_s": 900,
-            "redos_wall_s": 180,
-            "max_mem_mb": 2048,
-            "max_disk_mb": 500,
-        },
+        "budget": budget_as_dict(BUDGET_RULE_DEFAULT),
     },
     "vedetta": {
         "corpus_type": "rule_corpus",
@@ -1731,13 +1523,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": False,
         "corpus_pin": "cec6a1caef7a576c036e6d07eabd482fe0a6b059",
         "commit": "cec6a1caef7a576c036e6d07eabd482fe0a6b059",
-        "budget": {
-            "max_patterns": 5000,
-            "max_wall_s": 600,
-            "redos_wall_s": 120,
-            "max_mem_mb": 2048,
-            "max_disk_mb": 500,
-        },
+        "budget": budget_as_dict(BUDGET_PATROL),
     },
     "snyk-ls": {
         "corpus_type": "rule_corpus",
@@ -1767,13 +1553,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": False,
         "corpus_pin": "68dc3ee1a1d3cc31820daa762475292675464799",
         "commit": "68dc3ee1a1d3cc31820daa762475292675464799",
-        "budget": {
-            "max_patterns": 5000,
-            "max_wall_s": 600,
-            "redos_wall_s": 120,
-            "max_mem_mb": 2048,
-            "max_disk_mb": 500,
-        },
+        "budget": budget_as_dict(BUDGET_PATROL),
     },
     "mcp-for-splunk": {
         "corpus_type": "rule_corpus",
@@ -1793,13 +1573,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": False,
         "corpus_pin": "697f92649f5f1c9f77958d874e5ce2de1b43bd90",
         "commit": "697f92649f5f1c9f77958d874e5ce2de1b43bd90",
-        "budget": {
-            "max_patterns": 5000,
-            "max_wall_s": 600,
-            "redos_wall_s": 120,
-            "max_mem_mb": 2048,
-            "max_disk_mb": 500,
-        },
+        "budget": budget_as_dict(BUDGET_PATROL),
     },
     "pyparallel": {
         "corpus_type": "rule_corpus",
@@ -1878,13 +1652,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": False,
         "corpus_pin": "5e0b13026072ba0de7dcc86d254e8b357ca3e9db",
         "commit": "5e0b13026072ba0de7dcc86d254e8b357ca3e9db",
-        "budget": {
-            "max_patterns": 5000,
-            "max_wall_s": 900,
-            "redos_wall_s": 180,
-            "max_mem_mb": 2048,
-            "max_disk_mb": 500,
-        },
+        "budget": budget_as_dict(BUDGET_RULE_DEFAULT),
     },
     "caia": {
         "corpus_type": "rule_corpus",
@@ -1962,13 +1730,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": False,
         "corpus_pin": "95e3ba012416cfd7c92c6689ba9fc399e06cbc20",
         "commit": "95e3ba012416cfd7c92c6689ba9fc399e06cbc20",
-        "budget": {
-            "max_patterns": 5000,
-            "max_wall_s": 600,
-            "redos_wall_s": 120,
-            "max_mem_mb": 2048,
-            "max_disk_mb": 500,
-        },
+        "budget": budget_as_dict(BUDGET_PATROL),
     },
     "sonash-v0": {
         "corpus_type": "rule_corpus",
@@ -2045,13 +1807,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": False,
         "corpus_pin": "3eda2a06b917e0ed9bbf83658e68643e249c646e",
         "commit": "3eda2a06b917e0ed9bbf83658e68643e249c646e",
-        "budget": {
-            "max_patterns": 5000,
-            "max_wall_s": 600,
-            "redos_wall_s": 120,
-            "max_mem_mb": 2048,
-            "max_disk_mb": 500,
-        },
+        "budget": budget_as_dict(BUDGET_PATROL),
     },
     "real-router": {
         "corpus_type": "rule_corpus",
@@ -2128,13 +1884,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": False,
         "corpus_pin": "55aa7ef43a9c129beba90823cd8a4db10bb01211",
         "commit": "55aa7ef43a9c129beba90823cd8a4db10bb01211",
-        "budget": {
-            "max_patterns": 5000,
-            "max_wall_s": 600,
-            "redos_wall_s": 120,
-            "max_mem_mb": 2048,
-            "max_disk_mb": 500,
-        },
+        "budget": budget_as_dict(BUDGET_PATROL),
     },
     "RustPython": {
         "corpus_type": "rule_corpus",
@@ -2213,13 +1963,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": False,
         "corpus_pin": "24bd3b33f9c6d1a3d32ab297457f7a1b73984263",
         "commit": "24bd3b33f9c6d1a3d32ab297457f7a1b73984263",
-        "budget": {
-            "max_patterns": 5000,
-            "max_wall_s": 900,
-            "redos_wall_s": 180,
-            "max_mem_mb": 2048,
-            "max_disk_mb": 500,
-        },
+        "budget": budget_as_dict(BUDGET_RULE_DEFAULT),
     },
     "cinder": {
         "corpus_type": "rule_corpus",
@@ -2298,13 +2042,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": False,
         "corpus_pin": "1d5a99b2990628ae505c26df0c2a7c9d7871481e",
         "commit": "1d5a99b2990628ae505c26df0c2a7c9d7871481e",
-        "budget": {
-            "max_patterns": 5000,
-            "max_wall_s": 900,
-            "redos_wall_s": 180,
-            "max_mem_mb": 2048,
-            "max_disk_mb": 500,
-        },
+        "budget": budget_as_dict(BUDGET_RULE_DEFAULT),
     },
     "ver": {
         "corpus_type": "rule_corpus",
@@ -2383,13 +2121,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": False,
         "corpus_pin": "d60bf50736401b92b3e81626768b583c91e6a279",
         "commit": "d60bf50736401b92b3e81626768b583c91e6a279",
-        "budget": {
-            "max_patterns": 5000,
-            "max_wall_s": 900,
-            "redos_wall_s": 180,
-            "max_mem_mb": 2048,
-            "max_disk_mb": 500,
-        },
+        "budget": budget_as_dict(BUDGET_RULE_DEFAULT),
     },
     "Hazer": {
         "corpus_type": "rule_corpus",
@@ -2468,13 +2200,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": False,
         "corpus_pin": "080ce7f699b3e3f84dbde3fae1e27308320dc75a",
         "commit": "080ce7f699b3e3f84dbde3fae1e27308320dc75a",
-        "budget": {
-            "max_patterns": 5000,
-            "max_wall_s": 900,
-            "redos_wall_s": 180,
-            "max_mem_mb": 2048,
-            "max_disk_mb": 500,
-        },
+        "budget": budget_as_dict(BUDGET_RULE_DEFAULT),
     },
     "DataCon2020": {
         "corpus_type": "rule_corpus",
@@ -2491,13 +2217,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": False,
         "corpus_pin": "b22446263c872a651a1cba781c1f3d892c552af8",
         "commit": "b22446263c872a651a1cba781c1f3d892c552af8",
-        "budget": {
-            "max_patterns": 5000,
-            "max_wall_s": 600,
-            "redos_wall_s": 120,
-            "max_mem_mb": 2048,
-            "max_disk_mb": 500,
-        },
+        "budget": budget_as_dict(BUDGET_PATROL),
     },
     "three-ui": {
         "corpus_type": "rule_corpus",
@@ -2574,13 +2294,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": False,
         "corpus_pin": "c21b982a9f1583a44a5d9d15df403964d8c8aa0b",
         "commit": "c21b982a9f1583a44a5d9d15df403964d8c8aa0b",
-        "budget": {
-            "max_patterns": 5000,
-            "max_wall_s": 600,
-            "redos_wall_s": 120,
-            "max_mem_mb": 2048,
-            "max_disk_mb": 1000,
-        },
+        "budget": budget_as_dict(BUDGET_PATROL_DISK1000),
     },
     "kubilitics": {
         "corpus_type": "rule_corpus",
@@ -2657,13 +2371,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": False,
         "corpus_pin": "788d4d0760dfaec214bd1fd4b363391ac6c5a7a7",
         "commit": "788d4d0760dfaec214bd1fd4b363391ac6c5a7a7",
-        "budget": {
-            "max_patterns": 5000,
-            "max_wall_s": 600,
-            "redos_wall_s": 120,
-            "max_mem_mb": 2048,
-            "max_disk_mb": 1000,
-        },
+        "budget": budget_as_dict(BUDGET_PATROL_DISK1000),
     },
     "stateset-icommerce": {
         "corpus_type": "rule_corpus",
@@ -2740,13 +2448,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": False,
         "corpus_pin": "06a61c4fa83b902f9f436daa29289323011d99cd",
         "commit": "06a61c4fa83b902f9f436daa29289323011d99cd",
-        "budget": {
-            "max_patterns": 5000,
-            "max_wall_s": 600,
-            "redos_wall_s": 120,
-            "max_mem_mb": 2048,
-            "max_disk_mb": 1000,
-        },
+        "budget": budget_as_dict(BUDGET_PATROL_DISK1000),
     },
     "OctopusBeak": {
         "corpus_type": "rule_corpus",
@@ -2823,13 +2525,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": False,
         "corpus_pin": "fbde2b23cefb5d6a423576c63256e07e18c49218",
         "commit": "fbde2b23cefb5d6a423576c63256e07e18c49218",
-        "budget": {
-            "max_patterns": 5000,
-            "max_wall_s": 600,
-            "redos_wall_s": 120,
-            "max_mem_mb": 2048,
-            "max_disk_mb": 1000,
-        },
+        "budget": budget_as_dict(BUDGET_PATROL_DISK1000),
     },
     "cpython": {
         "corpus_type": "rule_corpus",
@@ -2908,13 +2604,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": False,
         "corpus_pin": "a487e12da470edf59e6bc96166d2178dad54dd85",
         "commit": "a487e12da470edf59e6bc96166d2178dad54dd85",
-        "budget": {
-            "max_patterns": 5000,
-            "max_wall_s": 900,
-            "redos_wall_s": 180,
-            "max_mem_mb": 2048,
-            "max_disk_mb": 500,
-        },
+        "budget": budget_as_dict(BUDGET_RULE_DEFAULT),
     },
     "remotepower": {
         "corpus_type": "rule_corpus",
@@ -2967,13 +2657,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": False,
         "corpus_pin": "4bbe6925652c03b02329c5fb15d34df96faf994c",
         "commit": "4bbe6925652c03b02329c5fb15d34df96faf994c",
-        "budget": {
-            "max_patterns": 5000,
-            "max_wall_s": 900,
-            "redos_wall_s": 180,
-            "max_mem_mb": 2048,
-            "max_disk_mb": 500,
-        },
+        "budget": budget_as_dict(BUDGET_RULE_DEFAULT),
     },
     "bike4mind": {
         "corpus_type": "rule_corpus",
@@ -3051,13 +2735,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": False,
         "corpus_pin": "391c37a5d7de13c9296667ceb65b3148bc276f82",
         "commit": "391c37a5d7de13c9296667ceb65b3148bc276f82",
-        "budget": {
-            "max_patterns": 5000,
-            "max_wall_s": 900,
-            "redos_wall_s": 180,
-            "max_mem_mb": 2048,
-            "max_disk_mb": 500,
-        },
+        "budget": budget_as_dict(BUDGET_RULE_DEFAULT),
     },
     "mycelium": {
         "corpus_type": "rule_corpus",
@@ -3074,13 +2752,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": False,
         "corpus_pin": "4b53dc7629ca3bc88bf5467db481ad2af7130711",
         "commit": "4b53dc7629ca3bc88bf5467db481ad2af7130711",
-        "budget": {
-            "max_patterns": 5000,
-            "max_wall_s": 900,
-            "redos_wall_s": 180,
-            "max_mem_mb": 2048,
-            "max_disk_mb": 500,
-        },
+        "budget": budget_as_dict(BUDGET_RULE_DEFAULT),
     },
     "gitleaks": {
         "corpus_type": "rule_corpus",
@@ -3152,7 +2824,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": True,
         "corpus_pin": "v3.88.29",
         "commit": "90190deac64289cb10bb694894be8db9ead8790b",
-        "budget": {"max_patterns": 5000, "max_wall_s": 600, "redos_wall_s": 120, "max_mem_mb": 1024, "max_disk_mb": 100},
+        "budget": budget_as_dict(BUDGET_VALIDATOR),
     },
     "ids_rules": {
         "corpus_type": "rule_corpus",
@@ -3181,7 +2853,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": True,
         "corpus_pin": "40b8c63f75dc7c22c8a77482d73bfb864b146f7e",
         "commit": "40b8c63f75dc7c22c8a77482d73bfb864b146f7e",
-        "budget": {"max_patterns": 5000, "max_wall_s": 600, "redos_wall_s": 120, "max_mem_mb": 1024, "max_disk_mb": 100},
+        "budget": budget_as_dict(BUDGET_VALIDATOR),
     },
     "re2_testdata": {
         "corpus_type": "testdata",
@@ -3196,7 +2868,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": False,
         "corpus_pin": "2024-07-02",
         "measure_scope": "sample",
-        "budget": {"max_patterns": 5000, "max_wall_s": 300, "max_mem_mb": 512, "max_disk_mb": 50},
+        "budget": budget_as_dict(BUDGET_TESTDATA_LIGHT),
     },
     "pcre2_testdata": {
         "corpus_type": "testdata",
@@ -3226,7 +2898,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": False,
         "corpus_pin": "v3.12.8",
         "measure_scope": "sample",
-        "budget": {"max_patterns": 5000, "max_wall_s": 300, "max_mem_mb": 512, "max_disk_mb": 50},
+        "budget": budget_as_dict(BUDGET_TESTDATA_LIGHT),
     },
     "busybox": {
         "corpus_type": "testdata",
@@ -3241,7 +2913,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": False,
         "corpus_pin": "1_36_1",
         "measure_scope": "sample",
-        "budget": {"max_patterns": 5000, "max_wall_s": 300, "max_mem_mb": 512, "max_disk_mb": 50},
+        "budget": budget_as_dict(BUDGET_TESTDATA_LIGHT),
     },
     "rust_regex": {
         "corpus_type": "inventory_only",
@@ -3296,13 +2968,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": True,
         "corpus_pin": "17e7842caa629d032589458f86d2f5ce8e7306a4",
         "commit": "17e7842caa629d032589458f86d2f5ce8e7306a4",
-        "budget": {
-            "max_patterns": 5000,
-            "max_wall_s": 600,
-            "redos_wall_s": 120,
-            "max_mem_mb": 1024,
-            "max_disk_mb": 100,
-        },
+        "budget": budget_as_dict(BUDGET_VALIDATOR),
     },
     "noseyparker": {
         "corpus_type": "rule_corpus",
@@ -3318,13 +2984,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": True,
         "corpus_pin": "2e6e7f36ce36619852532bbe698d8cb7a26d2da7",
         "commit": "2e6e7f36ce36619852532bbe698d8cb7a26d2da7",
-        "budget": {
-            "max_patterns": 5000,
-            "max_wall_s": 600,
-            "redos_wall_s": 120,
-            "max_mem_mb": 1024,
-            "max_disk_mb": 100,
-        },
+        "budget": budget_as_dict(BUDGET_VALIDATOR),
     },
     "shhgit": {
         "corpus_type": "rule_corpus",
@@ -3339,13 +2999,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": True,
         "corpus_pin": "bac0c7d39519203d230b6c9a2c6e3eba18346aba",
         "commit": "bac0c7d39519203d230b6c9a2c6e3eba18346aba",
-        "budget": {
-            "max_patterns": 5000,
-            "max_wall_s": 300,
-            "redos_wall_s": 60,
-            "max_mem_mb": 512,
-            "max_disk_mb": 50,
-        },
+        "budget": budget_as_dict(BUDGET_LIGHT),
     },
     "dompurify": {
         "corpus_type": "rule_corpus",
@@ -3366,13 +3020,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": False,
         "corpus_pin": "7392211bda80f9c1038db32fc090119685bfe425",
         "commit": "7392211bda80f9c1038db32fc090119685bfe425",
-        "budget": {
-            "max_patterns": 5000,
-            "max_wall_s": 300,
-            "redos_wall_s": 60,
-            "max_mem_mb": 512,
-            "max_disk_mb": 50,
-        },
+        "budget": budget_as_dict(BUDGET_LIGHT),
     },
     "isemail": {
         "corpus_type": "validator",
@@ -3393,13 +3041,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": False,
         "corpus_pin": "8789d509d69f098350783fb2d8d2bf05f036b448",
         "commit": "8789d509d69f098350783fb2d8d2bf05f036b448",
-        "budget": {
-            "max_patterns": 5000,
-            "max_wall_s": 300,
-            "redos_wall_s": 60,
-            "max_mem_mb": 512,
-            "max_disk_mb": 50,
-        },
+        "budget": budget_as_dict(BUDGET_LIGHT),
     },
     "email_addresses": {
         "corpus_type": "validator",
@@ -3412,13 +3054,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": False,
         "corpus_pin": "8e6be27770b7be223c2de035d7e52849f938c959",
         "commit": "8e6be27770b7be223c2de035d7e52849f938c959",
-        "budget": {
-            "max_patterns": 5000,
-            "max_wall_s": 300,
-            "redos_wall_s": 60,
-            "max_mem_mb": 512,
-            "max_disk_mb": 50,
-        },
+        "budget": budget_as_dict(BUDGET_LIGHT),
     },
     "hippo": {
         "corpus_type": "rule_corpus",
@@ -3440,13 +3076,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": False,
         "corpus_pin": "4879bd48c50c712236f99413cb1f68091cea599c",
         "commit": "4879bd48c50c712236f99413cb1f68091cea599c",
-        "budget": {
-            "max_patterns": 5000,
-            "max_wall_s": 600,
-            "redos_wall_s": 120,
-            "max_mem_mb": 1024,
-            "max_disk_mb": 200,
-        },
+        "budget": budget_as_dict(BUDGET_VALIDATOR_DISK200),
     },
     "everclaw-community-branches": {
         "corpus_type": "rule_corpus",
@@ -3502,13 +3132,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": False,
         "corpus_pin": "7ea3b445ee7d2ef8004d5ee77dab7544e1b8ef88",
         "commit": "7ea3b445ee7d2ef8004d5ee77dab7544e1b8ef88",
-        "budget": {
-            "max_patterns": 5000,
-            "max_wall_s": 600,
-            "redos_wall_s": 120,
-            "max_mem_mb": 1024,
-            "max_disk_mb": 200,
-        },
+        "budget": budget_as_dict(BUDGET_VALIDATOR_DISK200),
     },
     "tracecat": {
         "corpus_type": "rule_corpus",
@@ -3564,13 +3188,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": False,
         "corpus_pin": "c84d52528a489821f355fc63976fbc7783ae0ad5",
         "commit": "c84d52528a489821f355fc63976fbc7783ae0ad5",
-        "budget": {
-            "max_patterns": 5000,
-            "max_wall_s": 600,
-            "redos_wall_s": 120,
-            "max_mem_mb": 1024,
-            "max_disk_mb": 200,
-        },
+        "budget": budget_as_dict(BUDGET_VALIDATOR_DISK200),
     },
     "octo-server": {
         "corpus_type": "rule_corpus",
@@ -3607,13 +3225,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": False,
         "corpus_pin": "d3daa912a04d17f78df2d0c059a111cafff75534",
         "commit": "d3daa912a04d17f78df2d0c059a111cafff75534",
-        "budget": {
-            "max_patterns": 5000,
-            "max_wall_s": 600,
-            "redos_wall_s": 120,
-            "max_mem_mb": 1024,
-            "max_disk_mb": 200,
-        },
+        "budget": budget_as_dict(BUDGET_VALIDATOR_DISK200),
     },
     "magic-js": {
         "corpus_type": "rule_corpus",
@@ -3644,13 +3256,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": False,
         "corpus_pin": "e9fb233763160316989863b4739c4656133d45b0",
         "commit": "e9fb233763160316989863b4739c4656133d45b0",
-        "budget": {
-            "max_patterns": 5000,
-            "max_wall_s": 600,
-            "redos_wall_s": 120,
-            "max_mem_mb": 1024,
-            "max_disk_mb": 200,
-        },
+        "budget": budget_as_dict(BUDGET_VALIDATOR_DISK200),
     },
     "lonkero": {
         "corpus_type": "rule_corpus",
@@ -3778,13 +3384,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": False,
         "corpus_pin": "d4a39726cad8d8e27e4c0502d1843c3b4180ffbc",
         "commit": "d4a39726cad8d8e27e4c0502d1843c3b4180ffbc",
-        "budget": {
-            "max_patterns": 5000,
-            "max_wall_s": 900,
-            "redos_wall_s": 180,
-            "max_mem_mb": 2048,
-            "max_disk_mb": 500,
-        },
+        "budget": budget_as_dict(BUDGET_RULE_DEFAULT),
     },
     "bartblaze-yara-rules": {
         "corpus_type": "rule_corpus",
@@ -3800,13 +3400,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": False,
         "corpus_pin": "5cc871d82361de8a80d387ec8bbd01fe4258b4a9",
         "commit": "5cc871d82361de8a80d387ec8bbd01fe4258b4a9",
-        "budget": {
-            "max_patterns": 5000,
-            "max_wall_s": 600,
-            "redos_wall_s": 120,
-            "max_mem_mb": 1024,
-            "max_disk_mb": 100,
-        },
+        "budget": budget_as_dict(BUDGET_VALIDATOR),
     },
     "crust": {
         "corpus_type": "rule_corpus",
@@ -3828,13 +3422,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": False,
         "corpus_pin": "f4a47e2cf2822196275075ab9a2e258b6fa9be8b",
         "commit": "f4a47e2cf2822196275075ab9a2e258b6fa9be8b",
-        "budget": {
-            "max_patterns": 5000,
-            "max_wall_s": 600,
-            "redos_wall_s": 120,
-            "max_mem_mb": 1024,
-            "max_disk_mb": 200,
-        },
+        "budget": budget_as_dict(BUDGET_VALIDATOR_DISK200),
     },
     "yara-rules": {
         "corpus_type": "rule_corpus",
@@ -3849,13 +3437,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": False,
         "corpus_pin": "1d7c4faed70fae431b8189c904881cc0e12436e6",
         "commit": "1d7c4faed70fae431b8189c904881cc0e12436e6",
-        "budget": {
-            "max_patterns": 5000,
-            "max_wall_s": 300,
-            "redos_wall_s": 60,
-            "max_mem_mb": 512,
-            "max_disk_mb": 50,
-        },
+        "budget": budget_as_dict(BUDGET_LIGHT),
     },
     "ail-yara-rules": {
         "corpus_type": "rule_corpus",
@@ -3870,13 +3452,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": False,
         "corpus_pin": "8e978d5e70084df6d2fae0727677ec4f60e3e639",
         "commit": "8e978d5e70084df6d2fae0727677ec4f60e3e639",
-        "budget": {
-            "max_patterns": 5000,
-            "max_wall_s": 600,
-            "redos_wall_s": 120,
-            "max_mem_mb": 1024,
-            "max_disk_mb": 100,
-        },
+        "budget": budget_as_dict(BUDGET_VALIDATOR),
     },
     "xibo-cms": {
         "corpus_type": "rule_corpus",
@@ -3927,13 +3503,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": False,
         "corpus_pin": "978def55c8e68cab3a50a7ee4725039da753f0a1",
         "commit": "978def55c8e68cab3a50a7ee4725039da753f0a1",
-        "budget": {
-            "max_patterns": 5000,
-            "max_wall_s": 900,
-            "redos_wall_s": 180,
-            "max_mem_mb": 2048,
-            "max_disk_mb": 500,
-        },
+        "budget": budget_as_dict(BUDGET_RULE_DEFAULT),
     },
     "malcontent": {
         "corpus_type": "rule_corpus",
@@ -3977,13 +3547,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "repo": "dogfooding (usrmanage/fwlive/happycow/hermes-agent-fork)",
         "security_tool": False,
         "lift_inline": False,
-        "budget": {
-            "max_patterns": 5000,
-            "max_wall_s": 900,
-            "redos_wall_s": 180,
-            "max_mem_mb": 2048,
-            "max_disk_mb": 500,
-        },
+        "budget": budget_as_dict(BUDGET_RULE_DEFAULT),
     },
     # Wave-3 P5 testdata corpora (#116) — exempt from admission gate_decision.
     "perl_tre": {
@@ -4065,13 +3629,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": False,
         "corpus_pin": "889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8",
         "commit": "889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8",
-        "budget": {
-            "max_patterns": 5000,
-            "max_wall_s": 600,
-            "redos_wall_s": 120,
-            "max_mem_mb": 1024,
-            "max_disk_mb": 100,
-        },
+        "budget": budget_as_dict(BUDGET_VALIDATOR),
     },
     "llm-honeypot-intelligence": {
         "corpus_type": "rule_corpus",
@@ -4087,13 +3645,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": False,
         "corpus_pin": "65624396e263074bb8cb2e049f9a9ec6215ea5c1",
         "commit": "65624396e263074bb8cb2e049f9a9ec6215ea5c1",
-        "budget": {
-            "max_patterns": 5000,
-            "max_wall_s": 600,
-            "redos_wall_s": 120,
-            "max_mem_mb": 1024,
-            "max_disk_mb": 100,
-        },
+        "budget": budget_as_dict(BUDGET_VALIDATOR),
     },
     "titus": {
         "corpus_type": "rule_corpus",
@@ -4131,13 +3683,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": False,
         "corpus_pin": "57b733f5ed04a59b03514f229c3052ace7473d50",
         "commit": "57b733f5ed04a59b03514f229c3052ace7473d50",
-        "budget": {
-            "max_patterns": 5000,
-            "max_wall_s": 600,
-            "redos_wall_s": 120,
-            "max_mem_mb": 1024,
-            "max_disk_mb": 200,
-        },
+        "budget": budget_as_dict(BUDGET_VALIDATOR_DISK200),
     },
     "Doberman-Core": {
         "corpus_type": "rule_corpus",
@@ -4160,13 +3706,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": False,
         "corpus_pin": "53ae43c5298a2426c6696147fdd75e2a4aef10e2",
         "commit": "53ae43c5298a2426c6696147fdd75e2a4aef10e2",
-        "budget": {
-            "max_patterns": 5000,
-            "max_wall_s": 600,
-            "redos_wall_s": 120,
-            "max_mem_mb": 1024,
-            "max_disk_mb": 200,
-        },
+        "budget": budget_as_dict(BUDGET_VALIDATOR_DISK200),
     },
     "devguard": {
         "corpus_type": "rule_corpus",
@@ -4186,13 +3726,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": False,
         "corpus_pin": "00c7f6fc3fb20b1656827f8a8e85e603c7f4a77d",
         "commit": "00c7f6fc3fb20b1656827f8a8e85e603c7f4a77d",
-        "budget": {
-            "max_patterns": 5000,
-            "max_wall_s": 600,
-            "redos_wall_s": 120,
-            "max_mem_mb": 1024,
-            "max_disk_mb": 200,
-        },
+        "budget": budget_as_dict(BUDGET_VALIDATOR_DISK200),
     },
     "openmed": {
         "corpus_type": "rule_corpus",
@@ -4222,13 +3756,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": False,
         "corpus_pin": "353c81a6ef996b4b52eff555560efd2ac86922bf",
         "commit": "353c81a6ef996b4b52eff555560efd2ac86922bf",
-        "budget": {
-            "max_patterns": 5000,
-            "max_wall_s": 600,
-            "redos_wall_s": 120,
-            "max_mem_mb": 1024,
-            "max_disk_mb": 200,
-        },
+        "budget": budget_as_dict(BUDGET_VALIDATOR_DISK200),
     },
     "malzoo": {
         "corpus_type": "rule_corpus",
@@ -4244,13 +3772,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": False,
         "corpus_pin": "de1b93347a9783e3d2ec7b5297306bf66c9fbaa1",
         "commit": "de1b93347a9783e3d2ec7b5297306bf66c9fbaa1",
-        "budget": {
-            "max_patterns": 5000,
-            "max_wall_s": 600,
-            "redos_wall_s": 120,
-            "max_mem_mb": 1024,
-            "max_disk_mb": 100,
-        },
+        "budget": budget_as_dict(BUDGET_VALIDATOR),
     },
     "yarasigs": {
         "corpus_type": "rule_corpus",
@@ -4265,13 +3787,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": False,
         "corpus_pin": "5a07dfcde3076615e4d9394ec75ff53e74c19b45",
         "commit": "5a07dfcde3076615e4d9394ec75ff53e74c19b45",
-        "budget": {
-            "max_patterns": 5000,
-            "max_wall_s": 600,
-            "redos_wall_s": 120,
-            "max_mem_mb": 1024,
-            "max_disk_mb": 100,
-        },
+        "budget": budget_as_dict(BUDGET_VALIDATOR),
     },
     "panther-labs-panther-analysis": {
         "corpus_type": "rule_corpus",
@@ -4617,13 +4133,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": False,
         "corpus_pin": "d81cada060a5e7b61938445da021ed0b33236cbb",
         "commit": "d81cada060a5e7b61938445da021ed0b33236cbb",
-        "budget": {
-            "max_patterns": 5000,
-            "max_wall_s": 900,
-            "redos_wall_s": 180,
-            "max_mem_mb": 2048,
-            "max_disk_mb": 500,
-        },
+        "budget": budget_as_dict(BUDGET_RULE_DEFAULT),
     },
     "visulima-visulima": {
         "corpus_type": "rule_corpus",
@@ -5148,13 +4658,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": False,
         "corpus_pin": "50ce4889c75d82b4d7ad5f54a0fdf5142b06c710",
         "commit": "50ce4889c75d82b4d7ad5f54a0fdf5142b06c710",
-        "budget": {
-            "max_patterns": 5000,
-            "max_wall_s": 900,
-            "redos_wall_s": 180,
-            "max_mem_mb": 2048,
-            "max_disk_mb": 2000,
-        },
+        "budget": budget_as_dict(BUDGET_LUCI_DISK),
     },
     "ajohnsonnow-vet-rate-org": {
         "corpus_type": "rule_corpus",
@@ -5387,13 +4891,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": False,
         "corpus_pin": "1e9b252ca541f7a6b7f9eff7f82a99a4a055b8a7",
         "commit": "1e9b252ca541f7a6b7f9eff7f82a99a4a055b8a7",
-        "budget": {
-            "max_patterns": 5000,
-            "max_wall_s": 900,
-            "redos_wall_s": 180,
-            "max_mem_mb": 2048,
-            "max_disk_mb": 2000,
-        },
+        "budget": budget_as_dict(BUDGET_LUCI_DISK),
     },
     "lintendo-Axhub-Make": {
         "corpus_type": "rule_corpus",
@@ -5714,13 +5212,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": False,
         "corpus_pin": "bc10e311028d5e72752de97187ff690b2095f466",
         "commit": "bc10e311028d5e72752de97187ff690b2095f466",
-        "budget": {
-            "max_patterns": 5000,
-            "max_wall_s": 900,
-            "redos_wall_s": 180,
-            "max_mem_mb": 2048,
-            "max_disk_mb": 2000,
-        },
+        "budget": budget_as_dict(BUDGET_LUCI_DISK),
     },
     "SveltyCMS-SveltyCMS": {
         "corpus_type": "rule_corpus",
@@ -5970,13 +5462,7 @@ CORPUS_MANIFESTS: dict[str, dict[str, Any]] = {
         "lift_inline": False,
         "corpus_pin": "c48326afe2a9d429f105af9aa786738d970af848",
         "commit": "c48326afe2a9d429f105af9aa786738d970af848",
-        "budget": {
-            "max_patterns": 5000,
-            "max_wall_s": 900,
-            "redos_wall_s": 180,
-            "max_mem_mb": 2048,
-            "max_disk_mb": 2000,
-        },
+        "budget": budget_as_dict(BUDGET_LUCI_DISK),
     },
 
 }

@@ -4,10 +4,133 @@ from __future__ import annotations
 
 import sys
 from pathlib import Path
-from typing import Any
+from typing import Any, TypedDict
 
 _ADDRESS_SPACE_CAP_WARNED = False
 LAST_ADDRESS_SPACE_CAP_APPLIED: bool | None = None
+
+
+class Budget(TypedDict, total=False):
+    max_patterns: int
+    max_wall_s: int
+    redos_wall_s: int
+    max_mem_mb: int
+    max_disk_mb: int
+
+
+# Exact presets — only use where the 5-tuple (or subset) matches byte-for-byte.
+BUDGET_RULE_DEFAULT: Budget = {
+    "max_patterns": 5000,
+    "max_wall_s": 900,
+    "redos_wall_s": 180,
+    "max_mem_mb": 2048,
+    "max_disk_mb": 500,
+}
+BUDGET_VALIDATOR: Budget = {
+    "max_patterns": 5000,
+    "max_wall_s": 600,
+    "redos_wall_s": 120,
+    "max_mem_mb": 1024,
+    "max_disk_mb": 100,
+}
+BUDGET_VALIDATOR_DISK200: Budget = {
+    "max_patterns": 5000,
+    "max_wall_s": 600,
+    "redos_wall_s": 120,
+    "max_mem_mb": 1024,
+    "max_disk_mb": 200,
+}
+BUDGET_PATROL: Budget = {
+    "max_patterns": 5000,
+    "max_wall_s": 600,
+    "redos_wall_s": 120,
+    "max_mem_mb": 2048,
+    "max_disk_mb": 500,
+}
+BUDGET_PATROL_DISK1000: Budget = {
+    "max_patterns": 5000,
+    "max_wall_s": 600,
+    "redos_wall_s": 120,
+    "max_mem_mb": 2048,
+    "max_disk_mb": 1000,
+}
+BUDGET_LUCI_DISK: Budget = {
+    "max_patterns": 5000,
+    "max_wall_s": 900,
+    "redos_wall_s": 180,
+    "max_mem_mb": 2048,
+    "max_disk_mb": 2000,
+}
+BUDGET_LIGHT: Budget = {
+    "max_patterns": 5000,
+    "max_wall_s": 300,
+    "redos_wall_s": 60,
+    "max_mem_mb": 512,
+    "max_disk_mb": 50,
+}
+BUDGET_HEAVY_30K: Budget = {
+    "max_patterns": 30000,
+    "max_wall_s": 1200,
+    "redos_wall_s": 240,
+    "max_mem_mb": 4096,
+    "max_disk_mb": 1000,
+}
+BUDGET_HEAVY_50K: Budget = {
+    "max_patterns": 50000,
+    "max_wall_s": 1200,
+    "redos_wall_s": 240,
+    "max_mem_mb": 4096,
+    "max_disk_mb": 1000,
+}
+BUDGET_TESTDATA_LIGHT: Budget = {
+    "max_patterns": 5000,
+    "max_wall_s": 300,
+    "max_mem_mb": 512,
+    "max_disk_mb": 50,
+}
+
+# Named preset registry for equivalence tests / loaders.
+BUDGET_PRESETS: dict[str, Budget] = {
+    "rule_default": BUDGET_RULE_DEFAULT,
+    "validator": BUDGET_VALIDATOR,
+    "validator_disk200": BUDGET_VALIDATOR_DISK200,
+    "patrol": BUDGET_PATROL,
+    "patrol_disk1000": BUDGET_PATROL_DISK1000,
+    "luci_disk": BUDGET_LUCI_DISK,
+    "light": BUDGET_LIGHT,
+    "heavy_30k": BUDGET_HEAVY_30K,
+    "heavy_50k": BUDGET_HEAVY_50K,
+    "testdata_light": BUDGET_TESTDATA_LIGHT,
+}
+
+
+class _CorpusManifestCore(TypedDict):
+    corpus_type: str
+    path: Path
+    dialect: str
+    extractor: str
+    repo: str
+    security_tool: bool
+    lift_inline: bool
+    corpus_pin: str
+
+
+class CorpusManifest(_CorpusManifestCore, total=False):
+    """Typed manifest row — optional glob/files/measure_scope per Grok G5."""
+
+    budget: Budget
+    glob: str
+    files: list[str]
+    measure_scope: str
+    sample_path: Path
+    full_path: Path
+    declared_semantics: str
+    commit: str
+
+
+def budget_as_dict(budget: Budget) -> dict[str, Any]:
+    """Return a plain dict copy (manifests store dicts for JSON round-trips)."""
+    return dict(budget)
 
 
 class BudgetBreached(Exception):
