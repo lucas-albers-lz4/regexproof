@@ -215,6 +215,8 @@ every finding against the surrounding code before filing, and report what you
   score-v1 allocator + `scripts/rank-mine-candidates.py` for next-to-probe
 - Operator funnel (mine → rank → probe → gate → wave): [`docs/PIPELINE.md`](docs/PIPELINE.md)
   — `python scripts/pipeline-status.py`; probe via `python -m regexproof.probe`
+- Consumer adoption (one regex → a CI gate): [`docs/NEWGATE.md`](docs/NEWGATE.md)
+  — `python -m regexproof.newgate FILE PATTERN` / `regexproof newgate …`; not a second corpus funnel
 - Cluster conversion (OpenWrt, OpenClaw, …): [`docs/CLUSTER-CONVERSION.md`](docs/CLUSTER-CONVERSION.md)
   — rank 15 / write ≤5 human contracts **per idiom slice** (close-out is
   the deny-list; later waves reuse emit + product-engine checker). First

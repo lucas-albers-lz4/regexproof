@@ -86,6 +86,20 @@ python -m regexproof.probe --help
 Daily mine: [`docs/MINE-SETUP.md`](docs/MINE-SETUP.md). Conversion waves:
 [`docs/CLUSTER-CONVERSION.md`](docs/CLUSTER-CONVERSION.md).
 
+## Adopt a gate (consumers)
+
+Point regexproof at **one regex in your repo** and scaffold a CI-ready
+property gate (Z3 shape-1 mirror, Python `re` ground-truth, argv-only
+fuzz, mutation guard):
+
+```bash
+python -m regexproof.newgate path/to/file.py '^[a-z0-9._-]+$'
+# after install: regexproof newgate …
+```
+
+Walkthrough: [`docs/NEWGATE.md`](docs/NEWGATE.md). That is not the corpus
+funnel — operators stay on [`docs/PIPELINE.md`](docs/PIPELINE.md).
+
 ## Layout
 
 | Path | Role |
@@ -107,6 +121,7 @@ Daily mine: [`docs/MINE-SETUP.md`](docs/MINE-SETUP.md). Conversion waves:
 | `docs/CONTRACTS.md` | Property-contract object, provenance (`human` / `version_diff` / `cross_engine` / `agent_derived`), what batch may scale |
 | `docs/CLUSTER-CONVERSION.md` | Conversion-wave SOP: rank 15 / write ≤5 human contracts per idiom slice; ledger join via `*_conversion.ndjson`. First application: `sweep/openwrt-conversion/plan.md` |
 | `docs/PIPELINE.md` | Operator funnel: mine → rank → probe → gate → wave; ledger/queue stores; `pipeline-status.py` |
+| `docs/NEWGATE.md` | Consumer adoption: `regexproof newgate` cookie-cutter (one regex → a CI gate); not the corpus funnel |
 | `docs/conversion-upstream.jsonl` | Curated last-mile conversion events (filed / fixed / false positive / private_first) |
 | `docs/examples/shape5-rule_diff.md` | Shape-5 `rule_diff` kind/family/mutation guards |
 | `docs/verified-findings.jsonl` | Machine-readable verified implementation findings (toolkit traps, not vuln counts) |

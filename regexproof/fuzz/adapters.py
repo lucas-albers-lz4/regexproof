@@ -140,6 +140,7 @@ def reject_shell_subprocess_usage(paths: Sequence[Path] | None = None) -> list[s
         root = Path(__file__).resolve().parents[2]
         paths = [
             root / "regexproof" / "fuzz",
+            root / "regexproof" / "newgate",
             root / "regexproof" / "redos",
             root / "helpers" / "redos",
             root / "scripts" / "differential-fuzz.py",

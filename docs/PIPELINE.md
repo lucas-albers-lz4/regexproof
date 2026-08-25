@@ -62,3 +62,13 @@ and not `wont_file`:
 ```bash
 python scripts/check-disposition-coverage.py --ready-to-file
 ```
+
+## Not this funnel: consumer adoption
+
+`regexproof newgate` (or `python -m regexproof.newgate`) scaffolds a
+property gate for a **single regex in a product repo** — mirror,
+ground-truth, differential fuzz, mutation guard, CI stub. That is the
+adoption path for consumers of verified results, not a substitute for
+mine → rank → probe → gate → wave and not a third onboarding story.
+
+Walkthrough: [`NEWGATE.md`](NEWGATE.md).
