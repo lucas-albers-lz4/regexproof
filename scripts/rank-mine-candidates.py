@@ -222,6 +222,9 @@ def main(argv: list[str] | None = None) -> int:
             )
             # Decision-time pin is AUTHORITATIVE when a gate exists (E3).
             c["pin_probed"] = dec_pin
+            files = probe.get("regex_sites_per_file")
+            if isinstance(files, dict) and files:
+                c["regex_sites_per_file"] = dict(files)
         elif not str(c.get("pin_probed") or ""):
             mined = str(c.get("pin") or "")
             if mined:
