@@ -333,7 +333,7 @@ from regexproof.newgate.runner import main
 from regexproof.z3_pin import assert_z3_pinned
 
 # ``import regexproof.harness.core`` still runs harness/__init__.py, which
-# registers the built-in P1–P6 / OpenWrt suites. Isolate this gate.
+# registers the built-in P1-P6 / OpenWrt suites. Isolate this gate.
 REGISTRY.clear()
 
 assert_z3_pinned()
