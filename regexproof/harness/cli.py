@@ -108,11 +108,12 @@ def main(argv=None):
     domain_fail = check_domain_coverage(require=require_domain)
     contract_fail = check_contract_coverage(require=require_contract)
     # Execution only — NDJSON streams when as_json; legacy array is REPORT below.
-    # json-legacy must not stream (harness main owns the one-shot array).
+    # json-legacy must quiet run_one human lines (harness main owns the array).
     results = run_named_properties(
         names,
         require_gt=require_ground_truth,
         as_json=bool(as_json and not as_json_legacy),
+        quiet=bool(as_json_legacy),
     )
     failures = sum(1 for r in results if not r["ok"])
     not_proven_count = sum(1 for r in results if r.get("not_proven"))
