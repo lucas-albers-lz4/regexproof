@@ -1,0 +1,520 @@
+"""Emit a consumer property gate under ``--out`` (default ``gates/<slug>/``)."""
+
+from __future__ import annotations
+
+import hashlib
+import re
+from dataclasses import dataclass
+from pathlib import Path
+
+from regexproof.compiler import compile_pattern
+from regexproof.io_atomic import atomic_write_text
+from regexproof.kinds import CALL_KINDS, validate_call_kind, validate_dialect
+from regexproof.newgate.mirror_expr import (
+    collect_singleton_alphabet,
+    fuzz_alphabet,
+    mirror_to_py,
+)
+from regexproof.z3_pin import assert_z3_pinned
+
+DEFAULT_FORBIDDEN = " \t\n;=|$`&"
+DEFAULT_MUTATIONS = r""" ;="`$|&"""
+_SLUG_RE = re.compile(r"[^a-zA-Z0-9]+")
+_IDENT_RE = re.compile(r"[^A-Za-z0-9_]+")
+
+_CHAR_LABELS = {
+    " ": "space",
+    "=": "equals",
+    "\n": "newline",
+    "\t": "tab",
+    ";": "semicolon",
+    "|": "pipe",
+    "$": "dollar",
+    "`": "backtick",
+    "&": "ampersand",
+    "*": "star",
+    "\x7f": "del",
+    "\x00": "nul",
+}
+
+_SCAFFOLD_FILES = ("gate.py", "fuzz.py", "README.md", "ci.yml", "run.sh")
+
+
+@dataclass(frozen=True)
+class ScaffoldRequest:
+    source_file: Path
+    pattern: str
+    out: Path
+    slug: str
+    family: str
+    dialect: str
+    call_kind: str
+    flags: str
+    forbidden: str
+    fuzz_runs: int
+    exhaust_max_len: int
+    fuzz_max_len: int
+    mutations: str
+    force: bool
+
+
+@dataclass(frozen=True)
+class ScaffoldResult:
+    out: Path
+    files: tuple[str, ...]
+    family: str
+    dialect: str
+    mirror_expr: str
+
+
+def char_label(ch: str) -> str:
+    if ch in _CHAR_LABELS:
+        return _CHAR_LABELS[ch]
+    if ch.isascii() and ch.isalnum():
+        return ch
+    return f"chr{ord(ch)}"
+
+
+def default_slug(source_file: Path, pattern: str) -> str:
+    stem = _SLUG_RE.sub("_", source_file.stem).strip("_").lower() or "gate"
+    digest = hashlib.sha256(pattern.encode("utf-8")).hexdigest()[:8]
+    slug = f"{stem}_{digest}"
+    return slug[:40].rstrip("_")
+
+
+def family_ident(slug: str) -> str:
+    ident = _IDENT_RE.sub("_", slug).strip("_") or "gate"
+    if ident[0].isdigit():
+        ident = f"g_{ident}"
+    return f"NG_{ident}"
+
+
+def pick_forbidden(alphabet: set[str], requested: str) -> list[tuple[str, str]]:
+    pairs: list[tuple[str, str]] = []
+    seen_labels: set[str] = set()
+    for ch in requested:
+        if ch in alphabet:
+            continue
+        label = char_label(ch)
+        if label in seen_labels:
+            continue
+        seen_labels.add(label)
+        pairs.append((label, ch))
+    if pairs:
+        return pairs
+    for ch in (";", " ", "|", "\x7f", "\x00"):
+        if ch not in alphabet:
+            return [(char_label(ch), ch)]
+    return [("nul", "\x00")]
+
+
+def scaffold(req: ScaffoldRequest) -> ScaffoldResult:
+    """Write the gate tree. Fail-closed: missing file, unencodable pattern, clash."""
+    assert_z3_pinned()
+    src = req.source_file
+    if not src.is_file():
+        raise SystemExit(f"newgate: not a file: {src}")
+    if not req.pattern:
+        raise SystemExit("newgate: empty pattern")
+    if req.fuzz_runs < 1:
+        raise SystemExit("newgate: --fuzz-runs must be >= 1")
+    if req.exhaust_max_len < 0:
+        raise SystemExit("newgate: --exhaust-max-len must be >= 0")
+    if req.fuzz_max_len < 1:
+        raise SystemExit("newgate: --fuzz-max-len must be >= 1")
+    try:
+        dialect = validate_dialect(req.dialect)
+    except ValueError as exc:
+        raise SystemExit(f"newgate: {exc}") from exc
+    if dialect != "py_re":
+        raise SystemExit(
+            f"newgate: dialect {dialect!r} is not supported in v1 "
+            "(first cut is Python re / py_re)"
+        )
+    try:
+        call_kind = validate_call_kind(req.call_kind)
+    except ValueError as exc:
+        raise SystemExit(f"newgate: {exc}") from exc
+    if call_kind is None or call_kind not in CALL_KINDS:
+        raise SystemExit(f"newgate: invalid call_kind {req.call_kind!r}")
+    if call_kind == "substitution":
+        raise SystemExit("newgate: substitution call_kind has no v1 replay adapter")
+
+    compiled = compile_pattern(
+        req.pattern,
+        flags=req.flags,
+        dialect=dialect,
+        call_kind=call_kind,
+    )
+    if not compiled.encodable or compiled.mirror is None:
+        reason = compiled.unencodable_reason or "unencodable"
+        raise SystemExit(
+            f"newgate: pattern is not encodable as a Z3 mirror ({reason})"
+        )
+    try:
+        mirror_expr = mirror_to_py(compiled.mirror)
+    except ValueError as exc:
+        raise SystemExit(f"newgate: {exc}") from exc
+
+    alphabet = set(collect_singleton_alphabet(compiled.mirror))
+    forbidden = pick_forbidden(alphabet, req.forbidden)
+    fuzz_alpha = fuzz_alphabet(compiled.mirror)
+    out = req.out
+    if out.exists() and not out.is_dir():
+        raise SystemExit(f"newgate: --out is not a directory: {out}")
+    if not req.force:
+        clashes = [name for name in _SCAFFOLD_FILES if (out / name).exists()]
+        if clashes:
+            raise SystemExit(
+                f"newgate: refusing to overwrite {clashes} under {out} "
+                "(pass --force)"
+            )
+    out.mkdir(parents=True, exist_ok=True)
+
+    site = f"{src.as_posix()}:{req.pattern}"
+    ctx = {
+        "pattern": req.pattern,
+        "pattern_repr": repr(req.pattern),
+        "flags": req.flags,
+        "flags_repr": repr(req.flags),
+        "dialect": dialect,
+        "call_kind": call_kind,
+        "family": req.family,
+        "slug": req.slug,
+        "site": site,
+        "site_repr": repr(site),
+        "source": src.as_posix(),
+        "forbidden": forbidden,
+        "mirror_expr": mirror_expr,
+        "mirror_expr_repr": repr(mirror_expr),
+        "fuzz_alphabet": fuzz_alpha,
+        "fuzz_alphabet_repr": repr(fuzz_alpha),
+        "mutations": req.mutations,
+        "mutations_repr": repr(req.mutations),
+        "fuzz_runs": req.fuzz_runs,
+        "exhaust_max_len": req.exhaust_max_len,
+        "fuzz_max_len": req.fuzz_max_len,
+        # Charset shape-1 assumes an ASCII input domain; edit if the real
+        # boundary is Unicode-exposed (TRAPS #17).
+        "input_domain": "ascii",
+    }
+
+    atomic_write_text(out / "gate.py", _render_gate(ctx))
+    atomic_write_text(out / "fuzz.py", _render_fuzz(ctx))
+    atomic_write_text(out / "README.md", _render_readme(ctx))
+    atomic_write_text(out / "ci.yml", _render_ci(ctx))
+    atomic_write_text(out / "run.sh", _render_run())
+    (out / "run.sh").chmod((out / "run.sh").stat().st_mode | 0o111)
+
+    return ScaffoldResult(
+        out=out,
+        files=_SCAFFOLD_FILES,
+        family=req.family,
+        dialect=dialect,
+        mirror_expr=mirror_expr,
+    )
+
+
+def _render_gate(ctx: dict) -> str:
+    pairs = ",\n    ".join(
+        f"({label!r}, {ch!r})" for label, ch in ctx["forbidden"]
+    )
+    return f'''"""Scaffolded regexproof gate — Wave 12 cookie-cutter.
+
+Dialect: {ctx["dialect"]} (Python ``re``). Call kind: {ctx["call_kind"]}.
+Site: {ctx["source"]}
+Pattern: {ctx["pattern_repr"]}
+Flags: {ctx["flags_repr"]}
+
+This is a shape-1 alphabet-disjointness gate (single-char membership) plus a
+mutation-guard sibling. Provenance is ``agent_derived`` until a human edits
+the contract (see docs/CONTRACTS.md / docs/NEWGATE.md).
+"""
+from __future__ import annotations
+
+import re
+
+from z3 import InRe, Length, Re, String, StringVal, Union
+
+from regexproof.compiler import compile_pattern
+from regexproof.harness.core import prop
+from regexproof.newgate.runner import main
+from regexproof.z3_pin import assert_z3_pinned
+
+assert_z3_pinned()
+
+PATTERN = {ctx["pattern_repr"]}
+FLAGS = {ctx["flags_repr"]}
+DIALECT = {ctx["dialect"]!r}
+CALL_KIND = {ctx["call_kind"]!r}
+FAMILY = {ctx["family"]!r}
+SITE = {ctx["site_repr"]}
+INPUT_DOMAIN = {ctx["input_domain"]!r}
+
+_FLAG_BITS = {{
+    "i": re.IGNORECASE,
+    "m": re.MULTILINE,
+    "s": re.DOTALL,
+    "x": re.VERBOSE,
+    "a": re.ASCII,
+    "u": re.UNICODE,
+}}
+_BITS = 0
+for _ch in FLAGS:
+    if _ch not in _FLAG_BITS:
+        raise SystemExit(f"newgate gate: unknown flag {{_ch!r}}")
+    _BITS |= _FLAG_BITS[_ch]
+
+_COMPILED = compile_pattern(
+    PATTERN, flags=FLAGS, dialect=DIALECT, call_kind=CALL_KIND
+)
+if not _COMPILED.encodable or _COMPILED.mirror is None:
+    raise SystemExit(
+        f"newgate gate: pattern unencodable ({{_COMPILED.unencodable_reason}})"
+    )
+MIRROR = _COMPILED.mirror
+
+_RX = re.compile(PATTERN, _BITS)
+
+
+def _ground_truth(witness: dict) -> bool:
+    """Replay SAT witnesses against Python ``re`` (dialect=py_re)."""
+    text = witness.get("s")
+    if not isinstance(text, str):
+        return False
+    if CALL_KIND == "fullmatch":
+        return _RX.fullmatch(text) is not None
+    if CALL_KIND == "match":
+        return _RX.match(text) is not None
+    return _RX.search(text) is not None
+
+
+def _contract(guarantee: str) -> dict:
+    return {{
+        "schema_version": "1",
+        "site": SITE,
+        "guarantee": guarantee,
+        "input_source": "consumer-supplied (edit me)",
+        "trust": "untrusted-input",
+        "declared_domain": (
+            f"length-1 strings accepted by {{PATTERN!r}} ({{DIALECT}}/{{CALL_KIND}})"
+        ),
+        "provenance": "agent_derived",
+    }}
+
+
+FORBIDDEN = [
+    {pairs},
+]
+
+for _label, _ch in FORBIDDEN:
+    def _fn(ch=_ch):
+        s = String("s")
+        return [InRe(s, MIRROR), Length(s) == 1], s == StringVal(ch)
+
+    prop(
+        f"{{FAMILY}}-excludes-{{_label}}",
+        f"accepted length-1 strings matching {{PATTERN!r}} are not {{_label}}",
+        expect_unsat=True,
+        ground_truth=_ground_truth,
+        kind="property",
+        family=FAMILY,
+        input_domain=INPUT_DOMAIN,
+        call_kind=CALL_KIND,
+        contract=_contract(
+            f"accepted length-1 strings matching {{PATTERN!r}} contain no {{_label}}"
+        ),
+    )(_fn)
+
+
+@prop(
+    f"{{FAMILY}}-mutated-star",
+    "MUTATION GUARD: Union(mirror, Re('*')) must admit '*' (UNSAT→SAT). "
+    "If this stays UNSAT, the mirror is not tracking the regex.",
+    expect_unsat=False,
+    kind="mutation_guard",
+    family=FAMILY,
+    input_domain=INPUT_DOMAIN,
+    call_kind=CALL_KIND,
+)
+def _mutated():
+    s = String("s")
+    weakened = Union(MIRROR, Re("*"))
+    return [InRe(s, weakened), Length(s) == 1], s == StringVal("*")
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
+'''
+
+
+def _render_fuzz(ctx: dict) -> str:
+    return f'''"""Argv-only differential fuzz vs Python ``re`` (helpers/python/match.py).
+
+Invokes scripts/differential-fuzz.py with subprocess.run(..., shell=False).
+REGEXPROOF_ROOT or an editable checkout locates the script. Dialect: {ctx["dialect"]}.
+"""
+from __future__ import annotations
+
+import os
+import subprocess
+import sys
+from pathlib import Path
+
+PATTERN = {ctx["pattern_repr"]}
+FLAGS = {ctx["flags_repr"]}
+CALL_KIND = {ctx["call_kind"]!r}
+MIRROR_EXPR = {ctx["mirror_expr_repr"]}
+ALPHABET = {ctx["fuzz_alphabet_repr"]}
+MUTATIONS = {ctx["mutations_repr"]}
+RUNS = {ctx["fuzz_runs"]}
+EXHAUST_MAX_LEN = {ctx["exhaust_max_len"]}
+MAX_LEN = {ctx["fuzz_max_len"]}
+
+
+def _root() -> Path:
+    env = os.environ.get("REGEXPROOF_ROOT")
+    if env:
+        path = Path(env)
+        if (path / "scripts" / "differential-fuzz.py").is_file():
+            return path
+        raise SystemExit(
+            f"newgate fuzz: REGEXPROOF_ROOT={{env!r}} has no scripts/differential-fuzz.py"
+        )
+    import regexproof
+
+    cand = Path(regexproof.__file__).resolve().parent.parent
+    if (cand / "scripts" / "differential-fuzz.py").is_file():
+        return cand
+    raise SystemExit(
+        "newgate fuzz: set REGEXPROOF_ROOT to the regexproof checkout "
+        "(needed for scripts/differential-fuzz.py)"
+    )
+
+
+def main() -> int:
+    root = _root()
+    script = root / "scripts" / "differential-fuzz.py"
+    helper = root / "helpers" / "python" / "match.py"
+    if not helper.is_file():
+        raise SystemExit(f"newgate fuzz: missing {{helper}}")
+    cmd = [
+        sys.executable,
+        str(script),
+        "--mirror-expr",
+        MIRROR_EXPR,
+        "--alphabet",
+        ALPHABET,
+        "--mutations",
+        MUTATIONS,
+        "--runs",
+        str(RUNS),
+        "--seed",
+        "42",
+        "--exhaust-max-len",
+        str(EXHAUST_MAX_LEN),
+        "--max-len",
+        str(MAX_LEN),
+        "--real-argv",
+        sys.executable,
+        str(helper),
+        "match",
+        CALL_KIND,
+        PATTERN,
+        FLAGS,
+    ]
+    proc = subprocess.run(cmd, shell=False, timeout=120, check=False)
+    return int(proc.returncode)
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
+'''
+
+
+def _render_readme(ctx: dict) -> str:
+    return f"""# regexproof gate `{ctx["slug"]}`
+
+Scaffolded by `regexproof newgate` (Wave 12 / #581). **Dialect: `{ctx["dialect"]}`**
+(Python `re`). Call kind: `{ctx["call_kind"]}`. Flags: `{ctx["flags"] or "(none)"}`.
+
+This is the **consumer adoption** path: one regex in your repo → a runnable
+property gate. It is not the operator corpus funnel (`docs/PIPELINE.md`).
+
+## Site
+
+- File: `{ctx["source"]}`
+- Pattern: `{ctx["pattern"]}`
+- Family: `{ctx["family"]}`
+- Shape: 1 (alphabet disjointness, length-1) + mutation guard
+  (`Union(mirror, Re('*'))`)
+
+Contracts ship as `provenance: agent_derived`. After you read the surrounding
+code, change that to `human` before counting UNSAT as product
+(`docs/CONTRACTS.md`).
+
+## Run
+
+From this directory (regexproof + `z3-solver==5.0.0` installed):
+
+```bash
+python3 gate.py --all --require-ground-truth --fail-on-property-failure
+python3 gate.py --check-mutation-coverage
+REGEXPROOF_ROOT=/path/to/regexproof python3 fuzz.py
+```
+
+Or `./run.sh` (same three steps; set `REGEXPROOF_ROOT` for fuzz).
+
+TIMEOUT is a hard failure. SAT on a `property` kind is a finding — replay it
+against the real `re` engine before filing.
+
+## CI
+
+Copy `ci.yml` into your workflows (pin actions the way your repo already
+does). The stub runs `--require-ground-truth` and mutation coverage.
+
+Walkthrough: regexproof `docs/NEWGATE.md`.
+"""
+
+
+def _render_ci(ctx: dict) -> str:
+    return f"""# STUB — copy into .github/workflows/ and pin actions/python yourself.
+# regexproof newgate scaffold ({ctx["slug"]} / family {ctx["family"]})
+# TIMEOUT is a hard failure. --require-ground-truth + mutation coverage.
+name: regexproof-gate-{ctx["slug"]}
+on:
+  pull_request:
+  push:
+jobs:
+  regexproof-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4  # pin this
+      - uses: actions/setup-python@v5  # pin this
+        with:
+          python-version: "3.12"
+      - name: Install regexproof + pinned solver
+        run: pip install "z3-solver==5.0.0" regexproof
+      - name: Property gate
+        run: python gate.py --all --require-ground-truth --require-domain --fail-on-property-failure
+        working-directory: .  # scaffold directory (default gates/<slug>/)
+      - name: Mutation coverage
+        run: python gate.py --check-mutation-coverage
+        working-directory: .
+      - name: Differential fuzz (argv-only)
+        run: python fuzz.py
+        working-directory: .
+        env:
+          REGEXPROOF_ROOT: ${{{{ github.workspace }}}}  # regexproof checkout, or clone it
+"""
+
+
+def _render_run() -> str:
+    return """#!/bin/sh
+set -e
+here=$(dirname "$0")
+python3 "$here/gate.py" --all --require-ground-truth --fail-on-property-failure
+python3 "$here/gate.py" --check-mutation-coverage
+python3 "$here/fuzz.py"
+"""

@@ -19,6 +19,9 @@ dev = [
     "jsonschema>=4.0",
 ]
 
+[project.scripts]
+regexproof = "regexproof.cli:main"
+
 [tool.setuptools.packages.find]
 include = ["regexproof*"]
 
