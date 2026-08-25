@@ -23,11 +23,13 @@ BASELINE_PATH = GEN / "escape_baseline.json"
 
 
 def _load_json(path: Path) -> dict[str, Any]:
-    if not path.is_file():
+    if not path.exists():
         return {}
+    if not path.is_file():
+        raise SystemExit(f"pipeline-status: {path} is not a regular file")
     try:
         data = json.loads(path.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError, TypeError) as exc:
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError, TypeError) as exc:
         raise SystemExit(f"pipeline-status: unreadable/invalid {path}: {exc}") from exc
     if not isinstance(data, dict):
         raise SystemExit(f"pipeline-status: {path} is not a JSON object")
