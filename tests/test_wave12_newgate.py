@@ -188,8 +188,8 @@ def test_exhaust_ge_max_len_fails_closed(tmp_path: Path):
 
 def test_wide_range_fails_closed(tmp_path: Path):
     src = tmp_path / "validators.py"
-    # \x00-\x80 spans 129 code points → refuse partial alphabet.
-    src.write_text("WIDE = r'^[\\x00-\\x80]+$'\n", encoding="utf-8")
+    # [\x01-\x81] spans 129 code points with single-char Z3 bounds.
+    src.write_text("WIDE = r'^[\\x01-\\x81]+$'\n", encoding="utf-8")
     with pytest.raises(SystemExit, match=r"spans|false UNSAT"):
         newgate_main(
             [
@@ -198,7 +198,23 @@ def test_wide_range_fails_closed(tmp_path: Path):
                 "--fuzz-runs",
                 "1",
                 str(src),
-                r"^[\x00-\x80]+$",
+                r"^[\x01-\x81]+$",
+            ]
+        )
+
+
+def test_inexact_mirror_fails_closed(tmp_path: Path):
+    src = tmp_path / "validators.py"
+    src.write_text(r"WORD = r'^\w+$'" + "\n", encoding="utf-8")
+    with pytest.raises(SystemExit, match="mirror_exact"):
+        newgate_main(
+            [
+                "--out",
+                str(tmp_path / "out"),
+                "--fuzz-runs",
+                "1",
+                str(src),
+                r"^\w+$",
             ]
         )
 

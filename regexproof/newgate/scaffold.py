@@ -208,6 +208,12 @@ def scaffold(req: ScaffoldRequest) -> ScaffoldResult:
         raise SystemExit(
             f"newgate: pattern is not encodable as a Z3 mirror ({reason})"
         )
+    if compiled.mirror_exact is not True:
+        raise SystemExit(
+            "newgate: pattern mirror is approximate (mirror_exact=False); "
+            "v1 refuses Unicode-default shorthand like \\w/\\d/\\s without "
+            "re.ASCII — pass flags 'a' or use an explicit charset class"
+        )
     try:
         mirror_expr = mirror_to_py(compiled.mirror)
     except ValueError as exc:

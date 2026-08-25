@@ -95,6 +95,8 @@ is not product without that.
 - Mirror too wide to emit as `--mirror-expr` (e.g. `.` expanded to a BMP union) → refuse; use a charset whitelist
 - Pattern with no singleton char alphabet (fixed multi-char literals only) → refuse
 - Wide `re.range` (≥128 code points) → refuse (partial extraction → false UNSAT)
+- Approximate mirrors (`mirror_exact=False`, e.g. Unicode-default `\w`) → refuse;
+  use `flags=a` / `re.ASCII` or an explicit charset
 - `--slug` outside `[A-Za-z0-9_]{1,40}` → refuse (YAML injection)
 - `--exhaust-max-len >= --fuzz-max-len` → refuse
 - Existing scaffold files → refuse unless `--force`
