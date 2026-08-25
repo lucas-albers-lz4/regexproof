@@ -124,11 +124,13 @@ ALPHABET_CHARS = {ctx.alphabet_chars_repr}
 MUTATION_CH = {ctx.mutation_ch_repr}
 
 '''
-        mid = f'''
+        # Plain string (not f-string): keep single braces so generated gate.py
+        # still contains `{_ch!r}` inside its own f-string (Ruff F541).
+        mid = '''
 _BITS = 0
 for _ch in FLAGS:
     if _ch not in _FLAG_BITS:
-        raise SystemExit(f"newgate gate: unknown flag {{_ch!r}}")
+        raise SystemExit(f"newgate gate: unknown flag {_ch!r}")
     _BITS |= _FLAG_BITS[_ch]
 
 _RX = re.compile(PATTERN, _BITS)

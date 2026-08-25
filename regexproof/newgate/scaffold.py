@@ -303,4 +303,3 @@ def scaffold(req: ScaffoldRequest) -> ScaffoldResult:
         dialect=dialect,
         mirror_expr=mirror_expr,
     )
-
