@@ -71,6 +71,21 @@ brew install yara
 `CI=true` or `GITHUB_ACTIONS=true` keeps the skip path closed so CI still fails
 on toolchain drift.
 
+## Pipeline (operators)
+
+Corpus discovery is **not** the Z3 harness. Mine → rank → probe → gate →
+conversion wave lives in [`docs/PIPELINE.md`](docs/PIPELINE.md) (stores:
+`candidate-ledger.json`, `mine-queue.json`; shared gate:
+`*_gate_decision.json`). One-line status:
+
+```bash
+python scripts/pipeline-status.py
+python -m regexproof.probe --help
+```
+
+Daily mine: [`docs/MINE-SETUP.md`](docs/MINE-SETUP.md). Conversion waves:
+[`docs/CLUSTER-CONVERSION.md`](docs/CLUSTER-CONVERSION.md).
+
 ## Layout
 
 | Path | Role |
@@ -91,6 +106,7 @@ on toolchain drift.
 | `docs/why.md` | Three claims with different evidence: mirror soundness, encodable fraction, conversion (0 third-party public). Phase 0 inventory: 0/10 public filings (920210 and 942220 `false_positive` per `docs/conversion-upstream.jsonl`, CU-010 / CU-005) |
 | `docs/CONTRACTS.md` | Property-contract object, provenance (`human` / `version_diff` / `cross_engine` / `agent_derived`), what batch may scale |
 | `docs/CLUSTER-CONVERSION.md` | Conversion-wave SOP: rank 15 / write ≤5 human contracts per idiom slice; ledger join via `*_conversion.ndjson`. First application: `sweep/openwrt-conversion/plan.md` |
+| `docs/PIPELINE.md` | Operator funnel: mine → rank → probe → gate → wave; ledger/queue stores; `pipeline-status.py` |
 | `docs/conversion-upstream.jsonl` | Curated last-mile conversion events (filed / fixed / false positive / private_first) |
 | `docs/examples/shape5-rule_diff.md` | Shape-5 `rule_diff` kind/family/mutation guards |
 | `docs/verified-findings.jsonl` | Machine-readable verified implementation findings (toolkit traps, not vuln counts) |
@@ -109,6 +125,8 @@ on toolchain drift.
 | `scripts/batch-scan.py` | Phase-5 batch scan driver: inventory → triage → NDJSON/MD reports |
 | `scripts/conversion-ledger.py` | Product funnel: sites → properties asked → SAT → GT → accepted upstream |
 | `scripts/ci-assert-toolchain.py` | CI gate: assert pinned toolchain versions before runs |
+| `scripts/pipeline-status.py` | Operator snapshot: drain, queue pressure, 7-day survival, backlog weeks |
+| `python -m regexproof.probe` | Probe entry: `--single` (one repo) or `--batch` (leased loop) |
 | `scripts/ci-run-property-subset.py` | CI gate: run the measured-stable property subset |
 | `scripts/ground-truth-b.py` | Batch ground-truth replay helper (real engines on witnesses) |
 | `properties/usrmanage-p1-p6.md` | Worked property suite (P1–P6) from the usrmanage case study |
@@ -129,3 +147,18 @@ ground-truthed against real `sed`/`busybox sed` behavior. See
 ## License
 
 MIT
+
+## Operator CLI (scripts without argparse)
+
+These runners use argv flags or stdin rather than `argparse`. `--help` is
+documented here so a new operator does not have to open the file.
+
+| Command | How to invoke |
+|---|---|
+| `scripts/z3-verify.py` | `--all`, `--list`, `--json`, `--require-ground-truth`; `--help` via `regexproof.harness.cli` |
+| `scripts/z3-property-template.py` | no flags; copy-and-adapt the five shapes |
+| `scripts/ground-truth-b.py` | stdin matcher; exit 0/1 (not an operator loop) |
+| `scripts/p4-sweep.py` | no flags; `NOODLER=` env for the pinned binary |
+| `scripts/pilot-properties.py` | `--require-ground-truth` `--require-domain` |
+| `scripts/pilot-run.py` | no flags; Phase 2 extract → compile → report |
+| `scripts/ci-check-*.py` | CI gates; no operator flags |

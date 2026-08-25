@@ -20,8 +20,21 @@ import regexproof.harness.properties  # noqa: F401
 
 
 
+USAGE = """regexproof harness (scripts/z3-verify.py / regexproof.harness.cli)
+
+  python3 scripts/z3-verify.py --list
+  python3 scripts/z3-verify.py --all --require-ground-truth
+  python3 scripts/z3-verify.py P1 P2
+  python3 scripts/z3-verify.py --all --json
+  python3 scripts/z3-verify.py --check-mutation-coverage
+"""
+
+
 def main(argv=None):
     args = list(sys.argv[1:] if argv is None else argv)
+    if "-h" in args or "--help" in args:
+        print(USAGE.strip())
+        return 0
     require_ground_truth = "--require-ground-truth" in args
     require_domain = "--require-domain" in args
     require_contract = "--require-contract" in args

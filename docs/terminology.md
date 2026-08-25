@@ -11,7 +11,7 @@ search + ledger/queue step.
 | 1 | **Mine** | GitHub Code Search → admit up to the day cap into the ledger; park overflow in the queue | GHA `daily-mine.yml`, `scripts/mine-corpus-candidates.py` → `candidate-ledger.json`, `mine-queue.json` |
 | 1b | **Queue drain** | Move queued candidates into the ledger on later UTC days (or a high-cap flush), ordered by **score-v1** | Same mine job with `DAILY_MINE_CAP`; flush via `gh workflow run daily-mine.yml -f daily_mine_cap=80` |
 | 2 | **Rank** | Score ledger rows and print the next batch to hand-probe (no network, no writes) | `python scripts/rank-mine-candidates.py --limit 10` (gated rows skipped by default; `--no-skip-gated` to include them) |
-| 3 | **Probe** | Clone a pinned repo and walk it for regex sites / dialects / boundary signals; emit an admission draft | `python scripts/probe-corpus-admission.py <url> --pin <sha>` |
+| 3 | **Probe** | Clone a pinned repo and walk it for regex sites / dialects / boundary signals; emit an admission draft | `python -m regexproof.probe --single <url> --pin <sha>` (legacy: `scripts/probe-corpus-admission.py`) |
 | 4 | **Gate** (author-gate) | Human or auto decision: GO / NO-GO / triage on the probe draft | `*_gate_decision.json` under `properties/generated/`; `scripts/author-gate-decision.py` |
 | 5 | **Smith** | After GO: extract → compile → encodable-fraction / tickets / allowlists | `scripts/materialize-corpus.py`, `scripts/scaffold-smith-corpus.py`, `scripts/author-smith-decision.py`, `feat(smith): …` PRs |
 

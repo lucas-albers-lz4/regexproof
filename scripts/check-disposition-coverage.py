@@ -318,9 +318,38 @@ def crs942220_guard(upstream_path: Path, docs: tuple[Path, ...]) -> list[str]:
     return problems
 
 
+def ready_to_file_rows(
+    gt_sats: list[dict[str, Any]],
+    curated: dict[tuple[str, str], dict[str, Any]],
+    cl: Any,
+) -> list[dict[str, Any]]:
+    """GT-confirmed SATs whose curated disposition is not ``wont_file``."""
+    rows: list[dict[str, Any]] = []
+    for rec in gt_sats:
+        key = (cl.canonical_site(str(rec.get("site") or "")), cl.canonical_question_id(rec))
+        disp = curated.get(key)
+        if not isinstance(disp, dict):
+            continue
+        status = str(disp.get("status") or "")
+        if status == "wont_file":
+            continue
+        rows.append(
+            {
+                "id": disp.get("id"),
+                "status": status,
+                "site": key[0],
+                "question_id": key[1],
+                "source": rec.get("_source"),
+            }
+        )
+    return rows
+
+
 def run(
     gen_dir: Path = GEN_DIR,
     upstream_path: Path = UPSTREAM_PATH,
+    *,
+    ready_to_file: bool = False,
 ) -> int:
     if not upstream_path.is_file():
         print(f"FATAL: curated upstream file missing: {upstream_path}", file=sys.stderr)
@@ -346,6 +375,14 @@ def run(
         f"(curated file: {upstream_path.name}, rows indexed on join keys: "
         f"{len(curated)})"
     )
+    if ready_to_file:
+        ready = ready_to_file_rows(gt_sats, curated, cl)
+        print(f"ready-to-file: {len(ready)} GT-confirmed non-wont_file item(s)")
+        for row in ready:
+            print(
+                f"  - {row.get('id')}: status={row.get('status')} "
+                f"site={row.get('site')!r} question_id={row.get('question_id')!r}"
+            )
     failures = []
     if missing:
         failures.append("missing curated disposition rows:")
@@ -373,11 +410,20 @@ def main(argv: list[str] | None = None) -> int:
         default=UPSTREAM_PATH,
         help="Curated upstream JSONL (default: docs/conversion-upstream.jsonl)",
     )
+    ap.add_argument(
+        "--ready-to-file",
+        action="store_true",
+        help="List GT-confirmed curated items whose status is not wont_file",
+    )
     args = ap.parse_args(argv)
     if not args.generated_dir.is_dir():
         print(f"FATAL: generated dir missing: {args.generated_dir}", file=sys.stderr)
         return 2
-    return run(gen_dir=args.generated_dir, upstream_path=args.upstream)
+    return run(
+        gen_dir=args.generated_dir,
+        upstream_path=args.upstream,
+        ready_to_file=args.ready_to_file,
+    )
 
 
 if __name__ == "__main__":

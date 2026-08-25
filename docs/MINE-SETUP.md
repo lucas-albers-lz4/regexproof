@@ -159,6 +159,10 @@ queries do not. When that evidence holds, the mine prepends a 35% query
 share (`10/30` slots) of WAF/IDS / named-validator / BusyBox queries.
 `DAILY_MINE_CAP` stays **10**. OSV/CVE is a witness feed, not a live drain.
 
+Operator snapshot (Wave 11): `python scripts/pipeline-status.py` — latest mine-day
+drain, queue pressure, 7-day survival, backlog weeks. Funnel map:
+[`docs/PIPELINE.md`](PIPELINE.md).
+
 ```bash
 python scripts/rank-mine-candidates.py --limit 10
 python scripts/rank-mine-candidates.py --no-skip-gated --limit 10
