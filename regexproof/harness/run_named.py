@@ -39,7 +39,11 @@ def run_named_properties(
                 results.append(res)
                 if as_json:
                     # Flush each record immediately so partial streams stay valid.
-                    print(json.dumps(res, sort_keys=True), file=sys.__stdout__)
+                    print(
+                        json.dumps(res, sort_keys=True),
+                        file=sys.__stdout__,
+                        flush=True,
+                    )
     else:
         for name in names:
             res = run_one(name, REGISTRY[name], require_gt)
