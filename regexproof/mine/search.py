@@ -234,7 +234,15 @@ def run_search(
     generated = Path(__file__).resolve().parents[2] / "properties" / "generated"
     if generated.is_dir():
         go_repos = load_go_repo_names(generated)
-    for query in queries or SEARCH_QUERIES:
+    if queries is None:
+        from regexproof.mine.feeds import load_family_medians, select_queries
+
+        queries = select_queries(
+            SEARCH_QUERIES,
+            budget=query_budget,
+            family_medians=load_family_medians(generated / "feed_density.json"),
+        )
+    for query in queries:
         if rate_limited:  # P7 fold: a rate limit aborts ALL further queries
             break
         if result.queries_run >= query_budget:

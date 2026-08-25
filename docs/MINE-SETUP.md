@@ -149,6 +149,16 @@ The skip-class surrogate is **offline** (`python scripts/eval-ranking-surrogate.
 artifact `properties/generated/ranking_surrogate.json`, `live_rollout: false`).
 Do not roll out go-only score-v2.
 
+## Wave 10 target feeds (#579)
+
+Per-source density is in
+[`properties/generated/feed_density.json`](../properties/generated/feed_density.json)
+(rebuild: `python scripts/eval-feed-density.py`). **Rules-family** walked
+median clears the ≤50-site skip floor; generic `filename:validator.js`
+queries do not. When that evidence holds, the mine prepends a 35% query
+share (`10/30` slots) of WAF/IDS / named-validator / BusyBox queries.
+`DAILY_MINE_CAP` stays **10**. OSV/CVE is a witness feed, not a live drain.
+
 ```bash
 python scripts/rank-mine-candidates.py --limit 10
 python scripts/rank-mine-candidates.py --no-skip-gated --limit 10

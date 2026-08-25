@@ -10,6 +10,7 @@ import re
 from datetime import date, datetime, timezone
 from urllib.parse import urlparse
 
+from regexproof.mine.feeds import FEED_QUERIES
 from regexproof.mine.search import SEARCH_QUERIES
 
 # Map exact SEARCH_QUERIES strings → family (order matches search.py comments).
@@ -35,6 +36,7 @@ _QUERY_FAMILY: dict[str, str] = {
     SEARCH_QUERIES[18]: "validators",  # validator.py/validators.py path:src
     SEARCH_QUERIES[19]: "testdata",  # regex_test.go / regexp_test.go
 }
+_QUERY_FAMILY.update({q: fam for fam, q in FEED_QUERIES})
 
 
 def _repo_slug(url: str) -> str:
@@ -68,10 +70,14 @@ def _query_family(source_query: str) -> str:
         return "security"
     if "semgrep" in ql or "yara" in ql or "secrule" in ql or "extension:yar" in ql or ".yar" in ql or "yar " in ql:
         return "rules"
-    if "validator" in ql:
+    if "crs-setup" in ql or "coraza" in ql or "suricata" in ql or "sigma.yml" in ql or "sigma.yaml" in ql or "qlpack" in ql or "snort" in ql:
+        return "rules"
+    if "validator" in ql or "isemail" in ql or "isfqdn" in ql or "govalidator" in ql:
         return "validators"
     if "testdata" in ql or "re_tests" in ql or "test_re" in ql or "regex_test" in ql or "regexp_test" in ql:
         return "testdata"
+    if "procd" in ql or "netifd" in ql or "apkbuild" in ql or "fstools" in ql:
+        return "other"
     return "other"
 
 

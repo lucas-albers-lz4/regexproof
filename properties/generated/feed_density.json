@@ -1,0 +1,136 @@
+{
+  "daily_cap": {
+    "DAILY_MINE_CAP_default": 10,
+    "note": "Wave 10 moves query share only; the calendar day admit cap stays 10.",
+    "raised": false
+  },
+  "exemplars": {
+    "corazawaf/coraza-coreruleset": {
+      "regex_sites": 343,
+      "status": "no-go",
+      "url": "https://github.com/corazawaf/coraza-coreruleset"
+    },
+    "coreruleset/coreruleset": {
+      "regex_sites": 346,
+      "status": "go",
+      "url": "https://github.com/coreruleset/coreruleset"
+    },
+    "openwrt/luci": {
+      "regex_sites": 895,
+      "status": "go",
+      "url": "https://github.com/openwrt/luci"
+    },
+    "openwrt/packages": {
+      "regex_sites": 713,
+      "status": "go",
+      "url": "https://github.com/openwrt/packages"
+    },
+    "semgrep/semgrep-rules": {
+      "regex_sites": 9186,
+      "status": "go",
+      "url": "https://github.com/semgrep/semgrep-rules"
+    },
+    "validatorjs/validator.js": {
+      "regex_sites": 212,
+      "status": "go",
+      "url": "https://github.com/validatorjs/validator.js"
+    },
+    "yara-rules/rules": {
+      "regex_sites": 17574,
+      "status": "go",
+      "url": "https://github.com/YARA-Rules/rules"
+    }
+  },
+  "families": {
+    "other": {
+      "frac_gt_200": 0.458333,
+      "frac_le50": 0.458333,
+      "mean_regex_sites": 1726.9,
+      "median_regex_sites": 189.0,
+      "n": 24
+    },
+    "rules": {
+      "frac_gt_200": 0.481283,
+      "frac_le50": 0.31016,
+      "mean_regex_sites": 2129.8,
+      "median_regex_sites": 176.0,
+      "n": 187
+    },
+    "security": {
+      "frac_gt_200": 0.23262,
+      "frac_le50": 0.609626,
+      "mean_regex_sites": 426.9,
+      "median_regex_sites": 24.0,
+      "n": 374
+    },
+    "testdata": {
+      "frac_gt_200": 0.230088,
+      "frac_le50": 0.495575,
+      "mean_regex_sites": 434.1,
+      "median_regex_sites": 52.0,
+      "n": 113
+    },
+    "validators": {
+      "frac_gt_200": 0.065041,
+      "frac_le50": 0.780488,
+      "mean_regex_sites": 65.6,
+      "median_regex_sites": 11.0,
+      "n": 123
+    }
+  },
+  "feed_queries": [
+    {
+      "family": "rules",
+      "query": "filename:crs-setup.conf OR filename:REQUEST-942-APPLICATION-ATTACK-SQLI.conf"
+    },
+    {
+      "family": "rules",
+      "query": "filename:coraza.conf OR filename:coraza.yaml"
+    },
+    {
+      "family": "rules",
+      "query": "filename:suricata.yaml path:rules"
+    },
+    {
+      "family": "rules",
+      "query": "path:rules filename:snort.conf OR filename:local.rules"
+    },
+    {
+      "family": "rules",
+      "query": "filename:sigma.yml OR filename:sigma.yaml path:rules"
+    },
+    {
+      "family": "rules",
+      "query": "filename:qlpack.yml OR extension:ql path:ql"
+    },
+    {
+      "family": "validators",
+      "query": "filename:isEmail.js path:src OR filename:isFQDN.js path:src"
+    },
+    {
+      "family": "validators",
+      "query": "filename:email_validator.py OR filename:govalidator.go"
+    },
+    {
+      "family": "other",
+      "query": "filename:procd.c OR filename:netifd.c"
+    },
+    {
+      "family": "other",
+      "query": "filename:APKBUILD path:main OR filename:fstools"
+    }
+  ],
+  "feed_query_share_n": 10,
+  "issue": "#579",
+  "live_query_share_applied": true,
+  "note": "Generic validators filename queries stay low-density (do not qualify). Rules-family median clears the skip-class floor, so 10/30 query slots prepend the Wave 10 feed list. DAILY_MINE_CAP remains 10.",
+  "osv_witness": {
+    "note": "osv.dev / GitHub Advisory DB is a witness feed (pinned repo+commit), not a live drain source. Do not spend primary probe budget here.",
+    "primary_drain": false
+  },
+  "query_budget": 30,
+  "schema_version": "1",
+  "site_median_floor": 50,
+  "target_query_share": 0.35,
+  "wave": 10
+}
