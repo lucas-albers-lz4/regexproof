@@ -99,7 +99,7 @@ def _escape(state_path: Path, gen: Path, baseline: Path) -> dict[str, Any]:
             gen=gen,
             baseline_path=baseline,
         )
-    except (SystemExit, OSError, KeyError, TypeError, ValueError):
+    except (OSError, KeyError, TypeError, ValueError):
         return {
             "n_window": 0,
             "k_window": 0,

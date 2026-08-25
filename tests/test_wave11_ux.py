@@ -5,6 +5,8 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+import pytest
+
 from regexproof.mine.pipeline_status import render_status, render_weekly, snapshot
 from regexproof.probe.cli import main as probe_main
 
@@ -147,6 +149,24 @@ def test_injected_missing_state_does_not_use_default(tmp_path: Path, monkeypatch
     )
     assert seen["state_path"] == missing
     assert seen["baseline_path"] == baseline
+
+
+def test_corrupt_gate_decision_fails_closed(tmp_path: Path):
+    gen = tmp_path / "generated"
+    gen.mkdir()
+    (gen / "bad_gate_decision.json").write_text("{not json", encoding="utf-8")
+    (gen / "escape_baseline.json").write_text(
+        json.dumps({"survivor_rate": 0.14}), encoding="utf-8"
+    )
+    with pytest.raises(SystemExit, match="unreadable/invalid"):
+        snapshot(
+            generated=gen,
+            state_path=tmp_path / "state.json",
+            ledger_path=tmp_path / "ledger.json",
+            queue_path=tmp_path / "queue.json",
+            conversion_ledger=tmp_path / "conv.json",
+            baseline_path=gen / "escape_baseline.json",
+        )
 
 
 def test_probe_cli_help():
