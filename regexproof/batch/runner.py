@@ -9,6 +9,7 @@ import multiprocessing
 import platform
 import sys
 import time
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
@@ -74,6 +75,243 @@ _check_budget_patterns = check_budget_patterns
 _check_budget_mem = check_budget_mem
 _apply_address_space_cap = apply_address_space_cap
 _LAST_ADDRESS_SPACE_CAP_APPLIED = None  # compat; prefer _budgets.LAST_ADDRESS_SPACE_CAP_APPLIED
+
+
+@dataclass(frozen=True)
+class BatchRunOptions:
+    """Internal options object — public APIs keep keyword-only wrappers."""
+
+    out_dir: Path
+    with_redos: bool = False
+    approval_path: Path | None = None
+    require_ground_truth: bool = False
+    fail_planned: bool = False
+    redos_timeout_s: float | None = None
+    emit_planned: bool = True
+    synthesize: bool = False
+    synth_diff_fuzz_sample: int | None = None
+    jobs: int | None = None
+    cache_dir: Path | str | None = None
+
+
+def _zero_pair_counts(
+    *, note: str, include_dropped: bool = True, **extra: Any
+) -> dict[str, Any]:
+    row: dict[str, Any] = {
+        "admitted": 0,
+        "batch_shape5": 0,
+        "executed": 0,
+        "note": note,
+    }
+    if include_dropped:
+        row["dropped"] = 0
+    row.update(extra)
+    return row
+
+
+def _run_inventory_only(corpus: str, meta: dict[str, Any], out_dir: Path) -> dict[str, Any]:
+    from regexproof.extractors.rust_inventory import write_rust_inventory
+
+    path: Path = meta["path"]
+    out_dir.mkdir(parents=True, exist_ok=True)
+    report = write_rust_inventory(path, out_dir / f"{corpus}_inventory_only.json")
+    # Empty findings NDJSON so run_batch repro hashing still finds the file.
+    write_ndjson(out_dir / f"{corpus}.ndjson", [])
+    write_markdown(
+        out_dir / f"{corpus}_batch.md",
+        corpus=corpus,
+        findings=[],
+    )
+    summary = {
+        "corpus": corpus,
+        "findings": 0,
+        "encodable": report.get("extracted"),
+        "decision": "inventory_only",
+        "detail": report,
+        "cache": {"hits": 0, "misses": 0, "entries": 0, "hit_rate": 0.0},
+        "cache_hit_rate": 0.0,
+    }
+    atomic_write_text(
+        out_dir / f"{corpus}_batch_summary.json",
+        json.dumps(summary, indent=2, sort_keys=True) + "\n",
+    )
+    return summary
+
+
+def _emit_planned_findings(
+    inventory: dict[str, Any],
+    *,
+    corpus: str,
+    synthesis: Any,
+) -> list[dict[str, Any]]:
+    findings: list[dict[str, Any]] = []
+    for q in inventory["questions"]:
+        if synthesis is not None and q["id"] in synthesis.executed_questions:
+            continue
+        findings.append(
+            {
+                "schema_version": "1",
+                "regex_id": f"inventory:{q['id']}",
+                "kind": "property",
+                "corpus": corpus,
+                "result": "planned",
+                "ground_truth_status": "planned",
+                "site": f"inventory:{q['id']}",
+                "pattern": "",
+                "shape": q["shape"],
+                "disclosure": None,
+                "detail": {"question_id": q["id"], "threat": q["threat"]},
+            }
+        )
+    return findings
+
+
+def _run_redos_fanout(
+    rows: list[dict[str, Any]],
+    *,
+    corpus: str,
+    meta: dict[str, Any],
+    redos_timeout_s: float | None,
+) -> tuple[list[dict[str, Any]], list[dict[str, Any]], bool]:
+    """Return (finding-dicts for NDJSON, raw redos findings, incomplete)."""
+    from regexproof.redos.runner import analyze_record
+
+    findings: list[dict[str, Any]] = []
+    redos_findings: list[dict[str, Any]] = []
+    redos_incomplete = False
+    budget_s = redos_timeout_s
+    if budget_s is None:
+        budget_s = (meta.get("budget") or {}).get("redos_wall_s", 120)
+    t0 = time.monotonic()
+    for rec in rows:
+        if not rec.get("encodable"):
+            continue
+        if budget_s is not None and (time.monotonic() - t0) >= float(budget_s):
+            redos_incomplete = True
+            break
+        for f in analyze_record(rec, triage=False):
+            redos_findings.append(f)
+            findings.append(
+                {
+                    "schema_version": "1",
+                    "regex_id": f["regex_id"],
+                    "kind": "redos",
+                    "corpus": corpus,
+                    "result": f["result"],
+                    "site": f.get("site") or "",
+                    "pattern": f.get("pattern") or "",
+                    "shape": None,
+                    "disclosure": "private_first" if meta.get("security_tool") else None,
+                    "engine_versions": (
+                        {str(f.get("tool")): str(f.get("tool_version"))}
+                        if f.get("tool")
+                        else None
+                    ),
+                    "detail": {"tool": f.get("tool"), "severity": f.get("severity")},
+                }
+            )
+        # Re-check after each record so a slow analyze_record still trips the gate.
+        if budget_s is not None and (time.monotonic() - t0) >= float(budget_s):
+            redos_incomplete = True
+            break
+    if redos_incomplete:
+        findings.append(
+            {
+                "schema_version": "1",
+                "regex_id": f"redos-incomplete:{corpus}",
+                "kind": "redos",
+                "corpus": corpus,
+                "result": "incomplete",
+                "site": f"redos-timeout:{redos_timeout_s or (meta.get('budget') or {}).get('redos_wall_s', 120)}",
+                "pattern": "",
+                "shape": None,
+                "disclosure": "private_first" if meta.get("security_tool") else None,
+                "detail": {
+                    "error": "ReDoS fan-out truncated by wall-clock timeout gate",
+                    "redos_timeout_s": redos_timeout_s
+                    or (meta.get("budget") or {}).get("redos_wall_s", 120),
+                    "findings_emitted": len(redos_findings),
+                },
+            }
+        )
+    return findings, redos_findings, redos_incomplete
+
+
+def _finalize_corpus_artifacts(
+    *,
+    corpus: str,
+    meta: dict[str, Any],
+    out_dir: Path,
+    findings: list[dict[str, Any]],
+    approval_path: Path | None,
+    require_ground_truth: bool,
+    fail_planned: bool,
+    records: list[Any],
+    rows: list[dict[str, Any]],
+    triage: list[Any],
+    inventory: dict[str, Any],
+    joined: dict[str, Any],
+    redos_findings: list[dict[str, Any]],
+    redos_incomplete: bool,
+    redos_timeout_s: float | None,
+    cache_stats: dict[str, Any],
+    synthesis: Any,
+) -> dict[str, Any]:
+    findings = tag_disclosure(findings, corpus=corpus)
+    findings = apply_approval(findings, approval_path=approval_path)
+    enforce_evidence_gates(
+        findings,
+        require_ground_truth=require_ground_truth,
+        fail_planned=fail_planned,
+    )
+    write_ndjson(out_dir / f"{corpus}.ndjson", findings)
+    # Keep Phase 3 shape-5 report at {corpus}.md; batch uses a distinct path.
+    write_markdown(out_dir / f"{corpus}_batch.md", corpus=corpus, findings=findings)
+
+    dry = write_pr_dry_run(
+        out_dir / f"{corpus}-pr-dry-run.json",
+        findings=findings,
+        approval_path=approval_path,
+    )
+    assert_no_auto_publication(dry)
+
+    summary = {
+        "schema_version": "1",
+        "corpus": corpus,
+        "corpus_type": meta["corpus_type"],
+        "extracted": len(records),
+        "encodable": sum(1 for c in rows if c.get("encodable")),
+        "triage": len(triage),
+        "findings": len(findings),
+        "inventory_questions": len(inventory["questions"]),
+        "join_regex_ids": len(joined.get("regex_ids") or []),
+        "engine": {"python": platform.python_version()},
+        "redos_findings": len(redos_findings),
+        "redos_incomplete": redos_incomplete,
+        "complete_run": not redos_incomplete,
+        "address_space_cap": _budgets.LAST_ADDRESS_SPACE_CAP_APPLIED,
+        "cache": {
+            "hits": int(cache_stats.get("hits", 0)),
+            "misses": int(cache_stats.get("misses", 0)),
+            "entries": int(cache_stats.get("entries", 0)),
+            "hit_rate": float(cache_stats.get("hit_rate", 0.0)),
+        },
+        "cache_hit_rate": float(cache_stats.get("hit_rate", 0.0)),
+    }
+    if synthesis is not None:
+        summary["synthesis"] = synthesis.stats
+    atomic_write_text(
+        out_dir / f"{corpus}_batch_summary.json",
+        _serializable_summary(summary),
+    )
+    if redos_incomplete:
+        raise SystemExit(
+            f"evidence gate failed: ReDoS report incomplete "
+            f"(timeout_s={redos_timeout_s or (meta.get('budget') or {}).get('redos_wall_s', 120)}); "
+            "raise --redos-timeout-s / corpus budget.redos_wall_s for a complete run "
+            f"(partial findings written to {out_dir / f'{corpus}.ndjson'})"
+        )
+    return summary
 
 
 def _serializable_summary(summary: dict[str, Any]) -> str:
@@ -344,83 +582,55 @@ def run_corpus(
     jobs: int | None = None,
     cache_dir: Path | str | None = None,
 ) -> dict[str, Any]:
+    opts = BatchRunOptions(
+        out_dir=out_dir,
+        with_redos=with_redos,
+        approval_path=approval_path,
+        require_ground_truth=require_ground_truth,
+        fail_planned=fail_planned,
+        redos_timeout_s=redos_timeout_s,
+        emit_planned=emit_planned,
+        synthesize=synthesize,
+        synth_diff_fuzz_sample=synth_diff_fuzz_sample,
+        jobs=jobs,
+        cache_dir=cache_dir,
+    )
     meta = CORPUS_MANIFESTS[corpus]
     if meta.get("corpus_type") == "inventory_only":
-        from regexproof.extractors.rust_inventory import write_rust_inventory
-
-        path: Path = meta["path"]
-        out_dir.mkdir(parents=True, exist_ok=True)
-        report = write_rust_inventory(path, out_dir / f"{corpus}_inventory_only.json")
-        # Empty findings NDJSON so run_batch repro hashing still finds the file.
-        write_ndjson(out_dir / f"{corpus}.ndjson", [])
-        write_markdown(
-            out_dir / f"{corpus}_batch.md",
-            corpus=corpus,
-            findings=[],
-        )
-        summary = {
-            "corpus": corpus,
-            "findings": 0,
-            "encodable": report.get("extracted"),
-            "decision": "inventory_only",
-            "detail": report,
-            "cache": {"hits": 0, "misses": 0, "entries": 0, "hit_rate": 0.0},
-            "cache_hit_rate": 0.0,
-        }
-        atomic_write_text(
-            out_dir / f"{corpus}_batch_summary.json",
-            json.dumps(summary, indent=2, sort_keys=True) + "\n",
-        )
-        return summary
+        return _run_inventory_only(corpus, meta, opts.out_dir)
     meta = resolve_corpus_path(corpus, meta)
     inventory = load_inventory(meta["corpus_type"])
     cache_stats: dict[str, Any] = {}
     records, compiled = extract_and_compile_corpus(
         corpus,
         meta,
-        jobs=jobs,
-        cache_dir=cache_dir,
+        jobs=opts.jobs,
+        cache_dir=opts.cache_dir,
         cache_stats=cache_stats,
     )
 
     rows = [pair[0] for pair in compiled]
     synthesis = None
-    if synthesize:
+    if opts.synthesize:
         synthesis = synthesize_compiled(
             corpus,
             compiled,
             inventory,
             meta,
-            diff_fuzz_sample=synth_diff_fuzz_sample,
+            diff_fuzz_sample=opts.synth_diff_fuzz_sample,
         )
     # C1 (issue #426): rows stay lean (no AST); release streamed mirrors after
     # the opt-in P3 consumer has completed.
     _discard_streamed_mirrors(compiled)
 
     triage = triage_records_from_compiled(rows)
-    write_triage_ndjson(out_dir.parent / "triage" / f"{corpus}.ndjson", triage)
+    write_triage_ndjson(opts.out_dir.parent / "triage" / f"{corpus}.ndjson", triage)
 
     findings: list[dict[str, Any]] = []
-    # Inventory-driven shape markers (auto property stubs — encode deferred to Z3 job)
-    if emit_planned:
-        for q in inventory["questions"]:
-            if synthesis is not None and q["id"] in synthesis.executed_questions:
-                continue
-            findings.append(
-                {
-                    "schema_version": "1",
-                    "regex_id": f"inventory:{q['id']}",
-                    "kind": "property",
-                    "corpus": corpus,
-                    "result": "planned",
-                    "ground_truth_status": "planned",
-                    "site": f"inventory:{q['id']}",
-                    "pattern": "",
-                    "shape": q["shape"],
-                    "disclosure": None,
-                    "detail": {"question_id": q["id"], "threat": q["threat"]},
-                }
-            )
+    if opts.emit_planned:
+        findings.extend(
+            _emit_planned_findings(inventory, corpus=corpus, synthesis=synthesis)
+        )
 
     if synthesis is not None:
         findings.extend(synthesis.findings)
@@ -430,125 +640,42 @@ def run_corpus(
 
     redos_findings: list[dict[str, Any]] = []
     redos_incomplete = False
-    if with_redos:
-        from regexproof.redos.runner import analyze_record
-
-        budget_s = redos_timeout_s
-        if budget_s is None:
-            budget_s = (meta.get("budget") or {}).get("redos_wall_s", 120)
-        t0 = time.monotonic()
-        for rec in rows:
-            if not rec.get("encodable"):
-                continue
-            if budget_s is not None and (time.monotonic() - t0) >= float(budget_s):
-                redos_incomplete = True
-                break
-            for f in analyze_record(rec, triage=False):
-                redos_findings.append(f)
-                findings.append(
-                    {
-                        "schema_version": "1",
-                        "regex_id": f["regex_id"],
-                        "kind": "redos",
-                        "corpus": corpus,
-                        "result": f["result"],
-                        "site": f.get("site") or "",
-                        "pattern": f.get("pattern") or "",
-                        "shape": None,
-                        "disclosure": "private_first" if meta.get("security_tool") else None,
-                        "engine_versions": (
-                            {str(f.get("tool")): str(f.get("tool_version"))}
-                            if f.get("tool")
-                            else None
-                        ),
-                        "detail": {"tool": f.get("tool"), "severity": f.get("severity")},
-                    }
-                )
-            # Re-check after each record so a slow analyze_record still trips the gate.
-            if budget_s is not None and (time.monotonic() - t0) >= float(budget_s):
-                redos_incomplete = True
-                break
-
-    if redos_incomplete:
-        findings.append(
-            {
-                "schema_version": "1",
-                "regex_id": f"redos-incomplete:{corpus}",
-                "kind": "redos",
-                "corpus": corpus,
-                "result": "incomplete",
-                "site": f"redos-timeout:{redos_timeout_s or (meta.get('budget') or {}).get('redos_wall_s', 120)}",
-                "pattern": "",
-                "shape": None,
-                "disclosure": "private_first" if meta.get("security_tool") else None,
-                "detail": {
-                    "error": "ReDoS fan-out truncated by wall-clock timeout gate",
-                    "redos_timeout_s": redos_timeout_s
-                    or (meta.get("budget") or {}).get("redos_wall_s", 120),
-                    "findings_emitted": len(redos_findings),
-                },
-            }
+    if opts.with_redos:
+        redos_ndjson, redos_findings, redos_incomplete = _run_redos_fanout(
+            rows,
+            corpus=corpus,
+            meta=meta,
+            redos_timeout_s=opts.redos_timeout_s,
         )
+        findings.extend(redos_ndjson)
 
     # Join Z3-side placeholders with redos (separate sections)
-    z3_side = [{"regex_id": f["regex_id"], "result": f["result"]} for f in findings if f["kind"] != "redos"]
+    z3_side = [
+        {"regex_id": f["regex_id"], "result": f["result"]}
+        for f in findings
+        if f["kind"] != "redos"
+    ]
     joined = join_findings(z3_side, redos_findings)
 
-    findings = tag_disclosure(findings, corpus=corpus)
-    findings = apply_approval(findings, approval_path=approval_path)
-    enforce_evidence_gates(
-        findings,
-        require_ground_truth=require_ground_truth,
-        fail_planned=fail_planned,
-    )
-    write_ndjson(out_dir / f"{corpus}.ndjson", findings)
-    # Keep Phase 3 shape-5 report at {corpus}.md; batch uses a distinct path.
-    write_markdown(out_dir / f"{corpus}_batch.md", corpus=corpus, findings=findings)
-
-    dry = write_pr_dry_run(
-        out_dir / f"{corpus}-pr-dry-run.json",
+    return _finalize_corpus_artifacts(
+        corpus=corpus,
+        meta=meta,
+        out_dir=opts.out_dir,
         findings=findings,
-        approval_path=approval_path,
+        approval_path=opts.approval_path,
+        require_ground_truth=opts.require_ground_truth,
+        fail_planned=opts.fail_planned,
+        records=records,
+        rows=rows,
+        triage=triage,
+        inventory=inventory,
+        joined=joined,
+        redos_findings=redos_findings,
+        redos_incomplete=redos_incomplete,
+        redos_timeout_s=opts.redos_timeout_s,
+        cache_stats=cache_stats,
+        synthesis=synthesis,
     )
-    assert_no_auto_publication(dry)
-
-    summary = {
-        "schema_version": "1",
-        "corpus": corpus,
-        "corpus_type": meta["corpus_type"],
-        "extracted": len(records),
-        "encodable": sum(1 for c in rows if c.get("encodable")),
-        "triage": len(triage),
-        "findings": len(findings),
-        "inventory_questions": len(inventory["questions"]),
-        "join_regex_ids": len(joined.get("regex_ids") or []),
-        "engine": {"python": platform.python_version()},
-        "redos_findings": len(redos_findings),
-        "redos_incomplete": redos_incomplete,
-        "complete_run": not redos_incomplete,
-        "address_space_cap": _budgets.LAST_ADDRESS_SPACE_CAP_APPLIED,
-        "cache": {
-            "hits": int(cache_stats.get("hits", 0)),
-            "misses": int(cache_stats.get("misses", 0)),
-            "entries": int(cache_stats.get("entries", 0)),
-            "hit_rate": float(cache_stats.get("hit_rate", 0.0)),
-        },
-        "cache_hit_rate": float(cache_stats.get("hit_rate", 0.0)),
-    }
-    if synthesis is not None:
-        summary["synthesis"] = synthesis.stats
-    atomic_write_text(
-        out_dir / f"{corpus}_batch_summary.json",
-        _serializable_summary(summary),
-    )
-    if redos_incomplete:
-        raise SystemExit(
-            f"evidence gate failed: ReDoS report incomplete "
-            f"(timeout_s={redos_timeout_s or (meta.get('budget') or {}).get('redos_wall_s', 120)}); "
-            "raise --redos-timeout-s / corpus budget.redos_wall_s for a complete run "
-            f"(partial findings written to {out_dir / f'{corpus}.ndjson'})"
-        )
-    return summary
 
 
 def check_admission_gates(
@@ -684,13 +811,7 @@ def run_batch(
                 require_ground_truth=require_ground_truth,
             )
         else:
-            pair_counts[name] = {
-                "admitted": 0,
-                "dropped": 0,
-                "batch_shape5": 0,
-                "executed": 0,
-                "note": "no independent-spec catalog",
-            }
+            pair_counts[name] = _zero_pair_counts(note="no independent-spec catalog")
 
     if write_pilot_aggregate or "coreruleset" in corpora:
         crs = measure_coreruleset(out_dir)
@@ -715,15 +836,11 @@ def run_batch(
                 "rule trees (REGEXPROOF_CRS_*_RULES or /tmp/crs-shape5/)."
             )
             _clear_batch_shape5("coreruleset", out_dir, note=skip_note)
-            pair_counts["coreruleset"] = {
-                "admitted": 0,
-                "dropped": 0,
-                "batch_shape5": 0,
-                "executed": 0,
-                "note": skip_note,
-                "scope": crs.get("scope"),
-                "fraction": crs.get("fraction"),
-            }
+            pair_counts["coreruleset"] = _zero_pair_counts(
+                note=skip_note,
+                scope=crs.get("scope"),
+                fraction=crs.get("fraction"),
+            )
         else:
             older_rules, newer_rules = trees
             discovered = discover_crs_batch_pairs(
@@ -753,13 +870,11 @@ def run_batch(
         # never measured CRS (decision=skipped) — that reintroduces ledger skew.
         if crs["decision"] != "skipped":
             _clear_batch_shape5("coreruleset", out_dir, note=skip_note)
-        pair_counts["coreruleset"] = {
-            "admitted": 0,
-            "batch_shape5": 0,
-            "executed": 0,
-            "note": skip_note,
-            "scope": crs.get("scope"),
-        }
+        pair_counts["coreruleset"] = _zero_pair_counts(
+            note=skip_note,
+            include_dropped=False,
+            scope=crs.get("scope"),
+        )
 
     batch = {
         "schema_version": "1",
