@@ -52,6 +52,8 @@ from regexproof.mine import batch_state, corpus_lock, disk_admission, lease_regi
 
 
 def _legacy_pointer() -> None:
+    if os.environ.get("REGEXPROOF_PROBE_CANONICAL"):
+        return
     if sys.stderr.isatty():
         print(
             "note: prefer `python -m regexproof.probe --batch …` "

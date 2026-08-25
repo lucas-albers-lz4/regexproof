@@ -16,7 +16,7 @@ Terms match [`docs/terminology.md`](terminology.md).
 
 ## Flow
 
-```
+```text
 mine  →  rank  →  probe  →  gate  →  conversion wave
 ```
 

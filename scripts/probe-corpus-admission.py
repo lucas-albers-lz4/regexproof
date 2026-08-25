@@ -8,6 +8,7 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import os
 import sys
 import tempfile
 from pathlib import Path
@@ -26,6 +27,8 @@ from regexproof.admission.draft import build_draft, emit_draft_text  # noqa: E40
 
 
 def _legacy_pointer() -> None:
+    if os.environ.get("REGEXPROOF_PROBE_CANONICAL"):
+        return
     if sys.stderr.isatty():
         print(
             "note: prefer `python -m regexproof.probe --single …` "

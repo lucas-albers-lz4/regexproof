@@ -174,6 +174,25 @@ def test_probe_cli_help():
     assert probe_main(["--single", "--help"]) == 0
 
 
+def test_probe_cli_forwards_args_before_mode(monkeypatch):
+    seen: dict = {}
+
+    class _Fake:
+        @staticmethod
+        def main(argv):
+            seen["argv"] = list(argv)
+            return 0
+
+    monkeypatch.setattr(
+        "regexproof.probe.cli._load_script", lambda _name: _Fake()
+    )
+    assert (
+        probe_main(["--url", "https://example.com/r", "--pin", "abc", "--batch"])
+        == 0
+    )
+    assert seen["argv"] == ["--url", "https://example.com/r", "--pin", "abc"]
+
+
 def test_z3_verify_help():
     from regexproof.harness.cli import main
 

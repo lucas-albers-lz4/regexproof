@@ -10,11 +10,13 @@ from __future__ import annotations
 
 import argparse
 import importlib.util
+import os
 import sys
 from pathlib import Path
 from types import ModuleType
 
 ROOT = Path(__file__).resolve().parents[2]
+_CANONICAL_ENV = "REGEXPROOF_PROBE_CANONICAL"
 
 
 def _load_script(filename: str) -> ModuleType:
@@ -47,18 +49,15 @@ def main(argv: list[str] | None = None) -> int:
         ap.print_help()
         return 0
     mode = None
-    rest: list[str] = []
-    for i, tok in enumerate(argv):
+    for tok in argv:
         if tok == "--single" and mode is None:
             mode = "single"
-            rest = argv[i + 1 :]
-            break
-        if tok == "--batch" and mode is None:
+        elif tok == "--batch" and mode is None:
             mode = "batch"
-            rest = argv[i + 1 :]
-            break
     if mode is None:
         ap.error("one of --single / --batch is required")
+    rest = [tok for tok in argv if tok not in {"--single", "--batch"}]
+    os.environ[_CANONICAL_ENV] = "1"
     script = (
         "probe-corpus-admission.py" if mode == "single" else "batch-probe.py"
     )
