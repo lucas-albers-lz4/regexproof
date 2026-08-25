@@ -51,23 +51,30 @@ REGEXPROOF_ROOT=/path/to/regexproof python3 gates/<slug>/fuzz.py
 
 `REGEXPROOF_ROOT` is required when regexproof is not an editable checkout
 (fuzz locates `scripts/differential-fuzz.py` and the Python match helper).
-Fuzz never uses `shell=True`.
+A PyPI wheel does **not** ship those paths — the generated `ci.yml` clones
+`lucas-albers-lz4/regexproof` into `regexproof-src` and points
+`REGEXPROOF_ROOT` there. Fuzz never uses `shell=True`.
 
 ## What the mirror proves
 
 The cookie-cutter encodes **shape 1** from
 `scripts/z3-property-template.py`: for each injection character that is
-*not* already in the pattern's alphabet, "a length-1 accepted string
-equals that character" must be UNSAT. That is alphabet disjointness — no
-length bound, cheap, the right first question for a charset whitelist
-(`[A-Za-z0-9._-]+` and friends).
+*not* already in the pattern's singleton alphabet, "a length-1 string over
+that alphabet equals the forbidden character" must be UNSAT. That is
+alphabet disjointness — cheap, length-independent for the charset question.
 
-A **mutation guard** widens the language with `Union(mirror, Re('*'))`
+It queries `InRe(s, ALPHABET)` where `ALPHABET` is the singleton char leaves
+of the Z3 mirror (e.g. `[a-z0-9._-]`), **not** `InRe(s, full_pattern) ∧
+Length(s)==1`. The full-pattern form is vacuous for quantifiers like
+`{8,}` that admit no length-1 strings — newgate refuses to claim a
+charset proof that way.
+
+A **mutation guard** widens the alphabet with `Union(alphabet, Re('*'))`
 and expects SAT. A harness that cannot fail proves nothing.
 
-Ground-truth replay uses in-process Python `re` (`fullmatch` / `match` /
-`search` per `--call-kind`, default `fullmatch`). SAT witnesses must
-reproduce or `--require-ground-truth` refuses them.
+Ground-truth replay for SAT witnesses checks membership in the scaffolded
+alphabet chars (shape-1 domain). Differential fuzz still compares the
+**full** mirror language to Python `re` via `helpers/python/match.py`.
 
 Contracts are `provenance: agent_derived` until you read the surrounding
 code and adopt them as `human` ([`CONTRACTS.md`](CONTRACTS.md)). UNSAT
@@ -78,6 +85,7 @@ is not product without that.
 - Missing file, empty pattern, unknown dialect/call-kind → `SystemExit` with a message
 - Pattern the compiler cannot encode → `SystemExit` with the unencodable reason
 - Mirror too wide to emit as `--mirror-expr` (e.g. `.` expanded to a BMP union) → refuse; use a charset whitelist
+- Pattern with no singleton char alphabet (fixed multi-char literals only) → refuse
 - Existing scaffold files → refuse unless `--force`
 - v1 dialect is `py_re` only
 

@@ -156,7 +156,14 @@ def scaffold(req: ScaffoldRequest) -> ScaffoldResult:
     except ValueError as exc:
         raise SystemExit(f"newgate: {exc}") from exc
 
-    alphabet = set(collect_singleton_alphabet(compiled.mirror))
+    alphabet_chars = collect_singleton_alphabet(compiled.mirror)
+    alphabet = set(alphabet_chars)
+    if not alphabet_chars:
+        raise SystemExit(
+            "newgate: pattern has no singleton char alphabet for shape-1 "
+            "(v1 needs a charset whitelist like [A-Za-z0-9._-]+, not fixed "
+            "multi-char literals alone)"
+        )
     forbidden = pick_forbidden(alphabet, req.forbidden)
     fuzz_alpha = fuzz_alphabet(compiled.mirror)
     out = req.out
@@ -185,6 +192,8 @@ def scaffold(req: ScaffoldRequest) -> ScaffoldResult:
         "site_repr": repr(site),
         "source": src.as_posix(),
         "forbidden": forbidden,
+        "alphabet_chars": alphabet_chars,
+        "alphabet_chars_repr": repr(alphabet_chars),
         "mirror_expr": mirror_expr,
         "mirror_expr_repr": repr(mirror_expr),
         "fuzz_alphabet": fuzz_alpha,
@@ -226,17 +235,17 @@ Site: {ctx["source"]}
 Pattern: {ctx["pattern_repr"]}
 Flags: {ctx["flags_repr"]}
 
-This is a shape-1 alphabet-disjointness gate (single-char membership) plus a
-mutation-guard sibling. Provenance is ``agent_derived`` until a human edits
-the contract (see docs/CONTRACTS.md / docs/NEWGATE.md).
+Shape-1 alphabet-disjointness (template style): query single-char membership
+against the pattern's singleton alphabet, not ``InRe(s, full_mirror) ∧
+Length(s)==1``. The latter is vacuous for quantifiers like ``{{8,}}`` that
+admit no length-1 strings. Mutation guard widens the alphabet. Provenance is
+``agent_derived`` until a human edits the contract (docs/CONTRACTS.md /
+docs/NEWGATE.md).
 """
 from __future__ import annotations
 
-import re
-
 from z3 import InRe, Length, Re, String, StringVal, Union
 
-from regexproof.compiler import compile_pattern
 from regexproof.harness.core import prop
 from regexproof.newgate.runner import main
 from regexproof.z3_pin import assert_z3_pinned
@@ -250,43 +259,26 @@ CALL_KIND = {ctx["call_kind"]!r}
 FAMILY = {ctx["family"]!r}
 SITE = {ctx["site_repr"]}
 INPUT_DOMAIN = {ctx["input_domain"]!r}
+# Singleton leaves from the Z3 mirror (charset whitelist). Not the full language.
+ALPHABET_CHARS = {ctx["alphabet_chars_repr"]}
 
-_FLAG_BITS = {{
-    "i": re.IGNORECASE,
-    "m": re.MULTILINE,
-    "s": re.DOTALL,
-    "x": re.VERBOSE,
-    "a": re.ASCII,
-    "u": re.UNICODE,
-}}
-_BITS = 0
-for _ch in FLAGS:
-    if _ch not in _FLAG_BITS:
-        raise SystemExit(f"newgate gate: unknown flag {{_ch!r}}")
-    _BITS |= _FLAG_BITS[_ch]
 
-_COMPILED = compile_pattern(
-    PATTERN, flags=FLAGS, dialect=DIALECT, call_kind=CALL_KIND
-)
-if not _COMPILED.encodable or _COMPILED.mirror is None:
-    raise SystemExit(
-        f"newgate gate: pattern unencodable ({{_COMPILED.unencodable_reason}})"
-    )
-MIRROR = _COMPILED.mirror
+def _build_alphabet():
+    parts = [Re(ch) for ch in ALPHABET_CHARS]
+    if not parts:
+        raise SystemExit("newgate gate: empty ALPHABET_CHARS")
+    if len(parts) == 1:
+        return parts[0]
+    return Union(*parts)
 
-_RX = re.compile(PATTERN, _BITS)
+
+ALPHABET = _build_alphabet()
 
 
 def _ground_truth(witness: dict) -> bool:
-    """Replay SAT witnesses against Python ``re`` (dialect=py_re)."""
+    """SAT witness is a length-1 alphabet member (shape-1 domain)."""
     text = witness.get("s")
-    if not isinstance(text, str):
-        return False
-    if CALL_KIND == "fullmatch":
-        return _RX.fullmatch(text) is not None
-    if CALL_KIND == "match":
-        return _RX.match(text) is not None
-    return _RX.search(text) is not None
+    return isinstance(text, str) and len(text) == 1 and text in ALPHABET_CHARS
 
 
 def _contract(guarantee: str) -> dict:
@@ -297,7 +289,8 @@ def _contract(guarantee: str) -> dict:
         "input_source": "consumer-supplied (edit me)",
         "trust": "untrusted-input",
         "declared_domain": (
-            f"length-1 strings accepted by {{PATTERN!r}} ({{DIALECT}}/{{CALL_KIND}})"
+            f"length-1 strings over the singleton alphabet of {{PATTERN!r}} "
+            f"({{DIALECT}}/{{CALL_KIND}}; not the full pattern language)"
         ),
         "provenance": "agent_derived",
     }}
@@ -310,11 +303,11 @@ FORBIDDEN = [
 for _label, _ch in FORBIDDEN:
     def _fn(ch=_ch):
         s = String("s")
-        return [InRe(s, MIRROR), Length(s) == 1], s == StringVal(ch)
+        return [InRe(s, ALPHABET), Length(s) == 1], s == StringVal(ch)
 
     prop(
         f"{{FAMILY}}-excludes-{{_label}}",
-        f"accepted length-1 strings matching {{PATTERN!r}} are not {{_label}}",
+        f"singleton alphabet of {{PATTERN!r}} excludes {{_label}}",
         expect_unsat=True,
         ground_truth=_ground_truth,
         kind="property",
@@ -322,15 +315,15 @@ for _label, _ch in FORBIDDEN:
         input_domain=INPUT_DOMAIN,
         call_kind=CALL_KIND,
         contract=_contract(
-            f"accepted length-1 strings matching {{PATTERN!r}} contain no {{_label}}"
+            f"singleton alphabet of {{PATTERN!r}} contains no {{_label}}"
         ),
     )(_fn)
 
 
 @prop(
     f"{{FAMILY}}-mutated-star",
-    "MUTATION GUARD: Union(mirror, Re('*')) must admit '*' (UNSAT→SAT). "
-    "If this stays UNSAT, the mirror is not tracking the regex.",
+    "MUTATION GUARD: Union(alphabet, Re('*')) must admit '*' (UNSAT→SAT). "
+    "If this stays UNSAT, the alphabet encoding is not tracking the charset.",
     expect_unsat=False,
     kind="mutation_guard",
     family=FAMILY,
@@ -339,7 +332,7 @@ for _label, _ch in FORBIDDEN:
 )
 def _mutated():
     s = String("s")
-    weakened = Union(MIRROR, Re("*"))
+    weakened = Union(ALPHABET, Re("*"))
     return [InRe(s, weakened), Length(s) == 1], s == StringVal("*")
 
 
@@ -446,8 +439,13 @@ property gate. It is not the operator corpus funnel (`docs/PIPELINE.md`).
 - File: `{ctx["source"]}`
 - Pattern: `{ctx["pattern"]}`
 - Family: `{ctx["family"]}`
-- Shape: 1 (alphabet disjointness, length-1) + mutation guard
-  (`Union(mirror, Re('*'))`)
+- Alphabet chars (scaffold-time): `{ctx["alphabet_chars"]}`
+- Shape: 1 (alphabet disjointness over singleton charset leaves) +
+  mutation guard (`Union(alphabet, Re('*'))`)
+
+Shape-1 queries ``InRe(s, ALPHABET) ∧ Length(s)==1`` against the pattern's
+singleton char leaves — not the full mirror language. That keeps
+``^[a-z]{{8,}}$`` from vacuously passing.
 
 Contracts ship as `provenance: agent_derived`. After you read the surrounding
 code, change that to `human` before counting UNSAT as product
@@ -464,24 +462,31 @@ REGEXPROOF_ROOT=/path/to/regexproof python3 fuzz.py
 ```
 
 Or `./run.sh` (same three steps; set `REGEXPROOF_ROOT` for fuzz).
+`REGEXPROOF_ROOT` must point at a regexproof *source* tree (`scripts/` +
+`helpers/`); a PyPI install alone is not enough for fuzz.
 
 TIMEOUT is a hard failure. SAT on a `property` kind is a finding — replay it
-against the real `re` engine before filing.
+against the alphabet domain before filing.
 
 ## CI
 
 Copy `ci.yml` into your workflows (pin actions the way your repo already
-does). The stub runs `--require-ground-truth` and mutation coverage.
+does). The stub checks out `lucas-albers-lz4/regexproof` into
+`regexproof-src`, sets `REGEXPROOF_ROOT` to that path, and runs
+`--require-ground-truth` + mutation coverage + fuzz under `gates/{ctx["slug"]}`.
 
 Walkthrough: regexproof `docs/NEWGATE.md`.
 """
 
 
 def _render_ci(ctx: dict) -> str:
+    slug = ctx["slug"]
     return f"""# STUB — copy into .github/workflows/ and pin actions/python yourself.
-# regexproof newgate scaffold ({ctx["slug"]} / family {ctx["family"]})
+# regexproof newgate scaffold ({slug} / family {ctx["family"]})
 # TIMEOUT is a hard failure. --require-ground-truth + mutation coverage.
-name: regexproof-gate-{ctx["slug"]}
+# Differential fuzz needs scripts/ + helpers/ from a regexproof *source*
+# checkout (PyPI wheels do not ship them). This stub clones that tree.
+name: regexproof-gate-{slug}
 on:
   pull_request:
   push:
@@ -490,7 +495,14 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v4  # pin this
+      - name: Checkout consumer repo
+        uses: actions/checkout@v4  # pin this
+      - name: Checkout regexproof (scripts + helpers for fuzz)
+        uses: actions/checkout@v4  # pin this
+        with:
+          repository: lucas-albers-lz4/regexproof
+          # Pin a release tag or commit SHA when you copy this stub.
+          path: regexproof-src
       - uses: actions/setup-python@v5  # pin this
         with:
           python-version: "3.12"
@@ -498,15 +510,15 @@ jobs:
         run: pip install "z3-solver==5.0.0" regexproof
       - name: Property gate
         run: python gate.py --all --require-ground-truth --require-domain --fail-on-property-failure
-        working-directory: .  # scaffold directory (default gates/<slug>/)
+        working-directory: gates/{slug}
       - name: Mutation coverage
         run: python gate.py --check-mutation-coverage
-        working-directory: .
+        working-directory: gates/{slug}
       - name: Differential fuzz (argv-only)
         run: python fuzz.py
-        working-directory: .
+        working-directory: gates/{slug}
         env:
-          REGEXPROOF_ROOT: ${{{{ github.workspace }}}}  # regexproof checkout, or clone it
+          REGEXPROOF_ROOT: ${{{{ github.workspace }}}}/regexproof-src
 """
 
 

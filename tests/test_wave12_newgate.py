@@ -84,13 +84,70 @@ def test_file_colon_pattern_split(tmp_path: Path):
     text = (out / "gate.py").read_text(encoding="utf-8")
     assert "py_re" in text
     assert "mutation_guard" in text
+    assert "ALPHABET_CHARS" in text
+    assert "InRe(s, ALPHABET)" in text
     assert "shell=True" not in text
     assert (out / "fuzz.py").is_file()
     assert (out / "ci.yml").is_file()
+    ci = (out / "ci.yml").read_text(encoding="utf-8")
+    assert "regexproof-src" in ci
+    assert "REGEXPROOF_ROOT" in ci
+    assert "lucas-albers-lz4/regexproof" in ci
+    assert "github.workspace" in ci
     fuzz = (out / "fuzz.py").read_text(encoding="utf-8")
     assert "differential-fuzz.py" in fuzz
     assert "shell=False" in fuzz
     assert "shell=True" not in fuzz.replace("shell=False", "")
+
+
+def test_min_length_quantifier_uses_alphabet_not_full_mirror(tmp_path: Path):
+    """`{{8,}}` must not vacuous-pass via InRe(full_mirror) ∧ Length==1."""
+    src = tmp_path / "validators.py"
+    src.write_text("PIN = r'^[0-9]{8,}$'\n", encoding="utf-8")
+    out = tmp_path / "gate"
+    rc = newgate_main(
+        [
+            "--out",
+            str(out),
+            "--fuzz-runs",
+            "1",
+            "--chars",
+            ";",
+            str(src),
+            r"^[0-9]{8,}$",
+        ]
+    )
+    assert rc == 0
+    gate = out / "gate.py"
+    text = gate.read_text(encoding="utf-8")
+    assert "ALPHABET_CHARS" in text
+    assert "InRe(s, MIRROR)" not in text
+    proc = subprocess.run(
+        [
+            sys.executable,
+            str(gate),
+            "--all",
+            "--require-ground-truth",
+            "--require-domain",
+            "--fail-on-property-failure",
+        ],
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+        check=False,
+        timeout=60,
+    )
+    assert proc.returncode == 0, proc.stdout + proc.stderr
+    assert "UNSAT" in proc.stdout
+
+
+def test_no_singleton_alphabet_fails_closed(tmp_path: Path):
+    src = tmp_path / "validators.py"
+    src.write_text("EMPTY = r'^$'\n", encoding="utf-8")
+    with pytest.raises(SystemExit, match="singleton char alphabet"):
+        newgate_main(
+            ["--out", str(tmp_path / "out"), "--fuzz-runs", "1", str(src), r"^$"]
+        )
 
 
 def test_refuse_overwrite_without_force(tmp_path: Path):
