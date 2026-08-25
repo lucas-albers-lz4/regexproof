@@ -29,18 +29,13 @@ def main(argv: list[str] | None = None) -> int:
             file=sys.stderr,
         )
         return 2
+    from regexproof.cli_exit import exit_code_from_system_exit
     from regexproof.newgate.cli import main as newgate_main
 
     try:
         rc = newgate_main(argv[1:])
     except SystemExit as exc:
-        code = exc.code
-        if code is None:
-            return 0
-        if isinstance(code, int):
-            return code
-        print(code, file=sys.stderr)
-        return 1
+        return exit_code_from_system_exit(exc)
     return int(rc)
 
 

@@ -7,6 +7,9 @@ newgate v1 is a charset-whitelist cookie-cutter, not a general pretty-printer.
 
 from __future__ import annotations
 
+from collections.abc import Callable
+from typing import Any
+
 _MAX_EXPR = 8000
 _MAX_UNION = 64
 
@@ -18,6 +21,24 @@ _OP = {
     "re.comp": "Complement",
     "re.complement": "Complement",
 }
+
+# Visitor: (node_name, children) → True if handled (do not recurse into kids).
+RegexVisitor = Callable[[str, list[Any]], bool]
+
+
+def walk_z3_regex(node, visitor: RegexVisitor) -> None:
+    """Dispatch-only walk over a Z3 regex AST.
+
+    ``visitor(name, kids)`` returns True when it handled the node (no default
+    child recursion). Returns False to recurse into children. Callers keep
+    their own range / newline / printable policies — do not unify handlers.
+    """
+    name = node.decl().name()
+    kids = list(node.children())
+    if visitor(name, kids):
+        return
+    for child in kids:
+        walk_z3_regex(child, visitor)
 
 
 def mirror_to_py(expr, *, max_len: int = _MAX_EXPR) -> str:
@@ -47,9 +68,7 @@ def collect_singleton_alphabet(expr) -> str:
             seen.add(ch)
             found.append(ch)
 
-    def walk(node) -> None:
-        name = node.decl().name()
-        kids = node.children()
+    def visitor(name: str, kids: list) -> bool:
         if name == "re.range" and len(kids) == 2:
             lo = kids[0].as_string()
             hi = kids[1].as_string()
@@ -57,16 +76,19 @@ def collect_singleton_alphabet(expr) -> str:
                 raise ValueError("re.range bounds must be single characters")
             a, b = ord(lo), ord(hi)
             if not (0 <= a <= b <= 0x10FFFF):
-                raise ValueError(f"re.range out of order or out of Unicode: {lo!r}-{hi!r}")
+                raise ValueError(
+                    f"re.range out of order or out of Unicode: {lo!r}-{hi!r}"
+                )
             span = b - a
             if span >= 128:
                 raise ValueError(
                     f"re.range {lo!r}-{hi!r} spans {span + 1} chars (≥128); "
-                    "newgate v1 refuses partial alphabet extraction (false UNSAT risk)"
+                    "newgate v1 refuses partial alphabet extraction "
+                    "(false UNSAT risk)"
                 )
             for code in range(a, b + 1):
                 add(chr(code))
-            return
+            return True
         if name == "str.to_re":
             s = kids[0].as_string() if kids else ""
             # Include ``\n`` when present. Skipping it (for ``$`` trailing-newline
@@ -74,11 +96,10 @@ def collect_singleton_alphabet(expr) -> str:
             # ``excludes-newline`` UNSAT proofs.
             if len(s) == 1:
                 add(s)
-            return
-        for child in kids:
-            walk(child)
+            return True
+        return False
 
-    walk(expr)
+    walk_z3_regex(expr, visitor)
     return "".join(found)
 
 
@@ -92,25 +113,22 @@ def fuzz_alphabet(expr, *, fallback: str = "ab01._-") -> str:
             seen.add(ch)
             sample.append(ch)
 
-    def walk(node) -> None:
-        name = node.decl().name()
-        kids = node.children()
+    def visitor(name: str, kids: list) -> bool:
         if name == "re.range" and len(kids) == 2:
             lo = kids[0].as_string()
             hi = kids[1].as_string()
             if len(lo) == 1 and len(hi) == 1:
                 add(lo)
                 add(hi)
-            return
+            return True
         if name == "str.to_re":
             s = kids[0].as_string() if kids else ""
             if len(s) == 1:
                 add(s)
-            return
-        for child in kids:
-            walk(child)
+            return True
+        return False
 
-    walk(expr)
+    walk_z3_regex(expr, visitor)
     text = "".join(sample)
     return text if text else fallback
 
