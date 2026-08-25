@@ -25,6 +25,15 @@ from regexproof.admission.clone import (  # noqa: E402  # ROOT bootstrap above
 from regexproof.admission.draft import build_draft, emit_draft_text  # noqa: E402  # ROOT bootstrap above
 
 
+def _legacy_pointer() -> None:
+    if sys.stderr.isatty():
+        print(
+            "note: prefer `python -m regexproof.probe --single …` "
+            "(scripts/probe-corpus-admission.py remains a thin wrapper)",
+            file=sys.stderr,
+        )
+
+
 def _is_url(s: str) -> bool:
     return (
         s.startswith("http://")
@@ -69,6 +78,7 @@ def _check_stale_pin(pin_mined: str | None, pin_probed: str | None) -> str | Non
 
 
 def main(argv: list[str] | None = None) -> int:
+    _legacy_pointer()
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("target", help="Local path or git URL")
     ap.add_argument("--pin", default=None, help="Commit SHA to probe (required for URL)")

@@ -122,7 +122,7 @@ jobs:
             echo "gh workflow run daily-mine.yml -f daily_mine_cap=80"
             echo '```'
             echo ""
-            echo "Ops: \`docs/MINE-SETUP.md\`"
+            echo "Ops: \`docs/MINE-SETUP.md\` / \`docs/PIPELINE.md\`"
           } >> "${GITHUB_STEP_SUMMARY}"
 
       - name: Commit ledger + queue
@@ -184,3 +184,7 @@ jobs:
           else
             echo "No mine commits to push."
           fi
+
+      - name: Weekly pipeline projection (#580)
+        if: always() && steps.mine.outcome != 'skipped'
+        run: python scripts/pipeline-status.py --weekly >> "${GITHUB_STEP_SUMMARY}"

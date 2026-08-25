@@ -51,6 +51,15 @@ from regexproof.admission.clone import CloneError, enforce_disk_budget  # noqa: 
 from regexproof.mine import batch_state, corpus_lock, disk_admission, lease_registry  # noqa: E402
 
 
+def _legacy_pointer() -> None:
+    if sys.stderr.isatty():
+        print(
+            "note: prefer `python -m regexproof.probe --batch …` "
+            "(scripts/batch-probe.py remains a thin wrapper)",
+            file=sys.stderr,
+        )
+
+
 def _wave_status(corpus: str) -> str:
     """Derive wave status from the corpus event log (fail-closed: a
     missing/invalid status refuses to probe — Luna r1 #14)."""
@@ -91,6 +100,7 @@ def _dir_size_bytes(path: pathlib.Path) -> int:
 
 
 def main(argv: list[str] | None = None) -> int:
+    _legacy_pointer()
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--url", required=True)
     ap.add_argument("--pin", required=True)

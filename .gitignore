@@ -22,6 +22,10 @@ properties/generated/.search-replay-private.json
 # Admission probe drafts (authoring inputs; promote via gate_decision only)
 properties/generated/*_probe_draft.json
 
+# Unreviewed batch-probe drafts (disclosure hygiene). Walker CI remains
+# the real defense against treating these as contract material (#580).
+properties/staged_probes/
+
 # Materialized corpus checkouts (see batch/corpora/*/README.md)
 batch/corpora/*/rules
 batch/corpora/*/detectors
