@@ -44,7 +44,8 @@ def _nogo_reason(payload: dict[str, Any]) -> str:
     return basis or "unspecified"
 
 
-def _yesterday_drain(candidates: list[Any]) -> dict[str, Any]:
+def _latest_mine_day_drain(candidates: list[Any]) -> dict[str, Any]:
+    """Admits on the latest ``first_seen`` UTC date (artifact clock, not wall yesterday)."""
     dates: list[str] = []
     by_date: Counter[str] = Counter()
     for cand in candidates:
@@ -133,9 +134,9 @@ def snapshot(
         baseline_path if baseline_path is not None else BASELINE_PATH,
     )
     nogo = _nogo_counts(gen)
-    drain = _yesterday_drain(candidates)
+    drain = _latest_mine_day_drain(candidates)
     return {
-        "yesterday_drain": drain,
+        "latest_mine_day_drain": drain,
         "queue_pressure": starvation.get("mine_queue_pressure"),
         "queue_len": starvation.get("mine_queue_len", len(items)),
         "queue_cap": starvation.get("mine_queue_cap"),
@@ -170,13 +171,13 @@ def snapshot(
 
 
 def render_status(snap: dict[str, Any]) -> str:
-    drain = snap.get("yesterday_drain") or {}
+    drain = snap.get("latest_mine_day_drain") or {}
     week = snap.get("week_survival") or {}
     rate = week.get("rate")
     rate_s = f"{rate:.4f}" if isinstance(rate, (int, float)) else "n/a"
     lines = [
         "regexproof pipeline status",
-        f"yesterday's drain: {drain.get('admitted', 0)} ledger admits"
+        f"latest mine-day drain: {drain.get('admitted', 0)} ledger admits"
         + (f" (UTC {drain.get('date')})" if drain.get("date") else ""),
         f"queue pressure: {snap.get('queue_pressure')} "
         f"({snap.get('queue_len')}/{snap.get('queue_cap')})",
@@ -193,7 +194,7 @@ def render_status(snap: dict[str, Any]) -> str:
 
 def render_weekly(snap: dict[str, Any]) -> str:
     """Markdown block for the daily-mine job summary (no side effects)."""
-    drain = snap.get("yesterday_drain") or {}
+    drain = snap.get("latest_mine_day_drain") or {}
     week = snap.get("week_survival") or {}
     nogo = snap.get("nogo_by_reason") or {}
     nogo_lines = ", ".join(f"{k}={v}" for k, v in list(nogo.items())[:8]) or "none"

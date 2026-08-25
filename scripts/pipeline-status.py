@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Wave 11 (#580): print yesterday's drain, queue pressure, survival, backlog.
+"""Wave 11 (#580): print latest mine-day drain, queue pressure, survival, backlog.
 
 Assembles committed artifacts only (conversion-ledger hop/starvation tables,
 candidate ledger, mine queue, batch/state.json). No writes.

@@ -4,7 +4,7 @@ The proof harness (`scripts/z3-verify.py`) is the product. This page is the
 **corpus funnel** an operator runs beside it: discover candidates, probe them,
 gate them, then conversion-wave the GO set.
 
-Entry status command (yesterday's drain, queue pressure, 7-day survival,
+Entry status command (latest mine-day drain, queue pressure, 7-day survival,
 backlog weeks):
 
 ```bash

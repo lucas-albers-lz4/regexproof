@@ -104,14 +104,14 @@ def test_pipeline_status_snapshot(tmp_path: Path):
         conversion_ledger=gen / "conversion-ledger.json",
         baseline_path=gen / "escape_baseline.json",
     )
-    assert snap["yesterday_drain"] == {"date": "2026-08-20", "admitted": 2}
+    assert snap["latest_mine_day_drain"] == {"date": "2026-08-20", "admitted": 2}
     assert snap["queue_pressure"] == 0.5
     assert snap["backlog_weeks"] == 4.0
     assert snap["needs_human_backlog"] == 1
     assert snap["nogo_dominant"] == "below-scale"
     assert snap["hops"][0]["wave_id"] == "w1"
     text = render_status(snap)
-    assert "yesterday's drain: 2" in text
+    assert "latest mine-day drain: 2" in text
     assert "backlog weeks: 4.0" in text
     weekly = render_weekly(snap)
     assert "What changed this week" in weekly
