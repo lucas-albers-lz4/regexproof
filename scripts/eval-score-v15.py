@@ -153,22 +153,23 @@ def join_rows(freeze: dict) -> list[dict]:
             entry = tree_artifact.get(slug, {})
             if isinstance(entry, dict):
                 tree_feature = entry.get(pin)
-        rows.append(
-            {
-                "url": url,
-                "label": label,
-                "status": status,
-                "stars": led.get("stars") or 0,
-                "pushed_date": led.get("pushed_date") or "",
-                "source_query": led.get("source_query") or "",
-                "capped": bool(led.get("capped")),
-                "pin": pin,
-                "regex_sites": int(probe.get("regex_sites") or 0),
-                "tree_feature": tree_feature
-                if isinstance(tree_feature, dict)
-                else None,
-            }
-        )
+        sites_raw = probe.get("regex_sites")
+        row = {
+            "url": url,
+            "label": label,
+            "status": status,
+            "stars": led.get("stars") or 0,
+            "pushed_date": led.get("pushed_date") or "",
+            "source_query": led.get("source_query") or "",
+            "capped": bool(led.get("capped")),
+            "pin": pin,
+            "tree_feature": tree_feature
+            if isinstance(tree_feature, dict)
+            else None,
+        }
+        if type(sites_raw) is int:
+            row["regex_sites"] = sites_raw
+        rows.append(row)
     return rows
 
 

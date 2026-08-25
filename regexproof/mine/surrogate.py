@@ -64,8 +64,11 @@ SURROGATE_FEATURE_NAMES: tuple[str, ...] = (
 )
 
 
-def skip_class_label(status: str, regex_sites: int) -> int:
-    return int(str(status) == "no-go" and int(regex_sites) <= SKIP_SITE_CAP)
+def skip_class_label(status: str, regex_sites: int | None) -> int:
+    """Unknown/malformed site counts are not the skip class."""
+    if type(regex_sites) is not int:
+        return 0
+    return int(str(status) == "no-go" and regex_sites <= SKIP_SITE_CAP)
 
 
 def encode_features(

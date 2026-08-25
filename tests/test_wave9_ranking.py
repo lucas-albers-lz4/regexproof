@@ -221,6 +221,8 @@ def test_surrogate_features_exclude_walked_sites():
     assert skip_class_label("no-go", 50) == 1
     assert skip_class_label("no-go", 51) == 0
     assert skip_class_label("go", 0) == 0
+    assert skip_class_label("no-go", None) == 0
+    assert skip_class_label("no-go", 0.2) == 0
 
 
 def test_v15_root_deprioritize_still_beats_unavailable():

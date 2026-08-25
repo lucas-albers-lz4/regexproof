@@ -63,17 +63,13 @@ def main(argv: list[str] | None = None) -> int:
     split = freeze["split"]
     seed = int(split["seed"])
     train, test = ev.stratified_split(rows, seed)
-    y_train = [skip_class_label(r["status"], int(r.get("regex_sites") or 0)) for r in train]
-    y_test = [skip_class_label(r["status"], int(r.get("regex_sites") or 0)) for r in test]
+    y_train = [skip_class_label(r["status"], r.get("regex_sites")) for r in train]
+    y_test = [skip_class_label(r["status"], r.get("regex_sites")) for r in test]
     model = fit_surrogate(train, y_train, today=DEFAULT_FIT_DATE)
     metrics = evaluate_skip_rate(
         test, y_test, model, threshold=PREDECLARED_THRESHOLD, today=DEFAULT_FIT_DATE
     )
-    skip_pop = sum(
-        1
-        for r in rows
-        if skip_class_label(r["status"], int(r.get("regex_sites") or 0))
-    )
+    skip_pop = sum(1 for r in rows if skip_class_label(r["status"], r.get("regex_sites")))
     art = {
         "schema_version": "1",
         "wave": 9,
