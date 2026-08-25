@@ -67,7 +67,10 @@ def collect_singleton_alphabet(expr) -> str:
             return
         if name == "str.to_re":
             s = kids[0].as_string() if kids else ""
-            if len(s) == 1 and s != "\n":
+            # Include ``\n`` when present. Skipping it (for ``$`` trailing-newline
+            # artifacts) omitted real charset newlines and allowed false
+            # ``excludes-newline`` UNSAT proofs.
+            if len(s) == 1:
                 add(s)
             return
         for child in kids:

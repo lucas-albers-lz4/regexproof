@@ -155,8 +155,10 @@ def pick_forbidden(alphabet: set[str], requested: str) -> list[tuple[str, str]]:
     for ch in (";", " ", "|", "\x7f", "\x00"):
         if ch not in alphabet:
             return [(char_label(ch), ch)]
-    return [("nul", "\x00")]
-
+    raise SystemExit(
+        "newgate: every candidate forbidden char is inside the pattern "
+        "alphabet; shape-1 disjointness has nothing to prove (pass --chars)"
+    )
 
 def scaffold(req: ScaffoldRequest) -> ScaffoldResult:
     """Write the gate tree. Fail-closed: missing file, unencodable pattern, clash."""

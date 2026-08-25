@@ -203,6 +203,38 @@ def test_wide_range_fails_closed(tmp_path: Path):
         )
 
 
+def test_newline_in_charset_not_false_unsat(tmp_path: Path):
+    """Charset that admits ``\\n`` must not emit excludes-newline UNSAT."""
+    src = tmp_path / "validators.py"
+    src.write_text("NL = r'^[\\n;]+$'\n", encoding="utf-8")
+    out = tmp_path / "out"
+    assert (
+        newgate_main(
+            [
+                "--out",
+                str(out),
+                "--fuzz-runs",
+                "1",
+                "--chars",
+                "\n;",
+                str(src),
+                r"^[\n;]+$",
+            ]
+        )
+        == 0
+    )
+    text = (out / "gate.py").read_text(encoding="utf-8")
+    assert "excludes-newline" not in text
+
+
+def test_no_forbidden_outside_alphabet_fails_closed():
+    from regexproof.newgate.scaffold import pick_forbidden
+
+    alphabet = set(";\x00 |`$\x7f")
+    with pytest.raises(SystemExit, match="nothing to prove"):
+        pick_forbidden(alphabet, "\x00;")
+
+
 def test_inexact_mirror_fails_closed(tmp_path: Path):
     src = tmp_path / "validators.py"
     src.write_text(r"WORD = r'^\w+$'" + "\n", encoding="utf-8")
