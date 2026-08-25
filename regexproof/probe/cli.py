@@ -70,7 +70,10 @@ def main(argv: list[str] | None = None) -> int:
         code = exc.code
         if code is None:
             return 0
-        return int(code) if isinstance(code, int) else 1
+        if isinstance(code, int):
+            return code
+        print(code, file=sys.stderr)
+        return 1
     finally:
         if prev is None:
             os.environ.pop(_CANONICAL_ENV, None)

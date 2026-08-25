@@ -305,6 +305,19 @@ def test_probe_cli_rejects_both_modes(capsys):
     assert "mutually exclusive" in capsys.readouterr().err
 
 
+def test_probe_cli_prints_string_systemexit(monkeypatch, capsys):
+    class _Fake:
+        @staticmethod
+        def main(_argv):
+            raise SystemExit("batch_state: corrupt — fail closed")
+
+    monkeypatch.setattr(
+        "regexproof.probe.cli._load_script", lambda _name: _Fake()
+    )
+    assert probe_main(["--batch", "--url", "u", "--pin", "p"]) == 1
+    assert "corrupt — fail closed" in capsys.readouterr().err
+
+
 def test_z3_verify_help():
     from regexproof.harness.cli import main
 
