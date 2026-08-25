@@ -9,6 +9,7 @@ from regexproof.mine.feeds import (
     FEED_QUERIES,
     SITE_MEDIAN_FLOOR,
     TARGET_QUERY_SHARE,
+    artifact_note,
     evidence_allows_share,
     query_share_n,
     select_queries,
@@ -81,3 +82,24 @@ def test_committed_feed_density_artifact():
     assert art["osv_witness"]["primary_drain"] is False
     assert "openwrt/luci" in art["exemplars"]
     assert "validatorjs/validator.js" in art["exemplars"]
+    assert art["note"] == artifact_note(
+        allow=True,
+        share_n=art["feed_query_share_n"],
+        query_budget=DEFAULT_QUERY_BUDGET,
+        daily_cap=DEFAULT_DAILY_CAP,
+    )
+
+
+def test_artifact_note_blocked_evidence():
+    allowed = artifact_note(
+        allow=True, share_n=10, query_budget=30, daily_cap=10
+    )
+    blocked = artifact_note(
+        allow=False, share_n=10, query_budget=30, daily_cap=10
+    )
+    assert "clears the skip-class floor" in allowed
+    assert "10/30" in allowed
+    assert "does not clear the skip-class floor" in blocked
+    assert "0/30" in blocked
+    assert "10/30" not in blocked
+    assert "clears the skip-class floor" not in blocked

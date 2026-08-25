@@ -108,6 +108,31 @@ def evidence_allows_share(family_medians: dict[str, float]) -> bool:
     return rules is not None and rules >= SITE_MEDIAN_FLOOR
 
 
+def artifact_note(
+    *,
+    allow: bool,
+    share_n: int,
+    query_budget: int,
+    daily_cap: int,
+) -> str:
+    """Human note for ``feed_density.json``; must match ``live_query_share_applied``."""
+    head = (
+        "Generic validators filename queries stay low-density (do not qualify)."
+    )
+    slots = share_n if allow else 0
+    if allow:
+        middle = (
+            "Rules-family median clears the skip-class floor, so "
+            f"{slots}/{query_budget} query slots prepend the Wave 10 feed list."
+        )
+    else:
+        middle = (
+            "Rules-family median does not clear the skip-class floor, so "
+            f"{slots}/{query_budget} query slots prepend the Wave 10 feed list."
+        )
+    return f"{head} {middle} DAILY_MINE_CAP remains {daily_cap}."
+
+
 def select_queries(
     legacy: Sequence[str],
     *,

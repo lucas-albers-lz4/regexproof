@@ -25,6 +25,7 @@ from regexproof.mine.feeds import (  # noqa: E402
     SITE_MEDIAN_FLOOR,
     SKIP_CLASS_CAP,
     TARGET_QUERY_SHARE,
+    artifact_note,
     daily_cap_unchanged,
     evidence_allows_share,
     median,
@@ -123,12 +124,11 @@ def main(argv: list[str] | None = None) -> int:
         "feed_queries": [{"family": fam, "query": q} for fam, q in FEED_QUERIES],
         "families": families,
         "exemplars": {k: exemplars[k] for k in EXEMPLAR_SLUGS if k in exemplars},
-        "note": (
-            "Generic validators filename queries stay low-density (do not "
-            "qualify). Rules-family median clears the skip-class floor, so "
-            f"{share_n}/{DEFAULT_QUERY_BUDGET} query slots prepend the Wave 10 "
-            "feed list. DAILY_MINE_CAP remains "
-            f"{QUEUE_CAP}."
+        "note": artifact_note(
+            allow=allow,
+            share_n=share_n,
+            query_budget=DEFAULT_QUERY_BUDGET,
+            daily_cap=QUEUE_CAP,
         ),
     }
     text = json.dumps(art, indent=2, sort_keys=True, ensure_ascii=False) + "\n"
