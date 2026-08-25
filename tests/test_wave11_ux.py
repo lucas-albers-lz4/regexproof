@@ -14,6 +14,16 @@ from regexproof.probe.cli import main as probe_main
 ROOT = Path(__file__).resolve().parents[1]
 
 
+def _empty_stores(tmp_path: Path) -> tuple[Path, Path, Path]:
+    ledger = tmp_path / "ledger.json"
+    queue = tmp_path / "queue.json"
+    conv = tmp_path / "conv.json"
+    ledger.write_text("{}\n", encoding="utf-8")
+    queue.write_text("{}\n", encoding="utf-8")
+    conv.write_text("{}\n", encoding="utf-8")
+    return ledger, queue, conv
+
+
 def test_staged_probes_gitignored_and_walker_guard_stays():
     gi = (ROOT / ".gitignore").read_text(encoding="utf-8")
     assert "properties/staged_probes/" in gi
@@ -140,12 +150,13 @@ def test_injected_missing_state_does_not_use_default(tmp_path: Path, monkeypatch
     )
     missing = tmp_path / "absent-state.json"
     baseline = tmp_path / "absent-baseline.json"
+    ledger, queue, conv = _empty_stores(tmp_path)
     snapshot(
         generated=tmp_path,
         state_path=missing,
-        ledger_path=tmp_path / "no-ledger.json",
-        queue_path=tmp_path / "no-queue.json",
-        conversion_ledger=tmp_path / "no-conv.json",
+        ledger_path=ledger,
+        queue_path=queue,
+        conversion_ledger=conv,
         baseline_path=baseline,
     )
     assert seen["state_path"] == missing
@@ -159,30 +170,47 @@ def test_corrupt_gate_decision_fails_closed(tmp_path: Path):
     (gen / "escape_baseline.json").write_text(
         json.dumps({"survivor_rate": 0.14}), encoding="utf-8"
     )
+    ledger, queue, conv = _empty_stores(tmp_path)
     with pytest.raises(SystemExit, match="unreadable/invalid"):
         snapshot(
             generated=gen,
             state_path=tmp_path / "state.json",
-            ledger_path=tmp_path / "ledger.json",
-            queue_path=tmp_path / "queue.json",
-            conversion_ledger=tmp_path / "conv.json",
+            ledger_path=ledger,
+            queue_path=queue,
+            conversion_ledger=conv,
             baseline_path=gen / "escape_baseline.json",
         )
 
 
 def test_missing_baseline_fails_closed(tmp_path: Path):
+    ledger, queue, conv = _empty_stores(tmp_path)
     with pytest.raises(OSError):
         snapshot(
             generated=tmp_path,
             state_path=tmp_path / "state.json",
-            ledger_path=tmp_path / "ledger.json",
-            queue_path=tmp_path / "queue.json",
-            conversion_ledger=tmp_path / "conv.json",
+            ledger_path=ledger,
+            queue_path=queue,
+            conversion_ledger=conv,
+            baseline_path=tmp_path / "no-baseline.json",
+        )
+
+
+def test_missing_conversion_ledger_fails_closed(tmp_path: Path):
+    ledger, queue, _conv = _empty_stores(tmp_path)
+    missing = tmp_path / "absent-conv.json"
+    with pytest.raises(SystemExit, match="missing"):
+        snapshot(
+            generated=tmp_path,
+            state_path=tmp_path / "state.json",
+            ledger_path=ledger,
+            queue_path=queue,
+            conversion_ledger=missing,
             baseline_path=tmp_path / "no-baseline.json",
         )
 
 
 def test_malformed_ledger_fails_closed(tmp_path: Path):
+    _ledger, queue, conv = _empty_stores(tmp_path)
     bad = tmp_path / "ledger.json"
     bad.write_text("{not json", encoding="utf-8")
     with pytest.raises(SystemExit, match="unreadable/invalid"):
@@ -190,13 +218,14 @@ def test_malformed_ledger_fails_closed(tmp_path: Path):
             generated=tmp_path,
             state_path=tmp_path / "state.json",
             ledger_path=bad,
-            queue_path=tmp_path / "queue.json",
-            conversion_ledger=tmp_path / "conv.json",
+            queue_path=queue,
+            conversion_ledger=conv,
             baseline_path=tmp_path / "no-baseline.json",
         )
 
 
 def test_non_file_ledger_fails_closed(tmp_path: Path):
+    _ledger, queue, conv = _empty_stores(tmp_path)
     d = tmp_path / "ledger-dir"
     d.mkdir()
     with pytest.raises(SystemExit, match="not a regular file"):
@@ -204,13 +233,14 @@ def test_non_file_ledger_fails_closed(tmp_path: Path):
             generated=tmp_path,
             state_path=tmp_path / "state.json",
             ledger_path=d,
-            queue_path=tmp_path / "queue.json",
-            conversion_ledger=tmp_path / "conv.json",
+            queue_path=queue,
+            conversion_ledger=conv,
             baseline_path=tmp_path / "no-baseline.json",
         )
 
 
 def test_invalid_utf8_ledger_fails_closed(tmp_path: Path):
+    _ledger, queue, conv = _empty_stores(tmp_path)
     bad = tmp_path / "ledger.json"
     bad.write_bytes(b"\xff\xfe{")
     with pytest.raises(SystemExit, match="unreadable/invalid"):
@@ -218,8 +248,8 @@ def test_invalid_utf8_ledger_fails_closed(tmp_path: Path):
             generated=tmp_path,
             state_path=tmp_path / "state.json",
             ledger_path=bad,
-            queue_path=tmp_path / "queue.json",
-            conversion_ledger=tmp_path / "conv.json",
+            queue_path=queue,
+            conversion_ledger=conv,
             baseline_path=tmp_path / "no-baseline.json",
         )
 

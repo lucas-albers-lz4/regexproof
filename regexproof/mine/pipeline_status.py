@@ -22,8 +22,10 @@ QUEUE_PATH = GEN / "mine-queue.json"
 BASELINE_PATH = GEN / "escape_baseline.json"
 
 
-def _load_json(path: Path) -> dict[str, Any]:
+def _load_json(path: Path, *, required: bool = False) -> dict[str, Any]:
     if not path.exists():
+        if required:
+            raise SystemExit(f"pipeline-status: missing {path}")
         return {}
     if not path.is_file():
         raise SystemExit(f"pipeline-status: {path} is not a regular file")
@@ -114,12 +116,21 @@ def snapshot(
     baseline_path: Path | None = None,
 ) -> dict[str, Any]:
     gen = generated if generated is not None else GEN
-    conv = _load_json(conversion_ledger if conversion_ledger is not None else LEDGER_JSON)
+    conv = _load_json(
+        conversion_ledger if conversion_ledger is not None else LEDGER_JSON,
+        required=True,
+    )
     starvation = conv.get("starvation") if isinstance(conv.get("starvation"), dict) else {}
     hops = conv.get("per_wave") if isinstance(conv.get("per_wave"), list) else []
-    cand_doc = _load_json(ledger_path if ledger_path is not None else CANDIDATE_LEDGER)
+    cand_doc = _load_json(
+        ledger_path if ledger_path is not None else CANDIDATE_LEDGER,
+        required=True,
+    )
     candidates = cand_doc.get("candidates") if isinstance(cand_doc.get("candidates"), list) else []
-    queue_doc = _load_json(queue_path if queue_path is not None else QUEUE_PATH)
+    queue_doc = _load_json(
+        queue_path if queue_path is not None else QUEUE_PATH,
+        required=True,
+    )
     items = queue_doc.get("items") if isinstance(queue_doc.get("items"), list) else []
     state = state_path if state_path is not None else (ROOT / "batch" / "state.json")
     proj = batch_state.projection(state)
