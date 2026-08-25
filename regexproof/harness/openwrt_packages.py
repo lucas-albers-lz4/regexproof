@@ -176,64 +176,38 @@ def _cloudflare_engines(stream: str) -> dict[str, str | None]:
     }
 
 
-def transip_ground_truth(witness: dict) -> bool:
-    """Replay the TransIP token capture on BusyBox sed. GNU is logged only.
+def _prefix_truncation_gt(
+    log_key: str,
+    stream_fn,
+    engines_fn,
+):
+    """Parameterize Method: BusyBox prefix-truncation GT shared by OW sites."""
 
-    Returns False on busybox-absent / sed failure so ``run_one`` records
-    ``ground_truth=failed`` instead of aborting the suite.
-    """
-    v = witness["v"]
-    stream = '{"token" : "' + v + '"}'
-    try:
-        caps = _sed_engines(TRANSIP_SED, stream)
-    except RuntimeError as exc:
-        OW_VERDICT_LOG["OW-packages-transip-token-truncation"] = {
-            "busybox_absent": "busybox" in str(exc),
-            "gnu": False,
-            "busybox": False,
+    def gt(witness: dict) -> bool:
+        v = witness["v"]
+        stream = stream_fn(v)
+        try:
+            caps = engines_fn(stream)
+        except RuntimeError as exc:
+            OW_VERDICT_LOG[log_key] = {
+                "busybox_absent": "busybox" in str(exc),
+                "gnu": False,
+                "busybox": False,
+            }
+            return False
+
+        gnu_ok = is_prefix_truncation(caps["gnu"], v)
+        bb_ok = is_prefix_truncation(caps["busybox"], v)
+        OW_VERDICT_LOG[log_key] = {
+            "gnu": gnu_ok,
+            "busybox": bb_ok,
+            "busybox_absent": False,
+            "gnu_capture": caps["gnu"],
+            "busybox_capture": caps["busybox"],
         }
-        return False
+        return bb_ok
 
-    gnu_ok = is_prefix_truncation(caps["gnu"], v)
-    bb_ok = is_prefix_truncation(caps["busybox"], v)
-    OW_VERDICT_LOG["OW-packages-transip-token-truncation"] = {
-        "gnu": gnu_ok,
-        "busybox": bb_ok,
-        "busybox_absent": False,
-        "gnu_capture": caps["gnu"],
-        "busybox_capture": caps["busybox"],
-    }
-    return bb_ok
-
-
-def cloudflare_ground_truth(witness: dict) -> bool:
-    """Replay Cloudflare ``content`` ``[^"]*`` extract on BusyBox grep.
-
-    Returns False on busybox-absent / grep failure so ``run_one`` records
-    ``ground_truth=failed`` instead of aborting the suite.
-    """
-    v = witness["v"]
-    stream = '{"content":"' + v + '"}'
-    try:
-        caps = _cloudflare_engines(stream)
-    except RuntimeError as exc:
-        OW_VERDICT_LOG["OW-packages-cloudflare-content-truncation"] = {
-            "busybox_absent": "busybox" in str(exc),
-            "gnu": False,
-            "busybox": False,
-        }
-        return False
-
-    gnu_ok = is_prefix_truncation(caps["gnu"], v)
-    bb_ok = is_prefix_truncation(caps["busybox"], v)
-    OW_VERDICT_LOG["OW-packages-cloudflare-content-truncation"] = {
-        "gnu": gnu_ok,
-        "busybox": bb_ok,
-        "busybox_absent": False,
-        "gnu_capture": caps["gnu"],
-        "busybox_capture": caps["busybox"],
-    }
-    return bb_ok
+    return gt
 
 
 def _aliyun_id(grep_prefix: list[str], stream: str) -> str:
@@ -255,34 +229,39 @@ def _aliyun_engines(stream: str) -> dict[str, str | None]:
     }
 
 
-def aliyun_ground_truth(witness: dict) -> bool:
-    """Replay Aliyun ``RecordId=[^&]*`` extract on BusyBox grep.
+# Parameterize Method: one shared BusyBox prefix-truncation body per site.
+transip_ground_truth = _prefix_truncation_gt(
+    "OW-packages-transip-token-truncation",
+    lambda v: '{"token" : "' + v + '"}',
+    lambda stream: _sed_engines(TRANSIP_SED, stream),
+)
+transip_ground_truth.__doc__ = (
+    "Replay the TransIP token capture on BusyBox sed. GNU is logged only.\n\n"
+    "Returns False on busybox-absent / sed failure so ``run_one`` records\n"
+    "``ground_truth=failed`` instead of aborting the suite."
+)
 
-    Returns False on busybox-absent / grep failure so ``run_one`` records
-    ``ground_truth=failed`` instead of aborting the suite.
-    """
-    v = witness["v"]
-    stream = f"RecordId={v}&other=1"
-    try:
-        caps = _aliyun_engines(stream)
-    except RuntimeError as exc:
-        OW_VERDICT_LOG["OW-packages-aliyun-recordid-truncation"] = {
-            "busybox_absent": "busybox" in str(exc),
-            "gnu": False,
-            "busybox": False,
-        }
-        return False
+cloudflare_ground_truth = _prefix_truncation_gt(
+    "OW-packages-cloudflare-content-truncation",
+    lambda v: '{"content":"' + v + '"}',
+    _cloudflare_engines,
+)
+cloudflare_ground_truth.__doc__ = (
+    'Replay Cloudflare ``content`` ``[^"]*`` extract on BusyBox grep.\n\n'
+    "Returns False on busybox-absent / grep failure so ``run_one`` records\n"
+    "``ground_truth=failed`` instead of aborting the suite."
+)
 
-    gnu_ok = is_prefix_truncation(caps["gnu"], v)
-    bb_ok = is_prefix_truncation(caps["busybox"], v)
-    OW_VERDICT_LOG["OW-packages-aliyun-recordid-truncation"] = {
-        "gnu": gnu_ok,
-        "busybox": bb_ok,
-        "busybox_absent": False,
-        "gnu_capture": caps["gnu"],
-        "busybox_capture": caps["busybox"],
-    }
-    return bb_ok
+aliyun_ground_truth = _prefix_truncation_gt(
+    "OW-packages-aliyun-recordid-truncation",
+    lambda v: f"RecordId={v}&other=1",
+    _aliyun_engines,
+)
+aliyun_ground_truth.__doc__ = (
+    "Replay Aliyun ``RecordId=[^&]*`` extract on BusyBox grep.\n\n"
+    "Returns False on busybox-absent / grep failure so ``run_one`` records\n"
+    "``ground_truth=failed`` instead of aborting the suite."
+)
 
 
 def _hostname_no(ch: str, name: str, guarantee: str):

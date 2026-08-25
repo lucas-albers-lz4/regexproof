@@ -472,42 +472,48 @@ def _re2_replay(pattern, flags, call_kind, witness, *, timeout_s: float):
     return _rc_result(proc, compile_error=_COMPILE_ERROR_RC, label="go-re2")
 
 
+def _helper_match_replay(
+    match_script: Path,
+    label: str,
+    pattern,
+    flags,
+    call_kind,
+    witness,
+    *,
+    timeout_s: float,
+):
+    """Template Method for pcre2/perl helpers/*/match.py stdin runners."""
+    wrapped = _subprocess_wrap(pattern, call_kind)
+    proc = _subprocess_verdict(
+        [sys.executable, str(match_script), "match", wrapped, flags or ""],
+        data=witness,
+        text=True,
+        timeout_s=timeout_s,
+    )
+    if isinstance(proc, ReplayResult):
+        return proc
+    return _rc_result(
+        proc,
+        compile_error=_COMPILE_ERROR_RC,
+        unavailable=_UNAVAILABLE_RC,
+        label=label,
+    )
+
+
 # ---------------------------------------------------------------------------
 # pcre / perl — helpers/*/match.py, stdin search runners
 # ---------------------------------------------------------------------------
 def _pcre_replay(pattern, flags, call_kind, witness, *, timeout_s: float):
-    wrapped = _subprocess_wrap(pattern, call_kind)
-    proc = _subprocess_verdict(
-        [sys.executable, str(_PCRE2_MATCH), "match", wrapped, flags or ""],
-        data=witness,
-        text=True,
+    return _helper_match_replay(
+        _PCRE2_MATCH, "pcre2/match.py", pattern, flags, call_kind, witness,
         timeout_s=timeout_s,
-    )
-    if isinstance(proc, ReplayResult):
-        return proc
-    return _rc_result(
-        proc,
-        compile_error=_COMPILE_ERROR_RC,
-        unavailable=_UNAVAILABLE_RC,
-        label="pcre2/match.py",
     )
 
 
 def _perl_replay(pattern, flags, call_kind, witness, *, timeout_s: float):
-    wrapped = _subprocess_wrap(pattern, call_kind)
-    proc = _subprocess_verdict(
-        [sys.executable, str(_PERL_MATCH), "match", wrapped, flags or ""],
-        data=witness,
-        text=True,
+    return _helper_match_replay(
+        _PERL_MATCH, "perl/match.py", pattern, flags, call_kind, witness,
         timeout_s=timeout_s,
-    )
-    if isinstance(proc, ReplayResult):
-        return proc
-    return _rc_result(
-        proc,
-        compile_error=_COMPILE_ERROR_RC,
-        unavailable=_UNAVAILABLE_RC,
-        label="perl/match.py",
     )
 
 
