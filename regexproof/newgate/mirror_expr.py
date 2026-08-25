@@ -32,10 +32,12 @@ def mirror_to_py(expr, *, max_len: int = _MAX_EXPR) -> str:
 
 
 def collect_singleton_alphabet(expr) -> str:
-    """Printable single-char leaves (ranges expanded, trailing ``\\n`` skipped).
+    """Single-char leaves from the mirror (ranges expanded).
 
-    Fail-closed on wide ranges (≥128 code points): silently skipping them
-    would omit accepted chars and yield false UNSAT shape-1 properties.
+    Includes ``\\n`` when present (including ``$`` trailing-newline artifacts)
+    so shape-1 cannot claim a false ``excludes-newline`` UNSAT. Fail-closed on
+    wide ranges (≥128 code points): silently skipping them would omit accepted
+    chars and yield false UNSAT properties.
     """
     found: list[str] = []
     seen: set[str] = set()
