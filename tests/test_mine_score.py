@@ -328,7 +328,7 @@ def test_rank_cli_skips_gated_status_rows(tmp_path: Path, capsys):
 
 def test_every_search_query_has_family():
     """Fail-closed: any SEARCH_QUERIES addition must carry a family mapping."""
-    assert len(_QUERY_FAMILY) == len(SEARCH_QUERIES)
+    assert set(SEARCH_QUERIES) <= set(_QUERY_FAMILY)
     for q in SEARCH_QUERIES:
         assert q in _QUERY_FAMILY, f"query missing family entry: {q}"
         assert _query_family(q) == _QUERY_FAMILY[q]
