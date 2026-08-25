@@ -19,6 +19,7 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
+from regexproof.mine.deny_list import load_deny_slugs  # noqa: E402  # ROOT bootstrap above
 from regexproof.mine.exclusions import is_excluded, load_admitted_urls  # noqa: E402  # ROOT bootstrap above
 from regexproof.mine.gate_files import list_gate_decision_paths  # noqa: E402  # ROOT bootstrap above
 from regexproof.mine.ledger import empty_ledger, find_candidate, load_ledger, save_ledger  # noqa: E402  # ROOT bootstrap above
@@ -89,9 +90,12 @@ def assimilate(
     room = max(0, cap - already)
     accepted: list[dict[str, Any]] = []
 
+    deny_slugs = load_deny_slugs() or None
     evict_stale(queue)
     # Score-v1: highest-value overflow first (still drain one-at-a-time for exclusions).
-    queue["items"] = rank_candidates(list(queue.get("items") or []))
+    queue["items"] = rank_candidates(
+        list(queue.get("items") or []), deny_slugs=deny_slugs
+    )
     while room > 0 and queue.get("items"):
         item = drain(queue, 1)[0]
         url = item.get("url")
@@ -111,7 +115,9 @@ def assimilate(
     queue_dropped = 0
     queue_replaced = 0
     replacements_left = [MAX_REPLACEMENTS_PER_RUN]
-    ranked_hits = rank_candidates(list(search_result.candidates))
+    ranked_hits = rank_candidates(
+        list(search_result.candidates), deny_slugs=deny_slugs
+    )
     for cand in ranked_hits:
         url = cand["url"]
         if is_excluded(url, ledger=ledger, admitted=admitted):

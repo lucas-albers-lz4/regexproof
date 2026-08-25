@@ -19,6 +19,11 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
+from regexproof.mine.deny_list import load_deny_slugs  # noqa: E402  # ROOT bootstrap above
+from regexproof.mine.density import (  # noqa: E402  # ROOT bootstrap above
+    DensityCache,
+    materialize_density_hits,
+)
 from regexproof.mine.exclusions import load_admitted_urls, normalize_repo_url  # noqa: E402  # ROOT bootstrap above
 from regexproof.mine.ledger import load_ledger  # noqa: E402  # ROOT bootstrap above
 from regexproof.mine.score import (  # noqa: E402  # ROOT bootstrap above
@@ -113,6 +118,35 @@ def main(argv: list[str] | None = None) -> int:
         default="score-v1",
         help="Score allocator (default: score-v1; v1.5 adds the tree overlay).",
     )
+    ap.add_argument(
+        "--deny-list",
+        type=Path,
+        default=None,
+        help=(
+            "Wave 9 probe deny-list JSON (default: "
+            "properties/generated/probe_deny_list.json). Soft penalty only."
+        ),
+    )
+    ap.add_argument(
+        "--no-deny-list",
+        action="store_true",
+        help="Do not apply the post-walk deny-list (soft screen stays off).",
+    )
+    ap.add_argument(
+        "--code-search-budget",
+        type=int,
+        default=0,
+        help=(
+            "Max uncached GitHub code-search density calls (default: 0). "
+            "Rate-limit degrades to unknown, never a hard reject."
+        ),
+    )
+    ap.add_argument(
+        "--density-cache",
+        type=Path,
+        default=None,
+        help="Density cache path (default: .cache/regexproof/mine-density.json).",
+    )
     args = ap.parse_args(argv)
 
     ledger_path = args.ledger.expanduser().resolve()
@@ -136,7 +170,7 @@ def main(argv: list[str] | None = None) -> int:
     # feature.  Join the decisions (by URL) and attach the decision-time
     # probe + pin (E3 semantics: never the ledger's mined pin).
     decisions_by_url: dict[str, dict[str, Any]] = {}
-    if args.allocator == "score-v2":
+    if args.allocator == "score-v2" or not args.skip_gated:
         gen = args.generated.expanduser().resolve()
         for path in sorted(gen.glob("*_gate_decision.json")):
             try:
@@ -159,40 +193,42 @@ def main(argv: list[str] | None = None) -> int:
             continue
         if gated and url and normalize_repo_url(str(url)) in gated:
             continue
-        if args.allocator == "score-v2" and url:
-            dec = decisions_by_url.get(normalize_repo_url(str(url)))
-            if dec is not None:
-                probe = dec.get("probe") if isinstance(dec.get("probe"), dict) else {}
-                # Close-out gate: normalize the decision probe to the FIT's
-                # shape (the P6 build writes dialect_counts; the raw decision
-                # stores dialect) — otherwise probe_dialect_count_log stays
-                # zero at runtime and diverges from the fitted vector.
-                c["probe"] = {
-                    "regex_sites": int(probe.get("regex_sites") or 0),
-                    "dialect_counts": _int_map(probe.get("dialect")),
-                    "security_boundary": str(
-                        probe.get("security_boundary") or "unknown"
-                    ),
-                    "predicted_buckets": _int_map(probe.get("predicted_buckets")),
-                }
-                dec_pin = str(
-                    probe.get("pin_probed")
-                    or dec.get("corpus_pin")
-                    or probe.get("pin")
-                    or ""
-                )
-                # Close-out gate (M2, E3): the decision-time pin is
-                # AUTHORITATIVE — always set it (empty included) so a stale
-                # ledger mined pin can never probe the wrong commit.
-                c["pin_probed"] = dec_pin
-            elif not str(c.get("pin_probed") or ""):
-                # Ungated ledger rows store the mined SHA as `pin`. Copy it
-                # so score-v2 tree join is not `missing-probed-pin` (#490).
-                # This is ranking-only; admission E3 still refuses mined-pin
-                # fallback when probing for a gate decision.
-                mined = str(c.get("pin") or "")
-                if mined:
-                    c["pin_probed"] = mined
+        dec = (
+            decisions_by_url.get(normalize_repo_url(str(url)))
+            if url
+            else None
+        )
+        if args.allocator == "score-v2" and dec is not None:
+            probe = dec.get("probe") if isinstance(dec.get("probe"), dict) else {}
+            # Close-out gate: normalize the decision probe to the FIT's
+            # shape (the P6 build writes dialect_counts; the raw decision
+            # stores dialect) — otherwise probe_dialect_count_log stays
+            # zero at runtime and diverges from the fitted vector.
+            c["probe"] = {
+                "regex_sites": int(probe.get("regex_sites") or 0),
+                "dialect_counts": _int_map(probe.get("dialect")),
+                "security_boundary": str(
+                    probe.get("security_boundary") or "unknown"
+                ),
+                "predicted_buckets": _int_map(probe.get("predicted_buckets")),
+            }
+        if dec is not None:
+            probe = dec.get("probe") if isinstance(dec.get("probe"), dict) else {}
+            dec_pin = str(
+                probe.get("pin_probed")
+                or dec.get("corpus_pin")
+                or probe.get("pin")
+                or ""
+            )
+            # Decision-time pin is AUTHORITATIVE when a gate exists (E3).
+            c["pin_probed"] = dec_pin
+            files = probe.get("regex_sites_per_file")
+            if isinstance(files, dict) and files:
+                c["regex_sites_per_file"] = dict(files)
+        elif not str(c.get("pin_probed") or ""):
+            mined = str(c.get("pin") or "")
+            if mined:
+                c["pin_probed"] = mined
         pool.append(c)
     tree_features = {}
     if args.allocator == "score-v2" and pool:
@@ -212,10 +248,23 @@ def main(argv: list[str] | None = None) -> int:
             budget=args.tree_probe_budget,
             cache=TreeCache(args.tree_cache),
         )
+    density_hits: dict = {}
+    if pool:
+        density_hits, _dcalls = materialize_density_hits(
+            _http_session() if args.code_search_budget > 0 else None,
+            pool,
+            budget=args.code_search_budget,
+            cache=DensityCache(args.density_cache),
+        )
+    deny_slugs = set()
+    if not args.no_deny_list:
+        deny_slugs = load_deny_slugs(args.deny_list)
     ranked = rank_candidates(
         pool,
         allocator=args.allocator,
         tree_features=tree_features,
+        deny_slugs=deny_slugs or None,
+        density_hits=density_hits or None,
     )
     if args.limit and args.limit > 0:
         ranked = ranked[: args.limit]
@@ -224,10 +273,15 @@ def main(argv: list[str] | None = None) -> int:
         url = str(cand.get("url") or "")
         pin = str(cand.get("pin_probed") or "")
         tree_feature = tree_features.get((normalize_repo_url(url), pin))
+        hits = None
+        if density_hits:
+            hits = density_hits.get(normalize_repo_url(url), density_hits.get(url))
         total, breakdown = candidate_score(
             cand,
             allocator=args.allocator,
             tree_feature=tree_feature,
+            deny_slugs=deny_slugs or None,
+            code_search_hits=hits,
         )
         row = {
             "url": cand.get("url"),

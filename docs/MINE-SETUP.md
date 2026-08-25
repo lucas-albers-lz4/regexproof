@@ -130,17 +130,29 @@ Operator terms (mine / queue drain / rank / probe / gate / Smith):
 
 ### Rank then probe (operator loop)
 
-```bash
-# Top N mined ledger rows for hand probe → author-gate
-# (gated:* rows are skipped by default)
-python scripts/rank-mine-candidates.py --limit 10
+Each stdout line is NDJSON: `url`, `score`, `score_version`, `breakdown`, plus
+stars / query / pushed_date. No network, no writes (tree/density budgets
+default to 0). Wave 9 (#578) adds **soft** screens only — never a hard
+reject, and live drain stays score-v1:
 
-# Include gated rows (e.g. to review gate decisions)
+- Root-dir deprioritize when the tree summary has `root_dir_names` (new
+  probes via `--tree-probe-budget`) or when walked `regex_sites_per_file`
+  is on the row. Historical `mine-tree-features.json` omits that field —
+  missing names are unknown, not a reject.
+- Optional `--code-search-budget N` density probe; rate-limit degrades to
+  unknown (not a zero).
+- Post-walk deny-list (`properties/generated/probe_deny_list.json`) — distinct
+  from conversion `wont_file`. Rebuild with
+  `python scripts/build-probe-deny-list.py`.
+
+The skip-class surrogate is **offline** (`python scripts/eval-ranking-surrogate.py`,
+artifact `properties/generated/ranking_surrogate.json`, `live_rollout: false`).
+Do not roll out go-only score-v2.
+
+```bash
+python scripts/rank-mine-candidates.py --limit 10
 python scripts/rank-mine-candidates.py --no-skip-gated --limit 10
 ```
-
-Each stdout line is NDJSON: `url`, `score`, `score_version`, `breakdown`, plus
-stars / query / pushed_date. No network, no writes.
 
 ## Local dry-run
 
