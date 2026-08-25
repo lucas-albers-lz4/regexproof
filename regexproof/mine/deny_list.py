@@ -43,7 +43,13 @@ def build_deny_doc(decisions: list[dict[str, Any]]) -> dict[str, Any]:
     slugs: set[str] = set()
     for dec in decisions:
         probe = dec.get("probe") if isinstance(dec.get("probe"), dict) else {}
-        sites = int(probe.get("regex_sites") or 0)
+        sites_raw = probe.get("regex_sites")
+        if sites_raw is None or isinstance(sites_raw, bool):
+            continue
+        try:
+            sites = int(sites_raw)
+        except (TypeError, ValueError):
+            continue
         if sites != 0:
             continue
         url = str(dec.get("candidate_url") or "")

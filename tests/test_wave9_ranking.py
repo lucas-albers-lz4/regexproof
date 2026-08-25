@@ -197,6 +197,10 @@ def test_build_deny_doc_zero_surface_only():
                 "probe": {"regex_sites": 0},
             },
             {
+                "candidate_url": "https://github.com/acme/missing-sites",
+                "probe": {},
+            },
+            {
                 "candidate_url": "https://github.com/acme/full",
                 "probe": {"regex_sites": 12},
             },
