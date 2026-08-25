@@ -170,7 +170,7 @@ def main(argv: list[str] | None = None) -> int:
     # feature.  Join the decisions (by URL) and attach the decision-time
     # probe + pin (E3 semantics: never the ledger's mined pin).
     decisions_by_url: dict[str, dict[str, Any]] = {}
-    if args.allocator == "score-v2":
+    if args.allocator == "score-v2" or not args.skip_gated:
         gen = args.generated.expanduser().resolve()
         for path in sorted(gen.glob("*_gate_decision.json")):
             try:
@@ -193,40 +193,35 @@ def main(argv: list[str] | None = None) -> int:
             continue
         if gated and url and normalize_repo_url(str(url)) in gated:
             continue
-        if args.allocator == "score-v2" and url:
-            dec = decisions_by_url.get(normalize_repo_url(str(url)))
-            if dec is not None:
-                probe = dec.get("probe") if isinstance(dec.get("probe"), dict) else {}
-                # Close-out gate: normalize the decision probe to the FIT's
-                # shape (the P6 build writes dialect_counts; the raw decision
-                # stores dialect) — otherwise probe_dialect_count_log stays
-                # zero at runtime and diverges from the fitted vector.
-                c["probe"] = {
-                    "regex_sites": int(probe.get("regex_sites") or 0),
-                    "dialect_counts": _int_map(probe.get("dialect")),
-                    "security_boundary": str(
-                        probe.get("security_boundary") or "unknown"
-                    ),
-                    "predicted_buckets": _int_map(probe.get("predicted_buckets")),
-                }
-                dec_pin = str(
-                    probe.get("pin_probed")
-                    or dec.get("corpus_pin")
-                    or probe.get("pin")
-                    or ""
-                )
-                # Close-out gate (M2, E3): the decision-time pin is
-                # AUTHORITATIVE — always set it (empty included) so a stale
-                # ledger mined pin can never probe the wrong commit.
-                c["pin_probed"] = dec_pin
-            elif not str(c.get("pin_probed") or ""):
-                # Ungated ledger rows store the mined SHA as `pin`. Copy it
-                # so score-v2 tree join is not `missing-probed-pin` (#490).
-                # This is ranking-only; admission E3 still refuses mined-pin
-                # fallback when probing for a gate decision.
-                mined = str(c.get("pin") or "")
-                if mined:
-                    c["pin_probed"] = mined
+        dec = (
+            decisions_by_url.get(normalize_repo_url(str(url)))
+            if url
+            else None
+        )
+        if args.allocator == "score-v2" and dec is not None:
+            probe = dec.get("probe") if isinstance(dec.get("probe"), dict) else {}
+            # Close-out gate: normalize the decision probe to the FIT's
+            # shape (the P6 build writes dialect_counts; the raw decision
+            # stores dialect) — otherwise probe_dialect_count_log stays
+            # zero at runtime and diverges from the fitted vector.
+            c["probe"] = {
+                "regex_sites": int(probe.get("regex_sites") or 0),
+                "dialect_counts": _int_map(probe.get("dialect")),
+                "security_boundary": str(
+                    probe.get("security_boundary") or "unknown"
+                ),
+                "predicted_buckets": _int_map(probe.get("predicted_buckets")),
+            }
+        if dec is not None:
+            probe = dec.get("probe") if isinstance(dec.get("probe"), dict) else {}
+            dec_pin = str(
+                probe.get("pin_probed")
+                or dec.get("corpus_pin")
+                or probe.get("pin")
+                or ""
+            )
+            # Decision-time pin is AUTHORITATIVE when a gate exists (E3).
+            c["pin_probed"] = dec_pin
         elif not str(c.get("pin_probed") or ""):
             mined = str(c.get("pin") or "")
             if mined:
