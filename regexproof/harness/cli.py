@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-import contextlib
-import io
 import json
 import sys
 
@@ -12,12 +10,12 @@ from regexproof.harness.core import (
     check_contract_coverage,
     check_domain_coverage,
     check_mutation_coverage,
-    run_one,
     validate_registry,
 )
+from regexproof.harness.run_named import run_named_properties
+
 # Side-effect: register built-in properties
 import regexproof.harness.properties  # noqa: F401
-
 
 
 USAGE = """regexproof harness (scripts/z3-verify.py / regexproof.harness.cli)
@@ -109,30 +107,15 @@ def main(argv=None):
     coverage_fail = check_mutation_coverage()
     domain_fail = check_domain_coverage(require=require_domain)
     contract_fail = check_contract_coverage(require=require_contract)
-    failures = 0
-    not_proven_count = 0
-    results = []
-    if as_json or as_json_legacy:
-        sink = io.StringIO()
-        with contextlib.redirect_stdout(sink):
-            for n in names:
-                res = run_one(n, REGISTRY[n], require_ground_truth)
-                results.append(res)
-                if not res["ok"]:
-                    failures += 1
-                if res.get("not_proven"):
-                    not_proven_count += 1
-                if as_json:
-                    # Flush each record immediately so partial streams stay valid.
-                    print(json.dumps(res, sort_keys=True), file=sys.__stdout__)
-    else:
-        for n in names:
-            res = run_one(n, REGISTRY[n], require_ground_truth)
-            results.append(res)
-            if not res["ok"]:
-                failures += 1
-            if res.get("not_proven"):
-                not_proven_count += 1
+    # Execution only — NDJSON streams when as_json; legacy array is REPORT below.
+    # json-legacy must not stream (harness main owns the one-shot array).
+    results = run_named_properties(
+        names,
+        require_gt=require_ground_truth,
+        as_json=bool(as_json and not as_json_legacy),
+    )
+    failures = sum(1 for r in results if not r["ok"])
+    not_proven_count = sum(1 for r in results if r.get("not_proven"))
     failures += domain_fail
     failures += contract_fail
     if as_json_legacy:
@@ -147,8 +130,10 @@ def main(argv=None):
 
         print(f"\n{len(names) - failures}/{len(names)} passed")
         ts = tier_summary(results)
-        print("verification tiers (derived at report time, never stored): "
-              + ", ".join(f"{k}={v}" for k, v in ts.items()))
+        print(
+            "verification tiers (derived at report time, never stored): "
+            + ", ".join(f"{k}={v}" for k, v in ts.items())
+        )
     # §10 operator contract (design rev 7, luna-final): 0 = result recorded
     # (proven, finding, or recorded fallback — a FAILED property still RECORDED
     # its verdict); 1 = any not-proven (unknown/abstain, per #186) or a

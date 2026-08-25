@@ -7,9 +7,6 @@ because ``import regexproof.harness.core`` still executes
 
 from __future__ import annotations
 
-import contextlib
-import io
-import json
 import sys
 
 from regexproof.harness.core import (
@@ -17,9 +14,9 @@ from regexproof.harness.core import (
     check_contract_coverage,
     check_domain_coverage,
     check_mutation_coverage,
-    run_one,
     validate_registry,
 )
+from regexproof.harness.run_named import run_named_properties
 
 USAGE = """scaffolded regexproof gate
 
@@ -84,31 +81,18 @@ def main(argv: list[str] | None = None) -> int:
     coverage_fail = check_mutation_coverage()
     domain_fail = check_domain_coverage(require=require_domain)
     contract_fail = check_contract_coverage(require=require_contract)
-    failures = 0
-    not_proven_count = 0
-    results = []
-    if as_json:
-        sink = io.StringIO()
-        with contextlib.redirect_stdout(sink):
-            for name in names:
-                res = run_one(name, REGISTRY[name], require_ground_truth)
-                results.append(res)
-                if not res["ok"]:
-                    failures += 1
-                if res.get("not_proven"):
-                    not_proven_count += 1
-                print(json.dumps(res, sort_keys=True), file=sys.__stdout__)
-    else:
-        for name in names:
-            res = run_one(name, REGISTRY[name], require_ground_truth)
-            results.append(res)
-            if not res["ok"]:
-                failures += 1
-            if res.get("not_proven"):
-                not_proven_count += 1
+    results = run_named_properties(
+        names,
+        require_gt=require_ground_truth,
+        as_json=as_json,
+    )
+    failures = sum(1 for r in results if not r["ok"])
+    not_proven_count = sum(1 for r in results if r.get("not_proven"))
+    if not as_json:
         print(f"\n{len(names) - failures}/{len(names)} passed")
     failures += domain_fail
     failures += contract_fail
+    # Exit policy owned by this CLI (PR1: no D15 check yet — PR1b).
     if not_proven_count or coverage_fail or domain_fail or contract_fail:
         return 1
     if fail_on_property_failure and failures:

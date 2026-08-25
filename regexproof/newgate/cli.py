@@ -140,16 +140,13 @@ def main(argv: list[str] | None = None) -> int:
         help="overwrite existing scaffold files",
     )
     ap.add_argument("targets", nargs="*", help="FILE PATTERN or FILE:PATTERN")
+    from regexproof.cli_exit import exit_code_from_system_exit
+
     try:
         args = ap.parse_args(argv)
     except SystemExit as exc:
-        code = exc.code
-        if code in (0, None):
-            return 0
-        if isinstance(code, int):
-            return code
-        print(code, file=sys.stderr)
-        return 1
+        # argparse uses SystemExit(0) for -h; preserve int/None/other mapping.
+        return exit_code_from_system_exit(exc)
     if args.help or not argv:
         print(USAGE.strip())
         print()

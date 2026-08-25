@@ -64,16 +64,12 @@ def main(argv: list[str] | None = None) -> int:
     script = (
         "probe-corpus-admission.py" if mode == "single" else "batch-probe.py"
     )
+    from regexproof.cli_exit import exit_code_from_system_exit
+
     try:
         rc = _load_script(script).main(rest)
     except SystemExit as exc:
-        code = exc.code
-        if code is None:
-            return 0
-        if isinstance(code, int):
-            return code
-        print(code, file=sys.stderr)
-        return 1
+        return exit_code_from_system_exit(exc)
     finally:
         if prev is None:
             os.environ.pop(_CANONICAL_ENV, None)
