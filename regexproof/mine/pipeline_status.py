@@ -27,9 +27,11 @@ def _load_json(path: Path) -> dict[str, Any]:
         return {}
     try:
         data = json.loads(path.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError, TypeError):
-        return {}
-    return data if isinstance(data, dict) else {}
+    except (OSError, json.JSONDecodeError, TypeError) as exc:
+        raise SystemExit(f"pipeline-status: unreadable/invalid {path}: {exc}") from exc
+    if not isinstance(data, dict):
+        raise SystemExit(f"pipeline-status: {path} is not a JSON object")
+    return data
 
 
 def _nogo_reason(payload: dict[str, Any]) -> str:

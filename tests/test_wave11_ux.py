@@ -182,6 +182,20 @@ def test_missing_baseline_fails_closed(tmp_path: Path):
         )
 
 
+def test_malformed_ledger_fails_closed(tmp_path: Path):
+    bad = tmp_path / "ledger.json"
+    bad.write_text("{not json", encoding="utf-8")
+    with pytest.raises(SystemExit, match="unreadable/invalid"):
+        snapshot(
+            generated=tmp_path,
+            state_path=tmp_path / "state.json",
+            ledger_path=bad,
+            queue_path=tmp_path / "queue.json",
+            conversion_ledger=tmp_path / "conv.json",
+            baseline_path=tmp_path / "no-baseline.json",
+        )
+
+
 def test_probe_cli_help():
     assert probe_main(["--help"]) == 0
     assert probe_main(["--single", "--help"]) == 0

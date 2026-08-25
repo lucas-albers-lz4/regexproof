@@ -162,4 +162,3 @@ documented here so a new operator does not have to open the file.
 | `scripts/pilot-properties.py` | `--require-ground-truth` `--require-domain` |
 | `scripts/pilot-run.py` | no flags; Phase 2 extract → compile → report |
 | `scripts/ci-check-*.py` | CI gates; no operator flags |
-
