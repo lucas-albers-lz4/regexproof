@@ -348,6 +348,9 @@ def renew(
         existing["ttl_s"] = ttl_s
         existing["expires_at"] = now + ttl_s
         existing["start_time"] = now
+        ticks = _proc_start_ticks(owner_pid)
+        if ticks is not None:
+            existing["owner_start_ticks"] = ticks
         _write_registry(reg, path)
         return existing
 
