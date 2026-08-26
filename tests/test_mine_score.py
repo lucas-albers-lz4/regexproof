@@ -619,3 +619,54 @@ def test_rank_cli_decision_requires_no_skip_gated(tmp_path: Path, capsys):
     assert rc == 2
     err = capsys.readouterr().err
     assert "--decision requires --no-skip-gated" in err
+
+
+def test_rank_cli_skips_non_object_gate_json(tmp_path: Path, capsys):
+    """Malformed/non-object gate JSON must not crash; fail-closed skip."""
+    ledger_path = tmp_path / "candidate-ledger.json"
+    gen = tmp_path / "generated"
+    gen.mkdir()
+    ledger = empty_ledger()
+    ledger["candidates"] = [
+        {
+            "url": "https://github.com/acme/go-corpus",
+            "default_branch": "main",
+            "pin": "g",
+            "pushed_date": "2026-08-01",
+            "stars": 50,
+            "source_query": SEARCH_QUERIES[0],
+            "first_seen": "2026-08-09T00:00:00Z",
+            "status": "mined",
+        },
+    ]
+    save_ledger(ledger_path, ledger)
+    (gen / "broken_gate_decision.json").write_text("[]\n", encoding="utf-8")
+    (gen / "go-corpus_gate_decision.json").write_text(
+        json.dumps(
+            {
+                "schema_version": "1",
+                "corpus": "go-corpus",
+                "candidate_url": "https://github.com/acme/go-corpus",
+                "decision": "go",
+            }
+        ),
+        encoding="utf-8",
+    )
+    mod = _load_rank_cli()
+    rc = mod.main(
+        [
+            "--ledger",
+            str(ledger_path),
+            "--generated",
+            str(gen),
+            "--no-skip-gated",
+            "--decision",
+            "go",
+            "--limit",
+            "10",
+        ]
+    )
+    assert rc == 0
+    lines = [ln for ln in capsys.readouterr().out.splitlines() if ln.strip()]
+    assert len(lines) == 1
+    assert json.loads(lines[0])["url"].endswith("/go-corpus")

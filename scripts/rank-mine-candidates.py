@@ -213,6 +213,8 @@ def main(argv: list[str] | None = None) -> int:
                 dec = json.loads(path.read_text(encoding="utf-8"))
             except (OSError, json.JSONDecodeError):
                 continue
+            if not isinstance(dec, dict):
+                continue  # fail-closed: non-object gate JSON
             curl = str(dec.get("candidate_url") or "")
             if curl:
                 decisions_by_url.setdefault(normalize_repo_url(curl), dec)
