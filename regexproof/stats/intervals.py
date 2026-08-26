@@ -17,9 +17,9 @@ Intervals provided (each with an ``exact`` stdlib implementation):
 - ``bootstrap_ci``     — seeded percentile / BCa bootstrap over a statistic
   function (AUC flip-rule difference distribution). Stratified resampling is
   available via ``bootstrap_stratified`` (pass ``strata``).
-- ``two_proportion_test`` — one-sided Wilson two-proportion test with a FIXED
-  baseline constant (the committed Phase 0 artifact value), the escape gate's
-  exact predeclared decision function.
+- ``two_proportion_test`` — one-sided null-SE z-test vs a FIXED baseline
+  constant (the committed Phase 0 artifact value) with ``1/(2n)`` continuity
+  correction; the escape gate's exact predeclared decision function.
 
 Determinism contract: same inputs + same seed ⇒ byte-identical outputs.
 Never call ``random``/``time`` here without a seed.
@@ -118,9 +118,9 @@ def wilson_ci(
     """Wilson score interval for ``k`` successes in ``n`` trials.
 
     Returns ``(lower, upper)``. Used by the escape-baseline artifact. The
-    escape decision test itself (``two_proportion_test``) compares the window
-    rate against the fixed baseline using the null SE — no continuity
-    correction."""
+    escape decision test itself (``two_proportion_test``) is separate: a
+    one-sided null-SE z-test with ``1/(2n)`` continuity correction toward the
+    null (see that function's docstring)."""
     if n <= 0:
         raise ValueError("n must be > 0")
     if not 0 <= k <= n:
