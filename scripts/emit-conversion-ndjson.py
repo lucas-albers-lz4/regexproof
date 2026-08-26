@@ -61,6 +61,8 @@ def row_from_run(
     domain = entry.get("domain") or result.get("domain")
     if not isinstance(domain, str) or not domain.strip():
         raise SystemExit(f"error: {name} missing top-level domain")
+    if name not in SHAPE:
+        raise SystemExit(f"error: {name} missing SHAPE entry (fail closed)")
     gt = result.get("ground_truth")
     rec = {
         "schema_version": "1",
@@ -69,7 +71,7 @@ def row_from_run(
         "corpus": corpus,
         "result": result.get("result"),
         "site": (entry.get("contract") or {}).get("site") or name,
-        "shape": SHAPE.get(name),
+        "shape": SHAPE[name],
         "ground_truth_status": gt if isinstance(gt, str) else None,
         "ground_truth": None,
         "disclosure": None,
