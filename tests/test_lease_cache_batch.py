@@ -371,6 +371,35 @@ def test_lease_renew_extends_expiry(tmp_path):
         lease_registry.renew("https://x/y", "a" * 40, owner_pid=1, path=p)
 
 
+def test_lease_renew_fills_ticks_when_acquire_had_none(tmp_path):
+    """Grok F3: acquire stored None → renew fills live ticks when lookup
+    succeeds. Patch is scoped to acquire vs renew so _expired never sees a
+    recycled-PID mismatch."""
+    from unittest import mock
+
+    p = _reg(tmp_path)
+    with mock.patch.object(lease_registry, "_proc_start_ticks", return_value=None):
+        lease = lease_registry.acquire("https://x/y", "a" * 40, owner_pid=1, path=p)
+    assert lease.get("owner_start_ticks") is None
+    with mock.patch.object(lease_registry, "_proc_start_ticks", return_value=4242):
+        renewed = lease_registry.renew("https://x/y", "a" * 40, owner_pid=1, path=p)
+    assert renewed["owner_start_ticks"] == 4242
+
+
+def test_lease_renew_preserves_ticks_when_lookup_fails(tmp_path):
+    """Grok F3: a failed /proc lookup on renew must not wipe a stored
+    identity (None would disable PID-reuse checks on the heartbeat path)."""
+    from unittest import mock
+
+    p = _reg(tmp_path)
+    with mock.patch.object(lease_registry, "_proc_start_ticks", return_value=4242):
+        lease = lease_registry.acquire("https://x/y", "a" * 40, owner_pid=1, path=p)
+    assert lease["owner_start_ticks"] == 4242
+    with mock.patch.object(lease_registry, "_proc_start_ticks", return_value=None):
+        renewed = lease_registry.renew("https://x/y", "a" * 40, owner_pid=1, path=p)
+    assert renewed["owner_start_ticks"] == 4242
+
+
 def test_heartbeat_renews_before_gc_eviction(tmp_path):
     """Luna r5-r8: the walk's lease heartbeat keeps the lease live BEFORE
     expiry so GC never evicts the clone mid-walk. The injected walk_fn
