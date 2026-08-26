@@ -356,8 +356,12 @@ def test_lease_renew_extends_expiry(tmp_path):
     p = _reg(tmp_path)
     lease = lease_registry.acquire("https://x/y", "a" * 40, owner_pid=1, path=p)
     old_expiry = lease["expires_at"]
+    ticks_before = lease.get("owner_start_ticks")
     renewed = lease_registry.renew("https://x/y", "a" * 40, owner_pid=1, path=p)
     assert renewed["expires_at"] > old_expiry
+    ticks_after = renewed.get("owner_start_ticks")
+    assert ticks_after == lease_registry._proc_start_ticks(1)
+    assert ticks_before is None or ticks_after == ticks_before
     # Foreign owner cannot renew.
     with pytest.raises(SystemExit, match="lease_reject"):
         lease_registry.renew("https://x/y", "a" * 40, owner_pid=2, path=p)
