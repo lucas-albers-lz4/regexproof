@@ -41,7 +41,7 @@ from regexproof.mine.tree import (  # noqa: E402  # ROOT bootstrap above
 
 # Opt-in rank filters (operator shortlist). Live mine drain stays score-v1.
 _QUERY_FAMILIES = ("security", "rules", "validators", "testdata", "other")
-_GATE_DECISIONS = ("go", "no-go", "triage", "triage-trial")
+_GATE_DECISIONS = ("go", "no-go", "triage-trial")
 
 
 def _http_session():

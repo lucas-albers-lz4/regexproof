@@ -621,6 +621,26 @@ def test_rank_cli_decision_requires_no_skip_gated(tmp_path: Path, capsys):
     assert "--decision requires --no-skip-gated" in err
 
 
+def test_rank_cli_decision_rejects_bare_triage(tmp_path: Path):
+    """Schema enum is triage-trial, not triage — argparse must refuse."""
+    import pytest
+
+    ledger_path = tmp_path / "candidate-ledger.json"
+    save_ledger(ledger_path, empty_ledger())
+    mod = _load_rank_cli()
+    with pytest.raises(SystemExit) as exc:
+        mod.main(
+            [
+                "--ledger",
+                str(ledger_path),
+                "--no-skip-gated",
+                "--decision",
+                "triage",
+            ]
+        )
+    assert exc.value.code == 2
+
+
 def test_rank_cli_skips_non_object_gate_json(tmp_path: Path, capsys):
     """Malformed/non-object gate JSON must not crash; fail-closed skip."""
     ledger_path = tmp_path / "candidate-ledger.json"
