@@ -81,3 +81,4 @@ def test_wave_closeout_exists():
     text = path.read_text(encoding="utf-8")
     assert "OW-luci" in text
     assert "asked" in text.lower()
+    assert "Stop this cluster" in text

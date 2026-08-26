@@ -45,12 +45,10 @@ property has `kind=` / `family=OW-luci`.
 **Wave 1 idiom slice done.** Do not re-ask tcpdump-filter / netdevname
 semicolon / firewall-mark digit / dockerman colon-free host capture.
 
-**Next idiom bucket (same cluster, optional):** LuCI form validators with
-*new* alphabets not in this deny-list — e.g. qosify / network.js density, or
-firewall DSCP named-token alphabet — still Node GT, still `OW-luci`. Do
-**not** start OpenWrt core until a later wave’s ledger join exists if this
-close-out is treated as the cluster hand-off; this wave’s ledger join is
-`openwrt_luci_conversion.ndjson` (asked +4).
+**Stop this cluster (2026-08-26):** leftover keep-list is siblings (qosify
+digit/hex = firewall mark; hostname/MAC = packages deny-list; DSCP already
+skipped). Do **not** run LuCI wave 2. Do **not** start OpenWrt core (same
+ash dialect as packages). Keep the wave-1 deny-list of what not to re-ask.
 
 **Do not:** packages wave 4, Smith drain, `WAVE_CORPORA`, ucode `.uc`, public
 filing without approval.

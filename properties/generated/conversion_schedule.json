@@ -383,7 +383,7 @@
       "cluster": "openwrt_luci",
       "mine_re_ranked": false,
       "selected_bucket": null,
-      "selection_basis": "unregistered-next",
+      "selection_basis": "cluster-stopped",
       "used_buckets": [
         "form-validator-alphabets"
       ]
@@ -392,7 +392,7 @@
       "cluster": "openwrt_packages",
       "mine_re_ranked": false,
       "selected_bucket": null,
-      "selection_basis": "unregistered-next",
+      "selection_basis": "cluster-stopped",
       "used_buckets": [
         "ddns-query-and-escape-image",
         "image-and-ddns-json",
