@@ -481,3 +481,141 @@ def test_score_v2_tree_lookup_is_pin_aware():
         tree_features=features,
     )
     assert ranked[0]["pin_probed"] == "NEW"
+
+
+def test_rank_cli_exclude_family_rules(tmp_path: Path, capsys):
+    """--exclude-family rules drops YARA/rules source_query after score."""
+    ledger_path = tmp_path / "candidate-ledger.json"
+    ledger = empty_ledger()
+    ledger["candidates"] = [
+        {
+            "url": "https://github.com/acme/yara-pack",
+            "default_branch": "main",
+            "pin": "a",
+            "pushed_date": "2026-08-01",
+            "stars": 9000,
+            "source_query": SEARCH_QUERIES[6],  # path:rules extension:yar
+            "first_seen": "2026-08-09T00:00:00Z",
+            "status": "mined",
+        },
+        {
+            "url": "https://github.com/acme/gitleaks",
+            "default_branch": "main",
+            "pin": "b",
+            "pushed_date": "2026-08-01",
+            "stars": 100,
+            "source_query": SEARCH_QUERIES[0],  # security
+            "first_seen": "2026-08-09T00:00:00Z",
+            "status": "mined",
+        },
+    ]
+    save_ledger(ledger_path, ledger)
+    mod = _load_rank_cli()
+    rc = mod.main(
+        [
+            "--ledger",
+            str(ledger_path),
+            "--exclude-family",
+            "rules",
+            "--limit",
+            "10",
+        ]
+    )
+    assert rc == 0
+    lines = [ln for ln in capsys.readouterr().out.splitlines() if ln.strip()]
+    assert len(lines) == 1
+    assert json.loads(lines[0])["url"].endswith("/gitleaks")
+    assert _query_family(SEARCH_QUERIES[6]) == "rules"
+
+
+def test_rank_cli_decision_go_fail_closed(tmp_path: Path, capsys):
+    """--no-skip-gated --decision go keeps GO only; missing decision drops."""
+    ledger_path = tmp_path / "candidate-ledger.json"
+    gen = tmp_path / "generated"
+    gen.mkdir()
+    ledger = empty_ledger()
+    ledger["candidates"] = [
+        {
+            "url": "https://github.com/acme/go-corpus",
+            "default_branch": "main",
+            "pin": "g",
+            "pushed_date": "2026-08-01",
+            "stars": 50,
+            "source_query": SEARCH_QUERIES[0],
+            "first_seen": "2026-08-09T00:00:00Z",
+            "status": "mined",
+        },
+        {
+            "url": "https://github.com/acme/nogo-corpus",
+            "default_branch": "main",
+            "pin": "n",
+            "pushed_date": "2026-08-01",
+            "stars": 9000,
+            "source_query": SEARCH_QUERIES[0],
+            "first_seen": "2026-08-09T00:00:00Z",
+            "status": "mined",
+        },
+        {
+            "url": "https://github.com/acme/ungated-mine",
+            "default_branch": "main",
+            "pin": "u",
+            "pushed_date": "2026-08-01",
+            "stars": 8000,
+            "source_query": SEARCH_QUERIES[0],
+            "first_seen": "2026-08-09T00:00:00Z",
+            "status": "mined",
+        },
+    ]
+    save_ledger(ledger_path, ledger)
+    (gen / "go-corpus_gate_decision.json").write_text(
+        json.dumps(
+            {
+                "schema_version": "1",
+                "corpus": "go-corpus",
+                "candidate_url": "https://github.com/acme/go-corpus",
+                "decision": "go",
+            }
+        ),
+        encoding="utf-8",
+    )
+    (gen / "nogo-corpus_gate_decision.json").write_text(
+        json.dumps(
+            {
+                "schema_version": "1",
+                "corpus": "nogo-corpus",
+                "candidate_url": "https://github.com/acme/nogo-corpus",
+                "decision": "no-go",
+            }
+        ),
+        encoding="utf-8",
+    )
+    mod = _load_rank_cli()
+    rc = mod.main(
+        [
+            "--ledger",
+            str(ledger_path),
+            "--generated",
+            str(gen),
+            "--no-skip-gated",
+            "--decision",
+            "go",
+            "--limit",
+            "10",
+        ]
+    )
+    assert rc == 0
+    lines = [ln for ln in capsys.readouterr().out.splitlines() if ln.strip()]
+    assert len(lines) == 1
+    assert json.loads(lines[0])["url"].endswith("/go-corpus")
+
+
+def test_rank_cli_decision_requires_no_skip_gated(tmp_path: Path, capsys):
+    ledger_path = tmp_path / "candidate-ledger.json"
+    save_ledger(ledger_path, empty_ledger())
+    mod = _load_rank_cli()
+    rc = mod.main(
+        ["--ledger", str(ledger_path), "--decision", "go", "--limit", "1"]
+    )
+    assert rc == 2
+    err = capsys.readouterr().err
+    assert "--decision requires --no-skip-gated" in err

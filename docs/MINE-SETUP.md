@@ -166,9 +166,15 @@ drain, queue pressure, 7-day survival, backlog weeks. Funnel map:
 ```bash
 python scripts/rank-mine-candidates.py --limit 10
 python scripts/rank-mine-candidates.py --no-skip-gated --limit 10
+# Probe shortlist excluding rules/YARA (after score, before limit):
+python scripts/rank-mine-candidates.py --limit 10 --exclude-family rules
+# Conversion-target shortlist from GO (fail-closed on missing decision):
+python scripts/rank-mine-candidates.py --no-skip-gated --decision go --exclude-family rules --limit 10
 ```
 
-## Local dry-run
+These filters are **opt-in operator shortlists** — they do not change live
+mine admit/drain (score-v1). Do not persist a ranked URL snapshot (it drifts
+every mine day).
 
 ```bash
 export GITHUB_TOKEN=ghp_...   # same PAT as PROJECT_PAT
