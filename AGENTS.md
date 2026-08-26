@@ -222,9 +222,11 @@ every finding against the surrounding code before filing, and report what you
   the deny-list; later waves reuse emit + product-engine checker). First
   application [`sweep/openwrt-conversion/plan.md`](sweep/openwrt-conversion/plan.md);
   packages waves 1–3 close-outs under `properties/generated/openwrt_packages_conversion_wave*.md`
-  (packages **stopped** 2026-08-20). Next cluster: LuCI
+  (packages **stopped** 2026-08-20). LuCI wave 1 close-out
+  [`properties/generated/openwrt_luci_conversion_wave.md`](properties/generated/openwrt_luci_conversion_wave.md)
+  (cluster **stopped** 2026-08-26; plan
   [`sweep/openwrt-luci-conversion/plan.md`](sweep/openwrt-luci-conversion/plan.md)
-  (probe GO, 895 ECMA sites @ `77dad3f`).
+  is historical).
   Heap saturates the compiler; this SOP saturates `properties_asked`.
   Cursor: `.cursor/rules/cluster-conversion-waves.mdc`.
 - Auditing this repo's own security: [`docs/SECURITY-AUDIT.md`](docs/SECURITY-AUDIT.md)

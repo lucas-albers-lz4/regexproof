@@ -53,6 +53,11 @@ DESIGN_TAIL_BUCKETS: dict[str, list[str]] = {
     "openwrt_luci": ["network-js-dscp", "firewall-dscp"],
 }
 
+# Close-out said stop. Wins over DESIGN_TAIL so exhausted packages/luci
+# emit cluster-stopped, not unregistered-next. Keep DESIGN_TAIL_BUCKETS
+# so an unstopped cluster with an unregistered tail still fail-closes.
+STOPPED_CLUSTERS = frozenset({"openwrt_packages", "openwrt_luci"})
+
 DEFAULT_QUEUES_DIR = ROOT / "properties" / "conversion_queue"
 PENDING_SITE_STATUSES = frozenset({"emitted", "claimed"})
 # Luna r4: the queue's own vocabulary (regexproof/mine/conversion_queue.py)
@@ -188,13 +193,17 @@ def next_unused_bucket(
     queues_dir: pathlib.Path,
 ) -> tuple[str | None, str]:
     """(bucket, basis) for the cluster's next bucket. Registered progression
-    buckets (committed ledger vocabulary) win first; DESIGN_TAIL_BUCKETS
-    (qosify/network-js/firewall-dscp) are NEVER emitted until they appear
-    in the committed ledger — their basis is 'unregistered-next' (Luna r4).
-    No wrap-around: progression exhausted -> none-available."""
+    buckets (committed ledger vocabulary) win first; STOPPED_CLUSTERS win
+    over DESIGN_TAIL (exhausted packages/luci -> cluster-stopped, not
+    unregistered-next). DESIGN_TAIL_BUCKETS (qosify/network-js/firewall-dscp)
+    are NEVER emitted until they appear in the committed ledger — their
+    basis is 'unregistered-next' (Luna r4). No wrap-around: progression
+    exhausted with no tail -> none-available."""
     for candidate in BUCKET_PROGRESSION.get(cluster, []):
         if candidate not in used and not _queue_has_pending(queues_dir, cluster, candidate):
             return candidate, "named-next-unused"
+    if cluster in STOPPED_CLUSTERS:
+        return None, "cluster-stopped"
     if DESIGN_TAIL_BUCKETS.get(cluster):
         return None, "unregistered-next"
     return None, "none-available"

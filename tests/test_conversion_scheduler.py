@@ -77,24 +77,44 @@ def test_selects_first_unused_progression_bucket(tmp_path):
 
 
 def test_progression_exhausted_no_wrap(tmp_path):
-    """Luna r1 #1 + CodeRabbit #582 + r4: when every registered progression
-    bucket is used, the DESIGN tails (qosify/network-js/firewall-dscp) are
-    NOT emitted until registered — basis 'unregistered-next', nothing
-    selected (no wrap, no sentinel)."""
+    """Luna r1 #1 + CodeRabbit #582 + r4 + stop close-out: when every
+    registered progression bucket is used on a STOPPED cluster, DESIGN
+    tails are not emitted — basis 'cluster-stopped', nothing selected
+    (stop wins over unregistered-next)."""
     cs = _load_cs()
     gen = tmp_path / "generated"
     _gate_decision(gen, "openwrt_packages")
+    _gate_decision(gen, "openwrt_luci")
     rows = [
         _row("openwrt_packages_w1", b) for b in
         ("validator-charsets-and-captures", "image-and-ddns-json",
          "ddns-query-and-escape-image")
-    ]
+    ] + [_row("openwrt_luci_w1", "form-validator-alphabets")]
+    sched = cs.build_schedule(rows, queues_dir=tmp_path / "queues",
+                              gate_decisions_dir=gen,
+                              dispositions_path=tmp_path / "d.jsonl")
+    by = {s["cluster"]: s for s in sched["selections"]}
+    for name in ("openwrt_packages", "openwrt_luci"):
+        assert by[name]["selected_bucket"] is None
+        assert by[name]["selection_basis"] == "cluster-stopped"
+
+
+def test_design_tail_unregistered_on_non_stopped_cluster(tmp_path, monkeypatch):
+    """DESIGN_TAIL fail-closed: an unstopped cluster with an unregistered
+    tail still returns unregistered-next (not cluster-stopped)."""
+    cs = _load_cs()
+    monkeypatch.setitem(cs.BUCKET_PROGRESSION, "future_cluster", ["bucket-a"])
+    monkeypatch.setitem(cs.DESIGN_TAIL_BUCKETS, "future_cluster", ["tail-x"])
+    gen = tmp_path / "generated"
+    _gate_decision(gen, "future_cluster")
+    rows = [_row("future_cluster_w1", "bucket-a")]
     sched = cs.build_schedule(rows, queues_dir=tmp_path / "queues",
                               gate_decisions_dir=gen,
                               dispositions_path=tmp_path / "d.jsonl")
     sel = sched["selections"][0]
+    assert sel["cluster"] == "future_cluster"
     assert sel["selected_bucket"] is None
-    assert sel["selection_basis"] == "unregistered-next"  # design tail refused
+    assert sel["selection_basis"] == "unregistered-next"
 
 
 def test_design_tail_never_emitted_unregistered(tmp_path):
@@ -173,14 +193,15 @@ def test_malformed_queue_fails_closed(tmp_path):
 
     # null entry -> fail closed (block) — a malformed row with no
     # idiom_bucket is un-attributable, so the whole cluster queue is
-    # suspect: every progression bucket is blocked -> unregistered-next.
+    # suspect: every progression bucket is blocked; packages is stopped
+    # so the basis is cluster-stopped (not unregistered-next).
     (queues_dir / "openwrt_packages.json").write_text(
         json.dumps({"candidate_sites": [None]}) + "\n", encoding="utf-8")
     sched = cs.build_schedule(rows, queues_dir=queues_dir,
                               gate_decisions_dir=gen,
                               dispositions_path=tmp_path / "d.jsonl")
     assert sched["selections"][0]["selected_bucket"] is None
-    assert sched["selections"][0]["selection_basis"] == "unregistered-next"
+    assert sched["selections"][0]["selection_basis"] == "cluster-stopped"
 
     # status-less entry for image-and-ddns -> fail closed (block that
     # bucket); the progression advances to ddns-query-and-escape-image.
@@ -242,9 +263,10 @@ def test_site_only_queue_row_fails_closed(tmp_path):
     sched = cs.build_schedule(rows, queues_dir=queues_dir,
                               gate_decisions_dir=gen,
                               dispositions_path=tmp_path / "d.jsonl")
-    # Un-attributable row blocks every progression bucket -> design tail.
+    # Un-attributable row blocks every progression bucket; packages is
+    # stopped so the basis is cluster-stopped (not design-tail).
     assert sched["selections"][0]["selected_bucket"] is None
-    assert sched["selections"][0]["selection_basis"] == "unregistered-next"
+    assert sched["selections"][0]["selection_basis"] == "cluster-stopped"
 
 
 def test_malformed_gate_artifact_skipped(tmp_path):

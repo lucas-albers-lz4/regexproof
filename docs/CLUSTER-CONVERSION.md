@@ -182,7 +182,8 @@ Then pick **exactly one**:
   a prior ask is **not** a new idiom (one-line skip).
 - **Stop this cluster** — yield is flat, leftover keep-list is the same
   idiom, or no unread survivor has a sink. A logged “5 UNSAT / 0 SAT” is
-  still a prevalence datapoint.
+  still a prevalence datapoint. A named DESIGN_TAIL is not a go once the
+  close-out says stop.
 - **Next cluster** — only after the current wave is in the ledger.
   Parallel clusters duplicate the same learning. New dialect or engine
   (ECMA LuCI vs BusyBox shell) waits until the current cluster’s close-out
