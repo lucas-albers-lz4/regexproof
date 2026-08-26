@@ -23,7 +23,7 @@ mine  →  rank  →  probe  →  gate  →  conversion wave
 | Step | Command | Artifact |
 |---|---|---|
 | **Mine** | GHA [`daily-mine.yml`](../.github/workflows/daily-mine.yml) / `python scripts/mine-corpus-candidates.py` | ledger + queue (below) |
-| **Rank** | `python scripts/rank-mine-candidates.py --limit 10` | stdout NDJSON (no writes) |
+| **Rank** | `python scripts/rank-mine-candidates.py --limit 10` (opt-in: `--exclude-family rules`, `--no-skip-gated --decision go`) | stdout NDJSON (no writes) |
 | **Probe** | `python -m regexproof.probe --single <url> --pin <sha>` or `--batch …` | staged draft under `properties/staged_probes/` (gitignored) |
 | **Gate** | `python scripts/author-gate-decision.py` / Wave 5 auto-NO-GO | `properties/generated/*_gate_decision.json` |
 | **Wave** | [`docs/CLUSTER-CONVERSION.md`](CLUSTER-CONVERSION.md) | `*_conversion.ndjson` + ledger hop table |
@@ -31,6 +31,13 @@ mine  →  rank  →  probe  →  gate  →  conversion wave
 Legacy CLIs `scripts/probe-corpus-admission.py` (single) and
 `scripts/batch-probe.py` (leased batch) still run; they point at
 `python -m regexproof.probe`.
+
+Operator shortlists (stdout only; do not change live mine drain):
+
+```bash
+python scripts/rank-mine-candidates.py --limit 10 --exclude-family rules
+python scripts/rank-mine-candidates.py --no-skip-gated --decision go --exclude-family rules --limit 10
+```
 
 ## Two stores
 

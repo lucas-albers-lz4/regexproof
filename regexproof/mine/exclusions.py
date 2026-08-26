@@ -88,6 +88,8 @@ def load_admitted_urls(generated_dir: Path | None = None) -> set[str]:
             data = json.loads(p.read_text(encoding="utf-8"))
         except (OSError, json.JSONDecodeError):
             continue
+        if not isinstance(data, dict):
+            continue  # fail-closed: non-object gate JSON
         url = data.get("candidate_url")
         if url:
             out.add(normalize_repo_url(str(url)))

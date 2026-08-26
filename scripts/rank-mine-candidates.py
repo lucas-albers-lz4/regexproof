@@ -5,6 +5,8 @@ Usage:
   python scripts/rank-mine-candidates.py
   python scripts/rank-mine-candidates.py --ledger PATH --status mined --limit 10
   python scripts/rank-mine-candidates.py --no-skip-gated --limit 10
+  python scripts/rank-mine-candidates.py --limit 10 --exclude-family rules
+  python scripts/rank-mine-candidates.py --no-skip-gated --decision go --exclude-family rules --limit 10
 """
 
 from __future__ import annotations
@@ -25,6 +27,7 @@ from regexproof.mine.density import (  # noqa: E402  # ROOT bootstrap above
     materialize_density_hits,
 )
 from regexproof.mine.exclusions import load_admitted_urls, normalize_repo_url  # noqa: E402  # ROOT bootstrap above
+from regexproof.mine.features import query_family  # noqa: E402  # ROOT bootstrap above
 from regexproof.mine.ledger import load_ledger  # noqa: E402  # ROOT bootstrap above
 from regexproof.mine.score import (  # noqa: E402  # ROOT bootstrap above
     candidate_score,
@@ -35,6 +38,10 @@ from regexproof.mine.tree import (  # noqa: E402  # ROOT bootstrap above
     TreeCache,
     materialize_tree_features,
 )
+
+# Opt-in rank filters (operator shortlist). Live mine drain stays score-v1.
+_QUERY_FAMILIES = ("security", "rules", "validators", "testdata", "other")
+_GATE_DECISIONS = ("go", "no-go", "triage-trial")
 
 
 def _http_session():
@@ -147,7 +154,36 @@ def main(argv: list[str] | None = None) -> int:
         default=None,
         help="Density cache path (default: .cache/regexproof/mine-density.json).",
     )
+    ap.add_argument(
+        "--exclude-family",
+        action="append",
+        default=[],
+        choices=_QUERY_FAMILIES,
+        metavar="FAMILY",
+        help=(
+            "Drop candidates whose source_query family matches (repeatable). "
+            "Applied after scoring, before --limit. Does not change live "
+            "mine drain. Families: " + ", ".join(_QUERY_FAMILIES) + "."
+        ),
+    )
+    ap.add_argument(
+        "--decision",
+        default=None,
+        choices=_GATE_DECISIONS,
+        help=(
+            "Keep only candidates whose gate decision matches "
+            f"({', '.join(_GATE_DECISIONS)}). Requires --no-skip-gated. "
+            "Missing/unknown decision drops the row (fail-closed)."
+        ),
+    )
     args = ap.parse_args(argv)
+
+    if args.decision and args.skip_gated:
+        print(
+            "error: --decision requires --no-skip-gated",
+            file=sys.stderr,
+        )
+        return 2
 
     ledger_path = args.ledger.expanduser().resolve()
     if not ledger_path.is_file():
@@ -170,13 +206,15 @@ def main(argv: list[str] | None = None) -> int:
     # feature.  Join the decisions (by URL) and attach the decision-time
     # probe + pin (E3 semantics: never the ledger's mined pin).
     decisions_by_url: dict[str, dict[str, Any]] = {}
-    if args.allocator == "score-v2" or not args.skip_gated:
+    if args.allocator == "score-v2" or not args.skip_gated or args.decision:
         gen = args.generated.expanduser().resolve()
         for path in sorted(gen.glob("*_gate_decision.json")):
             try:
                 dec = json.loads(path.read_text(encoding="utf-8"))
             except (OSError, json.JSONDecodeError):
                 continue
+            if not isinstance(dec, dict):
+                continue  # fail-closed: non-object gate JSON
             curl = str(dec.get("candidate_url") or "")
             if curl:
                 decisions_by_url.setdefault(normalize_repo_url(curl), dec)
@@ -266,6 +304,29 @@ def main(argv: list[str] | None = None) -> int:
         deny_slugs=deny_slugs or None,
         density_hits=density_hits or None,
     )
+    # Opt-in shortlist filters: after score, before limit — ranking among
+    # survivors is unchanged; live mine admit/drain is untouched.
+    exclude_families = frozenset(args.exclude_family or ())
+    if exclude_families:
+        ranked = [
+            c
+            for c in ranked
+            if query_family(str(c.get("source_query") or ""))
+            not in exclude_families
+        ]
+    if args.decision:
+        kept: list[dict[str, Any]] = []
+        for c in ranked:
+            url = str(c.get("url") or "")
+            if not url:
+                continue
+            dec = decisions_by_url.get(normalize_repo_url(url))
+            if not isinstance(dec, dict):
+                continue  # fail-closed: no gate row
+            if str(dec.get("decision") or "") != args.decision:
+                continue
+            kept.append(c)
+        ranked = kept
     if args.limit and args.limit > 0:
         ranked = ranked[: args.limit]
 
