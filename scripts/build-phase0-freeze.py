@@ -250,8 +250,8 @@ def main() -> int:
             "to": "stdlib one-proportion z-test with 1/(2n) continuity "
             "correction toward the null (PR #583)",
             "implementation": "regexproof.stats.intervals.two_proportion_test",
-            "effect": "k=3/n=50 vs baseline 121/844: uncorrected fires "
-            "(p~=0.0463); corrected does not (p~=0.0694). Pinned in "
+            "effect": "k=3/n=50 vs baseline 121/854: uncorrected fires "
+            "(p~=0.0488); corrected does not (p~=0.0730). Pinned in "
             "tests/test_intervals.py.",
             "rationale": "Match the predeclared #550 continuity-corrected "
             "oracle. statsmodels' two-proportion wrapper has no "

@@ -20,14 +20,14 @@ from regexproof.stats.intervals import (
     wilson_ci,
 )
 
-BASELINE = 121 / 844  # committed Phase 0 escape baseline ≈ 14.3% (deduped, #560 W3)
+BASELINE = 121 / 854  # committed Phase 0 escape baseline ≈ 14.2% (deduped; +10 NO-GO 2026-08-27)
 
 
 def test_wilson_ci_escape_baseline():
-    lo, hi = wilson_ci(121, 844)
-    # Design pins [12.1%, 16.9%] for the 121/844 baseline.
-    assert lo == pytest.approx(0.1213, abs=0.001)
-    assert hi == pytest.approx(0.1686, abs=0.001)
+    lo, hi = wilson_ci(121, 854)
+    # Design pins ~[12.0%, 16.7%] for the 121/854 baseline.
+    assert lo == pytest.approx(0.1199, abs=0.001)
+    assert hi == pytest.approx(0.1667, abs=0.001)
 
 
 def test_wilson_ci_edges():
@@ -95,16 +95,16 @@ def test_escape_does_not_fire_at_or_above_baseline():
 
 def test_escape_continuity_correction_boundary():
     """CodeRabbit #583: the correction is decision-relevant at the gate's
-    own committed baseline — k=3/n=50 vs BASELINE (121/844): uncorrected
-    p≈0.0463 (<0.05, fires) vs corrected p≈0.0694 (does NOT fire)."""
+    own committed baseline — k=3/n=50 vs BASELINE (121/854): uncorrected
+    p≈0.0488 (<0.05, fires) vs corrected p≈0.0730 (does NOT fire)."""
     t = two_proportion_test(k_window=3, n_window=50, baseline=BASELINE)
     assert t["fires"] is False
-    assert t["p_value"] == pytest.approx(0.069395, abs=1e-6)  # corrected oracle
-    # Sanity: without the correction the same input fires (0.046276).
+    assert t["p_value"] == pytest.approx(0.073034, abs=1e-6)  # corrected oracle
+    # Sanity: without the correction the same input fires (0.048828).
     se = (0.06 - BASELINE) / ((BASELINE * (1.0 - BASELINE) / 50) ** 0.5)
     from regexproof.stats.intervals import _normal_cdf
 
-    assert _normal_cdf(se) == pytest.approx(0.046276, abs=1e-6)
+    assert _normal_cdf(se) == pytest.approx(0.048828, abs=1e-6)
 
 
 def test_escape_respects_n_floor_and_predeclared_shape():
