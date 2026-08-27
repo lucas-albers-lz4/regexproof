@@ -1,10 +1,8 @@
 """mycelium conversion-wave properties (family ``MY-mycelium``).
 
 Wave 1 (control-plane fail-closed guards): sshd authorized-key type prefix,
-AmneziaWG dialect-key alphabet, REALITY donor ALPN h2 line alphabet, and
-AllowedIPs last-octet capture before client address allocation.
-Product engine is BusyBox (``grep -E`` at search sites; ``sed -E`` at the
-last-octet substitution — not sed-for-bash-``=~``). BusyBox alone decides
+AmneziaWG dialect-key alphabet, and REALITY donor ALPN h2 line alphabet.
+Product engine is BusyBox ``grep -E`` at search sites. BusyBox alone decides
 ground-truth; GNU is not consulted.
 Importing this module registers into ``REGISTRY``.
 """
@@ -12,26 +10,17 @@ Importing this module registers into ``REGISTRY``.
 from __future__ import annotations
 
 from z3 import (
-    Concat,
-    If,
-    IndexOf,
     InRe,
     Length,
-    Range,
     Re,
-    Star,
     String,
     StringVal,
-    SubString,
     Union,
 )
 
 from regexproof.harness.core import prop
 
 FAMILY = "MY-mycelium"
-
-DIGIT = Range("0", "9")
-DIGIT_PLUS = Concat(DIGIT, Star(DIGIT))
 
 
 def _union_chars(text: str):
@@ -55,7 +44,6 @@ ALPN_H2_CHAR = _union_chars(" \tALPN protocol:h2")
 SSH_KEY_GREP = r"^(ssh-(ed25519|rsa)|ecdsa-|sk-)"
 AWG_DIALECT_GREP = r"^(Jc|Jmin|Jmax|S1|S2|H1|H2|H3|H4) = "
 ALPN_H2_GREP = r"^[[:space:]]*ALPN protocol:[[:space:]]*h2[[:space:]]*$"
-AWG_LAST_OCTET_SED = r"s#^[0-9]+\.[0-9]+\.[0-9]+\.([0-9]+)/.*#\1#"
 
 
 def _alphabet_no(ch: str, name: str, alphabet, site: str, guarantee: str,
@@ -126,51 +114,6 @@ _alphabet_no(
     "untrusted-input",
     "ALPN h2 line alphabet [POSIX space + 'ALPN protocol:h2'], single char, ASCII",
 )
-
-
-@prop(
-    "MY-mycelium-awg-last-octet-capture",
-    "AllowedIPs last IPv4 octet (digits before '/') is captured in full by "
-    r"sed -E 's#^[0-9]+\.[0-9]+\.[0-9]+\.([0-9]+)/.*#\1#' — "
-    "proven for octet len 1..3 plus '/' plus mask digits",
-    expect_unsat=True,
-    kind="property",
-    family=FAMILY,
-    input_domain="ascii",
-    call_kind="substitution",
-    contract={
-        "schema_version": "1",
-        "site": "control/lib/nb_render_awg.sh:639:last-octet",
-        "guarantee": (
-            "digit last-octets before '/' are captured in full into the "
-            "AmneziaWG client address slot (awg-issue enrolment)"
-        ),
-        "input_source": "live awg0.conf AllowedIPs for an existing peer public key",
-        "trust": "config",
-        "declared_domain": (
-            "last-octet field DIGIT{1,3} '/' DIGIT{1,2} ASCII, slash is the "
-            "real delimiter, BusyBox sed -E"
-        ),
-        "provenance": "human",
-    },
-)
-def my_awg_last_octet_capture():
-    # Mirror group 1 under ``([0-9]+)/.*``: Concat so '/' is IN the domain
-    # (Luna: no vacuous IndexOf on an alphabet-disjoint char).
-    octet = String("octet")
-    mask = String("mask")
-    w = Concat(octet, StringVal("/"), mask)
-    q = IndexOf(w, StringVal("/"), 0)
-    cap = If(q < 0, w, SubString(w, 0, q))
-    return [
-        InRe(octet, DIGIT_PLUS),
-        InRe(mask, DIGIT_PLUS),
-        Length(octet) >= 1,
-        Length(octet) <= 3,
-        Length(mask) >= 1,
-        Length(mask) <= 2,
-        q >= 0,
-    ], cap != octet
 
 
 @prop(

@@ -18,7 +18,6 @@ PRODUCT_NAMES = (
     "MY-mycelium-ssh-key-prefix-no-semicolon",
     "MY-mycelium-awg-dialect-key-no-semicolon",
     "MY-mycelium-alpn-h2-line-no-semicolon",
-    "MY-mycelium-awg-last-octet-capture",
 )
 
 

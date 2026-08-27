@@ -51,7 +51,6 @@ SHAPE = {
     "MY-mycelium-ssh-key-prefix-no-semicolon": 1,
     "MY-mycelium-awg-dialect-key-no-semicolon": 1,
     "MY-mycelium-alpn-h2-line-no-semicolon": 1,
-    "MY-mycelium-awg-last-octet-capture": 3,
 }
 
 

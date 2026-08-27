@@ -108,10 +108,13 @@ contracts / BusyBox GT / ledger join / close-out.
 - Vocab above; drop tests/vendor. Current bucket:
   **control-plane fail-closed guards** (`control/`).
 - Mix: 2–3 shape 1 (new alphabet only), 1–2 shape 3, 0–1 shape 4 if an
-  escaper is in the bucket.
+  escaper is in the bucket. A shape-3-less wave is allowed when remaining
+  captures are Concat-identity — record that in the close-out; do not
+  invent a tautological shape 3.
 - Family `MY-mycelium`; `provenance=human`; mutation guard required.
-- Shape-3: model the **real delimiter** (AllowedIPs `/`). No vacuous
-  IndexOf on an alphabet-disjoint domain.
+- Shape-3: only if a capture can actually disagree with the source field.
+  AllowedIPs last-octet `Concat(octet, "/", mask)` is Concat-identity
+  (octet is digits; no slash) — skip, do not file.
 
 ### P3 — BusyBox GT + ledger join
 
@@ -132,7 +135,7 @@ contracts / BusyBox GT / ledger join / close-out.
 - **`tests/conformance` inflation** — Gate 1 drops `tests/` before ranking;
   materialize may need `--allowlist-file` because the probe file list
   starts with `tests/`.
-- **IPv4 last-octet vs charset deny-list** — shape 3 capture of group 1
-  before `/` is not an IPv4 charset disjointness re-ask.
+- **IPv4 last-octet vs charset deny-list** — last-octet `([0-9]+)/` is
+  Concat-identity, not a charset re-ask and not a sound shape 3. Skip it.
 - **Disclosure** — third-party mycelium bugs are not auto-`private_first`;
   no public issue without approval.

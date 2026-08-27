@@ -39,16 +39,6 @@
       "security_tool": false
     },
     {
-      "corpus": "mycelium",
-      "properties_asked": 4,
-      "properties_sat": 0,
-      "properties_unsat": 4,
-      "sat_ground_truthed": 0,
-      "sat_unique_sites": 0,
-      "scanner_rows": 269,
-      "security_tool": false
-    },
-    {
       "corpus": "openwrt_luci",
       "properties_asked": 4,
       "properties_sat": 1,
@@ -67,6 +57,16 @@
       "sat_unique_sites": 0,
       "scanner_rows": 0,
       "security_tool": true
+    },
+    {
+      "corpus": "mycelium",
+      "properties_asked": 3,
+      "properties_sat": 0,
+      "properties_unsat": 3,
+      "sat_ground_truthed": 0,
+      "sat_unique_sites": 0,
+      "scanner_rows": 269,
+      "security_tool": false
     }
   ],
   "funnel": {
@@ -87,13 +87,13 @@
     "pr_dry_run_findings": 14580,
     "pr_dry_run_private_first": 1264,
     "pr_dry_runs": 85,
-    "properties_asked": 30,
-    "properties_asked_distinct": 30,
+    "properties_asked": 29,
+    "properties_asked_distinct": 29,
     "properties_asked_synthesized": 644,
     "properties_sat": 6,
     "properties_sat_distinct": 6,
     "properties_sat_synthesized": 28,
-    "properties_unsat": 23,
+    "properties_unsat": 22,
     "redos_rows": 0,
     "rule_diff_report_sat": 10,
     "rule_diff_report_sat_gt": 10,
@@ -152,16 +152,14 @@
       ],
       "filed": 0,
       "idiom_bucket": "control-failclosed",
-      "properties_asked": 4,
+      "properties_asked": 3,
       "properties_sat": 0,
       "sat_ground_truthed": 0,
       "shape_counts": {
-        "1": 3,
-        "3": 1
+        "1": 3
       },
       "shape_mix": {
-        "shape_1": 0.75,
-        "shape_3": 0.25
+        "shape_1": 1.0
       },
       "wave_id": "mycelium_w1"
     },
@@ -270,8 +268,8 @@
     "gt_per_sat": 1.0,
     "pipeline_accepted_per_extracted": 7e-06,
     "pipeline_accepted_per_gt": 0.166667,
-    "property_asked_per_encodable": 0.000318,
-    "sat_per_property_asked": 0.2,
+    "property_asked_per_encodable": 0.000307,
+    "sat_per_property_asked": 0.206897,
     "yara_share_of_unencodable": 0.585403
   },
   "rule_diff_reports": {
@@ -300,7 +298,7 @@
   "schema_version": "1",
   "security_tool_split": {
     "properties_asked_in_tools": 3,
-    "properties_asked_not_tools": 27,
+    "properties_asked_not_tools": 26,
     "properties_sat_in_tools": 2,
     "properties_sat_not_tools": 4
   },
@@ -310,8 +308,7 @@
       "shape_3": 2
     },
     "mycelium": {
-      "shape_1": 3,
-      "shape_3": 1
+      "shape_1": 3
     },
     "openwrt_luci": {
       "shape_1": 3,
