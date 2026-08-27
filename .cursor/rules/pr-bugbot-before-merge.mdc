@@ -26,11 +26,15 @@ implementer. Luna: `Task` tool, `model: gpt-5.6-luna-medium`,
 
 ## Non-trivial vs trivial
 
-**Trivial** (skip Luna / Bugbot / Security; merge after CI green):
+**Trivial** (skip Luna / Bugbot / Security; **do not wait for CodeRabbit**):
 
 - Docs-only typos, badge/link/metadata, single-line comment, pure
   formatting with no logic change
 - Housekeeping like license badge, topics, changelog date bumps
+
+Merge after **CI green**. Draft is optional. If the PR was marked Ready and
+CodeRabbit comments, triage real CONFIRMED only — do not block merge on a
+skipped or in-flight CodeRabbit round.
 
 **Non-trivial** (Luna **and** Bugbot required):
 
@@ -56,12 +60,18 @@ its own PR. Skip re-review for trivial pushes only.
 
 **Never:** Grok reviewing its own patch. Luna and Grok in parallel on
 “is this correct?”. Grok on Composer argparse / docs / mechanical flags.
-Security on diffs with no trust-boundary surface.
+Security on diffs with no trust-boundary surface. The Security trigger is a
+short heuristic, not a full inventory (`docs/SECURITY-AUDIT.md`). Do not
+expand it to generic network egress (LLM client / `OPENCODE_API_BASE`).
 
 ## Sequence
 
-CI, Luna, and Bugbot must be green on the **same head** that becomes Ready
-(and that later merges, except trivial nits on top of that head).
+**Trivial:** wait for CI green, then merge. Skip the numbered sequence
+(no Luna / Bugbot / CodeRabbit wait).
+
+**Non-trivial:** CI, Luna, and Bugbot must be green on the **same head**
+that becomes Ready (and that later merges, except trivial nits on top of
+that head). Luna and Bugbot are required only here, not on trivial PRs.
 
 1. Implement on a branch. Open a **draft** PR (`gh pr create --draft`).
 2. Wait for **CI green on this head** (or fix first). Presence, not just
@@ -96,11 +106,12 @@ CI, Luna, and Bugbot must be green on the **same head** that becomes Ready
    after Ready with no CodeRabbit round, or while a round is in flight.
    Next item.
 
-Do not merge a non-trivial PR that is still draft, or with Luna NO_GO,
+Do not merge a **non-trivial** PR that is still draft, or with Luna NO_GO,
 unresolved Luna or Bugbot CONFIRMED, a skipped/in-flight CodeRabbit
 round, or un-triaged CodeRabbit CONFIRMED.
 Do not merge on stale Luna / Bugbot from a **non-nit** head older than
 the one you are merging (trivial nits on top of a reviewed head are fine).
+**Trivial** PRs: CI green is the merge gate.
 
 ## This repo — CI presence
 

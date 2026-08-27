@@ -24,11 +24,13 @@ fragmented re-reviews, no findings landing after the gate was declared green.
 
 ## The 4 rules
 
-1. **Keep the PR in draft until the pre-ready gate is clean.** Push
-   everything, then mark Ready. **Cursor:** that gate is **CI green** on
-   the same head, then Luna then Bugbot
-   (`.cursor/rules/pr-bugbot-before-merge.mdc`). **Hermes:** skip Bugbot /
-   Security Review / Cursor model slugs; use Hermes luna/standard-development.
+1. **Keep a non-trivial PR in draft until the pre-ready gate is clean.**
+   Push everything, then mark Ready. **Cursor non-trivial:** that gate is
+   **CI green** on the same head, then Luna then Bugbot
+   (`.cursor/rules/pr-bugbot-before-merge.mdc`). **Cursor trivial:** skip
+   Luna/Bugbot; merge after CI green; do not wait for CodeRabbit.
+   **Hermes:** skip Bugbot / Security Review / Cursor model slugs; use
+   Hermes luna/standard-development.
    A single review over a stable diff is better than three incremental
    rounds over a moving one — cross-file consistency findings only surface
    on a complete PR. Do not leave a finished PR in draft: auto-review skips
@@ -60,12 +62,12 @@ fragmented re-reviews, no findings landing after the gate was declared green.
    For CodeRabbit: check that every finding from the latest round carries a
    resolution marker (`✅ Addressed in commit <sha>` /
    `✅ Confirmed as addressed` / `✅ Review thread resolved` / withdrawal) and
-   that no newer review submission exists for your head. **Cursor:** Bugbot
-   already ran while the PR was draft
+   that no newer review submission exists for your head. **Cursor
+   non-trivial:** Bugbot already ran while the PR was draft
    (`.cursor/rules/pr-bugbot-before-merge.mdc`). Re-run Luna + Bugbot after
    a CodeRabbit fix **only after a non-nit push** (any push that would be
    non-trivial as its own PR; definition in that rule); skip for trivial
-   nits/docs.
+   nits/docs. **Cursor trivial:** Bugbot did not run; do not require it.
    **Hermes:** do not require Bugbot. Do not merge non-trivial PRs with
    unresolved Bugbot findings (Cursor) or untriaged `CONFIRMED` comments.
    Marking the CodeRabbit gate green while a round is still writing is how

@@ -247,11 +247,13 @@ every finding against the surrounding code before filing, and report what you
 Draft PRs are **not automatically** reviewed (`auto_review.drafts: false`);
 manual `@coderabbitai review` can still trigger on drafts. Review limits are
 **plan-specific rolling limits** within a rolling 60-minute window (Free: 1/hr, Pro: 5/hr, Pro+ 10/hr — check remaining
-quota with `@coderabbitai rate limit`), not a fixed ~3/hr cap. Stay **draft
-until the pre-ready gate is clean**, then mark Ready so CodeRabbit sees one
-frozen diff. **Cursor** agents: that gate is **CI green** on the same head,
-then Luna then Bugbot
+quota with `@coderabbitai rate limit`), not a fixed ~3/hr cap. **Non-trivial
+Cursor** PRs: stay **draft until the pre-ready gate is clean** (**CI green**
+on the same head, then Luna then Bugbot), then mark Ready so CodeRabbit sees
+one frozen diff
 ([`.cursor/rules/pr-bugbot-before-merge.mdc`](.cursor/rules/pr-bugbot-before-merge.mdc)).
+**Trivial** Cursor PRs: skip Luna/Bugbot; merge after CI green; do not wait
+for CodeRabbit.
 **Hermes:** skip that Cursor cycle (no Bugbot, no Security Review, no
 Composer/Grok slugs); keep CI + Hermes luna/standard-development. CodeRabbit
 takes ~5–10 min to write a round; **wait for the round to complete before
