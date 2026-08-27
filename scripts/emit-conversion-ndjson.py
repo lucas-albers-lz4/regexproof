@@ -51,6 +51,9 @@ SHAPE = {
     "MY-mycelium-ssh-key-prefix-no-semicolon": 1,
     "MY-mycelium-awg-dialect-key-no-semicolon": 1,
     "MY-mycelium-alpn-h2-line-no-semicolon": 1,
+    "AI-claude-plugins-cli-flag-no-semicolon": 1,
+    "AI-claude-plugins-skill-ref-no-semicolon": 1,
+    "AI-claude-plugins-git-clean-e-bundle-no-semicolon": 1,
 }
 
 
@@ -72,6 +75,20 @@ def row_from_run(
     if name not in SHAPE:
         raise SystemExit(f"error: {name} missing SHAPE entry (fail closed)")
     gt = result.get("ground_truth")
+    engines = result.get("engine_versions")
+    if (
+        not isinstance(engines, dict)
+        or any(
+            not isinstance(version, str)
+            or not version.strip()
+            or version == "?"
+            for version in (engines.get("python"), engines.get("z3"))
+        )
+    ):
+        raise SystemExit(
+            f"error: {name} missing engine_versions "
+            "(python+z3 required by docs/CLUSTER-CONVERSION.md)"
+        )
     rec = {
         "schema_version": "1",
         "regex_id": _regex_id(name),
@@ -94,6 +111,10 @@ def row_from_run(
         "product_reportable": product_reportable(entry),
         "contract": entry.get("contract"),
         "synthesized": False,
+        "engine_versions": {
+            "python": engines["python"],
+            "z3": engines["z3"],
+        },
     }
     return rec
 

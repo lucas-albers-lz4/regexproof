@@ -315,6 +315,11 @@ jobs:
         # Product engine is BusyBox grep -E at search sites (alphabet
         # spot-checks). GNU is not consulted. Absence of busybox is a hard fail.
         run: python scripts/ci-check-busybox-mycelium.py
+      - name: BusyBox claude-code-plugins hook replay
+        # Product engine is BusyBox grep -E at bash =~ sites and sed -E at
+        # the skill-ref substitution (alphabet spot-checks). GNU is not
+        # consulted. Absence of busybox is a hard fail.
+        run: python scripts/ci-check-busybox-claude-code-plugins.py
       - name: P8 gate-labels artifact (regenerated, #432)
         # The D3 fit source regenerates OFFLINE (no network) from the
         # tracked inputs (decisions + ledger + mine-tree-features.json).

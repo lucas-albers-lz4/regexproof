@@ -234,6 +234,10 @@ every finding against the surrounding code before filing, and report what you
   [`sweep/mycelium-conversion/plan.md`](sweep/mycelium-conversion/plan.md),
   close-out [`properties/generated/mycelium_conversion_wave.md`](properties/generated/mycelium_conversion_wave.md)
   (family `MY-mycelium`, bucket `control-failclosed`; `scripts/` bootstrap deferred).
+  claude-code-plugins posix-shell wave 1:
+  [`sweep/claude-code-plugins-conversion/plan.md`](sweep/claude-code-plugins-conversion/plan.md),
+  close-out [`properties/generated/claude-code-plugins_conversion_wave.md`](properties/generated/claude-code-plugins_conversion_wave.md)
+  (family `AI-claude-plugins`, bucket `plugin-hook-guards`; ECMA skills/MCP deferred).
   Heap saturates the compiler; this SOP saturates `properties_asked`.
   Cursor: `.cursor/rules/cluster-conversion-waves.mdc`.
 - Auditing this repo's own security: [`docs/SECURITY-AUDIT.md`](docs/SECURITY-AUDIT.md)

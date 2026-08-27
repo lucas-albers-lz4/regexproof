@@ -524,6 +524,34 @@ def test_aidevops_named_next_is_shell_hook_guards(tmp_path):
     assert sel["selection_basis"] == "named-next-unused"
 
 
+def test_claude_code_plugins_named_next_is_plugin_hook_guards(tmp_path):
+    cs = _load_cs()
+    gen = tmp_path / "generated"
+    _gate_decision(gen, "claude-code-plugins")
+    sched = cs.build_schedule([], queues_dir=tmp_path / "queues",
+                              gate_decisions_dir=gen,
+                              dispositions_path=tmp_path / "d.jsonl")
+    sel = sched["selections"][0]
+    assert sel["cluster"] == "claude-code-plugins"
+    assert sel["selected_bucket"] == "plugin-hook-guards"
+    assert sel["selection_basis"] == "named-next-unused"
+
+
+def test_claude_code_plugins_used_bucket_defers_unregistered_ecma(tmp_path):
+    cs = _load_cs()
+    gen = tmp_path / "generated"
+    _gate_decision(gen, "claude-code-plugins")
+    rows = [_row("claude-code-plugins_w1", "plugin-hook-guards")]
+    sched = cs.build_schedule(rows, queues_dir=tmp_path / "queues",
+                              gate_decisions_dir=gen,
+                              dispositions_path=tmp_path / "d.jsonl")
+    sel = sched["selections"][0]
+    assert sel["cluster"] == "claude-code-plugins"
+    assert sel["used_buckets"] == ["plugin-hook-guards"]
+    assert sel["selected_bucket"] is None
+    assert sel["selection_basis"] == "unregistered-next"
+
+
 def test_aidevops_used_bucket_defers_unregistered_ecma(tmp_path):
     cs = _load_cs()
     gen = tmp_path / "generated"

@@ -1,0 +1,337 @@
+{
+  "bucket": "plugin-hook-guards",
+  "corpus": "claude-code-plugins",
+  "dropped": [
+    {
+      "pattern": "$start_re",
+      "reason": "interpolated:$ident",
+      "site": "batch/corpora/claude-code-plugins/rules/plugins/guardrails/hooks/block-convention-violation.sh:141:7"
+    },
+    {
+      "pattern": "$TITLE_ERE",
+      "reason": "interpolated:$ident",
+      "site": "batch/corpora/claude-code-plugins/rules/plugins/guardrails/hooks/block-convention-violation.sh:314:26"
+    },
+    {
+      "pattern": "$SUBJECT_ERE",
+      "reason": "interpolated:$ident",
+      "site": "batch/corpora/claude-code-plugins/rules/plugins/guardrails/hooks/block-convention-violation.sh:446:2"
+    },
+    {
+      "pattern": "$_py_write",
+      "reason": "interpolated:$ident",
+      "site": "batch/corpora/claude-code-plugins/rules/plugins/guardrails/hooks/block-hook-bypass.sh:563:2"
+    },
+    {
+      "pattern": "$_redir_scan",
+      "reason": "interpolated:$ident",
+      "site": "batch/corpora/claude-code-plugins/rules/plugins/guardrails/hooks/block-hook-bypass.sh:658:8"
+    },
+    {
+      "pattern": "$_cat_redir",
+      "reason": "interpolated:$ident",
+      "site": "batch/corpora/claude-code-plugins/rules/plugins/guardrails/hooks/block-hook-bypass.sh:857:4"
+    },
+    {
+      "pattern": "$_cmd_prefix",
+      "reason": "interpolated:$ident",
+      "site": "batch/corpora/claude-code-plugins/rules/plugins/guardrails/hooks/block-hook-bypass.sh:890:9"
+    },
+    {
+      "pattern": "$_leading_redir",
+      "reason": "interpolated:$ident",
+      "site": "batch/corpora/claude-code-plugins/rules/plugins/guardrails/hooks/block-hook-bypass.sh:896:9"
+    },
+    {
+      "pattern": "$_producer_head",
+      "reason": "interpolated:$ident",
+      "site": "batch/corpora/claude-code-plugins/rules/plugins/guardrails/hooks/block-hook-bypass.sh:923:4"
+    },
+    {
+      "pattern": "$_echo_file_out",
+      "reason": "interpolated:$ident",
+      "site": "batch/corpora/claude-code-plugins/rules/plugins/guardrails/hooks/block-hook-bypass.sh:924:4"
+    },
+    {
+      "pattern": "^(${HM_ALT})[_a-z0-9]*=(0|false)$",
+      "reason": "interpolated",
+      "site": "batch/corpora/claude-code-plugins/rules/plugins/guardrails/hooks/block-no-verify.sh:208:4"
+    },
+    {
+      "pattern": "^`+",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/claude-code-plugins/rules/plugins/guardrails/hooks/cli-flag-verify.sh:163:67"
+    },
+    {
+      "pattern": "(^|[[:space:]])--?[A-Za-z0-9][A-Za-z0-9-]*",
+      "reason": "unencodable:per-alternative-anchor",
+      "site": "batch/corpora/claude-code-plugins/rules/plugins/guardrails/hooks/cli-flag-verify.sh:307:6"
+    },
+    {
+      "pattern": "^DEFAULT_BINS=",
+      "reason": "test-filename:cli-flag-verify.test.sh",
+      "site": "batch/corpora/claude-code-plugins/rules/plugins/guardrails/hooks/cli-flag-verify.test.sh:283:20"
+    },
+    {
+      "pattern": "$heredoc_start_re",
+      "reason": "interpolated:$ident",
+      "site": "batch/corpora/claude-code-plugins/rules/plugins/guardrails/hooks/flag-commit-pr-skill-bypass.sh:225:7"
+    },
+    {
+      "pattern": "(^|[[:space:];&|()]+)gh[[:space:]]+pr[[:space:]]+create([[:space:]]|$)",
+      "reason": "unencodable:per-alternative-anchor",
+      "site": "batch/corpora/claude-code-plugins/rules/plugins/guardrails/hooks/flag-commit-pr-skill-bypass.sh:253:3"
+    },
+    {
+      "pattern": ":$",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/claude-code-plugins/rules/plugins/guardrails/hooks/hardcoded-path-check.sh:248:82"
+    },
+    {
+      "pattern": "hook::require_jq[[:space:]]",
+      "reason": "test-filename:require-jq-notice-isolation.test.sh",
+      "site": "batch/corpora/claude-code-plugins/rules/plugins/guardrails/hooks/require-jq-notice-isolation.test.sh:43:4"
+    },
+    {
+      "pattern": "hook::require_jq[[:space:",
+      "reason": "test-filename:require-jq-notice-isolation.test.sh",
+      "site": "batch/corpora/claude-code-plugins/rules/plugins/guardrails/hooks/require-jq-notice-isolation.test.sh:59:7"
+    },
+    {
+      "pattern": "^FIRED:",
+      "reason": "test-filename:require-jq-notice-isolation.test.sh",
+      "site": "batch/corpora/claude-code-plugins/rules/plugins/guardrails/hooks/require-jq-notice-isolation.test.sh:102:14"
+    },
+    {
+      "pattern": "hook::require_jq",
+      "reason": "test-filename:require-jq-posture.test.sh",
+      "site": "batch/corpora/claude-code-plugins/rules/plugins/guardrails/hooks/require-jq-posture.test.sh:75:2"
+    },
+    {
+      "pattern": "^MAX_COMMAND_LEN=",
+      "reason": "test-filename:require-jq-posture.test.sh",
+      "site": "batch/corpora/claude-code-plugins/rules/plugins/guardrails/hooks/require-jq-posture.test.sh:76:5"
+    },
+    {
+      "pattern": "hook::require_jq_blocking[[:space:]]",
+      "reason": "test-filename:require-jq-posture.test.sh",
+      "site": "batch/corpora/claude-code-plugins/rules/plugins/guardrails/hooks/require-jq-posture.test.sh:96:5"
+    },
+    {
+      "pattern": "hook::require_jq[[:space:]]",
+      "reason": "test-filename:require-jq-posture.test.sh",
+      "site": "batch/corpora/claude-code-plugins/rules/plugins/guardrails/hooks/require-jq-posture.test.sh:101:5"
+    },
+    {
+      "pattern": "hook::require_jq_blocking[[:space:]]",
+      "reason": "test-filename:require-jq-posture.test.sh",
+      "site": "batch/corpora/claude-code-plugins/rules/plugins/guardrails/hooks/require-jq-posture.test.sh:110:5"
+    },
+    {
+      "pattern": "^# \\{0,1\\}",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/claude-code-plugins/rules/plugins/guardrails/hooks/resolve-convention-pattern.sh:62:39"
+    },
+    {
+      "pattern": "^${k}:",
+      "reason": "interpolated",
+      "site": "batch/corpora/claude-code-plugins/rules/plugins/guardrails/hooks/resolve-convention-pattern.sh:127:10"
+    },
+    {
+      "pattern": "^${k}:",
+      "reason": "interpolated",
+      "site": "batch/corpora/claude-code-plugins/rules/plugins/guardrails/hooks/resolve-convention-pattern.sh:215:2"
+    },
+    {
+      "pattern": ",$",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/claude-code-plugins/rules/plugins/guardrails/hooks/secret-pattern-detection.sh:198:113"
+    },
+    {
+      "pattern": "${grep_e_args[@]}",
+      "reason": "interpolated",
+      "site": "batch/corpora/claude-code-plugins/rules/plugins/guardrails/hooks/secret-pattern-detection.sh:253:5"
+    },
+    {
+      "pattern": "^`+",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/claude-code-plugins/rules/plugins/guardrails/hooks/skill-reference-verify.sh:289:4"
+    },
+    {
+      "pattern": "^`+",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/claude-code-plugins/rules/plugins/guardrails/hooks/stale-path-verify.sh:123:4"
+    }
+  ],
+  "dropped_count": 32,
+  "input_rows": 73,
+  "keep": [
+    {
+      "call_kind": "search",
+      "encodable": true,
+      "file": "batch/corpora/claude-code-plugins/rules/plugins/guardrails/hooks/block-hook-bypass.sh",
+      "pattern": "^([A-Za-z]):(/.*)?$",
+      "regex_id": "e9f2298ca260c65ac37a0bab8812d47b",
+      "score": 7,
+      "site": "batch/corpora/claude-code-plugins/rules/plugins/guardrails/hooks/block-hook-bypass.sh:767:5"
+    },
+    {
+      "call_kind": "search",
+      "encodable": true,
+      "file": "batch/corpora/claude-code-plugins/rules/plugins/guardrails/hooks/cli-flag-verify.sh",
+      "pattern": "^(--[a-zA-Z][a-zA-Z0-9-]*)",
+      "regex_id": "0ab59afc73a3e194bf408ae530a30fee",
+      "score": 7,
+      "site": "batch/corpora/claude-code-plugins/rules/plugins/guardrails/hooks/cli-flag-verify.sh:247:11"
+    },
+    {
+      "call_kind": "search",
+      "encodable": true,
+      "file": "batch/corpora/claude-code-plugins/rules/plugins/guardrails/hooks/hook-utils.sh",
+      "pattern": "^-[i0v](.+)$",
+      "regex_id": "aecfe60b2314ae2803ff5e9b07a58697",
+      "score": 7,
+      "site": "batch/corpora/claude-code-plugins/rules/plugins/guardrails/hooks/hook-utils.sh:1348:18"
+    },
+    {
+      "call_kind": "search",
+      "encodable": true,
+      "file": "batch/corpora/claude-code-plugins/rules/plugins/guardrails/hooks/hook-utils.sh",
+      "pattern": "^[0-9]+([.][0-9]+)?(s|m|h|d)?$",
+      "regex_id": "f1133ce908b5b7fc3b28559c09696b4d",
+      "score": 7,
+      "site": "batch/corpora/claude-code-plugins/rules/plugins/guardrails/hooks/hook-utils.sh:1485:22"
+    },
+    {
+      "call_kind": "search",
+      "encodable": true,
+      "file": "batch/corpora/claude-code-plugins/rules/plugins/guardrails/hooks/hook-utils.sh",
+      "pattern": "^[0-9]+(\\.[0-9]+)?$",
+      "regex_id": "61cb8678c9f25fd7bf6c704229389245",
+      "score": 7,
+      "site": "batch/corpora/claude-code-plugins/rules/plugins/guardrails/hooks/hook-utils.sh:574:9"
+    },
+    {
+      "call_kind": "search",
+      "encodable": true,
+      "file": "batch/corpora/claude-code-plugins/rules/plugins/guardrails/hooks/hook-utils.sh",
+      "pattern": "^([0-9]+)(\\.([0-9]+))?$",
+      "regex_id": "dca12f59908c442659c538f5bd78034d",
+      "score": 7,
+      "site": "batch/corpora/claude-code-plugins/rules/plugins/guardrails/hooks/hook-utils.sh:576:9"
+    },
+    {
+      "call_kind": "search",
+      "encodable": true,
+      "file": "batch/corpora/claude-code-plugins/rules/plugins/guardrails/hooks/hook-utils.sh",
+      "pattern": "^([0-9]+)(\\.([0-9]+))?$",
+      "regex_id": "bd8af80af16ffdb2b2850a88966e207f",
+      "score": 7,
+      "site": "batch/corpora/claude-code-plugins/rules/plugins/guardrails/hooks/hook-utils.sh:621:5"
+    },
+    {
+      "call_kind": "search",
+      "encodable": true,
+      "file": "batch/corpora/claude-code-plugins/rules/plugins/guardrails/hooks/hook-utils.sh",
+      "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*(\\[.*\\])?\\+?=",
+      "regex_id": "2c1bb4d89d242b4405e5af4e6109081a",
+      "score": 7,
+      "site": "batch/corpora/claude-code-plugins/rules/plugins/guardrails/hooks/hook-utils.sh:950:5"
+    },
+    {
+      "call_kind": "substitution",
+      "encodable": true,
+      "file": "batch/corpora/claude-code-plugins/rules/plugins/guardrails/hooks/skill-reference-verify.sh",
+      "pattern": "^(/[a-z][a-z0-9-]*:[a-z][a-z0-9-]*)([[:space:]].*)?$",
+      "regex_id": "c0ed28f75bbede1cc73530e26e819c6c",
+      "score": 7,
+      "site": "batch/corpora/claude-code-plugins/rules/plugins/guardrails/hooks/skill-reference-verify.sh:290:4"
+    },
+    {
+      "call_kind": "search",
+      "encodable": true,
+      "file": "batch/corpora/claude-code-plugins/rules/plugins/guardrails/hooks/block-dangerous-git.sh",
+      "pattern": "^-[A-Za-z]*e[A-Za-z]*$",
+      "regex_id": "cc66deaeb2047a3b56a2782c53294add",
+      "score": 5,
+      "site": "batch/corpora/claude-code-plugins/rules/plugins/guardrails/hooks/block-dangerous-git.sh:1055:9"
+    },
+    {
+      "call_kind": "search",
+      "encodable": true,
+      "file": "batch/corpora/claude-code-plugins/rules/plugins/guardrails/hooks/block-dangerous-git.sh",
+      "pattern": "^-[A-Za-z]*e[A-Za-z]*$",
+      "regex_id": "e15637942403eddda4349ef553f0f157",
+      "score": 5,
+      "site": "batch/corpora/claude-code-plugins/rules/plugins/guardrails/hooks/block-dangerous-git.sh:1087:9"
+    },
+    {
+      "call_kind": "search",
+      "encodable": true,
+      "file": "batch/corpora/claude-code-plugins/rules/plugins/guardrails/hooks/block-dangerous-git.sh",
+      "pattern": "^-[A-Za-z]+$",
+      "regex_id": "6992ae47dfb8ec4d8eb2d6b9bd7dfa39",
+      "score": 5,
+      "site": "batch/corpora/claude-code-plugins/rules/plugins/guardrails/hooks/block-dangerous-git.sh:1257:11"
+    },
+    {
+      "call_kind": "search",
+      "encodable": true,
+      "file": "batch/corpora/claude-code-plugins/rules/plugins/guardrails/hooks/block-dangerous-git.sh",
+      "pattern": "^[0-9a-fA-F]+$",
+      "regex_id": "67e6f615c932ed1bf3123927dc3f87f0",
+      "score": 5,
+      "site": "batch/corpora/claude-code-plugins/rules/plugins/guardrails/hooks/block-dangerous-git.sh:338:2"
+    },
+    {
+      "call_kind": "search",
+      "encodable": true,
+      "file": "batch/corpora/claude-code-plugins/rules/plugins/guardrails/hooks/block-dangerous-git.sh",
+      "pattern": "^[./*?]+$",
+      "regex_id": "d7760fa6da4f486b2eeb21056a58a17d",
+      "score": 5,
+      "site": "batch/corpora/claude-code-plugins/rules/plugins/guardrails/hooks/block-dangerous-git.sh:549:4"
+    },
+    {
+      "call_kind": "search",
+      "encodable": true,
+      "file": "batch/corpora/claude-code-plugins/rules/plugins/guardrails/hooks/block-dangerous-git.sh",
+      "pattern": "^:?[./*?]*$",
+      "regex_id": "e8dd99b2fdf3964577017947d8e776cf",
+      "score": 5,
+      "site": "batch/corpora/claude-code-plugins/rules/plugins/guardrails/hooks/block-dangerous-git.sh:553:4"
+    }
+  ],
+  "limit": 15,
+  "path_filter": "plugins/guardrails/hooks/",
+  "schema_version": "1",
+  "seeds": {
+    "ddns-private-ip": {
+      "needle_path": "dynamic_dns_functions.sh",
+      "status": "not-in-top"
+    },
+    "mwan3-dev-capture": {
+      "needle_path": "mwan3.sh",
+      "status": "not-in-top"
+    },
+    "pbr-sanitizer": {
+      "needle_path": "net/pbr/files/etc/init.d/pbr",
+      "status": "not-in-top"
+    }
+  },
+  "survivor_count": 41,
+  "vocab": [
+    "hooks",
+    "guard",
+    "guardrails",
+    "secret",
+    "block",
+    "bypass",
+    "convention",
+    "permission",
+    "flag",
+    "dangerous",
+    "no-verify",
+    "git"
+  ]
+}

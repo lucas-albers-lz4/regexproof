@@ -399,6 +399,7 @@ def test_ci_golden_regenerates_and_drift_checks_ledger():
         "openwrt_luci_w1",
         "aidevops_w1",
         "mycelium_w1",
+        "claude-code-plugins_w1",
     }
     for w in pw.values():
         assert w["properties_asked"] >= w["properties_sat"]
@@ -413,7 +414,7 @@ def test_ci_golden_regenerates_and_drift_checks_ledger():
     assert star["admission_window_end"] == star["history"][-1]["week_end"]
     assert data["queue_health"]["artifacts_present"] is False  # Phase C pending
     smc = data["shape_mix_by_corpus"]
-    assert {"openwrt_packages", "openwrt_luci", "aidevops", "mycelium"} <= set(smc)
+    assert {"openwrt_packages", "openwrt_luci", "aidevops", "mycelium", "claude-code-plugins"} <= set(smc)
     assert (
         ROOT / "properties" / "generated" / "validatorjs-inventory.ndjson"
     ).is_file()
