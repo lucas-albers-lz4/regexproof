@@ -4,7 +4,7 @@ Wave 1 (posix-shell hooks/guards): brief-filename task-id alphabet + capture,
 credential-emission ``remote_url``/``origin_url`` identifier alphabet, scope-guard
 Files Scope heading alphabet, GitHub issue-number capture before ``gh issue view``.
 Product engine is BusyBox ``grep -E`` as at the call site (bash ``=~`` sites
-replayed as ERE). GNU is logged and must not decide the ground-truth bit.
+replayed as ERE). BusyBox alone decides ground-truth; GNU is not consulted.
 Importing this module registers into ``REGISTRY``.
 """
 

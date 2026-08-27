@@ -7,7 +7,7 @@ Unlike ``ci-check-busybox-sed.py`` (GNU∩BusyBox agreement), this checker:
 - expected-UNSAT shape-3 (brief t-ID capture, gh issue digit capture)
   is differential fuzz, not witness replay
 - bash ``=~`` sites are replayed as BusyBox ``grep -E`` (not sed)
-- GNU is logged when it can disagree; agreement is not required
+- BusyBox alone decides pass/fail (GNU is not consulted)
 
 Run from the golden job after busybox is installed.
 """
