@@ -48,7 +48,8 @@ GIT_E_GREP = r"^-[A-Za-z]*e[A-Za-z]*$"
 
 
 def _alphabet_no(ch: str, name: str, alphabet, site: str, guarantee: str,
-                 input_source: str, trust: str, declared_domain: str):
+                 input_source: str, trust: str, declared_domain: str,
+                 call_kind: str = "search"):
     @prop(
         name,
         f"{guarantee} (length-independent single-char)",
@@ -56,7 +57,7 @@ def _alphabet_no(ch: str, name: str, alphabet, site: str, guarantee: str,
         kind="property",
         family=FAMILY,
         input_domain="ascii",
-        call_kind="search",
+        call_kind=call_kind,
         contract={
             "schema_version": "1",
             "site": site,
@@ -100,6 +101,7 @@ _alphabet_no(
     "agent Write/Edit of *.md inline-code spans (PostToolUse payload)",
     "untrusted-input",
     "skill-ref alphabet [/[a-z0-9:-]], single char, ASCII",
+    "substitution",
 )
 
 _alphabet_no(

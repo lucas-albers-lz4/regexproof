@@ -76,7 +76,15 @@ def row_from_run(
         raise SystemExit(f"error: {name} missing SHAPE entry (fail closed)")
     gt = result.get("ground_truth")
     engines = result.get("engine_versions")
-    if not isinstance(engines, dict) or not engines.get("python") or not engines.get("z3"):
+    if (
+        not isinstance(engines, dict)
+        or any(
+            not isinstance(version, str)
+            or not version.strip()
+            or version == "?"
+            for version in (engines.get("python"), engines.get("z3"))
+        )
+    ):
         raise SystemExit(
             f"error: {name} missing engine_versions "
             "(python+z3 required by docs/CLUSTER-CONVERSION.md)"

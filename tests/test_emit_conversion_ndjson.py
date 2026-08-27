@@ -59,3 +59,17 @@ def test_row_from_run_missing_engine_versions_aborts():
     }
     with pytest.raises(SystemExit, match="missing engine_versions"):
         mod.row_from_run(name, entry, result, corpus="openwrt_packages")
+
+
+def test_row_from_run_rejects_placeholder_engine_versions():
+    mod = _load_emit_module()
+    name = "OW-packages-hostname-no-semicolon"
+    entry = _minimal_entry()
+    result = {
+        "result": "unsat",
+        "domain": "test domain",
+        "ground_truth": "verified",
+        "engine_versions": {"python": "3.12.0", "z3": "?"},
+    }
+    with pytest.raises(SystemExit, match="missing engine_versions"):
+        mod.row_from_run(name, entry, result, corpus="openwrt_packages")
