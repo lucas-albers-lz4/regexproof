@@ -10,7 +10,8 @@ import regexproof.harness.properties
 import regexproof.harness.openwrt_packages
 import regexproof.harness.openwrt_luci
 import regexproof.harness.aidevops
-import regexproof.harness.mycelium  # noqa: F401
+import regexproof.harness.mycelium
+import regexproof.harness.claude_code_plugins  # noqa: F401
 from regexproof.harness.cli import main
 from regexproof.harness.core import (
     REGISTRY,

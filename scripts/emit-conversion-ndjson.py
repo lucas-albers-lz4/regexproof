@@ -51,6 +51,9 @@ SHAPE = {
     "MY-mycelium-ssh-key-prefix-no-semicolon": 1,
     "MY-mycelium-awg-dialect-key-no-semicolon": 1,
     "MY-mycelium-alpn-h2-line-no-semicolon": 1,
+    "AI-claude-plugins-cli-flag-no-semicolon": 1,
+    "AI-claude-plugins-skill-ref-no-semicolon": 1,
+    "AI-claude-plugins-git-clean-e-bundle-no-semicolon": 1,
 }
 
 

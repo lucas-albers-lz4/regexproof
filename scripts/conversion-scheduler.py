@@ -52,6 +52,9 @@ BUCKET_PROGRESSION: dict[str, list[str]] = {
     "mycelium": [
         "control-failclosed",
     ],
+    "claude-code-plugins": [
+        "plugin-hook-guards",
+    ],
 }
 
 DESIGN_TAIL_BUCKETS: dict[str, list[str]] = {
@@ -59,6 +62,7 @@ DESIGN_TAIL_BUCKETS: dict[str, list[str]] = {
     "openwrt_luci": ["network-js-dscp", "firewall-dscp"],
     "aidevops": ["ecma-plugins"],
     "mycelium": ["scripts-bootstrap"],
+    "claude-code-plugins": ["ecma-plugins"],
 }
 
 # Close-out said stop. Wins over DESIGN_TAIL so exhausted packages/luci

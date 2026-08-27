@@ -55,6 +55,15 @@ the work by phase; dates are merge dates.
   heading alphabet, gh issue-number capture) + `ci-check-busybox-aidevops.py`.
   Bucket `shell-hook-guards`. Ledger `properties_asked` 21 → 26. ECMA
   `.agents/plugins` deferred.
+- mycelium conversion wave 1 close-out: three `MY-mycelium` contracts
+  (sshd key-type prefix, AWG dialect-key, ALPN h2 line) +
+  `ci-check-busybox-mycelium.py`. Bucket `control-failclosed`. Ledger
+  `properties_asked` 26 → 29. `scripts/` bootstrap deferred.
+- claude-code-plugins conversion wave 1 close-out: three `AI-claude-plugins`
+  contracts (CLI long-flag alphabet, `/plugin:skill` ref alphabet, git-clean
+  `-e` bundle alphabet) + `ci-check-busybox-claude-code-plugins.py`. Bucket
+  `plugin-hook-guards`. Ledger `properties_asked` 29 → 32. ECMA skills/MCP
+  deferred.
 - Smith #387: `panther-labs-panther-analysis` GO (37/57 = 0.6491
   encodable, private_first); first cheap-later after [#533](https://github.com/lucas-albers-lz4/regexproof/issues/533) close.
 - Smith #384: `gadievron-raptor` GO (894/1879 = 0.4758 on first-party
