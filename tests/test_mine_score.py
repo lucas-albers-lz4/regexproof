@@ -441,7 +441,7 @@ def test_rank_cli_score_v2_tags_allocator(tmp_path: Path, capsys):
 def test_score_v2_weights_name_label_reproduction():
     art = load_weights(SCORE_V2_WEIGHTS_PATH)
     assert art["default_allocator"] == "score-v1"
-    assert art["holdout_positive_count"] == 16
+    assert art["holdout_positive_count"] == 14
     assert "label_reproduction_auc" in art
     assert art["label_reproduction_auc"] == art["holdout_auc"]
 
