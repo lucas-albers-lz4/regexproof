@@ -247,17 +247,16 @@ every finding against the surrounding code before filing, and report what you
 Draft PRs are **not automatically** reviewed (`auto_review.drafts: false`);
 manual `@coderabbitai review` can still trigger on drafts. Review limits are
 **plan-specific rolling limits** within a rolling 60-minute window (Free: 1/hr, Pro: 5/hr, Pro+ 10/hr — check remaining
-quota with `@coderabbitai rate limit`), not a fixed ~3/hr cap. Marking Ready
-makes the PR *eligible* for automatic review. CodeRabbit takes ~5–10 min to
-write a round; **wait for the round to complete before pushing fixes** (new
-`COMMENTED` submission from `coderabbitai[bot]` with `commit_id` = your head;
-a rate-limit comment means the head was NOT reviewed), batch all fixes into
-one push, and never declare the gate green while a round is still in flight.
-Bugbot is a **mandatory pre-merge gate** for non-trivial agent-driven PRs
-(`.cursor/rules/pr-bugbot-before-merge.mdc`): CI green, then Bugbot on branch
-changes, then triage — do not merge with unresolved Bugbot findings or
-un-triaged `CONFIRMED` comments.
-Full protocol: [`docs/CODERABBIT.md`](docs/CODERABBIT.md).
+quota with `@coderabbitai rate limit`), not a fixed ~3/hr cap. Stay **draft
+until Luna then Bugbot are clean**, then mark Ready so CodeRabbit sees one
+frozen diff. CodeRabbit takes ~5–10 min to write a round; **wait for the
+round to complete before pushing fixes** (new `COMMENTED` submission from
+`coderabbitai[bot]` with `commit_id` = your head; a rate-limit comment means
+the head was NOT reviewed), batch all fixes into one push, and never declare
+the gate green while a round is still in flight. Re-run Luna + Bugbot after
+CodeRabbit **only if the fix changed behavior**. Full agent PR cycle:
+[`.cursor/rules/pr-bugbot-before-merge.mdc`](.cursor/rules/pr-bugbot-before-merge.mdc).
+Protocol: [`docs/CODERABBIT.md`](docs/CODERABBIT.md).
 
 ## Related skills (Hermes)
 
