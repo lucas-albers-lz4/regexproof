@@ -308,7 +308,7 @@ jobs:
         # node is a hard fail. Expected-UNSAT shape-3 is differential fuzz.
         run: python scripts/ci-check-node-openwrt-luci.py
       - name: BusyBox aidevops hook replay
-        # Product engine is BusyBox grep/sed; GNU is logged; disagreement is a
+        # Product engine is BusyBox grep -E; GNU is logged; disagreement is a
         # delta. Absence of busybox is a hard fail. Expected-UNSAT shape-3 is fuzz.
         run: python scripts/ci-check-busybox-aidevops.py
       - name: P8 gate-labels artifact (regenerated, #432)
