@@ -86,11 +86,17 @@ CI, Luna, and Bugbot must be green on the **same head** that becomes Ready
    changed). Skip reviewers for trivial nits/docs; CI must still succeed
    on the merge head. Triage comments CONFIRMED / DISMISS / FOLD; do not
    auto-apply bot patches; human `REQUEST_CHANGES` outranks bots.
-8. Merge (`gh pr merge`, usual strategy) only when CI + Luna + Bugbot
-   are clean on this head (and Security if it ran). Next item.
+8. Merge (`gh pr merge`, usual strategy) only when **CI is green on the
+   merge head**, Luna + Bugbot are clean on this head **or** on the last
+   non-nit head if only trivial nits followed (and Security if it ran),
+   and step 6 completed: CodeRabbit `COMMENTED` on the Ready SHA (or the
+   latest fix-round SHA) with CONFIRMED comments triaged. Do not merge
+   after Ready with no CodeRabbit round, or while a round is in flight.
+   Next item.
 
 Do not merge a non-trivial PR that is still draft, or with Luna NO_GO,
-unresolved Luna or Bugbot CONFIRMED, or un-triaged CodeRabbit CONFIRMED.
+unresolved Luna or Bugbot CONFIRMED, a skipped/in-flight CodeRabbit
+round, or un-triaged CodeRabbit CONFIRMED.
 Do not merge on stale Luna / Bugbot from a **non-nit** head older than
 the one you are merging (trivial nits on top of a reviewed head are fine).
 

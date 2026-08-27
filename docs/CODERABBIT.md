@@ -25,7 +25,8 @@ fragmented re-reviews, no findings landing after the gate was declared green.
 ## The 4 rules
 
 1. **Keep the PR in draft until the pre-ready gate is clean.** Push
-   everything, then mark Ready. **Cursor:** that gate is Luna then Bugbot
+   everything, then mark Ready. **Cursor:** that gate is **CI green** on
+   the same head, then Luna then Bugbot
    (`.cursor/rules/pr-bugbot-before-merge.mdc`). **Hermes:** skip Bugbot /
    Security Review / Cursor model slugs; use Hermes luna/standard-development.
    A single review over a stable diff is better than three incremental
