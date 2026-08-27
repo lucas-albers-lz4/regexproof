@@ -1,8 +1,8 @@
 {
   "provenance": {
-    "gate_decision_count": 853,
-    "input_file_count": 853,
-    "inputs_hash": "b8e64a6188be44a9cde1f374ce6dc618917db6348ef8529c16559cd52a2f30aa",
+    "gate_decision_count": 854,
+    "input_file_count": 854,
+    "inputs_hash": "7d492769d65c60cda4eda5d9d28613de884b6993d343c2f9355046b8077a6311",
     "linked_row_count": 820,
     "schema_version": "1"
   },
@@ -22488,7 +22488,7 @@
       "url": "https://github.com/malpedia/signator-rules"
     },
     {
-      "decision_date": "2026-08-13",
+      "decision_date": "2026-08-26",
       "label": "go",
       "ledger": {
         "archived": false,

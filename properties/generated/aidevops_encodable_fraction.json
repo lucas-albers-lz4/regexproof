@@ -1,0 +1,46 @@
+{
+  "budget": {
+    "max_disk_mb": 1000,
+    "max_mem_mb": 4096,
+    "max_patterns": 50000,
+    "max_wall_s": 1200,
+    "redos_wall_s": 240
+  },
+  "budget_breaches": null,
+  "commit": "8666b6c6c52472b5535aa295f2df593918152cb1",
+  "compiler_fingerprint": "35ea1f238a9e",
+  "complete_run": true,
+  "corpus_pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+  "decision": "go",
+  "decision_note": "63 unclassified parse-error rows \u2014 Phase 1 requires zero",
+  "decision_rule": "go iff encodable/sample_size >= 0.3",
+  "dialect": "posix-shell",
+  "encodable": 10212,
+  "engine_versions": {
+    "python": "3.14.6",
+    "z3": "5.0.0"
+  },
+  "extractor_schema_version": "2",
+  "fraction": 0.9013,
+  "go_no_go_threshold": 0.3,
+  "id_formula": "v2-domain-optional-ascii-default",
+  "inventory_path": "properties/generated/aidevops-inventory.ndjson",
+  "path": "batch/corpora/aidevops/rules",
+  "pilot": "aidevops",
+  "reasons": {
+    "backref": 1,
+    "empty-class": 15,
+    "gnu-extension": 162,
+    "gnu-word-boundary": 8,
+    "internal-anchor": 694,
+    "ok": 10212,
+    "parse-error": 63,
+    "pattern-too-long": 4,
+    "per-alternative-anchor": 171
+  },
+  "sample_size": 11330,
+  "schema_version": "1",
+  "scope": "full_corpus",
+  "unclassified_parse_errors": 63,
+  "wall_s": 170.255
+}

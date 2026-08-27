@@ -104,6 +104,13 @@
     "max_wall_s": 600,
     "redos_wall_s": 120
   },
+  "aidevops": {
+    "max_disk_mb": 1000,
+    "max_mem_mb": 4096,
+    "max_patterns": 50000,
+    "max_wall_s": 1200,
+    "redos_wall_s": 240
+  },
   "ail-yara-rules": {
     "max_disk_mb": 100,
     "max_mem_mb": 1024,

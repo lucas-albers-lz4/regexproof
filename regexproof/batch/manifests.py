@@ -92,6 +92,23 @@ CORPUS_MANIFESTS: dict[str, CorpusManifest] = {
         "commit": "77dad3f31405bc11f8384d742f7ad95314179694",
         "budget": budget_as_dict(BUDGET_LUCI_DISK),
     },
+    "aidevops": {
+        "corpus_type": "rule_corpus",
+        # Materialize: ln -sfn <clone> batch/corpora/aidevops/rules
+        # marcusquinn/aidevops @ 8666b6c6 (11330 posix-shell sites).
+        # Conversion wave 1 (sweep/aidevops-conversion/plan.md) — manifest
+        # only, NOT in WAVE_CORPORA. shell_posix dispatch ignores glob and
+        # walks **/* + _is_shell_script (shebang regardless of suffix).
+        "path": ROOT / "batch" / "corpora" / "aidevops" / "rules",
+        "dialect": "posix-shell",
+        "extractor": "shell_posix",
+        "repo": "marcusquinn/aidevops",
+        "security_tool": False,
+        "lift_inline": False,
+        "corpus_pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+        "commit": "8666b6c6c52472b5535aa295f2df593918152cb1",
+        "budget": budget_as_dict(BUDGET_HEAVY_50K),
+    },
     "volatility3-mcp": {
         "corpus_type": "rule_corpus",
         # Materialize: ln -sfn /tmp/v3-check/rules batch/corpora/volatility3-mcp/rules
