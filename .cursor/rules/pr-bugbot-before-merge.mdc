@@ -21,7 +21,8 @@ failures, Luna NO_GO, and Bugbot findings still block.
 | Hard (contracts, schedulers, harness, extractors) | Grok 4.6 high | `cursor-grok-4.6-high` |
 
 Do not use `cursor-grok-4.5-high-fast` (or other `*-fast` Grok) as the
-implementer. Luna pin: `gpt-5.6-luna-medium` — never Opus-high.
+implementer. Luna: `Task` tool, `model: gpt-5.6-luna-medium`,
+`generalPurpose`, branch changes vs the default base. Never Opus-high.
 
 ## Non-trivial vs trivial
 
@@ -65,10 +66,11 @@ CI, Luna, and Bugbot must be green on the **same head** that becomes Ready
 1. Implement on a branch. Open a **draft** PR (`gh pr create --draft`).
 2. Wait for **CI green on this head** (or fix first). Presence, not just
    green — see **This repo — CI presence** below.
-3. While draft: **Luna**, then **Bugbot** (`review-bugbot`, `Diff: branch
-   changes`). Escalate Grok / Security only per the table. Fix Luna **and**
-   Bugbot CONFIRMED findings (or document FOLD / DISMISS) before Ready.
-   Stay draft.
+3. While draft: **Luna** (`Task`, `model: gpt-5.6-luna-medium`,
+   `generalPurpose`, branch vs default base), then **Bugbot**
+   (`review-bugbot`, `Diff: branch changes`). Escalate Grok / Security
+   only per the table. Fix Luna **and** Bugbot CONFIRMED findings (or
+   document FOLD / DISMISS) before Ready. Stay draft.
 4. **Non-nit push** → Luna + Bugbot on the new head (Security only if a
    trust-boundary file changed). Trivial push → skip.
 5. **`gh pr ready` only when CI + Luna + Bugbot are clean on this head**
@@ -78,10 +80,13 @@ CI, Luna, and Bugbot must be green on the **same head** that becomes Ready
    comment is not a review. One fix push per round: Composer for nits,
    Grok only if a comment hits a contract. Wait out the round; do not
    push mid-review. Protocol: `docs/CODERABBIT.md`.
-7. After CodeRabbit: re-Luna + Bugbot **only after a non-nit push**. Skip
-   for trivial nits/docs. Triage comments CONFIRMED / DISMISS / FOLD; do
-   not auto-apply bot patches; human `REQUEST_CHANGES` outranks bots.
-8. Merge (`gh pr merge`, usual strategy). Next item.
+7. After CodeRabbit: **non-nit push** → wait for **CI green on the new
+   head**, then Luna + Bugbot (Security only if a trust-boundary file
+   changed). Skip reviewers for trivial nits/docs; CI must still succeed
+   on the merge head. Triage comments CONFIRMED / DISMISS / FOLD; do not
+   auto-apply bot patches; human `REQUEST_CHANGES` outranks bots.
+8. Merge (`gh pr merge`, usual strategy) only when CI + Luna + Bugbot
+   are clean on this head (and Security if it ran). Next item.
 
 Do not merge a non-trivial PR that is still draft, or with Luna NO_GO,
 unresolved Luna or Bugbot CONFIRMED, or un-triaged CodeRabbit CONFIRMED.
