@@ -1,86 +1,127 @@
 ---
-description: Luna (medium) then Bugbot before merge in autonomous PR cycles
+description: Cursor-only lean PR cycle — Composer/Grok implement, Luna+Bugbot while draft, then Ready for CodeRabbit
 alwaysApply: true
 ---
 
-# PR cycle: Luna then Bugbot before merge (no human-review dependency)
+# Agent PR cycle (lean)
 
-When creating and merging pull requests in an agent-driven cycle (create → CI → merge) **without waiting for human review**, treat **Luna then Bugbot** as required gates for any non-trivial PR.
+**Cursor agent sessions only.** If running under Hermes, skip this file:
+Hermes has its own models and does not have Bugbot or Security Review. Do
+not require Composer/Grok slugs, Bugbot, or Security Review there. Hermes
+keeps CI + its own luna/standard-development gates.
 
-## When this applies
+Autonomous create → review → merge. Do not wait on human review. Hard CI
+failures, Luna NO_GO, and Bugbot findings still block.
 
-- You opened a PR, or are about to merge an open PR you (or this session) own.
-- The change is **non-trivial** (see below).
-- Do **not** block on human approval / CODEOWNERS review for merge readiness in this cycle; still respect hard CI failures, Luna NO_GO, and Bugbot findings.
+## Implement (non-fast)
+
+| Work | Who | Task slug |
+|---|---|---|
+| Easy / mechanical (flags, docs, tests, nits) | Composer 2.5 | `composer-2.5-fast` |
+| Hard (contracts, schedulers, harness, extractors) | Grok 4.6 high | `cursor-grok-4.6-high` |
+
+Do not use `cursor-grok-4.5-high-fast` (or other `*-fast` Grok) as the
+implementer. Luna: `Task` tool, `model: gpt-5.6-luna-medium`,
+`generalPurpose`, branch changes vs the default base. Never Opus-high.
 
 ## Non-trivial vs trivial
 
-**Trivial** (Luna + Bugbot optional — may merge after CI green):
+**Trivial** (skip Luna / Bugbot / Security; **do not wait for CodeRabbit**):
 
-- Docs-only typos, badge/link/metadata, single-line comment, pure formatting with no logic change
+- Docs-only typos, badge/link/metadata, single-line comment, pure
+  formatting with no logic change
 - Housekeeping like license badge, topics, changelog date bumps
 
-**Non-trivial** (Luna **and** Bugbot **required** before merge):
+Merge after **CI green**. Draft is optional. If the PR was marked Ready and
+CodeRabbit comments, triage real CONFIRMED only — do not block merge on a
+skipped or in-flight CodeRabbit round.
 
-- Any new/changed logic, scripts, compilers, extractors, tests, CI workflows, schemas, or generated security/report artifacts
-- Multi-file features, refactors, or anything touching regexproof runtime / harness / batch / rule_diff
+**Non-trivial** (Luna **and** Bugbot required):
 
-If unsure, treat as non-trivial.
+- Any new/changed logic, scripts, compilers, extractors, tests, CI
+  workflows, schemas, or generated security/report artifacts
+- Multi-file features, refactors, or anything touching regexproof
+  runtime / harness / batch / rule_diff
 
-## Luna reviewer model (hard pin)
+If unsure, treat as non-trivial. A comment or formatting edit that
+changes CI/config/process semantics is non-trivial.
 
-- **Model slug:** `gpt-5.6-luna-medium`
-- Launch Luna via the `Task` tool with `model: gpt-5.6-luna-medium` (generalPurpose or equivalent design/correctness review prompt).
-- Do **not** use `claude-4.6-opus-high-thinking`, other Opus-high variants, or “high-thinking” stand-ins for Luna.
-- Luna is the blocking design/correctness pass (load-bearing contracts, ledger join, extractor/glob, GT product engine, smith/gate corpus naming). Fix or document folds before Bugbot.
+**Non-nit push** (re-run trigger): any push that would be non-trivial as
+its own PR. Skip re-review for trivial pushes only.
 
-## Required sequence (non-trivial)
+## One question per reviewer
 
-All of the following must succeed on the **same final head commit** that will
-be merged. Missing, failed, timed-out, or otherwise unusable results are
-blocking. After any code-changing push, re-run the full gate set (CI → Luna →
-Bugbot → bot triage) on that new head — do not merge on stale checks from a
-prior SHA.
+| Question | Who | When |
+|---|---|---|
+| Is the design/contract correct? | Luna | Every **non-trivial** PR |
+| Is there a bug? | Bugbot | Every **non-trivial** PR, **after** Luna |
+| Trust-boundary hole? | Security Review | Only if the diff touches clone URL, PAT, `subprocess`, `eval`, probe walker, or fail-open `except` |
+| Second brain on Composer work? | Grok | Only if Luna returns NO_GO / CONFIRMED on a **contract** |
 
-1. Open or update the PR; wait for **CI** to go green on the current head (or fix failures first).
-   **Presence, not just green:** required `verify` jobs must appear in
-   `gh pr checks` — a rollup that only shows CodeQL is *not* green (issue #205).
-   Exact required names on `main` (#364):
-   - `Z3 proof harness`
-   - `Golden suite (Python 3.12)`
-   - `Golden suite (Python 3.13)`
-   - `Link check`
-   - `ReDoS stage (isolated)`
-   - `Read Python matrix`
-   - `Noodler backend (pinned asset + pre-flight, #220)`
-   Assert those names are present *and* successful before merge.
-   The Noodler job `name` in `.github/workflows/ci.yml` must be YAML-quoted;
-   an unquoted `#220` becomes a comment and truncates the check context so
-   branch protection never matches even when the job passed.
-2. Ensure the PR head branch is checked out locally.
-3. Run **Luna** (`Task`, `model: gpt-5.6-luna-medium`) on branch changes vs the default base. Address NO_GO / CONFIRMED findings (or document FOLD/DISMISS) before Bugbot. Unresolved Luna `CONFIRMED` findings block merge until fixed or documented FOLD/DISMISS.
-4. Run Bugbot via the `review-bugbot` skill / `bugbot` subagent on **branch changes** (merge-base vs default base, usually `main`).
-5. If Bugbot (or Luna) reports findings that require code changes: **fix them** (or explicitly document why a finding is a false positive), push, then **re-run CI + Luna + Bugbot + bot triage** on the new head.
-6. Triage bot / external review comments on the PR before merge:
-   - If CodeRabbit (or another bot/human) left review comments, pull the
-     thread (`gh api repos/{owner}/{repo}/pulls/<n>/comments --paginate`,
-     plus `<n>/reviews` and issue comments) and classify each:
-     `CONFIRMED` (fix it), `DISMISS` (document why it's a false positive),
-     or `FOLD` (already addressed / duplicate).
-   - Do **not** auto-apply a CodeRabbit-suggested fix without ground-truthing
-     it against the code or the real API — a suggested fix can be wrong
-     (the 422 `path:`-OR inconsistency).
-   - Human `REQUEST_CHANGES` / substantive inline comments **outrank** bot
-     comments. A bare bot comment doesn't block merge by itself, but
-     unresolved `CONFIRMED` bot findings should not merge clean.
-7. Only then merge (`gh pr merge` with the repo’s usual strategy). Do not merge non-trivial PRs with Luna NO_GO, unresolved Luna `CONFIRMED` findings (without FOLD/DISMISS), unresolved Bugbot findings, or un-triaged `CONFIRMED` bot comments.
+**Never:** Grok reviewing its own patch. Luna and Grok in parallel on
+“is this correct?”. Grok on Composer argparse / docs / mechanical flags.
+Security on diffs with no trust-boundary surface. The Security trigger is a
+short heuristic, not a full inventory (`docs/SECURITY-AUDIT.md`). Do not
+expand it to generic network egress (LLM client / `OPENCODE_API_BASE`).
 
-## Do not
+## Sequence
 
-- Merge a non-trivial PR solely because CI is green and no human commented
-- Treat “listed checks passed” as sufficient when expected `verify` jobs are **absent**
-- Skip Luna or Bugbot because “we just ran tests locally”
-- Substitute Opus-high (or any non-`gpt-5.6-luna-medium` slug) for Luna
-- Merge on CI/Luna/Bugbot results from a prior head after a code-changing push
-- Rely on AGENTS.md alone for this gate — this Cursor rule is the merge-cycle source of truth
-- Merge with unresolved `CONFIRMED` bot/CodeRabbit findings or an un-triaged review-comment thread
+**Trivial:** wait for CI green, then merge. Skip the numbered sequence
+(no Luna / Bugbot / CodeRabbit wait).
+
+**Non-trivial:** CI, Luna, and Bugbot must be green on the **same head**
+that becomes Ready (and that later merges, except trivial nits on top of
+that head). Luna and Bugbot are required only here, not on trivial PRs.
+
+1. Implement on a branch. Open a **draft** PR (`gh pr create --draft`).
+2. Wait for **CI green on this head** (or fix first). Presence, not just
+   green — see **This repo — CI presence** below.
+3. While draft: **Luna** (`Task`, `model: gpt-5.6-luna-medium`,
+   `generalPurpose`, branch vs default base), then **Bugbot**
+   (`review-bugbot`, `Diff: branch changes`). Escalate Grok / Security
+   only per the table. Fix Luna **and** Bugbot CONFIRMED findings (or
+   document FOLD / DISMISS) before Ready. Stay draft.
+4. **Non-nit push** → wait for **CI green**, then Luna + Bugbot on the
+   new head (Security only if a trust-boundary file changed). Trivial
+   push → skip.
+5. **`gh pr ready` only when CI + Luna + Bugbot are clean on this head**
+   (and Security if it ran). Do not leave a finished PR in draft —
+   CodeRabbit auto-review skips drafts.
+6. Wait for `coderabbitai[bot]` `COMMENTED` on that SHA. A rate-limit
+   comment is not a review. One fix push per round: Composer for nits,
+   Grok only if a comment hits a contract. Wait out the round; do not
+   push mid-review. Protocol: `docs/CODERABBIT.md`.
+7. After CodeRabbit: one fix push per round. **Non-nit** → wait for
+   **CI green**, then Luna + Bugbot (Security only if a trust-boundary
+   file changed), then **back to step 6** (wait `COMMENTED` on the new
+   SHA). **Trivial** nits/docs → skip Luna/Bugbot; still wait out the
+   CodeRabbit round (step 6). CI must succeed on the merge head. Triage
+   comments CONFIRMED / DISMISS / FOLD; do not auto-apply bot patches;
+   human `REQUEST_CHANGES` outranks bots.
+8. Merge (`gh pr merge`, usual strategy) only when **CI is green on the
+   merge head**, Luna + Bugbot are clean on this head **or** on the last
+   non-nit head if only trivial nits followed (and Security if it ran),
+   and step 6 completed: CodeRabbit `COMMENTED` on the Ready SHA (or the
+   latest fix-round SHA) with CONFIRMED comments triaged. Do not merge
+   after Ready with no CodeRabbit round, or while a round is in flight.
+   Next item.
+
+Do not merge a **non-trivial** PR that is still draft, or with Luna NO_GO,
+unresolved Luna or Bugbot CONFIRMED, a skipped/in-flight CodeRabbit
+round, or un-triaged CodeRabbit CONFIRMED.
+Do not merge on stale Luna / Bugbot from a **non-nit** head older than
+the one you are merging (trivial nits on top of a reviewed head are fine).
+**Trivial** PRs: CI green is the merge gate.
+
+## This repo — CI presence
+
+Required verify jobs must **appear and succeed** on the merge head
+(`gh pr checks`). A CodeQL-only rollup is not green (#205):
+
+- `Z3 proof harness`
+- `Golden suite (Python 3.12)` / `Golden suite (Python 3.13)`
+- `Link check`
+- `ReDoS stage (isolated)`
+- `Read Python matrix`
+- `Noodler backend (pinned asset + pre-flight, #220)` — job `name` must
+  be YAML-quoted

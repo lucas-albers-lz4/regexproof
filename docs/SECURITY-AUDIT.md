@@ -211,9 +211,12 @@ it at medium and letting the reader discover the caveat.
   a "checked and clean" section is not auditable.
 - Group genuinely-minor items into one batch issue (as #176 does) rather than
   filing five issues that each need their own triage.
-- Non-trivial fixes follow the PR cycle in
-  `.cursor/rules/pr-bugbot-before-merge.mdc`: CI green, then Bugbot on branch
-  changes, then merge.
+- Non-trivial **Cursor** fixes follow the PR cycle in
+  `.cursor/rules/pr-bugbot-before-merge.mdc` (draft until **CI green** +
+  Luna then Bugbot; Security only on trust-boundary diffs; Ready for
+  CodeRabbit; wait `COMMENTED` + triage; then merge).
+  **Hermes:** skip that cycle (no Bugbot / Security Review / Cursor model
+  slugs).
 
 ## 6a. Keeping this current
 
