@@ -1,0 +1,25 @@
+{
+  "address_space_cap": true,
+  "cache": {
+    "entries": 0,
+    "hit_rate": 0.0,
+    "hits": 0,
+    "misses": 0
+  },
+  "cache_hit_rate": 0.0,
+  "complete_run": true,
+  "corpus": "aidevops",
+  "corpus_type": "rule_corpus",
+  "encodable": 10212,
+  "engine": {
+    "python": "3.14.6"
+  },
+  "extracted": 11330,
+  "findings": 4839,
+  "inventory_questions": 4,
+  "join_regex_ids": 4818,
+  "redos_findings": 0,
+  "redos_incomplete": false,
+  "schema_version": "1",
+  "triage": 1118
+}

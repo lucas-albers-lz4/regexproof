@@ -8,11 +8,11 @@ Heap's-law / singleton novelty saturates **compiler coverage**. This artifact sa
 
 | stage | count |
 |---|---|
-| sites extracted (batch summaries) | 136,260 |
-| sites encodable | 84,266 |
-| scanner NDJSON rows | 9,741 |
-| planned inventory stubs | 326 |
-| classification rows (usage/intent/triage kinds) | 8,127 |
+| sites extracted (batch summaries) | 147,590 |
+| sites encodable | 94,478 |
+| scanner NDJSON rows | 14,580 |
+| planned inventory stubs | 330 |
+| classification rows (usage/intent/triage kinds) | 12,962 |
 | mutation guards (hygiene) | 644 |
 | properties asked (non-planned product kinds) | 21 |
 | properties asked distinct `(site, question_id)` | 21 |
@@ -36,15 +36,15 @@ Heap's-law / singleton novelty saturates **compiler coverage**. This artifact sa
 
 | rate | value |
 |---|---|
-| encodable / extracted | 0.6184 |
+| encodable / extracted | 0.6401 |
 | properties asked / encodable | 0.0002 |
 | SAT / properties asked | 0.2857 |
 | ground-truthed / SAT | 1.0000 |
 | pipeline accepted (incl. own-code) / SAT GT | 0.1667 |
 | pipeline accepted / extracted | 7.00e-06 |
-| encodable / extracted excluding YARA inventories | 0.5979 |
-| YARA share of inventory unencodable | 0.5951 |
-| `fullword-boundary` share of inventory unencodable | 0.5789 |
+| encodable / extracted excluding YARA inventories | 0.6413 |
+| YARA share of inventory unencodable | 0.5854 |
+| `fullword-boundary` share of inventory unencodable | 0.5695 |
 
 ## Security-tool split (scanner product kinds)
 
@@ -81,7 +81,7 @@ asked → SAT → GT → filed → accepted per `(wave_id, idiom_bucket)`.
 ## Starvation & queue pressure (#554)
 
 - demand_open (open gated:go clusters lacking a closed wave): **64**
-- admission_per_week (GO gate-decision artifacts, last 7-day window ending 2026-08-20): **2**
+- admission_per_week (GO gate-decision artifacts, last 7-day window ending 2026-08-26): **2**
 - backlog_weeks = demand_open / admission_per_week = **32.0**
 - mine_queue_pressure = queue_len / queue_cap = 100 / 100 = **1.0000**
 - alert (backlog_weeks increased >= 2 consecutive windows): **no** (consecutive increases: 0)

@@ -8,7 +8,7 @@
       "triage-trial"
     ],
     "snapshot_note": "Committed decision files; archived *.audit-failed.json excluded by suffix (structural (url,pin) supersession dedup).",
-    "snapshot_sha256": "ae9121d46c3d2dcd77112bf89fbd52c6851ae78f3ef3d0d6ecc869765706e529",
+    "snapshot_sha256": "3ae3a4543d84771e42e43fc2588f48b8767c2b837d32efc0d90d5b0688a34380",
     "source": "properties/generated/*_gate_decision.json",
     "status_counts": {
       "go": 81,
