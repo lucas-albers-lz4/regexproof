@@ -145,8 +145,10 @@
       "cluster": "aidevops",
       "mine_re_ranked": false,
       "selected_bucket": null,
-      "selection_basis": "none-available",
-      "used_buckets": []
+      "selection_basis": "unregistered-next",
+      "used_buckets": [
+        "shell-hook-guards"
+      ]
     },
     {
       "cluster": "ajohnsonnow-vet-rate-org",

@@ -481,3 +481,31 @@ def test_ledger_row_missing_cluster_identity_fails_closed(tmp_path):
     ]}) + "\n", encoding="utf-8")
     with pytest.raises(SystemExit, match="neither wave_id nor cluster"):
         cs._load_ledger_rows(ledger)
+
+
+def test_aidevops_named_next_is_shell_hook_guards(tmp_path):
+    cs = _load_cs()
+    gen = tmp_path / "generated"
+    _gate_decision(gen, "aidevops")
+    sched = cs.build_schedule([], queues_dir=tmp_path / "queues",
+                              gate_decisions_dir=gen,
+                              dispositions_path=tmp_path / "d.jsonl")
+    sel = sched["selections"][0]
+    assert sel["cluster"] == "aidevops"
+    assert sel["selected_bucket"] == "shell-hook-guards"
+    assert sel["selection_basis"] == "named-next-unused"
+
+
+def test_aidevops_used_bucket_defers_unregistered_ecma(tmp_path):
+    cs = _load_cs()
+    gen = tmp_path / "generated"
+    _gate_decision(gen, "aidevops")
+    rows = [_row("aidevops_w1", "shell-hook-guards")]
+    sched = cs.build_schedule(rows, queues_dir=tmp_path / "queues",
+                              gate_decisions_dir=gen,
+                              dispositions_path=tmp_path / "d.jsonl")
+    sel = sched["selections"][0]
+    assert sel["cluster"] == "aidevops"
+    assert sel["used_buckets"] == ["shell-hook-guards"]
+    assert sel["selected_bucket"] is None
+    assert sel["selection_basis"] == "unregistered-next"

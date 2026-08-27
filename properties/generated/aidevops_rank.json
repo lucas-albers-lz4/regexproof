@@ -1,0 +1,240 @@
+{
+  "bucket": "shell-hook-guards",
+  "corpus": "aidevops",
+  "dropped": [
+    {
+      "pattern": "^(t[0-9]+)(-|$)",
+      "reason": "unencodable:per-alternative-anchor",
+      "site": "batch/corpora/aidevops/rules/.agents/hooks/scope-guard-pre-push.sh:90:4"
+    },
+    {
+      "pattern": "(^|[^a-zA-Z_])(echo|printf|log_[a-zA-Z_]+)",
+      "reason": "unencodable:per-alternative-anchor",
+      "site": "batch/corpora/aidevops/rules/.agents/hooks/credential-emission-pre-push.sh:101:6"
+    },
+    {
+      "pattern": "(^|/)(t[0-9]+)(-|$)",
+      "reason": "unencodable:per-alternative-anchor",
+      "site": "batch/corpora/aidevops/rules/.agents/hooks/scope-guard-pre-push.sh:95:4"
+    },
+    {
+      "pattern": "REGRESSION:",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/aidevops/rules/.agents/hooks/complexity-regression-pre-push.sh:201:54"
+    },
+    {
+      "pattern": "^refs/remotes/$_remote/",
+      "reason": "interpolated",
+      "site": "batch/corpora/aidevops/rules/.agents/hooks/scope-guard-pre-push.sh:229:4"
+    },
+    {
+      "pattern": "^refs/remotes/origin/",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/aidevops/rules/.agents/hooks/complexity-regression-pre-push.sh:103:4"
+    },
+    {
+      "pattern": "^# {0,1}",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/aidevops/rules/.agents/hooks/task-id-collision-guard.sh:834:24"
+    },
+    {
+      "pattern": "^chore: claim t0*${num}( |\\$|\\\\[)",
+      "reason": "interpolated",
+      "site": "batch/corpora/aidevops/rules/.agents/hooks/task-id-collision-guard.sh:321:4"
+    },
+    {
+      "pattern": "^refs/remotes/$\\{_remote}/",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/aidevops/rules/.agents/hooks/pre-push-dup-todo-guard.sh:79:4"
+    },
+    {
+      "pattern": "$_zero_sha_pattern",
+      "reason": "interpolated:$ident",
+      "site": "batch/corpora/aidevops/rules/.agents/hooks/pre-push-dup-todo-guard.sh:70:33"
+    },
+    {
+      "pattern": "$_zero_sha_pattern",
+      "reason": "interpolated:$ident",
+      "site": "batch/corpora/aidevops/rules/.agents/hooks/pre-push-dup-todo-guard.sh:115:4"
+    },
+    {
+      "pattern": "^chore: claim t0*${num}( |\\$|\\\\[)",
+      "reason": "interpolated",
+      "site": "batch/corpora/aidevops/rules/.agents/hooks/task-id-collision-guard.sh:284:4"
+    },
+    {
+      "pattern": "(tsc([^[:alnum:]_]|$).*(command not found|not found)|(command not found|not found).*tsc([^[:alnum:]_]|$))",
+      "reason": "unencodable:per-alternative-anchor",
+      "site": "batch/corpora/aidevops/rules/.agents/hooks/repo-verify-pre-push.sh:251:1"
+    }
+  ],
+  "dropped_count": 13,
+  "input_rows": 42,
+  "keep": [
+    {
+      "call_kind": "search",
+      "encodable": true,
+      "file": "batch/corpora/aidevops/rules/.agents/hooks/brief-filename-guard.sh",
+      "pattern": "^todo/tasks/(t[0-9]+)-brief\\.md$",
+      "regex_id": "2073e76d8e25a9e62142b5c8bd8de975",
+      "score": 7,
+      "site": "batch/corpora/aidevops/rules/.agents/hooks/brief-filename-guard.sh:105:4"
+    },
+    {
+      "call_kind": "search",
+      "encodable": true,
+      "file": "batch/corpora/aidevops/rules/.agents/hooks/credential-emission-pre-push.sh",
+      "pattern": "^\\+\\+\\+[[:space:]]b/(.*)$",
+      "regex_id": "7e169e482f912d82adf7567bd893b024",
+      "score": 7,
+      "site": "batch/corpora/aidevops/rules/.agents/hooks/credential-emission-pre-push.sh:77:5"
+    },
+    {
+      "call_kind": "search",
+      "encodable": true,
+      "file": "batch/corpora/aidevops/rules/.agents/hooks/credential-emission-pre-push.sh",
+      "pattern": "^@@[[:space:]]-[0-9]+(,[0-9]+)?[[:space:]]\\+([0-9]+)",
+      "regex_id": "f630cc31bdda0804eb3576504ea6f204",
+      "score": 7,
+      "site": "batch/corpora/aidevops/rules/.agents/hooks/credential-emission-pre-push.sh:90:5"
+    },
+    {
+      "call_kind": "search",
+      "encodable": true,
+      "file": "batch/corpora/aidevops/rules/.agents/hooks/task-id-collision-guard.sh",
+      "pattern": "(Resolves|Closes|Fixes|Ref|For)[[:space:]]+#[0-9]+",
+      "regex_id": "b75cf352ac6de8e34a01a1d368564c71",
+      "score": 7,
+      "site": "batch/corpora/aidevops/rules/.agents/hooks/task-id-collision-guard.sh:377:23"
+    },
+    {
+      "call_kind": "search",
+      "encodable": true,
+      "file": "batch/corpora/aidevops/rules/.agents/hooks/brief-filename-guard.sh",
+      "pattern": "^todo/tasks/t[0-9]+-brief\\.md$",
+      "regex_id": "21191efa97e1698e04c995e037ff02f8",
+      "score": 5,
+      "site": "batch/corpora/aidevops/rules/.agents/hooks/brief-filename-guard.sh:84:5"
+    },
+    {
+      "call_kind": "search",
+      "encodable": true,
+      "file": "batch/corpora/aidevops/rules/.agents/hooks/complexity-regression-pre-push.sh",
+      "pattern": "\\.(sh|py)$",
+      "regex_id": "5c94bd69c51f93bb3ce6c3a810278b55",
+      "score": 5,
+      "site": "batch/corpora/aidevops/rules/.agents/hooks/complexity-regression-pre-push.sh:144:3"
+    },
+    {
+      "call_kind": "search",
+      "encodable": true,
+      "file": "batch/corpora/aidevops/rules/.agents/hooks/credential-emission-pre-push.sh",
+      "pattern": "\\$\\{?(remote_url|origin_url)\\}?",
+      "regex_id": "7795c1a30486d8b94849994ceb7b72cf",
+      "score": 5,
+      "site": "batch/corpora/aidevops/rules/.agents/hooks/credential-emission-pre-push.sh:103:7"
+    },
+    {
+      "call_kind": "search",
+      "encodable": true,
+      "file": "batch/corpora/aidevops/rules/.agents/hooks/credential-emission-pre-push.sh",
+      "pattern": "^[[:space:]]",
+      "regex_id": "f6da042ca68e3f4c91487e2bc7c2b880",
+      "score": 5,
+      "site": "batch/corpora/aidevops/rules/.agents/hooks/credential-emission-pre-push.sh:111:7"
+    },
+    {
+      "call_kind": "search",
+      "encodable": true,
+      "file": "batch/corpora/aidevops/rules/.agents/hooks/credential-emission-pre-push.sh",
+      "pattern": "^\\+[^+]",
+      "regex_id": "e991d400a439e410088f03d8960f28f2",
+      "score": 5,
+      "site": "batch/corpora/aidevops/rules/.agents/hooks/credential-emission-pre-push.sh:96:5"
+    },
+    {
+      "call_kind": "search",
+      "encodable": true,
+      "file": "batch/corpora/aidevops/rules/.agents/hooks/scope-guard-pre-push.sh",
+      "pattern": "^##[#]?[[:space:]]+Files[[:space:]]+Scope",
+      "regex_id": "a2aa9472b2bb3377a6fc13710302c073",
+      "score": 5,
+      "site": "batch/corpora/aidevops/rules/.agents/hooks/scope-guard-pre-push.sh:137:5"
+    },
+    {
+      "call_kind": "search",
+      "encodable": true,
+      "file": "batch/corpora/aidevops/rules/.agents/hooks/scope-guard-pre-push.sh",
+      "pattern": "^##[#]? Files Scope",
+      "regex_id": "a7483f1835f315f0b28a8e58aef23e56",
+      "score": 5,
+      "site": "batch/corpora/aidevops/rules/.agents/hooks/scope-guard-pre-push.sh:177:5"
+    },
+    {
+      "call_kind": "search",
+      "encodable": true,
+      "file": "batch/corpora/aidevops/rules/.agents/hooks/task-id-collision-guard.sh",
+      "pattern": "^[0-9]+$",
+      "regex_id": "8799d5d9561a3438e71778ec36986f80",
+      "score": 5,
+      "site": "batch/corpora/aidevops/rules/.agents/hooks/task-id-collision-guard.sh:116:6"
+    },
+    {
+      "call_kind": "search",
+      "encodable": true,
+      "file": "batch/corpora/aidevops/rules/.agents/hooks/task-id-collision-guard.sh",
+      "pattern": "^[0-9]+$",
+      "regex_id": "28f686593cdcefbcb3164d279087788b",
+      "score": 5,
+      "site": "batch/corpora/aidevops/rules/.agents/hooks/task-id-collision-guard.sh:129:5"
+    },
+    {
+      "call_kind": "search",
+      "encodable": true,
+      "file": "batch/corpora/aidevops/rules/.agents/hooks/task-id-collision-guard.sh",
+      "pattern": "^[0-9]+$",
+      "regex_id": "0047719ae31612fd53ca28fb4c90c29c",
+      "score": 5,
+      "site": "batch/corpora/aidevops/rules/.agents/hooks/task-id-collision-guard.sh:278:6"
+    },
+    {
+      "call_kind": "search",
+      "encodable": true,
+      "file": "batch/corpora/aidevops/rules/.agents/hooks/task-id-collision-guard.sh",
+      "pattern": "^[0-9]+$",
+      "regex_id": "863b0ce57a5fdbb912462b1dfe301697",
+      "score": 5,
+      "site": "batch/corpora/aidevops/rules/.agents/hooks/task-id-collision-guard.sh:315:6"
+    }
+  ],
+  "limit": 15,
+  "path_filter": ".agents/hooks/",
+  "schema_version": "1",
+  "seeds": {
+    "ddns-private-ip": {
+      "needle_path": "dynamic_dns_functions.sh",
+      "status": "not-in-top"
+    },
+    "mwan3-dev-capture": {
+      "needle_path": "mwan3.sh",
+      "status": "not-in-top"
+    },
+    "pbr-sanitizer": {
+      "needle_path": "net/pbr/files/etc/init.d/pbr",
+      "status": "not-in-top"
+    }
+  },
+  "survivor_count": 29,
+  "vocab": [
+    ".agents",
+    "hooks",
+    "pre-push",
+    "credential",
+    "scope-guard",
+    "privacy",
+    "gh-wrapper",
+    "secret",
+    "task-id",
+    "repo-verify"
+  ]
+}

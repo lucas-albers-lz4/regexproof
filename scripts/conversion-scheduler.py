@@ -46,11 +46,15 @@ BUCKET_PROGRESSION: dict[str, list[str]] = {
     "openwrt_luci": [
         "form-validator-alphabets",
     ],
+    "aidevops": [
+        "shell-hook-guards",
+    ],
 }
 
 DESIGN_TAIL_BUCKETS: dict[str, list[str]] = {
     "openwrt_packages": ["qosify-network-dscp"],
     "openwrt_luci": ["network-js-dscp", "firewall-dscp"],
+    "aidevops": ["ecma-plugins"],
 }
 
 # Close-out said stop. Wins over DESIGN_TAIL so exhausted packages/luci

@@ -43,6 +43,11 @@ SHAPE = {
     "OW-luci-netdevname-semicolon-admitted": 1,
     "OW-luci-firewall-mark-no-semicolon": 1,
     "OW-luci-dockerman-publish-host-capture": 3,
+    "AI-aidevops-brief-tid-no-semicolon": 1,
+    "AI-aidevops-cred-ident-no-semicolon": 1,
+    "AI-aidevops-scope-heading-no-semicolon": 1,
+    "AI-aidevops-brief-tid-capture": 3,
+    "AI-aidevops-gh-issue-digit-capture": 3,
 }
 
 

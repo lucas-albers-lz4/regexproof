@@ -226,7 +226,10 @@ every finding against the surrounding code before filing, and report what you
   [`properties/generated/openwrt_luci_conversion_wave.md`](properties/generated/openwrt_luci_conversion_wave.md)
   (cluster **stopped** 2026-08-26; plan
   [`sweep/openwrt-luci-conversion/plan.md`](sweep/openwrt-luci-conversion/plan.md)
-  is historical).
+  is historical). aidevops posix-shell wave 1:
+  [`sweep/aidevops-conversion/plan.md`](sweep/aidevops-conversion/plan.md),
+  close-out [`properties/generated/aidevops_conversion_wave.md`](properties/generated/aidevops_conversion_wave.md)
+  (family `AI-aidevops`, bucket `shell-hook-guards`; ECMA plugins deferred).
   Heap saturates the compiler; this SOP saturates `properties_asked`.
   Cursor: `.cursor/rules/cluster-conversion-waves.mdc`.
 - Auditing this repo's own security: [`docs/SECURITY-AUDIT.md`](docs/SECURITY-AUDIT.md)
