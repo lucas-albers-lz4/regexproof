@@ -1,7 +1,7 @@
 # aidevops conversion wave 1 — close-out
 
 Pin: `marcusquinn/aidevops` @ `8666b6c6c52472b5535aa295f2df593918152cb1`.
-Family: `AI-aidevops`. Product engine: BusyBox `grep`/`sed` (bash `=~` replayed as ERE).
+Family: `AI-aidevops`. Product engine: BusyBox `grep -E` (bash `=~` replayed as ERE; not sed).
 Not in `WAVE_CORPORA`. Not mixed into `OW-packages` / `OW-luci`.
 Asked: **5** human contracts (ledger `properties_asked` 21 → 26).
 Idiom bucket: **`shell-hook-guards`**.

@@ -45,7 +45,9 @@ SCOPE_HEADING_CHAR = Union(
     Range("a", "z"),
 )
 
-BRIEF_SED = r"s|^todo/tasks/(t[0-9]+)-brief\.md$|\1|"
+# bash ``=~`` / ERE sites — BusyBox product engine is ``grep -E``, not sed.
+BRIEF_FILTER = r"^todo/tasks/t[0-9]+-brief\.md$"
+BRIEF_TID_GREP = r"t[0-9]+"
 ISSUE_GREP = r"#[0-9]+"
 
 
@@ -137,11 +139,16 @@ _alphabet_no(
         ),
         "input_source": "agent-staged todo/tasks/tNNN-brief.md filename (pre-commit index)",
         "trust": "untrusted-input",
-        "declared_domain": "t[0-9]+ ASCII, len 2..16, hyphen-free, BusyBox sed",
+        "declared_domain": (
+            "t[0-9]+ ASCII, len 2..16, hyphen-free, BusyBox grep -E "
+            "(bash =~ as ERE)"
+        ),
         "provenance": "human",
     },
 )
 def ai_brief_tid_capture():
+    # Mirror of group 1 under ``(t[0-9]+)`` then ``-brief.md``: first hyphen
+    # truncates; declared domain is hyphen-free so IndexOf == -1.
     w = String("w")
     q = IndexOf(w, StringVal("-"), 0)
     cap = If(q < 0, w, SubString(w, 0, q))
@@ -155,7 +162,8 @@ def ai_brief_tid_capture():
 @prop(
     "AI-aidevops-gh-issue-digit-capture",
     "GitHub issue numbers (digits only) are captured in full by "
-    r"grep -oE '#[0-9]+' before gh issue view — proven for len 1..8 digits",
+    r"grep -oE '#[0-9]+' | tr -d '#' before gh issue view — "
+    "proven for len 1..8 digits",
     expect_unsat=True,
     kind="property",
     family=FAMILY,
@@ -169,14 +177,21 @@ def ai_brief_tid_capture():
         ),
         "input_source": "commit-message Resolves/Closes/Fixes/Ref/For #NNN footers",
         "trust": "untrusted-input",
-        "declared_domain": "digits [0-9]{1,8}, ASCII, BusyBox grep -oE",
+        "declared_domain": "digits [0-9]{1,8}, ASCII, BusyBox grep -oE | tr -d '#'",
         "provenance": "human",
     },
 )
 def ai_gh_issue_capture():
+    # Mirror ``grep -oE '#[0-9]+' | tr -d '#'``: matched token is ``#``+digits;
+    # stripping the leading ``#`` recovers the digit body. First non-digit
+    # would end ``[0-9]+``; declared domain is digits-only so the strip is
+    # identity (delimiter = class complement, represented by space — the
+    # natural trailer terminator after ``#NNN``, not an unrelated ';').
     w = String("w")
-    q = IndexOf(w, StringVal(";"), 0)
-    cap = If(q < 0, w, SubString(w, 0, q))
+    matched = Concat(StringVal("#"), w)
+    stop = IndexOf(w, StringVal(" "), 0)
+    body = If(stop < 0, w, SubString(w, 0, stop))
+    cap = SubString(matched, 1, Length(body))
     return [
         InRe(w, DIGIT_PLUS),
         Length(w) >= 1,
