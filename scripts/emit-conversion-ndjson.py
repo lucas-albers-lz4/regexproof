@@ -48,6 +48,10 @@ SHAPE = {
     "AI-aidevops-scope-heading-no-semicolon": 1,
     "AI-aidevops-brief-tid-capture": 3,
     "AI-aidevops-gh-issue-digit-capture": 3,
+    "MY-mycelium-ssh-key-prefix-no-semicolon": 1,
+    "MY-mycelium-awg-dialect-key-no-semicolon": 1,
+    "MY-mycelium-alpn-h2-line-no-semicolon": 1,
+    "MY-mycelium-awg-last-octet-capture": 3,
 }
 
 

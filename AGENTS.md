@@ -230,6 +230,10 @@ every finding against the surrounding code before filing, and report what you
   [`sweep/aidevops-conversion/plan.md`](sweep/aidevops-conversion/plan.md),
   close-out [`properties/generated/aidevops_conversion_wave.md`](properties/generated/aidevops_conversion_wave.md)
   (family `AI-aidevops`, bucket `shell-hook-guards`; ECMA plugins deferred).
+  mycelium posix-shell wave 1:
+  [`sweep/mycelium-conversion/plan.md`](sweep/mycelium-conversion/plan.md),
+  close-out [`properties/generated/mycelium_conversion_wave.md`](properties/generated/mycelium_conversion_wave.md)
+  (family `MY-mycelium`, bucket `control-failclosed`; `scripts/` bootstrap deferred).
   Heap saturates the compiler; this SOP saturates `properties_asked`.
   Cursor: `.cursor/rules/cluster-conversion-waves.mdc`.
 - Auditing this repo's own security: [`docs/SECURITY-AUDIT.md`](docs/SECURITY-AUDIT.md)

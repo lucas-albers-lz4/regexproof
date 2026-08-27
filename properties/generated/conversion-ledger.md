@@ -14,9 +14,9 @@ Heap's-law / singleton novelty saturates **compiler coverage**. This artifact sa
 | planned inventory stubs | 330 |
 | classification rows (usage/intent/triage kinds) | 12,962 |
 | mutation guards (hygiene) | 644 |
-| properties asked (non-planned product kinds) | 26 |
-| properties asked distinct `(site, question_id)` | 26 |
-| properties UNSAT (holds in declared domain) | 19 |
+| properties asked (non-planned product kinds) | 30 |
+| properties asked distinct `(site, question_id)` | 30 |
+| properties UNSAT (holds in declared domain) | 23 |
 | properties SAT | 6 |
 | properties SAT distinct `(site, question_id)` | 6 |
 | SAT unique sites | 4 |
@@ -38,7 +38,7 @@ Heap's-law / singleton novelty saturates **compiler coverage**. This artifact sa
 |---|---|
 | encodable / extracted | 0.6401 |
 | properties asked / encodable | 0.0003 |
-| SAT / properties asked | 0.2308 |
+| SAT / properties asked | 0.2000 |
 | ground-truthed / SAT | 1.0000 |
 | pipeline accepted (incl. own-code) / SAT GT | 0.1667 |
 | pipeline accepted / extracted | 7.00e-06 |
@@ -48,7 +48,7 @@ Heap's-law / singleton novelty saturates **compiler coverage**. This artifact sa
 
 ## Security-tool split (scanner product kinds)
 
-Asked in tools: 3. Asked elsewhere: 23. SAT in tools: 2. SAT elsewhere: 4.
+Asked in tools: 3. Asked elsewhere: 27. SAT in tools: 2. SAT elsewhere: 4.
 
 ## Upstream (curated)
 
@@ -62,6 +62,7 @@ Source: [`docs/conversion-upstream.jsonl`](../../docs/conversion-upstream.jsonl)
 |---|---|---|---|---|---|---|
 | openwrt_packages | false | 14 | 11 | 3 | 3 | 3 |
 | aidevops | false | 5 | 5 | 0 | 0 | 0 |
+| mycelium | false | 4 | 4 | 0 | 0 | 0 |
 | openwrt_luci | false | 4 | 3 | 1 | 1 | 1 |
 | coreruleset | true | 3 | 0 | 2 | 2 | 0 |
 
@@ -75,6 +76,7 @@ asked → SAT → GT → filed → accepted per `(wave_id, idiom_bucket)`.
 | wave | idiom bucket | asked | SAT | GT | filed | accepted | GT→filed |
 |---|---|---|---|---|---|---|---|
 | aidevops_w1 | shell-hook-guards | 5 | 0 | 0 | **0** | 0 | **n/a** |
+| mycelium_w1 | control-failclosed | 4 | 0 | 0 | **0** | 0 | **n/a** |
 | openwrt_luci_w1 | form-validator-alphabets | 4 | 1 | 1 | **0** | 0 | **0.0000** |
 | openwrt_packages_w1 | validator-charsets-and-captures | 5 | 1 | 1 | **0** | 0 | **0.0000** |
 | openwrt_packages_w2 | image-and-ddns-json | 5 | 1 | 1 | **0** | 0 | **0.0000** |
@@ -82,9 +84,9 @@ asked → SAT → GT → filed → accepted per `(wave_id, idiom_bucket)`.
 
 ## Starvation & queue pressure (#554)
 
-- demand_open (open gated:go clusters lacking a closed wave): **63**
+- demand_open (open gated:go clusters lacking a closed wave): **62**
 - admission_per_week (GO gate-decision artifacts, last 7-day window ending 2026-08-26): **2**
-- backlog_weeks = demand_open / admission_per_week = **31.5**
+- backlog_weeks = demand_open / admission_per_week = **31.0**
 - mine_queue_pressure = queue_len / queue_cap = 100 / 100 = **1.0000**
 - alert (backlog_weeks increased >= 2 consecutive windows): **no** (consecutive increases: 0)
 
@@ -103,6 +105,7 @@ Share of asked properties per shape, per wave (conversion rows).
 | wave | idiom bucket | asked | shape mix (%) |
 |---|---|---|---|
 | aidevops_w1 | shell-hook-guards | 5 | shape 1: 0.6000, shape 3: 0.4000 |
+| mycelium_w1 | control-failclosed | 4 | shape 1: 0.7500, shape 3: 0.2500 |
 | openwrt_luci_w1 | form-validator-alphabets | 4 | shape 1: 0.7500, shape 3: 0.2500 |
 | openwrt_packages_w1 | validator-charsets-and-captures | 5 | shape 1: 0.6000, shape 3: 0.4000 |
 | openwrt_packages_w2 | image-and-ddns-json | 5 | shape 1: 0.4000, shape 3: 0.4000, shape 4: 0.2000 |

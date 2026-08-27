@@ -10,6 +10,8 @@ not this) · [`PLAYBOOK.md`](PLAYBOOK.md) (spike first) ·
 [`DYNAMIC.md`](DYNAMIC.md) (interpolated patterns) ·
 [`AGENTS.md`](../AGENTS.md) (shapes 1–5) · first application:
 [`sweep/openwrt-conversion/plan.md`](../sweep/openwrt-conversion/plan.md)
+· latest posix-shell cluster:
+[`sweep/mycelium-conversion/plan.md`](../sweep/mycelium-conversion/plan.md)
 
 A **cluster** is a source-native unit with one trust map and one device
 engine: an OpenWrt feed, an agent-runtime tree (OpenClaw), a distro’s init

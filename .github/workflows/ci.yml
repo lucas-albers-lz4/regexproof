@@ -311,6 +311,12 @@ jobs:
         # Product engine is BusyBox grep -E alone (GNU not consulted).
         # Absence of busybox is a hard fail. Expected-UNSAT shape-3 is fuzz.
         run: python scripts/ci-check-busybox-aidevops.py
+      - name: BusyBox mycelium control replay
+        # Product engine is BusyBox (grep -E at search sites; sed -E at the
+        # last-octet substitution as at the call site — not sed-for-bash-=~).
+        # GNU is not consulted. Absence of busybox is a hard fail.
+        # Expected-UNSAT shape-3 is differential fuzz.
+        run: python scripts/ci-check-busybox-mycelium.py
       - name: P8 gate-labels artifact (regenerated, #432)
         # The D3 fit source regenerates OFFLINE (no network) from the
         # tracked inputs (decisions + ledger + mine-tree-features.json).

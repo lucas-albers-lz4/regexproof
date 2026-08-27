@@ -369,11 +369,30 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--limit", type=int, default=15)
     ap.add_argument("-o", "--output", type=Path)
     ap.add_argument("--corpus", default="")
+    ap.add_argument(
+        "--path-filter",
+        default="",
+        help="keep only records whose path contains this substring (e.g. control/)",
+    )
+    ap.add_argument(
+        "--bucket",
+        default="",
+        help="idiom bucket label stored on the rank JSON",
+    )
     args = ap.parse_args(argv)
     vocab = tuple(t.strip() for t in args.vocab.split(",") if t.strip())
     records = load_ndjson(args.ndjson)
+    needle = args.path_filter.replace("\\", "/")
+    if needle:
+        records = [
+            rec for rec in records if needle in _path_of(rec).replace("\\", "/")
+        ]
     result = rank_rows(records, vocab=vocab, limit=args.limit)
     result["corpus"] = args.corpus or args.ndjson.stem.replace("-inventory", "")
+    if needle:
+        result["path_filter"] = args.path_filter
+    if args.bucket:
+        result["bucket"] = args.bucket
     annotate_seeds(result)
     text = json.dumps(result, indent=2, sort_keys=True, ensure_ascii=False) + "\n"
     if args.output:

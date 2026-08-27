@@ -126,6 +126,30 @@ def test_drop_substitution_without_capture_or_charset():
     ) is None
 
 
+def test_path_filter_and_bucket_flags(tmp_path: Path):
+    ndjson = tmp_path / "in.ndjson"
+    rows = [
+        _rec(site="control/lib/nb_harden.sh:1:0", file="control/lib/nb_harden.sh"),
+        _rec(site="tests/conformance/x.sh:1:0", file="tests/conformance/x.sh"),
+        _rec(site="scripts/fungi:1:0", file="scripts/fungi"),
+    ]
+    ndjson.write_text("".join(json.dumps(r) + "\n" for r in rows), encoding="utf-8")
+    out = tmp_path / "rank.json"
+    assert rank.main([
+        "--ndjson", str(ndjson),
+        "--path-filter", "control/",
+        "--bucket", "control-failclosed",
+        "--corpus", "mycelium",
+        "-o", str(out),
+    ]) == 0
+    data = json.loads(out.read_text(encoding="utf-8"))
+    assert data["path_filter"] == "control/"
+    assert data["bucket"] == "control-failclosed"
+    assert data["corpus"] == "mycelium"
+    assert data["input_rows"] == 1
+    assert all("control/" in str(k.get("file") or "") for k in data["keep"])
+
+
 def test_ranker_deterministic_fixture(tmp_path: Path):
     ndjson = tmp_path / "in.ndjson"
     rows = [

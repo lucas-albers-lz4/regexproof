@@ -483,6 +483,34 @@ def test_ledger_row_missing_cluster_identity_fails_closed(tmp_path):
         cs._load_ledger_rows(ledger)
 
 
+def test_mycelium_named_next_is_control_failclosed(tmp_path):
+    cs = _load_cs()
+    gen = tmp_path / "generated"
+    _gate_decision(gen, "mycelium")
+    sched = cs.build_schedule([], queues_dir=tmp_path / "queues",
+                              gate_decisions_dir=gen,
+                              dispositions_path=tmp_path / "d.jsonl")
+    sel = sched["selections"][0]
+    assert sel["cluster"] == "mycelium"
+    assert sel["selected_bucket"] == "control-failclosed"
+    assert sel["selection_basis"] == "named-next-unused"
+
+
+def test_mycelium_used_bucket_defers_unregistered_scripts(tmp_path):
+    cs = _load_cs()
+    gen = tmp_path / "generated"
+    _gate_decision(gen, "mycelium")
+    rows = [_row("mycelium_w1", "control-failclosed")]
+    sched = cs.build_schedule(rows, queues_dir=tmp_path / "queues",
+                              gate_decisions_dir=gen,
+                              dispositions_path=tmp_path / "d.jsonl")
+    sel = sched["selections"][0]
+    assert sel["cluster"] == "mycelium"
+    assert sel["used_buckets"] == ["control-failclosed"]
+    assert sel["selected_bucket"] is None
+    assert sel["selection_basis"] == "unregistered-next"
+
+
 def test_aidevops_named_next_is_shell_hook_guards(tmp_path):
     cs = _load_cs()
     gen = tmp_path / "generated"
