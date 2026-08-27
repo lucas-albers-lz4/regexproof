@@ -1,0 +1,48 @@
+{
+  "candidate_url": "https://github.com/Uniswap/routing-api",
+  "conditions": [
+    {
+      "evidence": "Predicted buckets present (1) but not treated as novel surface.",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Not a security boundary (probe.security_boundary=unknown).",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "8 sites < 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "routing-api",
+  "corpus_pin": "f5a81893b812b6745b1f8b7fa3a55a714cb9d89b",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-27",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 8
+    },
+    "flags": {
+      "g": 1
+    },
+    "pin": "f5a81893b812b6745b1f8b7fa3a55a714cb9d89b",
+    "pin_mined": "f5a81893b812b6745b1f8b7fa3a55a714cb9d89b",
+    "pin_probed": "f5a81893b812b6745b1f8b7fa3a55a714cb9d89b",
+    "predicted_buckets": {
+      "stateful": 1
+    },
+    "regex_sites": 8,
+    "regex_sites_per_file": {
+      "lib/handlers/quote/schema/quote-schema.ts": 8
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Uniswap routing-api. Probe 8 ECMA sites in quote-schema.ts, not a secret-scanner or validator corpus. Mined for .trufflehog.yml. Boundary unknown. No admission condition met.",
+  "schema_version": "1"
+}

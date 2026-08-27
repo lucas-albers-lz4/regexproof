@@ -1,0 +1,66 @@
+{
+  "candidate_url": "https://github.com/asweetand-a11y/DevTool1C",
+  "conditions": [
+    {
+      "evidence": "Predicted buckets present (3) but not treated as novel surface.",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Not a security boundary (probe.security_boundary=unknown).",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "113 sites < 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "DevTool1C",
+  "corpus_pin": "6c8ee2a0a6eb6c4187d0bb198bac213af1cfc4df",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-27",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "lookaround": 1
+    },
+    "dialect": {
+      "ecma": 113
+    },
+    "flags": {
+      "g": 30,
+      "i": 55
+    },
+    "pin": "6c8ee2a0a6eb6c4187d0bb198bac213af1cfc4df",
+    "pin_mined": "6c8ee2a0a6eb6c4187d0bb198bac213af1cfc4df",
+    "pin_probed": "6c8ee2a0a6eb6c4187d0bb198bac213af1cfc4df",
+    "predicted_buckets": {
+      "inline-flag": 55,
+      "lookaround": 1,
+      "stateful": 30
+    },
+    "regex_sites": 113,
+    "regex_sites_per_file": {
+      "src/commands/configurationCommands.ts": 2,
+      "src/commands/extensionsCommands.ts": 4,
+      "src/debug/bslModuleStructure.ts": 4,
+      "src/debug/bslProcedureVariables.ts": 4,
+      "src/debug/calculateExpression.ts": 8,
+      "src/debug/debugSession.ts": 17,
+      "src/debug/debugTargetTypes.ts": 2,
+      "src/debug/evalExprEnrich.ts": 12,
+      "src/debug/launch1cv8c.ts": 3,
+      "src/debug/metadataProvider.ts": 17,
+      "src/debug/rdbgClient.ts": 24,
+      "src/debug/showVariableInWindow.ts": 12,
+      "src/debug/xdtoSchema.ts": 1,
+      "src/vrunnerManager.ts": 3
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "1C DevTool VS Code extension. Probe 113 ECMA sites in debug/eval helpers, not secretlint rules. Mined for secretlintrc. Boundary unknown. No admission condition met.",
+  "schema_version": "1"
+}
