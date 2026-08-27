@@ -62,8 +62,9 @@ fragmented re-reviews, no findings landing after the gate was declared green.
    that no newer review submission exists for your head. **Cursor:** Bugbot
    already ran while the PR was draft
    (`.cursor/rules/pr-bugbot-before-merge.mdc`). Re-run Luna + Bugbot after
-   a CodeRabbit fix **only after a non-nit push** (logic, tests, schemas,
-   CI, scripts, or process-contract changes); skip for trivial nits/docs.
+   a CodeRabbit fix **only after a non-nit push** (any push that would be
+   non-trivial as its own PR; definition in that rule); skip for trivial
+   nits/docs.
    **Hermes:** do not require Bugbot. Do not merge non-trivial PRs with
    unresolved Bugbot findings (Cursor) or untriaged `CONFIRMED` comments.
    Marking the CodeRabbit gate green while a round is still writing is how
