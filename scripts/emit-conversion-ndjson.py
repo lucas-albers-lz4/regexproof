@@ -75,6 +75,12 @@ def row_from_run(
     if name not in SHAPE:
         raise SystemExit(f"error: {name} missing SHAPE entry (fail closed)")
     gt = result.get("ground_truth")
+    engines = result.get("engine_versions")
+    if not isinstance(engines, dict) or not engines.get("python") or not engines.get("z3"):
+        raise SystemExit(
+            f"error: {name} missing engine_versions "
+            "(python+z3 required by docs/CLUSTER-CONVERSION.md)"
+        )
     rec = {
         "schema_version": "1",
         "regex_id": _regex_id(name),
@@ -97,6 +103,10 @@ def row_from_run(
         "product_reportable": product_reportable(entry),
         "contract": entry.get("contract"),
         "synthesized": False,
+        "engine_versions": {
+            "python": engines["python"],
+            "z3": engines["z3"],
+        },
     }
     return rec
 

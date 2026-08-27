@@ -65,6 +65,10 @@ def test_committed_conversion_ndjson_matches_registry():
         assert row["family"] == FAMILY
         assert row["corpus"] == "claude-code-plugins"
         assert row["product_reportable"] is True
+        ev = row.get("engine_versions")
+        assert isinstance(ev, dict)
+        assert ev.get("python")
+        assert ev.get("z3")
         assert row["idiom_bucket"] == "plugin-hook-guards"
         assert row["wave_id"] == "claude-code-plugins_w1"
 
