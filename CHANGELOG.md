@@ -50,6 +50,11 @@ the work by phase; dates are merge dates.
   (adblock tcpdump-filter alphabet, netdevname semicolon admission SAT +
   Node GT, firewall mark alphabet, dockerman publish-host capture) +
   `ci-check-node-openwrt-luci.py`. Ledger `properties_asked` 17 → 21.
+- aidevops conversion wave 1 close-out: five `AI-aidevops` contracts
+  (brief task-id alphabet + capture, credential ident alphabet, Files Scope
+  heading alphabet, gh issue-number capture) + `ci-check-busybox-aidevops.py`.
+  Bucket `shell-hook-guards`. Ledger `properties_asked` 21 → 26. ECMA
+  `.agents/plugins` deferred.
 - Smith #387: `panther-labs-panther-analysis` GO (37/57 = 0.6491
   encodable, private_first); first cheap-later after [#533](https://github.com/lucas-albers-lz4/regexproof/issues/533) close.
 - Smith #384: `gadievron-raptor` GO (894/1879 = 0.4758 on first-party
