@@ -2,6 +2,9 @@
   "manifest_digests": {
     "funnel-drain-2026-08-27": {
       "count": 10
+    },
+    "funnel-drain-2026-08-27-b2": {
+      "count": 10
     }
   },
   "rows": {
@@ -124,8 +127,128 @@
       "pin": "8d96a93c37429a3d81c92f098dfdb05752b7337a",
       "started_at": "2026-08-27T14:55:27+00:00",
       "url": "https://github.com/practicalli/clojure-cli-config"
+    },
+    "funnel-drain-2026-08-27-b2#https://github.com/Amirhosein-gh98/Gnosis#1417f2103174d5ab00ed1fd48c8aa562365103ab": {
+      "bytes_saved": 0,
+      "cache_hit": false,
+      "completed_at": "2026-08-27T23:40:24+00:00",
+      "key": "funnel-drain-2026-08-27-b2#https://github.com/Amirhosein-gh98/Gnosis#1417f2103174d5ab00ed1fd48c8aa562365103ab",
+      "lifecycle_bytes": 0,
+      "manifest_digest": "funnel-drain-2026-08-27-b2",
+      "outcome": "needs_human",
+      "pin": "1417f2103174d5ab00ed1fd48c8aa562365103ab",
+      "started_at": "2026-08-27T23:45:00+00:00",
+      "url": "https://github.com/Amirhosein-gh98/Gnosis"
+    },
+    "funnel-drain-2026-08-27-b2#https://github.com/MyEtherWallet/MyEtherWallet#335d1508763b3c9f4b38eb8ccbc8cf0877e23a14": {
+      "bytes_saved": 0,
+      "cache_hit": false,
+      "completed_at": "2026-08-27T23:40:24+00:00",
+      "key": "funnel-drain-2026-08-27-b2#https://github.com/MyEtherWallet/MyEtherWallet#335d1508763b3c9f4b38eb8ccbc8cf0877e23a14",
+      "lifecycle_bytes": 0,
+      "manifest_digest": "funnel-drain-2026-08-27-b2",
+      "outcome": "needs_human",
+      "pin": "335d1508763b3c9f4b38eb8ccbc8cf0877e23a14",
+      "started_at": "2026-08-27T23:45:00+00:00",
+      "url": "https://github.com/MyEtherWallet/MyEtherWallet"
+    },
+    "funnel-drain-2026-08-27-b2#https://github.com/TheMorpheus407/the-dmz#dfb312166383492afd39f69e2c11bcc99233bca3": {
+      "bytes_saved": 0,
+      "cache_hit": false,
+      "completed_at": "2026-08-27T23:40:24+00:00",
+      "key": "funnel-drain-2026-08-27-b2#https://github.com/TheMorpheus407/the-dmz#dfb312166383492afd39f69e2c11bcc99233bca3",
+      "lifecycle_bytes": 0,
+      "manifest_digest": "funnel-drain-2026-08-27-b2",
+      "outcome": "needs_human",
+      "pin": "dfb312166383492afd39f69e2c11bcc99233bca3",
+      "started_at": "2026-08-27T23:45:00+00:00",
+      "url": "https://github.com/TheMorpheus407/the-dmz"
+    },
+    "funnel-drain-2026-08-27-b2#https://github.com/Uniswap/continuous-clearing-auction#6c9e559e63a7a141a4fe4bd5aa0f47fee1354b58": {
+      "bytes_saved": 0,
+      "cache_hit": false,
+      "completed_at": "2026-08-27T23:40:24+00:00",
+      "key": "funnel-drain-2026-08-27-b2#https://github.com/Uniswap/continuous-clearing-auction#6c9e559e63a7a141a4fe4bd5aa0f47fee1354b58",
+      "lifecycle_bytes": 0,
+      "manifest_digest": "funnel-drain-2026-08-27-b2",
+      "outcome": "needs_human",
+      "pin": "6c9e559e63a7a141a4fe4bd5aa0f47fee1354b58",
+      "started_at": "2026-08-27T23:45:00+00:00",
+      "url": "https://github.com/Uniswap/continuous-clearing-auction"
+    },
+    "funnel-drain-2026-08-27-b2#https://github.com/Uniswap/uniswapx-parameterization-api#acce4270cd36fc2e0899c69b547a454ca3086c95": {
+      "bytes_saved": 0,
+      "cache_hit": false,
+      "completed_at": "2026-08-27T23:40:24+00:00",
+      "key": "funnel-drain-2026-08-27-b2#https://github.com/Uniswap/uniswapx-parameterization-api#acce4270cd36fc2e0899c69b547a454ca3086c95",
+      "lifecycle_bytes": 0,
+      "manifest_digest": "funnel-drain-2026-08-27-b2",
+      "outcome": "needs_human",
+      "pin": "acce4270cd36fc2e0899c69b547a454ca3086c95",
+      "started_at": "2026-08-27T23:45:00+00:00",
+      "url": "https://github.com/Uniswap/uniswapx-parameterization-api"
+    },
+    "funnel-drain-2026-08-27-b2#https://github.com/aws/c3r#e6e7f6bc8707de991818fd79e7f37e56c11613fe": {
+      "bytes_saved": 0,
+      "cache_hit": false,
+      "completed_at": "2026-08-27T23:40:24+00:00",
+      "key": "funnel-drain-2026-08-27-b2#https://github.com/aws/c3r#e6e7f6bc8707de991818fd79e7f37e56c11613fe",
+      "lifecycle_bytes": 0,
+      "manifest_digest": "funnel-drain-2026-08-27-b2",
+      "outcome": "needs_human",
+      "pin": "e6e7f6bc8707de991818fd79e7f37e56c11613fe",
+      "started_at": "2026-08-27T23:45:00+00:00",
+      "url": "https://github.com/aws/c3r"
+    },
+    "funnel-drain-2026-08-27-b2#https://github.com/jauderho/dockerfiles#8122c6d9c75c964f1d7552f79c14c067b5b06e94": {
+      "bytes_saved": 0,
+      "cache_hit": false,
+      "completed_at": "2026-08-27T23:40:24+00:00",
+      "key": "funnel-drain-2026-08-27-b2#https://github.com/jauderho/dockerfiles#8122c6d9c75c964f1d7552f79c14c067b5b06e94",
+      "lifecycle_bytes": 0,
+      "manifest_digest": "funnel-drain-2026-08-27-b2",
+      "outcome": "needs_human",
+      "pin": "8122c6d9c75c964f1d7552f79c14c067b5b06e94",
+      "started_at": "2026-08-27T23:45:00+00:00",
+      "url": "https://github.com/jauderho/dockerfiles"
+    },
+    "funnel-drain-2026-08-27-b2#https://github.com/luongnv89/asm#9ed9a97c4910d404e0b72aab8daf090cf53e6cbd": {
+      "bytes_saved": 0,
+      "cache_hit": false,
+      "completed_at": "2026-08-27T23:40:24+00:00",
+      "key": "funnel-drain-2026-08-27-b2#https://github.com/luongnv89/asm#9ed9a97c4910d404e0b72aab8daf090cf53e6cbd",
+      "lifecycle_bytes": 0,
+      "manifest_digest": "funnel-drain-2026-08-27-b2",
+      "outcome": "needs_human",
+      "pin": "9ed9a97c4910d404e0b72aab8daf090cf53e6cbd",
+      "started_at": "2026-08-27T23:45:00+00:00",
+      "url": "https://github.com/luongnv89/asm"
+    },
+    "funnel-drain-2026-08-27-b2#https://github.com/mrwadams/stride-gpt#449d5b27b171eb288a48cdd9008a1f184e9afa48": {
+      "bytes_saved": 0,
+      "cache_hit": false,
+      "completed_at": "2026-08-27T23:40:24+00:00",
+      "key": "funnel-drain-2026-08-27-b2#https://github.com/mrwadams/stride-gpt#449d5b27b171eb288a48cdd9008a1f184e9afa48",
+      "lifecycle_bytes": 0,
+      "manifest_digest": "funnel-drain-2026-08-27-b2",
+      "outcome": "needs_human",
+      "pin": "449d5b27b171eb288a48cdd9008a1f184e9afa48",
+      "started_at": "2026-08-27T23:45:00+00:00",
+      "url": "https://github.com/mrwadams/stride-gpt"
+    },
+    "funnel-drain-2026-08-27-b2#https://github.com/practicalli/project-templates#19fa0480b98bc279798d18fec64f4e9a2f7024cb": {
+      "bytes_saved": 0,
+      "cache_hit": false,
+      "completed_at": "2026-08-27T23:40:24+00:00",
+      "key": "funnel-drain-2026-08-27-b2#https://github.com/practicalli/project-templates#19fa0480b98bc279798d18fec64f4e9a2f7024cb",
+      "lifecycle_bytes": 0,
+      "manifest_digest": "funnel-drain-2026-08-27-b2",
+      "outcome": "auto_nogo",
+      "pin": "19fa0480b98bc279798d18fec64f4e9a2f7024cb",
+      "started_at": "2026-08-27T23:45:00+00:00",
+      "url": "https://github.com/practicalli/project-templates"
     }
   },
   "schema_version": "1",
-  "sha256": "d57e9d7788eb2df77f0263f7777ee313c793f3d98892dd45415d6dbe27a81ede"
+  "sha256": "e4ec57f4f0eb75a654c8deb505e4292a602b2f6a7c519c74f9d21886017e5d43"
 }

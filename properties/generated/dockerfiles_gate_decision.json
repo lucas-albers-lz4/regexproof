@@ -1,0 +1,54 @@
+{
+  "candidate_url": "https://github.com/jauderho/dockerfiles",
+  "conditions": [
+    {
+      "evidence": "Predicted buckets present (1) but not treated as novel surface.",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Not a security boundary (probe.security_boundary=unknown).",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "30 sites < 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "dockerfiles",
+  "corpus_pin": "8122c6d9c75c964f1d7552f79c14c067b5b06e94",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-27",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "posix-class": 8
+    },
+    "dialect": {
+      "posix-shell": 30
+    },
+    "flags": {},
+    "pin": "8122c6d9c75c964f1d7552f79c14c067b5b06e94",
+    "pin_mined": "8122c6d9c75c964f1d7552f79c14c067b5b06e94",
+    "pin_probed": "4c6a73c68cd9486be3cd7fd2653d2c5dc31b04bb",
+    "predicted_buckets": {
+      "posix-class": 8
+    },
+    "regex_sites": 30,
+    "regex_sites_per_file": {
+      "lpar2rrd/startup.sh": 2,
+      "scripts/checkWorkflows.sh": 5,
+      "scripts/updateDockerImages.sh": 4,
+      "scripts/updateHashes.sh": 16,
+      "sftpd/files/create-sftp-user": 1,
+      "sftpd/files/entrypoint": 1,
+      "stor2rrd/startup.sh": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "jauderho/dockerfiles Docker image collection. Probe 30 posix-shell sites in build scripts, not TruffleHog detector rules. Mined for .trufflehog.yml. Boundary unknown. No admission condition met.",
+  "schema_version": "1"
+}

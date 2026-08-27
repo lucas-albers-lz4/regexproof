@@ -1,0 +1,61 @@
+{
+  "candidate_url": "https://github.com/mrwadams/stride-gpt",
+  "conditions": [
+    {
+      "evidence": "Predicted buckets present (2) but not treated as novel surface.",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Security-boundary condition not asserted met.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "30 sites < 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "stride-gpt",
+  "corpus_pin": "449d5b27b171eb288a48cdd9008a1f184e9afa48",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-27",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "py_re": 30
+    },
+    "flags": {
+      "i": 1,
+      "m": 2,
+      "s": 8
+    },
+    "pin": "449d5b27b171eb288a48cdd9008a1f184e9afa48",
+    "pin_mined": "449d5b27b171eb288a48cdd9008a1f184e9afa48",
+    "pin_probed": "5078e7f75c26e2a3a6d2b2215f59406554670c4c",
+    "predicted_buckets": {
+      "inline-flag": 9,
+      "m-flag": 2
+    },
+    "regex_sites": 30,
+    "regex_sites_per_file": {
+      "apps/web/attack_tree.py": 2,
+      "apps/web/dread.py": 2,
+      "stride_gpt/agent/report.py": 3,
+      "stride_gpt/agent/tools.py": 2,
+      "stride_gpt/core/dfd.py": 1,
+      "stride_gpt/core/dread.py": 4,
+      "stride_gpt/core/llm.py": 2,
+      "stride_gpt/core/mermaid_utils.py": 8,
+      "stride_gpt/core/threat_model.py": 4,
+      "tests/test_cli_version.py": 1,
+      "tests/test_report_sarif.py": 1
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "stride-gpt STRIDE threat-modeling app. Probe 30 py_re sites in app code, not gitleaks rule definitions. Mined for gitleaks.toml. Boundary deterministic-true but config-carrier product tree. No admission condition met.",
+  "schema_version": "1"
+}

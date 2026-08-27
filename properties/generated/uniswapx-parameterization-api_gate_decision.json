@@ -1,0 +1,54 @@
+{
+  "candidate_url": "https://github.com/Uniswap/uniswapx-parameterization-api",
+  "conditions": [
+    {
+      "evidence": "Predicted buckets present (1) but not treated as novel surface.",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Not a security boundary (probe.security_boundary=unknown).",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "9 sites < 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "uniswapx-parameterization-api",
+  "corpus_pin": "acce4270cd36fc2e0899c69b547a454ca3086c95",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-27",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 9
+    },
+    "flags": {
+      "g": 1
+    },
+    "pin": "acce4270cd36fc2e0899c69b547a454ca3086c95",
+    "pin_mined": "acce4270cd36fc2e0899c69b547a454ca3086c95",
+    "pin_probed": "8ddf6bf5d83ae4559ac57861003908cb28d5dd7a",
+    "predicted_buckets": {
+      "stateful": 1
+    },
+    "regex_sites": 9,
+    "regex_sites_per_file": {
+      "lib/util/fieldValidator.ts": 1,
+      "test/dashboards/deploy-markers.test.ts": 1,
+      "test/dashboards/param-dashboard-widgets.test.ts": 2,
+      "test/handlers/hard-quote/handlerDutchV2.deadline.test.ts": 1,
+      "test/handlers/hard-quote/handlerDutchV3.cosigner.test.ts": 1,
+      "test/integ/hard-quote.test.ts": 2,
+      "test/util/constants.test.ts": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "UniswapX parameterization API. Probe 9 ECMA sites in service code, not TruffleHog rules. Mined for .trufflehog.yml. Boundary unknown. No admission condition met.",
+  "schema_version": "1"
+}

@@ -1,0 +1,44 @@
+{
+  "candidate_url": "https://github.com/aws/c3r",
+  "conditions": [
+    {
+      "evidence": "No novel dialect/flag/encoding surface.",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Not a security boundary (probe.security_boundary=unknown).",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "1 sites < 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "c3r",
+  "corpus_pin": "e6e7f6bc8707de991818fd79e7f37e56c11613fe",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-27",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "java": 1
+    },
+    "flags": {},
+    "pin": "e6e7f6bc8707de991818fd79e7f37e56c11613fe",
+    "pin_mined": "e6e7f6bc8707de991818fd79e7f37e56c11613fe",
+    "pin_probed": "3195c3c5fa41b2bebdbff85a52a86a96dbc575cc",
+    "predicted_buckets": {},
+    "regex_sites": 1,
+    "regex_sites_per_file": {
+      "c3r-sdk-core/src/main/java/com/amazonaws/c3r/internal/Limits.java": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "aws/c3r collaborative encryption tool. Probe 1 Java site, not TruffleHog detector corpus. Mined for .trufflehog.yml. Boundary unknown. No admission condition met.",
+  "schema_version": "1"
+}
