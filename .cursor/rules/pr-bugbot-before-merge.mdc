@@ -71,8 +71,9 @@ CI, Luna, and Bugbot must be green on the **same head** that becomes Ready
    (`review-bugbot`, `Diff: branch changes`). Escalate Grok / Security
    only per the table. Fix Luna **and** Bugbot CONFIRMED findings (or
    document FOLD / DISMISS) before Ready. Stay draft.
-4. **Non-nit push** → Luna + Bugbot on the new head (Security only if a
-   trust-boundary file changed). Trivial push → skip.
+4. **Non-nit push** → wait for **CI green**, then Luna + Bugbot on the
+   new head (Security only if a trust-boundary file changed). Trivial
+   push → skip.
 5. **`gh pr ready` only when CI + Luna + Bugbot are clean on this head**
    (and Security if it ran). Do not leave a finished PR in draft —
    CodeRabbit auto-review skips drafts.
