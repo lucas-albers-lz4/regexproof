@@ -1,0 +1,56 @@
+{
+  "candidate_url": "https://github.com/huggingface/nanotron",
+  "conditions": [
+    {
+      "evidence": "Predicted buckets present (1) but not treated as novel surface.",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Not a security boundary (probe.security_boundary=unknown).",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "12 sites < 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "nanotron",
+  "corpus_pin": "2411b022a75fb7f7561a1bb4166706da5e1b76de",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-27",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "lookaround": 1
+    },
+    "dialect": {
+      "py_re": 12
+    },
+    "flags": {},
+    "pin": "2411b022a75fb7f7561a1bb4166706da5e1b76de",
+    "pin_mined": "2411b022a75fb7f7561a1bb4166706da5e1b76de",
+    "pin_probed": "2411b022a75fb7f7561a1bb4166706da5e1b76de",
+    "predicted_buckets": {
+      "lookaround": 1
+    },
+    "regex_sites": 12,
+    "regex_sites_per_file": {
+      "scripts/fix_checkpoint_bad_naming.py": 2,
+      "src/nanotron/data/s3_utils.py": 1,
+      "src/nanotron/data/tokenized_bytes.py": 1,
+      "src/nanotron/eval/upload_to_wandb.py": 1,
+      "src/nanotron/helpers.py": 2,
+      "src/nanotron/optim/zero.py": 2,
+      "src/nanotron/serialize/metadata.py": 1,
+      "src/nanotron/serialize/utils.py": 1,
+      "tests/helpers/utils.py": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "HuggingFace nanotron training stack. Probe 12 py_re sites in helpers/serialize/S3 utils, not a secret-scanner or input-validator regex corpus. Mined for .trufflehog.yml. Boundary unknown. No admission condition met.",
+  "schema_version": "1"
+}

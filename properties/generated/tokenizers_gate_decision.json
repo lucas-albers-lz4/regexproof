@@ -1,0 +1,57 @@
+{
+  "candidate_url": "https://github.com/huggingface/tokenizers",
+  "conditions": [
+    {
+      "evidence": "Predicted buckets present (3) but not treated as novel surface.",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Not a security boundary (probe.security_boundary=unknown).",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "20 sites < 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "tokenizers",
+  "corpus_pin": "447890f84deab25794ccfdee2a877901b6893569",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-27",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "lookaround": 3
+    },
+    "dialect": {
+      "ecma": 17,
+      "py_re": 3
+    },
+    "flags": {
+      "g": 2,
+      "i": 4
+    },
+    "pin": "447890f84deab25794ccfdee2a877901b6893569",
+    "pin_mined": "447890f84deab25794ccfdee2a877901b6893569",
+    "pin_probed": "d5827816baedcbf1cb5b452dea8048150b6872df",
+    "predicted_buckets": {
+      "inline-flag": 4,
+      "lookaround": 3,
+      "stateful": 2
+    },
+    "regex_sites": 20,
+    "regex_sites_per_file": {
+      ".github/scripts/render_bench_svg.py": 1,
+      "bindings/python/py_src/tokenizers/tools/visualizer.py": 1,
+      "docs/source/_ext/toctree_tags.py": 1,
+      "docs/source/_static/js/custom.js": 17
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "HuggingFace tokenizers. Probe 20 sites dominated by docs JS and bindings helpers, not secret-scanner rules. Mined for .trufflehog.yml. Boundary unknown. No admission condition met.",
+  "schema_version": "1"
+}

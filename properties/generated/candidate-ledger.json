@@ -19730,6 +19730,18 @@
     },
     {
       "archived": false,
+      "audit": {
+        "human_resolved": true,
+        "needs_human_review": false,
+        "re_evaluate": false,
+        "transitions": [
+          {
+            "reason": "sync:nanotron_gate_decision",
+            "to": "gated:no-go"
+          }
+        ],
+        "updated_at": "2026-08-27T14:54:47Z"
+      },
       "default_branch": "main",
       "first_seen": "2026-08-16T13:20:31Z",
       "fork": false,
@@ -19740,11 +19752,23 @@
       "size": 15871,
       "source_query": "filename:.trufflehog.yml OR filename:.trufflehog.toml OR filename:trufflehog.yml",
       "stars": 2783,
-      "status": "mined",
+      "status": "gated:no-go",
       "url": "https://github.com/huggingface/nanotron"
     },
     {
       "archived": false,
+      "audit": {
+        "human_resolved": true,
+        "needs_human_review": false,
+        "re_evaluate": false,
+        "transitions": [
+          {
+            "reason": "sync:tokenizers_gate_decision",
+            "to": "gated:no-go"
+          }
+        ],
+        "updated_at": "2026-08-27T14:54:47Z"
+      },
       "default_branch": "main",
       "first_seen": "2026-08-16T13:20:31Z",
       "fork": false,
@@ -19755,7 +19779,7 @@
       "size": 22157,
       "source_query": "filename:.trufflehog.yml OR filename:.trufflehog.toml OR filename:trufflehog.yml",
       "stars": 10968,
-      "status": "mined",
+      "status": "gated:no-go",
       "url": "https://github.com/huggingface/tokenizers"
     },
     {
@@ -19776,6 +19800,18 @@
     },
     {
       "archived": false,
+      "audit": {
+        "human_resolved": true,
+        "needs_human_review": false,
+        "re_evaluate": false,
+        "transitions": [
+          {
+            "reason": "sync:logchimp_gate_decision",
+            "to": "gated:no-go"
+          }
+        ],
+        "updated_at": "2026-08-27T14:54:47Z"
+      },
       "default_branch": "master",
       "first_seen": "2026-08-16T13:20:31Z",
       "fork": false,
@@ -19786,7 +19822,7 @@
       "size": 9236,
       "source_query": "filename:.trufflehog.yml OR filename:.trufflehog.toml OR filename:trufflehog.yml",
       "stars": 1116,
-      "status": "mined",
+      "status": "gated:no-go",
       "url": "https://github.com/logchimp/logchimp"
     },
     {
@@ -19807,6 +19843,19 @@
     },
     {
       "archived": false,
+      "audit": {
+        "auto_filed": true,
+        "auto_filed_at": "2026-08-27T14:54:47Z",
+        "needs_human_review": false,
+        "template_fired": "below-scale",
+        "transitions": [
+          {
+            "reason": "sync:clojure-cli-config_gate_decision",
+            "to": "gated:no-go"
+          }
+        ],
+        "updated_at": "2026-08-27T14:54:47Z"
+      },
       "default_branch": "main",
       "first_seen": "2026-08-16T13:20:31Z",
       "fork": false,
@@ -19817,11 +19866,23 @@
       "size": 654,
       "source_query": "filename:secretlintrc.json OR filename:.secretlintrc",
       "stars": 560,
-      "status": "mined",
+      "status": "gated:no-go",
       "url": "https://github.com/practicalli/clojure-cli-config"
     },
     {
       "archived": false,
+      "audit": {
+        "human_resolved": true,
+        "needs_human_review": false,
+        "re_evaluate": false,
+        "transitions": [
+          {
+            "reason": "sync:routing-api_gate_decision",
+            "to": "gated:no-go"
+          }
+        ],
+        "updated_at": "2026-08-27T14:54:47Z"
+      },
       "default_branch": "main",
       "first_seen": "2026-08-16T13:20:31Z",
       "fork": false,
@@ -19832,11 +19893,23 @@
       "size": 18840,
       "source_query": "filename:.trufflehog.yml OR filename:.trufflehog.toml OR filename:trufflehog.yml",
       "stars": 198,
-      "status": "mined",
+      "status": "gated:no-go",
       "url": "https://github.com/Uniswap/routing-api"
     },
     {
       "archived": false,
+      "audit": {
+        "human_resolved": true,
+        "needs_human_review": false,
+        "re_evaluate": false,
+        "transitions": [
+          {
+            "reason": "sync:RL_gate_decision",
+            "to": "gated:no-go"
+          }
+        ],
+        "updated_at": "2026-08-27T14:54:48Z"
+      },
       "capped": true,
       "default_branch": "main",
       "first_seen": "2026-08-16T13:20:31Z",
@@ -19848,11 +19921,23 @@
       "size": 119170,
       "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
       "stars": 1903,
-      "status": "mined",
+      "status": "gated:no-go",
       "url": "https://github.com/NVIDIA-NeMo/RL"
     },
     {
       "archived": false,
+      "audit": {
+        "human_resolved": true,
+        "needs_human_review": false,
+        "re_evaluate": false,
+        "transitions": [
+          {
+            "reason": "sync:IAD-R1_gate_decision",
+            "to": "gated:no-go"
+          }
+        ],
+        "updated_at": "2026-08-27T14:54:48Z"
+      },
       "default_branch": "main",
       "first_seen": "2026-08-16T13:20:31Z",
       "fork": false,
@@ -19863,11 +19948,23 @@
       "size": 3008,
       "source_query": "filename:.trufflehog.yml OR filename:.trufflehog.toml OR filename:trufflehog.yml",
       "stars": 95,
-      "status": "mined",
+      "status": "gated:no-go",
       "url": "https://github.com/Yanhui-Lee/IAD-R1"
     },
     {
       "archived": false,
+      "audit": {
+        "human_resolved": true,
+        "needs_human_review": false,
+        "re_evaluate": false,
+        "transitions": [
+          {
+            "reason": "sync:alibabacloud-landing-zone_gate_decision",
+            "to": "gated:no-go"
+          }
+        ],
+        "updated_at": "2026-08-27T14:54:48Z"
+      },
       "default_branch": "master",
       "first_seen": "2026-08-16T13:20:31Z",
       "fork": false,
@@ -19878,11 +19975,23 @@
       "size": 23760,
       "source_query": "filename:.trufflehog.yml OR filename:.trufflehog.toml OR filename:trufflehog.yml",
       "stars": 73,
-      "status": "mined",
+      "status": "gated:no-go",
       "url": "https://github.com/aliyun/alibabacloud-landing-zone"
     },
     {
       "archived": false,
+      "audit": {
+        "human_resolved": true,
+        "needs_human_review": false,
+        "re_evaluate": false,
+        "transitions": [
+          {
+            "reason": "sync:DevTool1C_gate_decision",
+            "to": "gated:no-go"
+          }
+        ],
+        "updated_at": "2026-08-27T14:54:48Z"
+      },
       "default_branch": "main",
       "first_seen": "2026-08-17T13:05:28Z",
       "fork": false,
@@ -19893,7 +20002,7 @@
       "size": 1516,
       "source_query": "filename:secretlintrc.json OR filename:.secretlintrc",
       "stars": 68,
-      "status": "mined",
+      "status": "gated:no-go",
       "url": "https://github.com/asweetand-a11y/DevTool1C"
     },
     {
@@ -20648,6 +20757,18 @@
     },
     {
       "archived": false,
+      "audit": {
+        "human_resolved": true,
+        "needs_human_review": false,
+        "re_evaluate": false,
+        "transitions": [
+          {
+            "reason": "sync:feast_gate_decision",
+            "to": "gated:no-go"
+          }
+        ],
+        "updated_at": "2026-08-27T14:54:48Z"
+      },
       "capped": true,
       "default_branch": "master",
       "first_seen": "2026-08-22T13:21:53Z",
@@ -20659,7 +20780,7 @@
       "size": 298538,
       "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
       "stars": 7224,
-      "status": "mined",
+      "status": "gated:no-go",
       "url": "https://github.com/feast-dev/feast"
     },
     {

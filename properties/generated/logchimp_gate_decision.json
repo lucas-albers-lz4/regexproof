@@ -1,0 +1,69 @@
+{
+  "candidate_url": "https://github.com/logchimp/logchimp",
+  "conditions": [
+    {
+      "evidence": "Predicted buckets present (3) but not treated as novel surface.",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Not a security boundary (probe.security_boundary=unknown).",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "36 sites < 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "logchimp",
+  "corpus_pin": "c2f349e0446c5841ea7bdbc164dcc95d3a447dac",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-27",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "lookaround": 1
+    },
+    "dialect": {
+      "ecma": 33,
+      "posix-shell": 3
+    },
+    "flags": {
+      "g": 19,
+      "i": 14
+    },
+    "pin": "c2f349e0446c5841ea7bdbc164dcc95d3a447dac",
+    "pin_mined": "c2f349e0446c5841ea7bdbc164dcc95d3a447dac",
+    "pin_probed": "9efa0ca0813639cee5722301089a3157f12df818",
+    "predicted_buckets": {
+      "inline-flag": 14,
+      "lookaround": 1,
+      "stateful": 19
+    },
+    "regex_sites": 36,
+    "regex_sites_per_file": {
+      ".devcontainer/postCreateCommand.sh": 1,
+      "packages/server/src/ee/controllers/v1/boards/checkName.ts": 1,
+      "packages/server/src/ee/controllers/v1/boards/checkSlug.ts": 1,
+      "packages/server/src/ee/controllers/v1/boards/updateBoard.ts": 1,
+      "packages/server/src/ee/controllers/v1/roadmaps/updateRoadmap.ts": 1,
+      "packages/server/src/ee/middleware/domainBlacklist.ts": 1,
+      "packages/server/src/helpers.ts": 6,
+      "packages/server/src/middlewares/auth/helpers.ts": 2,
+      "packages/server/src/services/mail/generateContent.ts": 1,
+      "packages/server/src/services/votes/vote.service.test.ts": 1,
+      "packages/server/tests/integration/v1/boards.spec.ts": 2,
+      "packages/server/tests/integration/v1/posts.spec.ts": 8,
+      "packages/server/tests/integration/v1/roadmaps.spec.ts": 4,
+      "packages/server/tests/unit/helpers.test.ts": 2,
+      "packages/theme/.storybook/preview.js": 2,
+      "scripts/worktree-setup.sh": 2
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "LogChimp feedback product. Probe 36 sites in server helpers/middleware, not a regex security-boundary corpus. Mined for .trufflehog.yml. Boundary unknown. No admission condition met.",
+  "schema_version": "1"
+}

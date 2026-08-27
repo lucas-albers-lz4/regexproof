@@ -1,0 +1,66 @@
+{
+  "candidate_url": "https://github.com/Yanhui-Lee/IAD-R1",
+  "conditions": [
+    {
+      "evidence": "Predicted buckets present (2) but not treated as novel surface.",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Not a security boundary (probe.security_boundary=unknown).",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "54 sites < 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "IAD-R1",
+  "corpus_pin": "625b936550cb1bf6568ca5ecb99d272a49f433c1",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-27",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "lookaround": 2
+    },
+    "dialect": {
+      "py_re": 54
+    },
+    "flags": {
+      "i": 10,
+      "s": 12
+    },
+    "pin": "625b936550cb1bf6568ca5ecb99d272a49f433c1",
+    "pin_mined": "625b936550cb1bf6568ca5ecb99d272a49f433c1",
+    "pin_probed": "625b936550cb1bf6568ca5ecb99d272a49f433c1",
+    "predicted_buckets": {
+      "inline-flag": 22,
+      "lookaround": 2
+    },
+    "regex_sites": 54,
+    "regex_sites_per_file": {
+      "GPT4/gpt4v.py": 2,
+      "scripts/Inference/Anomaly-R1-Inference/vLLM_Anomaly_R1.py": 1,
+      "scripts/Inference/IAD-R1-Inference/vLLM_LLaVA_1_5_detect_format.py": 1,
+      "scripts/Inference/IAD-R1-Inference/vLLM_LLaVA_detect_format.py": 1,
+      "scripts/Inference/IAD-R1-Inference/vLLM_Qwen_detect_format.py": 1,
+      "scripts/Inference/Pretrain-Inference/vLLM_LLaVA_detect.py": 1,
+      "train/stage_rl/reward.py": 35,
+      "train/stage_rl/reward_process/type_reward.py": 2,
+      "train/stage_sft/llamafactory/api/chat.py": 1,
+      "train/stage_sft/llamafactory/data/formatter.py": 2,
+      "train/stage_sft/llamafactory/data/tool_utils.py": 2,
+      "train/stage_sft/llamafactory/model/adapter.py": 1,
+      "trl/examples/datasets/hh-rlhf-helpful-base.py": 1,
+      "trl/trl/environment/base_environment.py": 2,
+      "trl/trl/scripts/chat.py": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "IAD-R1 anomaly-detection research tree. Probe 54 py_re sites concentrated in train/stage_rl/reward.py, not a secret-scanner corpus. Mined for .trufflehog.yml. Boundary unknown. No admission condition met.",
+  "schema_version": "1"
+}

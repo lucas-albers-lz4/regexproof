@@ -1,9 +1,9 @@
 {
   "provenance": {
-    "gate_decision_count": 854,
-    "input_file_count": 854,
-    "inputs_hash": "7d492769d65c60cda4eda5d9d28613de884b6993d343c2f9355046b8077a6311",
-    "linked_row_count": 820,
+    "gate_decision_count": 864,
+    "input_file_count": 864,
+    "inputs_hash": "bc5920ab4a0120d1910a0360947e49f6a80ec73a41b35e84908ee6570e12a65b",
+    "linked_row_count": 830,
     "schema_version": "1"
   },
   "rows": [
@@ -5466,6 +5466,44 @@
       "url": "https://github.com/NVIDIA-BioNeMo/bionemo-recipes"
     },
     {
+      "decision_date": "2026-08-27",
+      "label": "no-go",
+      "ledger": {
+        "archived": false,
+        "capped": true,
+        "fork": false,
+        "language": "Python",
+        "pushed_date": "2026-08-15",
+        "size": 119170,
+        "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
+        "stars": 1903
+      },
+      "probe": {
+        "dialect_counts": {
+          "posix-shell": 113,
+          "py_re": 52
+        },
+        "predicted_buckets": {
+          "backref": 1,
+          "inline-flag": 16,
+          "lookaround": 3,
+          "posix-class": 1
+        },
+        "regex_sites": 165,
+        "security_boundary": "unknown",
+        "tree_probe": {
+          "complete": false,
+          "path_count": 0,
+          "probed_pin": "a43d71b31850e4420fbf48a7da74088e84116f25",
+          "reason": "budget-exhausted",
+          "regex_file_type_counts": {},
+          "security_boundary": "unknown",
+          "truncated": false
+        }
+      },
+      "url": "https://github.com/NVIDIA-NeMo/RL"
+    },
+    {
       "decision_date": "2026-08-15",
       "label": "no-go",
       "ledger": {
@@ -8153,6 +8191,40 @@
       "url": "https://github.com/UPchieve/web"
     },
     {
+      "decision_date": "2026-08-27",
+      "label": "no-go",
+      "ledger": {
+        "archived": false,
+        "capped": false,
+        "fork": false,
+        "language": "TypeScript",
+        "pushed_date": "2026-03-19",
+        "size": 18840,
+        "source_query": "filename:.trufflehog.yml OR filename:.trufflehog.toml OR filename:trufflehog.yml",
+        "stars": 198
+      },
+      "probe": {
+        "dialect_counts": {
+          "ecma": 8
+        },
+        "predicted_buckets": {
+          "stateful": 1
+        },
+        "regex_sites": 8,
+        "security_boundary": "unknown",
+        "tree_probe": {
+          "complete": false,
+          "path_count": 0,
+          "probed_pin": "f5a81893b812b6745b1f8b7fa3a55a714cb9d89b",
+          "reason": "budget-exhausted",
+          "regex_file_type_counts": {},
+          "security_boundary": "unknown",
+          "truncated": false
+        }
+      },
+      "url": "https://github.com/Uniswap/routing-api"
+    },
+    {
       "decision_date": "2026-08-13",
       "label": "no-go",
       "ledger": {
@@ -8518,6 +8590,41 @@
         }
       },
       "url": "https://github.com/Yamato-Security/suzaku-rules"
+    },
+    {
+      "decision_date": "2026-08-27",
+      "label": "no-go",
+      "ledger": {
+        "archived": false,
+        "capped": false,
+        "fork": false,
+        "language": "Python",
+        "pushed_date": "2025-12-09",
+        "size": 3008,
+        "source_query": "filename:.trufflehog.yml OR filename:.trufflehog.toml OR filename:trufflehog.yml",
+        "stars": 95
+      },
+      "probe": {
+        "dialect_counts": {
+          "py_re": 54
+        },
+        "predicted_buckets": {
+          "inline-flag": 22,
+          "lookaround": 2
+        },
+        "regex_sites": 54,
+        "security_boundary": "unknown",
+        "tree_probe": {
+          "complete": false,
+          "path_count": 0,
+          "probed_pin": "625b936550cb1bf6568ca5ecb99d272a49f433c1",
+          "reason": "budget-exhausted",
+          "regex_file_type_counts": {},
+          "security_boundary": "unknown",
+          "truncated": false
+        }
+      },
+      "url": "https://github.com/Yanhui-Lee/IAD-R1"
     },
     {
       "decision_date": "2026-08-13",
@@ -9933,6 +10040,47 @@
       "url": "https://github.com/alexfazio/plankton"
     },
     {
+      "decision_date": "2026-08-27",
+      "label": "no-go",
+      "ledger": {
+        "archived": false,
+        "capped": false,
+        "fork": false,
+        "language": "Java",
+        "pushed_date": "2026-08-13",
+        "size": 23760,
+        "source_query": "filename:.trufflehog.yml OR filename:.trufflehog.toml OR filename:trufflehog.yml",
+        "stars": 73
+      },
+      "probe": {
+        "dialect_counts": {
+          "ecma": 507,
+          "java": 12,
+          "posix-shell": 39,
+          "py_re": 5
+        },
+        "predicted_buckets": {
+          "inline-flag": 36,
+          "lookaround": 1,
+          "stateful": 21,
+          "u-flag": 1,
+          "v-flag": 1
+        },
+        "regex_sites": 563,
+        "security_boundary": "unknown",
+        "tree_probe": {
+          "complete": false,
+          "path_count": 0,
+          "probed_pin": "59bb947ef0d999008b01a251aea68194105e9b02",
+          "reason": "budget-exhausted",
+          "regex_file_type_counts": {},
+          "security_boundary": "unknown",
+          "truncated": false
+        }
+      },
+      "url": "https://github.com/aliyun/alibabacloud-landing-zone"
+    },
+    {
       "decision_date": "2026-08-13",
       "label": "no-go",
       "ledger": {
@@ -11170,6 +11318,42 @@
         }
       },
       "url": "https://github.com/astronomer/telescope"
+    },
+    {
+      "decision_date": "2026-08-27",
+      "label": "no-go",
+      "ledger": {
+        "archived": false,
+        "capped": false,
+        "fork": false,
+        "language": "TypeScript",
+        "pushed_date": "2026-03-25",
+        "size": 1516,
+        "source_query": "filename:secretlintrc.json OR filename:.secretlintrc",
+        "stars": 68
+      },
+      "probe": {
+        "dialect_counts": {
+          "ecma": 113
+        },
+        "predicted_buckets": {
+          "inline-flag": 55,
+          "lookaround": 1,
+          "stateful": 30
+        },
+        "regex_sites": 113,
+        "security_boundary": "unknown",
+        "tree_probe": {
+          "complete": false,
+          "path_count": 0,
+          "probed_pin": "6c8ee2a0a6eb6c4187d0bb198bac213af1cfc4df",
+          "reason": "budget-exhausted",
+          "regex_file_type_counts": {},
+          "security_boundary": "unknown",
+          "truncated": false
+        }
+      },
+      "url": "https://github.com/asweetand-a11y/DevTool1C"
     },
     {
       "decision_date": "2026-08-12",
@@ -16594,6 +16778,45 @@
       "url": "https://github.com/fderuiter/QRCraftly"
     },
     {
+      "decision_date": "2026-08-27",
+      "label": "no-go",
+      "ledger": {
+        "archived": false,
+        "capped": true,
+        "fork": false,
+        "language": "Python",
+        "pushed_date": "2026-08-21",
+        "size": 298538,
+        "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
+        "stars": 7224
+      },
+      "probe": {
+        "dialect_counts": {
+          "ecma": 85,
+          "posix-shell": 16,
+          "py_re": 32,
+          "re2": 2
+        },
+        "predicted_buckets": {
+          "inline-flag": 18,
+          "m-flag": 1,
+          "stateful": 8
+        },
+        "regex_sites": 135,
+        "security_boundary": "unknown",
+        "tree_probe": {
+          "complete": false,
+          "path_count": 0,
+          "probed_pin": "1f2584dba9db23fd23df0a79c97802ee0c1504ed",
+          "reason": "budget-exhausted",
+          "regex_file_type_counts": {},
+          "security_boundary": "unknown",
+          "truncated": false
+        }
+      },
+      "url": "https://github.com/feast-dev/feast"
+    },
+    {
       "decision_date": "2026-08-13",
       "label": "no-go",
       "ledger": {
@@ -19019,6 +19242,77 @@
         }
       },
       "url": "https://github.com/hubtype/botonic"
+    },
+    {
+      "decision_date": "2026-08-27",
+      "label": "no-go",
+      "ledger": {
+        "archived": false,
+        "capped": false,
+        "fork": false,
+        "language": "Python",
+        "pushed_date": "2026-05-26",
+        "size": 15871,
+        "source_query": "filename:.trufflehog.yml OR filename:.trufflehog.toml OR filename:trufflehog.yml",
+        "stars": 2783
+      },
+      "probe": {
+        "dialect_counts": {
+          "py_re": 12
+        },
+        "predicted_buckets": {
+          "lookaround": 1
+        },
+        "regex_sites": 12,
+        "security_boundary": "unknown",
+        "tree_probe": {
+          "complete": false,
+          "path_count": 0,
+          "probed_pin": "2411b022a75fb7f7561a1bb4166706da5e1b76de",
+          "reason": "budget-exhausted",
+          "regex_file_type_counts": {},
+          "security_boundary": "unknown",
+          "truncated": false
+        }
+      },
+      "url": "https://github.com/huggingface/nanotron"
+    },
+    {
+      "decision_date": "2026-08-27",
+      "label": "no-go",
+      "ledger": {
+        "archived": false,
+        "capped": false,
+        "fork": false,
+        "language": "Rust",
+        "pushed_date": "2026-08-13",
+        "size": 22157,
+        "source_query": "filename:.trufflehog.yml OR filename:.trufflehog.toml OR filename:trufflehog.yml",
+        "stars": 10968
+      },
+      "probe": {
+        "dialect_counts": {
+          "ecma": 17,
+          "py_re": 3
+        },
+        "predicted_buckets": {
+          "inline-flag": 4,
+          "lookaround": 3,
+          "stateful": 2
+        },
+        "regex_sites": 20,
+        "security_boundary": "unknown",
+        "tree_probe": {
+          "complete": false,
+          "path_count": 0,
+          "probed_pin": "d5827816baedcbf1cb5b452dea8048150b6872df",
+          "reason": "budget-exhausted",
+          "regex_file_type_counts": {},
+          "security_boundary": "unknown",
+          "truncated": false
+        }
+      },
+      "url": "https://github.com/huggingface/tokenizers"
     },
     {
       "decision_date": "2026-08-12",
@@ -22122,6 +22416,43 @@
         }
       },
       "url": "https://github.com/loeffel-io/ls-lint"
+    },
+    {
+      "decision_date": "2026-08-27",
+      "label": "no-go",
+      "ledger": {
+        "archived": false,
+        "capped": false,
+        "fork": false,
+        "language": "TypeScript",
+        "pushed_date": "2026-08-13",
+        "size": 9236,
+        "source_query": "filename:.trufflehog.yml OR filename:.trufflehog.toml OR filename:trufflehog.yml",
+        "stars": 1116
+      },
+      "probe": {
+        "dialect_counts": {
+          "ecma": 33,
+          "posix-shell": 3
+        },
+        "predicted_buckets": {
+          "inline-flag": 14,
+          "lookaround": 1,
+          "stateful": 19
+        },
+        "regex_sites": 36,
+        "security_boundary": "unknown",
+        "tree_probe": {
+          "complete": false,
+          "path_count": 0,
+          "probed_pin": "9efa0ca0813639cee5722301089a3157f12df818",
+          "reason": "budget-exhausted",
+          "regex_file_type_counts": {},
+          "security_boundary": "unknown",
+          "truncated": false
+        }
+      },
+      "url": "https://github.com/logchimp/logchimp"
     },
     {
       "decision_date": "2026-08-12",
@@ -26630,6 +26961,36 @@
         }
       },
       "url": "https://github.com/pppp606/ink-chart"
+    },
+    {
+      "decision_date": "2026-08-27",
+      "label": "no-go",
+      "ledger": {
+        "archived": false,
+        "capped": false,
+        "fork": false,
+        "language": "edn",
+        "pushed_date": "2026-08-07",
+        "size": 654,
+        "source_query": "filename:secretlintrc.json OR filename:.secretlintrc",
+        "stars": 560
+      },
+      "probe": {
+        "dialect_counts": {},
+        "predicted_buckets": {},
+        "regex_sites": 0,
+        "security_boundary": "deterministic-true",
+        "tree_probe": {
+          "complete": false,
+          "path_count": 0,
+          "probed_pin": "8d96a93c37429a3d81c92f098dfdb05752b7337a",
+          "reason": "budget-exhausted",
+          "regex_file_type_counts": {},
+          "security_boundary": "unknown",
+          "truncated": false
+        }
+      },
+      "url": "https://github.com/practicalli/clojure-cli-config"
     },
     {
       "decision_date": "2026-08-13",

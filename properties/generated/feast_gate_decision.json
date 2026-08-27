@@ -1,0 +1,110 @@
+{
+  "candidate_url": "https://github.com/feast-dev/feast",
+  "conditions": [
+    {
+      "evidence": "Predicted buckets present (3) but not treated as novel surface.",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Not a security boundary (probe.security_boundary=unknown).",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "135 sites < 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "feast",
+  "corpus_pin": "03dac6f33d197d4dce25c0dd451c66dbe4d9fc3c",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-27",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "ecma": 85,
+      "posix-shell": 16,
+      "py_re": 32,
+      "re2": 2
+    },
+    "flags": {
+      "g": 8,
+      "i": 18,
+      "m": 1
+    },
+    "pin": "03dac6f33d197d4dce25c0dd451c66dbe4d9fc3c",
+    "pin_mined": "03dac6f33d197d4dce25c0dd451c66dbe4d9fc3c",
+    "pin_probed": "1f2584dba9db23fd23df0a79c97802ee0c1504ed",
+    "predicted_buckets": {
+      "inline-flag": 18,
+      "m-flag": 1,
+      "stateful": 8
+    },
+    "regex_sites": 135,
+    "regex_sites_per_file": {
+      ".releaserc.js": 1,
+      "examples/rbac-remote/install_feast.sh": 1,
+      "go/internal/feast/onlineserving/serving.go": 1,
+      "infra/feast-operator/test/utils/test_util.go": 1,
+      "infra/scripts/helm/validate-helm-chart-publish.sh": 4,
+      "infra/scripts/release-patch.sh": 10,
+      "infra/scripts/release/bump_file_versions.py": 1,
+      "infra/scripts/setup-common-functions.sh": 1,
+      "sdk/python/feast/api/registry/rest/rest_registry_server.py": 2,
+      "sdk/python/feast/inference.py": 3,
+      "sdk/python/feast/infra/compute_engines/snowflake/snowflake_engine.py": 1,
+      "sdk/python/feast/infra/offline_stores/contrib/clickhouse_offline_store/clickhouse.py": 1,
+      "sdk/python/feast/infra/offline_stores/contrib/trino_offline_store/trino_type_map.py": 4,
+      "sdk/python/feast/infra/online_stores/milvus_online_store/milvus.py": 1,
+      "sdk/python/feast/mlflow_integration/client.py": 1,
+      "sdk/python/feast/mlflow_integration/model_resolver.py": 1,
+      "sdk/python/feast/openlineage/facets.py": 1,
+      "sdk/python/feast/openlineage/mappers.py": 2,
+      "sdk/python/feast/openlineage/processor.py": 2,
+      "sdk/python/feast/permissions/auth/token_extractor.py": 1,
+      "sdk/python/feast/permissions/matcher.py": 1,
+      "sdk/python/feast/permissions/permission.py": 1,
+      "sdk/python/feast/repo_operations.py": 1,
+      "sdk/python/feast/type_map.py": 3,
+      "sdk/python/feast/utils.py": 1,
+      "sdk/python/feast/version_utils.py": 1,
+      "sdk/python/tests/unit/infra/offline_stores/test_snowflake.py": 1,
+      "sdk/python/tests/unit/test_errors.py": 1,
+      "sdk/python/tests/utils/test_wrappers.py": 1,
+      "ui/config/env.js": 1,
+      "ui/config/jest/fileTransform.js": 1,
+      "ui/config/webpack.config.js": 29,
+      "ui/rollup.config.js": 1,
+      "ui/scripts/build.js": 1,
+      "ui/src/FeastUISansProviders.test.tsx": 11,
+      "ui/src/components/DataSourceFormModal.tsx": 4,
+      "ui/src/components/EntityFormModal.tsx": 2,
+      "ui/src/components/FeatureServiceFormModal.tsx": 1,
+      "ui/src/components/FeatureViewFormModal.tsx": 2,
+      "ui/src/components/PermissionFormModal.tsx": 1,
+      "ui/src/components/ProjectSelector.test.tsx": 3,
+      "ui/src/components/RegistryVisualization.test.tsx": 3,
+      "ui/src/pages/label-views/ActiveLearningTab.tsx": 2,
+      "ui/src/pages/label-views/BatchUploadTab.tsx": 3,
+      "ui/src/pages/label-views/ClassificationMethod.tsx": 2,
+      "ui/src/pages/label-views/EntityFormMethod.tsx": 1,
+      "ui/src/pages/label-views/IntegrationsTab.tsx": 1,
+      "ui/src/pages/label-views/LabelBrowseTab.tsx": 1,
+      "ui/src/pages/label-views/QualityDashboardTab.tsx": 1,
+      "ui/src/pages/label-views/RagLabelingMethod.tsx": 2,
+      "ui/src/pages/label-views/TrainingExportTab.tsx": 1,
+      "ui/src/pages/label-views/useAnnotationConfig.ts": 1,
+      "ui/src/pages/saved-data-sets/CreateDatasetForm.tsx": 2,
+      "ui/src/pages/saved-data-sets/RegisterDatasetModal.tsx": 2,
+      "ui/src/queries/useMonitoringApi.ts": 3,
+      "ui/src/utils/permissionUtils.ts": 2
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "feast-dev/feast feature store. Probe 135 sites in release/helm scripts and frontend, not detect-secrets rules. Mined for .secrets.baseline. Boundary unknown. No admission condition met.",
+  "schema_version": "1"
+}
