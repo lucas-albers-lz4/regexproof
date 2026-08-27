@@ -39,6 +39,6 @@
     },
     "security_boundary": "unknown"
   },
-  "rationale": "aws/c3r collaborative encryption tool. Probe 1 Java site, not TruffleHog detector corpus. Mined for .trufflehog.yml. Boundary unknown. No admission condition met.",
+  "rationale": "aws/c3r collaborative encryption tool. Probe 1 Java site, not TruffleHog detector corpus. Mined for .trufflehog.yml. Boundary unknown. No admission condition met. Probe used --allow-stale-pin: walked mined corpus_pin; pin_probed records default-branch HEAD at probe time (E3), which differs from the mined pin.",
   "schema_version": "1"
 }

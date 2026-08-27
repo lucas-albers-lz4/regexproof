@@ -56,6 +56,6 @@
     },
     "security_boundary": "deterministic-true"
   },
-  "rationale": "stride-gpt STRIDE threat-modeling app. Probe 30 py_re sites in app code, not gitleaks rule definitions. Mined for gitleaks.toml. Boundary deterministic-true but config-carrier product tree. No admission condition met.",
+  "rationale": "stride-gpt STRIDE threat-modeling app. Probe 30 py_re sites in app code, not gitleaks rule definitions. Mined for gitleaks.toml. Boundary deterministic-true but config-carrier product tree. No admission condition met. Probe used --allow-stale-pin: walked mined corpus_pin; pin_probed records default-branch HEAD at probe time (E3), which differs from the mined pin.",
   "schema_version": "1"
 }

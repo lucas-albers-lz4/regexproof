@@ -49,6 +49,6 @@
     },
     "security_boundary": "unknown"
   },
-  "rationale": "UniswapX parameterization API. Probe 9 ECMA sites in service code, not TruffleHog rules. Mined for .trufflehog.yml. Boundary unknown. No admission condition met.",
+  "rationale": "UniswapX parameterization API. Probe 9 ECMA sites in service code, not TruffleHog rules. Mined for .trufflehog.yml. Boundary unknown. No admission condition met. Probe used --allow-stale-pin: walked mined corpus_pin; pin_probed records default-branch HEAD at probe time (E3), which differs from the mined pin.",
   "schema_version": "1"
 }

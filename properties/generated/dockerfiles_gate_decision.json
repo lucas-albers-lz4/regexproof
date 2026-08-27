@@ -49,6 +49,6 @@
     },
     "security_boundary": "unknown"
   },
-  "rationale": "jauderho/dockerfiles Docker image collection. Probe 30 posix-shell sites in build scripts, not TruffleHog detector rules. Mined for .trufflehog.yml. Boundary unknown. No admission condition met.",
+  "rationale": "jauderho/dockerfiles Docker image collection. Probe 30 posix-shell sites in build scripts, not TruffleHog detector rules. Mined for .trufflehog.yml. Boundary unknown. No admission condition met. Probe used --allow-stale-pin: walked mined corpus_pin; pin_probed records default-branch HEAD at probe time (E3), which differs from the mined pin.",
   "schema_version": "1"
 }
