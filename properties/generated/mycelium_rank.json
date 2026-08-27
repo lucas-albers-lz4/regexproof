@@ -1,0 +1,453 @@
+{
+  "bucket": "control-failclosed",
+  "corpus": "mycelium",
+  "dropped": [
+    {
+      "pattern": "$pat",
+      "reason": "interpolated:$ident",
+      "site": "batch/corpora/mycelium/rules/control/lib/common.sh:233:20"
+    },
+    {
+      "pattern": "[:.]$p\\$",
+      "reason": "interpolated",
+      "site": "batch/corpora/mycelium/rules/control/lib/nb_donor.sh:43:45"
+    },
+    {
+      "pattern": "^-A PREROUTING ",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/mycelium/rules/control/lib/nb_harden.sh:337:78"
+    },
+    {
+      "pattern": "^-A PREROUTING ",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/mycelium/rules/control/lib/nb_harden.sh:343:80"
+    },
+    {
+      "pattern": "default",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/mycelium/rules/control/lib/nb_harden.sh:376:44"
+    },
+    {
+      "pattern": "^Default: ",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/mycelium/rules/control/lib/nb_harden.sh:464:73"
+    },
+    {
+      "pattern": "${SINGBOX_VERSION#v}",
+      "reason": "interpolated",
+      "site": "batch/corpora/mycelium/rules/control/lib/nb_install.sh:43:55"
+    },
+    {
+      "pattern": "${XRAY_VERSION#v}",
+      "reason": "interpolated",
+      "site": "batch/corpora/mycelium/rules/control/lib/nb_install.sh:172:52"
+    },
+    {
+      "pattern": ".*=",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/mycelium/rules/control/lib/nb_install.sh:239:5"
+    },
+    {
+      "pattern": "$gover",
+      "reason": "interpolated:$ident",
+      "site": "batch/corpora/mycelium/rules/control/lib/nb_install.sh:464:54"
+    },
+    {
+      "pattern": "$NODE_EXPORTER_VERSION",
+      "reason": "interpolated:$ident",
+      "site": "batch/corpora/mycelium/rules/control/lib/nb_observability.sh:55:26"
+    },
+    {
+      "pattern": "inet6",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/mycelium/rules/control/lib/nb_render_awg.sh:245:54"
+    },
+    {
+      "pattern": "^PrivateKey = ",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/mycelium/rules/control/lib/nb_render_awg.sh:508:61"
+    },
+    {
+      "pattern": "^PrivateKey = ",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/mycelium/rules/control/lib/nb_render_awg.sh:605:61"
+    },
+    {
+      "pattern": "^ListenPort = ",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/mycelium/rules/control/lib/nb_render_awg.sh:611:58"
+    },
+    {
+      "pattern": "^AllowedIPs = ${AWG_PEER_BASE_V4//./\\\\.}\\.$n/32",
+      "reason": "interpolated",
+      "site": "batch/corpora/mycelium/rules/control/lib/nb_render_awg.sh:642:8"
+    },
+    {
+      "pattern": "^[[:space:]]*#[[:space:]]*name[[:space:]]*=[[:space:]]*${name}[[:space:]]*$",
+      "reason": "interpolated",
+      "site": "batch/corpora/mycelium/rules/control/lib/nb_render_awg.sh:961:28"
+    },
+    {
+      "pattern": "^DNS:\\*\\.",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/mycelium/rules/control/lib/nb_render_params.sh:366:86"
+    },
+    {
+      "pattern": "^DNS:",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/mycelium/rules/control/lib/nb_render_params.sh:367:126"
+    },
+    {
+      "pattern": "DNS:(${sni}|\\*\\.${parent})([[:space:],]|\\$)",
+      "reason": "interpolated",
+      "site": "batch/corpora/mycelium/rules/control/lib/nb_selftest.sh:447:28"
+    },
+    {
+      "pattern": ",$",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/mycelium/rules/control/lib/nb_selftest.sh:479:52"
+    },
+    {
+      "pattern": ",$",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/mycelium/rules/control/lib/nb_selftest.sh:480:55"
+    },
+    {
+      "pattern": ": ",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/mycelium/rules/control/lib/nb_selftest.sh:647:9"
+    },
+    {
+      "pattern": ": ",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/mycelium/rules/control/lib/nb_selftest.sh:648:9"
+    },
+    {
+      "pattern": ": ",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/mycelium/rules/control/lib/nb_selftest.sh:649:9"
+    },
+    {
+      "pattern": ": ",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/mycelium/rules/control/lib/nb_selftest.sh:650:9"
+    },
+    {
+      "pattern": ": ",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/mycelium/rules/control/lib/nb_selftest.sh:651:9"
+    },
+    {
+      "pattern": ": ",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/mycelium/rules/control/lib/nb_selftest.sh:652:9"
+    },
+    {
+      "pattern": ": ",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/mycelium/rules/control/lib/nb_selftest.sh:653:9"
+    },
+    {
+      "pattern": ": ",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/mycelium/rules/control/lib/nb_selftest.sh:654:9"
+    },
+    {
+      "pattern": ": ",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/mycelium/rules/control/lib/nb_selftest.sh:655:9"
+    },
+    {
+      "pattern": "DNS:(${sni}|\\*\\.${parent})([[:space:],]|\\$)",
+      "reason": "interpolated",
+      "site": "batch/corpora/mycelium/rules/control/lib/nb_selftest.sh:779:26"
+    },
+    {
+      "pattern": "alice",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/mycelium/rules/control/selftest.sh:136:28"
+    },
+    {
+      "pattern": "carol",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/mycelium/rules/control/selftest.sh:136:75"
+    },
+    {
+      "pattern": "^REALITY_PRIVATE_KEY=",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/mycelium/rules/control/selftest.sh:163:34"
+    },
+    {
+      "pattern": "^REALITY_PUBLIC_KEY=",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/mycelium/rules/control/selftest.sh:164:33"
+    },
+    {
+      "pattern": "^REALITY_SHORT_ID_1=",
+      "reason": "substitution-no-capture-or-charset",
+      "site": "batch/corpora/mycelium/rules/control/selftest.sh:165:63"
+    },
+    {
+      "pattern": "type: vless",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/mycelium/rules/control/selftest.sh:255:0"
+    },
+    {
+      "pattern": "flow: xtls-rprx-vision",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/mycelium/rules/control/selftest.sh:256:0"
+    },
+    {
+      "pattern": "client-fingerprint: chrome",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/mycelium/rules/control/selftest.sh:257:0"
+    },
+    {
+      "pattern": "reality-opts:",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/mycelium/rules/control/selftest.sh:258:0"
+    },
+    {
+      "pattern": "public-key: \\",
+      "reason": "unencodable:unsupported-syntax",
+      "site": "batch/corpora/mycelium/rules/control/selftest.sh:259:0"
+    },
+    {
+      "pattern": "$PRIV",
+      "reason": "interpolated:$ident",
+      "site": "batch/corpora/mycelium/rules/control/selftest.sh:432:3"
+    },
+    {
+      "pattern": "type: vless",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/mycelium/rules/control/selftest.sh:440:0"
+    },
+    {
+      "pattern": "type: hysteria2",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/mycelium/rules/control/selftest.sh:441:0"
+    },
+    {
+      "pattern": "type: tuic",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/mycelium/rules/control/selftest.sh:442:0"
+    },
+    {
+      "pattern": "type: ss",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/mycelium/rules/control/selftest.sh:443:0"
+    },
+    {
+      "pattern": "name: \"mycelium-auto\"",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/mycelium/rules/control/selftest.sh:444:0"
+    },
+    {
+      "pattern": "type: url-test",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/mycelium/rules/control/selftest.sh:444:48"
+    },
+    {
+      "pattern": "name: \"mycelium\"",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/mycelium/rules/control/selftest.sh:446:0"
+    },
+    {
+      "pattern": "type: select",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/mycelium/rules/control/selftest.sh:446:43"
+    },
+    {
+      "pattern": "proxies: \\[ \"[^]]*\", ",
+      "reason": "unencodable:empty-class",
+      "site": "batch/corpora/mycelium/rules/control/selftest.sh:449:0"
+    },
+    {
+      "pattern": "$PRIV",
+      "reason": "interpolated:$ident",
+      "site": "batch/corpora/mycelium/rules/control/selftest.sh:451:3"
+    },
+    {
+      "pattern": "$PRIV",
+      "reason": "interpolated:$ident",
+      "site": "batch/corpora/mycelium/rules/control/selftest.sh:731:3"
+    },
+    {
+      "pattern": "$PRIV",
+      "reason": "interpolated:$ident",
+      "site": "batch/corpora/mycelium/rules/control/selftest.sh:824:3"
+    },
+    {
+      "pattern": "xhttp-tls",
+      "reason": "literal-no-metachar",
+      "site": "batch/corpora/mycelium/rules/control/selftest.sh:1036:6"
+    }
+  ],
+  "dropped_count": 56,
+  "input_rows": 97,
+  "keep": [
+    {
+      "call_kind": "substitution",
+      "encodable": true,
+      "file": "batch/corpora/mycelium/rules/control/lib/nb_render_awg.sh",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+\\.([0-9]+)/.*",
+      "regex_id": "a00543a121cf42bad9b05889ab9aea4c",
+      "score": 7,
+      "site": "batch/corpora/mycelium/rules/control/lib/nb_render_awg.sh:639:33"
+    },
+    {
+      "call_kind": "search",
+      "encodable": true,
+      "file": "batch/corpora/mycelium/rules/control/lib/nb_donor.sh",
+      "pattern": "^[[:space:]]*ALPN protocol:[[:space:]]*h2[[:space:]]*$",
+      "regex_id": "8e263fc723be7e93406c8f7dcf0b3c43",
+      "score": 5,
+      "site": "batch/corpora/mycelium/rules/control/lib/nb_donor.sh:158:4"
+    },
+    {
+      "call_kind": "substitution",
+      "encodable": true,
+      "file": "batch/corpora/mycelium/rules/control/lib/nb_harden.sh",
+      "pattern": "^port[[:space:]]*",
+      "regex_id": "75764848911d4ac67d767fc223cd9779",
+      "score": 5,
+      "site": "batch/corpora/mycelium/rules/control/lib/nb_harden.sh:477:36"
+    },
+    {
+      "call_kind": "substitution",
+      "encodable": true,
+      "file": "batch/corpora/mycelium/rules/control/lib/nb_harden.sh",
+      "pattern": "^authorizedkeysfile[[:space:]]*",
+      "regex_id": "8affbfe5e2d2af75a7e8682d1b50182c",
+      "score": 5,
+      "site": "batch/corpora/mycelium/rules/control/lib/nb_harden.sh:58:30"
+    },
+    {
+      "call_kind": "search",
+      "encodable": true,
+      "file": "batch/corpora/mycelium/rules/control/lib/nb_harden.sh",
+      "pattern": "^(ssh-(ed25519|rsa)|ecdsa-|sk-)",
+      "regex_id": "5437c7eef5e4e0aaffc5d2b786830fb0",
+      "score": 5,
+      "site": "batch/corpora/mycelium/rules/control/lib/nb_harden.sh:74:6"
+    },
+    {
+      "call_kind": "substitution",
+      "encodable": true,
+      "file": "batch/corpora/mycelium/rules/control/lib/nb_identity.sh",
+      "pattern": "^[Pp]rivate[Kk]ey:[[:space:]]*",
+      "regex_id": "4570b8c3af400dff04ec921867b5af49",
+      "score": 5,
+      "site": "batch/corpora/mycelium/rules/control/lib/nb_identity.sh:24:32"
+    },
+    {
+      "call_kind": "substitution",
+      "encodable": true,
+      "file": "batch/corpora/mycelium/rules/control/lib/nb_identity.sh",
+      "pattern": "^[Pp]ublic[Kk]ey:[[:space:]]*",
+      "regex_id": "7dc5a76c5215ad5b7e793a07058d7235",
+      "score": 5,
+      "site": "batch/corpora/mycelium/rules/control/lib/nb_identity.sh:25:32"
+    },
+    {
+      "call_kind": "substitution",
+      "encodable": true,
+      "file": "batch/corpora/mycelium/rules/control/lib/nb_install.sh",
+      "pattern": "^Xray[[:space:]]*",
+      "regex_id": "4e21b7c0d4997da515b869c8711f02e4",
+      "score": 5,
+      "site": "batch/corpora/mycelium/rules/control/lib/nb_install.sh:171:43"
+    },
+    {
+      "call_kind": "substitution",
+      "encodable": true,
+      "file": "batch/corpora/mycelium/rules/control/lib/nb_install.sh",
+      "pattern": ".*version[[:space:]]*",
+      "regex_id": "6f76044c0164d649fe9d517f95e988ba",
+      "score": 5,
+      "site": "batch/corpora/mycelium/rules/control/lib/nb_install.sh:42:46"
+    },
+    {
+      "call_kind": "substitution",
+      "encodable": true,
+      "file": "batch/corpora/mycelium/rules/control/lib/nb_render_awg.sh",
+      "pattern": "^[[:space:]]*",
+      "regex_id": "eb4060c00b18fb9f34e27dc345192b69",
+      "score": 5,
+      "site": "batch/corpora/mycelium/rules/control/lib/nb_render_awg.sh:150:33"
+    },
+    {
+      "call_kind": "substitution",
+      "encodable": true,
+      "file": "batch/corpora/mycelium/rules/control/lib/nb_render_awg.sh",
+      "pattern": "\\.[0-9]+/[0-9]+$",
+      "regex_id": "d29d1a219fc9ad94951092f2d5a9bb65",
+      "score": 5,
+      "site": "batch/corpora/mycelium/rules/control/lib/nb_render_awg.sh:174:41"
+    },
+    {
+      "call_kind": "search",
+      "encodable": true,
+      "file": "batch/corpora/mycelium/rules/control/lib/nb_render_awg.sh",
+      "pattern": "^(Jc|Jmin|Jmax|S1|S2|H1|H2|H3|H4) = ",
+      "regex_id": "f7ddc098b4dc749870246e99ded669cc",
+      "score": 5,
+      "site": "batch/corpora/mycelium/rules/control/lib/nb_render_awg.sh:434:37"
+    },
+    {
+      "call_kind": "search",
+      "encodable": true,
+      "file": "batch/corpora/mycelium/rules/control/lib/nb_render_awg.sh",
+      "pattern": "^[[:space:]]*$",
+      "regex_id": "b4f2d5e1fec7dfd13d37b82ab2b5e27a",
+      "score": 5,
+      "site": "batch/corpora/mycelium/rules/control/lib/nb_render_awg.sh:869:9"
+    },
+    {
+      "call_kind": "search",
+      "encodable": true,
+      "file": "batch/corpora/mycelium/rules/control/lib/nb_render_awg.sh",
+      "pattern": "^[[:space:]]*$",
+      "regex_id": "f2bf7f45b32dd2e8144739e323dc7dda",
+      "score": 5,
+      "site": "batch/corpora/mycelium/rules/control/lib/nb_render_awg.sh:870:9"
+    },
+    {
+      "call_kind": "search",
+      "encodable": true,
+      "file": "batch/corpora/mycelium/rules/control/lib/nb_render_params.sh",
+      "pattern": "DNS:\\*\\.[A-Za-z0-9.-]+",
+      "regex_id": "a4979ae66ca5730d9f82196a511d3c0a",
+      "score": 5,
+      "site": "batch/corpora/mycelium/rules/control/lib/nb_render_params.sh:366:40"
+    }
+  ],
+  "limit": 15,
+  "path_filter": "control/",
+  "schema_version": "1",
+  "seeds": {
+    "ddns-private-ip": {
+      "needle_path": "dynamic_dns_functions.sh",
+      "status": "not-in-top"
+    },
+    "mwan3-dev-capture": {
+      "needle_path": "mwan3.sh",
+      "status": "not-in-top"
+    },
+    "pbr-sanitizer": {
+      "needle_path": "net/pbr/files/etc/init.d/pbr",
+      "status": "not-in-top"
+    }
+  },
+  "survivor_count": 41,
+  "vocab": [
+    "control/",
+    "awg",
+    "failsafe",
+    "failclosed",
+    "rotate",
+    "render",
+    "selftest",
+    "gated"
+  ]
+}
