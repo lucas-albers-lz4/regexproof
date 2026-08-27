@@ -1,9 +1,14 @@
 ---
-description: Lean agent PR cycle — Composer/Grok implement, Luna+Bugbot while draft, then Ready for CodeRabbit
+description: Cursor-only lean PR cycle — Composer/Grok implement, Luna+Bugbot while draft, then Ready for CodeRabbit
 alwaysApply: true
 ---
 
 # Agent PR cycle (lean)
+
+**Cursor agent sessions only.** If running under Hermes, skip this file:
+Hermes has its own models and does not have Bugbot or Security Review. Do
+not require Composer/Grok slugs, Bugbot, or Security Review there. Hermes
+keeps CI + its own luna/standard-development gates.
 
 Autonomous create → review → merge. Do not wait on human review. Hard CI
 failures, Luna NO_GO, and Bugbot findings still block.
@@ -18,6 +23,27 @@ failures, Luna NO_GO, and Bugbot findings still block.
 Do not use `cursor-grok-4.5-high-fast` (or other `*-fast` Grok) as the
 implementer. Luna pin: `gpt-5.6-luna-medium` — never Opus-high.
 
+## Non-trivial vs trivial
+
+**Trivial** (skip Luna / Bugbot / Security; merge after CI green):
+
+- Docs-only typos, badge/link/metadata, single-line comment, pure
+  formatting with no logic change
+- Housekeeping like license badge, topics, changelog date bumps
+
+**Non-trivial** (Luna **and** Bugbot required):
+
+- Any new/changed logic, scripts, compilers, extractors, tests, CI
+  workflows, schemas, or generated security/report artifacts
+- Multi-file features, refactors, or anything touching regexproof
+  runtime / harness / batch / rule_diff
+
+If unsure, treat as non-trivial. A comment or formatting edit that
+changes CI/config/process semantics is non-trivial.
+
+**Non-nit push** (re-run trigger): any push that would be non-trivial as
+its own PR. Skip re-review for trivial pushes only.
+
 ## One question per reviewer
 
 | Question | Who | When |
@@ -27,39 +53,40 @@ implementer. Luna pin: `gpt-5.6-luna-medium` — never Opus-high.
 | Trust-boundary hole? | Security Review | Only if the diff touches clone URL, PAT, `subprocess`, `eval`, probe walker, or fail-open `except` |
 | Second brain on Composer work? | Grok | Only if Luna returns NO_GO / CONFIRMED on a **contract** |
 
-Trivial (typo, badge, comment, formatting): skip Luna / Bugbot / Security;
-merge after CI green. If unsure, treat as non-trivial.
-
 **Never:** Grok reviewing its own patch. Luna and Grok in parallel on
 “is this correct?”. Grok on Composer argparse / docs / mechanical flags.
 Security on diffs with no trust-boundary surface.
 
 ## Sequence
 
+CI, Luna, and Bugbot must be green on the **same head** that becomes Ready
+(and that later merges, except trivial nits on top of that head).
+
 1. Implement on a branch. Open a **draft** PR (`gh pr create --draft`).
-2. While draft: **Luna**, then **Bugbot** (`review-bugbot`, `Diff: branch
-   changes`). Escalate Grok / Security only per the table. Fix CONFIRMED
-   (or document FOLD / DISMISS). Stay draft.
-3. **Logic-changing** push → Luna + Bugbot on the new head (Security only
-   if a trust-boundary file changed). Docs / typo push → skip.
-4. **`gh pr ready` only when Luna + Bugbot are clean** (and Security if it
-   ran). Do not leave a finished PR in draft — CodeRabbit auto-review
-   skips drafts.
-5. Wait for `coderabbitai[bot]` `COMMENTED` on that SHA. A rate-limit
+2. Wait for **CI green on this head** (or fix first). Presence, not just
+   green — see **This repo — CI presence** below.
+3. While draft: **Luna**, then **Bugbot** (`review-bugbot`, `Diff: branch
+   changes`). Escalate Grok / Security only per the table. Fix Luna **and**
+   Bugbot CONFIRMED findings (or document FOLD / DISMISS) before Ready.
+   Stay draft.
+4. **Non-nit push** → Luna + Bugbot on the new head (Security only if a
+   trust-boundary file changed). Trivial push → skip.
+5. **`gh pr ready` only when CI + Luna + Bugbot are clean on this head**
+   (and Security if it ran). Do not leave a finished PR in draft —
+   CodeRabbit auto-review skips drafts.
+6. Wait for `coderabbitai[bot]` `COMMENTED` on that SHA. A rate-limit
    comment is not a review. One fix push per round: Composer for nits,
    Grok only if a comment hits a contract. Wait out the round; do not
    push mid-review. Protocol: `docs/CODERABBIT.md`.
-6. After CodeRabbit: re-Luna + Bugbot **only if the fix changed
-   behavior**. Skip for nits / docs. Triage comments CONFIRMED / DISMISS /
-   FOLD; do not auto-apply bot patches; human `REQUEST_CHANGES` outranks
-   bots.
-7. Merge (`gh pr merge`, usual strategy). Next item.
+7. After CodeRabbit: re-Luna + Bugbot **only after a non-nit push**. Skip
+   for trivial nits/docs. Triage comments CONFIRMED / DISMISS / FOLD; do
+   not auto-apply bot patches; human `REQUEST_CHANGES` outranks bots.
+8. Merge (`gh pr merge`, usual strategy). Next item.
 
 Do not merge a non-trivial PR that is still draft, or with Luna NO_GO,
-unresolved Luna CONFIRMED, unresolved Bugbot, or un-triaged CodeRabbit
-CONFIRMED. Do not merge on stale Luna / Bugbot from a **logic** head
-older than the one you are merging (nit-only commits on top of a reviewed
-logic head are fine).
+unresolved Luna or Bugbot CONFIRMED, or un-triaged CodeRabbit CONFIRMED.
+Do not merge on stale Luna / Bugbot from a **non-nit** head older than
+the one you are merging (trivial nits on top of a reviewed head are fine).
 
 ## This repo — CI presence
 

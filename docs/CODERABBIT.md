@@ -24,12 +24,14 @@ fragmented re-reviews, no findings landing after the gate was declared green.
 
 ## The 4 rules
 
-1. **Keep the PR in draft until Luna then Bugbot are clean.** Push
-   everything, finish the pre-ready gate in
-   `.cursor/rules/pr-bugbot-before-merge.mdc`, then mark Ready. A single
-   review over a stable diff is better than three incremental rounds over a
-   moving one — cross-file consistency findings only surface on a complete
-   PR. Do not leave a finished PR in draft: auto-review skips drafts.
+1. **Keep the PR in draft until the pre-ready gate is clean.** Push
+   everything, then mark Ready. **Cursor:** that gate is Luna then Bugbot
+   (`.cursor/rules/pr-bugbot-before-merge.mdc`). **Hermes:** skip Bugbot /
+   Security Review / Cursor model slugs; use Hermes luna/standard-development.
+   A single review over a stable diff is better than three incremental
+   rounds over a moving one — cross-file consistency findings only surface
+   on a complete PR. Do not leave a finished PR in draft: auto-review skips
+   drafts.
 
 2. **After any trigger (marking ready, pushing a fix, `@coderabbitai review`),
    wait for the round to complete before touching the branch.** CodeRabbit
@@ -57,13 +59,15 @@ fragmented re-reviews, no findings landing after the gate was declared green.
    For CodeRabbit: check that every finding from the latest round carries a
    resolution marker (`✅ Addressed in commit <sha>` /
    `✅ Confirmed as addressed` / `✅ Review thread resolved` / withdrawal) and
-   that no newer review submission exists for your head. Bugbot already ran
-   **while the PR was draft** (`.cursor/rules/pr-bugbot-before-merge.mdc`).
-   Re-run Luna + Bugbot after a CodeRabbit fix **only if behavior changed**;
-   skip for nits/docs. Do not merge non-trivial PRs with unresolved Bugbot
-   findings or untriaged `CONFIRMED` comments. Marking the CodeRabbit gate
-   green while a round is still writing is how findings end up landing
-   *after* "all addressed".
+   that no newer review submission exists for your head. **Cursor:** Bugbot
+   already ran while the PR was draft
+   (`.cursor/rules/pr-bugbot-before-merge.mdc`). Re-run Luna + Bugbot after
+   a CodeRabbit fix **only after a non-nit push** (logic, tests, schemas,
+   CI, scripts, or process-contract changes); skip for trivial nits/docs.
+   **Hermes:** do not require Bugbot. Do not merge non-trivial PRs with
+   unresolved Bugbot findings (Cursor) or untriaged `CONFIRMED` comments.
+   Marking the CodeRabbit gate green while a round is still writing is how
+   findings end up landing *after* "all addressed".
 
 ## Working from agent tooling (Hermes / Cursor)
 
