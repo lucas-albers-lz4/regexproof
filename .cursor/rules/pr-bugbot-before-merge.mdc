@@ -81,11 +81,13 @@ CI, Luna, and Bugbot must be green on the **same head** that becomes Ready
    comment is not a review. One fix push per round: Composer for nits,
    Grok only if a comment hits a contract. Wait out the round; do not
    push mid-review. Protocol: `docs/CODERABBIT.md`.
-7. After CodeRabbit: **non-nit push** → wait for **CI green on the new
-   head**, then Luna + Bugbot (Security only if a trust-boundary file
-   changed). Skip reviewers for trivial nits/docs; CI must still succeed
-   on the merge head. Triage comments CONFIRMED / DISMISS / FOLD; do not
-   auto-apply bot patches; human `REQUEST_CHANGES` outranks bots.
+7. After CodeRabbit: one fix push per round. **Non-nit** → wait for
+   **CI green**, then Luna + Bugbot (Security only if a trust-boundary
+   file changed), then **back to step 6** (wait `COMMENTED` on the new
+   SHA). **Trivial** nits/docs → skip Luna/Bugbot; still wait out the
+   CodeRabbit round (step 6). CI must succeed on the merge head. Triage
+   comments CONFIRMED / DISMISS / FOLD; do not auto-apply bot patches;
+   human `REQUEST_CHANGES` outranks bots.
 8. Merge (`gh pr merge`, usual strategy) only when **CI is green on the
    merge head**, Luna + Bugbot are clean on this head **or** on the last
    non-nit head if only trivial nits followed (and Security if it ran),
