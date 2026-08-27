@@ -77,6 +77,5 @@ def test_aidevops_batch_summary_reconciles_with_probe():
     probe_n = int(probe["probe"]["dialect"]["posix-shell"])
     delta = abs(extracted - probe_n) / probe_n
     assert delta <= 0.10, f"extracted={extracted} probe={probe_n} delta={delta}"
-    if summary.get("complete_run") is True:
-        assert extracted > 0
-        assert summary["encodable"] / extracted >= 0.30
+    assert summary["complete_run"] is True
+    assert summary["encodable"] / extracted >= 0.30
