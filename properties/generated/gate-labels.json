@@ -1,9 +1,9 @@
 {
   "provenance": {
-    "gate_decision_count": 874,
-    "input_file_count": 874,
-    "inputs_hash": "65fd703a025339013e1284ce84081f2ba796cc432180355256bfe19a799fbe43",
-    "linked_row_count": 840,
+    "gate_decision_count": 884,
+    "input_file_count": 884,
+    "inputs_hash": "0a2ff3f4ff64df7afe23fe3fdfd8099085ab8b54aa470f330dff8a2de82d942b",
+    "linked_row_count": 850,
     "schema_version": "1"
   },
   "rows": [
@@ -513,6 +513,46 @@
         }
       },
       "url": "https://github.com/AaronLPS/loop-builder"
+    },
+    {
+      "decision_date": "2026-08-28",
+      "label": "no-go",
+      "ledger": {
+        "archived": false,
+        "capped": true,
+        "fork": false,
+        "language": "Python",
+        "pushed_date": "2026-08-18",
+        "size": 87826,
+        "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
+        "stars": 464
+      },
+      "probe": {
+        "dialect_counts": {
+          "ecma": 562,
+          "posix-shell": 71,
+          "py_re": 344
+        },
+        "predicted_buckets": {
+          "backref": 3,
+          "inline-flag": 147,
+          "lookaround": 14,
+          "m-flag": 42,
+          "stateful": 108
+        },
+        "regex_sites": 977,
+        "security_boundary": "deterministic-true",
+        "tree_probe": {
+          "complete": false,
+          "path_count": 0,
+          "probed_pin": "8029657180876f719d82779db33880563af18fac",
+          "reason": "budget-exhausted",
+          "regex_file_type_counts": {},
+          "security_boundary": "unknown",
+          "truncated": false
+        }
+      },
+      "url": "https://github.com/Abilityai/trinity"
     },
     {
       "decision_date": "2026-08-12",
@@ -1793,6 +1833,36 @@
         }
       },
       "url": "https://github.com/ConcordDev/concord-cognitive-engine"
+    },
+    {
+      "decision_date": "2026-08-28",
+      "label": "no-go",
+      "ledger": {
+        "archived": false,
+        "capped": false,
+        "fork": false,
+        "language": "Rust",
+        "pushed_date": "2026-08-16",
+        "size": 41884,
+        "source_query": "filename:.trufflehog.yml OR filename:.trufflehog.toml OR filename:trufflehog.yml",
+        "stars": 27
+      },
+      "probe": {
+        "dialect_counts": {},
+        "predicted_buckets": {},
+        "regex_sites": 0,
+        "security_boundary": "deterministic-true",
+        "tree_probe": {
+          "complete": false,
+          "path_count": 0,
+          "probed_pin": "a39b05d31b1674406b758905b9aef54b53da610b",
+          "reason": "budget-exhausted",
+          "regex_file_type_counts": {},
+          "security_boundary": "unknown",
+          "truncated": false
+        }
+      },
+      "url": "https://github.com/Correia-jpv/fucking-static-analysis"
     },
     {
       "decision_date": "2026-08-12",
@@ -5964,6 +6034,38 @@
         }
       },
       "url": "https://github.com/OmenApps/django-tomselect"
+    },
+    {
+      "decision_date": "2026-08-28",
+      "label": "no-go",
+      "ledger": {
+        "archived": false,
+        "capped": false,
+        "fork": false,
+        "language": "Python",
+        "pushed_date": "2025-10-20",
+        "size": 193046,
+        "source_query": "filename:.trufflehog.yml OR filename:.trufflehog.toml OR filename:trufflehog.yml",
+        "stars": 30
+      },
+      "probe": {
+        "dialect_counts": {
+          "py_re": 3
+        },
+        "predicted_buckets": {},
+        "regex_sites": 3,
+        "security_boundary": "unknown",
+        "tree_probe": {
+          "complete": false,
+          "path_count": 0,
+          "probed_pin": "c329d7abc0681f0193febd32cd14876f09e3fba5",
+          "reason": "budget-exhausted",
+          "regex_file_type_counts": {},
+          "security_boundary": "unknown",
+          "truncated": false
+        }
+      },
+      "url": "https://github.com/Open-Galaxea/open-galaxea"
     },
     {
       "decision_date": "2026-08-13",
@@ -13114,6 +13216,48 @@
       "url": "https://github.com/buke/typescript-go-internal"
     },
     {
+      "decision_date": "2026-08-28",
+      "label": "no-go",
+      "ledger": {
+        "archived": false,
+        "capped": true,
+        "fork": false,
+        "language": "Python",
+        "pushed_date": "2026-08-21",
+        "size": 133969,
+        "source_query": "filename:.gitleaks.toml",
+        "stars": 431
+      },
+      "probe": {
+        "dialect_counts": {
+          "ecma": 261,
+          "posix-shell": 43,
+          "py_re": 172
+        },
+        "predicted_buckets": {
+          "inline-flag": 115,
+          "lookaround": 4,
+          "m-flag": 22,
+          "posix-class": 8,
+          "stateful": 30,
+          "u-flag": 13,
+          "v-flag": 27
+        },
+        "regex_sites": 476,
+        "security_boundary": "deterministic-true",
+        "tree_probe": {
+          "complete": false,
+          "path_count": 0,
+          "probed_pin": "8b7f4c0594239a9af2ea3b174a8b3f4a43408fb6",
+          "reason": "budget-exhausted",
+          "regex_file_type_counts": {},
+          "security_boundary": "unknown",
+          "truncated": false
+        }
+      },
+      "url": "https://github.com/bytedance/agentkit-samples"
+    },
+    {
       "decision_date": "2026-08-12",
       "label": "go",
       "ledger": {
@@ -16050,6 +16194,45 @@
       "url": "https://github.com/drussell23/JARVIS"
     },
     {
+      "decision_date": "2026-08-28",
+      "label": "no-go",
+      "ledger": {
+        "archived": false,
+        "capped": false,
+        "fork": false,
+        "language": "Rust",
+        "pushed_date": "2026-08-11",
+        "size": 68583,
+        "source_query": "filename:secretlintrc.json OR filename:.secretlintrc",
+        "stars": 20
+      },
+      "probe": {
+        "dialect_counts": {
+          "ecma": 584,
+          "posix-shell": 26
+        },
+        "predicted_buckets": {
+          "inline-flag": 205,
+          "lookaround": 1,
+          "posix-class": 23,
+          "stateful": 28,
+          "u-flag": 4
+        },
+        "regex_sites": 610,
+        "security_boundary": "unknown",
+        "tree_probe": {
+          "complete": false,
+          "path_count": 0,
+          "probed_pin": "4903c1fd87e085f971e9bf82af2f8fc19e8047f8",
+          "reason": "budget-exhausted",
+          "regex_file_type_counts": {},
+          "security_boundary": "unknown",
+          "truncated": false
+        }
+      },
+      "url": "https://github.com/ducnguyen67201/FeatherlaneAI"
+    },
+    {
       "decision_date": "2026-08-12",
       "label": "triage-trial",
       "ledger": {
@@ -16144,6 +16327,40 @@
         }
       },
       "url": "https://github.com/earthly/earthly"
+    },
+    {
+      "decision_date": "2026-08-28",
+      "label": "no-go",
+      "ledger": {
+        "archived": false,
+        "capped": false,
+        "fork": false,
+        "language": "Python",
+        "pushed_date": "2026-07-27",
+        "size": 2450,
+        "source_query": "filename:.trufflehog.yml OR filename:.trufflehog.toml OR filename:trufflehog.yml",
+        "stars": 26
+      },
+      "probe": {
+        "dialect_counts": {
+          "posix-shell": 9
+        },
+        "predicted_buckets": {
+          "posix-class": 9
+        },
+        "regex_sites": 9,
+        "security_boundary": "unknown",
+        "tree_probe": {
+          "complete": false,
+          "path_count": 0,
+          "probed_pin": "fe1d0cc9d8326cc68dbd6f56433d1baa403d8ebc",
+          "reason": "budget-exhausted",
+          "regex_file_type_counts": {},
+          "security_boundary": "unknown",
+          "truncated": false
+        }
+      },
+      "url": "https://github.com/eclipse-tractusx/tractus-x-umbrella"
     },
     {
       "decision_date": "2026-08-12",
@@ -22502,6 +22719,49 @@
       "url": "https://github.com/lfzawacki/musical-artifacts"
     },
     {
+      "decision_date": "2026-08-28",
+      "label": "no-go",
+      "ledger": {
+        "archived": false,
+        "capped": true,
+        "fork": false,
+        "language": "Rust",
+        "pushed_date": "2026-08-25",
+        "size": 100745,
+        "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
+        "stars": 361
+      },
+      "probe": {
+        "dialect_counts": {
+          "ecma": 649,
+          "posix-shell": 94,
+          "py_re": 74
+        },
+        "predicted_buckets": {
+          "backref": 3,
+          "inline-flag": 130,
+          "lookaround": 17,
+          "m-flag": 20,
+          "posix-class": 13,
+          "stateful": 115,
+          "u-flag": 4,
+          "v-flag": 2
+        },
+        "regex_sites": 817,
+        "security_boundary": "deterministic-true",
+        "tree_probe": {
+          "complete": false,
+          "path_count": 0,
+          "probed_pin": "17bf1b18ea65a058c657869aae0c3424c24432e2",
+          "reason": "budget-exhausted",
+          "regex_file_type_counts": {},
+          "security_boundary": "unknown",
+          "truncated": false
+        }
+      },
+      "url": "https://github.com/librefang/librefang"
+    },
+    {
       "decision_date": "2026-08-13",
       "label": "go",
       "ledger": {
@@ -24586,6 +24846,44 @@
       "url": "https://github.com/mrwadams/stride-gpt"
     },
     {
+      "decision_date": "2026-08-28",
+      "label": "no-go",
+      "ledger": {
+        "archived": false,
+        "capped": true,
+        "fork": false,
+        "language": "TypeScript",
+        "pushed_date": "2026-08-10",
+        "size": 10504,
+        "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
+        "stars": 394
+      },
+      "probe": {
+        "dialect_counts": {
+          "ecma": 34,
+          "posix-shell": 17
+        },
+        "predicted_buckets": {
+          "backref": 1,
+          "inline-flag": 3,
+          "posix-class": 2,
+          "stateful": 12
+        },
+        "regex_sites": 51,
+        "security_boundary": "deterministic-true",
+        "tree_probe": {
+          "complete": false,
+          "path_count": 0,
+          "probed_pin": "04c10beee0f35ed43f88de9f232f1d885a03156c",
+          "reason": "budget-exhausted",
+          "regex_file_type_counts": {},
+          "security_boundary": "unknown",
+          "truncated": false
+        }
+      },
+      "url": "https://github.com/msitarzewski/agency-agents-app"
+    },
+    {
       "decision_date": "2026-08-14",
       "label": "no-go",
       "ledger": {
@@ -25282,6 +25580,39 @@
         }
       },
       "url": "https://github.com/nirholas/three.ws"
+    },
+    {
+      "decision_date": "2026-08-28",
+      "label": "no-go",
+      "ledger": {
+        "archived": false,
+        "capped": true,
+        "fork": false,
+        "language": "Rust",
+        "pushed_date": "2026-08-20",
+        "size": 7659,
+        "source_query": "filename:.gitleaks.toml",
+        "stars": 387
+      },
+      "probe": {
+        "dialect_counts": {
+          "posix-shell": 6,
+          "py_re": 2
+        },
+        "predicted_buckets": {},
+        "regex_sites": 8,
+        "security_boundary": "deterministic-true",
+        "tree_probe": {
+          "complete": false,
+          "path_count": 0,
+          "probed_pin": "96b0faac96c6242c53a5de215b134bc4221d3bcd",
+          "reason": "budget-exhausted",
+          "regex_file_type_counts": {},
+          "security_boundary": "unknown",
+          "truncated": false
+        }
+      },
+      "url": "https://github.com/nmstate/nmstate"
     },
     {
       "decision_date": "2026-08-13",
@@ -32044,6 +32375,38 @@
         }
       },
       "url": "https://github.com/uc-cdis/peregrine"
+    },
+    {
+      "decision_date": "2026-08-28",
+      "label": "no-go",
+      "ledger": {
+        "archived": false,
+        "capped": false,
+        "fork": false,
+        "language": "Go",
+        "pushed_date": "2026-07-20",
+        "size": 15470,
+        "source_query": "filename:.trufflehog.yml OR filename:.trufflehog.toml OR filename:trufflehog.yml",
+        "stars": 29
+      },
+      "probe": {
+        "dialect_counts": {
+          "re2": 1
+        },
+        "predicted_buckets": {},
+        "regex_sites": 1,
+        "security_boundary": "unknown",
+        "tree_probe": {
+          "complete": false,
+          "path_count": 0,
+          "probed_pin": "02d5c7fc771b80c70d2169827ce4fdf3a901696e",
+          "reason": "budget-exhausted",
+          "regex_file_type_counts": {},
+          "security_boundary": "unknown",
+          "truncated": false
+        }
+      },
+      "url": "https://github.com/underdog-tech/vulnbot"
     },
     {
       "decision_date": "2026-08-13",
