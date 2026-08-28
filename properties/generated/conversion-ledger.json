@@ -375,8 +375,8 @@
       }
     ],
     "mine_queue_cap": 100,
-    "mine_queue_len": 100,
-    "mine_queue_pressure": 1.0
+    "mine_queue_len": 94,
+    "mine_queue_pressure": 0.94
   },
   "upstream": {
     "accepted_upstream": 1,

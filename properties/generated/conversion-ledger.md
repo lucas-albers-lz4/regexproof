@@ -89,7 +89,7 @@ asked → SAT → GT → filed → accepted per `(wave_id, idiom_bucket)`.
 - demand_open (open gated:go clusters lacking a closed wave): **61**
 - admission_per_week (GO gate-decision artifacts, last 7-day window ending 2026-08-26): **2**
 - backlog_weeks = demand_open / admission_per_week = **30.5**
-- mine_queue_pressure = queue_len / queue_cap = 100 / 100 = **1.0000**
+- mine_queue_pressure = queue_len / queue_cap = 94 / 100 = **0.9400**
 - alert (backlog_weeks increased >= 2 consecutive windows): **no** (consecutive increases: 0)
 
 Admission is bounded by the ~10/day mine cap regardless of #550 batch
