@@ -87,7 +87,7 @@
       "tree_yara": -0.243701
     }
   },
-  "freeze_snapshot_sha256": "10c350a123d7df5d975d78219f15debb1a3134c76a2fe5bc22fcc86f03c021e4",
+  "freeze_snapshot_sha256": "72942a439ea50f93775d13755a7b6fdb03b8eb149efc54278f123157aba90215",
   "hard_reject": false,
   "issue": "#578",
   "label": {
