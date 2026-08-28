@@ -20007,6 +20007,18 @@
     },
     {
       "archived": false,
+      "audit": {
+        "human_resolved": true,
+        "needs_human_review": false,
+        "re_evaluate": false,
+        "transitions": [
+          {
+            "reason": "sync:Gnosis_gate_decision",
+            "to": "gated:no-go"
+          }
+        ],
+        "updated_at": "2026-08-27T23:40:00Z"
+      },
       "default_branch": "main",
       "first_seen": "2026-08-17T13:05:28Z",
       "fork": false,
@@ -20017,11 +20029,23 @@
       "size": 36003,
       "source_query": "filename:.trufflehog.yml OR filename:.trufflehog.toml OR filename:trufflehog.yml",
       "stars": 46,
-      "status": "mined",
+      "status": "gated:no-go",
       "url": "https://github.com/Amirhosein-gh98/Gnosis"
     },
     {
       "archived": false,
+      "audit": {
+        "human_resolved": true,
+        "needs_human_review": false,
+        "re_evaluate": false,
+        "transitions": [
+          {
+            "reason": "sync:continuous-clearing-auction_gate_decision",
+            "to": "gated:no-go"
+          }
+        ],
+        "updated_at": "2026-08-27T23:40:00Z"
+      },
       "default_branch": "main",
       "first_seen": "2026-08-17T13:05:28Z",
       "fork": false,
@@ -20032,11 +20056,23 @@
       "size": 12546,
       "source_query": "filename:.trufflehog.yml OR filename:.trufflehog.toml OR filename:trufflehog.yml",
       "stars": 45,
-      "status": "mined",
+      "status": "gated:no-go",
       "url": "https://github.com/Uniswap/continuous-clearing-auction"
     },
     {
       "archived": false,
+      "audit": {
+        "human_resolved": true,
+        "needs_human_review": false,
+        "re_evaluate": false,
+        "transitions": [
+          {
+            "reason": "sync:uniswapx-parameterization-api_gate_decision",
+            "to": "gated:no-go"
+          }
+        ],
+        "updated_at": "2026-08-27T23:40:00Z"
+      },
       "default_branch": "main",
       "first_seen": "2026-08-17T13:05:28Z",
       "fork": false,
@@ -20047,11 +20083,23 @@
       "size": 2365,
       "source_query": "filename:.trufflehog.yml OR filename:.trufflehog.toml OR filename:trufflehog.yml",
       "stars": 51,
-      "status": "mined",
+      "status": "gated:no-go",
       "url": "https://github.com/Uniswap/uniswapx-parameterization-api"
     },
     {
       "archived": false,
+      "audit": {
+        "human_resolved": true,
+        "needs_human_review": false,
+        "re_evaluate": false,
+        "transitions": [
+          {
+            "reason": "sync:the-dmz_gate_decision",
+            "to": "gated:no-go"
+          }
+        ],
+        "updated_at": "2026-08-27T23:40:01Z"
+      },
       "default_branch": "master",
       "first_seen": "2026-08-17T13:05:28Z",
       "fork": false,
@@ -20062,11 +20110,24 @@
       "size": 7163,
       "source_query": "filename:secretlintrc.json OR filename:.secretlintrc",
       "stars": 35,
-      "status": "mined",
+      "status": "gated:no-go",
       "url": "https://github.com/TheMorpheus407/the-dmz"
     },
     {
       "archived": false,
+      "audit": {
+        "auto_filed": true,
+        "auto_filed_at": "2026-08-27T23:40:01Z",
+        "needs_human_review": false,
+        "template_fired": "below-scale",
+        "transitions": [
+          {
+            "reason": "sync:project-templates_gate_decision",
+            "to": "gated:no-go"
+          }
+        ],
+        "updated_at": "2026-08-27T23:40:01Z"
+      },
       "default_branch": "main",
       "first_seen": "2026-08-17T13:05:28Z",
       "fork": false,
@@ -20077,7 +20138,7 @@
       "size": 398,
       "source_query": "filename:secretlintrc.json OR filename:.secretlintrc",
       "stars": 40,
-      "status": "mined",
+      "status": "gated:no-go",
       "url": "https://github.com/practicalli/project-templates"
     },
     {
@@ -20297,6 +20358,18 @@
     },
     {
       "archived": false,
+      "audit": {
+        "human_resolved": true,
+        "needs_human_review": false,
+        "re_evaluate": false,
+        "transitions": [
+          {
+            "reason": "sync:c3r_gate_decision",
+            "to": "gated:no-go"
+          }
+        ],
+        "updated_at": "2026-08-27T23:40:00Z"
+      },
       "default_branch": "main",
       "first_seen": "2026-08-19T13:33:52Z",
       "fork": false,
@@ -20307,7 +20380,7 @@
       "size": 3174,
       "source_query": "filename:.trufflehog.yml OR filename:.trufflehog.toml OR filename:trufflehog.yml",
       "stars": 44,
-      "status": "mined",
+      "status": "gated:no-go",
       "url": "https://github.com/aws/c3r"
     },
     {
@@ -21079,6 +21152,18 @@
     },
     {
       "archived": false,
+      "audit": {
+        "human_resolved": true,
+        "needs_human_review": false,
+        "re_evaluate": false,
+        "transitions": [
+          {
+            "reason": "sync:stride-gpt_gate_decision",
+            "to": "gated:no-go"
+          }
+        ],
+        "updated_at": "2026-08-27T23:40:00Z"
+      },
       "capped": true,
       "default_branch": "master",
       "first_seen": "2026-08-24T13:36:33Z",
@@ -21090,7 +21175,7 @@
       "size": 95217,
       "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
       "stars": 1103,
-      "status": "mined",
+      "status": "gated:no-go",
       "url": "https://github.com/mrwadams/stride-gpt"
     },
     {
@@ -21539,6 +21624,18 @@
     },
     {
       "archived": false,
+      "audit": {
+        "human_resolved": true,
+        "needs_human_review": false,
+        "re_evaluate": false,
+        "transitions": [
+          {
+            "reason": "sync:dockerfiles_gate_decision",
+            "to": "gated:no-go"
+          }
+        ],
+        "updated_at": "2026-08-27T23:39:59Z"
+      },
       "default_branch": "main",
       "first_seen": "2026-08-27T22:40:28Z",
       "fork": false,
@@ -21549,7 +21646,7 @@
       "size": 22524,
       "source_query": "filename:.trufflehog.yml OR filename:.trufflehog.toml OR filename:trufflehog.yml",
       "stars": 175,
-      "status": "mined",
+      "status": "gated:no-go",
       "url": "https://github.com/jauderho/dockerfiles"
     },
     {
@@ -21584,6 +21681,18 @@
     },
     {
       "archived": false,
+      "audit": {
+        "human_resolved": true,
+        "needs_human_review": false,
+        "re_evaluate": false,
+        "transitions": [
+          {
+            "reason": "sync:MyEtherWallet_gate_decision",
+            "to": "gated:no-go"
+          }
+        ],
+        "updated_at": "2026-08-27T23:40:00Z"
+      },
       "default_branch": "main",
       "first_seen": "2026-08-27T22:40:28Z",
       "fork": false,
@@ -21594,7 +21703,7 @@
       "size": 5486675,
       "source_query": "filename:isEmail.js path:src OR filename:isFQDN.js path:src",
       "stars": 1586,
-      "status": "mined",
+      "status": "gated:no-go",
       "url": "https://github.com/MyEtherWallet/MyEtherWallet"
     },
     {
@@ -21629,6 +21738,18 @@
     },
     {
       "archived": false,
+      "audit": {
+        "human_resolved": true,
+        "needs_human_review": false,
+        "re_evaluate": false,
+        "transitions": [
+          {
+            "reason": "sync:asm_gate_decision",
+            "to": "gated:no-go"
+          }
+        ],
+        "updated_at": "2026-08-27T23:40:00Z"
+      },
       "capped": true,
       "default_branch": "main",
       "first_seen": "2026-08-27T22:40:28Z",
@@ -21640,7 +21761,7 @@
       "size": 28441,
       "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
       "stars": 892,
-      "status": "mined",
+      "status": "gated:no-go",
       "url": "https://github.com/luongnv89/asm"
     },
     {

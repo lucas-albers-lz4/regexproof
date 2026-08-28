@@ -1,9 +1,9 @@
 {
   "provenance": {
-    "gate_decision_count": 864,
-    "input_file_count": 864,
-    "inputs_hash": "f3ade43c75bb204955f607462516980479c023eebb110e73079239bb95d45e99",
-    "linked_row_count": 830,
+    "gate_decision_count": 874,
+    "input_file_count": 874,
+    "inputs_hash": "4981fb13cab9c9e612e60a9c6a834516cea135256bfa165792ac5f961513d911",
+    "linked_row_count": 840,
     "schema_version": "1"
   },
   "rows": [
@@ -922,6 +922,43 @@
         }
       },
       "url": "https://github.com/AliyunContainerService/pouch"
+    },
+    {
+      "decision_date": "2026-08-27",
+      "label": "no-go",
+      "ledger": {
+        "archived": false,
+        "capped": false,
+        "fork": false,
+        "language": "Python",
+        "pushed_date": "2026-07-15",
+        "size": 36003,
+        "source_query": "filename:.trufflehog.yml OR filename:.trufflehog.toml OR filename:trufflehog.yml",
+        "stars": 46
+      },
+      "probe": {
+        "dialect_counts": {
+          "posix-shell": 9,
+          "py_re": 779
+        },
+        "predicted_buckets": {
+          "inline-flag": 44,
+          "lookaround": 27,
+          "m-flag": 30
+        },
+        "regex_sites": 788,
+        "security_boundary": "unknown",
+        "tree_probe": {
+          "complete": false,
+          "path_count": 0,
+          "probed_pin": "1417f2103174d5ab00ed1fd48c8aa562365103ab",
+          "reason": "budget-exhausted",
+          "regex_file_type_counts": {},
+          "security_boundary": "unknown",
+          "truncated": false
+        }
+      },
+      "url": "https://github.com/Amirhosein-gh98/Gnosis"
     },
     {
       "decision_date": "2026-08-12",
@@ -5184,6 +5221,42 @@
       "url": "https://github.com/Muriel2Horak/oig-proxy"
     },
     {
+      "decision_date": "2026-08-27",
+      "label": "no-go",
+      "ledger": {
+        "archived": false,
+        "capped": false,
+        "fork": false,
+        "language": "SCSS",
+        "pushed_date": "2026-08-26",
+        "size": 5486675,
+        "source_query": "filename:isEmail.js path:src OR filename:isFQDN.js path:src",
+        "stars": 1586
+      },
+      "probe": {
+        "dialect_counts": {
+          "ecma": 56
+        },
+        "predicted_buckets": {
+          "inline-flag": 5,
+          "lookaround": 5,
+          "stateful": 9
+        },
+        "regex_sites": 56,
+        "security_boundary": "unknown",
+        "tree_probe": {
+          "complete": false,
+          "path_count": 0,
+          "probed_pin": "335d1508763b3c9f4b38eb8ccbc8cf0877e23a14",
+          "reason": "budget-exhausted",
+          "regex_file_type_counts": {},
+          "security_boundary": "unknown",
+          "truncated": false
+        }
+      },
+      "url": "https://github.com/MyEtherWallet/MyEtherWallet"
+    },
+    {
       "decision_date": "2026-08-12",
       "label": "no-go",
       "ledger": {
@@ -7563,6 +7636,46 @@
       "url": "https://github.com/TheJumpCloud/jcapi-powershell"
     },
     {
+      "decision_date": "2026-08-27",
+      "label": "no-go",
+      "ledger": {
+        "archived": false,
+        "capped": false,
+        "fork": false,
+        "language": "TypeScript",
+        "pushed_date": "2026-05-07",
+        "size": 7163,
+        "source_query": "filename:secretlintrc.json OR filename:.secretlintrc",
+        "stars": 35
+      },
+      "probe": {
+        "dialect_counts": {
+          "ecma": 708,
+          "posix-shell": 24
+        },
+        "predicted_buckets": {
+          "backref": 1,
+          "inline-flag": 176,
+          "lookaround": 1,
+          "posix-class": 2,
+          "stateful": 162,
+          "u-flag": 2
+        },
+        "regex_sites": 732,
+        "security_boundary": "unknown",
+        "tree_probe": {
+          "complete": false,
+          "path_count": 0,
+          "probed_pin": "dfb312166383492afd39f69e2c11bcc99233bca3",
+          "reason": "budget-exhausted",
+          "regex_file_type_counts": {},
+          "security_boundary": "unknown",
+          "truncated": false
+        }
+      },
+      "url": "https://github.com/TheMorpheus407/the-dmz"
+    },
+    {
       "decision_date": "2026-08-12",
       "label": "no-go",
       "ledger": {
@@ -8197,6 +8310,42 @@
         "archived": false,
         "capped": false,
         "fork": false,
+        "language": "Solidity",
+        "pushed_date": "2026-07-13",
+        "size": 12546,
+        "source_query": "filename:.trufflehog.yml OR filename:.trufflehog.toml OR filename:trufflehog.yml",
+        "stars": 45
+      },
+      "probe": {
+        "dialect_counts": {
+          "ecma": 29,
+          "posix-shell": 3
+        },
+        "predicted_buckets": {
+          "lookaround": 1,
+          "stateful": 1
+        },
+        "regex_sites": 32,
+        "security_boundary": "unknown",
+        "tree_probe": {
+          "complete": false,
+          "path_count": 0,
+          "probed_pin": "6c9e559e63a7a141a4fe4bd5aa0f47fee1354b58",
+          "reason": "budget-exhausted",
+          "regex_file_type_counts": {},
+          "security_boundary": "unknown",
+          "truncated": false
+        }
+      },
+      "url": "https://github.com/Uniswap/continuous-clearing-auction"
+    },
+    {
+      "decision_date": "2026-08-27",
+      "label": "no-go",
+      "ledger": {
+        "archived": false,
+        "capped": false,
+        "fork": false,
         "language": "TypeScript",
         "pushed_date": "2026-03-19",
         "size": 18840,
@@ -8223,6 +8372,40 @@
         }
       },
       "url": "https://github.com/Uniswap/routing-api"
+    },
+    {
+      "decision_date": "2026-08-27",
+      "label": "no-go",
+      "ledger": {
+        "archived": false,
+        "capped": false,
+        "fork": false,
+        "language": "TypeScript",
+        "pushed_date": "2026-08-13",
+        "size": 2365,
+        "source_query": "filename:.trufflehog.yml OR filename:.trufflehog.toml OR filename:trufflehog.yml",
+        "stars": 51
+      },
+      "probe": {
+        "dialect_counts": {
+          "ecma": 9
+        },
+        "predicted_buckets": {
+          "stateful": 1
+        },
+        "regex_sites": 9,
+        "security_boundary": "unknown",
+        "tree_probe": {
+          "complete": false,
+          "path_count": 0,
+          "probed_pin": "8ddf6bf5d83ae4559ac57861003908cb28d5dd7a",
+          "reason": "budget-exhausted",
+          "regex_file_type_counts": {},
+          "security_boundary": "unknown",
+          "truncated": false
+        }
+      },
+      "url": "https://github.com/Uniswap/uniswapx-parameterization-api"
     },
     {
       "decision_date": "2026-08-13",
@@ -11739,6 +11922,38 @@
         }
       },
       "url": "https://github.com/aws-samples/sample-eks-enterprise-quickstart"
+    },
+    {
+      "decision_date": "2026-08-27",
+      "label": "no-go",
+      "ledger": {
+        "archived": false,
+        "capped": false,
+        "fork": false,
+        "language": "Java",
+        "pushed_date": "2026-08-18",
+        "size": 3174,
+        "source_query": "filename:.trufflehog.yml OR filename:.trufflehog.toml OR filename:trufflehog.yml",
+        "stars": 44
+      },
+      "probe": {
+        "dialect_counts": {
+          "java": 1
+        },
+        "predicted_buckets": {},
+        "regex_sites": 1,
+        "security_boundary": "unknown",
+        "tree_probe": {
+          "complete": false,
+          "path_count": 0,
+          "probed_pin": "3195c3c5fa41b2bebdbff85a52a86a96dbc575cc",
+          "reason": "budget-exhausted",
+          "regex_file_type_counts": {},
+          "security_boundary": "unknown",
+          "truncated": false
+        }
+      },
+      "url": "https://github.com/aws/c3r"
     },
     {
       "decision_date": "2026-08-13",
@@ -20447,6 +20662,40 @@
       "url": "https://github.com/jasonmichaelbell78-creator/sonash-v0"
     },
     {
+      "decision_date": "2026-08-27",
+      "label": "no-go",
+      "ledger": {
+        "archived": false,
+        "capped": false,
+        "fork": false,
+        "language": "Dockerfile",
+        "pushed_date": "2026-08-26",
+        "size": 22524,
+        "source_query": "filename:.trufflehog.yml OR filename:.trufflehog.toml OR filename:trufflehog.yml",
+        "stars": 175
+      },
+      "probe": {
+        "dialect_counts": {
+          "posix-shell": 30
+        },
+        "predicted_buckets": {
+          "posix-class": 8
+        },
+        "regex_sites": 30,
+        "security_boundary": "unknown",
+        "tree_probe": {
+          "complete": false,
+          "path_count": 0,
+          "probed_pin": "4c6a73c68cd9486be3cd7fd2653d2c5dc31b04bb",
+          "reason": "budget-exhausted",
+          "regex_file_type_counts": {},
+          "security_boundary": "unknown",
+          "truncated": false
+        }
+      },
+      "url": "https://github.com/jauderho/dockerfiles"
+    },
+    {
       "decision_date": "2026-08-13",
       "label": "go",
       "ledger": {
@@ -22618,6 +22867,45 @@
       "url": "https://github.com/lunarway/release-manager"
     },
     {
+      "decision_date": "2026-08-27",
+      "label": "no-go",
+      "ledger": {
+        "archived": false,
+        "capped": true,
+        "fork": false,
+        "language": "TypeScript",
+        "pushed_date": "2026-08-25",
+        "size": 28441,
+        "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
+        "stars": 892
+      },
+      "probe": {
+        "dialect_counts": {
+          "ecma": 491,
+          "posix-shell": 1,
+          "py_re": 6
+        },
+        "predicted_buckets": {
+          "inline-flag": 110,
+          "lookaround": 2,
+          "m-flag": 9,
+          "stateful": 69
+        },
+        "regex_sites": 498,
+        "security_boundary": "deterministic-true",
+        "tree_probe": {
+          "complete": false,
+          "path_count": 0,
+          "probed_pin": "9e3ef75269183dbb0cdf03d43dd045492669857b",
+          "reason": "budget-exhausted",
+          "regex_file_type_counts": {},
+          "security_boundary": "unknown",
+          "truncated": false
+        }
+      },
+      "url": "https://github.com/luongnv89/asm"
+    },
+    {
       "decision_date": "2026-08-13",
       "label": "no-go",
       "ledger": {
@@ -24261,6 +24549,41 @@
         }
       },
       "url": "https://github.com/mrcbax/ActiveAntiPhish"
+    },
+    {
+      "decision_date": "2026-08-27",
+      "label": "no-go",
+      "ledger": {
+        "archived": false,
+        "capped": true,
+        "fork": false,
+        "language": "Python",
+        "pushed_date": "2026-08-17",
+        "size": 95217,
+        "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
+        "stars": 1103
+      },
+      "probe": {
+        "dialect_counts": {
+          "py_re": 30
+        },
+        "predicted_buckets": {
+          "inline-flag": 9,
+          "m-flag": 2
+        },
+        "regex_sites": 30,
+        "security_boundary": "deterministic-true",
+        "tree_probe": {
+          "complete": false,
+          "path_count": 0,
+          "probed_pin": "5078e7f75c26e2a3a6d2b2215f59406554670c4c",
+          "reason": "budget-exhausted",
+          "regex_file_type_counts": {},
+          "security_boundary": "unknown",
+          "truncated": false
+        }
+      },
+      "url": "https://github.com/mrwadams/stride-gpt"
     },
     {
       "decision_date": "2026-08-14",
@@ -26991,6 +27314,36 @@
         }
       },
       "url": "https://github.com/practicalli/clojure-cli-config"
+    },
+    {
+      "decision_date": "2026-08-27",
+      "label": "no-go",
+      "ledger": {
+        "archived": false,
+        "capped": false,
+        "fork": false,
+        "language": "Clojure",
+        "pushed_date": "2026-07-29",
+        "size": 398,
+        "source_query": "filename:secretlintrc.json OR filename:.secretlintrc",
+        "stars": 40
+      },
+      "probe": {
+        "dialect_counts": {},
+        "predicted_buckets": {},
+        "regex_sites": 0,
+        "security_boundary": "unknown",
+        "tree_probe": {
+          "complete": false,
+          "path_count": 0,
+          "probed_pin": "19fa0480b98bc279798d18fec64f4e9a2f7024cb",
+          "reason": "budget-exhausted",
+          "regex_file_type_counts": {},
+          "security_boundary": "unknown",
+          "truncated": false
+        }
+      },
+      "url": "https://github.com/practicalli/project-templates"
     },
     {
       "decision_date": "2026-08-13",

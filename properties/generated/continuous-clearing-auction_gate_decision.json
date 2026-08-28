@@ -1,0 +1,53 @@
+{
+  "candidate_url": "https://github.com/Uniswap/continuous-clearing-auction",
+  "conditions": [
+    {
+      "evidence": "Predicted buckets present (2) but not treated as novel surface.",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Not a security boundary (probe.security_boundary=unknown).",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "32 sites < 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "continuous-clearing-auction",
+  "corpus_pin": "6c9e559e63a7a141a4fe4bd5aa0f47fee1354b58",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-27",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "lookaround": 1
+    },
+    "dialect": {
+      "ecma": 29,
+      "posix-shell": 3
+    },
+    "flags": {
+      "g": 1
+    },
+    "pin": "6c9e559e63a7a141a4fe4bd5aa0f47fee1354b58",
+    "pin_mined": "6c9e559e63a7a141a4fe4bd5aa0f47fee1354b58",
+    "pin_probed": "6c9e559e63a7a141a4fe4bd5aa0f47fee1354b58",
+    "predicted_buckets": {
+      "lookaround": 1,
+      "stateful": 1
+    },
+    "regex_sites": 32,
+    "regex_sites_per_file": {
+      "docs/autogen/solidity.min.js": 29,
+      "script/util/doc_gen.sh": 3
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Uniswap continuous-clearing-auction Solidity project. Probe 32 sites in contracts/scripts, not secret-scanner rules. Mined for .trufflehog.yml. Boundary unknown. No admission condition met.",
+  "schema_version": "1"
+}
