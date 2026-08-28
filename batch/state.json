@@ -5,6 +5,9 @@
     },
     "funnel-drain-2026-08-27-b2": {
       "count": 10
+    },
+    "funnel-drain-2026-08-28-b3": {
+      "count": 10
     }
   },
   "rows": {
@@ -247,8 +250,128 @@
       "pin": "19fa0480b98bc279798d18fec64f4e9a2f7024cb",
       "started_at": "2026-08-27T23:35:00+00:00",
       "url": "https://github.com/practicalli/project-templates"
+    },
+    "funnel-drain-2026-08-28-b3#https://github.com/Abilityai/trinity#f9ecbcc97871dbba81f05891aed033d848c3b557": {
+      "bytes_saved": 0,
+      "cache_hit": false,
+      "completed_at": "2026-08-28T14:18:02+00:00",
+      "key": "funnel-drain-2026-08-28-b3#https://github.com/Abilityai/trinity#f9ecbcc97871dbba81f05891aed033d848c3b557",
+      "lifecycle_bytes": 0,
+      "manifest_digest": "funnel-drain-2026-08-28-b3",
+      "outcome": "needs_human",
+      "pin": "f9ecbcc97871dbba81f05891aed033d848c3b557",
+      "started_at": "2026-08-28T14:18:02+00:00",
+      "url": "https://github.com/Abilityai/trinity"
+    },
+    "funnel-drain-2026-08-28-b3#https://github.com/Correia-jpv/fucking-static-analysis#9c9156c17ee1c0d1a3dbb38136b8a6884e1a23ea": {
+      "bytes_saved": 0,
+      "cache_hit": false,
+      "completed_at": "2026-08-28T14:18:02+00:00",
+      "key": "funnel-drain-2026-08-28-b3#https://github.com/Correia-jpv/fucking-static-analysis#9c9156c17ee1c0d1a3dbb38136b8a6884e1a23ea",
+      "lifecycle_bytes": 0,
+      "manifest_digest": "funnel-drain-2026-08-28-b3",
+      "outcome": "auto_nogo",
+      "pin": "9c9156c17ee1c0d1a3dbb38136b8a6884e1a23ea",
+      "started_at": "2026-08-28T14:18:02+00:00",
+      "url": "https://github.com/Correia-jpv/fucking-static-analysis"
+    },
+    "funnel-drain-2026-08-28-b3#https://github.com/Open-Galaxea/open-galaxea#c329d7abc0681f0193febd32cd14876f09e3fba5": {
+      "bytes_saved": 0,
+      "cache_hit": false,
+      "completed_at": "2026-08-28T14:18:02+00:00",
+      "key": "funnel-drain-2026-08-28-b3#https://github.com/Open-Galaxea/open-galaxea#c329d7abc0681f0193febd32cd14876f09e3fba5",
+      "lifecycle_bytes": 0,
+      "manifest_digest": "funnel-drain-2026-08-28-b3",
+      "outcome": "needs_human",
+      "pin": "c329d7abc0681f0193febd32cd14876f09e3fba5",
+      "started_at": "2026-08-28T14:18:02+00:00",
+      "url": "https://github.com/Open-Galaxea/open-galaxea"
+    },
+    "funnel-drain-2026-08-28-b3#https://github.com/bytedance/agentkit-samples#0890278a6571e4190c1ab8cacd9becc147f74d9c": {
+      "bytes_saved": 0,
+      "cache_hit": false,
+      "completed_at": "2026-08-28T14:18:02+00:00",
+      "key": "funnel-drain-2026-08-28-b3#https://github.com/bytedance/agentkit-samples#0890278a6571e4190c1ab8cacd9becc147f74d9c",
+      "lifecycle_bytes": 0,
+      "manifest_digest": "funnel-drain-2026-08-28-b3",
+      "outcome": "needs_human",
+      "pin": "0890278a6571e4190c1ab8cacd9becc147f74d9c",
+      "started_at": "2026-08-28T14:18:02+00:00",
+      "url": "https://github.com/bytedance/agentkit-samples"
+    },
+    "funnel-drain-2026-08-28-b3#https://github.com/ducnguyen67201/FeatherlaneAI#4903c1fd87e085f971e9bf82af2f8fc19e8047f8": {
+      "bytes_saved": 0,
+      "cache_hit": false,
+      "completed_at": "2026-08-28T14:18:02+00:00",
+      "key": "funnel-drain-2026-08-28-b3#https://github.com/ducnguyen67201/FeatherlaneAI#4903c1fd87e085f971e9bf82af2f8fc19e8047f8",
+      "lifecycle_bytes": 0,
+      "manifest_digest": "funnel-drain-2026-08-28-b3",
+      "outcome": "needs_human",
+      "pin": "4903c1fd87e085f971e9bf82af2f8fc19e8047f8",
+      "started_at": "2026-08-28T14:18:02+00:00",
+      "url": "https://github.com/ducnguyen67201/FeatherlaneAI"
+    },
+    "funnel-drain-2026-08-28-b3#https://github.com/eclipse-tractusx/tractus-x-umbrella#fe1d0cc9d8326cc68dbd6f56433d1baa403d8ebc": {
+      "bytes_saved": 0,
+      "cache_hit": false,
+      "completed_at": "2026-08-28T14:18:02+00:00",
+      "key": "funnel-drain-2026-08-28-b3#https://github.com/eclipse-tractusx/tractus-x-umbrella#fe1d0cc9d8326cc68dbd6f56433d1baa403d8ebc",
+      "lifecycle_bytes": 0,
+      "manifest_digest": "funnel-drain-2026-08-28-b3",
+      "outcome": "needs_human",
+      "pin": "fe1d0cc9d8326cc68dbd6f56433d1baa403d8ebc",
+      "started_at": "2026-08-28T14:18:02+00:00",
+      "url": "https://github.com/eclipse-tractusx/tractus-x-umbrella"
+    },
+    "funnel-drain-2026-08-28-b3#https://github.com/librefang/librefang#3624319cc58d403b17c4a1a8e9d5b5cb776c2d2d": {
+      "bytes_saved": 0,
+      "cache_hit": false,
+      "completed_at": "2026-08-28T14:18:02+00:00",
+      "key": "funnel-drain-2026-08-28-b3#https://github.com/librefang/librefang#3624319cc58d403b17c4a1a8e9d5b5cb776c2d2d",
+      "lifecycle_bytes": 0,
+      "manifest_digest": "funnel-drain-2026-08-28-b3",
+      "outcome": "needs_human",
+      "pin": "3624319cc58d403b17c4a1a8e9d5b5cb776c2d2d",
+      "started_at": "2026-08-28T14:18:02+00:00",
+      "url": "https://github.com/librefang/librefang"
+    },
+    "funnel-drain-2026-08-28-b3#https://github.com/msitarzewski/agency-agents-app#04c10beee0f35ed43f88de9f232f1d885a03156c": {
+      "bytes_saved": 0,
+      "cache_hit": false,
+      "completed_at": "2026-08-28T14:18:02+00:00",
+      "key": "funnel-drain-2026-08-28-b3#https://github.com/msitarzewski/agency-agents-app#04c10beee0f35ed43f88de9f232f1d885a03156c",
+      "lifecycle_bytes": 0,
+      "manifest_digest": "funnel-drain-2026-08-28-b3",
+      "outcome": "needs_human",
+      "pin": "04c10beee0f35ed43f88de9f232f1d885a03156c",
+      "started_at": "2026-08-28T14:18:02+00:00",
+      "url": "https://github.com/msitarzewski/agency-agents-app"
+    },
+    "funnel-drain-2026-08-28-b3#https://github.com/nmstate/nmstate#3bbac32aa342409d575060667e2cb6dd26c9ba7e": {
+      "bytes_saved": 0,
+      "cache_hit": false,
+      "completed_at": "2026-08-28T14:18:02+00:00",
+      "key": "funnel-drain-2026-08-28-b3#https://github.com/nmstate/nmstate#3bbac32aa342409d575060667e2cb6dd26c9ba7e",
+      "lifecycle_bytes": 0,
+      "manifest_digest": "funnel-drain-2026-08-28-b3",
+      "outcome": "needs_human",
+      "pin": "3bbac32aa342409d575060667e2cb6dd26c9ba7e",
+      "started_at": "2026-08-28T14:18:02+00:00",
+      "url": "https://github.com/nmstate/nmstate"
+    },
+    "funnel-drain-2026-08-28-b3#https://github.com/underdog-tech/vulnbot#02d5c7fc771b80c70d2169827ce4fdf3a901696e": {
+      "bytes_saved": 0,
+      "cache_hit": false,
+      "completed_at": "2026-08-28T14:18:02+00:00",
+      "key": "funnel-drain-2026-08-28-b3#https://github.com/underdog-tech/vulnbot#02d5c7fc771b80c70d2169827ce4fdf3a901696e",
+      "lifecycle_bytes": 0,
+      "manifest_digest": "funnel-drain-2026-08-28-b3",
+      "outcome": "needs_human",
+      "pin": "02d5c7fc771b80c70d2169827ce4fdf3a901696e",
+      "started_at": "2026-08-28T14:18:02+00:00",
+      "url": "https://github.com/underdog-tech/vulnbot"
     }
   },
   "schema_version": "1",
-  "sha256": "bfd7a38bfd52723ab3f0de9a80dd89e8835f6c39857739fffe6c9aa33c519f38"
+  "sha256": "a286459cd3b2a765d573d5b4c5287a278438f7f28857685a3c499bfa3fa05a89"
 }

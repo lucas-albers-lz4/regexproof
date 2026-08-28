@@ -1,0 +1,44 @@
+{
+  "candidate_url": "https://github.com/underdog-tech/vulnbot",
+  "conditions": [
+    {
+      "evidence": "No novel dialect/flag/encoding surface.",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Not a security boundary (probe.security_boundary=unknown).",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "1 sites < 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "vulnbot",
+  "corpus_pin": "02d5c7fc771b80c70d2169827ce4fdf3a901696e",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-28",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "re2": 1
+    },
+    "flags": {},
+    "pin": "02d5c7fc771b80c70d2169827ce4fdf3a901696e",
+    "pin_mined": "02d5c7fc771b80c70d2169827ce4fdf3a901696e",
+    "pin_probed": "02d5c7fc771b80c70d2169827ce4fdf3a901696e",
+    "predicted_buckets": {},
+    "regex_sites": 1,
+    "regex_sites_per_file": {
+      "querying/project.go": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "underdog-tech/vulnbot security bot. Probe 1 site, not TruffleHog detector corpus. Mined for .trufflehog.yml. Boundary unknown. No admission condition met.",
+  "schema_version": "1"
+}

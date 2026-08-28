@@ -2,17 +2,17 @@
   "action": "record offline AUC flip to score-v1.5; live drain unchanged",
   "designed_mismatch": "Eval already flipped to v1.5 (flip_to_v15). Live drain is still v1. AUC is a global-health statistic; the operational flip of the probe stream is a separate, currently unowned decision. A firing escape while v1.5 sits unflipped on live drain is a designed outcome. No second top-K flip rule (freeze is AUC-only).",
   "eval": {
-    "auc_delta_v15_minus_v1": 0.17753,
-    "auc_v1": 0.522629,
-    "auc_v15": 0.700159,
+    "auc_delta_v15_minus_v1": 0.201831,
+    "auc_v1": 0.498609,
+    "auc_v15": 0.700439,
     "bootstrap_ci_95_delta": [
-      0.069641,
-      0.267911
+      0.096598,
+      0.295669
     ],
     "bootstrap_method": "bca",
-    "cap_raise_calibration_note": "overlay shifts scores by 58.4289 on average; any cap raise must be recalibrated, never applied silently",
-    "mean_score_delta": 58.4289,
-    "population_n": 864,
+    "cap_raise_calibration_note": "overlay shifts scores by 57.475 on average; any cap raise must be recalibrated, never applied silently",
+    "mean_score_delta": 57.475,
+    "population_n": 874,
     "positive": 121,
     "precision_at_k": {
       "clopper_pearson_95": [
@@ -24,17 +24,17 @@
     },
     "precision_at_k_v1": {
       "clopper_pearson_95": [
-        0.122795,
-        0.458894
+        0.099338,
+        0.422837
       ],
       "k": 30,
-      "positive_in_top_k": 8
+      "positive_in_top_k": 7
     },
     "split": {
       "ratio": 0.5,
       "seed": 20260822
     },
-    "test_n": 433
+    "test_n": 438
   },
   "flip_rule": "bootstrap BCa difference CI (v1.5 - v1) excludes 0, one-sided, AUC-only, no OR alternative",
   "flip_to_v15": true,

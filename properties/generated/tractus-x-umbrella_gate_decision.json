@@ -1,0 +1,48 @@
+{
+  "candidate_url": "https://github.com/eclipse-tractusx/tractus-x-umbrella",
+  "conditions": [
+    {
+      "evidence": "Predicted buckets present (1) but not treated as novel surface.",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Not a security boundary (probe.security_boundary=unknown).",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "9 sites < 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "tractus-x-umbrella",
+  "corpus_pin": "fe1d0cc9d8326cc68dbd6f56433d1baa403d8ebc",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-28",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "posix-class": 9
+    },
+    "dialect": {
+      "posix-shell": 9
+    },
+    "flags": {},
+    "pin": "fe1d0cc9d8326cc68dbd6f56433d1baa403d8ebc",
+    "pin_mined": "fe1d0cc9d8326cc68dbd6f56433d1baa403d8ebc",
+    "pin_probed": "fe1d0cc9d8326cc68dbd6f56433d1baa403d8ebc",
+    "predicted_buckets": {
+      "posix-class": 9
+    },
+    "regex_sites": 9,
+    "regex_sites_per_file": {
+      "hack/helm-dependencies.bash": 9
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "eclipse-tractusx/tractus-x-umbrella infra charts. Probe 9 shell sites in helm/k8s glue, not TruffleHog rules. Mined for .trufflehog.yml. Boundary unknown. No admission condition met.",
+  "schema_version": "1"
+}

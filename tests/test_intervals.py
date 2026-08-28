@@ -20,14 +20,14 @@ from regexproof.stats.intervals import (
     wilson_ci,
 )
 
-BASELINE = 121 / 864  # committed Phase 0 escape baseline ≈ 14.0% (deduped; +20 NO-GO 2026-08-27)
+BASELINE = 121 / 874  # committed Phase 0 escape baseline ≈ 13.8% (deduped; batch 3 +10 NO-GO)
 
 
 def test_wilson_ci_escape_baseline():
-    lo, hi = wilson_ci(121, 864)
-    # Design pins ~[11.8%, 16.5%] for the 121/864 baseline.
-    assert lo == pytest.approx(0.1185, abs=0.001)
-    assert hi == pytest.approx(0.1648, abs=0.001)
+    lo, hi = wilson_ci(121, 874)
+    # Design pins ~[11.7%, 16.3%] for the 121/874 baseline.
+    assert lo == pytest.approx(0.1171, abs=0.001)
+    assert hi == pytest.approx(0.1629, abs=0.001)
 
 
 def test_wilson_ci_edges():
@@ -78,7 +78,7 @@ def test_bootstrap_stratified_preserves_strata():
 
 
 def test_escape_fires_below_baseline():
-    # 5/100 ≈ 5% vs 14.0% baseline → p ≈ 0.007 < 0.05 → FIRES (blocks scale).
+    # 5/100 ≈ 5% vs 13.8% baseline → p ≈ 0.008 < 0.05 → FIRES (blocks scale).
     t = two_proportion_test(k_window=5, n_window=100, baseline=BASELINE)
     assert t["fires"] is True
     assert t["p_value"] < 0.05
@@ -95,16 +95,16 @@ def test_escape_does_not_fire_at_or_above_baseline():
 
 def test_escape_continuity_correction_boundary():
     """CodeRabbit #583: the correction is decision-relevant at the gate's
-    own committed baseline — k=3/n=50 vs BASELINE (121/864): uncorrected
-    p≈0.0514 (just above 0.05) vs corrected p≈0.0768 (does NOT fire)."""
+    own committed baseline — k=3/n=50 vs BASELINE (121/874): uncorrected
+    p≈0.0541 (just above 0.05) vs corrected p≈0.0806 (does NOT fire)."""
     t = two_proportion_test(k_window=3, n_window=50, baseline=BASELINE)
     assert t["fires"] is False
-    assert t["p_value"] == pytest.approx(0.076755, abs=1e-6)  # corrected oracle
-    # Sanity: without the correction the same input is just above 0.05 (0.051446).
+    assert t["p_value"] == pytest.approx(0.080557, abs=1e-6)  # corrected oracle
+    # Sanity: without the correction the same input is just above 0.05 (0.054129).
     se = (0.06 - BASELINE) / ((BASELINE * (1.0 - BASELINE) / 50) ** 0.5)
     from regexproof.stats.intervals import _normal_cdf
 
-    assert _normal_cdf(se) == pytest.approx(0.051446, abs=1e-6)
+    assert _normal_cdf(se) == pytest.approx(0.054129, abs=1e-6)
 
 
 def test_escape_respects_n_floor_and_predeclared_shape():

@@ -1,0 +1,46 @@
+{
+  "candidate_url": "https://github.com/Open-Galaxea/open-galaxea",
+  "conditions": [
+    {
+      "evidence": "No novel dialect/flag/encoding surface.",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Not a security boundary (probe.security_boundary=unknown).",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "3 sites < 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "open-galaxea",
+  "corpus_pin": "c329d7abc0681f0193febd32cd14876f09e3fba5",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-28",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "py_re": 3
+    },
+    "flags": {},
+    "pin": "c329d7abc0681f0193febd32cd14876f09e3fba5",
+    "pin_mined": "c329d7abc0681f0193febd32cd14876f09e3fba5",
+    "pin_probed": "c329d7abc0681f0193febd32cd14876f09e3fba5",
+    "predicted_buckets": {},
+    "regex_sites": 3,
+    "regex_sites_per_file": {
+      "GalaxeaLeRobot/src/lerobot/policies/smolvla/modeling_smolvla.py": 1,
+      "GalaxeaLeRobot/src/lerobot/scripts/visualize_dataset_html.py": 1,
+      "GalaxeaLeRobot/src/lerobot/utils/wandb_utils.py": 1
+    },
+    "security_boundary": "unknown"
+  },
+  "rationale": "Open-Galaxea/open-galaxea robotics stack. Probe 3 sites, not TruffleHog detector corpus. Mined for .trufflehog.yml. Boundary unknown. No admission condition met.",
+  "schema_version": "1"
+}
