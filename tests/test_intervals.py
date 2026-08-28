@@ -78,7 +78,7 @@ def test_bootstrap_stratified_preserves_strata():
 
 
 def test_escape_fires_below_baseline():
-    # 5/100 ≈ 5% vs 14.9% baseline → p ≈ 0.003 < 0.05 → FIRES (blocks scale).
+    # 5/100 ≈ 5% vs 14.0% baseline → p ≈ 0.007 < 0.05 → FIRES (blocks scale).
     t = two_proportion_test(k_window=5, n_window=100, baseline=BASELINE)
     assert t["fires"] is True
     assert t["p_value"] < 0.05
@@ -96,11 +96,11 @@ def test_escape_does_not_fire_at_or_above_baseline():
 def test_escape_continuity_correction_boundary():
     """CodeRabbit #583: the correction is decision-relevant at the gate's
     own committed baseline — k=3/n=50 vs BASELINE (121/864): uncorrected
-    p≈0.0514 (<0.05 borderline) vs corrected p≈0.0768 (does NOT fire)."""
+    p≈0.0514 (just above 0.05) vs corrected p≈0.0768 (does NOT fire)."""
     t = two_proportion_test(k_window=3, n_window=50, baseline=BASELINE)
     assert t["fires"] is False
     assert t["p_value"] == pytest.approx(0.076755, abs=1e-6)  # corrected oracle
-    # Sanity: without the correction the same input is borderline (0.051446).
+    # Sanity: without the correction the same input is just above 0.05 (0.051446).
     se = (0.06 - BASELINE) / ((BASELINE * (1.0 - BASELINE) / 50) ** 0.5)
     from regexproof.stats.intervals import _normal_cdf
 
