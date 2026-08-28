@@ -20143,6 +20143,19 @@
     },
     {
       "archived": false,
+      "audit": {
+        "auto_filed": true,
+        "auto_filed_at": "2026-08-28T14:17:49Z",
+        "needs_human_review": false,
+        "template_fired": "below-scale",
+        "transitions": [
+          {
+            "reason": "sync:fucking-static-analysis_gate_decision",
+            "to": "gated:no-go"
+          }
+        ],
+        "updated_at": "2026-08-28T14:17:49Z"
+      },
       "default_branch": "main",
       "first_seen": "2026-08-17T13:05:28Z",
       "fork": false,
@@ -20153,11 +20166,23 @@
       "size": 41884,
       "source_query": "filename:.trufflehog.yml OR filename:.trufflehog.toml OR filename:trufflehog.yml",
       "stars": 27,
-      "status": "mined",
+      "status": "gated:no-go",
       "url": "https://github.com/Correia-jpv/fucking-static-analysis"
     },
     {
       "archived": false,
+      "audit": {
+        "human_resolved": true,
+        "needs_human_review": false,
+        "re_evaluate": false,
+        "transitions": [
+          {
+            "reason": "sync:open-galaxea_gate_decision",
+            "to": "gated:no-go"
+          }
+        ],
+        "updated_at": "2026-08-28T14:17:49Z"
+      },
       "default_branch": "main",
       "first_seen": "2026-08-17T13:05:28Z",
       "fork": false,
@@ -20168,11 +20193,23 @@
       "size": 193046,
       "source_query": "filename:.trufflehog.yml OR filename:.trufflehog.toml OR filename:trufflehog.yml",
       "stars": 30,
-      "status": "mined",
+      "status": "gated:no-go",
       "url": "https://github.com/Open-Galaxea/open-galaxea"
     },
     {
       "archived": false,
+      "audit": {
+        "human_resolved": true,
+        "needs_human_review": false,
+        "re_evaluate": false,
+        "transitions": [
+          {
+            "reason": "sync:tractus-x-umbrella_gate_decision",
+            "to": "gated:no-go"
+          }
+        ],
+        "updated_at": "2026-08-28T14:17:50Z"
+      },
       "default_branch": "main",
       "first_seen": "2026-08-17T13:05:28Z",
       "fork": false,
@@ -20183,11 +20220,23 @@
       "size": 2450,
       "source_query": "filename:.trufflehog.yml OR filename:.trufflehog.toml OR filename:trufflehog.yml",
       "stars": 26,
-      "status": "mined",
+      "status": "gated:no-go",
       "url": "https://github.com/eclipse-tractusx/tractus-x-umbrella"
     },
     {
       "archived": false,
+      "audit": {
+        "human_resolved": true,
+        "needs_human_review": false,
+        "re_evaluate": false,
+        "transitions": [
+          {
+            "reason": "sync:vulnbot_gate_decision",
+            "to": "gated:no-go"
+          }
+        ],
+        "updated_at": "2026-08-28T14:17:50Z"
+      },
       "default_branch": "main",
       "first_seen": "2026-08-17T13:05:28Z",
       "fork": false,
@@ -20198,7 +20247,7 @@
       "size": 15470,
       "source_query": "filename:.trufflehog.yml OR filename:.trufflehog.toml OR filename:trufflehog.yml",
       "stars": 29,
-      "status": "mined",
+      "status": "gated:no-go",
       "url": "https://github.com/underdog-tech/vulnbot"
     },
     {
@@ -20219,6 +20268,18 @@
     },
     {
       "archived": false,
+      "audit": {
+        "human_resolved": true,
+        "needs_human_review": false,
+        "re_evaluate": false,
+        "transitions": [
+          {
+            "reason": "sync:FeatherlaneAI_gate_decision",
+            "to": "gated:no-go"
+          }
+        ],
+        "updated_at": "2026-08-28T14:17:50Z"
+      },
       "default_branch": "main",
       "first_seen": "2026-08-18T13:32:37Z",
       "fork": false,
@@ -20229,7 +20290,7 @@
       "size": 68583,
       "source_query": "filename:secretlintrc.json OR filename:.secretlintrc",
       "stars": 20,
-      "status": "mined",
+      "status": "gated:no-go",
       "url": "https://github.com/ducnguyen67201/FeatherlaneAI"
     },
     {
@@ -20250,6 +20311,18 @@
     },
     {
       "archived": false,
+      "audit": {
+        "human_resolved": true,
+        "needs_human_review": false,
+        "re_evaluate": false,
+        "transitions": [
+          {
+            "reason": "sync:agency-agents-app_gate_decision",
+            "to": "gated:no-go"
+          }
+        ],
+        "updated_at": "2026-08-28T14:17:50Z"
+      },
       "capped": true,
       "default_branch": "main",
       "first_seen": "2026-08-18T13:32:37Z",
@@ -20261,7 +20334,7 @@
       "size": 10504,
       "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
       "stars": 394,
-      "status": "mined",
+      "status": "gated:no-go",
       "url": "https://github.com/msitarzewski/agency-agents-app"
     },
     {
@@ -20385,6 +20458,18 @@
     },
     {
       "archived": false,
+      "audit": {
+        "human_resolved": true,
+        "needs_human_review": false,
+        "re_evaluate": false,
+        "transitions": [
+          {
+            "reason": "sync:trinity_gate_decision",
+            "to": "gated:no-go"
+          }
+        ],
+        "updated_at": "2026-08-28T14:17:49Z"
+      },
       "capped": true,
       "default_branch": "main",
       "first_seen": "2026-08-19T13:33:52Z",
@@ -20396,7 +20481,7 @@
       "size": 87826,
       "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
       "stars": 464,
-      "status": "mined",
+      "status": "gated:no-go",
       "url": "https://github.com/Abilityai/trinity"
     },
     {
@@ -20858,6 +20943,18 @@
     },
     {
       "archived": false,
+      "audit": {
+        "human_resolved": true,
+        "needs_human_review": false,
+        "re_evaluate": false,
+        "transitions": [
+          {
+            "reason": "sync:nmstate_gate_decision",
+            "to": "gated:no-go"
+          }
+        ],
+        "updated_at": "2026-08-28T14:17:51Z"
+      },
       "capped": true,
       "default_branch": "base",
       "first_seen": "2026-08-22T13:21:53Z",
@@ -20869,7 +20966,7 @@
       "size": 7659,
       "source_query": "filename:.gitleaks.toml",
       "stars": 387,
-      "status": "mined",
+      "status": "gated:no-go",
       "url": "https://github.com/nmstate/nmstate"
     },
     {
@@ -21180,6 +21277,18 @@
     },
     {
       "archived": false,
+      "audit": {
+        "human_resolved": true,
+        "needs_human_review": false,
+        "re_evaluate": false,
+        "transitions": [
+          {
+            "reason": "sync:agentkit-samples_gate_decision",
+            "to": "gated:no-go"
+          }
+        ],
+        "updated_at": "2026-08-28T14:17:50Z"
+      },
       "capped": true,
       "default_branch": "main",
       "first_seen": "2026-08-24T13:36:33Z",
@@ -21191,7 +21300,7 @@
       "size": 133969,
       "source_query": "filename:.gitleaks.toml",
       "stars": 431,
-      "status": "mined",
+      "status": "gated:no-go",
       "url": "https://github.com/bytedance/agentkit-samples"
     },
     {
@@ -21781,6 +21890,18 @@
     },
     {
       "archived": false,
+      "audit": {
+        "human_resolved": true,
+        "needs_human_review": false,
+        "re_evaluate": false,
+        "transitions": [
+          {
+            "reason": "sync:librefang_gate_decision",
+            "to": "gated:no-go"
+          }
+        ],
+        "updated_at": "2026-08-28T14:17:50Z"
+      },
       "capped": true,
       "default_branch": "main",
       "first_seen": "2026-08-27T22:40:28Z",
@@ -21792,7 +21913,7 @@
       "size": 100745,
       "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
       "stars": 361,
-      "status": "mined",
+      "status": "gated:no-go",
       "url": "https://github.com/librefang/librefang"
     },
     {

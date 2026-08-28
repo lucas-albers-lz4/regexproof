@@ -1,0 +1,66 @@
+{
+  "candidate_url": "https://github.com/msitarzewski/agency-agents-app",
+  "conditions": [
+    {
+      "evidence": "Predicted buckets present (4) but not treated as novel surface.",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Security-boundary condition not asserted met.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "51 sites < 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "agency-agents-app",
+  "corpus_pin": "04c10beee0f35ed43f88de9f232f1d885a03156c",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-08-28",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {
+      "backref": 1,
+      "posix-class": 2
+    },
+    "dialect": {
+      "ecma": 34,
+      "posix-shell": 17
+    },
+    "flags": {
+      "g": 12,
+      "i": 3
+    },
+    "pin": "04c10beee0f35ed43f88de9f232f1d885a03156c",
+    "pin_mined": "04c10beee0f35ed43f88de9f232f1d885a03156c",
+    "pin_probed": "04c10beee0f35ed43f88de9f232f1d885a03156c",
+    "predicted_buckets": {
+      "backref": 1,
+      "inline-flag": 3,
+      "posix-class": 2,
+      "stateful": 12
+    },
+    "regex_sites": 51,
+    "regex_sites_per_file": {
+      "scripts/release-linux.sh": 1,
+      "scripts/release.sh": 1,
+      "src-tauri/resources/corpus-baseline/scripts/convert.sh": 14,
+      "src/lib/data/toolRegistry.ts": 1,
+      "src/lib/stores/github.svelte.ts": 1,
+      "src/lib/stores/i18n.svelte.ts": 1,
+      "src/lib/stores/projects.svelte.ts": 2,
+      "src/lib/util/markdown.ts": 22,
+      "src/lib/util/platform.ts": 1,
+      "tools/phase-c/phase-c.sh": 1,
+      "tools/phase-c/validate-config.mjs": 6
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "msitarzewski/agency-agents-app app repo. Probe 51 ECMA sites in app code, not gitleaks rules. Mined for gitleaks.toml. Boundary deterministic-true but product tree. No admission condition met.",
+  "schema_version": "1"
+}
