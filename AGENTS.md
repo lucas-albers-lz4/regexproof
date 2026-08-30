@@ -44,8 +44,9 @@ Shape-5 `rule_diff` still needs an independent spec or a
 pairing is not a contract.
 
 Phase 0 search-semantics inventory of the ten SAT candidates that looked like
-third-party findings: none are public filings; dispositions live in
-[`docs/conversion-upstream.jsonl`](docs/conversion-upstream.jsonl) (source of truth: CRS 942220 version-diff = CU-005 `false_positive`, cross-engine 920210 = CU-010 `false_positive`). The other eight are spec-gap or collapse under search.
+third-party findings: none are public filings — see [`docs/why.md`](docs/why.md)
+for the live conversion narrative and the [`docs/conversion-upstream.jsonl`](docs/conversion-upstream.jsonl)
+dispositions (source of truth). The other eight are spec-gap or collapse under search.
 
 ## The 5-step workflow (follow in order)
 
@@ -72,18 +73,14 @@ Shape-5 registry/`kind`/`family`/mutation-guard contract:
 Dialect/`call_kind`/fold tables: [`docs/SEMANTICS.md`](docs/SEMANTICS.md).
 
 ### 3. Encode — read `docs/TRAPS.md` first
-The traps cost real debugging time. Minimum set:
-- `Complement()` is **language** complement, not char-class negation.
-  `Star(Complement(Re('"')))` ≠ `[^\"]*`. Use `Range`/`Union` or string ops.
-- Never set `smt.string_solver=z3str3` for regex work — it returns `unknown`
-  instantly on `InRe`. Default `seq` backend is the one that solves.
-- Mirror the real code **exactly**: deny-lists verbatim, length checks,
-  char classes. "root" matches the username regex; only the deny-list
-  excludes it.
-- State input-domain assumptions as constraints + comments (for example,
-  *POSIX
-  shell strings cannot contain NUL*).
-- `re.replace_re` / `str.replace_all` are unsupported — model with string ops.
+The traps cost real debugging time — read [`docs/TRAPS.md`](docs/TRAPS.md)
+first (ToC at the top). The two that bite first are [TRAPS #1](docs/TRAPS.md#1-complement-is-language-complement-not-char-class-negation)
+(`Complement()` is language complement, not char-class negation) and
+[TRAPS #2](docs/TRAPS.md#2-the-seq-backend-solves-regex-z3str3-returns-unknown-instantly)
+(never `smt.string_solver=z3str3` — use the default `seq` backend). [TRAPS #3](docs/TRAPS.md#3-nul-0x00-is-a-real-edge--state-input-domain-assumptions)
+(NUL / input-domain), [TRAPS #4](docs/TRAPS.md#4-deny-list-unreachable-is-ambiguous) (mirror deny-lists verbatim), and [TRAPS #5](docs/TRAPS.md#5-rereplace_re--strreplace_all-are-not-supported) (`replace_all`
+unsupported) complete the minimum set. The full proof-trustworthiness
+workflow is [`docs/PLAYBOOK.md`](docs/PLAYBOOK.md).
 
 ### 4. Ground-truth every witness
 A Z3 model is a *mirror*; SAT means "the mirror says there's a counterexample".

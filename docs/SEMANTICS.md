@@ -71,7 +71,7 @@ Compilers expand shorthands to dialect alphabets (see `py_re.py`, `ecma.py`,
 | `\w` | ASCII word or Unicode word per flags / domain | JS word class per flags | RE2/PCRE word class in subset |
 | `\s` | whitespace incl. dialect-specific | JS whitespace | dialect whitespace |
 | `.` terminators | `\n` (`_PY_LINE_TERMINATORS`) | `\n`, `\r`, U+2028, U+2029 (`JS_TERMINATORS`) | `\n` (`RE2_TERMINATORS` / `PCRE_TERMINATORS`) |
-| `[^…]` negated class | ASCII/BMP **range complement** (not `Star(Complement)` — TRAPS #1) | same | same |
+| `[^…]` negated class | ASCII/BMP **range complement** (not `Star(Complement)` — [TRAPS #1](TRAPS.md#1-complement-is-language-complement-not-char-class-negation)) | same | same |
 | Scoped `(?i:…)` | via `sre` flag bits when modeled | **reject** `inline-flag` (JS has no scoped flags) | encode via `Folded` + dialect `case_fold` |
 
 **verified-finding: VF-006** — Unicode-aware Python classes vs ASCII Z3

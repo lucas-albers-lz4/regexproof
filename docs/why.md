@@ -23,7 +23,7 @@ Regexes sit on security boundaries everywhere. They appear in input validators, 
 The gap in the ecosystem: **existing tooling is almost entirely ReDoS-focused** (catastrophic backtracking — *complexity* analysis of the matching engine). Almost nothing proves *language membership* — containment, exclusion, capture correctness, rule equivalence. And that problem is genuinely hard because:
 
 - Real regexes span many dialects (Python `re`, PCRE, RE2, ECMA/JS, YARA, ModSecurity `@rx`, Go `regexp`, POSIX/busybox `sed`) with different semantics.
-- Z3's native regex theory is a subset. It has no lookarounds or backreferences as written, no ASCII-vs-Unicode class consistency, and no `Complement` as char-class negation.
+- Z3's native regex theory is a subset. It has no lookarounds or backreferences as written, no ASCII-vs-Unicode class consistency, and no `Complement` as char-class negation ([TRAPS #1](TRAPS.md#1-complement-is-language-complement-not-char-class-negation)).
 - The worst failure mode is not being unable to prove something. It is a *mirror error* that produces a **false proof** (UNSAT for the wrong reason).
 
 ## How it solves it

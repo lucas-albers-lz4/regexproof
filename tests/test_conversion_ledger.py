@@ -428,7 +428,8 @@ def test_ci_golden_regenerates_and_drift_checks_ledger():
     assert banned not in why
     assert banned not in reporting
     assert "Property-contract precondition" in agents
-    assert "0/10" in readme
+    assert "0/10" in why
+    assert "[conversion-upstream.jsonl](docs/conversion-upstream.jsonl)" in readme
     assert "conversion-ledger.md" in why
     assert "Two machines" in why
 
