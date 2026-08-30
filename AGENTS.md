@@ -77,8 +77,8 @@ The traps cost real debugging time — read [`docs/TRAPS.md`](docs/TRAPS.md)
 first (ToC at the top). The two that bite first are [TRAPS #1](docs/TRAPS.md#1-complement-is-language-complement-not-char-class-negation)
 (`Complement()` is language complement, not char-class negation) and
 [TRAPS #2](docs/TRAPS.md#2-the-seq-backend-solves-regex-z3str3-returns-unknown-instantly)
-(never `smt.string_solver=z3str3` — use the default `seq` backend). TRAPS #3
-(NUL / input-domain), #4 (mirror deny-lists verbatim), and #5 (`replace_all`
+(never `smt.string_solver=z3str3` — use the default `seq` backend). [TRAPS #3](docs/TRAPS.md#3-nul-0x00-is-a-real-edge--state-input-domain-assumptions)
+(NUL / input-domain), [TRAPS #4](docs/TRAPS.md#4-deny-list-unreachable-is-ambiguous) (mirror deny-lists verbatim), and [TRAPS #5](docs/TRAPS.md#5-rereplace_re--strreplace_all-are-not-supported) (`replace_all`
 unsupported) complete the minimum set. The full proof-trustworthiness
 workflow is [`docs/PLAYBOOK.md`](docs/PLAYBOOK.md).
 
