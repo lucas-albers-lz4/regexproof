@@ -69,15 +69,15 @@ first; it is faster than reading the call site.
 | GitHub search backoff | `regexproof/mine/search.py` | 429 retry — `search_code()` only, *not* `enrich_repo()` |
 
 **Known asymmetries** (each is a real gap, each already has an issue — do not
-re-file): batch NDJSON atomic writes landed with #187 (`report.py` /
-`triage.py` via `atomic_write_lines`) — no longer asymmetric vs ledger/queue.
-`search_code` **and** `enrich_repo` / `resolve_default_pin` retry 429
-(`regexproof/mine/search.py`). (Batch extraction size cap landed with #175 —
-no longer asymmetric vs admission walk.) Measure scripts
-share `compiler_fingerprint` via `batch/measure.py` (#197 partial); 
-`measure-corpus-fraction.py` still uses a historical `simple_parse.py` sha1
-for its `compiler_fingerprint` field so committed fraction artifacts stay
-stable — do not "fix" that divergence without regenerating artifacts.
+re-file): Measure scripts share `compiler_fingerprint` via `batch/measure.py`
+(#197 partial); `measure-corpus-fraction.py` still uses a historical
+`simple_parse.py` sha1 for its `compiler_fingerprint` field so committed
+fraction artifacts stay stable — do not "fix" that divergence without
+regenerating artifacts. Closed (do not re-file): batch NDJSON atomic writes
+(#187 — `report.py` / `triage.py` via `atomic_write_lines`); `search_code`
+**and** `enrich_repo` / `resolve_default_pin` retry 429
+(`regexproof/mine/search.py`); batch extraction size cap vs admission walk
+(#175).
 
 ---
 
