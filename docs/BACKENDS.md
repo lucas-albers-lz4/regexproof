@@ -14,17 +14,15 @@
 
 <!-- verified-finding: VF-002 -->
 
-The default `seq` backend is the workhorse. Regex membership is solved by
-**lazy unfolding via symbolic derivatives**. Per the official guide, Z3 is a
-decision procedure for equalities/disequalities between non-symbolic regular
-expressions, but is *not complete* when membership constraints combine with
-string constraints. Consequences (measured):
+The default `seq` backend solves regex by **lazy unfolding via symbolic
+derivatives** — `z3str3` returns `unknown` instantly on `InRe` instead (see
+[TRAPS.md#2](TRAPS.md#2-the-seq-backend-solves-regex-z3str3-returns-unknown-instantly)).
+Consequences (measured), each with its canonical trap:
 - containment properties: solve instantly via alphabet reasoning
-- monolithic image-language proofs: time out — decompose
-- replacements (`re.replace_re`, `str.replace_all`): unsupported — use string ops
+- monolithic image-language proofs: time out — decompose ([TRAPS.md#6](TRAPS.md#6-regex-unfolding-is-incomplete-with-string-constraints))
+- replacements (`re.replace_re`, `str.replace_all`): unsupported — use string ops ([TRAPS.md#5](TRAPS.md#5-rereplace_re-strreplace_all-are-not-supported))
 - **search-wrapped shape-5 gap queries**: routinely `unknown` — use `fullmatch`
-  mirrors + length bounds (**verified-finding: VF-007**; see
-  `docs/examples/shape5-rule_diff.md`)
+  mirrors + length bounds ([TRAPS.md#18](TRAPS.md#18-search-wrapped-rule_diff-blows-up-z3); **verified-finding: VF-007**)
 
 Pin `z3-solver==5.0.0` — the `Re()`/regex API changed across 4.x/5.x.
 

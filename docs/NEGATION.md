@@ -2,7 +2,7 @@
 
 ModSecurity extracts `negated=True` for `!@rx` operators and variable-selector
 regexes (`selector=True`). Stock Z3 `Complement()` is **language** complement
-(TRAPS #1), not a safe encoding of rule negation — so this wave **rejects**
+([TRAPS #1](TRAPS.md#1-complement-is-language-complement-not-char-class-negation)), not a safe encoding of rule negation — so this wave **rejects**
 negated records before compile/triage with reason `negated-unsupported`.
 
 Machine source of truth: [`regexproof/batch/negation_policy.py`](../regexproof/batch/negation_policy.py).

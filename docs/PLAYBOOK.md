@@ -34,7 +34,7 @@ Union(r1, r2)                  # alternation
 Concat(r1, r2)                 # sequence
 Star(r), Plus(r), Opt(r)       # *, +, ?
 Loop(Re("a"), 2, 3)            # a{2,3} — VERIFIED works
-Complement(r)                  # LANGUAGE complement — see TRAPS
+Complement(r)                  # LANGUAGE complement — see [TRAPS #1](TRAPS.md#1-complement-is-language-complement-not-char-class-negation)
 InRe(s, r)                     # membership
 Intersect(r1, r2)              # regex intersection (works, can be slow)
 
