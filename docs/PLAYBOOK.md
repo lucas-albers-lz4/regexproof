@@ -98,7 +98,7 @@ s != StringVal("x")            # inequality
 ## Scope guidance
 
 For a whole repo: count regexes per file, classify by input trust
-(untrusted-log-input > configuration > internal/cosmetic), then split into
+(untrusted-log-input > config > internal/cosmetic), then split into
 per-boundary properties. Skip cosmetic patterns (for example, CSS color
 parsing) — low value. Make sure that one critical function is correct at a time; expect
 trade-offs.
