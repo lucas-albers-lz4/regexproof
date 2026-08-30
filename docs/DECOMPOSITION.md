@@ -74,7 +74,7 @@ When a plan for Z3 verification is reviewed, these formulation bugs recur:
    starts with `key=`"), never a global `=` count.
 3. **Temporal coupling** — proving a *proposed* whitelist before the fix
    ships. Gate the property on the fix being present in the code (grep;
-   skip-with-warning if absent), or make sure that the weaker conditional holds.
+   skip-with-warning if absent), or prove the weaker conditional.
 4. **Unvalidated composition inputs** — for example, `src` is an
    env-influenceable
    var; encode all value domains in ONE solver context; do not compose

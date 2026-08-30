@@ -87,7 +87,8 @@ A Z3 model is a *mirror*; SAT means "the mirror says there is a counterexample".
 Before reporting it:
 1. Run the **real implementation** on the witness (real `sed`, real JS, real
    Python `re`) and make sure that the behavior matches the model byte-for-byte.
-2. If the target runs BusyBox (OpenWrt), make sure that the witness matches under `busybox sed` too —
+2. If the target runs BusyBox (OpenWrt), make sure that the behavior matches
+   the model byte-for-byte under `busybox sed` too —
    pin `busybox` in CI for device fidelity.
 3. **Presence-gates use whole-word grep** (`grep -wc`) — substring matches
    lie ("sed" matches "passed"). See TRAPS.md #12.
