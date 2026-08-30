@@ -1,5 +1,11 @@
 # Security-audit playbook for regexproof
 
+> **Status:** 17 controls documented (§2); 2 known gaps, each already filed.
+> **Last review:** 2026-08-19 (batch resource-exhaustion refresh, issue #524).
+> **Open:** batch NDJSON writes not atomic; `measure-corpus-fraction.py` historical `simple_parse.py` sha1 divergence (#197 partial).
+> **Next:** re-run §4 sweeps before the next wave; retire stale §2 rows in the same PR that closes them.
+> **How to verify:** §4 machine-checkable sweeps (reproduce a finding before filing); `scripts/conversion-ledger.py` for the product funnel.
+
 How to audit **this repo's own security** (not the regexes it verifies) without
 re-deriving the same context every time. Written after the 2026-08 audit wave
 (issues #169–#177), where most of the elapsed time went to answering three
