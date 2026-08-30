@@ -231,7 +231,7 @@ different flag). Mutation guards stay out of this file.
   (source of truth = `REGISTRY` + run results). Do not hand-author a
   second copy. A drift test fails on missing, extra, or mismatched rows
   (stable property id + contract digest).
-- Each product row validates against **both** `scanner_finding.schema.json`
+- Each product row must conform to **both** `scanner_finding.schema.json`
   and `property_contract.schema.json`. Require `contract.site`,
   `guarantee`, `input_source`, `trust`, `declared_domain`,
   `provenance=human`.

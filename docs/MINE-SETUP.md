@@ -38,7 +38,7 @@ Search; classic + `repo` is the low-friction path.
 ## Branch protection
 
 Ledger commits push as `regexproof-bot` using `PROJECT_PAT`. If `main` requires
-reviews or status checks, ensure the PAT account can push those commits (admin
+reviews or status checks, make sure that the PAT account can push those commits (admin
 bypass or an allowlisted bot), same as the sister-repo scanner. First-run
 commit-back already proved the push path on this repo.
 
@@ -189,7 +189,7 @@ Stdout ends with a `{"kind": "mine_run_summary", ...}` line (includes
 | Symptom | Likely cause | Fix |
 |---|---|---|
 | Job fails immediately: `PROJECT_PAT secret is required` | Secret unset | Add `PROJECT_PAT` |
-| Mine exit 2 / auth failure | Bad/expired PAT or missing search scope | Rotate classic PAT with `repo`; confirm Code Search works with the token |
+| Mine exit 2 / auth failure | Bad/expired PAT or missing search scope | Rotate classic PAT with `repo`; make sure that Code Search works with the token |
 | Mine exit 1, empty accept | Search errors, no hits after exclusions | Read step logs; try `--dry-run` locally |
 | `run.capped: true` / summary `capped: true` | Query budget or ~1000-result search cap | Expected; next day or raise `daily_mine_cap` on dispatch |
 | Accepted 0 but queue growing | Day cap already filled (`DAILY_MINE_CAP`) | Wait for UTC day roll or dispatch with higher cap |

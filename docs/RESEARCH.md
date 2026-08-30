@@ -75,7 +75,7 @@ full tool map. Key findings:
   Sec'22; engine instrumentation, 7× true positives).
 - **Nonbacktracking engines are not immune:** USENIX Sec'22 "Exposing ReDoS
   Vulnerability of Nonbacktracking Matchers" — linear-time engines can still
-  exhibit super-linear behavior; don't assume RE2/Rust-regex/V8 "solves" ReDoS.
+  exhibit super-linear behavior; do not assume RE2/Rust-regex/V8 "solves" ReDoS.
 - **SAST coverage is thin:** as of 2022, Semgrep had 1 ReDoS pattern for JS;
   CodeQL ~90 regex-related patterns total (ACM TOSEM survey). Use as triage,
   not as proof.

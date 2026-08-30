@@ -6,7 +6,7 @@
 > **Next:** re-run §4 sweeps before the next wave; retire stale §2 rows in the same PR that closes them.
 > **How to verify:** §4 machine-checkable sweeps (reproduce a finding before filing); `scripts/conversion-ledger.py` for the product funnel.
 
-How to audit **this repo's own security** (not the regexes it verifies) without
+How to audit **this repo's own security** (not the regexes it proves) without
 re-deriving the same context every time. Written after the 2026-08 audit wave
 (issues #169–#177), where most of the elapsed time went to answering three
 questions that this document now answers up front:
@@ -30,10 +30,10 @@ from". The answer is not obvious from the call site, so it is written down here.
 | Cloned repo file contents (admission probe) | **untrusted** | `admission/walk.py`, `admission/draft.py` | attacker-controlled bytes + attacker-controlled *filesystem layout* (symlinks, sizes, names) |
 | Corpus regex patterns (`batch/corpora/`, mined repos) | **untrusted** | `compiler/*.py`, `helpers/*`, `redos/` | attacker-controlled argv to helper subprocesses; self-ReDoS and hang vectors |
 | GitHub Code Search / API responses | **untrusted** | `mine/search.py` → `candidate-ledger.json`, `mine-queue.json` | attacker-influenced repo names, URLs, descriptions |
-| `candidate-ledger.json` / `mine-queue.json` | **machine-written, auto-committed** | `admission/clone.py` (clone targets) | *not* human-reviewed — treat as untrusted, not as config |
+| `candidate-ledger.json` / `mine-queue.json` | **machine-written, auto-committed** | `admission/clone.py` (clone targets) | *not* human-reviewed — treat as untrusted, not as configuration |
 | CLI arguments to `scripts/*.py` | **operator** | everywhere | operator input; `eval`/`RegExp` construction here is not a boundary |
-| `ci/toolchain.toml`, `ci/python-matrix.toml` | **repo config** | `ci-assert-toolchain.py` | trusted; changes go through PR review |
-| Environment variables (`REGEXPROOF_*`, `GITHUB_TOKEN`) | **operator / CI secret** | helpers, mine | assume env integrity; still validate paths that select executables |
+| `ci/toolchain.toml`, `ci/python-matrix.toml` | **repo configuration** | `ci-assert-toolchain.py` | trusted; changes go through PR review |
+| Environment variables (`REGEXPROOF_*`, `GITHUB_TOKEN`) | **operator / CI secret** | helpers, mine | assume env integrity; still make sure that paths that select executables are valid |
 
 **The load-bearing distinction:** an untrusted *pattern* is only ever passed as
 a list-argv element (never through a shell), so the risk is **hang / resource
@@ -88,11 +88,11 @@ reopened, argue against the recorded rationale explicitly.
 
 | Item | Decision | Rationale / where recorded |
 |---|---|---|
-| Floating action tags (`@v5`, `@v6`, `@v2`) not SHA-pinned | **won't fix** | Deliberate major-tag pinning, fleet standard. Code-scanning alert 6, dismissed 2026-08-09 |
-| `new RegExp(pattern, flags)` from argv in `helpers/ecma/match.mjs` | **won't fix** | Operator-supplied CLI args to a ground-truth replay harness; pattern is the SUT. CodeQL alert **#30** dismissed won't-fix 2026-08-23. `.github/codeql/codeql-configuration.yml` paths-ignores this file when `github-codeql-config-file` is set on the repo |
+| Floating action tags (`@v5`, `@v6`, `@v2`) not SHA-pinned | **will not fix** | Deliberate major-tag pinning, fleet standard. Code-scanning alert 6, dismissed 2026-08-09 |
+| `new RegExp(pattern, flags)` from argv in `helpers/ecma/match.mjs` | **will not fix** | Operator-supplied CLI args to a ground-truth replay harness; pattern is the SUT. CodeQL alert **#30** was dismissed with reason `will not fix` on 2026-08-23. `.github/codeql/codeql-configuration.yml` paths-ignores this file when `github-codeql-config-file` is set on the repo |
 | `eval()` on `--mirror-expr` | **not a boundary** | Same reasoning; 9-symbol namespace (`differential-fuzz.py`); `eval(..., {"__builtins__": {}}, MIRROR_NS)` — operator trust boundary, documented in-file |
 | daily-mine commits after mine exit 1 | **fixed** | Commit step is `if: steps.mine.outcome == 'success'` (`daily-mine.yml`). The old "commit partial progress" behaviour is gone. |
-| Dependabot version updates disabled repo-wide | **deliberate** | `open-pull-requests-limit: 0` + ignore-all; security updates come from the repo-level setting instead |
+| Dependabot version updates disabled repo-wide | **deliberate** | `open-pull-requests-limit: 0` + ignore-all; security updates come from the repo-level configuration instead |
 | ReDoS analysis via Z3 | **out of scope** | Complexity analysis of the engine, not language membership — see `AGENTS.md` and `docs/REDOS.md` |
 
 Suppression mechanics worth knowing: this repo uses CodeQL **default setup**
@@ -183,7 +183,7 @@ service. Rank by these instead:
 1. **A gate that cannot fail.** The product is trust in a proof. A green CI
    step that can never go red is the highest-severity class in this repo, above
    any conventional memory-safety or injection issue. `AGENTS.md` states the
-   doctrine ("a harness that can't fail proves nothing"); audit against it.
+   doctrine ("a harness that cannot fail proves nothing"); audit against it.
    This is what #169 is.
 2. **Fail-open on a soundness gate.** A helper that returns `ok: True` when it
    could not actually check anything (#172) produces *wrong proofs*, which is
@@ -208,7 +208,7 @@ it at medium and letting the reader discover the caveat.
   code with fenced blocks including line ranges so the reader does not have to
   go looking.
 - **Ground-truth before filing.** Same rule as for SAT witnesses in `AGENTS.md`:
-  run the sweep, read the surrounding code, and confirm the guard is actually
+  run the sweep, read the surrounding code, and make sure that the guard is actually
   absent. The 2026-08 wave initially over-ranked "batch does not enforce the z3
   pin" before finding that `ci-assert-toolchain.py --job golden` already asserts
   it in the CI env — the remaining gap is local runs only, which is a different

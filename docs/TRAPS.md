@@ -51,7 +51,7 @@ Every entry below was hit (or measured) during the usrmanage/fwlive work on
 
 <!-- verified-finding: VF-001 -->
 
-`Complement(Re('"'))` = all strings that aren't exactly `"` — so `a"`, `ba`,
+`Complement(Re('"'))` = all strings that are not exactly `"` — so `a"`, `ba`,
 `\"` are all "in the complement", and `Star(Complement(Re('"')))` is **NOT**
 `[^\"]*`. Controlled tests:
 
@@ -113,7 +113,7 @@ unroll (for example, `IndexOf`/`SubString`/`Concat` composition).
 The default solver lazily unfolds memberships via symbolic derivatives — it
 works for many membership/non-membership queries but "is not a complete
 procedure when membership constraints are combined with constraints over
-strings." Don't expect a decision procedure for the full combination. This is
+strings." Do not expect a decision procedure for the full combination. This is
 the mechanism behind monolithic-image timeouts — decompose (see
 DECOMPOSITION.md).
 
@@ -306,7 +306,7 @@ not a claim that the regex is inexpressible:
 
 Never treat TIMEOUT/`unknown` as a pass when probing a lengthened cap.
 
-## 22. ECMA flags `m` / `u` / `v` / sticky (`g`/`y`/`d`) — reject, don't approximate
+## 22. ECMA flags `m` / `u` / `v` / sticky (`g`/`y`/`d`) — reject, do not approximate
 
 JS RegExp flags beyond `i`/`s` are **explicit rejects** in `compile_ecma`:
 

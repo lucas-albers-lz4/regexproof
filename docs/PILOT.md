@@ -72,7 +72,7 @@ Toolkit-fix (#45): lazy strip, `\xNN`/`\x{}`, negated-class, scoped
   `NETFILTER_KV_GLUE` lookahead confirmed not stock-Z3 expressible; the pilot
   itself re-hit the Contains-vs-membership timeout trap.
 - **happycow** — new issue [#115](https://github.com/lucas-albers-lz4/happycow/issues/115):
-  regex robustness pass. Item 1 **verified safe** (the interpolated
+  regex reliability pass. Item 1 **verified safe** (the interpolated
   `re.search(name, …)` was already `re.escape`'d — see correction below);
   item 2 real (backreference `\b(\w+)\s+\1\b` needs a recheck verification).
 
@@ -94,8 +94,8 @@ Toolkit-fix (#45): lazy strip, `\xNN`/`\x{}`, negated-class, scoped
 
 ### fwlive — classifier verified on the ECMA frontier (issue #120 scope)
 - F1 `TCP_FLAG_TAIL` token alphabet excludes `=`/digits — UNSAT. The pilot's
-  Contains-vs-membership probe itself TIMED OUT (30s), re-confirming the
-  TRAPS.md guidance; alphabet form solves instantly.
+  Contains-vs-membership probe itself TIMED OUT (30s), showing again that the
+  TRAPS.md guidance is correct; alphabet form solves instantly.
 - F2 `wordPattern` boundary: single-char `Complement` form works as documented
   (excludes alnum/underscore, admits `.`). This validated the Length==1
   Complement nuance now recorded in TRAPS.md #1.
@@ -118,7 +118,7 @@ Toolkit-fix (#45): lazy strip, `\xNN`/`\x{}`, negated-class, scoped
   **Verified safe; regression note only.** Lesson recorded in PLAYBOOK.md /
   AGENTS.md: read the surrounding code before filing.
 - Fix-later (real item): `common.py:103` `re.sub(r"\b(\w+)\s+\1\b", ...)` —
-  backreference, not SMT-expressible. Verify complexity with recheck (bounded
+  backreference, not SMT-expressible. Show the complexity with recheck (bounded
   input lengths make risk low); tracked in happycow#115.
 
 ## How regexproof performed (dogfooding lessons)
@@ -136,7 +136,7 @@ Toolkit-fix (#45): lazy strip, `\xNN`/`\x{}`, negated-class, scoped
    TRAPS.md #1.
 4. **Code drifts past plans** — usrmanage's verification targets moved since
    issue #6 (jsonfilter landed, whitelist landed). Re-inventory before
-   verifying is now workflow step 2 in PLAYBOOK.md.
+   proving is now workflow step 2 in PLAYBOOK.md.
 5. **Ground-truth discipline applies to your own findings** — the happycow
    "un-escaped pattern" flag was already fixed in code. Read surrounding code
    before filing; PLAYBOOK.md step 3 / AGENTS.md step 4 now say so.
