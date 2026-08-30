@@ -118,7 +118,7 @@ Toolkit-fix (#45): lazy strip, `\xNN`/`\x{}`, negated-class, scoped
   **Verified safe; regression note only.** Lesson recorded in PLAYBOOK.md /
   AGENTS.md: read the surrounding code before filing.
 - Fix-later (real item): `common.py:103` `re.sub(r"\b(\w+)\s+\1\b", ...)` —
-  backreference, not SMT-expressible. Make sure that the complexity is acceptable with recheck (bounded
+  backreference, not SMT-expressible. Show the complexity with recheck (bounded
   input lengths make risk low); tracked in happycow#115.
 
 ## How regexproof performed (dogfooding lessons)
