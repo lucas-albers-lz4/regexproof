@@ -35,4 +35,7 @@ batch/corpora/*/testsuite
 batch/corpora/*/repo
 batch/corpora/test262/RegExp
 batch/corpora/rust_regex/src
+
+# Working wave clones (sibling-checkout model)
+wave/
 cache/

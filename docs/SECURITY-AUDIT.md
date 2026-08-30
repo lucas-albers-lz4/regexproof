@@ -1,5 +1,11 @@
 # Security-audit playbook for regexproof
 
+> **Status:** 17 controls documented (§2); 1 known gap, already filed.
+> **Last review:** 2026-08-19 (batch resource-exhaustion refresh, issue #524).
+> **Open:** `measure-corpus-fraction.py` historical `simple_parse.py` sha1 divergence (#197 partial).
+> **Next:** re-run §4 sweeps before the next wave; retire stale §2 rows in the same PR that closes them.
+> **How to verify:** §4 machine-checkable sweeps (reproduce a finding before filing); `scripts/conversion-ledger.py` for the product funnel.
+
 How to audit **this repo's own security** (not the regexes it verifies) without
 re-deriving the same context every time. Written after the 2026-08 audit wave
 (issues #169–#177), where most of the elapsed time went to answering three
@@ -54,23 +60,23 @@ first; it is faster than reading the call site.
 | Clone destination guard | `regexproof/admission/clone.py` | probe clones cannot land under `batch/corpora/` |
 | `_MAX_FILE_BYTES` (2 MB) | `regexproof/admission/walk.py`, `regexproof/batch/runner.py` (`_extract_glob`) | per-file read cap — admission walk **and** batch extraction (#175) |
 | `REGEXPROOF_GO_RE2` path containment | `regexproof/compiler/re2.py` | env override must resolve under `helpers/go-re2/` (#176) |
-| Atomic write (temp + fsync + `os.replace`) | `regexproof/mine/ledger.py`, `regexproof/mine/queue.py` | ledger/queue only — batch NDJSON writers do *not* use this |
+| Atomic write (temp + fsync + `os.replace`) | `regexproof/mine/ledger.py`, `regexproof/mine/queue.py`, `regexproof/batch/report.py`, `regexproof/batch/triage.py` | ledger/queue + batch scanner/triage NDJSON (`atomic_write_lines` / `atomic_write_text`; #187 closed) |
 | Evidence gates | `regexproof/batch/evidence.py` | Z3 `timeout`/`unknown` is a hard fail for property kinds |
 | Shape-5 batch solve budget | `regexproof/rule_diff/batch_shape5.py` | per-pair wall-clock `_BATCH_SOLVE_DEADLINE_MS` hard cap bounds the whole solve *including the untrusted-`py_re` search/pad replay*, which now runs in a timed subprocess (`scripts/shape5-pad-gate.py`); per-check Z3 `timeout` caps model enumeration + model cap `_PAD_GATE_MODEL_CAP`; `timeout_gate` still hard-fails TIMEOUT (AGENTS.md). Same-PR update (issue #524). |
 | Disclosure gate | `regexproof/batch/disclose.py` | `private_first` on security-tool corpora; no network publish |
 | Witness redaction | `scripts/rule-diff-pilot.py` | long solver strings redacted in committed artifacts |
 | Secret-scanning path ignores | `.github/secret_scanning.yml` | `paths-ignore` for fixture/pilot paths (gitleaks pilot artifacts) |
-| GitHub search backoff | `regexproof/mine/search.py` | 429 retry — `search_code()` only, *not* `enrich_repo()` |
+| GitHub search backoff | `regexproof/mine/search.py` | 429 retry on `search_code()`, `enrich_repo()`, and `resolve_default_pin()` |
 
-**Known asymmetries** (each is a real gap, each already has an issue — do not
-re-file): ledger writes are atomic but batch NDJSON writes are not.
-`search_code` **and** `enrich_repo` / `resolve_default_pin` retry 429
-(`regexproof/mine/search.py`). (Batch extraction size cap landed with #175 —
-no longer asymmetric vs admission walk.) Measure scripts
-share `compiler_fingerprint` via `batch/measure.py` (#197 partial); 
-`measure-corpus-fraction.py` still uses a historical `simple_parse.py` sha1
-for its `compiler_fingerprint` field so committed fraction artifacts stay
-stable — do not "fix" that divergence without regenerating artifacts.
+**Known asymmetries / closed gaps** (do not re-file; only #197 is still open): Measure scripts share `compiler_fingerprint` via `batch/measure.py`
+(#197 partial); `measure-corpus-fraction.py` still uses a historical
+`simple_parse.py` sha1 for its `compiler_fingerprint` field so committed
+fraction artifacts stay stable — do not "fix" that divergence without
+regenerating artifacts. Closed (do not re-file): batch NDJSON atomic writes
+(#187 — `report.py` / `triage.py` via `atomic_write_lines`); `search_code`
+**and** `enrich_repo` / `resolve_default_pin` retry 429
+(`regexproof/mine/search.py`); batch extraction size cap vs admission walk
+(#175).
 
 ---
 
