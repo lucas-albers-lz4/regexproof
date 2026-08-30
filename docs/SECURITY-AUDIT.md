@@ -1,16 +1,12 @@
 # Security-audit playbook for regexproof
 
-<<<<<<< HEAD
 > **Status:** 17 controls documented (§2); 1 known gap, already filed.
 > **Last review:** 2026-08-19 (batch resource-exhaustion refresh, issue #524).
 > **Open:** `measure-corpus-fraction.py` historical `simple_parse.py` sha1 divergence (#197 partial).
 > **Next:** re-run §4 sweeps before the next wave; retire stale §2 rows in the same PR that closes them.
 > **How to verify:** §4 machine-checkable sweeps (reproduce a finding before filing); `scripts/conversion-ledger.py` for the product funnel.
 
-How to audit **this repo's own security** (not the regexes it verifies) without
-=======
 How to audit **this repo's own security** (not the regexes it proves) without
->>>>>>> e84abcf (docs(ste): unify vocabulary — make sure that / configuration (Rules 1.11, 9.4))
 re-deriving the same context every time. Written after the 2026-08 audit wave
 (issues #169–#177), where most of the elapsed time went to answering three
 questions that this document now answers up front:
