@@ -66,10 +66,9 @@ first; it is faster than reading the call site.
 | Disclosure gate | `regexproof/batch/disclose.py` | `private_first` on security-tool corpora; no network publish |
 | Witness redaction | `scripts/rule-diff-pilot.py` | long solver strings redacted in committed artifacts |
 | Secret-scanning path ignores | `.github/secret_scanning.yml` | `paths-ignore` for fixture/pilot paths (gitleaks pilot artifacts) |
-| GitHub search backoff | `regexproof/mine/search.py` | 429 retry — `search_code()` only, *not* `enrich_repo()` |
+| GitHub search backoff | `regexproof/mine/search.py` | 429 retry on `search_code()`, `enrich_repo()`, and `resolve_default_pin()` |
 
-**Known asymmetries** (each is a real gap, each already has an issue — do not
-re-file): Measure scripts share `compiler_fingerprint` via `batch/measure.py`
+**Known asymmetries / closed gaps** (do not re-file; only #197 is still open): Measure scripts share `compiler_fingerprint` via `batch/measure.py`
 (#197 partial); `measure-corpus-fraction.py` still uses a historical
 `simple_parse.py` sha1 for its `compiler_fingerprint` field so committed
 fraction artifacts stay stable — do not "fix" that divergence without
