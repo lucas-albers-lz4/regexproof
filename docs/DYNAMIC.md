@@ -13,17 +13,17 @@ gap 3 — ~518 `re.compile` sites in a 3000-file corpus).
 |---|---|---|
 | **Constant** | `re.compile(r"...")` with only literal parts | Prove the pattern as a normal property. |
 | **Escaped-dynamic** | interpolation wrapped in `re.escape(x)` | Prove the *schema* with the variable as a finite set (see below). The `re.escape` guarantees no metacharacter leaks, so the mirror can treat each variable value as a literal. |
-| **Raw-dynamic (config)** | interpolation WITHOUT `re.escape` | This is a **regex-injection surface** (operator config → pattern). Prove *escape-safety of the interpolation site* — or better, fix the code to `re.escape`. |
+| **Raw-dynamic (config)** | interpolation WITHOUT `re.escape` | This is a **regex-injection surface** (operator configuration → pattern). Prove *escape-safety of the interpolation site* — or better, fix the code to `re.escape`. |
 | **Constant-alternation** | `'|'.join(known_literals)` | Prove the alternation as a finite union of literals. |
 
 ## Procedure
 
 1. **Find the variable source.** Where does the interpolated value come
-   from — hardcoded constant, config file, env, user input? The trust level
+   from — hardcoded constant, configuration file, env, user input? The trust level
    decides the class.
 
 2. **Bound the variable space.** For escaped-dynamic sites, enumerate the
-   actual values (a config table has ≤50 entries; a trigger list is finite).
+   actual values (a configuration table has ≤50 entries; a trigger list is finite).
    The mirror replaces the variable with `Union(Re(v1), Re(v2), ...)` over
    the enumerated values — or, when the set is too large, prove the
    *schema invariant*: the skeleton (`\b ... \b`) holds for ANY literal
@@ -34,7 +34,7 @@ gap 3 — ~518 `re.compile` sites in a 3000-file corpus).
    is interpolated raw, the property to prove is not about the regex — it
    is about the injection surface. File a fix (escape the value) or prove
    the value space itself cannot contain metacharacters (charset proof on
-   the config schema).
+   the configuration schema).
 
 4. **Ground-truth the witness** as usual: run the REAL compiled pattern on
    the witness (build it exactly the way the code does, interpolation
@@ -64,9 +64,9 @@ compiled = re.compile(r"^" + re.escape(slug) + r"(?:$|[\-._])")
 self.compiled_matcher = re.compile(self.matcher)
 ```
 
-- Variable space: unbounded user config.
+- Variable space: unbounded user configuration.
 - The mirror CANNOT be built (no value for `self.matcher`).
-- Correct action: **this is a finding, not a proof** — operator-config
+- Correct action: **this is a finding, not a proof** — operator-configuration
   regex injection (ReDoS via `(a+)+$`, logic bypass via `.*`). The
   regexproof deliverable is the inventory line + severity, not a property.
 

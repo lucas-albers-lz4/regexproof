@@ -29,7 +29,7 @@ Do NOT use Z3 for:
 - **Dynamic compiles** (`re.compile` with interpolated values) — cannot be
   proven as written. Classify the site (constant / escaped / raw-config)
   and prove the right thing per `docs/DYNAMIC.md`; an unescaped
-  config-supplied pattern is a finding, not a proof.
+  configuration-supplied pattern is a finding, not a proof.
 - Cosmetic/internal patterns with no untrusted input — skip them; low value.
 
 ## Property-contract precondition
@@ -83,11 +83,11 @@ unsupported) complete the minimum set. The full proof-trustworthiness
 workflow is [`docs/PLAYBOOK.md`](docs/PLAYBOOK.md).
 
 ### 4. Ground-truth every witness
-A Z3 model is a *mirror*; SAT means "the mirror says there's a counterexample".
+A Z3 model is a *mirror*; SAT means "the mirror says there is a counterexample".
 Before reporting it:
 1. Run the **real implementation** on the witness (real `sed`, real JS, real
-   Python `re`) and confirm behavior matches the model byte-for-byte.
-2. If the target runs BusyBox (OpenWrt), verify under `busybox sed` too —
+   Python `re`) and make sure that the behavior matches the model byte-for-byte.
+2. If the target runs BusyBox (OpenWrt), make sure that it works under `busybox sed` too —
    pin `busybox` in CI for device fidelity.
 3. **Presence-gates use whole-word grep** (`grep -wc`) — substring matches
    lie ("sed" matches "passed"). See TRAPS.md #12.
@@ -101,7 +101,7 @@ Before reporting it:
 - Ship as a runnable script + CI job (`pip install z3-solver`; **TIMEOUT
   (`unknown`) = hard failure / not proven**, never a silent skip).
 - Add **mutation guards**: a tagged property that weakens the regex and
-  asserts the result flips UNSAT→SAT. A harness that can't fail proves
+  asserts the result flips UNSAT→SAT. A harness that cannot fail proves
   nothing. Run them in `--all`, always. The harness enforces coverage: every
   family with a security property must have at least one mutation guard
   (`check_mutation_coverage()` warns and exits non-zero otherwise).

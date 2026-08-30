@@ -36,8 +36,8 @@ equation-stabilization algorithm + the Mata automata library. When to consider:
 - Extra string functions: `str.to_lower`, `str.to_upper`, `str.trim`,
   `str.delete`, `str.to_real/from_real`, `str.update`
 - **`re.from_ecma2020`** — converts ECMA/JS regexes to Z3 regexes. The only
-  way to verify a JS regex *as written* when it uses JS-only features. It also
-  verifies the authoritative source rather than a hand-ported mirror.
+  way to show that a JS regex is correct *as written* when it uses JS-only features. It also
+  shows that the authoritative source is correct rather than a hand-ported mirror.
 
 Caveats: NOT pip-installable as a drop-in. It is a separate binary
 (`cmake -DCMAKE_BUILD_TYPE=Release .. && make`, auto-fetches Mata; run
@@ -68,8 +68,8 @@ wiring needs a build step or vendored binary.
 
 Start with stock `z3-solver` `seq` backend + the 5 canonical shapes (incl.
 shape-5 `rule_diff`). Escalate to Z3-Noodler only when: (a) the pattern is
-JS/ECMA and you want to verify it as written, or (b) stock Z3 times out on a
-property that decomposition couldn't fix.
+JS/ECMA and you want to show that it is correct as written, or (b) stock Z3 times out on a
+property that decomposition could not fix.
 
 ### U9 scope note (Phase 1/4, #228/#220 — NORMATIVE)
 
@@ -78,7 +78,7 @@ silent `\p{}` literalization, negated-membership SIGABRT, no flag
 representation). All harness routes are **mirror-route only**; the S3
 authority guard requires an explicitly recorded `route: "mirror"` for the
 `cross-checked` tier. The backend binary is sha256-pinned (R5 policy: cache
-key = asset sha256; bump = verify cold download → update `preflight.py` + CI +
+key = asset sha256; bump = make sure that the cold download works → update `preflight.py` + CI +
 `PIN.md` → luna-gated PR). The `noodler` CI job downloads the pinned asset,
 runs the R8 pre-flight, and exercises the S16 noodler-backed fixture
 (`P1-space`) with the real binary; stock-only CI keeps that same fixture

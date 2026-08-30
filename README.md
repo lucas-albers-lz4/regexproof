@@ -16,7 +16,7 @@ inputs.
   boundaries (see `docs/PLAYBOOK.md`).
 - **Agent-first:** `AGENTS.md` is written to be consumed directly by coding
   agents (Hermes, Claude Code, Codex, opencode). An agent that loads this repo
-  can go from "there's a regex on a security boundary" to a verified property
+  can go from "there is a regex on a security boundary" to a verified property
   suite with counterexamples.
 - **ReDoS complement:** SMT proves *language properties* (containment,
   exclusion, capture correctness). Catastrophic-backtracking *complexity*
@@ -24,7 +24,7 @@ inputs.
   (recheck, safe-regex2, …) per case.
 - **Everything is testable:** the harness treats solver `unknown` (timeout) as
   a hard failure (**not proven**), requires mutation guards (a proof harness
-  that can't fail proves nothing), and demands ground-truthing every
+  that cannot fail proves nothing), and demands ground-truthing every
   counterexample against the real implementation.
 
 ## Quickstart
@@ -106,7 +106,7 @@ funnel — operators stay on [`docs/PIPELINE.md`](docs/PIPELINE.md).
 |---|---|
 | `README.md` | Landing page: quickstart, layout index, provenance | 
 | `CHANGELOG.md` | Phase-by-phase history of the initial development cycle |
-| `AGENTS.md` | Agent-facing instructions: when/how to verify, property checklist, NDJSON contract |
+| `AGENTS.md` | Agent-facing instructions: when/how to make sure that a property holds, property checklist, NDJSON contract |
 | `SECURITY.md` | Private-disclosure-first policy for security-tool findings |
 | `docs/SECURITY-AUDIT.md` | Auditing regexproof itself: trust boundaries, existing controls, settled decisions, sweeps |
 | `docs/PLAYBOOK.md` | The core method: strategy, workflow, performance rules, verification workflow |

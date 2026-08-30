@@ -80,7 +80,7 @@ A **mutation guard** widens the alphabet with `Union(alphabet, Re('*'))`
 and expects SAT. A harness that cannot fail proves nothing.
 
 Ground-truth replay for SAT witnesses runs Python `re` on `ch*n` for
-`n` in 1..32 (so `{8,}` still confirms the char is in the real language).
+`n` in 1..32 (so `{8,}` still shows that the char is in the real language).
 Differential fuzz compares the **full** mirror language to Python `re`
 via `helpers/python/match.py`.
 

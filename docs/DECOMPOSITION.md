@@ -51,7 +51,7 @@ when combined with string constraints**. Decompose in this order:
 6. **Lookahead/lookbehind routing.** Not expressible in stock Z3. Rewrite as
    equivalent non-lookahead forms (string-ops prefix checks work for most) or
    route through Z3-Noodler's `re.from_ecma2020` for JS patterns — the only
-   way to verify the pattern *as written*.
+   way to show that the pattern is correct *as written*.
 
 ## Reading a solver result honestly
 
@@ -72,10 +72,10 @@ When a plan for Z3 verification is reviewed, these formulation bugs recur:
    is false when `reason=from=readonly` legitimately embeds `=` in a value.
    Fix: per-field invariants ("no value contains unescaped space", "no value
    starts with `key=`"), never a global `=` count.
-3. **Temporal coupling** — verifying a *proposed* whitelist before the fix
+3. **Temporal coupling** — proving a *proposed* whitelist before the fix
    ships. Gate the property on the fix being present in the code (grep;
-   skip-with-warning if absent), or verify the weaker conditional.
+   skip-with-warning if absent), or make sure that the weaker conditional holds.
 4. **Unvalidated composition inputs** — for example, `src` is an
    env-influenceable
-   var; encode all value domains in ONE solver context; don't compose
+   var; encode all value domains in ONE solver context; do not compose
    separately-proven subsets.

@@ -1,6 +1,6 @@
 # Why regexproof
 
-> **Last updated:** 2026-08-15 · **Next review:** 2026-11-15 — the point-in-time stats in "Where it stands" and the conversion ledger age fast; re-verify them before quoting.
+> **Last updated:** 2026-08-15 · **Next review:** 2026-11-15 — the point-in-time stats in "Where it stands" and the conversion ledger age fast; make sure that they are current before quoting.
 
 ## What regexproof is
 
@@ -14,7 +14,7 @@ Keep three claims separate — they do not share evidence:
 
 A property without a contract (guarantee, input source, trust, declared domain) is not claim (3), even if the solver returns UNSAT.
 
-**The core capability is relational, not syntactic.** regexproof does not "verify a regex" in the abstract. It verifies that two symbolic descriptions of the allowed/denied input space relate in a specified way: equivalence, containment, or non-overlap. Each property in the 5-shape taxonomy is such a relation. Regex is the first domain where that description space is expressible in string theory.
+**The core capability is relational, not syntactic.** regexproof does not "prove a regex" in the abstract. It shows that two symbolic descriptions of the allowed/denied input space relate in a specified way: equivalence, containment, or non-overlap. Each property in the 5-shape taxonomy is such a relation. Regex is the first domain where that description space is expressible in string theory.
 
 ## The problem it solves
 
@@ -39,7 +39,7 @@ The gap in the ecosystem: **existing tooling is almost entirely ReDoS-focused** 
 The repo is two machines in series, plus a conversion step that is still mostly manual:
 
 1. **Funnel.** Mine, score, probe, admit or no-go. Goal: spend compile budget on security-boundary regex, not on more of the same.
-2. **Prove / don't prove.** Encode the pattern into Z3, reject unsoundly, then ask a shape-1–5 property. SAT + ground-truth against the real engine is a candidate finding; UNSAT is "holds in the declared domain"; timeout is not a pass.
+2. **Prove / do not prove.** Encode the pattern into Z3, reject unsoundly, then ask a shape-1–5 property. SAT + ground-truth against the real engine is a candidate finding; UNSAT is "holds in the declared domain"; timeout is not a pass.
 3. **Convert.** A finding only becomes a real security result if it reproduces in the real code *and* someone files it. That last step is the product. The first two are the factory.
 
 Heap's law (and the Good-Turing-ish singleton work) saturates **(1) and the compiler half of (2)**. It does not saturate **(3)**.
@@ -56,7 +56,7 @@ One filed issue is an existence proof, not a rate. The cleanest existence proofs
 
 Two independent parameters:
 
-- **Accuracy** — of the five factors above, the ones the toolkit controls are encode soundness, property shape, and ground-truth. The worst failure is a false UNSAT (saying safe when it isn't). The noisy failure is SAT that does not reproduce, or reproduces and is not security-relevant. Heap's law does not move these.
+- **Accuracy** — of the five factors above, the ones the toolkit controls are encode soundness, property shape, and ground-truth. The worst failure is a false UNSAT (saying safe when it is not). The noisy failure is SAT that does not reproduce, or reproduces and is not security-relevant. Heap's law does not move these.
 - **Prevalence** — how often regex-on-a-boundary is wrong in the wild. Heap's law on *pattern types* is a weak proxy. After the compiler saturates, more corpora *do* help here, because you need a denominator: N boundary sites with a property actually asked. Until that denominator exists, "keep ingesting" is still compiler-coverage work dressed as product-eval.
 
 The ingest-until-diminishing-returns plan is correct **for the toolkit**. The product claim needs a second stop condition: conversion yield over a frozen admitted set, not novel-bucket yield. A small accepted-upstream count with a known false-positive rate proves more than another hundred GO corpora.
@@ -67,7 +67,7 @@ Live artifact: [`properties/generated/conversion-ledger.md`](../properties/gener
 
 Historical-numerator rule (#554): curated dispositions in [`conversion-upstream.jsonl`](conversion-upstream.jsonl) govern filing state only. Prior wave / rule_diff `properties_asked` / `SAT` counts are left as recorded — CRS 942220 stays counted under `rule_diff_report_sat_gt` with no retroactive adjustment; the single CU-005 disposition is the filing truth.
 
-Headline counts (re-verify from the artifact before quoting):
+Headline counts (make sure that they are current from the artifact before quoting):
 
 | stage | count |
 |---|---|

@@ -16,7 +16,7 @@ fallbacks, and LuCI (JS) log-classifier regexes.
 2. **Ask the critical question**: "Is there ANY input that, after sanitation,
    violates the boundary?"
    - `unsat` → property **proven**: no string in the declared domain violates it
-   - `sat` → **counterexample** found: print the model — it's the bug witness
+   - `sat` → **counterexample** found: print the model — it is the bug witness
    - `unknown` → solver timeout: **hard failure**, never a pass
 3. Start small: one critical function at a time. Be precise. Expect trade-offs.
 
@@ -64,15 +64,15 @@ s != StringVal("x")            # inequality
 1. **Spike first, plan second.** Prove the core properties in a throwaway
    script before writing any plan. Costs minutes, converts speculation into
    evidence.
-2. **Re-inventory before verifying — code drifts past plans.** A plan (or a
+2. **Re-inventory before you prove — code drifts past plans.** A plan (or a
    skill note) written against an older revision can gate on things that no
    longer exist. The regexproof pilot found usrmanage's planned P3 target
    (rpcd sed JSON fallback) replaced by `jsonfilter` and the P2 whitelist
    already landed — both since the plan was written. Grep the actual code
    before encoding, and treat "known from a previous session" as suspect.
-3. **Ground-truth digest.** Manually verify every strong claim against the
+3. **Ground-truth digest.** Manually make sure that every strong claim holds against the
    real code before synthesis/CI. Refute confidently — reviewers and LLMs
-   produce plausible-but-wrong claims (a "TOCTOU" that's serialized by a lock;
+   produce plausible-but-wrong claims (a "TOCTOU" that is serialized by a lock;
    a byte-fidelity claim that `od` disproves). Enumerate refuted claims in the
    digest. This includes your own pilot findings: the happycow pilot flagged
    an interpolated regex as "un-escaped" without reading line 105 — the
@@ -83,7 +83,7 @@ s != StringVal("x")            # inequality
    (`USRMANAGE_DRY_RUN=1` pattern) and assert agreement on random inputs.
 5. **Automated mutation guards.** Tagged tests (`P1-mutated`) that weaken the
    regex and assert `expect_sat=True`. The harness MUST be able to fail — a
-   proof harness that can't fail proves nothing.
+   proof harness that cannot fail proves nothing.
 6. **Device fidelity.** On OpenWrt targets, run ground-truth subprocess tests
    through `busybox sed` (behavior was identical on tested repros, but pin for
    device fidelity — CI runs GNU tools).
@@ -98,9 +98,9 @@ s != StringVal("x")            # inequality
 ## Scope guidance
 
 For a whole repo: count regexes per file, classify by input trust
-(untrusted-log-input > config > internal/cosmetic), then split into
+(untrusted-log-input > configuration > internal/cosmetic), then split into
 per-boundary properties. Skip cosmetic patterns (for example, CSS color
-parsing) — low value. Verify one critical function at a time; expect
+parsing) — low value. Make sure that one critical function is correct at a time; expect
 trade-offs.
 
 **CRS / ModSecurity:** extract with `regexproof.extractors.modsec` (handles

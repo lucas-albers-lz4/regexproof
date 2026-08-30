@@ -116,5 +116,5 @@ Unicode `\p{…}`, `\Q…\E` quote escapes, truncated/unbalanced literals, and
 
 1. **Ask the question the code asks** (`call_kind` first).
 2. **Restrict the alphabet to the input domain** and declare it.
-3. **Lookahead?** Prefer string-ops rewrite; Noodler when verifying JS as written.
+3. **Lookahead?** Prefer string-ops rewrite; use Noodler when you prove JS as written.
 4. **Capture correctness** is string-ops, never pure membership.
