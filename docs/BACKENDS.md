@@ -20,7 +20,7 @@ derivatives** — `z3str3` returns `unknown` instantly on `InRe` instead (see
 Consequences (measured), each with its canonical trap:
 - containment properties: solve instantly via alphabet reasoning
 - monolithic image-language proofs: time out — decompose ([TRAPS.md#6](TRAPS.md#6-regex-unfolding-is-incomplete-with-string-constraints))
-- replacements (`re.replace_re`, `str.replace_all`): unsupported — use string ops ([TRAPS.md#5](TRAPS.md#5-rereplace_re-strreplace_all-are-not-supported))
+- replacements (`re.replace_re`, `str.replace_all`): unsupported — use string ops ([TRAPS.md#5](TRAPS.md#5-rereplace_re--strreplace_all-are-not-supported))
 - **search-wrapped shape-5 gap queries**: routinely `unknown` — use `fullmatch`
   mirrors + length bounds ([TRAPS.md#18](TRAPS.md#18-search-wrapped-rule_diff-blows-up-z3); **verified-finding: VF-007**)
 
