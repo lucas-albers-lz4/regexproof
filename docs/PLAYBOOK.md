@@ -67,7 +67,7 @@ s != StringVal("x")            # inequality
 2. **Re-inventory before you prove — code drifts past plans.** A plan (or a
    skill note) written against an older revision can gate on things that no
    longer exist. The regexproof pilot found usrmanage's planned P3 target
-   (rpcd sed JSON fallback) replaced by `jsonfilter` and the P2 whitelist
+   (rpcd's `sed` JSON fallback) replaced by `jsonfilter` and the P2 whitelist
    already landed — both since the plan was written. Grep the actual code
    before encoding, and treat "known from a previous session" as suspect.
 3. **Ground-truth digest.** Manually make sure that every strong claim holds against the

@@ -14,7 +14,7 @@ gap 3 — ~518 `re.compile` sites in a 3000-file corpus).
 | **Constant** | `re.compile(r"...")` with only literal parts | Prove the pattern as a normal property. |
 | **Escaped-dynamic** | interpolation wrapped in `re.escape(x)` | Prove the *schema* with the variable as a finite set (see below). The `re.escape` guarantees no metacharacter leaks, so the mirror can treat each variable value as a literal. |
 | **Raw-dynamic (config)** | interpolation WITHOUT `re.escape` | This is a **regex-injection surface** (operator configuration → pattern). Prove *escape-safety of the interpolation site* — or better, fix the code to `re.escape`. |
-| **Constant-alternation** | `'|'.join(known_literals)` | Prove the alternation as a finite union of literals. |
+| **Constant-alternation** | `'\|'.join(known_literals)` | Prove the alternation as a finite union of literals. |
 
 ## Procedure
 

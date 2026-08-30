@@ -93,7 +93,7 @@ reopened, argue against the recorded rationale explicitly.
 | Item | Decision | Rationale / where recorded |
 |---|---|---|
 | Floating action tags (`@v5`, `@v6`, `@v2`) not SHA-pinned | **will not fix** | Deliberate major-tag pinning, fleet standard. Code-scanning alert 6, dismissed 2026-08-09 |
-| `new RegExp(pattern, flags)` from argv in `helpers/ecma/match.mjs` | **will not fix** | Operator-supplied CLI args to a ground-truth replay harness; pattern is the SUT. CodeQL alert **#30** dismissed will not fix 2026-08-23. `.github/codeql/codeql-configuration.yml` paths-ignores this file when `github-codeql-config-file` is set on the repo |
+| `new RegExp(pattern, flags)` from argv in `helpers/ecma/match.mjs` | **will not fix** | Operator-supplied CLI args to a ground-truth replay harness; pattern is the SUT. CodeQL alert **#30** was dismissed with reason `will not fix` on 2026-08-23. `.github/codeql/codeql-configuration.yml` paths-ignores this file when `github-codeql-config-file` is set on the repo |
 | `eval()` on `--mirror-expr` | **not a boundary** | Same reasoning; 9-symbol namespace (`differential-fuzz.py`); `eval(..., {"__builtins__": {}}, MIRROR_NS)` — operator trust boundary, documented in-file |
 | daily-mine commits after mine exit 1 | **fixed** | Commit step is `if: steps.mine.outcome == 'success'` (`daily-mine.yml`). The old "commit partial progress" behaviour is gone. |
 | Dependabot version updates disabled repo-wide | **deliberate** | `open-pull-requests-limit: 0` + ignore-all; security updates come from the repo-level configuration instead |
