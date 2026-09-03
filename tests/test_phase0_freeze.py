@@ -2,7 +2,7 @@
 
 The committed ``phase0_freeze.json`` / ``escape_baseline.json`` must be
 byte-stable under regeneration (golden drift check in CI) and must match the
-real gate-decision population (n=874, pos=121, Wilson 95% ~[11.7%, 16.3%],
+real gate-decision population (n=894, pos=121, Wilson 95% ~[11.7%, 16.3%],
 with (url, pin) supersession dedup — older-pin decisions removed per
 #560 Wave 3; funnel drains added 30 NO-GOs through batch 3)."""
 
@@ -44,17 +44,17 @@ def baseline() -> dict:
 
 def test_freeze_pins_the_pinned_population(freeze: dict):
     ds = freeze["dataset"]
-    assert ds["n"] == 874
+    assert ds["n"] == 894
     assert ds["positive_count"] == 121
-    assert ds["positive_rate"] == pytest.approx(121 / 874, abs=1e-6)
+    assert ds["positive_rate"] == pytest.approx(121 / 894, abs=1e-6)
     assert ds["status_counts"]["go"] == 81
     assert ds["status_counts"]["triage-trial"] == 40
 
 
 def test_escape_baseline_matches_design(freeze: dict, baseline: dict):
     lo, hi = baseline["wilson_ci_95"]
-    assert lo == pytest.approx(0.1171, abs=0.001)
-    assert hi == pytest.approx(0.1629, abs=0.001)
+    assert lo == pytest.approx(0.114476, abs=0.001)
+    assert hi == pytest.approx(0.159338, abs=0.001)
     # The baseline is the same fixed constant referenced by the freeze.
     assert baseline["survivor_rate"] == freeze["escape_baseline"]["value"]
 

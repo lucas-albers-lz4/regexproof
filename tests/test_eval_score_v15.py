@@ -23,7 +23,7 @@ def test_flip_decision_exists_and_is_shape_checked():
     assert FLIP_OUT.is_file(), "eval must produce the flip decision artifact"
     d = json.loads(FLIP_OUT.read_text(encoding="utf-8"))
     assert d["schema_version"] == "1"
-    assert d["eval"]["population_n"] == 874
+    assert d["eval"]["population_n"] == 894
     assert d["eval"]["split"]["ratio"] == 0.5
     assert d["flip_rule"].startswith("bootstrap BCa difference CI")
     # Freeze-eval golden: current population flips offline to v1.5; live drain stays v1.
@@ -42,10 +42,10 @@ def test_flip_decision_exists_and_is_shape_checked():
     # precision@K is descriptive only; freeze-eval golden counts.
     assert d["eval"]["precision_at_k"]["k"] == 30
     assert d["eval"]["precision_at_k_v1"]["k"] == 30
-    assert d["eval"]["precision_at_k"]["positive_in_top_k"] == 12
-    assert d["eval"]["precision_at_k_v1"]["positive_in_top_k"] == 7
-    assert d["eval"]["precision_at_k"]["clopper_pearson_95"] == [0.226558, 0.593965]
-    assert d["eval"]["precision_at_k_v1"]["clopper_pearson_95"] == [0.099338, 0.422837]
+    assert d["eval"]["precision_at_k"]["positive_in_top_k"] == 15
+    assert d["eval"]["precision_at_k_v1"]["positive_in_top_k"] == 9
+    assert d["eval"]["precision_at_k"]["clopper_pearson_95"] == [0.31297, 0.68703]
+    assert d["eval"]["precision_at_k_v1"]["clopper_pearson_95"] == [0.147345, 0.493959]
     for name in ("precision_at_k", "precision_at_k_v1"):
         lo, hi = d["eval"][name]["clopper_pearson_95"]
         assert 0 <= lo <= hi <= 1

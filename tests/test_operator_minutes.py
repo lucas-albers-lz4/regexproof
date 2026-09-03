@@ -80,7 +80,7 @@ def test_stopwatch_rows_get_fresh_measurement_ids(tmp_path: Path):
 
 def test_does_not_touch_freeze():
     before = FREEZE.read_bytes()
-    assert json.loads(before)["dataset"]["n"] == 874
+    assert json.loads(before)["dataset"]["n"] == 894
     # Loading/summarizing the minutes log must not rewrite the freeze.
     summarize(COMMITTED)
     assert FREEZE.read_bytes() == before

@@ -288,8 +288,8 @@ def test_committed_surrogate_is_offline_only():
     assert art["hard_reject"] is False
     assert art["live_drain"].startswith("score-v1")
     assert art["freeze_snapshot_sha256"] == freeze["dataset"]["snapshot_sha256"]
-    assert art["test_once"]["auc"] == 0.793022
-    assert art["test_once"]["skip_rate"] == 0.723577
+    assert art["test_once"]["auc"] == 0.773224
+    assert art["test_once"]["skip_rate"] == 0.73494
     assert art["test_once"]["threshold"] == 0.5
     deny = json.loads(
         (ROOT / "properties" / "generated" / "probe_deny_list.json").read_text(

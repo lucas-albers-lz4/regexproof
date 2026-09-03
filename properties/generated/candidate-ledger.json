@@ -18888,6 +18888,13 @@
       "url": "https://github.com/Activiti/Activiti"
     },
     {
+      "audit": {
+        "auto_filed": true,
+        "auto_filed_at": "2026-09-03T15:40:03Z",
+        "needs_human_review": false,
+        "template_fired": "below-scale",
+        "updated_at": "2026-09-03T15:40:03Z"
+      },
       "capped": true,
       "default_branch": "main",
       "first_seen": "2026-08-14T02:52:16Z",
@@ -18910,6 +18917,13 @@
       "url": "https://github.com/opengrep/opengrep"
     },
     {
+      "audit": {
+        "auto_filed": true,
+        "auto_filed_at": "2026-09-03T15:40:03Z",
+        "needs_human_review": false,
+        "template_fired": "below-scale",
+        "updated_at": "2026-09-03T15:40:03Z"
+      },
       "capped": true,
       "default_branch": "main",
       "first_seen": "2026-08-14T02:52:16Z",
@@ -18921,6 +18935,13 @@
       "url": "https://github.com/superdesigndev/treg"
     },
     {
+      "audit": {
+        "auto_filed": true,
+        "auto_filed_at": "2026-09-03T15:40:03Z",
+        "needs_human_review": false,
+        "template_fired": "below-scale",
+        "updated_at": "2026-09-03T15:40:03Z"
+      },
       "capped": true,
       "default_branch": "master",
       "first_seen": "2026-08-14T02:52:16Z",
@@ -18932,6 +18953,13 @@
       "url": "https://github.com/Evokoa/pgContext"
     },
     {
+      "audit": {
+        "auto_filed": true,
+        "auto_filed_at": "2026-09-03T15:40:05Z",
+        "needs_human_review": false,
+        "template_fired": "below-scale",
+        "updated_at": "2026-09-03T15:40:05Z"
+      },
       "capped": true,
       "default_branch": "main",
       "first_seen": "2026-08-14T02:52:16Z",
@@ -18943,6 +18971,13 @@
       "url": "https://github.com/IBM/ibmdotcom-tutorials"
     },
     {
+      "audit": {
+        "auto_filed": true,
+        "auto_filed_at": "2026-09-03T15:40:07Z",
+        "needs_human_review": false,
+        "template_fired": "below-scale",
+        "updated_at": "2026-09-03T15:40:07Z"
+      },
       "capped": true,
       "default_branch": "main",
       "first_seen": "2026-08-14T02:52:16Z",
@@ -18965,6 +19000,13 @@
       "url": "https://github.com/frappe/frappe-ui"
     },
     {
+      "audit": {
+        "auto_filed": true,
+        "auto_filed_at": "2026-09-03T15:40:09Z",
+        "needs_human_review": false,
+        "template_fired": "below-scale",
+        "updated_at": "2026-09-03T15:40:09Z"
+      },
       "capped": true,
       "default_branch": "main",
       "first_seen": "2026-08-14T02:52:16Z",
@@ -18976,6 +19018,13 @@
       "url": "https://github.com/thomasxm/CrowdSentinels-AI-MCP"
     },
     {
+      "audit": {
+        "auto_filed": true,
+        "auto_filed_at": "2026-09-03T15:40:09Z",
+        "needs_human_review": false,
+        "template_fired": "below-scale",
+        "updated_at": "2026-09-03T15:40:09Z"
+      },
       "capped": true,
       "default_branch": "main",
       "first_seen": "2026-08-14T02:52:16Z",
@@ -20355,6 +20404,13 @@
     },
     {
       "archived": false,
+      "audit": {
+        "auto_filed": true,
+        "auto_filed_at": "2026-09-03T15:40:03Z",
+        "needs_human_review": false,
+        "template_fired": "below-scale",
+        "updated_at": "2026-09-03T15:40:03Z"
+      },
       "default_branch": "dev",
       "first_seen": "2026-08-18T13:32:37Z",
       "fork": false,
@@ -20370,6 +20426,13 @@
     },
     {
       "archived": false,
+      "audit": {
+        "auto_filed": true,
+        "auto_filed_at": "2026-09-03T15:40:04Z",
+        "needs_human_review": false,
+        "template_fired": "below-scale",
+        "updated_at": "2026-09-03T15:40:04Z"
+      },
       "default_branch": "main",
       "first_seen": "2026-08-18T13:32:37Z",
       "fork": false,
@@ -20385,6 +20448,13 @@
     },
     {
       "archived": false,
+      "audit": {
+        "auto_filed": true,
+        "auto_filed_at": "2026-09-03T15:40:05Z",
+        "needs_human_review": false,
+        "template_fired": "below-scale",
+        "updated_at": "2026-09-03T15:40:05Z"
+      },
       "capped": true,
       "default_branch": "main",
       "first_seen": "2026-08-18T13:32:37Z",
@@ -20401,6 +20471,13 @@
     },
     {
       "archived": false,
+      "audit": {
+        "auto_filed": true,
+        "auto_filed_at": "2026-09-03T15:40:06Z",
+        "needs_human_review": false,
+        "template_fired": "below-scale",
+        "updated_at": "2026-09-03T15:40:06Z"
+      },
       "default_branch": "main",
       "first_seen": "2026-08-18T13:32:37Z",
       "fork": false,
@@ -20416,6 +20493,13 @@
     },
     {
       "archived": false,
+      "audit": {
+        "auto_filed": true,
+        "auto_filed_at": "2026-09-03T15:40:06Z",
+        "needs_human_review": false,
+        "template_fired": "below-scale",
+        "updated_at": "2026-09-03T15:40:06Z"
+      },
       "default_branch": "master",
       "first_seen": "2026-08-18T13:32:37Z",
       "fork": false,
@@ -20502,6 +20586,13 @@
     },
     {
       "archived": false,
+      "audit": {
+        "auto_filed": true,
+        "auto_filed_at": "2026-09-03T15:40:07Z",
+        "needs_human_review": false,
+        "template_fired": "below-scale",
+        "updated_at": "2026-09-03T15:40:07Z"
+      },
       "default_branch": "main",
       "first_seen": "2026-08-19T13:33:52Z",
       "fork": false,
@@ -20517,6 +20608,13 @@
     },
     {
       "archived": false,
+      "audit": {
+        "auto_filed": true,
+        "auto_filed_at": "2026-09-03T15:40:07Z",
+        "needs_human_review": false,
+        "template_fired": "below-scale",
+        "updated_at": "2026-09-03T15:40:07Z"
+      },
       "default_branch": "main",
       "first_seen": "2026-08-19T13:33:52Z",
       "fork": false,
@@ -20532,6 +20630,13 @@
     },
     {
       "archived": false,
+      "audit": {
+        "auto_filed": true,
+        "auto_filed_at": "2026-09-03T15:40:07Z",
+        "needs_human_review": false,
+        "template_fired": "below-scale",
+        "updated_at": "2026-09-03T15:40:07Z"
+      },
       "default_branch": "main",
       "first_seen": "2026-08-19T13:33:52Z",
       "fork": false,
@@ -20547,6 +20652,13 @@
     },
     {
       "archived": false,
+      "audit": {
+        "auto_filed": true,
+        "auto_filed_at": "2026-09-03T15:40:08Z",
+        "needs_human_review": false,
+        "template_fired": "below-scale",
+        "updated_at": "2026-09-03T15:40:08Z"
+      },
       "default_branch": "master",
       "first_seen": "2026-08-19T13:33:52Z",
       "fork": false,
@@ -20562,6 +20674,13 @@
     },
     {
       "archived": false,
+      "audit": {
+        "auto_filed": true,
+        "auto_filed_at": "2026-09-03T15:40:08Z",
+        "needs_human_review": false,
+        "template_fired": "below-scale",
+        "updated_at": "2026-09-03T15:40:08Z"
+      },
       "default_branch": "main",
       "first_seen": "2026-08-19T13:33:52Z",
       "fork": false,
@@ -20761,6 +20880,13 @@
     },
     {
       "archived": false,
+      "audit": {
+        "auto_filed": true,
+        "auto_filed_at": "2026-09-03T15:40:08Z",
+        "needs_human_review": false,
+        "template_fired": "below-scale",
+        "updated_at": "2026-09-03T15:40:08Z"
+      },
       "capped": true,
       "default_branch": "main",
       "first_seen": "2026-08-21T13:29:08Z",
@@ -21948,6 +22074,13 @@
     },
     {
       "archived": false,
+      "audit": {
+        "auto_filed": true,
+        "auto_filed_at": "2026-09-03T15:40:06Z",
+        "needs_human_review": false,
+        "template_fired": "below-scale",
+        "updated_at": "2026-09-03T15:40:06Z"
+      },
       "capped": true,
       "default_branch": "main",
       "first_seen": "2026-08-28T22:18:02Z",
@@ -21964,6 +22097,13 @@
     },
     {
       "archived": false,
+      "audit": {
+        "auto_filed": true,
+        "auto_filed_at": "2026-09-03T15:40:07Z",
+        "needs_human_review": false,
+        "template_fired": "below-scale",
+        "updated_at": "2026-09-03T15:40:07Z"
+      },
       "default_branch": "main",
       "first_seen": "2026-08-28T22:18:02Z",
       "fork": false,

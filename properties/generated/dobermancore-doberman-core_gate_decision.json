@@ -1,0 +1,40 @@
+{
+  "candidate_url": "https://github.com/dobermancore/doberman-core",
+  "conditions": [
+    {
+      "evidence": "No novel dialect/flag/encoding surface.",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Not a security boundary (probe.security_boundary=unknown).",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "0 sites < 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "dobermancore-doberman-core",
+  "corpus_pin": "1f1b865a6b47e726abe0e37b9a9bcf98d05bfd0e",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-09-03",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {},
+    "flags": {},
+    "pin": "1f1b865a6b47e726abe0e37b9a9bcf98d05bfd0e",
+    "pin_mined": null,
+    "pin_probed": "1f1b865a6b47e726abe0e37b9a9bcf98d05bfd0e",
+    "predicted_buckets": {},
+    "regex_sites": 0,
+    "regex_sites_per_file": {},
+    "security_boundary": "unknown"
+  },
+  "rationale": "Below admission scale: 0 regex sites (auto-NO-GO bar 200); dialects [none]; boundary=unknown.",
+  "schema_version": "1"
+}
