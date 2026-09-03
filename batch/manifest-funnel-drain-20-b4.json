@@ -1,0 +1,149 @@
+{
+  "allocator": "score-v1",
+  "created_at": "2026-09-03T15:40:02+00:00",
+  "digest": "58aea63022eebf5a48af8fcac9085b402ab7382bed5a5dd76a229f8c3a228c64",
+  "items": [
+    {
+      "allocator": "score-v1",
+      "corpus": "o19s-quepid",
+      "pin": "cec788786627337583cdafddbe1902863f874383",
+      "score": 55.0,
+      "url": "https://github.com/o19s/quepid"
+    },
+    {
+      "allocator": "score-v1",
+      "corpus": "superdesigndev-treg",
+      "pin": "7744a51ba95a7a897f560672c882d3532c38e216",
+      "score": 55.0,
+      "url": "https://github.com/superdesigndev/treg"
+    },
+    {
+      "allocator": "score-v1",
+      "corpus": "cos301-se-2026-umtas",
+      "pin": "482e45c308f1545596c9957dced48b780ee4027f",
+      "score": 54.0,
+      "url": "https://github.com/cos301-se-2026/umtas"
+    },
+    {
+      "allocator": "score-v1",
+      "corpus": "evokoa-pgcontext",
+      "pin": "70ee2ef13df0f015f5731d456e2289df638bd715",
+      "score": 54.0,
+      "url": "https://github.com/evokoa/pgcontext"
+    },
+    {
+      "allocator": "score-v1",
+      "corpus": "haoyue-yang-cookie-bench",
+      "pin": "e10c614460e4f92adfa01b938af2f8ecb1ccec6d",
+      "score": 54.0,
+      "url": "https://github.com/haoyue-yang/cookie-bench"
+    },
+    {
+      "allocator": "score-v1",
+      "corpus": "ibm-ibmdotcom-tutorials",
+      "pin": "edb8773b3b97781060ac80a2e75a66246c1ca9ba",
+      "score": 54.0,
+      "url": "https://github.com/ibm/ibmdotcom-tutorials"
+    },
+    {
+      "allocator": "score-v1",
+      "corpus": "nvidia-nemo-run",
+      "pin": "99f13156dbb304afcea77927b57e3aa51cea5935",
+      "score": 54.0,
+      "url": "https://github.com/nvidia-nemo/run"
+    },
+    {
+      "allocator": "score-v1",
+      "corpus": "davidsneighbour-kollitsch.dev",
+      "pin": "33c7bf8ea601521f71074cb97d0a999a5ee15fdf",
+      "score": 54.0,
+      "url": "https://github.com/davidsneighbour/kollitsch.dev"
+    },
+    {
+      "allocator": "score-v1",
+      "corpus": "wayofdev-npm-shareable-configs",
+      "pin": "e6c38e3939519f6dfbc5d431f86438cf642cd4a0",
+      "score": 54.0,
+      "url": "https://github.com/wayofdev/npm-shareable-configs"
+    },
+    {
+      "allocator": "score-v1",
+      "corpus": "dobermancore-doberman-core",
+      "pin": "1f1b865a6b47e726abe0e37b9a9bcf98d05bfd0e",
+      "score": 53.0,
+      "url": "https://github.com/dobermancore/doberman-core"
+    },
+    {
+      "allocator": "score-v1",
+      "corpus": "anolilab-javascript-style-guide",
+      "pin": "6f43a1e9f71251524318d687151cfb84fa84a3ba",
+      "score": 53.0,
+      "url": "https://github.com/anolilab/javascript-style-guide"
+    },
+    {
+      "allocator": "score-v1",
+      "corpus": "anolilab-unplugin-favicons",
+      "pin": "d36dfe973c719fd81f875ece62f45fabbdc9f6b3",
+      "score": 53.0,
+      "url": "https://github.com/anolilab/unplugin-favicons"
+    },
+    {
+      "allocator": "score-v1",
+      "corpus": "constructorfabric-insight",
+      "pin": "69fb0f6bc6c2710a5d5640f1760646b35d393eed",
+      "score": 53.0,
+      "url": "https://github.com/constructorfabric/insight"
+    },
+    {
+      "allocator": "score-v1",
+      "corpus": "ctrl-gaurav-effgen",
+      "pin": "4487c0ee24933cbd24d4649bb9126aa13b96a5bb",
+      "score": 53.0,
+      "url": "https://github.com/ctrl-gaurav/effgen"
+    },
+    {
+      "allocator": "score-v1",
+      "corpus": "kinggongzilla-chess-bot-3000",
+      "pin": "0671712692d6c2d44ff80a2ccadd6625603d28b3",
+      "score": 53.0,
+      "url": "https://github.com/kinggongzilla/chess-bot-3000"
+    },
+    {
+      "allocator": "score-v1",
+      "corpus": "microsoft-sico",
+      "pin": "35255027868940cf25a7c5c4681882f9f831b330",
+      "score": 53.0,
+      "url": "https://github.com/microsoft/sico"
+    },
+    {
+      "allocator": "score-v1",
+      "corpus": "optionxi-optionxi-flutter-community",
+      "pin": "e747da6d7a8a65552b1b5b25a4c71db8969fdc89",
+      "score": 53.0,
+      "url": "https://github.com/optionxi/optionxi-flutter-community"
+    },
+    {
+      "allocator": "score-v1",
+      "corpus": "symbioticfi-relay-contracts",
+      "pin": "cba718183692230382d53bb8424a2b6cb33f973d",
+      "score": 53.0,
+      "url": "https://github.com/symbioticfi/relay-contracts"
+    },
+    {
+      "allocator": "score-v1",
+      "corpus": "thomasxm-crowdsentinels-ai-mcp",
+      "pin": "bfca612f46728f69ce93b2d0ef82a08bbc69e1d1",
+      "score": 53.0,
+      "url": "https://github.com/thomasxm/crowdsentinels-ai-mcp"
+    },
+    {
+      "allocator": "score-v1",
+      "corpus": "zeitgeistpm-zeitgeist",
+      "pin": "39ad8d60aa2f7af0a465d58c5e87dcc509602df5",
+      "score": 53.0,
+      "url": "https://github.com/zeitgeistpm/zeitgeist"
+    }
+  ],
+  "limit": 20,
+  "schema_version": "1"
+}

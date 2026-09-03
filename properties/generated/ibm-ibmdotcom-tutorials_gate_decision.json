@@ -2,17 +2,17 @@
   "candidate_url": "https://github.com/ibm/ibmdotcom-tutorials",
   "conditions": [
     {
-      "evidence": "No novel dialect/flag/encoding surface.",
+      "evidence": "Predicted buckets present (3) but not treated as novel surface.",
       "id": "new-surface",
       "met": false
     },
     {
-      "evidence": "Not a security boundary (probe.security_boundary=unknown).",
+      "evidence": "Not a security boundary (probe.security_boundary=deterministic-false).",
       "id": "security-boundary",
       "met": false
     },
     {
-      "evidence": "0 sites < 1000 scale bar.",
+      "evidence": "98 sites < 1000 scale bar.",
       "id": "large-under-saturated",
       "met": false
     }
@@ -24,17 +24,42 @@
   "decision_date": "2026-09-03",
   "escape_hatch_applied": false,
   "probe": {
-    "construct_counts": {},
-    "dialect": {},
-    "flags": {},
+    "construct_counts": {
+      "lookaround": 2
+    },
+    "dialect": {
+      "ecma": 90,
+      "py_re": 8
+    },
+    "flags": {
+      "g": 51,
+      "i": 2,
+      "s": 5
+    },
     "pin": "edb8773b3b97781060ac80a2e75a66246c1ca9ba",
     "pin_mined": null,
     "pin_probed": "edb8773b3b97781060ac80a2e75a66246c1ca9ba",
-    "predicted_buckets": {},
-    "regex_sites": 0,
-    "regex_sites_per_file": {},
-    "security_boundary": "unknown"
+    "predicted_buckets": {
+      "inline-flag": 7,
+      "lookaround": 2,
+      "stateful": 51
+    },
+    "regex_sites": 98,
+    "regex_sites_per_file": {
+      "tutorials/03-multi-agent-systems/chatdev_watsonx_tutorial_/camel/utils.py": 1,
+      "tutorials/03-multi-agent-systems/chatdev_watsonx_tutorial_/chatdev/utils.py": 1,
+      "tutorials/03-multi-agent-systems/chatdev_watsonx_tutorial_/ecl/ece.py": 3,
+      "tutorials/03-multi-agent-systems/chatdev_watsonx_tutorial_/ecl/utils.py": 1,
+      "tutorials/03-multi-agent-systems/chatdev_watsonx_tutorial_/visualizer/static/js/main.js": 4,
+      "tutorials/03-multi-agent-systems/chatdev_watsonx_tutorial_/visualizer/static/replay/js/app.js": 38,
+      "tutorials/03-multi-agent-systems/chatdev_watsonx_tutorial_/visualizer/static/replay/js/highlight.js": 31,
+      "tutorials/03-multi-agent-systems/metagpt_tutorial/metagpt_prd_generator.py": 2,
+      "tutorials/13-full-stack-applications/silly_story_time/src/services/imageService.ts": 1,
+      "tutorials/13-full-stack-applications/silly_story_time/vite.config.ts": 1,
+      "tutorials/16-ibm-bob/mcp-server-integration-ibm-bob/arxiv-server/src/index.ts": 15
+    },
+    "security_boundary": "deterministic-false"
   },
-  "rationale": "Below admission scale: 0 regex sites (auto-NO-GO bar 200); dialects [none]; boundary=unknown.",
+  "rationale": "Below admission scale: 98 regex sites (auto-NO-GO bar 200); dialects [ecma:90, py_re:8]; boundary=deterministic-false.",
   "schema_version": "1"
 }

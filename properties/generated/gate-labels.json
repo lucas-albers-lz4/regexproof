@@ -1,9 +1,9 @@
 {
   "provenance": {
-    "gate_decision_count": 904,
-    "input_file_count": 904,
-    "inputs_hash": "93ce171270285a447d2a99458061e46d19a3ea7b6b672ad83a906575ef4aa9f9",
-    "linked_row_count": 870,
+    "gate_decision_count": 885,
+    "input_file_count": 885,
+    "inputs_hash": "fcd169c35cc2b5e82d98db660045b49b8bf4b5b71c3eebd4c330a8f5838a5713",
+    "linked_row_count": 851,
     "schema_version": "1"
   },
   "rows": [
@@ -1552,36 +1552,6 @@
       "url": "https://github.com/CMS-Enterprise/npd"
     },
     {
-      "decision_date": "2026-09-03",
-      "label": "no-go",
-      "ledger": {
-        "archived": false,
-        "capped": false,
-        "fork": false,
-        "language": "TypeScript",
-        "pushed_date": "2026-08-16",
-        "size": 54250,
-        "source_query": "filename:secretlintrc.json OR filename:.secretlintrc",
-        "stars": 13
-      },
-      "probe": {
-        "dialect_counts": {},
-        "predicted_buckets": {},
-        "regex_sites": 0,
-        "security_boundary": "unknown",
-        "tree_probe": {
-          "complete": false,
-          "path_count": 0,
-          "probed_pin": "482e45c308f1545596c9957dced48b780ee4027f",
-          "reason": "budget-exhausted",
-          "regex_file_type_counts": {},
-          "security_boundary": "unknown",
-          "truncated": false
-        }
-      },
-      "url": "https://github.com/COS301-SE-2026/UMTAS"
-    },
-    {
       "decision_date": "2026-08-13",
       "label": "no-go",
       "ledger": {
@@ -2419,36 +2389,6 @@
       "url": "https://github.com/Dingent/Dingent"
     },
     {
-      "decision_date": "2026-09-03",
-      "label": "no-go",
-      "ledger": {
-        "archived": false,
-        "capped": true,
-        "fork": false,
-        "language": "Python",
-        "pushed_date": "2026-08-26",
-        "size": 3727,
-        "source_query": "filename:.gitleaks.toml",
-        "stars": 198
-      },
-      "probe": {
-        "dialect_counts": {},
-        "predicted_buckets": {},
-        "regex_sites": 0,
-        "security_boundary": "unknown",
-        "tree_probe": {
-          "complete": false,
-          "path_count": 0,
-          "probed_pin": "1f1b865a6b47e726abe0e37b9a9bcf98d05bfd0e",
-          "reason": "budget-exhausted",
-          "regex_file_type_counts": {},
-          "security_boundary": "unknown",
-          "truncated": false
-        }
-      },
-      "url": "https://github.com/DobermanCore/Doberman-Core"
-    },
-    {
       "decision_date": "2026-08-12",
       "label": "no-go",
       "ledger": {
@@ -2529,36 +2469,6 @@
         }
       },
       "url": "https://github.com/EpicDima/SavingSeries"
-    },
-    {
-      "decision_date": "2026-09-03",
-      "label": "no-go",
-      "ledger": {
-        "archived": null,
-        "capped": true,
-        "fork": null,
-        "language": null,
-        "pushed_date": "2026-08-13",
-        "size": null,
-        "source_query": "filename:.gitleaks.toml",
-        "stars": 237
-      },
-      "probe": {
-        "dialect_counts": {},
-        "predicted_buckets": {},
-        "regex_sites": 0,
-        "security_boundary": "unknown",
-        "tree_probe": {
-          "complete": false,
-          "path_count": 0,
-          "probed_pin": "70ee2ef13df0f015f5731d456e2289df638bd715",
-          "reason": "budget-exhausted",
-          "regex_file_type_counts": {},
-          "security_boundary": "unknown",
-          "truncated": false
-        }
-      },
-      "url": "https://github.com/Evokoa/pgContext"
     },
     {
       "decision_date": "2026-08-12",
@@ -3415,36 +3325,6 @@
         }
       },
       "url": "https://github.com/HHS/OPRE-OPS"
-    },
-    {
-      "decision_date": "2026-09-03",
-      "label": "no-go",
-      "ledger": {
-        "archived": false,
-        "capped": false,
-        "fork": false,
-        "language": "TypeScript",
-        "pushed_date": "2026-06-15",
-        "size": 36118,
-        "source_query": "filename:secretlintrc.json OR filename:.secretlintrc",
-        "stars": 16
-      },
-      "probe": {
-        "dialect_counts": {},
-        "predicted_buckets": {},
-        "regex_sites": 0,
-        "security_boundary": "unknown",
-        "tree_probe": {
-          "complete": false,
-          "path_count": 0,
-          "probed_pin": "e10c614460e4f92adfa01b938af2f8ecb1ccec6d",
-          "reason": "budget-exhausted",
-          "regex_file_type_counts": {},
-          "security_boundary": "unknown",
-          "truncated": false
-        }
-      },
-      "url": "https://github.com/Haoyue-Yang/Cookie-Bench"
     },
     {
       "decision_date": "2026-08-13",
@@ -5795,36 +5675,6 @@
         }
       },
       "url": "https://github.com/NVIDIA-NeMo/RL"
-    },
-    {
-      "decision_date": "2026-09-03",
-      "label": "no-go",
-      "ledger": {
-        "archived": false,
-        "capped": true,
-        "fork": false,
-        "language": "Python",
-        "pushed_date": "2026-08-16",
-        "size": 8500,
-        "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
-        "stars": 251
-      },
-      "probe": {
-        "dialect_counts": {},
-        "predicted_buckets": {},
-        "regex_sites": 0,
-        "security_boundary": "unknown",
-        "tree_probe": {
-          "complete": false,
-          "path_count": 0,
-          "probed_pin": "99f13156dbb304afcea77927b57e3aa51cea5935",
-          "reason": "budget-exhausted",
-          "regex_file_type_counts": {},
-          "security_boundary": "unknown",
-          "truncated": false
-        }
-      },
-      "url": "https://github.com/NVIDIA-NeMo/Run"
     },
     {
       "decision_date": "2026-08-15",
@@ -11042,36 +10892,6 @@
       "url": "https://github.com/anolilab/anole.chat"
     },
     {
-      "decision_date": "2026-09-03",
-      "label": "no-go",
-      "ledger": {
-        "archived": false,
-        "capped": false,
-        "fork": false,
-        "language": "TypeScript",
-        "pushed_date": "2026-08-18",
-        "size": 28115,
-        "source_query": "filename:secretlintrc.json OR filename:.secretlintrc",
-        "stars": 10
-      },
-      "probe": {
-        "dialect_counts": {},
-        "predicted_buckets": {},
-        "regex_sites": 0,
-        "security_boundary": "unknown",
-        "tree_probe": {
-          "complete": false,
-          "path_count": 0,
-          "probed_pin": "6f43a1e9f71251524318d687151cfb84fa84a3ba",
-          "reason": "budget-exhausted",
-          "regex_file_type_counts": {},
-          "security_boundary": "unknown",
-          "truncated": false
-        }
-      },
-      "url": "https://github.com/anolilab/javascript-style-guide"
-    },
-    {
       "decision_date": "2026-08-13",
       "label": "no-go",
       "ledger": {
@@ -11153,36 +10973,6 @@
         }
       },
       "url": "https://github.com/anolilab/semantic-release"
-    },
-    {
-      "decision_date": "2026-09-03",
-      "label": "no-go",
-      "ledger": {
-        "archived": false,
-        "capped": false,
-        "fork": false,
-        "language": "TypeScript",
-        "pushed_date": "2026-08-15",
-        "size": 22493,
-        "source_query": "filename:secretlintrc.json OR filename:.secretlintrc",
-        "stars": 10
-      },
-      "probe": {
-        "dialect_counts": {},
-        "predicted_buckets": {},
-        "regex_sites": 0,
-        "security_boundary": "unknown",
-        "tree_probe": {
-          "complete": false,
-          "path_count": 0,
-          "probed_pin": "d36dfe973c719fd81f875ece62f45fabbdc9f6b3",
-          "reason": "budget-exhausted",
-          "regex_file_type_counts": {},
-          "security_boundary": "unknown",
-          "truncated": false
-        }
-      },
-      "url": "https://github.com/anolilab/unplugin-favicons"
     },
     {
       "decision_date": "2026-08-13",
@@ -14522,36 +14312,6 @@
       "url": "https://github.com/consolelabs/mochi-discord"
     },
     {
-      "decision_date": "2026-09-03",
-      "label": "no-go",
-      "ledger": {
-        "archived": false,
-        "capped": false,
-        "fork": false,
-        "language": "Rust",
-        "pushed_date": "2026-08-27",
-        "size": 30862,
-        "source_query": "filename:.trufflehog.yml OR filename:.trufflehog.toml OR filename:trufflehog.yml",
-        "stars": 10
-      },
-      "probe": {
-        "dialect_counts": {},
-        "predicted_buckets": {},
-        "regex_sites": 0,
-        "security_boundary": "unknown",
-        "tree_probe": {
-          "complete": false,
-          "path_count": 0,
-          "probed_pin": "69fb0f6bc6c2710a5d5640f1760646b35d393eed",
-          "reason": "budget-exhausted",
-          "regex_file_type_counts": {},
-          "security_boundary": "unknown",
-          "truncated": false
-        }
-      },
-      "url": "https://github.com/constructorfabric/insight"
-    },
-    {
       "decision_date": "2026-08-14",
       "label": "no-go",
       "ledger": {
@@ -15132,36 +14892,6 @@
       "url": "https://github.com/crysalead-js/chaos-validator"
     },
     {
-      "decision_date": "2026-09-03",
-      "label": "no-go",
-      "ledger": {
-        "archived": null,
-        "capped": true,
-        "fork": null,
-        "language": null,
-        "pushed_date": "2026-08-13",
-        "size": null,
-        "source_query": "filename:.gitleaks.toml",
-        "stars": 188
-      },
-      "probe": {
-        "dialect_counts": {},
-        "predicted_buckets": {},
-        "regex_sites": 0,
-        "security_boundary": "unknown",
-        "tree_probe": {
-          "complete": false,
-          "path_count": 0,
-          "probed_pin": "4487c0ee24933cbd24d4649bb9126aa13b96a5bb",
-          "reason": "budget-exhausted",
-          "regex_file_type_counts": {},
-          "security_boundary": "unknown",
-          "truncated": false
-        }
-      },
-      "url": "https://github.com/ctrl-gaurav/effGen"
-    },
-    {
       "decision_date": "2026-08-13",
       "label": "no-go",
       "ledger": {
@@ -15529,36 +15259,6 @@
         }
       },
       "url": "https://github.com/davidmann4/botstack"
-    },
-    {
-      "decision_date": "2026-09-03",
-      "label": "no-go",
-      "ledger": {
-        "archived": false,
-        "capped": false,
-        "fork": false,
-        "language": "TypeScript",
-        "pushed_date": "2026-08-16",
-        "size": 626913,
-        "source_query": "filename:secretlintrc.json OR filename:.secretlintrc",
-        "stars": 14
-      },
-      "probe": {
-        "dialect_counts": {},
-        "predicted_buckets": {},
-        "regex_sites": 0,
-        "security_boundary": "unknown",
-        "tree_probe": {
-          "complete": false,
-          "path_count": 0,
-          "probed_pin": "33c7bf8ea601521f71074cb97d0a999a5ee15fdf",
-          "reason": "budget-exhausted",
-          "regex_file_type_counts": {},
-          "security_boundary": "unknown",
-          "truncated": false
-        }
-      },
-      "url": "https://github.com/davidsneighbour/kollitsch.dev"
     },
     {
       "decision_date": "2026-08-13",
@@ -22246,36 +21946,6 @@
       "url": "https://github.com/keysas-fr/keysas"
     },
     {
-      "decision_date": "2026-09-03",
-      "label": "no-go",
-      "ledger": {
-        "archived": false,
-        "capped": false,
-        "fork": false,
-        "language": "Python",
-        "pushed_date": "2025-12-14",
-        "size": 9881,
-        "source_query": "filename:.trufflehog.yml OR filename:.trufflehog.toml OR filename:trufflehog.yml",
-        "stars": 9
-      },
-      "probe": {
-        "dialect_counts": {},
-        "predicted_buckets": {},
-        "regex_sites": 0,
-        "security_boundary": "unknown",
-        "tree_probe": {
-          "complete": false,
-          "path_count": 0,
-          "probed_pin": "0671712692d6c2d44ff80a2ccadd6625603d28b3",
-          "reason": "budget-exhausted",
-          "regex_file_type_counts": {},
-          "security_boundary": "unknown",
-          "truncated": false
-        }
-      },
-      "url": "https://github.com/kinggongzilla/chess-bot-3000"
-    },
-    {
       "decision_date": "2026-08-12",
       "label": "no-go",
       "ledger": {
@@ -24194,36 +23864,6 @@
       "url": "https://github.com/mgechev/revive"
     },
     {
-      "decision_date": "2026-09-03",
-      "label": "no-go",
-      "ledger": {
-        "archived": false,
-        "capped": true,
-        "fork": false,
-        "language": "Python",
-        "pushed_date": "2026-08-20",
-        "size": 61619,
-        "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
-        "stars": 182
-      },
-      "probe": {
-        "dialect_counts": {},
-        "predicted_buckets": {},
-        "regex_sites": 0,
-        "security_boundary": "unknown",
-        "tree_probe": {
-          "complete": false,
-          "path_count": 0,
-          "probed_pin": "35255027868940cf25a7c5c4681882f9f831b330",
-          "reason": "budget-exhausted",
-          "regex_file_type_counts": {},
-          "security_boundary": "unknown",
-          "truncated": false
-        }
-      },
-      "url": "https://github.com/microsoft/Sico"
-    },
-    {
       "decision_date": "2026-08-14",
       "label": "no-go",
       "ledger": {
@@ -26121,36 +25761,6 @@
       "url": "https://github.com/nwutils/nw-utils-builder"
     },
     {
-      "decision_date": "2026-09-03",
-      "label": "no-go",
-      "ledger": {
-        "archived": null,
-        "capped": true,
-        "fork": null,
-        "language": null,
-        "pushed_date": "2026-08-12",
-        "size": null,
-        "source_query": "path:config filename:secrets.yml OR path:config filename:secrets.yaml",
-        "stars": 343
-      },
-      "probe": {
-        "dialect_counts": {},
-        "predicted_buckets": {},
-        "regex_sites": 0,
-        "security_boundary": "unknown",
-        "tree_probe": {
-          "complete": false,
-          "path_count": 0,
-          "probed_pin": "cec788786627337583cdafddbe1902863f874383",
-          "reason": "budget-exhausted",
-          "regex_file_type_counts": {},
-          "security_boundary": "unknown",
-          "truncated": false
-        }
-      },
-      "url": "https://github.com/o19s/quepid"
-    },
-    {
       "decision_date": "2026-08-13",
       "label": "no-go",
       "ledger": {
@@ -26968,36 +26578,6 @@
         }
       },
       "url": "https://github.com/openshift/splunk-forwarder-operator"
-    },
-    {
-      "decision_date": "2026-09-03",
-      "label": "no-go",
-      "ledger": {
-        "archived": false,
-        "capped": false,
-        "fork": false,
-        "language": "Dart",
-        "pushed_date": "2026-07-17",
-        "size": 42923,
-        "source_query": "filename:.trufflehog.yml OR filename:.trufflehog.toml OR filename:trufflehog.yml",
-        "stars": 10
-      },
-      "probe": {
-        "dialect_counts": {},
-        "predicted_buckets": {},
-        "regex_sites": 0,
-        "security_boundary": "unknown",
-        "tree_probe": {
-          "complete": false,
-          "path_count": 0,
-          "probed_pin": "e747da6d7a8a65552b1b5b25a4c71db8969fdc89",
-          "reason": "budget-exhausted",
-          "regex_file_type_counts": {},
-          "security_boundary": "unknown",
-          "truncated": false
-        }
-      },
-      "url": "https://github.com/optionxi/optionxi-flutter-community"
     },
     {
       "decision_date": "2026-08-10",
@@ -31382,36 +30962,6 @@
       "url": "https://github.com/stripstarter/stripstarter"
     },
     {
-      "decision_date": "2026-09-03",
-      "label": "no-go",
-      "ledger": {
-        "archived": null,
-        "capped": true,
-        "fork": null,
-        "language": null,
-        "pushed_date": "2026-08-13",
-        "size": null,
-        "source_query": "filename:.gitleaks.toml",
-        "stars": 368
-      },
-      "probe": {
-        "dialect_counts": {},
-        "predicted_buckets": {},
-        "regex_sites": 0,
-        "security_boundary": "unknown",
-        "tree_probe": {
-          "complete": false,
-          "path_count": 0,
-          "probed_pin": "7744a51ba95a7a897f560672c882d3532c38e216",
-          "reason": "budget-exhausted",
-          "regex_file_type_counts": {},
-          "security_boundary": "unknown",
-          "truncated": false
-        }
-      },
-      "url": "https://github.com/superdesigndev/treg"
-    },
-    {
       "decision_date": "2026-08-15",
       "label": "no-go",
       "ledger": {
@@ -31627,36 +31177,6 @@
         }
       },
       "url": "https://github.com/swenson/python-xr"
-    },
-    {
-      "decision_date": "2026-09-03",
-      "label": "no-go",
-      "ledger": {
-        "archived": false,
-        "capped": false,
-        "fork": false,
-        "language": "Solidity",
-        "pushed_date": "2026-03-02",
-        "size": 269855,
-        "source_query": "filename:.trufflehog.yml OR filename:.trufflehog.toml OR filename:trufflehog.yml",
-        "stars": 11
-      },
-      "probe": {
-        "dialect_counts": {},
-        "predicted_buckets": {},
-        "regex_sites": 0,
-        "security_boundary": "unknown",
-        "tree_probe": {
-          "complete": false,
-          "path_count": 0,
-          "probed_pin": "cba718183692230382d53bb8424a2b6cb33f973d",
-          "reason": "budget-exhausted",
-          "regex_file_type_counts": {},
-          "security_boundary": "unknown",
-          "truncated": false
-        }
-      },
-      "url": "https://github.com/symbioticfi/relay-contracts"
     },
     {
       "decision_date": "2026-08-10",
@@ -32025,36 +31545,6 @@
         }
       },
       "url": "https://github.com/thecybermafia/orgleaks"
-    },
-    {
-      "decision_date": "2026-09-03",
-      "label": "no-go",
-      "ledger": {
-        "archived": null,
-        "capped": true,
-        "fork": null,
-        "language": null,
-        "pushed_date": "2026-07-19",
-        "size": null,
-        "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
-        "stars": 206
-      },
-      "probe": {
-        "dialect_counts": {},
-        "predicted_buckets": {},
-        "regex_sites": 0,
-        "security_boundary": "unknown",
-        "tree_probe": {
-          "complete": false,
-          "path_count": 0,
-          "probed_pin": "bfca612f46728f69ce93b2d0ef82a08bbc69e1d1",
-          "reason": "budget-exhausted",
-          "regex_file_type_counts": {},
-          "security_boundary": "unknown",
-          "truncated": false
-        }
-      },
-      "url": "https://github.com/thomasxm/CrowdSentinels-AI-MCP"
     },
     {
       "decision_date": "2026-08-13",
@@ -33949,36 +33439,6 @@
       "url": "https://github.com/wayofdev/next-starter-tpl"
     },
     {
-      "decision_date": "2026-09-03",
-      "label": "no-go",
-      "ledger": {
-        "archived": false,
-        "capped": false,
-        "fork": false,
-        "language": "JavaScript",
-        "pushed_date": "2026-08-14",
-        "size": 2812,
-        "source_query": "filename:secretlintrc.json OR filename:.secretlintrc",
-        "stars": 13
-      },
-      "probe": {
-        "dialect_counts": {},
-        "predicted_buckets": {},
-        "regex_sites": 0,
-        "security_boundary": "unknown",
-        "tree_probe": {
-          "complete": false,
-          "path_count": 0,
-          "probed_pin": "e6c38e3939519f6dfbc5d431f86438cf642cd4a0",
-          "reason": "budget-exhausted",
-          "regex_file_type_counts": {},
-          "security_boundary": "unknown",
-          "truncated": false
-        }
-      },
-      "url": "https://github.com/wayofdev/npm-shareable-configs"
-    },
-    {
       "decision_date": "2026-08-13",
       "label": "no-go",
       "ledger": {
@@ -34916,36 +34376,6 @@
         }
       },
       "url": "https://github.com/yuvrajagarwal48/OverloadOblivion_GAJSHIELD"
-    },
-    {
-      "decision_date": "2026-09-03",
-      "label": "no-go",
-      "ledger": {
-        "archived": null,
-        "capped": true,
-        "fork": null,
-        "language": null,
-        "pushed_date": "2025-12-04",
-        "size": null,
-        "source_query": "filename:.gitleaks.toml",
-        "stars": 200
-      },
-      "probe": {
-        "dialect_counts": {},
-        "predicted_buckets": {},
-        "regex_sites": 0,
-        "security_boundary": "unknown",
-        "tree_probe": {
-          "complete": false,
-          "path_count": 0,
-          "probed_pin": "39ad8d60aa2f7af0a465d58c5e87dcc509602df5",
-          "reason": "budget-exhausted",
-          "regex_file_type_counts": {},
-          "security_boundary": "unknown",
-          "truncated": false
-        }
-      },
-      "url": "https://github.com/zeitgeistpm/zeitgeist"
     },
     {
       "decision_date": "2026-08-13",

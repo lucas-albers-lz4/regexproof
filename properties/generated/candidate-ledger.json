@@ -18891,9 +18891,10 @@
       "audit": {
         "auto_filed": true,
         "auto_filed_at": "2026-09-03T15:40:03Z",
-        "needs_human_review": false,
+        "human_review_reason": "auto-NO-GO refused: security_boundary=unknown with non-zero sites (routes to human review)",
+        "needs_human_review": true,
         "template_fired": "below-scale",
-        "updated_at": "2026-09-03T15:40:03Z"
+        "updated_at": "2026-09-03T18:01:41Z"
       },
       "capped": true,
       "default_branch": "main",
@@ -18920,9 +18921,10 @@
       "audit": {
         "auto_filed": true,
         "auto_filed_at": "2026-09-03T15:40:03Z",
-        "needs_human_review": false,
+        "human_review_reason": "auto-NO-GO refused: security_boundary=deterministic-true (routes to human review)",
+        "needs_human_review": true,
         "template_fired": "below-scale",
-        "updated_at": "2026-09-03T15:40:03Z"
+        "updated_at": "2026-09-03T18:01:46Z"
       },
       "capped": true,
       "default_branch": "main",
@@ -18938,9 +18940,10 @@
       "audit": {
         "auto_filed": true,
         "auto_filed_at": "2026-09-03T15:40:03Z",
-        "needs_human_review": false,
+        "human_review_reason": "auto-NO-GO refused: security_boundary=deterministic-true (routes to human review)",
+        "needs_human_review": true,
         "template_fired": "below-scale",
-        "updated_at": "2026-09-03T15:40:03Z"
+        "updated_at": "2026-09-03T18:01:53Z"
       },
       "capped": true,
       "default_branch": "master",
@@ -18958,7 +18961,7 @@
         "auto_filed_at": "2026-09-03T15:40:05Z",
         "needs_human_review": false,
         "template_fired": "below-scale",
-        "updated_at": "2026-09-03T15:40:05Z"
+        "updated_at": "2026-09-03T18:02:09Z"
       },
       "capped": true,
       "default_branch": "main",
@@ -18974,9 +18977,10 @@
       "audit": {
         "auto_filed": true,
         "auto_filed_at": "2026-09-03T15:40:07Z",
-        "needs_human_review": false,
+        "human_review_reason": "auto-NO-GO refused: security_boundary=deterministic-true (routes to human review)",
+        "needs_human_review": true,
         "template_fired": "below-scale",
-        "updated_at": "2026-09-03T15:40:07Z"
+        "updated_at": "2026-09-03T18:03:30Z"
       },
       "capped": true,
       "default_branch": "main",
@@ -19003,9 +19007,10 @@
       "audit": {
         "auto_filed": true,
         "auto_filed_at": "2026-09-03T15:40:09Z",
-        "needs_human_review": false,
+        "human_review_reason": "auto-NO-GO refused: security_boundary=unknown with non-zero sites (routes to human review)",
+        "needs_human_review": true,
         "template_fired": "below-scale",
-        "updated_at": "2026-09-03T15:40:09Z"
+        "updated_at": "2026-09-03T18:03:53Z"
       },
       "capped": true,
       "default_branch": "main",
@@ -19021,9 +19026,10 @@
       "audit": {
         "auto_filed": true,
         "auto_filed_at": "2026-09-03T15:40:09Z",
-        "needs_human_review": false,
+        "human_review_reason": "auto-NO-GO refused: security_boundary=deterministic-true (routes to human review)",
+        "needs_human_review": true,
         "template_fired": "below-scale",
-        "updated_at": "2026-09-03T15:40:09Z"
+        "updated_at": "2026-09-03T18:03:57Z"
       },
       "capped": true,
       "default_branch": "main",
@@ -20407,9 +20413,10 @@
       "audit": {
         "auto_filed": true,
         "auto_filed_at": "2026-09-03T15:40:03Z",
-        "needs_human_review": false,
+        "human_review_reason": "auto-NO-GO refused: security_boundary=unknown with non-zero sites (routes to human review)",
+        "needs_human_review": true,
         "template_fired": "below-scale",
-        "updated_at": "2026-09-03T15:40:03Z"
+        "updated_at": "2026-09-03T18:01:51Z"
       },
       "default_branch": "dev",
       "first_seen": "2026-08-18T13:32:37Z",
@@ -20429,9 +20436,10 @@
       "audit": {
         "auto_filed": true,
         "auto_filed_at": "2026-09-03T15:40:04Z",
-        "needs_human_review": false,
+        "human_review_reason": "auto-NO-GO refused: security_boundary=deterministic-true (routes to human review)",
+        "needs_human_review": true,
         "template_fired": "below-scale",
-        "updated_at": "2026-09-03T15:40:04Z"
+        "updated_at": "2026-09-03T18:01:58Z"
       },
       "default_branch": "main",
       "first_seen": "2026-08-18T13:32:37Z",
@@ -20451,9 +20459,10 @@
       "audit": {
         "auto_filed": true,
         "auto_filed_at": "2026-09-03T15:40:05Z",
-        "needs_human_review": false,
+        "human_review_reason": "auto-NO-GO refused: security_boundary=unknown with non-zero sites (routes to human review)",
+        "needs_human_review": true,
         "template_fired": "below-scale",
-        "updated_at": "2026-09-03T15:40:05Z"
+        "updated_at": "2026-09-03T18:02:12Z"
       },
       "capped": true,
       "default_branch": "main",
@@ -20474,9 +20483,10 @@
       "audit": {
         "auto_filed": true,
         "auto_filed_at": "2026-09-03T15:40:06Z",
-        "needs_human_review": false,
+        "human_review_reason": "auto-NO-GO refused: security_boundary=unknown with non-zero sites (routes to human review)",
+        "needs_human_review": true,
         "template_fired": "below-scale",
-        "updated_at": "2026-09-03T15:40:06Z"
+        "updated_at": "2026-09-03T18:02:26Z"
       },
       "default_branch": "main",
       "first_seen": "2026-08-18T13:32:37Z",
@@ -20496,9 +20506,10 @@
       "audit": {
         "auto_filed": true,
         "auto_filed_at": "2026-09-03T15:40:06Z",
-        "needs_human_review": false,
+        "human_review_reason": "auto-NO-GO refused: security_boundary=unknown with non-zero sites (routes to human review)",
+        "needs_human_review": true,
         "template_fired": "below-scale",
-        "updated_at": "2026-09-03T15:40:06Z"
+        "updated_at": "2026-09-03T18:02:28Z"
       },
       "default_branch": "master",
       "first_seen": "2026-08-18T13:32:37Z",
@@ -20611,9 +20622,10 @@
       "audit": {
         "auto_filed": true,
         "auto_filed_at": "2026-09-03T15:40:07Z",
-        "needs_human_review": false,
+        "human_review_reason": "auto-NO-GO refused: security_boundary=unknown with non-zero sites (routes to human review)",
+        "needs_human_review": true,
         "template_fired": "below-scale",
-        "updated_at": "2026-09-03T15:40:07Z"
+        "updated_at": "2026-09-03T18:02:41Z"
       },
       "default_branch": "main",
       "first_seen": "2026-08-19T13:33:52Z",
@@ -20633,9 +20645,10 @@
       "audit": {
         "auto_filed": true,
         "auto_filed_at": "2026-09-03T15:40:07Z",
-        "needs_human_review": false,
+        "human_review_reason": "auto-NO-GO refused: security_boundary=unknown with non-zero sites (routes to human review)",
+        "needs_human_review": true,
         "template_fired": "below-scale",
-        "updated_at": "2026-09-03T15:40:07Z"
+        "updated_at": "2026-09-03T18:03:34Z"
       },
       "default_branch": "main",
       "first_seen": "2026-08-19T13:33:52Z",
@@ -20655,9 +20668,10 @@
       "audit": {
         "auto_filed": true,
         "auto_filed_at": "2026-09-03T15:40:08Z",
-        "needs_human_review": false,
+        "human_review_reason": "auto-NO-GO refused: security_boundary=deterministic-true (routes to human review)",
+        "needs_human_review": true,
         "template_fired": "below-scale",
-        "updated_at": "2026-09-03T15:40:08Z"
+        "updated_at": "2026-09-03T18:03:44Z"
       },
       "default_branch": "master",
       "first_seen": "2026-08-19T13:33:52Z",
@@ -20677,9 +20691,10 @@
       "audit": {
         "auto_filed": true,
         "auto_filed_at": "2026-09-03T15:40:08Z",
-        "needs_human_review": false,
+        "human_review_reason": "auto-NO-GO refused: security_boundary=unknown with non-zero sites (routes to human review)",
+        "needs_human_review": true,
         "template_fired": "below-scale",
-        "updated_at": "2026-09-03T15:40:08Z"
+        "updated_at": "2026-09-03T18:03:48Z"
       },
       "default_branch": "main",
       "first_seen": "2026-08-19T13:33:52Z",
@@ -20883,9 +20898,10 @@
       "audit": {
         "auto_filed": true,
         "auto_filed_at": "2026-09-03T15:40:08Z",
-        "needs_human_review": false,
+        "human_review_reason": "auto-NO-GO refused: regex_sites=573 >= 200 (routes to human review)",
+        "needs_human_review": true,
         "template_fired": "below-scale",
-        "updated_at": "2026-09-03T15:40:08Z"
+        "updated_at": "2026-09-03T18:03:39Z"
       },
       "capped": true,
       "default_branch": "main",
@@ -22077,9 +22093,10 @@
       "audit": {
         "auto_filed": true,
         "auto_filed_at": "2026-09-03T15:40:06Z",
-        "needs_human_review": false,
+        "human_review_reason": "auto-NO-GO refused: security_boundary=deterministic-true (routes to human review)",
+        "needs_human_review": true,
         "template_fired": "below-scale",
-        "updated_at": "2026-09-03T15:40:06Z"
+        "updated_at": "2026-09-03T18:02:31Z"
       },
       "capped": true,
       "default_branch": "main",
@@ -22100,9 +22117,10 @@
       "audit": {
         "auto_filed": true,
         "auto_filed_at": "2026-09-03T15:40:07Z",
-        "needs_human_review": false,
+        "human_review_reason": "auto-NO-GO refused: security_boundary=deterministic-true (routes to human review)",
+        "needs_human_review": true,
         "template_fired": "below-scale",
-        "updated_at": "2026-09-03T15:40:07Z"
+        "updated_at": "2026-09-03T18:03:24Z"
       },
       "default_branch": "main",
       "first_seen": "2026-08-28T22:18:02Z",
