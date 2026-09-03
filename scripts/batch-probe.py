@@ -315,6 +315,22 @@ def main(argv: list[str] | None = None) -> int:
 
         generated = args.generated or (ROOT / "properties" / "generated")
         ledger = args.ledger or (ROOT / "properties" / "generated" / "candidate-ledger.json")
+        # Fail closed: an empty walk must never become auto-NO-GO (relative
+        # --cache-root nested worktrees once produced files_walked=0 with a
+        # real checkout elsewhere).
+        if walked <= 0:
+            _record(
+                digest, args.url, args.pin, "error",
+                {
+                    "corpus": args.corpus,
+                    "files_walked": walked,
+                    "draft": str(draft_path),
+                    "error": "empty worktree walk — refuse auto-NO-GO",
+                },
+                args.state,
+            )
+            print(f"error: {args.url}@{args.pin[:12]} empty worktree walk")
+            return 3
         try:
             outcome, decision_path, note = fold_auto_nogo(
                 draft,

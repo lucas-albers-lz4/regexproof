@@ -26,6 +26,13 @@ properties/generated/*_probe_draft.json
 # the real defense against treating these as contract material (#580).
 properties/staged_probes/
 
+# Ephemeral batch-probe clone caches / admission leases (never commit)
+batch/cache-*/
+batch/admission.json
+batch/admission.json.lock
+batch/*.json.lock
+batch/*.json.bak
+
 # Materialized corpus checkouts (see batch/corpora/*/README.md)
 batch/corpora/*/rules
 batch/corpora/*/detectors
