@@ -96,7 +96,7 @@ def test_escape_does_not_fire_at_or_above_baseline():
 def test_escape_continuity_correction_boundary():
     """CodeRabbit #583: the correction is decision-relevant at the gate's
     own committed baseline — k=3/n=50 vs BASELINE (121/894): uncorrected
-    p≈0.0541 (just above 0.05) vs corrected p≈0.0806 (does NOT fire)."""
+    p≈0.0597 (just above 0.05) vs corrected p≈0.0884 (does NOT fire)."""
     t = two_proportion_test(k_window=3, n_window=50, baseline=BASELINE)
     assert t["fires"] is False
     assert t["p_value"] == pytest.approx(0.088393, abs=1e-6)  # corrected oracle
