@@ -18,7 +18,7 @@
   },
   "test_revision": {
     "date": "2026-08-24",
-    "effect": "k=3/n=50 vs baseline 121/894: uncorrected just above 0.05 (p~=0.0597); corrected does not (p~=0.0884). Pinned in tests/test_intervals.py.",
+    "effect": "k=3/n=50 vs baseline 121/875: uncorrected just above 0.05 (p~=0.0544); corrected does not (p~=0.0809). Pinned in tests/test_intervals.py.",
     "from": "statsmodels.stats.proportion.proportions_ztest with Wilson continuity-corrected SE (#550 REV-6 named impl)",
     "implementation": "regexproof.stats.intervals.two_proportion_test",
     "rationale": "Match the predeclared #550 continuity-corrected oracle. statsmodels' two-proportion wrapper has no correction parameter -- the corrected oracle is this stdlib function. Future method changes append here instead of each operator re-deriving one.",

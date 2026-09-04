@@ -2,7 +2,7 @@
   "provenance": {
     "gate_decision_count": 885,
     "input_file_count": 885,
-    "inputs_hash": "fcd169c35cc2b5e82d98db660045b49b8bf4b5b71c3eebd4c330a8f5838a5713",
+    "inputs_hash": "179f2788ba1fe9e8786e26a5cf425cf3f62055191f90b4e00acf3e04bd1e7862",
     "linked_row_count": 851,
     "schema_version": "1"
   },
@@ -3720,10 +3720,17 @@
         "stars": 257
       },
       "probe": {
-        "dialect_counts": {},
-        "predicted_buckets": {},
-        "regex_sites": 0,
-        "security_boundary": "unknown",
+        "dialect_counts": {
+          "ecma": 90,
+          "py_re": 8
+        },
+        "predicted_buckets": {
+          "inline-flag": 7,
+          "lookaround": 2,
+          "stateful": 51
+        },
+        "regex_sites": 98,
+        "security_boundary": "deterministic-false",
         "tree_probe": {
           "complete": false,
           "path_count": 0,
