@@ -84,7 +84,12 @@ def mark_needs_human_review(
     reason: str = "",
     clock: Clock | None = None,
 ) -> dict[str, Any]:
-    updates: dict[str, Any] = {"needs_human_review": True}
+    # Human routing clears auto_filed so the weekly sampler does not treat a
+    # refused auto-NO-GO (or a later re-probe) as a successful auto-file.
+    updates: dict[str, Any] = {
+        "needs_human_review": True,
+        "auto_filed": False,
+    }
     if reason:
         updates["human_review_reason"] = reason
     return ensure_candidate_audit(ledger_path, url, updates=updates, clock=clock)
