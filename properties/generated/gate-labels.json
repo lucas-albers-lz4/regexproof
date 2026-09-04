@@ -1,9 +1,9 @@
 {
   "provenance": {
-    "gate_decision_count": 884,
-    "input_file_count": 884,
-    "inputs_hash": "5efe4b950077e756c6a93152f7ae22281281629452e138b5a46985fa44418da8",
-    "linked_row_count": 850,
+    "gate_decision_count": 885,
+    "input_file_count": 885,
+    "inputs_hash": "47853383563a50e7c3e8d5fbf41b9594aac5d3e3203de460b2195ba48d2b87c6",
+    "linked_row_count": 851,
     "schema_version": "1"
   },
   "rows": [
@@ -3705,6 +3705,43 @@
         }
       },
       "url": "https://github.com/IBM/ibm-common-service-operator"
+    },
+    {
+      "decision_date": "2026-09-03",
+      "label": "no-go",
+      "ledger": {
+        "archived": null,
+        "capped": true,
+        "fork": null,
+        "language": null,
+        "pushed_date": "2026-06-25",
+        "size": null,
+        "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
+        "stars": 257
+      },
+      "probe": {
+        "dialect_counts": {
+          "ecma": 90,
+          "py_re": 8
+        },
+        "predicted_buckets": {
+          "inline-flag": 7,
+          "lookaround": 2,
+          "stateful": 51
+        },
+        "regex_sites": 98,
+        "security_boundary": "deterministic-false",
+        "tree_probe": {
+          "complete": false,
+          "path_count": 0,
+          "probed_pin": "edb8773b3b97781060ac80a2e75a66246c1ca9ba",
+          "reason": "budget-exhausted",
+          "regex_file_type_counts": {},
+          "security_boundary": "unknown",
+          "truncated": false
+        }
+      },
+      "url": "https://github.com/IBM/ibmdotcom-tutorials"
     },
     {
       "decision_date": "2026-08-12",

@@ -149,10 +149,14 @@ def worktree_for(
     walk. The worktree is per-probe and removed after the walk; the
     reference clone stays warm for the lease duration."""
     run_fn = run or _default_run
-    d = cache_dir(url, pin, root)
+    # Resolve absolute paths before `git -C <bare> worktree add <path>`.
+    # A relative --cache-root makes `git` interpret the worktree path relative
+    # to the bare clone, nesting the checkout and leaving the returned path
+    # empty (files_walked=0 → false auto-NO-GO).
+    d = cache_dir(url, pin, root).resolve()
     if not (d / "refs").is_dir():
         raise CloneError(f"cache miss: no reference clone for ({url}, {pin})")
-    wt = d / f"worktree-{owner_pid}"
+    wt = (d / f"worktree-{owner_pid}").resolve()
     if wt.exists():
         # Remove a stale worktree THROUGH GIT (Luna r2 #10: rmtree leaves
         # linked-worktree metadata behind if the subsequent add fails).
@@ -178,8 +182,8 @@ def worktree_remove(
     guarded fallback (Luna r1 #16 — rmtree alone leaves dangling metadata
     that breaks future add/prune)."""
     run_fn = run or _default_run
-    d = cache_dir(url, pin, root)
-    wt = d / f"worktree-{owner_pid}"
+    d = cache_dir(url, pin, root).resolve()
+    wt = (d / f"worktree-{owner_pid}").resolve()
     if not wt.exists():
         return
     proc = run_fn(["git", "-C", str(d), "worktree", "remove", "--force", str(wt)])

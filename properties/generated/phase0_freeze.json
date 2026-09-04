@@ -1,18 +1,18 @@
 {
   "dataset": {
-    "n": 874,
+    "n": 875,
     "positive_count": 121,
-    "positive_rate": 0.138444,
+    "positive_rate": 0.138286,
     "positive_statuses": [
       "go",
       "triage-trial"
     ],
     "snapshot_note": "Committed decision files; archived *.audit-failed.json excluded by suffix (structural (url,pin) supersession dedup).",
-    "snapshot_sha256": "3d1a5a65f4f2ba1654d8a527f394983c2be5f61aa1b4d8bcddb380f119c65b69",
+    "snapshot_sha256": "245d67e448ce4d2d54c6517880eae756dc1d9d5a35679ed988ff58793f0a11bc",
     "source": "properties/generated/*_gate_decision.json",
     "status_counts": {
       "go": 81,
-      "no-go": 753,
+      "no-go": 754,
       "triage-trial": 40
     }
   },
@@ -23,13 +23,13 @@
   },
   "escape_baseline": {
     "computed_at": "2026-08-22",
-    "n": 874,
+    "n": 875,
     "note": "Fixed constant for the shared-gate one-sided z-test; never re-derived from a live window.",
     "positive_count": 121,
-    "value": 0.138444,
+    "value": 0.138286,
     "wilson_ci_95": [
-      0.117125,
-      0.162927
+      0.11699,
+      0.162744
     ]
   },
   "eval": {

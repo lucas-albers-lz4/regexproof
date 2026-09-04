@@ -340,14 +340,16 @@ def test_default_probe_cap_consistent_with_max(tmp_path):
             "--generated", str(gen),
             "--ledger", str(ledger),
         ])
-    # main completed through the patched path (return 0; no real Git ops).
-    assert rc == 0, f"main returned {rc}"
+    # main fails closed on empty worktree (relative --cache-root bug class);
+    # probe-cap was still applied before the walk.
+    assert rc == 3, f"main returned {rc}"
     assert captured["per_clone_cap_mb"] == 500  # derived from --max-disk-mb
     from regexproof.mine import batch_state as bs
 
     st = bs.load_state(path=tmp_path / "state.json")
     row = next(iter(st["rows"].values()))
-    assert row["outcome"] == "auto_nogo"  # empty worktree is below-scale, not ok
+    assert row["outcome"] == "error"
+    assert "empty worktree" in str(row.get("error") or "")
 
 
 def test_lease_renew_extends_expiry(tmp_path):

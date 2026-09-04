@@ -18888,6 +18888,14 @@
       "url": "https://github.com/Activiti/Activiti"
     },
     {
+      "audit": {
+        "auto_filed": false,
+        "auto_filed_at": "2026-09-03T15:40:03Z",
+        "human_review_reason": "auto-NO-GO refused: security_boundary=unknown with non-zero sites (routes to human review)",
+        "needs_human_review": true,
+        "template_fired": "below-scale",
+        "updated_at": "2026-09-04T03:49:36Z"
+      },
       "capped": true,
       "default_branch": "main",
       "first_seen": "2026-08-14T02:52:16Z",
@@ -18910,6 +18918,14 @@
       "url": "https://github.com/opengrep/opengrep"
     },
     {
+      "audit": {
+        "auto_filed": false,
+        "auto_filed_at": "2026-09-03T15:40:03Z",
+        "human_review_reason": "auto-NO-GO refused: security_boundary=deterministic-true (routes to human review)",
+        "needs_human_review": true,
+        "template_fired": "below-scale",
+        "updated_at": "2026-09-04T03:49:36Z"
+      },
       "capped": true,
       "default_branch": "main",
       "first_seen": "2026-08-14T02:52:16Z",
@@ -18921,6 +18937,14 @@
       "url": "https://github.com/superdesigndev/treg"
     },
     {
+      "audit": {
+        "auto_filed": false,
+        "auto_filed_at": "2026-09-03T15:40:03Z",
+        "human_review_reason": "auto-NO-GO refused: security_boundary=deterministic-true (routes to human review)",
+        "needs_human_review": true,
+        "template_fired": "below-scale",
+        "updated_at": "2026-09-04T03:49:36Z"
+      },
       "capped": true,
       "default_branch": "master",
       "first_seen": "2026-08-14T02:52:16Z",
@@ -18932,6 +18956,13 @@
       "url": "https://github.com/Evokoa/pgContext"
     },
     {
+      "audit": {
+        "auto_filed": true,
+        "auto_filed_at": "2026-09-03T15:40:05Z",
+        "needs_human_review": false,
+        "template_fired": "below-scale",
+        "updated_at": "2026-09-03T18:02:09Z"
+      },
       "capped": true,
       "default_branch": "main",
       "first_seen": "2026-08-14T02:52:16Z",
@@ -18943,6 +18974,14 @@
       "url": "https://github.com/IBM/ibmdotcom-tutorials"
     },
     {
+      "audit": {
+        "auto_filed": false,
+        "auto_filed_at": "2026-09-03T15:40:07Z",
+        "human_review_reason": "auto-NO-GO refused: security_boundary=deterministic-true (routes to human review)",
+        "needs_human_review": true,
+        "template_fired": "below-scale",
+        "updated_at": "2026-09-04T03:49:36Z"
+      },
       "capped": true,
       "default_branch": "main",
       "first_seen": "2026-08-14T02:52:16Z",
@@ -18965,6 +19004,14 @@
       "url": "https://github.com/frappe/frappe-ui"
     },
     {
+      "audit": {
+        "auto_filed": false,
+        "auto_filed_at": "2026-09-03T15:40:09Z",
+        "human_review_reason": "auto-NO-GO refused: security_boundary=unknown with non-zero sites (routes to human review)",
+        "needs_human_review": true,
+        "template_fired": "below-scale",
+        "updated_at": "2026-09-04T03:49:36Z"
+      },
       "capped": true,
       "default_branch": "main",
       "first_seen": "2026-08-14T02:52:16Z",
@@ -18976,6 +19023,14 @@
       "url": "https://github.com/thomasxm/CrowdSentinels-AI-MCP"
     },
     {
+      "audit": {
+        "auto_filed": false,
+        "auto_filed_at": "2026-09-03T15:40:09Z",
+        "human_review_reason": "auto-NO-GO refused: security_boundary=deterministic-true (routes to human review)",
+        "needs_human_review": true,
+        "template_fired": "below-scale",
+        "updated_at": "2026-09-04T03:49:36Z"
+      },
       "capped": true,
       "default_branch": "main",
       "first_seen": "2026-08-14T02:52:16Z",
@@ -20355,6 +20410,14 @@
     },
     {
       "archived": false,
+      "audit": {
+        "auto_filed": false,
+        "auto_filed_at": "2026-09-03T15:40:03Z",
+        "human_review_reason": "auto-NO-GO refused: security_boundary=unknown with non-zero sites (routes to human review)",
+        "needs_human_review": true,
+        "template_fired": "below-scale",
+        "updated_at": "2026-09-04T03:49:36Z"
+      },
       "default_branch": "dev",
       "first_seen": "2026-08-18T13:32:37Z",
       "fork": false,
@@ -20370,6 +20433,14 @@
     },
     {
       "archived": false,
+      "audit": {
+        "auto_filed": false,
+        "auto_filed_at": "2026-09-03T15:40:04Z",
+        "human_review_reason": "auto-NO-GO refused: security_boundary=deterministic-true (routes to human review)",
+        "needs_human_review": true,
+        "template_fired": "below-scale",
+        "updated_at": "2026-09-04T03:49:36Z"
+      },
       "default_branch": "main",
       "first_seen": "2026-08-18T13:32:37Z",
       "fork": false,
@@ -20385,6 +20456,14 @@
     },
     {
       "archived": false,
+      "audit": {
+        "auto_filed": false,
+        "auto_filed_at": "2026-09-03T15:40:05Z",
+        "human_review_reason": "auto-NO-GO refused: security_boundary=unknown with non-zero sites (routes to human review)",
+        "needs_human_review": true,
+        "template_fired": "below-scale",
+        "updated_at": "2026-09-04T03:49:36Z"
+      },
       "capped": true,
       "default_branch": "main",
       "first_seen": "2026-08-18T13:32:37Z",
@@ -20401,6 +20480,14 @@
     },
     {
       "archived": false,
+      "audit": {
+        "auto_filed": false,
+        "auto_filed_at": "2026-09-03T15:40:06Z",
+        "human_review_reason": "auto-NO-GO refused: security_boundary=unknown with non-zero sites (routes to human review)",
+        "needs_human_review": true,
+        "template_fired": "below-scale",
+        "updated_at": "2026-09-04T03:49:36Z"
+      },
       "default_branch": "main",
       "first_seen": "2026-08-18T13:32:37Z",
       "fork": false,
@@ -20416,6 +20503,14 @@
     },
     {
       "archived": false,
+      "audit": {
+        "auto_filed": false,
+        "auto_filed_at": "2026-09-03T15:40:06Z",
+        "human_review_reason": "auto-NO-GO refused: security_boundary=unknown with non-zero sites (routes to human review)",
+        "needs_human_review": true,
+        "template_fired": "below-scale",
+        "updated_at": "2026-09-04T03:49:36Z"
+      },
       "default_branch": "master",
       "first_seen": "2026-08-18T13:32:37Z",
       "fork": false,
@@ -20502,6 +20597,13 @@
     },
     {
       "archived": false,
+      "audit": {
+        "auto_filed": false,
+        "auto_filed_at": "2026-09-03T15:40:07Z",
+        "human_review_reason": "clone_timeout on re-probe; prior empty-walk auto-file withdrawn",
+        "needs_human_review": false,
+        "updated_at": "2026-09-04T03:49:36Z"
+      },
       "default_branch": "main",
       "first_seen": "2026-08-19T13:33:52Z",
       "fork": false,
@@ -20517,6 +20619,14 @@
     },
     {
       "archived": false,
+      "audit": {
+        "auto_filed": false,
+        "auto_filed_at": "2026-09-03T15:40:07Z",
+        "human_review_reason": "auto-NO-GO refused: security_boundary=unknown with non-zero sites (routes to human review)",
+        "needs_human_review": true,
+        "template_fired": "below-scale",
+        "updated_at": "2026-09-04T03:49:36Z"
+      },
       "default_branch": "main",
       "first_seen": "2026-08-19T13:33:52Z",
       "fork": false,
@@ -20532,6 +20642,14 @@
     },
     {
       "archived": false,
+      "audit": {
+        "auto_filed": false,
+        "auto_filed_at": "2026-09-03T15:40:07Z",
+        "human_review_reason": "auto-NO-GO refused: security_boundary=unknown with non-zero sites (routes to human review)",
+        "needs_human_review": true,
+        "template_fired": "below-scale",
+        "updated_at": "2026-09-04T03:49:36Z"
+      },
       "default_branch": "main",
       "first_seen": "2026-08-19T13:33:52Z",
       "fork": false,
@@ -20547,6 +20665,14 @@
     },
     {
       "archived": false,
+      "audit": {
+        "auto_filed": false,
+        "auto_filed_at": "2026-09-03T15:40:08Z",
+        "human_review_reason": "auto-NO-GO refused: security_boundary=deterministic-true (routes to human review)",
+        "needs_human_review": true,
+        "template_fired": "below-scale",
+        "updated_at": "2026-09-04T03:49:36Z"
+      },
       "default_branch": "master",
       "first_seen": "2026-08-19T13:33:52Z",
       "fork": false,
@@ -20562,6 +20688,14 @@
     },
     {
       "archived": false,
+      "audit": {
+        "auto_filed": false,
+        "auto_filed_at": "2026-09-03T15:40:08Z",
+        "human_review_reason": "auto-NO-GO refused: security_boundary=unknown with non-zero sites (routes to human review)",
+        "needs_human_review": true,
+        "template_fired": "below-scale",
+        "updated_at": "2026-09-04T03:49:36Z"
+      },
       "default_branch": "main",
       "first_seen": "2026-08-19T13:33:52Z",
       "fork": false,
@@ -20761,6 +20895,14 @@
     },
     {
       "archived": false,
+      "audit": {
+        "auto_filed": false,
+        "auto_filed_at": "2026-09-03T15:40:08Z",
+        "human_review_reason": "auto-NO-GO refused: regex_sites=573 >= 200 (routes to human review)",
+        "needs_human_review": true,
+        "template_fired": "below-scale",
+        "updated_at": "2026-09-04T03:49:36Z"
+      },
       "capped": true,
       "default_branch": "main",
       "first_seen": "2026-08-21T13:29:08Z",
@@ -21948,6 +22090,14 @@
     },
     {
       "archived": false,
+      "audit": {
+        "auto_filed": false,
+        "auto_filed_at": "2026-09-03T15:40:06Z",
+        "human_review_reason": "auto-NO-GO refused: security_boundary=deterministic-true (routes to human review)",
+        "needs_human_review": true,
+        "template_fired": "below-scale",
+        "updated_at": "2026-09-04T03:49:36Z"
+      },
       "capped": true,
       "default_branch": "main",
       "first_seen": "2026-08-28T22:18:02Z",
@@ -21964,6 +22114,14 @@
     },
     {
       "archived": false,
+      "audit": {
+        "auto_filed": false,
+        "auto_filed_at": "2026-09-03T15:40:07Z",
+        "human_review_reason": "auto-NO-GO refused: security_boundary=deterministic-true (routes to human review)",
+        "needs_human_review": true,
+        "template_fired": "below-scale",
+        "updated_at": "2026-09-04T03:49:36Z"
+      },
       "default_branch": "main",
       "first_seen": "2026-08-28T22:18:02Z",
       "fork": false,
