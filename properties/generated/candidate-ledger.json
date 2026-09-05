@@ -18961,6 +18961,12 @@
         "auto_filed_at": "2026-09-03T15:40:05Z",
         "needs_human_review": false,
         "template_fired": "below-scale",
+        "transitions": [
+          {
+            "reason": "sync:ibm-ibmdotcom-tutorials_gate_decision",
+            "to": "gated:no-go"
+          }
+        ],
         "updated_at": "2026-09-03T18:02:09Z"
       },
       "capped": true,
@@ -18970,7 +18976,7 @@
       "pushed_date": "2026-06-25",
       "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
       "stars": 257,
-      "status": "mined",
+      "status": "gated:no-go",
       "url": "https://github.com/IBM/ibmdotcom-tutorials"
     },
     {
@@ -23160,13 +23166,168 @@
       "stars": 196,
       "status": "mined",
       "url": "https://github.com/sjkim1127/Reversecore_MCP"
+    },
+    {
+      "archived": false,
+      "default_branch": "main",
+      "first_seen": "2026-09-05T15:34:30Z",
+      "fork": false,
+      "language": "Makefile",
+      "pin": "f3b301810caa4c180ff2a0c92cc3770187937795",
+      "pin_probed": "f3b301810caa4c180ff2a0c92cc3770187937795",
+      "pushed_date": "2026-08-22",
+      "size": 291807,
+      "source_query": "filename:secretlintrc.json OR filename:.secretlintrc",
+      "stars": 117,
+      "status": "mined",
+      "url": "https://github.com/practicalli/clojure"
+    },
+    {
+      "archived": false,
+      "capped": true,
+      "default_branch": "main",
+      "first_seen": "2026-09-05T15:34:30Z",
+      "fork": false,
+      "language": "Python",
+      "pin": "607ca7a0bb92e261120bcab8d9f97f28b3130ffc",
+      "pin_probed": "607ca7a0bb92e261120bcab8d9f97f28b3130ffc",
+      "pushed_date": "2026-08-20",
+      "size": 318656,
+      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
+      "stars": 2362,
+      "status": "mined",
+      "url": "https://github.com/NVlabs/ProtoMotions"
+    },
+    {
+      "archived": false,
+      "capped": true,
+      "default_branch": "main",
+      "first_seen": "2026-09-05T15:34:30Z",
+      "fork": false,
+      "language": "TypeScript",
+      "pin": "b5112bd90272e04763a61beca6eb92ef08b1dd9c",
+      "pin_probed": "b5112bd90272e04763a61beca6eb92ef08b1dd9c",
+      "pushed_date": "2026-09-02",
+      "size": 186038,
+      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
+      "stars": 2231,
+      "status": "mined",
+      "url": "https://github.com/flyfish-dev/file-viewer"
+    },
+    {
+      "archived": false,
+      "capped": true,
+      "default_branch": "main",
+      "first_seen": "2026-09-05T15:34:30Z",
+      "fork": false,
+      "language": "TypeScript",
+      "pin": "d53ba9d5b0f366e0df89ffce4a1c56b95fe1bacf",
+      "pin_probed": "d53ba9d5b0f366e0df89ffce4a1c56b95fe1bacf",
+      "pushed_date": "2026-09-03",
+      "size": 32852,
+      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
+      "stars": 10794,
+      "status": "mined",
+      "url": "https://github.com/getagentseal/codeburn"
+    },
+    {
+      "archived": false,
+      "capped": true,
+      "default_branch": "main",
+      "first_seen": "2026-09-05T15:34:30Z",
+      "fork": false,
+      "language": "Python",
+      "pin": "d5c05880febcf7c081c6f5a035e5d28e8db2e036",
+      "pin_probed": "d5c05880febcf7c081c6f5a035e5d28e8db2e036",
+      "pushed_date": "2026-08-31",
+      "size": 16162,
+      "source_query": "filename:gitleaks.toml OR filename:gitleaks.yml",
+      "stars": 1436,
+      "status": "mined",
+      "url": "https://github.com/misiektoja/instagram_monitor"
+    },
+    {
+      "archived": false,
+      "capped": true,
+      "default_branch": "master",
+      "first_seen": "2026-09-05T15:34:30Z",
+      "fork": false,
+      "language": "Python",
+      "pin": "36c7e2b87bc2e60ee230348e857e6c9d9570a46e",
+      "pin_probed": "36c7e2b87bc2e60ee230348e857e6c9d9570a46e",
+      "pushed_date": "2026-08-16",
+      "size": 440,
+      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
+      "stars": 2635,
+      "status": "mined",
+      "url": "https://github.com/wassim249/fastapi-langgraph-agent-production-ready-template"
+    },
+    {
+      "archived": false,
+      "capped": true,
+      "default_branch": "master",
+      "first_seen": "2026-09-05T15:34:30Z",
+      "fork": false,
+      "language": "Python",
+      "pin": "b115d85ec103b076d660de9c4b2aa3c00026b399",
+      "pin_probed": "b115d85ec103b076d660de9c4b2aa3c00026b399",
+      "pushed_date": "2026-09-03",
+      "size": 463215,
+      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
+      "stars": 884,
+      "status": "mined",
+      "url": "https://github.com/stratosphereips/StratosphereLinuxIPS"
+    },
+    {
+      "archived": false,
+      "default_branch": "staging",
+      "first_seen": "2026-09-05T15:34:30Z",
+      "fork": false,
+      "language": "TypeScript",
+      "pin": "609ce1e3416341eca71b5bd41ae03bcf35f577ba",
+      "pin_probed": "609ce1e3416341eca71b5bd41ae03bcf35f577ba",
+      "pushed_date": "2026-09-03",
+      "size": 1487443,
+      "source_query": "filename:rules.yml path:.semgrep OR path:semgrep",
+      "stars": 110,
+      "status": "mined",
+      "url": "https://github.com/ustaxcourt/ef-cms"
+    },
+    {
+      "archived": false,
+      "capped": true,
+      "default_branch": "main",
+      "first_seen": "2026-09-05T15:34:30Z",
+      "fork": false,
+      "language": "Python",
+      "pin": "014d7abe7cc8fb1820ffe1e3b26df4ac30d23fd9",
+      "pin_probed": "014d7abe7cc8fb1820ffe1e3b26df4ac30d23fd9",
+      "pushed_date": "2026-08-28",
+      "size": 7648,
+      "source_query": "filename:.secrets.baseline OR filename:detect-secrets",
+      "stars": 396,
+      "status": "mined",
+      "url": "https://github.com/aws-solutions-library-samples/guidance-for-claude-code-with-amazon-bedrock"
+    },
+    {
+      "archived": false,
+      "default_branch": "main",
+      "first_seen": "2026-09-05T15:34:30Z",
+      "fork": false,
+      "language": "TypeScript",
+      "pin": "7e72d20d987f651e31328c3ca3c449169cf41ba4",
+      "pin_probed": "7e72d20d987f651e31328c3ca3c449169cf41ba4",
+      "pushed_date": "2026-08-31",
+      "size": 5028,
+      "source_query": "filename:secretlintrc.json OR filename:.secretlintrc",
+      "stars": 13,
+      "status": "mined",
+      "url": "https://github.com/anolilab/neore"
     }
   ],
   "run": {
     "capped": true,
-    "search_errors": [
-      "enrich rate-limited: shynt-04/PRJ2_MalwareDetection: {\n\t\"message\": \"API rate limit exceeded for user ID 187806603. If you reach out to GitHub Support for help, please include the request ID 7038:304822:2B4E812:8A59451:6A99A52F and timestamp 2026-09-03 1"
-    ]
+    "search_errors": []
   },
   "schema_version": "1"
 }
