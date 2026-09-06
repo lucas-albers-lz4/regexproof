@@ -42,20 +42,21 @@
     "no-go": {
       "reasons": {
         "backref": 25,
-        "composite-pattern": 261,
+        "composite-pattern": 283,
         "inline-flag": 4,
-        "lookaround": 49,
+        "lookaround": 50,
         "m-flag": 25,
         "multi-match": 32,
         "negated-shorthand": 16,
         "parse-error:PatternError": 2,
-        "pattern-too-long": 8,
-        "per-alternative-anchor": 3,
+        "pattern-too-long": 9,
+        "per-alternative-anchor": 4,
+        "stateful": 45,
         "unicode-not-literal": 18,
         "word-boundary": 22
       },
-      "rows": 465,
-      "sites_weighted": 465.0
+      "rows": 535,
+      "sites_weighted": 535.0
     },
     "triage-trial": {
       "reasons": {
@@ -89,8 +90,8 @@
   },
   "provenance": {
     "gate_decision_count": 868,
-    "input_file_count": 86,
-    "triage_inputs_hash": "466a693984fe79c2"
+    "input_file_count": 88,
+    "triage_inputs_hash": "a0f9c9b8d9d33c10"
   },
   "rows": [
     {
@@ -112,36 +113,38 @@
     {
       "per_corpus": {
         "go": 14169.0,
+        "no-go": 45.0,
         "triage-trial": 1544.0
       },
       "per_corpus_raw": {
         "go": 4723,
+        "no-go": 45,
         "triage-trial": 772
       },
       "per_dialect": {
-        "ecma": 5495
+        "ecma": 5540
       },
-      "sites_unlocked": 5495,
-      "sites_weighted": 15713.0,
+      "sites_unlocked": 5540,
+      "sites_weighted": 15758.0,
       "unencodable_reason": "stateful"
     },
     {
       "per_corpus": {
         "go": 12111.0,
-        "no-go": 261.0,
+        "no-go": 283.0,
         "triage-trial": 156.0
       },
       "per_corpus_raw": {
         "go": 4037,
-        "no-go": 261,
+        "no-go": 283,
         "triage-trial": 78
       },
       "per_dialect": {
-        "ecma": 289,
+        "ecma": 311,
         "py_re": 4087
       },
-      "sites_unlocked": 4376,
-      "sites_weighted": 12528.0,
+      "sites_unlocked": 4398,
+      "sites_weighted": 12550.0,
       "unencodable_reason": "composite-pattern"
     },
     {
@@ -203,20 +206,20 @@
     {
       "per_corpus": {
         "go": 2253.0,
-        "no-go": 49.0,
+        "no-go": 50.0,
         "triage-trial": 46.0
       },
       "per_corpus_raw": {
         "go": 751,
-        "no-go": 49,
+        "no-go": 50,
         "triage-trial": 23
       },
       "per_dialect": {
-        "ecma": 142,
+        "ecma": 143,
         "py_re": 681
       },
-      "sites_unlocked": 823,
-      "sites_weighted": 2348.0,
+      "sites_unlocked": 824,
+      "sites_weighted": 2349.0,
       "unencodable_reason": "lookaround"
     },
     {
@@ -238,23 +241,23 @@
     {
       "per_corpus": {
         "go": 1797.0,
-        "no-go": 3.0,
+        "no-go": 4.0,
         "triage-trial": 92.0
       },
       "per_corpus_raw": {
         "go": 599,
-        "no-go": 3,
+        "no-go": 4,
         "triage-trial": 46
       },
       "per_dialect": {
-        "ecma": 273,
+        "ecma": 274,
         "posix-shell": 271,
         "py_re": 99,
         "re2": 3,
         "yara": 2
       },
-      "sites_unlocked": 648,
-      "sites_weighted": 1892.0,
+      "sites_unlocked": 649,
+      "sites_weighted": 1893.0,
       "unencodable_reason": "per-alternative-anchor"
     },
     {
@@ -370,24 +373,24 @@
     {
       "per_corpus": {
         "go": 894.0,
-        "no-go": 8.0,
+        "no-go": 9.0,
         "triage-trial": 24.0
       },
       "per_corpus_raw": {
         "go": 298,
-        "no-go": 8,
+        "no-go": 9,
         "triage-trial": 12
       },
       "per_dialect": {
-        "ecma": 20,
+        "ecma": 21,
         "pcre": 72,
         "posix-shell": 4,
         "py_re": 192,
         "re2": 4,
         "yara": 26
       },
-      "sites_unlocked": 318,
-      "sites_weighted": 926.0,
+      "sites_unlocked": 319,
+      "sites_weighted": 927.0,
       "unencodable_reason": "pattern-too-long"
     },
     {
@@ -674,8 +677,8 @@
     }
   ],
   "schema_version": "1",
-  "total_rows": 53112,
-  "total_weighted": 156407.0,
+  "total_rows": 53182,
+  "total_weighted": 156477.0,
   "unknown_reason_rows": 8,
   "weights": {
     "go": 3,
