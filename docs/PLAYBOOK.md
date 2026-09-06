@@ -16,7 +16,7 @@ fallbacks, and LuCI (JS) log-classifier regexes.
 2. **Ask the critical question**: "Is there ANY input that, after sanitation,
    violates the boundary?"
    - `unsat` → property **proven**: no string in the declared domain violates it
-   - `sat` → **counterexample** found: print the model — it is the bug witness
+   - `sat` → **counterexample** found: print the model — it is a candidate witness until the real implementation reproduces it
    - `unknown` → solver timeout: **hard failure**, never a pass
 3. Start small: one critical function at a time. Be precise. Expect trade-offs.
 

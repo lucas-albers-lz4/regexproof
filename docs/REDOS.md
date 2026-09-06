@@ -50,7 +50,8 @@ Nonbacktracking Matchers").
    Scala APIs, plus ESLint plugin.
 3. **Exploit confirmation:** `regexploit` or `ReScue`-style attack strings;
    make sure that the exploit is real with a timing test against the real engine on the real platform
-   (device fidelity: BusyBox/GNU, Node/V8 versions matter).
+   (device fidelity: BusyBox/GNU, Node/V8 versions matter). Run the timing test in a bounded
+   isolated process with wall-clock, CPU, and memory limits. Never run the timing test on production.
 4. **Semantics + language properties:** this repo's Z3 workflow.
 
 ## Phase 4 runner (this repo)
