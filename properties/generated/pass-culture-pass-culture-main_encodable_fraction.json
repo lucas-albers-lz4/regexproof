@@ -1,0 +1,42 @@
+{
+  "budget": {
+    "max_disk_mb": 2000,
+    "max_mem_mb": 2048,
+    "max_patterns": 5000,
+    "max_wall_s": 900,
+    "redos_wall_s": 180
+  },
+  "budget_breaches": null,
+  "commit": "14917fd0f8753933083fd379a7f9a0cc90bcc473",
+  "compiler_fingerprint": "35ea1f238a9e",
+  "complete_run": true,
+  "corpus_pin": "14917fd0f8753933083fd379a7f9a0cc90bcc473",
+  "decision": "go",
+  "decision_rule": "go iff encodable/sample_size >= 0.3",
+  "dialect": "ecma",
+  "encodable": 1526,
+  "engine_versions": {
+    "python": "3.13.5",
+    "z3": "5.0.0"
+  },
+  "extractor_schema_version": "2",
+  "fraction": 0.9604,
+  "go_no_go_threshold": 0.3,
+  "id_formula": "v2-domain-optional-ascii-default",
+  "inventory_path": "properties/generated/pass-culture-pass-culture-main-inventory.ndjson",
+  "path": "batch/corpora/pass-culture-pass-culture-main/rules",
+  "pilot": "pass-culture-pass-culture-main",
+  "reasons": {
+    "composite-pattern": 21,
+    "lookaround": 1,
+    "ok": 1526,
+    "pattern-too-long": 1,
+    "per-alternative-anchor": 1,
+    "stateful": 39
+  },
+  "sample_size": 1589,
+  "schema_version": "1",
+  "scope": "full_corpus",
+  "unclassified_parse_errors": 0,
+  "wall_s": 35.471
+}

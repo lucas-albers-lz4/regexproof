@@ -481,6 +481,13 @@
         "max_wall_s": 600,
         "redos_wall_s": 120
     },
+    "pass-culture-pass-culture-main": {
+        "max_disk_mb": 2000,
+        "max_mem_mb": 2048,
+        "max_patterns": 5000,
+        "max_wall_s": 900,
+        "redos_wall_s": 180
+    },
     "patrolaroid": {
         "max_disk_mb": 500,
         "max_mem_mb": 2048,
