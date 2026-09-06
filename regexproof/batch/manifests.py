@@ -4677,6 +4677,38 @@ CORPUS_MANIFESTS: dict[str, CorpusManifest] = {
         "commit": "50ce4889c75d82b4d7ad5f54a0fdf5142b06c710",
         "budget": budget_as_dict(BUDGET_LUCI_DISK),
     },
+    "semgrep-semgrep": {
+        "corpus_type": "rule_corpus",
+        # Smith #386 (triage-trial, escape hatch: security tool below scale).
+        # Materialize with first-party allowlist (tests/perf + vendored
+        # bundles like swagger-ui-bundle.js / three.js excluded):
+        # python scripts/materialize-corpus.py --gate \
+        #   properties/generated/semgrep-semgrep_gate_decision.json \
+        #   --allowlist-file /tmp/semgrep-allowlist.txt --link-name rules
+        # then: mv batch/corpora/semgrep/rules batch/corpora/semgrep-semgrep/rules
+        "path": ROOT / "batch" / "corpora" / "semgrep-semgrep" / "rules",
+        "files": [
+            "tests/patterns/js/dots_regexp.js",
+            "tests/patterns/js/infer_const_regexp.js",
+            "tests/patterns/js/metavar_regexp.js",
+            "tests/patterns/js/misc_regexp_modifier.js",
+            "tests/patterns/js/regexp.js",
+            "tests/patterns/ts/misc_deep_metavar.ts",
+            "tests/rules/misc_deep_metavar.ts",
+            "tests/rules/redos_bracket_colon.js",
+            "tests/rules/taint_assign_record.ts",
+            "tests/rules/taint_assign_record1.ts",
+        ],
+        "glob": "**/*.{js,ts}",
+        "dialect": "ecma",
+        "extractor": "js_precise_dir",
+        "repo": "semgrep/semgrep",
+        "security_tool": True,
+        "lift_inline": False,
+        "corpus_pin": "cc97b5c47dacabe76be343ef981204b8c1f60e07",
+        "commit": "cc97b5c47dacabe76be343ef981204b8c1f60e07",
+        "budget": budget_as_dict(BUDGET_LUCI_DISK),
+    },
     "ajohnsonnow-vet-rate-org": {
         "corpus_type": "rule_corpus",
         # Smith #408. Materialize with allowlist (tests/fixtures/i18n excluded):
