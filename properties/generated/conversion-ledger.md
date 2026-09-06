@@ -14,9 +14,9 @@ Heap's-law / singleton novelty saturates **compiler coverage**. This artifact sa
 | planned inventory stubs | 330 |
 | classification rows (usage/intent/triage kinds) | 12,962 |
 | mutation guards (hygiene) | 644 |
-| properties asked (non-planned product kinds) | 32 |
-| properties asked distinct `(site, question_id)` | 32 |
-| properties UNSAT (holds in declared domain) | 25 |
+| properties asked (non-planned product kinds) | 34 |
+| properties asked distinct `(site, question_id)` | 34 |
+| properties UNSAT (holds in declared domain) | 27 |
 | properties SAT | 6 |
 | properties SAT distinct `(site, question_id)` | 6 |
 | SAT unique sites | 4 |
@@ -37,8 +37,8 @@ Heap's-law / singleton novelty saturates **compiler coverage**. This artifact sa
 | rate | value |
 |---|---|
 | encodable / extracted | 0.6401 |
-| properties asked / encodable | 0.0003 |
-| SAT / properties asked | 0.1875 |
+| properties asked / encodable | 0.0004 |
+| SAT / properties asked | 0.1765 |
 | ground-truthed / SAT | 1.0000 |
 | pipeline accepted (incl. own-code) / SAT GT | 0.1667 |
 | pipeline accepted / extracted | 7.00e-06 |
@@ -48,7 +48,7 @@ Heap's-law / singleton novelty saturates **compiler coverage**. This artifact sa
 
 ## Security-tool split (scanner product kinds)
 
-Asked in tools: 3. Asked elsewhere: 29. SAT in tools: 2. SAT elsewhere: 4.
+Asked in tools: 3. Asked elsewhere: 31. SAT in tools: 2. SAT elsewhere: 4.
 
 ## Upstream (curated)
 
@@ -66,6 +66,7 @@ Source: [`docs/conversion-upstream.jsonl`](../../docs/conversion-upstream.jsonl)
 | claude-code-plugins | false | 3 | 3 | 0 | 0 | 0 |
 | coreruleset | true | 3 | 0 | 2 | 2 | 0 |
 | mycelium | false | 3 | 3 | 0 | 0 | 0 |
+| dogfood_shell | false | 2 | 2 | 0 | 0 | 0 |
 
 ## Per-wave conversion hops (#554)
 
@@ -78,6 +79,7 @@ asked → SAT → GT → filed → accepted per `(wave_id, idiom_bucket)`.
 |---|---|---|---|---|---|---|---|
 | aidevops_w1 | shell-hook-guards | 5 | 0 | 0 | **0** | 0 | **n/a** |
 | claude-code-plugins_w1 | plugin-hook-guards | 3 | 0 | 0 | **0** | 0 | **n/a** |
+| dogfood_shell_w1 | normalize-fixpoint | 2 | 0 | 0 | **0** | 0 | **n/a** |
 | mycelium_w1 | control-failclosed | 3 | 0 | 0 | **0** | 0 | **n/a** |
 | openwrt_luci_w1 | form-validator-alphabets | 4 | 1 | 1 | **0** | 0 | **0.0000** |
 | openwrt_packages_w1 | validator-charsets-and-captures | 5 | 1 | 1 | **0** | 0 | **0.0000** |
@@ -108,6 +110,7 @@ Share of asked properties per shape, per wave (conversion rows).
 |---|---|---|---|
 | aidevops_w1 | shell-hook-guards | 5 | shape 1: 0.6000, shape 3: 0.4000 |
 | claude-code-plugins_w1 | plugin-hook-guards | 3 | shape 1: 1.0000 |
+| dogfood_shell_w1 | normalize-fixpoint | 2 | shape 3: 1.0000 |
 | mycelium_w1 | control-failclosed | 3 | shape 1: 1.0000 |
 | openwrt_luci_w1 | form-validator-alphabets | 4 | shape 1: 0.7500, shape 3: 0.2500 |
 | openwrt_packages_w1 | validator-charsets-and-captures | 5 | shape 1: 0.6000, shape 3: 0.4000 |

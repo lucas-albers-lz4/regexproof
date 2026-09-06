@@ -54,6 +54,8 @@ SHAPE = {
     "AI-claude-plugins-cli-flag-no-semicolon": 1,
     "AI-claude-plugins-skill-ref-no-semicolon": 1,
     "AI-claude-plugins-git-clean-e-bundle-no-semicolon": 1,
+    "DF-dogfood-shell-normalize-fixpoint": 3,
+    "DF-dogfood-shell-normalize-idempotent": 3,
 }
 
 
