@@ -127,7 +127,7 @@ def test_build_draft_flagged_not_schema_valid():
     assert draft["pin_probed"] == "abc123"
     assert draft["pin_mined"] is None
     schema = gate_decision_schema()
-    with pytest.raises(Exception):
+    with pytest.raises(__import__("jsonschema").ValidationError):
         __import__("jsonschema").validate(instance=draft, schema=schema)
 
 

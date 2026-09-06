@@ -508,7 +508,7 @@ def main(argv: list[str] | None = None) -> int:
                 decision_date=(clock().date() if clock else None),
             )
         except AuthorError as exc:
-            raise SystemExit(f"bulk-review: authoring refused: {exc}")
+            raise SystemExit(f"bulk-review: authoring refused: {exc}") from exc
     else:
         try:
             out = author_auto(
@@ -517,7 +517,7 @@ def main(argv: list[str] | None = None) -> int:
                 generated_dir=GEN,
             )
         except AuthorError as exc:
-            raise SystemExit(f"bulk-review: auto authoring refused: {exc}")
+            raise SystemExit(f"bulk-review: auto authoring refused: {exc}") from exc
 
     # Ledger prechecks — READ-ONLY, before any artifact is written
     # (CodeRabbit #573: a filing decision that fails after persisting the

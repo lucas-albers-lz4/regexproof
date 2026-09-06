@@ -70,16 +70,18 @@ def _structure(pattern: str, flags: str = "") -> dict:
         raise RegistrationError(
             "node is required for the D7 registration gate "
             "(helpers/ecma/parse.mjs) but is not on PATH."
-        )
+        ) from None
     except subprocess.TimeoutExpired:
-        raise RegistrationError(f"registration parser timed out on {pattern!r}")
+        raise RegistrationError(
+            f"registration parser timed out on {pattern!r}"
+        ) from None
     try:
         d = json.loads(p.stdout)
     except json.JSONDecodeError:
         raise RegistrationError(
             f"registration parser produced no JSON for {pattern!r}: "
             f"{p.stderr.strip()[:120]}"
-        )
+        ) from None
     if not d.get("ok"):
         raise RegistrationError(
             f"pattern {pattern!r} is not encodable: "

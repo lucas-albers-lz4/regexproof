@@ -39,7 +39,7 @@ def _finite_percent(value: str) -> float:
     try:
         pct = float(value)
     except ValueError:
-        raise argparse.ArgumentTypeError(f"not a number: {value!r}")
+        raise argparse.ArgumentTypeError(f"not a number: {value!r}") from None
     if not _math.isfinite(pct) or not (0 < pct <= 100.0):
         raise argparse.ArgumentTypeError(
             f"tolerance must be a finite value in (0, 100]: {value!r}")

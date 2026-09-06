@@ -255,7 +255,7 @@ def _write(reg: dict[str, Any], path: pathlib.Path | None = None) -> None:
             raise SystemExit(
                 f"batch_state: cannot rotate verified backup for {p.name} — "
                 "state install aborted (fail closed)"
-            )
+            ) from None
     os.replace(tmp, p)
     # fsync the parent directory so the primary install is durable across a
     # crash (CodeRabbit #570 heavy-lift).

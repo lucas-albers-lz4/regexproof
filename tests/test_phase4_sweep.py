@@ -134,13 +134,13 @@ def test_every_combination_lands_in_exactly_one_bucket():
         (True, False),              # d16
         (True, False),              # ok
     ))
-    for (nd, abst, abs, ccv, d16, ok) in combos:
+    for (nd, abst, cc_absent, ccv, d16, ok) in combos:
         r = _res(noodler_verdict=nd,
                  not_proven=(nd in ("unknown", "ABSTAIN-TIMEOUT")),
-                 cross_check_abstained=abst, cross_check_absent=abs,
+                 cross_check_abstained=abst, cross_check_absent=cc_absent,
                  cross_check_verdict=ccv, d16_revalidated=d16, ok=ok)
         c = classify(r)
-        assert c.bucket in BUCKETS, (nd, abst, abs, ccv, d16, ok)
+        assert c.bucket in BUCKETS, (nd, abst, cc_absent, ccv, d16, ok)
         # escalated-unconfirmed is never folded into proven or still-unknown
         if c.bucket == BUCKET_ESCALATED:
             assert r["noodler_verdict"] not in ("unknown", "ABSTAIN-TIMEOUT", "ABSENT")
