@@ -52,7 +52,7 @@ def test_d15_27_triple_table():
                     expected[key] = ("wrong-verdict-event" if r == "sat"
                                      else "disagreement")
     for (p, c, r), want in expected.items():
-        res = resolve(p, c, reproduce=(lambda: r))
+        res = resolve(p, c, reproduce=(lambda r=r: r))
         assert res["kind"] == want, (p, c, r, res)
         assert res["disagreement"] == (want == "disagreement"), (p, c, r)
         assert res["wrong_verdict_event"] == (want == "wrong-verdict-event"), \

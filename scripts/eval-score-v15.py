@@ -185,7 +185,7 @@ def stratified_split(rows: list[dict], seed: int) -> tuple[list[dict], list[dict
         by_status.setdefault(r["status"], []).append(r)
     train: list[dict] = []
     test: list[dict] = []
-    for status, group in sorted(by_status.items()):
+    for _status, group in sorted(by_status.items()):
         rng.shuffle(group)
         half = len(group) // 2
         train.extend(group[:half])

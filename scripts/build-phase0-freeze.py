@@ -56,7 +56,7 @@ def load_decision_population(gen: Path | None = None) -> list[dict]:
             raise SystemExit(
                 f"error: {f.name}: unreadable/invalid decision file — the "
                 f"frozen population must not silently shrink: {exc}"
-            )
+            ) from exc
         status = str(d.get("status") or d.get("decision") or "")
         if not status:
             raise SystemExit(

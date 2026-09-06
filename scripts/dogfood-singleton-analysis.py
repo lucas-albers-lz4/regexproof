@@ -278,7 +278,7 @@ def _ndjson_record(r: dict) -> dict:
 def write_ndjson(by_repo: dict[str, list[dict]], out_path: Path) -> int:
     n = 0
     with out_path.open("w", encoding="utf-8") as fh:
-        for name, recs in by_repo.items():
+        for recs in by_repo.values():
             for r in recs:
                 fh.write(json.dumps(_ndjson_record(r), ensure_ascii=False) + "\n")
                 n += 1

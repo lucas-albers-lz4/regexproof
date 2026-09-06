@@ -797,7 +797,7 @@ def test_query_budget_counts_queries_not_pages():
     }
     empty_items = {"items": []}
     responses = []
-    for q in range(3):
+    for _ in range(3):
         responses.append(FakeResp(200, page_items))           # search p1
         responses.append(FakeResp(200, {"default_branch": "main",
                                         "stargazers_count": 5,

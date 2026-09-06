@@ -90,7 +90,7 @@ def test_eval_fails_closed_on_freeze_mismatch(tmp_path: Path):
     spec.loader.exec_module(mod)
     # Isolate the test's decision file in tmp_path — never write into the
     # real generated dir.
-    setattr(mod, "GEN", tmp_path)
+    mod.GEN = tmp_path
     (tmp_path / "_zz_mut_gate_decision.json").write_text(
         json.dumps({"candidate_url": "https://x/y", "decision": "go"})
         + "\n",
@@ -115,7 +115,7 @@ def test_join_pin_precedence_matches_tree_builder(tmp_path: Path):
     spec.loader.exec_module(mod)
 
     # Isolate all writes in tmp_path (mirrors the real GEN layout).
-    setattr(mod, "GEN", tmp_path)
+    mod.GEN = tmp_path
     (tmp_path / "candidate-ledger.json").write_text(
         json.dumps({"candidates": []}), encoding="utf-8"
     )

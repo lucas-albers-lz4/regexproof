@@ -156,7 +156,7 @@ def load_curated_index(
                     raise SystemExit(
                         f"error: {path.name}:{row.get('id')}: disposition_date "
                         f"{d!r} is not an ISO date or 'unknown_date'"
-                    )
+                    ) from None
         else:
             # Forward filing rows: filed_at / resolved_at are required (the
             # design makes them optional-with-reason only for backfilled
@@ -178,7 +178,7 @@ def load_curated_index(
                         raise SystemExit(
                             f"error: {path.name}:{row.get('id')}: {label} "
                             f"{val!r} is not an ISO date"
-                        )
+                        ) from None
         # Wave B (#556): approval_missing is a REAL hop with a defined escape
         # — either an approval signal (approval_present + ref) or an explicit
         # wont_file transition (escape=wont_file + reason). A bare

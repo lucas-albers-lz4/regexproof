@@ -42,6 +42,11 @@ target-version = "py39"
 extend-exclude = [
     "batch/corpora",
     "tests/fixtures",
+    # Working wave clones (sibling-checkout model, git-ignored): stale
+    # side branches would otherwise spam local `ruff check .` runs with
+    # findings fixed long ago on main. Absent from CI checkouts — this
+    # changes local signal only, never CI.
+    "wave/",
 ]
 
 [tool.ruff.lint]
@@ -54,9 +59,20 @@ extend-exclude = [
 #       load-bearing in solver/generated/corpus code)
 #   F   pyflakes — undefined names, unused imports/vars (the real-bug catcher)
 #   W   warnings
+#   B   flake8-bugbear — B904 explicit raise-from (traceback clarity in
+#       fail-closed paths), B007 unused loop vars, B023 late-binding
+#       lambdas, B017 blind-except asserts, B010 setattr-constants
+#       (all folded 2026-09-06; B023/B010 were latent-trap class)
+#   A   flake8-builtins — shadowing builtins (A001 `abs` folded 2026-09-06;
+#       A004 concurrent.futures.TimeoutError is noqa'd at the import: the
+#       class is distinct from builtin TimeoutError below 3.11 and this
+#       repo still targets py39)
 #   RUF ruff-specific (RUF002/003 unicode ×/∨ excluded — deliberate math
 #       notation in the Z3 docs)
 # Deliberately NOT selected (by-design noise / low value for this funnel):
+#   N   pep8-naming — evaluated 2026-09-06, rejected: fires on deliberate
+#       names (NoodlerAbsent, BudgetBreached, Unencodable) and test names
+#       where the capital is load-bearing (test_fgrep_and_F_are_literal)
 #   PLC  — incl. PLC0415 function-level lazy imports, a deliberate pattern
 #          here (lazy deps, avoid import cycles)
 #   SIM / PTH / PIE — style simplifications (Yoda, pathlib pedantry, range start)
@@ -64,7 +80,7 @@ extend-exclude = [
 #   UP   — pyupgrade modernization (unneeded for the py39 target)
 #   EXE  — EXE001 non-executable shebang (helpers are run via `python`, not exec)
 #   ANN*, D*, FBT*, PLR*, Q*, T201, COM* — as before (by-design noise)
-select = ["E", "F", "W", "RUF"]
+select = ["E", "F", "W", "B", "A", "RUF"]
 ignore = ["E501", "RUF002", "RUF003"]
 
 [tool.ruff.lint.per-file-ignores]

@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import time
-from concurrent.futures import ProcessPoolExecutor, TimeoutError, as_completed
+from concurrent.futures import ProcessPoolExecutor, TimeoutError, as_completed  # noqa: A004 — concurrent.futures.TimeoutError is a distinct class below 3.11 and this repo targets py39; builtin TimeoutError would not catch it there
 import multiprocessing
 import os
 from pathlib import Path
@@ -253,7 +253,7 @@ def compile_records(
             breached = True
             raise BudgetBreached(
                 corpus_slug, "max_wall_s", max_wall, time.monotonic() - t0
-            )
+            ) from None
         finally:
             if breached:
                 # Re-gate 3: shutdown(wait=False) leaves RUNNING workers

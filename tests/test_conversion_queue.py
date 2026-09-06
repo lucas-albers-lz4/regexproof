@@ -487,12 +487,12 @@ def test_stub_schema_rejects_contract_fields():
 
     bad = dict(ok)
     bad["guarantee"] = "smuggled contract semantics"  # additionalProperties
-    with pytest.raises(Exception):
+    with pytest.raises(jsonschema.ValidationError):
         jsonschema.validate(bad, schema)
 
     bad2 = dict(ok)
     bad2["provenance"] = "human"  # const violation
-    with pytest.raises(Exception):
+    with pytest.raises(jsonschema.ValidationError):
         jsonschema.validate(bad2, schema)
 
 

@@ -33,7 +33,7 @@ def measure_coreruleset_sample(
         if ln.strip() and not ln.strip().startswith("#")
     ]
     encodable = 0
-    for i, pat in enumerate(lines):
+    for pat in lines:
         cr = compile_pattern(pat, "", "pcre", "search")
         if cr.encodable:
             encodable += 1

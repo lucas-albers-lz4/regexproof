@@ -117,7 +117,7 @@ def _fuzz_mirror(n: int = N_RANDOM, seed: int = SEED) -> int:
     alphabet = (
         string.ascii_letters + string.digits + " \t:.-_/" + "\r\x0c\x0b"
     )
-    for i in range(n):
+    for _ in range(n):
         length = rng.randint(0, 12)
         stream = "".join(rng.choice(alphabet) for _ in range(length))
         want = normalize_mirror(stream)
