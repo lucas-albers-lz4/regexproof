@@ -77,6 +77,16 @@
       "sat_unique_sites": 0,
       "scanner_rows": 269,
       "security_tool": false
+    },
+    {
+      "corpus": "dogfood_shell",
+      "properties_asked": 2,
+      "properties_sat": 0,
+      "properties_unsat": 2,
+      "sat_ground_truthed": 0,
+      "sat_unique_sites": 0,
+      "scanner_rows": 0,
+      "security_tool": false
     }
   ],
   "funnel": {
@@ -97,19 +107,19 @@
     "pr_dry_run_findings": 14580,
     "pr_dry_run_private_first": 1264,
     "pr_dry_runs": 85,
-    "properties_asked": 32,
-    "properties_asked_distinct": 32,
+    "properties_asked": 34,
+    "properties_asked_distinct": 34,
     "properties_asked_synthesized": 644,
     "properties_sat": 6,
     "properties_sat_distinct": 6,
     "properties_sat_synthesized": 28,
-    "properties_unsat": 25,
+    "properties_unsat": 27,
     "redos_rows": 0,
     "rule_diff_report_sat": 10,
     "rule_diff_report_sat_gt": 10,
     "sat_ground_truthed": 6,
     "sat_unique_sites": 4,
-    "scanner_ndjson_files": 90,
+    "scanner_ndjson_files": 91,
     "scanner_rows": 14580,
     "scanner_rule_diff_sat": 0,
     "sites_encodable": 94478,
@@ -172,6 +182,24 @@
         "shape_1": 1.0
       },
       "wave_id": "claude-code-plugins_w1"
+    },
+    {
+      "accepted": 0,
+      "corpora": [
+        "dogfood_shell"
+      ],
+      "filed": 0,
+      "idiom_bucket": "normalize-fixpoint",
+      "properties_asked": 2,
+      "properties_sat": 0,
+      "sat_ground_truthed": 0,
+      "shape_counts": {
+        "3": 2
+      },
+      "shape_mix": {
+        "shape_3": 1.0
+      },
+      "wave_id": "dogfood_shell_w1"
     },
     {
       "accepted": 0,
@@ -296,8 +324,8 @@
     "gt_per_sat": 1.0,
     "pipeline_accepted_per_extracted": 7e-06,
     "pipeline_accepted_per_gt": 0.166667,
-    "property_asked_per_encodable": 0.000339,
-    "sat_per_property_asked": 0.1875,
+    "property_asked_per_encodable": 0.00036,
+    "sat_per_property_asked": 0.176471,
     "yara_share_of_unencodable": 0.585403
   },
   "rule_diff_reports": {
@@ -326,7 +354,7 @@
   "schema_version": "1",
   "security_tool_split": {
     "properties_asked_in_tools": 3,
-    "properties_asked_not_tools": 29,
+    "properties_asked_not_tools": 31,
     "properties_sat_in_tools": 2,
     "properties_sat_not_tools": 4
   },
@@ -337,6 +365,9 @@
     },
     "claude-code-plugins": {
       "shape_1": 3
+    },
+    "dogfood_shell": {
+      "shape_3": 2
     },
     "mycelium": {
       "shape_1": 3
