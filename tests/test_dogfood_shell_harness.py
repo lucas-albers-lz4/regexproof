@@ -36,6 +36,9 @@ FWLIVE_FUNC = (
     "/root/workspace/fwlive/openwrt-feed/luci-app-fwlive"
     "/root/usr/libexec/rpcd/fwlive"
 )
+# Vendored bytes (CI has no dogfood checkouts). The drift assert below keeps
+# the fixture pinned to the live file wherever the checkout exists.
+FIXTURE = ROOT / "tests" / "fixtures" / "fwlive-normalize_log_prefix.sh"
 
 
 def test_df_family_in_registry_and_mutation_coverage():
@@ -105,11 +108,24 @@ def test_df_mirror_agrees_with_sed():
 
 
 def _extract_shipped_function() -> str:
-    text = Path(FWLIVE_FUNC).read_text(encoding="utf-8")
+    text = FIXTURE.read_text(encoding="utf-8")
     m = re.search(r"^normalize_log_prefix\(\) \{\n(?:.*\n)*?^\}", text, re.M)
-    assert m is not None, "shipped normalize_log_prefix not found"
+    assert m is not None, "fixture carries no normalize_log_prefix"
     body = m.group(0)
-    assert "s/[[:space:]:]*$//" in body, "shipped script drifted"
+    assert "s/[[:space:]:]*$//" in body, "fixture script drifted"
+    assert SED_SCRIPT in body, "harness SED_SCRIPT drifted from fixture"
+    live = Path(FWLIVE_FUNC)
+    if live.is_file():
+        # The checkout exists (local dev): the fixture must equal the live
+        # bytes, or the pin is stale — refresh the fixture, do not weaken
+        # this assert.
+        live_text = live.read_text(encoding="utf-8")
+        lm = re.search(r"^normalize_log_prefix\(\) \{\n(?:.*\n)*?^\}", live_text, re.M)
+        assert lm is not None, "live normalize_log_prefix not found"
+        assert lm.group(0) == body, (
+            "fixture drifted from live fwlive HEAD — refresh "
+            "tests/fixtures/fwlive-normalize_log_prefix.sh"
+        )
     return body
 
 
