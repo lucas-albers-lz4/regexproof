@@ -401,7 +401,7 @@ def test_ci_golden_regenerates_and_drift_checks_ledger():
         "mycelium_w1",
         "claude-code-plugins_w1",
         "dogfood_shell_w1",
-        }
+    }
     for w in pw.values():
         assert w["properties_asked"] >= w["properties_sat"]
         assert w["properties_sat"] >= w["sat_ground_truthed"]
