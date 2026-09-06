@@ -11,8 +11,8 @@ import regexproof.harness.openwrt_packages
 import regexproof.harness.openwrt_luci
 import regexproof.harness.aidevops
 import regexproof.harness.mycelium
-import regexproof.harness.claude_code_plugins  # noqa: F401
-import regexproof.harness.dogfood_shell  # noqa: F401 — funnel #615 wave 1
+import regexproof.harness.claude_code_plugins
+import regexproof.harness.dogfood_shell  # noqa: F401
 from regexproof.harness.cli import main
 from regexproof.harness.core import (
     REGISTRY,
