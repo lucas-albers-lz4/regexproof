@@ -115,7 +115,13 @@ def _extract_shipped_function() -> str:
     assert "s/[[:space:]:]*$//" in body, "fixture script drifted"
     assert SED_SCRIPT in body, "harness SED_SCRIPT drifted from fixture"
     live = Path(FWLIVE_FUNC)
-    if live.is_file():
+    try:
+        live_present = live.is_file()
+    except OSError:
+        # CI runners have an unreadable /root (EACCES, not ENOENT) —
+        # absence of the checkout is absence, never a failure.
+        live_present = False
+    if live_present:
         # The checkout exists (local dev): the fixture must equal the live
         # bytes, or the pin is stale — refresh the fixture, do not weaken
         # this assert.
