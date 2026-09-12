@@ -21,13 +21,19 @@ the registered `extract_repo()` and `_ident_of()` implementation from
 element. `novel_sites` counts site instances whose canonical ID is absent from
 the preceding eligible prefix for that family.
 
+Manifest dialect families are checked against the dialects emitted by the
+registered extractor before an observation is counted. An assignment with no
+compatible extractor, including the current `go_re` family until the dogfood
+runner emits `re2` records, is recorded as `unsupported_dialect`; records from
+another language are never relabeled as evidence for the manifest family.
+
 The command emits these committed artifacts:
 
 | Artifact | Meaning |
 |---|---|
 | `canonical-observations.json` | Ordered observations, canonical IDs, counts, and the embedded manifest |
 | `saturation-report.json` | PR1 report, emitted only when every repository completed |
-| `skip-failure-log.json` | Exact missing-pin, missing-checkout, empty-inventory, oversized-file, or extractor failures |
+| `skip-failure-log.json` | Exact missing-pin, missing-checkout, empty-inventory, oversized-file, unsupported-dialect, or extractor failures |
 | `closeout.json` / `closeout.md` | Continue, retarget, or stop decision and per-family outcomes |
 
 The producer records an incomplete cohort as incomplete. It never turns a

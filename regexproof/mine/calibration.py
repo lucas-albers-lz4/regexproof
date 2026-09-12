@@ -37,6 +37,21 @@ class CalibrationError(ValueError):
     """Raised when calibration input or an execution artifact is unsafe."""
 
 
+class UnsupportedDialectError(CalibrationError):
+    """Raised when the registered extractor cannot support a manifest family."""
+
+
+_EXTRACTOR_DIALECTS_BY_FAMILY = {
+    "py_re": frozenset({"py_re"}),
+    "ecma": frozenset({"ecma"}),
+    "posix-shell": frozenset({"posix-shell"}),
+    # The calibration dogfood extractor does not currently emit re2 records.
+    # Keep this family explicit so a shell/Python record cannot be mislabeled
+    # as Go evidence while Go extraction is being brought into this runner.
+    "go_re": frozenset({"re2"}),
+}
+
+
 def _error(message: str) -> CalibrationError:
     return CalibrationError(f"invalid calibration artifact: {message}")
 
@@ -161,6 +176,23 @@ def _observation(
     return row, prior_ids | current_ids
 
 
+def _validate_dialect_alignment(
+    repo: Mapping[str, Any], records: list[Mapping[str, Any]]
+) -> None:
+    family = repo["dialect_family"]
+    expected = _EXTRACTOR_DIALECTS_BY_FAMILY.get(family)
+    if expected is None:
+        raise UnsupportedDialectError(
+            f"no calibration extractor registered for dialect family {family!r}"
+        )
+    observed = {record.get("dialect") for record in records}
+    if not observed.issubset(expected):
+        raise UnsupportedDialectError(
+            f"dialect family {family!r} requires extractor dialect(s) "
+            f"{sorted(expected)!r}, but inventory returned {sorted(observed)!r}"
+        )
+
+
 def build_observation_artifact(
     manifest: Mapping[str, Any],
     repo_paths: Mapping[str, str | Path],
@@ -210,6 +242,7 @@ def build_observation_artifact(
                 )
             if not scan.records:
                 raise CalibrationError("pinned inventory contains zero regex sites")
+            _validate_dialect_alignment(repo, scan.records)
             row, family_seen[repo["dialect_family"]] = _observation(
                 repo,
                 scan.records,
@@ -222,6 +255,8 @@ def build_observation_artifact(
         # version or a malformed source file.  Calibration must keep the
         # failure visible and continue collecting independent repositories;
         # it must never abort the whole cohort or turn the site count into 0.
+        except UnsupportedDialectError as exc:
+            failures.append(_failure(repo, "unsupported_dialect", str(exc)))
         except Exception as exc:
             failures.append(_failure(repo, "failed", str(exc)))
 

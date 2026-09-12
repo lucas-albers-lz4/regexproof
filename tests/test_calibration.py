@@ -101,6 +101,60 @@ def test_extractor_exception_is_recorded_not_silently_counted(monkeypatch, tmp_p
     assert artifact["observations"] == []
 
 
+def test_unsupported_dialect_is_recorded_before_counting_records(monkeypatch, tmp_path):
+    manifest = build_manifest(
+        {
+            "candidates": [
+                {
+                    "repo_id": "go-repo",
+                    "url": "https://github.com/example/go-repo",
+                    "pin": "a" * 40,
+                    "dialect_family": "go_re",
+                    "boundary_family": "validator",
+                    "score": 1,
+                    "sites": 1,
+                    "fork": False,
+                    "duplicate_of": None,
+                    "partial": False,
+                }
+            ]
+        },
+        "calibration",
+        1,
+    )
+
+    class ShellOnlyDogfood:
+        @staticmethod
+        def extract_repo(repo_id, path, *, dir_mode):
+            return SimpleNamespace(
+                records=[{"pattern": "[a-z]+", "dialect": "posix-shell"}],
+                oversized_files=0,
+            )
+
+    monkeypatch.setattr(calibration, "_dogfood_module", lambda: ShellOnlyDogfood)
+    monkeypatch.setattr(calibration, "_git_head", lambda path: "a" * 40)
+    checkout = tmp_path / "go-repo"
+    checkout.mkdir()
+
+    artifact = calibration.build_observation_artifact(
+        manifest, {"go-repo": checkout}
+    )
+
+    assert artifact["observations"] == []
+    assert artifact["failures"] == [
+        {
+            "repo_id": "go-repo",
+            "url": "https://github.com/example/go-repo",
+            "pin": "a" * 40,
+            "status": "unsupported_dialect",
+            "reason": (
+                "dialect family 'go_re' requires extractor dialect(s) ['re2'], "
+                "but inventory returned ['posix-shell']"
+            ),
+        }
+    ]
+
+
 def test_artifact_rejects_reordered_observations(monkeypatch, tmp_path):
     manifest = _manifest("one", "two")
 
@@ -111,7 +165,10 @@ def test_artifact_rejects_reordered_observations(monkeypatch, tmp_path):
 
         @staticmethod
         def extract_repo(repo_id, path, *, dir_mode):
-            return SimpleNamespace(records=[{"pattern": repo_id}], oversized_files=0)
+            return SimpleNamespace(
+                records=[{"pattern": repo_id, "dialect": "py_re"}],
+                oversized_files=0,
+            )
 
     monkeypatch.setattr(calibration, "_dogfood_module", lambda: FakeDogfood)
     monkeypatch.setattr(calibration, "_git_head", lambda path: manifest["repos"][0]["pin"] if path.name == "one" else manifest["repos"][1]["pin"])
