@@ -5,7 +5,9 @@ from __future__ import annotations
 import hashlib
 import json
 import math
+import os
 import re
+import tempfile
 from pathlib import Path
 from typing import Any, Mapping
 
@@ -32,6 +34,7 @@ OUTPUT_FIELDS = (
     "score",
     "sites",
 )
+MANIFEST_FIELDS = {"schema_version", "cohort_id", "manifest_digest", "repos"}
 
 
 class CohortManifestError(ValueError):
@@ -151,8 +154,17 @@ def load_candidates(path: str | Path) -> list[dict[str, Any]]:
     except OSError as exc:
         raise CohortManifestError(f"cannot read candidates {source}: {exc}") from exc
     try:
+        def reject_duplicates(pairs):
+            result = {}
+            for key, value in pairs:
+                if key in result:
+                    raise _error(f"duplicate JSON key {key!r}")
+                result[key] = value
+            return result
+
         document = json.loads(
             text,
+            object_pairs_hook=reject_duplicates,
             parse_constant=lambda value: (_ for _ in ()).throw(
                 _error(f"non-finite JSON number {value!r} is not allowed")
             ),
@@ -213,6 +225,106 @@ def build_manifest(
 
 def build_manifest_from_path(path: str | Path, cohort_id: str, limit: int) -> dict[str, Any]:
     return build_manifest(load_candidates(path), cohort_id, limit)
+
+
+def validate_manifest(manifest: Any) -> dict[str, Any]:
+    """Validate a frozen manifest and its digest, preserving repository order."""
+    root = _object(manifest, "manifest")
+    if set(root) != MANIFEST_FIELDS:
+        missing = sorted(MANIFEST_FIELDS - set(root))
+        extra = sorted(set(root) - MANIFEST_FIELDS)
+        if missing:
+            raise _error(f"manifest is missing required field(s): {', '.join(missing)}")
+        raise _error(f"manifest has unknown field(s): {', '.join(extra)}")
+    if root["schema_version"] != SCHEMA_VERSION:
+        raise _error(
+            f"unsupported manifest schema_version {root['schema_version']!r}; "
+            f"expected {SCHEMA_VERSION!r}"
+        )
+    cohort_id = _text(root["cohort_id"], "cohort_id", "manifest")
+    digest = _text(root["manifest_digest"], "manifest_digest", "manifest")
+    if re.fullmatch(r"[0-9a-f]{64}", digest) is None:
+        raise _error("manifest.manifest_digest must be 64 lowercase hexadecimal characters")
+    raw_repos = root["repos"]
+    if not isinstance(raw_repos, list) or not raw_repos:
+        raise _error("manifest.repos must be a non-empty list")
+
+    repos: list[dict[str, Any]] = []
+    seen_ids: set[str] = set()
+    seen_attempts: set[tuple[str, str]] = set()
+    for index, raw_repo in enumerate(raw_repos):
+        context = f"manifest.repos[{index}]"
+        repo = _object(raw_repo, context)
+        if set(repo) != set(OUTPUT_FIELDS):
+            missing = sorted(set(OUTPUT_FIELDS) - set(repo))
+            extra = sorted(set(repo) - set(OUTPUT_FIELDS))
+            if missing:
+                raise _error(f"{context} is missing required field(s): {', '.join(missing)}")
+            raise _error(f"{context} has unknown field(s): {', '.join(extra)}")
+        normalized = _validate_candidate(
+            {
+                **repo,
+                "fork": False,
+                "duplicate_of": None,
+                "partial": False,
+            },
+            index,
+        )
+        selected = {field: normalized[field] for field in OUTPUT_FIELDS}
+        if selected["repo_id"] in seen_ids:
+            raise _error(f"manifest contains duplicate repo_id {selected['repo_id']!r}")
+        attempt = (selected["url"], selected["pin"])
+        if attempt in seen_attempts:
+            raise _error(
+                f"manifest contains duplicate repository attempt {selected['url']!r}@{selected['pin']}"
+            )
+        seen_ids.add(selected["repo_id"])
+        seen_attempts.add(attempt)
+        repos.append(selected)
+
+    canonical = _canonical_content(cohort_id, repos)
+    expected = hashlib.sha256(canonical.encode("utf-8")).hexdigest()
+    if digest != expected:
+        raise _error("manifest_digest does not match the frozen cohort contents")
+    return {
+        "schema_version": SCHEMA_VERSION,
+        "cohort_id": cohort_id,
+        "manifest_digest": digest,
+        "repos": repos,
+    }
+
+
+def write_manifest_atomic(path: str | Path, text: str) -> None:
+    """Write *text* with fsync and replace, without partially updating *path*."""
+    destination = Path(path)
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    temporary: str | None = None
+    try:
+        with tempfile.NamedTemporaryFile(
+            mode="w",
+            encoding="utf-8",
+            dir=destination.parent,
+            prefix=f".{destination.name}.",
+            suffix=".tmp",
+            delete=False,
+        ) as handle:
+            temporary = handle.name
+            handle.write(text)
+            handle.flush()
+            os.fsync(handle.fileno())
+        os.replace(temporary, destination)
+        temporary = None
+        directory_fd = os.open(destination.parent, os.O_RDONLY | os.O_DIRECTORY)
+        try:
+            os.fsync(directory_fd)
+        finally:
+            os.close(directory_fd)
+    finally:
+        if temporary is not None:
+            try:
+                os.unlink(temporary)
+            except FileNotFoundError:
+                pass
 
 
 def dumps_manifest(manifest: Mapping[str, Any]) -> str:
