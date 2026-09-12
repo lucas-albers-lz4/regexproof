@@ -57,6 +57,8 @@ from pathlib import Path
 import re
 from typing import Any, Mapping
 
+from .cohort_manifest import CohortManifestError, validate_manifest as validate_frozen_manifest
+
 SCHEMA_VERSION = "1"
 PRODUCT_DENOMINATOR_THRESHOLD = 50
 TARGET_DENOMINATOR_THRESHOLD = 100
@@ -76,6 +78,7 @@ REPO_FIELDS = (
     "new_reject_buckets",
     "product_properties",
 )
+ENVELOPE_FIELDS = {"schema_version", "cohort_id", "manifest_digest", "cohort", "observations"}
 COUNT_FIELDS = ("sites", "novel_sites")
 PROPERTY_FIELDS = frozenset(
     {
@@ -190,12 +193,15 @@ def _validate_properties(raw: Any, context: str) -> dict[str, int]:
 def _validate_repo(raw: Any, index: int) -> dict[str, Any]:
     context = f"repos[{index}]"
     repo = _mapping(raw, context)
+    unknown = sorted(set(repo) - set(REPO_FIELDS))
     missing = [field for field in REPO_FIELDS if field not in repo]
     if missing:
         raise _fail(f"{context} is missing required field(s): {', '.join(missing)}")
+    if unknown:
+        raise _fail(f"{context} has unknown field(s): {', '.join(unknown)}")
 
     repo_id = _text(repo["repo_id"], "repo_id", context)
-    _text(repo["url"], "url", context)
+    url = _text(repo["url"], "url", context)
     pin = _text(repo["pin"], "pin", context)
     if PIN_RE.fullmatch(pin) is None:
         raise _fail(f"{context}.pin must be exactly 40 hexadecimal characters")
@@ -236,7 +242,7 @@ def _validate_repo(raw: Any, index: int) -> dict[str, Any]:
 
     return {
         "repo_id": repo_id,
-        "url": repo["url"],
+        "url": url,
         "pin": pin,
         "dialect_family": family,
         **counts,
@@ -244,39 +250,71 @@ def _validate_repo(raw: Any, index: int) -> dict[str, Any]:
     }
 
 
-def validate_manifest(manifest: Any) -> list[dict[str, Any]]:
-    """Validate *manifest* and return normalized repo observations.
-
-    The returned list preserves manifest order. The on-disk schema is an
-    object containing exactly ``schema_version`` and ``repos``.
-    """
-    document = _mapping(manifest, "manifest")
-    if set(document) != {"schema_version", "repos"}:
-        missing = sorted({"schema_version", "repos"} - set(document))
-        extra = sorted(set(document) - {"schema_version", "repos"})
+def _validate_observation_envelope(
+    envelope: Any,
+) -> tuple[dict[str, Any], list[dict[str, Any]]]:
+    """Validate the frozen cohort plus its ordered processing observations."""
+    document = _mapping(envelope, "observation envelope")
+    if set(document) != ENVELOPE_FIELDS:
+        missing = sorted(ENVELOPE_FIELDS - set(document))
+        extra = sorted(set(document) - ENVELOPE_FIELDS)
         if missing:
-            raise _fail(f"manifest is missing required field(s): {', '.join(missing)}")
-        raise _fail(f"manifest has unknown field(s): {', '.join(extra)}")
-    version = document["schema_version"]
-    if version != SCHEMA_VERSION:
-        raise _fail(f"unsupported schema_version {version!r}; expected {SCHEMA_VERSION!r}")
-    raw_repos = _required(document, "repos", "manifest")
+            raise _fail(
+                f"observation envelope is missing required field(s): {', '.join(missing)}"
+            )
+        raise _fail(f"observation envelope has unknown field(s): {', '.join(extra)}")
+    if document["schema_version"] != SCHEMA_VERSION:
+        raise _fail(
+            f"unsupported schema_version {document['schema_version']!r}; "
+            f"expected {SCHEMA_VERSION!r}"
+        )
+    cohort_id = _text(document["cohort_id"], "cohort_id", "observation envelope")
+    digest = _text(document["manifest_digest"], "manifest_digest", "observation envelope")
+    try:
+        frozen = validate_frozen_manifest(document["cohort"])
+    except CohortManifestError as exc:
+        raise _fail(f"invalid frozen cohort: {exc}") from exc
+    if cohort_id != frozen["cohort_id"]:
+        raise _fail("cohort_id does not match the embedded frozen cohort")
+    if digest != frozen["manifest_digest"]:
+        raise _fail("manifest_digest does not match the embedded frozen cohort")
 
-    if not isinstance(raw_repos, list):
-        raise _fail("repos must be a list")
+    raw_observations = document["observations"]
+    if not isinstance(raw_observations, list):
+        raise _fail("observations must be a list")
+    if len(raw_observations) != len(frozen["repos"]):
+        raise _fail("observations must contain exactly one row per frozen cohort repository")
 
-    normalized = [_validate_repo(repo, index) for index, repo in enumerate(raw_repos)]
-    seen: set[str] = set()
-    for repo in normalized:
-        repo_id = repo["repo_id"]
-        if repo_id in seen:
-            raise _fail(f"repo_id {repo_id!r} occurs more than once")
-        seen.add(repo_id)
-    return normalized
+    normalized = [_validate_repo(row, index) for index, row in enumerate(raw_observations)]
+    seen_ids: set[str] = set()
+    seen_attempts: set[tuple[str, str]] = set()
+    for index, (observation, expected) in enumerate(zip(normalized, frozen["repos"], strict=True)):
+        for field in ("repo_id", "url", "pin", "dialect_family"):
+            if observation[field] != expected[field]:
+                raise _fail(
+                    f"observations[{index}].{field} does not match the frozen cohort entry"
+                )
+        if observation["repo_id"] in seen_ids:
+            raise _fail(f"observations contains duplicate repo_id {observation['repo_id']!r}")
+        attempt = (observation["url"], observation["pin"])
+        if attempt in seen_attempts:
+            raise _fail(
+                f"observations contains duplicate repository attempt "
+                f"{observation['url']!r}@{observation['pin']}"
+            )
+        seen_ids.add(observation["repo_id"])
+        seen_attempts.add(attempt)
+    return frozen, normalized
 
 
-def load_manifest(path: str | Path) -> list[dict[str, Any]]:
-    """Read and validate a manifest without modifying it or its directory."""
+def validate_manifest(manifest: Any) -> list[dict[str, Any]]:
+    """Validate an observation envelope and return observations in frozen order."""
+    _frozen, observations = _validate_observation_envelope(manifest)
+    return observations
+
+
+def load_manifest(path: str | Path) -> dict[str, Any]:
+    """Read and validate an observation envelope without modifying it."""
     manifest_path = Path(path)
     try:
         text = manifest_path.read_text(encoding="utf-8")
@@ -302,7 +340,8 @@ def load_manifest(path: str | Path) -> list[dict[str, Any]]:
         raise
     except json.JSONDecodeError as exc:
         raise ManifestError(f"invalid JSON in {manifest_path}: {exc.msg}") from exc
-    return validate_manifest(document)
+    _validate_observation_envelope(document)
+    return document
 
 
 def _decimal_ratio(numerator: int, denominator: int, places: int = 12) -> str:
@@ -354,8 +393,8 @@ def _compiler_stop(trailing: list[Mapping[str, Any]]) -> bool:
 
 
 def build_report(manifest: Any) -> dict[str, Any]:
-    """Build a deterministic saturation report from a validated cohort."""
-    repos = validate_manifest(manifest)
+    """Build a deterministic report from a frozen cohort observation envelope."""
+    frozen, repos = _validate_observation_envelope(manifest)
     by_family: dict[str, list[dict[str, Any]]] = defaultdict(list)
     for repo in repos:
         by_family[repo["dialect_family"]].append(repo)
@@ -392,6 +431,8 @@ def build_report(manifest: Any) -> dict[str, Any]:
     target_denominator = totals["properties_asked"]
     return {
         "schema_version": SCHEMA_VERSION,
+        "cohort_id": frozen["cohort_id"],
+        "manifest_digest": frozen["manifest_digest"],
         "thresholds": {
             "compiler_novelty_rate_strictly_below": "0.03",
             "trailing_repos": TRAILING_REPO_COUNT,

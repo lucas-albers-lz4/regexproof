@@ -19,14 +19,34 @@ The first slice is a read-only calculator:
 python scripts/saturation-report.py path/to/cohort.json
 ```
 
-The input is a pinned, ordered cohort observation. The order is meaningful
-within each `dialect_family`, because the report evaluates the trailing two
-repositories in that family.
+The input is a pinned cohort plus an ordered observation envelope. The order is
+meaningful within each `dialect_family`, because the report evaluates the
+trailing two repositories in that family. The embedded `cohort` is the exact
+output of the PR2 builder; its digest is recomputed before observations are
+accepted.
 
 ```json
 {
   "schema_version": "1",
-  "repos": [
+  "cohort_id": "2026-09-calibration-10",
+  "manifest_digest": "<64 lowercase hex characters>",
+  "cohort": {
+    "schema_version": "1",
+    "cohort_id": "2026-09-calibration-10",
+    "manifest_digest": "<same digest>",
+    "repos": [
+      {
+        "repo_id": "owner/repo",
+        "url": "https://github.com/owner/repo",
+        "pin": "0123456789abcdef0123456789abcdef01234567",
+        "dialect_family": "py_re",
+        "boundary_family": "validator",
+        "score": 1.0,
+        "sites": 100
+      }
+    ]
+  },
+  "observations": [
     {
       "repo_id": "owner/repo",
       "url": "https://github.com/owner/repo",
@@ -53,8 +73,9 @@ repositories in that family.
 }
 ```
 
-The report fails closed on malformed counts, duplicate repository IDs or
-URL/pin attempts, invalid pins, empty site denominators, duplicate product
+The report fails closed on malformed counts, a missing or mismatched cohort
+digest, duplicate repository IDs or URL/pin attempts, observation order or
+metadata that differs from the frozen cohort, invalid pins, empty site denominators, duplicate product
 identities, non-human or synthesized product rows, non-finite JSON numbers,
 and impossible funnel orderings. Rates are emitted as deterministic decimal
 strings rather than binary floats. Product counts are derived from the
@@ -71,6 +92,9 @@ does not write artifacts, and does not add telemetry to
 `corpus_events.jsonl`. That file is reserved for the conversion-wave lock
 state machine. A separate immutable cohort/attempt event log belongs in a
 later PR.
+
+The PR2 CLI rejects duplicate JSON keys and input/output aliases, and writes
+the generated manifest through an fsync'd temporary file plus atomic replace.
 
 ## Operating interpretation
 
