@@ -90,8 +90,8 @@ checkpoint is `>=50`, with `>=100` as the preferred target.
 This report does not infer cohort membership from the live candidate queue,
 does not write artifacts, and does not add telemetry to
 `corpus_events.jsonl`. That file is reserved for the conversion-wave lock
-state machine. A separate immutable cohort/attempt event log belongs in a
-later PR.
+state machine. PR3 adds the separate immutable processing-event log and its
+read-only checker.
 
 The PR2 CLI rejects duplicate JSON keys and input/output aliases, and writes
 the generated manifest through an fsync'd temporary file plus atomic replace.
