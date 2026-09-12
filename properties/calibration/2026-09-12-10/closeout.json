@@ -1,0 +1,63 @@
+{
+  "cohort_id": "2026-09-12-calibration-10",
+  "continue_to_20": true,
+  "continue_to_30": "pending_20_repo_run",
+  "decision": "inconclusive",
+  "failures": [
+    {
+      "pin": "d3daa912a04d17f78df2d0c059a111cafff75534",
+      "reason": "inventory skipped 11 oversized file(s)",
+      "repo_id": "Mininglamp-OSS/octo-server",
+      "status": "failed",
+      "url": "https://github.com/Mininglamp-OSS/octo-server"
+    },
+    {
+      "pin": "14aea88a5ff4cb2840d3712dbd8a85078cd03b28",
+      "reason": "Missing parentheses in call to 'print'. Did you mean print(...)? (<unknown>, line 676)",
+      "repo_id": "eReader/detekt",
+      "status": "failed",
+      "url": "https://github.com/eReader/detekt"
+    },
+    {
+      "pin": "7fa83b2250a434bfe153a67eb52e015558e9409a",
+      "reason": "Missing parentheses in call to 'print'. Did you mean print(...)? (<unknown>, line 9)",
+      "repo_id": "x41x41x90/pm_shredder",
+      "status": "failed",
+      "url": "https://github.com/x41x41x90/pm_shredder"
+    }
+  ],
+  "families": {
+    "ecma": {
+      "expected_repo_count": 3,
+      "missing_repo_ids": [],
+      "repo_count": 3,
+      "status": "observed_but_closeout_blocked"
+    },
+    "go_re": {
+      "expected_repo_count": 2,
+      "missing_repo_ids": [
+        "Mininglamp-OSS/octo-server"
+      ],
+      "repo_count": 1,
+      "status": "insufficient_data"
+    },
+    "posix-shell": {
+      "expected_repo_count": 2,
+      "missing_repo_ids": [],
+      "repo_count": 2,
+      "status": "observed_but_closeout_blocked"
+    },
+    "py_re": {
+      "expected_repo_count": 3,
+      "missing_repo_ids": [
+        "eReader/detekt",
+        "x41x41x90/pm_shredder"
+      ],
+      "repo_count": 1,
+      "status": "insufficient_data"
+    }
+  },
+  "manifest_digest": "17fe9320b68cda053032a0d517a452149409854c869d0de2aefbbef5e3d2a6e6",
+  "reason": "incomplete calibration; rerun skipped repositories at their pins",
+  "schema_version": "1"
+}

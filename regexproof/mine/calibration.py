@@ -218,7 +218,11 @@ def build_observation_artifact(
                 dogfood,
             )
             observations.append(row)
-        except (CalibrationError, OSError, ValueError) as exc:
+        # A pinned repository may contain syntax from an older language
+        # version or a malformed source file.  Calibration must keep the
+        # failure visible and continue collecting independent repositories;
+        # it must never abort the whole cohort or turn the site count into 0.
+        except Exception as exc:
             failures.append(_failure(repo, "failed", str(exc)))
 
     return {
@@ -344,6 +348,32 @@ def build_closeout(artifact: Mapping[str, Any], *, conversion_report: Mapping[st
     checked = validate_artifact(artifact)
     expected_count = len(checked["cohort"]["repos"])
     if checked["failures"] or len(checked["observations"]) != expected_count:
+        observed_by_family: dict[str, int] = defaultdict(int)
+        expected_by_family: dict[str, list[str]] = defaultdict(list)
+        observed_ids = {row["repo_id"] for row in checked["observations"]}
+        for repo in checked["cohort"]["repos"]:
+            expected_by_family[repo["dialect_family"]].append(repo["repo_id"])
+            if repo["repo_id"] in observed_ids:
+                observed_by_family[repo["dialect_family"]] += 1
+        incomplete_families = {
+            family: {
+                "status": (
+                    "insufficient_data"
+                    if observed_by_family[family] < 2
+                    else (
+                        "incomplete"
+                        if set(repo_ids) - observed_ids
+                        else "observed_but_closeout_blocked"
+                    )
+                ),
+                "repo_count": observed_by_family[family],
+                "expected_repo_count": len(repo_ids),
+                "missing_repo_ids": sorted(
+                    set(repo_ids) - observed_ids
+                ),
+            }
+            for family, repo_ids in sorted(expected_by_family.items())
+        }
         return {
             "schema_version": SCHEMA_VERSION,
             "cohort_id": checked["cohort_id"],
@@ -353,7 +383,7 @@ def build_closeout(artifact: Mapping[str, Any], *, conversion_report: Mapping[st
             "continue_to_20": True,
             "continue_to_30": "pending_20_repo_run",
             "failures": checked["failures"],
-            "families": {},
+            "families": incomplete_families,
         }
     report = build_report(saturation_envelope(checked))
     families: dict[str, Any] = {}

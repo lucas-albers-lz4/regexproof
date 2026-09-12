@@ -1,0 +1,26 @@
+{
+  "cohort_id": "2026-09-12-calibration-10",
+  "failures": [
+    {
+      "pin": "d3daa912a04d17f78df2d0c059a111cafff75534",
+      "reason": "inventory skipped 11 oversized file(s)",
+      "repo_id": "Mininglamp-OSS/octo-server",
+      "status": "failed",
+      "url": "https://github.com/Mininglamp-OSS/octo-server"
+    },
+    {
+      "pin": "14aea88a5ff4cb2840d3712dbd8a85078cd03b28",
+      "reason": "Missing parentheses in call to 'print'. Did you mean print(...)? (<unknown>, line 676)",
+      "repo_id": "eReader/detekt",
+      "status": "failed",
+      "url": "https://github.com/eReader/detekt"
+    },
+    {
+      "pin": "7fa83b2250a434bfe153a67eb52e015558e9409a",
+      "reason": "Missing parentheses in call to 'print'. Did you mean print(...)? (<unknown>, line 9)",
+      "repo_id": "x41x41x90/pm_shredder",
+      "status": "failed",
+      "url": "https://github.com/x41x41x90/pm_shredder"
+    }
+  ]
+}
