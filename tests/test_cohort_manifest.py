@@ -49,7 +49,7 @@ def test_deterministic_order_and_digest_matches_canonical_content():
         _candidate("low", score=1),
     ]
     manifest = build_manifest(_input(*reversed(rows)), "cohort-1", 10)
-    assert [row["repo_id"] for row in manifest["repos"]] == ["z", "a", "b", "low"]
+    assert [row["repo_id"] for row in manifest["repos"]] == ["z", "a", "low", "b"]
     content = {
         key: manifest[key] for key in ("schema_version", "cohort_id", "repos")
     }
@@ -89,6 +89,7 @@ def test_duplicate_identity_and_malformed_input_fail_closed():
         )
     for field, value, message in (
         ("pin", "abc", "exactly 40"),
+        ("pin", "A" * 40, "lowercase"),
         ("score", float("inf"), "finite"),
         ("sites", 0, "positive"),
         ("fork", "no", "boolean"),
@@ -132,6 +133,24 @@ def test_candidate_loader_rejects_duplicate_json_keys(tmp_path: Path):
     )
     with pytest.raises(CohortManifestError, match="duplicate JSON key"):
         load_candidates(source)
+
+
+def test_selection_covers_family_buckets_before_score_fill():
+    rows = [
+        _candidate("py-validator", score=100, dialect_family="py", boundary_family="validator"),
+        _candidate("py-parser", score=1, dialect_family="py", boundary_family="parser"),
+        _candidate("js-validator", score=90, dialect_family="js", boundary_family="validator"),
+    ]
+    manifest = build_manifest(_input(*rows), "stratified", 2)
+    assert [row["repo_id"] for row in manifest["repos"]] == ["js-validator", "py-parser"]
+
+    expanded = build_manifest(_input(*rows), "stratified", 3)
+    assert [row["repo_id"] for row in expanded["repos"]] == [
+        "js-validator",
+        "py-parser",
+        "py-validator",
+    ]
+    assert expanded == build_manifest(_input(*reversed(rows)), "stratified", 3)
 
 
 def test_cli_rejects_input_output_alias_without_changing_source(tmp_path: Path):
