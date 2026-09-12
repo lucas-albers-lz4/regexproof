@@ -1,0 +1,31 @@
+{
+  "cohort_id": "2026-09-12-calibration-20-r2",
+  "compiler_stop": false,
+  "continue_to_20": true,
+  "continue_to_30": "pending_20_repo_run",
+  "conversion_checkpoint_supplied": false,
+  "decision": "continue",
+  "failures": [],
+  "families": {
+    "ecma": {
+      "repo_count": 6,
+      "status": "productive"
+    },
+    "go_re": {
+      "repo_count": 4,
+      "status": "productive"
+    },
+    "posix-shell": {
+      "repo_count": 4,
+      "status": "productive"
+    },
+    "py_re": {
+      "repo_count": 6,
+      "status": "productive"
+    }
+  },
+  "manifest_digest": "5745d8307a4eeb8483602b2a787b411bac521c6c242755a5f9bb2371c417056d",
+  "product_denominator": 0,
+  "reason": "ecma has not met the strict trailing novelty rule; go_re has not met the strict trailing novelty rule; posix-shell has not met the strict trailing novelty rule; py_re has not met the strict trailing novelty rule; human product-property denominator is below 50; PR4 conversion checkpoint was not supplied",
+  "schema_version": "1"
+}

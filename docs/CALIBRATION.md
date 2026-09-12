@@ -31,7 +31,9 @@ another language are excluded from that family’s observation rather than
 relabeled as evidence. A mixed-language repository is eligible when it emits
 at least one record in the manifest family. Directory-mode calibration now
 routes Go `regexp.Compile`/`MustCompile` literals through the registered Go
-extractor as `re2`; the default dogfood snapshot mode is unchanged.
+extractor as `re2`; Python, ECMA, and Go runs restrict the walk to their
+registered file extensions before parsing, while shell retains shebang and
+`init.d` discovery. The default dogfood snapshot mode is unchanged.
 
 The command emits these committed artifacts:
 

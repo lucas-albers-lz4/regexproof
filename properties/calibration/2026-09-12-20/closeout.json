@@ -1,0 +1,63 @@
+{
+  "cohort_id": "2026-09-12-calibration-20",
+  "continue_to_20": true,
+  "continue_to_30": "pending_20_repo_run",
+  "decision": "inconclusive",
+  "failures": [
+    {
+      "pin": "4bbe6925652c03b02329c5fb15d34df96faf994c",
+      "reason": "inventory skipped 1 oversized file(s)",
+      "repo_id": "tyxak/remotepower",
+      "status": "failed",
+      "url": "https://github.com/tyxak/remotepower"
+    },
+    {
+      "pin": "14917fd0f8753933083fd379a7f9a0cc90bcc473",
+      "reason": "inventory skipped 1 oversized file(s)",
+      "repo_id": "pass-culture/pass-culture-main",
+      "status": "failed",
+      "url": "https://github.com/pass-culture/pass-culture-main"
+    },
+    {
+      "pin": "ef9baeb3743426c58853e58fbad820e69e459144",
+      "reason": "inventory skipped 1 oversized file(s)",
+      "repo_id": "markpasternak/canvas-drop",
+      "status": "failed",
+      "url": "https://github.com/markpasternak/canvas-drop"
+    }
+  ],
+  "families": {
+    "ecma": {
+      "expected_repo_count": 6,
+      "missing_repo_ids": [
+        "markpasternak/canvas-drop"
+      ],
+      "repo_count": 5,
+      "status": "incomplete"
+    },
+    "go_re": {
+      "expected_repo_count": 4,
+      "missing_repo_ids": [],
+      "repo_count": 4,
+      "status": "observed_but_closeout_blocked"
+    },
+    "posix-shell": {
+      "expected_repo_count": 4,
+      "missing_repo_ids": [],
+      "repo_count": 4,
+      "status": "observed_but_closeout_blocked"
+    },
+    "py_re": {
+      "expected_repo_count": 6,
+      "missing_repo_ids": [
+        "pass-culture/pass-culture-main",
+        "tyxak/remotepower"
+      ],
+      "repo_count": 4,
+      "status": "incomplete"
+    }
+  },
+  "manifest_digest": "4484708a971c25c3e11d9caabdee0252f31beb992bfd66909862ef3b71b17d12",
+  "reason": "incomplete calibration; rerun skipped repositories at their pins",
+  "schema_version": "1"
+}
