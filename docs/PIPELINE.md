@@ -9,6 +9,10 @@ The saturation experiment and its units are documented in
 intake, not completed repository processing; compiler novelty and product
 conversion have separate stop conditions.
 
+The first calibration run uses the pinned-checkout procedure in
+[`CALIBRATION.md`](CALIBRATION.md). It is separate from the live score-v1
+allocator and never mutates the mine queue.
+
 Entry status command (latest mine-day drain, queue pressure, 7-day survival,
 backlog weeks):
 

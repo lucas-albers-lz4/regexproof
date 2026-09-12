@@ -134,17 +134,20 @@ human contracts, ground truth, filing, and upstream disposition over a frozen
 cohort. Synthesized or agent-derived rows do not silently become product
 yield.
 
+## PR5: first calibration execution
+
+The executable calibration procedure is documented in
+[`CALIBRATION.md`](CALIBRATION.md). It verifies ten local checkouts at the
+manifest pins, records canonical-ID observations, writes a skip/failure log,
+and emits a close-out memo. Missing or partial repositories prevent a
+saturation report; a family with fewer than two completed repositories is
+explicitly `insufficient_data`.
+
 ## Next slices
 
-- Define the immutable cohort manifest, pin/digest identity, and stratified
-  target selection without changing the live score-v1 allocator.
-- Add a separate append-only processing event log for mine, probe, gate,
-  conversion, and disposition stages. Keep it distinct from the wave-lock
-  log and fail closed on rewrite, duplicate identity, or unknown status.
-- Join frozen cohorts to conversion-ledger identities and report
-  asked → SAT → ground-truthed → filed/private-first → accepted.
-- Run the first 10-repository calibration cohort, then publish a measured
-  continue/retarget/stop close-out.
+Run the first ten pinned repositories with
+[`scripts/calibration.py`](../scripts/calibration.py), then publish the
+committed continue/retarget/stop close-out.
 
 ## PR4: product conversion checkpoint
 
