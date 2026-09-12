@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import os
 import sys
 from pathlib import Path
 
@@ -15,6 +16,7 @@ from regexproof.mine.cohort_manifest import (  # noqa: E402
     CohortManifestError,
     build_manifest_from_path,
     dumps_manifest,
+    write_manifest_atomic,
 )
 
 
@@ -26,8 +28,14 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--output", required=True, type=Path, help="manifest output path")
     args = parser.parse_args(argv)
     try:
+        input_path = args.input.resolve()
+        output_path = args.output.resolve()
+        if input_path == output_path:
+            raise CohortManifestError("input and output paths must be different")
+        if args.output.exists() and os.path.samefile(args.input, args.output):
+            raise CohortManifestError("input and output paths must not alias the same file")
         manifest = build_manifest_from_path(args.input, args.cohort_id, args.limit)
-        args.output.write_text(dumps_manifest(manifest), encoding="utf-8")
+        write_manifest_atomic(args.output, dumps_manifest(manifest))
     except (CohortManifestError, OSError) as exc:
         print(f"cohort-manifest: error: {exc}", file=sys.stderr)
         return 2

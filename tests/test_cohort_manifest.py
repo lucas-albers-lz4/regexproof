@@ -13,6 +13,7 @@ from regexproof.mine.cohort_manifest import (
     CohortManifestError,
     build_manifest,
     dumps_manifest,
+    load_candidates,
 )
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -121,3 +122,44 @@ def test_cli_writes_readable_manifest_without_changing_input(tmp_path: Path):
     assert document["cohort_id"] == "cli"
     assert len(document["repos"]) == 1
     assert dumps_manifest(document) == output.read_text(encoding="utf-8")
+
+
+def test_candidate_loader_rejects_duplicate_json_keys(tmp_path: Path):
+    source = tmp_path / "duplicate.json"
+    source.write_text(
+        '{"candidates": [{"repo_id": "one", "repo_id": "two"}]}',
+        encoding="utf-8",
+    )
+    with pytest.raises(CohortManifestError, match="duplicate JSON key"):
+        load_candidates(source)
+
+
+def test_cli_rejects_input_output_alias_without_changing_source(tmp_path: Path):
+    spec = importlib.util.spec_from_file_location("cohort_manifest_script_alias", SCRIPT)
+    assert spec is not None and spec.loader is not None
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    source = tmp_path / "candidates.json"
+    source_text = json.dumps(_input(_candidate("repo")), indent=2) + "\n"
+    source.write_text(source_text, encoding="utf-8")
+    assert module.main(
+        [str(source), "--cohort-id", "cli", "--limit", "1", "--output", str(source)]
+    ) == 2
+    assert source.read_text(encoding="utf-8") == source_text
+
+
+def test_cli_replaces_output_atomically_and_preserves_valid_manifest(tmp_path: Path):
+    spec = importlib.util.spec_from_file_location("cohort_manifest_script_atomic", SCRIPT)
+    assert spec is not None and spec.loader is not None
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    source = tmp_path / "candidates.json"
+    output = tmp_path / "manifest.json"
+    source.write_text(json.dumps(_input(_candidate("repo"))), encoding="utf-8")
+    output.write_text("old output\n", encoding="utf-8")
+    assert module.main(
+        [str(source), "--cohort-id", "cli", "--limit", "1", "--output", str(output)]
+    ) == 0
+    manifest = json.loads(output.read_text(encoding="utf-8"))
+    assert manifest["cohort_id"] == "cli"
+    assert not list(tmp_path.glob(".manifest.json.*.tmp"))
