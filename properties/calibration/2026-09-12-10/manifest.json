@@ -1,0 +1,97 @@
+{
+  "cohort_id": "2026-09-12-calibration-10",
+  "manifest_digest": "17fe9320b68cda053032a0d517a452149409854c869d0de2aefbbef5e3d2a6e6",
+  "repos": [
+    {
+      "boundary_family": "boundary-candidate",
+      "dialect_family": "ecma",
+      "pin": "b31ddabecf4ed3209d37a2f5b29956120cd8f9ce",
+      "repo_id": "json-editor/json-editor",
+      "score": 4902,
+      "sites": 1,
+      "url": "https://github.com/json-editor/json-editor"
+    },
+    {
+      "boundary_family": "boundary-candidate",
+      "dialect_family": "go_re",
+      "pin": "d3daa912a04d17f78df2d0c059a111cafff75534",
+      "repo_id": "Mininglamp-OSS/octo-server",
+      "score": 594,
+      "sites": 1,
+      "url": "https://github.com/Mininglamp-OSS/octo-server"
+    },
+    {
+      "boundary_family": "boundary-candidate",
+      "dialect_family": "posix-shell",
+      "pin": "d4f01ba6202d50909d1977810d322259482e0b82",
+      "repo_id": "mycelium0/mycelium",
+      "score": 21,
+      "sites": 1,
+      "url": "https://github.com/mycelium0/mycelium"
+    },
+    {
+      "boundary_family": "boundary-candidate",
+      "dialect_family": "py_re",
+      "pin": "889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8",
+      "repo_id": "netspooky/inhale",
+      "score": 191,
+      "sites": 1,
+      "url": "https://github.com/netspooky/inhale"
+    },
+    {
+      "boundary_family": "boundary-candidate",
+      "dialect_family": "ecma",
+      "pin": "e9fb233763160316989863b4739c4656133d45b0",
+      "repo_id": "magiclabs/magic-js",
+      "score": 477,
+      "sites": 1,
+      "url": "https://github.com/magiclabs/magic-js"
+    },
+    {
+      "boundary_family": "boundary-candidate",
+      "dialect_family": "ecma",
+      "pin": "d4a39726cad8d8e27e4c0502d1843c3b4180ffbc",
+      "repo_id": "grcengineering/gigachad-grc",
+      "score": 154,
+      "sites": 1,
+      "url": "https://github.com/grcengineering/gigachad-grc"
+    },
+    {
+      "boundary_family": "boundary-candidate",
+      "dialect_family": "go_re",
+      "pin": "eb5356d56e914552d6b1c8dc822f19bd6f0e5774",
+      "repo_id": "mole-ids/mole",
+      "score": 70,
+      "sites": 1,
+      "url": "https://github.com/mole-ids/mole"
+    },
+    {
+      "boundary_family": "boundary-candidate",
+      "dialect_family": "py_re",
+      "pin": "14aea88a5ff4cb2840d3712dbd8a85078cd03b28",
+      "repo_id": "eReader/detekt",
+      "score": 33,
+      "sites": 1,
+      "url": "https://github.com/eReader/detekt"
+    },
+    {
+      "boundary_family": "boundary-candidate",
+      "dialect_family": "py_re",
+      "pin": "7fa83b2250a434bfe153a67eb52e015558e9409a",
+      "repo_id": "x41x41x90/pm_shredder",
+      "score": 25,
+      "sites": 1,
+      "url": "https://github.com/x41x41x90/pm_shredder"
+    },
+    {
+      "boundary_family": "boundary-candidate",
+      "dialect_family": "posix-shell",
+      "pin": "cea68022f477680f4bb502396c705fe14b3c412f",
+      "repo_id": "melodic-software/claude-code-plugins",
+      "score": 6,
+      "sites": 1,
+      "url": "https://github.com/melodic-software/claude-code-plugins"
+    }
+  ],
+  "schema_version": "1"
+}

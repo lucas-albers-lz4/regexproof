@@ -77,8 +77,28 @@ def test_missing_checkout_is_logged_and_cannot_project_to_saturation():
     closeout = calibration.build_closeout(artifact)
     assert closeout["decision"] == "inconclusive"
     assert closeout["continue_to_20"] is True
+    assert closeout["families"]["py_re"]["status"] == "insufficient_data"
     with pytest.raises(calibration.CalibrationError, match="incomplete"):
         calibration.saturation_envelope(artifact)
+
+
+def test_extractor_exception_is_recorded_not_silently_counted(monkeypatch, tmp_path):
+    manifest = _manifest("one", "two")
+
+    class BrokenDogfood:
+        @staticmethod
+        def extract_repo(repo_id, path, *, dir_mode):
+            raise SyntaxError(f"bad source in {repo_id}")
+
+    monkeypatch.setattr(calibration, "_dogfood_module", lambda: BrokenDogfood)
+    pin_by_repo = {repo["repo_id"]: repo["pin"] for repo in manifest["repos"]}
+    monkeypatch.setattr(calibration, "_git_head", lambda path: pin_by_repo[path.name])
+    paths = {repo_id: tmp_path / repo_id for repo_id in ("one", "two")}
+    for path in paths.values():
+        path.mkdir()
+    artifact = calibration.build_observation_artifact(manifest, paths)
+    assert {failure["repo_id"] for failure in artifact["failures"]} == {"one", "two"}
+    assert artifact["observations"] == []
 
 
 def test_artifact_rejects_reordered_observations(monkeypatch, tmp_path):

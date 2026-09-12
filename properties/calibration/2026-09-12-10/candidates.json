@@ -1,0 +1,124 @@
+{
+  "candidates": [
+    {
+      "repo_id": "eReader/detekt",
+      "url": "https://github.com/eReader/detekt",
+      "pin": "14aea88a5ff4cb2840d3712dbd8a85078cd03b28",
+      "dialect_family": "py_re",
+      "boundary_family": "boundary-candidate",
+      "score": 33,
+      "sites": 1,
+      "fork": false,
+      "duplicate_of": null,
+      "partial": false
+    },
+    {
+      "repo_id": "x41x41x90/pm_shredder",
+      "url": "https://github.com/x41x41x90/pm_shredder",
+      "pin": "7fa83b2250a434bfe153a67eb52e015558e9409a",
+      "dialect_family": "py_re",
+      "boundary_family": "boundary-candidate",
+      "score": 25,
+      "sites": 1,
+      "fork": false,
+      "duplicate_of": null,
+      "partial": false
+    },
+    {
+      "repo_id": "netspooky/inhale",
+      "url": "https://github.com/netspooky/inhale",
+      "pin": "889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8",
+      "dialect_family": "py_re",
+      "boundary_family": "boundary-candidate",
+      "score": 191,
+      "sites": 1,
+      "fork": false,
+      "duplicate_of": null,
+      "partial": false
+    },
+    {
+      "repo_id": "magiclabs/magic-js",
+      "url": "https://github.com/magiclabs/magic-js",
+      "pin": "e9fb233763160316989863b4739c4656133d45b0",
+      "dialect_family": "ecma",
+      "boundary_family": "boundary-candidate",
+      "score": 477,
+      "sites": 1,
+      "fork": false,
+      "duplicate_of": null,
+      "partial": false
+    },
+    {
+      "repo_id": "json-editor/json-editor",
+      "url": "https://github.com/json-editor/json-editor",
+      "pin": "b31ddabecf4ed3209d37a2f5b29956120cd8f9ce",
+      "dialect_family": "ecma",
+      "boundary_family": "boundary-candidate",
+      "score": 4902,
+      "sites": 1,
+      "fork": false,
+      "duplicate_of": null,
+      "partial": false
+    },
+    {
+      "repo_id": "grcengineering/gigachad-grc",
+      "url": "https://github.com/grcengineering/gigachad-grc",
+      "pin": "d4a39726cad8d8e27e4c0502d1843c3b4180ffbc",
+      "dialect_family": "ecma",
+      "boundary_family": "boundary-candidate",
+      "score": 154,
+      "sites": 1,
+      "fork": false,
+      "duplicate_of": null,
+      "partial": false
+    },
+    {
+      "repo_id": "Mininglamp-OSS/octo-server",
+      "url": "https://github.com/Mininglamp-OSS/octo-server",
+      "pin": "d3daa912a04d17f78df2d0c059a111cafff75534",
+      "dialect_family": "go_re",
+      "boundary_family": "boundary-candidate",
+      "score": 594,
+      "sites": 1,
+      "fork": false,
+      "duplicate_of": null,
+      "partial": false
+    },
+    {
+      "repo_id": "mole-ids/mole",
+      "url": "https://github.com/mole-ids/mole",
+      "pin": "eb5356d56e914552d6b1c8dc822f19bd6f0e5774",
+      "dialect_family": "go_re",
+      "boundary_family": "boundary-candidate",
+      "score": 70,
+      "sites": 1,
+      "fork": false,
+      "duplicate_of": null,
+      "partial": false
+    },
+    {
+      "repo_id": "mycelium0/mycelium",
+      "url": "https://github.com/mycelium0/mycelium",
+      "pin": "d4f01ba6202d50909d1977810d322259482e0b82",
+      "dialect_family": "posix-shell",
+      "boundary_family": "boundary-candidate",
+      "score": 21,
+      "sites": 1,
+      "fork": false,
+      "duplicate_of": null,
+      "partial": false
+    },
+    {
+      "repo_id": "melodic-software/claude-code-plugins",
+      "url": "https://github.com/melodic-software/claude-code-plugins",
+      "pin": "cea68022f477680f4bb502396c705fe14b3c412f",
+      "dialect_family": "posix-shell",
+      "boundary_family": "boundary-candidate",
+      "score": 6,
+      "sites": 1,
+      "fork": false,
+      "duplicate_of": null,
+      "partial": false
+    }
+  ]
+}
