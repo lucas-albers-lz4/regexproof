@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 """Report product conversion from a strict frozen-cohort checkpoint.
 
-The input root object is exactly ``schema_version``, ``cohort_id``,
-``manifest_digest``, ``coverage_manifest_digest``, embedded PR2 ``cohort``,
-``expected_rows``, and ``rows``. ``expected_rows`` is an independently derived,
-digest-bound complete stable-identity coverage manifest; omitted or partial
-rows fail closed. Rows require a human contract and explicit
+The input root object is exactly ``schema_version`` (``"2"``), ``cohort_id``,
+``manifest_digest``, embedded PR2 ``cohort``,
+``product_coverage_manifest``, and ``rows``. The product coverage manifest is
+an independently derived, cohort-bound digest of complete stable identities;
+omitted or partial rows fail closed. Rows retain schema version ``"1"`` and
+require a human contract and explicit
 ground-truth/disposition status. Rule-diff,
 synthesized, classification, mutation, and agent-derived rows are rejected
 from this product checkpoint.  The command is read-only and exits 2 for an

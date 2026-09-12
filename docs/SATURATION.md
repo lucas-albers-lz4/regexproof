@@ -156,19 +156,20 @@ generated ledger artifacts. Run it with:
 python scripts/conversion-checkpoint.py path/to/conversion-checkpoint.json
 ```
 
-The root object is exact: `schema_version` (`"1"`), `cohort_id`,
-`manifest_digest`, `coverage_manifest_digest`, the embedded PR2 `cohort`,
-`expected_rows`, and `rows`. `expected_rows` is an independently derived,
-digest-bound complete coverage manifest for the checkpoint; omitted or extra
-product identities fail closed before construction. The embedded cohort is
-validated and its digest is recomputed. Each row binds the exact `repo_id`/URL/lowercase
+The root object is exact: checkpoint `schema_version` (`"2"`), `cohort_id`,
+`manifest_digest`, the embedded PR2 `cohort`,
+`product_coverage_manifest`, and `rows`. The product coverage manifest has
+schema version `"1"`, binds its `cohort_id` and `cohort_manifest_digest` to
+the frozen cohort, and contains the complete product identity list plus a
+`coverage_digest` over its canonical content. It must be independently derived
+from the product inventory, not from the canonical rows being checked. Omitted
+or extra product identities fail closed before construction. The embedded
+cohort is validated and its digest is recomputed. Each row binds the exact `repo_id`/URL/lowercase
 40-character pin from that cohort. Its stable identity is `(cohort_id, repo
 URL, pin, site, question_id)`; duplicate keys, stale cohorts, unknown fields,
 non-finite JSON, and repositories outside the cohort fail closed.
-`coverage_manifest_digest` is the SHA-256 of the canonical, sorted
-`expected_rows` content and is also emitted in the report. The producer must
-derive `expected_rows` from the independent product inventory, not from the
-canonical rows being checked.
+The report emits the product `coverage_digest`. Row and canonical contract
+schemas remain version `"1"` inside checkpoint schema `"2"`.
 
 Rows use the normalized product result vocabulary `sat`/`unsat`. The
 `canonical_row_to_checkpoint()` adapter normalizes upstream `gap` rows to

@@ -25,7 +25,8 @@ from typing import Any, Mapping
 
 from .cohort_manifest import CohortManifestError, validate_manifest as validate_cohort
 
-SCHEMA_VERSION = "1"
+SCHEMA_VERSION = "1"  # row, canonical, and contract schema version
+CHECKPOINT_SCHEMA_VERSION = "2"
 PIN_RE = re.compile(r"^[0-9a-f]{40}$")
 DIGEST_RE = re.compile(r"^[0-9a-f]{64}$")
 PRODUCT_KINDS = frozenset({"property", "counterexample_finder", "bug_demo"})
@@ -54,12 +55,18 @@ ROOT_FIELDS = {
     "schema_version",
     "cohort_id",
     "manifest_digest",
-    "coverage_manifest_digest",
     "cohort",
-    "expected_rows",
+    "product_coverage_manifest",
     "rows",
 }
 EXPECTED_ROW_FIELDS = {"repo_id", "url", "pin", "site", "question_id"}
+PRODUCT_COVERAGE_FIELDS = {
+    "schema_version",
+    "cohort_id",
+    "cohort_manifest_digest",
+    "identities",
+    "coverage_digest",
+}
 ROW_FIELDS = {
     "repo_id",
     "url",
@@ -165,9 +172,21 @@ def _stable_identity(
     )
 
 
-def _coverage_digest(expected_rows: list[Mapping[str, Any]]) -> str:
+def _coverage_digest(manifest: Mapping[str, Any]) -> str:
+    content = {
+        field: manifest[field]
+        for field in PRODUCT_COVERAGE_FIELDS
+        if field != "coverage_digest"
+    }
+    content["identities"] = [
+        dict(row)
+        for row in sorted(
+            content["identities"],
+            key=lambda row: _stable_identity(row, "product_coverage_manifest.identities"),
+        )
+    ]
     payload = json.dumps(
-        [dict(row) for row in sorted(expected_rows, key=lambda row: _stable_identity(row, "expected_rows"))],
+        content,
         ensure_ascii=False,
         separators=(",", ":"),
         sort_keys=True,
@@ -175,9 +194,9 @@ def _coverage_digest(expected_rows: list[Mapping[str, Any]]) -> str:
     return hashlib.sha256(payload).hexdigest()
 
 
-def coverage_manifest_digest(expected_rows: list[Mapping[str, Any]]) -> str:
-    """Return the canonical digest for an independently derived coverage manifest."""
-    return _coverage_digest(expected_rows)
+def coverage_manifest_digest(manifest: Mapping[str, Any]) -> str:
+    """Return the digest for a product coverage manifest before its digest field."""
+    return _coverage_digest(manifest)
 
 
 def _is_gt_pass(status: str) -> bool:
@@ -460,8 +479,7 @@ def checkpoint_from_canonical_rows(
     canonical_rows: list[Mapping[str, Any]],
     *,
     cohort: Mapping[str, Any],
-    expected_rows: list[Mapping[str, Any]],
-    coverage_manifest_digest: str,
+    product_coverage_manifest: Mapping[str, Any],
     repo_id: str,
     url: str,
     pin: str,
@@ -469,7 +487,7 @@ def checkpoint_from_canonical_rows(
 ) -> dict[str, Any]:
     """Build a complete checkpoint envelope from canonical rows.
 
-    ``expected_rows`` and its digest are deliberately independent inputs.  The
+    ``product_coverage_manifest`` is deliberately independent input.  The
     function fails before construction if canonical rows or dispositions omit
     an expected stable identity.
     """
@@ -477,12 +495,9 @@ def checkpoint_from_canonical_rows(
         validated_cohort = validate_cohort(cohort)
     except CohortManifestError as exc:
         raise _fail(f"invalid frozen cohort: {exc}") from exc
-    expected, expected_identities = _validate_expected_rows(
-        expected_rows, validated_cohort
+    coverage_manifest, expected_identities = _validate_product_coverage_manifest(
+        product_coverage_manifest, validated_cohort
     )
-    digest = _digest(coverage_manifest_digest, "coverage_manifest_digest", "checkpoint")
-    if digest != _coverage_digest(expected):
-        raise _fail("coverage_manifest_digest does not match expected_rows")
 
     canonical_identities: set[tuple[str, str, str, str, str]] = set()
     canonical_repo = (
@@ -525,30 +540,29 @@ def checkpoint_from_canonical_rows(
         )
     result = dict(validated_cohort)
     checkpoint = {
-        "schema_version": SCHEMA_VERSION,
+        "schema_version": CHECKPOINT_SCHEMA_VERSION,
         "cohort_id": _text(result.get("cohort_id"), "cohort_id", "cohort"),
         "manifest_digest": _digest(result.get("manifest_digest"), "manifest_digest", "cohort"),
-        "coverage_manifest_digest": digest,
         "cohort": result,
-        "expected_rows": expected,
+        "product_coverage_manifest": coverage_manifest,
         "rows": normalized,
     }
     _validated_root(checkpoint)
     return checkpoint
 
 
-def _validate_expected_rows(
-    value: Any, cohort: Mapping[str, Any]
+def _validate_product_identities(
+    value: Any, cohort: Mapping[str, Any], context_prefix: str
 ) -> tuple[list[dict[str, str]], set[tuple[str, str, str, str, str]]]:
     if not isinstance(value, list) or not value:
-        raise _fail("expected_rows must be a non-empty list")
+        raise _fail(f"{context_prefix} must be a non-empty list")
     allowed = {
         (repo["repo_id"], repo["url"], repo["pin"]): repo for repo in cohort["repos"]
     }
     normalized: list[dict[str, str]] = []
     identities: set[tuple[str, str, str, str, str]] = set()
     for index, raw in enumerate(value):
-        context = f"expected_rows[{index}]"
+        context = f"{context_prefix}[{index}]"
         item = _object(raw, context)
         _exact_fields(item, EXPECTED_ROW_FIELDS, context)
         identity = _stable_identity(item, context)
@@ -561,11 +575,74 @@ def _validate_expected_rows(
     return normalized, identities
 
 
+def build_product_coverage_manifest(
+    identities: list[Mapping[str, Any]], cohort: Mapping[str, Any]
+) -> dict[str, Any]:
+    """Build a digest-bound product manifest from an independent inventory."""
+    try:
+        validated_cohort = validate_cohort(cohort)
+    except CohortManifestError as exc:
+        raise _fail(f"invalid frozen cohort: {exc}") from exc
+    normalized, _identities = _validate_product_identities(
+        identities, validated_cohort, "product_coverage_manifest.identities"
+    )
+    manifest = {
+        "schema_version": SCHEMA_VERSION,
+        "cohort_id": validated_cohort["cohort_id"],
+        "cohort_manifest_digest": validated_cohort["manifest_digest"],
+        "identities": normalized,
+    }
+    manifest["coverage_digest"] = _coverage_digest(manifest)
+    return manifest
+
+
+def _validate_product_coverage_manifest(
+    value: Any, cohort: Mapping[str, Any]
+) -> tuple[dict[str, Any], set[tuple[str, str, str, str, str]]]:
+    manifest = _object(value, "product_coverage_manifest")
+    _exact_fields(manifest, PRODUCT_COVERAGE_FIELDS, "product_coverage_manifest")
+    if manifest["schema_version"] != SCHEMA_VERSION:
+        raise _fail(
+            "product_coverage_manifest.schema_version must "
+            f"be {SCHEMA_VERSION!r}"
+        )
+    cohort_id = _text(
+        manifest["cohort_id"], "cohort_id", "product_coverage_manifest"
+    )
+    if cohort_id != cohort["cohort_id"]:
+        raise _fail("product coverage cohort_id does not match the frozen cohort")
+    cohort_digest = _digest(
+        manifest["cohort_manifest_digest"],
+        "cohort_manifest_digest",
+        "product_coverage_manifest",
+    )
+    if cohort_digest != cohort["manifest_digest"]:
+        raise _fail(
+            "product coverage cohort_manifest_digest does not match the frozen cohort"
+        )
+    identities, identity_set = _validate_product_identities(
+        manifest["identities"], cohort, "product_coverage_manifest.identities"
+    )
+    coverage_digest = _digest(
+        manifest["coverage_digest"], "coverage_digest", "product_coverage_manifest"
+    )
+    normalized = {
+        "schema_version": SCHEMA_VERSION,
+        "cohort_id": cohort_id,
+        "cohort_manifest_digest": cohort_digest,
+        "identities": identities,
+        "coverage_digest": coverage_digest,
+    }
+    if coverage_digest != _coverage_digest(normalized):
+        raise _fail("coverage_digest does not match product coverage manifest")
+    return normalized, identity_set
+
+
 def _validated_root(document: Any) -> tuple[dict[str, Any], list[dict[str, Any]]]:
     root = _object(document, "checkpoint")
     _exact_fields(root, ROOT_FIELDS, "checkpoint")
-    if root["schema_version"] != SCHEMA_VERSION:
-        raise _fail(f"schema_version must be {SCHEMA_VERSION!r}")
+    if root["schema_version"] != CHECKPOINT_SCHEMA_VERSION:
+        raise _fail(f"schema_version must be {CHECKPOINT_SCHEMA_VERSION!r}")
     cohort_id = _text(root["cohort_id"], "cohort_id", "checkpoint")
     digest = _digest(root["manifest_digest"], "manifest_digest", "checkpoint")
     try:
@@ -579,12 +656,9 @@ def _validated_root(document: Any) -> tuple[dict[str, Any], list[dict[str, Any]]
     rows = root["rows"]
     if not isinstance(rows, list):
         raise _fail("rows must be a list")
-    expected_rows, expected = _validate_expected_rows(root["expected_rows"], cohort)
-    coverage_digest = _digest(
-        root["coverage_manifest_digest"], "coverage_manifest_digest", "checkpoint"
+    _product_coverage_manifest, expected = _validate_product_coverage_manifest(
+        root["product_coverage_manifest"], cohort
     )
-    if coverage_digest != _coverage_digest(expected_rows):
-        raise _fail("coverage_manifest_digest does not match expected_rows")
 
     allowed = {
         (repo["repo_id"], repo["url"], repo["pin"]): repo for repo in cohort["repos"]
@@ -606,7 +680,9 @@ def _validated_root(document: Any) -> tuple[dict[str, Any], list[dict[str, Any]]
         if identity in seen:
             raise _fail(f"rows[{index}] duplicates stable product identity")
         if identity not in expected:
-            raise _fail(f"rows[{index}] is not listed in expected_rows")
+            raise _fail(
+                f"rows[{index}] is not listed in product_coverage_manifest.identities"
+            )
         seen.add(identity)
         normalized.append(row)
     missing = sorted(expected - seen)
@@ -752,6 +828,9 @@ def build_report(document: Any) -> dict[str, Any]:
     """Return deterministic funnel counts and interpretations for a checkpoint."""
     cohort, rows = _validated_root(document)
     root = _object(document, "checkpoint")
+    coverage_manifest = _object(
+        root["product_coverage_manifest"], "product_coverage_manifest"
+    )
     asked = len(rows)
     sat_rows = [row for row in rows if row["result"] == "sat"]
     gt_rows = [row for row in sat_rows if _is_gt_pass(row["ground_truth_status"])]
@@ -791,10 +870,10 @@ def build_report(document: Any) -> dict[str, Any]:
     }
     dispositions = Counter(row["disposition"]["status"] for row in rows)
     return {
-        "schema_version": SCHEMA_VERSION,
+        "schema_version": CHECKPOINT_SCHEMA_VERSION,
         "cohort_id": cohort["cohort_id"],
         "manifest_digest": cohort["manifest_digest"],
-        "coverage_manifest_digest": root["coverage_manifest_digest"],
+        "product_coverage_digest": coverage_manifest["coverage_digest"],
         "counts": counts,
         "rates": rates,
         "disposition_breakdown": {
@@ -851,6 +930,7 @@ def dumps_report(report: Mapping[str, Any]) -> str:
 
 __all__ = [
     "ConversionCheckpointError",
+    "build_product_coverage_manifest",
     "build_report",
     "canonical_row_to_checkpoint",
     "checkpoint_from_canonical_rows",

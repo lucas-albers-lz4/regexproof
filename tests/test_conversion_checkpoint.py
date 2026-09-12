@@ -12,9 +12,9 @@ from regexproof.mine.cohort_manifest import build_manifest
 from regexproof.mine.conversion_checkpoint import (
     ConversionCheckpointError,
     build_report,
+    build_product_coverage_manifest,
     canonical_row_to_checkpoint,
     checkpoint_from_canonical_rows,
-    coverage_manifest_digest,
     dumps_report,
     load_checkpoint,
     wilson_interval,
@@ -134,14 +134,15 @@ def _expected_rows(rows):
 
 def _checkpoint(*rows):
     cohort = _cohort()
-    expected_rows = _expected_rows(rows)
+    product_coverage_manifest = build_product_coverage_manifest(
+        _expected_rows(rows), cohort
+    )
     return {
-        "schema_version": "1",
+        "schema_version": "2",
         "cohort_id": cohort["cohort_id"],
         "manifest_digest": cohort["manifest_digest"],
-        "coverage_manifest_digest": coverage_manifest_digest(expected_rows),
         "cohort": cohort,
-        "expected_rows": expected_rows,
+        "product_coverage_manifest": product_coverage_manifest,
         "rows": list(rows),
     }
 
@@ -178,7 +179,7 @@ def test_funnel_counts_preserve_filing_and_disposition_distinctions():
     assert report["filing_interpretation"]["private_first_is_filed"] is True
     assert report["filing_interpretation"]["accepted_is_not_third_party_remediation"]
     assert report["idiom_interpretation"]["product_conversion_checkpoint_is_not_compiler_saturation"]
-    assert report["coverage_manifest_digest"] == _checkpoint(
+    assert report["product_coverage_digest"] == _checkpoint(
         _row(0, gt="PASS", status="fixed_upstream", filed_at="2026-09-01"),
         _row(1, status="private_first", filed_at="2026-09-02"),
         _row(2, gt="PASS", status="filed", filed_at="2026-09-03"),
@@ -187,7 +188,7 @@ def test_funnel_counts_preserve_filing_and_disposition_distinctions():
         _row(5, result="unsat", gt="not_applicable"),
         _row(6, gt="PASS", status="filed", filed_at="2026-09-12"),
         _row(7, gt="PASS", status="filed_plan", filed_at="2026-09-12"),
-    )["coverage_manifest_digest"]
+    )["product_coverage_manifest"]["coverage_digest"]
 
 
 def test_strict_schema_and_exclusions_fail_closed():
@@ -216,6 +217,17 @@ def test_expected_rows_make_partial_checkpoints_fail_closed():
     checkpoint = _checkpoint(_row(0), _row(1))
     checkpoint["rows"] = checkpoint["rows"][:1]
     with pytest.raises(ConversionCheckpointError, match="omit expected"):
+        build_report(checkpoint)
+
+
+def test_unbound_v1_checkpoint_shape_is_rejected():
+    checkpoint = _checkpoint(_row(0))
+    checkpoint["schema_version"] = "1"
+    checkpoint["expected_rows"] = checkpoint["product_coverage_manifest"]["identities"]
+    del checkpoint["product_coverage_manifest"]
+    with pytest.raises(
+        ConversionCheckpointError, match=r"missing required field|schema_version"
+    ):
         build_report(checkpoint)
 
 
@@ -263,8 +275,7 @@ def test_canonical_checkpoint_requires_complete_digest_bound_coverage():
     checkpoint = checkpoint_from_canonical_rows(
         [row["canonical"] for row in rows],
         cohort=cohort,
-        expected_rows=expected,
-        coverage_manifest_digest=coverage_manifest_digest(expected),
+        product_coverage_manifest=build_product_coverage_manifest(expected, cohort),
         repo_id="owner/repo",
         url="https://github.com/owner/repo",
         pin="a" * 40,
@@ -276,8 +287,7 @@ def test_canonical_checkpoint_requires_complete_digest_bound_coverage():
         checkpoint_from_canonical_rows(
             [rows[0]["canonical"]],
             cohort=cohort,
-            expected_rows=expected,
-            coverage_manifest_digest=coverage_manifest_digest(expected),
+            product_coverage_manifest=build_product_coverage_manifest(expected, cohort),
             repo_id="owner/repo",
             url="https://github.com/owner/repo",
             pin="a" * 40,
@@ -295,8 +305,15 @@ def test_duplicate_identity_tampering_and_unknown_repo_fail_closed():
         build_report(tampered)
 
     tampered = _checkpoint(_row(0))
-    tampered["expected_rows"][0]["question_id"] = "different-question"
-    with pytest.raises(ConversionCheckpointError, match="coverage_manifest_digest"):
+    tampered["product_coverage_manifest"]["identities"][0]["question_id"] = (
+        "different-question"
+    )
+    with pytest.raises(ConversionCheckpointError, match="coverage_digest"):
+        build_report(tampered)
+
+    tampered = _checkpoint(_row(0))
+    tampered["product_coverage_manifest"]["cohort_id"] = "other-cohort"
+    with pytest.raises(ConversionCheckpointError, match="cohort_id"):
         build_report(tampered)
 
     outside = _row(0)
