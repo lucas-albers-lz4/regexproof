@@ -3,11 +3,13 @@
 from __future__ import annotations
 
 import importlib.util
+import hashlib
 import json
 from pathlib import Path
 
 import pytest
 
+from regexproof.mine.cohort_manifest import build_manifest
 from regexproof.mine.saturation import ManifestError, build_report, dumps_report, load_manifest
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -46,7 +48,29 @@ def _repo(repo_id: str, family: str, **overrides):
 
 
 def _manifest(*repos):
-    return {"schema_version": "1", "repos": list(repos)}
+    candidates = [
+        {
+            "repo_id": repo["repo_id"],
+            "url": repo["url"],
+            "pin": "a" * 40,
+            "dialect_family": repo["dialect_family"],
+            "boundary_family": "validator",
+            "score": len(repos) - index,
+            "sites": 100,
+            "fork": False,
+            "duplicate_of": None,
+            "partial": False,
+        }
+        for index, repo in enumerate(repos)
+    ]
+    cohort = build_manifest({"candidates": candidates}, "cohort", len(repos))
+    return {
+        "schema_version": "1",
+        "cohort_id": cohort["cohort_id"],
+        "manifest_digest": cohort["manifest_digest"],
+        "cohort": cohort,
+        "observations": list(repos),
+    }
 
 
 def test_partitions_by_family_and_preserves_trailing_order():
@@ -190,3 +214,52 @@ def test_product_denominator_rejects_duplicate_and_non_product_rows():
                 _repo("bad", "py", product_properties=[{**_property(0), "kind": "rule_diff"}])
             )
         )
+
+
+def test_envelope_binds_observations_to_frozen_order_and_digest():
+    envelope = _manifest(_repo("a", "py"), _repo("b", "py"))
+    assert build_report(envelope)["cohort_id"] == "cohort"
+
+    reordered = {**envelope, "observations": list(reversed(envelope["observations"]))}
+    with pytest.raises(ManifestError, match="does not match the frozen cohort entry"):
+        build_report(reordered)
+
+    tampered = json.loads(json.dumps(envelope))
+    tampered["cohort"]["repos"][0]["pin"] = "b" * 40
+    with pytest.raises(ManifestError, match="manifest_digest"):
+        build_report(tampered)
+
+    tampered = json.loads(json.dumps(envelope))
+    tampered["observations"][0]["pin"] = "c" * 40
+    with pytest.raises(ManifestError, match="does not match"):
+        build_report(tampered)
+
+
+def test_pr2_rejects_duplicate_url_pin_even_with_distinct_repo_ids():
+    first = _repo("a", "py")
+    second = _repo("b", "py", url=first["url"], pin=first["pin"])
+    with pytest.raises(ValueError, match="duplicate repository attempt"):
+        _manifest(first, second)
+
+
+def test_pr1_rejects_tampered_frozen_duplicate_url_pin():
+    envelope = _manifest(_repo("a", "py"), _repo("b", "py"))
+    tampered = json.loads(json.dumps(envelope))
+    tampered["cohort"]["repos"][1]["url"] = tampered["cohort"]["repos"][0]["url"]
+    tampered["cohort"]["repos"][1]["pin"] = tampered["cohort"]["repos"][0]["pin"]
+    content = {
+        key: tampered["cohort"][key]
+        for key in ("schema_version", "cohort_id", "repos")
+    }
+    digest = hashlib.sha256(
+        json.dumps(content, sort_keys=True, separators=(",", ":")).encode()
+    ).hexdigest()
+    tampered["cohort"]["manifest_digest"] = digest
+    tampered["manifest_digest"] = digest
+    with pytest.raises(ManifestError, match="duplicate repository attempt"):
+        build_report(tampered)
+
+
+def test_old_unbound_observation_schema_is_not_accepted():
+    with pytest.raises(ManifestError, match="observation envelope"):
+        build_report({"schema_version": "1", "repos": [_repo("a", "py")]})
