@@ -12,7 +12,7 @@ from pathlib import Path
 from typing import Any, Mapping
 
 SCHEMA_VERSION = "1"
-PIN_RE = re.compile(r"^[0-9a-fA-F]{40}$")
+PIN_RE = re.compile(r"^[0-9a-f]{40}$")
 CANDIDATE_FIELDS = {
     "repo_id",
     "url",
@@ -77,7 +77,7 @@ def _validate_candidate(value: Any, index: int) -> dict[str, Any]:
     url = _text(row["url"], "url", context)
     pin = _text(row["pin"], "pin", context)
     if PIN_RE.fullmatch(pin) is None:
-        raise _error(f"{context}.pin must be exactly 40 hexadecimal characters")
+        raise _error(f"{context}.pin must be exactly 40 lowercase hexadecimal characters")
     dialect = _text(row["dialect_family"], "dialect_family", context)
     boundary = _text(row["boundary_family"], "boundary_family", context)
 
@@ -200,16 +200,36 @@ def build_manifest(
         for row in rows
         if not row["fork"] and row["duplicate_of"] is None and not row["partial"]
     ]
-    eligible.sort(
-        key=lambda row: (
+    def sort_key(row: Mapping[str, Any]) -> tuple[Any, ...]:
+        return (
             -row["score"],
             row["dialect_family"],
             row["boundary_family"],
             row["repo_id"],
             row["url"],
+            row["pin"],
         )
+
+    buckets: dict[tuple[str, str], list[dict[str, Any]]] = {}
+    for row in eligible:
+        buckets.setdefault((row["dialect_family"], row["boundary_family"]), []).append(row)
+    for bucket in buckets.values():
+        bucket.sort(key=sort_key)
+
+    selected: list[dict[str, Any]] = []
+    bucket_keys = sorted(buckets)
+    for key in bucket_keys:
+        if len(selected) == limit:
+            break
+        selected.append(buckets[key][0])
+
+    # The coverage pass gives every available family bucket a chance. Score is
+    # then the tie breaker for the remaining eligible candidates.
+    selected_ids = {id(row) for row in selected}
+    remaining = sorted(
+        (row for row in eligible if id(row) not in selected_ids), key=sort_key
     )
-    selected = eligible[:limit]
+    selected.extend(remaining[: max(0, limit - len(selected))])
     if not selected:
         raise CohortManifestError("no eligible candidates remain after exclusions")
     repos = [{field: row[field] for field in OUTPUT_FIELDS} for row in selected]
@@ -292,6 +312,37 @@ def validate_manifest(manifest: Any) -> dict[str, Any]:
         "manifest_digest": digest,
         "repos": repos,
     }
+
+
+def load_frozen_manifest(path: str | Path) -> dict[str, Any]:
+    """Read and strictly validate a PR2 frozen cohort manifest."""
+    source = Path(path)
+    try:
+        text = source.read_text(encoding="utf-8")
+    except OSError as exc:
+        raise CohortManifestError(f"cannot read manifest {source}: {exc}") from exc
+
+    def reject_duplicates(pairs):
+        result = {}
+        for key, value in pairs:
+            if key in result:
+                raise _error(f"duplicate JSON key {key!r}")
+            result[key] = value
+        return result
+
+    try:
+        document = json.loads(
+            text,
+            object_pairs_hook=reject_duplicates,
+            parse_constant=lambda value: (_ for _ in ()).throw(
+                _error(f"non-finite JSON number {value!r} is not allowed")
+            ),
+        )
+    except CohortManifestError:
+        raise
+    except json.JSONDecodeError as exc:
+        raise CohortManifestError(f"invalid JSON in {source}: {exc.msg}") from exc
+    return validate_manifest(document)
 
 
 def write_manifest_atomic(path: str | Path, text: str) -> None:
