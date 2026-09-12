@@ -13,6 +13,8 @@ from regexproof.mine.conversion_checkpoint import (
     ConversionCheckpointError,
     build_report,
     canonical_row_to_checkpoint,
+    checkpoint_from_canonical_rows,
+    coverage_manifest_digest,
     dumps_report,
     load_checkpoint,
     wilson_interval,
@@ -117,23 +119,29 @@ def _row(
     }
 
 
+def _expected_rows(rows):
+    return [
+        {
+            "repo_id": row["repo_id"],
+            "url": row["url"],
+            "pin": row["pin"],
+            "site": row["site"],
+            "question_id": row["question_id"],
+        }
+        for row in rows
+    ]
+
+
 def _checkpoint(*rows):
     cohort = _cohort()
+    expected_rows = _expected_rows(rows)
     return {
         "schema_version": "1",
         "cohort_id": cohort["cohort_id"],
         "manifest_digest": cohort["manifest_digest"],
+        "coverage_manifest_digest": coverage_manifest_digest(expected_rows),
         "cohort": cohort,
-        "expected_rows": [
-            {
-                "repo_id": row["repo_id"],
-                "url": row["url"],
-                "pin": row["pin"],
-                "site": row["site"],
-                "question_id": row["question_id"],
-            }
-            for row in rows
-        ],
+        "expected_rows": expected_rows,
         "rows": list(rows),
     }
 
@@ -170,6 +178,16 @@ def test_funnel_counts_preserve_filing_and_disposition_distinctions():
     assert report["filing_interpretation"]["private_first_is_filed"] is True
     assert report["filing_interpretation"]["accepted_is_not_third_party_remediation"]
     assert report["idiom_interpretation"]["product_conversion_checkpoint_is_not_compiler_saturation"]
+    assert report["coverage_manifest_digest"] == _checkpoint(
+        _row(0, gt="PASS", status="fixed_upstream", filed_at="2026-09-01"),
+        _row(1, status="private_first", filed_at="2026-09-02"),
+        _row(2, gt="PASS", status="filed", filed_at="2026-09-03"),
+        _row(3, status="wont_file"),
+        _row(4, gt="PASS", status="false_positive"),
+        _row(5, result="unsat", gt="not_applicable"),
+        _row(6, gt="PASS", status="filed", filed_at="2026-09-12"),
+        _row(7, gt="PASS", status="filed_plan", filed_at="2026-09-12"),
+    )["coverage_manifest_digest"]
 
 
 def test_strict_schema_and_exclusions_fail_closed():
@@ -234,6 +252,39 @@ def test_canonical_adapter_normalizes_gap_and_null_unsat_ground_truth():
     assert adapted_unsat["ground_truth_status"] == "not_applicable"
 
 
+def test_canonical_checkpoint_requires_complete_digest_bound_coverage():
+    cohort = _cohort()
+    rows = [_row(0), _row(1)]
+    expected = _expected_rows(rows)
+    dispositions = {
+        (row["site"], row["question_id"]): row["disposition"] for row in rows
+    }
+
+    checkpoint = checkpoint_from_canonical_rows(
+        [row["canonical"] for row in rows],
+        cohort=cohort,
+        expected_rows=expected,
+        coverage_manifest_digest=coverage_manifest_digest(expected),
+        repo_id="owner/repo",
+        url="https://github.com/owner/repo",
+        pin="a" * 40,
+        dispositions=dispositions,
+    )
+    assert len(checkpoint["rows"]) == 2
+
+    with pytest.raises(ConversionCheckpointError, match="coverage manifest"):
+        checkpoint_from_canonical_rows(
+            [rows[0]["canonical"]],
+            cohort=cohort,
+            expected_rows=expected,
+            coverage_manifest_digest=coverage_manifest_digest(expected),
+            repo_id="owner/repo",
+            url="https://github.com/owner/repo",
+            pin="a" * 40,
+            dispositions=dispositions,
+        )
+
+
 def test_duplicate_identity_tampering_and_unknown_repo_fail_closed():
     with pytest.raises(ConversionCheckpointError, match="duplicates expected stable"):
         build_report(_checkpoint(_row(0), _row(0)))
@@ -241,6 +292,11 @@ def test_duplicate_identity_tampering_and_unknown_repo_fail_closed():
     tampered = _checkpoint(_row(0))
     tampered["manifest_digest"] = "b" * 64
     with pytest.raises(ConversionCheckpointError, match="does not match"):
+        build_report(tampered)
+
+    tampered = _checkpoint(_row(0))
+    tampered["expected_rows"][0]["question_id"] = "different-question"
+    with pytest.raises(ConversionCheckpointError, match="coverage_manifest_digest"):
         build_report(tampered)
 
     outside = _row(0)
