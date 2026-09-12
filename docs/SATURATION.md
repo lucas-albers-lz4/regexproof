@@ -1,0 +1,90 @@
+# Corpus saturation measurement
+
+Issue: [#623](https://github.com/lucas-albers-lz4/regexproof/issues/623)
+
+This measurement has two separate questions:
+
+1. Has a dialect family stopped contributing materially new compiler surface?
+2. Is the verification workflow producing product value on a frozen set of
+   real boundary sites?
+
+Heap's law / singleton novelty answers only the first question. It must not be
+used as a proxy for accepted security findings.
+
+## PR1: deterministic cohort report
+
+The first slice is a read-only calculator:
+
+```text
+python scripts/saturation-report.py path/to/cohort.json
+```
+
+The input is a pinned, ordered cohort observation. The order is meaningful
+within each `dialect_family`, because the report evaluates the trailing two
+repositories in that family.
+
+```json
+{
+  "schema_version": "1",
+  "repos": [
+    {
+      "repo_id": "owner/repo",
+      "dialect_family": "py_re",
+      "sites": 100,
+      "novel_sites": 2,
+      "new_reject_buckets": [],
+      "properties_asked": 25,
+      "properties_sat": 5,
+      "properties_ground_truthed": 4,
+      "properties_filed": 2,
+      "properties_accepted": 0
+    }
+  ]
+}
+```
+
+The report fails closed on malformed counts, duplicate repository IDs, empty
+site denominators, non-finite JSON numbers, and impossible funnel orderings.
+Rates are emitted as deterministic decimal strings rather than binary floats.
+
+Compiler saturation is true for a family only when both trailing repositories
+have a novelty rate strictly below `0.03` and neither introduces a new reject
+bucket. The product denominator is total `properties_asked`; the first
+checkpoint is `>=50`, with `>=100` as the preferred target.
+
+This report does not infer cohort membership from the live candidate queue,
+does not write artifacts, and does not add telemetry to
+`corpus_events.jsonl`. That file is reserved for the conversion-wave lock
+state machine. A separate immutable cohort/attempt event log belongs in a
+later PR.
+
+## Operating interpretation
+
+The mine job is intake, not processing: the live policy is one scheduled job
+per day with a default cap of 10 candidates. The queue is currently full, so
+raising that cap is not a saturation experiment. The working processing target
+is approximately 5–7 gated repositories per week, or about one per workday.
+
+Use a staged cohort:
+
+- calibrate on 10 independent repositories;
+- continue to 20 only if novelty or conversion remains material;
+- continue to 30 if the 20-repository result is still productive;
+- use 50 as a hard ceiling, not an automatic quota.
+
+The compiler decision is per dialect family. The product decision is based on
+human contracts, ground truth, filing, and upstream disposition over a frozen
+cohort. Synthesized or agent-derived rows do not silently become product
+yield.
+
+## Next slices
+
+- Define the immutable cohort manifest, pin/digest identity, and stratified
+  target selection without changing the live score-v1 allocator.
+- Add a separate append-only processing event log for mine, probe, gate,
+  conversion, and disposition stages. Keep it distinct from the wave-lock
+  log and fail closed on rewrite, duplicate identity, or unknown status.
+- Join frozen cohorts to conversion-ledger identities and report
+  asked → SAT → ground-truthed → filed/private-first → accepted.
+- Run the first 10-repository calibration cohort, then publish a measured
+  continue/retarget/stop close-out.

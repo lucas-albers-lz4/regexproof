@@ -4,6 +4,11 @@ The proof harness (`scripts/z3-verify.py`) is the product. This page is the
 **corpus funnel** an operator runs beside it: discover candidates, probe them,
 gate them, then conversion-wave the GO set.
 
+The saturation experiment and its units are documented in
+[`SATURATION.md`](SATURATION.md). In particular, the mine cap is candidate
+intake, not completed repository processing; compiler novelty and product
+conversion have separate stop conditions.
+
 Entry status command (latest mine-day drain, queue pressure, 7-day survival,
 backlog weeks):
 
