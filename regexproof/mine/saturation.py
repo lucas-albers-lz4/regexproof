@@ -10,24 +10,36 @@ two observations for that family in manifest order::
       "repos": [
         {
           "repo_id": "owner/repo",
+          "url": "https://github.com/owner/repo",
+          "pin": "0123456789abcdef0123456789abcdef01234567",
           "dialect_family": "py_re",
           "sites": 100,
           "novel_sites": 2,
           "new_reject_buckets": [],
-          "properties_asked": 10,
-          "properties_sat": 2,
-          "properties_ground_truthed": 2,
-          "properties_filed": 1,
-          "properties_accepted": 0
+          "product_properties": [
+            {
+              "site": "src/validator.py:10:4",
+              "question_id": "no-space",
+              "kind": "property",
+              "provenance": "human",
+              "synthesized": false,
+              "result": "unsat",
+              "ground_truthed": false,
+              "filed": false,
+              "accepted": false
+            }
+          ]
         }
       ]
     }
 
-All count fields are JSON integers, not booleans or floating-point values.
-They must be non-negative; ``novel_sites`` cannot exceed ``sites``.  A repo
-must have at least one site so its novelty rate has a defined denominator.
-The product and target denominators are the cohort totals for
-``properties_asked``; their thresholds are 50 and 100 respectively.
+``sites`` and ``novel_sites`` are JSON integers, not booleans or
+floating-point values.  They must be non-negative; ``novel_sites`` cannot
+exceed ``sites``.  A repo must have at least one site so its novelty rate has
+a defined denominator. Product counts are derived only from unique
+``(site, question_id)`` records with human provenance, a non-synthesized
+product kind, and an explicit result. The product and target denominators are
+the cohort totals for these records; their thresholds are 50 and 100.
 
 The compiler stop rule is deliberately exact: a family stops only when it has
 at least two repos, each of its trailing two per-repo novelty rates is
@@ -42,6 +54,7 @@ from __future__ import annotations
 import json
 from collections import defaultdict
 from pathlib import Path
+import re
 from typing import Any, Mapping
 
 SCHEMA_VERSION = "1"
@@ -50,27 +63,32 @@ TARGET_DENOMINATOR_THRESHOLD = 100
 TRAILING_REPO_COUNT = 2
 NOVELTY_RATE_NUMERATOR = 3
 NOVELTY_RATE_DENOMINATOR = 100
+PIN_RE = re.compile(r"^[0-9a-fA-F]{40}$")
+PRODUCT_KINDS = frozenset({"property", "counterexample_finder", "bug_demo"})
 
 REPO_FIELDS = (
     "repo_id",
+    "url",
+    "pin",
     "dialect_family",
     "sites",
     "novel_sites",
     "new_reject_buckets",
-    "properties_asked",
-    "properties_sat",
-    "properties_ground_truthed",
-    "properties_filed",
-    "properties_accepted",
+    "product_properties",
 )
-COUNT_FIELDS = (
-    "sites",
-    "novel_sites",
-    "properties_asked",
-    "properties_sat",
-    "properties_ground_truthed",
-    "properties_filed",
-    "properties_accepted",
+COUNT_FIELDS = ("sites", "novel_sites")
+PROPERTY_FIELDS = frozenset(
+    {
+        "site",
+        "question_id",
+        "kind",
+        "provenance",
+        "synthesized",
+        "result",
+        "ground_truthed",
+        "filed",
+        "accepted",
+    }
 )
 
 
@@ -112,6 +130,63 @@ def _text(value: Any, name: str, context: str) -> str:
     return value
 
 
+def _validate_properties(raw: Any, context: str) -> dict[str, int]:
+    if not isinstance(raw, list):
+        raise _fail(f"{context}.product_properties must be a list")
+    seen: set[tuple[str, str]] = set()
+    counts = {
+        "properties_asked": 0,
+        "properties_sat": 0,
+        "properties_ground_truthed": 0,
+        "properties_filed": 0,
+        "properties_accepted": 0,
+    }
+    for index, item in enumerate(raw):
+        item_context = f"{context}.product_properties[{index}]"
+        prop = _mapping(item, item_context)
+        if set(prop) != PROPERTY_FIELDS:
+            missing = sorted(PROPERTY_FIELDS - set(prop))
+            extra = sorted(set(prop) - PROPERTY_FIELDS)
+            if missing:
+                raise _fail(
+                    f"{item_context} is missing required field(s): {', '.join(missing)}"
+                )
+            raise _fail(f"{item_context} has unknown field(s): {', '.join(extra)}")
+        site = _text(prop["site"], "site", item_context)
+        question_id = _text(prop["question_id"], "question_id", item_context)
+        identity = (site, question_id)
+        if identity in seen:
+            raise _fail(
+                f"{item_context} duplicates product identity ({site!r}, {question_id!r})"
+            )
+        seen.add(identity)
+        kind = _text(prop["kind"], "kind", item_context)
+        if kind not in PRODUCT_KINDS:
+            raise _fail(f"{item_context}.kind {kind!r} is not a product kind")
+        if prop["provenance"] != "human":
+            raise _fail(f"{item_context}.provenance must be 'human'")
+        if prop["synthesized"] is not False:
+            raise _fail(f"{item_context}.synthesized must be false")
+        result = prop["result"]
+        if result not in {"sat", "unsat"}:
+            raise _fail(f"{item_context}.result must be 'sat' or 'unsat'")
+        for field in ("ground_truthed", "filed", "accepted"):
+            if not isinstance(prop[field], bool):
+                raise _fail(f"{item_context}.{field} must be a boolean")
+        if prop["ground_truthed"] and result != "sat":
+            raise _fail(f"{item_context}.ground_truthed requires result 'sat'")
+        if prop["filed"] and not prop["ground_truthed"]:
+            raise _fail(f"{item_context}.filed requires ground_truthed")
+        if prop["accepted"] and not prop["filed"]:
+            raise _fail(f"{item_context}.accepted requires filed")
+        counts["properties_asked"] += 1
+        counts["properties_sat"] += result == "sat"
+        counts["properties_ground_truthed"] += prop["ground_truthed"]
+        counts["properties_filed"] += prop["filed"]
+        counts["properties_accepted"] += prop["accepted"]
+    return counts
+
+
 def _validate_repo(raw: Any, index: int) -> dict[str, Any]:
     context = f"repos[{index}]"
     repo = _mapping(raw, context)
@@ -120,10 +195,15 @@ def _validate_repo(raw: Any, index: int) -> dict[str, Any]:
         raise _fail(f"{context} is missing required field(s): {', '.join(missing)}")
 
     repo_id = _text(repo["repo_id"], "repo_id", context)
+    _text(repo["url"], "url", context)
+    pin = _text(repo["pin"], "pin", context)
+    if PIN_RE.fullmatch(pin) is None:
+        raise _fail(f"{context}.pin must be exactly 40 hexadecimal characters")
     family = _text(repo["dialect_family"], "dialect_family", context)
     counts = {
         field: _nonnegative_int(repo[field], field, context) for field in COUNT_FIELDS
     }
+    counts.update(_validate_properties(repo["product_properties"], context))
     if counts["sites"] == 0:
         raise _fail(f"{context}.sites must be greater than zero to compute novelty rate")
     if counts["novel_sites"] > counts["sites"]:
@@ -156,6 +236,8 @@ def _validate_repo(raw: Any, index: int) -> dict[str, Any]:
 
     return {
         "repo_id": repo_id,
+        "url": repo["url"],
+        "pin": pin,
         "dialect_family": family,
         **counts,
         "new_reject_buckets": clean_buckets,
@@ -165,18 +247,20 @@ def _validate_repo(raw: Any, index: int) -> dict[str, Any]:
 def validate_manifest(manifest: Any) -> list[dict[str, Any]]:
     """Validate *manifest* and return normalized repo observations.
 
-    The returned list preserves manifest order.  A bare list is accepted for
-    library callers as a convenience, but the documented on-disk schema is an
-    object containing ``schema_version`` and ``repos``.
+    The returned list preserves manifest order. The on-disk schema is an
+    object containing exactly ``schema_version`` and ``repos``.
     """
-    if isinstance(manifest, list):
-        raw_repos = manifest
-    else:
-        document = _mapping(manifest, "manifest")
-        version = document.get("schema_version", SCHEMA_VERSION)
-        if version not in (SCHEMA_VERSION, 1):
-            raise _fail(f"unsupported schema_version {version!r}; expected {SCHEMA_VERSION!r}")
-        raw_repos = _required(document, "repos", "manifest")
+    document = _mapping(manifest, "manifest")
+    if set(document) != {"schema_version", "repos"}:
+        missing = sorted({"schema_version", "repos"} - set(document))
+        extra = sorted(set(document) - {"schema_version", "repos"})
+        if missing:
+            raise _fail(f"manifest is missing required field(s): {', '.join(missing)}")
+        raise _fail(f"manifest has unknown field(s): {', '.join(extra)}")
+    version = document["schema_version"]
+    if version != SCHEMA_VERSION:
+        raise _fail(f"unsupported schema_version {version!r}; expected {SCHEMA_VERSION!r}")
+    raw_repos = _required(document, "repos", "manifest")
 
     if not isinstance(raw_repos, list):
         raise _fail("repos must be a list")
@@ -199,9 +283,21 @@ def load_manifest(path: str | Path) -> list[dict[str, Any]]:
     except OSError as exc:
         raise ManifestError(f"cannot read manifest {manifest_path}: {exc}") from exc
     try:
-        document = json.loads(text, parse_constant=lambda value: (_ for _ in ()).throw(
-            _fail(f"non-finite JSON number {value!r} is not allowed")
-        ))
+        def reject_duplicates(pairs):
+            result = {}
+            for key, value in pairs:
+                if key in result:
+                    raise _fail(f"duplicate JSON key {key!r}")
+                result[key] = value
+            return result
+
+        document = json.loads(
+            text,
+            object_pairs_hook=reject_duplicates,
+            parse_constant=lambda value: (_ for _ in ()).throw(
+                _fail(f"non-finite JSON number {value!r} is not allowed")
+            ),
+        )
     except ManifestError:
         raise
     except json.JSONDecodeError as exc:
@@ -278,7 +374,17 @@ def build_report(manifest: Any) -> dict[str, Any]:
             "compiler_stop": _compiler_stop(trailing),
         }
 
-    totals = {field: sum(repo[field] for repo in repos) for field in COUNT_FIELDS}
+    product_fields = (
+        "properties_asked",
+        "properties_sat",
+        "properties_ground_truthed",
+        "properties_filed",
+        "properties_accepted",
+    )
+    totals = {
+        field: sum(repo[field] for repo in repos)
+        for field in (*COUNT_FIELDS, *product_fields)
+    }
     reject_buckets = sorted(
         {bucket for repo in repos for bucket in repo["new_reject_buckets"]}
     )

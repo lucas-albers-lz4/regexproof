@@ -29,23 +29,37 @@ repositories in that family.
   "repos": [
     {
       "repo_id": "owner/repo",
+      "url": "https://github.com/owner/repo",
+      "pin": "0123456789abcdef0123456789abcdef01234567",
       "dialect_family": "py_re",
       "sites": 100,
       "novel_sites": 2,
       "new_reject_buckets": [],
-      "properties_asked": 25,
-      "properties_sat": 5,
-      "properties_ground_truthed": 4,
-      "properties_filed": 2,
-      "properties_accepted": 0
+      "product_properties": [
+        {
+          "site": "src/validator.py:10:4",
+          "question_id": "no-space",
+          "kind": "property",
+          "provenance": "human",
+          "synthesized": false,
+          "result": "unsat",
+          "ground_truthed": false,
+          "filed": false,
+          "accepted": false
+        }
+      ]
     }
   ]
 }
 ```
 
-The report fails closed on malformed counts, duplicate repository IDs, empty
-site denominators, non-finite JSON numbers, and impossible funnel orderings.
-Rates are emitted as deterministic decimal strings rather than binary floats.
+The report fails closed on malformed counts, duplicate repository IDs or
+URL/pin attempts, invalid pins, empty site denominators, duplicate product
+identities, non-human or synthesized product rows, non-finite JSON numbers,
+and impossible funnel orderings. Rates are emitted as deterministic decimal
+strings rather than binary floats. Product counts are derived from the
+validated property rows, so rule-diff pilots, classification rows, mutation
+guards, and agent-derived rows cannot inflate the denominator.
 
 Compiler saturation is true for a family only when both trailing repositories
 have a novelty rate strictly below `0.03` and neither introduces a new reject

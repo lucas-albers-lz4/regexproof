@@ -21,7 +21,8 @@ Manifest schema (JSON):
     ]
   }
 
-The ``repos`` list is ordered.  For every dialect family, ``compiler_stop``
+  The ``repos`` list is ordered.  Each repo carries pinned ``url``/``pin``
+  identity and a ``product_properties`` list. For every dialect family, ``compiler_stop``
 is true only when the last two repos both have novelty strictly below 0.03 and
 both have no new reject buckets.  All count fields are non-negative JSON
 integers; a repo must have at least one site.  The product and target
