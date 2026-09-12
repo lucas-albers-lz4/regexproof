@@ -18,6 +18,7 @@ import json
 import math
 import re
 from collections import Counter
+from datetime import date, datetime
 from pathlib import Path
 from typing import Any, Mapping
 
@@ -27,6 +28,7 @@ SCHEMA_VERSION = "1"
 PIN_RE = re.compile(r"^[0-9a-f]{40}$")
 DIGEST_RE = re.compile(r"^[0-9a-f]{64}$")
 PRODUCT_KINDS = frozenset({"property", "counterexample_finder", "bug_demo"})
+TRUST_CLASSES = frozenset({"untrusted-input", "config", "internal"})
 GT_PASS = frozenset({"reproduced", "PASS"})
 GT_STATUSES = frozenset(
     {"not_applicable", "not_run", "unknown", "failed", "reproduced", "PASS"}
@@ -37,33 +39,71 @@ FILED_STATUSES = frozenset({"filed", "private_first", "fixed_upstream"})
 ACCEPTED_STATUSES = frozenset({"fixed_upstream"})
 DISPOSITION_STATUSES = frozenset(
     {
-        "pending",
         "filed_plan",
         "filed",
         "private_first",
         "fixed_upstream",
         "wont_file",
         "false_positive",
+        "approval_missing",
         "out_of_scope_redos",
-        "not_applicable",
     }
 )
-ROOT_FIELDS = {"schema_version", "cohort_id", "manifest_digest", "cohort", "rows"}
+ROOT_FIELDS = {
+    "schema_version",
+    "cohort_id",
+    "manifest_digest",
+    "cohort",
+    "expected_rows",
+    "rows",
+}
+EXPECTED_ROW_FIELDS = {"repo_id", "url", "pin", "site", "question_id"}
 ROW_FIELDS = {
     "repo_id",
     "url",
     "pin",
+    "schema_version",
     "site",
     "question_id",
     "kind",
     "synthesized",
     "result",
+    "domain",
     "contract",
     "ground_truth_status",
     "disposition",
+    "canonical",
 }
-CONTRACT_FIELDS = {"guarantee", "input_source", "trust_class", "domain", "provenance"}
-DISPOSITION_FIELDS = {"status", "filed_at"}
+CONTRACT_FIELDS = {
+    "schema_version",
+    "site",
+    "guarantee",
+    "input_source",
+    "trust",
+    "declared_domain",
+    "provenance",
+}
+CONTRACT_OPTIONAL_FIELDS = {"family_contract"}
+DISPOSITION_FIELDS = {
+    "status",
+    "filed_at",
+    "resolved_at",
+    "approval_escape",
+    "approval_ref",
+    "reason_code",
+    "backfilled",
+    "disposition_date",
+}
+CANONICAL_REQUIRED_FIELDS = {
+    "schema_version",
+    "site",
+    "contract",
+    "domain",
+    "kind",
+    "synthesized",
+    "result",
+    "ground_truth_status",
+}
 TARGETS = (50, 100)
 
 
@@ -117,14 +157,49 @@ def _is_gt_pass(status: str) -> bool:
 
 def _validate_contract(value: Any, context: str) -> dict[str, str]:
     contract = _object(value, f"{context}.contract")
-    _exact_fields(contract, CONTRACT_FIELDS, f"{context}.contract")
+    missing = sorted(CONTRACT_FIELDS - set(contract))
+    extra = sorted(set(contract) - CONTRACT_FIELDS - CONTRACT_OPTIONAL_FIELDS)
+    if missing:
+        raise _fail(
+            f"{context}.contract is missing required field(s): {', '.join(missing)}"
+        )
+    if extra:
+        raise _fail(
+            f"{context}.contract has unknown field(s): {', '.join(extra)}"
+        )
     normalized = {
         field: _text(contract[field], field, f"{context}.contract")
-        for field in ("guarantee", "input_source", "trust_class", "domain", "provenance")
+        for field in CONTRACT_FIELDS
     }
+    if normalized["schema_version"] != SCHEMA_VERSION:
+        raise _fail(f"{context}.contract.schema_version must be {SCHEMA_VERSION!r}")
+    if normalized["trust"] not in TRUST_CLASSES:
+        raise _fail(
+            f"{context}.contract.trust must be one of {sorted(TRUST_CLASSES)}"
+        )
     if normalized["provenance"] != "human":
         raise _fail(f"{context}.contract.provenance must be 'human'")
+    if contract["site"] != normalized["site"]:
+        raise _fail(f"{context}.contract.site must be stable and non-empty")
+    if "family_contract" in contract:
+        if not isinstance(contract["family_contract"], Mapping):
+            raise _fail(f"{context}.contract.family_contract must be an object")
+        normalized["family_contract"] = contract["family_contract"]
     return normalized
+
+
+def _iso_date_or_timestamp(value: Any, field: str, context: str) -> str | None:
+    if value is None:
+        return None
+    text = _text(value, field, context)
+    try:
+        date.fromisoformat(text)
+    except ValueError:
+        try:
+            datetime.fromisoformat(text.replace("Z", "+00:00"))
+        except ValueError as exc:
+            raise _fail(f"{context}.{field} must be an ISO date or timestamp") from exc
+    return text
 
 
 def _validate_disposition(value: Any, context: str) -> dict[str, str | None]:
@@ -133,10 +208,66 @@ def _validate_disposition(value: Any, context: str) -> dict[str, str | None]:
     status = _text(disposition["status"], "status", f"{context}.disposition")
     if status not in DISPOSITION_STATUSES:
         raise _fail(f"{context}.disposition.status {status!r} is unknown")
-    filed_at = disposition["filed_at"]
-    if filed_at is not None:
-        filed_at = _text(filed_at, "filed_at", f"{context}.disposition")
-    return {"status": status, "filed_at": filed_at}
+    filed_at = _iso_date_or_timestamp(disposition["filed_at"], "filed_at", context)
+    resolved_at = _iso_date_or_timestamp(
+        disposition["resolved_at"], "resolved_at", context
+    )
+    approval_escape = disposition["approval_escape"]
+    if approval_escape is not None:
+        approval_escape = _text(approval_escape, "approval_escape", context)
+    approval_ref = disposition["approval_ref"]
+    if approval_ref is not None:
+        approval_ref = _text(approval_ref, "approval_ref", context)
+    reason_code = disposition["reason_code"]
+    if reason_code is not None:
+        reason_code = _text(reason_code, "reason_code", context)
+    if not isinstance(disposition["backfilled"], bool):
+        raise _fail(f"{context}.disposition.backfilled must be boolean")
+    disposition_date = disposition["disposition_date"]
+    if disposition["backfilled"]:
+        if disposition_date != "unknown_date":
+            disposition_date = _iso_date_or_timestamp(
+                disposition_date, "disposition_date", context
+            )
+            if disposition_date is None:
+                raise _fail(
+                    f"{context}.disposition.disposition_date is required when backfilled"
+                )
+    elif disposition_date is not None:
+        raise _fail(
+            f"{context}.disposition.disposition_date is only valid for backfilled rows"
+        )
+    if status in {"filed", "filed_plan", "private_first", "fixed_upstream"}:
+        if filed_at is None and resolved_at is None and not disposition["backfilled"]:
+            raise _fail(
+                f"{context}.disposition filing status requires filed_at or resolved_at"
+            )
+    if status == "approval_missing":
+        if approval_escape == "approval_present":
+            if approval_ref is None:
+                raise _fail(
+                    f"{context}.disposition approval_missing requires approval_ref"
+                )
+        elif approval_escape == "wont_file":
+            if reason_code is None:
+                raise _fail(
+                    f"{context}.disposition approval_missing with wont_file escape "
+                    "requires reason_code"
+                )
+        else:
+            raise _fail(
+                f"{context}.disposition approval_missing requires approval_escape"
+            )
+    return {
+        "status": status,
+        "filed_at": filed_at,
+        "resolved_at": resolved_at,
+        "approval_escape": approval_escape,
+        "approval_ref": approval_ref,
+        "reason_code": reason_code,
+        "backfilled": disposition["backfilled"],
+        "disposition_date": disposition_date,
+    }
 
 
 def _validate_row(value: Any, index: int) -> dict[str, Any]:
@@ -147,13 +278,17 @@ def _validate_row(value: Any, index: int) -> dict[str, Any]:
         "repo_id": _text(row["repo_id"], "repo_id", context),
         "url": _text(row["url"], "url", context),
         "pin": _pin(row["pin"], context),
+        "schema_version": _text(row["schema_version"], "schema_version", context),
         "site": _text(row["site"], "site", context),
         "question_id": _text(row["question_id"], "question_id", context),
         "kind": _text(row["kind"], "kind", context),
         "synthesized": row["synthesized"],
         "result": row["result"],
+        "domain": _text(row["domain"], "domain", context),
         "ground_truth_status": row["ground_truth_status"],
     }
+    if normalized["schema_version"] != SCHEMA_VERSION:
+        raise _fail(f"{context}.schema_version must be {SCHEMA_VERSION!r}")
     if normalized["kind"] not in PRODUCT_KINDS:
         raise _fail(
             f"{context}.kind must be one of {sorted(PRODUCT_KINDS)}; rule_diff and other kinds are excluded"
@@ -170,6 +305,41 @@ def _validate_row(value: Any, index: int) -> dict[str, Any]:
     if normalized["result"] == "sat" and gt_status == "not_applicable":
         raise _fail(f"{context}.ground_truth_status cannot be 'not_applicable' for SAT")
     normalized["contract"] = _validate_contract(row["contract"], context)
+    if normalized["contract"]["site"] != normalized["site"]:
+        raise _fail(f"{context}.contract.site must equal row.site")
+    canonical = _object(row["canonical"], f"{context}.canonical")
+    missing_canonical = sorted(CANONICAL_REQUIRED_FIELDS - set(canonical))
+    if missing_canonical:
+        raise _fail(
+            f"{context}.canonical is missing required field(s): "
+            f"{', '.join(missing_canonical)}"
+        )
+    if canonical["schema_version"] != normalized["schema_version"]:
+        raise _fail(f"{context}.canonical.schema_version does not match row")
+    if canonical["site"] != normalized["site"]:
+        raise _fail(f"{context}.canonical.site does not match row")
+    if canonical["domain"] != normalized["domain"]:
+        raise _fail(f"{context}.canonical.domain does not match row")
+    if canonical["kind"] != normalized["kind"]:
+        raise _fail(f"{context}.canonical.kind does not match row")
+    if canonical["synthesized"] is not normalized["synthesized"]:
+        raise _fail(f"{context}.canonical.synthesized does not match row")
+    canonical_result = "sat" if canonical["result"] == "gap" else canonical["result"]
+    if canonical_result != normalized["result"]:
+        raise _fail(f"{context}.canonical.result does not match row")
+    canonical_gt = canonical["ground_truth_status"]
+    if canonical_gt is None:
+        canonical_gt = "not_applicable" if canonical_result == "unsat" else "not_run"
+    if canonical_gt != normalized["ground_truth_status"]:
+        raise _fail(f"{context}.canonical.ground_truth_status does not match row")
+    canonical_contract = _validate_contract(canonical["contract"], f"{context}.canonical")
+    if canonical_contract != normalized["contract"]:
+        raise _fail(f"{context}.canonical.contract does not match row.contract")
+    canonical_qid = canonical.get("question_id") or canonical.get("name")
+    if not isinstance(canonical_qid, str) or not canonical_qid.strip():
+        raise _fail(f"{context}.canonical requires question_id or name")
+    if canonical_qid.strip() != normalized["question_id"]:
+        raise _fail(f"{context}.canonical question identity does not match row")
     normalized["disposition"] = _validate_disposition(row["disposition"], context)
     status = normalized["disposition"]["status"]
     filed_at = normalized["disposition"]["filed_at"]
@@ -182,11 +352,123 @@ def _validate_row(value: Any, index: int) -> dict[str, Any]:
         raise _fail(f"{context}.disposition filing requires a ground-truthed SAT")
     if accepted and not (normalized["result"] == "sat" and gt):
         raise _fail(f"{context}.disposition accepted requires a ground-truthed SAT")
-    if status in {"wont_file", "false_positive", "out_of_scope_redos"} and normalized[
+    if status in {"wont_file", "false_positive", "approval_missing", "out_of_scope_redos"} and normalized[
         "result"
     ] == "sat" and not gt:
         raise _fail(f"{context}.disposition {status!r} requires ground truth")
+    normalized["canonical"] = canonical
     return normalized
+
+
+def canonical_row_to_checkpoint(
+    canonical: Mapping[str, Any],
+    *,
+    repo_id: str,
+    url: str,
+    pin: str,
+    disposition: Mapping[str, Any],
+) -> dict[str, Any]:
+    """Normalize one ``*_conversion.ndjson`` row for a checkpoint.
+
+    The full canonical row is retained under ``canonical``.  The only
+    intentional normalization is ``gap`` -> ``sat`` and a null UNSAT ground
+    truth marker -> ``not_applicable`` (a null SAT marker becomes ``not_run``).
+    A disposition is mandatory because canonical conversion artifacts do not
+    own filing state.
+    """
+    raw = dict(canonical)
+    missing = sorted(CANONICAL_REQUIRED_FIELDS - set(raw))
+    if missing:
+        raise _fail(f"canonical row is missing required field(s): {', '.join(missing)}")
+    context = "canonical row"
+    raw_schema = _text(raw["schema_version"], "schema_version", context)
+    if raw_schema != SCHEMA_VERSION:
+        raise _fail(f"canonical.schema_version must be {SCHEMA_VERSION!r}")
+    site = _text(raw["site"], "site", context)
+    qid_value = raw.get("question_id") or raw.get("name")
+    question_id = _text(qid_value, "question_id", context).strip()
+    kind = _text(raw["kind"], "kind", context)
+    synthesized = raw["synthesized"]
+    if synthesized is not False:
+        raise _fail("canonical.synthesized must be false")
+    if kind not in PRODUCT_KINDS:
+        raise _fail(f"canonical.kind must be one of {sorted(PRODUCT_KINDS)}")
+    result = raw["result"]
+    if result == "gap":
+        normalized_result = "sat"
+    elif result in {"sat", "unsat"}:
+        normalized_result = result
+    else:
+        raise _fail("canonical.result must be sat, gap, or unsat")
+    ground_truth = raw["ground_truth_status"]
+    if ground_truth is None:
+        ground_truth = "not_applicable" if normalized_result == "unsat" else "not_run"
+    if not isinstance(ground_truth, str) or ground_truth not in GT_STATUSES:
+        raise _fail("canonical.ground_truth_status is unknown")
+    contract = _validate_contract(raw["contract"], context)
+    domain = _text(raw["domain"], "domain", context)
+    if contract["site"] != site:
+        raise _fail("canonical.contract.site must equal canonical.site")
+    return {
+        "repo_id": _text(repo_id, "repo_id", "checkpoint row"),
+        "url": _text(url, "url", "checkpoint row"),
+        "pin": _pin(pin, "checkpoint row"),
+        "schema_version": raw_schema,
+        "site": site,
+        "question_id": question_id,
+        "kind": kind,
+        "synthesized": synthesized,
+        "result": normalized_result,
+        "domain": domain,
+        "contract": contract,
+        "ground_truth_status": ground_truth,
+        "disposition": dict(disposition),
+        "canonical": raw,
+    }
+
+
+def checkpoint_from_canonical_rows(
+    canonical_rows: list[Mapping[str, Any]],
+    *,
+    cohort: Mapping[str, Any],
+    expected_rows: list[Mapping[str, Any]],
+    repo_id: str,
+    url: str,
+    pin: str,
+    dispositions: Mapping[tuple[str, str], Mapping[str, Any]],
+) -> dict[str, Any]:
+    """Build a complete checkpoint envelope from canonical rows.
+
+    ``expected_rows`` is deliberately independent input.  The function fails
+    if canonical rows or dispositions omit an expected stable identity.
+    """
+    normalized = []
+    for raw in canonical_rows:
+        raw_site = _text(raw.get("site"), "site", "canonical row")
+        raw_qid = _text(raw.get("question_id") or raw.get("name"), "question_id", "canonical row")
+        key = (raw_site, raw_qid.strip())
+        if key not in dispositions:
+            raise _fail(f"missing disposition for canonical identity {key!r}")
+        normalized.append(
+            canonical_row_to_checkpoint(
+                raw,
+                repo_id=repo_id,
+                url=url,
+                pin=pin,
+                disposition=dispositions[key],
+            )
+        )
+    result = dict(cohort)
+    checkpoint = {
+        "schema_version": SCHEMA_VERSION,
+        "cohort_id": _text(result.get("cohort_id"), "cohort_id", "cohort"),
+        "manifest_digest": _digest(result.get("manifest_digest"), "manifest_digest", "cohort"),
+        "cohort": result,
+        "expected_rows": [dict(item) for item in expected_rows],
+        "rows": normalized,
+    }
+    _validated_root(checkpoint)
+    return checkpoint
 
 
 def _validated_root(document: Any) -> tuple[dict[str, Any], list[dict[str, Any]]]:
@@ -207,10 +489,31 @@ def _validated_root(document: Any) -> tuple[dict[str, Any], list[dict[str, Any]]
     rows = root["rows"]
     if not isinstance(rows, list):
         raise _fail("rows must be a list")
+    expected_rows = root["expected_rows"]
+    if not isinstance(expected_rows, list) or not expected_rows:
+        raise _fail("expected_rows must be a non-empty list")
 
     allowed = {
         (repo["repo_id"], repo["url"], repo["pin"]): repo for repo in cohort["repos"]
     }
+    expected: set[tuple[str, str, str, str, str]] = set()
+    for index, raw in enumerate(expected_rows):
+        context = f"expected_rows[{index}]"
+        item = _object(raw, context)
+        _exact_fields(item, EXPECTED_ROW_FIELDS, context)
+        identity = (
+            _text(item["repo_id"], "repo_id", context),
+            _text(item["url"], "url", context),
+            _pin(item["pin"], context),
+            _text(item["site"], "site", context),
+            _text(item["question_id"], "question_id", context),
+        )
+        if identity[:3] not in allowed:
+            raise _fail(f"{context} repository is outside the frozen cohort")
+        if identity in expected:
+            raise _fail(f"{context} duplicates expected stable product identity")
+        expected.add(identity)
+
     normalized: list[dict[str, Any]] = []
     seen: set[tuple[str, str, str, str, str]] = set()
     for index, raw in enumerate(rows):
@@ -218,11 +521,22 @@ def _validated_root(document: Any) -> tuple[dict[str, Any], list[dict[str, Any]]
         repo_identity = (row["repo_id"], row["url"], row["pin"])
         if repo_identity not in allowed:
             raise _fail(f"rows[{index}] repository is outside the frozen cohort")
-        identity = (cohort_id, row["url"], row["pin"], row["site"], row["question_id"])
+        identity = (
+            row["repo_id"],
+            row["url"],
+            row["pin"],
+            row["site"],
+            row["question_id"],
+        )
         if identity in seen:
             raise _fail(f"rows[{index}] duplicates stable product identity")
+        if identity not in expected:
+            raise _fail(f"rows[{index}] is not listed in expected_rows")
         seen.add(identity)
         normalized.append(row)
+    missing = sorted(expected - seen)
+    if missing:
+        raise _fail(f"rows omit expected stable product identity {missing[0]!r}")
     return cohort, normalized
 
 
@@ -368,8 +682,11 @@ def build_report(document: Any) -> dict[str, Any]:
     filed_rows = [
         row
         for row in gt_rows
-        if row["disposition"]["status"] in FILED_STATUSES
-        or row["disposition"]["filed_at"] is not None
+        if row["disposition"]["status"] != "filed_plan"
+        and (
+            row["disposition"]["status"] in FILED_STATUSES
+            or row["disposition"]["filed_at"] is not None
+        )
     ]
     private_rows = [
         row for row in gt_rows if row["disposition"]["status"] == "private_first"
@@ -406,9 +723,26 @@ def build_report(document: Any) -> dict[str, Any]:
         "disposition_breakdown": {
             status: dispositions[status] for status in sorted(dispositions)
         },
+        "sample_sizes": {
+            "unit": "human product properties",
+            "asked": asked,
+            "sat": len(sat_rows),
+            "ground_truthed": len(gt_rows),
+        },
+        "target_status": {
+            str(target): {
+                "target": target,
+                "observed": asked,
+                "reached": asked >= target,
+                "status": "reached" if asked >= target else "sub_target",
+                "shortfall": max(0, target - asked),
+            }
+            for target in TARGETS
+        },
         "filing_interpretation": {
             "filed_statuses": sorted(FILED_STATUSES),
             "filed_at_also_counts_as_filed": True,
+            "filed_plan_is_not_filed": True,
             "private_first_is_filed": True,
             "accepted_statuses": sorted(ACCEPTED_STATUSES),
             "accepted_is_not_third_party_remediation": True,
@@ -441,6 +775,8 @@ def dumps_report(report: Mapping[str, Any]) -> str:
 __all__ = [
     "ConversionCheckpointError",
     "build_report",
+    "canonical_row_to_checkpoint",
+    "checkpoint_from_canonical_rows",
     "dumps_report",
     "load_checkpoint",
     "report_from_path",
