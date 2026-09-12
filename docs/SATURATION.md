@@ -28,6 +28,7 @@ accepted.
 ```json
 {
   "schema_version": "1",
+  "canonicalization_version": "dogfood-singleton-analysis-v1",
   "cohort_id": "2026-09-calibration-10",
   "manifest_digest": "<64 lowercase hex characters>",
   "cohort": {
@@ -73,6 +74,24 @@ accepted.
 }
 ```
 
+`canonicalization_version` is a required producer identity: PR1 verifies the
+declared singleton-analysis version but does not recompute canonical pattern
+IDs from repository source. The separate processing log is checked with the
+same frozen cohort binding:
+
+```text
+python scripts/check-measurement-events.py \
+  --cohort path/to/frozen-cohort.json \
+  path/to/measurement_events.jsonl
+```
+
+Every event has a lowercase-hex `previous_digest` and `event_digest`. The
+first event points at 64 zeroes; each later event points at the prior digest.
+Valid statuses include `attempted`, `completed`, `ok`, `auto_nogo`,
+`needs_human`, `retry`, `cache_hit`, `timeout`, `unknown`, `error`, and
+`partial`. The checker requires the cohort file, verifies its digest, binds
+each event's repository URL and pin to it, and rejects a broken chain.
+
 The report fails closed on malformed counts, a missing or mismatched cohort
 digest, duplicate repository IDs or URL/pin attempts, observation order or
 metadata that differs from the frozen cohort, invalid pins, empty site denominators, duplicate product
@@ -90,8 +109,8 @@ checkpoint is `>=50`, with `>=100` as the preferred target.
 This report does not infer cohort membership from the live candidate queue,
 does not write artifacts, and does not add telemetry to
 `corpus_events.jsonl`. That file is reserved for the conversion-wave lock
-state machine. A separate immutable cohort/attempt event log belongs in a
-later PR.
+state machine. PR3 adds the separate immutable processing-event log and its
+read-only checker.
 
 The PR2 CLI rejects duplicate JSON keys and input/output aliases, and writes
 the generated manifest through an fsync'd temporary file plus atomic replace.

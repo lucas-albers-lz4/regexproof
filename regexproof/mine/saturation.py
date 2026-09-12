@@ -7,6 +7,7 @@ two observations for that family in manifest order::
 
     {
       "schema_version": "1",
+      "canonicalization_version": "dogfood-singleton-analysis-v1",
       "repos": [
         {
           "repo_id": "owner/repo",
@@ -65,7 +66,8 @@ TARGET_DENOMINATOR_THRESHOLD = 100
 TRAILING_REPO_COUNT = 2
 NOVELTY_RATE_NUMERATOR = 3
 NOVELTY_RATE_DENOMINATOR = 100
-PIN_RE = re.compile(r"^[0-9a-fA-F]{40}$")
+PIN_RE = re.compile(r"^[0-9a-f]{40}$")
+CANONICALIZATION_VERSION = "dogfood-singleton-analysis-v1"
 PRODUCT_KINDS = frozenset({"property", "counterexample_finder", "bug_demo"})
 
 REPO_FIELDS = (
@@ -78,7 +80,14 @@ REPO_FIELDS = (
     "new_reject_buckets",
     "product_properties",
 )
-ENVELOPE_FIELDS = {"schema_version", "cohort_id", "manifest_digest", "cohort", "observations"}
+ENVELOPE_FIELDS = {
+    "schema_version",
+    "canonicalization_version",
+    "cohort_id",
+    "manifest_digest",
+    "cohort",
+    "observations",
+}
 COUNT_FIELDS = ("sites", "novel_sites")
 PROPERTY_FIELDS = frozenset(
     {
@@ -268,6 +277,11 @@ def _validate_observation_envelope(
             f"unsupported schema_version {document['schema_version']!r}; "
             f"expected {SCHEMA_VERSION!r}"
         )
+    if document["canonicalization_version"] != CANONICALIZATION_VERSION:
+        raise _fail(
+            "canonicalization_version must be "
+            f"{CANONICALIZATION_VERSION!r}"
+        )
     cohort_id = _text(document["cohort_id"], "cohort_id", "observation envelope")
     digest = _text(document["manifest_digest"], "manifest_digest", "observation envelope")
     try:
@@ -431,6 +445,7 @@ def build_report(manifest: Any) -> dict[str, Any]:
     target_denominator = totals["properties_asked"]
     return {
         "schema_version": SCHEMA_VERSION,
+        "canonicalization_version": CANONICALIZATION_VERSION,
         "cohort_id": frozen["cohort_id"],
         "manifest_digest": frozen["manifest_digest"],
         "thresholds": {
