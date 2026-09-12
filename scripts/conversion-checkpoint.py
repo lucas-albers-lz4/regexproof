@@ -2,8 +2,10 @@
 """Report product conversion from a strict frozen-cohort checkpoint.
 
 The input root object is exactly ``schema_version``, ``cohort_id``,
-``manifest_digest``, embedded PR2 ``cohort``, and ``rows``.  Rows require a
-human contract and explicit ground-truth/disposition status.  Rule-diff,
+``manifest_digest``, embedded PR2 ``cohort``, ``expected_rows``, and ``rows``.
+``expected_rows`` is the complete stable-identity coverage manifest; omitted
+or partial rows fail closed. Rows require a human contract and explicit
+ground-truth/disposition status. Rule-diff,
 synthesized, classification, mutation, and agent-derived rows are rejected
 from this product checkpoint.  The command is read-only and exits 2 for an
 invalid artifact.
