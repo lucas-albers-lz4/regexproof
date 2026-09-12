@@ -157,24 +157,31 @@ python scripts/conversion-checkpoint.py path/to/conversion-checkpoint.json
 ```
 
 The root object is exact: `schema_version` (`"1"`), `cohort_id`,
-`manifest_digest`, the embedded PR2 `cohort`, and `rows`. The embedded cohort
-is validated and its digest is recomputed. Each row binds the exact
-`repo_id`/URL/lowercase 40-character pin from that cohort. Its stable identity
-is `(cohort_id, repo URL, pin, site, question_id)`; duplicate keys, stale
-cohorts, unknown fields, non-finite JSON, and repositories outside the cohort
-fail closed.
+`manifest_digest`, the embedded PR2 `cohort`, `expected_rows`, and `rows`.
+`expected_rows` is the complete coverage manifest for the checkpoint; omitted
+or extra product identities fail closed. The embedded cohort is validated and
+its digest is recomputed. Each row binds the exact `repo_id`/URL/lowercase
+40-character pin from that cohort. Its stable identity is `(cohort_id, repo
+URL, pin, site, question_id)`; duplicate keys, stale cohorts, unknown fields,
+non-finite JSON, and repositories outside the cohort fail closed.
 
-Rows use the normalized product result vocabulary `sat`/`unsat`. Upstream
-ledger `gap` rows must be normalized to `sat` before entering this strict
-checkpoint. Product rows require kind `property`, `counterexample_finder`, or
-`bug_demo`, `synthesized: false`, and a human contract containing
-`guarantee`, `input_source`, `trust_class`, `domain`, and
-`provenance: "human"`. Rule-diff, classification, mutation, synthesized, and
-agent-derived rows are not product yield and cannot inflate this denominator.
+Rows use the normalized product result vocabulary `sat`/`unsat`. The
+`canonical_row_to_checkpoint()` adapter normalizes upstream `gap` rows to
+`sat` and null UNSAT ground-truth markers to `not_applicable`, while retaining
+the complete canonical row under `canonical`. Product rows require kind
+`property`, `counterexample_finder`, or `bug_demo`, `synthesized: false`, and
+the canonical contract fields `schema_version`, `site`, `guarantee`,
+`input_source`, `trust`, `declared_domain`, and `provenance: "human"`.
+`trust` must be `untrusted-input`, `config`, or `internal`, and the row's
+`domain` must be explicit. Rule-diff, classification, mutation, synthesized,
+and agent-derived rows are not product yield and cannot inflate this
+denominator.
 
 `ground_truth_status` is explicit; only `reproduced` and `PASS` advance a SAT
-row to ground-truthed. Disposition status is also explicit. In the same
-semantics as `conversion-ledger.py`, filed means status `filed`,
+row to ground-truthed. Disposition status is also explicit and follows
+`check-disposition-coverage.py`, including `approval_missing` and its required
+escape metadata. Filing and resolution dates must be ISO dates or timestamps.
+In the same semantics as `conversion-ledger.py`, filed means status `filed`,
 `private_first`, or `fixed_upstream`, or a non-null explicit `filed_at`.
 `filed_plan` is retained in the disposition breakdown but does not count as
 filed. `private_first` remains separately visible while counting as filed.
@@ -185,8 +192,10 @@ interpretations must remain separate in the close-out. `false_positive`,
 not accepted yield.
 
 The report emits deterministic counts and rates for asked → SAT →
-ground-truthed → filed/private-first → accepted, a disposition breakdown, and
-separate `filing_interpretation` and `idiom_interpretation` fields. Its
+ground-truthed → filed/private-first → accepted, a disposition breakdown,
+observed sample sizes, explicit reached/sub-target flags for 50 and 100 human
+product-property targets, and separate `filing_interpretation` and
+`idiom_interpretation` fields. Its
 interval method is a stdlib-only, two-sided 95% Wilson score interval. The
 reported widths for targets 50 and 100 are the maximum width over every
 possible success count at that sample size: they describe worst-case precision

@@ -12,6 +12,7 @@ from regexproof.mine.cohort_manifest import build_manifest
 from regexproof.mine.conversion_checkpoint import (
     ConversionCheckpointError,
     build_report,
+    canonical_row_to_checkpoint,
     dumps_report,
     load_checkpoint,
     wilson_interval,
@@ -180,6 +181,8 @@ def test_strict_schema_and_exclusions_fail_closed():
         (_row(0, kind="rule_diff"), "kind must be"),
         (_row(0, synthesized=True), "synthesized must be false"),
         (_row(0, contract=_contract(provenance="agent")), "provenance must be 'human'"),
+        (_row(0, contract=_contract(trust="operator")), "trust must be one of"),
+        (_row(0, status="filed", filed_at="not-a-date"), "must be an ISO date"),
     ]
     for row, message in bad_rows:
         with pytest.raises(ConversionCheckpointError, match=message):
@@ -189,6 +192,46 @@ def test_strict_schema_and_exclusions_fail_closed():
     del missing_contract["contract"]
     with pytest.raises(ConversionCheckpointError, match="contract"):
         build_report(_checkpoint(missing_contract))
+
+
+def test_expected_rows_make_partial_checkpoints_fail_closed():
+    checkpoint = _checkpoint(_row(0), _row(1))
+    checkpoint["rows"] = checkpoint["rows"][:1]
+    with pytest.raises(ConversionCheckpointError, match="omit expected"):
+        build_report(checkpoint)
+
+
+def test_approval_missing_preserves_non_filing_disposition():
+    row = _row(0, status="approval_missing")
+    row["disposition"]["approval_escape"] = "wont_file"
+    row["disposition"]["reason_code"] = "no_approval"
+    report = build_report(_checkpoint(row))
+    assert report["counts"]["filed"] == 0
+    assert report["disposition_breakdown"] == {"approval_missing": 1}
+
+
+def test_canonical_adapter_normalizes_gap_and_null_unsat_ground_truth():
+    gap = _row(0, gt="reproduced")["canonical"]
+    gap["result"] = "gap"
+    adapted_gap = canonical_row_to_checkpoint(
+        gap,
+        repo_id="owner/repo",
+        url="https://github.com/owner/repo",
+        pin="a" * 40,
+        disposition=_disposition("fixed_upstream", filed_at="2026-09-12"),
+    )
+    assert adapted_gap["result"] == "sat"
+    unsat = _row(1, result="unsat", gt="not_applicable")["canonical"]
+    unsat["ground_truth_status"] = None
+    adapted_unsat = canonical_row_to_checkpoint(
+        unsat,
+        repo_id="owner/repo",
+        url="https://github.com/owner/repo",
+        pin="a" * 40,
+        disposition=_disposition("wont_file"),
+    )
+    assert adapted_unsat["result"] == "unsat"
+    assert adapted_unsat["ground_truth_status"] == "not_applicable"
 
 
 def test_duplicate_identity_tampering_and_unknown_repo_fail_closed():
@@ -228,6 +271,8 @@ def test_wilson_interval_and_target_widths_are_deterministic():
     targets = report["intervals"]["targets"]
     assert targets["50"] == {"max_width": "0.267109713863", "successes_at_max_width": 25}
     assert targets["100"] == {"max_width": "0.192336939417", "successes_at_max_width": 50}
+    assert report["target_status"]["50"]["status"] == "sub_target"
+    assert report["target_status"]["100"]["shortfall"] == 99
     assert dumps_report(report) == dumps_report(build_report(_checkpoint(_row(0))))
 
 
