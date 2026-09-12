@@ -121,6 +121,7 @@ funnel — operators stay on [`docs/PIPELINE.md`](docs/PIPELINE.md).
 | `docs/CONTRACTS.md` | Property-contract object, provenance (`human` / `version_diff` / `cross_engine` / `agent_derived`), what batch may scale |
 | `docs/CLUSTER-CONVERSION.md` | Conversion-wave SOP: rank 15 / write ≤5 human contracts per idiom slice; ledger join via `*_conversion.ndjson`. First application: `sweep/openwrt-conversion/plan.md` |
 | `docs/PIPELINE.md` | Operator funnel: mine → rank → probe → gate → wave; ledger/queue stores; `pipeline-status.py` |
+| `docs/SATURATION.md` | Frozen-cohort novelty, throughput, and conversion-value measurement |
 | `docs/NEWGATE.md` | Consumer adoption: `regexproof newgate` cookie-cutter (one regex → a CI gate); not the corpus funnel |
 | `docs/conversion-upstream.jsonl` | Curated last-mile conversion events (filed / fixed / false positive / private_first) |
 | `docs/examples/shape5-rule_diff.md` | Shape-5 `rule_diff` kind/family/mutation guards |
