@@ -145,3 +145,51 @@ yield.
   asked → SAT → ground-truthed → filed/private-first → accepted.
 - Run the first 10-repository calibration cohort, then publish a measured
   continue/retarget/stop close-out.
+
+## PR4: product conversion checkpoint
+
+PR4 is a separate, read-only product checkpoint. It is not a compiler
+saturation report and it does not modify `scripts/conversion-ledger.py` or
+generated ledger artifacts. Run it with:
+
+```text
+python scripts/conversion-checkpoint.py path/to/conversion-checkpoint.json
+```
+
+The root object is exact: `schema_version` (`"1"`), `cohort_id`,
+`manifest_digest`, the embedded PR2 `cohort`, and `rows`. The embedded cohort
+is validated and its digest is recomputed. Each row binds the exact
+`repo_id`/URL/lowercase 40-character pin from that cohort. Its stable identity
+is `(cohort_id, repo URL, pin, site, question_id)`; duplicate keys, stale
+cohorts, unknown fields, non-finite JSON, and repositories outside the cohort
+fail closed.
+
+Rows use the normalized product result vocabulary `sat`/`unsat`. Upstream
+ledger `gap` rows must be normalized to `sat` before entering this strict
+checkpoint. Product rows require kind `property`, `counterexample_finder`, or
+`bug_demo`, `synthesized: false`, and a human contract containing
+`guarantee`, `input_source`, `trust_class`, `domain`, and
+`provenance: "human"`. Rule-diff, classification, mutation, synthesized, and
+agent-derived rows are not product yield and cannot inflate this denominator.
+
+`ground_truth_status` is explicit; only `reproduced` and `PASS` advance a SAT
+row to ground-truthed. Disposition status is also explicit. In the same
+semantics as `conversion-ledger.py`, filed means status `filed`,
+`private_first`, or `fixed_upstream`, or a non-null explicit `filed_at`.
+`filed_plan` is retained in the disposition breakdown but does not count as
+filed. `private_first` remains separately visible while counting as filed.
+Accepted means `fixed_upstream` only. That is an accepted upstream fix; it is
+not automatically a third-party remediation, so own-code and third-party
+interpretations must remain separate in the close-out. `false_positive`,
+`wont_file`, and `out_of_scope_redos` are preserved as dispositions and are
+not accepted yield.
+
+The report emits deterministic counts and rates for asked → SAT →
+ground-truthed → filed/private-first → accepted, a disposition breakdown, and
+separate `filing_interpretation` and `idiom_interpretation` fields. Its
+interval method is a stdlib-only, two-sided 95% Wilson score interval. The
+reported widths for targets 50 and 100 are the maximum width over every
+possible success count at that sample size: they describe worst-case precision
+of the target, not uncertainty around this cohort's observed rate. A zero
+ground-truth-to-filed hop therefore does not prove idiom exhaustion; it is a
+filing/product signal requiring separate interpretation.
