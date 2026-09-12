@@ -1,0 +1,187 @@
+{
+  "cohort_id": "2026-09-12-calibration-20",
+  "manifest_digest": "4484708a971c25c3e11d9caabdee0252f31beb992bfd66909862ef3b71b17d12",
+  "repos": [
+    {
+      "boundary_family": "boundary-candidate",
+      "dialect_family": "ecma",
+      "pin": "b31ddabecf4ed3209d37a2f5b29956120cd8f9ce",
+      "repo_id": "json-editor/json-editor",
+      "score": 4902,
+      "sites": 1,
+      "url": "https://github.com/json-editor/json-editor"
+    },
+    {
+      "boundary_family": "boundary-candidate",
+      "dialect_family": "posix-shell",
+      "pin": "d4f01ba6202d50909d1977810d322259482e0b82",
+      "repo_id": "mycelium0/mycelium",
+      "score": 21,
+      "sites": 1,
+      "url": "https://github.com/mycelium0/mycelium"
+    },
+    {
+      "boundary_family": "boundary-candidate",
+      "dialect_family": "py_re",
+      "pin": "889bbe2ab4a40a85c7ccd8399b2fd3cfddf539e8",
+      "repo_id": "netspooky/inhale",
+      "score": 191,
+      "sites": 1,
+      "url": "https://github.com/netspooky/inhale"
+    },
+    {
+      "boundary_family": "boundary-candidate",
+      "dialect_family": "ecma",
+      "pin": "e9fb233763160316989863b4739c4656133d45b0",
+      "repo_id": "magiclabs/magic-js",
+      "score": 477,
+      "sites": 1,
+      "url": "https://github.com/magiclabs/magic-js"
+    },
+    {
+      "boundary_family": "boundary-candidate",
+      "dialect_family": "ecma",
+      "pin": "d4a39726cad8d8e27e4c0502d1843c3b4180ffbc",
+      "repo_id": "grcengineering/gigachad-grc",
+      "score": 154,
+      "sites": 1,
+      "url": "https://github.com/grcengineering/gigachad-grc"
+    },
+    {
+      "boundary_family": "boundary-candidate",
+      "dialect_family": "posix-shell",
+      "pin": "cea68022f477680f4bb502396c705fe14b3c412f",
+      "repo_id": "melodic-software/claude-code-plugins",
+      "score": 6,
+      "sites": 1,
+      "url": "https://github.com/melodic-software/claude-code-plugins"
+    },
+    {
+      "boundary_family": "boundary-candidate",
+      "dialect_family": "py_re",
+      "pin": "c84d52528a489821f355fc63976fbc7783ae0ad5",
+      "repo_id": "TracecatHQ/tracecat",
+      "score": 60,
+      "sites": 144,
+      "url": "https://github.com/TracecatHQ/tracecat"
+    },
+    {
+      "boundary_family": "boundary-candidate",
+      "dialect_family": "py_re",
+      "pin": "4bbe6925652c03b02329c5fb15d34df96faf994c",
+      "repo_id": "tyxak/remotepower",
+      "score": 49,
+      "sites": 661,
+      "url": "https://github.com/tyxak/remotepower"
+    },
+    {
+      "boundary_family": "boundary-candidate",
+      "dialect_family": "py_re",
+      "pin": "efcf8e4c0087def553a737dc1c4eebda5d8a90cd",
+      "repo_id": "Agenticstiger/forge-cli",
+      "score": 45,
+      "sites": 447,
+      "url": "https://github.com/Agenticstiger/forge-cli"
+    },
+    {
+      "boundary_family": "boundary-candidate",
+      "dialect_family": "py_re",
+      "pin": "a9c0f06affc35e1f8e45bb77f835b92350c68a0b",
+      "repo_id": "airbnb/binaryalert",
+      "score": 45,
+      "sites": 8,
+      "url": "https://github.com/airbnb/binaryalert"
+    },
+    {
+      "boundary_family": "boundary-candidate",
+      "dialect_family": "py_re",
+      "pin": "14917fd0f8753933083fd379a7f9a0cc90bcc473",
+      "repo_id": "pass-culture/pass-culture-main",
+      "score": 53,
+      "sites": 107,
+      "url": "https://github.com/pass-culture/pass-culture-main"
+    },
+    {
+      "boundary_family": "boundary-candidate",
+      "dialect_family": "ecma",
+      "pin": "978def55c8e68cab3a50a7ee4725039da753f0a1",
+      "repo_id": "xibosignage/xibo-cms",
+      "score": 61,
+      "sites": 1981,
+      "url": "https://github.com/xibosignage/xibo-cms"
+    },
+    {
+      "boundary_family": "boundary-candidate",
+      "dialect_family": "ecma",
+      "pin": "7ea3b445ee7d2ef8004d5ee77dab7544e1b8ef88",
+      "repo_id": "profbernardoj/everclaw-community-branches",
+      "score": 51,
+      "sites": 468,
+      "url": "https://github.com/profbernardoj/everclaw-community-branches"
+    },
+    {
+      "boundary_family": "boundary-candidate",
+      "dialect_family": "ecma",
+      "pin": "ef9baeb3743426c58853e58fbad820e69e459144",
+      "repo_id": "markpasternak/canvas-drop",
+      "score": 42,
+      "sites": 568,
+      "url": "https://github.com/markpasternak/canvas-drop"
+    },
+    {
+      "boundary_family": "boundary-candidate",
+      "dialect_family": "go_re",
+      "pin": "01cd447ad3b1acfed7e0680596c2c74458a4cf06",
+      "repo_id": "h0tak88r/AutoAR",
+      "score": 54,
+      "sites": 33,
+      "url": "https://github.com/h0tak88r/AutoAR"
+    },
+    {
+      "boundary_family": "boundary-candidate",
+      "dialect_family": "go_re",
+      "pin": "ea3e83e24676a1678a9522141da29b636c9451ab",
+      "repo_id": "chainguard-dev/malcontent",
+      "score": 52,
+      "sites": 15,
+      "url": "https://github.com/chainguard-dev/malcontent"
+    },
+    {
+      "boundary_family": "boundary-candidate",
+      "dialect_family": "go_re",
+      "pin": "2f3fa5a506d6565fa68858b7963450567ddda114",
+      "repo_id": "open-horizon/anax",
+      "score": 50,
+      "sites": 24,
+      "url": "https://github.com/open-horizon/anax"
+    },
+    {
+      "boundary_family": "boundary-candidate",
+      "dialect_family": "go_re",
+      "pin": "1cf40fcabd330a1fe4e8eb9493b15a99a392e17f",
+      "repo_id": "snyk/snyk-ls",
+      "score": 50,
+      "sites": 35,
+      "url": "https://github.com/snyk/snyk-ls"
+    },
+    {
+      "boundary_family": "boundary-candidate",
+      "dialect_family": "posix-shell",
+      "pin": "8666b6c6c52472b5535aa295f2df593918152cb1",
+      "repo_id": "marcusquinn/aidevops",
+      "score": 55,
+      "sites": 11330,
+      "url": "https://github.com/marcusquinn/aidevops"
+    },
+    {
+      "boundary_family": "boundary-candidate",
+      "dialect_family": "posix-shell",
+      "pin": "65624396e263074bb8cb2e049f9a9ec6215ea5c1",
+      "repo_id": "Leviticus-Triage/llm-honeypot-intelligence",
+      "score": 34,
+      "sites": 16,
+      "url": "https://github.com/Leviticus-Triage/llm-honeypot-intelligence"
+    }
+  ],
+  "schema_version": "1"
+}
