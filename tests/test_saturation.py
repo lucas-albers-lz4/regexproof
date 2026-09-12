@@ -66,10 +66,14 @@ def _manifest(*repos):
     cohort = build_manifest({"candidates": candidates}, "cohort", len(repos))
     return {
         "schema_version": "1",
+        "canonicalization_version": "dogfood-singleton-analysis-v1",
         "cohort_id": cohort["cohort_id"],
         "manifest_digest": cohort["manifest_digest"],
         "cohort": cohort,
-        "observations": list(repos),
+        "observations": [
+            next(repo for repo in repos if repo["repo_id"] == frozen_repo["repo_id"])
+            for frozen_repo in cohort["repos"]
+        ],
     }
 
 
@@ -263,3 +267,10 @@ def test_pr1_rejects_tampered_frozen_duplicate_url_pin():
 def test_old_unbound_observation_schema_is_not_accepted():
     with pytest.raises(ManifestError, match="observation envelope"):
         build_report({"schema_version": "1", "repos": [_repo("a", "py")]})
+
+
+def test_canonicalization_identity_is_required_and_exact():
+    envelope = _manifest(_repo("a", "py"))
+    bad = {**envelope, "canonicalization_version": "other"}
+    with pytest.raises(ManifestError, match="canonicalization_version"):
+        build_report(bad)

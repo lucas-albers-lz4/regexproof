@@ -15,6 +15,7 @@ schema-invalid history fails closed.
 from __future__ import annotations
 
 import fcntl
+import hashlib
 import json
 import os
 import pathlib
@@ -22,6 +23,8 @@ import re
 from collections import Counter
 from datetime import datetime, timezone
 from typing import Any, Mapping
+
+from .cohort_manifest import CohortManifestError, validate_manifest as validate_cohort
 
 DEFAULT_LOG_PATH = pathlib.Path("properties/generated/measurement_events.jsonl")
 SCHEMA_VERSION = "1"
@@ -33,6 +36,8 @@ STATUSES = frozenset(
         "ok",
         "auto_nogo",
         "needs_human",
+        "retry",
+        "cache_hit",
         "timeout",
         "unknown",
         "error",
@@ -57,6 +62,8 @@ _REQUIRED_FIELDS = frozenset(
         "started_at",
         "ended_at",
         "details",
+        "previous_digest",
+        "event_digest",
     }
 )
 _OPTIONAL_FIELDS = frozenset({"input_digest", "output_digest"})
@@ -155,10 +162,28 @@ def validate_event(event: Mapping[str, Any]) -> dict[str, Any]:
     if not isinstance(event["details"], dict):
         raise _fail("details must be an object")
     _require_json_value(event["details"], "details")
+    _require_digest(event["previous_digest"], "previous_digest")
+    _require_digest(event["event_digest"], "event_digest")
     for field in ("input_digest", "output_digest"):
         if field in event and event[field] is not None:
             _require_digest(event[field], field)
-    return dict(event)
+    normalized = dict(event)
+    if normalized["event_digest"] != compute_event_digest(normalized):
+        raise _fail("event_digest does not match the canonical event payload")
+    return normalized
+
+
+def compute_event_digest(event: Mapping[str, Any]) -> str:
+    """Return the SHA-256 of the canonical event payload without its digest."""
+    payload = {key: value for key, value in event.items() if key != "event_digest"}
+    encoded = json.dumps(
+        payload,
+        ensure_ascii=True,
+        allow_nan=False,
+        sort_keys=True,
+        separators=(",", ":"),
+    ).encode("utf-8")
+    return hashlib.sha256(encoded).hexdigest()
 
 
 def _reject_duplicate_keys(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
@@ -182,6 +207,7 @@ def _decode_log(data: bytes, path: pathlib.Path) -> list[dict[str, Any]]:
     events: list[dict[str, Any]] = []
     event_ids: set[str] = set()
     expected_sequence = 1
+    expected_previous_digest = "0" * 64
     for line_number, raw_line in enumerate(data.splitlines(keepends=True), start=1):
         if not raw_line.endswith(b"\n"):
             raise _fail(f"truncated record at line {line_number} in {path}")
@@ -212,14 +238,47 @@ def _decode_log(data: bytes, path: pathlib.Path) -> list[dict[str, Any]]:
                 f"append-order violation at line {line_number}: expected sequence "
                 f"{expected_sequence}, got {event['sequence']}"
             )
+        if event["previous_digest"] != expected_previous_digest:
+            raise _fail(
+                f"hash-chain violation at line {line_number}: expected previous_digest "
+                f"{expected_previous_digest}, got {event['previous_digest']}"
+            )
         event_ids.add(event["event_id"])
         events.append(event)
         expected_sequence += 1
+        expected_previous_digest = event["event_digest"]
     return events
 
 
-def read_events(path: pathlib.Path | str | None = None) -> list[dict[str, Any]]:
+def _validated_cohort(cohort: Mapping[str, Any] | None) -> dict[str, Any]:
+    if cohort is None:
+        raise _fail("a frozen cohort manifest is required")
+    try:
+        return validate_cohort(cohort)
+    except CohortManifestError as exc:
+        raise _fail(f"invalid frozen cohort: {exc}") from exc
+
+
+def _validate_cohort_binding(
+    event: Mapping[str, Any], cohort: Mapping[str, Any] | None
+) -> None:
+    frozen = _validated_cohort(cohort)
+    if event["cohort_id"] != frozen["cohort_id"]:
+        raise _fail("event cohort_id does not match the frozen cohort")
+    if event["manifest_digest"] != frozen["manifest_digest"]:
+        raise _fail("event manifest_digest does not match the frozen cohort")
+    identity = (event["repo_id"], event["url"], event["pin"])
+    allowed = {(repo["repo_id"], repo["url"], repo["pin"]) for repo in frozen["repos"]}
+    if identity not in allowed:
+        raise _fail("event repository identity is not in the frozen cohort")
+
+
+def read_events(
+    path: pathlib.Path | str | None = None,
+    cohort: Mapping[str, Any] | None = None,
+) -> list[dict[str, Any]]:
     """Read and fully validate the measurement log, returning event copies."""
+    _validated_cohort(cohort)
     destination = pathlib.Path(path) if path is not None else DEFAULT_LOG_PATH
     try:
         data = destination.read_bytes()
@@ -227,12 +286,18 @@ def read_events(path: pathlib.Path | str | None = None) -> list[dict[str, Any]]:
         return []
     except OSError as exc:
         raise _fail(f"cannot read {destination}: {exc}") from exc
-    return _decode_log(data, destination)
+    events = _decode_log(data, destination)
+    for event in events:
+        _validate_cohort_binding(event, cohort)
+    return events
 
 
-def check_events_log(path: pathlib.Path | str | None = None) -> list[dict[str, Any]]:
+def check_events_log(
+    path: pathlib.Path | str | None = None,
+    cohort: Mapping[str, Any] | None = None,
+) -> list[dict[str, Any]]:
     """Validate the complete log; this is the read-only CI/check entry point."""
-    return read_events(path)
+    return read_events(path, cohort)
 
 
 def _read_fd(fd: int) -> bytes:
@@ -255,7 +320,9 @@ def _write_all(fd: int, data: bytes, destination: pathlib.Path) -> None:
 
 
 def append_event(
-    event: Mapping[str, Any], path: pathlib.Path | str | None = None
+    event: Mapping[str, Any],
+    path: pathlib.Path | str | None = None,
+    cohort: Mapping[str, Any] | None = None,
 ) -> dict[str, Any]:
     """Validate and durably append one event under an exclusive file lock.
 
@@ -264,6 +331,7 @@ def append_event(
     concurrent writers visible instead of silently reordering the history.
     """
     candidate = validate_event(event)
+    _validate_cohort_binding(candidate, cohort)
     destination = pathlib.Path(path) if path is not None else DEFAULT_LOG_PATH
     destination.parent.mkdir(parents=True, exist_ok=True)
     flags = os.O_APPEND | os.O_CREAT | os.O_RDWR
@@ -274,10 +342,18 @@ def append_event(
         fcntl.flock(fd, fcntl.LOCK_EX)
         locked = True
         existing = _decode_log(_read_fd(fd), destination)
+        for row in existing:
+            _validate_cohort_binding(row, cohort)
         expected = len(existing) + 1
         if candidate["sequence"] != expected:
             raise _fail(
                 f"sequence {candidate['sequence']} cannot be appended; expected {expected}"
+            )
+        expected_previous_digest = existing[-1]["event_digest"] if existing else "0" * 64
+        if candidate["previous_digest"] != expected_previous_digest:
+            raise _fail(
+                "previous_digest cannot be appended; expected "
+                f"{expected_previous_digest}"
             )
         if any(row["event_id"] == candidate["event_id"] for row in existing):
             raise _fail(f"duplicate event_id {candidate['event_id']!r}")
@@ -297,9 +373,12 @@ def append_event(
         os.close(fd)
 
 
-def summarize(path: pathlib.Path | str | None = None) -> dict[str, Any]:
+def summarize(
+    path: pathlib.Path | str | None = None,
+    cohort: Mapping[str, Any] | None = None,
+) -> dict[str, Any]:
     """Return a deterministic, JSON-serializable log summary."""
-    events = check_events_log(path)
+    events = check_events_log(path, cohort)
     stages = Counter(event["stage"] for event in events)
     statuses = Counter(event["status"] for event in events)
     return {
@@ -319,6 +398,7 @@ __all__ = [
     "MeasurementEventError",
     "append_event",
     "check_events_log",
+    "compute_event_digest",
     "read_events",
     "summarize",
     "validate_event",
