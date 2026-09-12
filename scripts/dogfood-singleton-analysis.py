@@ -41,6 +41,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 from regexproof.batch.manifests import MAX_FILE_BYTES  # noqa: E402
+from regexproof.extractors.go_regexp import extract_go_regexp  # noqa: E402
 from regexproof.extractors.js_babel import extract_js_precise  # noqa: E402
 from regexproof.extractors.python_ast import extract_python  # noqa: E402
 from regexproof.extractors.shell_posix import extract_shell_posix  # noqa: E402
@@ -92,6 +93,7 @@ def _shell(src: str) -> list[dict]:
 
 # --- repo walk / extraction -------------------------------------------------
 
+_GO_EXTS = {".go"}
 _JS_EXTS = {".js", ".mjs", ".ts", ".tsx"}
 # Shell surface OpenWrt actually uses, selected in --dir mode.
 _SHELL_EXTS_DIR_MODE = {".sh", ".bash", ".init"}
@@ -109,7 +111,7 @@ def _filtered(rel: str) -> bool:
 
 
 def _classify(rel: str, first_line: str, *, dir_mode: bool) -> str | None:
-    """Return 'py' | 'js' | 'sh' | None for a repo-relative path."""
+    """Return 'py' | 'js' | 'go' | 'sh' | None for a repo-relative path."""
     ext = Path(rel).suffix.lower()
     if ext == ".py":
         return "py"
@@ -117,6 +119,8 @@ def _classify(rel: str, first_line: str, *, dir_mode: bool) -> str | None:
         return "js"
     if not dir_mode:
         return "sh" if ext == ".sh" else None
+    if ext in _GO_EXTS:
+        return "go"
     if ext in _SHELL_EXTS_DIR_MODE:
         return "sh"
     if "init.d" in Path(rel).parts:
@@ -131,7 +135,8 @@ def extract_repo(name: str, path: str, *, dir_mode: bool = False,
     """Extract all regex-site records from one repo.
 
     dir_mode selects the full OpenWrt shell surface (*.sh, *.bash, *.init,
-    init.d/*, shebang sniff); default mode scans .sh only, as before.
+    init.d/*, shebang sniff) and Go regexp literals (*.go); default mode scans
+    .sh only, as before.
     exts (normalized, dot-prefixed) restricts the walk to those suffixes and
     disables init.d/shebang sniffing.  Files larger than MAX_FILE_BYTES are
     skipped (counted in oversized_files), never read.
@@ -171,6 +176,8 @@ def extract_repo(name: str, path: str, *, dir_mode: bool = False,
             recs = extract_python(src, repo=name, file=rel)
         elif kind == "js":
             recs = extract_js_precise(src, repo=name, file=rel)
+        elif kind == "go":
+            recs = extract_go_regexp(src, repo=name, file=rel, dialect="re2")
         else:
             recs = extract_shell_posix(src, repo=name, file=rel,
                                        dialect="posix-shell")

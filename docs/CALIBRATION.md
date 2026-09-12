@@ -23,11 +23,12 @@ the preceding eligible prefix for that family.
 
 Manifest dialect families are checked against the dialects emitted by the
 registered extractor before an observation is counted. An assignment with no
-compatible extractor, including the current `go_re` family until the dogfood
-runner emits `re2` records, is recorded as `unsupported_dialect`; records from
+compatible extractor is recorded as `unsupported_dialect`; records from
 another language are excluded from that family’s observation rather than
 relabeled as evidence. A mixed-language repository is eligible when it emits
-at least one record in the manifest family.
+at least one record in the manifest family. Directory-mode calibration now
+routes Go `regexp.Compile`/`MustCompile` literals through the registered Go
+extractor as `re2`; the default dogfood snapshot mode is unchanged.
 
 The command emits these committed artifacts:
 
