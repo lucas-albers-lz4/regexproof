@@ -176,21 +176,26 @@ def _observation(
     return row, prior_ids | current_ids
 
 
-def _validate_dialect_alignment(
+def _records_for_family(
     repo: Mapping[str, Any], records: list[Mapping[str, Any]]
-) -> None:
+) -> list[Mapping[str, Any]]:
     family = repo["dialect_family"]
     expected = _EXTRACTOR_DIALECTS_BY_FAMILY.get(family)
     if expected is None:
         raise UnsupportedDialectError(
             f"no calibration extractor registered for dialect family {family!r}"
         )
-    observed = {record.get("dialect") for record in records}
-    if not observed.issubset(expected):
+    selected = [record for record in records if record.get("dialect") in expected]
+    if not selected:
+        observed = sorted(
+            {record.get("dialect") for record in records},
+            key=lambda value: str(value),
+        )
         raise UnsupportedDialectError(
             f"dialect family {family!r} requires extractor dialect(s) "
-            f"{sorted(expected)!r}, but inventory returned {sorted(observed)!r}"
+            f"{sorted(expected)!r}, but inventory returned {observed!r}"
         )
+    return selected
 
 
 def build_observation_artifact(
@@ -242,10 +247,10 @@ def build_observation_artifact(
                 )
             if not scan.records:
                 raise CalibrationError("pinned inventory contains zero regex sites")
-            _validate_dialect_alignment(repo, scan.records)
+            records = _records_for_family(repo, scan.records)
             row, family_seen[repo["dialect_family"]] = _observation(
                 repo,
-                scan.records,
+                records,
                 family_seen[repo["dialect_family"]],
                 reject_buckets.get(repo_id),
                 dogfood,

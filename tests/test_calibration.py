@@ -155,6 +155,36 @@ def test_unsupported_dialect_is_recorded_before_counting_records(monkeypatch, tm
     ]
 
 
+def test_mixed_inventory_counts_only_manifest_family(monkeypatch, tmp_path):
+    manifest = _manifest("one")
+
+    class MixedDogfood:
+        @staticmethod
+        def _ident_of(record, *, canon_pat):
+            return (record["pattern"], "", record["dialect"])
+
+        @staticmethod
+        def extract_repo(repo_id, path, *, dir_mode):
+            return SimpleNamespace(
+                records=[
+                    {"pattern": "shell", "dialect": "posix-shell"},
+                    {"pattern": "python", "dialect": "py_re"},
+                ],
+                oversized_files=0,
+            )
+
+    monkeypatch.setattr(calibration, "_dogfood_module", lambda: MixedDogfood)
+    monkeypatch.setattr(calibration, "_git_head", lambda path: "1" * 40)
+    checkout = tmp_path / "one"
+    checkout.mkdir()
+
+    artifact = calibration.build_observation_artifact(manifest, {"one": checkout})
+
+    assert artifact["failures"] == []
+    assert artifact["observations"][0]["sites"] == 1
+    assert artifact["observations"][0]["canonical_ids"] == [["python", "", "py_re"]]
+
+
 def test_artifact_rejects_reordered_observations(monkeypatch, tmp_path):
     manifest = _manifest("one", "two")
 
