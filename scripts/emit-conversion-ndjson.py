@@ -56,6 +56,8 @@ SHAPE = {
     "AI-claude-plugins-git-clean-e-bundle-no-semicolon": 1,
     "DF-dogfood-shell-normalize-fixpoint": 3,
     "DF-dogfood-shell-normalize-idempotent": 3,
+    "PY-doberman-windows-root-token": 2,
+    "PY-doberman-disk-wipe-token": 1,
 }
 
 
