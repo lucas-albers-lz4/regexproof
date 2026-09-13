@@ -152,6 +152,11 @@ jobs:
       - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
         with:
           node-version: "22"
+      - name: Record runner capacity (CI speed profile)
+        run: |
+          echo "nproc=$(nproc)"
+          free -h
+          python -c "import os; print('python_cpu_count=' + str(os.cpu_count()))"
       - name: Install JS helper deps
         run: npm ci --prefix helpers/ecma
       - name: Build go-re2 helper
