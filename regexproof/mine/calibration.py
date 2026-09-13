@@ -45,9 +45,9 @@ _EXTRACTOR_DIALECTS_BY_FAMILY = {
     "py_re": frozenset({"py_re"}),
     "ecma": frozenset({"ecma"}),
     "posix-shell": frozenset({"posix-shell"}),
-    # The calibration dogfood extractor does not currently emit re2 records.
-    # Keep this family explicit so a shell/Python record cannot be mislabeled
-    # as Go evidence while Go extraction is being brought into this runner.
+    # Go evidence is emitted as re2 by the canonical Go extractor. Keep this
+    # family explicit so a shell/Python record cannot be mislabeled as Go
+    # evidence.
     "go_re": frozenset({"re2"}),
 }
 _EXTRACTOR_EXTS_BY_FAMILY = {
