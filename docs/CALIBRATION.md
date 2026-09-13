@@ -1,8 +1,10 @@
 # PR5 calibration execution
 
-PR5 runs the first ten repositories from a frozen PR2 manifest. It is an
-execution artifact, not a new selector: membership, URL, commit pin, family,
-and repository order come only from the manifest.
+The calibration runner executes a frozen PR2 manifest. It is an execution
+artifact, not a new selector: membership, URL, commit pin, family, and
+repository order come only from the manifest. Use `--expected-repos` when the
+operator wants an explicit cohort-size assertion, such as the staged 20-repo
+run.
 
 The operator prepares local checkouts at the exact pins, then runs:
 
@@ -10,6 +12,7 @@ The operator prepares local checkouts at the exact pins, then runs:
 python scripts/calibration.py properties/calibration/2026-09-10-10/manifest.json \
   --repo owner/a=/srv/calibration/owner-a \
   --repo owner/b=/srv/calibration/owner-b \
+  --expected-repos 10 \
   --output-dir properties/calibration/2026-09-10-10
 ```
 
@@ -41,7 +44,7 @@ The command emits these committed artifacts:
 
 The producer records an incomplete cohort as incomplete. It never turns a
 missing repository into a zero-novelty row, and PR1's saturation envelope
-cannot be projected until all ten observations are present. A family with
+cannot be projected until all manifest observations are present. A family with
 fewer than two completed eligible repositories is `insufficient_data`, never
 `saturated`.
 
@@ -50,7 +53,7 @@ product funnel remains a separate arm: no conversion rows are invented by the
 compiler observation step, and zero filing is not evidence that compiler
 idioms are exhausted.
 
-The first ten-repository close-out can recommend continuing to 20, but it
-cannot claim that 20 or 30 have been evaluated. The committed manifest digest,
-observation artifact, failure log, and close-out are the evidence for the
-issue decision.
+The staged close-out can recommend continuing to the next cohort, but it
+cannot claim that a later cohort has been evaluated. The committed manifest
+digest, observation artifact, failure log, and close-out are the evidence for
+the issue decision.

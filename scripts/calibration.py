@@ -61,13 +61,26 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--repo", action="append", default=[], metavar="ID=PATH", help="pinned local checkout (repeatable)")
     parser.add_argument("--reject-buckets", type=Path, help="optional JSON map of repo_id to exact new reject-bucket strings")
     parser.add_argument("--conversion-report", type=Path, help="optional PR4 checkpoint report for close-out context")
+    parser.add_argument(
+        "--expected-repos",
+        type=int,
+        help="optional fail-closed assertion for the frozen cohort size",
+    )
     parser.add_argument("--output-dir", type=Path, required=True, help="directory for the evidence bundle")
     args = parser.parse_args(argv)
     try:
         manifest = load_manifest(args.manifest)
-        if len(manifest["repos"]) != 10:
+        if args.expected_repos is not None and args.expected_repos <= 0:
             raise CalibrationError(
-                f"PR5 calibration requires exactly 10 manifest repositories; got {len(manifest['repos'])}"
+                "--expected-repos must be a positive integer"
+            )
+        if (
+            args.expected_repos is not None
+            and len(manifest["repos"]) != args.expected_repos
+        ):
+            raise CalibrationError(
+                f"expected {args.expected_repos} manifest repositories; "
+                f"got {len(manifest['repos'])}"
             )
         artifact = build_observation_artifact(
             manifest,
