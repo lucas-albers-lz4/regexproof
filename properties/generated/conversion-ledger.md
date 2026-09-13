@@ -28,7 +28,7 @@ Heap's-law / singleton novelty saturates **compiler coverage**. This artifact sa
 | dry-run `private_first` (includes planned stubs) | 1,268 |
 | dry-run would open public upstream | 0 |
 | accepted upstream (curated `fixed_upstream`) | 1 |
-| existence proofs (`fixed_upstream` + `private_first`) | 1 |
+| existence proofs (`fixed_upstream` + `private_first`) | 3 |
 | filed false positives | 7 |
 | third-party public accepted | 0 |
 
@@ -52,7 +52,7 @@ Asked in tools: 5. Asked elsewhere: 31. SAT in tools: 4. SAT elsewhere: 4.
 
 ## Upstream (curated)
 
-Rows: 14. Language-membership: 13. fixed_upstream: 1. filed_plan: 1. false_positive: 7. out_of_scope_redos: 1. private_first: 0. wont_file: 4.
+Rows: 16. Language-membership: 15. fixed_upstream: 1. filed_plan: 1. false_positive: 7. out_of_scope_redos: 1. private_first: 2. wont_file: 4.
 
 Source: [`docs/conversion-upstream.jsonl`](../../docs/conversion-upstream.jsonl).
 
@@ -80,7 +80,7 @@ asked → SAT → GT → filed → accepted per `(wave_id, idiom_bucket)`.
 |---|---|---|---|---|---|---|---|
 | aidevops_w1 | shell-hook-guards | 5 | 0 | 0 | **0** | 0 | **n/a** |
 | claude-code-plugins_w1 | plugin-hook-guards | 3 | 0 | 0 | **0** | 0 | **n/a** |
-| doberman_w1 | command-execution | 2 | 2 | 2 | **0** | 0 | **0.0000** |
+| doberman_w1 | command-execution | 2 | 2 | 2 | **2** | 0 | **1.0000** |
 | dogfood_shell_w1 | normalize-fixpoint | 2 | 0 | 0 | **0** | 0 | **n/a** |
 | mycelium_w1 | control-failclosed | 3 | 0 | 0 | **0** | 0 | **n/a** |
 | openwrt_luci_w1 | form-validator-alphabets | 4 | 1 | 1 | **0** | 0 | **0.0000** |
