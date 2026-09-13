@@ -57,7 +57,7 @@ SHAPE = {
     "DF-dogfood-shell-normalize-fixpoint": 3,
     "DF-dogfood-shell-normalize-idempotent": 3,
     "PY-doberman-windows-root-token": 2,
-    "PY-doberman-disk-wipe-token": 1,
+    "PY-doberman-disk-wipe-token": 2,
 }
 
 
