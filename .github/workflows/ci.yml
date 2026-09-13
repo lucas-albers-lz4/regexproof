@@ -180,7 +180,10 @@ jobs:
       - name: Named extractor-accuracy fixtures
         run: pytest -q tests/test_extractors.py
       - name: Pytest (golden + foundations; ReDoS smoke in redos job)
-        run: pytest -q --ignore=tests/test_redos_smoke.py
+        # The hosted runners expose 4 vCPU / 15 GiB (measured in #638).
+        # loadfile keeps module-level fixtures together while using the
+        # measured capacity; the pinned plugin is installed by [dev].
+        run: pytest -q -n 4 --dist loadfile --ignore=tests/test_redos_smoke.py
       - name: Phase 2 pilots (extract → fraction → properties)
         run: |
           python scripts/pilot-run.py
