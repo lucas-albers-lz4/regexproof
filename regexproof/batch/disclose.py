@@ -20,6 +20,7 @@ SECURITY_TOOL_CORPORA = frozenset(
         "coreruleset",
         "ids_rules",
         "semgrep_rules",
+        "semgrep-semgrep",
         "yara_rules",
         "spamassassin",
         "noseyparker",
