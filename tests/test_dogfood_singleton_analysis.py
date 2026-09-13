@@ -95,6 +95,17 @@ def test_dir_mode_shell_surface(tmp_path):
     assert dict(scan.per_file) == _FIXTURE_COUNTS
 
 
+def test_dir_mode_go_surface(tmp_path):
+    (tmp_path / "sample.go").write_text(
+        'package sample\n\nimport "regexp"\n\n'
+        'var pat = regexp.MustCompile(`[a-z]+`)\n',
+        encoding="utf-8",
+    )
+    scan = dsa.extract_repo("t", str(tmp_path), dir_mode=True)
+    assert dict(scan.per_file) == {"sample.go": 1}
+    assert scan.records[0]["dialect"] == "re2"
+
+
 def test_default_mode_scans_sh_only(tmp_path):
     _write_fixture(tmp_path)
     scan = dsa.extract_repo("t", str(tmp_path), dir_mode=False)
