@@ -8,11 +8,11 @@ Heap's-law / singleton novelty saturates **compiler coverage**. This artifact sa
 
 | stage | count |
 |---|---|
-| sites extracted (batch summaries) | 147,590 |
-| sites encodable | 94,478 |
-| scanner NDJSON rows | 14,580 |
-| planned inventory stubs | 330 |
-| classification rows (usage/intent/triage kinds) | 12,962 |
+| sites extracted (batch summaries) | 149,191 |
+| sites encodable | 96,009 |
+| scanner NDJSON rows | 14,659 |
+| planned inventory stubs | 338 |
+| classification rows (usage/intent/triage kinds) | 13,033 |
 | mutation guards (hygiene) | 644 |
 | properties asked (non-planned product kinds) | 34 |
 | properties asked distinct `(site, question_id)` | 34 |
@@ -25,7 +25,7 @@ Heap's-law / singleton novelty saturates **compiler coverage**. This artifact sa
 | rule_diff report SAT + ground-truth | 10 |
 | disclosed `private_first` (scanner product+classification, skip planned) | 1,128 |
 | disclosed `public_ok` | 0 |
-| dry-run `private_first` (includes planned stubs) | 1,264 |
+| dry-run `private_first` (includes planned stubs) | 1,268 |
 | dry-run would open public upstream | 0 |
 | accepted upstream (curated `fixed_upstream`) | 1 |
 | existence proofs (`fixed_upstream` + `private_first`) | 1 |
@@ -36,15 +36,15 @@ Heap's-law / singleton novelty saturates **compiler coverage**. This artifact sa
 
 | rate | value |
 |---|---|
-| encodable / extracted | 0.6401 |
+| encodable / extracted | 0.6435 |
 | properties asked / encodable | 0.0004 |
 | SAT / properties asked | 0.1765 |
 | ground-truthed / SAT | 1.0000 |
 | pipeline accepted (incl. own-code) / SAT GT | 0.1667 |
 | pipeline accepted / extracted | 7.00e-06 |
-| encodable / extracted excluding YARA inventories | 0.6413 |
-| YARA share of inventory unencodable | 0.5854 |
-| `fullword-boundary` share of inventory unencodable | 0.5695 |
+| encodable / extracted excluding YARA inventories | 0.6476 |
+| YARA share of inventory unencodable | 0.5848 |
+| `fullword-boundary` share of inventory unencodable | 0.5689 |
 
 ## Security-tool split (scanner product kinds)
 
