@@ -1,0 +1,143 @@
+{
+  "canonicalization_version": "dogfood-singleton-analysis-v1",
+  "cohort_id": "2026-09-12-calibration-20-r2",
+  "cohort_totals": {
+    "dialect_family_count": 4,
+    "new_reject_buckets": [],
+    "novel_sites": 9628,
+    "properties_accepted": 0,
+    "properties_asked": 0,
+    "properties_filed": 0,
+    "properties_ground_truthed": 0,
+    "properties_sat": 0,
+    "repo_count": 20,
+    "sites": 10231
+  },
+  "compiler_stop": false,
+  "families": {
+    "ecma": {
+      "compiler_stop": false,
+      "repo_count": 6,
+      "repo_ids": [
+        "json-editor/json-editor",
+        "magiclabs/magic-js",
+        "grcengineering/gigachad-grc",
+        "xibosignage/xibo-cms",
+        "profbernardoj/everclaw-community-branches",
+        "greydragon888/real-router"
+      ],
+      "trailing_two": [
+        {
+          "new_reject_buckets": [],
+          "novel_sites": 381,
+          "novelty_rate": "0.821120689655",
+          "repo_id": "profbernardoj/everclaw-community-branches",
+          "sites": 464
+        },
+        {
+          "new_reject_buckets": [],
+          "novel_sites": 2668,
+          "novelty_rate": "0.943089430894",
+          "repo_id": "greydragon888/real-router",
+          "sites": 2829
+        }
+      ],
+      "trailing_two_novelty_rate": "0.925903431521"
+    },
+    "go_re": {
+      "compiler_stop": false,
+      "repo_count": 4,
+      "repo_ids": [
+        "h0tak88r/AutoAR",
+        "chainguard-dev/malcontent",
+        "open-horizon/anax",
+        "snyk/snyk-ls"
+      ],
+      "trailing_two": [
+        {
+          "new_reject_buckets": [],
+          "novel_sites": 24,
+          "novelty_rate": "1",
+          "repo_id": "open-horizon/anax",
+          "sites": 24
+        },
+        {
+          "new_reject_buckets": [],
+          "novel_sites": 35,
+          "novelty_rate": "1",
+          "repo_id": "snyk/snyk-ls",
+          "sites": 35
+        }
+      ],
+      "trailing_two_novelty_rate": "1"
+    },
+    "posix-shell": {
+      "compiler_stop": false,
+      "repo_count": 4,
+      "repo_ids": [
+        "mycelium0/mycelium",
+        "melodic-software/claude-code-plugins",
+        "marcusquinn/aidevops",
+        "Leviticus-Triage/llm-honeypot-intelligence"
+      ],
+      "trailing_two": [
+        {
+          "new_reject_buckets": [],
+          "novel_sites": 779,
+          "novelty_rate": "0.95",
+          "repo_id": "marcusquinn/aidevops",
+          "sites": 820
+        },
+        {
+          "new_reject_buckets": [],
+          "novel_sites": 13,
+          "novelty_rate": "0.8125",
+          "repo_id": "Leviticus-Triage/llm-honeypot-intelligence",
+          "sites": 16
+        }
+      ],
+      "trailing_two_novelty_rate": "0.947368421053"
+    },
+    "py_re": {
+      "compiler_stop": false,
+      "repo_count": 6,
+      "repo_ids": [
+        "netspooky/inhale",
+        "TracecatHQ/tracecat",
+        "Agenticstiger/forge-cli",
+        "airbnb/binaryalert",
+        "panther-labs/panther-analysis",
+        "fu351/Doberman-Core"
+      ],
+      "trailing_two": [
+        {
+          "new_reject_buckets": [],
+          "novel_sites": 40,
+          "novelty_rate": "1",
+          "repo_id": "panther-labs/panther-analysis",
+          "sites": 40
+        },
+        {
+          "new_reject_buckets": [],
+          "novel_sites": 101,
+          "novelty_rate": "0.971153846154",
+          "repo_id": "fu351/Doberman-Core",
+          "sites": 104
+        }
+      ],
+      "trailing_two_novelty_rate": "0.979166666667"
+    }
+  },
+  "manifest_digest": "5745d8307a4eeb8483602b2a787b411bac521c6c242755a5f9bb2371c417056d",
+  "product_denominator": 0,
+  "product_denominator_met": false,
+  "schema_version": "1",
+  "target_denominator": 0,
+  "target_denominator_met": false,
+  "thresholds": {
+    "compiler_novelty_rate_strictly_below": "0.03",
+    "product_denominator": 50,
+    "target_denominator": 100,
+    "trailing_repos": 2
+  }
+}

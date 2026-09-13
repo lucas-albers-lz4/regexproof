@@ -45,10 +45,18 @@ _EXTRACTOR_DIALECTS_BY_FAMILY = {
     "py_re": frozenset({"py_re"}),
     "ecma": frozenset({"ecma"}),
     "posix-shell": frozenset({"posix-shell"}),
-    # The calibration dogfood extractor does not currently emit re2 records.
-    # Keep this family explicit so a shell/Python record cannot be mislabeled
-    # as Go evidence while Go extraction is being brought into this runner.
+    # Go evidence is emitted as re2 by the canonical Go extractor. Keep this
+    # family explicit so a shell/Python record cannot be mislabeled as Go
+    # evidence.
     "go_re": frozenset({"re2"}),
+}
+_EXTRACTOR_EXTS_BY_FAMILY = {
+    "py_re": frozenset({".py"}),
+    "ecma": frozenset({".js", ".mjs", ".ts", ".tsx"}),
+    "go_re": frozenset({".go"}),
+    # Shell shebangs and init.d paths are part of the registered dir-mode
+    # surface, so this family deliberately uses the walker's default filter.
+    "posix-shell": None,
 }
 
 
@@ -198,6 +206,15 @@ def _records_for_family(
     return selected
 
 
+def _extractor_exts_for_family(family: str) -> frozenset[str] | None:
+    try:
+        return _EXTRACTOR_EXTS_BY_FAMILY[family]
+    except KeyError as exc:
+        raise UnsupportedDialectError(
+            f"no calibration file surface registered for dialect family {family!r}"
+        ) from exc
+
+
 def build_observation_artifact(
     manifest: Mapping[str, Any],
     repo_paths: Mapping[str, str | Path],
@@ -240,7 +257,11 @@ def build_observation_artifact(
                 raise CalibrationError(
                     f"HEAD {actual_pin!r} does not match manifest pin {repo['pin']!r}"
                 )
-            scan = dogfood.extract_repo(repo_id, str(path), dir_mode=True)
+            extractor_exts = _extractor_exts_for_family(repo["dialect_family"])
+            extractor_kwargs: dict[str, Any] = {"dir_mode": True}
+            if extractor_exts is not None:
+                extractor_kwargs["exts"] = extractor_exts
+            scan = dogfood.extract_repo(repo_id, str(path), **extractor_kwargs)
             if scan.oversized_files:
                 raise CalibrationError(
                     f"inventory skipped {scan.oversized_files} oversized file(s)"

@@ -38,7 +38,7 @@ def test_observation_binds_pin_and_counts_canonical_site_novelty(monkeypatch, tm
             return (record["pattern"], record.get("flags", ""), record["dialect"])
 
         @staticmethod
-        def extract_repo(repo_id, path, *, dir_mode):
+        def extract_repo(repo_id, path, *, dir_mode, exts=None):
             records = {
                 "one": [{"pattern": "a1", "flags": "", "dialect": "py_re"},
                         {"pattern": "b", "flags": "", "dialect": "py_re"}],
@@ -87,7 +87,7 @@ def test_extractor_exception_is_recorded_not_silently_counted(monkeypatch, tmp_p
 
     class BrokenDogfood:
         @staticmethod
-        def extract_repo(repo_id, path, *, dir_mode):
+        def extract_repo(repo_id, path, *, dir_mode, exts=None):
             raise SyntaxError(f"bad source in {repo_id}")
 
     monkeypatch.setattr(calibration, "_dogfood_module", lambda: BrokenDogfood)
@@ -125,7 +125,7 @@ def test_unsupported_dialect_is_recorded_before_counting_records(monkeypatch, tm
 
     class ShellOnlyDogfood:
         @staticmethod
-        def extract_repo(repo_id, path, *, dir_mode):
+        def extract_repo(repo_id, path, *, dir_mode, exts=None):
             return SimpleNamespace(
                 records=[{"pattern": "[a-z]+", "dialect": "posix-shell"}],
                 oversized_files=0,
@@ -164,7 +164,7 @@ def test_mixed_inventory_counts_only_manifest_family(monkeypatch, tmp_path):
             return (record["pattern"], "", record["dialect"])
 
         @staticmethod
-        def extract_repo(repo_id, path, *, dir_mode):
+        def extract_repo(repo_id, path, *, dir_mode, exts=None):
             return SimpleNamespace(
                 records=[
                     {"pattern": "shell", "dialect": "posix-shell"},
@@ -194,7 +194,7 @@ def test_artifact_rejects_reordered_observations(monkeypatch, tmp_path):
             return (record["pattern"], "", "py_re")
 
         @staticmethod
-        def extract_repo(repo_id, path, *, dir_mode):
+        def extract_repo(repo_id, path, *, dir_mode, exts=None):
             return SimpleNamespace(
                 records=[{"pattern": repo_id, "dialect": "py_re"}],
                 oversized_files=0,
