@@ -14,13 +14,13 @@ Heap's-law / singleton novelty saturates **compiler coverage**. This artifact sa
 | planned inventory stubs | 338 |
 | classification rows (usage/intent/triage kinds) | 13,033 |
 | mutation guards (hygiene) | 644 |
-| properties asked (non-planned product kinds) | 34 |
-| properties asked distinct `(site, question_id)` | 34 |
+| properties asked (non-planned product kinds) | 36 |
+| properties asked distinct `(site, question_id)` | 36 |
 | properties UNSAT (holds in declared domain) | 27 |
-| properties SAT | 6 |
-| properties SAT distinct `(site, question_id)` | 6 |
-| SAT unique sites | 4 |
-| SAT ground-truthed (`reproduced` / `PASS`) | 6 |
+| properties SAT | 8 |
+| properties SAT distinct `(site, question_id)` | 8 |
+| SAT unique sites | 6 |
+| SAT ground-truthed (`reproduced` / `PASS`) | 8 |
 | rule_diff report SAT (dedicated pilots) | 10 |
 | rule_diff report SAT + ground-truth | 10 |
 | disclosed `private_first` (scanner product+classification, skip planned) | 1,128 |
@@ -28,7 +28,7 @@ Heap's-law / singleton novelty saturates **compiler coverage**. This artifact sa
 | dry-run `private_first` (includes planned stubs) | 1,268 |
 | dry-run would open public upstream | 0 |
 | accepted upstream (curated `fixed_upstream`) | 1 |
-| existence proofs (`fixed_upstream` + `private_first`) | 1 |
+| existence proofs (`fixed_upstream` + `private_first`) | 3 |
 | filed false positives | 7 |
 | third-party public accepted | 0 |
 
@@ -38,9 +38,9 @@ Heap's-law / singleton novelty saturates **compiler coverage**. This artifact sa
 |---|---|
 | encodable / extracted | 0.6435 |
 | properties asked / encodable | 0.0004 |
-| SAT / properties asked | 0.1765 |
+| SAT / properties asked | 0.2222 |
 | ground-truthed / SAT | 1.0000 |
-| pipeline accepted (incl. own-code) / SAT GT | 0.1667 |
+| pipeline accepted (incl. own-code) / SAT GT | 0.1250 |
 | pipeline accepted / extracted | 7.00e-06 |
 | encodable / extracted excluding YARA inventories | 0.6476 |
 | YARA share of inventory unencodable | 0.5848 |
@@ -48,11 +48,11 @@ Heap's-law / singleton novelty saturates **compiler coverage**. This artifact sa
 
 ## Security-tool split (scanner product kinds)
 
-Asked in tools: 3. Asked elsewhere: 31. SAT in tools: 2. SAT elsewhere: 4.
+Asked in tools: 5. Asked elsewhere: 31. SAT in tools: 4. SAT elsewhere: 4.
 
 ## Upstream (curated)
 
-Rows: 14. Language-membership: 13. fixed_upstream: 1. filed_plan: 1. false_positive: 7. out_of_scope_redos: 1. private_first: 0. wont_file: 4.
+Rows: 16. Language-membership: 15. fixed_upstream: 1. filed_plan: 1. false_positive: 7. out_of_scope_redos: 1. private_first: 2. wont_file: 4.
 
 Source: [`docs/conversion-upstream.jsonl`](../../docs/conversion-upstream.jsonl).
 
@@ -66,6 +66,7 @@ Source: [`docs/conversion-upstream.jsonl`](../../docs/conversion-upstream.jsonl)
 | claude-code-plugins | false | 3 | 3 | 0 | 0 | 0 |
 | coreruleset | true | 3 | 0 | 2 | 2 | 0 |
 | mycelium | false | 3 | 3 | 0 | 0 | 0 |
+| Doberman-Core | true | 2 | 0 | 2 | 2 | 2 |
 | dogfood_shell | false | 2 | 2 | 0 | 0 | 0 |
 
 ## Per-wave conversion hops (#554)
@@ -79,6 +80,7 @@ asked → SAT → GT → filed → accepted per `(wave_id, idiom_bucket)`.
 |---|---|---|---|---|---|---|---|
 | aidevops_w1 | shell-hook-guards | 5 | 0 | 0 | **0** | 0 | **n/a** |
 | claude-code-plugins_w1 | plugin-hook-guards | 3 | 0 | 0 | **0** | 0 | **n/a** |
+| doberman_w1 | command-execution | 2 | 2 | 2 | **2** | 0 | **1.0000** |
 | dogfood_shell_w1 | normalize-fixpoint | 2 | 0 | 0 | **0** | 0 | **n/a** |
 | mycelium_w1 | control-failclosed | 3 | 0 | 0 | **0** | 0 | **n/a** |
 | openwrt_luci_w1 | form-validator-alphabets | 4 | 1 | 1 | **0** | 0 | **0.0000** |
@@ -110,6 +112,7 @@ Share of asked properties per shape, per wave (conversion rows).
 |---|---|---|---|
 | aidevops_w1 | shell-hook-guards | 5 | shape 1: 0.6000, shape 3: 0.4000 |
 | claude-code-plugins_w1 | plugin-hook-guards | 3 | shape 1: 1.0000 |
+| doberman_w1 | command-execution | 2 | shape 2: 1.0000 |
 | dogfood_shell_w1 | normalize-fixpoint | 2 | shape 3: 1.0000 |
 | mycelium_w1 | control-failclosed | 3 | shape 1: 1.0000 |
 | openwrt_luci_w1 | form-validator-alphabets | 4 | shape 1: 0.7500, shape 3: 0.2500 |

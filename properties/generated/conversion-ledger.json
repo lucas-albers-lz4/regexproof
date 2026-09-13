@@ -79,6 +79,16 @@
       "security_tool": false
     },
     {
+      "corpus": "Doberman-Core",
+      "properties_asked": 2,
+      "properties_sat": 2,
+      "properties_unsat": 0,
+      "sat_ground_truthed": 2,
+      "sat_unique_sites": 2,
+      "scanner_rows": 11,
+      "security_tool": true
+    },
+    {
       "corpus": "dogfood_shell",
       "properties_asked": 2,
       "properties_sat": 0,
@@ -99,7 +109,7 @@
     "classification_rows": 13033,
     "disclosed_private_first": 1128,
     "disclosed_public_ok": 0,
-    "existence_proofs": 1,
+    "existence_proofs": 3,
     "false_positives_filed": 7,
     "mutation_guards": 644,
     "other_rows": 0,
@@ -107,19 +117,19 @@
     "pr_dry_run_findings": 14659,
     "pr_dry_run_private_first": 1268,
     "pr_dry_runs": 87,
-    "properties_asked": 34,
-    "properties_asked_distinct": 34,
+    "properties_asked": 36,
+    "properties_asked_distinct": 36,
     "properties_asked_synthesized": 644,
-    "properties_sat": 6,
-    "properties_sat_distinct": 6,
+    "properties_sat": 8,
+    "properties_sat_distinct": 8,
     "properties_sat_synthesized": 28,
     "properties_unsat": 27,
     "redos_rows": 0,
     "rule_diff_report_sat": 10,
     "rule_diff_report_sat_gt": 10,
-    "sat_ground_truthed": 6,
-    "sat_unique_sites": 4,
-    "scanner_ndjson_files": 93,
+    "sat_ground_truthed": 8,
+    "sat_unique_sites": 6,
+    "scanner_ndjson_files": 94,
     "scanner_rows": 14659,
     "scanner_rule_diff_sat": 0,
     "sites_encodable": 96009,
@@ -182,6 +192,24 @@
         "shape_1": 1.0
       },
       "wave_id": "claude-code-plugins_w1"
+    },
+    {
+      "accepted": 0,
+      "corpora": [
+        "Doberman-Core"
+      ],
+      "filed": 2,
+      "idiom_bucket": "command-execution",
+      "properties_asked": 2,
+      "properties_sat": 2,
+      "sat_ground_truthed": 2,
+      "shape_counts": {
+        "2": 2
+      },
+      "shape_mix": {
+        "shape_2": 1.0
+      },
+      "wave_id": "doberman_w1"
     },
     {
       "accepted": 0,
@@ -315,7 +343,7 @@
   },
   "rates": {
     "accepted_per_extracted": 7e-06,
-    "accepted_per_gt": 0.166667,
+    "accepted_per_gt": 0.125,
     "encodable_fraction": 0.643531,
     "encodable_fraction_all_inventories": 0.641892,
     "encodable_fraction_excluding_yara": 0.647587,
@@ -323,9 +351,9 @@
     "fullword_share_of_unencodable": 0.56891,
     "gt_per_sat": 1.0,
     "pipeline_accepted_per_extracted": 7e-06,
-    "pipeline_accepted_per_gt": 0.166667,
-    "property_asked_per_encodable": 0.000354,
-    "sat_per_property_asked": 0.176471,
+    "pipeline_accepted_per_gt": 0.125,
+    "property_asked_per_encodable": 0.000375,
+    "sat_per_property_asked": 0.222222,
     "yara_share_of_unencodable": 0.584805
   },
   "rule_diff_reports": {
@@ -353,12 +381,15 @@
   },
   "schema_version": "1",
   "security_tool_split": {
-    "properties_asked_in_tools": 3,
+    "properties_asked_in_tools": 5,
     "properties_asked_not_tools": 31,
-    "properties_sat_in_tools": 2,
+    "properties_sat_in_tools": 4,
     "properties_sat_not_tools": 4
   },
   "shape_mix_by_corpus": {
+    "Doberman-Core": {
+      "shape_2": 2
+    },
     "aidevops": {
       "shape_1": 3,
       "shape_3": 2
@@ -411,14 +442,14 @@
   },
   "upstream": {
     "accepted_upstream": 1,
-    "existence_proofs": 1,
+    "existence_proofs": 3,
     "false_positive": 7,
     "filed_plan": 1,
     "fixed_upstream": 1,
-    "language_membership": 13,
+    "language_membership": 15,
     "out_of_scope_redos": 1,
-    "private_first": 0,
-    "rows": 14,
+    "private_first": 2,
+    "rows": 16,
     "third_party_public": 0,
     "wont_file": 4
   },
@@ -520,6 +551,20 @@
       "kind": "counterexample_finder",
       "language_membership": true,
       "status": "wont_file"
+    },
+    {
+      "corpus": "Doberman-Core",
+      "id": "CU-015",
+      "kind": "counterexample_finder",
+      "language_membership": true,
+      "status": "private_first"
+    },
+    {
+      "corpus": "Doberman-Core",
+      "id": "CU-016",
+      "kind": "counterexample_finder",
+      "language_membership": true,
+      "status": "private_first"
     }
   ],
   "yara_split": {
