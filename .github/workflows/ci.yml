@@ -181,9 +181,15 @@ jobs:
         run: pytest -q tests/test_extractors.py
       - name: Pytest (golden + foundations; ReDoS smoke in redos job)
         # The hosted runners expose 4 vCPU / 15 GiB (measured in #638).
-        # loadfile keeps module-level fixtures together while using the
-        # measured capacity; the pinned plugin is installed by [dev].
-        run: pytest -q -n 4 --dist loadfile --ignore=tests/test_redos_smoke.py
+        # Python 3.13 uses the measured capacity. Python 3.12 remains serial:
+        # its fixed-time Z3/subprocess tests have shown one runner-side timeout
+        # under xdist contention, and TIMEOUT is a hard failure in this gate.
+        run: |
+          if [ "${{ matrix.python-version }}" = "3.13" ]; then
+            pytest -q -n 4 --dist loadfile --ignore=tests/test_redos_smoke.py
+          else
+            pytest -q --ignore=tests/test_redos_smoke.py
+          fi
       - name: Phase 2 pilots (extract → fraction → properties)
         run: |
           python scripts/pilot-run.py
@@ -194,10 +200,22 @@ jobs:
         # counterexample_finder only, and this pilot's registry is rule_diff
         # gaps + mutation guards (see scripts/rule-diff-pilot.py).
         run: python scripts/rule-diff-pilot.py --require-ground-truth --require-domain
+      - name: Restore pinned golden corpus trees
+        uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5
+        with:
+          path: |
+            /tmp/detect-secrets
+            /tmp/crs-shape5
+          key: golden-corpora-${{ runner.os }}-detect-secrets-01886c8a-crs-bb64941f-55b09f5a
       - name: Materialize detect-secrets corpus pin (v1.5.0)
         run: |
-          git clone --depth 1 --branch v1.5.0 \
-            https://github.com/Yelp/detect-secrets.git /tmp/detect-secrets
+          if [ ! -d /tmp/detect-secrets/.git ]; then
+            rm -rf /tmp/detect-secrets
+            git clone --depth 1 --branch v1.5.0 \
+              https://github.com/Yelp/detect-secrets.git /tmp/detect-secrets
+          else
+            echo "Using cached detect-secrets checkout"
+          fi
           test "$(git -C /tmp/detect-secrets rev-parse HEAD)" = "01886c8a910c64595c47f186ca1ffc0b77fa5458"
           ln -sfn /tmp/detect-secrets/detect_secrets/plugins \
             batch/corpora/detect-secrets/plugins
@@ -208,14 +226,24 @@ jobs:
         # Z3 outcomes without a regexproof change.
         run: |
           mkdir -p /tmp/crs-shape5
-          git clone --depth 1 --branch v4.27.0 \
-            https://github.com/coreruleset/coreruleset.git \
-            /tmp/crs-shape5/coreruleset-v4.27.0
+          if [ ! -d /tmp/crs-shape5/coreruleset-v4.27.0/.git ]; then
+            rm -rf /tmp/crs-shape5/coreruleset-v4.27.0
+            git clone --depth 1 --branch v4.27.0 \
+              https://github.com/coreruleset/coreruleset.git \
+              /tmp/crs-shape5/coreruleset-v4.27.0
+          else
+            echo "Using cached CRS v4.27.0 checkout"
+          fi
           test "$(git -C /tmp/crs-shape5/coreruleset-v4.27.0 rev-parse HEAD)" = \
             "bb64941f9beb3382fecd215c9ef032c427884ff0"
-          git clone --depth 1 --branch v4.28.0 \
-            https://github.com/coreruleset/coreruleset.git \
-            /tmp/crs-shape5/coreruleset-v4.28.0
+          if [ ! -d /tmp/crs-shape5/coreruleset-v4.28.0/.git ]; then
+            rm -rf /tmp/crs-shape5/coreruleset-v4.28.0
+            git clone --depth 1 --branch v4.28.0 \
+              https://github.com/coreruleset/coreruleset.git \
+              /tmp/crs-shape5/coreruleset-v4.28.0
+          else
+            echo "Using cached CRS v4.28.0 checkout"
+          fi
           test "$(git -C /tmp/crs-shape5/coreruleset-v4.28.0 rev-parse HEAD)" = \
             "55b09f5acfd16413e7b31041100711ceb7adc89c"
           test -d /tmp/crs-shape5/coreruleset-v4.27.0/rules
