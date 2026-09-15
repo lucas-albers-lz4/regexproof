@@ -171,6 +171,10 @@ def test_toolchain_config_loads_and_matrix_aligned():
     tool = tomllib.loads((ROOT / "ci" / "toolchain.toml").read_text())
     matrix = tomllib.loads((ROOT / "ci" / "python-matrix.toml").read_text())
     assert tool["python"]["minors"] == matrix["minors"]
+    assert matrix["pr_minors"] == ["3.13"]
+    assert matrix["scheduled_minors"] == ["3.12"]
+    assert set(matrix["pr_minors"]) <= set(matrix["minors"])
+    assert set(matrix["scheduled_minors"]) <= set(matrix["minors"])
     assert tool["pcre2"]["status"] == "required"
     assert tool["yara"]["status"] == "required"
     assert tool["perl"]["status"] == "required"

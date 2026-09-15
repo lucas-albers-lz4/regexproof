@@ -1,3 +1,6 @@
-# Supported Python minors for golden-suite re-run (Phase 1).
-# Empty matrix MUST fail CI — at least one minor required.
+# Supported Python minors for the full compatibility suite.
+# Pull requests and main pushes use pr_minors; scheduled runs use
+# scheduled_minors. Empty selected matrices MUST fail CI.
 minors = ["3.12", "3.13"]
+pr_minors = ["3.13"]
+scheduled_minors = ["3.12"]
