@@ -302,8 +302,6 @@ jobs:
           # contract, so a regression flips CI red.
           python -m regexproof.batch --corpus all --require-ground-truth --synthesize
            pytest -q tests/test_batch.py tests/test_evidence_gates.py tests/test_synth_fixtures.py
-      - name: Two-run batch reproducibility
-        run: python scripts/ci-batch-repro.py --synthesize
       - name: D5 compiler-feature-yield artifact (regenerated, #429)
         # The artifact decides the next compiler wave — it is observational
         # only and must regenerate deterministically in the golden job.
@@ -421,11 +419,143 @@ jobs:
       - name: P8 score-v2 weights drift check (#432, luna gate 1)
         run: git diff --exit-code -- regexproof/mine/score_v2_weights.json
 
+  golden_repro:
+    name: Golden repro run ${{ matrix.run }} (Python ${{ matrix.python-version }})
+    needs: matrix
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        # Two independent runners replace the old sequential two-run gate.
+        python-version: ${{ fromJson(needs.matrix.outputs.minors) }}
+        run: [1, 2]
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: ${{ matrix.python-version }}
+      - uses: actions/setup-go@40f1582b2485089dde7abd97c1529aa768e1baff # v5
+        with:
+          go-version: "1.22"
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
+        with:
+          node-version: "22"
+      - name: Install JS helper deps
+        run: npm ci --prefix helpers/ecma
+      - name: Build go-re2 helper
+        working-directory: helpers/go-re2
+        run: go build -o go-re2 .
+      - name: Install YARA + PCRE2 + busybox (Wave 2 + E2 mirror-fidelity)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y yara pcre2-utils busybox
+          yara -v
+          pcre2grep --version | head -1
+          busybox sed --help | head -1
+      - name: Install package
+        run: pip install -e ".[dev]"
+      - name: Assert toolchain pins (golden)
+        run: python scripts/ci-assert-toolchain.py --job golden
+      - name: Restore pinned golden corpus trees
+        uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5
+        with:
+          path: |
+            /tmp/detect-secrets
+            /tmp/crs-shape5
+          key: golden-corpora-${{ runner.os }}-detect-secrets-01886c8a-crs-bb64941f-55b09f5a
+      - name: Materialize detect-secrets corpus pin (v1.5.0)
+        run: |
+          if [ ! -d /tmp/detect-secrets/.git ]; then
+            rm -rf /tmp/detect-secrets
+            git clone --depth 1 --branch v1.5.0 \
+              https://github.com/Yelp/detect-secrets.git /tmp/detect-secrets
+          else
+            echo "Using cached detect-secrets checkout"
+          fi
+          test "$(git -C /tmp/detect-secrets rev-parse HEAD)" = "01886c8a910c64595c47f186ca1ffc0b77fa5458"
+          ln -sfn /tmp/detect-secrets/detect_secrets/plugins \
+            batch/corpora/detect-secrets/plugins
+      - name: Materialize CRS version-diff trees (shape-5 batch, #477)
+        run: |
+          mkdir -p /tmp/crs-shape5
+          if [ ! -d /tmp/crs-shape5/coreruleset-v4.27.0/.git ]; then
+            rm -rf /tmp/crs-shape5/coreruleset-v4.27.0
+            git clone --depth 1 --branch v4.27.0 \
+              https://github.com/coreruleset/coreruleset.git \
+              /tmp/crs-shape5/coreruleset-v4.27.0
+          else
+            echo "Using cached CRS v4.27.0 checkout"
+          fi
+          test "$(git -C /tmp/crs-shape5/coreruleset-v4.27.0 rev-parse HEAD)" = \
+            "bb64941f9beb3382fecd215c9ef032c427884ff0"
+          if [ ! -d /tmp/crs-shape5/coreruleset-v4.28.0/.git ]; then
+            rm -rf /tmp/crs-shape5/coreruleset-v4.28.0
+            git clone --depth 1 --branch v4.28.0 \
+              https://github.com/coreruleset/coreruleset.git \
+              /tmp/crs-shape5/coreruleset-v4.28.0
+          else
+            echo "Using cached CRS v4.28.0 checkout"
+          fi
+          test "$(git -C /tmp/crs-shape5/coreruleset-v4.28.0 rev-parse HEAD)" = \
+            "55b09f5acfd16413e7b31041100711ceb7adc89c"
+          test -d /tmp/crs-shape5/coreruleset-v4.27.0/rules
+          test -d /tmp/crs-shape5/coreruleset-v4.28.0/rules
+      - name: Run one batch and fingerprint all outputs
+        run: |
+          python scripts/ci-batch-repro.py \
+            --run-once "/tmp/regexproof-repro/run-${{ matrix.run }}/generated" \
+            --fingerprint-out "/tmp/regexproof-repro/fingerprint.json" \
+            --synthesize
+      - name: Upload reproducibility fingerprint
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: golden-repro-${{ matrix.python-version }}-${{ matrix.run }}
+          path: /tmp/regexproof-repro/fingerprint.json
+          if-no-files-found: error
+          retention-days: 1
+
+  golden_repro_compare:
+    name: Golden repro compare (Python ${{ matrix.python-version }})
+    if: always()
+    needs: [matrix, golden_repro]
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ${{ fromJson(needs.matrix.outputs.minors) }}
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Download reproducibility run 1
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: golden-repro-${{ matrix.python-version }}-1
+          path: /tmp/repro/run1
+      - name: Download reproducibility run 2
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: golden-repro-${{ matrix.python-version }}-2
+          path: /tmp/repro/run2
+      - name: Compare complete reproducibility fingerprints
+        run: |
+          python scripts/ci-batch-repro.py \
+            --compare-fingerprints \
+            /tmp/repro/run1/fingerprint.json \
+            /tmp/repro/run2/fingerprint.json
+
   golden:
-    # Keep the existing required status names while the two phase jobs fan out.
+    # Keep the existing required status names while all golden gates fan out.
     name: Golden suite (Python ${{ matrix.python-version }})
     if: always()
-    needs: [matrix, golden_tests, golden_analysis]
+    needs: [matrix, golden_tests, golden_analysis, golden_repro, golden_repro_compare]
     runs-on: ubuntu-latest
     timeout-minutes: 10
     strategy:
@@ -437,9 +567,13 @@ jobs:
         env:
           TESTS_RESULT: ${{ needs.golden_tests.result }}
           ANALYSIS_RESULT: ${{ needs.golden_analysis.result }}
+          REPRO_RESULT: ${{ needs.golden_repro.result }}
+          REPRO_COMPARE_RESULT: ${{ needs.golden_repro_compare.result }}
         run: |
           test "$TESTS_RESULT" = success
           test "$ANALYSIS_RESULT" = success
+          test "$REPRO_RESULT" = success
+          test "$REPRO_COMPARE_RESULT" = success
 
   compiler-diff-fuzz:
     # E1 (#429): PRs touching regexproof/compiler/** run the EXPANDED
