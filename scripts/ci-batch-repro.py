@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import json
 import subprocess
 import sys
 import tempfile
@@ -85,6 +86,34 @@ def _run_batch(out_dir: Path, *, synthesize: bool = False) -> None:
         raise SystemExit(proc.returncode)
 
 
+def _write_fingerprint(path: Path, digests: dict[str, str]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(
+        json.dumps({"schema_version": "1", "digests": digests}, indent=2, sort_keys=True)
+        + "\n",
+        encoding="utf-8",
+    )
+
+
+def _read_fingerprint(path: Path) -> dict[str, str]:
+    data = json.loads(path.read_text(encoding="utf-8"))
+    if data.get("schema_version") != "1" or not isinstance(data.get("digests"), dict):
+        raise ValueError(f"invalid reproducibility fingerprint: {path}")
+    return data["digests"]
+
+
+def _compare_fingerprints(left: Path, right: Path) -> int:
+    fa = _read_fingerprint(left)
+    fb = _read_fingerprint(right)
+    if fa == fb:
+        print("batch reproducibility ok (byte-identical fingerprints)")
+        return 0
+    for key in sorted(set(fa) | set(fb)):
+        if fa.get(key) != fb.get(key):
+            print(f"MISMATCH {key}: {fa.get(key)} != {fb.get(key)}", file=sys.stderr)
+    return 1
+
+
 def _extract_determinism(corpus: str) -> int:
     """Two-run extraction must yield identical regex_id sequences."""
     from regexproof.batch.extract import extract_corpus
@@ -118,7 +147,45 @@ def main(argv: list[str] | None = None) -> int:
         action="store_true",
         help="P3: regenerate the synthesized rows in both runs",
     )
+    ap.add_argument(
+        "--run-once",
+        metavar="OUT_DIR",
+        help="run one batch into OUT_DIR and emit its reproducibility fingerprint",
+    )
+    ap.add_argument(
+        "--fingerprint-out",
+        metavar="PATH",
+        help="write the --run-once fingerprint to PATH",
+    )
+    ap.add_argument(
+        "--compare-fingerprints",
+        nargs=2,
+        metavar=("LEFT", "RIGHT"),
+        help="compare two fingerprints produced by --run-once",
+    )
     args = ap.parse_args(argv)
+
+    if args.compare_fingerprints:
+        if args.corpus != "all" or args.run_once or args.fingerprint_out or args.synthesize:
+            ap.error("--compare-fingerprints cannot be combined with batch-run options")
+        return _compare_fingerprints(
+            Path(args.compare_fingerprints[0]), Path(args.compare_fingerprints[1])
+        )
+
+    if args.fingerprint_out and not args.run_once:
+        ap.error("--fingerprint-out requires --run-once")
+
+    if args.run_once:
+        if args.corpus != "all":
+            ap.error("--run-once only supports --corpus all")
+        out_dir = Path(args.run_once)
+        _run_batch(out_dir, synthesize=args.synthesize)
+        fingerprint = _fingerprint(out_dir)
+        if args.fingerprint_out:
+            _write_fingerprint(Path(args.fingerprint_out), fingerprint)
+        print("batch run fingerprinted", len(fingerprint), "files")
+        return 0
+
     if args.corpus != "all":
         return _extract_determinism(args.corpus)
 
