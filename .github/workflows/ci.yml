@@ -181,9 +181,15 @@ jobs:
         run: pytest -q tests/test_extractors.py
       - name: Pytest (golden + foundations; ReDoS smoke in redos job)
         # The hosted runners expose 4 vCPU / 15 GiB (measured in #638).
-        # loadfile keeps module-level fixtures together while using the
-        # measured capacity; the pinned plugin is installed by [dev].
-        run: pytest -q -n 4 --dist loadfile --ignore=tests/test_redos_smoke.py
+        # Python 3.13 uses the measured capacity. Python 3.12 remains serial:
+        # its fixed-time Z3/subprocess tests have shown one runner-side timeout
+        # under xdist contention, and TIMEOUT is a hard failure in this gate.
+        run: |
+          if [ "${{ matrix.python-version }}" = "3.13" ]; then
+            pytest -q -n 4 --dist loadfile --ignore=tests/test_redos_smoke.py
+          else
+            pytest -q --ignore=tests/test_redos_smoke.py
+          fi
       - name: Phase 2 pilots (extract → fraction → properties)
         run: |
           python scripts/pilot-run.py
