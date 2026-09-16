@@ -926,6 +926,201 @@ def run_batch(
     return batch
 
 
+def _existing_pair_counts(corpus: str, out_dir: Path) -> dict[str, Any]:
+    """Reconstruct one corpus' pair-count row from fan-out artifacts.
+
+    Corpus workers already execute their own shape-5 work.  The aggregation
+    worker must not execute it a second time: doing so would waste the fan-out
+    win and could produce a different SAT witness.  The durable shape-5
+    summary is therefore the source of execution counts; discovery is only
+    repeated for the cheap admitted/dropped counters.
+    """
+    shape5_path = out_dir / f"{corpus}_batch_shape5.json"
+    if corpus == "gitleaks" and not shape5_path.is_file():
+        raise SystemExit(
+            f"fan-out artifact missing: {shape5_path.name}; "
+            "gitleaks worker did not publish its shape-5 result"
+        )
+
+    summary: dict[str, Any] = {}
+    if shape5_path.is_file():
+        try:
+            payload = json.loads(shape5_path.read_text(encoding="utf-8"))
+            summary = payload.get("summary") or {}
+        except (OSError, json.JSONDecodeError) as exc:
+            raise SystemExit(
+                f"fan-out artifact unreadable: {shape5_path}: {exc}"
+            ) from exc
+
+    if corpus == "gitleaks":
+        from regexproof.rule_diff.pairs import discover_pairs
+
+        specs = ROOT / "pilots" / "gitleaks" / "canonical_specs" / "catalog.json"
+        toml = ROOT / "pilots" / "gitleaks" / "config" / "gitleaks.toml"
+        discovered = discover_pairs(toml_path=toml, specs_path=specs)
+        admitted = discovered["admitted_count"]
+        dropped = discovered["dropped_count"]
+        note = (
+            "independent-spec gitleaks pairs are not version_diff/"
+            "cross_engine; batch executes 0 unless family_contract "
+            "is present (#477)"
+        )
+    else:
+        admitted = 0
+        dropped = 0
+        note = "no independent-spec catalog"
+
+    return {
+        "admitted": admitted,
+        "dropped": dropped,
+        "batch_shape5": int(summary.get("executed", 0)),
+        **summary,
+        "executed": int(summary.get("executed", 0)),
+        "note": note,
+    }
+
+
+def aggregate_batch(
+    corpora: list[str],
+    *,
+    out_dir: Path,
+    require_ground_truth: bool = False,
+) -> dict[str, Any]:
+    """Aggregate independently-run corpus artifacts into the batch contract.
+
+    This is the second half of the CI fan-out path.  Each corpus worker runs
+    ``run_batch([corpus])`` and publishes namespaced artifacts.  This function
+    validates that every expected corpus result exists, measures the shared
+    CRS gate, executes only the shared CRS shape-5 work, and writes the same
+    aggregate artifacts as ``run_batch(..., write_pilot_aggregate=True)``.
+    """
+    if set(corpora) != set(PILOT_CORPORA):
+        raise SystemExit(
+            "fan-out aggregation requires exactly the pilot corpora: "
+            f"{PILOT_CORPORA}"
+        )
+    cov = check_corpus_coverage()
+    if cov:
+        raise SystemExit("inventory coverage failed: " + "; ".join(cov))
+    admission = check_admission_gates(corpora, out_dir=out_dir)
+    if admission:
+        raise SystemExit("admission gate failed: " + "; ".join(admission))
+
+    summaries: dict[str, dict[str, Any]] = {}
+    for name in corpora:
+        path = out_dir / f"{name}_batch_summary.json"
+        if not path.is_file():
+            raise SystemExit(
+                f"fan-out artifact missing: {path.name}; "
+                f"worker for {name} did not publish its summary"
+            )
+        try:
+            summary = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError) as exc:
+            raise SystemExit(f"fan-out summary unreadable: {path}: {exc}") from exc
+        if summary.get("corpus") != name:
+            raise SystemExit(
+                f"fan-out summary corpus mismatch: {path.name}: "
+                f"{summary.get('corpus')!r} != {name!r}"
+            )
+        summaries[name] = summary
+
+    pair_counts = {
+        name: _existing_pair_counts(name, out_dir)
+        for name in corpora
+    }
+    crs = measure_coreruleset(out_dir)
+    if crs["decision"] == "go":
+        from regexproof.rule_diff.crs_batch import (
+            discover_crs_batch_pairs,
+            resolve_crs_version_trees,
+        )
+
+        trees = resolve_crs_version_trees()
+        if trees is None:
+            skip_note = (
+                "fraction gate go; version_diff family_contract is stamped "
+                "at CRS discovery. Batch shape-5 execute needs older+newer "
+                "rule trees (REGEXPROOF_CRS_*_RULES or /tmp/crs-shape5/)."
+            )
+            _clear_batch_shape5("coreruleset", out_dir, note=skip_note)
+            pair_counts["coreruleset"] = _zero_pair_counts(
+                note=skip_note,
+                scope=crs.get("scope"),
+                fraction=crs.get("fraction"),
+            )
+        else:
+            older_rules, newer_rules = trees
+            discovered = discover_crs_batch_pairs(
+                older_rules=older_rules,
+                newer_rules=newer_rules,
+            )
+            pair_counts["coreruleset"] = _run_and_record_shape5(
+                "coreruleset",
+                discovered["admitted"],
+                out_dir,
+                admitted=len(discovered["admitted"]),
+                dropped=len(discovered.get("dropped") or [])
+                + len(discovered.get("batch_timeout_skipped") or []),
+                note=(
+                    "CRS version_diff with family_contract; "
+                    f"timeout-skipped={len(discovered.get('batch_timeout_skipped') or [])}"
+                ),
+                require_ground_truth=require_ground_truth,
+            )
+            pair_counts["coreruleset"]["scope"] = crs.get("scope")
+            pair_counts["coreruleset"]["fraction"] = crs.get("fraction")
+    else:
+        skip_note = f"excluded decision={crs['decision']} fraction={crs['fraction']}"
+        if crs["decision"] != "skipped":
+            _clear_batch_shape5("coreruleset", out_dir, note=skip_note)
+        pair_counts["coreruleset"] = _zero_pair_counts(
+            note=skip_note,
+            include_dropped=False,
+            scope=crs.get("scope"),
+        )
+
+    total_hits = sum(
+        int((summary.get("cache") or {}).get("hits", 0))
+        for summary in summaries.values()
+    )
+    total_entries = sum(
+        int((summary.get("cache") or {}).get("entries", 0))
+        for summary in summaries.values()
+    )
+    batch = {
+        "schema_version": "1",
+        "corpora": summaries,
+        "pair_counts": pair_counts,
+        "coreruleset": {
+            key: crs[key] for key in crs if key != "records"
+        },
+        "cache_hit_rate": total_hits / total_entries if total_entries else 0.0,
+    }
+    payload = dict(batch)
+    payload["corpora"] = {
+        name: json.loads(_serializable_summary(summary))
+        for name, summary in summaries.items()
+    }
+    payload["cache_hit_rate"] = 0.0
+    atomic_write_text(
+        out_dir / "batch_pair_counts.json",
+        json.dumps(pair_counts, indent=2, sort_keys=True) + "\n",
+    )
+    atomic_write_text(
+        out_dir / "batch_summary.json",
+        json.dumps(payload, indent=2, sort_keys=True) + "\n",
+    )
+    blob = ""
+    for name in sorted(corpora):
+        path = out_dir / f"{name}.ndjson"
+        if not path.is_file():
+            raise SystemExit(f"fan-out artifact missing: {path.name}")
+        blob += hashlib.sha256(path.read_bytes()).hexdigest() + "\n"
+    atomic_write_text(out_dir / "batch_repro.sha256", blob)
+    return batch
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(
         description="regexproof batch scanner (Phase 5 NDJSON contract)",

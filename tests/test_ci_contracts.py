@@ -344,7 +344,12 @@ def test_p1_verified_default_flags_wired():
         "python scripts/rule-diff-pilot.py --require-ground-truth --require-domain"
         in yml
     )
-    assert "python -m regexproof.batch --corpus all --require-ground-truth" in yml
+    assert 'python -m regexproof.batch \\\n            --corpus "$CORPUS"' in yml
+    assert "python scripts/ci-batch-aggregate.py --require-ground-truth" in yml
+    assert "golden_batch_corpus:" in yml
+    assert "corpus: [gitleaks, validatorjs, detect-secrets]" in yml
+    assert "golden-batch-${{ matrix.python-version }}-${{ matrix.corpus }}" in yml
+    assert "pattern: golden-batch-${{ matrix.python-version }}-*" in yml
 
 
 def test_timeout_gate_zero_and_allowlist():
