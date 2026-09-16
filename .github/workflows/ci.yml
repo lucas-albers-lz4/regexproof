@@ -204,9 +204,150 @@ jobs:
             pytest -q --ignore=tests/test_redos_smoke.py
           fi
 
-  golden_analysis:
-    name: Golden analysis (Python ${{ matrix.python-version }})
+  golden_batch_corpus:
+    name: Golden batch ${{ matrix.corpus }} (Python ${{ matrix.python-version }})
     needs: matrix
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ${{ fromJson(needs.matrix.outputs.minors) }}
+        corpus: [gitleaks, validatorjs, detect-secrets]
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: ${{ matrix.python-version }}
+      - uses: actions/setup-go@40f1582b2485089dde7abd97c1529aa768e1baff # v5
+        with:
+          go-version: "1.22"
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
+        with:
+          node-version: "22"
+      - name: Install JS helper deps
+        run: npm ci --prefix helpers/ecma
+      - name: Build go-re2 helper
+        working-directory: helpers/go-re2
+        run: go build -o go-re2 .
+      - name: Install YARA + PCRE2 + busybox (Wave 2 + E2 mirror-fidelity)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y yara pcre2-utils busybox
+          yara -v
+          pcre2grep --version | head -1
+          busybox sed --help | head -1
+      - name: Install package
+        run: pip install -e ".[dev]"
+      - name: Assert toolchain pins (golden)
+        run: python scripts/ci-assert-toolchain.py --job golden
+      - name: Restore detect-secrets corpus cache
+        if: matrix.corpus == 'detect-secrets'
+        uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5
+        with:
+          path: /tmp/detect-secrets
+          key: golden-corpora-${{ runner.os }}-detect-secrets-01886c8a
+      - name: Materialize detect-secrets corpus pin (v1.5.0)
+        if: matrix.corpus == 'detect-secrets'
+        run: |
+          if [ ! -d /tmp/detect-secrets/.git ]; then
+            rm -rf /tmp/detect-secrets
+            git clone --depth 1 --branch v1.5.0 \
+              https://github.com/Yelp/detect-secrets.git /tmp/detect-secrets
+          else
+            echo "Using cached detect-secrets checkout"
+          fi
+          test "$(git -C /tmp/detect-secrets rev-parse HEAD)" = "01886c8a910c64595c47f186ca1ffc0b77fa5458"
+          ln -sfn /tmp/detect-secrets/detect_secrets/plugins \
+            batch/corpora/detect-secrets/plugins
+      - name: Run one corpus batch
+        env:
+          CORPUS: ${{ matrix.corpus }}
+        run: |
+          mkdir -p /tmp/regexproof-batch/generated
+          cp properties/generated/*_gate_decision.json /tmp/regexproof-batch/generated/
+          python -m regexproof.batch \
+            --corpus "$CORPUS" \
+            --out /tmp/regexproof-batch/generated \
+            --require-ground-truth \
+            --synthesize
+      - name: Stage corpus artifacts
+        env:
+          CORPUS: ${{ matrix.corpus }}
+        run: |
+          mkdir -p /tmp/regexproof-batch-upload/properties/generated
+          mkdir -p /tmp/regexproof-batch-upload/properties/triage
+          cp "/tmp/regexproof-batch/generated/${CORPUS}.ndjson" \
+            /tmp/regexproof-batch-upload/properties/generated/
+          cp "/tmp/regexproof-batch/generated/${CORPUS}_batch.md" \
+            /tmp/regexproof-batch-upload/properties/generated/
+          cp "/tmp/regexproof-batch/generated/${CORPUS}-pr-dry-run.json" \
+            /tmp/regexproof-batch-upload/properties/generated/
+          cp "/tmp/regexproof-batch/generated/${CORPUS}_batch_summary.json" \
+            /tmp/regexproof-batch-upload/properties/generated/
+          if [ -f "/tmp/regexproof-batch/generated/${CORPUS}_batch_shape5.json" ]; then
+            cp "/tmp/regexproof-batch/generated/${CORPUS}_batch_shape5.json" \
+              /tmp/regexproof-batch-upload/properties/generated/
+          fi
+          cp "/tmp/regexproof-batch/triage/${CORPUS}.ndjson" \
+            /tmp/regexproof-batch-upload/properties/triage/
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: golden-batch-${{ matrix.python-version }}-${{ matrix.corpus }}
+          path: /tmp/regexproof-batch-upload
+          if-no-files-found: error
+          retention-days: 1
+
+  golden_analysis_pilots:
+    name: Golden analysis pilots (Python ${{ matrix.python-version }})
+    needs: matrix
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ${{ fromJson(needs.matrix.outputs.minors) }}
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: ${{ matrix.python-version }}
+      - uses: actions/setup-go@40f1582b2485089dde7abd97c1529aa768e1baff # v5
+        with:
+          go-version: "1.22"
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
+        with:
+          node-version: "22"
+      - name: Install JS helper deps
+        run: npm ci --prefix helpers/ecma
+      - name: Build go-re2 helper
+        working-directory: helpers/go-re2
+        run: go build -o go-re2 .
+      - name: Install YARA + PCRE2 + busybox (Wave 2 + E2 mirror-fidelity)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y yara pcre2-utils busybox
+          yara -v
+          pcre2grep --version | head -1
+          busybox sed --help | head -1
+      - name: Install package
+        run: pip install -e ".[dev]"
+      - name: Assert toolchain pins (golden)
+        run: python scripts/ci-assert-toolchain.py --job golden
+      - name: Phase 2 pilots (extract → fraction → properties)
+        run: |
+          python scripts/pilot-run.py
+          python scripts/pilot-properties.py --require-ground-truth --require-domain
+      - name: Phase 3 shape-5 rule_diff (gitleaks encodable subset)
+        run: python scripts/rule-diff-pilot.py --require-ground-truth --require-domain
+
+  golden_analysis:
+    name: Golden batch aggregate (Python ${{ matrix.python-version }})
+    needs: [matrix, golden_batch_corpus]
     runs-on: ubuntu-latest
     timeout-minutes: 60
     strategy:
@@ -248,16 +389,12 @@ jobs:
         run: pip install -e ".[dev]"
       - name: Assert toolchain pins (golden)
         run: python scripts/ci-assert-toolchain.py --job golden
-      - name: Phase 2 pilots (extract → fraction → properties)
-        run: |
-          python scripts/pilot-run.py
-          python scripts/pilot-properties.py --require-ground-truth --require-domain
-      - name: Phase 3 shape-5 rule_diff (gitleaks encodable subset)
-        # --require-domain is accepted for CLI parity with the proof job; the
-        # check is INERT here — check_domain_coverage covers kind=property and
-        # counterexample_finder only, and this pilot's registry is rule_diff
-        # gaps + mutation guards (see scripts/rule-diff-pilot.py).
-        run: python scripts/rule-diff-pilot.py --require-ground-truth --require-domain
+      - name: Download corpus artifacts
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          pattern: golden-batch-${{ matrix.python-version }}-*
+          merge-multiple: true
+          path: .
       - name: Restore pinned golden corpus trees
         uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5
         with:
@@ -265,18 +402,6 @@ jobs:
             /tmp/detect-secrets
             /tmp/crs-shape5
           key: golden-corpora-${{ runner.os }}-detect-secrets-01886c8a-crs-bb64941f-55b09f5a
-      - name: Materialize detect-secrets corpus pin (v1.5.0)
-        run: |
-          if [ ! -d /tmp/detect-secrets/.git ]; then
-            rm -rf /tmp/detect-secrets
-            git clone --depth 1 --branch v1.5.0 \
-              https://github.com/Yelp/detect-secrets.git /tmp/detect-secrets
-          else
-            echo "Using cached detect-secrets checkout"
-          fi
-          test "$(git -C /tmp/detect-secrets rev-parse HEAD)" = "01886c8a910c64595c47f186ca1ffc0b77fa5458"
-          ln -sfn /tmp/detect-secrets/detect_secrets/plugins \
-            batch/corpora/detect-secrets/plugins
       - name: Materialize CRS version-diff trees (shape-5 batch, #477)
         # Older+newer rule trees unlock contracted CRS version_diff execution
         # in --corpus all (writes coreruleset_batch_shape5.json → conversion).
@@ -306,15 +431,10 @@ jobs:
             "55b09f5acfd16413e7b31041100711ceb7adc89c"
           test -d /tmp/crs-shape5/coreruleset-v4.27.0/rules
           test -d /tmp/crs-shape5/coreruleset-v4.28.0/rules
-      - name: Phase 5 batch mode
-        run: |
-          # --require-ground-truth (P1, #425): SAT-ish Z3-verdict findings must
-          # carry ground_truth_status=reproduced or the evidence gate fails.
-          # --synthesize (P3, #427): the committed synthesized rows + guards
-          # are regenerated here; the evidence gate enforces the guard SAT
-          # contract, so a regression flips CI red.
-          python -m regexproof.batch --corpus all --require-ground-truth --synthesize
-           pytest -q tests/test_batch.py tests/test_evidence_gates.py tests/test_synth_fixtures.py
+      - name: Aggregate Phase 5 batch artifacts
+        run: python scripts/ci-batch-aggregate.py --require-ground-truth
+      - name: Phase 5 batch contract tests
+        run: pytest -q tests/test_batch.py tests/test_evidence_gates.py tests/test_synth_fixtures.py tests/test_ci_batch_aggregate.py
       - name: D5 compiler-feature-yield artifact (regenerated, #429)
         # The artifact decides the next compiler wave — it is observational
         # only and must regenerate deterministically in the golden job.
@@ -568,7 +688,7 @@ jobs:
     # Keep the existing required status names while all golden gates fan out.
     name: Golden suite (Python ${{ matrix.python-version }})
     if: always()
-    needs: [matrix, golden_tests, golden_analysis, golden_repro, golden_repro_compare]
+    needs: [matrix, golden_tests, golden_analysis_pilots, golden_analysis, golden_repro, golden_repro_compare]
     runs-on: ubuntu-latest
     timeout-minutes: 10
     strategy:
@@ -576,14 +696,16 @@ jobs:
       matrix:
         python-version: ${{ fromJson(needs.matrix.outputs.minors) }}
     steps:
-      - name: Require both golden phases
+      - name: Require all golden gates
         env:
           TESTS_RESULT: ${{ needs.golden_tests.result }}
+          PILOTS_RESULT: ${{ needs.golden_analysis_pilots.result }}
           ANALYSIS_RESULT: ${{ needs.golden_analysis.result }}
           REPRO_RESULT: ${{ needs.golden_repro.result }}
           REPRO_COMPARE_RESULT: ${{ needs.golden_repro_compare.result }}
         run: |
           test "$TESTS_RESULT" = success
+          test "$PILOTS_RESULT" = success
           test "$ANALYSIS_RESULT" = success
           test "$REPRO_RESULT" = success
           test "$REPRO_COMPARE_RESULT" = success
