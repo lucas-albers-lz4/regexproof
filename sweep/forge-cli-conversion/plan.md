@@ -90,8 +90,8 @@ reproducible:
 |---:|---|---|
 | 1 | `observability/secret_redactor.py:218` `_JAAS_CONFIG_RE` | keep; whole quoted-value redaction |
 | 2 | `build_runners/base.py:54` `SENSITIVE_ENV_KEY_RE` | keep; inspect command-log sink |
-| 3 | `cli/_common.py:89` x-api-key substitution | keep; inspect copilot-memory sink |
-| 4 | `llm/providers.py:287` endpoint query/userinfo redaction | keep; config diagnostic sink |
+| 3 | `cli/_common.py:89` x-api-key substitution | keep initially; defer after read (central-redactor overlap) |
+| 4 | `llm/providers.py:287` endpoint userinfo substitution | keep; encodable `(https?://)([^@/]+)@`. Skip unencodable `:280` `[^&]+` |
 | 5 | `observability/secret_redactor.py:151` `_URL_USERINFO_RE` | keep; shared central redaction sink |
 | 6 | `providers/datamesh_manager/datamesh_manager.py:88` error-body pattern | keep; remote error-body sink |
 | 7 | `build_runners/base.py:47` env placeholder | defer; resolution, not redaction |
@@ -101,8 +101,9 @@ reproducible:
 | 11–15 | banner/schema/parser and URL-shape sites | defer; no credential sink in this slice |
 
 The six “keep” rows are a reading shortlist, not six adopted contracts.
-After reading, write no more than five contracts and merge duplicate central
-redaction paths where the same guarantee and sink apply.
+After reading, rank 3 (`x-api-key`) was deferred as central-redactor overlap,
+leaving five adopted sites. Do not alias PRODUCT to MATCH: that is
+Concat-identity and is not a countable property.
 
 ## Proposed contracts (human adoption required)
 
@@ -137,8 +138,11 @@ five rows above is rejected.
 
 - Adopt at most five guarantees with `provenance=human`.
 - Register family `FC-forge-cli` properties plus at least one mutation guard.
+- Specify PRODUCT and MATCH independently. `PRODUCT = MATCH` is Concat-identity
+  and must not increment `properties_asked`.
 - Use `--require-contract --require-ground-truth`; unsupported constructs stay
-  skipped rather than being rewritten into a weaker question.
+  skipped rather than being rewritten into a weaker question. The LLM query
+  `[^&]+` at `providers.py:280` stays skipped; adopt `:287` instead.
 
 ### P2 — Python ground truth and differential checks
 
