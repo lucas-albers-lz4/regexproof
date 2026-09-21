@@ -14,9 +14,9 @@ Heap's-law / singleton novelty saturates **compiler coverage**. This artifact sa
 | planned inventory stubs | 338 |
 | classification rows (usage/intent/triage kinds) | 13,033 |
 | mutation guards (hygiene) | 644 |
-| properties asked (non-planned product kinds) | 36 |
-| properties asked distinct `(site, question_id)` | 36 |
-| properties UNSAT (holds in declared domain) | 27 |
+| properties asked (non-planned product kinds) | 41 |
+| properties asked distinct `(site, question_id)` | 41 |
+| properties UNSAT (holds in declared domain) | 32 |
 | properties SAT | 8 |
 | properties SAT distinct `(site, question_id)` | 8 |
 | SAT unique sites | 6 |
@@ -38,7 +38,7 @@ Heap's-law / singleton novelty saturates **compiler coverage**. This artifact sa
 |---|---|
 | encodable / extracted | 0.6435 |
 | properties asked / encodable | 0.0004 |
-| SAT / properties asked | 0.2222 |
+| SAT / properties asked | 0.1951 |
 | ground-truthed / SAT | 1.0000 |
 | pipeline accepted (incl. own-code) / SAT GT | 0.1250 |
 | pipeline accepted / extracted | 7.00e-06 |
@@ -48,7 +48,7 @@ Heap's-law / singleton novelty saturates **compiler coverage**. This artifact sa
 
 ## Security-tool split (scanner product kinds)
 
-Asked in tools: 5. Asked elsewhere: 31. SAT in tools: 4. SAT elsewhere: 4.
+Asked in tools: 10. Asked elsewhere: 31. SAT in tools: 4. SAT elsewhere: 4.
 
 ## Upstream (curated)
 
@@ -62,6 +62,7 @@ Source: [`docs/conversion-upstream.jsonl`](../../docs/conversion-upstream.jsonl)
 |---|---|---|---|---|---|---|
 | openwrt_packages | false | 14 | 11 | 3 | 3 | 3 |
 | aidevops | false | 5 | 5 | 0 | 0 | 0 |
+| forge-cli | true | 5 | 5 | 0 | 0 | 0 |
 | openwrt_luci | false | 4 | 3 | 1 | 1 | 1 |
 | claude-code-plugins | false | 3 | 3 | 0 | 0 | 0 |
 | coreruleset | true | 3 | 0 | 2 | 2 | 0 |
@@ -82,6 +83,7 @@ asked → SAT → GT → filed → accepted per `(wave_id, idiom_bucket)`.
 | claude-code-plugins_w1 | plugin-hook-guards | 3 | 0 | 0 | **0** | 0 | **n/a** |
 | doberman_w1 | command-execution | 2 | 2 | 2 | **2** | 0 | **1.0000** |
 | dogfood_shell_w1 | normalize-fixpoint | 2 | 0 | 0 | **0** | 0 | **n/a** |
+| forge-cli_w1 | secret-redaction | 5 | 0 | 0 | **0** | 0 | **n/a** |
 | mycelium_w1 | control-failclosed | 3 | 0 | 0 | **0** | 0 | **n/a** |
 | openwrt_luci_w1 | form-validator-alphabets | 4 | 1 | 1 | **0** | 0 | **0.0000** |
 | openwrt_packages_w1 | validator-charsets-and-captures | 5 | 1 | 1 | **0** | 0 | **0.0000** |
@@ -114,6 +116,7 @@ Share of asked properties per shape, per wave (conversion rows).
 | claude-code-plugins_w1 | plugin-hook-guards | 3 | shape 1: 1.0000 |
 | doberman_w1 | command-execution | 2 | shape 2: 1.0000 |
 | dogfood_shell_w1 | normalize-fixpoint | 2 | shape 3: 1.0000 |
+| forge-cli_w1 | secret-redaction | 5 | shape 1: 0.6000, shape 2: 0.4000 |
 | mycelium_w1 | control-failclosed | 3 | shape 1: 1.0000 |
 | openwrt_luci_w1 | form-validator-alphabets | 4 | shape 1: 0.7500, shape 3: 0.2500 |
 | openwrt_packages_w1 | validator-charsets-and-captures | 5 | shape 1: 0.6000, shape 3: 0.4000 |

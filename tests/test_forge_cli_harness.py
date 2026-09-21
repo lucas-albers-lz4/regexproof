@@ -2,7 +2,9 @@
 
 from __future__ import annotations
 
+import json
 import re
+from pathlib import Path
 
 import jsonschema
 from z3 import InRe, Length, Solver, String, StringVal, sat
@@ -28,6 +30,14 @@ from regexproof.schemas import load_schema
 
 
 FAMILY = "FC-forge-cli"
+ROOT = Path(__file__).resolve().parents[1]
+PRODUCT_NAMES = (
+    "FC-forge-cli-url-password-no-space",
+    "FC-forge-cli-dmm-value-no-semicolon",
+    "FC-forge-cli-llm-userinfo-no-at",
+    "FC-forge-cli-jaas-escaped-quote-covered",
+    "FC-forge-cli-sensitive-env-key-covered",
+)
 
 
 def test_forge_cli_contracts_are_registered_and_human_adopted():
@@ -102,3 +112,37 @@ def test_jaas_escaped_quote_product_matches_source_and_not_naive():
         r'(?i)([\w.]{,64}sasl\.jaas\.config"?\s{,8}[:=]\s{,8}")([^"]{,2048})(")\Z'
     )
     assert naive.search(sample) is None
+
+
+def test_committed_conversion_rows_match_registry():
+    path = ROOT / "properties" / "generated" / "forge-cli_conversion.ndjson"
+    rows = [
+        json.loads(line)
+        for line in path.read_text(encoding="utf-8").splitlines()
+        if line.strip()
+    ]
+    schema = load_schema("scanner_finding.schema.json")
+    assert [row["name"] for row in rows] == sorted(PRODUCT_NAMES)
+    for row in rows:
+        jsonschema.validate(instance=row, schema=schema)
+        assert row["family"] == FAMILY
+        assert row["corpus"] == "forge-cli"
+        assert row["wave_id"] == "forge-cli_w1"
+        assert row["idiom_bucket"] == "secret-redaction"
+        assert row["product_reportable"] is True
+        assert row["result"] == "unsat"
+        assert row["ground_truth_status"] is None
+        assert row["engine_versions"]["z3"].startswith("5.0.")
+        assert row["name"] in REGISTRY
+        fresh = run_one(row["name"], REGISTRY[row["name"]])
+        assert fresh["result"] == row["result"]
+
+
+def test_wave_closeout_records_scope_and_next_step():
+    path = ROOT / "properties" / "generated" / "forge-cli_conversion_wave.md"
+    text = path.read_text(encoding="utf-8")
+    assert "FC-forge-cli" in text
+    assert "secret-redaction" in text
+    assert "0 SAT" in text
+    assert "providers.py:280" in text
+    assert "Concat-identity" in text

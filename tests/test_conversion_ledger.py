@@ -402,6 +402,7 @@ def test_ci_golden_regenerates_and_drift_checks_ledger():
         "claude-code-plugins_w1",
         "dogfood_shell_w1",
         "doberman_w1",
+        "forge-cli_w1",
     }
     for w in pw.values():
         assert w["properties_asked"] >= w["properties_sat"]

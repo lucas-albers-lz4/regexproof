@@ -39,6 +39,16 @@
       "security_tool": false
     },
     {
+      "corpus": "forge-cli",
+      "properties_asked": 5,
+      "properties_sat": 0,
+      "properties_unsat": 5,
+      "sat_ground_truthed": 0,
+      "sat_unique_sites": 0,
+      "scanner_rows": 84,
+      "security_tool": true
+    },
+    {
       "corpus": "openwrt_luci",
       "properties_asked": 4,
       "properties_sat": 1,
@@ -117,19 +127,19 @@
     "pr_dry_run_findings": 14659,
     "pr_dry_run_private_first": 1268,
     "pr_dry_runs": 87,
-    "properties_asked": 36,
-    "properties_asked_distinct": 36,
+    "properties_asked": 41,
+    "properties_asked_distinct": 41,
     "properties_asked_synthesized": 644,
     "properties_sat": 8,
     "properties_sat_distinct": 8,
     "properties_sat_synthesized": 28,
-    "properties_unsat": 27,
+    "properties_unsat": 32,
     "redos_rows": 0,
     "rule_diff_report_sat": 10,
     "rule_diff_report_sat_gt": 10,
     "sat_ground_truthed": 8,
     "sat_unique_sites": 6,
-    "scanner_ndjson_files": 94,
+    "scanner_ndjson_files": 95,
     "scanner_rows": 14659,
     "scanner_rule_diff_sat": 0,
     "sites_encodable": 96009,
@@ -228,6 +238,26 @@
         "shape_3": 1.0
       },
       "wave_id": "dogfood_shell_w1"
+    },
+    {
+      "accepted": 0,
+      "corpora": [
+        "forge-cli"
+      ],
+      "filed": 0,
+      "idiom_bucket": "secret-redaction",
+      "properties_asked": 5,
+      "properties_sat": 0,
+      "sat_ground_truthed": 0,
+      "shape_counts": {
+        "1": 3,
+        "2": 2
+      },
+      "shape_mix": {
+        "shape_1": 0.6,
+        "shape_2": 0.4
+      },
+      "wave_id": "forge-cli_w1"
     },
     {
       "accepted": 0,
@@ -352,8 +382,8 @@
     "gt_per_sat": 1.0,
     "pipeline_accepted_per_extracted": 7e-06,
     "pipeline_accepted_per_gt": 0.125,
-    "property_asked_per_encodable": 0.000375,
-    "sat_per_property_asked": 0.222222,
+    "property_asked_per_encodable": 0.000427,
+    "sat_per_property_asked": 0.195122,
     "yara_share_of_unencodable": 0.584805
   },
   "rule_diff_reports": {
@@ -381,7 +411,7 @@
   },
   "schema_version": "1",
   "security_tool_split": {
-    "properties_asked_in_tools": 5,
+    "properties_asked_in_tools": 10,
     "properties_asked_not_tools": 31,
     "properties_sat_in_tools": 4,
     "properties_sat_not_tools": 4
@@ -399,6 +429,10 @@
     },
     "dogfood_shell": {
       "shape_3": 2
+    },
+    "forge-cli": {
+      "shape_1": 3,
+      "shape_2": 2
     },
     "mycelium": {
       "shape_1": 3

@@ -1,0 +1,121 @@
+{
+  "schema_version": "1",
+  "corpus": "forge-cli",
+  "pin": "efcf8e4c0087def553a737dc1c4eebda5d8a90cd",
+  "bucket": "secret-redaction",
+  "path_filter": "fluid_build/",
+  "vocabulary": [
+    "secret",
+    "redact",
+    "credential",
+    "password",
+    "token",
+    "api-key",
+    "auth",
+    "endpoint",
+    "error",
+    "state",
+    "lineage",
+    "dbt",
+    "log"
+  ],
+  "keep": [
+    {
+      "rank": 1,
+      "site": "fluid_build/observability/secret_redactor.py:218:_JAAS_CONFIG_RE",
+      "decision": "keep",
+      "question": "escaped-quote-safe whole-value redaction"
+    },
+    {
+      "rank": 2,
+      "site": "fluid_build/build_runners/base.py:54:SENSITIVE_ENV_KEY_RE",
+      "decision": "keep",
+      "question": "sensitive dbt -e key reaches command-log renderer"
+    },
+    {
+      "rank": 3,
+      "site": "fluid_build/cli/_common.py:89:x-api-key substitution",
+      "decision": "defer",
+      "question": "fallback x-api-key sink is central-redactor overlap"
+    },
+    {
+      "rank": 4,
+      "site": "fluid_build/llm/providers.py:287:LlmConfig.redacted_endpoint",
+      "decision": "keep",
+      "question": "endpoint userinfo substitution; skip unencodable :280 [^&]+"
+    },
+    {
+      "rank": 5,
+      "site": "fluid_build/observability/secret_redactor.py:151:_URL_USERINFO_RE",
+      "decision": "keep",
+      "question": "shared URL userinfo redaction"
+    },
+    {
+      "rank": 6,
+      "site": "fluid_build/providers/datamesh_manager/datamesh_manager.py:88:_SECRET_ERROR_PATTERNS",
+      "decision": "keep",
+      "question": "remote error-body credential masking"
+    },
+    {
+      "rank": 7,
+      "site": "fluid_build/build_runners/base.py:47:ENV_PLACEHOLDER_RE",
+      "decision": "defer",
+      "question": "resolution rather than redaction"
+    },
+    {
+      "rank": 8,
+      "site": "fluid_build/build_runners/hooks/dlp_scan.py:35:phone detector",
+      "decision": "defer",
+      "question": "DLP classification, separate idiom"
+    },
+    {
+      "rank": 9,
+      "site": "fluid_build/cli/_common.py:88:Bearer substitution",
+      "decision": "defer",
+      "question": "central redactor overlap"
+    },
+    {
+      "rank": 10,
+      "site": "fluid_build/cli/_untrusted_content.py:50:role classifier",
+      "decision": "defer",
+      "question": "prompt classification rather than secret sink"
+    },
+    {
+      "rank": 11,
+      "site": "fluid_build/_console.py:57:bracket classifier",
+      "decision": "skip",
+      "question": "no credential sink"
+    },
+    {
+      "rank": 12,
+      "site": "fluid_build/build_runners/dbt/runner.py:325:version parser",
+      "decision": "skip",
+      "question": "diagnostic parsing only"
+    },
+    {
+      "rank": 13,
+      "site": "fluid_build/build_runners/hooks/dlp_scan.py:34:email detector",
+      "decision": "skip",
+      "question": "DLP classification, separate idiom"
+    },
+    {
+      "rank": 14,
+      "site": "fluid_build/build_runners/meltano/runner.py:112:tap identifier",
+      "decision": "skip",
+      "question": "name validation without secret sink"
+    },
+    {
+      "rank": 15,
+      "site": "fluid_build/build_runners/soda/runner.py:41:result parser",
+      "decision": "skip",
+      "question": "status parsing without secret sink"
+    }
+  ],
+  "asked_names": [
+    "FC-forge-cli-url-password-no-space",
+    "FC-forge-cli-dmm-value-no-semicolon",
+    "FC-forge-cli-llm-userinfo-no-at",
+    "FC-forge-cli-jaas-escaped-quote-covered",
+    "FC-forge-cli-sensitive-env-key-covered"
+  ]
+}
