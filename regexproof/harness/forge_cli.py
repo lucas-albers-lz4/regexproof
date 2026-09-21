@@ -301,8 +301,9 @@ def forge_cli_sensitive_env_key_coverage():
         "recognized credential assignments and ed_live_ tokens do not reach "
         "ProviderError text in clear form",
         "untrusted remote provider error body",
-        "ASCII Datamesh error fragment; assignment value is nonempty and "
-        "terminates at the product delimiter set, or an ed_live_ token",
+        "ASCII Datamesh error fragment; assignment separator len 1..16 and "
+        "value is nonempty and terminates at the product delimiter set, or "
+        "an ed_live_ token",
     ),
 )
 def forge_cli_dmm_error_secret_coverage():
