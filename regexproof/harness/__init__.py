@@ -13,7 +13,8 @@ import regexproof.harness.aidevops
 import regexproof.harness.mycelium
 import regexproof.harness.claude_code_plugins
 import regexproof.harness.dogfood_shell
-import regexproof.harness.doberman  # noqa: F401
+import regexproof.harness.doberman
+import regexproof.harness.forge_cli  # noqa: F401
 from regexproof.harness.cli import main
 from regexproof.harness.core import (
     REGISTRY,
