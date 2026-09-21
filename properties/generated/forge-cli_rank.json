@@ -40,9 +40,9 @@
     },
     {
       "rank": 4,
-      "site": "fluid_build/llm/providers.py:277:LlmConfig.redacted_endpoint",
+      "site": "fluid_build/llm/providers.py:287:LlmConfig.redacted_endpoint",
       "decision": "keep",
-      "question": "endpoint query and userinfo diagnostics"
+      "question": "endpoint userinfo substitution; skip unencodable :280 [^&]+"
     },
     {
       "rank": 5,
@@ -52,7 +52,7 @@
     },
     {
       "rank": 6,
-      "site": "fluid_build/providers/datamesh_manager/datamesh_manager.py:87:_SECRET_ERROR_PATTERNS",
+      "site": "fluid_build/providers/datamesh_manager/datamesh_manager.py:88:_SECRET_ERROR_PATTERNS",
       "decision": "keep",
       "question": "remote error-body credential masking"
     },
@@ -112,10 +112,10 @@
     }
   ],
   "asked_names": [
-    "FC-forge-cli-url-userinfo-coverage",
-    "FC-forge-cli-jaas-escaped-quote-coverage",
-    "FC-forge-cli-sensitive-env-key-coverage",
-    "FC-forge-cli-dmm-error-secret-coverage",
-    "FC-forge-cli-llm-query-secret-coverage"
+    "FC-forge-cli-url-password-no-space",
+    "FC-forge-cli-dmm-value-no-semicolon",
+    "FC-forge-cli-llm-userinfo-no-at",
+    "FC-forge-cli-jaas-escaped-quote-covered",
+    "FC-forge-cli-sensitive-env-key-covered"
   ]
 }

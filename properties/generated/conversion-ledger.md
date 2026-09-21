@@ -116,7 +116,7 @@ Share of asked properties per shape, per wave (conversion rows).
 | claude-code-plugins_w1 | plugin-hook-guards | 3 | shape 1: 1.0000 |
 | doberman_w1 | command-execution | 2 | shape 2: 1.0000 |
 | dogfood_shell_w1 | normalize-fixpoint | 2 | shape 3: 1.0000 |
-| forge-cli_w1 | secret-redaction | 5 | shape 2: 0.4000, shape 4: 0.6000 |
+| forge-cli_w1 | secret-redaction | 5 | shape 1: 0.6000, shape 2: 0.4000 |
 | mycelium_w1 | control-failclosed | 3 | shape 1: 1.0000 |
 | openwrt_luci_w1 | form-validator-alphabets | 4 | shape 1: 0.7500, shape 3: 0.2500 |
 | openwrt_packages_w1 | validator-charsets-and-captures | 5 | shape 1: 0.6000, shape 3: 0.4000 |
