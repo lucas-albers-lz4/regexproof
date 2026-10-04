@@ -35,10 +35,11 @@ At most four human contracts are planned, one per distinct helper/sink:
 | `observability/secret_redactor.py:218` `_JAAS_CONFIG_RE` | an escaped-quote JAAS value is replaced by the redaction image without exposing the value or damaging its surrounding record | shape 4, per-token image |
 | `build_runners/base.py:54` `SENSITIVE_ENV_KEY_RE` | a sensitive `KEY=VALUE` command rendered for logs contains the redacted image, never the value | shape 4, per-command token |
 | `providers/datamesh_manager/datamesh_manager.py:88` `_SECRET_ERROR_PATTERNS` | a remote error body reaches `ProviderError` only after the recognized credential image is applied | shape 4, per-error fixture |
-| `llm/providers.py:287` `LlmConfig.redacted_endpoint` | query credentials and URL userinfo are masked in the diagnostic endpoint image while host/scheme remain | shape 4, decomposed query/userinfo tokens |
+| `llm/providers.py:287` `LlmConfig.redacted_endpoint` | URL userinfo credentials are masked in the diagnostic endpoint image while host/scheme remain | shape 4, userinfo token |
 
-The existing wave-1 shape-1/2 contracts remain closed. The unencodable
-`providers.py:280` `[^&]+` query remains skipped unless a sound backend or an
+The existing wave-1 shape-1/2 contracts remain closed. This endpoint
+contract is limited to URL userinfo; query-credential masking at
+`providers.py:280` (`[^&]+`) remains skipped unless a sound backend or an
 independent product specification is supplied.
 
 ## Gates before adoption
