@@ -6,10 +6,12 @@ using corpus ingestion to test compiler coverage.
 
 ## What the current evidence says
 
-- The scheduled mine is active. The latest observed run admitted 10 candidates
-  at the daily cap, found the 100-item overflow queue full, and dropped 410
-  overflow candidates after ranking. This is evidence of candidate supply, not
-  completed repository processing; see [`MINE-SETUP.md`](MINE-SETUP.md).
+- The latest successful mine run admitted 10 candidates at the daily cap,
+  found the 100-item overflow queue full, and dropped 410 overflow candidates
+  after ranking. The Oct 8 scheduled attempt then failed on a remote connection
+  drop before producing a summary or updating artifacts. The successful-run
+  figures show candidate supply; they do not measure completed repository
+  processing. See [`MINE-SETUP.md`](MINE-SETUP.md).
 - A daily cap of 10 allows up to 70 admissions in a full week, compared with
   the 5–7 repository weekly processing target. That is a configured ceiling,
   not an observed weekly average; use the committed pipeline artifacts for the
