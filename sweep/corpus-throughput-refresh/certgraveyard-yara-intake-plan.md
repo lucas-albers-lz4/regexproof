@@ -156,6 +156,10 @@ its provenance now records 89 triage files and 871 gate decisions, while the
 feature rows, 53,182 unencodable sites, and 156,477 weighted sites are
 unchanged. This live summary is separate from the frozen human-provenance-only
 PR4 calibration denominator.
+The generated conversion ledger also now reflects the added batch summary:
+three extracted and encodable Python sites plus four planned triage stubs.
+Product questions, ground-truthed witnesses, and accepted upstream fixes did
+not increase; these intake counters do not represent product conversion yield.
 
 ## Claims checked and disproved
 
