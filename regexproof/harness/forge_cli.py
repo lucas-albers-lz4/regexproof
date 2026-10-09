@@ -1,15 +1,19 @@
 """Forge CLI secret-redaction conversion properties.
 
 Wave 1 covers five human-adopted contracts from
-``sweep/forge-cli-conversion/plan.md`` at pin ``PIN``. PRODUCT and MATCH
-are independently specified; aliasing them is Concat-identity and is not a
-countable property.
+``sweep/forge-cli-conversion/plan.md`` at pin ``PIN``. The helper-image
+follow-up adds regression replay for ``_render_command_for_log``; it adds no
+product contract or conversion row until a person adopts the finite guarantee.
+PRODUCT and MATCH are independently specified; aliasing them is
+Concat-identity and is not a countable property.
 
 Three slots are length-independent shape-1 alphabets taken from the pinned
-Python classes (new alphabets, not hostname / JSON / IPv4). Two slots are
+Python classes (new alphabets, not hostname / JSON / IPv4). Wave 1 also has two
 coverage inclusions: an escaped-quote JAAS product grammar against
-``_JAAS_CONFIG_RE``, and the documented sensitive-key forms against
-``SENSITIVE_ENV_KEY_RE``. The unencodable LLM query ``[^&]+`` at
+``_JAAS_CONFIG_RE`` and the documented sensitive-key forms against
+``SENSITIVE_ENV_KEY_RE``. The helper-image follow-up exercises the renderer
+against the pinned source.
+The unencodable LLM query ``[^&]+`` at
 ``providers.py:280`` is skipped; the adopted LLM site is the encodable
 userinfo substitution at ``:287``.
 """
@@ -136,6 +140,20 @@ ENV_MATCH = Union(
     Concat(ci("api"), Loop(_chars("_-"), 0, 1), ci("key")),
     Concat(ci("private"), Loop(_chars("_-"), 0, 1), ci("key")),
 )
+ENV_API_POLICY_KEYS = ("apikey", "api_key", "api-key")
+ENV_API_PRODUCT = Union(*(ci(word) for word in ENV_API_POLICY_KEYS))
+ENV_WEAKENED_PATTERN = (
+    r"(?i)(password|passphrase|secret|token|private[_-]?key|credential|auth)"
+)
+ENV_WEAK_MATCH = Union(
+    ci("password"),
+    ci("passphrase"),
+    ci("secret"),
+    ci("token"),
+    ci("credential"),
+    ci("auth"),
+    Concat(ci("private"), Loop(_chars("_-"), 0, 1), ci("key")),
+)
 
 
 def _contract(site: str, guarantee: str, input_source: str, trust: str, domain: str) -> dict:
@@ -257,6 +275,20 @@ def forge_cli_jaas_escaped_quote_covered():
 def forge_cli_sensitive_env_key_covered():
     s = String("s")
     return [InRe(s, ENV_PRODUCT), Length(s) <= 32], Not(InRe(s, ENV_MATCH))
+
+
+@prop(
+    "FC-forge-cli-mutated-sensitive-env-api-key",
+    "MUTATION GUARD: removing api[_-]?key recognition admits a documented key "
+    "whose value the real helper exposes",
+    expect_unsat=False,
+    kind="mutation_guard",
+    family=FAMILY,
+    input_domain="ascii",
+)
+def forge_cli_mutated_sensitive_env_api_key():
+    s = String("s")
+    return [InRe(s, ENV_API_PRODUCT), Length(s) <= 32], Not(InRe(s, ENV_WEAK_MATCH))
 
 
 @prop(

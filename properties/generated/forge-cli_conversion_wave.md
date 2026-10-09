@@ -34,7 +34,7 @@ Rank: [`forge-cli_rank.json`](forge-cli_rank.json) (vocab keep-15, path filter `
 - 1 mutation guard SAT (`FC-forge-cli-mutated-url-password-space`), confirming the URL-password alphabet is sensitive to a space-widening mutation.
 - No pattern-class SAT. No `conversion-upstream.jsonl` row. No public forge-cli filing.
 
-Alphabet membership is checked against CPython `re` in `tests/test_forge_cli_harness.py`. Helper-image shape 4 (`redact_secret_text`, `_render_command_for_log`, `_redact_error_body`, `LlmConfig.redacted_endpoint`) stays the next replay step; it is not claimed by these five rows.
+Alphabet membership is checked against CPython `re` in `tests/test_forge_cli_harness.py`. The helper-image sinks (`_render_command_for_log`, `redact_secret_text`, `_redact_error_body`, and `LlmConfig.redacted_endpoint`) are separate from the five counted language properties above. The bounded `_render_command_for_log` replay below is regression evidence only until a person adopts its contract.
 
 The conversion rows are emitted in
 [`forge-cli_conversion.ndjson`](forge-cli_conversion.ndjson). They record
@@ -44,6 +44,17 @@ The conversion rows are emitted in
 
 **Wave 1 idiom slice done.** Do not re-ask URL password charset, Datamesh assignment-value charset, LLM `:287` userinfo charset, JAAS escaped-quote product coverage, or the documented sensitive-key forms. Do not re-ask the unencodable `:280` `[^&]+` query as an ASCII self-cover.
 
-**Next idiom (same cluster, same pin):** copilot-memory x-api-key/Bearer persistence only if it is shown to be a distinct sink from `redact_secret_text`. If the helper replay of the five asked sites diverges from CPython `re`, split the reproduced discrepancy and keep it `private_first` until reviewed.
+**Next idiom (same cluster, same pin):** copilot-memory x-api-key/Bearer persistence only if it is shown to be a distinct sink from `redact_secret_text`.
 
 **Do not:** packages/LuCI/aidevops/mycelium re-open, Smith drain, `WAVE_CORPORA`, public filing without approval, hostname / JSON `[^"]*` / IPv4-MAC charset, Concat-identity `PRODUCT = MATCH`.
+
+## #648 helper-image replay — `SENSITIVE_ENV_KEY_RE`
+
+- **Counting status:** no property registry entry or conversion row is added. The proposed finite-domain guarantee is pending human adoption; this replay currently ships as regression coverage and adds zero to the product ledger.
+- **Proposed contract:** trust `config`; input is provider/operator dbt argv. For the exact enumerated argv fixtures in the declared domain, the pinned `_render_command_for_log` output redacts each documented sensitive value and contains no `CLEAR_SENTINEL`.
+- **Pinned product:** `Agenticstiger/forge-cli@efcf8e4c0087def553a737dc1c4eebda5d8a90cd`; source is fetched/materialized at that revision and the actual `fluid_build.build_runners.dbt.runner._render_command_for_log` is called. The source pattern is also checked against `base.py:SENSITIVE_ENV_KEY_RE`.
+- **Solver subclaim:** shape 2 proves only that every documented policy key is in the source regex language (`ENV_PRODUCT ⊆ ENV_MATCH`, length at most 32). It does not prove the renderer's output image. This duplicate solver property is omitted from the registry until adoption.
+- **Declared replay domain:** all 5,680 ASCII case assignments of the documented key forms (`password`, `passphrase`, `secret`, `token`, `credential`, `auth`, `api[_-]?key`, `private[_-]?key`, including empty separators), each rendered after both `-e` and `--env` with `CLEAR_SENTINEL`. Additional hand-labeled cases cover ordinary and near-miss keys, empty and delimiter-containing values, repeated entries, search substrings, and terminal newlines. For matched keys, tests independently specify and compare the full expected output `KEY=<redacted>`.
+- **Mutation guard:** removing the `api[_-]?key` branch is SAT with a key witness in the family run. A separate test replays that exact witness through the pinned helper with the weakened regex; it asserts the original output is redacted and the weakened helper exposes `CLEAR_SENTINEL`. The harness labels this expected SAT as a mutation guard, not as a ground-truthed vulnerability.
+- **Evidence gate:** register a conversion property only after human adoption plus the pinned renderer tests, exact-witness mutation replay, differential checks, and full proof/test gates pass. Use `python scripts/z3-verify.py --all --require-ground-truth --require-domain --require-contract --fail-on-property-failure` and the full pytest suite.
+- **Refuted / narrowed claims:** regex membership alone is insufficient evidence of sink behavior. Direct helper replay checks exact images only in the finite domain above; no claim is made for arbitrary values, non-ASCII keys, unlisted keys, or every possible command shape. No upstream filing or public disclosure is part of this wave.
