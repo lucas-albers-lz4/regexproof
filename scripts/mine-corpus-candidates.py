@@ -11,7 +11,7 @@ from __future__ import annotations
 import argparse
 import json
 import sys
-from datetime import datetime, timezone
+from datetime import date, datetime, timezone
 from pathlib import Path
 from typing import Any
 
@@ -91,7 +91,9 @@ def assimilate(
     accepted: list[dict[str, Any]] = []
 
     deny_slugs = load_deny_slugs() or None
-    evict_stale(queue)
+    # Use the same logical UTC day as the admission cap so replayed runs and
+    # tests do not age queue entries against the machine's wall clock.
+    evict_stale(queue, today=date.fromisoformat(day))
     # Score-v1: highest-value overflow first (still drain one-at-a-time for exclusions).
     queue["items"] = rank_candidates(
         list(queue.get("items") or []), deny_slugs=deny_slugs

@@ -154,7 +154,7 @@ Ledger JSON (`schema_version: "1"`) field groups:
 | upstream | curated `docs/conversion-upstream.jsonl` status counts |
 | per_wave (#554) | one row per top-level `(wave_id, idiom_bucket)`: `properties_asked` → `properties_sat` → `sat_ground_truthed` → `filed` → `accepted`, plus `shape_counts` / `shape_mix`. Join: curated rows on canonical `(site, question_id)`; `filed` = status `filed` / `private_first` / `fixed_upstream` (or `filed_at` set); `accepted` = `fixed_upstream`. GT→filed is the currently empty hop and is highlighted in the MD. |
 | starvation (#554) | `backlog_weeks = demand_open / admission_per_week`; demand = open `gated:go` clusters lacking a closed wave (candidate ledger); admission = GO `*_gate_decision.json` artifacts per 7-day window ending at the latest committed GO date (artifact clock — deterministic; NOT the lagging candidate ledger). `mine_queue_pressure = queue_len / queue_cap`. `alert_backlog_increasing` when `backlog_weeks` rises ≥ 2 consecutive windows (`history` carried in this artifact). Admission is mine-cap-bounded by design — read with `mine_queue_pressure`, not as batch health. |
-| queue_health (#551 C) | `properties/conversion_queue/*.json` counts by pre-contract state: emitted / claimed / contracted / skipped (+ median age days from `created_at`). Absent until Phase C ships. |
+| queue_health (#551 C) | `properties/conversion_queue/*.json` counts by pre-contract state: emitted / claimed / contracted / skipped (+ median age days from `created_at`). The queue library and emitter exist; this metric remains empty until queue artifacts are emitted. |
 | shape_mix_by_corpus (#554) | per-corpus shape-1..5 counts over asked properties (descriptive until n ≥ 50). |
 
 ### Entity IDs and dedup (#554)
@@ -165,6 +165,13 @@ canonicalized as in `scripts/check-disposition-coverage.py`'s docstring.
 `properties_asked_distinct` / `properties_sat_distinct` dedupe on that pair,
 consistent with #480. Findings-per-site and upstream-issue-level rollups are
 derived, never stored twice.
+
+Conversion-review stopwatch rows live in
+`properties/generated/conversion_review_minutes.jsonl` and are summarized by
+`scripts/conversion-review-metrics.py`. They include reviewed skips and measure
+operator effort per ranked site; they are operational timing data, not scanner
+findings, contracts, conversion-checkpoint rows, or additional
+`properties_asked`.
 
 ### Headline findings metric (#554, additive to encodable fraction)
 

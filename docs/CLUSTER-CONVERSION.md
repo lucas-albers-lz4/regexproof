@@ -176,6 +176,12 @@ close-out **is the deny-list** for the next wave — efficiency is skips,
 not speed. Seams from wave 1 (family, emit, product-engine checker, ledger
 glob) are reused; later waves are rank-slice → read → ≤5 → emit.
 
+Time each top-15 site review separately from admission review. At close-out,
+record one conversion stopwatch row per site, including skipped candidates;
+see [`metrics-operator-minutes.md`](metrics-operator-minutes.md). This is the
+reading-cost denominator for conversion yield per hour. Do not count clone,
+batch, or solver wall time as operator minutes.
+
 Then pick **exactly one**:
 
 - **Next idiom slice (same cluster)** — unused bucket with a named sink
@@ -282,8 +288,10 @@ not auto-open public upstream issues. Human approval before filing.
 2. Probe (if missing) + batch (minutes). Not `WAVE_CORPORA`.
 3. Cheap reject + rank 15 with that vocab.
 4. Read 15, write 5 (2–3 shape 1, 1–2 shape 3), `provenance=human`.
-5. Ground-truth on the engine that actually runs.
-6. Generate `*_conversion.ndjson` from harness run records; regenerate the
+5. Record the completed review time and outcome for each top-15 candidate,
+   including every skip.
+6. Ground-truth on the engine that actually runs.
+7. Generate `*_conversion.ndjson` from harness run records; regenerate the
    conversion ledger (special-case glob, not a broader `*.ndjson` scan).
-7. Close-out: asked / skip / **next idiom bucket or stop-cluster**.
+8. Close-out: asked / skip / **next idiom bucket or stop-cluster**.
    Do not start the next cluster yet.
