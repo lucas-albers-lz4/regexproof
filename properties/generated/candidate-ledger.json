@@ -19636,6 +19636,12 @@
         "human_resolved": true,
         "needs_human_review": false,
         "re_evaluate": false,
+        "transitions": [
+          {
+            "reason": "sync:semgrep_rules_manager_gate_decision",
+            "to": "gated:no-go"
+          }
+        ],
         "updated_at": "2026-10-09T08:07:46Z"
       },
       "capped": true,
@@ -19649,7 +19655,7 @@
       "size": 1288,
       "source_query": "filename:semgrep.yml OR filename:semgrep.yaml",
       "stars": 117,
-      "status": "mined",
+      "status": "gated:no-go",
       "url": "https://github.com/iosifache/semgrep-rules-manager"
     },
     {
@@ -21742,6 +21748,12 @@
         "human_resolved": true,
         "needs_human_review": false,
         "re_evaluate": false,
+        "transitions": [
+          {
+            "reason": "sync:wordpress_modsecurity_ruleset_gate_decision",
+            "to": "gated:triage-trial"
+          }
+        ],
         "updated_at": "2026-10-09T08:26:52Z"
       },
       "default_branch": "master",
@@ -21754,7 +21766,7 @@
       "size": 26,
       "source_query": "filename:crs-setup.conf OR filename:REQUEST-942-APPLICATION-ATTACK-SQLI.conf",
       "stars": 107,
-      "status": "mined",
+      "status": "gated:triage-trial",
       "url": "https://github.com/Rev3rseSecurity/wordpress-modsecurity-ruleset"
     },
     {
@@ -28518,7 +28530,9 @@
   ],
   "run": {
     "capped": true,
-    "search_errors": []
+    "search_errors": [
+      "enrich rate-limited: shynt-04/PRJ2_MalwareDetection: {\n\t\"message\": \"API rate limit exceeded for user ID 187806603. If you reach out to GitHub Support for help, please include the request ID 6040:3DF511:1A4A73C:5665B6C:6AC93635 and timestamp 2026-10-09 1"
+    ]
   },
   "schema_version": "1"
 }
