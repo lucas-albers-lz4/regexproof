@@ -1,8 +1,8 @@
 {
   "cohort_id": "2026-09-12-calibration-20-r2",
   "compiler_stop": false,
-  "continue_to_20": true,
-  "continue_to_30": "pending_20_repo_run",
+  "continue_to_20": false,
+  "continue_to_30": true,
   "conversion_checkpoint_supplied": false,
   "decision": "continue",
   "failures": [],

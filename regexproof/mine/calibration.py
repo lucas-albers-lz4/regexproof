@@ -469,8 +469,16 @@ def build_closeout(artifact: Mapping[str, Any], *, conversion_report: Mapping[st
         "manifest_digest": checked["manifest_digest"],
         "decision": "continue" if reasons else "stop",
         "reason": "; ".join(reasons) if reasons else "all calibration criteria met",
-        "continue_to_20": bool(reasons),
-        "continue_to_30": "pending_20_repo_run",
+        "continue_to_20": bool(reasons) if expected_count < 20 else False,
+        "continue_to_30": (
+            "pending_20_repo_run"
+            if expected_count < 20
+            else (
+                not report["compiler_stop"]
+                if expected_count == 20
+                else False
+            )
+        ),
         "failures": [],
         "families": families,
         "compiler_stop": report["compiler_stop"],
@@ -492,6 +500,9 @@ def dumps_digest(value: Mapping[str, Any]) -> str:
 
 def render_closeout(closeout: Mapping[str, Any]) -> str:
     """Render a concise, committed close-out memo."""
+    continue_to_30 = closeout["continue_to_30"]
+    if isinstance(continue_to_30, bool):
+        continue_to_30 = str(continue_to_30).lower()
     lines = [
         "# Calibration close-out",
         "",
@@ -499,7 +510,7 @@ def render_closeout(closeout: Mapping[str, Any]) -> str:
         f"- Cohort: `{closeout['cohort_id']}`",
         f"- Manifest digest: `{closeout['manifest_digest']}`",
         f"- Continue to 20: **{str(closeout['continue_to_20']).lower()}**",
-        f"- Continue to 30: **{closeout['continue_to_30']}**",
+        f"- Continue to 30: **{continue_to_30}**",
         "",
         f"Reason: {closeout['reason']}",
         "",

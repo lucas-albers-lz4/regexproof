@@ -55,7 +55,9 @@ product funnel remains a separate arm: no conversion rows are invented by the
 compiler observation step, and zero filing is not evidence that compiler
 idioms are exhausted.
 
-The staged close-out can recommend continuing to the next cohort, but it
-cannot claim that a later cohort has been evaluated. The committed manifest
-digest, observation artifact, failure log, and close-out are the evidence for
-the issue decision.
+The staged close-out records cohort progression separately from the product
+decision: after a complete 20-repository run, `continue_to_30` reflects the
+compiler stop rule, while an incomplete product denominator can still keep the
+overall decision at `continue`. It cannot claim that a later cohort has been
+evaluated. The committed manifest digest, observation artifact, failure log,
+and close-out are the evidence for the issue decision.

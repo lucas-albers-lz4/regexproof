@@ -143,11 +143,36 @@ and emits a close-out memo. Missing or partial repositories prevent a
 saturation report; a family with fewer than two completed repositories is
 explicitly `insufficient_data`.
 
-## Next slices
+## Current calibration state (2026-10-08)
 
-Run the first ten pinned repositories with
-[`scripts/calibration.py`](../scripts/calibration.py), then publish the
-committed continue/retarget/stop close-out.
+The newest complete bundle is
+`properties/calibration/2026-09-12-calibration-20-r2/`: 20 pinned repositories,
+zero failures, with a saturation report. All four observed families remain
+productive under the strict trailing-two rule: ECMA 0.9259, Go 1.0000,
+POSIX-shell 0.9474, and Python `re` 0.9792. The rule therefore supports
+preparing a 30-repository increment; it does not establish product value.
+
+The same cohort's product denominator is **0**, and no PR4 checkpoint was
+supplied. Human product rows in the global conversion ledger are not a
+substitute for a frozen-cohort coverage manifest. For a complete 20-repository
+run, the close-out now sets `continue_to_20` false and resolves
+`continue_to_30` from the compiler stop result. The product denominator and
+PR4 checkpoint remain separate reasons to continue product work.
+
+Next actions:
+
+1. Prepare a new 30-repository manifest by retaining the exact 20-r2 cohort
+   pins and adding ten eligible, independent repositories across the measured
+   families. Freeze its digest before checkout or observation work.
+2. In parallel, work a conversion wave on an admitted cluster and create the
+   independent product coverage manifest for the cohort. Do not count the
+   global ledger or synthesized/agent-derived rows toward its denominator.
+3. Run the calibration only after all exact-pin checkouts are ready; publish
+   the observation, failure, saturation, and close-out artifacts together.
+
+The mine job is active intake, not processing. Current run status and the
+working tree's as-of date belong in [`MINE-SETUP.md`](MINE-SETUP.md); do not
+raise the mine cap to compensate for a conversion backlog.
 
 ## PR4: product conversion checkpoint
 

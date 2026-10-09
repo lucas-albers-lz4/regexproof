@@ -13,7 +13,17 @@ does **not** run `fit-score-v2.py` (Python 3.13 vs Golden's 3.12 weight pin).
 Pattern matches sre-ai-llm-work `daily-scan.yml` (one scanner, no
 issue filing).
 
-**Status (2026-08-09):** live. First `workflow_dispatch` succeeded with
+**Status (2026-10-07):** the scheduled workflow is live. The latest observed
+run, [37670599572](https://github.com/lucas-albers-lz4/regexproof/actions/runs/37670599572),
+succeeded with `DAILY_MINE_CAP=10`: 10 candidates admitted, queue depth 100,
+`capped: true`, one search error, and 410 overflow candidates dropped after
+the queue filled (one lower-scored queue item was replaced). This confirms
+intake is running; it does not measure completed repository processing or
+contract throughput. A local worktree may lag `main`, so read
+`pipeline-status.py` from the latest committed artifacts before quoting backlog
+or survival rates.
+
+Historical first-run evidence (2026-08-09): the first `workflow_dispatch` succeeded with
 `PROJECT_PAT` set — [run 31339610109](https://github.com/lucas-albers-lz4/regexproof/actions/runs/31339610109)
 committed `chore(mine): daily candidate ledger + queue` (`4d1e17e`): **10**
 ledger admits (day cap), **queue depth 100** (full), **`run.capped: true`**.
