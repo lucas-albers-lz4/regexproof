@@ -99,7 +99,7 @@ def _validate_row(row: Any, index: int) -> dict[str, Any]:
         raise ConversionReviewError(
             f"{context}.pin must be 40 lowercase hexadecimal characters"
         )
-    site = _required_text(row["site"], f"{context}.site")
+    _required_text(row["site"], f"{context}.site")
     if not isinstance(row["rank"], int) or isinstance(row["rank"], bool):
         raise ConversionReviewError(f"{context}.rank must be an integer")
     if not 1 <= row["rank"] <= 15:
@@ -310,7 +310,7 @@ def append_row(
     return row
 
 
-def _median_mean(values: list[float]) -> dict[str, float | None | int]:
+def _median_mean(values: list[float]) -> dict[str, float | int | None]:
     if not values:
         return {"median": None, "mean": None, "total": 0.0, "n": 0}
     return {
