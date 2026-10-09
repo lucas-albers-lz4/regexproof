@@ -9,6 +9,7 @@ with (url, pin) supersession dedup — older-pin decisions removed per
 from __future__ import annotations
 
 import importlib.util
+import hashlib
 import json
 import pathlib
 import subprocess
@@ -57,6 +58,12 @@ def test_escape_baseline_matches_design(freeze: dict, baseline: dict):
     assert hi == pytest.approx(0.162744, abs=0.001)
     # The baseline is the same fixed constant referenced by the freeze.
     assert baseline["survivor_rate"] == freeze["escape_baseline"]["value"]
+    names = freeze["dataset"]["snapshot_files"]
+    names_sha256 = hashlib.sha256("\n".join(names).encode("utf-8")).hexdigest()
+    assert "phase0_freeze.json dataset.snapshot_files" in baseline["query"]
+    assert f"n={len(names)}" in baseline["query"]
+    assert names_sha256 in baseline["query"]
+    assert "*_gate_decision.json" not in baseline["query"]
 
 
 def test_freeze_k_is_frozen_a_priori(freeze: dict):
@@ -186,3 +193,36 @@ def test_builder_fails_loud_on_malformed_decision(tmp_path: Path):
             mod.load_decision_population(gen=GEN)
     finally:
         (GEN / "_zz_test_gate_decision.json").unlink()
+
+
+def test_missing_freeze_requires_explicit_bootstrap(tmp_path: Path, monkeypatch):
+    mod = _load_bpf()
+    gen = tmp_path / "generated"
+    gen.mkdir()
+    (gen / "first_gate_decision.json").write_text(
+        json.dumps(
+            {
+                "candidate_url": "https://example.test/repo",
+                "corpus_pin": "abc",
+                "decision": "no-go",
+                "decision_date": "2026-10-01",
+            }
+        ),
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(mod, "GEN", gen)
+    monkeypatch.setattr(mod, "FREEZE_OUT", gen / "phase0_freeze.json")
+    monkeypatch.setattr(mod, "BASELINE_OUT", gen / "escape_baseline.json")
+
+    with pytest.raises(SystemExit, match="--bootstrap"):
+        mod.main([])
+    assert not (gen / "phase0_freeze.json").exists()
+
+    assert mod.main(["--bootstrap"]) == 0
+    freeze = json.loads((gen / "phase0_freeze.json").read_text(encoding="utf-8"))
+    baseline = json.loads((gen / "escape_baseline.json").read_text(encoding="utf-8"))
+    assert freeze["dataset"]["snapshot_files"] == ["first_gate_decision.json"]
+    assert "phase0_freeze.json dataset.snapshot_files" in baseline["query"]
+
+    with pytest.raises(SystemExit, match="only valid when"):
+        mod.main(["--bootstrap"])

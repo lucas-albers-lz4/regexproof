@@ -39,7 +39,8 @@ _RX_OP = re.compile(r'"((?:!)?@rx)\s+([^"\\]*(?:\\.[^"\\]*)*)"')
 # pattern for its implicit default operator (@rx). Actions are optional in
 # SecRule, so accept either a following action list or the end of the rule.
 _RX_DEFAULT_OP = re.compile(
-    r'^SecRule\b\s+[^"\n]+\s+"(?P<pattern>[^"\\]*(?:\\.[^"\\]*)*)"(?=\s+(?:"|$)|$)',
+    r'^SecRule\b\s+[^"\n]+\s+"(?P<pattern>[^"\\]*(?:\\.[^"\\]*)*)"'
+    r'(?=\s+(?:"|[A-Za-z_][A-Za-z0-9_-]*(?:\s*[:,=]|\s*$)|$)|$)',
     re.IGNORECASE,
 )
 # Variable-selector regexes: !REQUEST_COOKIES:/^_pk_ref/  (optional trailing flags)
@@ -91,6 +92,7 @@ def extract_modsec(
         ls = joined.strip()
         if ls.startswith("#"):
             continue
+        selector_source = ls
         m = _RX_OP.search(ls)
         if m:
             negated = m.group(1).startswith("!")
@@ -140,8 +142,11 @@ def extract_modsec(
                 if mid:
                     rec["rule_id"] = mid.group(1)
                 out.append(rec)
-                continue
-        for sm in _RX_SELECTOR.finditer(ls):
+                # The selector lives in the variable list before the first
+                # quoted argument; don't scan the pattern or actions for
+                # selector-looking text.
+                selector_source = ls[: default.start("pattern")]
+        for sm in _RX_SELECTOR.finditer(selector_source):
             sel = sm.group(1)
             if not (sel.startswith("/") and len(sel) > 2):
                 continue  # quoted selectors are literal strings, not regexes

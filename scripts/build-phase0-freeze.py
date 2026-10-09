@@ -18,10 +18,12 @@ not silently change this frozen evaluation population. The content hash is
 computed over the frozen, deduplicated file contents.
 
 Usage: ``python3 scripts/build-phase0-freeze.py`` (run from the repo root).
+Use ``--bootstrap`` only to create the first freeze when it does not exist.
 """
 
 from __future__ import annotations
 
+import argparse
 import hashlib
 import json
 import pathlib
@@ -50,17 +52,29 @@ POSITIVE_STATUSES = ("go", "triage-trial")
 def load_decision_population(
     gen: Path | None = None,
     snapshot_files: list[str] | None = None,
+    *,
+    bootstrap: bool = False,
 ) -> list[dict]:
     source = gen if gen is not None else GEN
     freeze_path = source / "phase0_freeze.json"
-    if snapshot_files is None and gen is None and freeze_path.is_file():
-        try:
-            freeze = json.loads(freeze_path.read_text(encoding="utf-8"))
-            snapshot_files = freeze["dataset"]["snapshot_files"]
-        except (OSError, ValueError, KeyError, TypeError) as exc:
+    if snapshot_files is None and gen is None:
+        if bootstrap and freeze_path.is_file():
             raise SystemExit(
-                f"error: {freeze_path.name}: missing/invalid frozen snapshot file list"
-            ) from exc
+                f"error: --bootstrap is only valid when {freeze_path.name} is absent"
+            )
+        if freeze_path.is_file():
+            try:
+                freeze = json.loads(freeze_path.read_text(encoding="utf-8"))
+                snapshot_files = freeze["dataset"]["snapshot_files"]
+            except (OSError, ValueError, KeyError, TypeError) as exc:
+                raise SystemExit(
+                    f"error: {freeze_path.name}: missing/invalid frozen snapshot file list"
+                ) from exc
+        elif not bootstrap:
+            raise SystemExit(
+                f"error: {freeze_path.name} is missing; use --bootstrap only to "
+                "create the initial frozen population"
+            )
     if snapshot_files is not None:
         names = snapshot_files
         if (
@@ -183,8 +197,15 @@ def _score_v15_overlay_definition() -> dict:
     }
 
 
-def main() -> int:
-    rows = load_decision_population()
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--bootstrap",
+        action="store_true",
+        help="Create the initial freeze from current gate files; only when no freeze exists.",
+    )
+    args = parser.parse_args(argv)
+    rows = load_decision_population(bootstrap=args.bootstrap)
     n = len(rows)
     counts: dict[str, int] = {}
     for r in rows:
@@ -198,11 +219,15 @@ def main() -> int:
 
     lo, hi = wilson_ci(pos, n, CONFIDENCE)
 
+    snapshot_files = sorted(r["file"] for r in rows)
+    snapshot_names_sha256 = hashlib.sha256(
+        "\n".join(snapshot_files).encode("utf-8")
+    ).hexdigest()
     freeze = {
         "schema_version": "1",
         "dataset": {
             "source": "dataset.snapshot_files in phase0_freeze.json",
-            "snapshot_files": sorted(r["file"] for r in rows),
+            "snapshot_files": snapshot_files,
             "n": n,
             "positive_statuses": list(POSITIVE_STATUSES),
             "positive_count": pos,
@@ -273,7 +298,9 @@ def main() -> int:
         "(candidate-ledger rows) is documented sync drift, never a second "
         "population." % n,
         "computed_at": "2026-08-22",
-        "query": "properties/generated/*_gate_decision.json with "
+        "query": "properties/generated/<basename> for each filename in "
+        "phase0_freeze.json dataset.snapshot_files "
+        f"(n={len(snapshot_files)}, basename_sha256={snapshot_names_sha256}), with "
         "status in {go, triage-trial}",
         "test": {
             "h0": "window_rate >= baseline",

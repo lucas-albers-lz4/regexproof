@@ -56,6 +56,25 @@ def test_omitted_operator_uses_implicit_rx():
     assert all(r["operator_defaulted"] is True for r in recs)
 
 
+def test_implicit_rx_accepts_unquoted_actions():
+    src = 'SecRule REQUEST_URI "^/admin" phase:1,id:123,deny\n'
+    recs = _extract(src)
+    assert len(recs) == 1
+    assert recs[0]["pattern"] == "^/admin"
+    assert recs[0]["operator_defaulted"] is True
+    assert recs[0]["rule_id"] == "123"
+
+
+def test_implicit_pattern_and_variable_selector_both_extract():
+    src = 'SecRule ARGS|!ARGS:/^private/ "attack" phase:1,id:124,deny\n'
+    recs = _extract(src)
+    assert len(recs) == 2
+    assert [(r["pattern"], r.get("selector", False)) for r in recs] == [
+        ("attack", False),
+        ("^private", True),
+    ]
+
+
 def test_multiline_secrule_captures_rule_id():
     src = (
         'SecRule ARGS "@rx (?i)union\\s+select" \\\n'
