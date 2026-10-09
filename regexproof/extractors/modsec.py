@@ -3,6 +3,7 @@
 Extracts regex-bearing operators from ModSecurity rule files:
 
 - ``@rx`` / ``!@rx`` — the primary regex surface (negated operator = inverted match)
+- an omitted operator — ModSecurity defaults to ``@rx``
 - variable-selector regexes (``!REQUEST_COOKIES:/^_pk_ref/``) — exclusion/exception
   selectors with a ``/regex/`` form
 
@@ -33,6 +34,14 @@ from regexproof.extractors.record import make_record
 # Safe escaped-string idiom ([^"\\]*(?:\\.[^"\\]*)*) — linear-time; the
 # naive (?:\\.|[^"\\])* alternation trips CodeQL py/redos.
 _RX_OP = re.compile(r'"((?:!)?@rx)\s+([^"\\]*(?:\\.[^"\\]*)*)"')
+# SecRule's operator is the first quoted argument after the variable list.
+# When that argument is not an operator, ModSecurity interprets it as the
+# pattern for its implicit default operator (@rx). Actions are optional in
+# SecRule, so accept either a following action list or the end of the rule.
+_RX_DEFAULT_OP = re.compile(
+    r'^SecRule\b\s+[^"\n]+\s+"(?P<pattern>[^"\\]*(?:\\.[^"\\]*)*)"(?=\s+(?:"|$)|$)',
+    re.IGNORECASE,
+)
 # Variable-selector regexes: !REQUEST_COOKIES:/^_pk_ref/  (optional trailing flags)
 # Linear-time idiom (CodeQL py/redos): [^/"\\]*(?:\\.[^/"\\]*)* unrolls the naive
 # (?:\\.|[^/"])* alternation. The trailing \\? preserves exact language parity with
@@ -43,6 +52,7 @@ _RX_SELECTOR = re.compile(r'!(?:[A-Z_]+):(/[^/"\\]*(?:\\.[^/"\\]*)*\\?/[a-z]*|"[
 # Any operator name (for counting; @rx is handled separately).
 _RX_OPNAME = re.compile(r'"((?:!)?@[a-z_]+)')
 _RULE_ID = re.compile(r"\bid:(\d+)\b")
+_VARIABLE_SELECTOR = re.compile(r"^![A-Z_]+:")
 
 
 def iter_secrule_blocks(source: str) -> Iterator[tuple[int, str]]:
@@ -104,6 +114,33 @@ def extract_modsec(
                 rec["rule_id"] = mid.group(1)
             out.append(rec)
             continue
+        default = _RX_DEFAULT_OP.search(ls)
+        if default:
+            pattern = default.group("pattern").strip()
+            # Operator arguments begin with @ (or !@); they are not patterns
+            # for the implicit operator. Variable-selector expressions are
+            # handled separately below and must not be counted twice.
+            if (
+                not pattern.startswith(("@", "!@"))
+                and _VARIABLE_SELECTOR.match(pattern) is None
+            ):
+                rec = make_record(
+                    repo=repo,
+                    pattern=pattern,
+                    flags="",
+                    dialect="pcre",
+                    call_kind="search",
+                    file=file,
+                    line=start_line,
+                    column=0,
+                    context_snippet=ls[:500],
+                )
+                rec["operator_defaulted"] = True
+                mid = _RULE_ID.search(ls)
+                if mid:
+                    rec["rule_id"] = mid.group(1)
+                out.append(rec)
+                continue
         for sm in _RX_SELECTOR.finditer(ls):
             sel = sm.group(1)
             if not (sel.startswith("/") and len(sel) > 2):

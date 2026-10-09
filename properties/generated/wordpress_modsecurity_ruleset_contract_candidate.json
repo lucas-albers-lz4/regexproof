@@ -1,0 +1,9 @@
+{
+  "schema_version": "1",
+  "site": "batch/corpora/wordpress_modsecurity_ruleset/rules/05-HARDENING.conf:95:0",
+  "guarantee": "With ModSecurity enabled, the WPRS rules loaded, and wprs_allow_user_enumeration set to 0, a HEAD request whose exact origin-form target is /?author= followed by one or more ASCII digits is interrupted by rule 22200029 in phase 1; the test configuration returns HTTP 403 before a backend response.",
+  "input_source": "Untrusted HTTP request target as exposed to ModSecurity through REQUEST_URI; the pinned CI probe sends HEAD requests with curl -I.",
+  "trust": "untrusted-input",
+  "declared_domain": "HEAD request with exact ASCII origin-form target /?author=[0-9]+, where [0-9]+ means one or more ASCII digits and there are no additional query parameters, alternate path, case variation, or percent-encoded characters. Gate setting: tx.wprs_allow_user_enumeration=0; SecRuleEngine On; phase-1 test SecDefaultAction uses deny,status:403. Alternate-engine replay only until the historical CI base image can be pinned.",
+  "provenance": "agent_derived"
+}

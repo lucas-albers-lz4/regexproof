@@ -1,9 +1,9 @@
 {
   "provenance": {
-    "gate_decision_count": 885,
-    "input_file_count": 885,
-    "inputs_hash": "3f86abeda364534babf7189089dc617b0c6853b3a3e85a8ea41f360b5c3bc562",
-    "linked_row_count": 851,
+    "gate_decision_count": 887,
+    "input_file_count": 887,
+    "inputs_hash": "bac85dd11fffd4e34548b528ee37579d417627a2d2e59a18e3b64bd81faf96dd",
+    "linked_row_count": 853,
     "schema_version": "1"
   },
   "rows": [
@@ -6771,6 +6771,38 @@
         }
       },
       "url": "https://github.com/RedHatInsights/insights-client"
+    },
+    {
+      "decision_date": "2026-10-09",
+      "label": "triage-trial",
+      "ledger": {
+        "archived": false,
+        "capped": false,
+        "fork": false,
+        "language": "Dockerfile",
+        "pushed_date": "2021-02-25",
+        "size": 26,
+        "source_query": "filename:crs-setup.conf OR filename:REQUEST-942-APPLICATION-ATTACK-SQLI.conf",
+        "stars": 107
+      },
+      "probe": {
+        "dialect_counts": {
+          "pcre": 23
+        },
+        "predicted_buckets": {},
+        "regex_sites": 23,
+        "security_boundary": "deterministic-true",
+        "tree_probe": {
+          "complete": false,
+          "path_count": 0,
+          "probed_pin": "6bdd250e3b121f79c9b06ea48231cdada8e9dac9",
+          "reason": "budget-exhausted",
+          "regex_file_type_counts": {},
+          "security_boundary": "unknown",
+          "truncated": false
+        }
+      },
+      "url": "https://github.com/Rev3rseSecurity/wordpress-modsecurity-ruleset"
     },
     {
       "decision_date": "2026-08-13",
@@ -20550,6 +20582,38 @@
         }
       },
       "url": "https://github.com/iogbole/gentelella_on_rails"
+    },
+    {
+      "decision_date": "2026-10-09",
+      "label": "no-go",
+      "ledger": {
+        "archived": false,
+        "capped": true,
+        "fork": false,
+        "language": "Python",
+        "pushed_date": "2025-12-24",
+        "size": 1288,
+        "source_query": "filename:semgrep.yml OR filename:semgrep.yaml",
+        "stars": 117
+      },
+      "probe": {
+        "dialect_counts": {
+          "py_re": 1
+        },
+        "predicted_buckets": {},
+        "regex_sites": 1,
+        "security_boundary": "deterministic-true",
+        "tree_probe": {
+          "complete": false,
+          "path_count": 0,
+          "probed_pin": "6b62771efadf16f8e7112d6918029c768cefba81",
+          "reason": "budget-exhausted",
+          "regex_file_type_counts": {},
+          "security_boundary": "unknown",
+          "truncated": false
+        }
+      },
+      "url": "https://github.com/iosifache/semgrep-rules-manager"
     },
     {
       "decision_date": "2026-08-13",

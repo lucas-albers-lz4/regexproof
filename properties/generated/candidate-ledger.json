@@ -19632,6 +19632,12 @@
     },
     {
       "archived": false,
+      "audit": {
+        "human_resolved": true,
+        "needs_human_review": false,
+        "re_evaluate": false,
+        "updated_at": "2026-10-09T08:07:46Z"
+      },
       "capped": true,
       "default_branch": "main",
       "first_seen": "2026-08-15T13:21:37Z",
@@ -21731,6 +21737,13 @@
     },
     {
       "archived": false,
+      "audit": {
+        "auto_filed": false,
+        "human_resolved": true,
+        "needs_human_review": false,
+        "re_evaluate": false,
+        "updated_at": "2026-10-09T08:26:52Z"
+      },
       "default_branch": "master",
       "first_seen": "2026-08-26T13:44:09Z",
       "fork": false,

@@ -1,0 +1,37 @@
+{
+  "budget": {
+    "max_disk_mb": 500,
+    "max_mem_mb": 2048,
+    "max_patterns": 100,
+    "max_wall_s": 120,
+    "redos_wall_s": 60
+  },
+  "budget_breaches": null,
+  "commit": "6bdd250e3b121f79c9b06ea48231cdada8e9dac9",
+  "compiler_fingerprint": "35ea1f238a9e",
+  "complete_run": true,
+  "corpus_pin": "6bdd250e3b121f79c9b06ea48231cdada8e9dac9",
+  "decision": "go",
+  "decision_rule": "go iff encodable/sample_size >= 0.3",
+  "dialect": "pcre",
+  "encodable": 21,
+  "engine_versions": {
+    "python": "3.13.16",
+    "z3": "5.0.0"
+  },
+  "extractor_schema_version": "2",
+  "fraction": 1.0,
+  "go_no_go_threshold": 0.3,
+  "id_formula": "v2-domain-optional-ascii-default",
+  "inventory_path": "properties/generated/wordpress_modsecurity_ruleset-inventory.ndjson",
+  "path": "batch/corpora/wordpress_modsecurity_ruleset/rules",
+  "pilot": "wordpress_modsecurity_ruleset",
+  "reasons": {
+    "ok": 21
+  },
+  "sample_size": 21,
+  "schema_version": "1",
+  "scope": "full_corpus",
+  "unclassified_parse_errors": 0,
+  "wall_s": 1.254
+}

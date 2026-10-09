@@ -539,3 +539,124 @@ def test_extract_corpus_re2_testdata_file_not_glob_only(tmp_path):
     assert recs
     assert recs[0]["pattern"] == "[a-z]+"
 
+
+def test_extract_modsec_honors_manifest_files_and_keeps_symlink_paths(tmp_path, monkeypatch):
+    from regexproof.batch import extract as extract_mod
+    from regexproof.batch.extract import extract_corpus
+
+    workspace = tmp_path / "workspace"
+    source = tmp_path / "pinned-candidate"
+    workspace.mkdir()
+    source.mkdir()
+    (source / "production.conf").write_text(
+        'SecRule REQUEST_URI "author=[0-9]+" "id:1,block"\n',
+        encoding="utf-8",
+    )
+    (source / "test.conf").write_text(
+        'SecRule REQUEST_URI "test-only" "id:2,pass"\n',
+        encoding="utf-8",
+    )
+    corpus_path = workspace / "batch" / "corpora" / "fixture" / "rules"
+    corpus_path.parent.mkdir(parents=True)
+    corpus_path.symlink_to(source, target_is_directory=True)
+    monkeypatch.setattr(extract_mod, "ROOT", workspace)
+
+    recs = extract_corpus(
+        "fixture",
+        {
+            "path": corpus_path,
+            "files": ["production.conf"],
+            "extractor": "modsec",
+            "repo": "example/waf",
+            "dialect": "pcre",
+        },
+    )
+
+    assert len(recs) == 1
+    assert recs[0]["pattern"] == "author=[0-9]+"
+    assert recs[0]["file"] == "batch/corpora/fixture/rules/production.conf"
+    assert str(source) not in recs[0]["site"]
+
+
+def test_extract_modsec_manifest_fails_closed_for_missing_file(tmp_path):
+    import pytest
+    from regexproof.batch.extract import extract_corpus
+
+    with pytest.raises(FileNotFoundError, match="manifest files missing"):
+        extract_corpus(
+            "fixture",
+            {
+                "path": tmp_path,
+                "files": ["missing.conf"],
+                "extractor": "modsec",
+                "repo": "example/waf",
+                "dialect": "pcre",
+            },
+        )
+
+
+def test_extract_modsec_empty_manifest_files_selects_nothing(tmp_path):
+    from regexproof.batch.extract import extract_corpus
+
+    (tmp_path / "unlisted.conf").write_text(
+        'SecRule REQUEST_URI "should-not-be-read" "id:1,block"\n',
+        encoding="utf-8",
+    )
+    assert extract_corpus(
+        "fixture",
+        {
+            "path": tmp_path,
+            "files": [],
+            "extractor": "modsec",
+            "repo": "example/waf",
+            "dialect": "pcre",
+        },
+    ) == []
+
+
+def test_extract_modsec_rejects_allowlisted_symlink_outside_root(tmp_path):
+    import pytest
+    from regexproof.batch.extract import extract_corpus
+
+    rules = tmp_path / "rules"
+    rules.mkdir()
+    outside = tmp_path / "outside.conf"
+    outside.write_text('SecRule REQUEST_URI "secret" "id:1,block"\n', encoding="utf-8")
+    (rules / "linked.conf").symlink_to(outside)
+
+    with pytest.raises(ValueError, match="resolve outside corpus root"):
+        extract_corpus(
+            "fixture",
+            {
+                "path": rules,
+                "files": ["linked.conf"],
+                "extractor": "modsec",
+                "repo": "example/waf",
+                "dialect": "pcre",
+            },
+        )
+
+
+def test_extract_modsec_rejects_allowlisted_symlink_to_unlisted_in_root_file(tmp_path):
+    import pytest
+    from regexproof.batch.extract import extract_corpus
+
+    rules = tmp_path / "rules"
+    (rules / "test").mkdir(parents=True)
+    (rules / "test" / "fixture.conf").write_text(
+        'SecRule REQUEST_URI "test-only" "id:1,block"\n', encoding="utf-8"
+    )
+    (rules / "approved.conf").symlink_to("test/fixture.conf")
+
+    with pytest.raises(ValueError, match="must not traverse symlinks"):
+        extract_corpus(
+            "fixture",
+            {
+                "path": rules,
+                "files": ["approved.conf"],
+                "extractor": "modsec",
+                "repo": "example/waf",
+                "dialect": "pcre",
+            },
+        )
+
