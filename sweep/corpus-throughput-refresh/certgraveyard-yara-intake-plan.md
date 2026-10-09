@@ -160,6 +160,10 @@ The generated conversion ledger also now reflects the added batch summary:
 three extracted and encodable Python sites plus four planned triage stubs.
 Product questions, ground-truthed witnesses, and accepted upstream fixes did
 not increase; these intake counters do not represent product conversion yield.
+The [gate-label artifact](../../properties/generated/gate-labels.json) has one
+additional linked triage row (854 total). Score-v2 remains pinned to its exact
+853-row fit snapshot from `f84effe`; the append is below the documented 20%
+refit threshold, and score-v1 remains the live allocator.
 
 ## Claims checked and disproved
 

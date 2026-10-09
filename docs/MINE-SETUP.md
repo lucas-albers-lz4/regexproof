@@ -122,9 +122,18 @@ own GO labels (`positive_mapping: go-only`), with `holdout_positive_count`
 (16 on the 2026-08-13 fit) sitting next to it so the CI width is readable.
 It is not gate accuracy on unseen repos (#484).
 
-Refit manually when the gate decision count grows by about 20%; the daily
-mine job regenerates **labels** (so Golden P8 `inputs_hash` matches the new
-ledger) but does not refit weights.
+Refit manually when the linked gate-label population grows by about 20%; any
+edit or removal of an existing linked row also requires a refit. Golden CI
+reproduces weights from their recorded fit-source snapshot and keeps that fit
+pinned only while every source row is unchanged and new linked rows remain
+below that threshold. At or above 20%, CI requires weights reproduced from
+current labels. Each fit records
+`training.fit_source_commit`, the commit whose exact label rows were fitted;
+commit label changes before running the fitter so that snapshot can be replayed.
+The daily mine job still regenerates **labels** (so Golden P8 `inputs_hash`
+matches the new ledger) but does not refit weights. This cadence only controls
+the comparison artifact; score-v2 remains offline and is not evidence of
+unseen-repository accuracy.
 
 Ungated ledger rows store the mined SHA as `pin`. Rank `--allocator score-v2`
 copies that into `pin_probed` so tree join is not `missing-probed-pin`.

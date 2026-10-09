@@ -10,11 +10,13 @@ from __future__ import annotations
 
 import argparse
 import json
+import subprocess
 import sys
 from pathlib import Path
 from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
+LABELS_REPO_PATH = "properties/generated/gate-labels.json"
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
@@ -30,6 +32,41 @@ def _load_rows(path: Path) -> list[dict[str, Any]]:
     if len(rows) != len(value["rows"]):
         raise ValueError("gate-label artifact contains a non-object row")
     return rows
+
+
+def _fit_source_commit(rows: list[dict[str, Any]], requested: str | None) -> str:
+    ref = requested or "HEAD"
+    result = subprocess.run(
+        ["git", "rev-parse", "--verify", f"{ref}^{{commit}}"],
+        cwd=ROOT,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    if result.returncode:
+        detail = result.stderr.strip() or result.stdout.strip()
+        raise ValueError(f"cannot resolve fit-source commit {ref!r}: {detail}")
+    commit = result.stdout.strip()
+    snapshot = subprocess.run(
+        ["git", "show", f"{commit}:{LABELS_REPO_PATH}"],
+        cwd=ROOT,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    if snapshot.returncode:
+        detail = snapshot.stderr.strip() or snapshot.stdout.strip()
+        raise ValueError(f"cannot read fit-source gate labels at {commit}: {detail}")
+    try:
+        value = json.loads(snapshot.stdout)
+    except json.JSONDecodeError as exc:
+        raise ValueError(f"fit-source gate labels at {commit} are invalid JSON") from exc
+    if not isinstance(value, dict) or value.get("rows") != rows:
+        raise ValueError(
+            "fit input rows must exactly match the committed gate-label rows at "
+            f"{commit}; commit labels before fitting"
+        )
+    return commit
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -56,6 +93,10 @@ def main(argv: list[str] | None = None) -> int:
         help=f"As-of date for recency features (default: {DEFAULT_FIT_DATE.isoformat()}).",
     )
     parser.add_argument(
+        "--fit-source-commit",
+        help="Commit containing the exact gate-label rows used for this fit (default: HEAD).",
+    )
+    parser.add_argument(
         "--fail-on-gate",
         action="store_true",
         help="Return non-zero when a blocking ship-gate condition fails.",
@@ -67,7 +108,10 @@ def main(argv: list[str] | None = None) -> int:
         print(f"error: labels not found: {labels}", file=sys.stderr)
         return 2
     try:
-        artifact = fit_report(_load_rows(labels), seed=args.seed, fit_date=args.fit_date)
+        rows = _load_rows(labels)
+        source_commit = _fit_source_commit(rows, args.fit_source_commit)
+        artifact = fit_report(rows, seed=args.seed, fit_date=args.fit_date)
+        artifact["training"]["fit_source_commit"] = source_commit
     except (OSError, ValueError, TypeError, AssertionError, json.JSONDecodeError) as exc:
         print(f"error: score-v2 fit failed: {exc}", file=sys.stderr)
         return 2
