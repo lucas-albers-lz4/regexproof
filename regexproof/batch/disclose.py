@@ -53,6 +53,7 @@ SECURITY_TOOL_CORPORA = frozenset(
         "canvas-drop",
         "mobissh",
         "weissman-cybersecurity",
+        "wordpress_modsecurity_ruleset",
         "rkcheck",
         "Astra_AV",
         "SentryShield",

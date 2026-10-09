@@ -12,9 +12,10 @@ Outputs (both committed, drift-checked in CI):
   survivor count, Wilson CI, sample size, date, query, and the FULL
   predeclared escape protocol (H0/H1/test/floor/block-direction).
 
-The dataset snapshot is the committed ``*_gate_decision.json`` population
-(n=853); its content hash is computed over the sorted file contents so the
-freeze is reproducible on a fresh clone without extra artifacts.
+The dataset snapshot is pinned by ``dataset.snapshot_files`` in
+``phase0_freeze.json``. Later gate decisions stay in the live pipeline but do
+not silently change this frozen evaluation population. The content hash is
+computed over the frozen, deduplicated file contents.
 
 Usage: ``python3 scripts/build-phase0-freeze.py`` (run from the repo root).
 """
@@ -47,7 +48,42 @@ POSITIVE_STATUSES = ("go", "triage-trial")
 
 
 def load_decision_population(gen: Path | None = None) -> list[dict]:
-    files = sorted((gen if gen is not None else GEN).glob("*_gate_decision.json"))
+    source = gen if gen is not None else GEN
+    freeze_path = source / "phase0_freeze.json"
+    if gen is None and freeze_path.is_file():
+        try:
+            freeze = json.loads(freeze_path.read_text(encoding="utf-8"))
+            names = freeze["dataset"]["snapshot_files"]
+        except (OSError, ValueError, KeyError, TypeError) as exc:
+            raise SystemExit(
+                f"error: {freeze_path.name}: missing/invalid frozen snapshot file list"
+            ) from exc
+        if (
+            not isinstance(names, list)
+            or not names
+            or any(
+                not isinstance(name, str)
+                or Path(name).name != name
+                or not name.endswith("_gate_decision.json")
+                for name in names
+            )
+            or names != sorted(set(names))
+        ):
+            raise SystemExit(
+                f"error: {freeze_path.name}: dataset.snapshot_files must be a "
+                "non-empty, sorted, unique list of gate-decision basenames"
+            )
+        files = [source / name for name in names]
+        missing = [path.name for path in files if not path.is_file()]
+        if missing:
+            raise SystemExit(
+                "error: frozen decision files are missing; the population must "
+                "not silently shrink: " + ", ".join(missing)
+            )
+    else:
+        # An explicit directory is used by isolated tests. Production calls
+        # without `gen` always follow the committed freeze manifest above.
+        files = sorted(source.glob("*_gate_decision.json"))
     rows = []
     for f in files:
         try:
@@ -111,7 +147,7 @@ def load_decision_population(gen: Path | None = None) -> list[dict]:
 def snapshot_hash(rows: list[dict]) -> str:
     """Content hash over the FULL canonical JSON of every decision file.
 
-    Hashes each committed decision file's raw parsed contents (filename
+    Hashes each frozen decision file's raw parsed contents (filename
     framing + canonical JSON bytes), so ANY mutation — status, url, pin,
     rationale, probe, conditions — changes the hash. This is the
     reproducibility claim the freeze artifact makes."""
@@ -160,15 +196,17 @@ def main() -> int:
     freeze = {
         "schema_version": "1",
         "dataset": {
-            "source": "properties/generated/*_gate_decision.json",
+            "source": "dataset.snapshot_files in phase0_freeze.json",
+            "snapshot_files": sorted(r["file"] for r in rows),
             "n": n,
             "positive_statuses": list(POSITIVE_STATUSES),
             "positive_count": pos,
             "positive_rate": round(rate, 6),
             "status_counts": counts,
             "snapshot_sha256": snapshot_hash(rows),
-            "snapshot_note": "Committed decision files; archived *.audit-failed.json "
-            "excluded by suffix (structural (url,pin) supersession dedup).",
+            "snapshot_note": "Frozen source file list; later gate decisions are "
+            "excluded. Archived *.audit-failed.json files are excluded by the "
+            "pinned list (structural (url,pin) supersession dedup).",
         },
         "split": {
             "algorithm": "stratified_50_50",

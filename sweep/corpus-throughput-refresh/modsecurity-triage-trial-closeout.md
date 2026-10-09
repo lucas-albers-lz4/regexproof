@@ -21,6 +21,9 @@ enumeration is blocked.
   and [inventory](../../properties/generated/wordpress_modsecurity_ruleset-inventory.ndjson).
 - The isolated batch completed with 21 extracted/encodable sites, 19 generic
   scanner flags, and no ReDoS findings. These are not product findings.
+  The disclosure-gated PR dry run records all 19 as `private_first`, with
+  `publish=false` and no public upstream issue; see
+  [dry-run artifact](../../properties/generated/wordpress_modsecurity_ruleset-pr-dry-run.json).
 
 The scanner's 18 `usage_mismatch` claims were refuted by source context. The
 extractor represents ModSecurity `SecRule` PCRE as `call_kind=search`; the

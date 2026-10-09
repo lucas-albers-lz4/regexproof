@@ -16,7 +16,7 @@ corpus: wordpress_modsecurity_ruleset
 call_kind: search
 shape: null
 result: finding
-disclosure: null
+disclosure: private_first
 site: "batch/corpora/wordpress_modsecurity_ruleset/rules/04-EVENTS.conf:11:0"
 ```
 
@@ -50,7 +50,7 @@ corpus: wordpress_modsecurity_ruleset
 call_kind: search
 shape: null
 result: finding
-disclosure: null
+disclosure: private_first
 site: "batch/corpora/wordpress_modsecurity_ruleset/rules/04-EVENTS.conf:10:0"
 ```
 
@@ -84,7 +84,7 @@ corpus: wordpress_modsecurity_ruleset
 call_kind: search
 shape: null
 result: finding
-disclosure: null
+disclosure: private_first
 site: "batch/corpora/wordpress_modsecurity_ruleset/rules/04-EVENTS.conf:31:0"
 ```
 
@@ -117,7 +117,7 @@ kind: intent_mismatch
 corpus: wordpress_modsecurity_ruleset
 shape: null
 result: finding
-disclosure: null
+disclosure: private_first
 site: "batch/corpora/wordpress_modsecurity_ruleset/rules/05-HARDENING.conf:136:0"
 ```
 
@@ -151,7 +151,7 @@ corpus: wordpress_modsecurity_ruleset
 call_kind: search
 shape: null
 result: finding
-disclosure: null
+disclosure: private_first
 site: "batch/corpora/wordpress_modsecurity_ruleset/rules/05-HARDENING.conf:136:0"
 ```
 
@@ -185,7 +185,7 @@ corpus: wordpress_modsecurity_ruleset
 call_kind: search
 shape: null
 result: finding
-disclosure: null
+disclosure: private_first
 site: "batch/corpora/wordpress_modsecurity_ruleset/rules/03-BRUTEFORCE.conf:30:0"
 ```
 
@@ -219,7 +219,7 @@ corpus: wordpress_modsecurity_ruleset
 call_kind: search
 shape: null
 result: finding
-disclosure: null
+disclosure: private_first
 site: "batch/corpora/wordpress_modsecurity_ruleset/rules/04-EVENTS.conf:45:0"
 ```
 
@@ -253,7 +253,7 @@ corpus: wordpress_modsecurity_ruleset
 call_kind: search
 shape: null
 result: finding
-disclosure: null
+disclosure: private_first
 site: "batch/corpora/wordpress_modsecurity_ruleset/rules/03-BRUTEFORCE.conf:50:0"
 ```
 
@@ -287,7 +287,7 @@ corpus: wordpress_modsecurity_ruleset
 call_kind: search
 shape: null
 result: finding
-disclosure: null
+disclosure: private_first
 site: "batch/corpora/wordpress_modsecurity_ruleset/rules/04-EVENTS.conf:48:0"
 ```
 
@@ -321,7 +321,7 @@ corpus: wordpress_modsecurity_ruleset
 call_kind: search
 shape: null
 result: finding
-disclosure: null
+disclosure: private_first
 site: "batch/corpora/wordpress_modsecurity_ruleset/rules/05-HARDENING.conf:17:0"
 ```
 
@@ -355,7 +355,7 @@ corpus: wordpress_modsecurity_ruleset
 call_kind: search
 shape: null
 result: finding
-disclosure: null
+disclosure: private_first
 site: "batch/corpora/wordpress_modsecurity_ruleset/rules/05-HARDENING.conf:152:0"
 ```
 
@@ -389,7 +389,7 @@ corpus: wordpress_modsecurity_ruleset
 call_kind: search
 shape: null
 result: finding
-disclosure: null
+disclosure: private_first
 site: "batch/corpora/wordpress_modsecurity_ruleset/rules/05-HARDENING.conf:110:0"
 ```
 
@@ -423,7 +423,7 @@ corpus: wordpress_modsecurity_ruleset
 call_kind: search
 shape: null
 result: finding
-disclosure: null
+disclosure: private_first
 site: "batch/corpora/wordpress_modsecurity_ruleset/rules/05-HARDENING.conf:70:0"
 ```
 
@@ -457,7 +457,7 @@ corpus: wordpress_modsecurity_ruleset
 call_kind: search
 shape: null
 result: finding
-disclosure: null
+disclosure: private_first
 site: "batch/corpora/wordpress_modsecurity_ruleset/rules/05-HARDENING.conf:46:0"
 ```
 
@@ -491,7 +491,7 @@ corpus: wordpress_modsecurity_ruleset
 call_kind: search
 shape: null
 result: finding
-disclosure: null
+disclosure: private_first
 site: "batch/corpora/wordpress_modsecurity_ruleset/rules/03-BRUTEFORCE.conf:51:0"
 ```
 
@@ -525,7 +525,7 @@ corpus: wordpress_modsecurity_ruleset
 call_kind: search
 shape: null
 result: finding
-disclosure: null
+disclosure: private_first
 site: "batch/corpora/wordpress_modsecurity_ruleset/rules/04-EVENTS.conf:32:0"
 ```
 
@@ -559,7 +559,7 @@ corpus: wordpress_modsecurity_ruleset
 call_kind: search
 shape: null
 result: finding
-disclosure: null
+disclosure: private_first
 site: "batch/corpora/wordpress_modsecurity_ruleset/rules/05-HARDENING.conf:2:0"
 ```
 
@@ -593,7 +593,7 @@ corpus: wordpress_modsecurity_ruleset
 call_kind: search
 shape: null
 result: finding
-disclosure: null
+disclosure: private_first
 site: "batch/corpora/wordpress_modsecurity_ruleset/rules/05-HARDENING.conf:32:0"
 ```
 
@@ -627,7 +627,7 @@ corpus: wordpress_modsecurity_ruleset
 call_kind: search
 shape: null
 result: finding
-disclosure: null
+disclosure: private_first
 site: "batch/corpora/wordpress_modsecurity_ruleset/rules/03-BRUTEFORCE.conf:31:0"
 ```
 

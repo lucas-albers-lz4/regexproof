@@ -2,7 +2,7 @@
 
 The committed ``phase0_freeze.json`` / ``escape_baseline.json`` must be
 byte-stable under regeneration (golden drift check in CI) and must match the
-real gate-decision population (n=875, pos=121, Wilson 95% ~[11.7%, 16.3%],
+frozen gate-decision population (n=875, pos=121, Wilson 95% ~[11.7%, 16.3%],
 with (url, pin) supersession dedup — older-pin decisions removed per
 #560 Wave 3; funnel drain batch 4 removed 19 empty-walk auto-NO-GOs)."""
 
@@ -121,34 +121,31 @@ def test_snapshot_hash_is_reproducible(freeze: dict):
     assert h.hexdigest() == freeze["dataset"]["snapshot_sha256"]
 
 
+def test_frozen_population_excludes_later_gate_decisions(freeze: dict):
+    names = freeze["dataset"]["snapshot_files"]
+    rows = _load_bpf().load_decision_population()
+    live_names = {path.name for path in GEN.glob("*_gate_decision.json")}
+
+    assert len(names) == 875
+    assert names == sorted(set(names))
+    assert {row["file"] for row in rows} <= set(names)
+    assert set(names) < live_names
+    assert "semgrep_rules_manager_gate_decision.json" not in names
+    assert "wordpress_modsecurity_ruleset_gate_decision.json" not in names
+
+
 def test_snapshot_hash_detects_any_decision_mutation():
     """Any change to a decision file's contents must change the hash — the
     reproducibility claim (status, url, pin, rationale, probe, conditions)."""
     import copy
-    import hashlib
-
-    freeze = json.loads((GEN / "phase0_freeze.json").read_text(encoding="utf-8"))
-    original = freeze["dataset"]["snapshot_sha256"]
-    files = sorted(GEN.glob("*_gate_decision.json"))
-    assert files, "expected committed decision files"
-
-    first = json.loads(files[0].read_text(encoding="utf-8"))
-    mutated = copy.deepcopy(first)
+    bpf = _load_bpf()
+    rows = bpf.load_decision_population()
+    original = bpf.snapshot_hash(rows)
+    mutated_rows = copy.deepcopy(rows)
+    assert mutated_rows, "expected frozen decision files"
     # Mutate a NON-status field that the old hash would have ignored.
-    mutated["rationale"] = "MUTATED-for-hash-test"
-    mutated_bytes = json.dumps(mutated, sort_keys=True).encode("utf-8")
-    h = hashlib.sha256()
-    for f in sorted(files):
-        payload = (
-            json.loads(mutated_bytes)
-            if f.name == files[0].name
-            else json.loads(f.read_text(encoding="utf-8"))
-        )
-        h.update(f.name.encode("utf-8"))
-        h.update(b"\x00")
-        h.update(json.dumps(payload, sort_keys=True).encode("utf-8"))
-        h.update(b"\n")
-    assert h.hexdigest() != original, "hash must change when a decision mutates"
+    mutated_rows[0]["payload"]["rationale"] = "MUTATED-for-hash-test"
+    assert bpf.snapshot_hash(mutated_rows) != original
 
 
 def test_sha256_anchor_matches_freeze():
@@ -176,7 +173,7 @@ def test_builder_fails_loud_on_malformed_decision(tmp_path: Path):
     bad.write_text("{not json", encoding="utf-8")
     try:
         with pytest.raises(SystemExit, match="unreadable/invalid"):
-            mod.load_decision_population()
+            mod.load_decision_population(gen=GEN)
     finally:
         bad.unlink()
 
@@ -186,6 +183,6 @@ def test_builder_fails_loud_on_malformed_decision(tmp_path: Path):
     )
     try:
         with pytest.raises(SystemExit, match="neither 'status'"):
-            mod.load_decision_population()
+            mod.load_decision_population(gen=GEN)
     finally:
         (GEN / "_zz_test_gate_decision.json").unlink()

@@ -52,7 +52,7 @@ def validate_freeze_snapshot(freeze: dict) -> None:
     )
     bpf = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(bpf)  # type: ignore[union-attr]
-    rows = bpf.load_decision_population(gen=GEN)
+    rows = bpf.load_decision_population()
     h = hashlib.sha256()
     for r in sorted(rows, key=lambda r: r["file"]):
         h.update(r["file"].encode("utf-8"))
@@ -129,7 +129,7 @@ def join_rows(freeze: dict) -> list[dict]:
     )
     bpf = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(bpf)  # type: ignore[union-attr]
-    for f in bpf.load_decision_population(gen=GEN):
+    for f in bpf.load_decision_population():
         d = f["payload"]
         status = str(d.get("status") or d.get("decision") or "")
         url = str(d.get("candidate_url") or "")
