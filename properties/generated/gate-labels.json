@@ -1,9 +1,9 @@
 {
   "provenance": {
-    "gate_decision_count": 887,
-    "input_file_count": 887,
-    "inputs_hash": "bac85dd11fffd4e34548b528ee37579d417627a2d2e59a18e3b64bd81faf96dd",
-    "linked_row_count": 853,
+    "gate_decision_count": 888,
+    "input_file_count": 888,
+    "inputs_hash": "2feb8b41557244f3a5686f1bedef012eed9c7edb4d02d630b075ec455c45d6f2",
+    "linked_row_count": 854,
     "schema_version": "1"
   },
   "rows": [
@@ -31688,6 +31688,38 @@
         }
       },
       "url": "https://github.com/tjefferies/metalog_jax"
+    },
+    {
+      "decision_date": "2026-10-09",
+      "label": "triage-trial",
+      "ledger": {
+        "archived": false,
+        "capped": true,
+        "fork": false,
+        "language": "YARA",
+        "pushed_date": "2026-08-14",
+        "size": 15374,
+        "source_query": "path:rules extension:yar OR extension:yara",
+        "stars": 15
+      },
+      "probe": {
+        "dialect_counts": {
+          "py_re": 3
+        },
+        "predicted_buckets": {},
+        "regex_sites": 3,
+        "security_boundary": "deterministic-true",
+        "tree_probe": {
+          "complete": false,
+          "path_count": 0,
+          "probed_pin": "d965ff32860bef8010f7eb1e7df7b9ea1762d2d4",
+          "reason": "budget-exhausted",
+          "regex_file_type_counts": {},
+          "security_boundary": "unknown",
+          "truncated": false
+        }
+      },
+      "url": "https://github.com/tjnel/certgraveyard_yara"
     },
     {
       "decision_date": "2026-08-12",
