@@ -1,5 +1,5 @@
 {
-  "cache_hit_rate": 0.628099173553719,
+  "cache_hit_rate": 0.0,
   "coreruleset": {
     "budget": {
       "redos_wall_s": 180
@@ -120,10 +120,10 @@
     "detect-secrets": {
       "address_space_cap": null,
       "cache": {
-        "entries": 51,
+        "entries": 0,
         "hit_rate": 0.0,
         "hits": 0,
-        "misses": 51
+        "misses": 0
       },
       "cache_hit_rate": 0.0,
       "complete_run": true,
@@ -175,12 +175,12 @@
     "gitleaks": {
       "address_space_cap": null,
       "cache": {
-        "entries": 221,
-        "hit_rate": 0.8190045248868778,
-        "hits": 181,
-        "misses": 40
+        "entries": 0,
+        "hit_rate": 0.0,
+        "hits": 0,
+        "misses": 0
       },
-      "cache_hit_rate": 0.8190045248868778,
+      "cache_hit_rate": 0.0,
       "complete_run": true,
       "corpus": "gitleaks",
       "corpus_type": "rule_corpus",
@@ -230,12 +230,12 @@
     "validatorjs": {
       "address_space_cap": null,
       "cache": {
-        "entries": 212,
-        "hit_rate": 0.5801886792452831,
-        "hits": 123,
-        "misses": 89
+        "entries": 0,
+        "hit_rate": 0.0,
+        "hits": 0,
+        "misses": 0
       },
-      "cache_hit_rate": 0.5801886792452831,
+      "cache_hit_rate": 0.0,
       "complete_run": true,
       "corpus": "validatorjs",
       "corpus_type": "validator",

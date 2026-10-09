@@ -1,0 +1,44 @@
+{
+  "candidate_url": "https://github.com/iosifache/semgrep-rules-manager",
+  "conditions": [
+    {
+      "evidence": "No novel dialect/flag/encoding surface.",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Security-boundary condition not asserted met.",
+      "id": "security-boundary",
+      "met": false
+    },
+    {
+      "evidence": "1 sites < 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "semgrep_rules_manager",
+  "corpus_pin": "6b62771efadf16f8e7112d6918029c768cefba81",
+  "decision": "no-go",
+  "decision_basis": "admission_conditions",
+  "decision_date": "2026-10-09",
+  "escape_hatch_applied": false,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "py_re": 1
+    },
+    "flags": {},
+    "pin": "6b62771efadf16f8e7112d6918029c768cefba81",
+    "pin_mined": null,
+    "pin_probed": "6b62771efadf16f8e7112d6918029c768cefba81",
+    "predicted_buckets": {},
+    "regex_sites": 1,
+    "regex_sites_per_file": {
+      "semgrep_rules_manager/sources.py": 1
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Exact-pin probe found one py_re substitution in IDStandardizationPreprocessor that normalizes downloaded Semgrep rule IDs. The source review found no regex security boundary, named security sink, or concrete property candidate; no admission condition is met. The deterministic-true probe label came from the repository name and does not establish a findings-trial property.",
+  "schema_version": "1"
+}

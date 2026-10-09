@@ -1,4 +1,4 @@
-"""ModSecurity extractor accuracy: @rx operators, escaped quotes, selectors."""
+"""ModSecurity extractor accuracy: @rx, implicit @rx, escaped quotes, selectors."""
 
 from __future__ import annotations
 
@@ -34,6 +34,45 @@ def test_basic_rx_operator():
     assert recs[0]["site"] == "rules/test.conf:1:0"
     assert recs[0]["negated"] is False
     assert recs[0]["rule_id"] == "1"
+
+
+def test_omitted_operator_uses_implicit_rx():
+    src = (
+        'SecRule REQUEST_URI "(author\\=[0-9]+)" '
+        '"phase:1,id:22200029,block,capture"\n'
+        'SecRule REQUEST_FILENAME "^(/wp-json/wp/v[0-9]+/users)" '
+        '"phase:1,id:22200033,block,capture"\n'
+        'SecRule REQUEST_URI "^/admin"\n'
+        'SecRule REQUEST_URI "" "phase:1,id:22200034,block"\n'
+    )
+    recs = _extract(src)
+    assert [r["pattern"] for r in recs] == [
+        r"(author\=[0-9]+)",
+        r"^(/wp-json/wp/v[0-9]+/users)",
+        r"^/admin",
+        "",
+    ]
+    assert [r.get("rule_id") for r in recs] == ["22200029", "22200033", None, "22200034"]
+    assert all(r["operator_defaulted"] is True for r in recs)
+
+
+def test_implicit_rx_accepts_unquoted_actions():
+    src = 'SecRule REQUEST_URI "^/admin" phase:1,id:123,deny\n'
+    recs = _extract(src)
+    assert len(recs) == 1
+    assert recs[0]["pattern"] == "^/admin"
+    assert recs[0]["operator_defaulted"] is True
+    assert recs[0]["rule_id"] == "123"
+
+
+def test_implicit_pattern_and_variable_selector_both_extract():
+    src = 'SecRule ARGS|!ARGS:/^private/ "attack" phase:1,id:124,deny\n'
+    recs = _extract(src)
+    assert len(recs) == 2
+    assert [(r["pattern"], r.get("selector", False)) for r in recs] == [
+        ("attack", False),
+        ("^private", True),
+    ]
 
 
 def test_multiline_secrule_captures_rule_id():

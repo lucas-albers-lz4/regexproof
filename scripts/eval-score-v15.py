@@ -52,14 +52,9 @@ def validate_freeze_snapshot(freeze: dict) -> None:
     )
     bpf = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(bpf)  # type: ignore[union-attr]
-    rows = bpf.load_decision_population(gen=GEN)
-    h = hashlib.sha256()
-    for r in sorted(rows, key=lambda r: r["file"]):
-        h.update(r["file"].encode("utf-8"))
-        h.update(b"\x00")
-        h.update(json.dumps(r["payload"], sort_keys=True).encode("utf-8"))
-        h.update(b"\n")
-    if h.hexdigest() != freeze["dataset"]["snapshot_sha256"]:
+    names = _frozen_snapshot_files(freeze)
+    rows = bpf.load_decision_population(gen=GEN, snapshot_files=names)
+    if bpf.snapshot_hash(rows) != freeze["dataset"]["snapshot_sha256"]:
         raise SystemExit(
             "FATAL: freeze snapshot hash mismatch — the eval population "
             "differs from the Phase 0 frozen population. Regenerate the "
@@ -67,8 +62,6 @@ def validate_freeze_snapshot(freeze: dict) -> None:
         )
     # The frozen score-v1.5 overlay must match the implementation — a drift
     # in the weights would silently change what the eval measures.
-    import hashlib
-
     from regexproof.mine.score import _TREE_OVERLAY_WEIGHTS
 
     pinned = freeze.get("eval", {}).get("score_v15_overlay")
@@ -97,6 +90,17 @@ def validate_freeze_snapshot(freeze: dict) -> None:
             "FATAL: freeze score_v15_overlay.weights does not match its "
             "recorded sha256 — the freeze artifact is inconsistent."
         )
+
+
+def _frozen_snapshot_files(freeze: dict) -> list[str]:
+    dataset = freeze.get("dataset")
+    names = dataset.get("snapshot_files") if isinstance(dataset, dict) else None
+    if not isinstance(names, list):
+        raise SystemExit(
+            "FATAL: freeze has no dataset.snapshot_files list — "
+            "the eval cannot verify its population."
+        )
+    return names
 
 
 def join_rows(freeze: dict) -> list[dict]:
@@ -129,7 +133,9 @@ def join_rows(freeze: dict) -> list[dict]:
     )
     bpf = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(bpf)  # type: ignore[union-attr]
-    for f in bpf.load_decision_population(gen=GEN):
+    for f in bpf.load_decision_population(
+        gen=GEN, snapshot_files=_frozen_snapshot_files(freeze)
+    ):
         d = f["payload"]
         status = str(d.get("status") or d.get("decision") or "")
         url = str(d.get("candidate_url") or "")

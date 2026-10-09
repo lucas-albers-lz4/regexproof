@@ -128,11 +128,76 @@ def extract_corpus(corpus: str, meta: dict[str, Any]) -> list[dict[str, Any]]:
     if meta["extractor"] == "modsec":
         out: list[dict[str, Any]] = []
         root_resolved = ROOT.resolve()
-        for fp in sorted(path.glob("*.conf")):
+        names = meta.get("files")
+        if names is not None:
+            if not isinstance(names, (list, tuple)):
+                raise ValueError(
+                    f"{meta.get('repo', path)}: ModSecurity manifest files must be a list"
+                )
+            unsafe = [
+                str(name) for name in names
+                if Path(str(name)).is_absolute()
+                or ".." in Path(str(name).replace("\\", "/")).parts
+            ]
+            if unsafe:
+                raise ValueError(
+                    f"{meta.get('repo', path)}: unsafe ModSecurity manifest file(s): "
+                    + ", ".join(unsafe)
+                )
+            missing = [str(name) for name in names if not (path / str(name)).is_file()]
+            if missing:
+                raise FileNotFoundError(
+                    f"{meta.get('repo', path)}: manifest files missing under {path}: "
+                    + ", ".join(missing)
+                )
+            files = [path / str(name) for name in names]
+            allowed_root = path.resolve()
+            escaping = []
+            symlinked = []
+            for fp in files:
+                try:
+                    fp.resolve().relative_to(allowed_root)
+                except ValueError:
+                    escaping.append(str(fp))
+                # A path named in the allowlist must identify the listed
+                # corpus file itself. Following an in-root alias could read
+                # an unlisted test/vendor target and silently widen scope.
+                cursor = path
+                try:
+                    parts = fp.relative_to(path).parts
+                except ValueError:
+                    parts = ()
+                for part in parts:
+                    cursor = cursor / part
+                    if cursor.is_symlink():
+                        symlinked.append(str(fp))
+                        break
+            if escaping:
+                raise ValueError(
+                    f"{meta.get('repo', path)}: ModSecurity manifest file(s) "
+                    "resolve outside corpus root: " + ", ".join(escaping)
+                )
+            if symlinked:
+                raise ValueError(
+                    f"{meta.get('repo', path)}: ModSecurity manifest file(s) "
+                    "must not traverse symlinks: " + ", ".join(symlinked)
+                )
+        else:
+            files = sorted(path.glob("*.conf"))
+        seen: set[Path] = set()
+        for fp in sorted(files, key=lambda p: str(p)):
+            if fp in seen:
+                continue
+            seen.add(fp)
             try:
-                rel = str(fp.resolve().relative_to(root_resolved))
+                # Keep the logical path under ROOT so a materialized symlink
+                # produces stable sites instead of absolute /tmp paths.
+                rel = str(fp.relative_to(ROOT))
             except ValueError:
-                rel = str(fp)
+                try:
+                    rel = str(fp.resolve().relative_to(root_resolved))
+                except ValueError:
+                    rel = str(fp)
             text = _read_capped(fp, meta)
             if text is None:
                 continue

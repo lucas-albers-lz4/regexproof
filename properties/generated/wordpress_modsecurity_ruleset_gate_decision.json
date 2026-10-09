@@ -1,0 +1,47 @@
+{
+  "candidate_url": "https://github.com/Rev3rseSecurity/wordpress-modsecurity-ruleset",
+  "conditions": [
+    {
+      "evidence": "No novel dialect/flag/encoding surface.",
+      "id": "new-surface",
+      "met": false
+    },
+    {
+      "evidence": "Rule 22200029 inspects attacker-controlled REQUEST_URI, applies lowercase/urlDecode/trim, and blocks author=[0-9]+; README says the disabled setting blocks /?author=1, test Dockerfile sets it to 0, and CI expects 403.",
+      "id": "security-boundary",
+      "met": true
+    },
+    {
+      "evidence": "23 sites < 1000 scale bar.",
+      "id": "large-under-saturated",
+      "met": false
+    }
+  ],
+  "corpus": "wordpress_modsecurity_ruleset",
+  "corpus_pin": "6bdd250e3b121f79c9b06ea48231cdada8e9dac9",
+  "decision": "triage-trial",
+  "decision_basis": "escape_hatch",
+  "decision_date": "2026-10-09",
+  "escape_hatch_applied": true,
+  "probe": {
+    "construct_counts": {},
+    "dialect": {
+      "pcre": 23
+    },
+    "flags": {},
+    "pin": "6bdd250e3b121f79c9b06ea48231cdada8e9dac9",
+    "pin_mined": null,
+    "pin_probed": "6bdd250e3b121f79c9b06ea48231cdada8e9dac9",
+    "predicted_buckets": {},
+    "regex_sites": 23,
+    "regex_sites_per_file": {
+      "03-BRUTEFORCE.conf": 4,
+      "04-EVENTS.conf": 8,
+      "05-HARDENING.conf": 9,
+      "test/modsecurity.conf": 2
+    },
+    "security_boundary": "deterministic-true"
+  },
+  "rationale": "Security-boundary WAF with a concrete shape-3 property candidate: determine whether any documented numeric author URI can evade rule 22200029 when user enumeration is disabled. The exact-pin README, Docker test setup, and CI provide the trust boundary and expected block behavior.",
+  "schema_version": "1"
+}

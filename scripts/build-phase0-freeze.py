@@ -12,15 +12,18 @@ Outputs (both committed, drift-checked in CI):
   survivor count, Wilson CI, sample size, date, query, and the FULL
   predeclared escape protocol (H0/H1/test/floor/block-direction).
 
-The dataset snapshot is the committed ``*_gate_decision.json`` population
-(n=853); its content hash is computed over the sorted file contents so the
-freeze is reproducible on a fresh clone without extra artifacts.
+The dataset snapshot is pinned by ``dataset.snapshot_files`` in
+``phase0_freeze.json``. Later gate decisions stay in the live pipeline but do
+not silently change this frozen evaluation population. The content hash is
+computed over the frozen, deduplicated file contents.
 
 Usage: ``python3 scripts/build-phase0-freeze.py`` (run from the repo root).
+Use ``--bootstrap`` only to create the first freeze when it does not exist.
 """
 
 from __future__ import annotations
 
+import argparse
 import hashlib
 import json
 import pathlib
@@ -46,8 +49,60 @@ N_FLOOR = 50
 POSITIVE_STATUSES = ("go", "triage-trial")
 
 
-def load_decision_population(gen: Path | None = None) -> list[dict]:
-    files = sorted((gen if gen is not None else GEN).glob("*_gate_decision.json"))
+def load_decision_population(
+    gen: Path | None = None,
+    snapshot_files: list[str] | None = None,
+    *,
+    bootstrap: bool = False,
+) -> list[dict]:
+    source = gen if gen is not None else GEN
+    freeze_path = source / "phase0_freeze.json"
+    if snapshot_files is None and gen is None:
+        if bootstrap and freeze_path.is_file():
+            raise SystemExit(
+                f"error: --bootstrap is only valid when {freeze_path.name} is absent"
+            )
+        if freeze_path.is_file():
+            try:
+                freeze = json.loads(freeze_path.read_text(encoding="utf-8"))
+                snapshot_files = freeze["dataset"]["snapshot_files"]
+            except (OSError, ValueError, KeyError, TypeError) as exc:
+                raise SystemExit(
+                    f"error: {freeze_path.name}: missing/invalid frozen snapshot file list"
+                ) from exc
+        elif not bootstrap:
+            raise SystemExit(
+                f"error: {freeze_path.name} is missing; use --bootstrap only to "
+                "create the initial frozen population"
+            )
+    if snapshot_files is not None:
+        names = snapshot_files
+        if (
+            not isinstance(names, list)
+            or not names
+            or any(
+                not isinstance(name, str)
+                or Path(name).name != name
+                or not name.endswith("_gate_decision.json")
+                for name in names
+            )
+            or names != sorted(set(names))
+        ):
+            raise SystemExit(
+                f"error: {freeze_path.name}: dataset.snapshot_files must be a "
+                "non-empty, sorted, unique list of gate-decision basenames"
+            )
+        files = [source / name for name in names]
+        missing = [path.name for path in files if not path.is_file()]
+        if missing:
+            raise SystemExit(
+                "error: frozen decision files are missing; the population must "
+                "not silently shrink: " + ", ".join(missing)
+            )
+    else:
+        # An explicit directory without a manifest/list is used by isolated
+        # builder tests that exercise malformed live decision files.
+        files = sorted(source.glob("*_gate_decision.json"))
     rows = []
     for f in files:
         try:
@@ -111,7 +166,7 @@ def load_decision_population(gen: Path | None = None) -> list[dict]:
 def snapshot_hash(rows: list[dict]) -> str:
     """Content hash over the FULL canonical JSON of every decision file.
 
-    Hashes each committed decision file's raw parsed contents (filename
+    Hashes each frozen decision file's raw parsed contents (filename
     framing + canonical JSON bytes), so ANY mutation — status, url, pin,
     rationale, probe, conditions — changes the hash. This is the
     reproducibility claim the freeze artifact makes."""
@@ -142,8 +197,15 @@ def _score_v15_overlay_definition() -> dict:
     }
 
 
-def main() -> int:
-    rows = load_decision_population()
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--bootstrap",
+        action="store_true",
+        help="Create the initial freeze from current gate files; only when no freeze exists.",
+    )
+    args = parser.parse_args(argv)
+    rows = load_decision_population(bootstrap=args.bootstrap)
     n = len(rows)
     counts: dict[str, int] = {}
     for r in rows:
@@ -157,18 +219,24 @@ def main() -> int:
 
     lo, hi = wilson_ci(pos, n, CONFIDENCE)
 
+    snapshot_files = sorted(r["file"] for r in rows)
+    snapshot_names_sha256 = hashlib.sha256(
+        "\n".join(snapshot_files).encode("utf-8")
+    ).hexdigest()
     freeze = {
         "schema_version": "1",
         "dataset": {
-            "source": "properties/generated/*_gate_decision.json",
+            "source": "dataset.snapshot_files in phase0_freeze.json",
+            "snapshot_files": snapshot_files,
             "n": n,
             "positive_statuses": list(POSITIVE_STATUSES),
             "positive_count": pos,
             "positive_rate": round(rate, 6),
             "status_counts": counts,
             "snapshot_sha256": snapshot_hash(rows),
-            "snapshot_note": "Committed decision files; archived *.audit-failed.json "
-            "excluded by suffix (structural (url,pin) supersession dedup).",
+            "snapshot_note": "Frozen source file list; later gate decisions are "
+            "excluded. Archived *.audit-failed.json files are excluded by the "
+            "pinned list (structural (url,pin) supersession dedup).",
         },
         "split": {
             "algorithm": "stratified_50_50",
@@ -230,7 +298,9 @@ def main() -> int:
         "(candidate-ledger rows) is documented sync drift, never a second "
         "population." % n,
         "computed_at": "2026-08-22",
-        "query": "properties/generated/*_gate_decision.json with "
+        "query": "properties/generated/<basename> for each filename in "
+        "phase0_freeze.json dataset.snapshot_files "
+        f"(n={len(snapshot_files)}, basename_sha256={snapshot_names_sha256}), with "
         "status in {go, triage-trial}",
         "test": {
             "h0": "window_rate >= baseline",

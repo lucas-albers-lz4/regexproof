@@ -8,11 +8,11 @@ Heap's-law / singleton novelty saturates **compiler coverage**. This artifact sa
 
 | stage | count |
 |---|---|
-| sites extracted (batch summaries) | 149,191 |
-| sites encodable | 96,009 |
-| scanner NDJSON rows | 14,659 |
+| sites extracted (batch summaries) | 149,212 |
+| sites encodable | 96,030 |
+| scanner NDJSON rows | 14,678 |
 | planned inventory stubs | 338 |
-| classification rows (usage/intent/triage kinds) | 13,033 |
+| classification rows (usage/intent/triage kinds) | 13,052 |
 | mutation guards (hygiene) | 644 |
 | properties asked (non-planned product kinds) | 41 |
 | properties asked distinct `(site, question_id)` | 41 |
@@ -23,9 +23,9 @@ Heap's-law / singleton novelty saturates **compiler coverage**. This artifact sa
 | SAT ground-truthed (`reproduced` / `PASS`) | 8 |
 | rule_diff report SAT (dedicated pilots) | 10 |
 | rule_diff report SAT + ground-truth | 10 |
-| disclosed `private_first` (scanner product+classification, skip planned) | 1,128 |
+| disclosed `private_first` (scanner product+classification, skip planned) | 1,147 |
 | disclosed `public_ok` | 0 |
-| dry-run `private_first` (includes planned stubs) | 1,268 |
+| dry-run `private_first` (includes planned stubs) | 1,287 |
 | dry-run would open public upstream | 0 |
 | accepted upstream (curated `fixed_upstream`) | 1 |
 | existence proofs (`fixed_upstream` + `private_first`) | 3 |
@@ -36,13 +36,13 @@ Heap's-law / singleton novelty saturates **compiler coverage**. This artifact sa
 
 | rate | value |
 |---|---|
-| encodable / extracted | 0.6435 |
+| encodable / extracted | 0.6436 |
 | properties asked / encodable | 0.0004 |
 | SAT / properties asked | 0.1951 |
 | ground-truthed / SAT | 1.0000 |
 | pipeline accepted (incl. own-code) / SAT GT | 0.1250 |
 | pipeline accepted / extracted | 7.00e-06 |
-| encodable / extracted excluding YARA inventories | 0.6476 |
+| encodable / extracted excluding YARA inventories | 0.6477 |
 | YARA share of inventory unencodable | 0.5848 |
 | `fullword-boundary` share of inventory unencodable | 0.5689 |
 

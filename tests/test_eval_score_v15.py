@@ -97,6 +97,8 @@ def test_eval_fails_closed_on_freeze_mismatch(tmp_path: Path):
         encoding="utf-8",
     )
     freeze = mod.load_freeze()
+    freeze["dataset"]["snapshot_files"] = ["_zz_mut_gate_decision.json"]
+    freeze["dataset"]["snapshot_sha256"] = "0" * 64
     with pytest.raises(SystemExit, match="snapshot hash mismatch"):
         mod.validate_freeze_snapshot(freeze)
 
@@ -154,7 +156,9 @@ def test_join_pin_precedence_matches_tree_builder(tmp_path: Path):
     (tmp_path / "mine-tree-features.json").write_text(
         json.dumps(artifact), encoding="utf-8"
     )
-    rows = mod.join_rows(mod.load_freeze())
+    freeze = mod.load_freeze()
+    freeze["dataset"]["snapshot_files"] = ["_zz_pin_gate_decision.json"]
+    rows = mod.join_rows(freeze)
     row = next(r for r in rows if "probe-pin-repo" in r["url"])
     assert row["pin"] == "probed-pin", f"pin={row['pin']!r}"
     assert row["tree_feature"] is not None, "tree feature must resolve"
