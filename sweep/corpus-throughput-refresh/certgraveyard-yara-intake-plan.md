@@ -150,6 +150,12 @@ uv run python scripts/batch-scan.py \
 These are workflow and compiler-smoke results only: **zero solver-run product
 properties, zero SAT witnesses, zero conversion rows, and zero accepted
 findings**. Do not turn the four planned questions into `properties_asked`.
+Adding the new triage file and gate decision regenerated the live
+[`compiler-feature-yield` summary](../../properties/generated/compiler-feature-yield.md):
+its provenance now records 89 triage files and 871 gate decisions, while the
+feature rows, 53,182 unencodable sites, and 156,477 weighted sites are
+unchanged. This live summary is separate from the frozen human-provenance-only
+PR4 calibration denominator.
 
 ## Claims checked and disproved
 
