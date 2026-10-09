@@ -886,7 +886,7 @@ def _load_bpf():
     return bpf
 
 
-def test_supersession_dedup_keeps_latest_decision(tmp_path, monkeypatch):
+def test_supersession_dedup_keeps_latest_decision(tmp_path):
     """Luna r1 #4/#5: dedup keys on the CANONICAL pin (corpus_pin) and
     selects by CHRONOLOGICAL decision_date, not lexical SHA order."""
     bpf = _load_bpf()
@@ -898,14 +898,13 @@ def test_supersession_dedup_keeps_latest_decision(tmp_path, monkeypatch):
                    corpus_pin="ffff", decision="no_go", decision_date="2026-08-01")
     _decision_file(gen, "b_gate_decision.json", "https://x/y",
                    corpus_pin="0000", decision="go", decision_date="2026-08-22")
-    monkeypatch.setattr(bpf, "GEN", gen)
-    rows = bpf.load_decision_population()
+    rows = bpf.load_decision_population(gen=gen)
     assert len(rows) == 1  # superseded: the older decision is dropped
     assert rows[0]["pin"] == "0000"  # newer decision_date wins, NOT lexical max
     assert rows[0]["status"] == "go"
 
 
-def test_supersession_dedup_reads_nested_probe_pin(tmp_path, monkeypatch):
+def test_supersession_dedup_reads_nested_probe_pin(tmp_path):
     """Luna r1 #4: when corpus_pin is absent, the nested probe.pin is the
     canonical pin — a top-level pin read would see an empty key."""
     bpf = _load_bpf()
@@ -920,13 +919,12 @@ def test_supersession_dedup_reads_nested_probe_pin(tmp_path, monkeypatch):
         }, sort_keys=True) + "\n",
         encoding="utf-8",
     )
-    monkeypatch.setattr(bpf, "GEN", gen)
-    rows = bpf.load_decision_population()
+    rows = bpf.load_decision_population(gen=gen)
     assert len(rows) == 1
     assert rows[0]["pin"] == "abc123"
 
 
-def test_supersession_dedup_distinct_urls_untouched(tmp_path, monkeypatch):
+def test_supersession_dedup_distinct_urls_untouched(tmp_path):
     bpf = _load_bpf()
 
     gen = tmp_path
@@ -934,24 +932,22 @@ def test_supersession_dedup_distinct_urls_untouched(tmp_path, monkeypatch):
                    corpus_pin="aaa", decision="no_go", decision_date="2026-08-01")
     _decision_file(gen, "c_gate_decision.json", "https://x/z",
                    corpus_pin="ccc", decision="triage_trial", decision_date="2026-08-01")
-    monkeypatch.setattr(bpf, "GEN", gen)
-    rows = bpf.load_decision_population()
+    rows = bpf.load_decision_population(gen=gen)
     assert len(rows) == 2  # distinct urls never dedup
 
 
-def test_supersession_dedup_missing_url_kept(tmp_path, monkeypatch):
+def test_supersession_dedup_missing_url_kept(tmp_path):
     bpf = _load_bpf()
 
     gen = tmp_path
     (gen / "a_gate_decision.json").write_text(
         json.dumps({"decision": "no_go"}, sort_keys=True) + "\n", encoding="utf-8",
     )
-    monkeypatch.setattr(bpf, "GEN", gen)
-    rows = bpf.load_decision_population()
+    rows = bpf.load_decision_population(gen=gen)
     assert len(rows) == 1  # url-less rows are untouched
 
 
-def test_supersession_dedup_fails_closed_on_missing_recency(tmp_path, monkeypatch):
+def test_supersession_dedup_fails_closed_on_missing_recency(tmp_path):
     """CodeRabbit #573: a dedup-eligible pair with NO ordering value must
     fail closed — a silent tie could pick the wrong decision as latest."""
     bpf = _load_bpf()
@@ -961,9 +957,8 @@ def test_supersession_dedup_fails_closed_on_missing_recency(tmp_path, monkeypatc
                    corpus_pin="aaa", decision="no_go")  # NO decision_date
     _decision_file(gen, "b_gate_decision.json", "https://x/y",
                    corpus_pin="bbb", decision="go")  # NO decision_date
-    monkeypatch.setattr(bpf, "GEN", gen)
     with pytest.raises(SystemExit, match="cannot supersede"):
-        bpf.load_decision_population()
+        bpf.load_decision_population(gen=gen)
 
 
 # --- golden inputs_hash no-drift on requeue AND demote (#560 AC) -------------
