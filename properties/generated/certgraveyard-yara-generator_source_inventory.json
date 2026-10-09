@@ -1,0 +1,21 @@
+{
+  "corpus": "tjnel/certgraveyard_yara",
+  "license_file": "LICENSE",
+  "license_summary": "MIT",
+  "pin": "d965ff32860bef8010f7eb1e7df7b9ea1762d2d4",
+  "recursive_entries": 2934,
+  "regex_assignment_hit_sites": [],
+  "regex_assignment_hits": 0,
+  "regex_assignment_pattern": "=\\s*/",
+  "regex_literal_hits": 0,
+  "regex_matches_hit_sites": [],
+  "regex_matches_hits": 0,
+  "regex_matches_pattern": "\\bmatches\\s*/",
+  "rule_bytes": 8484653,
+  "rule_files": 2889,
+  "schema_version": "1",
+  "tree_files": 2923,
+  "tree_nodes": 11,
+  "yar_files": 0,
+  "yara_files": 2889
+}

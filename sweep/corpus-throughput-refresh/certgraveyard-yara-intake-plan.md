@@ -1,170 +1,177 @@
-# Three-hour intake plan: certgraveyard YARA
+# CertGraveyard YARA intake close-out — 2026-10-09
 
-**Candidate:** `tjnel/certgraveyard_yara`
+**Repository:** [`tjnel/certgraveyard_yara`](https://github.com/tjnel/certgraveyard_yara)
 
-**Mined pin:** `cac568463861fdf80386a50958951cc06b3e9bbb`
+**Disposition:** admit a narrowly named Python generator source slice as
+`triage-trial`; do not count this as YARA-rule regex corpus intake.
 
-**Scope:** one bounded admission and (only if admitted) Smith triage cycle.
-This is a plan to measure useful new corpus surface, not a conversion wave,
-product proof, or security finding.
+**Active time:** not recorded contemporaneously; no retrospective estimate
+was made.
 
-**Parents:** the [12-hour intake plan](plan.md),
-[corpus admission gate](../corpus-admission-gate.md), and
-[operator pipeline](../../docs/PIPELINE.md).
+**Exact pin:** `d965ff32860bef8010f7eb1e7df7b9ea1762d2d4`
 
-## Start condition
+**Parent plan:** [`plan.md`](plan.md). The repository owner authorized agents
+to adopt evidence-backed contracts under the standing rule in
+[`docs/CONTRACTS.md`](../../docs/CONTRACTS.md). Autonomous admission decisions
+for this backlog execution are covered by the user-directed scope recorded in
+[`plan.md`](plan.md), not by the narrower standing contract authority.
 
-The ModSecurity rule 22200029 contract candidate is still `agent_derived`.
-Close that cluster's human decision by adopting or rejecting its exact
-guarantee before starting this intake. Until the decision is recorded, do
-metadata-only preparation; do not clone, probe, register, or batch this
-candidate. The pending CodeRabbit manual-review requirement on PR #650 is a
-separate code-merge gate and does not decide the ModSecurity contract.
+## Intake decision
 
-Once the prior contract gate is closed, re-read the current candidate ledger,
-rank output, and gate files. The values below are the Oct 9, 2026 snapshot,
-not permission to reuse a stale pin:
+The refreshed repository metadata looked attractive in the stale score-v1
+snapshot: its recorded YARA size was 15,374 and its old mined pin was
+`cac568463861fdf80386a50958951cc06b3e9bbb`. At the new default-branch head,
+however, the repository contains **2,889 YARA files and zero YARA regex
+literals**. The complete Git tree has 2,923 blobs and 11 tree nodes (2,934
+recursive entries); the rule files occupy 8,484,653 bytes. The license file is
+MIT. These facts are recorded in
+[`certgraveyard-yara-generator_source_inventory.json`](../../properties/generated/certgraveyard-yara-generator_source_inventory.json).
 
-- Rank 5, score 89; YARA, recorded repository size 15,374; non-fork; pushed
-  2026-08-14.
-- URL: `https://github.com/tjnel/certgraveyard_yara`.
-- Mined pin: `cac568463861fdf80386a50958951cc06b3e9bbb`.
-- YARA is already supported. The admitted `yara_rules` corpus has 17,574
-  sites and a recorded encodable fraction of 0.6563, so condition 1 is not
-  met and condition 3 is possible only if this candidate has at least 1,000
-  regex sites. Repository byte size is not a regex-site count.
-- There is no committed gate or corpus manifest for this candidate at this
-  snapshot.
+The exact-pin probe found three Python `re` sites:
 
-## Work blocks (up to three active hours)
+| Site | Pattern | Boundary assessment |
+|---|---|---|
+| `src/cert_graveyard_yara/generator.py:79` | `[^a-zA-Z0-9]` | Replaces characters in CSV-derived name fields before YARA identifier/filename use. |
+| `src/cert_graveyard_yara/generator.py:81` | `_{2,}` | Collapses underscores in the same sanitizer. |
+| `src/cert_graveyard_yara/changelog.py:155` | `(## \[)` | Searches existing local changelog content; internal, no property adopted. |
 
-### 0:00–0:15 — close the prerequisite and refresh the candidate
-
-- Confirm the ModSecurity human contract decision is recorded. If it is
-  pending, stop candidate work here.
-- Re-run the score-v1 shortlist and inspect the exact candidate-ledger row,
-  gate labels, and any new gate decision. Record the rank, current pin, fork
-  status, pushed date, and source query.
-- Do not use `--allow-stale-pin`. If the default branch has moved since the
-  mined pin, stop and re-rank; use a new exact pin only after its source and
-  admission evidence are refreshed.
-
-### 0:15–0:45 — run the bounded admission probe
-
-Run the canonical single-candidate probe with the current exact pin and a
-500 MB disk cap. Save the draft outside the repository:
+The canonical probe command was:
 
 ```bash
-uv run python -m regexproof.probe --single \
+uv run --python 3.12 python -m regexproof.probe --single \
   https://github.com/tjnel/certgraveyard_yara \
-  --pin cac568463861fdf80386a50958951cc06b3e9bbb \
+  --pin d965ff32860bef8010f7eb1e7df7b9ea1762d2d4 \
   --max-disk-mb 500 \
   --output /tmp/certgraveyard-yara-probe.json
 ```
 
-Record the observed YARA site count and per-file distribution, construct and
-modifier counts, predicted buckets, extractor errors, and boundary label.
-Treat the probe as a registered-extractor snapshot: it does not establish
-complete tree coverage or count skipped oversized files as scanned.
+It completed with three `py_re` sites, zero extractor errors, and
+`security_boundary=deterministic-true`. Its per-file counts and the exact
+probe pin are preserved in
+[`certgraveyard-yara-generator_gate_decision.json`](../../properties/generated/certgraveyard-yara-generator_gate_decision.json).
+The repository candidate ledger was not rewritten: its pin remains a mining
+snapshot, and the gate-label artifact hashes the ledger bytes. A temporary
+refreshed shortlist was used for screening, but its ranking artifact was not
+retained and is not evidence for this committed intake.
 
-### 0:45–1:25 — test admission value and overlap
+## Admission conditions and scope
 
-- Verify the candidate has real `.yar`/`.yara` rule content at the exact pin;
-  the mined repository size alone is not evidence of corpus scale.
-- Check whether at least 1,000 regex sites are present. Re-read the current
-  `yara_rules` fraction before applying condition 3's under-saturation test.
-- Assess condition 2 independently. A security-tool label or YARA syntax is
-  not enough: identify one concrete contract shape and the guarantee it
-  could ask. For shape 5, require an independent specification or a valid
-  version/cross-engine pair with a family contract.
-- Compare exact rule-file and extracted-site fingerprints against the
-  admitted YARA sources and prior YARA triage packs. Report the overlap and
-  novel counts; do not treat copied rules as new compiler or conversion
-  yield.
-- Re-read the repository license and rule provenance before planning any
-  later public disclosure. Any security-tool batch result remains
-  `private_first`.
+1. **New surface: no.** Python `re` and YARA are already supported. The YARA
+   rules at this pin contain no regex literals.
+2. **Security boundary: yes, narrowly.** The CSV parser maps external
+   `Malware`, `Issuer Short`, and `Serial` fields into `CertificateRecord`.
+   `sanitize_name` applies the two regex transformations before those values
+   enter generated YARA identifiers and filenames. The CLI defaults to the
+   CertGraveyard CSV endpoint and also permits an operator-supplied URL.
+3. **Large and under-saturated: no.** There are three Python regex sites, far
+   below 1,000; YARA-rule saturation does not apply to this Python source
+   slice.
 
-### 1:25–1:50 — prepare the admission decision packet
+Condition 2 supports `triage-trial` for the dedicated slug
+`certgraveyard-yara-generator`. The manifest scans only `src/**/*.py` with
+`python_dir` / `py_re`, is marked as a security tool, and is not in
+`WAVE_CORPORA`. It cannot inflate the YARA-rule corpus fraction or compiler
+site count. The gate decision is schema-valid and records this narrow scope.
 
-Evaluate all three documented admission conditions explicitly:
+## Contract and source replay
 
-1. New dialect/flag/encoding surface: expected **no**; confirm from probe.
-2. Security boundary with a concrete candidate property: only **yes** if
-   source context names a testable guarantee and its property shape.
-3. Large and under-saturated: **yes** only if the probe finds at least 1,000
-   sites and the current nearest YARA fraction is below 0.85.
+The adopted contract is
+[`certgraveyard-yara-generator_contract_candidate.json`](../../properties/generated/certgraveyard-yara-generator_contract_candidate.json).
+Its guarantee is limited to a nonempty ASCII alphanumeric/underscore output
+component for the three CSV-derived values at production call sites. The
+fixed generated rule-name prefix and filename suffix then keep those values
+from adding YARA syntax delimiters or path separators. It makes no length
+claim and does not cover separate metadata escaping. Provenance remains
+`agent_derived`; adoption records the user's standing delegation.
 
-Prepare the schema-valid decision draft and a concise GO, triage-trial, or
-NO-GO recommendation with exact evidence. Leave the decision pending until a
-human records it; do not label a draft as an admitted gate.
+The replay script loads the pinned function definitions from their AST and
+checks the real Python implementation. It tested 10,359 cases covering 10,276
+distinct strings (including traversal forms, separators, controls, Unicode,
+and deterministic random strings), 93,231 sanitized components, and 62,154
+generated names. All passed. A mutation that lets `/` through the first
+character class produced `/` for the witness `/`, so the output-alphabet guard
+detected the weakened behavior. Evidence is saved in
+[`certgraveyard-yara-generator_sanitizer_replay.json`](../../properties/generated/certgraveyard-yara-generator_sanitizer_replay.json)
+and can be regenerated with:
 
-### 1:50–2:45 — run Smith triage only after admission is recorded
+```bash
+uv run python scripts/replay-certgraveyard-yara-sanitizer.py \
+  --repo /tmp/regexproof-certgraveyard-yara-src
+```
 
-If a human records `go` or `triage-trial` during the work block:
+The exact-pinned source audit also checks both YARA regex literal forms:
+string assignments (`= /.../`) and condition expressions (`matches /.../`).
+It found no hits in either form across all 2,889 rule files; the counts and
+hit-site lists are recorded in
+[`certgraveyard-yara-generator_source_inventory.json`](../../properties/generated/certgraveyard-yara-generator_source_inventory.json).
+Reproduce it with:
 
-- Materialize the exact pin under `/tmp/regexproof-certgraveyard-yara` and
-  verify `git rev-parse HEAD` equals the recorded pin. Keep the manifest slug
-  `certgraveyard-yara` distinct from existing YARA corpus slugs.
-- Use the pin revalidated in the first block:
+```bash
+uv run python scripts/audit-certgraveyard-yara-tree.py --repo /tmp/regexproof-certgraveyard-yara-src
+```
 
-  ```bash
-  PIN=cac568463861fdf80386a50958951cc06b3e9bbb
-  git clone --filter=blob:none \
-    https://github.com/tjnel/certgraveyard_yara.git \
-    /tmp/regexproof-certgraveyard-yara
-  git -C /tmp/regexproof-certgraveyard-yara fetch --depth 1 origin "$PIN"
-  git -C /tmp/regexproof-certgraveyard-yara checkout "$PIN"
-  test "$(git -C /tmp/regexproof-certgraveyard-yara rev-parse HEAD)" = "$PIN"
-  mkdir -p batch/corpora/certgraveyard-yara
-  ln -sfn /tmp/regexproof-certgraveyard-yara/rules \
-    batch/corpora/certgraveyard-yara/rules
-  ```
+The upstream `tests/test_generator.py` also passed all 32 tests when run with
+the project coverage threshold disabled for this focused file. The replay and
+upstream tests support the contract; neither is an SMT proof or a product
+property result.
 
-- Add a narrow `rule_corpus` manifest using `dialect: "yara"`,
-  `extractor: "yara"`, `**/*.yar,**/*.yara`, the exact repo/pin, and an
-  existing bounded YARA budget appropriate to the measured site count.
-  Register the corpus as `private_first`; do not add it to `WAVE_CORPORA`.
-- Run deterministic fraction measurement and the single-corpus batch:
+## Compiler and batch result
 
-  ```bash
-  uv run python scripts/measure-corpus-fraction.py \
-    --corpus certgraveyard-yara --assert-determinism
-  uv run python -m regexproof.batch --corpus certgraveyard-yara
-  ```
+The full registered Python-source fraction run is deterministic and complete:
+**3/3 encodable (1.0000)**, zero parse errors, no budget breaches, Python
+3.12.15 / Z3 5.0.0. The exact output is in
+[`certgraveyard-yara-generator_encodable_fraction.json`](../../properties/generated/certgraveyard-yara-generator_encodable_fraction.json);
+the three extracted sites are listed in
+[`certgraveyard-yara-generator-inventory.ndjson`](../../properties/generated/certgraveyard-yara-generator-inventory.ndjson).
+Reproduce the determinism check with:
 
-  Review completion status, site and file counts, encodable fraction, parse
-  errors, timeout/budget outcomes, overlap, triage output, and emitted
-  summaries.
-- Keep all generated evidence private. Do not create conversion rows from
-  fraction or scanner output.
+```bash
+uv run python scripts/measure-corpus-fraction.py \
+  --corpus certgraveyard-yara-generator --assert-determinism
+```
 
-If the decision is still pending, stop after the admission packet. Do not
-materialize or batch the repository on the basis of a pending draft.
+The Smith batch completed with `extracted=3`, `encodable=3`, and
+`triage=0`. Its [`batch summary`](../../properties/generated/certgraveyard-yara-generator_batch_summary.json)
+and [NDJSON](../../properties/generated/certgraveyard-yara-generator.ndjson)
+show four generic inventory questions in `planned` status; the
+[corpus triage file](../../properties/triage/certgraveyard-yara-generator.ndjson)
+is empty. The [PR dry-run](../../properties/generated/certgraveyard-yara-generator-pr-dry-run.json)
+records four `private_first` planned rows and `publish=false`; the
+[batch report](../../properties/generated/certgraveyard-yara-generator_batch.md)
+has the human-readable summary. Reproduce it with:
 
-### 2:45–3:00 — close out
+```bash
+uv run python scripts/batch-scan.py \
+  --corpus certgraveyard-yara-generator \
+  --out properties/generated \
+  --cache-dir /tmp/regexproof-yara-batch-cache
+```
 
-Record actual active minutes, exact source pin, commands, admission-condition
-results, overlap measurement, any human decision, and completed/incomplete
-Smith outputs. Name any unresolved engine, scope, or product-contract issue.
-Do not start a second repository or a conversion slice in this work block.
+These are workflow and compiler-smoke results only: **zero solver-run product
+properties, zero SAT witnesses, zero conversion rows, and zero accepted
+findings**. Do not turn the four planned questions into `properties_asked`.
 
-## Stop conditions
+## Claims checked and disproved
 
-- The ModSecurity contract decision remains open at the start.
-- The candidate pin is stale, the exact checkout cannot be verified, the
-  clone exceeds 500 MB, or the probe has unexplained errors.
-- Neither condition 2 nor condition 3 is supported by the observed source
-  evidence. A large repository metadata field does not satisfy condition 3.
-- The exact rule overlap leaves no defensible incremental value, or the
-  declared YARA source scope cannot be reproduced within the time/budget.
-- The Smith run is incomplete, over budget, below the 0.30 fraction gate, or
-  has unexplained parse errors. Record the result; do not convert it to a
-  product success.
+- The large rule-file count and byte size do not imply a regex-bearing YARA
+  corpus. The exact-pinned tree contains zero assignment-form (`= /`) or
+  condition-form (`matches /`) regex literals in all 2,889 YARA files.
+- The old candidate-ledger pin is stale; the live head is the exact pin above.
+  The historical ledger row was preserved rather than rewritten.
+- The changelog search is over existing local content, not the untrusted CSV
+  boundary, so it was not given a contract.
+- `3/3` encodable is a compiler fraction on three Python patterns, not a
+  YARA-rule fraction, a solver result, or product success.
+- The sanitizer replay checks the stated output properties. It does not
+  establish full transformation equivalence for every string or cover
+  metadata fields.
 
-## Completion evidence
+## Close-out
 
-The block is complete when the exact-pin admission packet has a human-recorded
-decision and, only for an admitted candidate, a deterministic complete Smith
-triage result—or a precise stop record explaining which gate failed. No
-product contract or conversion count is expected from this intake alone.
+Keep the small Python source manifest, gate decision, source inventory,
+contract candidate, and replay artifacts as a private-first triage record.
+Do not add a YARA-rule manifest, conversion wave, or conversion-ledger row
+from this intake. No public disclosure or upstream filing was performed.
+Any later full product claim needs a dedicated harness property with a
+sound transformation model and regression gate; the adopted contract alone
+does not supply that proof.

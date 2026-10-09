@@ -1258,6 +1258,24 @@ CORPUS_MANIFESTS: dict[str, CorpusManifest] = {
         "commit": "50c8516ecb73db2a7b44e0bf42a99b0eaf94155d",
         "budget": budget_as_dict(BUDGET_PATROL),
     },
+    "certgraveyard-yara-generator": {
+        "corpus_type": "rule_corpus",
+        # Python generator source only (not its YARA rule files): the exact
+        # intake pin has two sanitizer regex sites in generator.py and no
+        # regex literals in its 2,889 .yara files. Keep this under its own
+        # security-tool scope so it cannot inflate YARA corpus metrics.
+        # Materialize: ln -sfn <clone>/src batch/corpora/certgraveyard-yara-generator/rules
+        "path": ROOT / "batch" / "corpora" / "certgraveyard-yara-generator" / "rules",
+        "glob": "**/*.py",
+        "dialect": "py_re",
+        "extractor": "python_dir",
+        "repo": "tjnel/certgraveyard_yara",
+        "security_tool": True,
+        "lift_inline": False,
+        "corpus_pin": "d965ff32860bef8010f7eb1e7df7b9ea1762d2d4",
+        "commit": "d965ff32860bef8010f7eb1e7df7b9ea1762d2d4",
+        "budget": budget_as_dict(BUDGET_RULE_DEFAULT),
+    },
     "weissman-cybersecurity": {
         "corpus_type": "rule_corpus",
         # Materialize: ln -sfn /tmp/t-weissman batch/corpora/weissman-cybersecurity/rules
