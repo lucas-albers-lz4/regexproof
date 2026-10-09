@@ -93,8 +93,10 @@ Shape-1 alphabet-disjointness (template style): query single-char membership
 against the pattern's singleton alphabet, not ``InRe(s, full_mirror) ∧
 Length(s)==1``. The latter is vacuous for quantifiers like ``{{8,}}`` that
 admit no length-1 strings. Mutation guard widens the alphabet with a
-sentinel outside the charset. Provenance is ``agent_derived`` until a human
-edits the contract (docs/CONTRACTS.md / docs/NEWGATE.md).
+sentinel outside the charset. The scaffold leaves contracts
+``agent_derived``; do not relabel agent-authored guarantees as ``human``.
+After source review, adoption follows the host repository's instructions.
+Inside regexproof, see docs/CONTRACTS.md for the standing adoption record.
 """
 from __future__ import annotations
 
@@ -331,9 +333,13 @@ Shape-1 queries ``InRe(s, ALPHABET) ∧ Length(s)==1`` against the pattern's
 singleton char leaves — not the full mirror language. That keeps
 ``^[a-z]{{8,}}$`` from vacuously passing.
 
-Contracts ship as `provenance: agent_derived`. After you read the surrounding
-code, change that to `human` before counting UNSAT as product
-(`docs/CONTRACTS.md`).
+Contracts ship as `provenance: agent_derived` proposals because the scaffold
+does not read the surrounding source or establish the trust boundary. After
+that review, follow the host repository's contract-adoption policy and record
+its required evidence without mislabeling agent authorship. Inside regexproof,
+use the standing adoption record in `docs/CONTRACTS.md`; in another repository,
+follow that repository's `AGENTS.md` or equivalent. UNSAT is not product until
+the contract is adopted under the applicable policy.
 
 ## Run
 

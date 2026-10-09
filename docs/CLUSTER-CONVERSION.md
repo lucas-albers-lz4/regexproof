@@ -34,8 +34,9 @@ The factory already scales. Conversion does not:
 Heap’s-law / singleton novelty saturates the first two. The conversion ledger
 saturates the third. Untargeted shape-1/2 synthesis (`synth_max_sites`,
 `properties_asked_synthesized`) is compiler smoke. `agent_derived` contracts
-are schema-valid and **not product** until a human adopts them
-([`CONTRACTS.md`](CONTRACTS.md) provenance table).
+are schema-valid proposals and remain **not product** until they carry a valid
+adoption record under the standing authority in
+[`CONTRACTS.md`](CONTRACTS.md).
 
 Site-level taint is **out of architecture** ([`CONTRACTS.md`](CONTRACTS.md)
 #475). Do not invent a dataflow engine to rank sites. Rank with cheap
@@ -53,7 +54,7 @@ of serial 15/5 waves, not one lifetime cap of 10 contracts.
 **Hard caps (load-bearing):**
 
 - Rank **15** survivors for reading **from the current idiom bucket**.
-- Write **≤5** human contracts per wave (mix below).
+- Write and adopt **≤5** contracts per wave (mix below).
 - Wave 1 expand: **at most +5** if the stop rule fires, and only on a
   **new idiom** (not another `is_hostname`).
 - Further 15/5 waves on the **same cluster** are allowed when the close-out
@@ -145,8 +146,10 @@ the quality gate (happycow interpolated `re.search` already had `re.escape`;
 usrmanage P5 “no `=` in values” was false because audit lines embed
 `from=`). Reject if you cannot name a sink in one sentence.
 
-Write 5 contracts (`provenance=human` after that read). If an agent drafted
-the JSON, a human still adopts it or the row stays `agent_derived` smoke.
+Write up to 5 contracts after reading the source. A human may author/adopt a
+contract directly (`provenance=human`); an agent working under this repository's
+standing authority preserves `provenance=agent_derived` and records the
+evidence-backed `adoption` object. Leave unsupported questions unadopted.
 
 Spike in a throwaway script first ([`PLAYBOOK.md`](PLAYBOOK.md)). Then
 register and emit the ledger join (below). Each shipped family needs at
@@ -226,7 +229,8 @@ sidecars (`crs_cross_engine_findings.ndjson` stays excluded).
 
 **Count rule:** a conversion row increments `properties_asked` only when
 `product_reportable(entry)` is true **and** `synthesized` is absent/false
-**and** `contract.provenance=human`. `kind` alone is not enough —
+**and** the contract has human provenance or a valid delegated adoption record.
+`kind` alone is not enough —
 `classify_scanner_rows` today would count an `agent_derived` or
 contract-less product kind as asked (the #479 failure mode with a
 different flag). Mutation guards stay out of this file.
@@ -240,7 +244,9 @@ different flag). Mutation guards stay out of this file.
 - Each product row must conform to **both** `scanner_finding.schema.json`
   and `property_contract.schema.json`. Require `contract.site`,
   `guarantee`, `input_source`, `trust`, `declared_domain`,
-  `provenance=human`.
+  and either `provenance=human` or `provenance=agent_derived` with a valid
+  delegated adoption record. Shape-5 `rule_diff` rows use the separate
+  family-contract path described in `CONTRACTS.md`.
 - Scanner top-level `domain` is required (`product_reportable` reads it).
   Map harness `ground_truth` (string) → scanner `ground_truth_status`; do
   not leave `ground_truth` as a string or `sat_ground_truthed` stays 0.
@@ -251,8 +257,9 @@ different flag). Mutation guards stay out of this file.
 
 A fixture test must prove: (a) a `product_reportable` `*_conversion.ndjson`
 row increments `properties_asked` with **no** matching batch summary; (b)
-a scanner-schema-valid row with an incomplete or `agent_derived` contract
-is **rejected** and does not increment the numerator. Until this glob and
+a scanner-schema-valid row with an incomplete or unadopted `agent_derived`
+contract is **rejected** and does not increment the numerator. A valid adopted
+agent contract counts. Until this glob and
 count rule exist, a wave that only lands harness registry entries is
 invisible to the ledger.
 
@@ -287,7 +294,8 @@ not auto-open public upstream issues. Human approval before filing.
 1. One-paragraph trust map + vocab tokens.
 2. Probe (if missing) + batch (minutes). Not `WAVE_CORPORA`.
 3. Cheap reject + rank 15 with that vocab.
-4. Read 15, write 5 (2–3 shape 1, 1–2 shape 3), `provenance=human`.
+4. Read 15, adopt up to 5 (2–3 shape 1, 1–2 shape 3) under
+   `CONTRACTS.md`.
 5. Record the completed review time and outcome for each top-15 candidate,
    including every skip.
 6. Ground-truth on the engine that actually runs.

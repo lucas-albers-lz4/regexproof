@@ -118,8 +118,8 @@ funnel — operators stay on [`docs/PIPELINE.md`](docs/PIPELINE.md).
 | `docs/LOOKBEHIND_REWRITE.md` | Variable-width lookbehind → string-ops rewrite (the `(?<=^)` + MULTILINE case) |
 | `docs/REPORTING.md` | Scanner NDJSON / triage / batch MD field contracts |
 | `docs/why.md` | Three claims with different evidence: mirror soundness, encodable fraction, conversion (0 third-party public). Filing dispositions: see [why.md](docs/why.md) → [conversion-upstream.jsonl](docs/conversion-upstream.jsonl) |
-| `docs/CONTRACTS.md` | Property-contract object, provenance (`human` / `version_diff` / `cross_engine` / `agent_derived`), what batch may scale |
-| `docs/CLUSTER-CONVERSION.md` | Conversion-wave SOP: rank 15 / write ≤5 human contracts per idiom slice; ledger join via `*_conversion.ndjson`. First application: `sweep/openwrt-conversion/plan.md` |
+| `docs/CONTRACTS.md` | Property-contract object, authorship provenance and approved agent adoption, what batch may scale |
+| `docs/CLUSTER-CONVERSION.md` | Conversion-wave SOP: rank 15 / write ≤5 approved contracts per idiom slice; ledger join via `*_conversion.ndjson`. First application: `sweep/openwrt-conversion/plan.md` |
 | `docs/PIPELINE.md` | Operator funnel: mine → rank → probe → gate → wave; ledger/queue stores; `pipeline-status.py` |
 | `docs/SATURATION.md` | Frozen-cohort novelty, throughput, and conversion-value measurement |
 | `docs/NEWGATE.md` | Consumer adoption: `regexproof newgate` cookie-cutter (one regex → a CI gate); not the corpus funnel |

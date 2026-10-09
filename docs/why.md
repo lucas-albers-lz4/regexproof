@@ -76,7 +76,7 @@ bugs. SAT + ground-truth is a candidate finding, not the same as a filed or
 accepted issue. `docs/verified-findings.jsonl` remains the toolkit-trap log;
 it is not the product numerator.
 
-The next measurement that speaks to the end result is conversion yield on already-admitted security-boundary corpora, not another mine flush. The SOP for that measurement is **conversion waves** on a frozen cluster (rank 15, write ≤5 human contracts **per idiom slice**, ground-truth the device engine, emit `*_conversion.ndjson` so the ledger moves): [`CLUSTER-CONVERSION.md`](CLUSTER-CONVERSION.md). First application: [`sweep/openwrt-conversion/plan.md`](../sweep/openwrt-conversion/plan.md).
+The next measurement that speaks to the end result is conversion yield on already-admitted security-boundary corpora, not another mine flush. The SOP for that measurement is **conversion waves** on a frozen cluster (rank 15, write ≤5 adopted contracts **per idiom slice**, ground-truth the device engine, emit `*_conversion.ndjson` so the ledger moves): [`CLUSTER-CONVERSION.md`](CLUSTER-CONVERSION.md). First application: [`sweep/openwrt-conversion/plan.md`](../sweep/openwrt-conversion/plan.md).
 
 ## Progress — what has actually been accomplished
 
