@@ -42,6 +42,8 @@
     "sat_search_gap": 2,
     "skipped": 0,
     "timeout": 0,
+    "timeout_gate_ok": true,
+    "timeout_rate": 0.0,
     "unsat": 0
   }
 }

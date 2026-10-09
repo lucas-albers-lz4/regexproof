@@ -47,17 +47,22 @@ N_FLOOR = 50
 POSITIVE_STATUSES = ("go", "triage-trial")
 
 
-def load_decision_population(gen: Path | None = None) -> list[dict]:
+def load_decision_population(
+    gen: Path | None = None,
+    snapshot_files: list[str] | None = None,
+) -> list[dict]:
     source = gen if gen is not None else GEN
     freeze_path = source / "phase0_freeze.json"
-    if gen is None and freeze_path.is_file():
+    if snapshot_files is None and gen is None and freeze_path.is_file():
         try:
             freeze = json.loads(freeze_path.read_text(encoding="utf-8"))
-            names = freeze["dataset"]["snapshot_files"]
+            snapshot_files = freeze["dataset"]["snapshot_files"]
         except (OSError, ValueError, KeyError, TypeError) as exc:
             raise SystemExit(
                 f"error: {freeze_path.name}: missing/invalid frozen snapshot file list"
             ) from exc
+    if snapshot_files is not None:
+        names = snapshot_files
         if (
             not isinstance(names, list)
             or not names
@@ -81,8 +86,8 @@ def load_decision_population(gen: Path | None = None) -> list[dict]:
                 "not silently shrink: " + ", ".join(missing)
             )
     else:
-        # An explicit directory is used by isolated tests. Production calls
-        # without `gen` always follow the committed freeze manifest above.
+        # An explicit directory without a manifest/list is used by isolated
+        # builder tests that exercise malformed live decision files.
         files = sorted(source.glob("*_gate_decision.json"))
     rows = []
     for f in files:
