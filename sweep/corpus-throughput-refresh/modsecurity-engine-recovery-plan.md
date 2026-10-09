@@ -105,3 +105,13 @@ The block is complete when the close-out states one of these outcomes:
 Do not claim a vulnerability or product proof from corpus fraction, generic
 scanner output, or a mirror-only result. The remaining human gate decides
 whether the narrow, documented request guarantee is adopted or rejected.
+
+## Recorded outcome (2026-10-09)
+
+Outcome 2: the original image tag has no current registry manifest, its image
+builder is archived, and the source available for a rebuild does not pin the
+base image or OS packages. The archived Dockerfile history does not identify
+the digest behind `v3-ubuntu-nginx`. The bounded recovery check took 4 active
+minutes; evidence and the remaining human contract gate are in the
+[trial close-out](modsecurity-triage-trial-closeout.md#historical-runtime-recovery-check).
+Keep rank 3 and later held until the human gate closes.

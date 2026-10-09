@@ -60,10 +60,7 @@ product issue.
 ## Rule 22200029 replay
 
 The repository's CI image, `owasp/modsecurity:v3-ubuntu-nginx`, cannot be
-resolved. The old standalone ModSecurity image repository is archived and
-states that it no longer builds that image; the maintained project is the
-[ModSecurity CRS container repository](https://github.com/coreruleset/modsecurity-crs-docker).
-Therefore the replay below is alternate-engine corroboration, not exact
+resolved. The replay below is alternate-engine corroboration, not exact
 historical-CI ground truth.
 
 Replay environment:
@@ -111,10 +108,48 @@ captures only the exact CI-shaped request domain. Its provenance remains
 `agent_derived`; it is not a human-adopted contract, product result, or
 conversion-ledger row. The corpus is not in `WAVE_CORPORA`.
 
+## Historical runtime recovery check
+
+**Checked:** 2026-10-09; **active time:** 4 minutes (09:16–09:20 UTC).
+This records only the recovery check; it does not backfill time for the
+earlier corpus trial.
+
+- Confirmed the candidate checkout is exactly
+  `6bdd250e3b121f79c9b06ea48231cdada8e9dac9` (2021-02-25). Its
+  `test/Dockerfile` uses `FROM owasp/modsecurity:v3-ubuntu-nginx` without a
+  digest and runs `apt-get update` plus unpinned package installs. The Travis
+  config passes `COMMIT` as a build argument, but the checked Dockerfile has no
+  `ARG COMMIT` declaration.
+- `docker manifest inspect owasp/modsecurity:v3-ubuntu-nginx` returned `no
+  such manifest`; the Docker Hub tag API returned `count: 0`. No ModSecurity
+  image for that tag was present in the local Docker cache.
+- The former image builder,
+  [`coreruleset/modsecurity-docker`](https://github.com/coreruleset/modsecurity-docker),
+  is archived; its README says it stopped building the standalone
+  `owasp/modsecurity` image and points users to the
+  [current official CRS container project](https://github.com/coreruleset/modsecurity-crs-docker).
+  The archived builder history nearest this candidate pin (commit
+  `bca1ded4e75390b1bb51aa64ff052f107c896daa`, 2021-02-02) uses
+  `nginx:1.17.9`, ModSecurity `v3.0.4`, and connector `v1.0.1`; its tag script
+  maps that Dockerfile to `3.0.4-nginx`. It does not establish which image
+  digest, base, or engine versions the candidate's `v3-ubuntu-nginx` tag used.
+- Rebuilding from the candidate Dockerfile would not recover that runtime:
+  its base tag and apt packages are not pinned, and no historical image digest
+  or build record was recovered. The Travis API checks returned 404; Travis
+  documents that logs older than 365 days are unavailable by default
+  ([job-log availability](https://www.travis-ci.com/blog/22-9-30-joblogs/)).
+
+**Outcome:** historical runtime not recoverable from the checked public
+artifacts. Stop product-engine replay at this blocker. The pinned CRS image
+replay above remains alternate-engine evidence only. Resume historical-engine
+work only if an immutable image export/digest or equivalent pinned build
+record becomes available.
+
 ## Remaining gate
 
 Before this candidate can become a product contract, a human must adopt or
-reject the exact guarantee and decide whether to continue with the
-historical-engine recovery. Do not infer Smith GO from a 1.0 encodable
-fraction or from alternate-engine replay. Active minutes were not separately
-instrumented, so this trial is not an operator-throughput timing sample.
+reject the exact guarantee. Do not infer Smith GO from a 1.0 encodable
+fraction or from alternate-engine replay. The historical-engine recovery
+trial is closed; the human decision packet remains `agent_derived` until the
+guarantee is adopted or rejected. The earlier corpus trial did not instrument
+active minutes, so it is not an operator-throughput timing sample.
