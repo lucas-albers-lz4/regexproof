@@ -270,7 +270,8 @@ def contract(
 ) -> dict[str, Any]:
     """Adopt a contract for a claimed site. Contract fields are validated
     by the caller against the contract schema; ``provenance=stub`` rows
-    NEVER contract (they must be re-ranked / human-adopted first)."""
+    NEVER contract (they must be re-ranked and adopted under repository
+    contract policy first)."""
 
     def _contract() -> dict[str, Any]:
         q = load_queue(cluster, root)

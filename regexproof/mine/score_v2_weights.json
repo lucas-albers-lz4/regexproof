@@ -108,6 +108,7 @@
     "dev_n": 171,
     "feature_set_frozen": true,
     "fit_date": "2026-08-13",
+    "fit_source_commit": "f84effe117f214de1b0766aca0303cea1ec0bd41",
     "fitter": {
       "boundary_prior_strength": 0.02,
       "iterations": 3000,

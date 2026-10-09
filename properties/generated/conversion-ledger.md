@@ -8,10 +8,10 @@ Heap's-law / singleton novelty saturates **compiler coverage**. This artifact sa
 
 | stage | count |
 |---|---|
-| sites extracted (batch summaries) | 149,212 |
-| sites encodable | 96,030 |
-| scanner NDJSON rows | 14,678 |
-| planned inventory stubs | 338 |
+| sites extracted (batch summaries) | 149,215 |
+| sites encodable | 96,033 |
+| scanner NDJSON rows | 14,682 |
+| planned inventory stubs | 342 |
 | classification rows (usage/intent/triage kinds) | 13,052 |
 | mutation guards (hygiene) | 644 |
 | properties asked (non-planned product kinds) | 41 |
@@ -25,7 +25,7 @@ Heap's-law / singleton novelty saturates **compiler coverage**. This artifact sa
 | rule_diff report SAT + ground-truth | 10 |
 | disclosed `private_first` (scanner product+classification, skip planned) | 1,147 |
 | disclosed `public_ok` | 0 |
-| dry-run `private_first` (includes planned stubs) | 1,287 |
+| dry-run `private_first` (includes planned stubs) | 1,291 |
 | dry-run would open public upstream | 0 |
 | accepted upstream (curated `fixed_upstream`) | 1 |
 | existence proofs (`fixed_upstream` + `private_first`) | 3 |

@@ -187,8 +187,8 @@ def rank_sites(
 ) -> dict[str, Any]:
     """Rank conversion CANDIDATE SITES (Gate 2 stub emitter input).
 
-    Conversion rows are human-adopted (they carry ``contract.site`` or a
-    top-level ``site``); the scanner-pattern drop rules do NOT apply to
+    Conversion rows carry adopted contracts (they carry ``contract.site`` or
+    a top-level ``site``); the scanner-pattern drop rules do NOT apply to
     them — there is no ``pattern`` to gate. Path/test-name drops still
     apply so test-dir density cannot outrank a real init script (Luna r1
     fold #1: the documented ``*_conversion.ndjson`` input must not produce
@@ -252,7 +252,7 @@ def _drop_reason_for_site(rec: dict[str, Any]) -> str | None:
     """Drop rules that apply to conversion candidate sites (no pattern gate).
 
     Keeps the path-segment / test-filename filters; skips all pattern-based
-    rules because conversion rows are human-adopted candidates, not scanner
+    rules because conversion rows are adopted contract candidates, not scanner
     output (Luna r1 fold #1)."""
     path = _path_of(rec)
     segs = _path_segments(path)

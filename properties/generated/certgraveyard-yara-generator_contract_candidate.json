@@ -1,0 +1,21 @@
+{
+  "schema_version": "1",
+  "site": "src/cert_graveyard_yara/generator.py:79,81:sanitize_name (used at :174-176, :210-212, :227-229)",
+  "guarantee": "For the Malware, Issuer Short, and Serial fields at the production generator call sites, sanitize_name returns a nonempty ASCII alphanumeric/underscore component. Those components add no YARA syntax delimiters or path separators to the fixed generated rule identifiers and filenames.",
+  "input_source": "CSV columns Malware, Issuer Short, and Serial parsed into CertificateRecord values; the default feed is CertGraveyard's external CSV endpoint and the CLI permits an operator-supplied URL.",
+  "trust": "untrusted-input",
+  "declared_domain": "Any Python str in those three fields, passed at the production call sites with their fixed defaults (Unknown_Malware, Unknown_Issuer, Unknown_Serial) and an integer index from record enumeration. The claim covers sanitizer output components and their use in rule identifiers/filenames only; it makes no length claim and does not cover metadata escaping.",
+  "provenance": "agent_derived",
+  "adoption": {
+    "status": "approved",
+    "authority": "standing_user_delegation",
+    "approved_on": "2026-10-09",
+    "rationale": "The source establishes the external CSV inputs, fixed production defaults, and the generated identifier/filename sinks. The sanitizer's explicit ASCII replacement, underscore collapse, and boundary stripping support this narrow all-input output-alphabet guarantee; the source does not support a length bound or claims about separately escaped metadata.",
+    "evidence": [
+      "tjnel/certgraveyard_yara@d965ff32860bef8010f7eb1e7df7b9ea1762d2d4: src/cert_graveyard_yara/parser.py:13-29,132-138; generator.py:61-82,174-176,210-212,227-229",
+      "properties/generated/certgraveyard-yara-generator_source_inventory.json: exact pinned tree has 2,889 YARA files and zero assignment-form or matches-form regex literals",
+      "properties/generated/certgraveyard-yara-generator_sanitizer_replay.json: pinned-function replay over 10,359 cases (10,276 distinct strings), 93,231 sanitized components, and 62,154 generated names; slash-preservation mutation guard passed",
+      "Upstream tests/test_generator.py::TestSanitizeName and ::TestGenerateRuleFilename"
+    ]
+  }
+}

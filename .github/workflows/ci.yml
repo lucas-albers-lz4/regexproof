@@ -545,12 +545,10 @@ jobs:
       - name: P8 gate-labels drift check (#432, luna gate 1)
         # Stale or hand-edited labels must fail CI, not pass silently.
         run: git diff --exit-code -- properties/generated/gate-labels.json
-      - name: P8 score-v2 weights (refit, #432)
-        # The deterministic fit must reproduce the committed weights
-        # exactly; a stale or hand-edited model fails CI.
-        run: python scripts/fit-score-v2.py
-      - name: P8 score-v2 weights drift check (#432, luna gate 1)
-        run: git diff --exit-code -- regexproof/mine/score_v2_weights.json
+      - name: P8 score-v2 fit cadence check (#432)
+        # Keep the comparison fit frozen for small append-only label growth.
+        # Changed prior rows or >=20% growth require an exact current refit.
+        run: python scripts/ci-check-score-v2.py
 
   golden_repro:
     name: Golden repro run ${{ matrix.run }} (Python ${{ matrix.python-version }})

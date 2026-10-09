@@ -1,0 +1,25 @@
+{
+  "address_space_cap": true,
+  "cache": {
+    "entries": 0,
+    "hit_rate": 0.0,
+    "hits": 0,
+    "misses": 0
+  },
+  "cache_hit_rate": 0.0,
+  "complete_run": true,
+  "corpus": "certgraveyard-yara-generator",
+  "corpus_type": "rule_corpus",
+  "encodable": 3,
+  "engine": {
+    "python": "3.12.15"
+  },
+  "extracted": 3,
+  "findings": 4,
+  "inventory_questions": 4,
+  "join_regex_ids": 4,
+  "redos_findings": 0,
+  "redos_incomplete": false,
+  "schema_version": "1",
+  "triage": 0
+}

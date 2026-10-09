@@ -21,11 +21,11 @@ other page is in this directory. Each entry is one link plus one clause.
 
 ## Contracts & reporting
 
-- [`CONTRACTS.md`](CONTRACTS.md) — property-contract object, provenance, what batch may scale.
+- [`CONTRACTS.md`](CONTRACTS.md) — property-contract object, authorship provenance, delegated adoption, what batch may scale.
 - [`REPORTING.md`](REPORTING.md) — scanner NDJSON / triage / batch MD field contracts.
 - [`conversion-upstream.jsonl`](conversion-upstream.jsonl) — curated last-mile conversion events (filed / fixed / false positive / private_first).
 - [`verified-findings.jsonl`](verified-findings.jsonl) — machine-readable verified implementation findings.
-- [`CLUSTER-CONVERSION.md`](CLUSTER-CONVERSION.md) — conversion-wave SOP: rank / write ≤5 human contracts per idiom slice.
+- [`CLUSTER-CONVERSION.md`](CLUSTER-CONVERSION.md) — conversion-wave SOP: rank / adopt ≤5 contracts per idiom slice.
 - [`why.md`](why.md) — three claims with different evidence: mirror soundness, encodable fraction, conversion.
 
 ## Operations

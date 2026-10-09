@@ -518,6 +518,131 @@ def test_conversion_agent_derived_and_incomplete_do_not_increment(tmp_path: Path
     assert data["funnel"]["properties_asked"] == 0
 
 
+def test_conversion_agent_contract_counts_with_adoption_record(tmp_path: Path):
+    gen = tmp_path / "generated"
+    gen.mkdir()
+    adopted = {
+        "schema_version": "1",
+        "kind": "property",
+        "result": "unsat",
+        "regex_id": "e" * 32,
+        "corpus": "openwrt_packages",
+        "site": "x:1:0",
+        "domain": "ascii",
+        "contract": _human_contract(
+            site="x:1:0",
+            provenance="agent_derived",
+            adoption={
+                "status": "approved",
+                "authority": "standing_user_delegation",
+                "approved_on": "2026-10-09",
+                "rationale": "The source context supports this narrow guarantee.",
+                "evidence": ["src/validator.py:12"],
+            },
+        ),
+        "synthesized": False,
+    }
+    (gen / "demo_conversion.ndjson").write_text(
+        json.dumps(adopted) + "\n", encoding="utf-8"
+    )
+    upstream = tmp_path / "upstream.jsonl"
+    upstream.write_text("", encoding="utf-8")
+    data = cl.aggregate(
+        gen_dir=gen, upstream_path=upstream, security_tools=frozenset()
+    )
+    assert data["funnel"]["properties_asked"] == 1
+
+
+def test_conversion_rejects_malformed_adoption_and_rule_diff(tmp_path: Path):
+    gen = tmp_path / "generated"
+    gen.mkdir()
+    adoption = {
+        "status": "approved",
+        "authority": "standing_user_delegation",
+        "approved_on": "2026-10-09",
+        "rationale": "The source supports this narrow guarantee.",
+        "evidence": ["src/validator.py@0123456789abcdef0123456789abcdef01234567"],
+    }
+    malformed = {
+        "schema_version": "1",
+        "kind": "property",
+        "result": "unsat",
+        "regex_id": "f" * 32,
+        "corpus": "openwrt_packages",
+        "site": "x:1:0",
+        "domain": "ascii",
+        "contract": _human_contract(
+            site="x:1:0",
+            provenance="agent_derived",
+            adoption={**adoption, "approved_on": "2026-02-31"},
+        ),
+        "synthesized": False,
+    }
+    rule_diff = {
+        **malformed,
+        "kind": "rule_diff",
+        "regex_id": "a" * 32,
+        "contract": _human_contract(
+            site="x:1:0",
+            provenance="agent_derived",
+            adoption=adoption,
+            family_contract={"family": "demo"},
+        ),
+    }
+    missing_schema_field = {
+        **malformed,
+        "kind": "property",
+        "regex_id": "b" * 32,
+        "contract": _human_contract(
+            site="x:1:0",
+            provenance="agent_derived",
+            adoption=adoption,
+        ),
+    }
+    missing_schema_field["contract"].pop("trust")
+    site_mismatch = {
+        **malformed,
+        "kind": "property",
+        "regex_id": "c" * 32,
+        "contract": _human_contract(
+            site="different.py:9",
+            provenance="agent_derived",
+            adoption=adoption,
+        ),
+    }
+    missing_declared_domain = {
+        **malformed,
+        "kind": "property",
+        "regex_id": "d" * 32,
+        "contract": _human_contract(
+            site="x:1:0",
+            provenance="agent_derived",
+            adoption=adoption,
+        ),
+    }
+    missing_declared_domain["contract"].pop("declared_domain")
+    (gen / "demo_conversion.ndjson").write_text(
+        "\n".join(
+            json.dumps(row)
+            for row in (
+                malformed,
+                rule_diff,
+                missing_schema_field,
+                site_mismatch,
+                missing_declared_domain,
+            )
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    upstream = tmp_path / "upstream.jsonl"
+    upstream.write_text("", encoding="utf-8")
+    data = cl.aggregate(
+        gen_dir=gen, upstream_path=upstream, security_tools=frozenset()
+    )
+    assert data["funnel"]["properties_asked"] == 0
+
+
 def test_conversion_version_diff_does_not_increment(tmp_path: Path):
     gen = tmp_path / "generated"
     gen.mkdir()
@@ -607,6 +732,10 @@ def test_join_wave_dispositions_filed_and_accepted_hops():
             question_id="other-question",
             result="sat",
             ground_truth_status="reproduced",
+            contract=_human_contract(
+                site="net/other/files/usr/bin/oth:9:f",
+                guarantee="accepted host labels contain no semicolon",
+            ),
             wave_id="openwrt_luci_w1",
             idiom_bucket="form-validator-alphabets",
         ),
