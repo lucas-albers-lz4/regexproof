@@ -12,13 +12,10 @@
     "origin": "fwlive origin/master",
     "commit": "aa1554730999de8cf3660f959c8ffd1e554b8992",
     "sourceRoot": "/tmp/regexproof-653-luna/source",
-    "sourceRootMode": "adjacent source/ archive",
+    "sourceRootMode": "SOURCE_ROOT environment override",
     "commitReadMethod": "source-commit.txt",
     "snapshotCommands": [
-      "git fetch origin master",
-      "git archive --format=tar origin/master | tar -xf - -C /tmp/regexproof-653-luna",
-      "git rev-parse origin/master > /tmp/regexproof-653-luna/source-commit.txt",
-      "extracted tree moved into source/ and made read-only"
+      "Set SOURCE_ROOT to a fwlive checkout at the pinned commit."
     ],
     "readOnlyTree": true
   },
@@ -40,7 +37,7 @@
     "unicodeVersion": "17.0",
     "icuVersion": "78.3",
     "v8Version": "14.6.202.34-node.37",
-    "scriptSha256": "4914bc9ab328b477334606839321a50be66f17be9e25b41a0fd3319747732b69"
+    "scriptSha256": "e1ad90ce3e40bf62bd94dd1efd59c3d02881229181f34f2e8b56c270546e3484"
   },
   "regex": {
     "name": "NON_FIREWALL_PREFIX",
@@ -77,7 +74,6 @@
   "sourceInventory": [
     {
       "path": "core/fwlive-log.js",
-      "sha256": "52983d7c0a629de4ee23a13873e5ac54cf7d08dfaf03383614fceb59a4d1da12",
       "gitBlob": "cc77bc663fc1bae0b2cb473eca2f10b2eedc2079",
       "lines": {
         "classifySpec": "9-21",
@@ -86,75 +82,76 @@
         "consumerGuard": "389-410",
         "callers": "592-620",
         "exports": "669-704"
-      }
+      },
+      "sha256": "52983d7c0a629de4ee23a13873e5ac54cf7d08dfaf03383614fceb59a4d1da12"
     },
     {
       "path": "openwrt-feed/luci-app-fwlive/htdocs/luci-static/resources/fwlive/log.js",
-      "sha256": "efddb7eab758c5c86038248274fddf4ce1b2d7b6003e5d81cb423f1c151cc336",
       "gitBlob": "c6b19cb6d24b2825d2a19252d05e46c0e97d96da",
       "lines": {
         "classifySpec": "13-50",
         "classifyTrim": "153-161",
         "nonFirewallRegex": "164-169",
         "consumerGuard": "483-489"
-      }
+      },
+      "sha256": "efddb7eab758c5c86038248274fddf4ce1b2d7b6003e5d81cb423f1c151cc336"
     },
     {
       "path": "openwrt-feed/luci-app-fwlive/htdocs/luci-static/resources/view/status/fwlive.js",
-      "sha256": "d7528f5db7d88a8e63bc46716724951d73a86e3fb24321e6455723d1923c43f8",
       "gitBlob": "a6a4fc63c0cdb67a82a9cdec0c81b09a76231bd6",
       "lines": {
         "consumerCallsite": "1177"
-      }
+      },
+      "sha256": "d7528f5db7d88a8e63bc46716724951d73a86e3fb24321e6455723d1923c43f8"
     },
     {
       "path": "scripts/gen-luci-wrapper.js",
-      "sha256": "30fc5d987004844e7e78e932ef10392e01e56147c847fb922e139900da7d94eb",
       "gitBlob": "bd100a47b08a2ea3025e371b09a3ba5b1c70b4eb",
       "lines": {
         "regexDerivationAndParityGate": "36-127"
-      }
+      },
+      "sha256": "30fc5d987004844e7e78e932ef10392e01e56147c847fb922e139900da7d94eb"
     },
     {
       "path": "scripts/gen-all.sh",
-      "sha256": "1d02f7bd8f21dab9c9075e7b7779c3bffb343545f836617e5b9b9cd35afb6b36",
       "gitBlob": "797c9fc3f78eda5bc86c2c140b05f1344152bf67",
       "lines": {
         "generatorAndGateWorkflow": "1-17"
-      }
+      },
+      "sha256": "1d02f7bd8f21dab9c9075e7b7779c3bffb343545f836617e5b9b9cd35afb6b36"
     },
     {
       "path": "scripts/z3-verify.py",
-      "sha256": "643c452e943db8be2b44729b404da333f0062934cd2cb94c9683584d6d132d1a",
       "gitBlob": "268cfbf5b3068e123b5ec0719af5ad80b4f0b6a1",
       "lines": {
         "manuallyMaintainedPrefixMirror": "70-100,250-263"
-      }
+      },
+      "sha256": "643c452e943db8be2b44729b404da333f0062934cd2cb94c9683584d6d132d1a"
     },
     {
       "path": "docs/developer/z3-verification.md",
-      "sha256": "8f40791208c990bf8c462b94068752f048727d3369d9f9135fdb4ef57ffd9adb",
       "gitBlob": "089a212d389b9e93525f3f69eb43c3a316b4975a",
       "lines": {
         "documentedModelGapAndUtf16Boundary": "77-96,165-179"
-      }
+      },
+      "sha256": "8f40791208c990bf8c462b94068752f048727d3369d9f9135fdb4ef57ffd9adb"
     },
     {
       "path": "AGENTS.md",
-      "sha256": "1133b68bfd269dc8ed819aa3beba4cf9826a4ffc01c112a8f6b1f7738d233e88",
       "gitBlob": "379180ebcef3e28653667444e659643f18651961",
       "lines": {
         "classifySpecAndGeneratorInstructions": "1-20"
-      }
+      },
+      "sha256": "1133b68bfd269dc8ed819aa3beba4cf9826a4ffc01c112a8f6b1f7738d233e88"
     },
     {
       "path": "docs/developer/contributing.md",
-      "sha256": "17766199655f217db7e880784319962e7b007d1336a1bbf3ecc3257aa5233244",
       "gitBlob": "af19d5000946bb7639464f2ddec1da9882054a31",
       "lines": {
         "singleSourceOfTruth": "103-126",
         "tabsAndWorkflow": "10-34"
-      }
+      },
+      "sha256": "17766199655f217db7e880784319962e7b007d1336a1bbf3ecc3257aa5233244"
     }
   ],
   "finiteNativeCases": [

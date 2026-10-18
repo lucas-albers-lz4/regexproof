@@ -6,7 +6,7 @@
     "CanonicalizeBoundary.v": "51ca14ae5dd700af38b71c56253bd55004fb67b8f8e4928ca8f8db0e5991a980",
     "PrefixAstProbe.v": "b619fa21a81c3d04f59af03ca3b45b968d397e04eac12381ec1041cc20633ca2"
   },
-  "runner_sha256": "8c349440102a53eaa3502bb71df2768f252ffa370183d97139c8430c54883a76",
+  "runner_sha256": "b41b8ff31837f99967ed189490863a7e3a265752a45e0d68c9d70526c65ed495",
   "records": [
     {
       "label": "positive",
@@ -15,7 +15,7 @@
         "run",
         "--rm",
         "--name",
-        "regexproof-653-1176590-positive",
+        "regexproof-653-1187842-positive",
         "--network",
         "none",
         "--cpus",
@@ -34,7 +34,7 @@
         "/dune/_boot/dune.exe clean && /dune/_boot/dune.exe build -j 4 examples/rocq_proof"
       ],
       "exit_code": 0,
-      "seconds": 31.544,
+      "seconds": 31.775,
       "stdout": "",
       "stderr": "Closed under the global context\nClosed under the global context\nClosed under the global context\nClosed under the global context\nPass_Regex :\nforall {specParameters : Parameters},\nRegex -> list Node.RegexContextLayer -> Prop\n\nPass_Regex is not universe polymorphic\nPass_Regex may only be eliminated to produce values whose type is SProp or Prop.\nArguments Pass_Regex {specParameters} _ _%_list_scope\nExpands to: Inductive Warblre.props.EarlyErrors.Pass_Regex\nDeclared in library Warblre.props.EarlyErrors, line 63, characters 12-22\ncompilePattern_success:\n  forall {specParameters : Parameters} (r : Regex) (rer : RegExpRecord),\n  StaticSemantics.countLeftCapturingParensWithin r nil =\n  RegExpRecord.capturingGroupsCount rer ->\n  Pass_Regex r nil ->\n  exists m : list Character -> Numeric.non_neg_integer -> MatchResult,\n    Semantics.compilePattern r rer = Success m\n"
     },
@@ -45,7 +45,7 @@
         "run",
         "--rm",
         "--name",
-        "regexproof-653-1176590-kernel-recheck",
+        "regexproof-653-1187842-kernel-recheck",
         "--network",
         "none",
         "--cpus",
@@ -64,7 +64,7 @@
         "rocqchk -silent -Q _build/default/mechanization Warblre -R _build/default/examples/rocq_proof Example Example.Example Example.CanonicalizeBoundary Example.PrefixAstProbe"
       ],
       "exit_code": 0,
-      "seconds": 14.203,
+      "seconds": 14.603,
       "stdout": "",
       "stderr": ""
     },
@@ -75,7 +75,7 @@
         "run",
         "--rm",
         "--name",
-        "regexproof-653-1176590-mutantanchor",
+        "regexproof-653-1187842-mutantanchor",
         "--network",
         "none",
         "--cpus",
@@ -94,7 +94,7 @@
         "/dune/_boot/dune.exe build -j 4 examples/rocq_proof/MutantAnchor.vo"
       ],
       "exit_code": 1,
-      "seconds": 0.752,
+      "seconds": 0.799,
       "stdout": "",
       "stderr": "File \"./examples/rocq_proof/MutantAnchor.v\", line 54, characters 19-30:\nError: Unable to unify \"Some false\" with \"Some true\".\n\n"
     },
@@ -105,7 +105,7 @@
         "run",
         "--rm",
         "--name",
-        "regexproof-653-1176590-mutanthyphen",
+        "regexproof-653-1187842-mutanthyphen",
         "--network",
         "none",
         "--cpus",
@@ -124,7 +124,7 @@
         "/dune/_boot/dune.exe build -j 4 examples/rocq_proof/MutantHyphen.vo"
       ],
       "exit_code": 1,
-      "seconds": 0.647,
+      "seconds": 0.672,
       "stdout": "",
       "stderr": "File \"./examples/rocq_proof/MutantHyphen.v\", line 50, characters 19-30:\nError: Unable to unify \"Some false\" with \"Some true\".\n\n"
     },
@@ -135,7 +135,7 @@
         "run",
         "--rm",
         "--name",
-        "regexproof-653-1176590-mutantcanonicalize",
+        "regexproof-653-1187842-mutantcanonicalize",
         "--network",
         "none",
         "--cpus",
@@ -154,7 +154,7 @@
         "/dune/_boot/dune.exe build -j 4 examples/rocq_proof/MutantCanonicalize.vo"
       ],
       "exit_code": 1,
-      "seconds": 0.525,
+      "seconds": 0.537,
       "stdout": "",
       "stderr": "File \"./examples/rocq_proof/MutantCanonicalize.v\", line 21, characters 19-30:\nError: Unable to unify \"383\" with \"83\".\n\n"
     }

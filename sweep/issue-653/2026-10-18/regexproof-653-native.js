@@ -27,6 +27,12 @@ function sha256(file) {
 	return crypto.createHash('sha256').update(fs.readFileSync(file)).digest('hex');
 }
 
+function gitBlobSha1(file) {
+	const bytes = fs.readFileSync(file);
+	const header = Buffer.from('blob ' + bytes.length + '\0', 'utf8');
+	return crypto.createHash('sha1').update(Buffer.concat([header, bytes])).digest('hex');
+}
+
 function readSourceCommit() {
 	const commitFile = path.join(sourceRoot, 'source-commit.txt');
 	if (fs.existsSync(commitFile))
@@ -63,7 +69,75 @@ const luciSha256 = sha256(luciPath);
 if (luciSha256 !== expectedLuciSha256)
 	throw new Error('LuCI log.js SHA256 mismatch: expected ' + expectedLuciSha256 + ', got ' + luciSha256);
 
-/* The commit and both source-byte pins are checked before either module is loaded. */
+const sourceInventory = [
+	{
+		path: 'core/fwlive-log.js',
+		gitBlob: 'cc77bc663fc1bae0b2cb473eca2f10b2eedc2079',
+		lines: {
+			classifySpec: '9-21',
+			nonFirewallRegex: '137-144',
+			normalization: '174-184',
+			consumerGuard: '389-410',
+			callers: '592-620',
+			exports: '669-704'
+		}
+	},
+	{
+		path: 'openwrt-feed/luci-app-fwlive/htdocs/luci-static/resources/fwlive/log.js',
+		gitBlob: 'c6b19cb6d24b2825d2a19252d05e46c0e97d96da',
+		lines: {
+			classifySpec: '13-50',
+			classifyTrim: '153-161',
+			nonFirewallRegex: '164-169',
+			consumerGuard: '483-489'
+		}
+	},
+	{
+		path: 'openwrt-feed/luci-app-fwlive/htdocs/luci-static/resources/view/status/fwlive.js',
+		gitBlob: 'a6a4fc63c0cdb67a82a9cdec0c81b09a76231bd6',
+		lines: { consumerCallsite: '1177' }
+	},
+	{
+		path: 'scripts/gen-luci-wrapper.js',
+		gitBlob: 'bd100a47b08a2ea3025e371b09a3ba5b1c70b4eb',
+		lines: { regexDerivationAndParityGate: '36-127' }
+	},
+	{
+		path: 'scripts/gen-all.sh',
+		gitBlob: '797c9fc3f78eda5bc86c2c140b05f1344152bf67',
+		lines: { generatorAndGateWorkflow: '1-17' }
+	},
+	{
+		path: 'scripts/z3-verify.py',
+		gitBlob: '268cfbf5b3068e123b5ec0719af5ad80b4f0b6a1',
+		lines: { manuallyMaintainedPrefixMirror: '70-100,250-263' }
+	},
+	{
+		path: 'docs/developer/z3-verification.md',
+		gitBlob: '089a212d389b9e93525f3f69eb43c3a316b4975a',
+		lines: { documentedModelGapAndUtf16Boundary: '77-96,165-179' }
+	},
+	{
+		path: 'AGENTS.md',
+		gitBlob: '379180ebcef3e28653667444e659643f18651961',
+		lines: { classifySpecAndGeneratorInstructions: '1-20' }
+	},
+	{
+		path: 'docs/developer/contributing.md',
+		gitBlob: 'af19d5000946bb7639464f2ddec1da9882054a31',
+		lines: { singleSourceOfTruth: '103-126', tabsAndWorkflow: '10-34' }
+	}
+];
+
+for (const item of sourceInventory) {
+	const file = path.join(sourceRoot, item.path);
+	const actualBlob = gitBlobSha1(file);
+	if (actualBlob !== item.gitBlob)
+		throw new Error('source inventory Git blob mismatch for ' + item.path + ': expected ' + item.gitBlob + ', got ' + actualBlob);
+	item.sha256 = sha256(file);
+}
+
+/* Commit, byte pins, and every inventory blob are checked before module loading. */
 const core = require(corePath);
 
 function loadLuciModule(file) {
@@ -185,75 +259,6 @@ if (mutations.weakenStartAnchor.actualMatch !== false || mutations.weakenStartAn
 	throw new Error('start-anchor mutation did not distinguish its control input');
 if (mutations.allowHyphenAsBoundary.actualMatch !== false || mutations.allowHyphenAsBoundary.mutantMatch !== true)
 	throw new Error('hyphen mutation did not distinguish its control input');
-
-const sourceInventory = [
-	{
-		path: 'core/fwlive-log.js',
-		sha256: sha256(corePath),
-		gitBlob: 'cc77bc663fc1bae0b2cb473eca2f10b2eedc2079',
-		lines: {
-			classifySpec: '9-21',
-			nonFirewallRegex: '137-144',
-			normalization: '174-184',
-			consumerGuard: '389-410',
-			callers: '592-620',
-			exports: '669-704'
-		}
-	},
-	{
-		path: 'openwrt-feed/luci-app-fwlive/htdocs/luci-static/resources/fwlive/log.js',
-		sha256: sha256(luciPath),
-		gitBlob: 'c6b19cb6d24b2825d2a19252d05e46c0e97d96da',
-		lines: {
-			classifySpec: '13-50',
-			classifyTrim: '153-161',
-			nonFirewallRegex: '164-169',
-			consumerGuard: '483-489'
-		}
-	},
-	{
-		path: 'openwrt-feed/luci-app-fwlive/htdocs/luci-static/resources/view/status/fwlive.js',
-		sha256: sha256(viewPath),
-		gitBlob: 'a6a4fc63c0cdb67a82a9cdec0c81b09a76231bd6',
-		lines: { consumerCallsite: '1177' }
-	},
-	{
-		path: 'scripts/gen-luci-wrapper.js',
-		sha256: sha256(gatePath),
-		gitBlob: 'bd100a47b08a2ea3025e371b09a3ba5b1c70b4eb',
-		lines: { regexDerivationAndParityGate: '36-127' }
-	},
-	{
-		path: 'scripts/gen-all.sh',
-		sha256: sha256(genAllPath),
-		gitBlob: '797c9fc3f78eda5bc86c2c140b05f1344152bf67',
-		lines: { generatorAndGateWorkflow: '1-17' }
-	},
-	{
-		path: 'scripts/z3-verify.py',
-		sha256: sha256(z3Path),
-		gitBlob: '268cfbf5b3068e123b5ec0719af5ad80b4f0b6a1',
-		lines: { manuallyMaintainedPrefixMirror: '70-100,250-263' }
-	},
-	{
-		path: 'docs/developer/z3-verification.md',
-		sha256: sha256(z3DocPath),
-		gitBlob: '089a212d389b9e93525f3f69eb43c3a316b4975a',
-		lines: { documentedModelGapAndUtf16Boundary: '77-96,165-179' }
-	},
-	{
-		path: 'AGENTS.md',
-		sha256: sha256(path.join(sourceRoot, 'AGENTS.md')),
-		gitBlob: '379180ebcef3e28653667444e659643f18651961',
-		lines: { classifySpecAndGeneratorInstructions: '1-20' }
-	},
-	{
-		path: 'docs/developer/contributing.md',
-		sha256: sha256(path.join(sourceRoot, 'docs/developer/contributing.md')),
-		gitBlob: 'af19d5000946bb7639464f2ddec1da9882054a31',
-		lines: { singleSourceOfTruth: '103-126', tabsAndWorkflow: '10-34' }
-	}
-];
 
 const report = {
 	artifact: 'regexproof-653-native-diagnostic',

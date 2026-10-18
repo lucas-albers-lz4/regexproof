@@ -42,8 +42,13 @@ WARBLRE_BUILD=/tmp/issue653-warblre DUNE_SOURCE=/tmp/issue653-dune \
 ```
 
 This uses prepared, operator-controlled directories. It rejects wrong Git
-revisions and tracked-source edits before executing build code. It copies the
-two research `.v` files into the example directory, cleans and rebuilds the
+revisions, tracked-source edits and unexpected nonignored untracked files
+before executing build code. Existing copies of the two research `.v` inputs
+are accepted only when their bytes match this snapshot; missing copies are
+installed exclusively. The Dune source tree must have no extra untracked
+source. Pre-existing `Mutant*.v` paths are rejected, and cleanup removes only
+mutant files created by this run whose bytes still match. It copies the two
+research `.v` files into the example directory, cleans and rebuilds the
 unmodified upstream proof plus the probes, runs `rocqchk` on their compiled
 modules and dependencies, then requires three specific theorem rejections.
 Each Docker invocation has no network, four CPUs, 8 GiB and a 600-second
@@ -68,9 +73,11 @@ SOURCE_ROOT=/path/to/fwlive \
 ```
 
 The script checks the expected commit and core/LuCI hashes **before** loading
-those modules. An optional `source-commit.txt` identifies an archived tree;
-otherwise HEAD is read with Git. It exercises the actual guard on 21 finite
-inputs, plus two weakened native regexes. The small classifyTrim loop is
+those modules. It also computes and checks each inventory Git blob ID from the
+listed file bytes before loading or evaluating either module. An optional
+`source-commit.txt` identifies an archived tree; otherwise HEAD is read with
+Git. It exercises the actual guard on 21 finite inputs, plus two weakened
+native regexes. The small classifyTrim loop is
 reproduced in this diagnostic and is not a proved preprocessing adapter.
 Results and expected code-unit sequences are in `regexproof-653-native.json`.
 No source tree, Node binary or generated witness is bundled. A fresh run from
