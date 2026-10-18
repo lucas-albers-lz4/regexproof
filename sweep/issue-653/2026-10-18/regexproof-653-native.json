@@ -1,0 +1,743 @@
+{
+  "artifact": "regexproof-653-native-diagnostic",
+  "classification": "finite native diagnostic; no universal theorem or solver witness",
+  "issue653": {
+    "command": "gh issue view 653 --repo lucas-albers-lz4/regexproof --json number,title,body,state,url",
+    "state": "OPEN",
+    "title": "Plan: one-consumer Rocq feasibility pilot for fwlive prefix guard",
+    "url": "https://github.com/lucas-albers-lz4/regexproof/issues/653",
+    "constraintsObserved": "This artifact covers the bounded source inventory and actual-Node finite diagnostic only. It makes no proof-feasibility, trusted-base, solver-witness, or universal-theorem claim."
+  },
+  "sourceSnapshot": {
+    "origin": "fwlive origin/master",
+    "commit": "aa1554730999de8cf3660f959c8ffd1e554b8992",
+    "sourceRoot": "/tmp/regexproof-653-luna/source",
+    "sourceRootMode": "adjacent source/ archive",
+    "commitReadMethod": "source-commit.txt",
+    "snapshotCommands": [
+      "git fetch origin master",
+      "git archive --format=tar origin/master | tar -xf - -C /tmp/regexproof-653-luna",
+      "git rev-parse origin/master > /tmp/regexproof-653-luna/source-commit.txt",
+      "extracted tree moved into source/ and made read-only"
+    ],
+    "readOnlyTree": true
+  },
+  "pinnedLoadGuards": {
+    "expectedCommit": "aa1554730999de8cf3660f959c8ffd1e554b8992",
+    "expectedCoreSha256": "52983d7c0a629de4ee23a13873e5ac54cf7d08dfaf03383614fceb59a4d1da12",
+    "expectedLuciSha256": "efddb7eab758c5c86038248274fddf4ce1b2d7b6003e5d81cb423f1c151cc336",
+    "observedCommit": "aa1554730999de8cf3660f959c8ffd1e554b8992",
+    "observedCoreSha256": "52983d7c0a629de4ee23a13873e5ac54cf7d08dfaf03383614fceb59a4d1da12",
+    "observedLuciSha256": "efddb7eab758c5c86038248274fddf4ce1b2d7b6003e5d81cb423f1c151cc336",
+    "allVerifiedBeforeModuleLoad": true
+  },
+  "reproduction": {
+    "command": "node /tmp/regexproof-653-luna/regexproof-653-native.js > /tmp/regexproof-653-luna/regexproof-653-native.json",
+    "sourceRootOverride": "SOURCE_ROOT=/absolute/path/to/fwlive",
+    "runtime": "v26.11.1",
+    "platform": "linux",
+    "architecture": "x64",
+    "unicodeVersion": "17.0",
+    "icuVersion": "78.3",
+    "v8Version": "14.6.202.34-node.37",
+    "scriptSha256": "4914bc9ab328b477334606839321a50be66f17be9e25b41a0fd3319747732b69"
+  },
+  "regex": {
+    "name": "NON_FIREWALL_PREFIX",
+    "source": "^(dnsmasq|procd|ubusd|netifd|odhcpd|logd|dropbear|uhttpd|hostapd|wpad)([^A-Za-z0-9_-]|$)",
+    "flags": "i",
+    "unicodeMode": false,
+    "multilineMode": false,
+    "globalMode": false,
+    "stickyMode": false,
+    "specPrefixes": [
+      "dnsmasq",
+      "procd",
+      "ubusd",
+      "netifd",
+      "odhcpd",
+      "logd",
+      "dropbear",
+      "uhttpd",
+      "hostapd",
+      "wpad"
+    ],
+    "hyphenContinuation": true,
+    "coreSpecAndRegexDerivedSourceCheck": true,
+    "luciSpecEqualToCore": true,
+    "coreAndLuciRegexSourceFlagsEqual": true
+  },
+  "consumerBoundary": {
+    "core": "isFirewallEvent: normalizeNetfilterMessage((entry && entry.msg) || \"\"), then classifyTrim using CLASSIFY_SPEC.trimWhitespace, then NON_FIREWALL_PREFIX.test(msg), core/fwlive-log.js:400-407",
+    "luci": "log.isFirewallEvent: normalizeNetfilterMessage((entry && entry.msg) || \"\"), then classifyTrim using CLASSIFY_SPEC.trimWhitespace, then NON_FIREWALL_PREFIX.test(msg), fwlive log.js:483-486; status view callsite at view/status/fwlive.js:1177",
+    "inputDomain": "JavaScript strings measured as UTF-16 code units; no ASCII-only or maximum-length guard is present at this consumer. The probe preserves NUL, isolated surrogates, and supplementary characters.",
+    "preGuardTransforms": "normalization may insert one ASCII space before the first exact-case glue key; classifyTrim removes only space, tab, LF, CR, NBSP from either end. The diagnostic applies the actual core normalizer and reproduces the small classifyTrim loop from the pinned source.",
+    "invocations": "core.filterLogEntries and core.statsLogEntries call isFirewallEvent; LuCI status view calls log.isFirewallEvent."
+  },
+  "sourceInventory": [
+    {
+      "path": "core/fwlive-log.js",
+      "sha256": "52983d7c0a629de4ee23a13873e5ac54cf7d08dfaf03383614fceb59a4d1da12",
+      "gitBlob": "cc77bc663fc1bae0b2cb473eca2f10b2eedc2079",
+      "lines": {
+        "classifySpec": "9-21",
+        "nonFirewallRegex": "137-144",
+        "normalization": "174-184",
+        "consumerGuard": "389-410",
+        "callers": "592-620",
+        "exports": "669-704"
+      }
+    },
+    {
+      "path": "openwrt-feed/luci-app-fwlive/htdocs/luci-static/resources/fwlive/log.js",
+      "sha256": "efddb7eab758c5c86038248274fddf4ce1b2d7b6003e5d81cb423f1c151cc336",
+      "gitBlob": "c6b19cb6d24b2825d2a19252d05e46c0e97d96da",
+      "lines": {
+        "classifySpec": "13-50",
+        "classifyTrim": "153-161",
+        "nonFirewallRegex": "164-169",
+        "consumerGuard": "483-489"
+      }
+    },
+    {
+      "path": "openwrt-feed/luci-app-fwlive/htdocs/luci-static/resources/view/status/fwlive.js",
+      "sha256": "d7528f5db7d88a8e63bc46716724951d73a86e3fb24321e6455723d1923c43f8",
+      "gitBlob": "a6a4fc63c0cdb67a82a9cdec0c81b09a76231bd6",
+      "lines": {
+        "consumerCallsite": "1177"
+      }
+    },
+    {
+      "path": "scripts/gen-luci-wrapper.js",
+      "sha256": "30fc5d987004844e7e78e932ef10392e01e56147c847fb922e139900da7d94eb",
+      "gitBlob": "bd100a47b08a2ea3025e371b09a3ba5b1c70b4eb",
+      "lines": {
+        "regexDerivationAndParityGate": "36-127"
+      }
+    },
+    {
+      "path": "scripts/gen-all.sh",
+      "sha256": "1d02f7bd8f21dab9c9075e7b7779c3bffb343545f836617e5b9b9cd35afb6b36",
+      "gitBlob": "797c9fc3f78eda5bc86c2c140b05f1344152bf67",
+      "lines": {
+        "generatorAndGateWorkflow": "1-17"
+      }
+    },
+    {
+      "path": "scripts/z3-verify.py",
+      "sha256": "643c452e943db8be2b44729b404da333f0062934cd2cb94c9683584d6d132d1a",
+      "gitBlob": "268cfbf5b3068e123b5ec0719af5ad80b4f0b6a1",
+      "lines": {
+        "manuallyMaintainedPrefixMirror": "70-100,250-263"
+      }
+    },
+    {
+      "path": "docs/developer/z3-verification.md",
+      "sha256": "8f40791208c990bf8c462b94068752f048727d3369d9f9135fdb4ef57ffd9adb",
+      "gitBlob": "089a212d389b9e93525f3f69eb43c3a316b4975a",
+      "lines": {
+        "documentedModelGapAndUtf16Boundary": "77-96,165-179"
+      }
+    },
+    {
+      "path": "AGENTS.md",
+      "sha256": "1133b68bfd269dc8ed819aa3beba4cf9826a4ffc01c112a8f6b1f7738d233e88",
+      "gitBlob": "379180ebcef3e28653667444e659643f18651961",
+      "lines": {
+        "classifySpecAndGeneratorInstructions": "1-20"
+      }
+    },
+    {
+      "path": "docs/developer/contributing.md",
+      "sha256": "17766199655f217db7e880784319962e7b007d1336a1bbf3ecc3257aa5233244",
+      "gitBlob": "af19d5000946bb7639464f2ddec1da9882054a31",
+      "lines": {
+        "singleSourceOfTruth": "103-126",
+        "tabsAndWorkflow": "10-34"
+      }
+    }
+  ],
+  "finiteNativeCases": [
+    {
+      "id": "nonunicode-ignorecase-long-s-in-daemon-word",
+      "inputUtf16Length": 8,
+      "inputCodeUnits": [
+        "0x0064",
+        "0x006e",
+        "0x017f",
+        "0x006d",
+        "0x0061",
+        "0x0073",
+        "0x0071",
+        "0x005b"
+      ],
+      "normalizedUtf16Length": 8,
+      "guardInputUtf16Length": 8,
+      "guardInputCodeUnits": [
+        "0x0064",
+        "0x006e",
+        "0x017f",
+        "0x006d",
+        "0x0061",
+        "0x0073",
+        "0x0071",
+        "0x005b"
+      ],
+      "coreMatch": false,
+      "luciMatch": false,
+      "expectedMatch": false
+    },
+    {
+      "id": "wpad-open-bracket",
+      "inputUtf16Length": 8,
+      "inputCodeUnits": [
+        "0x0077",
+        "0x0070",
+        "0x0061",
+        "0x0064",
+        "0x005b",
+        "0x0031",
+        "0x005d",
+        "0x003a"
+      ],
+      "normalizedUtf16Length": 8,
+      "guardInputUtf16Length": 8,
+      "guardInputCodeUnits": [
+        "0x0077",
+        "0x0070",
+        "0x0061",
+        "0x0064",
+        "0x005b",
+        "0x0031",
+        "0x005d",
+        "0x003a"
+      ],
+      "coreMatch": true,
+      "luciMatch": true,
+      "expectedMatch": true
+    },
+    {
+      "id": "wpad-mixed-case-open-bracket",
+      "inputUtf16Length": 8,
+      "inputCodeUnits": [
+        "0x0057",
+        "0x0070",
+        "0x0041",
+        "0x0064",
+        "0x005b",
+        "0x0031",
+        "0x005d",
+        "0x003a"
+      ],
+      "normalizedUtf16Length": 8,
+      "guardInputUtf16Length": 8,
+      "guardInputCodeUnits": [
+        "0x0057",
+        "0x0070",
+        "0x0041",
+        "0x0064",
+        "0x005b",
+        "0x0031",
+        "0x005d",
+        "0x003a"
+      ],
+      "coreMatch": true,
+      "luciMatch": true,
+      "expectedMatch": true
+    },
+    {
+      "id": "wpad-drop-nft-prefix",
+      "inputUtf16Length": 9,
+      "inputCodeUnits": [
+        "0x0077",
+        "0x0070",
+        "0x0061",
+        "0x0064",
+        "0x002d",
+        "0x0064",
+        "0x0072",
+        "0x006f",
+        "0x0070"
+      ],
+      "normalizedUtf16Length": 9,
+      "guardInputUtf16Length": 9,
+      "guardInputCodeUnits": [
+        "0x0077",
+        "0x0070",
+        "0x0061",
+        "0x0064",
+        "0x002d",
+        "0x0064",
+        "0x0072",
+        "0x006f",
+        "0x0070"
+      ],
+      "coreMatch": false,
+      "luciMatch": false,
+      "expectedMatch": false
+    },
+    {
+      "id": "wpad-underscore-continuation",
+      "inputUtf16Length": 9,
+      "inputCodeUnits": [
+        "0x0077",
+        "0x0070",
+        "0x0061",
+        "0x0064",
+        "0x005f",
+        "0x0064",
+        "0x0072",
+        "0x006f",
+        "0x0070"
+      ],
+      "normalizedUtf16Length": 9,
+      "guardInputUtf16Length": 9,
+      "guardInputCodeUnits": [
+        "0x0077",
+        "0x0070",
+        "0x0061",
+        "0x0064",
+        "0x005f",
+        "0x0064",
+        "0x0072",
+        "0x006f",
+        "0x0070"
+      ],
+      "coreMatch": false,
+      "luciMatch": false,
+      "expectedMatch": false
+    },
+    {
+      "id": "wpad-ascii-letter-continuation",
+      "inputUtf16Length": 5,
+      "inputCodeUnits": [
+        "0x0077",
+        "0x0070",
+        "0x0061",
+        "0x0064",
+        "0x0030"
+      ],
+      "normalizedUtf16Length": 5,
+      "guardInputUtf16Length": 5,
+      "guardInputCodeUnits": [
+        "0x0077",
+        "0x0070",
+        "0x0061",
+        "0x0064",
+        "0x0030"
+      ],
+      "coreMatch": false,
+      "luciMatch": false,
+      "expectedMatch": false
+    },
+    {
+      "id": "wpad-exact-end",
+      "inputUtf16Length": 4,
+      "inputCodeUnits": [
+        "0x0077",
+        "0x0070",
+        "0x0061",
+        "0x0064"
+      ],
+      "normalizedUtf16Length": 4,
+      "guardInputUtf16Length": 4,
+      "guardInputCodeUnits": [
+        "0x0077",
+        "0x0070",
+        "0x0061",
+        "0x0064"
+      ],
+      "coreMatch": true,
+      "luciMatch": true,
+      "expectedMatch": true
+    },
+    {
+      "id": "wpad-space-boundary",
+      "inputUtf16Length": 8,
+      "inputCodeUnits": [
+        "0x0077",
+        "0x0070",
+        "0x0061",
+        "0x0064",
+        "0x0020",
+        "0x0049",
+        "0x004e",
+        "0x003d"
+      ],
+      "normalizedUtf16Length": 8,
+      "guardInputUtf16Length": 8,
+      "guardInputCodeUnits": [
+        "0x0077",
+        "0x0070",
+        "0x0061",
+        "0x0064",
+        "0x0020",
+        "0x0049",
+        "0x004e",
+        "0x003d"
+      ],
+      "coreMatch": true,
+      "luciMatch": true,
+      "expectedMatch": true
+    },
+    {
+      "id": "start-anchor-discriminator",
+      "inputUtf16Length": 6,
+      "inputCodeUnits": [
+        "0x0078",
+        "0x0077",
+        "0x0070",
+        "0x0061",
+        "0x0064",
+        "0x005b"
+      ],
+      "normalizedUtf16Length": 6,
+      "guardInputUtf16Length": 6,
+      "guardInputCodeUnits": [
+        "0x0078",
+        "0x0077",
+        "0x0070",
+        "0x0061",
+        "0x0064",
+        "0x005b"
+      ],
+      "coreMatch": false,
+      "luciMatch": false,
+      "expectedMatch": false
+    },
+    {
+      "id": "leading-lf-trimmed-before-guard",
+      "inputUtf16Length": 6,
+      "inputCodeUnits": [
+        "0x000a",
+        "0x0077",
+        "0x0070",
+        "0x0061",
+        "0x0064",
+        "0x005b"
+      ],
+      "normalizedUtf16Length": 6,
+      "guardInputUtf16Length": 5,
+      "guardInputCodeUnits": [
+        "0x0077",
+        "0x0070",
+        "0x0061",
+        "0x0064",
+        "0x005b"
+      ],
+      "coreMatch": true,
+      "luciMatch": true,
+      "expectedMatch": true
+    },
+    {
+      "id": "leading-ascii-ws-and-nbsp-trimmed",
+      "inputUtf16Length": 8,
+      "inputCodeUnits": [
+        "0x0020",
+        "0x0009",
+        "0x00a0",
+        "0x0057",
+        "0x0070",
+        "0x0041",
+        "0x0064",
+        "0x005b"
+      ],
+      "normalizedUtf16Length": 8,
+      "guardInputUtf16Length": 5,
+      "guardInputCodeUnits": [
+        "0x0057",
+        "0x0070",
+        "0x0041",
+        "0x0064",
+        "0x005b"
+      ],
+      "coreMatch": true,
+      "luciMatch": true,
+      "expectedMatch": true
+    },
+    {
+      "id": "em-space-is-not-classify-trimmed",
+      "inputUtf16Length": 6,
+      "inputCodeUnits": [
+        "0x2003",
+        "0x0077",
+        "0x0070",
+        "0x0061",
+        "0x0064",
+        "0x005b"
+      ],
+      "normalizedUtf16Length": 6,
+      "guardInputUtf16Length": 6,
+      "guardInputCodeUnits": [
+        "0x2003",
+        "0x0077",
+        "0x0070",
+        "0x0061",
+        "0x0064",
+        "0x005b"
+      ],
+      "coreMatch": false,
+      "luciMatch": false,
+      "expectedMatch": false
+    },
+    {
+      "id": "nul-after-prefix-boundary",
+      "inputUtf16Length": 5,
+      "inputCodeUnits": [
+        "0x0077",
+        "0x0070",
+        "0x0061",
+        "0x0064",
+        "0x0000"
+      ],
+      "normalizedUtf16Length": 5,
+      "guardInputUtf16Length": 5,
+      "guardInputCodeUnits": [
+        "0x0077",
+        "0x0070",
+        "0x0061",
+        "0x0064",
+        "0x0000"
+      ],
+      "coreMatch": true,
+      "luciMatch": true,
+      "expectedMatch": true
+    },
+    {
+      "id": "nul-before-prefix",
+      "inputUtf16Length": 6,
+      "inputCodeUnits": [
+        "0x0000",
+        "0x0077",
+        "0x0070",
+        "0x0061",
+        "0x0064",
+        "0x005b"
+      ],
+      "normalizedUtf16Length": 6,
+      "guardInputUtf16Length": 6,
+      "guardInputCodeUnits": [
+        "0x0000",
+        "0x0077",
+        "0x0070",
+        "0x0061",
+        "0x0064",
+        "0x005b"
+      ],
+      "coreMatch": false,
+      "luciMatch": false,
+      "expectedMatch": false
+    },
+    {
+      "id": "isolated-high-surrogate-after-prefix",
+      "inputUtf16Length": 5,
+      "inputCodeUnits": [
+        "0x0077",
+        "0x0070",
+        "0x0061",
+        "0x0064",
+        "0xd800"
+      ],
+      "normalizedUtf16Length": 5,
+      "guardInputUtf16Length": 5,
+      "guardInputCodeUnits": [
+        "0x0077",
+        "0x0070",
+        "0x0061",
+        "0x0064",
+        "0xd800"
+      ],
+      "coreMatch": true,
+      "luciMatch": true,
+      "expectedMatch": true
+    },
+    {
+      "id": "isolated-low-surrogate-after-prefix",
+      "inputUtf16Length": 5,
+      "inputCodeUnits": [
+        "0x0077",
+        "0x0070",
+        "0x0061",
+        "0x0064",
+        "0xdfff"
+      ],
+      "normalizedUtf16Length": 5,
+      "guardInputUtf16Length": 5,
+      "guardInputCodeUnits": [
+        "0x0077",
+        "0x0070",
+        "0x0061",
+        "0x0064",
+        "0xdfff"
+      ],
+      "coreMatch": true,
+      "luciMatch": true,
+      "expectedMatch": true
+    },
+    {
+      "id": "isolated-surrogate-before-prefix",
+      "inputUtf16Length": 6,
+      "inputCodeUnits": [
+        "0xd800",
+        "0x0077",
+        "0x0070",
+        "0x0061",
+        "0x0064",
+        "0x005b"
+      ],
+      "normalizedUtf16Length": 6,
+      "guardInputUtf16Length": 6,
+      "guardInputCodeUnits": [
+        "0xd800",
+        "0x0077",
+        "0x0070",
+        "0x0061",
+        "0x0064",
+        "0x005b"
+      ],
+      "coreMatch": false,
+      "luciMatch": false,
+      "expectedMatch": false
+    },
+    {
+      "id": "nonascii-letter-boundary",
+      "inputUtf16Length": 5,
+      "inputCodeUnits": [
+        "0x0077",
+        "0x0070",
+        "0x0061",
+        "0x0064",
+        "0x00e9"
+      ],
+      "normalizedUtf16Length": 5,
+      "guardInputUtf16Length": 5,
+      "guardInputCodeUnits": [
+        "0x0077",
+        "0x0070",
+        "0x0061",
+        "0x0064",
+        "0x00e9"
+      ],
+      "coreMatch": true,
+      "luciMatch": true,
+      "expectedMatch": true
+    },
+    {
+      "id": "nonascii-hyphen-like-boundary",
+      "inputUtf16Length": 9,
+      "inputCodeUnits": [
+        "0x0077",
+        "0x0070",
+        "0x0061",
+        "0x0064",
+        "0x2014",
+        "0x0064",
+        "0x0072",
+        "0x006f",
+        "0x0070"
+      ],
+      "normalizedUtf16Length": 9,
+      "guardInputUtf16Length": 9,
+      "guardInputCodeUnits": [
+        "0x0077",
+        "0x0070",
+        "0x0061",
+        "0x0064",
+        "0x2014",
+        "0x0064",
+        "0x0072",
+        "0x006f",
+        "0x0070"
+      ],
+      "coreMatch": true,
+      "luciMatch": true,
+      "expectedMatch": true
+    },
+    {
+      "id": "supplementary-character-boundary",
+      "inputUtf16Length": 6,
+      "inputCodeUnits": [
+        "0x0077",
+        "0x0070",
+        "0x0061",
+        "0x0064",
+        "0xd83d",
+        "0xde00"
+      ],
+      "normalizedUtf16Length": 6,
+      "guardInputUtf16Length": 6,
+      "guardInputCodeUnits": [
+        "0x0077",
+        "0x0070",
+        "0x0061",
+        "0x0064",
+        "0xd83d",
+        "0xde00"
+      ],
+      "coreMatch": true,
+      "luciMatch": true,
+      "expectedMatch": true
+    },
+    {
+      "id": "nonascii-before-prefix",
+      "inputUtf16Length": 6,
+      "inputCodeUnits": [
+        "0x00e9",
+        "0x0077",
+        "0x0070",
+        "0x0061",
+        "0x0064",
+        "0x005b"
+      ],
+      "normalizedUtf16Length": 6,
+      "guardInputUtf16Length": 6,
+      "guardInputCodeUnits": [
+        "0x00e9",
+        "0x0077",
+        "0x0070",
+        "0x0061",
+        "0x0064",
+        "0x005b"
+      ],
+      "coreMatch": false,
+      "luciMatch": false,
+      "expectedMatch": false
+    }
+  ],
+  "mutationControls": {
+    "weakenStartAnchor": {
+      "mutation": "remove leading ^",
+      "inputCodeUnits": [
+        "0x0078",
+        "0x0077",
+        "0x0070",
+        "0x0061",
+        "0x0064",
+        "0x005b"
+      ],
+      "actualMatch": false,
+      "mutantMatch": true
+    },
+    "allowHyphenAsBoundary": {
+      "mutation": "replace [^A-Za-z0-9_-] with [^A-Za-z0-9_]",
+      "inputCodeUnits": [
+        "0x0077",
+        "0x0070",
+        "0x0061",
+        "0x0064",
+        "0x002d",
+        "0x0064",
+        "0x0072",
+        "0x006f",
+        "0x0070"
+      ],
+      "actualMatch": false,
+      "mutantMatch": true
+    }
+  },
+  "limits": [
+    "Examples are a finite diagnostic corpus, not a universal claim over all JavaScript strings.",
+    "The native runs use the installed Node ECMAScript RegExp engine; no solver, Z3 model, Rocq proof, or solver-generated witness is included.",
+    "The core/LuCI equality checks here cover the loaded CLASSIFY_SPEC values and the NON_FIREWALL_PREFIX source and flags at this pinned snapshot; they are not a universal source-to-model theorem."
+  ]
+}
