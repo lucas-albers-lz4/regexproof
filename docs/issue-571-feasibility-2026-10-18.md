@@ -170,4 +170,4 @@ pin is rejected before backend execution; every query also verifies source,
 binary and runner identity against its initialized baseline. No binary or core
 dump is committed, and no research script is wired into the harness or CI.
 
-Independent final-head review: pending. No proof completion is claimed.
+Independent reviews and exact reviewed heads are recorded in [PR #652](https://github.com/lucas-albers-lz4/regexproof/pull/652). No proof completion is claimed.

@@ -4,14 +4,14 @@
     "/tmp/regexproof-571-feasibility/sweep/issue-571/2026-10-18/v1.6.1/source-upper.smt2"
   ],
   "timeout_seconds": 8.0,
-  "elapsed_ms": 18.49,
+  "elapsed_ms": 14.969,
   "returncode": 0,
   "timed_out": false,
   "classification": "sat",
   "stdout": "sat\n",
   "stderr": "",
   "case": "source-upper",
-  "runner_sha256": "bd61d5603e8773f49cfa47f2f37225acabcbeaf02619844ca9d22078a0779d7b",
+  "runner_sha256": "028a1b7e5a80be54f012b5f51e4c21ec41b83f7412896d6a4f2f776925beb4ac",
   "noodler_sha256": "22b19f123d3e7f54e10fdc46af3f91de23d89148c9a259eb072bc9e12f083464",
   "noodler_trusted_binary_mapping": {
     "label": "Noodler 1.6.1 issue-comment baseline",
@@ -20,6 +20,9 @@
   "smt_path": "/tmp/regexproof-571-feasibility/sweep/issue-571/2026-10-18/v1.6.1/source-upper.smt2",
   "smt_sha256": "ef125a6ab81fd33624a973a4c6e7a904d132480d8a3a3b91c2b4df04ab96c1f6",
   "fixed_input": "ACCEPT",
-  "pattern_or_control_source": "(^|[^A-Za-z0-9_])(ACCEPT|ALLOW|PASS|DROP|REJECT|DENY|BLOCK)([^A-Za-z0-9_]|$)",
+  "query_patterns": [
+    "(^|[^A-Za-z0-9_])(ACCEPT|ALLOW|PASS|DROP|REJECT|DENY|BLOCK)([^A-Za-z0-9_]|$)"
+  ],
+  "frozen_action_source": "(^|[^A-Za-z0-9_])(ACCEPT|ALLOW|PASS|DROP|REJECT|DENY|BLOCK)([^A-Za-z0-9_]|$)",
   "interpretation_limit": "fixed-string membership; converter call has no source /i flag"
 }

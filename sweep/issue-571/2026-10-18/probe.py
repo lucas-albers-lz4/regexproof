@@ -178,7 +178,7 @@ console.log(JSON.stringify({node:process.version,path:p,file_sha256:crypto.creat
     version = run_bounded([NOODLER_BIN, '-version'])
     if version['returncode'] != 0 or version['classification'] != 'zero_exit_without_verdict':
         raise SystemExit(f'Noodler version probe did not exit cleanly: {version}')
-    trusted_binary = APPROVED_NOODLER_BINARIES.get(actual_binary_sha256)
+    trusted_binary = APPROVED_NOODLER_BINARIES[actual_binary_sha256]
     if trusted_binary and version['stdout'].strip() != trusted_binary['version']:
         raise SystemExit('Noodler binary version text does not match the trusted SHA mapping')
 
@@ -254,7 +254,6 @@ console.log(JSON.stringify({node:process.version,path:p,file_sha256:crypto.creat
         'source_basename': SOURCE_FILE.name, 'source_last_changed_commit': source_last_changed_commit,
         'action_flags': node_record['flags'], 'finite_node_rows': len(diagnostic_record['rows']),
         'noodler_sha256': actual_binary_sha256, 'noodler_version': version['stdout'].strip(),
-        'noodler_trusted_binary_mapping': trusted_binary,
     }, indent=2))
 
 
@@ -301,6 +300,7 @@ def run_case(case):
             str(NOODLER_BIN) != manifest.get('noodler_binary')):
         raise SystemExit(f'Noodler binary pin or path changed: {actual_binary_sha256}')
     pattern = manifest['action_regex_source']
+    query_patterns = [pattern]
     fixed_inputs = {
         'source-upper': 'ACCEPT', 'source-mixed': 'aCcEpT',
         'ascii-mirror-mixed': 'aCcEpT', 'negative-membership': 'ACCEPT',
@@ -314,6 +314,7 @@ def run_case(case):
         assertions = [f'(assert (str.in_re s {term}))']
     elif case == 'ascii-mirror-mixed':
         mirror = (PROBE_DIR / 'expanded-action-ascii-mirror.txt').read_text(encoding='utf-8').rstrip('\n')
+        query_patterns = [mirror]
         term = f"(re.from_ecma2020 '{mirror}')"
         assertions = [f'(assert (str.in_re s {term}))']
     elif case in {'negative-membership', 'negative-membership-unconstrained'}:
@@ -321,6 +322,7 @@ def run_case(case):
         assertions = [f'(assert (not (str.in_re s {term})))']
     elif case == 'm2e-diff':
         mirror = (PROBE_DIR / 'expanded-action-ascii-mirror.txt').read_text(encoding='utf-8').rstrip('\n')
+        query_patterns = [mirror, pattern]
         assertions = [
             f"(assert (str.in_re s (re.from_ecma2020 '{mirror}')))",
             f"(assert (not (str.in_re s (re.from_ecma2020 '{pattern}'))))",
@@ -329,20 +331,24 @@ def run_case(case):
         term = f"(re.from_ecma2020 '{pattern}' \"i\")"
         assertions = [f'(assert (str.in_re s {term}))']
     elif case == 'inline-i-flag':
+        query_patterns = ['(?i)ACCEPT']
         term = "(re.from_ecma2020 '(?i)ACCEPT')"
         assertions = [f'(assert (str.in_re s {term}))']
     elif case in {'property-escape-non-u-literal', 'property-escape-letter'}:
+        query_patterns = [r'^\p{L}$']
         term = r"(re.from_ecma2020 '^\p{L}$')"
         assertions = [f'(assert (str.in_re s {term}))']
     elif case == 'property-escape-u-argument':
+        query_patterns = [r'^\p{L}$']
         term = r'''(re.from_ecma2020 '^\p{L}$' "u")'''
         assertions = [f'(assert (str.in_re s {term}))']
     elif case == 'non-u-dot-astral':
+        query_patterns = ['^.$']
         term = "(re.from_ecma2020 '^.$')"
         assertions = [f'(assert (str.in_re s {term}))']
     elif case == 'historical-negation-crash-control':
         smt, historical_pattern = historical_negation_control()
-        return run_one(case, smt, None, historical_pattern,
+        return run_one(case, smt, None, [historical_pattern],
                        'historical blocker-probe control, not current ACTION_RE proof input')
     else:
         raise SystemExit(f'unknown case: {case}')
@@ -360,10 +366,10 @@ def run_case(case):
         if case.startswith('ascii-') else
         'API/parser or solver diagnostic only; no theorem or product-property inference'
     )
-    return run_one(case, smt, input_value, pattern, interpretation)
+    return run_one(case, smt, input_value, query_patterns, interpretation)
 
 
-def run_one(case, smt, input_value, pattern, interpretation):
+def run_one(case, smt, input_value, query_patterns, interpretation):
     smt_path = PROBE_DIR / f'{case}.smt2'
     smt_path.write_text(smt, encoding='utf-8')
     result = run_bounded([NOODLER_BIN, smt_path])
@@ -371,11 +377,12 @@ def run_one(case, smt, input_value, pattern, interpretation):
         'case': case,
         'runner_sha256': sha256(pathlib.Path(__file__).resolve()),
         'noodler_sha256': sha256(NOODLER_BIN),
-        'noodler_trusted_binary_mapping': APPROVED_NOODLER_BINARIES.get(EXPECTED_NOODLER_SHA256),
+        'noodler_trusted_binary_mapping': APPROVED_NOODLER_BINARIES[EXPECTED_NOODLER_SHA256],
         'smt_path': str(smt_path),
         'smt_sha256': sha256(smt_path),
         'fixed_input': input_value,
-        'pattern_or_control_source': pattern,
+        'query_patterns': query_patterns,
+        'frozen_action_source': json.loads((PROBE_DIR / 'baseline.json').read_text())['action_regex_source'],
         'interpretation_limit': interpretation,
     })
     (PROBE_DIR / f'{case}.stdout').write_text(result['stdout'], encoding='utf-8')

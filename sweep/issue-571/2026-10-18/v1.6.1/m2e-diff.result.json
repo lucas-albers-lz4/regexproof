@@ -4,14 +4,14 @@
     "/tmp/regexproof-571-feasibility/sweep/issue-571/2026-10-18/v1.6.1/m2e-diff.smt2"
   ],
   "timeout_seconds": 8.0,
-  "elapsed_ms": 8011.598,
+  "elapsed_ms": 8005.353,
   "returncode": -9,
   "timed_out": true,
   "classification": "timeout_not_proven",
   "stdout": "",
   "stderr": "",
   "case": "m2e-diff",
-  "runner_sha256": "bd61d5603e8773f49cfa47f2f37225acabcbeaf02619844ca9d22078a0779d7b",
+  "runner_sha256": "028a1b7e5a80be54f012b5f51e4c21ec41b83f7412896d6a4f2f776925beb4ac",
   "noodler_sha256": "22b19f123d3e7f54e10fdc46af3f91de23d89148c9a259eb072bc9e12f083464",
   "noodler_trusted_binary_mapping": {
     "label": "Noodler 1.6.1 issue-comment baseline",
@@ -20,6 +20,10 @@
   "smt_path": "/tmp/regexproof-571-feasibility/sweep/issue-571/2026-10-18/v1.6.1/m2e-diff.smt2",
   "smt_sha256": "d649b65d6e09e9c1748ab27402c77048ad063213653f4e6cf0fc6be136bc856c",
   "fixed_input": null,
-  "pattern_or_control_source": "(^|[^A-Za-z0-9_])(ACCEPT|ALLOW|PASS|DROP|REJECT|DENY|BLOCK)([^A-Za-z0-9_]|$)",
+  "query_patterns": [
+    "(^|[^A-Za-z0-9_])(([Aa][Cc][Cc][Ee][Pp][Tt]|[Aa][Ll][Ll][Oo][Ww]|[Pp][Aa][Ss][Ss]|[Dd][Rr][Oo][Pp]|[Rr][Ee][Jj][Ee][Cc][Tt]|[Dd][Ee][Nn][Yy]|[Bb][Ll][Oo][Cc][Kk]))([^A-Za-z0-9_]|$)",
+    "(^|[^A-Za-z0-9_])(ACCEPT|ALLOW|PASS|DROP|REJECT|DENY|BLOCK)([^A-Za-z0-9_]|$)"
+  ],
+  "frozen_action_source": "(^|[^A-Za-z0-9_])(ACCEPT|ALLOW|PASS|DROP|REJECT|DENY|BLOCK)([^A-Za-z0-9_]|$)",
   "interpretation_limit": "API/parser or solver diagnostic only; no theorem or product-property inference"
 }

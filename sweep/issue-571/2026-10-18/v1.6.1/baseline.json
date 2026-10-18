@@ -1,7 +1,7 @@
 {
   "scope": "bounded backend diagnostics only; no harness, policy, or product changes",
   "runner_path": "/tmp/regexproof-571-feasibility/sweep/issue-571/2026-10-18/probe.py",
-  "runner_sha256": "bd61d5603e8773f49cfa47f2f37225acabcbeaf02619844ca9d22078a0779d7b",
+  "runner_sha256": "028a1b7e5a80be54f012b5f51e4c21ec41b83f7412896d6a4f2f776925beb4ac",
   "fwlive_repo": "/tmp/fwlive-1322-e-review-fixes",
   "fwlive_head": "924e27967d9138817a77b11109c6bc0cff6a2d5e",
   "source_path": "/tmp/fwlive-1322-e-review-fixes/core/fwlive-log.js",
@@ -12,7 +12,7 @@
   "source_last_changed_commit": "8a1228fa92572a05344004574ce088ac9b347864",
   "source_last_changed_commit_blob": "cc77bc663fc1bae0b2cb473eca2f10b2eedc2079",
   "regexproof_repo": "/tmp/regexproof-571-feasibility",
-  "regexproof_head": "f61f9ae1cc7e2edc555e34e8f71b84cd38e64df0",
+  "regexproof_head": "43d4e8b6c33c3e5dc4e9660e7d2c1ba65de14012",
   "node_version": "v26.11.1",
   "action_regex_source": "(^|[^A-Za-z0-9_])(ACCEPT|ALLOW|PASS|DROP|REJECT|DENY|BLOCK)([^A-Za-z0-9_]|$)",
   "action_regex_flags_in_node": "i",
@@ -55,7 +55,7 @@
       "-version"
     ],
     "timeout_seconds": 8.0,
-    "elapsed_ms": 2.948,
+    "elapsed_ms": 2.553,
     "returncode": 0,
     "timed_out": false,
     "classification": "zero_exit_without_verdict",

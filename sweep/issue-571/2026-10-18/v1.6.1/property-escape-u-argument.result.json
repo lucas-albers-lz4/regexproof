@@ -4,14 +4,14 @@
     "/tmp/regexproof-571-feasibility/sweep/issue-571/2026-10-18/v1.6.1/property-escape-u-argument.smt2"
   ],
   "timeout_seconds": 8.0,
-  "elapsed_ms": 12.158,
+  "elapsed_ms": 11.793,
   "returncode": 1,
   "timed_out": false,
   "classification": "nonzero_backend_or_parser_error",
   "stdout": "(error \"line 3 column 52: invalid re.from_ecma2020: expected one String argument or zero arguments with one string parameter\")\nsat\n",
   "stderr": "",
   "case": "property-escape-u-argument",
-  "runner_sha256": "bd61d5603e8773f49cfa47f2f37225acabcbeaf02619844ca9d22078a0779d7b",
+  "runner_sha256": "028a1b7e5a80be54f012b5f51e4c21ec41b83f7412896d6a4f2f776925beb4ac",
   "noodler_sha256": "22b19f123d3e7f54e10fdc46af3f91de23d89148c9a259eb072bc9e12f083464",
   "noodler_trusted_binary_mapping": {
     "label": "Noodler 1.6.1 issue-comment baseline",
@@ -20,6 +20,9 @@
   "smt_path": "/tmp/regexproof-571-feasibility/sweep/issue-571/2026-10-18/v1.6.1/property-escape-u-argument.smt2",
   "smt_sha256": "e1937f096ad252bb3c1b2595d174b8aba5cb6d84a3e8b0735f12cef107d39ce3",
   "fixed_input": "A",
-  "pattern_or_control_source": "(^|[^A-Za-z0-9_])(ACCEPT|ALLOW|PASS|DROP|REJECT|DENY|BLOCK)([^A-Za-z0-9_]|$)",
+  "query_patterns": [
+    "^\\p{L}$"
+  ],
+  "frozen_action_source": "(^|[^A-Za-z0-9_])(ACCEPT|ALLOW|PASS|DROP|REJECT|DENY|BLOCK)([^A-Za-z0-9_]|$)",
   "interpretation_limit": "API/parser or solver diagnostic only; no theorem or product-property inference"
 }

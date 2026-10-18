@@ -3,6 +3,6 @@
   "returncode": 1,
   "stderr": "Noodler binary pin or path changed: 8a63c98320173f79e263115e10cefc170155e47d1fd4b5a70e4429d2699cae28\n",
   "previous_result_unchanged": true,
-  "previous_result_sha256": "dd361e45a66b7f700d19977a666c70ee00f3577bdd7a8db3a2ac27ae365c0dd1",
+  "previous_result_sha256": "eb30c9586e714f7553e42704dd15c78295f421b1b4d5b0b8664b765099f59546",
   "formal_proof": false
 }

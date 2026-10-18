@@ -7,7 +7,7 @@
       "/tmp/fwlive-1322-e-review-fixes/core/fwlive-log.js"
     ],
     "timeout_seconds": 8.0,
-    "elapsed_ms": 32.328,
+    "elapsed_ms": 31.407,
     "returncode": 0,
     "timed_out": false,
     "classification": "zero_exit_without_verdict",
@@ -20,7 +20,7 @@
       "-version"
     ],
     "timeout_seconds": 8.0,
-    "elapsed_ms": 2.578,
+    "elapsed_ms": 2.608,
     "returncode": 0,
     "timed_out": false,
     "classification": "zero_exit_without_verdict",
@@ -29,7 +29,7 @@
   },
   "finite_node_diagnostic_run": {
     "returncode": 0,
-    "elapsed_ms": 35.257,
+    "elapsed_ms": 33.441,
     "classification": "zero_exit_without_verdict"
   }
 }
